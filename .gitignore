@@ -1,4 +1,8 @@
+target/
+
 *.*
 !.gitignore
 !src/
 !*.java
+!*.xml
+!*.doxyfile

@@ -1,0 +1,148 @@
+/**
+ ######################################################################################
+ # GPL License                                                                        #
+ #                                                                                    #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
+ # This program is free software: you can redistribute it and/or modify               #
+ # it under the terms of the GNU General Public License as                            #
+ # published by the Free Software Foundation, either version 3 of the                 #
+ # License, or (at your option) any later version.                                    #
+ #                                                                                    #
+ # This program is distributed in the hope that it will be useful,                    #
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ # GNU General Public License for more details.                                       #
+ #                                                                                    #
+ # You should have received a copy of the GNU General Public License                  #
+ # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ ######################################################################################
+ @endcond
+ **/
+
+package de.tu_clausthal.in.winf.ui;
+
+import de.tu_clausthal.in.winf.CConfiguration;
+import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.OSMTileFactoryInfo;
+import org.jdesktop.swingx.input.CenterMapListener;
+import org.jdesktop.swingx.input.PanKeyListener;
+import org.jdesktop.swingx.input.PanMouseInputListener;
+import org.jdesktop.swingx.input.ZoomMouseWheelListenerCenter;
+import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
+import org.jdesktop.swingx.mapviewer.LocalResponseCache;
+import org.jdesktop.swingx.mapviewer.TileFactoryInfo;
+
+import javax.swing.event.MouseInputListener;
+
+
+/**
+ * openstreetmap viewer class - must be a singleton because
+ * we would to use only one instance with a global access
+ *
+ * @see https://github.com/msteiger/jxmapviewer2
+ * @see https://today.java.net/pub/a/today/2007/10/30/building-maps-into-swing-app-with-jxmapviewer.html
+ */
+public class COSMViewer extends JXMapViewer {
+
+    /**
+     * singleton instance *
+     */
+    private static COSMViewer s_instance = new COSMViewer();
+    /**
+     * way point renderer *
+     */
+    private CSourceOverlay m_SourceRenderer = new CSourceOverlay(this);
+    /**
+     * graph renderer *
+     */
+    private CRouteOverlay m_RouteRenderer = new CRouteOverlay();
+    /**
+     * car renderer
+     */
+    private CCarOverlay m_CarRenderer = new CCarOverlay(this);
+
+
+    /**
+     * private ctor with loading configuration defaults
+     * and listener definition
+     */
+    private COSMViewer() {
+        super();
+
+        TileFactoryInfo l_info = new OSMTileFactoryInfo();
+        DefaultTileFactory l_tileFactory = new DefaultTileFactory(l_info);
+        l_tileFactory.setThreadPoolSize(CConfiguration.getInstance().get().MaxThreadNumber);
+
+        LocalResponseCache.installResponseCache(l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false);
+        this.setTileFactory(l_tileFactory);
+        this.setZoom(CConfiguration.getInstance().get().Zoom);
+        this.setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
+        this.setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
+
+        COverlayCollection l_overlay = new COverlayCollection();
+        l_overlay.add(m_RouteRenderer);
+        l_overlay.add(m_SourceRenderer);
+        l_overlay.add(m_CarRenderer);
+        this.setOverlayPainter(l_overlay);
+
+        COSMMouseListener l_OSMListener = new COSMMouseListener();
+        MouseInputListener l_mouse = new PanMouseInputListener(this);
+
+        this.addMouseListener(l_mouse);
+        this.addMouseListener(l_OSMListener);
+        this.addMouseMotionListener(l_mouse);
+        this.addMouseListener(new CenterMapListener(this));
+        this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
+        this.addKeyListener(new PanKeyListener(this));
+    }
+
+    /**
+     * return instance
+     *
+     * @return viewer instance
+     */
+    public static COSMViewer getInstance() {
+        return s_instance;
+    }
+
+
+    /**
+     * returns the instance of the overlay renderer for sources
+     *
+     * @return renderer object
+     */
+    public CSourceOverlay getSourceRenderer() {
+        return m_SourceRenderer;
+    }
+
+
+    /**
+     * returns the instance of the overlay renderer for routes
+     *
+     * @return renderer object
+     */
+    public CRouteOverlay getRouteRenderer() {
+        return m_RouteRenderer;
+    }
+
+
+    /**
+     * return the instance of the overlay renderer for cars
+     *
+     * @return renderer object
+     */
+    public CCarOverlay getCarRenderer() {
+        return m_CarRenderer;
+    }
+
+
+    /**
+     * resets the viewer to the configuration defaults *
+     */
+    public void reset() {
+        this.recenterToAddressLocation();
+        this.setZoom(CConfiguration.getInstance().get().Zoom);
+    }
+
+}

@@ -38,6 +38,7 @@ import java.awt.event.WindowEvent;
 
 /**
  * create the main frame of the simulation
+ * dockable component @see http://www.javalobby.org/java/forums/t52990.html
  */
 public class CFrame extends JFrame {
 

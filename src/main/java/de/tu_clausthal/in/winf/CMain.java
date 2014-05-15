@@ -36,7 +36,6 @@ import java.io.File;
  * main class of the application
  *
  * @note Jar must be started with option "-Xmx2g", because we need memory to create graph structure
- * dockable component @see http://www.javalobby.org/java/forums/t52990.html
  */
 public class CMain {
 

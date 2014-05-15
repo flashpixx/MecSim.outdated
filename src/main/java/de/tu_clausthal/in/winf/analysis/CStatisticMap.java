@@ -36,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * statistic map for creating plots of any data *
+ * * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public class CStatisticMap implements ISimulationStep {
 

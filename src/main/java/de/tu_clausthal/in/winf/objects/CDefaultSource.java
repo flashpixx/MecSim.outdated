@@ -43,8 +43,6 @@ public class CDefaultSource implements ICarSourceFactory {
      */
     private int m_NumberCarsInStep = 1;
 
-    private int x = 0;
-
 
     /**
      * ctor that sets the geo position of the source
@@ -85,9 +83,6 @@ public class CDefaultSource implements ICarSourceFactory {
         for (int i = 0; i < m_NumberCarsInStep; i++)
             l_sources.add(new CDefaultCar(m_position));
 
-        if (x >= 2)
-            m_NumberCarsInStep = 0;
-        x++;
         return l_sources;
     }
 

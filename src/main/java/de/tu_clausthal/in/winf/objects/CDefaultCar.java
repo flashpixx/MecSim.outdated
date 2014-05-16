@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -97,15 +96,14 @@ public class CDefaultCar implements ICar {
         while (m_speed < 25)
             m_speed = m_random.nextInt(m_maxSpeed);
 
-        m_speed = 1;
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position
         List<Path> l_route = null;
         while (true) {
             try {
-                //m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5);
-                m_EndPosition = new GeoPosition(52.35547370875268, 9.744873046875);
+                m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5);
+
                 GHRequest l_request = CGraphHopper.getInstance().getRouteRequest(m_StartPosition, m_EndPosition);
                 l_route = CGraphHopper.getInstance().getRoutePaths(l_request, CGraphHopper.getInstance().getRoute(l_request));
                 if (l_route.size() > 0) {
@@ -150,9 +148,7 @@ public class CDefaultCar implements ICar {
 
     @Override
     public void setCurrentSpeed(int p_speed) {
-        if ((p_speed < 0) || (p_speed > m_maxSpeed))
-            throw new IllegalArgumentException("speed value must be equal or greater than zero and smaller than maximum speed");
-        m_speed = p_speed;
+        m_speed = Math.min(Math.max(p_speed, 15), m_maxSpeed);
     }
 
 
@@ -242,13 +238,13 @@ public class CDefaultCar implements ICar {
 
     @Override
     public Map<Integer, ICar> getPredecessor() {
-        for(int i=m_routeindex; i < m_routeedges.size(); i++) {
-            CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(i);
-            System.out.println(l_edge);
+        for (int i = m_routeindex; i < m_routeedges.size(); i++) {
+            CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(m_routeedges.get(m_routeindex));
+
             if (l_edge == null)
                 return null;
 
-            if ( this.getCurrentSpeed() >= l_edge.getEdgeCells() )
+            if (this.getCurrentSpeed() >= l_edge.getEdgeCells())
                 continue;
 
             return l_edge.getPredecessor(this);

@@ -27,7 +27,6 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.TileFactory;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 

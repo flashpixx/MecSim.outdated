@@ -234,19 +234,23 @@ public class CGraphHopper extends GraphHopper {
     /**
      * returns the linkage between edge and car
      *
+     * @warn disable this method, because on an edge
+     * ID the direction of an edge is undefined on
+     * an edge iterator the direction is defined, so we
+     * use the iterator
      * @param p_edge edge ID
      * @return linkage object
-     */
+     *
     public synchronized CCellCarLinkage getEdge(int p_edge) {
-        CCellCarLinkage l_edge = m_edgecell.get(p_edge);
-        if (l_edge == null) {
-            l_edge = new CCellCarLinkage(p_edge, this.getEdgeLength(p_edge));
-            m_edgecell.put(l_edge.getEdgeID(), l_edge);
-        }
-
-        return l_edge;
+    CCellCarLinkage l_edge = m_edgecell.get(p_edge);
+    if (l_edge == null) {
+    l_edge = new CCellCarLinkage(p_edge, this.getEdgeLength(p_edge));
+    m_edgecell.put(l_edge.getEdgeID(), l_edge);
     }
 
+    return l_edge;
+    }
+     */
 
     /**
      * returns the linkage between edge and car

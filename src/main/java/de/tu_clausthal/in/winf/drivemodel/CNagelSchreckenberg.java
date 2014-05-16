@@ -23,7 +23,6 @@ package de.tu_clausthal.in.winf.drivemodel;
 
 import de.tu_clausthal.in.winf.objects.ICar;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -43,22 +42,18 @@ public class CNagelSchreckenberg implements IDriveModel {
 
     @Override
     public void update(int p_currentsep, ICar p_car) {
-        //if (p_car.getCurrentSpeed() < p_car.getMaximumSpeed())
-        //    p_car.setCurrentSpeed(p_car.getCurrentSpeed() + 1);
+        if (p_car.getCurrentSpeed() < p_car.getMaximumSpeed())
+            p_car.setCurrentSpeed(p_car.getCurrentSpeed() + 1);
 
         Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
-        if ( (l_predecessor != null) && (l_predecessor.size() > 0) )
-        {
+        if ((l_predecessor != null) && (l_predecessor.size() > 0)) {
             Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
             if (l_item.getKey().intValue() < p_car.getCurrentSpeed())
-                p_car.setCurrentSpeed(l_item.getKey().intValue());
+                p_car.setCurrentSpeed(l_item.getKey().intValue() - 1);
         }
 
-        //if ((p_car.getCurrentSpeed() > 0) && (m_random.nextDouble() <= p_car.getLingerProbability()))
-        //    p_car.setCurrentSpeed(p_car.getCurrentSpeed() - 1);
-
-        if (p_currentsep > 5)
-            p_car.setCurrentSpeed(0);
+        if ((p_car.getCurrentSpeed() > 0) && (m_random.nextDouble() <= p_car.getLingerProbability()))
+            p_car.setCurrentSpeed(p_car.getCurrentSpeed() - 1);
 
         p_car.drive();
     }

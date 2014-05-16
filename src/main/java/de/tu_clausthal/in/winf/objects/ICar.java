@@ -28,6 +28,7 @@ import org.jdesktop.swingx.mapviewer.TileFactory;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -110,7 +111,7 @@ public interface ICar {
      *
      * @return predecessor car object and its distance
      */
-    public HashMap<Integer, ICar> getPredecessor();
+    public Map<Integer, ICar> getPredecessor();
 
 
     /**

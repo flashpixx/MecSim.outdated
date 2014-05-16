@@ -304,10 +304,9 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
      *
      * @param p_car   car object
      * @param p_count number of predecessors
-     * @return null or car object
-     * @todo check next edge
+     * @return null or map with position and car object
      */
-    public HashMap<Integer, ICar> getPredecessor(ICar p_car, int p_count) {
+    public Map<Integer, ICar> getPredecessor(ICar p_car, int p_count) {
         Integer l_pos = m_cars.get(p_car);
         if (l_pos == null)
             return null;
@@ -328,9 +327,9 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
      * returns the next predecessor of a car on the edge
      *
      * @param p_car car object
-     * @return
+     * @return null or map with position and car object
      */
-    public HashMap<Integer, ICar> getPredecessor(ICar p_car) {
+    public Map<Integer, ICar> getPredecessor(ICar p_car) {
         return this.getPredecessor(p_car, 1);
     }
 

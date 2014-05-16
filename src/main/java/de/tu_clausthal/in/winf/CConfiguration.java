@@ -140,6 +140,7 @@ public class CConfiguration {
 
         // set always static values (we need always 2 threads)
         m_data.MaxThreadNumber = Runtime.getRuntime().availableProcessors() + 1;
+        m_data.MaxThreadNumber = 1;
     }
 
     /**

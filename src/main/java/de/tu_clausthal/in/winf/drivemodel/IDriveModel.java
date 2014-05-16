@@ -34,7 +34,9 @@ public interface IDriveModel {
      * updates car
      *
      * @warn update is called on each thread, so sometimes it must be synchronized
+     * @param p_currentstep current step number
+     * @param p_car car object
      */
-    public void update(ICar p_car);
+    public void update(int p_currentstep, ICar p_car);
 
 }

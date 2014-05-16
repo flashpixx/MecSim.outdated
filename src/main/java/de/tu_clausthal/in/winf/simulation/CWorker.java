@@ -177,7 +177,7 @@ public class CWorker implements Runnable {
                 if (l_car.hasEndReached())
                     continue;
 
-                m_drivemodell.update(l_car);
+                m_drivemodell.update(m_currentstep.get(), l_car);
 
                 if (!l_car.hasEndReached())
                     m_cars.push(l_car);

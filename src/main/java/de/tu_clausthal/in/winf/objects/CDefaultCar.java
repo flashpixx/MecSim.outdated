@@ -238,14 +238,18 @@ public class CDefaultCar implements ICar {
 
     @Override
     public Map<Integer, ICar> getPredecessor() {
+        int l_steps = this.getCurrentSpeed();
+
         for (int i = m_routeindex; i < m_routeedges.size(); i++) {
             CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(m_routeedges.get(m_routeindex));
 
             if (l_edge == null)
                 return null;
 
-            if (this.getCurrentSpeed() >= l_edge.getEdgeCells())
+            if (l_steps >= l_edge.getEdgeCells()) {
+                l_steps -= l_edge.getEdgeCells();
                 continue;
+            }
 
             return l_edge.getPredecessor(this);
         }

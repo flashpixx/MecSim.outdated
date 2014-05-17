@@ -230,6 +230,13 @@ public class CGraphHopper extends GraphHopper {
         return l_result.getClosestNode();
     }
 
+    /**
+     * clears all edges
+     */
+    public synchronized void clear() {
+        for (Map.Entry<Integer, CCellCarLinkage> l_item : m_edgecell.entrySet())
+            l_item.getValue().clear();
+    }
 
     /**
      * returns the linkage between edge and car

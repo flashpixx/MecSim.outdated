@@ -334,6 +334,16 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
     }
 
     /**
+     * clears the edge information
+     */
+    public synchronized void clear() {
+        m_cars.clear();
+        for (int i = 0; i < m_cells.length; i++)
+            m_cells[i] = null;
+
+    }
+
+    /**
      * checks if the forward edge is empty
      *
      * @return boolean for empty
@@ -465,6 +475,12 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
             return m_y[p_index];
         }
 
+
+        /**
+         * number of elements
+         *
+         * @return number of elements
+         */
         public int size() {
             return m_x.length;
         }

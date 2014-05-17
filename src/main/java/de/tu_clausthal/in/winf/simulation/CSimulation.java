@@ -24,8 +24,10 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,6 +206,8 @@ public class CSimulation {
         this.stop();
         m_currentstep.set(0);
         m_cars.clear();
+        CGraphHopper.getInstance().clear();
+        COSMViewer.getInstance().getCarRenderer().clear();
         m_Logger.info("simulation reset");
     }
 

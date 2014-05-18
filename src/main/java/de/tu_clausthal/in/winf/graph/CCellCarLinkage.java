@@ -311,10 +311,22 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
         if (l_pos == null)
             return null;
 
+        return getPredecessor(l_pos.intValue() + 1, p_count);
+    }
+
+
+    /**
+     * returns the predeccors of a position
+     *
+     * @param p_position index
+     * @param p_count    number of elements
+     * @return null or map with position and car object
+     */
+    public Map<Integer, ICar> getPredecessor(int p_position, int p_count) {
         HashMap<Integer, ICar> l_items = new HashMap();
-        for (int i = l_pos.intValue() + 1; i < m_cells.length; i++) {
+        for (int i = p_position; i < m_cells.length; i++) {
             if (m_cells[i] != null)
-                l_items.put(i - l_pos.intValue(), m_cells[i]);
+                l_items.put(i - p_position, m_cells[i]);
 
             if (l_items.size() >= p_count)
                 break;
@@ -331,6 +343,16 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
      */
     public Map<Integer, ICar> getPredecessor(ICar p_car) {
         return this.getPredecessor(p_car, 1);
+    }
+
+    /**
+     * returns the next predecessor of a position on the egde
+     *
+     * @param p_position index
+     * @return null or map with position and car object
+     */
+    public Map<Integer, ICar> getPredecessor(int p_position) {
+        return this.getPredecessor(p_position, 1);
     }
 
     /**

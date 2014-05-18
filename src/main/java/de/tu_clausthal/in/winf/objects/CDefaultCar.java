@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -239,19 +240,36 @@ public class CDefaultCar implements ICar {
     @Override
     public Map<Integer, ICar> getPredecessor() {
         int l_steps = this.getCurrentSpeed();
+        int l_edgelength = 0;
 
+        //iterate over the edges in the rozre
         for (int i = m_routeindex; i < m_routeedges.size(); i++) {
             CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(m_routeedges.get(m_routeindex));
 
             if (l_edge == null)
                 return null;
 
+            // if car is faster than edge length -> get next edge
             if (l_steps >= l_edge.getEdgeCells()) {
                 l_steps -= l_edge.getEdgeCells();
+                l_edgelength += l_edge.getEdgeCells();
                 continue;
             }
 
-            return l_edge.getPredecessor(this);
+            // found predecessor on the current edge
+            if (i == m_routeindex)
+                return l_edge.getPredecessor(this);
+
+            // otherwise
+            if (l_edge.getPredecessor(l_steps) != null) {
+                Map<Integer, ICar> l_predecessor = new HashMap();
+                for (Map.Entry<Integer, ICar> l_item : l_edge.getPredecessor(l_steps).entrySet())
+                    l_predecessor.put( l_item.getKey().intValue()+l_edgelength, l_item.getValue() );
+
+                return l_predecessor;
+            }
+
+            return null;
         }
 
         return null;

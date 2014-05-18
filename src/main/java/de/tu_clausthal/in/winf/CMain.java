@@ -50,7 +50,7 @@ public class CMain {
         if (p_args.length > 0)
             l_config = new File(p_args[0]);
 
-        // set configuration directory and read the Json configuration file
+        // set configuration directory and read the Json configuration file‚‚‚‚‚
         CConfiguration.getInstance().setConfigDir(l_config);
         CConfiguration.getInstance().read();
 

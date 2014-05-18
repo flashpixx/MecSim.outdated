@@ -264,7 +264,7 @@ public class CDefaultCar implements ICar {
             if (l_edge.getPredecessor(l_steps) != null) {
                 Map<Integer, ICar> l_predecessor = new HashMap();
                 for (Map.Entry<Integer, ICar> l_item : l_edge.getPredecessor(l_steps).entrySet())
-                    l_predecessor.put( l_item.getKey().intValue()+l_edgelength, l_item.getValue() );
+                    l_predecessor.put(l_item.getKey().intValue() + l_edgelength, l_item.getValue());
 
                 return l_predecessor;
             }

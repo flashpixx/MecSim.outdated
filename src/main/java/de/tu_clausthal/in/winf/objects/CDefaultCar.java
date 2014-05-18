@@ -41,6 +41,7 @@ import java.util.Random;
 
 /**
  * class for a default car *
+ * @note the paint method color the car depend on the current speed
  */
 public class CDefaultCar implements ICar {
 
@@ -90,11 +91,10 @@ public class CDefaultCar implements ICar {
      * @param p_StartPosition start positions (position of the source)
      */
     public CDefaultCar(GeoPosition p_StartPosition) {
+        m_maxSpeed          = 200;
+        m_StartPosition     = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
-        m_StartPosition = p_StartPosition;
-        while (m_maxSpeed < 75)
-            m_maxSpeed = m_random.nextInt(100) + 20;
-        while (m_speed < 25)
+        while (m_speed < 50)
             m_speed = m_random.nextInt(m_maxSpeed);
 
 
@@ -239,7 +239,6 @@ public class CDefaultCar implements ICar {
 
     @Override
     public Map<Integer, ICar> getPredecessor() {
-        int l_steps = this.getCurrentSpeed();
         int l_edgelength = 0;
 
         //iterate over the edges in the rozre
@@ -249,30 +248,22 @@ public class CDefaultCar implements ICar {
             if (l_edge == null)
                 return null;
 
-            // if car is faster than edge length -> get next edge
-            if (l_steps >= l_edge.getEdgeCells()) {
-                l_steps -= l_edge.getEdgeCells();
-                l_edgelength += l_edge.getEdgeCells();
-                continue;
+            // exists a predecessor on the current edge
+            Map<Integer, ICar> l_predecessor = (i == m_routeindex) ?  l_edge.getPredecessor(this) : l_edge.getPredecessor(0);
+            if (l_predecessor != null)
+            {
+                Map<Integer, ICar> l_predecessordistance = new HashMap();
+                for (Map.Entry<Integer, ICar> l_item : l_predecessor.entrySet())
+                    l_predecessordistance.put(l_item.getKey().intValue() + l_edgelength, l_item.getValue());
+
+                return l_predecessordistance;
             }
 
-            // found predecessor on the current edge
-            if (i == m_routeindex)
-                return l_edge.getPredecessor(this);
-
-            // otherwise
-            if (l_edge.getPredecessor(l_steps) != null) {
-                Map<Integer, ICar> l_predecessor = new HashMap();
-                for (Map.Entry<Integer, ICar> l_item : l_edge.getPredecessor(l_steps).entrySet())
-                    l_predecessor.put(l_item.getKey().intValue() + l_edgelength, l_item.getValue());
-
-                return l_predecessor;
-            }
-
-            return null;
+            l_edgelength += l_edge.getEdgeCells();
         }
 
         return null;
+
     }
 
 
@@ -305,7 +296,13 @@ public class CDefaultCar implements ICar {
         int l_zoom = Math.max(9 - p_zoom, 2);
 
         Point2D l_point = p_factory.geoToPixel(l_position, p_zoom);
-        p_graphic.setColor(Color.MAGENTA);
+
+        p_graphic.setColor(Color.DARK_GRAY);
+        if (m_speed >= 50)
+            p_graphic.setColor(Color.GREEN);
+        if (m_speed >= 100)
+            p_graphic.setColor(Color.RED);
+
         p_graphic.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
     }
 

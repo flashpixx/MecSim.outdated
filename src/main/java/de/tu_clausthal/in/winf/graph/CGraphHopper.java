@@ -77,7 +77,7 @@ public class CGraphHopper extends GraphHopper {
         // define graph location
         File l_graphlocation = new File(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator +
                 CConfiguration.getInstance().get().RoutingMap.replace('/', '_'));
-        m_Logger.info("try to load graph from [" + l_graphlocation.getAbsolutePath() + "]");
+        System.out.println("try to load graph from [" + l_graphlocation.getAbsolutePath() + "]");
 
         if (!this.load(l_graphlocation.getAbsolutePath())) {
             m_Logger.info("graph cannot be found");
@@ -91,7 +91,7 @@ public class CGraphHopper extends GraphHopper {
             l_osm.delete();
         }
 
-        m_Logger.info("graph is loaded successfully");
+        System.out.println("graph is loaded successfully");
     }
 
     /**
@@ -193,9 +193,10 @@ public class CGraphHopper extends GraphHopper {
      * @param p_edge edge ID
      * @return speed
      */
-    public double getEdgeSpeed(int p_edge) {
-        return this.getGraph().getEncodingManager().getEncoder("CAR").getSpeed(p_edge);
+    public double getEdgeSpeed(EdgeIteratorState p_edge) {
+        return this.getGraph().getEncodingManager().getEncoder("CAR").getSpeed(p_edge.getFlags());
     }
+
 
     /**
      * returns the edge length
@@ -287,7 +288,7 @@ public class CGraphHopper extends GraphHopper {
             File l_output = File.createTempFile("tucosm", ".osm.pbf");
             URL l_url = new URL("http://download.geofabrik.de/" + CConfiguration.getInstance().get().RoutingMap + "-latest.osm.pbf");
 
-            m_Logger.info("download OSM map from [" + l_url + "] to [" + l_output + "]");
+            System.out.println("download OSM map from [" + l_url + "] to [" + l_output + "]");
 
             ReadableByteChannel l_channel = Channels.newChannel(l_url.openStream());
             FileOutputStream l_stream = new FileOutputStream(l_output);

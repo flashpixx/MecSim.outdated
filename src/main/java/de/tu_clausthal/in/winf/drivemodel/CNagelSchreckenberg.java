@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.drivemodel;
 
+import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.objects.ICar;
 
 import java.util.Map;
@@ -31,6 +32,8 @@ import java.util.Random;
  * class of the Nagel-Schrenberg drive model
  *
  * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
+ * @note modifed model, the maximum speed is defined by the maximum edge speed and the
+ * acceleration is up to 5 cells (both create a little bit more realistic driving)
  */
 public class CNagelSchreckenberg implements IDriveModel {
 
@@ -42,9 +45,17 @@ public class CNagelSchreckenberg implements IDriveModel {
 
     @Override
     public void update(int p_currentsep, ICar p_car) {
-        if (p_car.getCurrentSpeed() < p_car.getMaximumSpeed())
-            p_car.setCurrentSpeed(p_car.getCurrentSpeed() + 1);
 
+        //check maximum speed on the current edge and modify speed
+        int l_maxspeed = Math.min(p_car.getMaximumSpeed(), (int) CGraphHopper.getInstance().getEdgeSpeed(p_car.getCurrentEdge()));
+
+        // increment speed
+        if (p_car.getCurrentSpeed() < l_maxspeed-5 )
+            p_car.setCurrentSpeed(p_car.getCurrentSpeed() + 5);
+        else
+            p_car.setCurrentSpeed(l_maxspeed);
+
+        // check collision with the predecessor car
         Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
         if ((l_predecessor != null) && (l_predecessor.size() > 0)) {
             Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
@@ -52,10 +63,14 @@ public class CNagelSchreckenberg implements IDriveModel {
                 p_car.setCurrentSpeed(l_item.getKey().intValue() - 1);
         }
 
+        // decrement on linger random vlaue
         if ((p_car.getCurrentSpeed() > 0) && (m_random.nextDouble() <= p_car.getLingerProbability()))
             p_car.setCurrentSpeed(p_car.getCurrentSpeed() - 1);
 
+        //System.out.println(p_car.getCurrentSpeed());
+        // update car
         p_car.drive();
+
     }
 
 }

@@ -31,9 +31,9 @@ import java.util.Random;
 /**
  * class of the Nagel-Schrenberg drive model
  *
- * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
  * @note modifed model, the maximum speed is defined by the maximum edge speed and the
  * acceleration is up to 5 cells (both create a little bit more realistic driving)
+ * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
  */
 public class CNagelSchreckenberg implements IDriveModel {
 
@@ -50,7 +50,7 @@ public class CNagelSchreckenberg implements IDriveModel {
         int l_maxspeed = Math.min(p_car.getMaximumSpeed(), (int) CGraphHopper.getInstance().getEdgeSpeed(p_car.getCurrentEdge()));
 
         // increment speed
-        if (p_car.getCurrentSpeed() < l_maxspeed-5 )
+        if (p_car.getCurrentSpeed() < l_maxspeed - 5)
             p_car.setCurrentSpeed(p_car.getCurrentSpeed() + 5);
         else
             p_car.setCurrentSpeed(l_maxspeed);

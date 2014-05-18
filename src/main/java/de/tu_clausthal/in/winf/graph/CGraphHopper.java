@@ -27,6 +27,8 @@ import com.graphhopper.GraphHopper;
 import com.graphhopper.routing.Path;
 import com.graphhopper.routing.util.EdgeFilter;
 import com.graphhopper.routing.util.EncodingManager;
+import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
@@ -300,6 +302,11 @@ public class CGraphHopper extends GraphHopper {
         }
         return null;
 
+    }
+
+    @Override
+    public Weighting createWeighting(String p_weighting, FlagEncoder p_encoder) {
+        return new CTrafficJamWeighting();
     }
 
     /**

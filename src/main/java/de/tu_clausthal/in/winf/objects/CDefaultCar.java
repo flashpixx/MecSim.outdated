@@ -41,6 +41,7 @@ import java.util.Random;
 
 /**
  * class for a default car *
+ *
  * @note the paint method color the car depend on the current speed
  */
 public class CDefaultCar implements ICar {
@@ -91,8 +92,8 @@ public class CDefaultCar implements ICar {
      * @param p_StartPosition start positions (position of the source)
      */
     public CDefaultCar(GeoPosition p_StartPosition) {
-        m_maxSpeed          = 200;
-        m_StartPosition     = p_StartPosition;
+        m_maxSpeed = 200;
+        m_StartPosition = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
         while (m_speed < 50)
             m_speed = m_random.nextInt(m_maxSpeed);
@@ -249,9 +250,8 @@ public class CDefaultCar implements ICar {
                 return null;
 
             // exists a predecessor on the current edge
-            Map<Integer, ICar> l_predecessor = (i == m_routeindex) ?  l_edge.getPredecessor(this) : l_edge.getPredecessor(0);
-            if (l_predecessor != null)
-            {
+            Map<Integer, ICar> l_predecessor = (i == m_routeindex) ? l_edge.getPredecessor(this) : l_edge.getPredecessor(0);
+            if (l_predecessor != null) {
                 Map<Integer, ICar> l_predecessordistance = new HashMap();
                 for (Map.Entry<Integer, ICar> l_item : l_predecessor.entrySet())
                     l_predecessordistance.put(l_item.getKey().intValue() + l_edgelength, l_item.getValue());

@@ -32,7 +32,7 @@ import java.util.Random;
  * class of the Nagel-Schrenberg drive model
  *
  * @note modifed model, the maximum speed is defined by the maximum edge speed and the
- * acceleration is up to 5 cells (both create a little bit more realistic driving)
+ * acceleration/ deceleration is defined on the car object (both create a little bit more realistic driving)
  * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
  */
 public class CNagelSchreckenberg implements IDriveModel {

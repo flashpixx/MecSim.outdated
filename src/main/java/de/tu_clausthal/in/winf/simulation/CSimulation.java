@@ -155,13 +155,13 @@ public class CSimulation {
     /**
      * runs the simulation of the current step
      *
-     * @param p_model traffic modell
+     * @param p_model traffic model
      * @throws IllegalAccessException
      * @note thread pool is generated (pause structures can be created with a reentrant lock @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html )
      */
-    public synchronized void start(IDriveModel p_model) throws IllegalAccessException {
+    public synchronized void start(IDriveModel p_model) throws IllegalAccessException, IllegalStateException {
         if (this.isRunning())
-            return;
+            throw new IllegalStateException("simulation is running");
 
         if (CConfiguration.getInstance().get().MaxThreadNumber < 1)
             throw new IllegalAccessException("one thread must be exists to start simulation");
@@ -183,9 +183,9 @@ public class CSimulation {
     /**
      * stops the current simulation *
      */
-    public synchronized void stop() {
+    public synchronized void stop() throws IllegalStateException {
         if (!this.isRunning())
-            return;
+            throw new IllegalStateException("simulation is not running");
 
         m_pool.shutdown();
         try {

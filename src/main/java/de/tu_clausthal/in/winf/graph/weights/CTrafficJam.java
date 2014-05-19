@@ -19,11 +19,12 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.graph;
+package de.tu_clausthal.in.winf.graph.weights;
 
 
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.winf.graph.CGraphHopper;
 
 
 /**
@@ -31,7 +32,7 @@ import com.graphhopper.util.EdgeIteratorState;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CTrafficJamWeighting implements Weighting {
+public class CTrafficJam implements Weighting {
 
     @Override
     public double getMinWeight(double p_weight) {
@@ -41,6 +42,11 @@ public class CTrafficJamWeighting implements Weighting {
     @Override
     public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse) {
         return CGraphHopper.getInstance().getEdge(p_edge).getNumberOfCars();
+    }
+
+    @Override
+    public String toString() {
+        return "TrafficJam ";
     }
 
 }

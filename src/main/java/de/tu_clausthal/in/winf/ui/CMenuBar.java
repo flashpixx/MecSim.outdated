@@ -59,6 +59,50 @@ public class CMenuBar extends JMenuBar {
         l_menu.add(l_item);
 
         this.add(l_menu);
+
+
+        l_menu = new JMenu("Graph Weights");
+        ButtonGroup l_group = new ButtonGroup();
+
+        JRadioButtonMenuItem l_radio = new JRadioButtonMenuItem("Default");
+        l_radio.setSelected(true);
+        l_radio.addActionListener(l_listener);
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
+        l_listener.add(l_radio.getText(), l_radio);
+
+        l_radio = new JRadioButtonMenuItem("Speed");
+        l_radio.addActionListener(l_listener);
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
+        l_listener.add(l_radio.getText(), l_radio);
+
+        l_radio = new JRadioButtonMenuItem("Traffic Jam");
+        l_radio.addActionListener(l_listener);
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
+        l_listener.add(l_radio.getText(), l_radio);
+
+        l_radio = new JRadioButtonMenuItem("Speed & Traffic Jam");
+        l_radio.addActionListener(l_listener);
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
+        l_listener.add(l_radio.getText(), l_radio);
+
+        this.add(l_menu);
+
+
+        l_menu = new JMenu("Driving Model");
+        l_group = new ButtonGroup();
+
+        l_radio = new JRadioButtonMenuItem("Nagel-Schreckenberg");
+        l_radio.setSelected(true);
+        l_radio.addActionListener(l_listener);
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
+        l_listener.add(l_radio.getText(), l_radio);
+
+        this.add(l_menu);
     }
 
 }

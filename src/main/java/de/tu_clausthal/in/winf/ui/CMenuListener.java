@@ -24,10 +24,12 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -71,19 +73,57 @@ public class CMenuListener implements ActionListener {
 
             if (p_event.getSource() == m_items.get("Start"))
                 CSimulation.getInstance().start(m_drivemodel);
-
-
             if (p_event.getSource() == m_items.get("Stop"))
                 CSimulation.getInstance().stop();
-
             if (p_event.getSource() == m_items.get("Reset")) {
                 CSimulation.getInstance().reset();
                 COSMViewer.getInstance().reset();
             }
 
-        } catch (IllegalAccessException l_exception) {
-            m_Logger.error(l_exception.getMessage());
+            if (p_event.getSource() == m_items.get("Default"))
+                this.setGraphWeight("");
+            if (p_event.getSource() == m_items.get("Speed"))
+                this.setGraphWeight("Speed");
+            if (p_event.getSource() == m_items.get("Traffic Jam"))
+                this.setGraphWeight("Traffic Jam");
+            if (p_event.getSource() == m_items.get("Speed & Traffic Jam"))
+                this.setGraphWeight("Speed & Traffic Jam");
+
+            if (p_event.getSource() == m_items.get("Nagel-Schreckenberg"))
+                this.setDrivingModel(new CNagelSchreckenberg());
+
+
+        } catch (Exception l_exception) {
+            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
+    }
+
+
+    /**
+     * sets the graph weights
+     *
+     * @param p_weight weight name (see "graphhopper" class "createWeighting" method)
+     * @throws IllegalStateException
+     */
+    private void setGraphWeight(String p_weight) throws IllegalStateException {
+        if (CSimulation.getInstance().isRunning())
+            throw new IllegalStateException("simulation is running");
+        CGraphHopper.getInstance().setWeights(p_weight);
+    }
+
+
+    /**
+     * sets the driving model
+     *
+     * @param p_model model
+     * @throws IllegalStateException
+     */
+    private void setDrivingModel(IDriveModel p_model) throws IllegalStateException {
+        if (CSimulation.getInstance().isRunning())
+            throw new IllegalStateException("simulation is running");
+        if (p_model == null)
+            throw new IllegalArgumentException("driving model need not be null");
+        m_drivemodel = p_model;
     }
 
 }

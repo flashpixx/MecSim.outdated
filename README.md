@@ -52,13 +52,16 @@ Das System bezieht die Daten für den Graph online von dem Dienst [Geofabrik](ht
 
 ## Benutzung
 
-Nach dem Start des Programms erscheint die Karte. Man kann die Karte mittels Maus und / oder Cursortasten bewegen. Durch Klicken können blaue Quellen, an denen Fahrzeuge erzeugt werden, in die Karte eingefügt werden (ebenso kann eine Quelle wieder entfernt werden). Über das Menü kann die Simulation gestartet, gestoppt oder resettet werden. Bei einem Reset werden alle Fahrzeuge entfernt und nur die Quellen bleiben bestehen.
+Nach dem Start des Programms erscheint die Karte. Man kann die Karte mittels Maus und / oder Cursortasten bewegen. Durch Klicken können blaue Quellen, an denen Fahrzeuge erzeugt werden, in die Karte eingefügt werden (ebenso kann eine Quelle wieder entfernt werden). Über das Menü kann die Simulation gestartet, gestoppt oder resettet werden. Bei einem Reset werden alle Fahrzeuge entfernt und nur die Quellen bleiben bestehen. Über das Menü ```Graph Weights``` können unterschiedliche Gewichtsstrukturen für das Routing aktiviert werden.
 
 ### Ansicht / Tips
 
 * werden Quellen auf Autobahnen gesetzt, zeigt sich sehr schnell ein Verkehrsstau
 * die Fahrzeuge besitzen unterschiedliche Farben mit folgender Bedeutung:
-  * schwarz / dunkel-grau: das Fahrzeug fährt weniger als 50km/h
-  * grün: das Fahrzeug fährt zwischen 50 und 100 km/h
-  * rot: das Fahrzeug fährt mehr als 100 km/h
+  * dunkel grau: < 50km/h
+  * magenta: 50-60km/h
+  * pink: 60-80km/h
+  * blau: 80-100km/h
+  * cyan: 100-130km/h
+  * rot: > 130km/h
 * an einigen Stellen fahren die Fahrzeuge nicht exakt die gezeigte Straße, dies ist dadurch bedingt, dass die unterliegenden GPS Koordinaten nicht exakt interpoliert werden können  

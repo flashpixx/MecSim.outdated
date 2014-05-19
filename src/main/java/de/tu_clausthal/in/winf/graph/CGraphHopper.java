@@ -33,6 +33,8 @@ import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.graph.weights.CSpeedUp;
+import de.tu_clausthal.in.winf.graph.weights.CSpeedUpTrafficJam;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,22 +71,42 @@ public class CGraphHopper extends GraphHopper {
      * map with edge-cell connection *
      */
     private Map<Integer, CCellCarLinkage> m_edgecell = new ConcurrentHashMap();
-    /**
-     * boolean flag for graph loading *
-     */
-    private boolean m_isload = false;
 
 
     /**
      * private ctor of the singleton structure
-     * which runs the download / structure convert
      */
     private CGraphHopper() {
+        this.initialize();
+    }
+
+    /**
+     * private ctor do add different weights for routing *
+     */
+    private CGraphHopper(String p_weights) {
+        this.setCHShortcuts(p_weights);
+        this.initialize();
+    }
+
+    /**
+     * returns the instance
+     *
+     * @return instance of the class
+     */
+    public static CGraphHopper getInstance() {
+        return s_instance;
+    }
+
+    /**
+     * run graph initialize process with OSM data convert *
+     */
+    private void initialize() {
         // define graph location
         File l_graphlocation = new File(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator +
                 CConfiguration.getInstance().get().RoutingMap.replace('/', '_'));
         System.out.println("try to load graph from [" + l_graphlocation.getAbsolutePath() + "]");
 
+        // convert OSM or load the graph
         if (!this.load(l_graphlocation.getAbsolutePath())) {
             m_Logger.info("graph cannot be found");
             File l_osm = this.downloadOSMData();
@@ -98,17 +120,20 @@ public class CGraphHopper extends GraphHopper {
         }
 
         System.out.println("graph is loaded successfully");
-        m_isload = true;
     }
 
     /**
-     * returns the instance
+     * change the weighting on the graph
      *
-     * @return instance of the class
+     * @param p_weights weight name
+     * @note weight reloading can be create only be reinitialize the graph
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    public static CGraphHopper getInstance() {
-        return s_instance;
+    public void setWeights(String p_weights) {
+        s_instance = null;
+        s_instance = new CGraphHopper(p_weights);
     }
+
 
     /**
      * returns a route between two geo position
@@ -311,8 +336,14 @@ public class CGraphHopper extends GraphHopper {
 
     @Override
     public Weighting createWeighting(String p_weighting, FlagEncoder p_encoder) {
-        if (this.m_isload)
-            return new CTrafficJamWeighting();
+        if ("TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting))
+            return new CSpeedUpTrafficJam(p_encoder);
+
+        if ("SpeedUp".equalsIgnoreCase(p_weighting))
+            return new CSpeedUp(p_encoder);
+
+        if ("TrafficJam".equalsIgnoreCase(p_weighting))
+            return null;
 
         return super.createWeighting(p_weighting, p_encoder);
     }

@@ -69,7 +69,7 @@ public class CDefaultCar implements ICar {
     /**
      * maximum speed definition *
      */
-    private int m_maxSpeed = 0;
+    private int m_maxSpeed = 200;
     /**
      * linger probability value *
      */
@@ -100,7 +100,6 @@ public class CDefaultCar implements ICar {
      * @param p_StartPosition start positions (position of the source)
      */
     public CDefaultCar(GeoPosition p_StartPosition) {
-        m_maxSpeed = 200;
         m_StartPosition = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
         while (m_speed < 50)
@@ -207,7 +206,6 @@ public class CDefaultCar implements ICar {
 
                 // check car can be set to the edge position
                 if ((l_steps < l_edge.getEdgeCells()) && (!l_edge.isPositionSet(l_steps))) {
-                    //System.out.println(this+" set");
                     l_edge.addCar2Edge(this, l_steps);
                     break;
                 }
@@ -306,10 +304,17 @@ public class CDefaultCar implements ICar {
 
         Point2D l_point = p_factory.geoToPixel(l_position, p_zoom);
 
+        // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
         p_graphic.setColor(Color.DARK_GRAY);
         if (m_speed >= 50)
-            p_graphic.setColor(Color.GREEN);
+            p_graphic.setColor(Color.MAGENTA);
+        if (m_speed >= 60)
+            p_graphic.setColor(Color.PINK);
+        if (m_speed >= 80)
+            p_graphic.setColor(Color.BLUE);
         if (m_speed >= 100)
+            p_graphic.setColor(Color.CYAN);
+        if (m_speed >= 130)
             p_graphic.setColor(Color.RED);
 
         p_graphic.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);

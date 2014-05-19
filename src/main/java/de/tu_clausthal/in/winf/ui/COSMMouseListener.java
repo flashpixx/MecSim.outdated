@@ -48,39 +48,32 @@ class COSMMouseListener extends MouseInputAdapter {
      * click method to add / remove sources *
      */
     public void mouseClicked(MouseEvent l_event) {
-        if (CSimulation.getInstance().isRunning()) {
-            JOptionPane.showMessageDialog(null, "Simulation is running", "Warning", JOptionPane.CANCEL_OPTION);
-            return;
-        }
+        try {
+            if (l_event.getButton() == MouseEvent.BUTTON1) {
+                COSMViewer l_viewer = (COSMViewer) l_event.getSource();
+                Rectangle l_viewportBounds = l_viewer.getViewportBounds();
+                Point2D l_position = new Point(l_viewportBounds.x + l_event.getPoint().x, l_viewportBounds.y + l_event.getPoint().y);
 
-        if (l_event.getButton() == MouseEvent.BUTTON1) {
-            COSMViewer l_viewer = (COSMViewer) l_event.getSource();
-            Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-            Point2D l_position = new Point(l_viewportBounds.x + l_event.getPoint().x, l_viewportBounds.y + l_event.getPoint().y);
-
-            boolean l_remove = false;
-            for (ICarSourceFactory l_source : l_viewer.getSourceRenderer().getSources()) {
-                Point2D l_sourceposition = l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom());
-                if ((l_position.getX() >= l_sourceposition.getX() - s_removeBoxEpsilon) && (l_position.getX() <= l_sourceposition.getX() + s_removeBoxEpsilon) &&
-                        (l_position.getY() >= l_sourceposition.getY() - s_removeBoxEpsilon) && (l_position.getY() <= l_sourceposition.getY() + s_removeBoxEpsilon))
-                    try {
+                boolean l_remove = false;
+                for (ICarSourceFactory l_source : l_viewer.getSourceRenderer().getSources()) {
+                    Point2D l_sourceposition = l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom());
+                    if ((l_position.getX() >= l_sourceposition.getX() - s_removeBoxEpsilon) && (l_position.getX() <= l_sourceposition.getX() + s_removeBoxEpsilon) &&
+                            (l_position.getY() >= l_sourceposition.getY() - s_removeBoxEpsilon) && (l_position.getY() <= l_sourceposition.getY() + s_removeBoxEpsilon)) {
                         CSimulation.getInstance().removeSource(l_source);
                         l_viewer.getSourceRenderer().removeSource(l_source);
                         l_remove = true;
                         break;
-                    } catch (IllegalAccessException l_exception) {
                     }
+                }
 
-            }
-
-            if (!l_remove) {
-                CDefaultSource l_source = new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom()));
-                try {
+                if (!l_remove) {
+                    CDefaultSource l_source = new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom()));
                     CSimulation.getInstance().addSource(l_source);
                     l_viewer.getSourceRenderer().addSources(l_source);
-                } catch (IllegalAccessException l_exception) {
                 }
             }
+        } catch (Exception l_exception) {
+            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
     }
 

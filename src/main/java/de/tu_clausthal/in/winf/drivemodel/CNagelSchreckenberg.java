@@ -29,7 +29,7 @@ import java.util.Random;
 
 
 /**
- * class of the Nagel-Schrenberg drive model
+ * class of the Nagel-Schreckenberg drive model
  *
  * @note modifed model, the maximum speed is defined by the maximum edge speed and the
  * acceleration/ deceleration is defined on the car object (both create a little bit more realistic driving)

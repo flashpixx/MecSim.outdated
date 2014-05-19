@@ -56,7 +56,7 @@ Nach dem Start des Programms erscheint die Karte. Man kann die Karte mittels Mau
 
 ### Ansicht / Tips
 
-* Werden Quellen auf Autobahnen gesetzt, zeigt sich sehr schnell ein Verkehrsstau
+* werden Quellen auf Autobahnen gesetzt, zeigt sich sehr schnell ein Verkehrsstau
 * die Fahrzeuge besitzen unterschiedliche Farben mit folgender Bedeutung:
   * schwarz / dunkel-grau: das Fahrzeug fährt weniger als 50km/h
   * grün: das Fahrzeug fährt zwischen 50 und 100 km/h

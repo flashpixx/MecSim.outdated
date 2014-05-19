@@ -69,7 +69,9 @@ public class CGraphHopper extends GraphHopper {
      * map with edge-cell connection *
      */
     private Map<Integer, CCellCarLinkage> m_edgecell = new ConcurrentHashMap();
-
+    /**
+     * boolean flag for graph loading *
+     */
     private boolean m_isload = false;
 
 
@@ -312,7 +314,7 @@ public class CGraphHopper extends GraphHopper {
         if (this.m_isload)
             return new CTrafficJamWeighting();
 
-        return super.createWeighting( p_weighting, p_encoder);
+        return super.createWeighting(p_weighting, p_encoder);
     }
 
     /**

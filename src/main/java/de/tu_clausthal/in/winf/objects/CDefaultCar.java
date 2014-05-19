@@ -80,10 +80,18 @@ public class CDefaultCar implements ICar {
     private List<EdgeIteratorState> m_routeedges = null;
     /**
      * edge counter for GHResponse  *
-     *
-     * @warn counter runs from [1,n-1) because the first and last edge are "virtual" and does not exists within the graph
      */
-    private int m_routeindex = 1;
+    private int m_routeindex = 0;
+
+    /**
+     * individual acceleration
+     */
+    private int m_acceleration = 1;
+
+    /**
+     * individual deceleration *
+     */
+    private int m_deceleration = 1;
 
 
     /**
@@ -97,7 +105,8 @@ public class CDefaultCar implements ICar {
         m_LingerProbability = m_random.nextDouble();
         while (m_speed < 50)
             m_speed = m_random.nextInt(m_maxSpeed);
-
+        m_acceleration = m_random.nextInt(40) + 20;
+        m_deceleration = m_random.nextInt(40) + 20;
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position
@@ -304,6 +313,16 @@ public class CDefaultCar implements ICar {
             p_graphic.setColor(Color.RED);
 
         p_graphic.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+    }
+
+    @Override
+    public int getAcceleration() {
+        return m_acceleration;
+    }
+
+    @Override
+    public int getDeceleration() {
+        return m_deceleration;
     }
 
 

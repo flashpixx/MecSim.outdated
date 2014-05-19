@@ -335,9 +335,16 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
         return l_items;
     }
 
+
+    /**
+     * returns the number of cars on the current edge
+     *
+     * @return car number
+     */
     public int getNumberOfCars() {
         return m_cars.size();
     }
+
 
     /**
      * returns the next predecessor of a car on the edge

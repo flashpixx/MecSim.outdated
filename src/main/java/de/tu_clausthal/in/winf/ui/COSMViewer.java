@@ -32,6 +32,7 @@ import org.jdesktop.swingx.input.ZoomMouseWheelListenerCenter;
 import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
 import org.jdesktop.swingx.mapviewer.LocalResponseCache;
 import org.jdesktop.swingx.mapviewer.TileFactoryInfo;
+import org.jdesktop.swingx.painter.Painter;
 
 import javax.swing.event.MouseInputListener;
 
@@ -49,6 +50,10 @@ public class COSMViewer extends JXMapViewer {
      * singleton instance *
      */
     private static COSMViewer s_instance = new COSMViewer();
+    /**
+     * list with overlays
+     */
+    COverlayCollection m_overlay = new COverlayCollection();
     /**
      * way point renderer *
      */
@@ -80,11 +85,10 @@ public class COSMViewer extends JXMapViewer {
         this.setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
         this.setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
 
-        COverlayCollection l_overlay = new COverlayCollection();
-        l_overlay.add(m_RouteRenderer);
-        l_overlay.add(m_SourceRenderer);
-        l_overlay.add(m_CarRenderer);
-        this.setOverlayPainter(l_overlay);
+        m_overlay.add(m_RouteRenderer);
+        m_overlay.add(m_SourceRenderer);
+        m_overlay.add(m_CarRenderer);
+        this.setOverlayPainter(m_overlay);
 
         COSMMouseListener l_OSMListener = new COSMMouseListener();
         MouseInputListener l_mouse = new PanMouseInputListener(this);
@@ -143,6 +147,32 @@ public class COSMViewer extends JXMapViewer {
     public void reset() {
         this.recenterToAddressLocation();
         this.setZoom(CConfiguration.getInstance().get().Zoom);
+    }
+
+
+    /**
+     * add a new overlay painter
+     *
+     * @param p_overlay painter object
+     */
+    public void addOverlayPainter(Painter p_overlay) {
+        if ((p_overlay.equals(m_RouteRenderer)) || (p_overlay.equals(m_CarRenderer)) || (p_overlay.equals(m_SourceRenderer)) || (!m_overlay.contains(p_overlay)))
+            return;
+
+        m_overlay.add(p_overlay);
+    }
+
+
+    /**
+     * remove a overlay painter
+     *
+     * @param p_overlay painter object
+     */
+    public void removeOverlayPainter(Painter p_overlay) {
+        if ((p_overlay.equals(m_RouteRenderer)) || (p_overlay.equals(m_CarRenderer)) || (p_overlay.equals(m_SourceRenderer)) || (!m_overlay.contains(p_overlay)))
+            return;
+
+        m_overlay.remove(p_overlay);
     }
 
 }

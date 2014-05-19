@@ -27,6 +27,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Random;
 
 
 /**
@@ -42,6 +43,10 @@ public class CDefaultSource implements ICarSourceFactory {
      * integer values how many cars are generated in a step *
      */
     private int m_NumberCarsInStep = 1;
+    /**
+     * random interface *
+     */
+    private Random m_random = new Random();
 
 
     /**
@@ -80,8 +85,11 @@ public class CDefaultSource implements ICarSourceFactory {
     @Override
     public Collection<ICar> generate() {
         Collection<ICar> l_sources = new HashSet();
+
+        // use random number on care creation, to avoid traffic jam on the source
         for (int i = 0; i < m_NumberCarsInStep; i++)
-            l_sources.add(new CDefaultCar(m_position));
+            if (m_random.nextDouble() <= 0.35)
+                l_sources.add(new CDefaultCar(m_position));
 
         return l_sources;
     }

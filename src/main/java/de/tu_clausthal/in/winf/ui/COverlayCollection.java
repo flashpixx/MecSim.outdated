@@ -25,13 +25,15 @@ package de.tu_clausthal.in.winf.ui;
 import org.jdesktop.swingx.painter.Painter;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 
 /**
  * collection to use mutiple overlays in the viewer *
  */
-public class COverlayCollection implements Painter {
+public class COverlayCollection implements Painter, Collection<Painter> {
 
     /**
      * list of other overlay painter *
@@ -39,29 +41,79 @@ public class COverlayCollection implements Painter {
     private HashSet<Painter> m_overlay = new HashSet();
 
 
-    /**
-     * adds a new painter
-     *
-     * @param p_item painter object
-     */
-    public void add(Painter p_item) {
-        m_overlay.add(p_item);
+    @Override
+    public int size() {
+        return m_overlay.size();
     }
 
 
-    /**
-     * removes a painter
-     *
-     * @param p_item painter object
-     */
-    public void remove(Painter p_item) {
-        m_overlay.remove(p_item);
+    @Override
+    public boolean isEmpty() {
+        return m_overlay.isEmpty();
     }
 
 
-    /**
-     * removes all painters *
-     */
+    @Override
+    public boolean contains(Object p_object) {
+        return m_overlay.contains(p_object);
+    }
+
+
+    @Override
+    public Iterator<Painter> iterator() {
+        return m_overlay.iterator();
+    }
+
+
+    @Override
+    public Object[] toArray() {
+        return m_overlay.toArray();
+    }
+
+
+    @Override
+    public <T> T[] toArray(T[] p_array) {
+        return m_overlay.toArray(p_array);
+    }
+
+
+    @Override
+    public boolean add(Painter p_painter) {
+        return m_overlay.add(p_painter);
+    }
+
+
+    @Override
+    public boolean remove(Object p_object) {
+        return m_overlay.remove(p_object);
+    }
+
+
+    @Override
+    public boolean containsAll(Collection<?> p_objects) {
+        return m_overlay.containsAll(p_objects);
+    }
+
+
+    @Override
+    public boolean addAll(Collection<? extends Painter> p_painters) {
+        return m_overlay.addAll(p_painters);
+    }
+
+
+    @Override
+    public boolean removeAll(Collection<?> p_objects) {
+        return m_overlay.removeAll(p_objects);
+    }
+
+
+    @Override
+    public boolean retainAll(Collection<?> p_objects) {
+        return m_overlay.retainAll(p_objects);
+    }
+
+
+    @Override
     public void clear() {
         m_overlay.clear();
     }

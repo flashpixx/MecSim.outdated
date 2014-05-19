@@ -142,4 +142,20 @@ public interface ICar {
      */
     public void paint(Graphics2D p_graphic, TileFactory p_factory, int p_zoom);
 
+
+    /**
+     * define an individual acceleration
+     *
+     * @return number (greater than zero)
+     */
+    public int getAcceleration();
+
+
+    /**
+     * define an individual deceleration
+     *
+     * @return number (greater than zero)
+     */
+    public int getDeceleration();
+
 }

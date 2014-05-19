@@ -70,6 +70,8 @@ public class CGraphHopper extends GraphHopper {
      */
     private Map<Integer, CCellCarLinkage> m_edgecell = new ConcurrentHashMap();
 
+    private boolean m_isload = false;
+
 
     /**
      * private ctor of the singleton structure
@@ -94,6 +96,7 @@ public class CGraphHopper extends GraphHopper {
         }
 
         System.out.println("graph is loaded successfully");
+        m_isload = true;
     }
 
     /**
@@ -306,7 +309,10 @@ public class CGraphHopper extends GraphHopper {
 
     @Override
     public Weighting createWeighting(String p_weighting, FlagEncoder p_encoder) {
-        return new CTrafficJamWeighting();
+        if (this.m_isload)
+            return new CTrafficJamWeighting();
+
+        return super.createWeighting( p_weighting, p_encoder);
     }
 
     /**

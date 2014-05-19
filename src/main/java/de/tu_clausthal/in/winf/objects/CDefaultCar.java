@@ -204,7 +204,7 @@ public class CDefaultCar implements ICar {
 
             // car is not set on the current edge, so we try to find the first position
             if (!l_edge.contains(this)) {
-                //System.out.println(this+" not contains");
+
                 // check car can be set to the edge position
                 if ((l_steps < l_edge.getEdgeCells()) && (!l_edge.isPositionSet(l_steps))) {
                     //System.out.println(this+" set");

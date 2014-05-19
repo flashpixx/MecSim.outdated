@@ -3,6 +3,7 @@ target/
 *.*
 !.gitignore
 !src/
+!*.md
 !*.java
 !*.xml
 !*.doxyfile

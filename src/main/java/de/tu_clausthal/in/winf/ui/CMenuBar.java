@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -17,7 +17,6 @@
  # You should have received a copy of the GNU General Public License                  #
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
- @endcond
  **/
 
 package de.tu_clausthal.in.winf.ui;
@@ -37,9 +36,24 @@ public class CMenuBar extends JMenuBar {
         super();
 
         CMenuListener l_listener = new CMenuListener();
-        JMenu l_menu = new JMenu("Action");
+        JMenu l_menu = new JMenu("File");
         JMenuItem l_item = null;
 
+        l_item = new JMenuItem("Load Sources");
+        l_listener.add(l_item.getText(), l_item);
+        l_item.addActionListener(l_listener);
+        l_menu.add(l_item);
+
+        l_item = new JMenuItem("Save Sources");
+        l_listener.add(l_item.getText(), l_item);
+        l_item.addActionListener(l_listener);
+        l_menu.add(l_item);
+
+        this.add(l_menu);
+
+
+        l_menu = new JMenu("Action");
+        l_item = null;
 
         l_item = new JMenuItem("Start");
         l_listener.add(l_item.getText(), l_item);

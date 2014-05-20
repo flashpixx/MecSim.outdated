@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -21,7 +21,6 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
-
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
@@ -39,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * worker class for the simulation *
  *
- * @note BrokenBarrierException is catched within the method,
+ * @note Exception is catched within the run method,
  * because the method should be terminated correctly
  */
 public class CWorker implements Runnable {
@@ -61,9 +60,9 @@ public class CWorker implements Runnable {
      */
     private CQueue<ISimulationStep> m_steps = null;
     /**
-     * drive modell *
+     * drive model *
      */
-    private IDriveModel m_drivemodell = null;
+    private IDriveModel m_drivemodel = null;
     /**
      * barrier object for synchronization *
      */
@@ -81,19 +80,21 @@ public class CWorker implements Runnable {
      * ctor to create a working process
      *
      * @param p_barrier     synchronized barrier
-     * @param p_incremt     rank ID of the process
-     * @param p_drivemodell driving modell object
-     * @param p_cars        list with raw car objects
+     * @param p_increment   rank ID of the process
+     * @param p_currentstep current step object
+     * @param p_drivemodel  driving model object
+     * @param p_cars        queue with raw car objects
      * @param p_sources     queue with sources
+     * @param p_steps       queue with step objects
      */
-    public CWorker(CyclicBarrier p_barrier, boolean p_incremt, AtomicInteger p_currentstep, IDriveModel p_drivemodell, CQueue<ICar> p_cars, CQueue<ICarSourceFactory> p_sources, CQueue<ISimulationStep> p_steps) {
+    public CWorker(CyclicBarrier p_barrier, boolean p_increment, AtomicInteger p_currentstep, IDriveModel p_drivemodel, CQueue<ICar> p_cars, CQueue<ICarSourceFactory> p_sources, CQueue<ISimulationStep> p_steps) {
         m_barrier = p_barrier;
-        m_increment = p_incremt;
+        m_increment = p_increment;
         m_currentstep = p_currentstep;
         m_cars = p_cars;
         m_sources = p_sources;
         m_steps = p_steps;
-        m_drivemodell = p_drivemodell;
+        m_drivemodel = p_drivemodel;
     }
 
     /**
@@ -177,7 +178,7 @@ public class CWorker implements Runnable {
                 if (l_car.hasEndReached())
                     continue;
 
-                m_drivemodell.update(m_currentstep.get(), l_car);
+                m_drivemodel.update(m_currentstep.get(), l_car);
 
                 if (!l_car.hasEndReached())
                     m_cars.push(l_car);

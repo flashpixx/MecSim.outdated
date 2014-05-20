@@ -19,37 +19,53 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.objects;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 /**
- * interface for getting messages before / after each call step call
- *
- * @note each object can be called on different threads, so attend synchronization
+ * serializable geoposition object, because mapviewer.GeoPosition object does not
+ * implement the serializable interface
  */
-public interface ISimulationStep {
+public class CSerializableGeoPosition extends CSerializableAdapter<GeoPosition> {
 
     /**
-     * is called on before each step
+     * ctor to create a serializable geoposition object
      *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * @param p_object geoposition object
      */
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+    public CSerializableGeoPosition(GeoPosition p_object) {
+        m_object = p_object;
+    }
 
 
     /**
-     * is called after each step
+     * output method
      *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * @param p_output stream
+     * @throws IOException
      */
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+    private void writeObject(ObjectOutputStream p_output) throws IOException {
+        p_output.writeDouble(m_object.getLatitude());
+        p_output.writeDouble(m_object.getLongitude());
+    }
+
+
+    /**
+     * input method
+     *
+     * @param p_input stream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream p_input) throws IOException, ClassNotFoundException {
+        m_object = new GeoPosition(p_input.readDouble(), p_input.readDouble());
+    }
 
 
 }

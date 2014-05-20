@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -263,6 +263,7 @@ public class CGraphHopper extends GraphHopper {
         return l_result.getClosestNode();
     }
 
+
     /**
      * clears all edges
      */
@@ -271,26 +272,6 @@ public class CGraphHopper extends GraphHopper {
             l_item.getValue().clear();
     }
 
-    /**
-     * returns the linkage between edge and car
-     *
-     * @warn disable this method, because on an edge
-     * ID the direction of an edge is undefined on
-     * an edge iterator the direction is defined, so we
-     * use the iterator
-     * @param p_edge edge ID
-     * @return linkage object
-     *
-    public synchronized CCellCarLinkage getEdge(int p_edge) {
-    CCellCarLinkage l_edge = m_edgecell.get(p_edge);
-    if (l_edge == null) {
-    l_edge = new CCellCarLinkage(p_edge, this.getEdgeLength(p_edge));
-    m_edgecell.put(l_edge.getEdgeID(), l_edge);
-    }
-
-    return l_edge;
-    }
-     */
 
     /**
      * returns the linkage between edge and car

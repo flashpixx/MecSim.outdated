@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -20,7 +20,6 @@
  **/
 
 package de.tu_clausthal.in.winf.graph.weights;
-
 
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;

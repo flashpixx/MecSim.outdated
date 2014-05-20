@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -252,7 +252,7 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
      * @param p_car  car object
      * @param p_move steps to move
      * @return boolean, true if the car can be updated
-     * @warn does not check for an empty position
+     * @note does not check for an empty position
      */
     public synchronized boolean CarCanUpdated(ICar p_car, int p_move) {
         if (!m_cars.containsKey(p_car))

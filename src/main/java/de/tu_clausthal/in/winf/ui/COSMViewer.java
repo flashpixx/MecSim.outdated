@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum.   #
+ # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -17,7 +17,6 @@
  # You should have received a copy of the GNU General Public License                  #
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
- @endcond
  **/
 
 package de.tu_clausthal.in.winf.ui;
@@ -53,7 +52,7 @@ public class COSMViewer extends JXMapViewer {
     /**
      * list with overlays
      */
-    COverlayCollection m_overlay = new COverlayCollection();
+    private COverlayCollection m_overlay = new COverlayCollection();
     /**
      * way point renderer *
      */

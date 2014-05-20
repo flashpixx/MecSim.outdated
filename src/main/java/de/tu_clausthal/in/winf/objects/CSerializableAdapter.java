@@ -19,37 +19,29 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.objects;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import java.io.Serializable;
 
 
 /**
- * interface for getting messages before / after each call step call
- *
- * @note each object can be called on different threads, so attend synchronization
+ * serializable adapter for objects that does not
+ * implement the serializable interface
  */
-public interface ISimulationStep {
-
+public class CSerializableAdapter<T> implements Serializable {
     /**
-     * is called on before each step
-     *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * object reference *
      */
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+    protected transient T m_object;
 
 
     /**
-     * is called after each step
+     * getter for object reference
      *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * @return object
      */
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
-
+    public T getObject() {
+        return m_object;
+    }
 
 }

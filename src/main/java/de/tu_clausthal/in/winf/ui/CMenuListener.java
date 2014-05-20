@@ -62,14 +62,32 @@ public class CMenuListener implements ActionListener {
      * object for driving model *
      */
     private IDriveModel m_drivemodel = new CNagelSchreckenberg();
+    /**
+     * sets the selected item
+     */
     private Map<String, Object> m_itemSelected = new HashMap();
 
 
     /**
      * adds a new object to the map *
+     *
+     * @param p_name object name
+     * @param p_obj  object
      */
     public void add(String p_name, Object p_obj) {
         m_items.put(p_name, p_obj);
+    }
+
+    /**
+     * adds a new object to the map and defines for a default object
+     *
+     * @param p_name    object name
+     * @param p_obj     object
+     * @param p_default default option
+     */
+    public void add(String p_name, Object p_obj, String p_default) {
+        m_items.put(p_name, p_obj);
+        m_itemSelected.put(p_default, p_obj);
     }
 
 
@@ -122,7 +140,11 @@ public class CMenuListener implements ActionListener {
             }
 
         } catch (Exception l_exception) {
-            //m_itemSelected.get("drivemodel")).
+            if (m_itemSelected.get("drivemodel") != null)
+                ((JRadioButtonMenuItem) m_itemSelected.get("drivemodel")).setSelected(true);
+            if (m_itemSelected.get("weight") != null)
+                ((JRadioButtonMenuItem) m_itemSelected.get("weight")).setSelected(true);
+
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
     }

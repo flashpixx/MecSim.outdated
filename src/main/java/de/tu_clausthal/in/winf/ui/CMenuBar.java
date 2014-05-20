@@ -83,7 +83,7 @@ public class CMenuBar extends JMenuBar {
         l_radio.addActionListener(l_listener);
         l_group.add(l_radio);
         l_menu.add(l_radio);
-        l_listener.add(l_radio.getText(), l_radio);
+        l_listener.add(l_radio.getText(), l_radio, "weight");
 
         l_radio = new JRadioButtonMenuItem("Speed");
         l_radio.addActionListener(l_listener);
@@ -114,7 +114,7 @@ public class CMenuBar extends JMenuBar {
         l_radio.addActionListener(l_listener);
         l_group.add(l_radio);
         l_menu.add(l_radio);
-        l_listener.add(l_radio.getText(), l_radio);
+        l_listener.add(l_radio.getText(), l_radio, "drivemodel");
 
         this.add(l_menu);
     }

@@ -37,6 +37,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -61,6 +62,7 @@ public class CMenuListener implements ActionListener {
      * object for driving model *
      */
     private IDriveModel m_drivemodel = new CNagelSchreckenberg();
+    private Map<String, Object> m_itemSelected = new HashMap();
 
 
     /**
@@ -89,7 +91,6 @@ public class CMenuListener implements ActionListener {
             if (p_event.getSource() == m_items.get("Start"))
                 CSimulation.getInstance().start(m_drivemodel);
             if (p_event.getSource() == m_items.get("Stop"))
-
                 CSimulation.getInstance().stop();
             if (p_event.getSource() == m_items.get("Reset")) {
                 CSimulation.getInstance().reset();
@@ -97,21 +98,31 @@ public class CMenuListener implements ActionListener {
             }
 
 
-            if (p_event.getSource() == m_items.get("Default"))
+            if (p_event.getSource() == m_items.get("Default")) {
                 this.setGraphWeight("");
-            if (p_event.getSource() == m_items.get("Speed"))
+                m_itemSelected.put("weight", p_event.getSource());
+            }
+            if (p_event.getSource() == m_items.get("Speed")) {
                 this.setGraphWeight("Speed");
-            if (p_event.getSource() == m_items.get("Traffic Jam"))
+                m_itemSelected.put("weight", p_event.getSource());
+            }
+            if (p_event.getSource() == m_items.get("Traffic Jam")) {
                 this.setGraphWeight("Traffic Jam");
-            if (p_event.getSource() == m_items.get("Speed & Traffic Jam"))
+                m_itemSelected.put("weight", p_event.getSource());
+            }
+            if (p_event.getSource() == m_items.get("Speed & Traffic Jam")) {
                 this.setGraphWeight("Speed & Traffic Jam");
+                m_itemSelected.put("weight", p_event.getSource());
+            }
 
 
-            if (p_event.getSource() == m_items.get("Nagel-Schreckenberg"))
+            if (p_event.getSource() == m_items.get("Nagel-Schreckenberg")) {
                 this.setDrivingModel(new CNagelSchreckenberg());
-
+                m_itemSelected.put("drivemodel", p_event.getSource());
+            }
 
         } catch (Exception l_exception) {
+            //m_itemSelected.get("drivemodel")).
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
     }

@@ -31,9 +31,11 @@ import de.tu_clausthal.in.winf.simulation.CSimulation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -100,6 +102,8 @@ public class CMenuListener implements ActionListener {
     public void actionPerformed(ActionEvent p_event) {
         try {
 
+            if (p_event.getSource() == m_items.get("Screenshot"))
+                this.screenshot();
             if (p_event.getSource() == m_items.get("Save Sources"))
                 this.saveSources();
             if (p_event.getSource() == m_items.get("Load Sources"))
@@ -191,7 +195,7 @@ public class CMenuListener implements ActionListener {
         for (ICarSourceFactory l_item : COSMViewer.getInstance().getSourceRenderer().getSources())
             l_positions.add(new CSerializableGeoPosition(l_item.getPosition()));
 
-        FileOutputStream l_stream = new FileOutputStream(m_filedialog.getSelectedFile());
+        FileOutputStream l_stream = new FileOutputStream(this.addFileExtension(m_filedialog.getSelectedFile(), ".src"));
         ObjectOutputStream l_output = new ObjectOutputStream(l_stream);
         l_output.writeObject(l_positions);
         l_output.close();
@@ -208,7 +212,7 @@ public class CMenuListener implements ActionListener {
      */
     @SuppressWarnings(value = "unchecked")
     private void loadSources() throws IOException, ClassNotFoundException, IllegalAccessException {
-        if (m_filedialog.showOpenDialog(COSMViewer.getInstance()) == JFileChooser.APPROVE_OPTION)
+        if (m_filedialog.showOpenDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
             return;
 
         FileInputStream l_stream = new FileInputStream(m_filedialog.getSelectedFile());
@@ -217,13 +221,43 @@ public class CMenuListener implements ActionListener {
         l_input.close();
         l_stream.close();
 
+
         if (l_data instanceof Set)
             for (CSerializableGeoPosition l_item : (Set<CSerializableGeoPosition>) l_data) {
                 CDefaultSource l_source = new CDefaultSource(l_item.getObject());
-
                 CSimulation.getInstance().addSource(l_source);
                 COSMViewer.getInstance().getSourceRenderer().addSources(l_source);
             }
     }
 
+
+    /**
+     * create a screenshot of the OSM view
+     *
+     * @throws IOException
+     */
+    private void screenshot() throws IOException {
+        BufferedImage l_image = new BufferedImage(COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB);
+        COSMViewer.getInstance().paint(l_image.getGraphics());
+
+        if (m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
+            return;
+
+        ImageIO.write(l_image, "jpg", this.addFileExtension(m_filedialog.getSelectedFile(), ".jpg"));
+    }
+
+
+    /**
+     * adds a file extension if necessary
+     *
+     * @param p_file   file object
+     * @param p_suffix suffix
+     * @return
+     */
+    private File addFileExtension(File p_file, String p_suffix) {
+        File l_file = p_file;
+        if (!l_file.getAbsolutePath().endsWith(p_suffix))
+            l_file = new File(l_file + p_suffix);
+        return l_file;
+    }
 }

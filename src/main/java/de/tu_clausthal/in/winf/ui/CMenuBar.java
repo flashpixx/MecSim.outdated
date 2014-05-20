@@ -49,6 +49,13 @@ public class CMenuBar extends JMenuBar {
         l_item.addActionListener(l_listener);
         l_menu.add(l_item);
 
+        l_menu.addSeparator();
+
+        l_item = new JMenuItem("Screenshot");
+        l_listener.add(l_item.getText(), l_item);
+        l_item.addActionListener(l_listener);
+        l_menu.add(l_item);
+
         this.add(l_menu);
 
 

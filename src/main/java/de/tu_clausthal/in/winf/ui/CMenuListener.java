@@ -252,7 +252,7 @@ public class CMenuListener implements ActionListener {
      *
      * @param p_file   file object
      * @param p_suffix suffix
-     * @return
+     * @return file with extension
      */
     private File addFileExtension(File p_file, String p_suffix) {
         File l_file = p_file;

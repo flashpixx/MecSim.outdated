@@ -65,6 +65,7 @@ public class CMain {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 CFrame l_frame = new CFrame();
+                l_frame.setTitle("TU-Clausthal MEC - Traffic Simulation");
                 l_frame.setVisible(true);
             }
         });

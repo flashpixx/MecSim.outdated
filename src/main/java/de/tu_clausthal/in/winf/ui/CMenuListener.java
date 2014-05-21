@@ -243,7 +243,7 @@ public class CMenuListener implements ActionListener {
         if (m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
             return;
 
-        ImageIO.write(l_image, "jpg", this.addFileExtension(m_filedialog.getSelectedFile(), ".jpg"));
+        ImageIO.write(l_image, "png", this.addFileExtension(m_filedialog.getSelectedFile(), ".png"));
     }
 
 

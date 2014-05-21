@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* [Java 1.6](http://www.java.com)
+* [Java 1.7](http://www.java.com)
 * [Maven](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/)
 

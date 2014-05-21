@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.objects;
 
-import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.util.Collection;

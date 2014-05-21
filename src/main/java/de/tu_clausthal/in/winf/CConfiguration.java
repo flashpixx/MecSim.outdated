@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf;
 
 import com.google.gson.Gson;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

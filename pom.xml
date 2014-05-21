@@ -48,9 +48,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.jdesktop.swingx</groupId>
+            <groupId>org.jxmapviewer</groupId>
             <artifactId>jxmapviewer2</artifactId>
-            <version>1.2</version>
+            <version>2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

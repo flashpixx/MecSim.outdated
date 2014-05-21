@@ -22,8 +22,8 @@
 package de.tu_clausthal.in.winf.ui;
 
 import com.graphhopper.util.PointList;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.jdesktop.swingx.painter.Painter;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

@@ -35,7 +35,7 @@ import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.graph.weights.CSpeedUpTrafficJam;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

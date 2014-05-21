@@ -22,8 +22,8 @@
 package de.tu_clausthal.in.winf.objects;
 
 import com.graphhopper.util.EdgeIteratorState;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.jdesktop.swingx.mapviewer.TileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactory;
 
 import java.awt.*;
 import java.util.Map;

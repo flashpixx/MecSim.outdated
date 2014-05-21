@@ -22,8 +22,9 @@
 package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import org.jdesktop.swingx.JXMapViewer;
-import org.jdesktop.swingx.mapviewer.WaypointPainter;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.WaypointPainter;
+
 
 import java.util.HashSet;
 import java.util.Set;

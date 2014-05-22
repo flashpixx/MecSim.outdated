@@ -107,9 +107,4 @@ public class CDefaultSource implements ICarSourceFactory {
     }
 
 
-    @Override
-    public void paint(Graphics2D p_graphic, TileFactory p_factory, int p_zoom) {
-
-    }
-
 }

@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.simulation;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
+import de.tu_clausthal.in.winf.util.CPainterQueue;
 import de.tu_clausthal.in.winf.util.CQueue;
 import de.tu_clausthal.in.winf.util.CWaypointQueue;
 
@@ -39,7 +40,7 @@ public class CSimulationData {
     /**
      * queue for cars *
      */
-    private CWaypointQueue<ICar> m_cars = new CWaypointQueue();
+    private CPainterQueue<ICar> m_cars = new CPainterQueue();
     /**
      * queue for sources *
      */
@@ -54,7 +55,7 @@ public class CSimulationData {
      * private ctor *
      */
     private CSimulationData() {
-        COSMViewer.getInstance().setOverlayPainter(m_cars);
+        //COSMViewer.getInstance().setOverlayPainter(m_cars);
         COSMViewer.getInstance().setOverlayPainter(m_sources);
     }
 
@@ -74,7 +75,7 @@ public class CSimulationData {
      *
      * @return queue object
      */
-    public CWaypointQueue<ICar> getCarQueue() {
+    public CPainterQueue<ICar> getCarQueue() {
         return m_cars;
     }
 

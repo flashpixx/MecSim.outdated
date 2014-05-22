@@ -105,10 +105,10 @@ public class CSimulation {
         if (CConfiguration.getInstance().get().MaxThreadNumber < 1)
             throw new IllegalAccessException("one thread must be exists to start simulation");
 
-        CSimulationData.getInstance().getSourceQueue().swap();
+        CSimulationData.getInstance().getSourceQueue().reset();
         if (CSimulationData.getInstance().getSourceQueue().isEmpty())
             m_Logger.warn("no sources exists");
-        CSimulationData.getInstance().getCarQueue().swap();
+        CSimulationData.getInstance().getCarQueue().reset();
         if (CSimulationData.getInstance().getCarQueue().isEmpty())
             m_Logger.warn("no cars exists");
 

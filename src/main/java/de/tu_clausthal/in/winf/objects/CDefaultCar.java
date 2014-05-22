@@ -295,7 +295,24 @@ public class CDefaultCar implements ICar {
 
 
     @Override
-    public void paint(Graphics2D p_graphic, TileFactory p_factory, int p_zoom) {
+    public int getAcceleration() {
+        return m_acceleration;
+    }
+
+    @Override
+    public int getDeceleration() {
+        return m_deceleration;
+    }
+
+
+    //@Override
+    public String toString() {
+        return "speed [" + this.getCurrentSpeed() + " / " + this.getMaximumSpeed() + "]\tstart- / end- / current position [" + this.getStartPosition() + " / " + this.getEndPosition() + " / " + this.getCurrentPosition() + "]\tlinger prop [" + this.getLingerProbability() + "]\tedge [" + this.getCurrentEdgeID() + "]";
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+        /*
         GeoPosition l_position = this.getCurrentPosition();
         if (l_position == null)
             return;
@@ -319,22 +336,6 @@ public class CDefaultCar implements ICar {
 
         p_graphic.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
         p_graphic.dispose();
+        */
     }
-
-    @Override
-    public int getAcceleration() {
-        return m_acceleration;
-    }
-
-    @Override
-    public int getDeceleration() {
-        return m_deceleration;
-    }
-
-
-    //@Override
-    public String toString() {
-        return "speed [" + this.getCurrentSpeed() + " / " + this.getMaximumSpeed() + "]\tstart- / end- / current position [" + this.getStartPosition() + " / " + this.getEndPosition() + " / " + this.getCurrentPosition() + "]\tlinger prop [" + this.getLingerProbability() + "]\tedge [" + this.getCurrentEdgeID() + "]";
-    }
-
 }

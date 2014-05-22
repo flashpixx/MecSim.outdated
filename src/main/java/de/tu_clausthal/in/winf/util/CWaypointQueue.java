@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.util;
 
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import java.util.Collection;
@@ -34,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * waypoint queue class *
  */
-public class CWaypointQueue<T extends WaypointPainter> extends WaypointPainter implements IQueue<T> {
+public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implements IQueue<T> {
 
     /**
      * list of unprocessed sources *

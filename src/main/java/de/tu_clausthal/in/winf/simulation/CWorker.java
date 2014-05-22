@@ -141,7 +141,7 @@ public class CWorker implements Runnable {
         }
 
         m_barrier.await();
-        CSimulationData.getInstance().getStepListenerQueue().swap();
+        CSimulationData.getInstance().getStepListenerQueue().reset();
 
     }
 
@@ -176,7 +176,7 @@ public class CWorker implements Runnable {
         }
 
         m_barrier.await();
-        CSimulationData.getInstance().getCarQueue().swap();
+        CSimulationData.getInstance().getCarQueue().reset();
 
     }
 
@@ -201,7 +201,7 @@ public class CWorker implements Runnable {
         }
 
         m_barrier.await();
-        CSimulationData.getInstance().getSourceQueue().swap();
+        CSimulationData.getInstance().getSourceQueue().reset();
 
     }
 

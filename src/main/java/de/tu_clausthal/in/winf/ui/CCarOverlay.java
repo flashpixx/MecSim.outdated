@@ -106,10 +106,10 @@ public class CCarOverlay implements Painter {
         Rectangle l_viewportBounds = COSMViewer.getInstance().getViewportBounds();
         graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
+/*
         for (ICar l_car : m_cars)
             l_car.paint(graphics2D, COSMViewer.getInstance().getTileFactory(), COSMViewer.getInstance().getZoom());
-
+*/
         graphics2D.dispose();
     }
 

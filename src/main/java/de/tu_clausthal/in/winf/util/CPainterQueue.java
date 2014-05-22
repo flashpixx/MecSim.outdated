@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.util;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Queue;
@@ -34,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * waypoint queue class *
  */
-public class CPainterQueue<T extends Painter> extends Painter implements IQueue<T> {
+public class CPainterQueue<T extends Painter> implements IQueue<T>, Painter<T>  {
 
     /**
      * list of unprocessed sources *
@@ -140,5 +141,49 @@ public class CPainterQueue<T extends Painter> extends Painter implements IQueue<
         m_unprocess.clear();
         m_process.clear();
     }
+
+    @Override
+    public void paint(Graphics2D graphics2D, T t, int i, int i2) {
+        for( T l_item : convert2set() )
+            l_item.paint(graphics2D, t, i, i2);
+    }
+
+
+    /**
+     * convert items to set
+     *
+     * @return set
+     */
+    private Set<T> convert2set() {
+        Set<T> l_set = new HashSet();
+        for (T l_item : this.getAll())
+            l_set.add(l_item);
+        return l_set;
+    }
+
+
+    /*
+    SwingUtilities.invokeLater(new SwingPainter(p_cars));
+    }
+
+
+    private class SwingPainter implements Runnable {
+
+        private ICar[] m_cars = null;
+
+        public SwingPainter(ICar[] p_cars) {
+            m_cars = p_cars;
+        }
+
+        @Override
+        public void run() {
+
+            // plot car items
+            COSMViewer.getInstance().getCarRenderer().clear();
+            COSMViewer.getInstance().getCarRenderer().add(m_cars);
+
+        }
+    }
+     */
 
 }

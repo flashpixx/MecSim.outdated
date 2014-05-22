@@ -32,6 +32,6 @@ import java.awt.*;
 public interface IPainter {
 
 
-    void paint( Graphics2D graphics2D, TileFactory factory, int zoom );
+    void paint(Graphics2D graphics2D, TileFactory factory, int zoom);
 
 }

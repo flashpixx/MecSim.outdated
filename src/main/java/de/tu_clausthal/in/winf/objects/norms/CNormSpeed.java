@@ -38,6 +38,7 @@ public class CNormSpeed implements INorm<ICar> {
      * dedicated institution *
      */
     private IInstitution<ICar> m_institution = null;
+
     /**
      * ctor
      *

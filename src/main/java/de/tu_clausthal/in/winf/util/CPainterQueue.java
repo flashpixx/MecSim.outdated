@@ -21,8 +21,7 @@
 
 package de.tu_clausthal.in.winf.util;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
+
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
 
@@ -37,7 +36,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * waypoint queue class *
  */
-public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter<T>  {
+public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
 
     /**
      * list of unprocessed sources *
@@ -158,15 +157,17 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter<T> 
         m_process.clear();
     }
 
+
     @Override
-    public void paint(Graphics2D graphics2D, T t, int i, int i2) {
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+        System.out.println("ddd");
         graphics2D = (Graphics2D) graphics2D.create();
         Rectangle l_viewportBounds = m_viewer.getViewportBounds();
         graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        for( T l_item : convert2set() )
-            l_item.paint(graphics2D, m_viewer.getTileFactory(), m_viewer.getZoom() );
+        for (T l_item : convert2set())
+            l_item.paint(graphics2D, m_viewer.getTileFactory(), m_viewer.getZoom());
 
         graphics2D.dispose();
     }
@@ -183,6 +184,8 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter<T> 
             l_set.add(l_item);
         return l_set;
     }
+
+
 
 
     /*

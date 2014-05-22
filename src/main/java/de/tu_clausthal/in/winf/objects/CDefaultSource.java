@@ -22,7 +22,6 @@
 package de.tu_clausthal.in.winf.objects;
 
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactory;
 
 import java.awt.*;
 import java.util.Collection;

@@ -59,6 +59,7 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
      */
     public CPainterQueue(JXMapViewer p_viewer) {
         m_viewer = p_viewer;
+        m_viewer.setOverlayPainter(this);
     }
 
 
@@ -160,7 +161,6 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
 
     @Override
     public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
-        System.out.println("ddd");
         graphics2D = (Graphics2D) graphics2D.create();
         Rectangle l_viewportBounds = m_viewer.getViewportBounds();
         graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
@@ -169,7 +169,7 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
         for (T l_item : convert2set())
             l_item.paint(graphics2D, m_viewer.getTileFactory(), m_viewer.getZoom());
 
-        graphics2D.dispose();
+        m_viewer.repaint();
     }
 
 

@@ -38,13 +38,13 @@ public class CSimulationData {
      */
     static CSimulationData s_instance = new CSimulationData();
     /**
-     * queue for cars *
-     */
-    private CPainterQueue<ICar> m_cars = new CPainterQueue(COSMViewer.getInstance());
-    /**
      * queue for sources *
      */
     private CWaypointQueue<ICarSourceFactory> m_sources = new CWaypointQueue(COSMViewer.getInstance());
+    /**
+     * queue for cars *
+     */
+    private CPainterQueue<ICar> m_cars = new CPainterQueue(COSMViewer.getInstance());
     /**
      * queue for step listeners *
      */
@@ -54,10 +54,7 @@ public class CSimulationData {
     /**
      * private ctor *
      */
-    private CSimulationData() {
-        COSMViewer.getInstance().setOverlayPainter(m_cars);
-        COSMViewer.getInstance().setOverlayPainter(m_sources);
-    }
+    private CSimulationData() {}
 
 
     /**

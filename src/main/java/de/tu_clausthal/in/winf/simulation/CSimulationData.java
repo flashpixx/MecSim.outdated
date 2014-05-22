@@ -55,7 +55,7 @@ public class CSimulationData {
      * private ctor *
      */
     private CSimulationData() {
-        //COSMViewer.getInstance().setOverlayPainter(m_cars);
+        COSMViewer.getInstance().setOverlayPainter(m_cars);
         COSMViewer.getInstance().setOverlayPainter(m_sources);
     }
 

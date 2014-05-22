@@ -310,32 +310,31 @@ public class CDefaultCar implements ICar {
         return "speed [" + this.getCurrentSpeed() + " / " + this.getMaximumSpeed() + "]\tstart- / end- / current position [" + this.getStartPosition() + " / " + this.getEndPosition() + " / " + this.getCurrentPosition() + "]\tlinger prop [" + this.getLingerProbability() + "]\tedge [" + this.getCurrentEdgeID() + "]";
     }
 
+
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
-        /*
+    public void paint(Graphics2D graphics2D, TileFactory factory, int zoom) {
         GeoPosition l_position = this.getCurrentPosition();
         if (l_position == null)
             return;
 
-        int l_zoom = Math.max(9 - p_zoom, 2);
+        int l_zoom = Math.max(9 - zoom, 2);
 
-        Point2D l_point = p_factory.geoToPixel(l_position, p_zoom);
+        Point2D l_point = factory.geoToPixel(l_position, zoom);
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
-        p_graphic.setColor(Color.DARK_GRAY);
+        graphics2D.setColor(Color.DARK_GRAY);
         if (m_speed >= 50)
-            p_graphic.setColor(Color.MAGENTA);
+            graphics2D.setColor(Color.MAGENTA);
         if (m_speed >= 60)
-            p_graphic.setColor(Color.PINK);
+            graphics2D.setColor(Color.PINK);
         if (m_speed >= 80)
-            p_graphic.setColor(Color.BLUE);
+            graphics2D.setColor(Color.BLUE);
         if (m_speed >= 100)
-            p_graphic.setColor(Color.CYAN);
+            graphics2D.setColor(Color.CYAN);
         if (m_speed >= 130)
-            p_graphic.setColor(Color.RED);
+            graphics2D.setColor(Color.RED);
 
-        p_graphic.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
-        p_graphic.dispose();
-        */
+        graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+
     }
 }

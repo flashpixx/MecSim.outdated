@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.objects;
 
 import com.graphhopper.util.EdgeIteratorState;
-import org.jxmapviewer.painter.Painter;
+import de.tu_clausthal.in.winf.util.IPainter;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends Painter {
+public interface ICar extends IPainter {
 
     /**
      * returns the geoposition of the start

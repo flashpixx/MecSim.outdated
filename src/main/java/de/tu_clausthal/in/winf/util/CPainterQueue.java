@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * waypoint queue class *
  */
-public class CPainterQueue<T extends Painter> implements IQueue<T>, Painter<T>  {
+public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter<T>  {
 
     /**
      * list of unprocessed sources *
@@ -165,16 +165,10 @@ public class CPainterQueue<T extends Painter> implements IQueue<T>, Painter<T>  
         graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        //for (ICar l_car : m_cars)
-        //    l_car.paint(graphics2D, COSMViewer.getInstance().getTileFactory(), COSMViewer.getInstance().getZoom());
-
         for( T l_item : convert2set() )
-            l_item.paint(graphics2D, t, i, i2);
+            l_item.paint(graphics2D, m_viewer.getTileFactory(), m_viewer.getZoom() );
 
         graphics2D.dispose();
-
-
-
     }
 
 

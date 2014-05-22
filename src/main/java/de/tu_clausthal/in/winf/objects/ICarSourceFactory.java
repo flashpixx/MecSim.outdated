@@ -32,7 +32,7 @@ import java.util.Collection;
 /**
  * factory interface of car - defines a source
  */
-public interface ICarSourceFactory extends Waypoint, IOverlayPainter {
+public interface ICarSourceFactory extends Waypoint {
 
     /**
      * sets the value how many cars are created in one step

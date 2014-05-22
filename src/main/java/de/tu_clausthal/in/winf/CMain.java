@@ -23,10 +23,8 @@ package de.tu_clausthal.in.winf;
 
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.CFrame;
-import de.tu_clausthal.in.winf.ui.CSimulationStepPainter;
 
 import javax.swing.*;
 import java.io.File;

@@ -23,7 +23,6 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 
 import javax.swing.*;
@@ -66,7 +65,7 @@ class COSMMouseListener extends MouseInputAdapter {
                 }
 
                 if (!l_remove)
-                    CSimulationData.getInstance().getSourceQueue().add( new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())) );
+                    CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
 
                 COSMViewer.getInstance().repaint();
             }

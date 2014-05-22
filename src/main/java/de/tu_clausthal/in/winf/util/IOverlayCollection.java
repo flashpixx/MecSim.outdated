@@ -30,6 +30,5 @@ import java.util.Collection;
 /**
  * overlay collection interface
  */
-public interface IOverlayCollection<T extends IOverlayPainter> extends Collection<T>, Painter
-{
+public interface IOverlayCollection<T extends IOverlayPainter> extends Collection<T>, Painter {
 }

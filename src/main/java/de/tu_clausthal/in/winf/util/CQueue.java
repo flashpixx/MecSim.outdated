@@ -22,171 +22,115 @@
 package de.tu_clausthal.in.winf.util;
 
 import java.util.Collection;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
  * queue class *
  */
-public class CQueue<T> {
+public class CQueue<T> implements IQueue<T> {
 
     /**
      * list of unprocessed sources *
      */
-    private ConcurrentLinkedQueue<T> m_unprocess = new ConcurrentLinkedQueue();
+    protected ConcurrentLinkedQueue<T> m_unprocess = new ConcurrentLinkedQueue();
     /**
      * list of processed sources *
      */
-    private ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
+    protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
 
 
-    /** get a list of unprocessed items
-     *
-     * @return queue
-     */
-    public ConcurrentLinkedQueue<T> getAll()
-    {
-        ConcurrentLinkedQueue<T> l_data = new ConcurrentLinkedQueue();
+    @Override
+    public Queue<T> getAll() {
+        Queue<T> l_data = new ConcurrentLinkedQueue();
         l_data.addAll(m_unprocess);
         l_data.addAll(m_process);
         return l_data;
     }
 
 
-    /**
-     * removes an element of the unproccessed list
-     *
-     * @return element
-     */
+    @Override
     public T pop() {
         return m_unprocess.poll();
     }
 
 
-    /**
-     * adds an element to the proccessed list
-     *
-     * @param p_item processed element
-     */
+    @Override
     public void push(T p_item) {
         m_process.add(p_item);
     }
 
 
-    /**
-     * check if the unprocessed list empty
-     *
-     * @return empty
-     */
+    @Override
     public boolean isEmpty() {
         return m_unprocess.isEmpty() && m_process.isEmpty();
     }
 
 
-    /**
-     * swaps processed list to the unprocessed *
-     */
-    public synchronized void swap() {
+    @Override
+    public synchronized void reset() {
         m_unprocess.addAll(m_process);
         m_process.clear();
     }
 
 
-    /**
-     * returns the number of elements
-     *
-     * @return number of elements
-     */
+    @Override
     public int size() {
         return this.unprocessedsize() + this.processsize();
     }
 
 
-    /**
-     * returns the number of unprocessed elements
-     *
-     * @return number of elements
-     */
+    @Override
     public int unprocessedsize() {
         return m_unprocess.size();
     }
 
 
-    /**
-     * returns the number of processed items
-     *
-     * @return number of elements
-     */
+    @Override
     public int processsize() {
         return m_process.size();
     }
 
 
-    /**
-     * checks if an object exists within the queue
-     *
-     * @param p_item object
-     * @return existence
-     */
+    @Override
     public boolean contains(T p_item) {
         return m_unprocess.contains(p_item) || m_process.contains(p_item);
     }
 
 
-    /**
-     * returns a list with unprocessed elements
-     *
-     * @return object array
-     */
+    @Override
     public void unprocessed2array(T[] p_array) {
         m_unprocess.toArray(p_array);
     }
 
 
-    /**
-     * returns an array with processed elements
-     *
-     * @return object array
-     */
+    @Override
     public void process2array(T[] p_array) {
         m_process.toArray(p_array);
     }
 
 
-    /**
-     * adds an element to the unprocessed list
-     *
-     * @param p_item element
-     */
+    @Override
     public void add(T p_item) {
         m_unprocess.add(p_item);
     }
 
 
-    /**
-     * adds a collection to the unprocessed queue
-     *
-     * @param p_item collection
-     */
+    @Override
     public void add(Collection<T> p_item) {
         m_unprocess.addAll(p_item);
     }
 
 
-    /**
-     * removes an item from the lists
-     *
-     * @param p_item element
-     */
+    @Override
     public synchronized void remove(T p_item) {
         m_unprocess.remove(p_item);
         m_process.remove(p_item);
     }
 
 
-    /**
-     * clears all lists *
-     */
+    @Override
     public synchronized void clear() {
         m_unprocess.clear();
         m_process.clear();

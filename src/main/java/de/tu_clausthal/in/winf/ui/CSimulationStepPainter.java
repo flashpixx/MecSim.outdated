@@ -23,15 +23,14 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.simulation.ISimulationStep;
-import de.tu_clausthal.in.winf.util.IOverlayCollection;
 
 import javax.swing.*;
 
 
 /**
  * class for step actions *
+ *
  * @deprecated
  */
 public class CSimulationStepPainter implements ISimulationStep {

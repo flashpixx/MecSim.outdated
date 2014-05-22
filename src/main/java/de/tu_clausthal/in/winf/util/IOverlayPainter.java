@@ -37,7 +37,7 @@ public interface IOverlayPainter {
      *
      * @param p_graphic graphic object
      * @param p_factory title factory
-     * @param p_zoom current zoom value
+     * @param p_zoom    current zoom value
      */
     public void paint(Graphics2D p_graphic, TileFactory p_factory, int p_zoom);
 

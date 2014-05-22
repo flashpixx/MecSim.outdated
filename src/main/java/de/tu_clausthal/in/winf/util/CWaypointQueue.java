@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.util;
 
 import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.viewer.WaypointPainter;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * waypoint queue class *
  */
-public class CPainterQueue<T extends Painter> extends Painter implements IQueue<T> {
+public class CWaypointQueue<T extends WaypointPainter> extends WaypointPainter implements IQueue<T> {
 
     /**
      * list of unprocessed sources *
@@ -44,6 +44,21 @@ public class CPainterQueue<T extends Painter> extends Painter implements IQueue<
      * list of processed sources *
      */
     protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
+
+    /**
+     * viewer reference
+     */
+    protected JXMapViewer m_viewer = null;
+
+
+    /**
+     * ctor
+     *
+     * @param p_viewer viewer reference
+     */
+    public CWaypointQueue(JXMapViewer p_viewer) {
+        m_viewer = p_viewer;
+    }
 
 
     @Override
@@ -119,6 +134,8 @@ public class CPainterQueue<T extends Painter> extends Painter implements IQueue<
     @Override
     public void add(T p_item) {
         m_unprocess.add(p_item);
+        this.setWaypoints(this.convert2set());
+        m_viewer.repaint();
     }
 
 
@@ -132,6 +149,8 @@ public class CPainterQueue<T extends Painter> extends Painter implements IQueue<
     public synchronized void remove(T p_item) {
         m_unprocess.remove(p_item);
         m_process.remove(p_item);
+        this.setWaypoints(this.convert2set());
+        m_viewer.repaint();
     }
 
 
@@ -139,6 +158,20 @@ public class CPainterQueue<T extends Painter> extends Painter implements IQueue<
     public synchronized void clear() {
         m_unprocess.clear();
         m_process.clear();
+        this.setWaypoints(this.convert2set());
+        m_viewer.repaint();
     }
 
+
+    /**
+     * convert items to set
+     *
+     * @return set
+     */
+    private Set<T> convert2set() {
+        Set<T> l_set = new HashSet();
+        for (T l_item : this.getAll())
+            l_set.add(l_item);
+        return l_set;
+    }
 }

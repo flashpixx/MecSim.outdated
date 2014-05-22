@@ -19,83 +19,133 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.util;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
-import de.tu_clausthal.in.winf.util.CQueue;
-import de.tu_clausthal.in.winf.util.CWaypointQueue;
+import java.util.Collection;
+import java.util.Queue;
+
 
 /**
- * data structure of the simulation and view
+ *
  */
-public class CSimulationData {
+public interface IQueue<T> {
 
     /**
-     * singleton instance *
-     */
-    static CSimulationData s_instance = new CSimulationData();
-    /**
-     * queue for cars *
-     */
-    private CWaypointQueue<ICar> m_cars = new CWaypointQueue();
-    /**
-     * queue for sources *
-     */
-    private CWaypointQueue<ICarSourceFactory> m_sources = new CWaypointQueue(COSMViewer.getInstance());
-    /**
-     * queue for step listeners *
-     */
-    private CQueue<ISimulationStep> m_steplistener = new CQueue();
-
-
-    /**
-     * private ctor *
-     */
-    private CSimulationData() {
-        COSMViewer.getInstance().setOverlayPainter(m_cars);
-        COSMViewer.getInstance().setOverlayPainter(m_sources);
-    }
-
-
-    /**
-     * returns singleton instance
-     *
-     * @return instance
-     */
-    public static CSimulationData getInstance() {
-        return s_instance;
-    }
-
-
-    /**
-     * returns the care queue
-     *
-     * @return queue object
-     */
-    public CWaypointQueue<ICar> getCarQueue() {
-        return m_cars;
-    }
-
-
-    /**
-     * returns the source queue
+     * returns the queue of all items
      *
      * @return queue
      */
-    public CWaypointQueue<ICarSourceFactory> getSourceQueue() {
-        return m_sources;
-    }
+    public Queue<T> getAll();
 
 
     /**
-     * returns the step listener queue
+     * remove an item from the processed list
      *
-     * @return queue
+     * @return item
      */
-    public CQueue<ISimulationStep> getStepListenerQueue() {
-        return m_steplistener;
-    }
+    public T pop();
+
+
+    /**
+     * push an item to the unprocessed list
+     *
+     * @param p_item item
+     */
+    public void push(T p_item);
+
+
+    /**
+     * checks that the queue is empty
+     *
+     * @return empty boolean value
+     */
+    public boolean isEmpty();
+
+
+    /**
+     * moves elements from the unprocessed queue
+     * to the processed queue
+     */
+    public void reset();
+
+
+    /**
+     * number of elements
+     *
+     * @return value
+     */
+    public int size();
+
+
+    /**
+     * number of unprocessed items
+     *
+     * @return count values
+     */
+    public int unprocessedsize();
+
+
+    /**
+     * number of proccessed items
+     *
+     * @return count value
+     */
+    public int processsize();
+
+
+    /**
+     * checks that an elements is in the queue
+     *
+     * @param p_item item
+     * @return boolean for existence
+     */
+    public boolean contains(T p_item);
+
+
+    /**
+     * converts the unprocessed items to an array
+     *
+     * @param p_array ouput array
+     */
+    public void unprocessed2array(T[] p_array);
+
+
+    /**
+     * converts the unprocessed data to an array
+     *
+     * @param p_array output array
+     */
+    public void process2array(T[] p_array);
+
+
+    /**
+     * adds an item
+     *
+     * @param p_item item
+     */
+    public void add(T p_item);
+
+
+    /**
+     * adds a collection
+     *
+     * @param p_item collection
+     */
+    public void add(Collection<T> p_item);
+
+
+    /**
+     * removes an item
+     *
+     * @param p_item item
+     */
+    public void remove(T p_item);
+
+
+    /**
+     * clear all data *
+     */
+    public void clear();
+
 
 }

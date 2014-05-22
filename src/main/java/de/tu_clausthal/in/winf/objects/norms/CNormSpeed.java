@@ -21,16 +21,53 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
-import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;
 import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
+import de.tu_clausthal.in.winf.objects.ICar;
 
 
 /**
  * norm for speed check
  */
 public class CNormSpeed implements INorm<ICar> {
+
+    /* maximum speed value for check **/
+    private int m_maxspeed = Integer.MAX_VALUE;
+    /**
+     * dedicated institution *
+     */
+    private IInstitution<ICar> m_institution = null;
+    /**
+     * ctor
+     *
+     * @param p_institution defines the institution
+     */
+    public CNormSpeed(IInstitution<ICar> p_institution) {
+        m_institution = p_institution;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_institution defines institution
+     * @param p_maxspeed    defines maximum allowed speed
+     */
+    public CNormSpeed(IInstitution<ICar> p_institution, int p_maxspeed) {
+        m_institution = p_institution;
+        m_maxspeed = p_maxspeed;
+    }
+
+    @Override
+    public INormCheckResult check(ICar p_object) {
+        return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed);
+    }
+
+    @Override
+    public IInstitution<ICar> getInstitution() {
+        return m_institution;
+    }
 
     /**
      * inner class to represent the norm result
@@ -61,47 +98,5 @@ public class CNormSpeed implements INorm<ICar> {
         public Boolean getResult() {
             return false;
         }
-    }
-
-
-    /* maximum speed value for check **/
-    private int m_maxspeed = Integer.MAX_VALUE;
-    /**
-     * dedicated institution *
-     */
-    private IInstitution<ICar> m_institution = null;
-
-
-    /**
-     * ctor
-     *
-     * @param p_institution defines the institution
-     */
-    public CNormSpeed(IInstitution<ICar> p_institution) {
-        m_institution = p_institution;
-    }
-
-
-    /**
-     * ctor
-     *
-     * @param p_institution defines institution
-     * @param p_maxspeed    defines maximum allowed speed
-     */
-    public CNormSpeed(IInstitution<ICar> p_institution, int p_maxspeed) {
-        m_institution = p_institution;
-        m_maxspeed = p_maxspeed;
-    }
-
-
-    @Override
-    public INormCheckResult check(ICar p_object) {
-        return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed);
-    }
-
-
-    @Override
-    public IInstitution<ICar> getInstitution() {
-        return m_institution;
     }
 }

@@ -140,6 +140,7 @@ public class CSimulation {
 
     /**
      * resets the simulation data *
+     *
      * @bug reset
      */
     public void reset() {

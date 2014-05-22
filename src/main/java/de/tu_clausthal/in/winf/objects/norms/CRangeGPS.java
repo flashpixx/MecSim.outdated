@@ -21,8 +21,8 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
-import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.mas.norm.IRange;
+import de.tu_clausthal.in.winf.objects.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -43,9 +43,10 @@ public class CRangeGPS implements IRange<ICar> {
     private GeoPosition m_lowerright = null;
 
 
-    /** ctor to create the rectangle
+    /**
+     * ctor to create the rectangle
      *
-     * @param p_upperleft left upper corner position
+     * @param p_upperleft  left upper corner position
      * @param p_lowerright right lower corner position
      */
     public CRangeGPS(GeoPosition p_upperleft, GeoPosition p_lowerright) {

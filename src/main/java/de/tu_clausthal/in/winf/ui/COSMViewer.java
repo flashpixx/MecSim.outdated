@@ -22,10 +22,6 @@
 package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.util.COverlayCollection;
-import de.tu_clausthal.in.winf.util.IOverlayCollection;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.CenterMapListener;
@@ -37,8 +33,6 @@ import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
 import javax.swing.event.MouseInputListener;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**

@@ -226,7 +226,7 @@ public class CMenuListener implements ActionListener {
 
         if (l_data instanceof Set)
             for (CSerializableGeoPosition l_item : (Set<CSerializableGeoPosition>) l_data)
-                CSimulationData.getInstance().getSourceQueue().add( new CDefaultSource(l_item.getObject()) );
+                CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_item.getObject()));
     }
 
 

@@ -40,7 +40,7 @@ public class CSimulationData {
     /**
      * queue for cars *
      */
-    private CPainterQueue<ICar> m_cars = new CPainterQueue();
+    private CPainterQueue<ICar> m_cars = new CPainterQueue(COSMViewer.getInstance());
     /**
      * queue for sources *
      */

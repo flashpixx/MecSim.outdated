@@ -45,7 +45,6 @@ public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implemen
      * list of processed sources *
      */
     protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
-
     /**
      * viewer reference
      */

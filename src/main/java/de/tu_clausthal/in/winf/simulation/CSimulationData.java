@@ -24,8 +24,8 @@ package de.tu_clausthal.in.winf.simulation;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
-import de.tu_clausthal.in.winf.util.CConcurrentOverlayQueue;
-import de.tu_clausthal.in.winf.util.CConcurrentQueue;
+import de.tu_clausthal.in.winf.util.CPainterQueue;
+import de.tu_clausthal.in.winf.util.CQueue;
 
 /**
  * data structure of the simulation and view
@@ -35,11 +35,11 @@ public class CSimulationData {
     /** singleton instance **/
     static CSimulationData s_instance = new CSimulationData();
     /** queue for cars **/
-    private CConcurrentOverlayQueue<ICar> m_cars = new CConcurrentOverlayQueue();
+    private CPainterQueue<ICar> m_cars = new CPainterQueue();
     /** queue for sources **/
-    private CConcurrentOverlayQueue<ICarSourceFactory> m_sources = new CConcurrentOverlayQueue();
+    private CPainterQueue<ICarSourceFactory> m_sources = new CPainterQueue();
     /** queue for step listeners **/
-    private CConcurrentQueue<ISimulationStep> m_steplistener = new CConcurrentQueue();
+    private CQueue<ISimulationStep> m_steplistener = new CQueue();
 
 
     /** private ctor **/
@@ -63,7 +63,7 @@ public class CSimulationData {
      *
      * @return queue object
      */
-    public CConcurrentOverlayQueue<ICar> getCarQueue()
+    public CPainterQueue<ICar> getCarQueue()
     {
         return m_cars;
     }
@@ -73,7 +73,7 @@ public class CSimulationData {
      *
      * @return queue
      */
-    public CConcurrentOverlayQueue<ICarSourceFactory> getSourceQueue()
+    public CPainterQueue<ICarSourceFactory> getSourceQueue()
     {
         return m_sources;
     }
@@ -83,7 +83,7 @@ public class CSimulationData {
      *
      * @return queue
      */
-    public CConcurrentQueue<ISimulationStep> getStepListenerQueue()
+    public CQueue<ISimulationStep> getStepListenerQueue()
     {
         return m_steplistener;
     }

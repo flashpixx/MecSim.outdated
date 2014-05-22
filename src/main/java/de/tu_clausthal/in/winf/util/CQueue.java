@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * queue class *
  */
-public class CConcurrentQueue<T> {
+public class CQueue<T> {
 
     /**
      * list of unprocessed sources *

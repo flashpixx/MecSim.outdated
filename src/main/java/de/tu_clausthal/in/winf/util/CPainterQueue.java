@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * queue class *
  */
-public class CConcurrentOverlayQueue<T extends IOverlayPainter> implements Painter {
+public class CPainterQueue<T extends IOverlayPainter> implements Painter {
 
     /**
      * list of unprocessed sources *

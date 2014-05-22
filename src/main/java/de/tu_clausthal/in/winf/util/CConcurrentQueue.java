@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.util;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * queue class *
  */
-public class CQueue<T> {
+public class CConcurrentQueue<T> {
 
     /**
      * list of unprocessed sources *
@@ -38,6 +38,19 @@ public class CQueue<T> {
      * list of processed sources *
      */
     private ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
+
+
+    /** get a list of unprocessed items
+     *
+     * @return queue
+     */
+    public ConcurrentLinkedQueue<T> getAll()
+    {
+        ConcurrentLinkedQueue<T> l_data = new ConcurrentLinkedQueue();
+        l_data.addAll(m_unprocess);
+        l_data.addAll(m_process);
+        return l_data;
+    }
 
 
     /**

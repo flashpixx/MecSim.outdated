@@ -22,8 +22,8 @@
 package de.tu_clausthal.in.winf.ui;
 
 import com.graphhopper.util.PointList;
-import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -33,6 +33,7 @@ import java.util.Map;
 
 /**
  * overlay renderer for routes *
+ * @deprecated
  */
 public class CRouteOverlay implements Painter {
 

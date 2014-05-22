@@ -19,26 +19,53 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.mas.norm;
+package de.tu_clausthal.in.winf.objects.norms;
 
-import java.io.Serializable;
+import de.tu_clausthal.in.winf.objects.ICar;
+import de.tu_clausthal.in.winf.mas.norm.IRange;
+import org.jxmapviewer.viewer.GeoPosition;
+
+import java.awt.*;
 
 
 /**
- * represent a fuzzy checkresult of a norm
+ * range for GPS rectangle
  */
-public interface INormCheckResult<T> extends Serializable {
+public class CRangeGPS implements IRange<ICar> {
 
-    /** returns the fuzzy value of the norm
-     * @return fuzzy value [0,1]
-     **/
-    public double getWeight();
-
-
-    /** returns the checking result of the norm
-     *
-     * @return result
+    /**
+     * geoposition of the upper left corner of the rectangle
      */
-    public T getResult();
+    private GeoPosition m_upperleft = null;
+    /**
+     * geoposition of the lower right corner of the rectangle
+     */
+    private GeoPosition m_lowerright = null;
 
+
+    /** ctor to create the rectangle
+     *
+     * @param p_upperleft left upper corner position
+     * @param p_lowerright right lower corner position
+     */
+    public CRangeGPS(GeoPosition p_upperleft, GeoPosition p_lowerright) {
+        if ((p_lowerright == null) || (p_upperleft == null))
+            throw new IllegalArgumentException("parameter need not to be null");
+        if ((p_upperleft.getLongitude() > p_lowerright.getLongitude()) || (p_upperleft.getLatitude() < p_lowerright.getLatitude()))
+            throw new IllegalArgumentException("geoposition are not in the correct order, first argument is the upper-left ");
+
+        m_upperleft = p_upperleft;
+        m_lowerright = p_lowerright;
+    }
+
+
+    @Override
+    public boolean isWithin(ICar p_object) {
+        return (m_upperleft.getLongitude() <= p_object.getCurrentPosition().getLongitude()) && (m_lowerright.getLatitude() >= p_object.getCurrentPosition().getLatitude());
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+
+    }
 }

@@ -19,59 +19,89 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.simulation.ISimulationStep;
-import de.tu_clausthal.in.winf.util.IOverlayCollection;
-
-import javax.swing.*;
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
 
 
 /**
- * class for step actions *
- * @deprecated
+ * norm for speed check
  */
-public class CSimulationStepPainter implements ISimulationStep {
-
-    @Override
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
-    }
-
-    @Override
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
-        SwingUtilities.invokeLater(new SwingPainter(p_cars));
-    }
+public class CNormSpeed implements INorm<ICar> {
 
     /**
-     * runnable class for Swing painter to avoid thread barrier exceptions *
+     * inner class to represent the norm result
      */
-    private class SwingPainter implements Runnable {
-        /**
-         * list with cars *
-         */
-        private ICar[] m_cars = null;
+    public class CNormResultSpeed implements INormCheckResult<Boolean> {
 
         /**
-         * ctor to create car painter *
+         * satisfiable boolean *
          */
-        public SwingPainter(ICar[] p_cars) {
-            m_cars = p_cars;
+        private boolean m_match = false;
+
+
+        /**
+         * ctor to create the value
+         *
+         * @param p_match value
+         */
+        public CNormResultSpeed(boolean p_match) {
+            m_match = p_match;
         }
 
         @Override
-        public void run() {
+        public double getWeight() {
+            return 1;
+        }
 
-            // plot car items
-            /*
-            IOverlayCollection<ICar> l_item = CSimulationData.getInstance().getCarQueue();
-            if (l_item != null) {
-                l_item.clear();
-                l_item.addAll(m_cars);
-            }*/
+        @Override
+        public Boolean getResult() {
+            return false;
         }
     }
 
+
+    /* maximum speed value for check **/
+    private int m_maxspeed = Integer.MAX_VALUE;
+    /**
+     * dedicated institution *
+     */
+    private IInstitution<ICar> m_institution = null;
+
+
+    /**
+     * ctor
+     *
+     * @param p_institution defines the institution
+     */
+    public CNormSpeed(IInstitution<ICar> p_institution) {
+        m_institution = p_institution;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_institution defines institution
+     * @param p_maxspeed    defines maximum allowed speed
+     */
+    public CNormSpeed(IInstitution<ICar> p_institution, int p_maxspeed) {
+        m_institution = p_institution;
+        m_maxspeed = p_maxspeed;
+    }
+
+
+    @Override
+    public INormCheckResult check(ICar p_object) {
+        return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed);
+    }
+
+
+    @Override
+    public IInstitution<ICar> getInstitution() {
+        return m_institution;
+    }
 }

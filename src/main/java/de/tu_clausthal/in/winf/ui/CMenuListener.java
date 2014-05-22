@@ -28,6 +28,7 @@ import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
+import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,6 +99,7 @@ public class CMenuListener implements ActionListener {
      * correct call
      *
      * @param p_event event object
+     * @bug reset
      */
     public void actionPerformed(ActionEvent p_event) {
         try {
@@ -116,7 +118,7 @@ public class CMenuListener implements ActionListener {
                 CSimulation.getInstance().stop();
             if (p_event.getSource() == m_items.get("Reset")) {
                 CSimulation.getInstance().reset();
-                COSMViewer.getInstance().reset();
+                //COSMViewer.getInstance().clearOverlay("car");
             }
 
 
@@ -192,7 +194,7 @@ public class CMenuListener implements ActionListener {
             return;
 
         Set<CSerializableGeoPosition> l_positions = new HashSet();
-        for (ICarSourceFactory l_item : COSMViewer.getInstance().getSourceRenderer().getSources())
+        for (ICarSourceFactory l_item : CSimulationData.getInstance().getSourceQueue().getAll())
             l_positions.add(new CSerializableGeoPosition(l_item.getPosition()));
 
         FileOutputStream l_stream = new FileOutputStream(this.addFileExtension(m_filedialog.getSelectedFile(), ".src"));
@@ -223,11 +225,8 @@ public class CMenuListener implements ActionListener {
 
 
         if (l_data instanceof Set)
-            for (CSerializableGeoPosition l_item : (Set<CSerializableGeoPosition>) l_data) {
-                CDefaultSource l_source = new CDefaultSource(l_item.getObject());
-                CSimulation.getInstance().addSource(l_source);
-                COSMViewer.getInstance().getSourceRenderer().addSources(l_source);
-            }
+            for (CSerializableGeoPosition l_item : (Set<CSerializableGeoPosition>) l_data)
+                CSimulationData.getInstance().getSourceQueue().add( new CDefaultSource(l_item.getObject()) );
     }
 
 

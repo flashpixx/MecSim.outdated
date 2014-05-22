@@ -27,6 +27,7 @@ import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.util.CConcurrentQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,18 +48,6 @@ public class CWorker implements Runnable {
      * logger instance *
      */
     private final Logger m_Logger = LoggerFactory.getLogger(getClass());
-    /**
-     * list of sources *
-     */
-    private CQueue<ICarSourceFactory> m_sources = null;
-    /**
-     * list of cars *
-     */
-    private CQueue<ICar> m_cars = null;
-    /**
-     * list of step interfaces *
-     */
-    private CQueue<ISimulationStep> m_steps = null;
     /**
      * drive model *
      */
@@ -83,17 +72,11 @@ public class CWorker implements Runnable {
      * @param p_increment   rank ID of the process
      * @param p_currentstep current step object
      * @param p_drivemodel  driving model object
-     * @param p_cars        queue with raw car objects
-     * @param p_sources     queue with sources
-     * @param p_steps       queue with step objects
      */
-    public CWorker(CyclicBarrier p_barrier, boolean p_increment, AtomicInteger p_currentstep, IDriveModel p_drivemodel, CQueue<ICar> p_cars, CQueue<ICarSourceFactory> p_sources, CQueue<ISimulationStep> p_steps) {
+    public CWorker(CyclicBarrier p_barrier, boolean p_increment, AtomicInteger p_currentstep, IDriveModel p_drivemodel) {
         m_barrier = p_barrier;
         m_increment = p_increment;
         m_currentstep = p_currentstep;
-        m_cars = p_cars;
-        m_sources = p_sources;
-        m_steps = p_steps;
         m_drivemodel = p_drivemodel;
     }
 
@@ -133,13 +116,13 @@ public class CWorker implements Runnable {
     private void processListener(ListenerCall p_call) throws InterruptedException, BrokenBarrierException {
 
         ISimulationStep l_step = null;
-        ICarSourceFactory[] l_sources = new ICarSourceFactory[m_sources.unprocessedsize()];
-        ICar[] l_cars = new ICar[m_cars.unprocessedsize()];
+        ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
+        ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
 
-        m_cars.unprocessed2array(l_cars);
-        m_sources.unprocessed2array(l_sources);
+        CSimulationData.getInstance().getCarQueue().unprocessed2array(l_cars);
+        CSimulationData.getInstance().getSourceQueue().unprocessed2array(l_sources);
 
-        while ((l_step = m_steps.pop()) != null) {
+        while ((l_step = CSimulationData.getInstance().getStepListenerQueue().pop()) != null) {
             try {
 
                 switch (p_call) {
@@ -151,7 +134,7 @@ public class CWorker implements Runnable {
                         break;
                 }
 
-                m_steps.push(l_step);
+                CSimulationData.getInstance().getStepListenerQueue().push(l_step);
 
             } catch (Exception l_exception) {
                 LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processListener: ", l_exception);
@@ -159,7 +142,7 @@ public class CWorker implements Runnable {
         }
 
         m_barrier.await();
-        m_steps.swap();
+        CSimulationData.getInstance().getStepListenerQueue().swap();
 
     }
 
@@ -171,7 +154,7 @@ public class CWorker implements Runnable {
     private void processCars() throws InterruptedException, BrokenBarrierException {
 
         ICar l_car = null;
-        while ((l_car = m_cars.pop()) != null) {
+        while ((l_car = CSimulationData.getInstance().getCarQueue().pop()) != null) {
 
             try {
 
@@ -181,7 +164,7 @@ public class CWorker implements Runnable {
                 m_drivemodel.update(m_currentstep.get(), l_car);
 
                 if (!l_car.hasEndReached())
-                    m_cars.push(l_car);
+                    CSimulationData.getInstance().getCarQueue().push(l_car);
                 else {
                     CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
                     if (l_edge != null)
@@ -194,7 +177,7 @@ public class CWorker implements Runnable {
         }
 
         m_barrier.await();
-        m_cars.swap();
+        CSimulationData.getInstance().getCarQueue().swap();
 
     }
 
@@ -206,11 +189,11 @@ public class CWorker implements Runnable {
     private void processSources() throws InterruptedException, BrokenBarrierException {
 
         ICarSourceFactory l_source = null;
-        while ((l_source = m_sources.pop()) != null) {
+        while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
             try {
 
-                m_cars.add(l_source.generate());
-                m_sources.push(l_source);
+                CSimulationData.getInstance().getCarQueue().add(l_source.generate());
+                CSimulationData.getInstance().getSourceQueue().push(l_source);
 
             } catch (Exception l_exception) {
                 LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processSources: ", l_exception);
@@ -219,7 +202,7 @@ public class CWorker implements Runnable {
         }
 
         m_barrier.await();
-        m_sources.swap();
+        CSimulationData.getInstance().getSourceQueue().swap();
 
     }
 

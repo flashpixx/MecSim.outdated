@@ -22,17 +22,16 @@
 package de.tu_clausthal.in.winf.objects;
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.winf.util.IOverlayPainter;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactory;
 
-import java.awt.*;
 import java.util.Map;
 
 
 /**
  * car interface for defining the car structure
  */
-public interface ICar {
+public interface ICar extends IOverlayPainter {
 
     /**
      * returns the geoposition of the start
@@ -134,12 +133,6 @@ public interface ICar {
      * @return index value
      */
     public int getCurrentIndex();
-
-
-    /**
-     * paint  method of the car
-     */
-    public void paint(Graphics2D p_graphic, TileFactory p_factory, int p_zoom);
 
 
     /**

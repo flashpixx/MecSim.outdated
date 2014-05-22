@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
+import de.tu_clausthal.in.winf.simulation.CSimulationData;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -54,22 +55,20 @@ class COSMMouseListener extends MouseInputAdapter {
                 Point2D l_position = new Point(l_viewportBounds.x + l_event.getPoint().x, l_viewportBounds.y + l_event.getPoint().y);
 
                 boolean l_remove = false;
-                for (ICarSourceFactory l_source : l_viewer.getSourceRenderer().getSources()) {
+                for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll()) {
                     Point2D l_sourceposition = l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom());
                     if ((l_position.getX() >= l_sourceposition.getX() - s_removeBoxEpsilon) && (l_position.getX() <= l_sourceposition.getX() + s_removeBoxEpsilon) &&
                             (l_position.getY() >= l_sourceposition.getY() - s_removeBoxEpsilon) && (l_position.getY() <= l_sourceposition.getY() + s_removeBoxEpsilon)) {
-                        CSimulation.getInstance().removeSource(l_source);
-                        l_viewer.getSourceRenderer().removeSource(l_source);
+                        CSimulationData.getInstance().getSourceQueue().remove(l_source);
                         l_remove = true;
                         break;
                     }
                 }
 
-                if (!l_remove) {
-                    CDefaultSource l_source = new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom()));
-                    CSimulation.getInstance().addSource(l_source);
-                    l_viewer.getSourceRenderer().addSources(l_source);
-                }
+                if (!l_remove)
+                    CSimulationData.getInstance().getSourceQueue().add( new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())) );
+
+                COSMViewer.getInstance().repaint();
             }
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);

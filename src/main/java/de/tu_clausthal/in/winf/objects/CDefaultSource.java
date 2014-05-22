@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.objects;
 
 import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactory;
 
 import java.awt.*;
 import java.util.Collection;
@@ -103,6 +104,12 @@ public class CDefaultSource implements ICarSourceFactory {
     @Override
     public GeoPosition getPosition() {
         return m_position;
+    }
+
+
+    @Override
+    public void paint(Graphics2D p_graphic, TileFactory p_factory, int p_zoom) {
+
     }
 
 }

@@ -22,19 +22,23 @@
 package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.objects.ICar;
+import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.util.COverlayCollection;
+import de.tu_clausthal.in.winf.util.IOverlayCollection;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
-
 import javax.swing.event.MouseInputListener;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -50,22 +54,6 @@ public class COSMViewer extends JXMapViewer {
      * singleton instance *
      */
     private static COSMViewer s_instance = new COSMViewer();
-    /**
-     * list with overlays
-     */
-    private COverlayCollection m_overlay = new COverlayCollection();
-    /**
-     * way point renderer *
-     */
-    private CSourceOverlay m_SourceRenderer = new CSourceOverlay(this);
-    /**
-     * graph renderer *
-     */
-    private CRouteOverlay m_RouteRenderer = new CRouteOverlay();
-    /**
-     * car renderer
-     */
-    private CCarOverlay m_CarRenderer = new CCarOverlay(this);
 
 
     /**
@@ -85,11 +73,6 @@ public class COSMViewer extends JXMapViewer {
         this.setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
         this.setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
 
-        m_overlay.add(m_RouteRenderer);
-        m_overlay.add(m_SourceRenderer);
-        m_overlay.add(m_CarRenderer);
-        this.setOverlayPainter(m_overlay);
-
         COSMMouseListener l_OSMListener = new COSMMouseListener();
         MouseInputListener l_mouse = new PanMouseInputListener(this);
 
@@ -108,71 +91,6 @@ public class COSMViewer extends JXMapViewer {
      */
     public static COSMViewer getInstance() {
         return s_instance;
-    }
-
-
-    /**
-     * returns the instance of the overlay renderer for sources
-     *
-     * @return renderer object
-     */
-    public CSourceOverlay getSourceRenderer() {
-        return m_SourceRenderer;
-    }
-
-
-    /**
-     * returns the instance of the overlay renderer for routes
-     *
-     * @return renderer object
-     */
-    public CRouteOverlay getRouteRenderer() {
-        return m_RouteRenderer;
-    }
-
-
-    /**
-     * return the instance of the overlay renderer for cars
-     *
-     * @return renderer object
-     */
-    public CCarOverlay getCarRenderer() {
-        return m_CarRenderer;
-    }
-
-
-    /**
-     * resets the viewer to the configuration defaults *
-     */
-    public void reset() {
-        this.recenterToAddressLocation();
-        this.setZoom(CConfiguration.getInstance().get().Zoom);
-    }
-
-
-    /**
-     * add a new overlay painter
-     *
-     * @param p_overlay painter object
-     */
-    public void addOverlayPainter(Painter p_overlay) {
-        if ((p_overlay.equals(m_RouteRenderer)) || (p_overlay.equals(m_CarRenderer)) || (p_overlay.equals(m_SourceRenderer)) || (!m_overlay.contains(p_overlay)))
-            return;
-
-        m_overlay.add(p_overlay);
-    }
-
-
-    /**
-     * remove a overlay painter
-     *
-     * @param p_overlay painter object
-     */
-    public void removeOverlayPainter(Painter p_overlay) {
-        if ((p_overlay.equals(m_RouteRenderer)) || (p_overlay.equals(m_CarRenderer)) || (p_overlay.equals(m_SourceRenderer)) || (!m_overlay.contains(p_overlay)))
-            return;
-
-        m_overlay.remove(p_overlay);
     }
 
 }

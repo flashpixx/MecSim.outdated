@@ -19,25 +19,73 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.mas.norm;
+package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.objects.ICar;
-
-import java.io.Serializable;
-
+import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
+import de.tu_clausthal.in.winf.util.CConcurrentOverlayQueue;
+import de.tu_clausthal.in.winf.util.CConcurrentQueue;
 
 /**
- * class to represent the workspace of an institution
+ * data structure of the simulation and view
  */
-public interface IRange<T> extends Serializable {
+public class CSimulationData {
+
+    /** singleton instance **/
+    static CSimulationData s_instance = new CSimulationData();
+    /** queue for cars **/
+    private CConcurrentOverlayQueue<ICar> m_cars = new CConcurrentOverlayQueue();
+    /** queue for sources **/
+    private CConcurrentOverlayQueue<ICarSourceFactory> m_sources = new CConcurrentOverlayQueue();
+    /** queue for step listeners **/
+    private CConcurrentQueue<ISimulationStep> m_steplistener = new CConcurrentQueue();
 
 
-    /** check if an object is within the range
+    /** private ctor **/
+    private CSimulationData() {
+        COSMViewer.getInstance().setOverlayPainter(m_cars);
+        COSMViewer.getInstance().setOverlayPainter(m_sources);
+    }
+
+
+    /** returns singleton instance
      *
-     * @param p_object object
-     * @return
+     * @return instance
      */
-    public boolean isWithin( T p_object );
+    public static CSimulationData getInstance()
+    {
+        return s_instance;
+    }
 
+
+    /** returns the care queue
+     *
+     * @return queue object
+     */
+    public CConcurrentOverlayQueue<ICar> getCarQueue()
+    {
+        return m_cars;
+    }
+
+
+    /** returns the source queue
+     *
+     * @return queue
+     */
+    public CConcurrentOverlayQueue<ICarSourceFactory> getSourceQueue()
+    {
+        return m_sources;
+    }
+
+
+    /** returns the step listener queue
+     *
+     * @return queue
+     */
+    public CConcurrentQueue<ISimulationStep> getStepListenerQueue()
+    {
+        return m_steplistener;
+    }
 
 }

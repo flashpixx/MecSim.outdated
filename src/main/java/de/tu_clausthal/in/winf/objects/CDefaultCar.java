@@ -318,6 +318,7 @@ public class CDefaultCar implements ICar {
             p_graphic.setColor(Color.RED);
 
         p_graphic.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+        p_graphic.dispose();
     }
 
     @Override

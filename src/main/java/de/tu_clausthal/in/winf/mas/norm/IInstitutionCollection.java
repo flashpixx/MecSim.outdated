@@ -19,24 +19,24 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.mas.norm;
+package de.tu_clausthal.in.winf.mas.norm;
 
-
-import java.io.Serializable;
 import java.util.Collection;
 
+
 /**
- * class to define a collection of ranges
+ * collection to receive and / send norms to
+ * institutions
  */
-public interface IRangeCollection<T> extends Collection<IRange>, Serializable {
+public interface IInstitutionCollection<T> extends Collection<IInstitution> {
 
 
-    /** check if an object is within the range
+    /**
+     * sends a norm to all institution
      *
-     * @param p_object object
-     * @return
+     * @param p_norm norm object
      */
-    public boolean isWithin( T p_object );
+    public void send(INorm<T> p_norm);
 
 
 }

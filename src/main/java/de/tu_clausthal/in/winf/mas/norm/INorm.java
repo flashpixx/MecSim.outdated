@@ -19,59 +19,32 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.mas.norm;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.simulation.ISimulationStep;
-import de.tu_clausthal.in.winf.util.IOverlayCollection;
-
-import javax.swing.*;
+import java.io.Serializable;
 
 
 /**
- * class for step actions *
- * @deprecated
+ * interface class of a norm
  */
-public class CSimulationStepPainter implements ISimulationStep {
+public interface INorm<T> extends Serializable {
 
-    @Override
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
-    }
-
-    @Override
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
-        SwingUtilities.invokeLater(new SwingPainter(p_cars));
-    }
 
     /**
-     * runnable class for Swing painter to avoid thread barrier exceptions *
+     * checks for a car the norm
+     *
+     * @param p_object object
+     * @return result
      */
-    private class SwingPainter implements Runnable {
-        /**
-         * list with cars *
-         */
-        private ICar[] m_cars = null;
+    public INormCheckResult check(T p_object);
 
-        /**
-         * ctor to create car painter *
-         */
-        public SwingPainter(ICar[] p_cars) {
-            m_cars = p_cars;
-        }
 
-        @Override
-        public void run() {
+    /**
+     * returns the institution which handle the norm
+     *
+     * @return institution
+     */
+    public IInstitution<T> getInstitution();
 
-            // plot car items
-            /*
-            IOverlayCollection<ICar> l_item = CSimulationData.getInstance().getCarQueue();
-            if (l_item != null) {
-                l_item.clear();
-                l_item.addAll(m_cars);
-            }*/
-        }
-    }
 
 }

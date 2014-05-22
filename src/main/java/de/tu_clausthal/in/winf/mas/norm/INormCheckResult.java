@@ -19,31 +19,31 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.mas.norm;
-
+package de.tu_clausthal.in.winf.mas.norm;
 
 import java.io.Serializable;
-import java.util.Collection;
+
 
 /**
- * interface of an institution, an institution
- * is a collection of norms, collection of other institutions with additional aspects
+ * represent a fuzzy checkresult of a norm
  */
-public interface IInstitution<T> extends Collection<INorm>, Serializable {
+public interface INormCheckResult<T> extends Serializable {
 
 
-    /** checks an object
+    /**
+     * returns the fuzzy value of the norm
      *
-     * @param p_object object
+     * @return fuzzy value [0,1]
      */
-    public void check( T p_object );
+    public double getWeight();
 
 
-    /** returns the range of the workspace of the institution
+    /**
+     * returns the checking result of the norm
      *
-     * @return rangecollection
+     * @return result
      */
-    public IRangeCollection<T> getRange();
+    public T getResult();
 
 
 }

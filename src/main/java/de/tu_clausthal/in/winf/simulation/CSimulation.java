@@ -27,6 +27,7 @@ import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
+import de.tu_clausthal.in.winf.util.CConcurrentQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,18 +56,6 @@ public class CSimulation {
      */
     ExecutorService m_pool = null;
     /**
-     * queue of sources *
-     */
-    private CQueue<ICarSourceFactory> m_sources = new CQueue();
-    /**
-     * queue with cars *
-     */
-    private CQueue<ICar> m_cars = new CQueue();
-    /**
-     * queue if step-interfaces *
-     */
-    private CQueue<ISimulationStep> m_steps = new CQueue();
-    /**
      * current step of the simulation *
      */
     private AtomicInteger m_currentstep = new AtomicInteger(0);
@@ -83,51 +72,6 @@ public class CSimulation {
      */
     public static CSimulation getInstance() {
         return s_instance;
-    }
-
-
-    /**
-     * adds a new source to the simulation
-     *
-     * @param p_source source object
-     */
-    public void addSource(ICarSourceFactory p_source) throws IllegalAccessException {
-        if (this.isRunning())
-            throw new IllegalAccessException("simulation is running");
-
-        m_sources.add(p_source);
-    }
-
-    /**
-     * removes a source from the simulation
-     *
-     * @param p_source source object
-     */
-    public void removeSource(ICarSourceFactory p_source) throws IllegalAccessException {
-        if (this.isRunning())
-            throw new IllegalAccessException("simulation is running");
-
-        m_sources.remove(p_source);
-    }
-
-
-    /**
-     * adds a step interface
-     *
-     * @param p_step item
-     */
-    public void registerStep(ISimulationStep p_step) {
-        if (!m_steps.contains(p_step))
-            m_steps.add(p_step);
-    }
-
-    /**
-     * removes a step interface
-     *
-     * @param p_step item
-     */
-    public void unregisterStep(ISimulationStep p_step) {
-        m_steps.remove(p_step);
     }
 
 
@@ -165,17 +109,17 @@ public class CSimulation {
         if (CConfiguration.getInstance().get().MaxThreadNumber < 1)
             throw new IllegalAccessException("one thread must be exists to start simulation");
 
-        m_sources.swap();
-        if (m_sources.isEmpty())
+        CSimulationData.getInstance().getSourceQueue().swap();
+        if (CSimulationData.getInstance().getSourceQueue().isEmpty())
             m_Logger.warn("no sources exists");
-        m_cars.swap();
-        if (m_cars.isEmpty())
+        CSimulationData.getInstance().getCarQueue().swap();
+        if (CSimulationData.getInstance().getCarQueue().isEmpty())
             m_Logger.warn("no cars exists");
 
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();
         for (int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++)
-            m_pool.submit(new CWorker(m_barrier, i == 0, m_currentstep, p_model, m_cars, m_sources, m_steps));
+            m_pool.submit(new CWorker(m_barrier, i == 0, m_currentstep, p_model));
     }
 
 
@@ -200,13 +144,13 @@ public class CSimulation {
 
     /**
      * resets the simulation data *
+     * @bug reset
      */
     public void reset() {
         this.stop();
         m_currentstep.set(0);
-        m_cars.clear();
         CGraphHopper.getInstance().clear();
-        COSMViewer.getInstance().getCarRenderer().clear();
+        //COSMViewer.getInstance().clearOverlay("car");
         m_Logger.info("simulation reset");
     }
 

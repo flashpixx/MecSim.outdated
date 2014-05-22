@@ -19,59 +19,42 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.mas.norm;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.simulation.ISimulationStep;
-import de.tu_clausthal.in.winf.util.IOverlayCollection;
 
-import javax.swing.*;
-
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
- * class for step actions *
- * @deprecated
+ * interface of an institution, an institution
+ * is a collection of norms, collection of other institutions with additional aspects
  */
-public class CSimulationStepPainter implements ISimulationStep {
+public interface IInstitution<T> extends Collection<INorm>, Serializable {
 
-    @Override
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
-    }
-
-    @Override
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
-        SwingUtilities.invokeLater(new SwingPainter(p_cars));
-    }
 
     /**
-     * runnable class for Swing painter to avoid thread barrier exceptions *
+     * checks an object
+     *
+     * @param p_object object
      */
-    private class SwingPainter implements Runnable {
-        /**
-         * list with cars *
-         */
-        private ICar[] m_cars = null;
+    public void check(T p_object);
 
-        /**
-         * ctor to create car painter *
-         */
-        public SwingPainter(ICar[] p_cars) {
-            m_cars = p_cars;
-        }
 
-        @Override
-        public void run() {
+    /**
+     * returns the range of the workspace of the institution
+     *
+     * @return rangecollection
+     */
+    public IRangeCollection<T> getRange();
 
-            // plot car items
-            /*
-            IOverlayCollection<ICar> l_item = CSimulationData.getInstance().getCarQueue();
-            if (l_item != null) {
-                l_item.clear();
-                l_item.addAll(m_cars);
-            }*/
-        }
-    }
+
+    /**
+     * update event norm itself (on update) or
+     * form another institution (on changeing)
+     *
+     * @param p_norm
+     */
+    public void update(INorm<T> p_norm);
+
 
 }

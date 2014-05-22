@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
+import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.CFrame;
 import de.tu_clausthal.in.winf.ui.CSimulationStepPainter;
 
@@ -57,8 +58,7 @@ public class CMain {
         CGraphHopper.getInstance();
 
         // add step runner objects to the simulation
-        CSimulation.getInstance().registerStep(new CSimulationStepPainter());
-        CSimulation.getInstance().registerStep(CStatisticMap.getInstance());
+        CSimulationData.getInstance().getStepListenerQueue().add(CStatisticMap.getInstance());
 
 
         // create the UI within an invoke thread

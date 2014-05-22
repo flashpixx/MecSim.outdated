@@ -19,9 +19,9 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.util;
 
-import org.jxmapviewer.painter.Painter;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 
 import java.awt.*;
 import java.util.Collection;
@@ -32,12 +32,13 @@ import java.util.Iterator;
 /**
  * collection to use mutiple overlays in the viewer *
  */
-public class COverlayCollection implements Painter, Collection<Painter> {
+public class COverlayCollection<T extends IOverlayPainter> implements IOverlayCollection<T>  {
+
 
     /**
      * list of other overlay painter *
      */
-    private HashSet<Painter> m_overlay = new HashSet();
+    private HashSet<T> m_overlay = new HashSet();
 
 
     @Override
@@ -59,7 +60,7 @@ public class COverlayCollection implements Painter, Collection<Painter> {
 
 
     @Override
-    public Iterator<Painter> iterator() {
+    public Iterator<T> iterator() {
         return m_overlay.iterator();
     }
 
@@ -71,14 +72,14 @@ public class COverlayCollection implements Painter, Collection<Painter> {
 
 
     @Override
-    public <T> T[] toArray(T[] p_array) {
+    public <T1> T1[] toArray(T1[] p_array) {
         return m_overlay.toArray(p_array);
     }
 
 
     @Override
-    public boolean add(Painter p_painter) {
-        return m_overlay.add(p_painter);
+    public boolean add(T p_item) {
+        return m_overlay.add(p_item);
     }
 
 
@@ -89,26 +90,26 @@ public class COverlayCollection implements Painter, Collection<Painter> {
 
 
     @Override
-    public boolean containsAll(Collection<?> p_objects) {
-        return m_overlay.containsAll(p_objects);
+    public boolean containsAll(Collection<?> p_collection) {
+        return m_overlay.containsAll(p_collection);
     }
 
 
     @Override
-    public boolean addAll(Collection<? extends Painter> p_painters) {
-        return m_overlay.addAll(p_painters);
+    public boolean addAll(Collection<? extends T> p_collection) {
+        return m_overlay.addAll(p_collection);
     }
 
 
     @Override
-    public boolean removeAll(Collection<?> p_objects) {
-        return m_overlay.removeAll(p_objects);
+    public boolean removeAll(Collection<?> p_collection) {
+        return m_overlay.remove(p_collection);
     }
 
 
     @Override
-    public boolean retainAll(Collection<?> p_objects) {
-        return m_overlay.retainAll(p_objects);
+    public boolean retainAll(Collection<?> p_collection) {
+        return m_overlay.retainAll(p_collection);
     }
 
 
@@ -120,8 +121,8 @@ public class COverlayCollection implements Painter, Collection<Painter> {
 
     @Override
     public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
-        for (Painter l_item : m_overlay)
-            l_item.paint(graphics2D, o, i, i2);
+        for(IOverlayPainter l_item : m_overlay)
+            l_item.paint(graphics2D, COSMViewer.getInstance().getTileFactory(), COSMViewer.getInstance().getZoom());
+        graphics2D.dispose();
     }
-
 }

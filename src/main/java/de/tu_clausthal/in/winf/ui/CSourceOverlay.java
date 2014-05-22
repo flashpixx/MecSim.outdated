@@ -25,7 +25,6 @@ import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +34,7 @@ import java.util.Set;
  *
  * @note after adding / removing waypoints the JxMapViewer must be repainted,
  * otherwise the waypoint is not shown
+ * @deprecated
  */
 public class CSourceOverlay extends WaypointPainter {
 
@@ -62,7 +62,7 @@ public class CSourceOverlay extends WaypointPainter {
      * are not shown until the map is repainted
      */
     public void addSources(ICarSourceFactory p_src) {
-        HashSet<ICarSourceFactory> l_sources = new HashSet<ICarSourceFactory>(this.getWaypoints());
+        HashSet<ICarSourceFactory> l_sources = new HashSet(this.getWaypoints());
         l_sources.add(p_src);
         this.setWaypoints(l_sources);
         m_viewer.repaint();
@@ -77,7 +77,7 @@ public class CSourceOverlay extends WaypointPainter {
      * are not shown until the map is repainted
      */
     public void removeSource(ICarSourceFactory p_src) {
-        HashSet<ICarSourceFactory> l_sources = new HashSet<ICarSourceFactory>(this.getWaypoints());
+        HashSet<ICarSourceFactory> l_sources = new HashSet(this.getWaypoints());
         l_sources.remove(p_src);
         this.setWaypoints(l_sources);
         m_viewer.repaint();

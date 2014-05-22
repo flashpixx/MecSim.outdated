@@ -33,6 +33,7 @@ import java.util.Set;
 
 /**
  * overlay renderer for cars *
+ * @deprecated
  */
 public class CCarOverlay implements Painter {
 

@@ -21,7 +21,6 @@
 
 package de.tu_clausthal.in.winf.objects;
 
-import de.tu_clausthal.in.winf.util.IOverlayPainter;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 

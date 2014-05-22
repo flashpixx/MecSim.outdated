@@ -63,13 +63,6 @@ public class CSimulationStepPainter implements ISimulationStep {
         @Override
         public void run() {
 
-            // plot car items
-            /*
-            IOverlayCollection<ICar> l_item = CSimulationData.getInstance().getCarQueue();
-            if (l_item != null) {
-                l_item.clear();
-                l_item.addAll(m_cars);
-            }*/
         }
     }
 

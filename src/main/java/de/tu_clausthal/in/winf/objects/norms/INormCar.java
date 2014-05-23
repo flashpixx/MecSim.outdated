@@ -19,25 +19,23 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
+package de.tu_clausthal.in.winf.objects.norms;
 
+import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.objects.ICar;
 
-import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
+
 
 /**
- * class to define a collection of ranges
+ * interface with norm structure for car
  */
-public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable {
+public interface INormCar extends ICar {
 
-
-    /**
-     * check if an object is within the range
+    /** matching method of a norm
      *
-     * @param p_object object
-     * @return boolean for existence
+     * @param p_norm set of norm objects
      */
-    public boolean isWithin(T p_object);
-
+    public void isNormMatch( Set<INorm<INormCar>> p_norm );
 
 }

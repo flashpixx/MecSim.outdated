@@ -22,7 +22,9 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.*;
+import org.jxmapviewer.viewer.TileFactory;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -47,7 +49,7 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     /**
      * range collection with a disjoint set *
      */
-    private IRangeCollection<T> m_range = new CDisjointRangeCollection();
+    private IRangeCollection<T> m_range = new CConjointRangeCollection();
 
     /**
      * norms of the institution *
@@ -109,7 +111,7 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public IInstitutionCollection getSuperior() {
+    public IInstitutionCollection<T> getSuperior() {
         return m_superior;
     }
 
@@ -124,7 +126,7 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public IInstitutionCollection getInferior() {
+    public IInstitutionCollection<T> getInferior() {
         return m_inferior;
     }
 
@@ -154,8 +156,8 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public Iterator<INorm> iterator() {
-        return null;
+    public Iterator<INorm<T>> iterator() {
+        return m_norms.iterator();
     }
 
     @Override
@@ -184,8 +186,8 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm> c) {
-        return false; //m_norms.addAll(c);
+    public boolean addAll(Collection<? extends INorm<T>> c) {
+        return m_norms.addAll(c);
     }
 
     @Override
@@ -201,5 +203,11 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     @Override
     public void clear() {
         m_norms.clear();
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D, TileFactory factory, int zoom) {
+        for( IRange<T> l_item : m_range )
+            l_item.paint( graphics2D, factory, zoom );
     }
 }

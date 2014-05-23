@@ -21,6 +21,8 @@
 
 package de.tu_clausthal.in.winf.mas.norm;
 
+import de.tu_clausthal.in.winf.util.IPainter;
+
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -30,7 +32,7 @@ import java.util.Collection;
  * is a collection of norms, stores collection of other institutions and
  * additional aspects
  */
-public interface IInstitution<T> extends Collection<INorm>, Serializable {
+public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, IPainter {
 
 
     /**

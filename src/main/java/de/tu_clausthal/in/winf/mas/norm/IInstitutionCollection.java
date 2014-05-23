@@ -28,7 +28,7 @@ import java.util.Collection;
  * collection to receive and / send norms to
  * institutions
  */
-public interface IInstitutionCollection<T> extends Collection<IInstitution> {
+public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
 
 
     /**

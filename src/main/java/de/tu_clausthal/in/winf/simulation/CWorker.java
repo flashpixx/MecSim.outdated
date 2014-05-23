@@ -28,6 +28,7 @@ import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.objects.norms.INormCar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,8 +174,9 @@ public class CWorker implements Runnable {
                 }
 
                 // call on each car the institutions
-                for (IInstitution<ICar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                    l_item.check(l_car);
+                if (l_car instanceof INormCar)
+                    for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+                        l_item.check( (INormCar)l_car );
 
             } catch (Exception l_exception) {
                 LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);

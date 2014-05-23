@@ -41,10 +41,10 @@ public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
     @Override
     public boolean isWithin(T p_object) {
         for (IRange<T> l_item : m_ranges)
-            if (!l_item.isWithin(p_object))
-                return false;
+            if (l_item.isWithin(p_object))
+                return true;
 
-        return true;
+        return false;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
-    public Iterator<IRange> iterator() {
-        return null;
+    public Iterator<IRange<T>> iterator() {
+        return m_ranges.iterator();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
-    public boolean add(IRange iRange) {
+    public boolean add(IRange<T> iRange) {
         return m_ranges.add(iRange);
     }
 
@@ -93,8 +93,8 @@ public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends IRange> c) {
-        return false; //m_ranges.addAll(c);
+    public boolean addAll(Collection<? extends IRange<T>> c) {
+        return m_ranges.addAll(c);
     }
 
     @Override

@@ -19,25 +19,38 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
+package de.tu_clausthal.in.winf.objects.norms;
 
+import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.objects.CDefaultCar;
+import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
+
 
 /**
- * class to define a collection of ranges
+ * creates a car with norm context
  */
-public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable {
+public class CNormCar extends CDefaultCar implements INormCar {
+
+    /** set with norms, that are matched **/
+    private Set<INorm<INormCar>> m_norms = null;
 
 
     /**
-     * check if an object is within the range
+     * ctor to create the initial values
      *
-     * @param p_object object
-     * @return boolean for existence
+     * @param p_StartPosition start positions (position of the source)
      */
-    public boolean isWithin(T p_object);
+    public CNormCar(GeoPosition p_StartPosition) {
+        super(p_StartPosition);
+    }
+
+    @Override
+    public void isNormMatch(Set<INorm<INormCar>> p_norm) {
+        m_norms = p_norm;
+    }
+
 
 
 }

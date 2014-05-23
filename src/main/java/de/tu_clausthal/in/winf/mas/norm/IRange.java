@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.mas.norm;
 
-import org.jxmapviewer.painter.Painter;
+import de.tu_clausthal.in.winf.util.IPainter;
 
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ import java.io.Serializable;
 /**
  * class to represent the workspace of an institution
  */
-public interface IRange<T> extends Serializable, Painter {
+public interface IRange<T> extends Serializable, IPainter {
 
 
     /**

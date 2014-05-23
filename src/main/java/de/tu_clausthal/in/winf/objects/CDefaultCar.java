@@ -53,45 +53,43 @@ public class CDefaultCar implements ICar {
     /**
      * random interface *
      */
-    private Random m_random = new Random();
+    protected Random m_random = new Random();
     /**
      * geo position of the start *
      */
-    private GeoPosition m_StartPosition = null;
+    protected GeoPosition m_StartPosition = null;
     /**
      * geo position of the end *
      */
-    private GeoPosition m_EndPosition = null;
+    protected GeoPosition m_EndPosition = null;
     /**
      * current speed *
      */
-    private int m_speed = 0;
+    protected int m_speed = 0;
     /**
      * maximum speed definition *
      */
-    private int m_maxSpeed = 200;
+    protected int m_maxSpeed = 200;
     /**
      * linger probability value *
      */
-    private double m_LingerProbability = 0;
+    protected double m_LingerProbability = 0;
     /**
      * edges of the route *
      */
-    private List<EdgeIteratorState> m_routeedges = null;
+    protected List<EdgeIteratorState> m_routeedges = null;
     /**
      * edge counter for GHResponse  *
      */
-    private int m_routeindex = 0;
-
+    protected int m_routeindex = 0;
     /**
      * individual acceleration
      */
-    private int m_acceleration = 1;
-
+   protected int m_acceleration = 1;
     /**
      * individual deceleration *
      */
-    private int m_deceleration = 1;
+    protected int m_deceleration = 1;
 
 
     /**

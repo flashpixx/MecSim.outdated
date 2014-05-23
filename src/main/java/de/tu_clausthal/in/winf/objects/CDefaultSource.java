@@ -37,15 +37,15 @@ public class CDefaultSource implements ICarSourceFactory {
     /**
      * position of the source within the map *
      */
-    private GeoPosition m_position = null;
+    protected GeoPosition m_position = null;
     /**
      * integer values how many cars are generated in a step *
      */
-    private int m_NumberCarsInStep = 1;
+    protected int m_NumberCarsInStep = 1;
     /**
      * random interface *
      */
-    private Random m_random = new Random();
+    protected Random m_random = new Random();
 
 
     /**
@@ -91,12 +91,6 @@ public class CDefaultSource implements ICarSourceFactory {
                 l_sources.add(new CDefaultCar(m_position));
 
         return l_sources;
-    }
-
-
-    @Override
-    public Color getColor() {
-        return Color.BLUE;
     }
 
 

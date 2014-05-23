@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 
 import javax.swing.*;
@@ -36,6 +37,9 @@ import java.awt.geom.Point2D;
  * mouse listener for jxviewer *
  */
 class COSMMouseListener extends MouseAdapter {
+
+    /** popup **/
+    private CMenuPopup m_popup = new CMenuPopup();
 
 
     /**
@@ -60,16 +64,19 @@ class COSMMouseListener extends MouseAdapter {
                         break;
                     }
 
-                if (!l_remove)
-                    CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
+                if (!l_remove) {
+                    if (m_popup.getSourceSelection().equals("default cars"))
+                        CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
+                    if (m_popup.getSourceSelection().equals("norm cars"))
+                        CSimulationData.getInstance().getSourceQueue().add(new CNormSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
+                }
             }
 
 
             // right click
-            if (p_event.getButton() == MouseEvent.BUTTON3) {
-                CMenuPopup l_menu = new CMenuPopup();
-                l_menu.show(p_event.getComponent(), p_event.getX(), p_event.getY());
-            }
+            if (p_event.getButton() == MouseEvent.BUTTON3)
+                m_popup.show(p_event.getComponent(), p_event.getX(), p_event.getY());
+
 
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);

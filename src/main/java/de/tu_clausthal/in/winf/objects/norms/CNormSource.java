@@ -19,41 +19,41 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects;
+package de.tu_clausthal.in.winf.objects.norms;
 
+import de.tu_clausthal.in.winf.objects.CDefaultCar;
+import de.tu_clausthal.in.winf.objects.CDefaultSource;
+import de.tu_clausthal.in.winf.objects.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.Waypoint;
 
 import java.awt.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 
 /**
- * factory interface of car - defines a source
+ * source for norm cars
  */
-public interface ICarSourceFactory extends Waypoint {
+public class CNormSource extends CDefaultSource {
 
-    /**
-     * sets the value how many cars are created in one step
-     *
-     * @param p_number integer number greate than zero
-     */
-    public void setNumberOfCars(int p_number);
+    public CNormSource(GeoPosition p_position) {
+        super(p_position);
+    }
 
+    public CNormSource(GeoPosition p_position, int p_number) {
+        super(p_position, p_number);
+    }
 
-    /**
-     * creates a list of new car objects
-     *
-     * @return collection of cars
-     */
-    public Collection<ICar> generate();
+    @Override
+    public Collection<ICar> generate() {
+        Collection<ICar> l_sources = new HashSet();
 
+        // use random number on care creation, to avoid traffic jam on the source
+        for (int i = 0; i < super.m_NumberCarsInStep; i++)
+            if (super.m_random.nextDouble() <= 0.35)
+                l_sources.add(new CNormCar(super.m_position));
 
-    /**
-     * returns the geoposition of the source
-     *
-     * @return geoposition
-     */
-    public GeoPosition getPosition();
+        return l_sources;
+    }
 
 }

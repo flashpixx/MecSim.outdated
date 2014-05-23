@@ -71,7 +71,6 @@ class COSMMouseListener extends MouseAdapter {
                 l_menu.show(p_event.getComponent(), p_event.getX(), p_event.getY());
             }
 
-
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
@@ -83,7 +82,7 @@ class COSMMouseListener extends MouseAdapter {
      * @param p_pointclick point of the click
      * @param p_pointsource point of the source
      * @param p_rectangle rectangle size
-     * @return
+     * @return boolean on existence
      */
     private boolean inRange( Point2D p_pointclick, Point2D p_pointsource, int p_rectangle )
     {

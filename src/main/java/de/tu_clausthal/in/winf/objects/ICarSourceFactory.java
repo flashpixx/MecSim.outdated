@@ -48,12 +48,4 @@ public interface ICarSourceFactory extends Waypoint {
      */
     public Collection<ICar> generate();
 
-
-    /**
-     * returns the geoposition of the source
-     *
-     * @return geoposition
-     */
-    public GeoPosition getPosition();
-
 }

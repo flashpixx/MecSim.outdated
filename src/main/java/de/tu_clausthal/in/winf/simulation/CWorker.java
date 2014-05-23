@@ -25,6 +25,7 @@ import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import org.slf4j.Logger;
@@ -157,6 +158,7 @@ public class CWorker implements Runnable {
 
             try {
 
+                // update car
                 if (l_car.hasEndReached())
                     continue;
 
@@ -169,6 +171,10 @@ public class CWorker implements Runnable {
                     if (l_edge != null)
                         l_edge.removeCarFromEdge(l_car);
                 }
+
+                // call on each car the institutions
+                for (IInstitution<ICar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+                    l_item.check(l_car);
 
             } catch (Exception l_exception) {
                 LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);

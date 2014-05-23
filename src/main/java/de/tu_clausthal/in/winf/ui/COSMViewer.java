@@ -28,6 +28,7 @@ import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
@@ -48,6 +49,10 @@ public class COSMViewer extends JXMapViewer {
      * singleton instance *
      */
     private static COSMViewer s_instance = new COSMViewer();
+    /**
+     * compounend painter
+     */
+    private CompoundPainter m_painter = new CompoundPainter();
 
 
     /**
@@ -67,6 +72,8 @@ public class COSMViewer extends JXMapViewer {
         this.setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
         this.setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
 
+        this.setOverlayPainter(m_painter);
+
         COSMMouseListener l_OSMListener = new COSMMouseListener();
         MouseInputListener l_mouse = new PanMouseInputListener(this);
 
@@ -85,6 +92,16 @@ public class COSMViewer extends JXMapViewer {
      */
     public static COSMViewer getInstance() {
         return s_instance;
+    }
+
+
+    /**
+     * returns the compounend painter
+     *
+     * @return painter
+     */
+    public CompoundPainter getCompoundPainter() {
+        return m_painter;
     }
 
 }

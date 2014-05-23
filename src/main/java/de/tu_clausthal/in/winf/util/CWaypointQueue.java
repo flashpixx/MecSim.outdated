@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.util;
 
-import org.jxmapviewer.JXMapViewer;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -48,7 +48,7 @@ public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implemen
     /**
      * viewer reference
      */
-    protected JXMapViewer m_viewer = null;
+    protected COSMViewer m_viewer = null;
 
 
     /**
@@ -56,9 +56,9 @@ public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implemen
      *
      * @param p_viewer viewer reference
      */
-    public CWaypointQueue(JXMapViewer p_viewer) {
+    public CWaypointQueue(COSMViewer p_viewer) {
         m_viewer = p_viewer;
-        m_viewer.setOverlayPainter(this);
+        m_viewer.getCompoundPainter().addPainter(this);
     }
 
 

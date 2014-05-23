@@ -30,21 +30,24 @@ import java.io.Serializable;
 public interface INormMessage<T> extends Serializable {
 
 
-    /** returns the norm
+    /**
+     * returns the norm
      *
      * @return norm object
      */
     public INorm<T> getNorm();
 
 
-    /** get owner institution
+    /**
+     * get owner institution
      *
      * @return institution object
      */
     public IInstitution<T> getInstitution();
 
 
-    /** returns the message type
+    /**
+     * returns the message type
      *
      * @return message type
      */
@@ -54,8 +57,8 @@ public interface INormMessage<T> extends Serializable {
     /**
      * hops to avoid infinity loops on update process
      *
-     * @note the hop value defines the max. send operations
      * @return hop value (less or equal than zero equal ignore / remove norm)
+     * @note the hop value defines the max. send operations
      */
     public int getHops();
 

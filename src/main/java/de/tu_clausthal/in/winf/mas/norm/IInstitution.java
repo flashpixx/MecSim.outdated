@@ -44,7 +44,7 @@ public interface IInstitution<T> extends Collection<INorm>, Serializable {
     /**
      * returns the range of the workspace of the institution
      *
-     * @return rangecollection
+     * @return range collection
      */
     public IRangeCollection<T> getRange();
 

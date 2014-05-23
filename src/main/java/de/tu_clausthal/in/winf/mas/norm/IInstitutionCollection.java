@@ -36,7 +36,7 @@ public interface IInstitutionCollection<T> extends Collection<IInstitution> {
      *
      * @param p_message norm message
      */
-    public void send( INormMessage<T> p_message );
+    public void send(INormMessage<T> p_message);
 
 
 }

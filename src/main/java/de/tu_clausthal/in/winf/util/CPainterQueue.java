@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.util;
 
 
-import org.jxmapviewer.JXMapViewer;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
     /**
      * viewer reference
      */
-    protected JXMapViewer m_viewer = null;
+    protected COSMViewer m_viewer = null;
 
 
     /**
@@ -57,9 +57,9 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
      *
      * @param p_viewer viewer reference
      */
-    public CPainterQueue(JXMapViewer p_viewer) {
+    public CPainterQueue(COSMViewer p_viewer) {
         m_viewer = p_viewer;
-        m_viewer.setOverlayPainter(this);
+        m_viewer.getCompoundPainter().addPainter(this);
     }
 
 

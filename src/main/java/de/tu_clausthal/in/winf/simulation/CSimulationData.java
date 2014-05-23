@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
@@ -49,6 +50,10 @@ public class CSimulationData {
      * queue for step listeners *
      */
     private CQueue<ISimulationStep> m_steplistener = new CQueue();
+    /**
+     * car institution *
+     */
+    private CQueue<IInstitution<ICar>> m_carinstitution = new CQueue<>();
 
 
     /**
@@ -95,6 +100,16 @@ public class CSimulationData {
      */
     public CQueue<ISimulationStep> getStepListenerQueue() {
         return m_steplistener;
+    }
+
+
+    /**
+     * returns the car institution
+     *
+     * @return car institution
+     */
+    public CQueue<IInstitution<ICar>> getCarInstitutionQueue() {
+        return m_carinstitution;
     }
 
 }

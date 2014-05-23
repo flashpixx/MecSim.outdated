@@ -32,10 +32,11 @@ import java.util.Set;
  */
 public interface INormCar extends ICar {
 
-    /** matching method of a norm
+    /**
+     * matching method of a norm
      *
      * @param p_norm set of norm objects
      */
-    public void isNormMatch( Set<INorm<INormCar>> p_norm );
+    public void isNormMatch(Set<INorm<INormCar>> p_norm);
 
 }

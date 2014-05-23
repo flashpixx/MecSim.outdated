@@ -176,7 +176,7 @@ public class CWorker implements Runnable {
                 // call on each car the institutions
                 if (l_car instanceof INormCar)
                     for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                        l_item.check( (INormCar)l_car );
+                        l_item.check((INormCar) l_car);
 
             } catch (Exception l_exception) {
                 LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);

@@ -118,7 +118,6 @@ public class CMenuListener implements ActionListener {
                 CSimulation.getInstance().stop();
             if (p_event.getSource() == m_items.get("Reset")) {
                 CSimulation.getInstance().reset();
-                //COSMViewer.getInstance().clearOverlay("car");
             }
 
 

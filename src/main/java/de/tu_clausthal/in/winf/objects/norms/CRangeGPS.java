@@ -21,7 +21,6 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
-import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.mas.norm.IRange;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
@@ -30,7 +29,6 @@ import org.jxmapviewer.viewer.TileFactory;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.Map;
 
 
 /**
@@ -78,10 +76,10 @@ public class CRangeGPS implements IRange<ICar> {
         graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Point2D l_upperleft  = factory.geoToPixel(m_upperleft, zoom);
+        Point2D l_upperleft = factory.geoToPixel(m_upperleft, zoom);
         Point2D l_lowerright = factory.geoToPixel(m_lowerright, zoom);
 
         graphics2D.setColor(new Color(200, 0, 0, 75));
-        graphics2D.fillRect( (int)l_upperleft.getX(), (int)l_upperleft.getY(), (int)(l_lowerright.getX()-l_upperleft.getX()), (int)(l_lowerright.getY()-l_upperleft.getY()) );
+        graphics2D.fillRect((int) l_upperleft.getX(), (int) l_upperleft.getY(), (int) (l_lowerright.getX() - l_upperleft.getX()), (int) (l_lowerright.getY() - l_upperleft.getY()));
     }
 }

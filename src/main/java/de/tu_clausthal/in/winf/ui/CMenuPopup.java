@@ -25,29 +25,33 @@ import javax.swing.*;
 
 
 /**
- * class for create the menubar *
+ * popmenu
  */
-public class CMenuBar extends JMenuBar {
+public class CMenuPopup extends JPopupMenu {
 
-    /**
-     * ctor with menu items *
-     */
-    public CMenuBar() {
-        super();
+    public CMenuPopup() {
 
-        CMenuListener l_listener = new CMenuListener();
+        ButtonGroup l_group = new ButtonGroup();
+        JMenu l_menu = new JMenu("Sources");
 
-        String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
-        this.add(CMenuFactory.createMenu("File", l_file, l_listener));
+        JRadioButtonMenuItem l_radio = new JRadioButtonMenuItem("default cars");
+        l_radio.setSelected(true);
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
 
-        String[] l_actions = {"Start", "Stop", null, "Reset"};
-        this.add(CMenuFactory.createMenu("Action", l_actions, l_listener));
+        l_radio = new JRadioButtonMenuItem("norm cars");
+        l_group.add(l_radio);
+        l_menu.add(l_radio);
 
-        String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
-        this.add(CMenuFactory.createRadioMenu("Graph Weights", l_weights, l_listener));
+        this.add(l_menu);
 
-        String[] l_drivemodel = {"Nagel-Schreckenberg"};
-        this.add(CMenuFactory.createRadioMenu("Driving Model", l_drivemodel, l_listener));
+
+/*
+        l_menu = new JMenu("Norms");
+        l_item = new JMenuItem("speed norm");
+        l_menu.add(l_item);
+        this.add(l_menu);*/
+
     }
 
 

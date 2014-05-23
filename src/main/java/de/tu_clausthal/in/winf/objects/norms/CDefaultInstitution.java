@@ -207,7 +207,7 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
 
     @Override
     public void paint(Graphics2D graphics2D, TileFactory factory, int zoom) {
-        for( IRange<T> l_item : m_range )
-            l_item.paint( graphics2D, factory, zoom );
+        for (IRange<T> l_item : m_range)
+            l_item.paint(graphics2D, factory, zoom);
     }
 }

@@ -26,8 +26,8 @@ import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
@@ -35,7 +35,7 @@ import java.awt.geom.Point2D;
 /**
  * mouse listener for jxviewer *
  */
-class COSMMouseListener extends MouseInputAdapter {
+class COSMMouseListener extends MouseAdapter {
 
     /**
      * size of the box around a source to remove it *
@@ -45,13 +45,17 @@ class COSMMouseListener extends MouseInputAdapter {
 
     /**
      * click method to add / remove sources *
+     *
+     * @param p_event mouse event
      */
-    public void mouseClicked(MouseEvent l_event) {
+    public void mouseClicked(MouseEvent p_event) {
         try {
-            if (l_event.getButton() == MouseEvent.BUTTON1) {
-                COSMViewer l_viewer = (COSMViewer) l_event.getSource();
+
+            // left click
+            if (p_event.getButton() == MouseEvent.BUTTON1) {
+                COSMViewer l_viewer = (COSMViewer) p_event.getSource();
                 Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-                Point2D l_position = new Point(l_viewportBounds.x + l_event.getPoint().x, l_viewportBounds.y + l_event.getPoint().y);
+                Point2D l_position = new Point(l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y);
 
                 boolean l_remove = false;
                 for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll()) {
@@ -69,6 +73,15 @@ class COSMMouseListener extends MouseInputAdapter {
 
                 COSMViewer.getInstance().repaint();
             }
+
+
+            // right click
+            if (p_event.getButton() == MouseEvent.BUTTON3) {
+                CMenuPopup l_menu = new CMenuPopup();
+                l_menu.show(p_event.getComponent(), p_event.getX(), p_event.getY());
+            }
+
+
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }

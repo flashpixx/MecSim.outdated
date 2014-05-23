@@ -33,7 +33,9 @@ import java.util.Set;
  */
 public class CNormCar extends CDefaultCar implements INormCar {
 
-    /** set with norms, that are matched **/
+    /**
+     * set with norms, that are matched *
+     */
     private Set<INorm<INormCar>> m_norms = null;
 
 
@@ -50,7 +52,6 @@ public class CNormCar extends CDefaultCar implements INormCar {
     public void isNormMatch(Set<INorm<INormCar>> p_norm) {
         m_norms = p_norm;
     }
-
 
 
 }

@@ -37,11 +37,6 @@ import java.awt.geom.Point2D;
  */
 class COSMMouseListener extends MouseAdapter {
 
-    /**
-     * size of the box around a source to remove it *
-     */
-    static final int s_removeBoxEpsilon = 10;
-
 
     /**
      * click method to add / remove sources *
@@ -58,20 +53,15 @@ class COSMMouseListener extends MouseAdapter {
                 Point2D l_position = new Point(l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y);
 
                 boolean l_remove = false;
-                for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll()) {
-                    Point2D l_sourceposition = l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom());
-                    if ((l_position.getX() >= l_sourceposition.getX() - s_removeBoxEpsilon) && (l_position.getX() <= l_sourceposition.getX() + s_removeBoxEpsilon) &&
-                            (l_position.getY() >= l_sourceposition.getY() - s_removeBoxEpsilon) && (l_position.getY() <= l_sourceposition.getY() + s_removeBoxEpsilon)) {
+                for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
+                    if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)){
                         CSimulationData.getInstance().getSourceQueue().remove(l_source);
                         l_remove = true;
                         break;
                     }
-                }
 
                 if (!l_remove)
                     CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
-
-                COSMViewer.getInstance().repaint();
             }
 
 
@@ -85,6 +75,19 @@ class COSMMouseListener extends MouseAdapter {
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
+    }
+
+
+    /** checks if a point is in a box around another point
+     *
+     * @param p_pointclick point of the click
+     * @param p_pointsource point of the source
+     * @param p_rectangle rectangle size
+     * @return
+     */
+    private boolean inRange( Point2D p_pointclick, Point2D p_pointsource, int p_rectangle )
+    {
+        return ((p_pointclick.getX()-p_rectangle/2) <= p_pointsource.getX()) && ((p_pointclick.getX()+p_rectangle/2) >= p_pointsource.getX()) && ((p_pointclick.getY()-p_rectangle/2) <= p_pointsource.getY()) && ((p_pointclick.getY()+p_rectangle/2) >= p_pointsource.getY());
     }
 
 }

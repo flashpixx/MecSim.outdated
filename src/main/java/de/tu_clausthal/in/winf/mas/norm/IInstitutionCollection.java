@@ -34,9 +34,9 @@ public interface IInstitutionCollection<T> extends Collection<IInstitution> {
     /**
      * sends a norm to all institution
      *
-     * @param p_norm norm object
+     * @param p_message norm message
      */
-    public void send(INorm<T> p_norm);
+    public void send( INormMessage<T> p_message );
 
 
 }

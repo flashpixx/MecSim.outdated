@@ -40,19 +40,11 @@ public interface INorm<T> extends Serializable {
 
 
     /**
-     * returns the institutions which handle the norm
+     * returns the institution which handle the norm
      *
-     * @return institution collection
+     * @return institution
      */
-    public IInstitutionCollection getInstitutions();
-
-
-    /**
-     * hops to avoid infinity loops on update process
-     *
-     * @return hop value (zero equal ignore / remove norm)
-     */
-    public int getHops();
+    public IInstitution<T> getInstitution();
 
 
 }

@@ -30,7 +30,7 @@ import de.tu_clausthal.in.winf.objects.ICar;
 /**
  * norm for speed check
  */
-public class CNormSpeed implements INorm<ICar> {
+public class CSpeedNorm implements INorm<ICar> {
 
     /* maximum speed value for check **/
     private int m_maxspeed = Integer.MAX_VALUE;
@@ -44,7 +44,7 @@ public class CNormSpeed implements INorm<ICar> {
      *
      * @param p_institution defines the institution
      */
-    public CNormSpeed(IInstitution<ICar> p_institution) {
+    public CSpeedNorm(IInstitution<ICar> p_institution) {
         m_institution = p_institution;
     }
 
@@ -55,7 +55,7 @@ public class CNormSpeed implements INorm<ICar> {
      * @param p_institution defines institution
      * @param p_maxspeed    defines maximum allowed speed
      */
-    public CNormSpeed(IInstitution<ICar> p_institution, int p_maxspeed) {
+    public CSpeedNorm(IInstitution<ICar> p_institution, int p_maxspeed) {
         m_institution = p_institution;
         m_maxspeed = p_maxspeed;
     }

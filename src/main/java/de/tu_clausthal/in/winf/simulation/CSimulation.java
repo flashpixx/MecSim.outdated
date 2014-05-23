@@ -98,12 +98,13 @@ public class CSimulation {
      * @throws IllegalAccessException
      * @note thread pool is generated (pause structures can be created with a reentrant lock @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html )
      */
-    public synchronized void start(IDriveModel p_model) throws IllegalAccessException, IllegalStateException {
+    public synchronized void start(IDriveModel p_model) throws IllegalAccessException, IllegalStateException, IllegalArgumentException {
         if (this.isRunning())
             throw new IllegalStateException("simulation is running");
-
         if (CConfiguration.getInstance().get().MaxThreadNumber < 1)
             throw new IllegalAccessException("one thread must be exists to start simulation");
+        if (p_model == null)
+            throw new IllegalArgumentException("model need not be null");
 
         CSimulationData.getInstance().getSourceQueue().reset();
         if (CSimulationData.getInstance().getSourceQueue().isEmpty())

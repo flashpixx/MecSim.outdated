@@ -19,10 +19,13 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.util;
 
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.util.Map;
+
 
 /**
  * factory class to create UI menus
@@ -33,18 +36,19 @@ public class CMenuFactory {
     /**
      * creates a menu
      *
-     * @param p_label    menu label
-     * @param p_list     string with items
-     * @param p_listener listener
-     * @return
+     * @param p_label     menu label
+     * @param p_list      string with items
+     * @param p_listener  listener
+     * @param p_reference reference map with object for action listener
+     * @return menu
      */
-    public static JMenu createMenu(String p_label, String[] p_list, CMenuListener p_listener) {
+    public static JMenu createMenu(String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference) {
         JMenu l_menu = new JMenu(p_label);
         for (String l_item : p_list)
             if ((l_item == null) || (l_item.isEmpty()))
                 l_menu.addSeparator();
             else
-                createMenuItem(l_item, l_menu, p_listener);
+                createMenuItem(l_item, l_menu, p_listener, p_reference);
 
         return l_menu;
     }
@@ -52,12 +56,13 @@ public class CMenuFactory {
     /**
      * creates a menu
      *
-     * @param p_label    menu label
-     * @param p_list     string with items
-     * @param p_listener listener
-     * @return
+     * @param p_label     menu label
+     * @param p_list      string with items
+     * @param p_listener  listener
+     * @param p_reference reference map with object for action listener
+     * @return menu
      */
-    public static JMenu createRadioMenu(String p_label, String[] p_list, CMenuListener p_listener) {
+    public static JMenu createRadioMenu(String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference) {
         JMenu l_menu = new JMenu(p_label);
         ButtonGroup l_group = new ButtonGroup();
 
@@ -65,7 +70,7 @@ public class CMenuFactory {
             if ((p_list[i] == null) || (p_list[i].isEmpty()))
                 l_menu.addSeparator();
             else
-                createRadioMenuItem(p_list[i], l_menu, p_listener, l_group, i == 0);
+                createRadioMenuItem(p_list[i], l_menu, p_listener, p_reference, l_group, i == 0);
 
         return l_menu;
     }
@@ -74,13 +79,14 @@ public class CMenuFactory {
     /**
      * creates a menu item
      *
-     * @param p_label    label
-     * @param p_menu     menu
-     * @param p_listener listener
+     * @param p_label     label
+     * @param p_menu      menu
+     * @param p_listener  listener
+     * @param p_reference reference map with object for action listener
      */
-    private static void createMenuItem(String p_label, JMenu p_menu, CMenuListener p_listener) {
+    private static void createMenuItem(String p_label, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference) {
         JMenuItem l_item = new JMenuItem(p_label);
-        p_listener.add(l_item.getText(), l_item);
+        p_reference.put(l_item.getText(), l_item);
         l_item.addActionListener(p_listener);
         p_menu.add(l_item);
     }
@@ -89,15 +95,16 @@ public class CMenuFactory {
     /**
      * creates a radio menu item
      *
-     * @param p_label    label
-     * @param p_menu     menu
-     * @param p_listener listener
-     * @param p_group    group
-     * @param p_select   item default selected
+     * @param p_label     label
+     * @param p_menu      menu
+     * @param p_listener  listener
+     * @param p_reference reference map with object for action listener
+     * @param p_group     group
+     * @param p_select    item default selected
      */
-    private static void createRadioMenuItem(String p_label, JMenu p_menu, CMenuListener p_listener, ButtonGroup p_group, boolean p_select) {
+    private static void createRadioMenuItem(String p_label, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference, ButtonGroup p_group, boolean p_select) {
         JRadioButtonMenuItem l_item = new JRadioButtonMenuItem(p_label);
-        p_listener.add(l_item.getText(), l_item);
+        p_reference.put(l_item.getText(), l_item);
         l_item.setSelected(p_select);
         l_item.addActionListener(p_listener);
         p_group.add(l_item);

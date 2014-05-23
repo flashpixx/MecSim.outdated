@@ -21,38 +21,41 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.util.CMenuFactory;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * popmenu
  */
-public class CMenuPopup extends JPopupMenu {
+public class CMenuPopup extends JPopupMenu implements ActionListener {
 
+    /**
+     * map with object for action listener
+     */
+    private Map<String, Object> m_reference = new HashMap();
+
+
+    /**
+     * ctor to create popup
+     */
     public CMenuPopup() {
 
-        ButtonGroup l_group = new ButtonGroup();
-        JMenu l_menu = new JMenu("Sources");
+        String[] l_cars = {"default cars", "norm cars"};
+        this.add(CMenuFactory.createRadioMenu("Sources", l_cars, this, m_reference));
 
-        JRadioButtonMenuItem l_radio = new JRadioButtonMenuItem("default cars");
-        l_radio.setSelected(true);
-        l_group.add(l_radio);
-        l_menu.add(l_radio);
-
-        l_radio = new JRadioButtonMenuItem("norm cars");
-        l_group.add(l_radio);
-        l_menu.add(l_radio);
-
-        this.add(l_menu);
-
-
-/*
-        l_menu = new JMenu("Norms");
-        l_item = new JMenuItem("speed norm");
-        l_menu.add(l_item);
-        this.add(l_menu);*/
-
+        String[] l_norm = {"speed norm"};
+        this.add(CMenuFactory.createRadioMenu("Norms", l_norm, this, m_reference));
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
 }

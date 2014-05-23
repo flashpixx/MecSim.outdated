@@ -63,4 +63,10 @@ public interface INormMessage<T> extends Serializable {
     public int getHops();
 
 
+    /**
+     * hop decrement
+     */
+    public void decrementHop();
+
+
 }

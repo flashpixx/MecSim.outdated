@@ -31,7 +31,7 @@ public interface INorm<T> extends Serializable {
 
 
     /**
-     * checks for a car the norm
+     * checks for an object the norm
      *
      * @param p_object object
      * @return result
@@ -40,11 +40,19 @@ public interface INorm<T> extends Serializable {
 
 
     /**
-     * returns the institution which handle the norm
+     * returns the institutions which handle the norm
      *
-     * @return institution
+     * @return institution collection
      */
-    public IInstitution<T> getInstitution();
+    public IInstitutionCollection getInstitutions();
+
+
+    /**
+     * hops to avoid infinity loops on update process
+     *
+     * @return hop value (zero equal ignore / remove norm)
+     */
+    public int getHops();
 
 
 }

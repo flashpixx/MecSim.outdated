@@ -54,7 +54,8 @@ public class CSimulationData {
     /**
      * private ctor *
      */
-    private CSimulationData() {}
+    private CSimulationData() {
+    }
 
 
     /**

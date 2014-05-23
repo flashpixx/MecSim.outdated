@@ -35,7 +35,7 @@ public interface IRangeCollection<T> extends Collection<IRange>, Serializable {
      * check if an object is within the range
      *
      * @param p_object object
-     * @return
+     * @return boolean for existence
      */
     public boolean isWithin(T p_object);
 

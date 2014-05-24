@@ -39,9 +39,13 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      * map with object for action listener
      */
     private Map<String, Object> m_reference = new HashMap();
-    /** selected car definition **/
+    /**
+     * selected car definition *
+     */
     private String m_sources = "default cars";
-    /** selected source definition **/
+    /**
+     * selected source definition *
+     */
     private String m_norms = "speed norm";
 
     /**
@@ -71,38 +75,44 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
     }
 
 
-    /** sets the source option
+    /**
+     * sets the source option
      *
      * @param p_name name
      */
-    private void setSource( String p_name )
-    {
+    private void setSource(String p_name) {
         m_sources = p_name;
-        ((JRadioButtonMenuItem)m_reference.get(p_name)).setSelected(true);
+        ((JRadioButtonMenuItem) m_reference.get(p_name)).setSelected(true);
     }
 
 
-    /** sets the norm option
+    /**
+     * sets the norm option
      *
      * @param p_name name
      */
-    private void setNorm( String p_name )
-    {
+    private void setNorm(String p_name) {
         m_norms = p_name;
-        ((JRadioButtonMenuItem)m_reference.get(p_name)).setSelected(true);
+        ((JRadioButtonMenuItem) m_reference.get(p_name)).setSelected(true);
     }
 
 
-    /** returns the current source selection
+    /**
+     * returns the current source selection
      *
      * @return string with definition
      */
-    public String getSourceSelection() { return m_sources; }
+    public String getSourceSelection() {
+        return m_sources;
+    }
 
 
-    /** returns the norm selection
+    /**
+     * returns the norm selection
      *
      * @return string with definition
      */
-    public String getNormSelection() { return m_norms; }
+    public String getNormSelection() {
+        return m_norms;
+    }
 }

@@ -23,7 +23,6 @@ package de.tu_clausthal.in.winf.objects;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;

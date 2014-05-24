@@ -38,7 +38,9 @@ import java.awt.geom.Point2D;
  */
 class COSMMouseListener extends MouseAdapter {
 
-    /** popup **/
+    /**
+     * popup *
+     */
     private CMenuPopup m_popup = new CMenuPopup();
 
 
@@ -58,7 +60,7 @@ class COSMMouseListener extends MouseAdapter {
 
                 boolean l_remove = false;
                 for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
-                    if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)){
+                    if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)) {
                         CSimulationData.getInstance().getSourceQueue().remove(l_source);
                         l_remove = true;
                         break;
@@ -84,16 +86,16 @@ class COSMMouseListener extends MouseAdapter {
     }
 
 
-    /** checks if a point is in a box around another point
+    /**
+     * checks if a point is in a box around another point
      *
-     * @param p_pointclick point of the click
+     * @param p_pointclick  point of the click
      * @param p_pointsource point of the source
-     * @param p_rectangle rectangle size
+     * @param p_rectangle   rectangle size
      * @return boolean on existence
      */
-    private boolean inRange( Point2D p_pointclick, Point2D p_pointsource, int p_rectangle )
-    {
-        return ((p_pointclick.getX()-p_rectangle/2) <= p_pointsource.getX()) && ((p_pointclick.getX()+p_rectangle/2) >= p_pointsource.getX()) && ((p_pointclick.getY()-p_rectangle/2) <= p_pointsource.getY()) && ((p_pointclick.getY()+p_rectangle/2) >= p_pointsource.getY());
+    private boolean inRange(Point2D p_pointclick, Point2D p_pointsource, int p_rectangle) {
+        return ((p_pointclick.getX() - p_rectangle / 2) <= p_pointsource.getX()) && ((p_pointclick.getX() + p_rectangle / 2) >= p_pointsource.getX()) && ((p_pointclick.getY() - p_rectangle / 2) <= p_pointsource.getY()) && ((p_pointclick.getY() + p_rectangle / 2) >= p_pointsource.getY());
     }
 
 }

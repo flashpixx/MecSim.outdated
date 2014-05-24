@@ -21,10 +21,8 @@
 
 package de.tu_clausthal.in.winf.objects;
 
-import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
-import java.awt.*;
 import java.util.Collection;
 
 

@@ -21,12 +21,10 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
-import de.tu_clausthal.in.winf.objects.CDefaultCar;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 

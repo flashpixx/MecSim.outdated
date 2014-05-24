@@ -333,6 +333,6 @@ public class CDefaultCar implements ICar {
             graphics2D.setColor(Color.RED);
 
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
-
+        graphics2D.dispose();
     }
 }

@@ -81,5 +81,6 @@ public class CRangeGPS implements IRange<ICar> {
 
         graphics2D.setColor(new Color(200, 0, 0, 75));
         graphics2D.fillRect((int) l_upperleft.getX(), (int) l_upperleft.getY(), (int) (l_lowerright.getX() - l_upperleft.getX()), (int) (l_lowerright.getY() - l_upperleft.getY()));
+        graphics2D.dispose();
     }
 }

@@ -170,6 +170,7 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
             l_item.paint(graphics2D, m_viewer.getTileFactory(), m_viewer.getZoom());
 
         m_viewer.repaint();
+        graphics2D.dispose();
     }
 
 
@@ -184,32 +185,5 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
             l_set.add(l_item);
         return l_set;
     }
-
-
-
-
-    /*
-    SwingUtilities.invokeLater(new SwingPainter(p_cars));
-    }
-
-
-    private class SwingPainter implements Runnable {
-
-        private ICar[] m_cars = null;
-
-        public SwingPainter(ICar[] p_cars) {
-            m_cars = p_cars;
-        }
-
-        @Override
-        public void run() {
-
-            // plot car items
-            COSMViewer.getInstance().getCarRenderer().clear();
-            COSMViewer.getInstance().getCarRenderer().add(m_cars);
-
-        }
-    }
-     */
 
 }

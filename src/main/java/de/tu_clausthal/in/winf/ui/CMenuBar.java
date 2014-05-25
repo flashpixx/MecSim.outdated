@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
@@ -37,10 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -83,6 +81,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         String[] l_drivemodel = {"Nagel-Schreckenberg"};
         this.add(CMenuFactory.createRadioMenu("Driving Model", l_drivemodel, this, m_reference));
+
+        String[] l_institution = {"Create", "Delete"};
+        this.add(CMenuFactory.createMenu("Institution", l_institution, this, m_reference));
     }
 
 

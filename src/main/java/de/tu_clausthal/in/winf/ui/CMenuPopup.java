@@ -62,10 +62,8 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
 
         String[] l_norm = {"speed norm"};
         this.add(CMenuFactory.createRadioMenu("Norms", l_norm, this, m_reference));
-        ArrayList<String> l_list = new ArrayList();
-        l_list.add("Create");
-        l_list.add("");
 
+        ArrayList<String> l_list = new ArrayList();
         // singleton instance can be null, because this class is initialize before the singleton can be
         // initialize, so to avoid of null-pointer-exception we check it first
         if (CSimulationData.getInstance() != null)

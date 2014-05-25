@@ -184,7 +184,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         FileOutputStream l_stream = new FileOutputStream(this.addFileExtension(m_filedialog.getSelectedFile(), ".src"));
         ObjectOutputStream l_output = new ObjectOutputStream(l_stream);
-        l_output.writeObject(l_positions);
+        l_output.writeObject( l_positions );
         l_output.close();
         l_stream.close();
     }

@@ -24,13 +24,14 @@ package de.tu_clausthal.in.winf.objects;
 import org.jxmapviewer.viewer.Waypoint;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 
 /**
  * factory interface of car - defines a source
  */
-public interface ICarSourceFactory extends Waypoint {
+public interface ICarSourceFactory extends Waypoint, Serializable {
 
     /**
      * sets the value how many cars are created in one step

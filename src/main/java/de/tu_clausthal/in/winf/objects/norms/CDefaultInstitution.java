@@ -36,6 +36,8 @@ import java.util.Set;
  */
 public class CDefaultInstitution<T> implements IInstitution<T> {
 
+    String m_name = "Default Institution";
+
     /**
      * superior institutions *
      */
@@ -57,9 +59,27 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     private Set<INorm<T>> m_norms = new HashSet();
 
 
+    /** default ctor
+     *
+     */
+    public CDefaultInstitution() {};
+
+
+    /** ctor to add a name
+     *
+     * @param p_name name
+     */
+    public CDefaultInstitution( String p_name )
+    {
+        if ( (p_name == null) || (p_name.isEmpty()) )
+            throw new IllegalArgumentException("name need not be empty");
+        m_name = p_name;
+    }
+
+
     @Override
     public String getName() {
-        return "Default Institution";
+        return m_name;
     }
 
     @Override

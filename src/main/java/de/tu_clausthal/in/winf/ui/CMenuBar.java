@@ -28,6 +28,8 @@ import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.objects.norms.CDefaultInstitution;
+import de.tu_clausthal.in.winf.objects.norms.INormCar;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.util.CMenuFactory;
@@ -116,6 +118,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             if (e.getSource() == m_reference.get("Speed & Traffic Jam"))
                 this.setGraphWeight("Speed & Traffic Jam");
 
+            if (e.getSource() == m_reference.get("Create"))
+                this.createInstitution();
+
 
             if (e.getSource() == m_reference.get("Nagel-Schreckenberg"))
                 this.setDrivingModel("Nagel-Schreckenberg");
@@ -127,6 +132,21 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
     }
 
+
+    /** create a new institution
+     *
+     */
+    private void createInstitution()
+    {
+        if (CSimulation.getInstance().isRunning())
+            throw new IllegalStateException("simulation is running");
+
+        String l_input = JOptionPane.showInputDialog(null, "xxx");
+        if ((l_input == null) || (l_input.isEmpty()))
+            return;
+
+        CSimulationData.getInstance().getCarInstitutionQueue().add( new CDefaultInstitution<INormCar>(l_input) );
+    }
 
     /**
      * sets the graph weights

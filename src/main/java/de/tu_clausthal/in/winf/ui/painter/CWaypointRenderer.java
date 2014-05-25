@@ -55,6 +55,9 @@ public class CWaypointRenderer extends DefaultWaypointRenderer {
     private Map<Color, BufferedImage> m_images = new HashMap();
 
 
+    /**
+     * ctor to construct the basic image from the JXMapViewer package
+     */
     public CWaypointRenderer() {
         try {
             m_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));

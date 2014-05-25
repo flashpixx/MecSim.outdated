@@ -21,11 +21,14 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.util.CMenuFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +51,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      */
     private String m_norms = "speed norm";
 
+
     /**
      * ctor to create popup
      */
@@ -58,6 +62,17 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
 
         String[] l_norm = {"speed norm"};
         this.add(CMenuFactory.createRadioMenu("Norms", l_norm, this, m_reference));
+
+        ArrayList<String> l_list = new ArrayList();
+        l_list.add("Create");
+        l_list.add("");
+        //if (CSimulationData.getInstance().getCarInstitutionQueue().getAll() != null) {}
+        //    for(IInstitution l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+        //        l_list.add(l_item.getName());
+        String[] l_array = new String[l_list.size()];
+        l_list.toArray(l_array);
+        this.add(CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference));
+
     }
 
 

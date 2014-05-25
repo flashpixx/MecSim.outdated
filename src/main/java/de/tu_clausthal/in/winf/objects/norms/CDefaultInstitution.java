@@ -58,6 +58,11 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
 
 
     @Override
+    public String getName() {
+        return "Default Institution";
+    }
+
+    @Override
     public void check(T p_object) {
         if (!m_range.isWithin(p_object))
             return;

@@ -43,6 +43,11 @@ public class CMenuFactory {
      * @return menu
      */
     public static JMenu createMenu(String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference) {
+        if (p_label == null)
+            return null;
+        if ( (p_list == null) || (p_listener == null) || (p_reference == null) )
+            return new JMenu(p_label);
+
         JMenu l_menu = new JMenu(p_label);
         for (String l_item : p_list)
             if ((l_item == null) || (l_item.isEmpty()))
@@ -63,6 +68,11 @@ public class CMenuFactory {
      * @return menu
      */
     public static JMenu createRadioMenu(String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference) {
+        if (p_label == null)
+            return null;
+        if ( (p_list == null) || (p_listener == null) || (p_reference == null) )
+            return new JMenu(p_label);
+
         JMenu l_menu = new JMenu(p_label);
         ButtonGroup l_group = new ButtonGroup();
 

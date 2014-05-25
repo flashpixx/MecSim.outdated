@@ -35,6 +35,10 @@ import java.util.Collection;
 public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, IPainter {
 
 
+    /** returns a name of the institution **/
+    public String getName();
+
+
     /**
      * checks an object
      *

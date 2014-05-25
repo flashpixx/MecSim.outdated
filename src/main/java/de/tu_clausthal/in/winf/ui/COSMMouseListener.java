@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.norms.CNormSource;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 
 import javax.swing.*;
@@ -38,25 +39,33 @@ import java.awt.geom.Point2D;
  */
 class COSMMouseListener extends MouseAdapter {
 
+    private Point2D m_beginning = null;
+
+
     /**
      * popup *
      */
     private CMenuPopup m_popup = new CMenuPopup();
 
 
-    /**
-     * click method to add / remove sources *
-     *
-     * @param p_event mouse event
-     */
-    public void mouseClicked(MouseEvent p_event) {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // set the start position for dragging
+        m_beginning = (e.getButton() == MouseEvent.BUTTON1) ? e.getPoint() : null;
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
         try {
 
-            // left click
-            if (p_event.getButton() == MouseEvent.BUTTON1) {
-                COSMViewer l_viewer = (COSMViewer) p_event.getSource();
+            // left click (without any mouse movement)
+            if ( (e.getButton() == MouseEvent.BUTTON1) && (this.inRange(e.getPoint(), m_beginning, 2)) ) {
+                if (CSimulation.getInstance().isRunning())
+                    throw new IllegalStateException("simulation is running");
+
+                COSMViewer l_viewer = (COSMViewer) e.getSource();
                 Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-                Point2D l_position = new Point(l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y);
+                Point2D l_position = new Point(l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y);
 
                 boolean l_remove = false;
                 for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
@@ -74,10 +83,15 @@ class COSMMouseListener extends MouseAdapter {
                 }
             }
 
+            // left click (with mouse movement)
+            if ( (e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_beginning, 2)) ) {
+                System.out.println("xxx");
+            }
+
 
             // right click
-            if (p_event.getButton() == MouseEvent.BUTTON3)
-                m_popup.show(p_event.getComponent(), p_event.getX(), p_event.getY());
+            if (e.getButton() == MouseEvent.BUTTON3)
+                m_popup.show(e.getComponent(), e.getX(), e.getY());
 
 
         } catch (Exception l_exception) {
@@ -89,13 +103,16 @@ class COSMMouseListener extends MouseAdapter {
     /**
      * checks if a point is in a box around another point
      *
-     * @param p_pointclick  point of the click
-     * @param p_pointsource point of the source
-     * @param p_rectangle   rectangle size
+     * @param p_checkposition  point of the click
+     * @param p_center point of the source
+     * @param p_size rectangle size
      * @return boolean on existence
      */
-    private boolean inRange(Point2D p_pointclick, Point2D p_pointsource, int p_rectangle) {
-        return ((p_pointclick.getX() - p_rectangle / 2) <= p_pointsource.getX()) && ((p_pointclick.getX() + p_rectangle / 2) >= p_pointsource.getX()) && ((p_pointclick.getY() - p_rectangle / 2) <= p_pointsource.getY()) && ((p_pointclick.getY() + p_rectangle / 2) >= p_pointsource.getY());
+    private boolean inRange(Point2D p_checkposition, Point2D p_center, int p_size) {
+        if ((p_checkposition == null) || (p_center == null))
+            return true;
+
+        return ((p_checkposition.getX() - p_size / 2) <= p_center.getX()) && ((p_checkposition.getX() + p_size / 2) >= p_center.getX()) && ((p_checkposition.getY() - p_size / 2) <= p_center.getY()) && ((p_checkposition.getY() + p_size / 2) >= p_center.getY());
     }
 
 }

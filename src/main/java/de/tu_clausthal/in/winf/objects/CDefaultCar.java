@@ -42,7 +42,7 @@ import java.util.Random;
 /**
  * class for a default car *
  *
- * @note the paint method color the car depend on the current speed
+ * @note the paint method color the car depend on the current speed and need not to be call dispose
  */
 public class CDefaultCar implements ICar {
 
@@ -333,6 +333,5 @@ public class CDefaultCar implements ICar {
             graphics2D.setColor(Color.RED);
 
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
-        graphics2D.dispose();
     }
 }

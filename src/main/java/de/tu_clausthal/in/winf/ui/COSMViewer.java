@@ -83,6 +83,7 @@ public class COSMViewer extends JXMapViewer {
         this.addMouseListener(new CenterMapListener(this));
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
+
     }
 
     /**

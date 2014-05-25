@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.objects;
 
 import org.jxmapviewer.viewer.Waypoint;
 
+import java.awt.*;
 import java.util.Collection;
 
 
@@ -45,5 +46,13 @@ public interface ICarSourceFactory extends Waypoint {
      * @return collection of cars
      */
     public Collection<ICar> generate();
+
+
+    /**
+     * define color for the waypoint
+     *
+     * @return color value
+     */
+    public Color getColor();
 
 }

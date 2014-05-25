@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.util;
 
 import de.tu_clausthal.in.winf.ui.COSMViewer;
+import de.tu_clausthal.in.winf.ui.painter.CWaypointRenderer;
 import org.jxmapviewer.viewer.Waypoint;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -59,6 +60,7 @@ public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implemen
     public CWaypointQueue(COSMViewer p_viewer) {
         m_viewer = p_viewer;
         m_viewer.getCompoundPainter().addPainter(this);
+        this.setRenderer(new CWaypointRenderer());
     }
 
 

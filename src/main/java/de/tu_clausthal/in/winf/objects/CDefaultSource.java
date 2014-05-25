@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.objects;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
@@ -90,6 +91,11 @@ public class CDefaultSource implements ICarSourceFactory {
                 l_sources.add(new CDefaultCar(m_position));
 
         return l_sources;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.CYAN;
     }
 
 

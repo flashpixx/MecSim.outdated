@@ -118,10 +118,10 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
 
     @Override
     public void receive(INormMessage<T> p_message) {
-        if (p_message.getHops() < 0)
+        if (p_message.getTTL() < 0)
             return;
 
-        p_message.decrementHop();
+        p_message.decrementTTL();
         switch (p_message.getType()) {
             case Create:
                 m_norms.add(p_message.getNorm());

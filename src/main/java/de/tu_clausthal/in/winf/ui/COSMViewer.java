@@ -34,6 +34,7 @@ import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
 import javax.swing.event.MouseInputListener;
+import java.awt.event.MouseListener;
 
 
 /**
@@ -74,13 +75,10 @@ public class COSMViewer extends JXMapViewer {
 
         this.setOverlayPainter(m_painter);
 
-        COSMMouseListener l_OSMListener = new COSMMouseListener();
-        MouseInputListener l_mouse = new PanMouseInputListener(this);
-
-        this.addMouseListener(l_mouse);
-        this.addMouseListener(l_OSMListener);
-        this.addMouseMotionListener(l_mouse);
-        this.addMouseListener(new CenterMapListener(this));
+        this.addMouseListener(new PanMouseInputListener(this));
+        this.addMouseListener(new COSMMouseListener());
+        //this.addMouseListener(new CenterMapListener(this));
+        //this.addMouseMotionListener(new PanMouseInputListener(this));
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
 

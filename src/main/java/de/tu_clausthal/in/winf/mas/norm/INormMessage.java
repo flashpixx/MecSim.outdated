@@ -55,18 +55,18 @@ public interface INormMessage<T> extends Serializable {
 
 
     /**
-     * hops to avoid infinity loops on update process
+     * hops to avoid infinity loops on update process (time-to-live)
      *
      * @return hop value (less or equal than zero equal ignore / remove norm)
      * @note the hop value defines the max. send operations
      */
-    public int getHops();
+    public int getTTL();
 
 
     /**
-     * hop decrement
+     * TTL decrement (time-to-live)
      */
-    public void decrementHop();
+    public void decrementTTL();
 
 
 }

@@ -39,9 +39,8 @@ import java.awt.geom.Point2D;
  */
 class COSMMouseListener extends MouseAdapter {
 
-    private Point2D m_beginning = null;
-
-
+    /** point to detect mouse movement **/
+    private Point2D m_begining = null;
     /**
      * popup *
      */
@@ -51,15 +50,26 @@ class COSMMouseListener extends MouseAdapter {
     @Override
     public void mousePressed(MouseEvent e) {
         // set the start position for dragging
-        m_beginning = (e.getButton() == MouseEvent.BUTTON1) ? e.getPoint() : null;
+        m_begining = (e.getButton() == MouseEvent.BUTTON1) ? e.getPoint() : null;
     }
+
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if ( (m_begining != null) && (!this.inRange(e.getPoint(), m_begining, 5)) )
+        {
+            //Color(0.7, 0.7, 0.7, 0.5);
+        }
+
+    }
+
 
     @Override
     public void mouseReleased(MouseEvent e) {
         try {
 
             // left click (without any mouse movement)
-            if ((e.getButton() == MouseEvent.BUTTON1) && (this.inRange(e.getPoint(), m_beginning, 2))) {
+            if ((e.getButton() == MouseEvent.BUTTON1) && (this.inRange(e.getPoint(), m_begining, 2))) {
                 if (CSimulation.getInstance().isRunning())
                     throw new IllegalStateException("simulation is running");
 
@@ -84,8 +94,8 @@ class COSMMouseListener extends MouseAdapter {
             }
 
             // left click (with mouse movement)
-            if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_beginning, 2))) {
-                System.out.println("xxx");
+            if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_begining, 2))) {
+                
             }
 
 

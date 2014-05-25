@@ -50,6 +50,10 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      * selected source definition *
      */
     private String m_norms = "speed norm";
+    /**
+     * reference to the institution menu, to remove it on update *
+     */
+    private JMenu m_institutionMenu = null;
 
 
     /**
@@ -62,17 +66,6 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
 
         String[] l_norm = {"speed norm"};
         this.add(CMenuFactory.createRadioMenu("Norms", l_norm, this, m_reference));
-
-        ArrayList<String> l_list = new ArrayList();
-        // singleton instance can be null, because this class is initialize before the singleton can be
-        // initialize, so to avoid of null-pointer-exception we check it first
-        if (CSimulationData.getInstance() != null)
-            for(IInstitution l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                l_list.add(l_item.getName());
-
-        String[] l_array = new String[l_list.size()];
-        l_list.toArray(l_array);
-        this.add(CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference));
 
     }
 
@@ -88,6 +81,24 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
         if (e.getSource() == m_reference.get("speed norm"))
             this.setNorm("speed norm");
 
+    }
+
+
+    /**
+     * update method to modify internal menu structure
+     */
+    public void update() {
+        if (m_institutionMenu != null)
+            this.remove(m_institutionMenu);
+
+        ArrayList<String> l_list = new ArrayList();
+        for (IInstitution l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+            l_list.add(l_item.getName());
+        String[] l_array = new String[l_list.size()];
+        l_list.toArray(l_array);
+
+        m_institutionMenu = CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference);
+        this.add(m_institutionMenu);
     }
 
 

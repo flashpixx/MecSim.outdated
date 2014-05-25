@@ -59,7 +59,7 @@ class COSMMouseListener extends MouseAdapter {
         try {
 
             // left click (without any mouse movement)
-            if ( (e.getButton() == MouseEvent.BUTTON1) && (this.inRange(e.getPoint(), m_beginning, 2)) ) {
+            if ((e.getButton() == MouseEvent.BUTTON1) && (this.inRange(e.getPoint(), m_beginning, 2))) {
                 if (CSimulation.getInstance().isRunning())
                     throw new IllegalStateException("simulation is running");
 
@@ -84,14 +84,16 @@ class COSMMouseListener extends MouseAdapter {
             }
 
             // left click (with mouse movement)
-            if ( (e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_beginning, 2)) ) {
+            if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_beginning, 2))) {
                 System.out.println("xxx");
             }
 
 
             // right click
-            if (e.getButton() == MouseEvent.BUTTON3)
+            if (e.getButton() == MouseEvent.BUTTON3) {
+                m_popup.update();
                 m_popup.show(e.getComponent(), e.getX(), e.getY());
+            }
 
 
         } catch (Exception l_exception) {
@@ -103,9 +105,9 @@ class COSMMouseListener extends MouseAdapter {
     /**
      * checks if a point is in a box around another point
      *
-     * @param p_checkposition  point of the click
-     * @param p_center point of the source
-     * @param p_size rectangle size
+     * @param p_checkposition point of the click
+     * @param p_center        point of the source
+     * @param p_size          rectangle size
      * @return boolean on existence
      */
     private boolean inRange(Point2D p_checkposition, Point2D p_center, int p_size) {

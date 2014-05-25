@@ -59,19 +59,22 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     private Set<INorm<T>> m_norms = new HashSet();
 
 
-    /** default ctor
-     *
+    /**
+     * default ctor
      */
-    public CDefaultInstitution() {};
+    public CDefaultInstitution() {
+    }
+
+    ;
 
 
-    /** ctor to add a name
+    /**
+     * ctor to add a name
      *
      * @param p_name name
      */
-    public CDefaultInstitution( String p_name )
-    {
-        if ( (p_name == null) || (p_name.isEmpty()) )
+    public CDefaultInstitution(String p_name) {
+        if ((p_name == null) || (p_name.isEmpty()))
             throw new IllegalArgumentException("name need not be empty");
         m_name = p_name;
     }

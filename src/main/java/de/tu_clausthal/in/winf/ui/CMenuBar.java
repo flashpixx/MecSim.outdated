@@ -24,7 +24,6 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
@@ -40,7 +39,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -133,19 +135,18 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     }
 
 
-    /** create a new institution
-     *
+    /**
+     * create a new institution
      */
-    private void createInstitution()
-    {
+    private void createInstitution() {
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
 
-        String l_input = JOptionPane.showInputDialog(null, "xxx");
+        String l_input = JOptionPane.showInputDialog(null, "add a new institution name");
         if ((l_input == null) || (l_input.isEmpty()))
             return;
 
-        CSimulationData.getInstance().getCarInstitutionQueue().add( new CDefaultInstitution<INormCar>(l_input) );
+        CSimulationData.getInstance().getCarInstitutionQueue().add(new CDefaultInstitution<INormCar>(l_input));
     }
 
     /**
@@ -205,7 +206,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         FileOutputStream l_stream = new FileOutputStream(this.addFileExtension(m_filedialog.getSelectedFile(), ".src"));
         ObjectOutputStream l_output = new ObjectOutputStream(l_stream);
-        l_output.writeObject( l_positions );
+        l_output.writeObject(l_positions);
         l_output.close();
         l_stream.close();
     }

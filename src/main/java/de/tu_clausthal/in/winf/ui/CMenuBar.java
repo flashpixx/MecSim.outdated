@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
@@ -39,10 +40,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -122,6 +120,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
             if (e.getSource() == m_reference.get("Create"))
                 this.createInstitution();
+            if (e.getSource() == m_reference.get("Delete"))
+                this.deleteInstitution();
 
 
             if (e.getSource() == m_reference.get("Nagel-Schreckenberg"))
@@ -148,6 +148,36 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         CSimulationData.getInstance().getCarInstitutionQueue().add(new CDefaultInstitution<INormCar>(l_input));
     }
+
+
+    /** deletes an institution
+     *
+     */
+    private void deleteInstitution()
+    {
+        if (CSimulationData.getInstance().getCarInstitutionQueue().isEmpty())
+            return;
+        if (CSimulation.getInstance().isRunning())
+            throw new IllegalStateException("simulation is running");
+
+        Queue<IInstitution<INormCar>> l_data = CSimulationData.getInstance().getCarInstitutionQueue().getAll();
+        String[] l_names = new String[l_data.size()];
+        int i=0;
+        for( IInstitution<INormCar> l_item :  l_data )
+        {
+            l_names[i] = l_item.getName();
+            i++;
+        }
+
+        String l_name = (String)JOptionPane.showInputDialog(null, "delete an institution", "Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
+        if ( (l_name != null) && (!l_name.isEmpty()) )
+            for( IInstitution<INormCar> l_item :  l_data )
+                if (l_item.getName().equals(l_name)) {
+                    CSimulationData.getInstance().getCarInstitutionQueue().remove(l_item);
+                    break;
+                }
+    }
+
 
     /**
      * sets the graph weights

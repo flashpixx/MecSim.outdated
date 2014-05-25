@@ -39,7 +39,9 @@ import java.awt.geom.Point2D;
  */
 class COSMMouseListener extends MouseAdapter {
 
-    /** point to detect mouse movement **/
+    /**
+     * point to detect mouse movement *
+     */
     private Point2D m_begining = null;
     /**
      * popup *
@@ -56,8 +58,7 @@ class COSMMouseListener extends MouseAdapter {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if ( (m_begining != null) && (!this.inRange(e.getPoint(), m_begining, 5)) )
-        {
+        if ((m_begining != null) && (!this.inRange(e.getPoint(), m_begining, 5))) {
             //Color(0.7, 0.7, 0.7, 0.5);
         }
 
@@ -95,7 +96,7 @@ class COSMMouseListener extends MouseAdapter {
 
             // left click (with mouse movement)
             if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_begining, 2))) {
-                
+
             }
 
 

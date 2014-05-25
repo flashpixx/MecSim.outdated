@@ -38,7 +38,7 @@ public class CSimulationData {
     /**
      * singleton instance *
      */
-    static CSimulationData s_instance = new CSimulationData();
+    private static volatile CSimulationData s_instance = new CSimulationData();
     /**
      * queue for sources *
      */

@@ -48,7 +48,7 @@ public class COSMViewer extends JXMapViewer {
     /**
      * singleton instance *
      */
-    private static COSMViewer s_instance = new COSMViewer();
+    private static volatile COSMViewer s_instance = new COSMViewer();
     /**
      * compounend painter
      */

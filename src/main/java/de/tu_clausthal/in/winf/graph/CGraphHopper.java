@@ -62,7 +62,7 @@ public class CGraphHopper extends GraphHopper {
     /**
      * instance variable of singleton *
      */
-    private static CGraphHopper s_instance = new CGraphHopper();
+    private static volatile CGraphHopper s_instance = new CGraphHopper();
     /**
      * logger instance *
      */

@@ -42,7 +42,7 @@ public class CSimulation {
     /**
      * singleton instance *
      */
-    private static CSimulation s_instance = new CSimulation();
+    private static volatile CSimulation s_instance = new CSimulation();
     /**
      * logger instance *
      */

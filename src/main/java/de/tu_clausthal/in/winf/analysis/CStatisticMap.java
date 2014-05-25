@@ -43,7 +43,7 @@ public class CStatisticMap implements ISimulationStep {
     /**
      * singleton instance of the class *
      */
-    private static CStatisticMap s_instance = new CStatisticMap();
+    private static volatile CStatisticMap s_instance = new CStatisticMap();
     /**
      * thread-safe static structure *
      */

@@ -24,7 +24,6 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.CConfiguration;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
@@ -32,9 +31,6 @@ import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
-
-import javax.swing.event.MouseInputListener;
-import java.awt.event.MouseListener;
 
 
 /**

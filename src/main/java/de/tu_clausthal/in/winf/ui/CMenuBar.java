@@ -150,11 +150,10 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     }
 
 
-    /** deletes an institution
-     *
+    /**
+     * deletes an institution
      */
-    private void deleteInstitution()
-    {
+    private void deleteInstitution() {
         if (CSimulationData.getInstance().getCarInstitutionQueue().isEmpty())
             return;
         if (CSimulation.getInstance().isRunning())
@@ -162,16 +161,15 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         Queue<IInstitution<INormCar>> l_data = CSimulationData.getInstance().getCarInstitutionQueue().getAll();
         String[] l_names = new String[l_data.size()];
-        int i=0;
-        for( IInstitution<INormCar> l_item :  l_data )
-        {
+        int i = 0;
+        for (IInstitution<INormCar> l_item : l_data) {
             l_names[i] = l_item.getName();
             i++;
         }
 
-        String l_name = (String)JOptionPane.showInputDialog(null, "delete an institution", "Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
-        if ( (l_name != null) && (!l_name.isEmpty()) )
-            for( IInstitution<INormCar> l_item :  l_data )
+        String l_name = (String) JOptionPane.showInputDialog(null, "delete an institution", "Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
+        if ((l_name != null) && (!l_name.isEmpty()))
+            for (IInstitution<INormCar> l_item : l_data)
                 if (l_item.getName().equals(l_name)) {
                     CSimulationData.getInstance().getCarInstitutionQueue().remove(l_item);
                     break;

@@ -65,9 +65,13 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
         ArrayList<String> l_list = new ArrayList();
         l_list.add("Create");
         l_list.add("");
-        //if (CSimulationData.getInstance().getCarInstitutionQueue().getAll() != null) {}
-        //    for(IInstitution l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-        //        l_list.add(l_item.getName());
+
+        // singleton instance can be null, because this class is initialize before the singleton can be
+        // initialize, so to avoid of null-pointer-exception we check it first
+        if (CSimulationData.getInstance() != null)
+            for(IInstitution l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+                l_list.add(l_item.getName());
+
         String[] l_array = new String[l_list.size()];
         l_list.toArray(l_array);
         this.add(CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference));

@@ -42,24 +42,21 @@ import java.awt.geom.Point2D;
 class COSMMouseListener extends MouseAdapter implements MouseMotionListener {
 
     /**
-     * point to detect mouse movement *
-     */
-    private Point2D m_begining = null;
-    /**
      * popup *
      */
     private CMenuPopup m_popup = new CMenuPopup();
-
-    private CRectanglePainter m_rectangle = null;
-
+    private Point2D m_begining = null;
+    private Point2D m_end = null;
+    private CRectanglePainter m_rectangle = new CRectanglePainter();
 
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        m_end = e.getPoint();
+        m_rectangle.set( m_begining, m_end );
     }
 
-    
+
     /*
     @Override
     public void mouseMoved(MouseEvent e) {
@@ -72,13 +69,24 @@ class COSMMouseListener extends MouseAdapter implements MouseMotionListener {
     }
     */
 
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1)
+            m_begining = e.getPoint();
+        m_end = m_begining;
+        COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+    }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {
         try {
 
+            //m_begining = null;
+            //m_end = null;
+
             // left click (without any mouse movement)
-            if ((e.getButton() == MouseEvent.BUTTON1) && (this.inRange(e.getPoint(), m_begining, 2))) {
+            /*
+            if (e.getButton() == MouseEvent.BUTTON1) {
                 if (CSimulation.getInstance().isRunning())
                     throw new IllegalStateException("simulation is running");
 
@@ -101,6 +109,7 @@ class COSMMouseListener extends MouseAdapter implements MouseMotionListener {
                         CSimulationData.getInstance().getSourceQueue().add(new CNormSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
                 }
             }
+            */
 
             // right click
             if (e.getButton() == MouseEvent.BUTTON3) {

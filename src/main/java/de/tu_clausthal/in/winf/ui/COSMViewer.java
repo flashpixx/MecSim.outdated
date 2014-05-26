@@ -85,7 +85,7 @@ public class COSMViewer extends JXMapViewer {
         this.addKeyListener(new PanKeyListener(this));
     }
 
-    
+
     /**
      * return instance
      *

@@ -46,6 +46,10 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
     protected Point2D m_pointrightlower = null;
 
 
+    /** ctor for blank initialization
+     *
+     */
+    public CRectanglePainter() {}
 
     /** ctor for geopositions
      *
@@ -53,9 +57,6 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
      * @param p_rightlower right lower position
      */
     public CRectanglePainter( GeoPosition p_leftupper, GeoPosition p_rightlower ) {
-        if ( (p_leftupper == null) || (p_rightlower == null) )
-            throw new IllegalArgumentException("positions need not to be null");
-
         m_geoleftupper = p_leftupper;
         m_georightlower = p_rightlower;
     }
@@ -69,8 +70,6 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
      */
     public CRectanglePainter( GeoPosition p_leftupper, GeoPosition p_rightlower, Color p_color )
     {
-        if ( (p_leftupper == null) || (p_rightlower == null) )
-            throw new IllegalArgumentException("positions need not to be null");
         if (p_color == null)
             throw new IllegalArgumentException("color need not to be null");
 
@@ -87,9 +86,8 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
      */
     public CRectanglePainter( Point2D p_leftupper, Point2D p_rightlower )
     {
-        if ((p_leftupper == null) || (p_rightlower == null))
-            throw new IllegalArgumentException("positions need not to be null");
-
+        m_pointleftupper = p_leftupper;
+        m_pointrightlower = p_rightlower;
     }
 
 
@@ -105,23 +103,104 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
             throw new IllegalArgumentException("color need not to be null");
 
         m_color = p_color;
+        m_pointleftupper = p_leftupper;
+        m_pointrightlower = p_rightlower;
     }
+
+
+    /** sets the color
+     *
+     * @param p_color color
+     */
+    public void set( Color p_color )
+    {
+        if (p_color == null)
+            throw new IllegalArgumentException("color need not to be null");
+
+        m_color = p_color;
+    }
+
+
+    /** changes the geoposition
+     *
+     * @param p_leftupper left-upper corner
+     * @param p_rightlower right-lower corner
+     */
+    public void set( GeoPosition p_leftupper, GeoPosition p_rightlower )
+    {
+        m_pointleftupper  = null;
+        m_pointrightlower = null;
+        m_geoleftupper    = p_leftupper;
+        m_georightlower   = p_rightlower;
+    }
+
+
+    /** sets the position
+     *
+     * @param p_leftupper left-upper point
+     * @param p_rightlower right-lower point
+     */
+    public void set( Point2D p_leftupper, Point2D p_rightlower )
+    {
+        m_pointleftupper  = p_leftupper;
+        m_pointrightlower = p_rightlower;
+        m_geoleftupper    = null;
+        m_georightlower   = null;
+    }
+
+
+    /** returns the left-upper point
+     *
+     * @param jxMapViewer map viewer
+     * @return point
+     */
+    private Point2D getLeftUpper(JXMapViewer jxMapViewer)
+    {
+        if ((m_geoleftupper == null) && (m_pointleftupper == null))
+            return null;
+
+        if (m_geoleftupper != null)
+            return jxMapViewer.getTileFactory().geoToPixel(m_geoleftupper, jxMapViewer.getZoom());
+
+        return m_pointleftupper;
+    }
+
+
+    /** returns the right-lower point
+     *
+     * @param jxMapViewer map viewer
+     * @return point
+     */
+    private Point2D getRightLower(JXMapViewer jxMapViewer)
+    {
+        if ((m_georightlower == null) && (m_pointrightlower == null))
+            return null;
+
+        if (m_georightlower != null)
+            return jxMapViewer.getTileFactory().geoToPixel(m_georightlower, jxMapViewer.getZoom());
+
+        return m_pointrightlower;
+    }
+
 
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer jxMapViewer, int i, int i2) {
+        Point2D l_left  = this.getLeftUpper(jxMapViewer);
+        Point2D l_right = this.getRightLower(jxMapViewer);
+        if ( (l_left == null) || (l_right == null) )
+            return;
+
         graphics2D = (Graphics2D) graphics2D.create();
-        Rectangle rect = jxMapViewer.getViewportBounds();
-        graphics2D.translate(-rect.x, -rect.y);
+        Rectangle l_rect = jxMapViewer.getViewportBounds();
+        graphics2D.translate(-l_rect.x, -l_rect.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-
-        Point2D l_left  = m_geoleftupper == null ? m_pointleftupper : jxMapViewer.getTileFactory().geoToPixel(m_geoleftupper, jxMapViewer.getZoom());
-        Point2D l_right = m_georightlower == null ? m_pointrightlower : jxMapViewer.getTileFactory().geoToPixel(m_georightlower, jxMapViewer.getZoom());
-
-        graphics2D.setColor(m_color);
+        //graphics2D.setColor(m_color);
+        graphics2D.setColor(Color.BLACK);
+        //graphics2D.fillRect(100, 100, 500, 500);
         graphics2D.fillRect( (int)l_left.getX(), (int)l_left.getY(), (int)(l_right.getX()-l_left.getX()), (int)(l_right.getY()-l_left.getY()) );
-        graphics2D.dispose();
 
+        //jxMapViewer.repaint();
     }
 }

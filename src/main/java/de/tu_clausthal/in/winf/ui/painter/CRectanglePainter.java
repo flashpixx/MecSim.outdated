@@ -199,8 +199,8 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
         //graphics2D.setColor(m_color);
         graphics2D.setColor(Color.BLACK);
         //graphics2D.fillRect(100, 100, 500, 500);
-        graphics2D.fillRect( (int)l_left.getX(), (int)l_left.getY(), (int)(l_right.getX()-l_left.getX()), (int)(l_right.getY()-l_left.getY()) );
+        graphics2D.fillRect( (int)Math.min(l_left.getX(), l_right.getX()), (int)Math.min(l_left.getY(), l_right.getY()), (int)Math.abs(l_right.getX()-l_left.getX()), (int)Math.abs(l_right.getY()-l_left.getY()) );
 
-        //jxMapViewer.repaint();
+        jxMapViewer.repaint();
     }
 }

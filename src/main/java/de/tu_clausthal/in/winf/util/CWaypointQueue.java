@@ -60,7 +60,7 @@ public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implemen
     public CWaypointQueue(COSMViewer p_viewer) {
         m_viewer = p_viewer;
         m_viewer.getCompoundPainter().addPainter(this);
-        this.setRenderer(new CWaypointRenderer());
+        this.setRenderer(CWaypointRenderer.getInstance());
     }
 
 

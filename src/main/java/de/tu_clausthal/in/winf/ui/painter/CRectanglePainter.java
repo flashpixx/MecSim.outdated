@@ -21,77 +21,57 @@
 
 package de.tu_clausthal.in.winf.ui.painter;
 
-import com.graphhopper.util.PointList;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
- * painter for routes
+ * painter to create a rectangle
  */
-public class CRoutePainter implements Painter<JXMapViewer> {
+public class CRectanglePainter implements Painter<JXMapViewer> {
 
-    /**
-     * draw color *
-     */
-    protected Color m_color = Color.RED;
-    /**
-     * point list *
-     */
-    protected List<GeoPosition> m_track = new ArrayList();
+    /** color of the rectangle **/
+    protected Color m_color = new Color(200,200,200, 127);
+    /** left-upper position **/
+    protected GeoPosition m_leftupper = null;
+    /** right-lower position **/
+    protected GeoPosition m_rightlower = null;
 
 
-    /**
-     * sets a route
+    /** ctor
      *
-     * @param p_list list
+     * @param p_leftupper left upper position
+     * @param p_rightlower right lower position
      */
-    public CRoutePainter(List<GeoPosition> p_list) {
-        m_track = new ArrayList(p_list);
+    public CRectanglePainter( GeoPosition p_leftupper, GeoPosition p_rightlower ) {
+        if ( (p_leftupper == null) || (p_rightlower == null) )
+            throw new IllegalArgumentException("positions need not to be null");
+
+        m_leftupper = p_leftupper;
+        m_rightlower = p_rightlower;
     }
 
 
-    /**
-     * sets a route
+    /** ctor
      *
-     * @param p_list  list
-     * @param p_color draw color
+     * @param p_leftupper left upper position
+     * @param p_rightlower right lower position
+     * @param p_color color of the rectangle
      */
-    public CRoutePainter(List<GeoPosition> p_list, Color p_color) {
-        m_track = new ArrayList(p_list);
+    public CRectanglePainter( GeoPosition p_leftupper, GeoPosition p_rightlower, Color p_color )
+    {
+        if ( (p_leftupper == null) || (p_rightlower == null) )
+            throw new IllegalArgumentException("positions need not to be null");
+        if (p_color == null)
+            throw new IllegalArgumentException("color need not to be null");
+
         m_color = p_color;
-    }
-
-
-    /**
-     * sets a point list with color
-     *
-     * @param p_list point list
-     */
-    public CRoutePainter(PointList p_list) {
-        m_track = new ArrayList();
-        for (int i = 0; i < p_list.size(); i++)
-            m_track.add(new GeoPosition(p_list.getLatitude(i), p_list.getLongitude(i)));
-    }
-
-
-    /**
-     * sets a pointlist with color
-     *
-     * @param p_list  point list
-     * @param p_color draw color
-     */
-    public CRoutePainter(PointList p_list, Color p_color) {
-        m_color = p_color;
-        m_track = new ArrayList();
-        for (int i = 0; i < p_list.size(); i++)
-            m_track.add(new GeoPosition(p_list.getLatitude(i), p_list.getLongitude(i)));
+        m_leftupper = p_leftupper;
+        m_rightlower = p_rightlower;
     }
 
 
@@ -102,33 +82,13 @@ public class CRoutePainter implements Painter<JXMapViewer> {
         graphics2D.translate(-rect.x, -rect.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+
+        Point2D l_left  = jxMapViewer.getTileFactory().geoToPixel(m_leftupper, jxMapViewer.getZoom());
+        Point2D l_right = jxMapViewer.getTileFactory().geoToPixel(m_rightlower, jxMapViewer.getZoom());
+
         graphics2D.setColor(m_color);
-        graphics2D.setStroke(new BasicStroke(2));
-        this.drawRoute(graphics2D, jxMapViewer);
+        graphics2D.fillRect( (int)l_left.getX(), (int)l_left.getY(), (int)(l_right.getX()-l_left.getX()), (int)(l_right.getY()-l_left.getY()) );
         graphics2D.dispose();
+
     }
-
-
-    /**
-     * draws the route
-     *
-     * @param p_graphic graphic
-     * @param p_viewer  viewer
-     */
-    private void drawRoute(Graphics2D p_graphic, JXMapViewer p_viewer) {
-        int l_lastX = 0;
-        int l_lastY = 0;
-
-        boolean l_first = true;
-        for (GeoPosition l_position : m_track) {
-            Point2D l_point = p_viewer.getTileFactory().geoToPixel(l_position, p_viewer.getZoom());
-            if (!l_first)
-                p_graphic.drawLine(l_lastX, l_lastY, (int) l_point.getX(), (int) l_point.getY());
-
-            l_first = false;
-            l_lastX = (int) l_point.getX();
-            l_lastY = (int) l_point.getY();
-        }
-    }
-
 }

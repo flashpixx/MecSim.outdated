@@ -95,7 +95,7 @@ class COSMMouseListener extends MouseAdapter {
             }
 
             // left click (with mouse movement)
-            if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_begining, 2))) {
+            if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_begining, 3))) {
 
             }
 

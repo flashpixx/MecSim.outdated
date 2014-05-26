@@ -52,7 +52,7 @@ Das System bezieht die Daten für den Graph online von dem Dienst [Geofabrik](ht
 
 ## Benutzung
 
-Nach dem Start des Programms erscheint die Karte. Man kann die Karte mittels Maus und / oder Cursortasten bewegen. Durch Klicken können blaue Quellen, an denen Fahrzeuge erzeugt werden, in die Karte eingefügt werden (ebenso kann eine Quelle wieder entfernt werden). Über das Menü kann die Simulation gestartet, gestoppt oder resettet werden. Bei einem Reset werden alle Fahrzeuge entfernt und nur die Quellen bleiben bestehen. Über das Menü ```Graph Weights``` können unterschiedliche Gewichtsstrukturen für das Routing aktiviert werden.
+Nach dem Start des Programms erscheint die Karte. Man kann die Karte mittels Maus und / oder Cursortasten bewegen. Durch Klicken können blaue Quellen, an denen Fahrzeuge erzeugt werden, in die Karte eingefügt werden (ebenso kann eine Quelle wieder entfernt werden). Über das Menü kann die Simulation gestartet, gestoppt oder resettet werden. Bei einem Reset werden alle Fahrzeuge entfernt und nur die Quellen bleiben bestehen. Über das Menü ```Graph Weights``` können unterschiedliche Gewichtsstrukturen für das Routing aktiviert werden. Über das Menu "Driving Model" kann das Fahrzeugfolgemodell ausgewählt werden. Mit Hilfe des Institutionsmenu erzeugt oder löscht man Institutionen. Über das Contextmenu können die Arten der Quellen, Normen und der Institution ausgewählt werden, wenn in die Map die Daten eingefügt werden.
 
 ### Ansicht / Tips
 
@@ -64,4 +64,5 @@ Nach dem Start des Programms erscheint die Karte. Man kann die Karte mittels Mau
   * blau: 80-100km/h
   * cyan: 100-130km/h
   * rot: > 130km/h
-* an einigen Stellen fahren die Fahrzeuge nicht exakt die gezeigte Straße, dies ist dadurch bedingt, dass die unterliegenden GPS Koordinaten nicht exakt interpoliert werden können  
+* an einigen Stellen fahren die Fahrzeuge nicht exakt die gezeigte Straße, dies ist dadurch bedingt, dass die unterliegenden GPS Koordinaten nicht exakt interpoliert werden können
+* die Quellen sind individuell eingefärbt

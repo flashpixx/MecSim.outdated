@@ -37,10 +37,16 @@ import java.util.Map;
 
 
 /**
- * own waypoint renderer to handle all waypoints
+ * own waypoint renderer to handle all waypoints,
+ * can be defined with a singleton because the object
+ * is used global
  */
 public class CWaypointRenderer extends DefaultWaypointRenderer {
 
+    /**
+     * singleton instance
+     */
+    private static volatile CWaypointRenderer s_instance = new CWaypointRenderer();
     /**
      * logger instance *
      */
@@ -48,17 +54,17 @@ public class CWaypointRenderer extends DefaultWaypointRenderer {
     /**
      * image object (read from JXMapViewer
      */
-    private BufferedImage m_image = null;
+    protected BufferedImage m_image = null;
     /**
      * image map for faster access *
      */
-    private Map<Color, BufferedImage> m_images = new HashMap();
+    protected Map<Color, BufferedImage> m_images = new HashMap();
 
 
     /**
      * ctor to construct the basic image from the JXMapViewer package
      */
-    public CWaypointRenderer() {
+    private CWaypointRenderer() {
         try {
             m_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));
         } catch (Exception l_exception) {
@@ -67,6 +73,14 @@ public class CWaypointRenderer extends DefaultWaypointRenderer {
 
     }
 
+    /**
+     * returns the singleton instance
+     *
+     * @return instance
+     */
+    public static CWaypointRenderer getInstance() {
+        return s_instance;
+    }
 
     @Override
     public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w) {

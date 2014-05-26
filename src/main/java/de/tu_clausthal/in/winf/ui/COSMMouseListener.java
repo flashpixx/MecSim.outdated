@@ -26,18 +26,20 @@ import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
+import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
 
 /**
  * mouse listener for jxviewer *
  */
-class COSMMouseListener extends MouseAdapter {
+class COSMMouseListener extends MouseAdapter implements MouseMotionListener {
 
     /**
      * point to detect mouse movement *
@@ -48,25 +50,31 @@ class COSMMouseListener extends MouseAdapter {
      */
     private CMenuPopup m_popup = new CMenuPopup();
 
+    private CRectanglePainter m_rectangle = null;
+
+
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        // set the start position for dragging
-        m_begining = (e.getButton() == MouseEvent.BUTTON1) ? e.getPoint() : null;
+    public void mouseDragged(MouseEvent e) {
+
     }
 
-
+    
+    /*
     @Override
     public void mouseMoved(MouseEvent e) {
         if ((m_begining != null) && (!this.inRange(e.getPoint(), m_begining, 5))) {
-            //Color(0.7, 0.7, 0.7, 0.5);
+            if (m_rectangle != null)
+                COSMViewer.getInstance().getCompoundPainter().removePainter(m_rectangle);
+            m_rectangle = new CRectanglePainter(m_begining, e.getPoint());
+            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
         }
-
     }
+    */
 
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
         try {
 
             // left click (without any mouse movement)
@@ -94,18 +102,11 @@ class COSMMouseListener extends MouseAdapter {
                 }
             }
 
-            // left click (with mouse movement)
-            if ((e.getButton() == MouseEvent.BUTTON1) && (!this.inRange(e.getPoint(), m_begining, 3))) {
-
-            }
-
-
             // right click
             if (e.getButton() == MouseEvent.BUTTON3) {
                 m_popup.update();
                 m_popup.show(e.getComponent(), e.getX(), e.getY());
             }
-
 
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);

@@ -36,13 +36,18 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
 
     /** color of the rectangle **/
     protected Color m_color = new Color(200,200,200, 127);
-    /** left-upper position **/
-    protected GeoPosition m_leftupper = null;
-    /** right-lower position **/
-    protected GeoPosition m_rightlower = null;
+    /** left-upper geoposition **/
+    protected GeoPosition m_geoleftupper = null;
+    /** right-lower geoposition **/
+    protected GeoPosition m_georightlower = null;
+    /** left-upper point **/
+    protected Point2D m_pointleftupper = null;
+    /** right-lower point **/
+    protected Point2D m_pointrightlower = null;
 
 
-    /** ctor
+
+    /** ctor for geopositions
      *
      * @param p_leftupper left upper position
      * @param p_rightlower right lower position
@@ -51,12 +56,12 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
         if ( (p_leftupper == null) || (p_rightlower == null) )
             throw new IllegalArgumentException("positions need not to be null");
 
-        m_leftupper = p_leftupper;
-        m_rightlower = p_rightlower;
+        m_geoleftupper = p_leftupper;
+        m_georightlower = p_rightlower;
     }
 
 
-    /** ctor
+    /** ctor for geopositions and color
      *
      * @param p_leftupper left upper position
      * @param p_rightlower right lower position
@@ -70,8 +75,36 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
             throw new IllegalArgumentException("color need not to be null");
 
         m_color = p_color;
-        m_leftupper = p_leftupper;
-        m_rightlower = p_rightlower;
+        m_geoleftupper = p_leftupper;
+        m_georightlower = p_rightlower;
+    }
+
+
+    /** ctor for points
+     *
+     * @param p_leftupper
+     * @param p_rightlower
+     */
+    public CRectanglePainter( Point2D p_leftupper, Point2D p_rightlower )
+    {
+        if ((p_leftupper == null) || (p_rightlower == null))
+            throw new IllegalArgumentException("positions need not to be null");
+
+    }
+
+
+    /** ctor for points and color
+     *
+     * @param p_leftupper
+     * @param p_rightlower
+     * @param p_color
+     */
+    public CRectanglePainter( Point2D p_leftupper, Point2D p_rightlower, Color p_color )
+    {
+        if (p_color == null)
+            throw new IllegalArgumentException("color need not to be null");
+
+        m_color = p_color;
     }
 
 
@@ -83,8 +116,8 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 
-        Point2D l_left  = jxMapViewer.getTileFactory().geoToPixel(m_leftupper, jxMapViewer.getZoom());
-        Point2D l_right = jxMapViewer.getTileFactory().geoToPixel(m_rightlower, jxMapViewer.getZoom());
+        Point2D l_left  = m_geoleftupper == null ? m_pointleftupper : jxMapViewer.getTileFactory().geoToPixel(m_geoleftupper, jxMapViewer.getZoom());
+        Point2D l_right = m_georightlower == null ? m_pointrightlower : jxMapViewer.getTileFactory().geoToPixel(m_georightlower, jxMapViewer.getZoom());
 
         graphics2D.setColor(m_color);
         graphics2D.fillRect( (int)l_left.getX(), (int)l_left.getY(), (int)(l_right.getX()-l_left.getX()), (int)(l_right.getY()-l_left.getY()) );

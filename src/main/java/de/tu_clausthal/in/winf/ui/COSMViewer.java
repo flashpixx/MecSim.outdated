@@ -32,6 +32,9 @@ import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
 
 /**
  * openstreetmap viewer class - must be a singleton because
@@ -71,15 +74,18 @@ public class COSMViewer extends JXMapViewer {
 
         this.setOverlayPainter(m_painter);
 
+        MouseListener l_mouse = new COSMMouseListener();
+
         this.addMouseListener(new PanMouseInputListener(this));
-        this.addMouseListener(new COSMMouseListener());
+        this.addMouseListener(l_mouse);
         //this.addMouseListener(new CenterMapListener(this));
         //this.addMouseMotionListener(new PanMouseInputListener(this));
+        this.addMouseMotionListener( (MouseMotionListener)l_mouse );
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
-
     }
 
+    
     /**
      * return instance
      *

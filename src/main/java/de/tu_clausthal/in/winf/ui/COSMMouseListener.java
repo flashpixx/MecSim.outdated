@@ -27,6 +27,7 @@ import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
+import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,44 +46,32 @@ class COSMMouseListener extends MouseAdapter implements MouseMotionListener {
      * popup *
      */
     private CMenuPopup m_popup = new CMenuPopup();
-    private Point2D m_begining = null;
-    private Point2D m_end = null;
-    private CRectanglePainter m_rectangle = new CRectanglePainter();
+    private CRectanglePainter m_rectangle = null;
 
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        m_end = e.getPoint();
-        m_rectangle.set( m_begining, m_end );
+        m_rectangle.to(e.getPoint());
+        ((JXMapViewer) e.getSource()).repaint();
     }
 
-
-    /*
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        if ((m_begining != null) && (!this.inRange(e.getPoint(), m_begining, 5))) {
-            if (m_rectangle != null)
-                COSMViewer.getInstance().getCompoundPainter().removePainter(m_rectangle);
-            m_rectangle = new CRectanglePainter(m_begining, e.getPoint());
-            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
-        }
-    }
-    */
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1)
-            m_begining = e.getPoint();
-        m_end = m_begining;
-        COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            m_rectangle = new CRectanglePainter(e.getPoint());
+            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         try {
 
-            //m_begining = null;
-            //m_end = null;
+            m_rectangle = null;
+            ((JXMapViewer) e.getSource()).repaint();
+
+            //m_rectangle = null;
 
             // left click (without any mouse movement)
             /*

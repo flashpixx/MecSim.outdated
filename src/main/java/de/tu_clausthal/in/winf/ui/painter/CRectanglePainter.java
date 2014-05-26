@@ -31,176 +31,68 @@ import java.awt.geom.Point2D;
 
 /**
  * painter to create a rectangle
+ * @see http://www.locked.de/2011/01/21/selektionsfenster-in-swingx-ws-jxmapkit/
  */
 public class CRectanglePainter implements Painter<JXMapViewer> {
 
     /** color of the rectangle **/
-    protected Color m_color = new Color(200,200,200, 127);
-    /** left-upper geoposition **/
-    protected GeoPosition m_geoleftupper = null;
-    /** right-lower geoposition **/
-    protected GeoPosition m_georightlower = null;
-    /** left-upper point **/
-    protected Point2D m_pointleftupper = null;
-    /** right-lower point **/
-    protected Point2D m_pointrightlower = null;
+    protected Color m_regioColor = new Color(0,0,200, 75);
+    protected Color m_borderColor = new Color(0,0,200);
+    protected Rectangle m_start = null;
+    protected Rectangle m_rectangle = null;
 
 
     /** ctor for blank initialization
      *
      */
-    public CRectanglePainter() {}
-
-    /** ctor for geopositions
-     *
-     * @param p_leftupper left upper position
-     * @param p_rightlower right lower position
-     */
-    public CRectanglePainter( GeoPosition p_leftupper, GeoPosition p_rightlower ) {
-        m_geoleftupper = p_leftupper;
-        m_georightlower = p_rightlower;
+    public CRectanglePainter( Point p_point ) {
+        if (p_point == null)
+            throw new IllegalArgumentException("point need not to be null");
+        m_start = new Rectangle(p_point);
     }
 
 
-    /** ctor for geopositions and color
-     *
-     * @param p_leftupper left upper position
-     * @param p_rightlower right lower position
-     * @param p_color color of the rectangle
-     */
-    public CRectanglePainter( GeoPosition p_leftupper, GeoPosition p_rightlower, Color p_color )
-    {
-        if (p_color == null)
-            throw new IllegalArgumentException("color need not to be null");
-
-        m_color = p_color;
-        m_geoleftupper = p_leftupper;
-        m_georightlower = p_rightlower;
-    }
-
-
-    /** ctor for points
-     *
-     * @param p_leftupper
-     * @param p_rightlower
-     */
-    public CRectanglePainter( Point2D p_leftupper, Point2D p_rightlower )
-    {
-        m_pointleftupper = p_leftupper;
-        m_pointrightlower = p_rightlower;
-    }
-
-
-    /** ctor for points and color
-     *
-     * @param p_leftupper
-     * @param p_rightlower
-     * @param p_color
-     */
-    public CRectanglePainter( Point2D p_leftupper, Point2D p_rightlower, Color p_color )
-    {
-        if (p_color == null)
-            throw new IllegalArgumentException("color need not to be null");
-
-        m_color = p_color;
-        m_pointleftupper = p_leftupper;
-        m_pointrightlower = p_rightlower;
-    }
-
-
-    /** sets the color
+    /** sets the border color
      *
      * @param p_color color
      */
-    public void set( Color p_color )
+    public void setBorderColor( Color p_color )
     {
         if (p_color == null)
             throw new IllegalArgumentException("color need not to be null");
 
-        m_color = p_color;
+        m_borderColor = p_color;
     }
 
 
-    /** changes the geoposition
-     *
-     * @param p_leftupper left-upper corner
-     * @param p_rightlower right-lower corner
-     */
-    public void set( GeoPosition p_leftupper, GeoPosition p_rightlower )
+    public void setRegioColor( Color p_color )
     {
-        m_pointleftupper  = null;
-        m_pointrightlower = null;
-        m_geoleftupper    = p_leftupper;
-        m_georightlower   = p_rightlower;
+        if (p_color == null)
+            throw new IllegalArgumentException("color need not to be null");
+
+        m_regioColor = p_color;
     }
 
 
     /** sets the position
      *
-     * @param p_leftupper left-upper point
-     * @param p_rightlower right-lower point
      */
-    public void set( Point2D p_leftupper, Point2D p_rightlower )
+    public void to( Point p_point )
     {
-        m_pointleftupper  = p_leftupper;
-        m_pointrightlower = p_rightlower;
-        m_geoleftupper    = null;
-        m_georightlower   = null;
+        m_rectangle = m_start.union( new Rectangle(p_point) );
     }
 
-
-    /** returns the left-upper point
-     *
-     * @param jxMapViewer map viewer
-     * @return point
-     */
-    private Point2D getLeftUpper(JXMapViewer jxMapViewer)
-    {
-        if ((m_geoleftupper == null) && (m_pointleftupper == null))
-            return null;
-
-        if (m_geoleftupper != null)
-            return jxMapViewer.getTileFactory().geoToPixel(m_geoleftupper, jxMapViewer.getZoom());
-
-        return m_pointleftupper;
-    }
-
-
-    /** returns the right-lower point
-     *
-     * @param jxMapViewer map viewer
-     * @return point
-     */
-    private Point2D getRightLower(JXMapViewer jxMapViewer)
-    {
-        if ((m_georightlower == null) && (m_pointrightlower == null))
-            return null;
-
-        if (m_georightlower != null)
-            return jxMapViewer.getTileFactory().geoToPixel(m_georightlower, jxMapViewer.getZoom());
-
-        return m_pointrightlower;
-    }
 
 
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer jxMapViewer, int i, int i2) {
-        Point2D l_left  = this.getLeftUpper(jxMapViewer);
-        Point2D l_right = this.getRightLower(jxMapViewer);
-        if ( (l_left == null) || (l_right == null) )
+        if (m_rectangle == null)
             return;
 
-        graphics2D = (Graphics2D) graphics2D.create();
-        Rectangle l_rect = jxMapViewer.getViewportBounds();
-        graphics2D.translate(-l_rect.x, -l_rect.y);
-        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        //graphics2D.setColor(m_color);
-        graphics2D.setColor(Color.BLACK);
-        //graphics2D.fillRect(100, 100, 500, 500);
-        graphics2D.fillRect( (int)Math.min(l_left.getX(), l_right.getX()), (int)Math.min(l_left.getY(), l_right.getY()), (int)Math.abs(l_right.getX()-l_left.getX()), (int)Math.abs(l_right.getY()-l_left.getY()) );
-
-        jxMapViewer.repaint();
+        graphics2D.setColor(m_regioColor);
+        graphics2D.fillRect(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height);
+        graphics2D.setColor(m_borderColor);
+        graphics2D.drawRect(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height);
     }
 }

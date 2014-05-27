@@ -47,23 +47,22 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
      * popup *
      */
     private CMenuPopup m_popup = new CMenuPopup();
-    private volatile CRectanglePainter m_rectangle = null;
+    private CRectanglePainter m_rectangle = null;
 
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (m_rectangle == null)
+     /*   if (m_rectangle == null)
             return;
 
         m_rectangle.to(e.getPoint());
         System.out.println("moved");
 
-        ((JXMapViewer)e.getSource()).repaint();
+        ((JXMapViewer)e.getSource()).repaint(); */
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-/*
         if (m_rectangle == null)
             return;
 
@@ -71,7 +70,6 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
         System.out.println("dragged");
 
         ((JXMapViewer)e.getSource()).repaint();
-*/
     }
 
 

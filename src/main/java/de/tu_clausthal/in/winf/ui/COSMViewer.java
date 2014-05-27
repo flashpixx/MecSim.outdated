@@ -74,10 +74,10 @@ public class COSMViewer extends JXMapViewer {
 
         this.setOverlayPainter(m_painter);
 
-        MouseListener l_mouse = new COSMMouseListener();
+        COSMMouseListener l_mouse = new COSMMouseListener();
 
         this.addMouseListener(l_mouse); //new PanMouseInputListener(this) / new CenterMapListener(this)
-        this.addMouseMotionListener( (MouseMotionListener)l_mouse ); // new PanMouseInputListener(this)
+        this.addMouseMotionListener(l_mouse); // new PanMouseInputListener(this)
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
     }

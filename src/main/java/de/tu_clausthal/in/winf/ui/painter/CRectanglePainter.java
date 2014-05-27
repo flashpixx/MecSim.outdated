@@ -33,7 +33,7 @@ import java.awt.geom.Point2D;
  * painter to create a rectangle
  * @see http://www.locked.de/2011/01/21/selektionsfenster-in-swingx-ws-jxmapkit/
  */
-public class CRectanglePainter implements Painter<JXMapViewer> {
+public class CRectanglePainter implements Painter<Object> {
 
     /** color of the rectangle **/
     protected Color m_regioColor = new Color(0,0,200, 75);
@@ -84,13 +84,13 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
 
 
     @Override
-    public void paint(Graphics2D graphics2D, JXMapViewer jxMapViewer, int i, int i2) {
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
         if (m_rectangle == null)
             return;
 
-        graphics2D.setColor(m_regioColor);
-        graphics2D.fillRect(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height);
         graphics2D.setColor(m_borderColor);
-        graphics2D.drawRect(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height);
+        graphics2D.draw(m_rectangle);
+        graphics2D.setColor(m_regioColor);
+        graphics2D.fill(m_rectangle);
     }
 }

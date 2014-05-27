@@ -31,6 +31,7 @@ import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -40,7 +41,7 @@ import java.awt.geom.Point2D;
 /**
  * mouse listener for jxviewer *
  */
-class COSMMouseListener implements MouseListener, MouseMotionListener {
+class COSMMouseListener extends MouseAdapter {
 
     /**
      * popup *
@@ -55,6 +56,7 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
         {
             m_rectangle = new CRectanglePainter(e.getPoint());
             COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+            ((JXMapViewer)e.getSource()).repaint();
         }
     }
 

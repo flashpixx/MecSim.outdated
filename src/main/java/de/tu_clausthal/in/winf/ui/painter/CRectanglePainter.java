@@ -79,8 +79,7 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
      */
     public void to( Point p_point )
     {
-        System.out.println(p_point);
-        //m_rectangle = m_start.union( new Rectangle(p_point) );
+        m_rectangle = m_start.union( new Rectangle(p_point) );
     }
 
 
@@ -95,7 +94,5 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
         graphics2D.fillRect(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height);
         graphics2D.setColor(m_borderColor);
         graphics2D.drawRect(m_rectangle.x, m_rectangle.y, m_rectangle.width, m_rectangle.height);
-
-        //System.out.println(m_rectangle);
     }
 }

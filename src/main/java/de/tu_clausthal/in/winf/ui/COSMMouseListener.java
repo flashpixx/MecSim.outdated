@@ -52,30 +52,27 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-     /*   if (m_rectangle == null)
-            return;
-
-        m_rectangle.to(e.getPoint());
-        System.out.println("moved");
-
-        ((JXMapViewer)e.getSource()).repaint(); */
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         if (m_rectangle == null)
-            return;
+        {
+            m_rectangle = new CRectanglePainter(e.getPoint());
+            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+        } else {
+            m_rectangle.to(e.getPoint());
+            m_rectangle = null;
+        }
 
-        m_rectangle.to(e.getPoint());
-        System.out.println("dragged");
 
-        ((JXMapViewer)e.getSource()).repaint();
+        //((JXMapViewer)e.getSource()).repaint();
     }
 
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        try {
         // left double-click
         // http://stackoverflow.com/questions/4051659/identifying-double-click-in-java
         if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
@@ -107,28 +104,17 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
             m_popup.update();
             m_popup.show(e.getComponent(), e.getX(), e.getY());
         }
+        } catch (Exception l_exception) {
+            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1)  {
-            m_rectangle = new CRectanglePainter(e.getPoint());
-            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
-            System.out.println("start");
-        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        try {
-
-            m_rectangle = null;
-            System.out.println("end");
-
-
-        } catch (Exception l_exception) {
-            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
-        }
     }
 
     @Override

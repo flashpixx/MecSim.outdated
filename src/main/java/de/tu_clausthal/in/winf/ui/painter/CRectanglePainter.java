@@ -21,43 +21,59 @@
 
 package de.tu_clausthal.in.winf.ui.painter;
 
-import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 
 
 /**
  * painter to create a rectangle
+ *
  * @see http://www.locked.de/2011/01/21/selektionsfenster-in-swingx-ws-jxmapkit/
+ * @see https://github.com/msteiger/jxmapviewer2/tree/master/examples/src/sample3_interaction
  */
 public class CRectanglePainter implements Painter<Object> {
 
-    /** color of the rectangle **/
-    protected Color m_regioColor = new Color(0,0,200, 75);
-    protected Color m_borderColor = new Color(0,0,200);
+    /**
+     * color of the rectangle fill color *
+     */
+    protected Color m_regioColor = new Color(0, 0, 200, 75);
+    /**
+     * border color of the rectangle *
+     */
+    protected Color m_borderColor = new Color(0, 0, 200);
+    /**
+     * start rectangle *
+     */
     protected Rectangle m_start = null;
+    /**
+     * current full rectangle *
+     */
     protected Rectangle m_rectangle = null;
 
 
-    /** ctor for blank initialization
-     *
+    /**
+     * ctor for blank initialization *
      */
-    public CRectanglePainter( Point p_point ) {
+    public CRectanglePainter() {
+    }
+
+    /**
+     * ctor
+     */
+    public CRectanglePainter(Point p_point) {
         if (p_point == null)
             throw new IllegalArgumentException("point need not to be null");
         m_start = new Rectangle(p_point);
     }
 
 
-    /** sets the border color
+    /**
+     * sets the border color
      *
      * @param p_color color
      */
-    public void setBorderColor( Color p_color )
-    {
+    public void setBorderColor(Color p_color) {
         if (p_color == null)
             throw new IllegalArgumentException("color need not to be null");
 
@@ -65,8 +81,7 @@ public class CRectanglePainter implements Painter<Object> {
     }
 
 
-    public void setRegioColor( Color p_color )
-    {
+    public void setRegioColor(Color p_color) {
         if (p_color == null)
             throw new IllegalArgumentException("color need not to be null");
 
@@ -74,12 +89,19 @@ public class CRectanglePainter implements Painter<Object> {
     }
 
 
-    /** sets the position
-     *
+    /**
+     * sets the position
      */
-    public void to( Point p_point )
-    {
-        m_rectangle = m_start.union( new Rectangle(p_point) );
+    public void to(Point p_point) {
+        m_rectangle = m_start.union(new Rectangle(p_point));
+    }
+
+
+    /**
+     * sets the starts point *
+     */
+    public void from(Point p_point) {
+        m_start = new Rectangle(p_point);
     }
 
 

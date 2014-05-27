@@ -33,8 +33,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
 
@@ -52,25 +50,14 @@ class COSMMouseListener extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1)
-        {
-            m_rectangle = new CRectanglePainter(e.getPoint());
-            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
-            ((JXMapViewer)e.getSource()).repaint();
-        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        m_rectangle = null;
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (m_rectangle == null)
-            return;
-        m_rectangle.to(e.getPoint());
-        ((JXMapViewer)e.getSource()).repaint();
     }
 
 

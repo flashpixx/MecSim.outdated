@@ -83,8 +83,6 @@ public class CRectanglePainter implements Painter<JXMapViewer> {
     }
 
 
-
-
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer jxMapViewer, int i, int i2) {
         if (m_rectangle == null)

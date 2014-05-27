@@ -31,7 +31,6 @@ import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -51,77 +50,66 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
 
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1)
+        {
+            m_rectangle = new CRectanglePainter(e.getPoint());
+            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        m_rectangle = null;
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         if (m_rectangle == null)
-        {
-            m_rectangle = new CRectanglePainter(e.getPoint());
-            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
-        } else {
-            m_rectangle.to(e.getPoint());
-            m_rectangle = null;
-        }
-
-
-        //((JXMapViewer)e.getSource()).repaint();
+            return;
+        m_rectangle.to(e.getPoint());
+        ((JXMapViewer)e.getSource()).repaint();
     }
 
 
     @Override
     public void mouseClicked(MouseEvent e) {
         try {
-        // left double-click
-        // http://stackoverflow.com/questions/4051659/identifying-double-click-in-java
-        if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
-            if (CSimulation.getInstance().isRunning())
-                throw new IllegalStateException("simulation is running");
+            // left double-click
+            // http://stackoverflow.com/questions/4051659/identifying-double-click-in-java
+            if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
+                if (CSimulation.getInstance().isRunning())
+                    throw new IllegalStateException("simulation is running");
 
-            COSMViewer l_viewer = (COSMViewer) e.getSource();
-            Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-            Point2D l_position = new Point(l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y);
+                COSMViewer l_viewer = (COSMViewer) e.getSource();
+                Rectangle l_viewportBounds = l_viewer.getViewportBounds();
+                Point2D l_position = new Point(l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y);
 
-            boolean l_remove = false;
-            for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
-                if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)) {
-                    CSimulationData.getInstance().getSourceQueue().remove(l_source);
-                    l_remove = true;
-                    break;
+                boolean l_remove = false;
+                for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
+                    if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)) {
+                        CSimulationData.getInstance().getSourceQueue().remove(l_source);
+                        l_remove = true;
+                        break;
+                    }
+
+                if (!l_remove) {
+                    if (m_popup.getSourceSelection().equals("default cars"))
+                        CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
+                    if (m_popup.getSourceSelection().equals("norm cars"))
+                        CSimulationData.getInstance().getSourceQueue().add(new CNormSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
                 }
-
-            if (!l_remove) {
-                if (m_popup.getSourceSelection().equals("default cars"))
-                    CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
-                if (m_popup.getSourceSelection().equals("norm cars"))
-                    CSimulationData.getInstance().getSourceQueue().add(new CNormSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
             }
-        }
 
-        // right-click
-        if ((e.getButton() == MouseEvent.BUTTON3) && (e.getClickCount() == 1)) {
-            m_popup.update();
-            m_popup.show(e.getComponent(), e.getX(), e.getY());
-        }
+            // right-click
+            if ((e.getButton() == MouseEvent.BUTTON3) && (e.getClickCount() == 1)) {
+                m_popup.update();
+                m_popup.show(e.getComponent(), e.getX(), e.getY());
+            }
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-
-    @Override
-    public void mouseExited(MouseEvent e) {}
 
 
     /**
@@ -137,6 +125,19 @@ class COSMMouseListener implements MouseListener, MouseMotionListener {
             return true;
 
         return ((p_checkposition.getX() - p_size / 2) <= p_center.getX()) && ((p_checkposition.getX() + p_size / 2) >= p_center.getX()) && ((p_checkposition.getY() - p_size / 2) <= p_center.getY()) && ((p_checkposition.getY() + p_size / 2) >= p_center.getY());
+    }
+
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
     }
 
 }

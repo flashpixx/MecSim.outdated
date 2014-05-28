@@ -27,15 +27,12 @@ import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
-import org.jxmapviewer.painter.Painter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**

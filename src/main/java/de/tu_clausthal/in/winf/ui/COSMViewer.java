@@ -27,7 +27,6 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;

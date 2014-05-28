@@ -23,8 +23,6 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
-import org.flexdock.docking.DockingManager;
-import org.flexdock.docking.DockingPort;
 import org.flexdock.docking.defaults.DefaultDockingPort;
 import org.jfree.chart.ChartPanel;
 

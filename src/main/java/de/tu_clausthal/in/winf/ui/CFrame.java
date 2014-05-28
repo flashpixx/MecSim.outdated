@@ -78,12 +78,12 @@ public class CFrame extends JFrame {
 
 
     /**
-     * add a chart to the frame
+     * add component to the frame
      *
      * @param p_name  dockname
-     * @param p_panel chart object
+     * @param p_panel omponent
      */
-    public void addChart(String p_name, ChartPanel p_panel) {
+    public void addUIComponent(String p_name, Component p_panel) {
         this.createDockable(p_name, p_panel, false);
     }
 
@@ -103,5 +103,7 @@ public class CFrame extends JFrame {
         m_control.addDockable(l_dock);
         l_dock.setVisible(true);
     }
+
+
 
 }

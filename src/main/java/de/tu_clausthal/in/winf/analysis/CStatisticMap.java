@@ -108,7 +108,7 @@ public class CStatisticMap implements ISimulationStep {
             return;
 
         m_plotdata.put(p_name, new DefaultCategoryDataset());
-        m_frame.addChart(p_name, new ChartPanel(ChartFactory.createLineChart(p_name, p_xaxis, p_yaxis, m_plotdata.get(p_name), PlotOrientation.VERTICAL, false, false, false)));
+        m_frame.addUIComponent(p_name, new ChartPanel(ChartFactory.createLineChart(p_name, p_xaxis, p_yaxis, m_plotdata.get(p_name), PlotOrientation.VERTICAL, false, false, false)));
     }
 
 

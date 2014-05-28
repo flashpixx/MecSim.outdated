@@ -72,7 +72,7 @@ public class CFrame extends JFrame {
             }
         });
 
-
+/*
         m_dock.setSingleTabAllowed(true);
         m_dock.setPreferredSize(new Dimension(CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight));
 
@@ -82,6 +82,9 @@ public class CFrame extends JFrame {
 
         // add docking component to frame
         this.add(m_dock);
+*/
+
+        this.add(COSMViewer.getInstance());
 
     }
 
@@ -93,9 +96,9 @@ public class CFrame extends JFrame {
      * @param p_panel chart object
      */
     public void addChart(String p_name, ChartPanel p_panel) {
-        DockingManager.registerDockable(p_panel, p_name);
+        /*DockingManager.registerDockable(p_panel, p_name);
         DockingManager.dock(p_panel, (DockingPort) m_dock);
-        this.pack();
+        this.pack();*/
     }
 
 }

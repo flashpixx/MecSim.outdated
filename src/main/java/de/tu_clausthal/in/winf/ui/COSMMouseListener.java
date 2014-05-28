@@ -27,13 +27,15 @@ import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
-import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.painter.Painter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -45,19 +47,33 @@ class COSMMouseListener extends MouseAdapter {
      * popup *
      */
     private CMenuPopup m_popup = new CMenuPopup();
-    private CRectanglePainter m_rectangle = null;
+    private CRectanglePainter m_rectangle = new CRectanglePainter();
+    private boolean m_drag = false;
 
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if ((e.getButton() != MouseEvent.BUTTON1) && (!m_drag))
+            return;
+        m_drag = true;
+        m_rectangle.from(e.getPoint());
+        COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (!m_drag)
+            return;
+
+        m_drag = false;
+        m_rectangle.clear();
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if (!m_drag)
+            return;
+        m_rectangle.to(e.getPoint());
     }
 
 
@@ -65,7 +81,6 @@ class COSMMouseListener extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         try {
             // left double-click
-            // http://stackoverflow.com/questions/4051659/identifying-double-click-in-java
             if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
                 if (CSimulation.getInstance().isRunning())
                     throw new IllegalStateException("simulation is running");

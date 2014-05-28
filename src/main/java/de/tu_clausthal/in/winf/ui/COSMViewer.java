@@ -27,6 +27,7 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
@@ -72,17 +73,11 @@ public class COSMViewer extends JXMapViewer {
 
         COSMMouseListener l_mouse = new COSMMouseListener();
 
-        //this.addMouseListener(l_mouse); //new PanMouseInputListener(this) / new CenterMapListener(this)
-        //this.addMouseMotionListener(l_mouse); // new PanMouseInputListener(this)
+        this.addMouseListener(l_mouse); //new PanMouseInputListener(this) / new CenterMapListener(this)
+        this.addMouseMotionListener(l_mouse); // new PanMouseInputListener(this)
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
 
-
-        SelectionAdapter sa = new SelectionAdapter(this);
-        SelectionPainter sp = new SelectionPainter(sa);
-        this.addMouseListener(sa);
-        this.addMouseMotionListener(sa);
-        this.setOverlayPainter(sp);
     }
 
 

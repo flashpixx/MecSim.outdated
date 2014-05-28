@@ -37,7 +37,7 @@ public class CRectanglePainter implements Painter<Object> {
     /**
      * color of the rectangle fill color *
      */
-    protected Color m_regioColor = new Color(0, 0, 200, 75);
+    protected Color m_regioColor = new Color(0, 0, 200, 35);
     /**
      * border color of the rectangle *
      */
@@ -102,6 +102,42 @@ public class CRectanglePainter implements Painter<Object> {
      */
     public void from(Point p_point) {
         m_start = new Rectangle(p_point);
+    }
+
+
+    /**
+     * clears the rectangle *
+     */
+    public void clear() {
+        m_start = null;
+        m_rectangle = null;
+    }
+
+
+    /**
+     * returns the upper-left corner
+     *
+     * @return point
+     */
+    public Point getFrom() {
+        if (m_rectangle == null)
+            return null;
+
+        return m_rectangle.getLocation();
+    }
+
+
+    /**
+     * returns the lower-right corner
+     *
+     * @return point
+     */
+    public Point getTo() {
+        if (m_rectangle == null)
+            return null;
+
+        return new Point((int) (this.getFrom().getX() + m_rectangle.getWidth()), (int) (this.getFrom().getY() + m_rectangle.getHeight()));
+
     }
 
 

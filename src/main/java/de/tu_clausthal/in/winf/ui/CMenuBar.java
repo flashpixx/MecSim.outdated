@@ -143,6 +143,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     }
 
 
+    /** creates a new speed norm
+     *
+     */
     private void createSpeedNorm() {
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
@@ -152,16 +155,14 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         String[] l_names = this.getInstitutionList();
         String l_name = (String) JOptionPane.showInputDialog(null, "set an institution for norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
-        if ((l_name != null) && (!l_name.isEmpty()))
-            for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                if (l_item.getName().equals(l_name)) {
-                    String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
-                    String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
+        IInstitution<INormCar> l_item = this.getInstitution(l_name);
+        if (l_item != null)
+        {
+            String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
+            String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
 
-                    new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed));
-
-                    break;
-                }
+            l_item.add( new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)) );
+        }
     }
 
     /**
@@ -190,12 +191,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         String[] l_names = this.getInstitutionList();
         String l_name = (String) JOptionPane.showInputDialog(null, "delete an institution", "Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
-        if ((l_name != null) && (!l_name.isEmpty()))
-            for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                if (l_item.getName().equals(l_name)) {
-                    CSimulationData.getInstance().getCarInstitutionQueue().remove(l_item);
-                    break;
-                }
+        IInstitution<INormCar> l_item = this.getInstitution(l_name);
+        if (l_item != null)
+            CSimulationData.getInstance().getCarInstitutionQueue().remove(l_item);
     }
 
     /**
@@ -212,6 +210,24 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             i++;
         }
         return l_names;
+    }
+
+
+    /** returns an institution object by the name
+     *
+     * @param p_name name
+     * @return null or institution
+     */
+    private IInstitution<INormCar> getInstitution(String p_name)
+    {
+        if ((p_name == null) && (p_name.isEmpty()))
+            return null;
+
+        for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+            if (l_item.getName().equals(p_name))
+                return l_item;
+
+        return null;
     }
 
 

@@ -47,13 +47,13 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      */
     private String m_sources = "default cars";
     /**
-     * selected source definition *
-     */
-    private String m_norms = "speed norm";
-    /**
      * reference to the institution menu, to remove it on update *
      */
     private JMenu m_institutionMenu = null;
+    /**
+     * name of the institution
+     */
+    private String m_institution = null;
 
 
     /**
@@ -69,10 +69,16 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == m_reference.get("default cars"))
+        if (e.getSource() == m_reference.get("default cars")) {
             this.setSource("default cars");
-        if (e.getSource() == m_reference.get("norm cars"))
+            return;
+        }
+        if (e.getSource() == m_reference.get("norm cars")) {
             this.setSource("norm cars");
+            return;
+        }
+
+        m_institution = ((JRadioButtonMenuItem)e.getSource()).getText();
 
     }
 
@@ -81,8 +87,12 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      * update method to modify internal menu structure
      */
     public void update() {
-        if (m_institutionMenu != null)
+        if (m_institutionMenu != null) {
             this.remove(m_institutionMenu);
+            m_institution = null;
+        }
+        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
+            return;
 
         ArrayList<String> l_list = new ArrayList();
         for (IInstitution l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
@@ -90,6 +100,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
         String[] l_array = new String[l_list.size()];
         l_list.toArray(l_array);
 
+        m_institution = l_array[0];
         m_institutionMenu = CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference);
         this.add(m_institutionMenu);
     }
@@ -113,6 +124,17 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      */
     public String getSourceSelection() {
         return m_sources;
+    }
+
+
+    /**
+     * returns the selected institution
+     *
+     * @return name
+     */
+    public String getInstitutionSelection()
+    {
+        return m_institution;
     }
 
 }

@@ -21,9 +21,12 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.norms.CNormSource;
+import de.tu_clausthal.in.winf.objects.norms.CRangeGPS;
+import de.tu_clausthal.in.winf.objects.norms.INormCar;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
@@ -69,9 +72,13 @@ class COSMMouseListener extends MouseAdapter {
         if (!m_drag)
             return;
 
+        Point l_left = m_rectangle.getFrom();
+        Point l_right = m_rectangle.getTo();
+        IInstitution<INormCar> l_institution = this.getSelectedInstitution();
+        if ((l_left == null) || (l_right == null) || (l_institution == null))
+            return;
 
-        //((JXMapViewer)e.getSource()).convertPointToGeoPosition(m_rectangle.getFrom());
-        //((JXMapViewer)e.getSource()).convertPointToGeoPosition(m_rectangle.getTo());
+        l_institution.getRange().add( new CRangeGPS( ((JXMapViewer)e.getSource()).convertPointToGeoPosition(l_left), ((JXMapViewer)e.getSource()).convertPointToGeoPosition(l_right) ) );
 
         m_drag = false;
         m_rectangle.clear();
@@ -137,6 +144,18 @@ class COSMMouseListener extends MouseAdapter {
             return true;
 
         return ((p_checkposition.getX() - p_size / 2) <= p_center.getX()) && ((p_checkposition.getX() + p_size / 2) >= p_center.getX()) && ((p_checkposition.getY() - p_size / 2) <= p_center.getY()) && ((p_checkposition.getY() + p_size / 2) >= p_center.getY());
+    }
+
+
+    private IInstitution<INormCar> getSelectedInstitution()
+    {
+        if ((m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()))
+            return null;
+
+
+
+
+        return null;
     }
 
 }

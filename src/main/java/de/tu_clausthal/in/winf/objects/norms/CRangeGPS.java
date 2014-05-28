@@ -34,7 +34,7 @@ import java.awt.geom.Point2D;
 /**
  * range for GPS rectangle
  */
-public class CRangeGPS implements IRange<ICar> {
+public class CRangeGPS implements IRange<INormCar> {
 
     /**
      * geoposition of the upper left corner of the rectangle
@@ -64,7 +64,7 @@ public class CRangeGPS implements IRange<ICar> {
 
 
     @Override
-    public boolean isWithin(ICar p_object) {
+    public boolean isWithin(INormCar p_object) {
         return (m_upperleft.getLongitude() <= p_object.getCurrentPosition().getLongitude()) && (m_lowerright.getLatitude() >= p_object.getCurrentPosition().getLatitude());
     }
 

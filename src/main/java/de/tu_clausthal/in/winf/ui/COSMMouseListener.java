@@ -27,6 +27,7 @@ import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
+import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -67,6 +68,10 @@ class COSMMouseListener extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         if (!m_drag)
             return;
+
+
+        //((JXMapViewer)e.getSource()).convertPointToGeoPosition(m_rectangle.getFrom());
+        //((JXMapViewer)e.getSource()).convertPointToGeoPosition(m_rectangle.getTo());
 
         m_drag = false;
         m_rectangle.clear();
@@ -132,19 +137,6 @@ class COSMMouseListener extends MouseAdapter {
             return true;
 
         return ((p_checkposition.getX() - p_size / 2) <= p_center.getX()) && ((p_checkposition.getX() + p_size / 2) >= p_center.getX()) && ((p_checkposition.getY() - p_size / 2) <= p_center.getY()) && ((p_checkposition.getY() + p_size / 2) >= p_center.getY());
-    }
-
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
     }
 
 }

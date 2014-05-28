@@ -63,10 +63,6 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
 
         String[] l_cars = {"default cars", "norm cars"};
         this.add(CMenuFactory.createRadioMenu("Sources", l_cars, this, m_reference));
-
-        String[] l_norm = {"speed norm"};
-        this.add(CMenuFactory.createRadioMenu("Norms", l_norm, this, m_reference));
-
     }
 
 
@@ -77,9 +73,6 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
             this.setSource("default cars");
         if (e.getSource() == m_reference.get("norm cars"))
             this.setSource("norm cars");
-
-        if (e.getSource() == m_reference.get("speed norm"))
-            this.setNorm("speed norm");
 
     }
 
@@ -114,17 +107,6 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
 
 
     /**
-     * sets the norm option
-     *
-     * @param p_name name
-     */
-    private void setNorm(String p_name) {
-        m_norms = p_name;
-        ((JRadioButtonMenuItem) m_reference.get(p_name)).setSelected(true);
-    }
-
-
-    /**
      * returns the current source selection
      *
      * @return string with definition
@@ -133,13 +115,4 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
         return m_sources;
     }
 
-
-    /**
-     * returns the norm selection
-     *
-     * @return string with definition
-     */
-    public String getNormSelection() {
-        return m_norms;
-    }
 }

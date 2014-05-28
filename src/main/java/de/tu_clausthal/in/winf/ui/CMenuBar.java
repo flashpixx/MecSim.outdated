@@ -84,8 +84,11 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_drivemodel = {"Nagel-Schreckenberg"};
         this.add(CMenuFactory.createRadioMenu("Driving Model", l_drivemodel, this, m_reference));
 
-        String[] l_institution = {"Create", "Delete"};
+        String[] l_institution = {"Create Institution", "Delete Institution"};
         this.add(CMenuFactory.createMenu("Institution", l_institution, this, m_reference));
+
+        String[] l_norm = {"Create Speed Norm", "Delete Speed Norm"};
+        this.add(CMenuFactory.createMenu("Norm", l_norm, this, m_reference));
     }
 
 
@@ -118,9 +121,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             if (e.getSource() == m_reference.get("Speed & Traffic Jam"))
                 this.setGraphWeight("Speed & Traffic Jam");
 
-            if (e.getSource() == m_reference.get("Create"))
+            if (e.getSource() == m_reference.get("Create Institution"))
                 this.createInstitution();
-            if (e.getSource() == m_reference.get("Delete"))
+            if (e.getSource() == m_reference.get("Delete Institution"))
                 this.deleteInstitution();
 
 

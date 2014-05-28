@@ -302,6 +302,22 @@ public class CDefaultCar implements ICar {
         return m_deceleration;
     }
 
+    @Override
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = new HashMap();
+
+        l_map.put("current speed", m_speed);
+        l_map.put("maximum speed", m_maxSpeed);
+        l_map.put("acceleration", m_acceleration);
+        l_map.put("deceleration", m_deceleration);
+        l_map.put("start position", m_StartPosition);
+        l_map.put("end position", m_EndPosition);
+        l_map.put("current edge id", this.getCurrentEdgeID());
+        l_map.put("current geoposition", this.getCurrentPosition());
+
+        return l_map;
+    }
+
 
     //@Override
     public String toString() {

@@ -21,10 +21,12 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;
 import de.tu_clausthal.in.winf.objects.CDefaultCar;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.util.Map;
 import java.util.Set;
 
 
@@ -51,6 +53,21 @@ public class CNormCar extends CDefaultCar implements INormCar {
     @Override
     public void isNormMatch(Set<INorm<INormCar>> p_norm) {
         m_norms = p_norm;
+    }
+
+    @Override
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = super.inspect();
+
+        for (INorm l_norm : m_norms) {
+            IInstitution l_institution = l_norm.getInstitution();
+            if (l_institution == null)
+                l_map.put(l_norm.getName(), "matched");
+            else
+                l_map.put(l_norm.getName(), "matched in institution " + l_institution.getName());
+        }
+
+        return l_map;
     }
 
 

@@ -47,4 +47,12 @@ public interface INorm<T> extends Serializable {
     public IInstitution<T> getInstitution();
 
 
+    /**
+     * name of the norm
+     *
+     * @return name
+     */
+    public String getName();
+
+
 }

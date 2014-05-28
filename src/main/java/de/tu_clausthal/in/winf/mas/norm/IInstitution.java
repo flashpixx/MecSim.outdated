@@ -86,17 +86,17 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, IPa
     /**
      * add a new superior institution
      *
-     * @param p_insitution institution object
+     * @param p_institution institution object
      */
-    public void addSuperior(IInstitution<T> p_insitution);
+    public void addSuperior(IInstitution<T> p_institution);
 
 
     /**
      * removes a superior institution
      *
-     * @param p_insitution institution object
+     * @param p_institution institution object
      */
-    public void removeSuperior(IInstitution<T> p_insitution);
+    public void removeSuperior(IInstitution<T> p_institution);
 
 
     /**
@@ -109,17 +109,17 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, IPa
     /**
      * add a new inferior institution
      *
-     * @param p_insitution institution object
+     * @param p_institution institution object
      */
-    public void addInferior(IInstitution<T> p_insitution);
+    public void addInferior(IInstitution<T> p_institution);
 
 
     /**
      * removes a inferior institution
      *
-     * @param p_insitution institution object
+     * @param p_institution institution object
      */
-    public void removeInferior(IInstitution<T> p_insitution);
+    public void removeInferior(IInstitution<T> p_institution);
 
 
 }

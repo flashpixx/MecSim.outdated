@@ -38,6 +38,10 @@ public class CSpeedNorm implements INorm<ICar> {
      * dedicated institution *
      */
     private IInstitution<ICar> m_institution = null;
+    /**
+     * name der norm *
+     */
+    private String m_name = this.getClass().getName();
 
     /**
      * ctor
@@ -46,6 +50,18 @@ public class CSpeedNorm implements INorm<ICar> {
      */
     public CSpeedNorm(IInstitution<ICar> p_institution) {
         m_institution = p_institution;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_institution defines the institution
+     * @param p_name        name of the norm
+     */
+    public CSpeedNorm(IInstitution<ICar> p_institution, String p_name) {
+        m_institution = p_institution;
+        m_name = p_name;
     }
 
 
@@ -68,6 +84,11 @@ public class CSpeedNorm implements INorm<ICar> {
     @Override
     public IInstitution<ICar> getInstitution() {
         return m_institution;
+    }
+
+    @Override
+    public String getName() {
+        return m_name;
     }
 
     /**

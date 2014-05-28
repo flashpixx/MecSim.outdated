@@ -32,6 +32,17 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>sonatype-oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -66,9 +77,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>net.java.dev.flexdock</groupId>
-            <artifactId>flexdock</artifactId>
-            <version>[0.4,)</version>
+            <groupId>org.dockingframes</groupId>
+            <artifactId>docking-frames-common</artifactId>
+            <version>1.1.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

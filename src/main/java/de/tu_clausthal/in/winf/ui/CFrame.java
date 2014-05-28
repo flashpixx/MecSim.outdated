@@ -21,11 +21,12 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.CGrid;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
+import bibliothek.gui.dock.common.SingleCDockable;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
-import org.flexdock.docking.DockingManager;
-import org.flexdock.docking.DockingPort;
-import org.flexdock.docking.defaults.DefaultDockingPort;
 import org.jfree.chart.ChartPanel;
 
 import javax.swing.*;
@@ -40,10 +41,10 @@ import java.awt.event.WindowEvent;
  */
 public class CFrame extends JFrame {
 
-    /**
-     * dock object *
-     */
-    private DefaultDockingPort m_dock = new DefaultDockingPort();
+    /** control of the dock component **/
+    private CControl m_control = new CControl( this );
+    /** grid of the windows **/
+    private CGrid m_grid = new CGrid(m_control);
 
 
     /**
@@ -69,22 +70,13 @@ public class CFrame extends JFrame {
                 CConfiguration.getInstance().get().WindowWidth = l_event.getWindow().getWidth();
                 CConfiguration.getInstance().write();
                 l_event.getWindow().dispose();
+                m_control.destroy();
             }
         });
-/*
 
-        m_dock.setSingleTabAllowed(true);
-        m_dock.setPreferredSize(new Dimension(CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight));
-
-        // register first component with name and add it to docking component
-        DockingManager.registerDockable(COSMViewer.getInstance(), "OSM");
-        DockingManager.dock(COSMViewer.getInstance(), (DockingPort) m_dock);
-
-        // add docking component to frame
-        this.add(m_dock);*/
-
-
-        this.add(COSMViewer.getInstance());
+        this.add( m_control.getContentArea() );
+        m_grid.add(0,0,1,1, this.createDockable("OSM", COSMViewer.getInstance(), false));
+        m_control.getContentArea().deploy(m_grid);
 
     }
 
@@ -96,9 +88,17 @@ public class CFrame extends JFrame {
      * @param p_panel chart object
      */
     public void addChart(String p_name, ChartPanel p_panel) {
-        DockingManager.registerDockable(p_panel, p_name);
-        DockingManager.dock(p_panel, (DockingPort) m_dock);
-        this.pack();
+        m_grid.add(0,0,1,1, this.createDockable(p_name, p_panel, false));
+    }
+
+
+    private SingleCDockable createDockable( String p_title, Component p_panel, boolean p_close )
+    {
+        DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
+        l_dock.setTitleText(p_title);
+        l_dock.setCloseable(p_close);
+        l_dock.add(p_panel);
+        return l_dock;
     }
 
 }

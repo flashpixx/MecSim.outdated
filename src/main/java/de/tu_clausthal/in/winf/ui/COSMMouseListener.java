@@ -44,7 +44,13 @@ class COSMMouseListener extends MouseAdapter {
      * popup *
      */
     private CMenuPopup m_popup = new CMenuPopup();
+    /**
+     * rectangle painter to set norm ranges *
+     */
     private CRectanglePainter m_rectangle = new CRectanglePainter();
+    /**
+     * flag to detect dragging *
+     */
     private boolean m_drag = false;
 
 

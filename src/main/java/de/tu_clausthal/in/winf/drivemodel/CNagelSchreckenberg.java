@@ -64,9 +64,6 @@ public class CNagelSchreckenberg implements IDriveModel {
         if ((p_car.getCurrentSpeed() > 0) && (m_random.nextDouble() <= p_car.getLingerProbability()))
             p_car.setCurrentSpeed(Math.max(1, (p_car.getCurrentSpeed() - p_car.getDeceleration())));
 
-        // update car
-        p_car.drive();
-
     }
 
 }

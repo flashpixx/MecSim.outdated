@@ -23,6 +23,8 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
+import org.flexdock.docking.DockingManager;
+import org.flexdock.docking.DockingPort;
 import org.flexdock.docking.defaults.DefaultDockingPort;
 import org.jfree.chart.ChartPanel;
 
@@ -69,8 +71,8 @@ public class CFrame extends JFrame {
                 l_event.getWindow().dispose();
             }
         });
-
 /*
+
         m_dock.setSingleTabAllowed(true);
         m_dock.setPreferredSize(new Dimension(CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight));
 
@@ -79,8 +81,8 @@ public class CFrame extends JFrame {
         DockingManager.dock(COSMViewer.getInstance(), (DockingPort) m_dock);
 
         // add docking component to frame
-        this.add(m_dock);
-*/
+        this.add(m_dock);*/
+
 
         this.add(COSMViewer.getInstance());
 
@@ -94,9 +96,9 @@ public class CFrame extends JFrame {
      * @param p_panel chart object
      */
     public void addChart(String p_name, ChartPanel p_panel) {
-        /*DockingManager.registerDockable(p_panel, p_name);
+        DockingManager.registerDockable(p_panel, p_name);
         DockingManager.dock(p_panel, (DockingPort) m_dock);
-        this.pack();*/
+        this.pack();
     }
 
 }

@@ -25,6 +25,7 @@ import de.tu_clausthal.in.winf.CConfiguration;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanKeyListener;
+import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
@@ -72,8 +73,9 @@ public class COSMViewer extends JXMapViewer {
 
         COSMMouseListener l_mouse = new COSMMouseListener();
 
-        this.addMouseListener(l_mouse); //new PanMouseInputListener(this) / new CenterMapListener(this)
-        this.addMouseMotionListener(l_mouse); // new PanMouseInputListener(this)
+        this.addMouseListener(l_mouse); // new CenterMapListener(this)
+        this.addMouseMotionListener(l_mouse);
+        this.addMouseListener(new PanMouseInputListener(this));
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
 

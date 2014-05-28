@@ -29,6 +29,7 @@ import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.norms.CDefaultInstitution;
+import de.tu_clausthal.in.winf.objects.norms.CSpeedNorm;
 import de.tu_clausthal.in.winf.objects.norms.INormCar;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
@@ -154,6 +155,10 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         if ((l_name != null) && (!l_name.isEmpty()))
             for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
                 if (l_item.getName().equals(l_name)) {
+                    String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
+                    String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
+
+                    new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed));
 
                     break;
                 }

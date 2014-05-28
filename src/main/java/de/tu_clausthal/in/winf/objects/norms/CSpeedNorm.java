@@ -24,31 +24,31 @@ package de.tu_clausthal.in.winf.objects.norms;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;
 import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
-import de.tu_clausthal.in.winf.objects.ICar;
 
 
 /**
  * norm for speed check
  */
-public class CSpeedNorm implements INorm<ICar> {
+public class CSpeedNorm implements INorm<INormCar> {
 
     /* maximum speed value for check **/
     private int m_maxspeed = Integer.MAX_VALUE;
     /**
      * dedicated institution *
      */
-    private IInstitution<ICar> m_institution = null;
+    private IInstitution<INormCar> m_institution = null;
     /**
      * name der norm *
      */
     private String m_name = this.getClass().getName();
+
 
     /**
      * ctor
      *
      * @param p_institution defines the institution
      */
-    public CSpeedNorm(IInstitution<ICar> p_institution) {
+    public CSpeedNorm(IInstitution<INormCar> p_institution) {
         m_institution = p_institution;
     }
 
@@ -59,7 +59,7 @@ public class CSpeedNorm implements INorm<ICar> {
      * @param p_institution defines the institution
      * @param p_name        name of the norm
      */
-    public CSpeedNorm(IInstitution<ICar> p_institution, String p_name) {
+    public CSpeedNorm(IInstitution<INormCar> p_institution, String p_name) {
         m_institution = p_institution;
         m_name = p_name;
     }
@@ -71,18 +71,33 @@ public class CSpeedNorm implements INorm<ICar> {
      * @param p_institution defines institution
      * @param p_maxspeed    defines maximum allowed speed
      */
-    public CSpeedNorm(IInstitution<ICar> p_institution, int p_maxspeed) {
+    public CSpeedNorm(IInstitution<INormCar> p_institution, int p_maxspeed) {
         m_institution = p_institution;
         m_maxspeed = p_maxspeed;
     }
 
+
+    /**
+     * ctor
+     *
+     * @param p_institution defines institution
+     * @param p_name        name of the norm
+     * @param p_maxspeed    defines maximum allowed speed
+     */
+    public CSpeedNorm(IInstitution<INormCar> p_institution, String p_name, int p_maxspeed) {
+        m_institution = p_institution;
+        m_maxspeed = p_maxspeed;
+        m_name = p_name;
+    }
+
+
     @Override
-    public INormCheckResult check(ICar p_object) {
+    public INormCheckResult check(INormCar p_object) {
         return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed);
     }
 
     @Override
-    public IInstitution<ICar> getInstitution() {
+    public IInstitution<INormCar> getInstitution() {
         return m_institution;
     }
 

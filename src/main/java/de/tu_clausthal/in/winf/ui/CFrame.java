@@ -22,9 +22,7 @@
 package de.tu_clausthal.in.winf.ui;
 
 import bibliothek.gui.dock.common.CControl;
-import bibliothek.gui.dock.common.CGrid;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
-import bibliothek.gui.dock.common.SingleCDockable;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
 import org.jfree.chart.ChartPanel;
@@ -37,14 +35,14 @@ import java.awt.event.WindowEvent;
 
 /**
  * create the main frame of the simulation
- * dockable component @see http://www.javalobby.org/java/forums/t52990.html
+ * dockable component @see http://dock.javaforge.com/
  */
 public class CFrame extends JFrame {
 
-    /** control of the dock component **/
-    private CControl m_control = new CControl( this );
-    /** grid of the windows **/
-    private CGrid m_grid = new CGrid(m_control);
+    /**
+     * control of the dock component *
+     */
+    private CControl m_control = new CControl(this);
 
 
     /**
@@ -74,10 +72,8 @@ public class CFrame extends JFrame {
             }
         });
 
-        this.add( m_control.getContentArea() );
-        m_grid.add(0,0,1,1, this.createDockable("OSM", COSMViewer.getInstance(), false));
-        m_control.getContentArea().deploy(m_grid);
-
+        this.add(m_control.getContentArea());
+        this.createDockable("OSM", COSMViewer.getInstance(), false);
     }
 
 
@@ -88,17 +84,24 @@ public class CFrame extends JFrame {
      * @param p_panel chart object
      */
     public void addChart(String p_name, ChartPanel p_panel) {
-        m_grid.add(0,0,1,1, this.createDockable(p_name, p_panel, false));
+        this.createDockable(p_name, p_panel, false);
     }
 
 
-    private SingleCDockable createDockable( String p_title, Component p_panel, boolean p_close )
-    {
-        DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
+    /**
+     * creates a single dockable and adds it to the dockable control
+     *
+     * @param p_title unique title
+     * @param p_panel panel
+     * @param p_close show close button
+     */
+    private void createDockable(String p_title, Component p_panel, boolean p_close) {
+        DefaultSingleCDockable l_dock = new DefaultSingleCDockable(p_title, p_title);
         l_dock.setTitleText(p_title);
         l_dock.setCloseable(p_close);
         l_dock.add(p_panel);
-        return l_dock;
+        m_control.addDockable(l_dock);
+        l_dock.setVisible(true);
     }
 
 }

@@ -51,7 +51,7 @@ class COSMMouseListener extends MouseAdapter {
     /**
      * rectangle painter to set norm ranges *
      */
-    private CRectanglePainter m_rectangle = new CRectanglePainter();
+    private CRectanglePainter m_rectangle = null;
     /**
      * flag to detect dragging *
      */
@@ -62,9 +62,16 @@ class COSMMouseListener extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         if ((e.getButton() != MouseEvent.BUTTON1) && (!m_drag))
             return;
+
+        // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
+        // and would create an exception, so we do the initialization process here
+        if (m_rectangle == null) {
+            m_rectangle = new CRectanglePainter();
+            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+        }
+
         m_drag = true;
         m_rectangle.from(e.getPoint());
-        COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
     }
 
     @Override
@@ -72,16 +79,18 @@ class COSMMouseListener extends MouseAdapter {
         if (!m_drag)
             return;
 
+        m_drag = false;
+
         Point l_left = m_rectangle.getFrom();
         Point l_right = m_rectangle.getTo();
+        m_rectangle.clear();
+
         IInstitution<INormCar> l_institution = this.getSelectedInstitution();
         if ((l_left == null) || (l_right == null) || (l_institution == null))
             return;
 
+        // add range to the institution
         l_institution.getRange().add( new CRangeGPS( ((JXMapViewer)e.getSource()).convertPointToGeoPosition(l_left), ((JXMapViewer)e.getSource()).convertPointToGeoPosition(l_right) ) );
-
-        m_drag = false;
-        m_rectangle.clear();
     }
 
     @Override

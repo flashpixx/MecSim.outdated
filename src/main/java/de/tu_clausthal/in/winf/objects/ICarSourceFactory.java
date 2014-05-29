@@ -44,9 +44,10 @@ public interface ICarSourceFactory extends Waypoint, Serializable {
     /**
      * creates a list of new car objects
      *
+     * @param p_currentstep current step of the simulation
      * @return collection of cars
      */
-    public Collection<ICar> generate();
+    public Collection<ICar> generate(int p_currentstep);
 
 
     /**

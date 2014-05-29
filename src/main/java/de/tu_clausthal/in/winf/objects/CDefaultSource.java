@@ -82,7 +82,7 @@ public class CDefaultSource implements ICarSourceFactory {
 
 
     @Override
-    public Collection<ICar> generate() {
+    public Collection<ICar> generate(int p_currentstep) {
         Collection<ICar> l_sources = new HashSet();
 
         // use random number on care creation, to avoid traffic jam on the source

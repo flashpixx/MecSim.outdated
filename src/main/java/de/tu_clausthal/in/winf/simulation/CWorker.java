@@ -200,7 +200,7 @@ public class CWorker implements Runnable {
         while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
             try {
 
-                CSimulationData.getInstance().getCarQueue().add(l_source.generate());
+                CSimulationData.getInstance().getCarQueue().add(l_source.generate(m_currentstep.get()));
                 CSimulationData.getInstance().getSourceQueue().push(l_source);
 
             } catch (Exception l_exception) {

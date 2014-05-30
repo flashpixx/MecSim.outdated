@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.simulation;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,10 +146,21 @@ public class CSimulation {
      * @bug reset
      */
     public void reset() {
-        this.stop();
+        if (this.isRunning()) {
+            m_pool.shutdown();
+            try {
+                m_pool.awaitTermination(2, TimeUnit.SECONDS);
+                m_pool = null;
+            } catch (InterruptedException l_exception) {
+                m_Logger.error(l_exception.getMessage());
+            }
+        }
         m_currentstep.set(0);
         CGraphHopper.getInstance().clear();
-        //COSMViewer.getInstance().clearOverlay("car");
+        COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
+        COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
+        COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
+
         m_Logger.info("simulation reset");
     }
 

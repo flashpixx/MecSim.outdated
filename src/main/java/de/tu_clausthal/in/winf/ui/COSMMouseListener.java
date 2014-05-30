@@ -140,6 +140,17 @@ class COSMMouseListener extends MouseAdapter {
     }
 
 
+    /** returns the popup listener
+     *
+     * @return popup listener
+     */
+    public CMenuPopup getPopupListener()
+    {
+        return m_popup;
+    }
+
+
+
     /**
      * checks if a point is in a box around another point
      *
@@ -156,13 +167,18 @@ class COSMMouseListener extends MouseAdapter {
     }
 
 
+    /** returns the selected institution
+     *
+     * @return institution
+     */
     private IInstitution<INormCar> getSelectedInstitution()
     {
         if ((m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()))
             return null;
 
-
-
+        for( IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll() )
+            if (l_item.getName().equals(m_popup.getInstitutionSelection()))
+                return l_item;
 
         return null;
     }

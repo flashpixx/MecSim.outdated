@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
@@ -158,8 +159,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         IInstitution<INormCar> l_item = this.getInstitution(l_name);
         if (l_item != null)
         {
-            String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
             String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
+            String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
 
             l_item.add( new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)) );
         }
@@ -177,6 +178,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             return;
 
         CSimulationData.getInstance().getCarInstitutionQueue().add(new CDefaultInstitution<INormCar>(l_input));
+        COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
     }
 
 
@@ -194,6 +196,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         IInstitution<INormCar> l_item = this.getInstitution(l_name);
         if (l_item != null)
             CSimulationData.getInstance().getCarInstitutionQueue().remove(l_item);
+        COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
     }
 
     /**

@@ -50,6 +50,10 @@ public class COSMViewer extends JXMapViewer {
      * compounend painter
      */
     private CompoundPainter m_painter = new CompoundPainter();
+    /**
+     * mouse listener
+     */
+    private COSMMouseListener m_mouse = new COSMMouseListener();
 
 
     /**
@@ -71,14 +75,11 @@ public class COSMViewer extends JXMapViewer {
 
         this.setOverlayPainter(m_painter);
 
-        COSMMouseListener l_mouse = new COSMMouseListener();
-
-        this.addMouseListener(l_mouse); // new CenterMapListener(this)
-        this.addMouseMotionListener(l_mouse);
+        this.addMouseListener(m_mouse); // new CenterMapListener(this)
+        this.addMouseMotionListener(m_mouse);
         this.addMouseListener(new PanMouseInputListener(this));
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
-
     }
 
 
@@ -100,5 +101,12 @@ public class COSMViewer extends JXMapViewer {
     public CompoundPainter getCompoundPainter() {
         return m_painter;
     }
+
+
+    /** returns the main mouse listener
+     *
+     * @return listener object
+     */
+    public COSMMouseListener getMainMouseListener() { return m_mouse; }
 
 }

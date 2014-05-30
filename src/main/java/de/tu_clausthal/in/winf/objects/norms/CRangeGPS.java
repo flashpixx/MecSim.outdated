@@ -26,6 +26,7 @@ import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactory;
+import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -44,6 +45,15 @@ public class CRangeGPS implements IRange<INormCar> {
      * geoposition of the lower right corner of the rectangle
      */
     private GeoPosition m_lowerright = null;
+    /**
+     * color of the rectangle fill color *
+     */
+    private Color m_regioColor = new Color(200, 0, 0, 35);
+    /**
+     * border color of the rectangle *
+     */
+    private Color m_borderColor = new Color(200, 0, 0);
+
 
 
     /**
@@ -76,11 +86,20 @@ public class CRangeGPS implements IRange<INormCar> {
         graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Point2D l_upperleft = factory.geoToPixel(m_upperleft, zoom);
+        Point2D l_upperleft  = factory.geoToPixel(m_upperleft, zoom);
         Point2D l_lowerright = factory.geoToPixel(m_lowerright, zoom);
+        Rectangle l_rectangle = new Rectangle( new Point((int)l_upperleft.getX(), (int)l_upperleft.getY()) );
+        l_rectangle.union( new Rectangle( new Point((int)l_lowerright.getX(), (int)l_lowerright.getY()) ) );
 
-        graphics2D.setColor(new Color(200, 0, 0, 75));
-        graphics2D.fillRect((int) l_upperleft.getX(), (int) l_upperleft.getY(), (int) (l_lowerright.getX() - l_upperleft.getX()), (int) (l_lowerright.getY() - l_upperleft.getY()));
-        graphics2D.dispose();
+        System.out.println(l_rectangle);
+        System.out.println(m_upperleft+"      "+m_lowerright);
+        System.out.println(l_upperleft+"      "+l_lowerright);
+        System.out.println(l_viewportBounds);
+        System.out.println();
+
+        graphics2D.setColor(m_borderColor);
+        graphics2D.draw(l_rectangle);
+        graphics2D.setColor(m_regioColor);
+        graphics2D.fill(l_rectangle);
     }
 }

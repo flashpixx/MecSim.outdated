@@ -22,11 +22,8 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.IRange;
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactory;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -40,19 +37,19 @@ public class CRangeGPS implements IRange<INormCar> {
     /**
      * geoposition of the upper left corner of the rectangle
      */
-    private GeoPosition m_upperleft = null;
+    protected GeoPosition m_upperleft = null;
     /**
      * geoposition of the lower right corner of the rectangle
      */
-    private GeoPosition m_lowerright = null;
+    protected GeoPosition m_lowerright = null;
     /**
      * color of the rectangle fill color *
      */
-    private Color m_regioColor = new Color(200, 0, 0, 35);
+    protected Color m_regioColor = new Color(200, 0, 0, 35);
     /**
      * border color of the rectangle *
      */
-    private Color m_borderColor = new Color(200, 0, 0);
+    protected Color m_borderColor = new Color(200, 0, 0);
 
 
 
@@ -80,26 +77,29 @@ public class CRangeGPS implements IRange<INormCar> {
 
 
     @Override
-    public void paint(Graphics2D graphics2D, TileFactory factory, int zoom) {
+    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
         graphics2D = (Graphics2D) graphics2D.create();
-        Rectangle l_viewportBounds = COSMViewer.getInstance().getViewportBounds();
-        graphics2D.translate(-l_viewportBounds.x, -l_viewportBounds.y);
+        Rectangle l_rectangle = viewer.getViewportBounds();
+        graphics2D.translate(-l_rectangle.x, -l_rectangle.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Point2D l_upperleft  = factory.geoToPixel(m_upperleft, zoom);
-        Point2D l_lowerright = factory.geoToPixel(m_lowerright, zoom);
-        Rectangle l_rectangle = new Rectangle( new Point((int)l_upperleft.getX(), (int)l_upperleft.getY()) );
-        l_rectangle.union( new Rectangle( new Point((int)l_lowerright.getX(), (int)l_lowerright.getY()) ) );
 
-        System.out.println(l_rectangle);
-        System.out.println(m_upperleft+"      "+m_lowerright);
-        System.out.println(l_upperleft+"      "+l_lowerright);
+        Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
+        Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
+        Rectangle l_rectanglemark = new Rectangle(new Point((int) l_upperleft.getX(), (int) l_upperleft.getY()));
+        l_rectanglemark.union(new Rectangle(new Point((int) l_lowerright.getX(), (int) l_lowerright.getY())));
+
+//        System.out.println(l_rectanglemark);
+//        System.out.println(m_upperleft+"      "+m_lowerright);
+//        System.out.println(l_upperleft+"      "+l_lowerright);
+/*
         System.out.println(l_viewportBounds);
         System.out.println();
-
+*/
         graphics2D.setColor(m_borderColor);
-        graphics2D.draw(l_rectangle);
+        graphics2D.draw(l_rectanglemark);
         graphics2D.setColor(m_regioColor);
-        graphics2D.fill(l_rectangle);
+        graphics2D.fill(l_rectanglemark);
+
     }
 }

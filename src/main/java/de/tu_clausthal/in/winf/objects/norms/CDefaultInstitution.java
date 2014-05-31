@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.*;
-import org.jxmapviewer.viewer.TileFactory;
+import org.jxmapviewer.JXMapViewer;
 
 import java.awt.*;
 import java.util.Collection;
@@ -234,8 +234,8 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public void paint(Graphics2D graphics2D, TileFactory factory, int zoom) {
+    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
         for (IRange<T> l_item : m_range)
-            l_item.paint(graphics2D, factory, zoom);
+            l_item.paint(graphics2D, viewer);
     }
 }

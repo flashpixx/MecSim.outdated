@@ -26,8 +26,8 @@ import com.graphhopper.routing.Path;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -326,14 +326,14 @@ public class CDefaultCar implements ICar {
 
 
     @Override
-    public void paint(Graphics2D graphics2D, TileFactory factory, int zoom) {
+    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
         GeoPosition l_position = this.getCurrentPosition();
         if (l_position == null)
             return;
 
-        int l_zoom = Math.max(9 - zoom, 2);
+        int l_zoom = Math.max(9 - viewer.getZoom(), 2);
 
-        Point2D l_point = factory.geoToPixel(l_position, zoom);
+        Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
         graphics2D.setColor(Color.DARK_GRAY);

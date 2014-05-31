@@ -167,10 +167,9 @@ public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         for (T l_item : convert2set())
-            l_item.paint(graphics2D, m_viewer.getTileFactory(), m_viewer.getZoom());
-
-        m_viewer.repaint();
+            l_item.paint(graphics2D, m_viewer);
         graphics2D.dispose();
+        m_viewer.repaint();
     }
 
 

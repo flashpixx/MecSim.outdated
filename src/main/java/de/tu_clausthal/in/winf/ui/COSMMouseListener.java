@@ -80,6 +80,7 @@ class COSMMouseListener extends MouseAdapter {
             return;
 
         m_drag = false;
+        m_rectangle.to(e.getPoint());
 
         Point l_left = m_rectangle.getFrom();
         Point l_right = m_rectangle.getTo();

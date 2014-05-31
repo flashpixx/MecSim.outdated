@@ -98,8 +98,8 @@ public class CRoutePainter implements Painter<JXMapViewer> {
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer jxMapViewer, int i, int i2) {
         graphics2D = (Graphics2D) graphics2D.create();
-        Rectangle l_rect = jxMapViewer.getViewportBounds();
-        graphics2D.translate(-l_rect.x, -l_rect.y);
+        Rectangle l_rectangle = jxMapViewer.getViewportBounds();
+        graphics2D.translate(-l_rectangle.x, -l_rectangle.y);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         graphics2D.setColor(m_color);

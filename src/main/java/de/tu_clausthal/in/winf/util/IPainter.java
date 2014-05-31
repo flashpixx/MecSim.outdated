@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.util;
 
-import org.jxmapviewer.viewer.TileFactory;
+import org.jxmapviewer.JXMapViewer;
 
 import java.awt.*;
 
@@ -31,7 +31,12 @@ import java.awt.*;
  */
 public interface IPainter {
 
-
-    void paint(Graphics2D graphics2D, TileFactory factory, int zoom);
+    /**
+     * generic painter method
+     *
+     * @param graphics2D graphic object
+     * @param viewer     jxmapviewer object
+     */
+    void paint(Graphics2D graphics2D, JXMapViewer viewer);
 
 }

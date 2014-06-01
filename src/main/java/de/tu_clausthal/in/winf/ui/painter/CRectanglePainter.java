@@ -137,7 +137,16 @@ public class CRectanglePainter implements Painter<Object> {
             return null;
 
         return new Point((int) (this.getFrom().getX() + m_rectangle.getWidth()), (int) (this.getFrom().getY() + m_rectangle.getHeight()));
+    }
 
+
+    /**
+     * returns the rectangle or null
+     *
+     * @return rectangle object
+     */
+    public Rectangle getRectangle() {
+        return m_rectangle;
     }
 
 

@@ -82,16 +82,15 @@ class COSMMouseListener extends MouseAdapter {
         m_drag = false;
         m_rectangle.to(e.getPoint());
 
-        Point l_left = m_rectangle.getFrom();
-        Point l_right = m_rectangle.getTo();
-        m_rectangle.clear();
-
         IInstitution<INormCar> l_institution = this.getSelectedInstitution();
-        if ((l_left == null) || (l_right == null) || (l_institution == null))
+        if ((m_rectangle.getRectangle() == null) || (l_institution == null)) {
+            m_rectangle.clear();
             return;
+        }
 
         // add range to the institution
-        l_institution.getRange().add( new CRangeGPS( ((JXMapViewer)e.getSource()).convertPointToGeoPosition(l_left), ((JXMapViewer)e.getSource()).convertPointToGeoPosition(l_right) ) );
+        l_institution.getRange().add(new CRangeGPS(((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getFrom()), ((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getTo())));
+        m_rectangle.clear();
     }
 
     @Override

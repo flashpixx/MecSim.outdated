@@ -78,25 +78,15 @@ public class CRangeGPS implements IRange<INormCar> {
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
-        graphics2D = (Graphics2D) graphics2D.create();
-        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
         Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
-        Rectangle l_rectanglemark = new Rectangle(new Point((int) l_upperleft.getX(), (int) l_upperleft.getY()));
-        l_rectanglemark.union(new Rectangle(new Point((int) l_lowerright.getX(), (int) l_lowerright.getY())));
 
-
-//        System.out.println(l_rectanglemark);
-//        System.out.println(m_upperleft+"      "+m_lowerright);
-//        System.out.println(l_upperleft+"      "+l_lowerright);
-//        System.out.println(l_view);
-//        System.out.println();
-
+        Rectangle l_rectangle = new Rectangle((int) Math.min(l_upperleft.getX(), l_lowerright.getX()), (int) Math.min(l_upperleft.getY(), l_lowerright.getY()),
+                (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
         graphics2D.setColor(m_borderColor);
-        graphics2D.draw(l_rectanglemark);
+        graphics2D.draw(l_rectangle);
         graphics2D.setColor(m_regioColor);
-        graphics2D.fill(l_rectanglemark);
+        graphics2D.fill(l_rectangle);
 
     }
 }

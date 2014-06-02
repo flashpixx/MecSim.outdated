@@ -38,6 +38,7 @@ import java.util.Set;
  *
  * @see http://openbook.galileocomputing.de/javainsel9/javainsel_19_019.htm#mj4d8b3bc0b550304f97713fa1788ff0f6
  * @see http://wiki.byte-welt.net/wiki/JTable_(Tutorial)%C2%A9
+ * @see http://wiki.byte-welt.net/wiki/JTable_%28Java_API%29
  */
 public class CInspector extends JScrollPane {
 
@@ -91,7 +92,7 @@ public class CInspector extends JScrollPane {
         /**
          * array with object values *
          */
-        ArrayList<Object> m_values = new ArrayList();
+        ArrayList<String> m_values = new ArrayList();
 
         private Set<TableModelListener> m_listener = new HashSet();
 
@@ -113,7 +114,7 @@ public class CInspector extends JScrollPane {
 
             for (Map.Entry<String, Object> l_item : l_data.entrySet()) {
                 m_names.add(l_item.getKey());
-                m_values.add(l_item.getValue());
+                m_values.add(l_item.getValue().toString());
                 System.out.println(l_item.getKey() + "\t" + l_item.getValue());
             }
 
@@ -140,7 +141,7 @@ public class CInspector extends JScrollPane {
                 case 0:
                     return String.class;
                 case 1:
-                    return Object.class;
+                    return String.class;
             }
             return null;
         }
@@ -195,3 +196,5 @@ public class CInspector extends JScrollPane {
     }
 
 }
+
+

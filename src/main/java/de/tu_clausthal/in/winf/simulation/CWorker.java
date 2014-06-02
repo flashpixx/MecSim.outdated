@@ -29,6 +29,7 @@ import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.norms.INormCar;
+import de.tu_clausthal.in.winf.ui.CInspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,6 +166,8 @@ public class CWorker implements Runnable {
 
                 m_drivemodel.update(m_currentstep.get(), l_car);
                 l_car.drive();
+                CInspector.getInstance().set(l_car);
+
 
                 if (!l_car.hasEndReached())
                     CSimulationData.getInstance().getCarQueue().push(l_car);

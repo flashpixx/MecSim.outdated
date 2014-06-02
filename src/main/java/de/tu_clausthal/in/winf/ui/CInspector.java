@@ -30,6 +30,7 @@ import java.util.Map;
 
 /**
  * inspector class to create a visual view of an object
+ * @see http://openbook.galileocomputing.de/javainsel9/javainsel_19_019.htm#mj4d8b3bc0b550304f97713fa1788ff0f6
  */
 public class CInspector extends JScrollPane {
 

@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
@@ -318,6 +320,15 @@ public class CDefaultCar extends IObject implements ICar {
         return l_map;
     }
 
+    /**
+     * returns the icon size
+     *
+     * @param viewer viewer object
+     * @return circle size
+     */
+    private int iconsize(JXMapViewer viewer) {
+        return Math.max(9 - viewer.getZoom(), 2);
+    }
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
@@ -325,8 +336,7 @@ public class CDefaultCar extends IObject implements ICar {
         if (l_position == null)
             return;
 
-        int l_zoom = Math.max(9 - viewer.getZoom(), 2);
-
+        int l_zoom = this.iconsize(viewer);
         Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
@@ -343,6 +353,23 @@ public class CDefaultCar extends IObject implements ICar {
             graphics2D.setColor(Color.RED);
 
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+    }
+
+
+    @Override
+    public void onClick(MouseEvent e, JXMapViewer viewer) {
+        GeoPosition l_position = this.getCurrentPosition();
+        if (l_position == null)
+            return;
+
+        int l_zoom = this.iconsize(viewer);
+        Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
+        Ellipse2D l_circle = new Ellipse2D.Double(l_point.getX(), l_point.getY(), l_zoom, l_zoom);
+
+        if (!l_circle.contains(e.getX(), e.getY()))
+            return;
+
+        //CInspector.getInstance().set(this);
     }
 
 }

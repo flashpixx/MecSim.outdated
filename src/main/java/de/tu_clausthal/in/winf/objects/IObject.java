@@ -52,6 +52,20 @@ public abstract class IObject extends JComponent implements MouseListener {
     public void onClick(MouseEvent e, JXMapViewer viewer) {
     }
 
+    /**
+     * returns a map to inspect current data of the car
+     *
+     * @return map with name and value
+     */
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = new HashMap();
+
+        l_map.put("class name", this.getClass().getName());
+        l_map.put("object id", this.hashCode());
+
+        return l_map;
+    }
+
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -72,21 +86,6 @@ public abstract class IObject extends JComponent implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-    }
-
-
-    /**
-     * returns a map to inspect current data of the car
-     *
-     * @return map with name and value
-     */
-    public Map<String, Object> inspect() {
-        Map<String, Object> l_map = new HashMap();
-
-        l_map.put("class name", this.getClass().getName());
-        l_map.put("object id", this.hashCode());
-
-        return l_map;
     }
 
 }

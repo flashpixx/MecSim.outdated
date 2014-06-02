@@ -24,13 +24,20 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.objects.IObject;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
  * inspector class to create a visual view of an object
+ *
  * @see http://openbook.galileocomputing.de/javainsel9/javainsel_19_019.htm#mj4d8b3bc0b550304f97713fa1788ff0f6
+ * @see http://wiki.byte-welt.net/wiki/JTable_(Tutorial)%C2%A9
  */
 public class CInspector extends JScrollPane {
 
@@ -69,21 +76,24 @@ public class CInspector extends JScrollPane {
      */
     public void set(IObject p_object) {
         m_model.set(p_object);
+
     }
 
     /**
      * table model to use the inspect object call *
      */
-    private class CTableModel extends AbstractTableModel {
+    private class CTableModel implements TableModel {
 
         /**
          * array with names *
          */
-        String[] m_names = null;
+        ArrayList<String> m_names = new ArrayList();
         /**
          * array with object values *
          */
-        Object[] m_values = null;
+        ArrayList<Object> m_values = new ArrayList();
+
+        private Set<TableModelListener> m_listener = new HashSet();
 
 
         /**
@@ -92,9 +102,8 @@ public class CInspector extends JScrollPane {
          * @param p_object object
          */
         public void set(IObject p_object) {
-            m_names = null;
-            m_values = null;
-
+            m_names.clear();
+            m_values.clear();
             if (p_object == null)
                 return;
 
@@ -102,15 +111,15 @@ public class CInspector extends JScrollPane {
             if ((l_data == null) || (l_data.isEmpty()))
                 return;
 
-            m_names = new String[l_data.size()];
-            m_values = new Object[l_data.size()];
-            int i = 0;
             for (Map.Entry<String, Object> l_item : l_data.entrySet()) {
-                m_names[i] = l_item.getKey();
-                m_values[i] = l_item.getValue();
-                //System.out.println(l_item.getKey()+"\t"+l_item.getValue());
-                i++;
+                m_names.add(l_item.getKey());
+                m_values.add(l_item.getValue());
+                System.out.println(l_item.getKey() + "\t" + l_item.getValue());
             }
+
+            TableModelEvent l_event = new TableModelEvent(this);
+            for (TableModelListener l_item : m_listener)
+                l_item.tableChanged(l_event);
         }
 
         @Override
@@ -126,11 +135,27 @@ public class CInspector extends JScrollPane {
         }
 
         @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return String.class;
+                case 1:
+                    return Object.class;
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        @Override
         public int getRowCount() {
-            if ((m_values == null) || (m_names == null))
+            if ((m_values.isEmpty()) || (m_names.isEmpty()))
                 return 0;
 
-            return m_names.length;
+            return m_names.size();
         }
 
         @Override
@@ -140,17 +165,32 @@ public class CInspector extends JScrollPane {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            if (((m_values == null) || (m_names == null)) || (rowIndex < 0) || (rowIndex >= m_names.length))
+            if (((m_values == null) || (m_names == null)) || (rowIndex < 0) || (rowIndex >= m_names.size()))
                 return null;
 
             switch (columnIndex) {
                 case 0:
-                    return m_names[rowIndex];
+                    return m_names.get(rowIndex);
                 case 1:
-                    return m_values[rowIndex];
+                    return m_values.get(rowIndex);
             }
 
             return null;
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+
+        }
+
+        @Override
+        public void addTableModelListener(TableModelListener l) {
+            m_listener.add(l);
+        }
+
+        @Override
+        public void removeTableModelListener(TableModelListener l) {
+            m_listener.remove(l);
         }
     }
 

@@ -45,11 +45,11 @@ public class CRangeGPS implements IRange<INormCar> {
     /**
      * color of the rectangle fill color *
      */
-    protected Color m_regioColor = new Color(200, 0, 0, 35);
+    protected Color m_regioColor = new Color(200, 0, 0, 25);
     /**
      * border color of the rectangle *
      */
-    protected Color m_borderColor = new Color(200, 0, 0);
+    protected Color m_borderColor = new Color(200, 0, 0, 75);
 
 
 
@@ -87,6 +87,5 @@ public class CRangeGPS implements IRange<INormCar> {
         graphics2D.draw(l_rectangle);
         graphics2D.setColor(m_regioColor);
         graphics2D.fill(l_rectangle);
-
     }
 }

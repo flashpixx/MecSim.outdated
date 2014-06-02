@@ -129,6 +129,7 @@ public class CSpeedNorm implements INorm<INormCar> {
          * ctor to create the value
          *
          * @param p_match value
+         * @param p_weight weight value
          */
         public CNormResultSpeed(boolean p_match, double p_weight) {
             if ((p_weight < 0) || (p_weight > 1))

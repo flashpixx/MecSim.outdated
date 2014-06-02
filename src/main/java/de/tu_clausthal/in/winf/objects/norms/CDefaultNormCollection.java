@@ -31,16 +31,16 @@ import java.util.*;
 /**
  * default norm collection
  */
-public class CDefaultNormCollection<T extends INorm> implements INormCollection<T> {
+public class CDefaultNormCollection<INormCar> implements INormCollection<INormCar> {
 
-    private HashSet<T> m_norms = new HashSet();
+    private HashSet<INorm<INormCar>> m_norms = new HashSet();
 
 
     @Override
-    public Map<T, INormCheckResult> match(T p_object) {
-        HashMap<T, INormCheckResult> l_map = new HashMap();
+    public Map<INorm<INormCar>, INormCheckResult> match(INormCar p_object) {
+        HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap();
 
-        for (T l_norm : m_norms) {
+        for (INorm<INormCar> l_norm : m_norms) {
             INormCheckResult l_check = l_norm.check(p_object);
             if ((l_check.getResult() instanceof Boolean) && ((Boolean) l_check.getResult()))
                 l_map.put(l_norm, l_check);
@@ -65,7 +65,7 @@ public class CDefaultNormCollection<T extends INorm> implements INormCollection<
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<INorm<INormCar>> iterator() {
         return m_norms.iterator();
     }
 
@@ -80,8 +80,8 @@ public class CDefaultNormCollection<T extends INorm> implements INormCollection<
     }
 
     @Override
-    public boolean add(T t) {
-        return m_norms.add(t);
+    public boolean add(INorm<INormCar> iNormCarINorm) {
+        return m_norms.add(iNormCarINorm);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CDefaultNormCollection<T extends INorm> implements INormCollection<
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends INorm<INormCar>> c) {
         return m_norms.addAll(c);
     }
 

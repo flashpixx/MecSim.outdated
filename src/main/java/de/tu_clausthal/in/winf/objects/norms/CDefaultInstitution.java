@@ -80,7 +80,6 @@ public class CDefaultInstitution<INormCar> implements IInstitution<INormCar> {
 
     @Override
     public void check(INormCar p_object) {
-
     }
 
     @Override

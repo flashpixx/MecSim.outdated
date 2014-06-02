@@ -28,10 +28,6 @@ import javax.swing.*;
 
 /**
  * inspector class to create a visual view of an object
- *
- * @see http://openbook.galileocomputing.de/javainsel9/javainsel_19_019.htm#mj4d8b3bc0b550304f97713fa1788ff0f6
- * @see http://wiki.byte-welt.net/wiki/JTable_(Tutorial)%C2%A9
- * @see http://wiki.byte-welt.net/wiki/JTable_%28Java_API%29
  */
 public class CInspector extends JTable {
 

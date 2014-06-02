@@ -26,37 +26,34 @@ import org.jxmapviewer.JXMapViewer;
 
 import java.awt.*;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 
 /**
  * default institution
  */
-public class CDefaultInstitution<T> implements IInstitution<T> {
+public class CDefaultInstitution<INormCar> implements IInstitution<INormCar> {
 
+    /**
+     * name of the institution *
+     */
     String m_name = "Default Institution";
-
     /**
      * superior institutions *
      */
-    private IInstitutionCollection<T> m_superior = new CDefaultInstitutionCollection();
-
+    private IInstitutionCollection<INormCar> m_superior = new CDefaultInstitutionCollection();
     /**
      * inferior instituions *
      */
-    private IInstitutionCollection<T> m_inferior = new CDefaultInstitutionCollection();
-
+    private IInstitutionCollection<INormCar> m_inferior = new CDefaultInstitutionCollection();
     /**
      * range collection with a disjoint set *
      */
-    private IRangeCollection<T> m_range = new CConjointRangeCollection();
-
+    private IRangeCollection<INormCar> m_range = new CConjointRangeCollection();
     /**
      * norms of the institution *
      */
-    private Set<INorm<T>> m_norms = new HashSet();
+    private INormCollection<INormCar> m_norms = new CDefaultNormCollection();
 
 
     /**
@@ -64,9 +61,6 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
      */
     public CDefaultInstitution() {
     }
-
-    ;
-
 
     /**
      * ctor to add a name
@@ -79,45 +73,28 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
         m_name = p_name;
     }
 
-
     @Override
     public String getName() {
         return m_name;
     }
 
     @Override
-    public void check(T p_object) {
-        if (!m_range.isWithin(p_object))
-            return;
+    public void check(INormCar p_object) {
 
-        // fuzzy arithmetic with max-norm
-        double l_weight = 0;
-        boolean l_result = true;
-        for (INorm l_item : m_norms) {
-            INormCheckResult l_check = l_item.check(p_object);
-            l_weight = Math.max(l_weight, l_check.getWeight());
-
-            if (l_check.getResult() instanceof Boolean)
-                l_result = l_result && (Boolean) l_check.getResult();
-        }
-
-        if ((l_result) && (l_weight >= 0.5)) {
-
-        }
     }
 
     @Override
-    public IRangeCollection<T> getRange() {
+    public IRangeCollection<INormCar> getRange() {
         return m_range;
     }
 
     @Override
-    public void update(INorm<T> p_norm) {
+    public void update(INorm<INormCar> p_norm) {
         m_norms.add(p_norm);
     }
 
     @Override
-    public void receive(INormMessage<T> p_message) {
+    public void receive(INormMessage<INormCar> p_message) {
         if (p_message.getTTL() < 0)
             return;
 
@@ -139,33 +116,13 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public IInstitutionCollection<T> getSuperior() {
+    public IInstitutionCollection getSuperior() {
         return m_superior;
     }
 
     @Override
-    public void addSuperior(IInstitution<T> p_insitution) {
-        m_superior.add(p_insitution);
-    }
-
-    @Override
-    public void removeSuperior(IInstitution<T> p_insitution) {
-        m_superior.remove(p_insitution);
-    }
-
-    @Override
-    public IInstitutionCollection<T> getInferior() {
+    public IInstitutionCollection getInferior() {
         return m_inferior;
-    }
-
-    @Override
-    public void addInferior(IInstitution<T> p_insitution) {
-        m_inferior.add(p_insitution);
-    }
-
-    @Override
-    public void removeInferior(IInstitution<T> p_insitution) {
-        m_inferior.add(p_insitution);
     }
 
     @Override
@@ -184,7 +141,7 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public Iterator<INorm<T>> iterator() {
+    public Iterator<INorm<INormCar>> iterator() {
         return m_norms.iterator();
     }
 
@@ -199,8 +156,8 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public boolean add(INorm iNorm) {
-        return m_norms.add(iNorm);
+    public boolean add(INorm<INormCar> iNormCarINorm) {
+        return m_norms.add(iNormCarINorm);
     }
 
     @Override
@@ -214,7 +171,7 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<T>> c) {
+    public boolean addAll(Collection<? extends INorm<INormCar>> c) {
         return m_norms.addAll(c);
     }
 
@@ -235,7 +192,8 @@ public class CDefaultInstitution<T> implements IInstitution<T> {
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
-        for (IRange<T> l_item : m_range)
+        for (IRange<INormCar> l_item : m_range)
             l_item.paint(graphics2D, viewer);
     }
+
 }

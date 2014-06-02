@@ -21,97 +21,96 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
-import de.tu_clausthal.in.winf.mas.norm.IRange;
-import de.tu_clausthal.in.winf.mas.norm.IRangeCollection;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
+import de.tu_clausthal.in.winf.mas.norm.INormCollection;
 
+import java.util.*;
 
 /**
- * conjoint range
+ * default norm collection
  */
-public class CConjointRangeCollection<T> implements IRangeCollection<T> {
+public class CDefaultNormCollection<T extends INorm> implements INormCollection<T> {
 
-    /**
-     * map with ranges *
-     */
-    private Set<IRange<T>> m_ranges = new HashSet();
+    private HashSet<T> m_norms = new HashSet();
 
 
     @Override
-    public boolean isWithin(T p_object) {
-        for (IRange<T> l_item : m_ranges)
-            if (!l_item.isWithin(p_object))
-                return false;
+    public Map<T, INormCheckResult> match(T p_object) {
+        HashMap<T, INormCheckResult> l_map = new HashMap();
 
-        return true;
+        for (T l_norm : m_norms) {
+            INormCheckResult l_check = l_norm.check(p_object);
+            if ((l_check.getResult() instanceof Boolean) && ((Boolean) l_check.getResult()))
+                l_map.put(l_norm, l_check);
+        }
+
+        return l_map;
     }
 
     @Override
     public int size() {
-        return m_ranges.size();
+        return m_norms.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return m_ranges.isEmpty();
+        return m_norms.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return m_ranges.contains(o);
+        return m_norms.contains(o);
     }
 
     @Override
-    public Iterator<IRange<T>> iterator() {
-        return m_ranges.iterator();
+    public Iterator<T> iterator() {
+        return m_norms.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return m_ranges.toArray();
+        return m_norms.toArray();
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
-        return m_ranges.toArray(a);
+    public <T1> T1[] toArray(T1[] a) {
+        return m_norms.toArray(a);
     }
 
     @Override
-    public boolean add(IRange iRange) {
-        return m_ranges.add(iRange);
+    public boolean add(T t) {
+        return m_norms.add(t);
     }
 
     @Override
     public boolean remove(Object o) {
-        return m_ranges.remove(o);
+        return m_norms.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return m_ranges.containsAll(c);
+        return m_norms.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends IRange<T>> c) {
-        return m_ranges.addAll(c);
+    public boolean addAll(Collection<? extends T> c) {
+        return m_norms.addAll(c);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return m_ranges.removeAll(c);
+        return m_norms.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return m_ranges.retainAll(c);
+        return m_norms.retainAll(c);
     }
 
     @Override
     public void clear() {
-        m_ranges.clear();
+        m_norms.clear();
     }
 }

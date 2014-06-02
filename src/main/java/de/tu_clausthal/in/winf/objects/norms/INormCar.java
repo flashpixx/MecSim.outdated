@@ -22,9 +22,10 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
 import de.tu_clausthal.in.winf.objects.ICar;
 
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -35,8 +36,8 @@ public interface INormCar extends ICar {
     /**
      * matching method of a norm
      *
-     * @param p_norm set of norm objects
+     * @param p_norm map of norm objects
      */
-    public void isNormMatch(Set<INorm<INormCar>> p_norm);
+    public void isNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm);
 
 }

@@ -23,11 +23,11 @@ package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
 import de.tu_clausthal.in.winf.objects.CDefaultCar;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -38,7 +38,7 @@ public class CNormCar extends CDefaultCar implements INormCar {
     /**
      * set with norms, that are matched *
      */
-    private Set<INorm<INormCar>> m_norms = null;
+    protected Map<INorm<INormCar>, INormCheckResult> m_norms = null;
 
 
     /**
@@ -50,25 +50,25 @@ public class CNormCar extends CDefaultCar implements INormCar {
         super(p_StartPosition);
     }
 
-    @Override
-    public void isNormMatch(Set<INorm<INormCar>> p_norm) {
-        m_norms = p_norm;
-    }
 
     @Override
     public Map<String, Object> inspect() {
         Map<String, Object> l_map = super.inspect();
 
-        for (INorm l_norm : m_norms) {
-            IInstitution l_institution = l_norm.getInstitution();
+        for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
+            IInstitution l_institution = l_item.getKey().getInstitution();
             if (l_institution == null)
-                l_map.put(l_norm.getName(), "matched");
+                l_map.put(l_item.getKey().getName(), "matched with weight " + l_item.getValue().getWeight());
             else
-                l_map.put(l_norm.getName(), "matched in institution " + l_institution.getName());
+                l_map.put(l_item.getKey().getName(), "matched in institution " + l_institution.getName() + " weight " + l_item.getValue().getWeight());
         }
 
         return l_map;
     }
 
 
+    @Override
+    public void isNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm) {
+        m_norms = p_norm;
+    }
 }

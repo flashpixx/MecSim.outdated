@@ -31,6 +31,10 @@ import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
  */
 public class CSpeedNorm implements INorm<INormCar> {
 
+    /**
+     * tolerance value in [0,1] *
+     */
+    private double m_tolerance = 0.1;
     /* maximum speed value for check **/
     private int m_maxspeed = Integer.MAX_VALUE;
     /**
@@ -93,7 +97,7 @@ public class CSpeedNorm implements INorm<INormCar> {
 
     @Override
     public INormCheckResult check(INormCar p_object) {
-        return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed);
+        return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed, Math.max(0, Math.min(1, (p_object.getCurrentSpeed() - m_maxspeed) / (m_maxspeed * m_tolerance))));
     }
 
     @Override
@@ -115,6 +119,10 @@ public class CSpeedNorm implements INorm<INormCar> {
          * satisfiable boolean *
          */
         private boolean m_match = false;
+        /**
+         * weight *
+         */
+        private double m_weight = 1;
 
 
         /**
@@ -122,13 +130,17 @@ public class CSpeedNorm implements INorm<INormCar> {
          *
          * @param p_match value
          */
-        public CNormResultSpeed(boolean p_match) {
+        public CNormResultSpeed(boolean p_match, double p_weight) {
+            if ((p_weight < 0) || (p_weight > 1))
+                throw new IllegalArgumentException("weight must be in [0,1]");
+
             m_match = p_match;
+            m_weight = p_weight;
         }
 
         @Override
         public double getWeight() {
-            return 1;
+            return m_weight;
         }
 
         @Override

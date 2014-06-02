@@ -31,8 +31,7 @@ import java.util.Set;
 
 
 /**
- *
- *
+ * disjoint range
  */
 public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
     private Set<IRange<T>> m_ranges = new HashSet();

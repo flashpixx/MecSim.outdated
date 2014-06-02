@@ -103,10 +103,13 @@ public class COSMViewer extends JXMapViewer {
     }
 
 
-    /** returns the main mouse listener
+    /**
+     * returns the main mouse listener
      *
      * @return listener object
      */
-    public COSMMouseListener getMainMouseListener() { return m_mouse; }
+    public COSMMouseListener getMainMouseListener() {
+        return m_mouse;
+    }
 
 }

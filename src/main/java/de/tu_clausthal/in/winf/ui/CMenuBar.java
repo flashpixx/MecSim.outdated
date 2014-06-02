@@ -21,7 +21,6 @@
 
 package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
@@ -144,8 +143,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     }
 
 
-    /** creates a new speed norm
-     *
+    /**
+     * creates a new speed norm
      */
     private void createSpeedNorm() {
         if (CSimulation.getInstance().isRunning())
@@ -157,12 +156,11 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_names = this.getInstitutionList();
         String l_name = (String) JOptionPane.showInputDialog(null, "set an institution for norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
         IInstitution<INormCar> l_item = this.getInstitution(l_name);
-        if (l_item != null)
-        {
+        if (l_item != null) {
             String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
             String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
 
-            l_item.add( new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)) );
+            l_item.add(new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)));
         }
     }
 
@@ -216,13 +214,13 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     }
 
 
-    /** returns an institution object by the name
+    /**
+     * returns an institution object by the name
      *
      * @param p_name name
      * @return null or institution
      */
-    private IInstitution<INormCar> getInstitution(String p_name)
-    {
+    private IInstitution<INormCar> getInstitution(String p_name) {
         if ((p_name == null) && (p_name.isEmpty()))
             return null;
 

@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends IPainter {
+public interface ICar extends IPainter, IObject {
 
     /**
      * returns the geoposition of the start
@@ -149,13 +149,5 @@ public interface ICar extends IPainter {
      * @return number (greater than zero)
      */
     public int getDeceleration();
-
-
-    /**
-     * returns a map to inspect current data of the car
-     *
-     * @return map with name and value
-     */
-    public Map<String, Object> inspect();
 
 }

@@ -78,7 +78,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
             return;
         }
 
-        m_institution = ((JRadioButtonMenuItem)e.getSource()).getText();
+        m_institution = ((JRadioButtonMenuItem) e.getSource()).getText();
 
     }
 
@@ -132,8 +132,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      *
      * @return name
      */
-    public String getInstitutionSelection()
-    {
+    public String getInstitutionSelection() {
         return m_institution;
     }
 

@@ -52,7 +52,6 @@ public class CRangeGPS implements IRange<INormCar> {
     protected Color m_borderColor = new Color(200, 0, 0, 75);
 
 
-
     /**
      * ctor to create the rectangle
      *

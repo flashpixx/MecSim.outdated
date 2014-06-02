@@ -25,7 +25,6 @@ import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
-import org.jfree.chart.ChartPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,6 +72,7 @@ public class CFrame extends JFrame {
         });
 
         this.add(m_control.getContentArea());
+        this.createDockable("Inspector", CInspector.getInstance(), false);
         this.createDockable("OSM", COSMViewer.getInstance(), false);
     }
 
@@ -103,7 +103,6 @@ public class CFrame extends JFrame {
         m_control.addDockable(l_dock);
         l_dock.setVisible(true);
     }
-
 
 
 }

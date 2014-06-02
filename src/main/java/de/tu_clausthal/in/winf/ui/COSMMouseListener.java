@@ -140,15 +140,14 @@ class COSMMouseListener extends MouseAdapter {
     }
 
 
-    /** returns the popup listener
+    /**
+     * returns the popup listener
      *
      * @return popup listener
      */
-    public CMenuPopup getPopupListener()
-    {
+    public CMenuPopup getPopupListener() {
         return m_popup;
     }
-
 
 
     /**
@@ -167,16 +166,16 @@ class COSMMouseListener extends MouseAdapter {
     }
 
 
-    /** returns the selected institution
+    /**
+     * returns the selected institution
      *
      * @return institution
      */
-    private IInstitution<INormCar> getSelectedInstitution()
-    {
+    private IInstitution<INormCar> getSelectedInstitution() {
         if ((m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()))
             return null;
 
-        for( IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll() )
+        for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
             if (l_item.getName().equals(m_popup.getInstitutionSelection()))
                 return l_item;
 

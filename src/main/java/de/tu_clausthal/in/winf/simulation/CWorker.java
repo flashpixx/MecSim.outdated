@@ -165,8 +165,6 @@ public class CWorker implements Runnable {
 
                 m_drivemodel.update(m_currentstep.get(), l_car);
                 l_car.drive();
-                //CInspector.getInstance().set(l_car);
-
 
                 if (!l_car.hasEndReached())
                     CSimulationData.getInstance().getCarQueue().push(l_car);

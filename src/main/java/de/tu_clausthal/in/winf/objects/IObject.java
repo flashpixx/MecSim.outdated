@@ -21,19 +21,72 @@
 
 package de.tu_clausthal.in.winf.objects;
 
+import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.jxmapviewer.JXMapViewer;
+
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.HashMap;
 import java.util.Map;
 
 
 /**
- * global object of the simulation
+ * global object of the simulation with mouse event handler
  */
-public interface IObject {
+public abstract class IObject extends JComponent implements MouseListener {
+
+    /**
+     * ctor to register component on the viewer *
+     */
+    public IObject() {
+        COSMViewer.getInstance().addMouseListener(this);
+    }
+
+    /**
+     * click method which is called by a click on the object
+     *
+     * @param e      mouse event
+     * @param viewer viewer
+     */
+    public void onClick(MouseEvent e, JXMapViewer viewer) {
+    }
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        this.onClick(e, COSMViewer.getInstance());
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
 
     /**
      * returns a map to inspect current data of the car
      *
      * @return map with name and value
      */
-    public Map<String, Object> inspect();
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = new HashMap();
+
+        l_map.put("class name", this.getClass().getName());
+        l_map.put("object id", this.hashCode());
+
+        return l_map;
+    }
 
 }

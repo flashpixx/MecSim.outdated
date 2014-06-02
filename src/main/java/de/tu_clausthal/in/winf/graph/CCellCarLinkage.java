@@ -399,16 +399,6 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
         return m_cells[p_position] == null;
     }
 
-    @Override
-    public String toString() {
-        String l_out = "edge [" + m_edgeid + "]\tcells [" + m_cells.length + "]\tcars [" + m_cars.size() + "]\tset [";
-        for (int i = 0; i < m_cells.length; i++)
-            if (m_cells[i] != null)
-                l_out += " " + i;
-        l_out += " ]";
-
-        return l_out;
-    }
 
     @Override
     public int compareTo(CCellCarLinkage p_edgelink) {

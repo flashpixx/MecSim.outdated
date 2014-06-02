@@ -66,9 +66,4 @@ public class CSpeedUp implements Weighting {
         return p_edge.getDistance() / l_speed;
     }
 
-    @Override
-    public String toString() {
-        return "SpeedUp";
-    }
-
 }

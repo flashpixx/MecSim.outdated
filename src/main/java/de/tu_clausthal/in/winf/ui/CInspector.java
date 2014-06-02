@@ -103,11 +103,12 @@ public class CInspector extends JScrollPane {
                 return;
 
             m_names = new String[l_data.size()];
-            m_values = new String[l_data.size()];
+            m_values = new Object[l_data.size()];
             int i = 0;
             for (Map.Entry<String, Object> l_item : l_data.entrySet()) {
                 m_names[i] = l_item.getKey();
                 m_values[i] = l_item.getValue();
+                //System.out.println(l_item.getKey()+"\t"+l_item.getValue());
                 i++;
             }
         }

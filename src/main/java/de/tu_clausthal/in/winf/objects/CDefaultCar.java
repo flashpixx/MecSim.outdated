@@ -44,7 +44,7 @@ import java.util.Random;
  *
  * @note the paint method color the car depend on the current speed and need not to be call dispose
  */
-public class CDefaultCar implements ICar {
+public class CDefaultCar extends IObject implements ICar {
 
     /**
      * logger instance *
@@ -304,7 +304,7 @@ public class CDefaultCar implements ICar {
 
     @Override
     public Map<String, Object> inspect() {
-        Map<String, Object> l_map = new HashMap();
+        Map<String, Object> l_map = super.inspect();
 
         l_map.put("current speed", m_speed);
         l_map.put("maximum speed", m_maxSpeed);
@@ -316,12 +316,6 @@ public class CDefaultCar implements ICar {
         l_map.put("current geoposition", this.getCurrentPosition());
 
         return l_map;
-    }
-
-
-    //@Override
-    public String toString() {
-        return "speed [" + this.getCurrentSpeed() + " / " + this.getMaximumSpeed() + "]\tstart- / end- / current position [" + this.getStartPosition() + " / " + this.getEndPosition() + " / " + this.getCurrentPosition() + "]\tlinger prop [" + this.getLingerProbability() + "]\tedge [" + this.getCurrentEdgeID() + "]";
     }
 
 
@@ -350,4 +344,5 @@ public class CDefaultCar implements ICar {
 
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
     }
+
 }

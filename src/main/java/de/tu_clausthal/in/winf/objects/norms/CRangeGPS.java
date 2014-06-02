@@ -22,17 +22,21 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.IRange;
+import de.tu_clausthal.in.winf.objects.IObject;
+import de.tu_clausthal.in.winf.ui.CInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.Map;
 
 
 /**
  * range for GPS rectangle
  */
-public class CRangeGPS implements IRange<INormCar> {
+public class CRangeGPS extends IObject implements IRange<INormCar> {
 
     /**
      * geoposition of the upper left corner of the rectangle
@@ -45,7 +49,7 @@ public class CRangeGPS implements IRange<INormCar> {
     /**
      * color of the rectangle fill color *
      */
-    protected Color m_regioColor = new Color(200, 0, 0, 25);
+    protected Color m_regioColor = new Color(200, 0, 0, 35);
     /**
      * border color of the rectangle *
      */
@@ -66,6 +70,17 @@ public class CRangeGPS implements IRange<INormCar> {
 
         m_upperleft = p_upperleft;
         m_lowerright = p_lowerright;
+
+    }
+
+    @Override
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = super.inspect();
+
+        l_map.put("upper left", m_upperleft);
+        l_map.put("lower right", m_lowerright);
+
+        return l_map;
     }
 
 
@@ -86,5 +101,18 @@ public class CRangeGPS implements IRange<INormCar> {
         graphics2D.draw(l_rectangle);
         graphics2D.setColor(m_regioColor);
         graphics2D.fill(l_rectangle);
+    }
+
+    @Override
+    public void onClick(MouseEvent e, JXMapViewer viewer) {
+        Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
+        Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
+        Rectangle l_rectangle = new Rectangle((int) (Math.min(l_upperleft.getX(), l_lowerright.getX()) - viewer.getViewportBounds().getX()), (int) (Math.min(l_upperleft.getY(), l_lowerright.getY()) - viewer.getViewportBounds().getY()),
+                (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
+
+        if (!l_rectangle.contains(e.getPoint()))
+            return;
+
+        CInspector.getInstance().set(this);
     }
 }

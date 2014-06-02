@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends IPainter, IObject {
+public interface ICar extends IPainter {
 
     /**
      * returns the geoposition of the start

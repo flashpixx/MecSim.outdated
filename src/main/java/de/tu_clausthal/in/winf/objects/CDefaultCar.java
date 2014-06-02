@@ -26,6 +26,7 @@ import com.graphhopper.routing.Path;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.ui.CInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
@@ -314,8 +315,11 @@ public class CDefaultCar extends IObject implements ICar {
         l_map.put("deceleration", m_deceleration);
         l_map.put("start position", m_StartPosition);
         l_map.put("end position", m_EndPosition);
-        l_map.put("current edge id", this.getCurrentEdgeID());
-        l_map.put("current geoposition", this.getCurrentPosition());
+
+        synchronized (this) {
+            l_map.put("current edge id", this.getCurrentEdgeID());
+            l_map.put("current geoposition", this.getCurrentPosition());
+        }
 
         return l_map;
     }
@@ -364,12 +368,12 @@ public class CDefaultCar extends IObject implements ICar {
 
         int l_zoom = this.iconsize(viewer);
         Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
-        Ellipse2D l_circle = new Ellipse2D.Double(l_point.getX(), l_point.getY(), l_zoom, l_zoom);
+        Ellipse2D l_circle = new Ellipse2D.Double(l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom);
 
         if (!l_circle.contains(e.getX(), e.getY()))
             return;
 
-        //CInspector.getInstance().set(this);
+        CInspector.getInstance().set(this);
     }
 
 }

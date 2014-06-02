@@ -69,7 +69,7 @@ public class CNormCar extends CDefaultCar implements INormCar {
 
 
     @Override
-    public void isNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm) {
+    public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm) {
         m_norms = p_norm;
     }
 }

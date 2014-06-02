@@ -46,6 +46,9 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
                 l_map.put(l_norm, l_check);
         }
 
+        if (l_map.isEmpty())
+            return null;
+
         return l_map;
     }
 

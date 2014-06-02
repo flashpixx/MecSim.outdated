@@ -175,7 +175,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         if ((l_input == null) || (l_input.isEmpty()))
             return;
 
-        CSimulationData.getInstance().getCarInstitutionQueue().add(new CDefaultInstitution<INormCar>(l_input));
+        CSimulationData.getInstance().getCarInstitutionQueue().add(new CDefaultInstitution(l_input));
         COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
     }
 

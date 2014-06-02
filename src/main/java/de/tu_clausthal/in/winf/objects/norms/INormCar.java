@@ -38,6 +38,6 @@ public interface INormCar extends ICar {
      *
      * @param p_norm map of norm objects
      */
-    public void isNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm);
+    public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm);
 
 }

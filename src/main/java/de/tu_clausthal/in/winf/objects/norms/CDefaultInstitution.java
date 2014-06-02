@@ -32,7 +32,7 @@ import java.util.Iterator;
 /**
  * default institution
  */
-public class CDefaultInstitution<INormCar> implements IInstitution<INormCar> {
+public class CDefaultInstitution implements IInstitution<INormCar> {
 
     /**
      * name of the institution *
@@ -80,6 +80,7 @@ public class CDefaultInstitution<INormCar> implements IInstitution<INormCar> {
 
     @Override
     public void check(INormCar p_object) {
+        p_object.setNormMatch(m_norms.match(p_object));
     }
 
     @Override

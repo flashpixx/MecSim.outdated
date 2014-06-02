@@ -24,13 +24,6 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.objects.IObject;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -40,25 +33,18 @@ import java.util.Set;
  * @see http://wiki.byte-welt.net/wiki/JTable_(Tutorial)%C2%A9
  * @see http://wiki.byte-welt.net/wiki/JTable_%28Java_API%29
  */
-public class CInspector extends JScrollPane {
+public class CInspector extends JTable {
 
     /**
      * singleton instance *
      */
     private static CInspector s_inspector = new CInspector();
-    /**
-     * table model *
-     */
-    private CTableModel m_model = new CTableModel();
 
     /**
      * private ctor *
      */
     private CInspector() {
-        JTable l_table = new JTable(m_model);
-        l_table.createDefaultColumnsFromModel();
-        l_table.setFillsViewportHeight(true);
-        this.add(l_table);
+        super(new CInspectorModel());
     }
 
     /**
@@ -76,123 +62,7 @@ public class CInspector extends JScrollPane {
      * @param p_object object
      */
     public void set(IObject p_object) {
-        m_model.set(p_object);
-
-    }
-
-    /**
-     * table model to use the inspect object call *
-     */
-    private class CTableModel implements TableModel {
-
-        /**
-         * array with names *
-         */
-        ArrayList<String> m_names = new ArrayList();
-        /**
-         * array with object values *
-         */
-        ArrayList<String> m_values = new ArrayList();
-
-        private Set<TableModelListener> m_listener = new HashSet();
-
-
-        /**
-         * sets a new object
-         *
-         * @param p_object object
-         */
-        public void set(IObject p_object) {
-            m_names.clear();
-            m_values.clear();
-            if (p_object == null)
-                return;
-
-            Map<String, Object> l_data = p_object.inspect();
-            if ((l_data == null) || (l_data.isEmpty()))
-                return;
-
-            for (Map.Entry<String, Object> l_item : l_data.entrySet()) {
-                m_names.add(l_item.getKey());
-                m_values.add(l_item.getValue().toString());
-                System.out.println(l_item.getKey() + "\t" + l_item.getValue());
-            }
-
-            TableModelEvent l_event = new TableModelEvent(this);
-            for (TableModelListener l_item : m_listener)
-                l_item.tableChanged(l_event);
-        }
-
-        @Override
-        public String getColumnName(int col) {
-            switch (col) {
-                case 0:
-                    return "Property";
-                case 1:
-                    return "Value";
-            }
-
-            return null;
-        }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            switch (columnIndex) {
-                case 0:
-                    return String.class;
-                case 1:
-                    return String.class;
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return false;
-        }
-
-        @Override
-        public int getRowCount() {
-            if ((m_values.isEmpty()) || (m_names.isEmpty()))
-                return 0;
-
-            return m_names.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return 2;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            if (((m_values == null) || (m_names == null)) || (rowIndex < 0) || (rowIndex >= m_names.size()))
-                return null;
-
-            switch (columnIndex) {
-                case 0:
-                    return m_names.get(rowIndex);
-                case 1:
-                    return m_values.get(rowIndex);
-            }
-
-            return null;
-        }
-
-        @Override
-        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-        }
-
-        @Override
-        public void addTableModelListener(TableModelListener l) {
-            m_listener.add(l);
-        }
-
-        @Override
-        public void removeTableModelListener(TableModelListener l) {
-            m_listener.remove(l);
-        }
+        ((CInspectorModel) this.getModel()).set(p_object);
     }
 
 }

@@ -73,7 +73,7 @@ public class CFrame extends JFrame {
 
         this.add(m_control.getContentArea());
         this.createDockable("Inspector", CInspector.getInstance(), false);
-        this.createDockable("OSM", COSMViewer.getInstance(), false);
+        this.createDockable("OSM", new JScrollPane(COSMViewer.getInstance()), false);
     }
 
 

@@ -77,7 +77,8 @@ public abstract class IObject extends JComponent implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        this.onClick(e, COSMViewer.getInstance());
+        if (e.getButton() == MouseEvent.BUTTON1)
+            this.onClick(e, COSMViewer.getInstance());
     }
 
     @Override

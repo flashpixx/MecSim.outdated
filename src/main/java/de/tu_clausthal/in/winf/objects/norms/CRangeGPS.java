@@ -131,7 +131,13 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
         Rectangle l_rectangle = new Rectangle((int) (Math.min(l_upperleft.getX(), l_lowerright.getX()) - viewer.getViewportBounds().getX()), (int) (Math.min(l_upperleft.getY(), l_lowerright.getY()) - viewer.getViewportBounds().getY()),
                 (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
 
-        if (l_rectangle.contains(e.getPoint()))
+        if (!l_rectangle.contains(e.getPoint()))
+            return;
+
+        if (e.isControlDown()) {
+            m_institution.getRange().remove(this);
+            this.release();
+        } else
             CInspector.getInstance().set(this);
     }
 }

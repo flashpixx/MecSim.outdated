@@ -166,6 +166,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
             if ((l_normname == null) || (l_normname.isEmpty()))
                 return;
+            if (l_normname.contains(":"))
+                throw new IllegalArgumentException(": not allowed");
 
             String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
             if ((l_speed == null) || (l_speed.isEmpty()))
@@ -187,13 +189,28 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
             throw new IllegalStateException("institutions are not exist, add an institution first");
-/*
+
         ArrayList<String> l_names = new ArrayList();
-        ArrayList<INorm<INormCar>>
         for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-            for( INorm<INormCar> l_norm : l_item )
-                l_norm
-*/
+            for (INorm<INormCar> l_norm : l_item)
+                l_names.add(l_item.getName() + ":" + l_norm.getName());
+        String l_name = (String) JOptionPane.showInputDialog(null, "delete an norm", "Norm", JOptionPane.QUESTION_MESSAGE, null, l_names.toArray(), l_names.toArray()[0]);
+        if ((l_name == null) || (l_name.isEmpty()))
+            return;
+
+        String[] l_parts = l_name.split("\\:");
+        if (l_parts.length != 2)
+            throw new IllegalStateException("cannot split institution and norm name");
+
+        IInstitution<INormCar> l_item = this.getInstitution(l_parts[0]);
+        if (l_item == null)
+            throw new IllegalStateException("cannot found exception");
+
+        for (INorm<INormCar> l_norm : l_item)
+            if (l_norm.getName().equals(l_parts[1])) {
+                l_item.remove(l_norm);
+                l_norm.release();
+            }
     }
 
 
@@ -207,6 +224,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String l_input = JOptionPane.showInputDialog(null, "add a new institution name");
         if ((l_input == null) || (l_input.isEmpty()))
             return;
+        if (l_input.contains(":"))
+            throw new IllegalArgumentException(": not allowed");
 
         new CDefaultInstitution(l_input);
         COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();

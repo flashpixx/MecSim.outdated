@@ -59,9 +59,9 @@ public class CNormCar extends CDefaultCar implements INormCar {
             for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
                 IInstitution l_institution = l_item.getKey().getInstitution();
                 if (l_institution == null)
-                    l_map.put(l_item.getKey().getName(), "matched with weight " + l_item.getValue().getWeight());
+                    l_map.put(l_item.getKey().getName(), "matched with weight [" + l_item.getValue().getWeight() + "]");
                 else
-                    l_map.put(l_item.getKey().getName(), "matched in institution " + l_institution.getName() + " weight " + l_item.getValue().getWeight());
+                    l_map.put(l_item.getKey().getName(), "matched in institution [" + l_institution.getName() + "] weight [" + l_item.getValue().getWeight() + "]");
             }
 
         return l_map;

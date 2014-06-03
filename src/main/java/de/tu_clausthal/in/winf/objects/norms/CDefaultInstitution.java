@@ -83,10 +83,8 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
 
     @Override
     public void check(INormCar p_object) {
-        if (!m_range.isWithin(p_object))
-            return;
-
-        p_object.setNormMatch(m_norms.match(p_object));
+        if (m_range.check(p_object))
+            p_object.setNormMatch(m_norms.match(p_object));
     }
 
     @Override

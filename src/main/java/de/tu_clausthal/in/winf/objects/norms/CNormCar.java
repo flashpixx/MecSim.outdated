@@ -58,10 +58,7 @@ public class CNormCar extends CDefaultCar implements INormCar {
 
         for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
             IInstitution l_institution = l_item.getKey().getInstitution();
-            if (l_institution == null)
-                l_map.put("norm [" + l_item.getKey().getName() + "]", l_item.getValue().getWeight());
-            else
-                l_map.put("norm [" + l_item.getKey().getName() + "]", l_institution.getName() + " [" + l_item.getValue().getWeight() + "]");
+            l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
         }
 
         return l_map;

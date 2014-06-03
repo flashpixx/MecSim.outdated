@@ -36,18 +36,15 @@ import java.util.Set;
 public class CUnionRangeCollection<T> implements IRangeCollection<T> {
 
     /**
-     * map with ranges *
+     * list of ranges *
      */
     private Set<IRange<T>> m_ranges = new HashSet();
 
 
     @Override
-    public boolean isWithin(T p_object) {
-        if (m_ranges.isEmpty())
-            return false;
-
+    public boolean check(T p_object) {
         for (IRange<T> l_item : m_ranges)
-            if (l_item.isWithin(p_object))
+            if (l_item.check(p_object))
                 return true;
 
         return false;

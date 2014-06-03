@@ -34,16 +34,20 @@ import java.util.Set;
  * disjoint range
  */
 public class CIntersectionRangeCollection<T> implements IRangeCollection<T> {
+
+    /**
+     * list of ranges *
+     */
     private Set<IRange<T>> m_ranges = new HashSet();
 
 
     @Override
-    public boolean isWithin(T p_object) {
+    public boolean check(T p_object) {
         if (m_ranges.isEmpty())
             return false;
 
         for (IRange<T> l_item : m_ranges)
-            if (!l_item.isWithin(p_object))
+            if (!l_item.check(p_object))
                 return false;
 
         return true;

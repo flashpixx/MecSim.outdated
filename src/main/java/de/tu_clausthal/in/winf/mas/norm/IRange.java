@@ -38,7 +38,7 @@ public interface IRange<T> extends Serializable, IPainter {
      * @param p_object object
      * @return boolean for existence
      */
-    public boolean isWithin(T p_object);
+    public boolean check(T p_object);
 
 
     /**

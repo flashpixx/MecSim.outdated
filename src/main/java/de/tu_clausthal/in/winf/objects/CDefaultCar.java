@@ -377,10 +377,8 @@ public class CDefaultCar extends IObject implements ICar {
         Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
         Ellipse2D l_circle = new Ellipse2D.Double(l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom);
 
-        if (!l_circle.contains(e.getX(), e.getY()))
-            return;
-
-        CInspector.getInstance().set(this);
+        if (l_circle.contains(e.getX(), e.getY()))
+            CInspector.getInstance().set(this);
     }
 
 }

@@ -52,6 +52,10 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
      */
     protected GeoPosition m_lowerright = null;
     /**
+     * rectangle of the geoposition *
+     */
+    protected Rectangle.Double m_georectangle = null;
+    /**
      * color of the rectangle fill color *
      */
     protected Color m_regioColor = new Color(200, 0, 0, 35);
@@ -78,6 +82,7 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
         m_upperleft = p_upperleft;
         m_lowerright = p_lowerright;
         m_institution = p_institution;
+        m_georectangle = new Rectangle.Double(Math.min(m_upperleft.getLatitude(), m_lowerright.getLatitude()), Math.min(m_upperleft.getLongitude(), m_lowerright.getLongitude()), Math.abs(m_upperleft.getLatitude() - m_lowerright.getLatitude()), Math.abs(m_upperleft.getLongitude() - m_lowerright.getLongitude()));
     }
 
     @Override
@@ -93,8 +98,10 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
 
 
     @Override
-    public boolean isWithin(INormCar p_object) {
-        return (m_upperleft.getLongitude() <= p_object.getCurrentPosition().getLongitude()) && (m_lowerright.getLatitude() >= p_object.getCurrentPosition().getLatitude());
+    public boolean check(INormCar p_object) {
+        synchronized (p_object) {
+            return m_georectangle.contains(p_object.getCurrentPosition().getLatitude(), p_object.getCurrentPosition().getLongitude());
+        }
     }
 
     @Override
@@ -123,9 +130,7 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
         Rectangle l_rectangle = new Rectangle((int) (Math.min(l_upperleft.getX(), l_lowerright.getX()) - viewer.getViewportBounds().getX()), (int) (Math.min(l_upperleft.getY(), l_lowerright.getY()) - viewer.getViewportBounds().getY()),
                 (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
 
-        if (!l_rectangle.contains(e.getPoint()))
-            return;
-
-        CInspector.getInstance().set(this);
+        if (l_rectangle.contains(e.getPoint()))
+            CInspector.getInstance().set(this);
     }
 }

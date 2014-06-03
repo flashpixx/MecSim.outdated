@@ -54,6 +54,12 @@ public class CConjointRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
+    public void release() {
+        for (IRange<T> l_item : m_ranges)
+            l_item.release();
+    }
+
+    @Override
     public int size() {
         return m_ranges.size();
     }

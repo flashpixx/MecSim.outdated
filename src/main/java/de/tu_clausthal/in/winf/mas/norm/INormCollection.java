@@ -40,4 +40,10 @@ public interface INormCollection<T> extends Collection<INorm<T>>, Serializable {
      */
     public Map<INorm<T>, INormCheckResult> match(T p_object);
 
+
+    /**
+     * release call *
+     */
+    public void release();
+
 }

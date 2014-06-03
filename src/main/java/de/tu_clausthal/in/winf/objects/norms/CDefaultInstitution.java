@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.*;
+import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import org.jxmapviewer.JXMapViewer;
 
 import java.awt.*;
@@ -60,6 +61,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
      * default ctor
      */
     public CDefaultInstitution() {
+        CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }
 
     /**
@@ -71,6 +73,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
         if ((p_name == null) || (p_name.isEmpty()))
             throw new IllegalArgumentException("name need not be empty");
         m_name = p_name;
+        CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }
 
     @Override
@@ -126,6 +129,11 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     @Override
     public IInstitutionCollection getInferior() {
         return m_inferior;
+    }
+
+    @Override
+    public void release() {
+        CSimulationData.getInstance().getCarInstitutionQueue().remove(this);
     }
 
     @Override

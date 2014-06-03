@@ -200,7 +200,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         if ((l_input == null) || (l_input.isEmpty()))
             return;
 
-        CSimulationData.getInstance().getCarInstitutionQueue().add(new CDefaultInstitution(l_input));
+        new CDefaultInstitution(l_input);
         COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
     }
 
@@ -218,7 +218,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String l_name = (String) JOptionPane.showInputDialog(null, "delete an institution", "Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
         IInstitution<INormCar> l_item = this.getInstitution(l_name);
         if (l_item != null)
-            CSimulationData.getInstance().getCarInstitutionQueue().remove(l_item);
+            l_item.release();
         COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
     }
 

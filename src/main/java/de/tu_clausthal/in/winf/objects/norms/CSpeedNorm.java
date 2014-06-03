@@ -110,6 +110,11 @@ public class CSpeedNorm implements INorm<INormCar> {
         return m_name;
     }
 
+    @Override
+    public void release() {
+
+    }
+
     /**
      * inner class to represent the norm result
      */

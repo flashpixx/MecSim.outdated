@@ -49,4 +49,9 @@ public interface IRange<T> extends Serializable, IPainter {
     public IInstitution<T> getInstitution();
 
 
+    /**
+     * release call *
+     */
+    public void release();
+
 }

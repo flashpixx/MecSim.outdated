@@ -30,7 +30,6 @@ import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.IObject;
 import de.tu_clausthal.in.winf.objects.norms.INormCar;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -178,8 +177,7 @@ public class CWorker implements Runnable {
                     CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
                     if (l_edge != null)
                         l_edge.removeCarFromEdge(l_car);
-                    if (l_car instanceof IObject)
-                        COSMViewer.getInstance().removeMouseListener((IObject) l_car);
+                    ((IObject) l_car).release();
                 }
 
                 // call on each car all institutions

@@ -67,6 +67,14 @@ public abstract class IObject extends JComponent implements MouseListener {
     }
 
 
+    /**
+     * release of the event handler *
+     */
+    public void release() {
+        COSMViewer.getInstance().removeMouseListener(this);
+    }
+
+
     @Override
     public void mousePressed(MouseEvent e) {
         this.onClick(e, COSMViewer.getInstance());

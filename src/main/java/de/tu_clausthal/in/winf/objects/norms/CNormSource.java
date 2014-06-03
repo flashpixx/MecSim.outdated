@@ -35,13 +35,26 @@ import java.util.HashSet;
  */
 public class CNormSource extends CDefaultSource {
 
+    /**
+     * ctor set the position
+     *
+     * @param p_position geo position
+     */
     public CNormSource(GeoPosition p_position) {
         super(p_position);
     }
 
+
+    /**
+     * ctor set positition and generate number
+     *
+     * @param p_position position
+     * @param p_number   number of cars
+     */
     public CNormSource(GeoPosition p_position, int p_number) {
         super(p_position, p_number);
     }
+
 
     @Override
     public Collection<ICar> generate(int p_currentstep) {
@@ -49,8 +62,10 @@ public class CNormSource extends CDefaultSource {
 
         // use random number on care creation, to avoid traffic jam on the source
         for (int i = 0; i < super.m_NumberCarsInStep; i++)
-            if (super.m_random.nextDouble() <= 0.35)
-                l_sources.add(new CNormCar(super.m_position));
+            //if (super.m_random.nextDouble() <= 0.35)
+            l_sources.add(new CNormCar(super.m_position));
+
+        super.m_NumberCarsInStep = 0;
 
         return l_sources;
     }

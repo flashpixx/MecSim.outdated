@@ -55,6 +55,12 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
     }
 
     @Override
+    public void release() {
+        for (INorm<INormCar> l_item : m_norms)
+            l_item.release();
+    }
+
+    @Override
     public int size() {
         return m_norms.size();
     }

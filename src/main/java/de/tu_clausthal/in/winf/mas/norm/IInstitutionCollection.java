@@ -39,4 +39,9 @@ public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
     public void send(INormMessage<T> p_message);
 
 
+    /**
+     * release call *
+     */
+    public void release();
+
 }

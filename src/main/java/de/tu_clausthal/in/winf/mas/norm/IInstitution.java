@@ -89,4 +89,10 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, IPa
      */
     public IInstitutionCollection getInferior();
 
+
+    /**
+     * release call *
+     */
+    public void release();
+
 }

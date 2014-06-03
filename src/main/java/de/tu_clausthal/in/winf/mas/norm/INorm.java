@@ -55,4 +55,9 @@ public interface INorm<T> extends Serializable {
     public String getName();
 
 
+    /**
+     * release call *
+     */
+    public void release();
+
 }

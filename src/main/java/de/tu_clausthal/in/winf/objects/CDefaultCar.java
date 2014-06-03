@@ -140,10 +140,12 @@ public class CDefaultCar extends IObject implements ICar {
         return m_StartPosition;
     }
 
+
     @Override
     public GeoPosition getEndPosition() {
         return m_EndPosition;
     }
+
 
     @Override
     public int getMaximumSpeed() {
@@ -300,10 +302,12 @@ public class CDefaultCar extends IObject implements ICar {
         return m_acceleration;
     }
 
+
     @Override
     public int getDeceleration() {
         return m_deceleration;
     }
+
 
     @Override
     public Map<String, Object> inspect() {
@@ -317,12 +321,14 @@ public class CDefaultCar extends IObject implements ICar {
         l_map.put("end position", m_EndPosition);
 
         synchronized (this) {
+            l_map.put("street name", m_routeedges.get(m_routeindex).getName());
             l_map.put("current edge id", this.getCurrentEdgeID());
             l_map.put("current geoposition", this.getCurrentPosition());
         }
 
         return l_map;
     }
+
 
     /**
      * returns the icon size
@@ -333,6 +339,7 @@ public class CDefaultCar extends IObject implements ICar {
     private int iconsize(JXMapViewer viewer) {
         return Math.max(9 - viewer.getZoom(), 2);
     }
+
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer viewer) {

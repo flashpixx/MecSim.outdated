@@ -50,6 +50,12 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
     }
 
     @Override
+    public void release() {
+        for (IInstitution<T> l_item : m_institution)
+            l_item.release();
+    }
+
+    @Override
     public int size() {
         return m_institution.size();
     }

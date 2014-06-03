@@ -91,6 +91,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         String[] l_norm = {"Create Speed Norm", "Delete Norm"};
         this.add(CMenuFactory.createMenu("Norm", l_norm, this, m_reference));
+
+        String[] l_mas = {"Modify Environment", "Create Agent", "Delete Agent", ""};
+        this.add(CMenuFactory.createMenu("MAS", l_mas, this, m_reference));
     }
 
 

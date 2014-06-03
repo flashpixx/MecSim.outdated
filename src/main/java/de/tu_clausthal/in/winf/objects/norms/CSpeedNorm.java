@@ -97,7 +97,7 @@ public class CSpeedNorm implements INorm<INormCar> {
 
     @Override
     public INormCheckResult check(INormCar p_object) {
-        return new CNormResultSpeed(p_object.getCurrentSpeed() <= m_maxspeed, Math.max(0, Math.min(1, (p_object.getCurrentSpeed() - m_maxspeed) / (m_maxspeed * m_tolerance))));
+        return new CNormResultSpeed(p_object.getCurrentSpeed() > m_maxspeed, Math.max(0, Math.min(1, (p_object.getCurrentSpeed() - m_maxspeed) / (m_maxspeed * m_tolerance))));
     }
 
     @Override
@@ -146,7 +146,7 @@ public class CSpeedNorm implements INorm<INormCar> {
 
         @Override
         public Boolean getResult() {
-            return false;
+            return m_match;
         }
     }
 }

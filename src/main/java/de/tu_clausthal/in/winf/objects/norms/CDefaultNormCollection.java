@@ -42,7 +42,7 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
 
         for (INorm<INormCar> l_norm : m_norms) {
             INormCheckResult l_check = l_norm.check(p_object);
-            if ((l_check.getResult() instanceof Boolean) && ((Boolean) l_check.getResult()))
+            if ((l_check.getResult() instanceof Boolean) && (((Boolean) l_check.getResult())))
                 l_map.put(l_norm, l_check);
         }
 

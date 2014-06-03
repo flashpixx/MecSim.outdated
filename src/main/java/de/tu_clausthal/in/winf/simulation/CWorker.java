@@ -138,7 +138,7 @@ public class CWorker implements Runnable {
                 CSimulationData.getInstance().getStepListenerQueue().push(l_step);
 
             } catch (Exception l_exception) {
-                LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processListener: ", l_exception);
+                m_Logger.error("thread [" + Thread.currentThread().getId() + "] processListener: ", l_exception);
             }
         }
 
@@ -180,7 +180,7 @@ public class CWorker implements Runnable {
                         l_item.check((INormCar) l_car);
 
             } catch (Exception l_exception) {
-                LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);
+                m_Logger.error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);
             }
         }
 

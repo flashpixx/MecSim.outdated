@@ -154,11 +154,16 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             throw new IllegalStateException("institutions are not exist, add an institution first");
 
         String[] l_names = this.getInstitutionList();
-        String l_name = (String) JOptionPane.showInputDialog(null, "set an institution for norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
+        String l_name = (String) JOptionPane.showInputDialog(null, "set an institution for the norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
+        if ((l_name == null) || (l_name.isEmpty()))
+            return;
+
         IInstitution<INormCar> l_item = this.getInstitution(l_name);
         if (l_item != null) {
             String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
             String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
+            if ((l_normname == null) || (l_normname.isEmpty()) || (l_speed == null) || (l_speed.isEmpty()))
+                return;
 
             l_item.add(new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)));
         }

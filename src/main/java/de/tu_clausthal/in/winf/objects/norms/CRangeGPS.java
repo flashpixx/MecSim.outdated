@@ -68,6 +68,7 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
     /**
      * ctor to create the rectangle
      *
+     * @param p_institution institution of the range
      * @param p_upperleft  left upper corner position
      * @param p_lowerright right lower corner position
      */

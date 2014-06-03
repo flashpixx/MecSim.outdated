@@ -25,6 +25,7 @@ import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.INorm;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
@@ -186,6 +187,13 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
             throw new IllegalStateException("institutions are not exist, add an institution first");
+/*
+        ArrayList<String> l_names = new ArrayList();
+        ArrayList<INorm<INormCar>>
+        for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+            for( INorm<INormCar> l_norm : l_item )
+                l_norm
+*/
     }
 
 

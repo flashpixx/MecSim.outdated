@@ -95,6 +95,7 @@ public class CFrame extends JFrame {
      * @param p_title unique title
      * @param p_panel panel
      * @param p_close show close button
+     * @param p_location location of the panel
      */
     private void createDockable(String p_title, Component p_panel, boolean p_close, CLocation p_location) {
         DefaultSingleCDockable l_dock = new DefaultSingleCDockable(p_title, p_title);

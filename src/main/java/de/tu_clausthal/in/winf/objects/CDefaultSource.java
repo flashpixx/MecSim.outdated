@@ -87,7 +87,7 @@ public class CDefaultSource implements ICarSourceFactory {
 
         // use random number on care creation, to avoid traffic jam on the source
         for (int i = 0; i < m_NumberCarsInStep; i++)
-            if (m_random.nextDouble() <= 0.35)
+            if (m_random.nextDouble() > 0.15)
                 l_sources.add(new CDefaultCar(m_position));
 
         return l_sources;

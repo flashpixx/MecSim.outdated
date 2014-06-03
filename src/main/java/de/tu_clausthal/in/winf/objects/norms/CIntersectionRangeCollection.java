@@ -31,20 +31,16 @@ import java.util.Set;
 
 
 /**
- * conjoint range
+ * disjoint range
  */
-public class CConjointRangeCollection<T> implements IRangeCollection<T> {
-
-    /**
-     * map with ranges *
-     */
+public class CIntersectionRangeCollection<T> implements IRangeCollection<T> {
     private Set<IRange<T>> m_ranges = new HashSet();
 
 
     @Override
     public boolean isWithin(T p_object) {
         if (m_ranges.isEmpty())
-            return true;
+            return false;
 
         for (IRange<T> l_item : m_ranges)
             if (!l_item.isWithin(p_object))
@@ -90,7 +86,7 @@ public class CConjointRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
-    public boolean add(IRange iRange) {
+    public boolean add(IRange<T> iRange) {
         return m_ranges.add(iRange);
     }
 

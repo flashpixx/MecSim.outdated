@@ -41,10 +41,8 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
 
     @Override
     public Map<INorm<INormCar>, INormCheckResult> match(INormCar p_object) {
-        if (m_norms.isEmpty())
-            return null;
-
         HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap();
+
         for (INorm<INormCar> l_norm : m_norms) {
             INormCheckResult l_check = l_norm.check(p_object);
             if ((l_check.getResult() instanceof Boolean) && (((Boolean) l_check.getResult())))

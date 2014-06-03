@@ -62,10 +62,8 @@ public class CNormSource extends CDefaultSource {
 
         // use random number on care creation, to avoid traffic jam on the source
         for (int i = 0; i < super.m_NumberCarsInStep; i++)
-            //if (super.m_random.nextDouble() <= 0.35)
-            l_sources.add(new CNormCar(super.m_position));
-
-        super.m_NumberCarsInStep = 0;
+            if (super.m_random.nextDouble() > 0.15)
+                l_sources.add(new CNormCar(super.m_position));
 
         return l_sources;
     }

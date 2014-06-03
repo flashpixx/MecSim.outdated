@@ -55,13 +55,13 @@ public class CNormCar extends CDefaultCar implements INormCar {
     @Override
     public Map<String, Object> inspect() {
         Map<String, Object> l_map = super.inspect();
-        System.out.println(this.hashCode());
+
         for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
             IInstitution l_institution = l_item.getKey().getInstitution();
             if (l_institution == null)
-                l_map.put("norm [" + l_item.getKey().getName() + "]", "matched with weight [" + l_item.getValue().getWeight() + "]");
+                l_map.put("norm [" + l_item.getKey().getName() + "]", l_item.getValue().getWeight());
             else
-                l_map.put("norm [" + l_item.getKey().getName() + "]", "matched in institution [" + l_institution.getName() + "] weight [" + l_item.getValue().getWeight() + "]");
+                l_map.put("norm [" + l_item.getKey().getName() + "]", l_institution.getName() + " [" + l_item.getValue().getWeight() + "]");
         }
 
         return l_map;
@@ -71,7 +71,6 @@ public class CNormCar extends CDefaultCar implements INormCar {
     @Override
     public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm) {
         m_norms.putAll(p_norm);
-        System.out.println(this.hashCode());
     }
 
     @Override

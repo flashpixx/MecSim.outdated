@@ -50,7 +50,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     /**
      * range collection with a disjoint set *
      */
-    private IRangeCollection<INormCar> m_range = new CConjointRangeCollection();
+    private IRangeCollection<INormCar> m_range = new CUnionRangeCollection();
     /**
      * norms of the institution *
      */
@@ -134,6 +134,11 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     @Override
     public void release() {
         CSimulationData.getInstance().getCarInstitutionQueue().remove(this);
+        m_norms.release();
+        m_range.release();
+        m_inferior.release();
+        m_superior.release();
+
     }
 
     @Override

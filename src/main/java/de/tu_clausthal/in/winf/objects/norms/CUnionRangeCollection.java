@@ -31,9 +31,13 @@ import java.util.Set;
 
 
 /**
- * disjoint range
+ * conjoint range
  */
-public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
+public class CUnionRangeCollection<T> implements IRangeCollection<T> {
+
+    /**
+     * map with ranges *
+     */
     private Set<IRange<T>> m_ranges = new HashSet();
 
 
@@ -86,7 +90,7 @@ public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
-    public boolean add(IRange<T> iRange) {
+    public boolean add(IRange iRange) {
         return m_ranges.add(iRange);
     }
 

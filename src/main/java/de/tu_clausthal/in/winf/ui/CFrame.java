@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.ui;
 
 import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
@@ -72,8 +73,8 @@ public class CFrame extends JFrame {
         });
 
         this.add(m_control.getContentArea());
-        this.createDockable("Inspector", CInspector.getInstance(), false);
-        this.createDockable("OSM", new JScrollPane(COSMViewer.getInstance()), false);
+        this.createDockable("Inspector", CInspector.getInstance(), false, CLocation.base().normalSouth(0.2));
+        this.createDockable("OSM", new JScrollPane(COSMViewer.getInstance()), false, CLocation.base().normalNorth(0.8));
     }
 
 
@@ -84,7 +85,7 @@ public class CFrame extends JFrame {
      * @param p_panel omponent
      */
     public void addUIComponent(String p_name, Component p_panel) {
-        this.createDockable(p_name, p_panel, false);
+        this.createDockable(p_name, p_panel, false, CLocation.base().minimalSouth());
     }
 
 
@@ -95,11 +96,12 @@ public class CFrame extends JFrame {
      * @param p_panel panel
      * @param p_close show close button
      */
-    private void createDockable(String p_title, Component p_panel, boolean p_close) {
+    private void createDockable(String p_title, Component p_panel, boolean p_close, CLocation p_location) {
         DefaultSingleCDockable l_dock = new DefaultSingleCDockable(p_title, p_title);
         l_dock.setTitleText(p_title);
         l_dock.setCloseable(p_close);
         l_dock.add(p_panel);
+        l_dock.setLocation(p_location);
         m_control.addDockable(l_dock);
         l_dock.setVisible(true);
     }

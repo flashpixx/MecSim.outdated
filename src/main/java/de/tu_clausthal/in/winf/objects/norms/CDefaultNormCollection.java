@@ -33,6 +33,9 @@ import java.util.*;
  */
 public class CDefaultNormCollection<INormCar> implements INormCollection<INormCar> {
 
+    /**
+     * map with norms *
+     */
     private HashSet<INorm<INormCar>> m_norms = new HashSet();
 
 

@@ -27,6 +27,7 @@ import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
 import de.tu_clausthal.in.winf.objects.CDefaultCar;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -38,7 +39,7 @@ public class CNormCar extends CDefaultCar implements INormCar {
     /**
      * set with norms, that are matched *
      */
-    protected Map<INorm<INormCar>, INormCheckResult> m_norms = null;
+    protected Map<INorm<INormCar>, INormCheckResult> m_norms = new HashMap();
 
 
     /**
@@ -55,14 +56,13 @@ public class CNormCar extends CDefaultCar implements INormCar {
     public Map<String, Object> inspect() {
         Map<String, Object> l_map = super.inspect();
 
-        if (m_norms != null)
-            for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
-                IInstitution l_institution = l_item.getKey().getInstitution();
-                if (l_institution == null)
-                    l_map.put(l_item.getKey().getName(), "matched with weight [" + l_item.getValue().getWeight() + "]");
-                else
-                    l_map.put(l_item.getKey().getName(), "matched in institution [" + l_institution.getName() + "] weight [" + l_item.getValue().getWeight() + "]");
-            }
+        for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
+            IInstitution l_institution = l_item.getKey().getInstitution();
+            if (l_institution == null)
+                l_map.put("norm [" + l_item.getKey().getName() + "]", "matched with weight [" + l_item.getValue().getWeight() + "]");
+            else
+                l_map.put("norm [" + l_item.getKey().getName() + "]", "matched in institution [" + l_institution.getName() + "] weight [" + l_item.getValue().getWeight() + "]");
+        }
 
         return l_map;
     }
@@ -70,6 +70,13 @@ public class CNormCar extends CDefaultCar implements INormCar {
 
     @Override
     public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm) {
-        m_norms = p_norm;
+        m_norms.putAll(p_norm);
     }
+
+    @Override
+    public void clearNormMatch() {
+        m_norms.clear();
+    }
+
+
 }

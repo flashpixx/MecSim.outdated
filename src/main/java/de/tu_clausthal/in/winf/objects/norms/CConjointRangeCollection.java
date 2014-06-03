@@ -43,6 +43,9 @@ public class CConjointRangeCollection<T> implements IRangeCollection<T> {
 
     @Override
     public boolean isWithin(T p_object) {
+        if (m_ranges.isEmpty())
+            return true;
+
         for (IRange<T> l_item : m_ranges)
             if (!l_item.isWithin(p_object))
                 return false;

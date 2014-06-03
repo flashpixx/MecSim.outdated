@@ -39,5 +39,4 @@ public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable
      */
     public boolean isWithin(T p_object);
 
-
 }

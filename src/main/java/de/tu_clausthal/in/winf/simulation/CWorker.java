@@ -28,7 +28,9 @@ import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
+import de.tu_clausthal.in.winf.objects.IObject;
 import de.tu_clausthal.in.winf.objects.norms.INormCar;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,25 +161,33 @@ public class CWorker implements Runnable {
 
             try {
 
-                // update car
+                // car is at the end
                 if (l_car.hasEndReached())
                     continue;
 
+                // update car with drive model (and drive it)
                 m_drivemodel.update(m_currentstep.get(), l_car);
                 l_car.drive();
 
+                // car is at the end
                 if (!l_car.hasEndReached())
                     CSimulationData.getInstance().getCarQueue().push(l_car);
                 else {
+
+                    // remove car from the graph and from the mouse listener
                     CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
                     if (l_edge != null)
                         l_edge.removeCarFromEdge(l_car);
+                    if (l_car instanceof IObject)
+                        COSMViewer.getInstance().removeMouseListener((IObject) l_car);
                 }
 
-                // call on each car the institutions
-                if (l_car instanceof INormCar)
+                // call on each car all institutions
+                if (l_car instanceof INormCar) {
+                    ((INormCar) l_car).clearNormMatch();
                     for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
                         l_item.check((INormCar) l_car);
+                }
 
             } catch (Exception l_exception) {
                 m_Logger.error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);

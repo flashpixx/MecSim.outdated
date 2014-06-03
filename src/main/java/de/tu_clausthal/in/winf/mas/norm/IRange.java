@@ -41,4 +41,12 @@ public interface IRange<T> extends Serializable, IPainter {
     public boolean isWithin(T p_object);
 
 
+    /**
+     * returns the institution of the range
+     *
+     * @return institution
+     */
+    public IInstitution<T> getInstitution();
+
+
 }

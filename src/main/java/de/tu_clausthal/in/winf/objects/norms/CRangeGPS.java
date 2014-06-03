@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.objects.norms;
 
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.IRange;
 import de.tu_clausthal.in.winf.objects.IObject;
 import de.tu_clausthal.in.winf.ui.CInspector;
@@ -38,6 +39,10 @@ import java.util.Map;
  */
 public class CRangeGPS extends IObject implements IRange<INormCar> {
 
+    /**
+     * institution of the range
+     */
+    protected IInstitution<INormCar> m_institution = null;
     /**
      * geoposition of the upper left corner of the rectangle
      */
@@ -62,15 +67,17 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
      * @param p_upperleft  left upper corner position
      * @param p_lowerright right lower corner position
      */
-    public CRangeGPS(GeoPosition p_upperleft, GeoPosition p_lowerright) {
+    public CRangeGPS(IInstitution<INormCar> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright) {
         if ((p_lowerright == null) || (p_upperleft == null))
             throw new IllegalArgumentException("parameter need not to be null");
         if ((p_upperleft.getLongitude() > p_lowerright.getLongitude()) || (p_upperleft.getLatitude() < p_lowerright.getLatitude()))
             throw new IllegalArgumentException("geoposition are not in the correct order, first argument is the upper-left ");
+        if (p_institution == null)
+            throw new IllegalArgumentException("institution need not to be null");
 
         m_upperleft = p_upperleft;
         m_lowerright = p_lowerright;
-
+        m_institution = p_institution;
     }
 
     @Override
@@ -79,6 +86,7 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
 
         l_map.put("upper left", m_upperleft);
         l_map.put("lower right", m_lowerright);
+        l_map.put("institution", m_institution.getName());
 
         return l_map;
     }
@@ -87,6 +95,11 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
     @Override
     public boolean isWithin(INormCar p_object) {
         return (m_upperleft.getLongitude() <= p_object.getCurrentPosition().getLongitude()) && (m_lowerright.getLatitude() >= p_object.getCurrentPosition().getLatitude());
+    }
+
+    @Override
+    public IInstitution<INormCar> getInstitution() {
+        return m_institution;
     }
 
 

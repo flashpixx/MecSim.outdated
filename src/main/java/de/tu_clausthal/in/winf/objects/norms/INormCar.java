@@ -40,4 +40,10 @@ public interface INormCar extends ICar {
      */
     public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm);
 
+
+    /**
+     * clears the mached norms *
+     */
+    public void clearNormMatch();
+
 }

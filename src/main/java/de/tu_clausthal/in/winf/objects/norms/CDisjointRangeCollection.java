@@ -39,6 +39,9 @@ public class CDisjointRangeCollection<T> implements IRangeCollection<T> {
 
     @Override
     public boolean isWithin(T p_object) {
+        if (m_ranges.isEmpty())
+            return false;
+
         for (IRange<T> l_item : m_ranges)
             if (l_item.isWithin(p_object))
                 return true;

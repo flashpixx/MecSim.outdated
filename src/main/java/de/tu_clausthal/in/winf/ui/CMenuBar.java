@@ -88,7 +88,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_institution = {"Create Institution", "Delete Institution"};
         this.add(CMenuFactory.createMenu("Institution", l_institution, this, m_reference));
 
-        String[] l_norm = {"Create Speed Norm", "Delete Speed Norm"};
+        String[] l_norm = {"Create Speed Norm", "Delete Norm"};
         this.add(CMenuFactory.createMenu("Norm", l_norm, this, m_reference));
     }
 
@@ -130,6 +130,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
             if (e.getSource() == m_reference.get("Create Speed Norm"))
                 this.createSpeedNorm();
+            if (e.getSource() == m_reference.get("Delete Norm"))
+                this.deleteNorm();
 
 
             if (e.getSource() == m_reference.get("Nagel-Schreckenberg"))
@@ -161,13 +163,31 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         IInstitution<INormCar> l_item = this.getInstitution(l_name);
         if (l_item != null) {
             String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
+            if ((l_normname == null) || (l_normname.isEmpty()))
+                return;
+
             String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
-            if ((l_normname == null) || (l_normname.isEmpty()) || (l_speed == null) || (l_speed.isEmpty()))
+            if ((l_speed == null) || (l_speed.isEmpty()))
                 return;
 
             l_item.add(new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)));
         }
     }
+
+
+    /**
+     * deletes a norm
+     *
+     * @todo complete
+     */
+    private void deleteNorm() {
+        if (CSimulation.getInstance().isRunning())
+            throw new IllegalStateException("simulation is running");
+
+        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
+            throw new IllegalStateException("institutions are not exist, add an institution first");
+    }
+
 
     /**
      * create a new institution

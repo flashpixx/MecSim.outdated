@@ -89,7 +89,7 @@ class COSMMouseListener extends MouseAdapter {
         }
 
         // add range to the institution
-        l_institution.getRange().add(new CRangeGPS(((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getFrom()), ((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getTo())));
+        l_institution.getRange().add(new CRangeGPS(l_institution, ((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getFrom()), ((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getTo())));
         m_rectangle.clear();
     }
 

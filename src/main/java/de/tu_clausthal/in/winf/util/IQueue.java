@@ -21,14 +21,13 @@
 
 package de.tu_clausthal.in.winf.util;
 
-import java.util.Collection;
 import java.util.Queue;
 
 
 /**
  *
  */
-public interface IQueue<T> {
+public interface IQueue<T> extends Queue<T> {
 
     /**
      * returns the queue of all items
@@ -67,85 +66,5 @@ public interface IQueue<T> {
      * to the processed queue
      */
     public void reset();
-
-
-    /**
-     * number of elements
-     *
-     * @return value
-     */
-    public int size();
-
-
-    /**
-     * number of unprocessed items
-     *
-     * @return count values
-     */
-    public int unprocessedsize();
-
-
-    /**
-     * number of proccessed items
-     *
-     * @return count value
-     */
-    public int processsize();
-
-
-    /**
-     * checks that an elements is in the queue
-     *
-     * @param p_item item
-     * @return boolean for existence
-     */
-    public boolean contains(T p_item);
-
-
-    /**
-     * converts the unprocessed items to an array
-     *
-     * @param p_array ouput array
-     */
-    public void unprocessed2array(T[] p_array);
-
-
-    /**
-     * converts the unprocessed data to an array
-     *
-     * @param p_array output array
-     */
-    public void process2array(T[] p_array);
-
-
-    /**
-     * adds an item
-     *
-     * @param p_item item
-     */
-    public void add(T p_item);
-
-
-    /**
-     * adds a collection
-     *
-     * @param p_item collection
-     */
-    public void add(Collection<T> p_item);
-
-
-    /**
-     * removes an item
-     *
-     * @param p_item item
-     */
-    public void remove(T p_item);
-
-
-    /**
-     * clear all data *
-     */
-    public void clear();
-
 
 }

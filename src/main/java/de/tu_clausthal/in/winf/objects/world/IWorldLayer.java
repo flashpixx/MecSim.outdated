@@ -19,24 +19,23 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects;
+package de.tu_clausthal.in.winf.objects.world;
 
 import de.tu_clausthal.in.winf.ui.IPainter;
+import de.tu_clausthal.in.winf.util.IQueue;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
  *
  */
-public abstract class IWorldLayer implements Collection<IPainter>, IPainter {
+public abstract class IWorldLayer<T extends IPainter> implements IPainter, IQueue<T> {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;
 
 
     public void step(int p_currentstep) {
-
     }
 
     public Map<String, Object> getData() {

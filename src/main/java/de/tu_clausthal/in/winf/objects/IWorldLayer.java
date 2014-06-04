@@ -22,20 +22,24 @@
 package de.tu_clausthal.in.winf.objects;
 
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.IPainter;
+import org.jxmapviewer.painter.Painter;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
  *
  */
-public abstract class IWorldLayer implements IPainter {
+public abstract class IWorldLayer implements Collection<IPainter>, Painter {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;
 
 
     public IWorldLayer() {
+        COSMViewer.getInstance().getCompoundPainter().addPainter(this);
         CSimulationData.getInstance();
     }
 

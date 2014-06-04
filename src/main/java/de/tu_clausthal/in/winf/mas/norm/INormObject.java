@@ -27,7 +27,7 @@ import java.util.Map;
 
 
 /**
- * interface with norm structure for car
+ * interface of an norm object to receive norms
  */
 public interface INormObject extends ICar {
 

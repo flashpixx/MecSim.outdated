@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
+import de.tu_clausthal.in.winf.objects.CWorld;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
@@ -55,6 +56,10 @@ public class CSimulationData {
      * car institution *
      */
     private CPainterQueue<IInstitution<INormObject>> m_carinstitution = new CPainterQueue(COSMViewer.getInstance());
+    /**
+     * world layer structure
+     */
+    private CWorld m_world = new CWorld(COSMViewer.getInstance());
 
 
     /**
@@ -71,6 +76,11 @@ public class CSimulationData {
      */
     public static CSimulationData getInstance() {
         return s_instance;
+    }
+
+
+    public CWorld getWorld() {
+        return m_world;
     }
 
 

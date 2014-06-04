@@ -35,6 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * waypoint queue class *
+ *
  * @deprecated
  */
 public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implements IQueue<T> {
@@ -72,7 +73,6 @@ public class CWaypointQueue<T extends Waypoint> extends WaypointPainter implemen
         l_data.addAll(m_process);
         return l_data;
     }
-
 
     @Override
     public T pop() {

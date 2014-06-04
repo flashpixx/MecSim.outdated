@@ -21,10 +21,7 @@
 
 package de.tu_clausthal.in.winf.objects;
 
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.IPainter;
-import org.jxmapviewer.painter.Painter;
 
 import java.util.Collection;
 import java.util.Map;
@@ -32,27 +29,19 @@ import java.util.Map;
 /**
  *
  */
-public abstract class IWorldLayer implements Collection<IPainter>, Painter {
+public abstract class IWorldLayer implements Collection<IPainter>, IPainter {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;
-
-
-    public IWorldLayer() {
-        COSMViewer.getInstance().getCompoundPainter().addPainter(this);
-        CSimulationData.getInstance();
-    }
 
 
     public void step(int p_currentstep) {
 
     }
 
-
     public Map<String, Object> getData() {
         return null;
     }
-
 
     public boolean isActive() {
         return m_active;
@@ -61,7 +50,6 @@ public abstract class IWorldLayer implements Collection<IPainter>, Painter {
     public void setActive(boolean p_active) {
         m_active = p_active;
     }
-
 
     public boolean isVisible() {
         return m_visible;

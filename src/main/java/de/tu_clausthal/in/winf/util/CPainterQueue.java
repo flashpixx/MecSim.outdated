@@ -36,6 +36,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * waypoint queue class *
+ *
  * @deprecated
  */
 public class CPainterQueue<T extends IPainter> implements IQueue<T>, Painter {

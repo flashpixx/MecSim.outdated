@@ -80,6 +80,12 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_actions = {"Start", "Stop", null, "Reset"};
         this.add(CMenuFactory.createMenu("Action", l_actions, this, m_reference));
 
+        String[] l_layer = null;
+        if (!CSimulationData.getInstance().getWorld().isEmpty())
+            CSimulationData.getInstance().getWorld().keySet().toArray(l_layer);
+        this.add(CMenuFactory.createRadioMenu("Layer", l_layer, this, m_reference));
+
+
         String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
         this.add(CMenuFactory.createRadioMenu("Graph Weights", l_weights, this, m_reference));
 

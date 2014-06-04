@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.mas.norm;
 
-import de.tu_clausthal.in.winf.util.IPainter;
+import de.tu_clausthal.in.winf.ui.IPainter;
 
 import java.io.Serializable;
 

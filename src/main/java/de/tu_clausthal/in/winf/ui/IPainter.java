@@ -19,31 +19,25 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.norms;
+package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.mas.norm.INorm;
-import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
-import de.tu_clausthal.in.winf.objects.ICar;
+import org.jxmapviewer.JXMapViewer;
 
-import java.util.Map;
+import java.awt.*;
 
 
 /**
- * interface with norm structure for car
+ * class for painter representation (encapsulate JXMapViewer)
  */
-public interface INormCar extends ICar {
+public interface IPainter {
 
     /**
-     * matching method of a norm
+     * generic painter method
      *
-     * @param p_norm map of norm objects
+     * @param graphics2D graphic object
+     * @param viewer     jxmapviewer object
      */
-    public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm);
+    void paint(Graphics2D graphics2D, JXMapViewer viewer);
 
-
-    /**
-     * clears the mached norms *
-     */
-    public void clearNormMatch();
 
 }

@@ -22,11 +22,11 @@
 package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.objects.CDefaultSource;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.norms.CNormSource;
 import de.tu_clausthal.in.winf.objects.norms.CRangeGPS;
-import de.tu_clausthal.in.winf.objects.norms.INormCar;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
@@ -82,7 +82,7 @@ class COSMMouseListener extends MouseAdapter {
         m_drag = false;
         m_rectangle.to(e.getPoint());
 
-        IInstitution<INormCar> l_institution = this.getSelectedInstitution();
+        IInstitution<INormObject> l_institution = this.getSelectedInstitution();
         if ((m_rectangle.getRectangle() == null) || (l_institution == null)) {
             m_rectangle.clear();
             return;
@@ -171,11 +171,11 @@ class COSMMouseListener extends MouseAdapter {
      *
      * @return institution
      */
-    private IInstitution<INormCar> getSelectedInstitution() {
+    private IInstitution<INormObject> getSelectedInstitution() {
         if ((m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()))
             return null;
 
-        for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+        for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
             if (l_item.getName().equals(m_popup.getInstitutionSelection()))
                 return l_item;
 

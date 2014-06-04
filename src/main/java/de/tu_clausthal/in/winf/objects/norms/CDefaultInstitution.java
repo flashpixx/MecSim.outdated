@@ -33,7 +33,7 @@ import java.util.Iterator;
 /**
  * default institution
  */
-public class CDefaultInstitution implements IInstitution<INormCar> {
+public class CDefaultInstitution implements IInstitution<INormObject> {
 
     /**
      * name of the institution *
@@ -42,19 +42,19 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     /**
      * superior institutions *
      */
-    private IInstitutionCollection<INormCar> m_superior = new CDefaultInstitutionCollection();
+    private IInstitutionCollection<INormObject> m_superior = new CDefaultInstitutionCollection();
     /**
      * inferior instituions *
      */
-    private IInstitutionCollection<INormCar> m_inferior = new CDefaultInstitutionCollection();
+    private IInstitutionCollection<INormObject> m_inferior = new CDefaultInstitutionCollection();
     /**
      * range collection with a disjoint set *
      */
-    private IRangeCollection<INormCar> m_range = new CUnionRangeCollection();
+    private IRangeCollection<INormObject> m_range = new CUnionRangeCollection();
     /**
      * norms of the institution *
      */
-    private INormCollection<INormCar> m_norms = new CDefaultNormCollection();
+    private INormCollection<INormObject> m_norms = new CDefaultNormCollection();
 
 
     /**
@@ -82,23 +82,23 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     }
 
     @Override
-    public void check(INormCar p_object) {
+    public void check(INormObject p_object) {
         if (m_range.check(p_object))
             p_object.setNormMatch(m_norms.match(p_object));
     }
 
     @Override
-    public IRangeCollection<INormCar> getRange() {
+    public IRangeCollection<INormObject> getRange() {
         return m_range;
     }
 
     @Override
-    public void update(INorm<INormCar> p_norm) {
+    public void update(INorm<INormObject> p_norm) {
         m_norms.add(p_norm);
     }
 
     @Override
-    public void receive(INormMessage<INormCar> p_message) {
+    public void receive(INormMessage<INormObject> p_message) {
         if (p_message.getTTL() < 0)
             return;
 
@@ -155,7 +155,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     }
 
     @Override
-    public Iterator<INorm<INormCar>> iterator() {
+    public Iterator<INorm<INormObject>> iterator() {
         return m_norms.iterator();
     }
 
@@ -170,7 +170,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     }
 
     @Override
-    public boolean add(INorm<INormCar> iNormCarINorm) {
+    public boolean add(INorm<INormObject> iNormCarINorm) {
         return m_norms.add(iNormCarINorm);
     }
 
@@ -185,7 +185,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<INormCar>> c) {
+    public boolean addAll(Collection<? extends INorm<INormObject>> c) {
         return m_norms.addAll(c);
     }
 
@@ -206,7 +206,7 @@ public class CDefaultInstitution implements IInstitution<INormCar> {
 
     @Override
     public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
-        for (IRange<INormCar> l_item : m_range)
+        for (IRange<INormObject> l_item : m_range)
             l_item.paint(graphics2D, viewer);
     }
 

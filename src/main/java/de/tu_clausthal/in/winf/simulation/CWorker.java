@@ -26,10 +26,10 @@ import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
 import de.tu_clausthal.in.winf.objects.IObject;
-import de.tu_clausthal.in.winf.objects.norms.INormCar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -181,10 +181,10 @@ public class CWorker implements Runnable {
                 }
 
                 // call on each car all institutions
-                if (l_car instanceof INormCar) {
-                    ((INormCar) l_car).clearNormMatch();
-                    for (IInstitution<INormCar> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                        l_item.check((INormCar) l_car);
+                if (l_car instanceof INormObject) {
+                    ((INormObject) l_car).clearNormMatch();
+                    for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+                        l_item.check((INormObject) l_car);
                 }
 
             } catch (Exception l_exception) {

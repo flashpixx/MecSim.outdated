@@ -24,12 +24,13 @@ package de.tu_clausthal.in.winf.objects.norms;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;
 import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
+import de.tu_clausthal.in.winf.mas.norm.INormObject;
 
 
 /**
  * norm for speed check
  */
-public class CSpeedNorm implements INorm<INormCar> {
+public class CSpeedNorm implements INorm<INormObject> {
 
     /**
      * tolerance value in [0,1] *
@@ -40,7 +41,7 @@ public class CSpeedNorm implements INorm<INormCar> {
     /**
      * dedicated institution *
      */
-    private IInstitution<INormCar> m_institution = null;
+    private IInstitution<INormObject> m_institution = null;
     /**
      * name der norm *
      */
@@ -52,7 +53,7 @@ public class CSpeedNorm implements INorm<INormCar> {
      *
      * @param p_institution defines the institution
      */
-    public CSpeedNorm(IInstitution<INormCar> p_institution) {
+    public CSpeedNorm(IInstitution<INormObject> p_institution) {
         m_institution = p_institution;
     }
 
@@ -63,7 +64,7 @@ public class CSpeedNorm implements INorm<INormCar> {
      * @param p_institution defines the institution
      * @param p_name        name of the norm
      */
-    public CSpeedNorm(IInstitution<INormCar> p_institution, String p_name) {
+    public CSpeedNorm(IInstitution<INormObject> p_institution, String p_name) {
         m_institution = p_institution;
         m_name = p_name;
     }
@@ -75,7 +76,7 @@ public class CSpeedNorm implements INorm<INormCar> {
      * @param p_institution defines institution
      * @param p_maxspeed    defines maximum allowed speed
      */
-    public CSpeedNorm(IInstitution<INormCar> p_institution, int p_maxspeed) {
+    public CSpeedNorm(IInstitution<INormObject> p_institution, int p_maxspeed) {
         m_institution = p_institution;
         m_maxspeed = p_maxspeed;
     }
@@ -88,7 +89,7 @@ public class CSpeedNorm implements INorm<INormCar> {
      * @param p_name        name of the norm
      * @param p_maxspeed    defines maximum allowed speed
      */
-    public CSpeedNorm(IInstitution<INormCar> p_institution, String p_name, int p_maxspeed) {
+    public CSpeedNorm(IInstitution<INormObject> p_institution, String p_name, int p_maxspeed) {
         m_institution = p_institution;
         m_maxspeed = p_maxspeed;
         m_name = p_name;
@@ -96,12 +97,12 @@ public class CSpeedNorm implements INorm<INormCar> {
 
 
     @Override
-    public INormCheckResult check(INormCar p_object) {
+    public INormCheckResult check(INormObject p_object) {
         return new CNormResultSpeed(p_object.getCurrentSpeed() > m_maxspeed, Math.max(0, Math.min(1, (p_object.getCurrentSpeed() - m_maxspeed) / (m_maxspeed * m_tolerance))));
     }
 
     @Override
-    public IInstitution<INormCar> getInstitution() {
+    public IInstitution<INormObject> getInstitution() {
         return m_institution;
     }
 

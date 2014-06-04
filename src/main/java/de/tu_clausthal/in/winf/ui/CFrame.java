@@ -92,9 +92,9 @@ public class CFrame extends JFrame {
     /**
      * creates a single dockable and adds it to the dockable control
      *
-     * @param p_title unique title
-     * @param p_panel panel
-     * @param p_close show close button
+     * @param p_title    unique title
+     * @param p_panel    panel
+     * @param p_close    show close button
      * @param p_location location of the panel
      */
     private void createDockable(String p_title, Component p_panel, boolean p_close, CLocation p_location) {

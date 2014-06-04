@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.objects;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.winf.util.IPainter;
+import de.tu_clausthal.in.winf.ui.IPainter;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Map;

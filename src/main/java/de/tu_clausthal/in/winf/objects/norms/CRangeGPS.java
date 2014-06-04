@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.objects.norms;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.mas.norm.IRange;
 import de.tu_clausthal.in.winf.objects.IObject;
 import de.tu_clausthal.in.winf.ui.CInspector;
@@ -37,12 +38,12 @@ import java.util.Map;
 /**
  * range for GPS rectangle
  */
-public class CRangeGPS extends IObject implements IRange<INormCar> {
+public class CRangeGPS extends IObject implements IRange<INormObject> {
 
     /**
      * institution of the range
      */
-    protected IInstitution<INormCar> m_institution = null;
+    protected IInstitution<INormObject> m_institution = null;
     /**
      * geoposition of the upper left corner of the rectangle
      */
@@ -69,10 +70,10 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
      * ctor to create the rectangle
      *
      * @param p_institution institution of the range
-     * @param p_upperleft  left upper corner position
-     * @param p_lowerright right lower corner position
+     * @param p_upperleft   left upper corner position
+     * @param p_lowerright  right lower corner position
      */
-    public CRangeGPS(IInstitution<INormCar> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright) {
+    public CRangeGPS(IInstitution<INormObject> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright) {
         if ((p_lowerright == null) || (p_upperleft == null))
             throw new IllegalArgumentException("parameter need not to be null");
         if ((p_upperleft.getLongitude() > p_lowerright.getLongitude()) || (p_upperleft.getLatitude() < p_lowerright.getLatitude()))
@@ -99,14 +100,14 @@ public class CRangeGPS extends IObject implements IRange<INormCar> {
 
 
     @Override
-    public boolean check(INormCar p_object) {
+    public boolean check(INormObject p_object) {
         synchronized (p_object) {
             return m_georectangle.contains(p_object.getCurrentPosition().getLatitude(), p_object.getCurrentPosition().getLongitude());
         }
     }
 
     @Override
-    public IInstitution<INormCar> getInstitution() {
+    public IInstitution<INormObject> getInstitution() {
         return m_institution;
     }
 

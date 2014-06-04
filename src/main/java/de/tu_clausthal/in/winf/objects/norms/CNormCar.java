@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.objects.norms;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;
 import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
+import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.objects.CDefaultCar;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -34,12 +35,12 @@ import java.util.Map;
 /**
  * creates a car with norm context
  */
-public class CNormCar extends CDefaultCar implements INormCar {
+public class CNormCar extends CDefaultCar implements INormObject {
 
     /**
      * set with norms, that are matched *
      */
-    protected Map<INorm<INormCar>, INormCheckResult> m_norms = new HashMap();
+    protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap();
 
 
     /**
@@ -56,7 +57,7 @@ public class CNormCar extends CDefaultCar implements INormCar {
     public Map<String, Object> inspect() {
         Map<String, Object> l_map = super.inspect();
 
-        for (Map.Entry<INorm<INormCar>, INormCheckResult> l_item : m_norms.entrySet()) {
+        for (Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet()) {
             IInstitution l_institution = l_item.getKey().getInstitution();
             l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
         }
@@ -66,7 +67,7 @@ public class CNormCar extends CDefaultCar implements INormCar {
 
 
     @Override
-    public void setNormMatch(Map<INorm<INormCar>, INormCheckResult> p_norm) {
+    public void setNormMatch(Map<INorm<INormObject>, INormCheckResult> p_norm) {
         m_norms.putAll(p_norm);
     }
 

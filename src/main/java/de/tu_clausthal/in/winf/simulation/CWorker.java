@@ -182,7 +182,7 @@ public class CWorker implements Runnable {
 
                 // call on each car all institutions
                 if (l_car instanceof INormObject) {
-                    ((INormObject) l_car).clearNormMatch();
+                    ((INormObject) l_car).clearMatchedNorm();
                     for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
                         l_item.check((INormObject) l_car);
                 }

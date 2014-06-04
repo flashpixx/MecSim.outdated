@@ -67,12 +67,12 @@ public class CNormCar extends CDefaultCar implements INormObject {
 
 
     @Override
-    public void setNormMatch(Map<INorm<INormObject>, INormCheckResult> p_norm) {
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm) {
         m_norms.putAll(p_norm);
     }
 
     @Override
-    public void clearNormMatch() {
+    public void clearMatchedNorm() {
         m_norms.clear();
     }
 

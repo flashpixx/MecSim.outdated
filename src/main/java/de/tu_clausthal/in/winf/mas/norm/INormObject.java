@@ -36,12 +36,12 @@ public interface INormObject extends ICar {
      *
      * @param p_norm map of norm objects
      */
-    public void setNormMatch(Map<INorm<INormObject>, INormCheckResult> p_norm);
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm);
 
 
     /**
      * clears the mached norms *
      */
-    public void clearNormMatch();
+    public void clearMatchedNorm();
 
 }

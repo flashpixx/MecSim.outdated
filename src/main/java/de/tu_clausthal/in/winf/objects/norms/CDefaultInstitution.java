@@ -84,7 +84,7 @@ public class CDefaultInstitution implements IInstitution<INormObject> {
     @Override
     public void check(INormObject p_object) {
         if (m_range.check(p_object))
-            p_object.setNormMatch(m_norms.match(p_object));
+            p_object.setMatchedNorm(m_norms.match(p_object));
     }
 
     @Override

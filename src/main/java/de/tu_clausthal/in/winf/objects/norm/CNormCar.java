@@ -19,57 +19,62 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.norms;
+package de.tu_clausthal.in.winf.objects.norm;
 
-import de.tu_clausthal.in.winf.objects.CDefaultSource;
-import de.tu_clausthal.in.winf.objects.ICar;
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.INorm;
+import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
+import de.tu_clausthal.in.winf.mas.norm.INormObject;
+import de.tu_clausthal.in.winf.objects.CDefaultCar;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * source for norm cars
+ * creates a car with norm context
  */
-public class CNormSource extends CDefaultSource {
+public class CNormCar extends CDefaultCar implements INormObject {
 
     /**
-     * ctor set the position
-     *
-     * @param p_position geo position
+     * set with norms, that are matched *
      */
-    public CNormSource(GeoPosition p_position) {
-        super(p_position);
-    }
+    protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap();
 
 
     /**
-     * ctor set positition and generate number
+     * ctor to create the initial values
      *
-     * @param p_position position
-     * @param p_number   number of cars
+     * @param p_StartPosition start positions (position of the source)
      */
-    public CNormSource(GeoPosition p_position, int p_number) {
-        super(p_position, p_number);
+    public CNormCar(GeoPosition p_StartPosition) {
+        super(p_StartPosition);
     }
 
 
     @Override
-    public Collection<ICar> generate(int p_currentstep) {
-        Collection<ICar> l_sources = new HashSet();
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = super.inspect();
 
-        // use random number on care creation, to avoid traffic jam on the source
-        for (int i = 0; i < super.m_NumberCarsInStep; i++)
-            if (super.m_random.nextDouble() > 0.15)
-                l_sources.add(new CNormCar(super.m_position));
+        for (Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet()) {
+            IInstitution l_institution = l_item.getKey().getInstitution();
+            l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
+        }
 
-        return l_sources;
+        return l_map;
+    }
+
+
+    @Override
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm) {
+        m_norms.putAll(p_norm);
     }
 
     @Override
-    public Color getColor() {
-        return Color.YELLOW;
+    public void clearMatchedNorm() {
+        m_norms.clear();
     }
+
+
 }

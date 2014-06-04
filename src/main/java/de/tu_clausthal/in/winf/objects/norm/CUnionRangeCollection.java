@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.norms;
+package de.tu_clausthal.in.winf.objects.norm;
 
 import de.tu_clausthal.in.winf.mas.norm.IRange;
 import de.tu_clausthal.in.winf.mas.norm.IRangeCollection;

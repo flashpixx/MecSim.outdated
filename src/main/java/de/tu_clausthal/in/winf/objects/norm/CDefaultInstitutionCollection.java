@@ -19,107 +19,104 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.norms;
+package de.tu_clausthal.in.winf.objects.norm;
 
+import de.tu_clausthal.in.winf.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.mas.norm.IInstitutionCollection;
+import de.tu_clausthal.in.winf.mas.norm.INormMessage;
 
-import de.tu_clausthal.in.winf.mas.norm.INorm;
-import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
-import de.tu_clausthal.in.winf.mas.norm.INormCollection;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import java.util.*;
 
 /**
- * default norm collection
+ * default institution collection
  */
-public class CDefaultNormCollection<INormCar> implements INormCollection<INormCar> {
+public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<T> {
+
 
     /**
-     * map with norms *
+     * list of insitutions *
      */
-    private HashSet<INorm<INormCar>> m_norms = new HashSet();
+    private Set<IInstitution<T>> m_institution = new HashSet();
 
 
     @Override
-    public Map<INorm<INormCar>, INormCheckResult> match(INormCar p_object) {
-        HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap();
-
-        for (INorm<INormCar> l_norm : m_norms) {
-            INormCheckResult l_check = l_norm.check(p_object);
-            if ((l_check.getResult() instanceof Boolean) && (((Boolean) l_check.getResult())))
-                l_map.put(l_norm, l_check);
-        }
-
-        return l_map;
+    public void send(INormMessage<T> p_message) {
+        for (IInstitution<T> l_item : m_institution)
+            l_item.receive(p_message);
     }
 
     @Override
     public void release() {
-        for (INorm<INormCar> l_item : m_norms)
+        for (IInstitution<T> l_item : m_institution)
             l_item.release();
     }
 
     @Override
     public int size() {
-        return m_norms.size();
+        return m_institution.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return m_norms.isEmpty();
+        return m_institution.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return m_norms.contains(o);
+        return m_institution.contains(o);
     }
 
     @Override
-    public Iterator<INorm<INormCar>> iterator() {
-        return m_norms.iterator();
+    public Iterator<IInstitution<T>> iterator() {
+        return m_institution.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return m_norms.toArray();
+        return m_institution.toArray();
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
-        return m_norms.toArray(a);
+    public <T> T[] toArray(T[] a) {
+        return m_institution.toArray(a);
     }
 
     @Override
-    public boolean add(INorm<INormCar> iNormCarINorm) {
-        return m_norms.add(iNormCarINorm);
+    public boolean add(IInstitution<T> iInstitution) {
+        return m_institution.add(iInstitution);
     }
 
     @Override
     public boolean remove(Object o) {
-        return m_norms.remove(o);
+        return m_institution.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return m_norms.containsAll(c);
+        return m_institution.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<INormCar>> c) {
-        return m_norms.addAll(c);
+    public boolean addAll(Collection<? extends IInstitution<T>> c) {
+        return m_institution.addAll(c);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return m_norms.removeAll(c);
+        return m_institution.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return m_norms.retainAll(c);
+        return m_institution.retainAll(c);
     }
 
     @Override
     public void clear() {
-        m_norms.clear();
+        m_institution.clear();
     }
 }

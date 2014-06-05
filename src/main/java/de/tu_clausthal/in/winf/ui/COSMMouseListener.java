@@ -23,10 +23,10 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
-import de.tu_clausthal.in.winf.objects.CDefaultSource;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.objects.norm.CNormSource;
-import de.tu_clausthal.in.winf.objects.norm.CRangeGPS;
+import de.tu_clausthal.in.winf.object.CDefaultSource;
+import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import de.tu_clausthal.in.winf.object.norm.CNormSource;
+import de.tu_clausthal.in.winf.object.norm.CRangeGPS;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;

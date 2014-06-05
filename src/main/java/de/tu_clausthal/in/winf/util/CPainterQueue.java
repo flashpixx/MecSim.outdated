@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.util;
 
 
+import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.IPainter;
 import org.jxmapviewer.painter.Painter;

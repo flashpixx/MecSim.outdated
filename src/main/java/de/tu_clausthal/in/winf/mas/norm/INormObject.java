@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.mas.norm;
 
-import de.tu_clausthal.in.winf.objects.ICar;
+import de.tu_clausthal.in.winf.object.ICar;
 
 import java.util.Map;
 

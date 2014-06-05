@@ -19,12 +19,12 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.mas.norm.IRange;
-import de.tu_clausthal.in.winf.objects.IObject;
+import de.tu_clausthal.in.winf.object.IObject;
 import de.tu_clausthal.in.winf.ui.CInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;

@@ -19,12 +19,11 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.world;
+package de.tu_clausthal.in.winf.object.world;
 
 
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.util.Collection;
@@ -137,24 +136,18 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldL
     }
 
     @Override
-    protected void doPaint(Graphics2D g, T component, int width, int height)
-    {
-        for (IWorldLayer l_layer : m_layer.values())
-        {
+    protected void doPaint(Graphics2D g, T component, int width, int height) {
+        for (IWorldLayer l_layer : m_layer.values()) {
             if (!l_layer.isVisible())
                 continue;
 
             Graphics2D temp = (Graphics2D) g.create();
-            try
-            {
+            try {
                 l_layer.paint(temp, component, width, height);
-                if (super.isClipPreserved())
-                {
+                if (super.isClipPreserved()) {
                     g.setClip(temp.getClip());
                 }
-            }
-            finally
-            {
+            } finally {
                 temp.dispose();
             }
         }

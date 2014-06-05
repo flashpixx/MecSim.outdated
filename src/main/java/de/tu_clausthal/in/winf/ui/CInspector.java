@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.objects.IObject;
+import de.tu_clausthal.in.winf.object.IObject;
 
 import javax.swing.*;
 

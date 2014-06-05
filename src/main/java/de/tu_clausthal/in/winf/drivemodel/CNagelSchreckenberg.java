@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.drivemodel;
 
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.objects.ICar;
+import de.tu_clausthal.in.winf.object.ICar;
 
 import java.util.Map;
 import java.util.Random;

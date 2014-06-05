@@ -27,9 +27,9 @@ import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.objects.IObject;
+import de.tu_clausthal.in.winf.object.ICar;
+import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import de.tu_clausthal.in.winf.object.IObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

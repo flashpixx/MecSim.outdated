@@ -1,9 +1,5 @@
-package de.tu_clausthal.in.winf.objects.world;
+package de.tu_clausthal.in.winf.object.world;
 
-import de.tu_clausthal.in.winf.objects.ICar;
-import org.jxmapviewer.JXMapViewer;
-
-import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;

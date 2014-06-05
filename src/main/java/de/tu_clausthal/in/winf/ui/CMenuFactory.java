@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.util;
+package de.tu_clausthal.in.winf.ui;
 
 
 import javax.swing.*;

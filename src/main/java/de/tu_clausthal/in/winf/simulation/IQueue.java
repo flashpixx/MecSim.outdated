@@ -19,46 +19,28 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.world;
+package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.ui.IPainter;
-import de.tu_clausthal.in.winf.util.IQueue;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.painter.Painter;
+import java.util.Queue;
 
-import java.util.Map;
 
 /**
  *
  */
-public abstract class IWorldLayer<T> extends CompoundPainter<T> implements IQueue<T> {
+public interface IQueue<T> extends Queue<T> {
 
-    protected boolean m_visible = true;
-    protected boolean m_active = true;
+    /**
+     * returns the queue of all items
+     *
+     * @return queue
+     */
+    public Queue<T> getAll();
 
 
-    public void step(int p_currentstep) {
-    }
-
-    public Map<String, Object> getData() {
-        return null;
-    }
-
-    public boolean isActive() {
-        return m_active;
-    }
-
-    public void setActive(boolean p_active) {
-        m_active = p_active;
-    }
-
-    public boolean isVisible() {
-        return m_visible;
-    }
-
-    public void setVisible(boolean p_visible) {
-        m_visible = p_visible;
-    }
-
+    /**
+     * moves elements from the unprocessed queue
+     * to the processed queue
+     */
+    public void reset();
 
 }

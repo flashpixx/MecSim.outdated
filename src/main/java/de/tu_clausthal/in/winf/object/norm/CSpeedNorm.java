@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INorm;

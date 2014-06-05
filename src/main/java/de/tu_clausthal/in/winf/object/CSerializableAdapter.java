@@ -19,28 +19,29 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.util;
+package de.tu_clausthal.in.winf.object;
 
-import java.util.Queue;
+import java.io.Serializable;
 
 
 /**
- *
+ * serializable adapter for objects that does not
+ * implement the serializable interface
  */
-public interface IQueue<T> extends Queue<T> {
+public class CSerializableAdapter<T> implements Serializable {
+    /**
+     * object reference *
+     */
+    protected transient T m_object;
+
 
     /**
-     * returns the queue of all items
+     * getter for object reference
      *
-     * @return queue
+     * @return object
      */
-    public Queue<T> getAll();
-
-
-    /**
-     * moves elements from the unprocessed queue
-     * to the processed queue
-     */
-    public void reset();
+    public T getObject() {
+        return m_object;
+    }
 
 }

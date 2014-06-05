@@ -23,7 +23,6 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.util.CMenuFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -23,9 +23,9 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
-import de.tu_clausthal.in.winf.objects.ICar;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.objects.world.CWorld;
+import de.tu_clausthal.in.winf.object.ICar;
+import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.util.CPainterQueue;
 import de.tu_clausthal.in.winf.util.CQueue;

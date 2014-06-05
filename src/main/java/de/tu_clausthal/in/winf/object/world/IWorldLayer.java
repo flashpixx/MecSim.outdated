@@ -19,29 +19,44 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.objects;
+package de.tu_clausthal.in.winf.object.world;
 
-import java.io.Serializable;
+import de.tu_clausthal.in.winf.simulation.IQueue;
+import org.jxmapviewer.painter.CompoundPainter;
 
+import java.util.Map;
 
 /**
- * serializable adapter for objects that does not
- * implement the serializable interface
+ *
  */
-public class CSerializableAdapter<T> implements Serializable {
-    /**
-     * object reference *
-     */
-    protected transient T m_object;
+public abstract class IWorldLayer<T> extends CompoundPainter<T> implements IQueue<T> {
+
+    protected boolean m_visible = true;
+    protected boolean m_active = true;
 
 
-    /**
-     * getter for object reference
-     *
-     * @return object
-     */
-    public T getObject() {
-        return m_object;
+    public void step(int p_currentstep) {
     }
+
+    public Map<String, Object> getData() {
+        return null;
+    }
+
+    public boolean isActive() {
+        return m_active;
+    }
+
+    public void setActive(boolean p_active) {
+        m_active = p_active;
+    }
+
+    public boolean isVisible() {
+        return m_visible;
+    }
+
+    public void setVisible(boolean p_visible) {
+        m_visible = p_visible;
+    }
+
 
 }

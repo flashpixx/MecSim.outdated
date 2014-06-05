@@ -1,4 +1,4 @@
-package de.tu_clausthal.in.winf.object.world;
+package de.tu_clausthal.in.winf.simulation.data;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -7,7 +7,7 @@ import java.util.Queue;
 /**
  *
  */
-public class CDefaultLayer<T> extends IWorldLayer<T> {
+public class CDefaultMultiLayer<T> extends IMultiLayer<T> {
 
     @Override
     public Queue<T> getAll() {

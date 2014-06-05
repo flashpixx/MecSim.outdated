@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.process;
 
 import de.tu_clausthal.in.winf.object.ICar;
 import de.tu_clausthal.in.winf.object.ICarSourceFactory;

@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.util;
 
-import de.tu_clausthal.in.winf.simulation.IQueue;
+import de.tu_clausthal.in.winf.simulation.process.IQueue;
 
 import java.util.Collection;
 import java.util.Queue;

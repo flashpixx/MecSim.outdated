@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.process;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
@@ -30,6 +30,7 @@ import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.object.ICar;
 import de.tu_clausthal.in.winf.object.ICarSourceFactory;
 import de.tu_clausthal.in.winf.object.IObject;
+import de.tu_clausthal.in.winf.simulation.data.CSimulationData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

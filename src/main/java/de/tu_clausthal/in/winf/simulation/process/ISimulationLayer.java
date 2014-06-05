@@ -19,54 +19,16 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf;
-
-import de.tu_clausthal.in.winf.analysis.CStatisticMap;
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.simulation.data.CSimulationData;
-import de.tu_clausthal.in.winf.ui.CFrame;
-
-import javax.swing.*;
-import java.io.File;
+package de.tu_clausthal.in.winf.simulation.process;
 
 
 /**
- * main class of the application
- *
- * @note Main must be started with option "-Xmx2g", because we need memory to create graph structure
+ * simulation layer to represent simulation information
  */
-public class CMain {
+public interface ISimulationLayer extends IStep {
 
-    /**
-     * main program
-     *
-     * @param p_args commandline arguments
-     */
-    public static void main(String[] p_args) throws Exception {
-        // read the configuration directory (default ~/.tucwinf)
-        File l_config = new File(System.getProperty("user.home") + File.separator + ".tucwinf");
-        if (p_args.length > 0)
-            l_config = new File(p_args[0]);
+    public boolean isActive();
 
-        // set configuration directory and read the Json configuration file
-        CConfiguration.getInstance().setConfigDir(l_config);
-        CConfiguration.getInstance().read();
-
-        // call Graphhopper instance (and import data if needed)
-        CGraphHopper.getInstance();
-
-        // add step runner objects to the simulation
-        CSimulationData.getInstance().getStepListenerQueue().add(CStatisticMap.getInstance());
-
-
-        // create the UI within an invoke thread
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                CFrame l_frame = new CFrame();
-                l_frame.setTitle("TU-Clausthal MEC - Traffic Simulation");
-                l_frame.setVisible(true);
-            }
-        });
-    }
+    public void setActive(boolean p_active);
 
 }

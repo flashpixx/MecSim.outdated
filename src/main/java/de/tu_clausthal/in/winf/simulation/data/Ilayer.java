@@ -19,16 +19,16 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.data;
 
+
+import java.util.Map;
 
 /**
- * interface of void-step method
+ * layer definition
  */
-public interface IVoidStepable extends IStepable {
+public interface Ilayer {
 
-
-    /** step method **/
-    public void step( int p_currentstep );
+    public Map<String, Object> getData();
 
 }

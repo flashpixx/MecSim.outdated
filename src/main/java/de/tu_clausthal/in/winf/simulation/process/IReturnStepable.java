@@ -19,44 +19,16 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.world;
+package de.tu_clausthal.in.winf.simulation.process;
 
-import de.tu_clausthal.in.winf.simulation.IQueue;
-import org.jxmapviewer.painter.CompoundPainter;
+import java.util.Collection;
 
-import java.util.Map;
 
 /**
- *
+ * interface for a step call with a return argument
  */
-public abstract class IWorldLayer<T> extends CompoundPainter<T> implements IQueue<T> {
+public interface IReturnStepable<T> extends IStepable {
 
-    protected boolean m_visible = true;
-    protected boolean m_active = true;
-
-
-    public void step(int p_currentstep) {
-    }
-
-    public Map<String, Object> getData() {
-        return null;
-    }
-
-    public boolean isActive() {
-        return m_active;
-    }
-
-    public void setActive(boolean p_active) {
-        m_active = p_active;
-    }
-
-    public boolean isVisible() {
-        return m_visible;
-    }
-
-    public void setVisible(boolean p_visible) {
-        m_visible = p_visible;
-    }
-
+    public Collection<T> step(int p_currentstep);
 
 }

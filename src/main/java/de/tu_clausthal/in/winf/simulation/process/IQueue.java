@@ -19,16 +19,28 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.process;
+
+import java.util.Queue;
 
 
 /**
- * simulation layer to represent simulation information
+ *
  */
-public interface ISimulationLayer extends IStep {
+public interface IQueue<T> extends Queue<T> {
 
-    public boolean isActive();
+    /**
+     * returns the queue of all items
+     *
+     * @return queue
+     */
+    public Queue<T> getAll();
 
-    public void setActive(boolean p_active);
+
+    /**
+     * moves elements from the unprocessed queue
+     * to the processed queue
+     */
+    public void reset();
 
 }

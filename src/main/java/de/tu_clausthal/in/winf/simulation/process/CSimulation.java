@@ -19,11 +19,12 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.process;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.simulation.data.CSimulationData;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

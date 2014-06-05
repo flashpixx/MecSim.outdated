@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.world;
+package de.tu_clausthal.in.winf.simulation.data;
 
 
 import de.tu_clausthal.in.winf.ui.COSMViewer;
@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * world layer collection
  */
-public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldLayer> {
+public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiLayer> {
 
     /**
      * viewer *
@@ -43,7 +43,7 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldL
     /**
      * map with layer *
      */
-    protected Map<String, IWorldLayer> m_layer = new HashMap();
+    protected Map<String, IMultiLayer> m_layer = new HashMap();
 
 
     /**
@@ -62,7 +62,7 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldL
     public synchronized Map<String, Object> getData() {
         Map<String, Object> l_data = new HashMap();
 
-        for (Map.Entry<String, IWorldLayer> l_item : m_layer.entrySet())
+        for (Map.Entry<String, IMultiLayer> l_item : m_layer.entrySet())
             l_data.putAll(l_item.getValue().getData());
 
         return l_data;
@@ -89,33 +89,33 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldL
     }
 
     @Override
-    public IWorldLayer get(Object key) {
+    public IMultiLayer get(Object key) {
         return m_layer.get(key);
     }
 
     @Override
-    public IWorldLayer put(String key, IWorldLayer value) {
+    public IMultiLayer put(String key, IMultiLayer value) {
         super.addPainter(value);
         return m_layer.put(key, value);
     }
 
     @Override
-    public IWorldLayer remove(Object key) {
-        IWorldLayer l_layer = m_layer.remove(key);
+    public IMultiLayer remove(Object key) {
+        IMultiLayer l_layer = m_layer.remove(key);
         super.removePainter(l_layer);
         return l_layer;
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends IWorldLayer> m) {
-        for (IWorldLayer l_layer : m.values())
+    public void putAll(Map<? extends String, ? extends IMultiLayer> m) {
+        for (IMultiLayer l_layer : m.values())
             super.addPainter(l_layer);
         m_layer.putAll(m);
     }
 
     @Override
     public void clear() {
-        for (IWorldLayer l_layer : m_layer.values())
+        for (IMultiLayer l_layer : m_layer.values())
             super.removePainter(l_layer);
         m_layer.clear();
     }
@@ -126,18 +126,18 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldL
     }
 
     @Override
-    public Collection<IWorldLayer> values() {
+    public Collection<IMultiLayer> values() {
         return m_layer.values();
     }
 
     @Override
-    public Set<Entry<String, IWorldLayer>> entrySet() {
+    public Set<Entry<String, IMultiLayer>> entrySet() {
         return m_layer.entrySet();
     }
 
     @Override
     protected void doPaint(Graphics2D g, T component, int width, int height) {
-        for (IWorldLayer l_layer : m_layer.values()) {
+        for (IMultiLayer l_layer : m_layer.values()) {
             if (!l_layer.isVisible())
                 continue;
 

@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.object.norm;
 
 import de.tu_clausthal.in.winf.mas.norm.*;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
+import de.tu_clausthal.in.winf.simulation.data.CSimulationData;
 import org.jxmapviewer.JXMapViewer;
 
 import java.awt.*;

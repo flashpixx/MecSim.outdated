@@ -19,12 +19,45 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.data;
 
+import de.tu_clausthal.in.winf.simulation.process.IQueue;
+import de.tu_clausthal.in.winf.ui.IViewableLayer;
+import org.jxmapviewer.painter.CompoundPainter;
+
+import java.util.Map;
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ *
  */
-public interface IStepable {
+public abstract class IMultiLayer<T> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer {
+
+    protected boolean m_visible = true;
+    protected boolean m_active = true;
+
+
+    public void step(int p_currentstep) {
+    }
+
+    public Map<String, Object> getData() {
+        return null;
+    }
+
+    public boolean isActive() {
+        return m_active;
+    }
+
+    public void setActive(boolean p_active) {
+        m_active = p_active;
+    }
+
+    public boolean isVisible() {
+        return m_visible;
+    }
+
+    public void setVisible(boolean p_visible) {
+        m_visible = p_visible;
+    }
+
 
 }

@@ -19,28 +19,16 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.util;
+package de.tu_clausthal.in.winf.simulation;
 
-import java.util.Queue;
+import java.util.Collection;
 
 
 /**
- *
+ * interface for a step call with a return argument
  */
-public interface IQueue<T> extends Queue<T> {
+public interface IReturnStepable<T> extends IStepable {
 
-    /**
-     * returns the queue of all items
-     *
-     * @return queue
-     */
-    public Queue<T> getAll();
-
-
-    /**
-     * moves elements from the unprocessed queue
-     * to the processed queue
-     */
-    public void reset();
+    public Collection<T> step( int p_currentstep );
 
 }

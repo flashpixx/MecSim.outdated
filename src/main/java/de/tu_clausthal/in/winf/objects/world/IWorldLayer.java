@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.objects.world;
 
 import de.tu_clausthal.in.winf.ui.IPainter;
 import de.tu_clausthal.in.winf.util.IQueue;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.Map;
 /**
  *
  */
-public abstract class IWorldLayer<T extends IPainter> implements Painter, IQueue<T> {
+public abstract class IWorldLayer<T> extends CompoundPainter<T> implements IQueue<T> {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;

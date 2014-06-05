@@ -11,20 +11,15 @@ import java.util.Queue;
 /**
  *
  */
-public class CCarLayer extends IWorldLayer<ICar> {
+public class CDefaultLayer<T> extends IWorldLayer<T> {
 
     @Override
-    public Queue<ICar> getAll() {
+    public Queue<T> getAll() {
         return null;
     }
 
     @Override
-    public ICar pop() {
-        return null;
-    }
-
-    @Override
-    public void push(ICar p_item) {
+    public void reset() {
 
     }
 
@@ -44,7 +39,7 @@ public class CCarLayer extends IWorldLayer<ICar> {
     }
 
     @Override
-    public Iterator<ICar> iterator() {
+    public Iterator<T> iterator() {
         return null;
     }
 
@@ -54,17 +49,12 @@ public class CCarLayer extends IWorldLayer<ICar> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T1> T1[] toArray(T1[] a) {
         return null;
     }
 
     @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public boolean add(ICar iCar) {
+    public boolean add(T t) {
         return false;
     }
 
@@ -79,7 +69,7 @@ public class CCarLayer extends IWorldLayer<ICar> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends ICar> c) {
+    public boolean addAll(Collection<? extends T> c) {
         return false;
     }
 
@@ -99,32 +89,27 @@ public class CCarLayer extends IWorldLayer<ICar> {
     }
 
     @Override
-    public boolean offer(ICar iCar) {
+    public boolean offer(T t) {
         return false;
     }
 
     @Override
-    public ICar remove() {
+    public T remove() {
         return null;
     }
 
     @Override
-    public ICar poll() {
+    public T poll() {
         return null;
     }
 
     @Override
-    public ICar element() {
+    public T element() {
         return null;
     }
 
     @Override
-    public ICar peek() {
+    public T peek() {
         return null;
-    }
-
-    @Override
-    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
-
     }
 }

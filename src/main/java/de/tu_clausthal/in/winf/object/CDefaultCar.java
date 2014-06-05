@@ -26,7 +26,7 @@ import com.graphhopper.routing.Path;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.ui.CInspector;
+import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;

@@ -30,6 +30,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * queue class *
+ *
+ * @deprecated
  */
 public class CQueue<T> implements IQueue<T> {
 

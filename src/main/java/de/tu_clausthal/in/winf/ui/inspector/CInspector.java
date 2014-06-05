@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.ui.inspector;
 
 import de.tu_clausthal.in.winf.object.IObject;
 

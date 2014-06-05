@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.ui.menu;
 
 import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
@@ -34,6 +34,7 @@ import de.tu_clausthal.in.winf.object.norm.CDefaultInstitution;
 import de.tu_clausthal.in.winf.object.norm.CSpeedNorm;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

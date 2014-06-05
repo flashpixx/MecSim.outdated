@@ -28,6 +28,8 @@ import java.awt.*;
 
 /**
  * class for painter representation (encapsulate JXMapViewer)
+ *
+ * @deprecated
  */
 public interface IPainter {
 

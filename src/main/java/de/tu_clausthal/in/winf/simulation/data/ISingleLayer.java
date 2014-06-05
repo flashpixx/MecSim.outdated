@@ -21,33 +21,22 @@
 
 package de.tu_clausthal.in.winf.simulation.data;
 
-import de.tu_clausthal.in.winf.simulation.process.IQueue;
+
 import de.tu_clausthal.in.winf.simulation.process.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.IViewableLayer;
-import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
+import java.awt.*;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
- * multilayer to create a collection for elements
+ * single layer to create a single information structure
  */
-public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, Ilayer, IVoidStepable {
+public abstract class ISingleLayer implements Painter, IViewableLayer, Ilayer, IVoidStepable {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;
-
-    /**
-     * list of unprocessed sources *
-     */
-    protected ConcurrentLinkedQueue<T> m_unprocess = new ConcurrentLinkedQueue();
-    /**
-     * list of processed sources *
-     */
-    protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
 
 
     public boolean isActive() {
@@ -70,63 +59,18 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
     }
 
 
+    @Override
+    public void step(int p_currentstep) {
+
+    }
+
+    @Override
     public Map<String, Object> getData() {
         return null;
     }
 
     @Override
-    public boolean add(T t) {
-        super.addPainter(t);
-        return m_process.add(t);
-    }
-
-    @Override
-    public boolean offer(T t) {
-        super.addPainter(t);
-        return m_process.offer(t);
-    }
-
-    @Override
-    public T remove() {
-        T l_item = m_process.remove();
-        super.removePainter(l_item);
-        return l_item;
-    }
-
-    @Override
-    public T poll() {
-        T l_item = m_unprocess.poll();
-        super.removePainter(l_item);
-        return l_item;
-    }
-
-    @Override
-    public T element() {
-        return m_unprocess.element();
-    }
-
-    @Override
-    public T peek() {
-        return m_unprocess.peek();
-    }
-
-    public void step(int p_currentstep) {
-    }
-
-
-    @Override
-    public synchronized void reset() {
-        m_unprocess.addAll(m_process);
-        m_process.clear();
-    }
-
-
-    @Override
-    public Queue<T> getAll() {
-        Queue<T> l_data = new ConcurrentLinkedQueue();
-        l_data.addAll(m_unprocess);
-        l_data.addAll(m_process);
-        return l_data;
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
     }
 
 }

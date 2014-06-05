@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.objects.world;
 
 
 import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
@@ -34,7 +35,7 @@ import java.util.Set;
 /**
  * world layer collection
  */
-public class CWorld implements Map<String, IWorldLayer>, Painter {
+public class CWorld<T> extends CompoundPainter<T> implements Map<String, IWorldLayer> {
 
     /**
      * viewer *
@@ -95,21 +96,28 @@ public class CWorld implements Map<String, IWorldLayer>, Painter {
 
     @Override
     public IWorldLayer put(String key, IWorldLayer value) {
+        super.addPainter(value);
         return m_layer.put(key, value);
     }
 
     @Override
     public IWorldLayer remove(Object key) {
-        return m_layer.remove(key);
+        IWorldLayer l_layer = m_layer.remove(key);
+        super.removePainter(l_layer);
+        return l_layer;
     }
 
     @Override
     public void putAll(Map<? extends String, ? extends IWorldLayer> m) {
+        for (IWorldLayer l_layer : m.values())
+            super.addPainter(l_layer);
         m_layer.putAll(m);
     }
 
     @Override
     public void clear() {
+        for (IWorldLayer l_layer : m_layer.values())
+            super.removePainter(l_layer);
         m_layer.clear();
     }
 
@@ -129,9 +137,27 @@ public class CWorld implements Map<String, IWorldLayer>, Painter {
     }
 
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+    protected void doPaint(Graphics2D g, T component, int width, int height)
+    {
         for (IWorldLayer l_layer : m_layer.values())
-            if (l_layer.isVisible())
-                l_layer.paint(graphics2D, m_viewer);
+        {
+            if (!l_layer.isVisible())
+                continue;
+
+            Graphics2D temp = (Graphics2D) g.create();
+            try
+            {
+                l_layer.paint(temp, component, width, height);
+                if (super.isClipPreserved())
+                {
+                    g.setClip(temp.getClip());
+                }
+            }
+            finally
+            {
+                temp.dispose();
+            }
+        }
     }
+
 }

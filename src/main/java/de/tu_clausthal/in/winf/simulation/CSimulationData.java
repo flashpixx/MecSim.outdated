@@ -51,7 +51,7 @@ public class CSimulationData {
     /**
      * queue for step listeners *
      */
-    private CQueue<ISimulationStep> m_steplistener = new CQueue();
+    private CQueue<IStep> m_steplistener = new CQueue();
     /**
      * car institution *
      */
@@ -109,7 +109,7 @@ public class CSimulationData {
      *
      * @return queue
      */
-    public CQueue<ISimulationStep> getStepListenerQueue() {
+    public CQueue<IStep> getStepListenerQueue() {
         return m_steplistener;
     }
 

@@ -117,7 +117,7 @@ public class CWorker implements Runnable {
      */
     private void processListener(ListenerCall p_call) throws InterruptedException, BrokenBarrierException {
 
-        ISimulationStep l_step = null;
+        IStep l_step = null;
         ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
         ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
 

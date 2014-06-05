@@ -23,7 +23,7 @@ package de.tu_clausthal.in.winf.analysis;
 
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.ISimulationStep;
+import de.tu_clausthal.in.winf.simulation.IStep;
 import de.tu_clausthal.in.winf.ui.CFrame;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * statistic map for creating plots of any data *
  * * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
-public class CStatisticMap implements ISimulationStep {
+public class CStatisticMap implements IStep {
 
     /**
      * singleton instance of the class *

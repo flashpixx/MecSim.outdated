@@ -30,7 +30,7 @@ import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
  *
  * @note each object can be called on different threads, so attend synchronization
  */
-public interface ISimulationStep {
+public interface IStep {
 
     /**
      * is called on before each step

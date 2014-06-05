@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * multilayer to create a collection for elements
  */
-public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, Ilayer, IVoidStepable {
+public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, ILayer, IVoidStepable {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;

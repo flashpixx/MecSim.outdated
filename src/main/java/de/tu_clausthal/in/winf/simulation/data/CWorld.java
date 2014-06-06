@@ -27,9 +27,8 @@ import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.CompoundPainter;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * world layer collection
@@ -43,7 +42,7 @@ public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQue
     /**
      * map with layer *
      */
-    protected Map<String, ILayer> m_layer = new HashMap();
+    protected Map<String, ILayer> m_layer = new ConcurrentHashMap();
     /**
      * list of unprocessed sources *
      */
@@ -52,8 +51,13 @@ public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQue
      * list of processed sources *
      */
     protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
-
-
+@bug remove clash
+@todo check all
+@todo create union
+    @Overr
+with unique
+    @Overrid
+elements from
 
     /**
      * ctor
@@ -65,40 +69,42 @@ public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQue
         m_viewer.getCompoundPainter().addPainter(this);
     }
 
-
     /**
      * returns a map with all layer data *
      */
     public synchronized Map<String, Object> getData() {
         Map<String, Object> l_data = new HashMap();
 
-        for (Map.Entry<String, ILayer> l_item : m_layer.entrySet())
-            l_data.putAll(l_item.getValue().getData());
+        for (ILayer l_item : m_process)
+            l_data.putAll(l_item.getData());
+        for (ILayer l_item : m_unprocess)
+            l_data.putAll(l_item.getData());
 
         return l_data;
     }
 
-
     @Override
-    public int size() {
-        return m_layer.size();
+    public synchronized int size() {
+        return Math.max(m_layer.size(), m_process.size() + m_unprocess.size());
     }
 
     @Override
-    public boolean isEmpty() {
-        return m_layer.isEmpty();
+    public synchronized boolean isEmpty() {
+        return m_layer.isEmpty() && m_process.isEmpty() && m_unprocess.isEmpty();
     }
 
     @Override
-    public boolean contains(Object o) {
-        return false;
+    public synchronized boolean contains(Object o) {
+        return m_layer.values().contains(o) || m_process.contains(o) || m_unprocess.contains(o);
     }
 
     @Override
-    public Iterator<ILayer<?>> iterator() {
-        return null;
+    public synchronized Iterator<ILayer> iterator() {
+        Queue<ILayer> l_items = new ConcurrentLinkedQueue();
+        l_items.addAll(m_unprocess);
+        l_items.addAll(m_process);
+        return l_items.iterator();
     }
-
 
     @Override
     public Object[] toArray() {
@@ -106,52 +112,61 @@ public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQue
     }
 
     @Override
+
+    @Override
     public <T> T[] toArray(T[] a) {
         return m_layer.values().toArray(a);
     }
 
+    error
+
     @Override
+
     public boolean containsKey(Object key) {
         return m_layer.containsKey(key);
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        return m_layer.containsValue(value);
+    public synchronized boolean containsValue(Object value) {
+        return m_layer.containsValue(value) || m_process.contains(value) || m_unprocess.contains(value);
     }
 
     @Override
-    public synchronized ILayer get(Object key) {
+
+    @Override
+    public ILayer get(Object key) {
         return m_layer.get(key);
     }
 
+    parts
 
     @Override
+
     public synchronized ILayer put(String key, ILayer value) {
         m_unprocess.add(value);
         return m_layer.put(key, value);
     }
 
-    @Override
     public ILayer remove(Object key) {
-        return null;
+        return m_layer.remove(key);
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends ILayer> m) {
-
+    public synchronized void putAll(Map<? extends String, ? extends ILayer> m) {
+        m_unprocess.addAll(m.values());
+        m_layer.putAll(m);
     }
 
-    @Override
     public synchronized boolean containsAll(Collection<?> c) {
-        return m_layer.values().containsAll(c);
+
+
+        return false;
     }
 
     @Override
     public boolean addAll(Collection<? extends ILayer> c) {
-        return false;
+        return m_unprocess.addAll(c);
     }
-
 
     @Override
     public boolean removeAll(Collection<?> c) {
@@ -159,35 +174,34 @@ public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQue
     }
 
     @Override
+
+    @Override
     public boolean retainAll(Collection<?> c) {
         return false;
     }
 
+    ide
 
-    @Override
     public synchronized void clear() {
         m_layer.clear();
         m_process.clear();
         m_unprocess.clear();
     }
 
-    @Override
+    e
+
     public Set<String> keySet() {
         return m_layer.keySet();
     }
 
-    @Override
+    layer&process&unprocess
+
     public Collection<ILayer> values() {
         return null;
     }
 
     @Override
     public Set<Entry<String, ILayer>> entrySet() {
-        return null;
-    }
-
-    @Override
-    public Queue<ILayer> getAll() {
         return null;
     }
 

@@ -28,7 +28,6 @@ import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -118,15 +117,6 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
     public synchronized void reset() {
         m_unprocess.addAll(m_process);
         m_process.clear();
-    }
-
-
-    @Override
-    public Queue<T> getAll() {
-        Queue<T> l_data = new ConcurrentLinkedQueue();
-        l_data.addAll(m_unprocess);
-        l_data.addAll(m_process);
-        return l_data;
     }
 
 }

@@ -30,14 +30,6 @@ import java.util.Queue;
 public interface IQueue<T> extends Queue<T> {
 
     /**
-     * returns the queue of all items
-     *
-     * @return queue
-     */
-    public Queue<T> getAll();
-
-
-    /**
      * moves elements from the unprocessed queue
      * to the processed queue
      */

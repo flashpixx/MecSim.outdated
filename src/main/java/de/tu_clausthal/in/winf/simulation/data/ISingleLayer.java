@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * single layer to create a single information structure
  */
-public abstract class ISingleLayer implements Painter, IViewableLayer, Ilayer, IVoidStepable {
+public abstract class ISingleLayer implements Painter, IViewableLayer, ILayer, IVoidStepable {
 
     protected boolean m_visible = true;
     protected boolean m_active = true;

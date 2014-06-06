@@ -22,19 +22,18 @@
 package de.tu_clausthal.in.winf.simulation.data;
 
 
+import de.tu_clausthal.in.winf.simulation.process.IQueue;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.CompoundPainter;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * world layer collection
  */
-public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiLayer> {
+public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>, IQueue<ILayer> {
 
     /**
      * viewer *
@@ -43,7 +42,15 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiL
     /**
      * map with layer *
      */
-    protected Map<String, IMultiLayer> m_layer = new HashMap();
+    protected Map<String, ILayer> m_layer = new HashMap();
+    /**
+     * list of unprocessed sources *
+     */
+    protected ConcurrentLinkedQueue<ILayer> m_unprocess = new ConcurrentLinkedQueue();
+    /**
+     * list of processed sources *
+     */
+    protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
 
 
     /**
@@ -68,6 +75,7 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiL
         return l_data;
     }
 
+
     @Override
     public int size() {
         return m_layer.size();
@@ -76,6 +84,27 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiL
     @Override
     public boolean isEmpty() {
         return m_layer.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
+
+    @Override
+    public Iterator<ILayer> iterator() {
+        return null;
+    }
+
+
+    @Override
+    public Object[] toArray() {
+        return m_layer.values().toArray()
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return m_layer.values().toArray(a);
     }
 
     @Override
@@ -89,35 +118,52 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiL
     }
 
     @Override
-    public IMultiLayer get(Object key) {
+    public synchronized ILayer get(Object key) {
         return m_layer.get(key);
     }
 
     @Override
-    public IMultiLayer put(String key, IMultiLayer value) {
-        super.addPainter(value);
+    public synchronized ILayer put(String key, ILayer value) {
+        m_unprocess.add(value)
         return m_layer.put(key, value);
     }
 
     @Override
-    public IMultiLayer remove(Object key) {
-        IMultiLayer l_layer = m_layer.remove(key);
-        super.removePainter(l_layer);
-        return l_layer;
+    public ILayer remove(Object key) {
+        return null;
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends IMultiLayer> m) {
-        for (IMultiLayer l_layer : m.values())
-            super.addPainter(l_layer);
+    public synchronized boolean containsAll(Collection<?> c) {
+        return m_layer.values().containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends ILayer> c) {
+        return m_unprocess.addAll(c);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public synchronized void putAll(Map<? extends String, ? extends ILayer> m) {
         m_layer.putAll(m);
+        m_unprocess.addAll(m.values());
     }
 
     @Override
-    public void clear() {
-        for (IMultiLayer l_layer : m_layer.values())
-            super.removePainter(l_layer);
+    public synchronized void clear() {
         m_layer.clear();
+        m_process.clear();
+        m_unprocess.clear();
     }
 
     @Override
@@ -126,31 +172,53 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, IMultiL
     }
 
     @Override
-    public Collection<IMultiLayer> values() {
+    public Collection<ILayer> values() {
         return m_layer.values();
     }
 
     @Override
-    public Set<Entry<String, IMultiLayer>> entrySet() {
+    public Set<Entry<String, ILayer>> entrySet() {
         return m_layer.entrySet();
     }
 
     @Override
-    protected void doPaint(Graphics2D g, T component, int width, int height) {
-        for (IMultiLayer l_layer : m_layer.values()) {
-            if (!l_layer.isVisible())
-                continue;
-
-            Graphics2D temp = (Graphics2D) g.create();
-            try {
-                l_layer.paint(temp, component, width, height);
-                if (super.isClipPreserved()) {
-                    g.setClip(temp.getClip());
-                }
-            } finally {
-                temp.dispose();
-            }
-        }
+    public Queue<ILayer> getAll() {
+        return new Queue(m_layer.values());
     }
 
+    @Override
+    public synchronized void reset() {
+        m_unprocess.addAll(m_process);
+        m_process.clear();
+    }
+
+    @Override
+    public boolean add(ILayer iLayer) {
+        return m_process.add(iLayer);
+    }
+
+    @Override
+    public boolean offer(ILayer iLayer) {
+        return m_process.offer(iLayer);
+    }
+
+    @Override
+    public synchronized ILayer remove() {
+        return m_unprocess.remove();
+    }
+
+    @Override
+    public ILayer poll() {
+        return m_unprocess.poll();
+    }
+
+    @Override
+    public ILayer element() {
+        return m_unprocess.element();
+    }
+
+    @Override
+    public ILayer peek() {
+        return m_unprocess.peek();
+    }
 }

@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * layer definition
  */
-public interface ILayer {
+public interface ILayer<T> {
 
     public Map<String, Object> getData();
 

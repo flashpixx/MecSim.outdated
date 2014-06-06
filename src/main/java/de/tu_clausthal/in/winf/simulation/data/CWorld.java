@@ -26,14 +26,15 @@ import de.tu_clausthal.in.winf.simulation.process.IQueue;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.CompoundPainter;
 
-import java.awt.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * world layer collection
  */
-public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>, IQueue<ILayer> {
+public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQueue<ILayer> {
 
     /**
      * viewer *
@@ -53,6 +54,7 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
     protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
 
 
+
     /**
      * ctor
      *
@@ -63,13 +65,14 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
         m_viewer.getCompoundPainter().addPainter(this);
     }
 
+
     /**
      * returns a map with all layer data *
      */
     public synchronized Map<String, Object> getData() {
         Map<String, Object> l_data = new HashMap();
 
-        for (Map.Entry<String, IMultiLayer> l_item : m_layer.entrySet())
+        for (Map.Entry<String, ILayer> l_item : m_layer.entrySet())
             l_data.putAll(l_item.getValue().getData());
 
         return l_data;
@@ -92,14 +95,14 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
     }
 
     @Override
-    public Iterator<ILayer> iterator() {
+    public Iterator<ILayer<?>> iterator() {
         return null;
     }
 
 
     @Override
     public Object[] toArray() {
-        return m_layer.values().toArray()
+        return m_layer.values().toArray();
     }
 
     @Override
@@ -122,9 +125,10 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
         return m_layer.get(key);
     }
 
+
     @Override
     public synchronized ILayer put(String key, ILayer value) {
-        m_unprocess.add(value)
+        m_unprocess.add(value);
         return m_layer.put(key, value);
     }
 
@@ -134,14 +138,20 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
     }
 
     @Override
+    public void putAll(Map<? extends String, ? extends ILayer> m) {
+
+    }
+
+    @Override
     public synchronized boolean containsAll(Collection<?> c) {
         return m_layer.values().containsAll(c);
     }
 
     @Override
     public boolean addAll(Collection<? extends ILayer> c) {
-        return m_unprocess.addAll(c);
+        return false;
     }
+
 
     @Override
     public boolean removeAll(Collection<?> c) {
@@ -153,11 +163,6 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
         return false;
     }
 
-    @Override
-    public synchronized void putAll(Map<? extends String, ? extends ILayer> m) {
-        m_layer.putAll(m);
-        m_unprocess.addAll(m.values());
-    }
 
     @Override
     public synchronized void clear() {
@@ -173,17 +178,17 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
 
     @Override
     public Collection<ILayer> values() {
-        return m_layer.values();
+        return null;
     }
 
     @Override
     public Set<Entry<String, ILayer>> entrySet() {
-        return m_layer.entrySet();
+        return null;
     }
 
     @Override
     public Queue<ILayer> getAll() {
-        return new Queue(m_layer.values());
+        return null;
     }
 
     @Override
@@ -221,4 +226,5 @@ public class CWorld<T> extends CompoundPainter<T> implements Map<String, ILayer>
     public ILayer peek() {
         return m_unprocess.peek();
     }
+
 }

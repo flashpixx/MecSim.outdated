@@ -33,6 +33,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * multilayer to create a collection for elements
+ * offer, poll, peek operates only of the queue
+ * add, remove, element operates on the painter and on the queue
  */
 public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, ILayer, IVoidStepable {
 
@@ -73,16 +75,11 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
         return null;
     }
 
+
     @Override
     public boolean add(T t) {
         super.addPainter(t);
-        return m_process.add(t);
-    }
-
-    @Override
-    public boolean offer(T t) {
-        super.addPainter(t);
-        return m_process.offer(t);
+        return m_unprocess.add(t);
     }
 
     @Override
@@ -93,15 +90,21 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
     }
 
     @Override
+    public T element() {
+        return m_unprocess.element();
+    }
+
+    @Override
+    public boolean offer(T t) {
+        super.addPainter(t);
+        return m_process.offer(t);
+    }
+
+    @Override
     public T poll() {
         T l_item = m_unprocess.poll();
         super.removePainter(l_item);
         return l_item;
-    }
-
-    @Override
-    public T element() {
-        return m_unprocess.element();
     }
 
     @Override

@@ -22,11 +22,13 @@
 package de.tu_clausthal.in.winf.simulation.data;
 
 import de.tu_clausthal.in.winf.simulation.process.IQueue;
+import de.tu_clausthal.in.winf.simulation.process.ISimulationLayer;
 import de.tu_clausthal.in.winf.simulation.process.IVoidStepable;
-import de.tu_clausthal.in.winf.ui.IViewableLayer;
+import de.tu_clausthal.in.winf.ui.IViewLayer;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
+import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -36,9 +38,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
  */
-public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, ILayer, IVoidStepable {
+public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable {
 
+    /**
+     * flag for visibility *
+     */
     protected boolean m_visible = true;
+    /**
+     * flag for activity *
+     */
     protected boolean m_active = true;
 
     /**
@@ -50,27 +58,27 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
      */
     protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
 
-
+    @Override
     public boolean isActive() {
         return m_active;
     }
 
-
+    @Override
     public void setActive(boolean p_active) {
         m_active = p_active;
     }
 
-
+    @Override
     public boolean isVisible() {
         return m_visible;
     }
 
-
+    @Override
     public void setVisible(boolean p_visible) {
         m_visible = p_visible;
     }
 
-
+    @Override
     public Map<String, Object> getData() {
         return null;
     }
@@ -84,6 +92,9 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
 
     @Override
     public synchronized T remove() {
+        if (!m_active)
+            return null;
+
         T l_item = m_unprocess.remove();
         super.removePainter(l_item);
         return l_item;
@@ -91,6 +102,9 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
 
     @Override
     public T element() {
+        if (!m_active)
+            return null;
+
         return m_unprocess.element();
     }
 
@@ -101,11 +115,17 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
 
     @Override
     public T poll() {
+        if (!m_active)
+            return null;
+
         return m_unprocess.poll();
     }
 
     @Override
     public T peek() {
+        if (!m_active)
+            return null;
+
         return m_unprocess.peek();
     }
 
@@ -119,4 +139,11 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
         m_process.clear();
     }
 
+    @Override
+    protected void doPaint(Graphics2D g, T component, int width, int height) {
+        if (!m_visible)
+            return;
+
+        super.doPaint(g, component, width, height);
+    }
 }

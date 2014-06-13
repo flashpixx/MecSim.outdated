@@ -25,7 +25,7 @@ package de.tu_clausthal.in.winf.simulation.process;
 /**
  * simulation layer to represent simulation information
  */
-public interface ISimulationLayer extends IStep {
+public interface ISimulationLayer extends IStepable {
 
     public boolean isActive();
 

@@ -19,16 +19,21 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.simulation.data;
+
+import java.util.Map;
 
 
 /**
- * defines a viewable layer
+ * data layer definition
  */
-public interface IViewableLayer {
+public interface IDataLayer {
 
-    public boolean isVisible();
-
-    public void setVisible(boolean p_visible);
+    /**
+     * returns data of a layer
+     *
+     * @return map with data of the layer
+     */
+    public Map<String, Object> getData();
 
 }

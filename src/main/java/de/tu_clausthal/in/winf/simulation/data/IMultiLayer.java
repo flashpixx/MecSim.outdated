@@ -77,14 +77,14 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
 
 
     @Override
-    public boolean add(T t) {
+    public synchronized boolean add(T t) {
         super.addPainter(t);
         return m_unprocess.add(t);
     }
 
     @Override
-    public T remove() {
-        T l_item = m_process.remove();
+    public synchronized T remove() {
+        T l_item = m_unprocess.remove();
         super.removePainter(l_item);
         return l_item;
     }
@@ -96,15 +96,12 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
 
     @Override
     public boolean offer(T t) {
-        super.addPainter(t);
         return m_process.offer(t);
     }
 
     @Override
     public T poll() {
-        T l_item = m_unprocess.poll();
-        super.removePainter(l_item);
-        return l_item;
+        return m_unprocess.poll();
     }
 
     @Override

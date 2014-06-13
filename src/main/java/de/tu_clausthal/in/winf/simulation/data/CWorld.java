@@ -51,13 +51,7 @@ public class CWorld extends CompoundPainter implements Map<String, ILayer>, IQue
      * list of processed sources *
      */
     protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
-@bug remove clash
-@todo check all
-@todo create union
-    @Overr
-with unique
-    @Overrid
-elements from
+
 
     /**
      * ctor
@@ -84,88 +78,81 @@ elements from
     }
 
     @Override
-    public synchronized int size() {
-        return Math.max(m_layer.size(), m_process.size() + m_unprocess.size());
+    public synchronized void reset() {
+        m_unprocess.addAll(m_process);
+        m_process.clear();
+    }
+
+
+
+    @Override
+    public boolean contains(Object o) {
+        return m_layer.containsValue(o) || m_process.contains(o) || m_unprocess.contains(o);
     }
 
     @Override
-    public synchronized boolean isEmpty() {
-        return m_layer.isEmpty() && m_process.isEmpty() && m_unprocess.isEmpty();
-    }
-
-    @Override
-    public synchronized boolean contains(Object o) {
-        return m_layer.values().contains(o) || m_process.contains(o) || m_unprocess.contains(o);
-    }
-
-    @Override
-    public synchronized Iterator<ILayer> iterator() {
-        Queue<ILayer> l_items = new ConcurrentLinkedQueue();
-        l_items.addAll(m_unprocess);
-        l_items.addAll(m_process);
-        return l_items.iterator();
+    public Iterator<ILayer> iterator() {
+        return null;
     }
 
     @Override
     public Object[] toArray() {
-        return m_layer.values().toArray();
+        return new Object[0];
     }
-
-    @Override
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return m_layer.values().toArray(a);
+        return null;
     }
 
-    error
+    @Override
+    public int size() {
+        return Math.max(m_layer.size(), m_process.size()+m_unprocess.size());
+    }
 
     @Override
+    public boolean isEmpty() {
+        return m_layer.isEmpty() && m_process.isEmpty() && m_unprocess.isEmpty();
+    }
 
+    @Override
     public boolean containsKey(Object key) {
         return m_layer.containsKey(key);
     }
 
     @Override
-    public synchronized boolean containsValue(Object value) {
-        return m_layer.containsValue(value) || m_process.contains(value) || m_unprocess.contains(value);
+    public boolean containsValue(Object value) {
+        return m_layer.containsValue(value);
     }
-
-    @Override
 
     @Override
     public ILayer get(Object key) {
         return m_layer.get(key);
     }
 
-    parts
-
     @Override
-
     public synchronized ILayer put(String key, ILayer value) {
-        m_unprocess.add(value);
+        m_process.remove(value);
+        m_unprocess.remove(value);
         return m_layer.put(key, value);
     }
 
-    public ILayer remove(Object key) {
-        return m_layer.remove(key);
+    @Override
+    public synchronized ILayer remove(Object key) {
+        ILayer l_item = m_layer.remove(key);
+        m_process.remove(l_item);
+        m_unprocess.remove(l_item);
+        return l_item;
     }
 
     @Override
-    public synchronized void putAll(Map<? extends String, ? extends ILayer> m) {
-        m_unprocess.addAll(m.values());
-        m_layer.putAll(m);
-    }
-
-    public synchronized boolean containsAll(Collection<?> c) {
-
-
+    public boolean containsAll(Collection<?> c) {
         return false;
     }
 
     @Override
     public boolean addAll(Collection<? extends ILayer> c) {
-        return m_unprocess.addAll(c);
+        return false;
     }
 
     @Override
@@ -174,42 +161,39 @@ elements from
     }
 
     @Override
-
-    @Override
     public boolean retainAll(Collection<?> c) {
         return false;
     }
 
-    ide
-
-    public synchronized void clear() {
-        m_layer.clear();
-        m_process.clear();
-        m_unprocess.clear();
+    @Override
+    public synchronized void putAll(Map<? extends String, ? extends ILayer> m) {
+        m_layer.putAll(m);
+        m_process.addAll(m.values());
     }
 
-    e
+    @Override
+    public synchronized void clear() {
+        m_layer.clear();
+        m_unprocess.clear();
+        m_process.clear();
+    }
 
+    @Override
     public Set<String> keySet() {
         return m_layer.keySet();
     }
 
-    layer&process&unprocess
-
+    @Override
     public Collection<ILayer> values() {
-        return null;
+        return m_layer.values();
     }
 
     @Override
     public Set<Entry<String, ILayer>> entrySet() {
-        return null;
+        return m_layer.entrySet();
     }
 
-    @Override
-    public synchronized void reset() {
-        m_unprocess.addAll(m_process);
-        m_process.clear();
-    }
+
 
     @Override
     public boolean add(ILayer iLayer) {
@@ -222,7 +206,7 @@ elements from
     }
 
     @Override
-    public synchronized ILayer remove() {
+    public ILayer remove() {
         return m_unprocess.remove();
     }
 
@@ -240,5 +224,4 @@ elements from
     public ILayer peek() {
         return m_unprocess.peek();
     }
-
 }

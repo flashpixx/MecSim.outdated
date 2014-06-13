@@ -139,14 +139,6 @@ public class CWorld extends CompoundPainter implements Map<String, IDataLayer>, 
     }
 
     @Override
-    public synchronized IDataLayer remove(Object key) {
-        IDataLayer l_item = m_layer.remove(key);
-        m_process.remove(l_item);
-        m_unprocess.remove(l_item);
-        return l_item;
-    }
-
-    @Override
     public boolean containsAll(Collection<?> c) {
         return false;
     }
@@ -198,6 +190,11 @@ public class CWorld extends CompoundPainter implements Map<String, IDataLayer>, 
     @Override
     public boolean add(IDataLayer iDataLayer) {
         return m_process.add(iDataLayer);
+    }
+
+    @Override
+    public IDataLayer remove(Object o) {
+        return null;
     }
 
     @Override

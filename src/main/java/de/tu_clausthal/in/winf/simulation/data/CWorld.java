@@ -33,7 +33,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * world layer collection
  */
-public class CWorld extends CompoundPainter implements Map<String, IDataLayer>, IQueue<IDataLayer> {
+public class CWorld extends CompoundPainter {
+
 
     /**
      * viewer *
@@ -42,16 +43,11 @@ public class CWorld extends CompoundPainter implements Map<String, IDataLayer>, 
     /**
      * map with layer *
      */
-    protected Map<String, IDataLayer> m_layer = new ConcurrentHashMap();
+    protected CMap m_layer = new CMap();
     /**
-     * list of unprocessed sources *
+     * queue with layer
      */
-    protected ConcurrentLinkedQueue<IDataLayer> m_unprocess = new ConcurrentLinkedQueue();
-    /**
-     * list of processed sources *
-     */
-    protected ConcurrentLinkedQueue<IDataLayer> m_process = new ConcurrentLinkedQueue();
-
+    protected CQueue m_queue = new CQueue();
 
     /**
      * ctor
@@ -64,161 +60,262 @@ public class CWorld extends CompoundPainter implements Map<String, IDataLayer>, 
     }
 
     /**
+     * returns map data
+     *
+     * @return map
+     */
+    public Map<String, IDataLayer> getMap() {
+        return m_layer;
+    }
+
+    /**
+     * returns queue data *
+     */
+    public Queue<IDataLayer> getQueue() {
+        return m_queue;
+    }
+
+    /**
      * returns a map with all layer data *
      */
     public synchronized Map<String, Object> getData() {
         Map<String, Object> l_data = new HashMap();
 
-        for (IDataLayer l_item : m_process)
-            l_data.putAll(l_item.getData());
-        for (IDataLayer l_item : m_unprocess)
+        for (IDataLayer l_item : m_queue)
             l_data.putAll(l_item.getData());
 
         return l_data;
     }
 
-    @Override
-    public synchronized void reset() {
-        m_unprocess.addAll(m_process);
-        m_process.clear();
+    /**
+     * internal queue representation of the data *
+     */
+    protected class CQueue implements IQueue<IDataLayer> {
+
+        /**
+         * list of unprocessed sources *
+         */
+        protected ConcurrentLinkedQueue<IDataLayer> m_unprocess = new ConcurrentLinkedQueue();
+        /**
+         * list of processed sources *
+         */
+        protected ConcurrentLinkedQueue<IDataLayer> m_process = new ConcurrentLinkedQueue();
+
+        @Override
+        public synchronized void reset() {
+            m_unprocess.addAll(m_process);
+            m_process.clear();
+        }
+
+        @Override
+        public synchronized int size() {
+            return m_process.size() + m_unprocess.size();
+        }
+
+        @Override
+        public synchronized boolean isEmpty() {
+            return m_process.isEmpty() && m_unprocess.isEmpty();
+        }
+
+        @Override
+        public synchronized boolean contains(Object o) {
+            return m_process.contains(o) || m_unprocess.contains(o);
+        }
+
+        @Override
+        public synchronized Iterator<IDataLayer> iterator() {
+            Queue<IDataLayer> l_data = new LinkedList();
+            l_data.addAll(m_unprocess);
+            l_data.addAll(m_process);
+            return l_data.iterator();
+        }
+
+        @Override
+        public synchronized Object[] toArray() {
+            Queue<IDataLayer> l_data = new LinkedList();
+            l_data.addAll(m_unprocess);
+            l_data.addAll(m_process);
+            return l_data.toArray();
+        }
+
+        @Override
+        public synchronized <T> T[] toArray(T[] a) {
+            Queue<IDataLayer> l_data = new LinkedList();
+            l_data.addAll(m_unprocess);
+            l_data.addAll(m_process);
+            return l_data.toArray(a);
+        }
+
+        @Override
+        public synchronized boolean remove(Object o) {
+            m_layer.values().remove(o);
+            return m_process.remove(o) || m_unprocess.remove(o);
+        }
+
+        @Override
+        public synchronized boolean containsAll(Collection<?> c) {
+            Queue<IDataLayer> l_data = new LinkedList();
+            l_data.addAll(m_unprocess);
+            l_data.addAll(m_process);
+            return l_data.containsAll(c);
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends IDataLayer> c) {
+            return m_process.addAll(c);
+        }
+
+        @Override
+        public synchronized boolean removeAll(Collection<?> c) {
+            for (Object l_item : c) {
+                if (m_process.remove(l_item))
+                    continue;
+                if (m_unprocess.remove(l_item))
+                    continue;
+
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public synchronized boolean retainAll(Collection<?> c) {
+            Queue<IDataLayer> l_data = new LinkedList();
+            l_data.addAll(m_unprocess);
+            l_data.addAll(m_process);
+            l_data.retainAll(c);
+
+            ConcurrentLinkedQueue<IDataLayer> l_newprocess = new ConcurrentLinkedQueue();
+            ConcurrentLinkedQueue<IDataLayer> l_newunprocess = new ConcurrentLinkedQueue();
+            for (IDataLayer l_item : l_data) {
+                if (m_process.contains(l_item)) {
+                    l_newprocess.add(l_item);
+                    continue;
+                }
+                if (m_unprocess.contains(l_item)) {
+                    l_newunprocess.add(l_item);
+                    continue;
+                }
+
+                return false;
+            }
+            m_process = l_newprocess;
+            m_unprocess = l_newunprocess;
+
+            return true;
+        }
+
+        @Override
+        public synchronized void clear() {
+            m_process.clear();
+            m_unprocess.clear();
+        }
+
+        @Override
+        public boolean add(IDataLayer iDataLayer) {
+            return m_process.add(iDataLayer);
+        }
+
+        @Override
+        public boolean offer(IDataLayer iDataLayer) {
+            return m_process.offer(iDataLayer);
+        }
+
+        @Override
+        public IDataLayer remove() {
+            return m_unprocess.remove();
+        }
+
+        @Override
+        public IDataLayer poll() {
+            return m_unprocess.poll();
+        }
+
+        @Override
+        public IDataLayer element() {
+            return m_unprocess.element();
+        }
+
+        @Override
+        public IDataLayer peek() {
+            return m_unprocess.peek();
+        }
     }
 
+    /**
+     * internal map representation of the data *
+     */
+    protected class CMap implements Map<String, IDataLayer> {
 
-    @Override
-    public boolean contains(Object o) {
-        return m_layer.containsValue(o) || m_process.contains(o) || m_unprocess.contains(o);
+        protected Map<String, IDataLayer> m_layer = new ConcurrentHashMap();
+
+        @Override
+        public int size() {
+            return m_layer.size();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return m_layer.isEmpty();
+        }
+
+        @Override
+        public boolean containsKey(Object key) {
+            return m_layer.containsKey(key);
+        }
+
+        @Override
+        public boolean containsValue(Object value) {
+            return m_layer.containsValue(value);
+        }
+
+        @Override
+        public IDataLayer get(Object key) {
+            return m_layer.get(key);
+        }
+
+        @Override
+        public IDataLayer put(String key, IDataLayer value) {
+            m_queue.add(value);
+            return m_layer.put(key, value);
+        }
+
+        @Override
+        public IDataLayer remove(Object key) {
+            IDataLayer l_layer = m_layer.remove(key);
+            if (l_layer != null)
+                m_queue.remove(l_layer);
+            return l_layer;
+        }
+
+        @Override
+        public void putAll(Map<? extends String, ? extends IDataLayer> m) {
+            m_layer.putAll(m);
+            for (IDataLayer l_layer : m.values())
+                m_queue.add(l_layer);
+        }
+
+        @Override
+        public synchronized void clear() {
+            m_queue.clear();
+            m_layer.clear();
+        }
+
+        @Override
+        public Set<String> keySet() {
+            return m_layer.keySet();
+        }
+
+        @Override
+        public Collection<IDataLayer> values() {
+            return m_layer.values();
+        }
+
+        @Override
+        public Set<Entry<String, IDataLayer>> entrySet() {
+            return m_layer.entrySet();
+        }
     }
 
-    @Override
-    public Iterator<IDataLayer> iterator() {
-        return null;
-    }
-
-    @Override
-    public Object[] toArray() {
-        ArrayList<Object> l_list = new ArrayList(m_unprocess);
-        l_list.addAll(m_process);
-        return l_list.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
-    }
-
-    @Override
-    public int size() {
-        return Math.max(m_layer.size(), m_process.size() + m_unprocess.size());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return m_layer.isEmpty() && m_process.isEmpty() && m_unprocess.isEmpty();
-    }
-
-    @Override
-    public boolean containsKey(Object key) {
-        return m_layer.containsKey(key);
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return m_layer.containsValue(value);
-    }
-
-    @Override
-    public IDataLayer get(Object key) {
-        return m_layer.get(key);
-    }
-
-    @Override
-    public synchronized IDataLayer put(String key, IDataLayer value) {
-        m_process.remove(value);
-        m_unprocess.remove(value);
-        return m_layer.put(key, value);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends IDataLayer> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public synchronized void putAll(Map<? extends String, ? extends IDataLayer> m) {
-        m_layer.putAll(m);
-        m_process.addAll(m.values());
-    }
-
-    @Override
-    public synchronized void clear() {
-        m_layer.clear();
-        m_unprocess.clear();
-        m_process.clear();
-    }
-
-    @Override
-    public Set<String> keySet() {
-        return m_layer.keySet();
-    }
-
-    @Override
-    public Collection<IDataLayer> values() {
-        return m_layer.values();
-    }
-
-    @Override
-    public Set<Entry<String, IDataLayer>> entrySet() {
-        return m_layer.entrySet();
-    }
-
-
-    @Override
-    public boolean add(IDataLayer iDataLayer) {
-        return m_process.add(iDataLayer);
-    }
-
-    @Override
-    public IDataLayer remove(Object o) {
-        return null;
-    }
-
-    @Override
-    public boolean offer(IDataLayer iDataLayer) {
-        return m_process.offer(iDataLayer);
-    }
-
-    @Override
-    public IDataLayer remove() {
-        return m_unprocess.remove();
-    }
-
-    @Override
-    public IDataLayer poll() {
-        return m_unprocess.poll();
-    }
-
-    @Override
-    public IDataLayer element() {
-        return m_unprocess.element();
-    }
-
-    @Override
-    public IDataLayer peek() {
-        return m_unprocess.peek();
-    }
 }

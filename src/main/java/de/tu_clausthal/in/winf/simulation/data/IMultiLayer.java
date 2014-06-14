@@ -87,7 +87,7 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
     @Override
     public synchronized boolean add(T t) {
         super.addPainter(t);
-        return m_unprocess.add(t);
+        return m_process.add(t);
     }
 
     @Override

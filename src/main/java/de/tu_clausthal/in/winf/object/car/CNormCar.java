@@ -19,12 +19,61 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.car;
+
+import de.tu_clausthal.in.winf.object.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.object.mas.norm.INorm;
+import de.tu_clausthal.in.winf.object.mas.norm.INormCheckResult;
+import de.tu_clausthal.in.winf.object.mas.norm.INormObject;
+import org.jxmapviewer.viewer.GeoPosition;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * defines the operation on a norm transfer
+ * creates a car with norm context
  */
-public enum ENormMessageType {
-    Create, Update, Delete
+public class CNormCar extends CDefaultCar implements INormObject {
+
+    /**
+     * set with norms, that are matched *
+     */
+    protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap();
+
+
+    /**
+     * ctor to create the initial values
+     *
+     * @param p_StartPosition start positions (position of the source)
+     */
+    public CNormCar(GeoPosition p_StartPosition) {
+        super(p_StartPosition);
+    }
+
+
+    @Override
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = super.inspect();
+
+        for (Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet()) {
+            IInstitution l_institution = l_item.getKey().getInstitution();
+            l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
+        }
+
+        return l_map;
+    }
+
+
+    @Override
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm) {
+        m_norms.putAll(p_norm);
+    }
+
+    @Override
+    public void clearMatchedNorm() {
+        m_norms.clear();
+    }
+
+
 }

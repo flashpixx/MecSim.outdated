@@ -19,10 +19,10 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.mas.norm;
 
-import de.tu_clausthal.in.winf.object.IObject;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
+import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * range for GPS rectangle
  */
-public class CRangeGPS extends IObject implements IRange<INormObject> {
+public class CRangeGPS extends IInspector implements IRange<INormObject> {
 
     /**
      * institution of the range

@@ -21,8 +21,8 @@
 
 package de.tu_clausthal.in.winf.simulation.process;
 
-import de.tu_clausthal.in.winf.object.ICar;
-import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import de.tu_clausthal.in.winf.object.car.ICar;
+import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 
 
 /**

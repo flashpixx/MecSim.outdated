@@ -19,45 +19,31 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.mas.norm;
 
 import java.io.Serializable;
 
 
 /**
- * interface class of a norm
+ * represent a fuzzy checkresult of a norm
  */
-public interface INorm<T> extends Serializable {
+public interface INormCheckResult<T> extends Serializable {
 
 
     /**
-     * checks for an object the norm
+     * returns the fuzzy value of the norm
      *
-     * @param p_object object
+     * @return fuzzy value [0,1]
+     */
+    public double getWeight();
+
+
+    /**
+     * returns the checking result of the norm
+     *
      * @return result
      */
-    public INormCheckResult check(T p_object);
+    public T getResult();
 
-
-    /**
-     * returns the institution which handle the norm
-     *
-     * @return institution
-     */
-    public IInstitution<T> getInstitution();
-
-
-    /**
-     * name of the norm
-     *
-     * @return name
-     */
-    public String getName();
-
-
-    /**
-     * release call *
-     */
-    public void release();
 
 }

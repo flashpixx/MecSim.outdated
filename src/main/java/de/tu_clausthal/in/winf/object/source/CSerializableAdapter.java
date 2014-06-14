@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object;
+package de.tu_clausthal.in.winf.object.source;
 
 import java.io.Serializable;
 

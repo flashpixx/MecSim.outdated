@@ -19,53 +19,43 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object;
+package de.tu_clausthal.in.winf.object.source;
 
-import org.jxmapviewer.viewer.GeoPosition;
+import de.tu_clausthal.in.winf.object.car.ICar;
+import org.jxmapviewer.viewer.Waypoint;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.awt.*;
+import java.io.Serializable;
+import java.util.Collection;
 
 
 /**
- * serializable geoposition object, because mapviewer.GeoPosition object does not
- * implement the serializable interface
+ * factory interface of car - defines a source
  */
-public class CSerializableGeoPosition extends CSerializableAdapter<GeoPosition> {
+public interface ICarSourceFactory extends Waypoint, Serializable {
 
     /**
-     * ctor to create a serializable geoposition object
+     * sets the value how many cars are created in one step
      *
-     * @param p_object geoposition object
+     * @param p_number integer number greate than zero
      */
-    public CSerializableGeoPosition(GeoPosition p_object) {
-        m_object = p_object;
-    }
+    public void setNumberOfCars(int p_number);
 
 
     /**
-     * output method
+     * creates a list of new car objects
      *
-     * @param p_output stream
-     * @throws IOException
+     * @param p_currentstep current step of the simulation
+     * @return collection of cars
      */
-    private void writeObject(ObjectOutputStream p_output) throws IOException {
-        p_output.writeDouble(m_object.getLatitude());
-        p_output.writeDouble(m_object.getLongitude());
-    }
+    public Collection<ICar> generate(int p_currentstep);
 
 
     /**
-     * input method
+     * define color for the waypoint
      *
-     * @param p_input stream
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @return color value
      */
-    private void readObject(ObjectInputStream p_input) throws IOException, ClassNotFoundException {
-        m_object = new GeoPosition(p_input.readDouble(), p_input.readDouble());
-    }
-
+    public Color getColor();
 
 }

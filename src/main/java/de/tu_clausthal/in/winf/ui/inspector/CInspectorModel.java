@@ -21,8 +21,6 @@
 
 package de.tu_clausthal.in.winf.ui.inspector;
 
-import de.tu_clausthal.in.winf.object.IObject;
-
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -54,7 +52,7 @@ public class CInspectorModel implements TableModel {
      *
      * @param p_object object
      */
-    public void set(IObject p_object) {
+    public void set(IInspector p_object) {
         m_names.clear();
         m_values.clear();
         if (p_object == null)

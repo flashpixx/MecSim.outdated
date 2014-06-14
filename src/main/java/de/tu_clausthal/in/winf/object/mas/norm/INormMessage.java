@@ -19,29 +19,54 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.mas.norm;
 
-import java.util.Collection;
+import java.io.Serializable;
 
 
 /**
- * collection to receive and / send norms to
- * institutions
+ * defines a message to transfer a norm
  */
-public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
+public interface INormMessage<T> extends Serializable {
 
 
     /**
-     * sends a norm to all institution
+     * returns the norm
      *
-     * @param p_message norm message
+     * @return norm object
      */
-    public void send(INormMessage<T> p_message);
+    public INorm<T> getNorm();
 
 
     /**
-     * release call *
+     * get owner institution
+     *
+     * @return institution object
      */
-    public void release();
+    public IInstitution<T> getInstitution();
+
+
+    /**
+     * returns the message type
+     *
+     * @return message type
+     */
+    public ENormMessageType getType();
+
+
+    /**
+     * hops to avoid infinity loops on update process (time-to-live)
+     *
+     * @return hop value (less or equal than zero equal ignore / remove norm)
+     * @note the hop value defines the max. send operations
+     */
+    public int getTTL();
+
+
+    /**
+     * TTL decrement (time-to-live)
+     */
+    public void decrementTTL();
+
 
 }

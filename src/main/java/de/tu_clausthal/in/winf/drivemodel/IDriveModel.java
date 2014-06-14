@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.drivemodel;
 
-import de.tu_clausthal.in.winf.object.ICar;
+import de.tu_clausthal.in.winf.object.car.ICar;
 
 
 /**

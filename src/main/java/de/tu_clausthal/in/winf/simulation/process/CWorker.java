@@ -25,13 +25,13 @@ import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.object.ICar;
-import de.tu_clausthal.in.winf.object.ICarSourceFactory;
-import de.tu_clausthal.in.winf.object.IObject;
-import de.tu_clausthal.in.winf.object.norm.IInstitution;
-import de.tu_clausthal.in.winf.object.norm.INormObject;
+import de.tu_clausthal.in.winf.object.car.ICar;
+import de.tu_clausthal.in.winf.object.mas.norm.IInstitution;
+import de.tu_clausthal.in.winf.object.mas.norm.INormObject;
+import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
+import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -179,7 +179,7 @@ public class CWorker implements Runnable {
                     CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
                     if (l_edge != null)
                         l_edge.removeCarFromEdge(l_car);
-                    ((IObject) l_car).release();
+                    ((IInspector) l_car).release();
                 }
 
                 // call on each car all institutions

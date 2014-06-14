@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object;
+package de.tu_clausthal.in.winf.object.car;
 
 import com.graphhopper.GHRequest;
 import com.graphhopper.routing.Path;
@@ -27,6 +27,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
+import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ import java.util.Random;
  *
  * @note the paint method color the car depend on the current speed and need not to be call dispose
  */
-public class CDefaultCar extends IObject implements ICar {
+public class CDefaultCar extends IInspector implements ICar {
 
     /**
      * logger instance *

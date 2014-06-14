@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.ui.painter;
 
-import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.Waypoint;

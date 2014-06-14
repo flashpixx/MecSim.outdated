@@ -24,7 +24,7 @@ package de.tu_clausthal.in.winf.graph;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.object.ICar;
+import de.tu_clausthal.in.winf.object.car.ICar;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;

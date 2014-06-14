@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object;
+package de.tu_clausthal.in.winf.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.ui.IPainter;

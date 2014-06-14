@@ -19,102 +19,82 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.ui.inspector;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.jxmapviewer.JXMapViewer;
+
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * conjoint range
+ * global object of the simulation with mouse event handler
  */
-public class CUnionRangeCollection<T> implements IRangeCollection<T> {
+public abstract class IInspector extends JComponent implements MouseListener {
 
     /**
-     * list of ranges *
+     * ctor to register component on the viewer *
      */
-    private Set<IRange<T>> m_ranges = new HashSet();
-
-
-    @Override
-    public boolean check(T p_object) {
-        for (IRange<T> l_item : m_ranges)
-            if (l_item.check(p_object))
-                return true;
-
-        return false;
+    public IInspector() {
+        COSMViewer.getInstance().addMouseListener(this);
     }
 
-    @Override
+    /**
+     * click method which is called by a click on the object
+     *
+     * @param e      mouse event
+     * @param viewer viewer
+     */
+    public void onClick(MouseEvent e, JXMapViewer viewer) {
+    }
+
+    /**
+     * returns a map to inspect current data of the car
+     *
+     * @return map with name and value
+     */
+    public Map<String, Object> inspect() {
+        Map<String, Object> l_map = new HashMap();
+
+        l_map.put("class name", this.getClass().getName());
+        l_map.put("object id", this.hashCode());
+
+        return l_map;
+    }
+
+
+    /**
+     * release of the event handler *
+     */
     public void release() {
-        for (IRange<T> l_item : m_ranges)
-            l_item.release();
+        COSMViewer.getInstance().removeMouseListener(this);
+    }
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1)
+            this.onClick(e, COSMViewer.getInstance());
     }
 
     @Override
-    public int size() {
-        return m_ranges.size();
+    public void mouseReleased(MouseEvent e) {
     }
 
     @Override
-    public boolean isEmpty() {
-        return m_ranges.isEmpty();
+    public void mouseEntered(MouseEvent e) {
     }
 
     @Override
-    public boolean contains(Object o) {
-        return m_ranges.contains(o);
+    public void mouseExited(MouseEvent e) {
     }
 
     @Override
-    public Iterator<IRange<T>> iterator() {
-        return m_ranges.iterator();
+    public void mouseClicked(MouseEvent e) {
     }
 
-    @Override
-    public Object[] toArray() {
-        return m_ranges.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return m_ranges.toArray(a);
-    }
-
-    @Override
-    public boolean add(IRange iRange) {
-        return m_ranges.add(iRange);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return m_ranges.remove(o);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return m_ranges.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends IRange<T>> c) {
-        return m_ranges.addAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return m_ranges.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return m_ranges.retainAll(c);
-    }
-
-    @Override
-    public void clear() {
-        m_ranges.clear();
-    }
 }

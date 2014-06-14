@@ -21,8 +21,6 @@
 
 package de.tu_clausthal.in.winf.ui.inspector;
 
-import de.tu_clausthal.in.winf.object.IObject;
-
 import javax.swing.*;
 
 
@@ -57,7 +55,7 @@ public class CInspector extends JTable {
      *
      * @param p_object object
      */
-    public void set(IObject p_object) {
+    public void set(IInspector p_object) {
         ((CInspectorModel) this.getModel()).set(p_object);
     }
 

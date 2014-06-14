@@ -19,58 +19,45 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.mas.norm;
 
-import de.tu_clausthal.in.winf.object.CDefaultCar;
-import org.jxmapviewer.viewer.GeoPosition;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
 
 
 /**
- * creates a car with norm context
+ * interface class of a norm
  */
-public class CNormCar extends CDefaultCar implements INormObject {
-
-    /**
-     * set with norms, that are matched *
-     */
-    protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap();
+public interface INorm<T> extends Serializable {
 
 
     /**
-     * ctor to create the initial values
+     * checks for an object the norm
      *
-     * @param p_StartPosition start positions (position of the source)
+     * @param p_object object
+     * @return result
      */
-    public CNormCar(GeoPosition p_StartPosition) {
-        super(p_StartPosition);
-    }
+    public INormCheckResult check(T p_object);
 
 
-    @Override
-    public Map<String, Object> inspect() {
-        Map<String, Object> l_map = super.inspect();
-
-        for (Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet()) {
-            IInstitution l_institution = l_item.getKey().getInstitution();
-            l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
-        }
-
-        return l_map;
-    }
+    /**
+     * returns the institution which handle the norm
+     *
+     * @return institution
+     */
+    public IInstitution<T> getInstitution();
 
 
-    @Override
-    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm) {
-        m_norms.putAll(p_norm);
-    }
+    /**
+     * name of the norm
+     *
+     * @return name
+     */
+    public String getName();
 
-    @Override
-    public void clearMatchedNorm() {
-        m_norms.clear();
-    }
 
+    /**
+     * release call *
+     */
+    public void release();
 
 }

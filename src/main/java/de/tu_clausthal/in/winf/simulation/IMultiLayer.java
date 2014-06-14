@@ -126,9 +126,20 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
         return m_unprocess.peek();
     }
 
+    @Override
     public void step(int p_currentstep) {
     }
 
+    /**
+     * method which is called with each object of the layer
+     *
+     * @param p_currentstep current step
+     * @param p_object      object
+     */
+    public void stepObject(int p_currentstep, T p_object) {
+    }
+
+    ;
 
     @Override
     public synchronized void reset() {

@@ -28,10 +28,7 @@ import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -64,6 +61,10 @@ public class CSimulation {
      * world of the simulation
      */
     private CWorld m_world = new CWorld(COSMViewer.getInstance());
+    /**
+     * pre- & postprocess data
+     */
+    private ConcurrentLinkedQueue<IStepable> m_prepostprocessing = new ConcurrentLinkedQueue();
 
 
     /**
@@ -100,7 +101,22 @@ public class CSimulation {
      * returns the simulation world *
      */
     public CWorld getWorld() {
+        if (this.isRunning())
+            throw new IllegalStateException("simulation is running");
+
         return m_world;
+    }
+
+    /**
+     * returns the queue of pre- and poststable objects
+     *
+     * @return queue
+     */
+    public ConcurrentLinkedQueue<IStepable> getStepableQueue() {
+        if (this.isRunning())
+            throw new IllegalStateException("simulation is running");
+
+        return m_prepostprocessing;
     }
 
 

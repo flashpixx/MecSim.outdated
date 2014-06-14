@@ -21,11 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.norm;
 
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.mas.norm.INorm;
-import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
-import de.tu_clausthal.in.winf.mas.norm.INormObject;
-
 
 /**
  * norm for speed check

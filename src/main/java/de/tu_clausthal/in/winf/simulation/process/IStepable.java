@@ -19,20 +19,13 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
-
-import java.util.Queue;
+package de.tu_clausthal.in.winf.simulation.process;
 
 
 /**
- *
+ * interface for all objects which are triggered by the simulation worker
  */
-public interface IQueue<T> extends Queue<T> {
+public interface IStepable {
 
-    /**
-     * moves elements from the unprocessed queue
-     * to the processed queue
-     */
-    public void reset();
 
 }

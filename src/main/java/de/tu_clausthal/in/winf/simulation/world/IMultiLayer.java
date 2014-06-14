@@ -19,8 +19,10 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.simulation.world;
 
+import de.tu_clausthal.in.winf.simulation.process.IQueue;
+import de.tu_clausthal.in.winf.simulation.process.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.IViewLayer;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;

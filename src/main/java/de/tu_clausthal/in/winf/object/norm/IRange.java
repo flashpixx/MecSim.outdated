@@ -19,16 +19,17 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
+import de.tu_clausthal.in.winf.ui.IPainter;
 
 import java.io.Serializable;
-import java.util.Collection;
+
 
 /**
- * class to define a collection of ranges
+ * class to represent the workspace of an institution
  */
-public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable {
+public interface IRange<T> extends Serializable, IPainter {
 
 
     /**
@@ -38,6 +39,14 @@ public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable
      * @return boolean for existence
      */
     public boolean check(T p_object);
+
+
+    /**
+     * returns the institution of the range
+     *
+     * @return institution
+     */
+    public IInstitution<T> getInstitution();
 
 
     /**

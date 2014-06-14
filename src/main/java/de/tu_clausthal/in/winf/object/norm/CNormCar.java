@@ -21,10 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.norm;
 
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.mas.norm.INorm;
-import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
-import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.object.CDefaultCar;
 import org.jxmapviewer.viewer.GeoPosition;
 

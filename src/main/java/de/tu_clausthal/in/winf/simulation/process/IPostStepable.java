@@ -18,32 +18,16 @@
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
  **/
+package de.tu_clausthal.in.winf.simulation.process;
 
-package de.tu_clausthal.in.winf.mas.norm;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
-
+import de.tu_clausthal.in.winf.simulation.world.CWorld;
 
 /**
- * norm collection
+ * interface for post step calls
  */
-public interface INormCollection<T> extends Collection<INorm<T>>, Serializable {
+public interface IPostStepable extends IStepable {
 
-
-    /**
-     * checks the object for each norm and returns a map with results
-     *
-     * @param p_object check object
-     * @return map with results
-     */
-    public Map<INorm<T>, INormCheckResult> match(T p_object);
-
-
-    /**
-     * release call *
-     */
-    public void release();
+    public void postStep(int p_currentstep, CWorld p_world);
 
 }

@@ -21,9 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.norm;
 
-import de.tu_clausthal.in.winf.mas.norm.IRange;
-import de.tu_clausthal.in.winf.mas.norm.IRangeCollection;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;

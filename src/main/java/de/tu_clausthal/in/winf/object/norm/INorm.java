@@ -19,34 +19,40 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
-
-import de.tu_clausthal.in.winf.ui.IPainter;
+package de.tu_clausthal.in.winf.object.norm;
 
 import java.io.Serializable;
 
 
 /**
- * class to represent the workspace of an institution
+ * interface class of a norm
  */
-public interface IRange<T> extends Serializable, IPainter {
+public interface INorm<T> extends Serializable {
 
 
     /**
-     * check if an object is within the range
+     * checks for an object the norm
      *
      * @param p_object object
-     * @return boolean for existence
+     * @return result
      */
-    public boolean check(T p_object);
+    public INormCheckResult check(T p_object);
 
 
     /**
-     * returns the institution of the range
+     * returns the institution which handle the norm
      *
      * @return institution
      */
     public IInstitution<T> getInstitution();
+
+
+    /**
+     * name of the norm
+     *
+     * @return name
+     */
+    public String getName();
 
 
     /**

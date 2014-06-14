@@ -19,29 +19,20 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
+package de.tu_clausthal.in.winf.simulation.process;
 
-import java.util.Collection;
+import java.util.Queue;
 
 
 /**
- * collection to receive and / send norms to
- * institutions
+ *
  */
-public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
-
-
-    /**
-     * sends a norm to all institution
-     *
-     * @param p_message norm message
-     */
-    public void send(INormMessage<T> p_message);
-
+public interface IQueue<T> extends Queue<T> {
 
     /**
-     * release call *
+     * moves elements from the unprocessed queue
+     * to the processed queue
      */
-    public void release();
+    public void reset();
 
 }

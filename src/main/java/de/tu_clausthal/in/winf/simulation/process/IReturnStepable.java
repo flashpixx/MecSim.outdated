@@ -18,14 +18,17 @@
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
  **/
-package de.tu_clausthal.in.winf.simulation;
+
+package de.tu_clausthal.in.winf.simulation.process;
+
+import java.util.Collection;
 
 
 /**
- * interface for pre step calls
+ * interface for a step call with a return argument
  */
-public interface IPreStepable extends IStepable {
+public interface IReturnStepable<T> extends IStepable {
 
-    public void preStep(int p_currentstep, CWorld p_world);
+    public Collection<T> step(int p_currentstep);
 
 }

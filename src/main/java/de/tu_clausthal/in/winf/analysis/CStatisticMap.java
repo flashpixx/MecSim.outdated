@@ -23,7 +23,7 @@ package de.tu_clausthal.in.winf.analysis;
 
 import de.tu_clausthal.in.winf.object.ICar;
 import de.tu_clausthal.in.winf.object.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.IStep;
+import de.tu_clausthal.in.winf.simulation.process.IStep;
 import de.tu_clausthal.in.winf.ui.CFrame;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.jfree.chart.ChartFactory;

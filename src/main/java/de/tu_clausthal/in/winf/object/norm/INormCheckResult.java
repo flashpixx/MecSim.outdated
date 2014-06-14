@@ -19,38 +19,31 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.object.norm;
 
-import de.tu_clausthal.in.winf.object.ICar;
-import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import java.io.Serializable;
 
 
 /**
- * interface for getting messages before / after each call step call
- *
- * @note each object can be called on different threads, so attend synchronization
- * @deprecated
+ * represent a fuzzy checkresult of a norm
  */
-public interface IStep {
-
-    /**
-     * is called on before each step
-     *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
-     */
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+public interface INormCheckResult<T> extends Serializable {
 
 
     /**
-     * is called after each step
+     * returns the fuzzy value of the norm
      *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * @return fuzzy value [0,1]
      */
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+    public double getWeight();
+
+
+    /**
+     * returns the checking result of the norm
+     *
+     * @return result
+     */
+    public T getResult();
 
 
 }

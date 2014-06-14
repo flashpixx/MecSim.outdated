@@ -21,9 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.norm;
 
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.mas.norm.INormObject;
-import de.tu_clausthal.in.winf.mas.norm.IRange;
 import de.tu_clausthal.in.winf.object.IObject;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import org.jxmapviewer.JXMapViewer;

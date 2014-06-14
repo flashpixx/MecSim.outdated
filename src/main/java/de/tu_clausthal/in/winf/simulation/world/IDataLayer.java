@@ -19,45 +19,21 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
+package de.tu_clausthal.in.winf.simulation.world;
 
-import java.io.Serializable;
+import java.util.Map;
 
 
 /**
- * interface class of a norm
+ * data layer definition
  */
-public interface INorm<T> extends Serializable {
-
+public interface IDataLayer {
 
     /**
-     * checks for an object the norm
+     * returns data of a layer
      *
-     * @param p_object object
-     * @return result
+     * @return map with data of the layer
      */
-    public INormCheckResult check(T p_object);
-
-
-    /**
-     * returns the institution which handle the norm
-     *
-     * @return institution
-     */
-    public IInstitution<T> getInstitution();
-
-
-    /**
-     * name of the norm
-     *
-     * @return name
-     */
-    public String getName();
-
-
-    /**
-     * release call *
-     */
-    public void release();
+    public Map<String, Object> getData();
 
 }

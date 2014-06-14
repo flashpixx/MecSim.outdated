@@ -22,10 +22,6 @@
 package de.tu_clausthal.in.winf.object.norm;
 
 
-import de.tu_clausthal.in.winf.mas.norm.INorm;
-import de.tu_clausthal.in.winf.mas.norm.INormCheckResult;
-import de.tu_clausthal.in.winf.mas.norm.INormCollection;
-
 import java.util.*;
 
 /**

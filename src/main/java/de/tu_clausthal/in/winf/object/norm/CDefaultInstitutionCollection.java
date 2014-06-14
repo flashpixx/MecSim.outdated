@@ -21,10 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.norm;
 
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.mas.norm.IInstitutionCollection;
-import de.tu_clausthal.in.winf.mas.norm.INormMessage;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;

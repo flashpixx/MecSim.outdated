@@ -19,16 +19,29 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.object.norm;
+
+import de.tu_clausthal.in.winf.object.ICar;
+
+import java.util.Map;
 
 
 /**
- * simulation layer to represent simulation information
+ * interface of an norm object to receive norms
  */
-public interface ISimulationLayer extends IStepable {
+public interface INormObject extends ICar {
 
-    public boolean isActive();
+    /**
+     * matching method of a norm
+     *
+     * @param p_norm map of norm objects
+     */
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm);
 
-    public void setActive(boolean p_active);
+
+    /**
+     * clears the mached norms *
+     */
+    public void clearMatchedNorm();
 
 }

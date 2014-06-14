@@ -18,13 +18,16 @@
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
  **/
+package de.tu_clausthal.in.winf.simulation.process;
 
-package de.tu_clausthal.in.winf.mas.norm;
 
+import de.tu_clausthal.in.winf.simulation.world.CWorld;
 
 /**
- * defines the operation on a norm transfer
+ * interface for pre step calls
  */
-public enum ENormMessageType {
-    Create, Update, Delete
+public interface IPreStepable extends IStepable {
+
+    public void preStep(int p_currentstep, CWorld p_world);
+
 }

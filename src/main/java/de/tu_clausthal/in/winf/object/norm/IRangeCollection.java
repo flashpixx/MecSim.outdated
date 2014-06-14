@@ -19,13 +19,30 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.object.norm;
 
+
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * class to define a collection of ranges
  */
-public interface IStepable {
+public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable {
 
+
+    /**
+     * check if an object is within the range
+     *
+     * @param p_object object
+     * @return boolean for existence
+     */
+    public boolean check(T p_object);
+
+
+    /**
+     * release call *
+     */
+    public void release();
 
 }

@@ -19,37 +19,60 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.object.ICar;
-import de.tu_clausthal.in.winf.object.ICarSourceFactory;
+import de.tu_clausthal.in.winf.ui.IViewLayer;
+import org.jxmapviewer.painter.Painter;
+
+import java.awt.*;
+import java.util.Map;
 
 
 /**
- * interface for getting messages before / after each call step call
- *
- * @note each object can be called on different threads, so attend synchronization
+ * single layer to create a single information structure
  */
-public interface IStep {
+public abstract class ISingleLayer implements Painter, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable {
 
     /**
-     * is called on before each step
-     *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * flag for visibility *
      */
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
-
-
+    protected boolean m_visible = true;
     /**
-     * is called after each step
-     *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
+     * flag for activity *
      */
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+    protected boolean m_active = true;
 
+    @Override
+    public boolean isActive() {
+        return m_active;
+    }
+
+    @Override
+    public void setActive(boolean p_active) {
+        m_active = p_active;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return m_visible;
+    }
+
+    @Override
+    public void setVisible(boolean p_visible) {
+        m_visible = p_visible;
+    }
+
+    @Override
+    public void step(int p_currentstep) {
+    }
+
+    @Override
+    public Map<String, Object> getData() {
+        return null;
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+    }
 
 }

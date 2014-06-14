@@ -19,54 +19,38 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf;
+package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.analysis.CStatisticMap;
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.ui.CFrame;
-
-import javax.swing.*;
-import java.io.File;
+import de.tu_clausthal.in.winf.object.ICar;
+import de.tu_clausthal.in.winf.object.ICarSourceFactory;
 
 
 /**
- * main class of the application
+ * interface for getting messages before / after each call step call
  *
- * @note Main must be started with option "-Xmx2g", because we need memory to create graph structure
+ * @note each object can be called on different threads, so attend synchronization
+ * @deprecated
  */
-public class CMain {
+public interface IStep {
 
     /**
-     * main program
+     * is called on before each step
      *
-     * @param p_args commandline arguments
+     * @param p_currentstep step number
+     * @param p_sources     list with all sources
+     * @param p_cars        list with all cars
      */
-    public static void main(String[] p_args) throws Exception {
-        // read the configuration directory (default ~/.tucwinf)
-        File l_config = new File(System.getProperty("user.home") + File.separator + ".tucwinf");
-        if (p_args.length > 0)
-            l_config = new File(p_args[0]);
-
-        // set configuration directory and read the Json configuration file
-        CConfiguration.getInstance().setConfigDir(l_config);
-        CConfiguration.getInstance().read();
-
-        // call Graphhopper instance (and import data if needed)
-        CGraphHopper.getInstance();
-
-        // add step runner objects to the simulation
-        CSimulationData.getInstance().getStepListenerQueue().add(CStatisticMap.getInstance());
+    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
 
 
-        // create the UI within an invoke thread
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                CFrame l_frame = new CFrame();
-                l_frame.setTitle("TU-Clausthal MEC - Traffic Simulation");
-                l_frame.setVisible(true);
-            }
-        });
-    }
+    /**
+     * is called after each step
+     *
+     * @param p_currentstep step number
+     * @param p_sources     list with all sources
+     * @param p_cars        list with all cars
+     */
+    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+
 
 }

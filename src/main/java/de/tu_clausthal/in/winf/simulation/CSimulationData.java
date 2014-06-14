@@ -19,13 +19,12 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.data;
+package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.object.ICar;
 import de.tu_clausthal.in.winf.object.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.process.IStep;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.util.CPainterQueue;
 import de.tu_clausthal.in.winf.util.CQueue;
@@ -33,6 +32,8 @@ import de.tu_clausthal.in.winf.util.CWaypointQueue;
 
 /**
  * data structure of the simulation and view
+ *
+ * @deprecated
  */
 public class CSimulationData {
 

@@ -19,16 +19,13 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
-
-import java.util.Collection;
+package de.tu_clausthal.in.winf.simulation;
 
 
 /**
- * interface for a step call with a return argument
+ * interface for all objects which are triggered by the simulation worker
  */
-public interface IReturnStepable<T> extends IStepable {
+public interface IStepable {
 
-    public Collection<T> step(int p_currentstep);
 
 }

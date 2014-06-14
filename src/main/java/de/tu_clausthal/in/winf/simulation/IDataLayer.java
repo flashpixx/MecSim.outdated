@@ -19,16 +19,21 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.simulation;
+
+import java.util.Map;
 
 
 /**
- * simulation layer to represent simulation information
+ * data layer definition
  */
-public interface ISimulationLayer extends IStepable {
+public interface IDataLayer {
 
-    public boolean isActive();
-
-    public void setActive(boolean p_active);
+    /**
+     * returns data of a layer
+     *
+     * @return map with data of the layer
+     */
+    public Map<String, Object> getData();
 
 }

@@ -19,12 +19,11 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.simulation.data.CSimulationData;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +60,10 @@ public class CSimulation {
      * barrier object to synchronize the threads *
      */
     private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
+    /**
+     * world of the simulation
+     */
+    private CWorld m_world = new CWorld(COSMViewer.getInstance());
 
 
     /**
@@ -90,6 +93,14 @@ public class CSimulation {
      */
     public int getCurrentStep() {
         return m_currentstep.intValue();
+    }
+
+
+    /**
+     * returns the simulation world *
+     */
+    public CWorld getWorld() {
+        return m_world;
     }
 
 

@@ -19,21 +19,23 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.data;
+package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.simulation.process.ISimulationLayer;
-import de.tu_clausthal.in.winf.simulation.process.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.IViewLayer;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
- * single layer to create a single information structure
+ * multilayer to create a collection for elements
+ * offer, poll, peek operates only of the queue
+ * add, remove, element operates on the painter and on the queue
  */
-public abstract class ISingleLayer implements Painter, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable {
+public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable {
 
     /**
      * flag for visibility *
@@ -43,6 +45,15 @@ public abstract class ISingleLayer implements Painter, IViewLayer, IDataLayer, I
      * flag for activity *
      */
     protected boolean m_active = true;
+
+    /**
+     * list of unprocessed sources *
+     */
+    protected ConcurrentLinkedQueue<T> m_unprocess = new ConcurrentLinkedQueue();
+    /**
+     * list of processed sources *
+     */
+    protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
 
     @Override
     public boolean isActive() {
@@ -65,16 +76,71 @@ public abstract class ISingleLayer implements Painter, IViewLayer, IDataLayer, I
     }
 
     @Override
-    public void step(int p_currentstep) {
-    }
-
-    @Override
     public Map<String, Object> getData() {
         return null;
     }
 
+
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+    public synchronized boolean add(T t) {
+        super.addPainter(t);
+        return m_process.add(t);
     }
 
+    @Override
+    public synchronized T remove() {
+        if (!m_active)
+            return null;
+
+        T l_item = m_unprocess.remove();
+        super.removePainter(l_item);
+        return l_item;
+    }
+
+    @Override
+    public T element() {
+        if (!m_active)
+            return null;
+
+        return m_unprocess.element();
+    }
+
+    @Override
+    public boolean offer(T t) {
+        return m_process.offer(t);
+    }
+
+    @Override
+    public T poll() {
+        if (!m_active)
+            return null;
+
+        return m_unprocess.poll();
+    }
+
+    @Override
+    public T peek() {
+        if (!m_active)
+            return null;
+
+        return m_unprocess.peek();
+    }
+
+    public void step(int p_currentstep) {
+    }
+
+
+    @Override
+    public synchronized void reset() {
+        m_unprocess.addAll(m_process);
+        m_process.clear();
+    }
+
+    @Override
+    protected void doPaint(Graphics2D g, T component, int width, int height) {
+        if (!m_visible)
+            return;
+
+        super.doPaint(g, component, width, height);
+    }
 }

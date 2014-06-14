@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.simulation;
 
 
 /**

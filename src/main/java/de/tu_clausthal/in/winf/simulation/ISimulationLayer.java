@@ -19,13 +19,16 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.simulation;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * simulation layer to represent simulation information
  */
-public interface IStepable {
+public interface ISimulationLayer extends IStepable {
 
+    public boolean isActive();
+
+    public void setActive(boolean p_active);
 
 }

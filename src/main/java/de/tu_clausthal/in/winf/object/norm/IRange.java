@@ -19,24 +19,34 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
-import java.util.Collection;
+import de.tu_clausthal.in.winf.ui.IPainter;
+
+import java.io.Serializable;
 
 
 /**
- * collection to receive and / send norms to
- * institutions
+ * class to represent the workspace of an institution
  */
-public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
+public interface IRange<T> extends Serializable, IPainter {
 
 
     /**
-     * sends a norm to all institution
+     * check if an object is within the range
      *
-     * @param p_message norm message
+     * @param p_object object
+     * @return boolean for existence
      */
-    public void send(INormMessage<T> p_message);
+    public boolean check(T p_object);
+
+
+    /**
+     * returns the institution of the range
+     *
+     * @return institution
+     */
+    public IInstitution<T> getInstitution();
 
 
     /**

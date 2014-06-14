@@ -19,30 +19,54 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
-
+package de.tu_clausthal.in.winf.object.norm;
 
 import java.io.Serializable;
-import java.util.Collection;
+
 
 /**
- * class to define a collection of ranges
+ * defines a message to transfer a norm
  */
-public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable {
+public interface INormMessage<T> extends Serializable {
 
 
     /**
-     * check if an object is within the range
+     * returns the norm
      *
-     * @param p_object object
-     * @return boolean for existence
+     * @return norm object
      */
-    public boolean check(T p_object);
+    public INorm<T> getNorm();
 
 
     /**
-     * release call *
+     * get owner institution
+     *
+     * @return institution object
      */
-    public void release();
+    public IInstitution<T> getInstitution();
+
+
+    /**
+     * returns the message type
+     *
+     * @return message type
+     */
+    public ENormMessageType getType();
+
+
+    /**
+     * hops to avoid infinity loops on update process (time-to-live)
+     *
+     * @return hop value (less or equal than zero equal ignore / remove norm)
+     * @note the hop value defines the max. send operations
+     */
+    public int getTTL();
+
+
+    /**
+     * TTL decrement (time-to-live)
+     */
+    public void decrementTTL();
+
 
 }

@@ -19,31 +19,12 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
-
-import java.io.Serializable;
+package de.tu_clausthal.in.winf.object.norm;
 
 
 /**
- * represent a fuzzy checkresult of a norm
+ * defines the operation on a norm transfer
  */
-public interface INormCheckResult<T> extends Serializable {
-
-
-    /**
-     * returns the fuzzy value of the norm
-     *
-     * @return fuzzy value [0,1]
-     */
-    public double getWeight();
-
-
-    /**
-     * returns the checking result of the norm
-     *
-     * @return result
-     */
-    public T getResult();
-
-
+public enum ENormMessageType {
+    Create, Update, Delete
 }

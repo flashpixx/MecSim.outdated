@@ -19,39 +19,31 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
-
-import de.tu_clausthal.in.winf.ui.IPainter;
+package de.tu_clausthal.in.winf.object.norm;
 
 import java.io.Serializable;
 
 
 /**
- * class to represent the workspace of an institution
+ * represent a fuzzy checkresult of a norm
  */
-public interface IRange<T> extends Serializable, IPainter {
+public interface INormCheckResult<T> extends Serializable {
 
 
     /**
-     * check if an object is within the range
+     * returns the fuzzy value of the norm
      *
-     * @param p_object object
-     * @return boolean for existence
+     * @return fuzzy value [0,1]
      */
-    public boolean check(T p_object);
+    public double getWeight();
 
 
     /**
-     * returns the institution of the range
+     * returns the checking result of the norm
      *
-     * @return institution
+     * @return result
      */
-    public IInstitution<T> getInstitution();
+    public T getResult();
 
-
-    /**
-     * release call *
-     */
-    public void release();
 
 }

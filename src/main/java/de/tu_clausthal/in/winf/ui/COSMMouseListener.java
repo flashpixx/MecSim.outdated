@@ -21,9 +21,9 @@
 
 package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.object.mas.norm.CRangeGPS;
-import de.tu_clausthal.in.winf.object.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.object.mas.norm.INormObject;
+import de.tu_clausthal.in.winf.object.norm.CRangeGPS;
+import de.tu_clausthal.in.winf.object.norm.IInstitution;
+import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.source.CDefaultSource;
 import de.tu_clausthal.in.winf.object.source.CNormSource;
 import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;

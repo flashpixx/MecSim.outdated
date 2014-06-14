@@ -22,8 +22,8 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.simulation.process.CWorker;
 import de.tu_clausthal.in.winf.simulation.process.IStepable;
 import de.tu_clausthal.in.winf.simulation.world.CWorld;

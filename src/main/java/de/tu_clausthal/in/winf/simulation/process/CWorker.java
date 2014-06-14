@@ -22,12 +22,12 @@
 package de.tu_clausthal.in.winf.simulation.process;
 
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.car.ICar;
-import de.tu_clausthal.in.winf.object.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.object.mas.norm.INormObject;
+import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.object.norm.IInstitution;
+import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;

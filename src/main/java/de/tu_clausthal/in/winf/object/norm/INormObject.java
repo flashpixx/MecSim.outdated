@@ -19,31 +19,29 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
-import java.io.Serializable;
-import java.util.Collection;
+import de.tu_clausthal.in.winf.object.car.ICar;
+
 import java.util.Map;
 
 
 /**
- * norm collection
+ * interface of an norm object to receive norms
  */
-public interface INormCollection<T> extends Collection<INorm<T>>, Serializable {
-
+public interface INormObject extends ICar {
 
     /**
-     * checks the object for each norm and returns a map with results
+     * matching method of a norm
      *
-     * @param p_object check object
-     * @return map with results
+     * @param p_norm map of norm objects
      */
-    public Map<INorm<T>, INormCheckResult> match(T p_object);
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm);
 
 
     /**
-     * release call *
+     * clears the mached norms *
      */
-    public void release();
+    public void clearMatchedNorm();
 
 }

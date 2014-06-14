@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.drivemodel;
+package de.tu_clausthal.in.winf.object.car.drivemodel;
 
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.car.ICar;

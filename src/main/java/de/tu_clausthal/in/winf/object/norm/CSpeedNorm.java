@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
 
 /**

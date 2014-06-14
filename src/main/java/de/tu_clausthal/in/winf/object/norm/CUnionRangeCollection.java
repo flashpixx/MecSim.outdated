@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,91 +28,93 @@ import java.util.Set;
 
 
 /**
- * default institution collection
+ * conjoint range
  */
-public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<T> {
-
+public class CUnionRangeCollection<T> implements IRangeCollection<T> {
 
     /**
-     * list of insitutions *
+     * list of ranges *
      */
-    private Set<IInstitution<T>> m_institution = new HashSet();
+    private Set<IRange<T>> m_ranges = new HashSet();
 
 
     @Override
-    public void send(INormMessage<T> p_message) {
-        for (IInstitution<T> l_item : m_institution)
-            l_item.receive(p_message);
+    public boolean check(T p_object) {
+        for (IRange<T> l_item : m_ranges)
+            if (l_item.check(p_object))
+                return true;
+
+        return false;
     }
 
     @Override
     public void release() {
-        for (IInstitution<T> l_item : m_institution)
+        for (IRange<T> l_item : m_ranges)
             l_item.release();
     }
 
     @Override
     public int size() {
-        return m_institution.size();
+        return m_ranges.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return m_institution.isEmpty();
+        return m_ranges.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return m_institution.contains(o);
+        return m_ranges.contains(o);
     }
 
     @Override
-    public Iterator<IInstitution<T>> iterator() {
-        return m_institution.iterator();
+    public Iterator<IRange<T>> iterator() {
+        return m_ranges.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return m_institution.toArray();
+        return m_ranges.toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return m_institution.toArray(a);
+        return m_ranges.toArray(a);
     }
 
     @Override
-    public boolean add(IInstitution<T> iInstitution) {
-        return m_institution.add(iInstitution);
+    public boolean add(IRange iRange) {
+        return m_ranges.add(iRange);
     }
 
     @Override
     public boolean remove(Object o) {
-        return m_institution.remove(o);
+        return m_ranges.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return m_institution.containsAll(c);
+        return m_ranges.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends IInstitution<T>> c) {
-        return m_institution.addAll(c);
+    public boolean addAll(Collection<? extends IRange<T>> c) {
+        return m_ranges.addAll(c);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return m_institution.removeAll(c);
+        return m_ranges.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return m_institution.retainAll(c);
+        return m_ranges.retainAll(c);
     }
 
     @Override
     public void clear() {
-        m_institution.clear();
+        m_ranges.clear();
     }
 }

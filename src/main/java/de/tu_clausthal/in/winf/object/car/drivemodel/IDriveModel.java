@@ -19,45 +19,23 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.car.drivemodel;
 
-import java.io.Serializable;
+import de.tu_clausthal.in.winf.object.car.ICar;
 
 
 /**
- * interface class of a norm
+ * drive interface for driving models *
  */
-public interface INorm<T> extends Serializable {
-
+public interface IDriveModel {
 
     /**
-     * checks for an object the norm
+     * updates car
      *
-     * @param p_object object
-     * @return result
+     * @param p_currentstep current step number
+     * @param p_car         car object
+     * @note update is called on each thread, so sometimes it must be synchronized
      */
-    public INormCheckResult check(T p_object);
-
-
-    /**
-     * returns the institution which handle the norm
-     *
-     * @return institution
-     */
-    public IInstitution<T> getInstitution();
-
-
-    /**
-     * name of the norm
-     *
-     * @return name
-     */
-    public String getName();
-
-
-    /**
-     * release call *
-     */
-    public void release();
+    public void update(int p_currentstep, ICar p_car);
 
 }

@@ -19,12 +19,29 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
+
+import java.util.Collection;
 
 
 /**
- * defines the operation on a norm transfer
+ * collection to receive and / send norms to
+ * institutions
  */
-public enum ENormMessageType {
-    Create, Update, Delete
+public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
+
+
+    /**
+     * sends a norm to all institution
+     *
+     * @param p_message norm message
+     */
+    public void send(INormMessage<T> p_message);
+
+
+    /**
+     * release call *
+     */
+    public void release();
+
 }

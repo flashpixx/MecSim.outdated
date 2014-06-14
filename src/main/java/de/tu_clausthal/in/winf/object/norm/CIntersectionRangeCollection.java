@@ -19,103 +19,105 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.mas.norm;
+package de.tu_clausthal.in.winf.object.norm;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
-import java.util.*;
 
 /**
- * default norm collection
+ * disjoint range
  */
-public class CDefaultNormCollection<INormCar> implements INormCollection<INormCar> {
+public class CIntersectionRangeCollection<T> implements IRangeCollection<T> {
 
     /**
-     * map with norms *
+     * list of ranges *
      */
-    private HashSet<INorm<INormCar>> m_norms = new HashSet();
+    private Set<IRange<T>> m_ranges = new HashSet();
 
 
     @Override
-    public Map<INorm<INormCar>, INormCheckResult> match(INormCar p_object) {
-        HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap();
+    public boolean check(T p_object) {
+        if (m_ranges.isEmpty())
+            return false;
 
-        for (INorm<INormCar> l_norm : m_norms) {
-            INormCheckResult l_check = l_norm.check(p_object);
-            if ((l_check.getResult() instanceof Boolean) && (((Boolean) l_check.getResult())))
-                l_map.put(l_norm, l_check);
-        }
+        for (IRange<T> l_item : m_ranges)
+            if (!l_item.check(p_object))
+                return false;
 
-        return l_map;
+        return true;
     }
 
     @Override
     public void release() {
-        for (INorm<INormCar> l_item : m_norms)
+        for (IRange<T> l_item : m_ranges)
             l_item.release();
     }
 
     @Override
     public int size() {
-        return m_norms.size();
+        return m_ranges.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return m_norms.isEmpty();
+        return m_ranges.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return m_norms.contains(o);
+        return m_ranges.contains(o);
     }
 
     @Override
-    public Iterator<INorm<INormCar>> iterator() {
-        return m_norms.iterator();
+    public Iterator<IRange<T>> iterator() {
+        return m_ranges.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return m_norms.toArray();
+        return m_ranges.toArray();
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
-        return m_norms.toArray(a);
+    public <T> T[] toArray(T[] a) {
+        return m_ranges.toArray(a);
     }
 
     @Override
-    public boolean add(INorm<INormCar> iNormCarINorm) {
-        return m_norms.add(iNormCarINorm);
+    public boolean add(IRange<T> iRange) {
+        return m_ranges.add(iRange);
     }
 
     @Override
     public boolean remove(Object o) {
-        return m_norms.remove(o);
+        return m_ranges.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return m_norms.containsAll(c);
+        return m_ranges.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<INormCar>> c) {
-        return m_norms.addAll(c);
+    public boolean addAll(Collection<? extends IRange<T>> c) {
+        return m_ranges.addAll(c);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return m_norms.removeAll(c);
+        return m_ranges.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return m_norms.retainAll(c);
+        return m_ranges.retainAll(c);
     }
 
     @Override
     public void clear() {
-        m_norms.clear();
+        m_ranges.clear();
     }
 }

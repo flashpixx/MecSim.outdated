@@ -21,12 +21,53 @@
 
 package de.tu_clausthal.in.winf.object.car;
 
+import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
+import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
+import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
+
 
 /**
  * defines the layer for cars
  */
 public class CCarLayer extends IMultiLayer<ICar> {
 
+    /**
+     * drive model *
+     */
+    private IDriveModel m_drivemodel = new CNagelSchreckenberg();
+    /**
+     * graph *
+     */
+    private CGraphHopper m_graph = null;
+
+
+    /**
+     * sets the drive model
+     *
+     * @param p_model model
+     */
+    public void setDriveModel(IDriveModel p_model) {
+        if (p_model == null)
+            throw new IllegalArgumentException("drive model need not be null");
+        m_drivemodel = p_model;
+    }
+
+
+    @Override
+    public void stepObject(int p_currentstep, ICar p_object) {
+
+        m_drivemodel.update(p_currentstep, p_object);
+        p_object.drive();
+
+        if (p_object.hasEndReached()) {
+            super.remove(p_object);
+            CCellCarLinkage l_edge = m_graph.getEdge(p_object.getCurrentEdge());
+            if (l_edge != null)
+                l_edge.removeCarFromEdge(p_object);
+        }
+
+    }
 
 }

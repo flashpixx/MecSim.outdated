@@ -58,7 +58,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
     public CMenuPopup() {
 
         String[] l_cars = {"default cars", "norm cars"};
-        this.add(CMenuFactory.createRadioMenu("Sources", l_cars, this, m_reference));
+        this.add(CMenuFactory.createRadioMenuGroup("Sources", l_cars, this, m_reference));
     }
 
 
@@ -98,7 +98,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
         l_list.toArray(l_array);
 
         m_institution = l_array[0];
-        m_institutionMenu = CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference);
+        m_institutionMenu = CMenuFactory.createRadioMenuGroup("Institution", l_array, this, m_reference);
         this.add(m_institutionMenu);
         */
     }

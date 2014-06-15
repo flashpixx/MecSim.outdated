@@ -71,14 +71,19 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
         this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
 
+        String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
+        CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
+        this.add(CMenuFactory.createRadioMenu("Layer", l_layer, this, m_reference));
+
+
         String[] l_actions = {"Start", "Stop", null, "Reset"};
         this.add(CMenuFactory.createMenu("Action", l_actions, this, m_reference));
 
         String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
-        this.add(CMenuFactory.createRadioMenu("Graph Weights", l_weights, this, m_reference));
+        this.add(CMenuFactory.createRadioMenuGroup("Graph Weights", l_weights, this, m_reference));
 
         String[] l_drivemodel = {"Nagel-Schreckenberg"};
-        this.add(CMenuFactory.createRadioMenu("Driving Model", l_drivemodel, this, m_reference));
+        this.add(CMenuFactory.createRadioMenuGroup("Driving Model", l_drivemodel, this, m_reference));
 
         String[] l_institution = {"Create Institution", "Delete Institution"};
         this.add(CMenuFactory.createMenu("Institution", l_institution, this, m_reference));

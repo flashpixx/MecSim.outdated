@@ -59,7 +59,35 @@ public class CMenuFactory {
     }
 
     /**
-     * creates a menu
+     * creates a menu with radio buttons in a group
+     *
+     * @param p_label     menu label
+     * @param p_list      string with items
+     * @param p_listener  listener
+     * @param p_reference reference map with object for action listener
+     * @return menu
+     */
+    public static JMenu createRadioMenuGroup(String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference) {
+        if (p_label == null)
+            return null;
+        if ((p_list == null) || (p_listener == null) || (p_reference == null))
+            return new JMenu(p_label);
+
+        JMenu l_menu = new JMenu(p_label);
+        ButtonGroup l_group = new ButtonGroup();
+
+        for (int i = 0; i < p_list.length; i++)
+            if ((p_list[i] == null) || (p_list[i].isEmpty()))
+                l_menu.addSeparator();
+            else
+                createRadioMenuItem(p_list[i], l_menu, p_listener, p_reference, l_group, i == 0);
+
+        return l_menu;
+    }
+
+
+    /**
+     * creates a menu with radio buttons in a group
      *
      * @param p_label     menu label
      * @param p_list      string with items
@@ -74,13 +102,11 @@ public class CMenuFactory {
             return new JMenu(p_label);
 
         JMenu l_menu = new JMenu(p_label);
-        ButtonGroup l_group = new ButtonGroup();
-
         for (int i = 0; i < p_list.length; i++)
             if ((p_list[i] == null) || (p_list[i].isEmpty()))
                 l_menu.addSeparator();
             else
-                createRadioMenuItem(p_list[i], l_menu, p_listener, p_reference, l_group, i == 0);
+                createRadioMenuItem(p_list[i], l_menu, p_listener, p_reference, null, true);
 
         return l_menu;
     }
@@ -109,7 +135,7 @@ public class CMenuFactory {
      * @param p_menu      menu
      * @param p_listener  listener
      * @param p_reference reference map with object for action listener
-     * @param p_group     group
+     * @param p_group     group or null
      * @param p_select    item default selected
      */
     private static void createRadioMenuItem(String p_label, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference, ButtonGroup p_group, boolean p_select) {
@@ -117,7 +143,8 @@ public class CMenuFactory {
         p_reference.put(l_item.getText(), l_item);
         l_item.setSelected(p_select);
         l_item.addActionListener(p_listener);
-        p_group.add(l_item);
+        if (p_group != null)
+            p_group.add(l_item);
         p_menu.add(l_item);
     }
 

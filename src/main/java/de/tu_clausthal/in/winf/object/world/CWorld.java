@@ -58,7 +58,7 @@ public class CWorld extends CompoundPainter {
     public CWorld(COSMViewer p_viewer) {
         m_viewer = p_viewer;
         m_viewer.getCompoundPainter().addPainter(this);
-        CBootstrap.AfterWorldInit();
+        CBootstrap.AfterWorldInit(this);
     }
 
     /**

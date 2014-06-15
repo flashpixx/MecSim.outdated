@@ -21,30 +21,54 @@
 
 package de.tu_clausthal.in.winf;
 
+import de.tu_clausthal.in.winf.object.world.CWorld;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
+import de.tu_clausthal.in.winf.ui.CFrame;
+
 /**
  * class to create the bootstrap of the program
  */
 public class CBootstrap {
 
-    public static void AfterConfigLoad() {
+    /**
+     * is called after configuration is loaded
+     *
+     * @param p_configuration configuration
+     */
+    public static void ConfigIsLoaded(CConfiguration p_configuration) {
     }
 
     ;
 
-    public static void AfterFrameLoad() {
+
+    /**
+     * is called after the frame is initialize
+     *
+     * @param p_frame frame
+     */
+    public static void AfterFrameInit(CFrame p_frame) {
     }
 
     ;
 
-    public static void AfterSimulationInit() {
+
+    /**
+     * is called after the simulation is initialize
+     *
+     * @param p_simulation simulation
+     */
+    public static void AfterSimulationInit(CSimulation p_simulation) {
     }
 
     ;
 
-    public static void AfterWorldInit() {
-    }
 
-    ;
-
+    /**
+     * is called after the world is initialize
+     *
+     * @param p_world world
+     */
+    public static void AfterWorldInit(CWorld p_world ) {
+    };
 
 }

@@ -73,7 +73,7 @@ public class CSimulation {
      * private ctor *
      */
     private CSimulation() {
-        CBootstrap.AfterSimulationInit();
+        CBootstrap.AfterSimulationInit(this);
     }
 
     /**

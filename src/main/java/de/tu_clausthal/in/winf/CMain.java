@@ -49,7 +49,7 @@ public class CMain {
         // set configuration directory and read the Json configuration file
         CConfiguration.getInstance().setConfigDir(l_config);
         CConfiguration.getInstance().read();
-        CBootstrap.AfterConfigLoad();
+        CBootstrap.ConfigIsLoaded(CConfiguration.getInstance());
 
         // call Graphhopper instance (and import data if needed)
         CGraphHopper.getInstance();

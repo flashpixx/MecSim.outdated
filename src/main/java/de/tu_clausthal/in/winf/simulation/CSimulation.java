@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
+import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
@@ -67,6 +68,13 @@ public class CSimulation {
      */
     private ConcurrentLinkedQueue<IStepable> m_prepostprocessing = new ConcurrentLinkedQueue();
 
+
+    /**
+     * private ctor *
+     */
+    private CSimulation() {
+        CBootstrap.AfterSimulationInit();
+    }
 
     /**
      * returns the singelton instance

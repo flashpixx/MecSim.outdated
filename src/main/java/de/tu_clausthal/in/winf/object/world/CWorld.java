@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.object.world;
 
+import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -57,6 +58,7 @@ public class CWorld extends CompoundPainter {
     public CWorld(COSMViewer p_viewer) {
         m_viewer = p_viewer;
         m_viewer.getCompoundPainter().addPainter(this);
+        CBootstrap.AfterWorldInit();
     }
 
     /**

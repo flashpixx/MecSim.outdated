@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf.ui;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
+import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
@@ -76,6 +77,7 @@ public class CFrame extends JFrame {
         this.add(m_control.getContentArea());
         this.createDockable("Inspector", CInspector.getInstance(), false, CLocation.base().normalEast(0.2));
         this.createDockable("OSM", new JScrollPane(COSMViewer.getInstance()), false, CLocation.base().normalWest(0.8));
+        CBootstrap.AfterFrameLoad();
     }
 
 

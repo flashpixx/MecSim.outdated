@@ -31,6 +31,8 @@ import java.io.ObjectOutputStream;
 /**
  * serializable geoposition object, because mapviewer.GeoPosition object does not
  * implement the serializable interface
+ *
+ * @deprecated
  */
 public class CSerializableGeoPosition extends CSerializableAdapter<GeoPosition> {
 

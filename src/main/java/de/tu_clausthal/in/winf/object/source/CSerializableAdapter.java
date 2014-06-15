@@ -27,6 +27,8 @@ import java.io.Serializable;
 /**
  * serializable adapter for objects that does not
  * implement the serializable interface
+ *
+ * @deprecated
  */
 public class CSerializableAdapter<T> implements Serializable {
     /**

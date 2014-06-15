@@ -19,12 +19,12 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.institution;
+package de.tu_clausthal.in.winf.object.norm.institution;
 
 import de.tu_clausthal.in.winf.object.norm.*;
-import de.tu_clausthal.in.winf.object.range.CUnionRangeCollection;
-import de.tu_clausthal.in.winf.object.range.IRange;
-import de.tu_clausthal.in.winf.object.range.IRangeCollection;
+import de.tu_clausthal.in.winf.object.norm.range.CUnionRangeCollection;
+import de.tu_clausthal.in.winf.object.norm.range.IRange;
+import de.tu_clausthal.in.winf.object.norm.range.IRangeCollection;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import org.jxmapviewer.JXMapViewer;
 

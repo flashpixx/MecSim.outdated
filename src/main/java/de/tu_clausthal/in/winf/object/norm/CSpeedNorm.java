@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.object.norm;
 
 
-import de.tu_clausthal.in.winf.object.institution.IInstitution;
+import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 
 /**
  * norm for speed check

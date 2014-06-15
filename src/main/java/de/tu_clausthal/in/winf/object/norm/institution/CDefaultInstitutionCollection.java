@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.institution;
+package de.tu_clausthal.in.winf.object.norm.institution;
 
 import de.tu_clausthal.in.winf.object.norm.INormMessage;
 

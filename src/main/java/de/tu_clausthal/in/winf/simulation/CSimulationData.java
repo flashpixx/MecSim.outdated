@@ -22,8 +22,8 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.object.car.ICar;
-import de.tu_clausthal.in.winf.object.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
+import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.process.IStep;
 import de.tu_clausthal.in.winf.simulation.world.CWorld;

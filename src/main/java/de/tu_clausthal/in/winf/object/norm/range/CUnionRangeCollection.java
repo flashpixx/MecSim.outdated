@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.range;
+package de.tu_clausthal.in.winf.object.norm.range;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,9 +28,9 @@ import java.util.Set;
 
 
 /**
- * disjoint range
+ * conjoint range
  */
-public class CIntersectionRangeCollection<T> implements IRangeCollection<T> {
+public class CUnionRangeCollection<T> implements IRangeCollection<T> {
 
     /**
      * list of ranges *
@@ -40,14 +40,11 @@ public class CIntersectionRangeCollection<T> implements IRangeCollection<T> {
 
     @Override
     public boolean check(T p_object) {
-        if (m_ranges.isEmpty())
-            return false;
-
         for (IRange<T> l_item : m_ranges)
-            if (!l_item.check(p_object))
-                return false;
+            if (l_item.check(p_object))
+                return true;
 
-        return true;
+        return false;
     }
 
     @Override
@@ -87,7 +84,7 @@ public class CIntersectionRangeCollection<T> implements IRangeCollection<T> {
     }
 
     @Override
-    public boolean add(IRange<T> iRange) {
+    public boolean add(IRange iRange) {
         return m_ranges.add(iRange);
     }
 

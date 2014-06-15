@@ -24,16 +24,9 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.norm.range.CRangeGPS;
-import de.tu_clausthal.in.winf.object.source.CDefaultSource;
-import de.tu_clausthal.in.winf.object.source.CNormSource;
-import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
-import de.tu_clausthal.in.winf.simulation.CSimulation;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
 import org.jxmapviewer.JXMapViewer;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -103,6 +96,7 @@ class COSMMouseListener extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        /*
         try {
             // left double-click
             if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
@@ -136,7 +130,7 @@ class COSMMouseListener extends MouseAdapter {
             }
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
-        }
+        }*/
     }
 
 
@@ -174,11 +168,11 @@ class COSMMouseListener extends MouseAdapter {
     private IInstitution<INormObject> getSelectedInstitution() {
         if ((m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()))
             return null;
-
+/*
         for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
             if (l_item.getName().equals(m_popup.getInstitutionSelection()))
                 return l_item;
-
+*/
         return null;
     }
 

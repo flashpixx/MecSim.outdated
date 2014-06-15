@@ -24,7 +24,7 @@ package de.tu_clausthal.in.winf.util;
 import de.tu_clausthal.in.winf.simulation.IQueue;
 
 import java.util.Collection;
-import java.util.Queue;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -46,29 +46,33 @@ public class CQueue<T> implements IQueue<T> {
 
 
     @Override
-    public Queue<T> getAll() {
-        Queue<T> l_data = new ConcurrentLinkedQueue();
-        l_data.addAll(m_unprocess);
-        l_data.addAll(m_process);
-        return l_data;
+    public int size() {
+        return 0;
     }
-
-
-    @Override
-    public T pop() {
-        return m_unprocess.poll();
-    }
-
-
-    @Override
-    public void push(T p_item) {
-        m_process.add(p_item);
-    }
-
 
     @Override
     public boolean isEmpty() {
         return m_unprocess.isEmpty() && m_process.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T1> T1[] toArray(T1[] a) {
+        return null;
     }
 
 
@@ -80,59 +84,59 @@ public class CQueue<T> implements IQueue<T> {
 
 
     @Override
-    public int size() {
-        return this.unprocessedsize() + this.processsize();
+    public boolean remove(Object o) {
+        return false;
     }
-
 
     @Override
-    public int unprocessedsize() {
-        return m_unprocess.size();
+    public boolean containsAll(Collection<?> c) {
+        return false;
     }
-
 
     @Override
-    public int processsize() {
-        return m_process.size();
+    public boolean addAll(Collection<? extends T> c) {
+        return false;
     }
-
 
     @Override
-    public boolean contains(T p_item) {
-        return m_unprocess.contains(p_item) || m_process.contains(p_item);
+    public boolean removeAll(Collection<?> c) {
+        return false;
     }
-
 
     @Override
-    public void unprocessed2array(T[] p_array) {
-        m_unprocess.toArray(p_array);
+    public boolean retainAll(Collection<?> c) {
+        return false;
     }
-
 
     @Override
-    public void process2array(T[] p_array) {
-        m_process.toArray(p_array);
+    public boolean add(T t) {
+        return false;
     }
-
 
     @Override
-    public void add(T p_item) {
-        m_unprocess.add(p_item);
+    public boolean offer(T t) {
+        return false;
     }
-
 
     @Override
-    public void add(Collection<T> p_item) {
-        m_unprocess.addAll(p_item);
+    public T remove() {
+        return null;
     }
-
 
     @Override
-    public synchronized void remove(T p_item) {
-        m_unprocess.remove(p_item);
-        m_process.remove(p_item);
+    public T poll() {
+        return null;
     }
 
+    @Override
+    public T element() {
+        return null;
+    }
+
+    @Override
+    public T peek() {
+        return null;
+    }
 
     @Override
     public synchronized void clear() {

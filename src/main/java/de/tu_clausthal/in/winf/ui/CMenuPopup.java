@@ -21,14 +21,10 @@
 
 package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.util.CMenuFactory;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,6 +83,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      * update method to modify internal menu structure
      */
     public void update() {
+        /*
         if (m_institutionMenu != null) {
             this.remove(m_institutionMenu);
             m_institution = null;
@@ -103,6 +100,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
         m_institution = l_array[0];
         m_institutionMenu = CMenuFactory.createRadioMenu("Institution", l_array, this, m_reference);
         this.add(m_institutionMenu);
+        */
     }
 
 

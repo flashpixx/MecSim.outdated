@@ -27,7 +27,6 @@ import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
-import de.tu_clausthal.in.winf.util.CMenuFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

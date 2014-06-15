@@ -22,14 +22,7 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
-import de.tu_clausthal.in.winf.object.norm.INormObject;
-import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
-import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,7 +109,7 @@ public class CWorker implements Runnable {
      * @throws InterruptedException
      */
     private void processListener(ListenerCall p_call) throws InterruptedException, BrokenBarrierException {
-
+/*
         IStep l_step = null;
         ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
         ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
@@ -145,7 +138,7 @@ public class CWorker implements Runnable {
 
         m_barrier.await();
         CSimulationData.getInstance().getStepListenerQueue().reset();
-
+*/
     }
 
     /**
@@ -154,7 +147,7 @@ public class CWorker implements Runnable {
      * @throws InterruptedException
      */
     private void processCars() throws InterruptedException, BrokenBarrierException {
-
+/*
         ICar l_car = null;
         while ((l_car = CSimulationData.getInstance().getCarQueue().pop()) != null) {
 
@@ -194,7 +187,7 @@ public class CWorker implements Runnable {
 
         m_barrier.await();
         CSimulationData.getInstance().getCarQueue().reset();
-
+*/
     }
 
     /**
@@ -203,7 +196,7 @@ public class CWorker implements Runnable {
      * @throws InterruptedException
      */
     private void processSources() throws InterruptedException, BrokenBarrierException {
-
+/*
         ICarSourceFactory l_source = null;
         while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
             try {
@@ -219,7 +212,7 @@ public class CWorker implements Runnable {
 
         m_barrier.await();
         CSimulationData.getInstance().getSourceQueue().reset();
-
+*/
     }
 
 

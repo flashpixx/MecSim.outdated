@@ -29,7 +29,6 @@ import de.tu_clausthal.in.winf.object.source.CNormSource;
 import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.CSimulationData;
-import de.tu_clausthal.in.winf.ui.menu.CMenuPopup;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
 import org.jxmapviewer.JXMapViewer;
 

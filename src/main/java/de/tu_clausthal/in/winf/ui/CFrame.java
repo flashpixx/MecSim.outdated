@@ -27,7 +27,6 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.analysis.CStatisticMap;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
-import de.tu_clausthal.in.winf.ui.menu.CMenuBar;
 
 import javax.swing.*;
 import java.awt.*;

@@ -21,19 +21,12 @@
 
 package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.drivemodel.CNagelSchreckenberg;
-import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.mas.norm.IInstitution;
-import de.tu_clausthal.in.winf.mas.norm.INorm;
-import de.tu_clausthal.in.winf.mas.norm.INormObject;
-import de.tu_clausthal.in.winf.objects.CDefaultSource;
-import de.tu_clausthal.in.winf.objects.CSerializableGeoPosition;
-import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.objects.norm.CDefaultInstitution;
-import de.tu_clausthal.in.winf.objects.norm.CSpeedNorm;
+import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
+import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.object.norm.INormObject;
+import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
-import de.tu_clausthal.in.winf.simulation.CSimulationData;
 import de.tu_clausthal.in.winf.util.CMenuFactory;
 
 import javax.imageio.ImageIO;
@@ -41,8 +34,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -155,6 +150,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * creates a new speed norm
      */
     private void createSpeedNorm() {
+        /*
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
 
@@ -180,6 +176,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
             l_item.add(new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)));
         }
+        */
     }
 
 
@@ -189,6 +186,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * @todo complete
      */
     private void deleteNorm() {
+        /*
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
 
@@ -216,6 +214,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
                 l_item.remove(l_norm);
                 l_norm.release();
             }
+        */
     }
 
 
@@ -223,6 +222,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * create a new institution
      */
     private void createInstitution() {
+        /*
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
 
@@ -234,6 +234,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         new CDefaultInstitution(l_input);
         COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
+        */
     }
 
 
@@ -241,6 +242,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * deletes an institution
      */
     private void deleteInstitution() {
+        /*
         if (CSimulationData.getInstance().getCarInstitutionQueue().isEmpty())
             return;
         if (CSimulation.getInstance().isRunning())
@@ -252,6 +254,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         if (l_item != null)
             l_item.release();
         COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
+        */
     }
 
     /**
@@ -260,6 +263,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * @return array
      */
     private String[] getInstitutionList() {
+        /*
         Queue<IInstitution<INormObject>> l_data = CSimulationData.getInstance().getCarInstitutionQueue().getAll();
         String[] l_names = new String[l_data.size()];
         int i = 0;
@@ -268,6 +272,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             i++;
         }
         return l_names;
+        */
+        return null;
     }
 
 
@@ -278,6 +284,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * @return null or institution
      */
     private IInstitution<INormObject> getInstitution(String p_name) {
+        /*
         if ((p_name == null) && (p_name.isEmpty()))
             return null;
 
@@ -285,6 +292,8 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             if (l_item.getName().equals(p_name))
                 return l_item;
 
+        return null;
+        */
         return null;
     }
 
@@ -337,6 +346,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      * @throws java.io.IOException
      */
     private void saveSources() throws IOException {
+        /*
         if (m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
             return;
 
@@ -349,6 +359,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         l_output.writeObject(l_positions);
         l_output.close();
         l_stream.close();
+        */
     }
 
 
@@ -361,6 +372,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
      */
     @SuppressWarnings(value = "unchecked")
     private void loadSources() throws IOException, ClassNotFoundException, IllegalAccessException {
+        /*
         if (m_filedialog.showOpenDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
             return;
 
@@ -373,6 +385,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         if (l_data instanceof Set)
             for (CSerializableGeoPosition l_item : (Set<CSerializableGeoPosition>) l_data)
                 CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_item.getObject()));
+                */
     }
 
 

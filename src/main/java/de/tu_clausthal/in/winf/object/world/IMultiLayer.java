@@ -30,7 +30,8 @@ import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
-import java.util.Map;
+import java.util.*;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -49,7 +50,6 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
      * flag for activity *
      */
     protected boolean m_active = true;
-
     /**
      * list of unprocessed sources *
      */
@@ -150,8 +150,87 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
      */
     public void stepObject(int p_currentstep, T p_object) {
     }
-
     ;
+
+    @Override
+    public synchronized int size() {
+        return m_process.size() + m_unprocess.size();
+    }
+
+    @Override
+    public synchronized boolean isEmpty() {
+        return m_process.isEmpty() && m_unprocess.isEmpty();
+    }
+
+    @Override
+    public synchronized boolean contains(Object o) {
+        return m_unprocess.contains(o) || m_process.contains(o);
+    }
+
+    @Override
+    public synchronized Iterator<T> iterator() {
+        Queue<T> l_data = new LinkedList();
+        l_data.addAll(m_unprocess);
+        l_data.addAll(m_process);
+        return l_data.iterator();
+    }
+
+    @Override
+    public synchronized Object[] toArray() {
+        Queue<T> l_data = new LinkedList();
+        l_data.addAll(m_unprocess);
+        l_data.addAll(m_process);
+        return l_data.toArray();
+    }
+
+    @Override
+    public synchronized <S> S[] toArray(S[] a) {
+        Queue<T> l_data = new LinkedList();
+        l_data.addAll(m_unprocess);
+        l_data.addAll(m_process);
+        return l_data.toArray(a);
+    }
+
+    @Override
+    public synchronized boolean remove(Object o) {
+        return m_process.remove(o) || m_unprocess.remove(o);
+    }
+
+    @Override
+    public synchronized boolean containsAll(Collection<?> c) {
+        for (Object l_item : c)
+            if ((!m_unprocess.contains(l_item)) && (!m_process.contains(l_item)))
+                return false;
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+        return m_process.addAll(c);
+    }
+
+    @Override
+    public synchronized boolean removeAll(Collection<?> c) {
+        for (Object l_item : c) {
+            if ((m_process.remove(l_item)) || (m_unprocess.remove(l_item)))
+                continue;
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public synchronized void clear() {
+        m_unprocess.clear();
+        m_process.clear();
+    }
+
 
     @Override
     public synchronized void reset() {

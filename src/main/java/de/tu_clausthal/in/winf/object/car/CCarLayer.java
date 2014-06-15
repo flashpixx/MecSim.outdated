@@ -19,59 +19,14 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf;
+package de.tu_clausthal.in.winf.object.car;
 
-import de.tu_clausthal.in.winf.object.world.CWorld;
-import de.tu_clausthal.in.winf.simulation.CSimulation;
-import de.tu_clausthal.in.winf.ui.CFrame;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 
 /**
- * class to create the bootstrap of the program
+ * defines the layer for cars
  */
-public class CBootstrap {
+public class CCarLayer extends IMultiLayer<ICar> {
 
-    /**
-     * is called after configuration is loaded
-     *
-     * @param p_configuration configuration
-     */
-    public static void ConfigIsLoaded(CConfiguration p_configuration) {
-    }
-
-    ;
-
-
-    /**
-     * is called after the frame is initialize
-     *
-     * @param p_frame frame
-     */
-    public static void AfterFrameInit(CFrame p_frame) {
-    }
-
-    ;
-
-
-    /**
-     * is called after the simulation is initialize
-     *
-     * @param p_simulation simulation
-     */
-    public static void AfterSimulationInit(CSimulation p_simulation) {
-    }
-
-    ;
-
-
-    /**
-     * is called after the world is initialize
-     *
-     * @param p_world world
-     */
-    public static void AfterWorldInit(CWorld p_world) {
-
-    }
-
-    ;
 
 }

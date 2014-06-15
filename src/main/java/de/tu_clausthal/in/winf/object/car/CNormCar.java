@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.object.car;
 
-import de.tu_clausthal.in.winf.object.norm.IInstitution;
+import de.tu_clausthal.in.winf.object.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.norm.INorm;
 import de.tu_clausthal.in.winf.object.norm.INormCheckResult;
 import de.tu_clausthal.in.winf.object.norm.INormObject;

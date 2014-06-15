@@ -19,7 +19,9 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.institution;
+
+import de.tu_clausthal.in.winf.object.norm.INormMessage;
 
 import java.util.Collection;
 import java.util.HashSet;

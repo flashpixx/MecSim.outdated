@@ -19,8 +19,9 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.norm;
+package de.tu_clausthal.in.winf.object.range;
 
+import de.tu_clausthal.in.winf.object.institution.IInstitution;
 import de.tu_clausthal.in.winf.ui.IPainter;
 
 import java.io.Serializable;

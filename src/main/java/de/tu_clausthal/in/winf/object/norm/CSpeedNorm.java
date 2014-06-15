@@ -22,6 +22,8 @@
 package de.tu_clausthal.in.winf.object.norm;
 
 
+import de.tu_clausthal.in.winf.object.institution.IInstitution;
+
 /**
  * norm for speed check
  */

@@ -21,6 +21,8 @@
 
 package de.tu_clausthal.in.winf.object.norm;
 
+import de.tu_clausthal.in.winf.object.institution.IInstitution;
+
 import java.io.Serializable;
 
 

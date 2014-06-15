@@ -18,16 +18,14 @@
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
  **/
-package de.tu_clausthal.in.winf.simulation.process;
 
+package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.simulation.world.CWorld;
 
 /**
- * interface for pre step calls
+ * interface for all objects which are triggered by the simulation worker
  */
-public interface IPreStepable extends IStepable {
+public interface IStepable {
 
-    public void preStep(int p_currentstep, CWorld p_world);
 
 }

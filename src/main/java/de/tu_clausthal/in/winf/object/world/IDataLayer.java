@@ -19,20 +19,21 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.object.world;
 
-import java.util.Queue;
+import java.util.Map;
 
 
 /**
- *
+ * data layer definition
  */
-public interface IQueue<T> extends Queue<T> {
+public interface IDataLayer {
 
     /**
-     * moves elements from the unprocessed queue
-     * to the processed queue
+     * returns data of a layer
+     *
+     * @return map with data of the layer
      */
-    public void reset();
+    public Map<String, Object> getData();
 
 }

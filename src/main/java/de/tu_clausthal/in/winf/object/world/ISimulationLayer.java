@@ -19,10 +19,10 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.world;
+package de.tu_clausthal.in.winf.object.world;
 
 
-import de.tu_clausthal.in.winf.simulation.process.IStepable;
+import de.tu_clausthal.in.winf.simulation.IStepable;
 
 /**
  * simulation layer to represent simulation information

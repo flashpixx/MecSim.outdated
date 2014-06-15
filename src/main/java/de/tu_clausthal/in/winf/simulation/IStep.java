@@ -19,13 +19,38 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.process;
+package de.tu_clausthal.in.winf.simulation;
+
+import de.tu_clausthal.in.winf.object.car.ICar;
+import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * interface for getting messages before / after each call step call
+ *
+ * @note each object can be called on different threads, so attend synchronization
+ * @deprecated
  */
-public interface IStepable {
+public interface IStep {
+
+    /**
+     * is called on before each step
+     *
+     * @param p_currentstep step number
+     * @param p_sources     list with all sources
+     * @param p_cars        list with all cars
+     */
+    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
+
+
+    /**
+     * is called after each step
+     *
+     * @param p_currentstep step number
+     * @param p_sources     list with all sources
+     * @param p_cars        list with all cars
+     */
+    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars);
 
 
 }

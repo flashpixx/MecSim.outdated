@@ -19,9 +19,9 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.world;
+package de.tu_clausthal.in.winf.object.world;
 
-import de.tu_clausthal.in.winf.simulation.process.IQueue;
+import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.CompoundPainter;
 

@@ -22,8 +22,14 @@
 package de.tu_clausthal.in.winf.object.world;
 
 
+import de.tu_clausthal.in.winf.simulation.IStepable;
+
 /**
  * interface of the layer
  */
-public interface ILayer {
+public interface ILayer extends IStepable {
+
+    public boolean isActive();
+
+    public void setActive(boolean p_active);
 }

@@ -89,19 +89,29 @@ public class CWorker implements Runnable {
 
             try {
 
+                // first call stepable on each layer
                 ILayer l_layer = null;
                 while ((l_layer = m_world.getQueue().poll()) != null) {
-                    if (l_layer instanceof IVoidStepable)
+
+                    if (!l_layer.isActive())
+                        continue;
+
+                    if (l_layer instanceof IVoidStepable) {
                         ((IVoidStepable) l_layer).step(m_currentstep.get());
-                    // return stepable
-
-                    if (l_layer instanceof IMultiLayer) {
-                        IStepable l_object = null;
-                        while ((l_object = ((IMultiLayer) l_layer).poll()) != null) {
-
-                        }
+                        continue;
                     }
+
+                    if (l_layer instanceof IReturnStepable)
+                    {
+                        continue;
+                    }
+
                 }
+                m_barrier.await();
+
+
+
+                // multilayer objects
 
                 // world getData
 

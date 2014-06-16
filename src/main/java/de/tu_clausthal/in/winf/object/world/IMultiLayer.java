@@ -22,10 +22,11 @@
 package de.tu_clausthal.in.winf.object.world;
 
 import de.tu_clausthal.in.winf.simulation.IQueue;
+import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
-import de.tu_clausthal.in.winf.ui.IViewLayer;
-import org.jxmapviewer.painter.CompoundPainter;
+import de.tu_clausthal.in.winf.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.painter.CompoundPainter;
 
 import java.awt.*;
 import java.util.*;
@@ -38,7 +39,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
  */
-public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable, ILayer {
+public abstract class IMultiLayer<T extends IStepable & Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
 
     /**
      * flag for visibility *

@@ -30,7 +30,10 @@ import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -63,10 +66,6 @@ public class CSimulation {
      * world of the simulation
      */
     private CWorld m_world = new CWorld(COSMViewer.getInstance());
-    /**
-     * pre- & postprocess data
-     */
-    private ConcurrentLinkedQueue<IStepable> m_prepostprocessing = new ConcurrentLinkedQueue();
 
 
     /**
@@ -116,18 +115,6 @@ public class CSimulation {
         return m_world;
     }
 
-    /**
-     * returns the queue of pre- and poststable objects
-     *
-     * @return queue
-     */
-    public ConcurrentLinkedQueue<IStepable> getStepableQueue() {
-        if (this.isRunning())
-            throw new IllegalStateException("simulation is running");
-
-        return m_prepostprocessing;
-    }
-
 
     /**
      * runs the simulation of the current step
@@ -147,9 +134,9 @@ public class CSimulation {
         CSimulationData.getInstance().getSourceQueue().reset();
         if (CSimulationData.getInstance().getSourceQueue().isEmpty())
             m_Logger.warn("no sources exists");
-        CSimulationData.getInstance().getCarQueue().reset();
-        if (CSimulationData.getInstance().getCarQueue().isEmpty())
-            m_Logger.warn("no cars exists");
+        // CSimulationData.getInstance().getCarQueue().reset();
+        // if (CSimulationData.getInstance().getCarQueue().isEmpty())
+        //     m_Logger.warn("no cars exists");
 
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();

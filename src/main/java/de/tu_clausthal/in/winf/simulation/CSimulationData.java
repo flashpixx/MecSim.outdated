@@ -21,11 +21,9 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
-import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.util.CPainterQueue;
 import de.tu_clausthal.in.winf.util.CQueue;
@@ -49,7 +47,7 @@ public class CSimulationData {
     /**
      * queue for cars *
      */
-    private CPainterQueue<ICar> m_cars = new CPainterQueue(COSMViewer.getInstance());
+    //private CPainterQueue<ICar> m_cars = new CPainterQueue(COSMViewer.getInstance());
     /**
      * queue for step listeners *
      */
@@ -60,8 +58,9 @@ public class CSimulationData {
     private CPainterQueue<IInstitution<INormObject>> m_carinstitution = new CPainterQueue(COSMViewer.getInstance());
     /**
      * world layer structure
+     *
+     private CWorld m_world = new CWorld(COSMViewer.getInstance());
      */
-    private CWorld m_world = new CWorld(COSMViewer.getInstance());
 
 
     /**
@@ -81,20 +80,15 @@ public class CSimulationData {
     }
 
 
-    public CWorld getWorld() {
-        return m_world;
-    }
-
-
     /**
      * returns the care queue
      *
      * @return queue object
-     */
+     *
     public CPainterQueue<ICar> getCarQueue() {
-        return m_cars;
+    return m_cars;
     }
-
+     */
 
     /**
      * returns the source queue

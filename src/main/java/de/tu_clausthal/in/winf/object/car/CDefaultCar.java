@@ -343,13 +343,27 @@ public class CDefaultCar extends IInspector implements ICar {
 
 
     @Override
-    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
+    public void onClick(MouseEvent e, JXMapViewer viewer) {
         GeoPosition l_position = this.getCurrentPosition();
         if (l_position == null)
             return;
 
         int l_zoom = this.iconsize(viewer);
         Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
+        Ellipse2D l_circle = new Ellipse2D.Double(l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom);
+
+        if (l_circle.contains(e.getX(), e.getY()))
+            CInspector.getInstance().set(this);
+    }
+
+    @Override
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+        GeoPosition l_position = this.getCurrentPosition();
+        if (l_position == null)
+            return;
+
+        int l_zoom = this.iconsize((JXMapViewer) o);
+        Point2D l_point = ((JXMapViewer) o).getTileFactory().geoToPixel(l_position, ((JXMapViewer) o).getZoom());
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
         graphics2D.setColor(Color.DARK_GRAY);
@@ -366,20 +380,4 @@ public class CDefaultCar extends IInspector implements ICar {
 
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
     }
-
-
-    @Override
-    public void onClick(MouseEvent e, JXMapViewer viewer) {
-        GeoPosition l_position = this.getCurrentPosition();
-        if (l_position == null)
-            return;
-
-        int l_zoom = this.iconsize(viewer);
-        Point2D l_point = viewer.getTileFactory().geoToPixel(l_position, viewer.getZoom());
-        Ellipse2D l_circle = new Ellipse2D.Double(l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom);
-
-        if (l_circle.contains(e.getX(), e.getY()))
-            CInspector.getInstance().set(this);
-    }
-
 }

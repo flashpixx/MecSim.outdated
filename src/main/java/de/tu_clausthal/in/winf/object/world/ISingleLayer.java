@@ -21,8 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.world;
 
-import de.tu_clausthal.in.winf.simulation.IPostStepable;
-import de.tu_clausthal.in.winf.simulation.IPreStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.IViewLayer;
 import org.jxmapviewer.painter.Painter;
@@ -34,7 +32,7 @@ import java.util.Map;
 /**
  * single layer to create a single information structure
  */
-public abstract class ISingleLayer implements Painter, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable, IPreStepable, IPostStepable {
+public abstract class ISingleLayer implements Painter, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable, ILayer {
 
     /**
      * flag for visibility *

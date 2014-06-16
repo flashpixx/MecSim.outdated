@@ -21,8 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.world;
 
-import de.tu_clausthal.in.winf.simulation.IPostStepable;
-import de.tu_clausthal.in.winf.simulation.IPreStepable;
 import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.IViewLayer;
@@ -40,7 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
  */
-public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable, IPreStepable, IPostStepable {
+public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> implements IQueue<T>, IViewLayer, IDataLayer, ISimulationLayer, IVoidStepable, ILayer {
 
     /**
      * flag for visibility *
@@ -134,14 +132,6 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
     public void step(int p_currentstep) {
     }
 
-    @Override
-    public void postStep(int p_currentstep) {
-    }
-
-    @Override
-    public void preStep(int p_currentstep) {
-    }
-
     /**
      * method which is called with each object of the layer
      *
@@ -150,6 +140,7 @@ public abstract class IMultiLayer<T extends Painter> extends CompoundPainter<T> 
      */
     public void stepObject(int p_currentstep, T p_object) {
     }
+
     ;
 
     @Override

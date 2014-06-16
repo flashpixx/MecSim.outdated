@@ -18,14 +18,12 @@
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
  **/
-package de.tu_clausthal.in.winf.simulation;
+
+package de.tu_clausthal.in.winf.object.world;
 
 
 /**
- * interface for pre step calls
+ * interface of the layer
  */
-public interface IPreStepable extends IStepable {
-
-    public void preStep(int p_currentstep);
-
+public interface ILayer {
 }

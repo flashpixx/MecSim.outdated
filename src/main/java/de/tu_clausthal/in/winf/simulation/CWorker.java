@@ -23,10 +23,12 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.object.world.CWorld;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -60,6 +62,8 @@ public class CWorker implements Runnable {
      */
     private AtomicInteger m_currentstep = null;
 
+    private CWorld m_world = null;
+
     /**
      * ctor to create a working process
      *
@@ -85,10 +89,30 @@ public class CWorker implements Runnable {
 
             try {
 
+                ILayer l_layer = null;
+                while ((l_layer = m_world.getQueue().poll()) != null) {
+                    if (l_layer instanceof IVoidStepable)
+                        ((IVoidStepable) l_layer).step(m_currentstep.get());
+                    // return stepable
+
+                    if (l_layer instanceof IMultiLayer) {
+                        IStepable l_object = null;
+                        while ((l_object = ((IMultiLayer) l_layer).poll()) != null) {
+
+                        }
+                    }
+                }
+
+                // world getData
+
+
+
+                /*
                 this.processListener(ListenerCall.Before);
                 this.processCars();
                 this.processSources();
                 this.processListener(ListenerCall.After);
+                */
 
                 if (m_increment)
                     m_currentstep.getAndIncrement();
@@ -107,9 +131,8 @@ public class CWorker implements Runnable {
      * processes listener
      *
      * @throws InterruptedException
-     */
+     *
     private void processListener(ListenerCall p_call) throws InterruptedException, BrokenBarrierException {
-/*
         IStep l_step = null;
         ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
         ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
@@ -138,16 +161,15 @@ public class CWorker implements Runnable {
 
         m_barrier.await();
         CSimulationData.getInstance().getStepListenerQueue().reset();
-*/
     }
+     */
 
     /**
      * processes cars
      *
      * @throws InterruptedException
-     */
+     *
     private void processCars() throws InterruptedException, BrokenBarrierException {
-/*
         ICar l_car = null;
         while ((l_car = CSimulationData.getInstance().getCarQueue().pop()) != null) {
 
@@ -187,17 +209,17 @@ public class CWorker implements Runnable {
 
         m_barrier.await();
         CSimulationData.getInstance().getCarQueue().reset();
-*/
     }
+     */
 
     /**
      * processes sources
      *
      * @throws InterruptedException
-     */
+     *
     private void processSources() throws InterruptedException, BrokenBarrierException {
-/*
-        ICarSourceFactory l_source = null;
+
+    ICarSourceFactory l_source = null;
         while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
             try {
 
@@ -212,15 +234,16 @@ public class CWorker implements Runnable {
 
         m_barrier.await();
         CSimulationData.getInstance().getSourceQueue().reset();
-*/
-    }
 
+    }
+     */
 
     /**
      * enum listener call definition *
-     */
+     *
     private enum ListenerCall {
         Before, After
     }
+     */
 
 }

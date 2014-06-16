@@ -27,7 +27,7 @@ import de.tu_clausthal.in.winf.simulation.IStepable;
 /**
  * simulation layer to represent simulation information
  */
-public interface ISimulationLayer extends IStepable {
+public interface ISimulationLayer extends IStepable, ILayer {
 
     public boolean isActive();
 

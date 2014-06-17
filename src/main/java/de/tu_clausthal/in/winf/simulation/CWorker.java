@@ -29,6 +29,7 @@ import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -89,26 +90,43 @@ public class CWorker implements Runnable {
 
             try {
 
-                // first call stepable on each layer
+                // first: call stepable on each layer
                 ILayer l_layer = null;
                 while ((l_layer = m_world.getQueue().poll()) != null) {
 
+                    m_world.getQueue().add(l_layer);
                     if (!l_layer.isActive())
                         continue;
 
-                    if (l_layer instanceof IVoidStepable) {
+                    if (l_layer instanceof IVoidStepable)
                         ((IVoidStepable) l_layer).step(m_currentstep.get());
-                        continue;
-                    }
 
                     if (l_layer instanceof IReturnStepable)
                     {
-                        continue;
+                        Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get());
+                        Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_layer).getTargets();
+                        if ((l_data == null) || (l_targets == null))
+                            continue;
+                        for (IReturnStepableTarget l_target : l_targets)
+                            l_target.set(l_data);
                     }
 
                 }
                 m_barrier.await();
+                m_world.getQueue().reset();
 
+
+                // second: call objects on each multilayer
+                l_layer = null;
+                while ((l_layer = m_world.getQueue().element()) != null) {
+
+                    if (!(l_layer instanceof IMultiLayer))
+                        continue;
+
+
+                    m_barrier.await();
+                    ((IMultiLayer) l_layer).reset();
+                }
 
 
                 // multilayer objects

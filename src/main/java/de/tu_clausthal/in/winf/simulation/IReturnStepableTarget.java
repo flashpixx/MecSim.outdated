@@ -25,24 +25,10 @@ import java.util.Collection;
 
 
 /**
- * interface for a step call with a return argument
+ * interface of the target of a return stepable argument
  */
-public interface IReturnStepable<T> extends IStepable {
+public interface IReturnStepableTarget<T> {
 
-    /**
-     * step method with return argument
-     *
-     * @param p_currentstep current step value
-     * @return collection with step values
-     */
-    public Collection<T> step(int p_currentstep);
-
-
-    /**
-     * returns the object which gets the data
-     *
-     * @return objects which gets the data
-     */
-    public Collection<IReturnStepableTarget<T>> getTargets();
+    public void set(Collection<T> p_data);
 
 }

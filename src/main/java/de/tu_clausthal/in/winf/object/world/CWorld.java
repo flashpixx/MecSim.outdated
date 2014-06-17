@@ -73,7 +73,7 @@ public class CWorld extends CompoundPainter {
     /**
      * returns queue data *
      */
-    public Queue<ILayer> getQueue() {
+    public IQueue<ILayer> getQueue() {
         return m_queue;
     }
 

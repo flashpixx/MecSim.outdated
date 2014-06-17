@@ -141,7 +141,7 @@ public class CSimulation {
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();
         for (int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++)
-            m_pool.submit(new CWorker(m_barrier, i == 0, m_currentstep, p_model));
+            m_pool.submit(new CWorker(m_barrier, i == 0, m_currentstep));
     }
 
 

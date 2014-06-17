@@ -22,7 +22,6 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
@@ -30,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,17 +47,13 @@ public class CWorker implements Runnable {
      */
     private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
-     * drive model *
-     */
-    private IDriveModel m_drivemodel = null;
-    /**
      * barrier object for synchronization *
      */
     private CyclicBarrier m_barrier = null;
     /**
      * rank defines the thread number *
      */
-    private boolean m_increment = false;
+    private boolean m_isFirst = false;
     /**
      * current step value *
      */
@@ -69,15 +65,13 @@ public class CWorker implements Runnable {
      * ctor to create a working process
      *
      * @param p_barrier     synchronized barrier
-     * @param p_increment   rank ID of the process
+     * @param p_isFirst     rank ID of the process
      * @param p_currentstep current step object
-     * @param p_drivemodel  driving model object
      */
-    public CWorker(CyclicBarrier p_barrier, boolean p_increment, AtomicInteger p_currentstep, IDriveModel p_drivemodel) {
+    public CWorker(CyclicBarrier p_barrier, boolean p_isFirst, AtomicInteger p_currentstep) {
         m_barrier = p_barrier;
-        m_increment = p_increment;
+        m_isFirst = p_isFirst;
         m_currentstep = p_currentstep;
-        m_drivemodel = p_drivemodel;
     }
 
     /**
@@ -90,50 +84,8 @@ public class CWorker implements Runnable {
 
             try {
 
-                // first: call stepable on each layer
-                ILayer l_layer = null;
-                while ((l_layer = m_world.getQueue().poll()) != null) {
-
-                    m_world.getQueue().add(l_layer);
-                    if (!l_layer.isActive())
-                        continue;
-
-                    if (l_layer instanceof IVoidStepable)
-                        ((IVoidStepable) l_layer).step(m_currentstep.get());
-
-                    if (l_layer instanceof IReturnStepable)
-                    {
-                        Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get());
-                        Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_layer).getTargets();
-                        if ((l_data == null) || (l_targets == null))
-                            continue;
-                        for (IReturnStepableTarget l_target : l_targets)
-                            l_target.set(l_data);
-                    }
-
-                }
-                m_barrier.await();
-                m_world.getQueue().reset();
-
-
-                // second: call objects on each multilayer
-                l_layer = null;
-                while ((l_layer = m_world.getQueue().element()) != null) {
-
-                    if (!(l_layer instanceof IMultiLayer))
-                        continue;
-
-
-                    m_barrier.await();
-                    ((IMultiLayer) l_layer).reset();
-                }
-
-
-                // multilayer objects
-
-                // world getData
-
-
+                this.processLayer();
+                this.processMultiLayerObject();
 
                 /*
                 this.processListener(ListenerCall.Before);
@@ -142,7 +94,7 @@ public class CWorker implements Runnable {
                 this.processListener(ListenerCall.After);
                 */
 
-                if (m_increment)
+                if (m_isFirst)
                     m_currentstep.getAndIncrement();
 
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
@@ -155,40 +107,109 @@ public class CWorker implements Runnable {
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] stops working");
     }
 
+
+    /**
+     * run process of each layer *
+     */
+    private void processLayer() throws BrokenBarrierException, InterruptedException {
+        ILayer l_layer = null;
+        while ((l_layer = m_world.getQueue().poll()) != null) {
+
+            m_world.getQueue().add(l_layer);
+            if (!l_layer.isActive())
+                continue;
+
+            if (l_layer instanceof IVoidStepable)
+                ((IVoidStepable) l_layer).step(m_currentstep.get());
+
+            if (l_layer instanceof IReturnStepable) {
+                Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get());
+                Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_layer).getTargets();
+                if ((l_data == null) || (l_targets == null))
+                    continue;
+                for (IReturnStepableTarget l_target : l_targets)
+                    l_target.set(l_data);
+            }
+
+        }
+        m_barrier.await();
+        m_world.getQueue().reset();
+    }
+
+
+    /**
+     * run process on each object on the multilayer *
+     */
+    private void processMultiLayerObject() throws BrokenBarrierException, InterruptedException {
+        ILayer l_layer = null;
+        while ((l_layer = m_world.getQueue().element()) != null) {
+
+            if (m_isFirst) {
+                m_world.getQueue().poll();
+                m_world.getQueue().add(l_layer);
+            }
+
+            if ((!(l_layer instanceof IMultiLayer)) || (!l_layer.isActive()))
+                continue;
+
+            IStepable l_object = null;
+            while ((l_object = ((IMultiLayer) l_layer).poll()) != null) {
+                ((IMultiLayer) l_layer).add(l_object);
+                if (l_object instanceof IVoidStepable)
+                    ((IVoidStepable) l_object).step(m_currentstep.get());
+
+                if (l_object instanceof IReturnStepable) {
+                    Collection l_data = ((IReturnStepable) l_object).step(m_currentstep.get());
+                    Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_object).getTargets();
+                    if ((l_data == null) || (l_targets == null))
+                        continue;
+                    for (IReturnStepableTarget l_target : l_targets)
+                        l_target.set(l_data);
+                }
+            }
+
+            m_barrier.await();
+            ((IMultiLayer) l_layer).reset();
+        }
+        m_barrier.await();
+        m_world.getQueue().reset();
+    }
+
+
     /**
      * processes listener
      *
      * @throws InterruptedException
      *
     private void processListener(ListenerCall p_call) throws InterruptedException, BrokenBarrierException {
-        IStep l_step = null;
-        ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
-        ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
+    IStep l_step = null;
+    ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
+    ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
 
-        CSimulationData.getInstance().getCarQueue().unprocessed2array(l_cars);
-        CSimulationData.getInstance().getSourceQueue().unprocessed2array(l_sources);
+    CSimulationData.getInstance().getCarQueue().unprocessed2array(l_cars);
+    CSimulationData.getInstance().getSourceQueue().unprocessed2array(l_sources);
 
-        while ((l_step = CSimulationData.getInstance().getStepListenerQueue().pop()) != null) {
-            try {
+    while ((l_step = CSimulationData.getInstance().getStepListenerQueue().pop()) != null) {
+    try {
 
-                switch (p_call) {
-                    case Before:
-                        l_step.before(m_currentstep.get(), l_sources, l_cars);
-                        break;
-                    case After:
-                        l_step.after(m_currentstep.get(), l_sources, l_cars);
-                        break;
-                }
+    switch (p_call) {
+    case Before:
+    l_step.before(m_currentstep.get(), l_sources, l_cars);
+    break;
+    case After:
+    l_step.after(m_currentstep.get(), l_sources, l_cars);
+    break;
+    }
 
-                CSimulationData.getInstance().getStepListenerQueue().push(l_step);
+    CSimulationData.getInstance().getStepListenerQueue().push(l_step);
 
-            } catch (Exception l_exception) {
-                m_Logger.error("thread [" + Thread.currentThread().getId() + "] processListener: ", l_exception);
-            }
-        }
+    } catch (Exception l_exception) {
+    m_Logger.error("thread [" + Thread.currentThread().getId() + "] processListener: ", l_exception);
+    }
+    }
 
-        m_barrier.await();
-        CSimulationData.getInstance().getStepListenerQueue().reset();
+    m_barrier.await();
+    CSimulationData.getInstance().getStepListenerQueue().reset();
     }
      */
 
@@ -198,45 +219,45 @@ public class CWorker implements Runnable {
      * @throws InterruptedException
      *
     private void processCars() throws InterruptedException, BrokenBarrierException {
-        ICar l_car = null;
-        while ((l_car = CSimulationData.getInstance().getCarQueue().pop()) != null) {
+    ICar l_car = null;
+    while ((l_car = CSimulationData.getInstance().getCarQueue().pop()) != null) {
 
-            try {
+    try {
 
-                // car is at the end
-                if (l_car.hasEndReached())
-                    continue;
+    // car is at the end
+    if (l_car.hasEndReached())
+    continue;
 
-                // update car with drive model (and drive it)
-                m_drivemodel.update(m_currentstep.get(), l_car);
-                l_car.drive();
+    // update car with drive model (and drive it)
+    m_drivemodel.update(m_currentstep.get(), l_car);
+    l_car.drive();
 
-                // car is at the end
-                if (!l_car.hasEndReached())
-                    CSimulationData.getInstance().getCarQueue().push(l_car);
-                else {
+    // car is at the end
+    if (!l_car.hasEndReached())
+    CSimulationData.getInstance().getCarQueue().push(l_car);
+    else {
 
-                    // remove car from the graph and from the mouse listener
-                    CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
-                    if (l_edge != null)
-                        l_edge.removeCarFromEdge(l_car);
-                    ((IInspector) l_car).release();
-                }
+    // remove car from the graph and from the mouse listener
+    CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
+    if (l_edge != null)
+    l_edge.removeCarFromEdge(l_car);
+    ((IInspector) l_car).release();
+    }
 
-                // call on each car all institutions
-                if (l_car instanceof INormObject) {
-                    ((INormObject) l_car).clearMatchedNorm();
-                    for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-                        l_item.check((INormObject) l_car);
-                }
+    // call on each car all institutions
+    if (l_car instanceof INormObject) {
+    ((INormObject) l_car).clearMatchedNorm();
+    for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
+    l_item.check((INormObject) l_car);
+    }
 
-            } catch (Exception l_exception) {
-                m_Logger.error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);
-            }
-        }
+    } catch (Exception l_exception) {
+    m_Logger.error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);
+    }
+    }
 
-        m_barrier.await();
-        CSimulationData.getInstance().getCarQueue().reset();
+    m_barrier.await();
+    CSimulationData.getInstance().getCarQueue().reset();
     }
      */
 
@@ -248,20 +269,20 @@ public class CWorker implements Runnable {
     private void processSources() throws InterruptedException, BrokenBarrierException {
 
     ICarSourceFactory l_source = null;
-        while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
-            try {
+    while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
+    try {
 
-                CSimulationData.getInstance().getCarQueue().add(l_source.generate(m_currentstep.get()));
-                CSimulationData.getInstance().getSourceQueue().push(l_source);
+    CSimulationData.getInstance().getCarQueue().add(l_source.generate(m_currentstep.get()));
+    CSimulationData.getInstance().getSourceQueue().push(l_source);
 
-            } catch (Exception l_exception) {
-                LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processSources: ", l_exception);
-            }
+    } catch (Exception l_exception) {
+    LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processSources: ", l_exception);
+    }
 
-        }
+    }
 
-        m_barrier.await();
-        CSimulationData.getInstance().getSourceQueue().reset();
+    m_barrier.await();
+    CSimulationData.getInstance().getSourceQueue().reset();
 
     }
      */
@@ -269,9 +290,9 @@ public class CWorker implements Runnable {
     /**
      * enum listener call definition *
      *
-    private enum ListenerCall {
-        Before, After
-    }
+     private enum ListenerCall {
+     Before, After
+     }
      */
 
 }

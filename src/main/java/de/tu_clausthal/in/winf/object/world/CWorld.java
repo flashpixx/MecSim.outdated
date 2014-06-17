@@ -78,19 +78,6 @@ public class CWorld extends CompoundPainter {
     }
 
     /**
-     * returns a map with all layer data *
-     */
-    public synchronized Map<String, Object> getData() {
-        Map<String, Object> l_data = new HashMap();
-
-        for (ILayer l_item : m_queue)
-            if (l_item instanceof IDataLayer)
-                l_data.putAll(((IDataLayer) l_item).getData());
-
-        return l_data;
-    }
-
-    /**
      * internal queue representation of the data *
      */
     protected class CQueue implements IQueue<ILayer> {

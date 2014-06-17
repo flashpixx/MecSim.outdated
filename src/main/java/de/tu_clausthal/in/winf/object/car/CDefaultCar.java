@@ -185,71 +185,6 @@ public class CDefaultCar extends IInspector implements ICar {
 
 
     @Override
-    public void drive() {
-
-        // store current speed for modifying the position on the edge
-        int l_steps = this.getCurrentSpeed();
-
-        for (int i = 0; true; i++) {
-
-            // if the car is at the end
-            if (this.hasEndReached())
-                return;
-
-            // avoid infinity loop for update
-            if (i > 15) {
-                m_routeindex = m_routeedges.size();
-                return;
-            }
-
-            // get current edge of cars route
-            CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(this.getCurrentEdge());
-
-            // car is not set on the current edge, so we try to find the first position
-            if (!l_edge.contains(this)) {
-
-                // check car can be set to the edge position
-                if ((l_steps < l_edge.getEdgeCells()) && (!l_edge.isPositionSet(l_steps))) {
-                    l_edge.addCar2Edge(this, l_steps);
-                    break;
-                }
-
-                // if car faster than edge length, so get the next edge
-                if (l_steps >= l_edge.getEdgeCells()) {
-                    l_steps -= l_edge.getEdgeCells();
-                    m_routeindex++;
-                    continue;
-                }
-
-                // car is stored on the edge, so try to update
-            } else {
-
-                // car can be updated to a new position (we did not check for empty,
-                // because the driving model should update the current speed value for an empty cell
-                if (l_edge.CarCanUpdated(this, l_steps)) {
-                    try {
-                        l_edge.updateCar(this, l_steps);
-                    } catch (Exception l_exception) {
-                    }
-                    break;
-
-                    // car can not be updated to a new position, so remove it and add the car to the next edge
-                } else {
-                    l_steps = l_edge.overlappingCells(this, l_steps);
-                    l_edge.removeCarFromEdge(this);
-                    m_routeindex++;
-                    continue;
-                }
-
-
-            }
-
-        }
-
-    }
-
-
-    @Override
     public Map<Integer, ICar> getPredecessor() {
         int l_edgelength = 0;
 
@@ -379,5 +314,68 @@ public class CDefaultCar extends IInspector implements ICar {
             graphics2D.setColor(Color.RED);
 
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+    }
+
+    @Override
+    public void step(int p_currentstep) {
+
+        // store current speed for modifying the position on the edge
+        int l_steps = this.getCurrentSpeed();
+
+        for (int i = 0; true; i++) {
+
+            // if the car is at the end
+            if (this.hasEndReached())
+                return;
+
+            // avoid infinity loop for update
+            if (i > 15) {
+                m_routeindex = m_routeedges.size();
+                return;
+            }
+
+            // get current edge of cars route
+            CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(this.getCurrentEdge());
+
+            // car is not set on the current edge, so we try to find the first position
+            if (!l_edge.contains(this)) {
+
+                // check car can be set to the edge position
+                if ((l_steps < l_edge.getEdgeCells()) && (!l_edge.isPositionSet(l_steps))) {
+                    l_edge.addCar2Edge(this, l_steps);
+                    break;
+                }
+
+                // if car faster than edge length, so get the next edge
+                if (l_steps >= l_edge.getEdgeCells()) {
+                    l_steps -= l_edge.getEdgeCells();
+                    m_routeindex++;
+                    continue;
+                }
+
+                // car is stored on the edge, so try to update
+            } else {
+
+                // car can be updated to a new position (we did not check for empty,
+                // because the driving model should update the current speed value for an empty cell
+                if (l_edge.CarCanUpdated(this, l_steps)) {
+                    try {
+                        l_edge.updateCar(this, l_steps);
+                    } catch (Exception l_exception) {
+                    }
+                    break;
+
+                    // car can not be updated to a new position, so remove it and add the car to the next edge
+                } else {
+                    l_steps = l_edge.overlappingCells(this, l_steps);
+                    l_edge.removeCarFromEdge(this);
+                    m_routeindex++;
+                    continue;
+                }
+
+
+            }
+
+        }
     }
 }

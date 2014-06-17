@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -31,7 +32,7 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends Painter {
+public interface ICar extends Painter, IVoidStepable {
 
     /**
      * returns the geoposition of the start
@@ -95,12 +96,6 @@ public interface ICar extends Painter {
      * @return boolean for reaching the end
      */
     public boolean hasEndReached();
-
-
-    /**
-     * method to update the position on the graph *
-     */
-    public void drive();
 
 
     /**

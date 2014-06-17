@@ -29,6 +29,11 @@ import java.util.Collection;
  */
 public interface IReturnStepableTarget<T> {
 
+    /**
+     * sets the data of a return stepable call
+     *
+     * @param p_data collection with data
+     */
     public void set(Collection<T> p_data);
 
 }

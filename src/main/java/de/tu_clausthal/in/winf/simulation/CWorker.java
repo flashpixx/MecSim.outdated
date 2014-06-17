@@ -166,6 +166,8 @@ public class CWorker implements Runnable {
                     for (IReturnStepableTarget l_target : l_targets)
                         l_target.set(l_data);
                 }
+
+                ((IMultiLayer) l_layer).stepObject(m_currentstep.get(), l_object);
             }
 
             m_barrier.await();

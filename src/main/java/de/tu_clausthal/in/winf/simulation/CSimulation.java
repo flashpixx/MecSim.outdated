@@ -24,8 +24,9 @@ package de.tu_clausthal.in.winf.simulation;
 import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
-import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.world.CWorld;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,24 +120,18 @@ public class CSimulation {
     /**
      * runs the simulation of the current step
      *
-     * @param p_model traffic model
      * @throws IllegalAccessException
      * @note thread pool is generated (pause structures can be created with a reentrant lock @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html )
      */
-    public synchronized void start(IDriveModel p_model) throws IllegalAccessException, IllegalStateException, IllegalArgumentException {
+    public synchronized void start() throws IllegalAccessException, IllegalStateException, IllegalArgumentException {
         if (this.isRunning())
             throw new IllegalStateException("simulation is running");
         if (CConfiguration.getInstance().get().MaxThreadNumber < 1)
             throw new IllegalAccessException("one thread must be exists to start simulation");
-        if (p_model == null)
-            throw new IllegalArgumentException("model need not be null");
 
-        CSimulationData.getInstance().getSourceQueue().reset();
-        if (CSimulationData.getInstance().getSourceQueue().isEmpty())
-            m_Logger.warn("no sources exists");
-        // CSimulationData.getInstance().getCarQueue().reset();
-        // if (CSimulationData.getInstance().getCarQueue().isEmpty())
-        //     m_Logger.warn("no cars exists");
+        for (ILayer l_layer : m_world.getQueue())
+            if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
+                m_Logger.warn("layer [" + l_layer + "] has not objects");
 
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();

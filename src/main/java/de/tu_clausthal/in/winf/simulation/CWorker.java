@@ -58,19 +58,24 @@ public class CWorker implements Runnable {
      * current step value *
      */
     private AtomicInteger m_currentstep = null;
-
+    /**
+     * reference of the world
+     */
     private CWorld m_world = null;
+
 
     /**
      * ctor to create a working process
      *
      * @param p_barrier     synchronized barrier
      * @param p_isFirst     rank ID of the process
+     * @param p_world       world object
      * @param p_currentstep current step object
      */
-    public CWorker(CyclicBarrier p_barrier, boolean p_isFirst, AtomicInteger p_currentstep) {
+    public CWorker(CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
         m_barrier = p_barrier;
         m_isFirst = p_isFirst;
+        m_world = p_world;
         m_currentstep = p_currentstep;
     }
 

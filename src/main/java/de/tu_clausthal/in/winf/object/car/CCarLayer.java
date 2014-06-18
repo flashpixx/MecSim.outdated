@@ -26,12 +26,15 @@ import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
+import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
+
+import java.util.Collection;
 
 
 /**
  * defines the layer for cars
  */
-public class CCarLayer extends IMultiLayer<ICar> {
+public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarget<ICar> {
 
     /**
      * drive model *
@@ -70,5 +73,10 @@ public class CCarLayer extends IMultiLayer<ICar> {
                 l_edge.removeCarFromEdge(p_object);
         }
 
+    }
+
+    @Override
+    public void set(Collection<ICar> p_data) {
+        super.addAll(p_data);
     }
 }

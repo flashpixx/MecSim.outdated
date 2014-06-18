@@ -23,7 +23,6 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
@@ -133,6 +132,7 @@ public class CSimulation {
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
                 m_Logger.warn("layer [" + l_layer + "] has not objects");
 
+        CBootstrap.BeforeSimulationStarts(this);
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();
         for (int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++)
@@ -156,6 +156,7 @@ public class CSimulation {
         }
 
         m_Logger.info("simulation is stopped");
+        CBootstrap.AfterSimulationStops(this);
     }
 
 
@@ -175,12 +176,8 @@ public class CSimulation {
             }
         }
         m_currentstep.set(0);
-        CGraphHopper.getInstance().clear();
-        COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
-        COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
-        COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
-
         m_Logger.info("simulation reset");
+        CBootstrap.onSimulationReset(this);
     }
 
 }

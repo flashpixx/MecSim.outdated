@@ -24,6 +24,7 @@ package de.tu_clausthal.in.winf;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.CFrame;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 
 /**
  * class to create the bootstrap of the program
@@ -70,6 +71,30 @@ public class CBootstrap {
      */
     public static void AfterWorldInit(CWorld p_world) {
 
+    }
+
+    ;
+
+
+    public static void BeforeSimulationStarts(CSimulation p_simulation) {
+
+    }
+
+    ;
+
+
+    public static void AfterSimulationStops(CSimulation p_simulation) {
+
+    }
+
+    ;
+
+
+    public static void onSimulationReset(CSimulation p_simulation) {
+        //CGraphHopper.getInstance().clear();
+        COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
+        COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
+        COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
     }
 
     ;

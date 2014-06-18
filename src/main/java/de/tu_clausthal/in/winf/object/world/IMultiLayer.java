@@ -25,8 +25,8 @@ import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.IViewableLayer;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.util.*;
@@ -134,12 +134,23 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
     }
 
     /**
-     * method which is called with each object of the layer
+     * method which is called before the object step method is called
      *
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public void stepObject(int p_currentstep, T p_object) {
+    public void beforeStepObject(int p_currentstep, T p_object) {
+    }
+
+    ;
+
+    /**
+     * method which is called after the object step method is called
+     *
+     * @param p_currentstep current step
+     * @param p_object      object
+     */
+    public void afterStepObject(int p_currentstep, T p_object) {
     }
 
     ;

@@ -56,10 +56,12 @@ public class CCarLayer extends IMultiLayer<ICar> {
 
 
     @Override
-    public void stepObject(int p_currentstep, ICar p_object) {
-
+    public void beforeStepObject(int p_currentstep, ICar p_object) {
         m_drivemodel.update(p_currentstep, p_object);
-        p_object.drive();
+    }
+
+    @Override
+    public void afterStepObject(int p_currentstep, ICar p_object) {
 
         if (p_object.hasEndReached()) {
             super.remove(p_object);
@@ -69,5 +71,4 @@ public class CCarLayer extends IMultiLayer<ICar> {
         }
 
     }
-
 }

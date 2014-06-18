@@ -100,6 +100,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        /*
         try {
 
             if (e.getSource() == m_reference.get("Screenshot"))
@@ -146,7 +147,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
-
+*/
     }
 
 

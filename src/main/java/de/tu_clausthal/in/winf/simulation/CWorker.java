@@ -87,13 +87,6 @@ public class CWorker implements Runnable {
                 this.processLayer();
                 this.processMultiLayerObject();
 
-                /*
-                this.processListener(ListenerCall.Before);
-                this.processCars();
-                this.processSources();
-                this.processListener(ListenerCall.After);
-                */
-
                 if (m_isFirst)
                     m_currentstep.getAndIncrement();
 
@@ -155,6 +148,9 @@ public class CWorker implements Runnable {
             IStepable l_object = null;
             while ((l_object = ((IMultiLayer) l_layer).poll()) != null) {
                 ((IMultiLayer) l_layer).add(l_object);
+
+                ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
+
                 if (l_object instanceof IVoidStepable)
                     ((IVoidStepable) l_object).step(m_currentstep.get());
 
@@ -167,7 +163,7 @@ public class CWorker implements Runnable {
                         l_target.set(l_data);
                 }
 
-                ((IMultiLayer) l_layer).stepObject(m_currentstep.get(), l_object);
+                ((IMultiLayer) l_layer).afterStepObject(m_currentstep.get(), l_object);
             }
 
             m_barrier.await();
@@ -176,125 +172,5 @@ public class CWorker implements Runnable {
         m_barrier.await();
         m_world.getQueue().reset();
     }
-
-
-    /**
-     * processes listener
-     *
-     * @throws InterruptedException
-     *
-    private void processListener(ListenerCall p_call) throws InterruptedException, BrokenBarrierException {
-    IStep l_step = null;
-    ICarSourceFactory[] l_sources = new ICarSourceFactory[CSimulationData.getInstance().getSourceQueue().unprocessedsize()];
-    ICar[] l_cars = new ICar[CSimulationData.getInstance().getCarQueue().unprocessedsize()];
-
-    CSimulationData.getInstance().getCarQueue().unprocessed2array(l_cars);
-    CSimulationData.getInstance().getSourceQueue().unprocessed2array(l_sources);
-
-    while ((l_step = CSimulationData.getInstance().getStepListenerQueue().pop()) != null) {
-    try {
-
-    switch (p_call) {
-    case Before:
-    l_step.before(m_currentstep.get(), l_sources, l_cars);
-    break;
-    case After:
-    l_step.after(m_currentstep.get(), l_sources, l_cars);
-    break;
-    }
-
-    CSimulationData.getInstance().getStepListenerQueue().push(l_step);
-
-    } catch (Exception l_exception) {
-    m_Logger.error("thread [" + Thread.currentThread().getId() + "] processListener: ", l_exception);
-    }
-    }
-
-    m_barrier.await();
-    CSimulationData.getInstance().getStepListenerQueue().reset();
-    }
-     */
-
-    /**
-     * processes cars
-     *
-     * @throws InterruptedException
-     *
-    private void processCars() throws InterruptedException, BrokenBarrierException {
-    ICar l_car = null;
-    while ((l_car = CSimulationData.getInstance().getCarQueue().pop()) != null) {
-
-    try {
-
-    // car is at the end
-    if (l_car.hasEndReached())
-    continue;
-
-    // update car with drive model (and drive it)
-    m_drivemodel.update(m_currentstep.get(), l_car);
-    l_car.drive();
-
-    // car is at the end
-    if (!l_car.hasEndReached())
-    CSimulationData.getInstance().getCarQueue().push(l_car);
-    else {
-
-    // remove car from the graph and from the mouse listener
-    CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
-    if (l_edge != null)
-    l_edge.removeCarFromEdge(l_car);
-    ((IInspector) l_car).release();
-    }
-
-    // call on each car all institutions
-    if (l_car instanceof INormObject) {
-    ((INormObject) l_car).clearMatchedNorm();
-    for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-    l_item.check((INormObject) l_car);
-    }
-
-    } catch (Exception l_exception) {
-    m_Logger.error("thread [" + Thread.currentThread().getId() + "] processCars: ", l_exception);
-    }
-    }
-
-    m_barrier.await();
-    CSimulationData.getInstance().getCarQueue().reset();
-    }
-     */
-
-    /**
-     * processes sources
-     *
-     * @throws InterruptedException
-     *
-    private void processSources() throws InterruptedException, BrokenBarrierException {
-
-    ICarSourceFactory l_source = null;
-    while ((l_source = CSimulationData.getInstance().getSourceQueue().pop()) != null) {
-    try {
-
-    CSimulationData.getInstance().getCarQueue().add(l_source.generate(m_currentstep.get()));
-    CSimulationData.getInstance().getSourceQueue().push(l_source);
-
-    } catch (Exception l_exception) {
-    LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processSources: ", l_exception);
-    }
-
-    }
-
-    m_barrier.await();
-    CSimulationData.getInstance().getSourceQueue().reset();
-
-    }
-     */
-
-    /**
-     * enum listener call definition *
-     *
-     private enum ListenerCall {
-     Before, After
-     }
-     */
 
 }

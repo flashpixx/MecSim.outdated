@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf;
 
+import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.CFrame;
@@ -39,8 +40,6 @@ public class CBootstrap {
     public static void ConfigIsLoaded(CConfiguration p_configuration) {
     }
 
-    ;
-
 
     /**
      * is called after the frame is initialize
@@ -50,8 +49,6 @@ public class CBootstrap {
     public static void AfterFrameInit(CFrame p_frame) {
     }
 
-    ;
-
 
     /**
      * is called after the simulation is initialize
@@ -59,9 +56,11 @@ public class CBootstrap {
      * @param p_simulation simulation
      */
     public static void AfterSimulationInit(CSimulation p_simulation) {
-    }
 
-    ;
+        // add different layer
+        p_simulation.getWorld().getMap().put("car", new CCarLayer());
+
+    }
 
 
     /**
@@ -73,30 +72,37 @@ public class CBootstrap {
 
     }
 
-    ;
 
-
+    /**
+     * is called before the simulation is run
+     *
+     * @param p_simulation simulation object
+     */
     public static void BeforeSimulationStarts(CSimulation p_simulation) {
 
     }
 
-    ;
 
-
+    /**
+     * is called after the simulation is finished
+     *
+     * @param p_simulation simiulation object
+     */
     public static void AfterSimulationStops(CSimulation p_simulation) {
 
     }
 
-    ;
 
-
+    /**
+     * is called on simulation reset
+     *
+     * @param p_simulation simulation object
+     */
     public static void onSimulationReset(CSimulation p_simulation) {
         //CGraphHopper.getInstance().clear();
         COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
         COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
         COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
     }
-
-    ;
 
 }

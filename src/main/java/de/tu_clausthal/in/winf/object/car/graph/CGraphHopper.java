@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.graph;
+package de.tu_clausthal.in.winf.object.car.graph;
 
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
@@ -33,8 +33,8 @@ import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.graph.weights.CSpeedUp;
-import de.tu_clausthal.in.winf.graph.weights.CSpeedUpTrafficJam;
+import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUp;
+import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUpTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +58,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CGraphHopper extends GraphHopper {
 
-
-    /**
-     * instance variable of singleton *
-     */
-    private static volatile CGraphHopper s_instance = new CGraphHopper();
     /**
      * logger instance *
      */
@@ -75,35 +70,35 @@ public class CGraphHopper extends GraphHopper {
 
     /**
      * private ctor of the singleton structure
+     *
+     * @param p_location path of data
      */
-    private CGraphHopper() {
-        this.initialize();
+    public CGraphHopper(String p_location) {
+        this.initialize(p_location);
     }
 
     /**
      * private ctor do add different weights for routing *
+     *
+     * @param p_location path of data
+     * @param p_weights  weight name
+     * @note weight reloading can be create only be reinitialize the graph
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    private CGraphHopper(String p_weights) {
+    public CGraphHopper(String p_location, String p_weights) {
         this.setCHShortcuts(p_weights);
-        this.initialize();
+        this.initialize(p_location);
     }
 
-    /**
-     * returns the instance
-     *
-     * @return instance of the class
-     */
-    public static CGraphHopper getInstance() {
-        return s_instance;
-    }
 
     /**
      * run graph initialize process with OSM data convert *
+     *
+     * @param p_location path of data
      */
-    private void initialize() {
+    private void initialize(String p_location) {
         // define graph location
-        File l_graphlocation = new File(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator +
-                CConfiguration.getInstance().get().RoutingMap.replace('/', '_'));
+        File l_graphlocation = new File(p_location);
         System.out.println("try to load graph from [" + l_graphlocation.getAbsolutePath() + "]");
 
         // convert OSM or load the graph
@@ -120,18 +115,6 @@ public class CGraphHopper extends GraphHopper {
         }
 
         System.out.println("graph is loaded successfully");
-    }
-
-    /**
-     * change the weighting on the graph
-     *
-     * @param p_weights weight name
-     * @note weight reloading can be create only be reinitialize the graph
-     * @see https://github.com/graphhopper/graphhopper/issues/111
-     */
-    public void setWeights(String p_weights) {
-        s_instance = null;
-        s_instance = new CGraphHopper(p_weights);
     }
 
 
@@ -318,7 +301,7 @@ public class CGraphHopper extends GraphHopper {
     @Override
     public Weighting createWeighting(String p_weighting, FlagEncoder p_encoder) {
         if ("TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting))
-            return new CSpeedUpTrafficJam(p_encoder);
+            return new CSpeedUpTrafficJam(this, p_encoder);
 
         if ("SpeedUp".equalsIgnoreCase(p_weighting))
             return new CSpeedUp(p_encoder);

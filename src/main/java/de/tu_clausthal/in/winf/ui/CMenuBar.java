@@ -21,9 +21,9 @@
 
 package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.simulation.CSimulation;

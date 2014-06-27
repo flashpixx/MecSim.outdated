@@ -21,13 +21,15 @@
 
 package de.tu_clausthal.in.winf.object.car;
 
-import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
+import de.tu_clausthal.in.winf.object.car.graph.CCellCarLinkage;
+import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 
+import java.io.File;
 import java.util.Collection;
 
 
@@ -43,7 +45,27 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     /**
      * graph *
      */
-    private CGraphHopper m_graph = null;
+    private CGraphHopper m_graph = new CGraphHopper(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.replace('/', '_'));
+
+
+    /**
+     * returns the graph of the layer
+     *
+     * @return graph object
+     */
+    public CGraphHopper getGraph() {
+        return m_graph;
+    }
+
+
+    /**
+     * sets the graph with a weight
+     *
+     * @param p_weight weight name
+     */
+    public void setGraphWeight(String p_weight) {
+        m_graph = new CGraphHopper(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.replace('/', '_'), p_weight);
+    }
 
 
     /**

@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.graph;
+package de.tu_clausthal.in.winf.object.car.graph;
 
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
@@ -68,13 +68,14 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
     /**
      * ctor create the samples
      *
+     * @param p_graph  graph object
      * @param p_id     edge ID
      * @param p_length length of the edge
      */
-    public CCellCarLinkage(int p_id, double p_length) {
+    public CCellCarLinkage(CGraphHopper p_graph, int p_id, double p_length) {
         m_edgeid = p_id;
         m_edgelength = p_length;
-        this.sampling(CGraphHopper.getInstance().getEdgeIterator(m_edgeid));
+        this.sampling(p_graph.getEdgeIterator(m_edgeid));
     }
 
 

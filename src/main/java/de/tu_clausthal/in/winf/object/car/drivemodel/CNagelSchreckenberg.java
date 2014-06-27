@@ -21,8 +21,8 @@
 
 package de.tu_clausthal.in.winf.object.car.drivemodel;
 
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.car.ICar;
+import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 
 import java.util.Map;
 import java.util.Random;

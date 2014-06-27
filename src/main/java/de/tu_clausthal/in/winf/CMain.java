@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf;
 
-import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.ui.CFrame;
 
 import javax.swing.*;

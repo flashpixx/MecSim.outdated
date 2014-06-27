@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.graph.weights;
+package de.tu_clausthal.in.winf.object.car.graph.weights;
 
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;

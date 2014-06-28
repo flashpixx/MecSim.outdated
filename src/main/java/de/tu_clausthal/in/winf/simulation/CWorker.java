@@ -118,10 +118,10 @@ public class CWorker implements Runnable {
                 continue;
 
             if (l_layer instanceof IVoidStepable)
-                ((IVoidStepable) l_layer).step(m_currentstep.get());
+                ((IVoidStepable) l_layer).step(m_currentstep.get(), null);
 
             if (l_layer instanceof IReturnStepable) {
-                Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get());
+                Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get(), null);
                 Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_layer).getTargets();
                 if ((l_data == null) || (l_targets == null))
                     continue;
@@ -157,10 +157,10 @@ public class CWorker implements Runnable {
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
 
                 if (l_object instanceof IVoidStepable)
-                    ((IVoidStepable) l_object).step(m_currentstep.get());
+                    ((IVoidStepable) l_object).step(m_currentstep.get(), l_layer);
 
                 if (l_object instanceof IReturnStepable) {
-                    Collection l_data = ((IReturnStepable) l_object).step(m_currentstep.get());
+                    Collection l_data = ((IReturnStepable) l_object).step(m_currentstep.get(), l_layer);
                     Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_object).getTargets();
                     if ((l_data == null) || (l_targets == null))
                         continue;

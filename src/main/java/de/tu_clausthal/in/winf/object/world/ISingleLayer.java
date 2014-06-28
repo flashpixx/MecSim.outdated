@@ -64,7 +64,7 @@ public abstract class ISingleLayer implements Painter, IViewableLayer, IDataLaye
     }
 
     @Override
-    public void step(int p_currentstep) {
+    public void step(int p_currentstep, ILayer p_layer) {
     }
 
     @Override

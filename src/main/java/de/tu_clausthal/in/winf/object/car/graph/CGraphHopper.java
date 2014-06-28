@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -119,15 +120,30 @@ public class CGraphHopper extends GraphHopper {
 
 
     /**
-     * returns a route between two geo position
+     * creates a list of list of edge between two geopositions
      *
-     * @param p_start start geo position
-     * @param p_end   end geo position
-     * @return route response
+     * @param p_start start geoposition
+     * @param p_end   end geoposition
+     * @return list of list of edges
      */
-    public GHResponse getRoute(GeoPosition p_start, GeoPosition p_end) {
+    public List<List<EdgeIteratorState>> getRoutes(GeoPosition p_start, GeoPosition p_end) {
+        return this.getRoutes(p_start, p_end, Integer.MAX_VALUE);
+    }
+
+
+    /**
+     * creates a list of list of edge between two geopositions
+     *
+     * @param p_start     start geoposition
+     * @param p_end       end geoposition
+     * @param p_maxroutes max. number of paths
+     * @return list of list of edges
+     */
+    public List<List<EdgeIteratorState>> getRoutes(GeoPosition p_start, GeoPosition p_end, int p_maxroutes) {
+        // calculate routes
         GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
         l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
+
         GHResponse l_result = this.route(l_request);
         if (!l_result.getErrors().isEmpty()) {
             for (Throwable l_msg : l_result.getErrors())
@@ -135,25 +151,71 @@ public class CGraphHopper extends GraphHopper {
             throw new IllegalArgumentException("graph error");
         }
 
-        return l_result;
+
+        // get all pathes
+        List<Path> l_routes = this.getPaths(l_request, l_result);
+        if (l_routes.size() == 0)
+            return null;
+
+        // create edge list with routes
+        List<List<EdgeIteratorState>> l_pathes = new ArrayList();
+        for (Path l_path : l_routes) {
+            if (l_pathes.size() >= p_maxroutes)
+                return l_pathes;
+
+            // we must delete the first and last element, because the items are "virtual"
+            List<EdgeIteratorState> l_edgelist = l_path.calcEdges();
+            if (l_edgelist.size() < 3)
+                continue;
+
+            l_edgelist.remove(0);
+            l_edgelist.remove(l_edgelist.size() - 1);
+
+            l_pathes.add(l_edgelist);
+        }
+
+        return l_pathes;
     }
+
+
+    /**
+     * returns a route between two geo position
+     *
+     * @param p_start start geo position
+     * @param p_end   end geo position
+     * @return route response
+     *
+    public GHResponse getRoute(GeoPosition p_start, GeoPosition p_end) {
+    GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
+    l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
+    GHResponse l_result = this.route(l_request);
+    if (!l_result.getErrors().isEmpty()) {
+    for (Throwable l_msg : l_result.getErrors())
+    m_Logger.error(l_msg.getMessage());
+    throw new IllegalArgumentException("graph error");
+    }
+
+    return l_result;
+    }
+     */
 
     /**
      * returns the response of a route request
      *
      * @param p_request request object
      * @return response
-     */
+     *
     public GHResponse getRoute(GHRequest p_request) {
-        GHResponse l_result = this.route(p_request);
-        if (!l_result.getErrors().isEmpty()) {
-            for (Throwable l_msg : l_result.getErrors())
-                m_Logger.error(l_msg.getMessage());
-            throw new IllegalArgumentException("graph error");
-        }
-
-        return l_result;
+    GHResponse l_result = this.route(p_request);
+    if (!l_result.getErrors().isEmpty()) {
+    for (Throwable l_msg : l_result.getErrors())
+    m_Logger.error(l_msg.getMessage());
+    throw new IllegalArgumentException("graph error");
     }
+
+    return l_result;
+    }
+     */
 
     /**
      * returns a route request between two geo position
@@ -161,12 +223,13 @@ public class CGraphHopper extends GraphHopper {
      * @param p_start start geo position
      * @param p_end   end geo position
      * @return request object
-     */
+     *
     public GHRequest getRouteRequest(GeoPosition p_start, GeoPosition p_end) {
-        GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
-        l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
-        return l_request;
+    GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
+    l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
+    return l_request;
     }
+     */
 
     /**
      * returns the path list of the request and response object
@@ -174,10 +237,11 @@ public class CGraphHopper extends GraphHopper {
      * @param p_request  route request
      * @param p_response route response
      * @return path list
-     */
+     *
     public List<Path> getRoutePaths(GHRequest p_request, GHResponse p_response) {
-        return this.getPaths(p_request, p_response);
+    return this.getPaths(p_request, p_response);
     }
+     */
 
     /**
      * returns the closest edge(s) of a geo position

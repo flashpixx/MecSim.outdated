@@ -21,9 +21,9 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
-import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
@@ -314,8 +314,12 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             ((JRadioButtonMenuItem) m_reference.get(m_weight)).setSelected(true);
             throw new IllegalStateException("simulation is running");
         }
-        CGraphHopper.getInstance().setWeights(p_weight);
-        m_weight = p_weight;
+
+        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car");
+        if (l_layer != null) {
+            l_layer.setGraphWeight(p_weight);
+            m_weight = p_weight;
+        }
     }
 
 
@@ -328,17 +332,24 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     private void setDrivingModel(String p_model) throws IllegalStateException {
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
-        m_drivemodel = p_model;
+
+        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car");
+        if (l_layer != null) {
+            l_layer.setDriveModel(this.generateDrivingModel(p_model));
+            m_drivemodel = p_model;
+        }
+
     }
 
 
     /**
      * generates the driving model
      *
+     * @param p_model string name of the model
      * @return model
      */
-    private IDriveModel generateDrivingModel() {
-        if (m_drivemodel.equals("Nagel-Schreckenberg"))
+    private IDriveModel generateDrivingModel(String p_model) {
+        if (p_model.equals("Nagel-Schreckenberg"))
             return new CNagelSchreckenberg();
 
         return null;

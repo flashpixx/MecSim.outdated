@@ -22,6 +22,8 @@
 package de.tu_clausthal.in.winf.simulation;
 
 
+import de.tu_clausthal.in.winf.object.world.ILayer;
+
 /**
  * interface of void-step method
  */
@@ -32,7 +34,8 @@ public interface IVoidStepable extends IStepable {
      * step method *
      *
      * @param p_currentstep current step value
+     * @param p_layer       layer on which is the object set or null
      */
-    public void step(int p_currentstep);
+    public void step(int p_currentstep, ILayer p_layer);
 
 }

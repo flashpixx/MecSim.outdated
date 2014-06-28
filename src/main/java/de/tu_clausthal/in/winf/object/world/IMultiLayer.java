@@ -130,7 +130,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
     }
 
     @Override
-    public void step(int p_currentstep) {
+    public void step(int p_currentstep, ILayer p_layer) {
     }
 
     /**

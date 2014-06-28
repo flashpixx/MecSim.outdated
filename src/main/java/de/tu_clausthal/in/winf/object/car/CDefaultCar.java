@@ -21,11 +21,11 @@
 
 package de.tu_clausthal.in.winf.object.car;
 
-import com.graphhopper.GHRequest;
-import com.graphhopper.routing.Path;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.object.car.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
@@ -111,25 +111,15 @@ public class CDefaultCar extends IInspector implements ICar {
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position
-        List<Path> l_route = null;
+        CGraphHopper l_graph = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph();
         while (true) {
             try {
                 m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5);
-
-                GHRequest l_request = CGraphHopper.getInstance().getRouteRequest(m_StartPosition, m_EndPosition);
-                l_route = CGraphHopper.getInstance().getRoutePaths(l_request, CGraphHopper.getInstance().getRoute(l_request));
-                if (l_route.size() > 0) {
-                    m_routeedges = l_route.get(0).calcEdges();
-
-                    // we must delete the first and last element, because the items are "virtual"
-                    if (m_routeedges.size() < 3)
-                        continue;
-                    m_routeedges.remove(0);
-                    m_routeedges.remove(m_routeedges.size() - 1);
-
+                List<List<EdgeIteratorState>> l_route = l_graph.getRoutes(m_StartPosition, m_EndPosition, 1);
+                if ((l_route != null) && (l_route.size() > 0)) {
+                    m_routeedges = l_route.get(0);
                     break;
                 }
-
             } catch (Exception l_exception) {
             }
         }
@@ -174,7 +164,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public GeoPosition getCurrentPosition() {
-        return CGraphHopper.getInstance().getEdge(this.getCurrentEdge()).getCarGeoposition(this);
+        return ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph().getEdge(this.getCurrentEdge()).getCarGeoposition(this);
     }
 
 
@@ -190,7 +180,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         //iterate over the edges in the rozre
         for (int i = m_routeindex; i < m_routeedges.size(); i++) {
-            CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(m_routeedges.get(m_routeindex));
+            CCellCarLinkage l_edge = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph().getEdge(m_routeedges.get(m_routeindex));
 
             if (l_edge == null)
                 return null;
@@ -317,7 +307,7 @@ public class CDefaultCar extends IInspector implements ICar {
     }
 
     @Override
-    public void step(int p_currentstep) {
+    public void step(int p_currentstep, ILayer p_layer) {
 
         // store current speed for modifying the position on the edge
         int l_steps = this.getCurrentSpeed();
@@ -335,7 +325,7 @@ public class CDefaultCar extends IInspector implements ICar {
             }
 
             // get current edge of cars route
-            CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(this.getCurrentEdge());
+            CCellCarLinkage l_edge = ((CCarLayer) p_layer).getGraph().getEdge(this.getCurrentEdge());
 
             // car is not set on the current edge, so we try to find the first position
             if (!l_edge.contains(this)) {

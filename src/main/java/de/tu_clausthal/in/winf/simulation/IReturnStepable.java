@@ -21,6 +21,8 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
+import de.tu_clausthal.in.winf.object.world.ILayer;
+
 import java.util.Collection;
 
 
@@ -33,9 +35,10 @@ public interface IReturnStepable<T> extends IStepable {
      * step method with return argument
      *
      * @param p_currentstep current step value
+     * @param p_layer       layer on which is the object set or null
      * @return collection with step values
      */
-    public Collection<T> step(int p_currentstep);
+    public Collection<T> step(int p_currentstep, ILayer p_layer);
 
 
     /**

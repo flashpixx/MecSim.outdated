@@ -46,11 +46,12 @@ public class CMain {
         Options l_clioptions = new Options();
         l_clioptions.addOption("help", false, "shows this help");
         l_clioptions.addOption("configuration", true, "configuration directory");
+        l_clioptions.addOption("graph", true, "OSM graph URL (see configuration file description of option 'RoutingMap')");
 
         CommandLineParser l_parser = new BasicParser();
         CommandLine l_cli = l_parser.parse(l_clioptions, p_args);
 
-        // --- process CLI arguments -----------------------------------------------------------------------------------
+        // --- process CLI arguments and set configuration -------------------------------------------------------------
         if (l_cli.hasOption("help")) {
             HelpFormatter l_formatter = new HelpFormatter();
             l_formatter.printHelp((new java.io.File(CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName()), l_clioptions);
@@ -62,10 +63,12 @@ public class CMain {
         if (l_cli.hasOption("configuration"))
             l_config = new File(l_cli.getOptionValue("configuration"));
 
-
-        // --- create configuration ------------------------------------------------------------------------------------
         CConfiguration.getInstance().setConfigDir(l_config);
         CConfiguration.getInstance().read();
+
+        if (l_cli.hasOption("graph"))
+            CConfiguration.getInstance().get().RoutingMap = l_cli.getOptionValue("graph");
+
         CBootstrap.ConfigIsLoaded(CConfiguration.getInstance());
 
 

@@ -71,35 +71,30 @@ public class CGraphHopper extends GraphHopper {
 
     /**
      * private ctor of the singleton structure
-     *
-     * @param p_location path of data
      */
-    public CGraphHopper(String p_location) {
-        this.initialize(p_location);
+    public CGraphHopper() {
+        this.initialize();
     }
 
     /**
      * private ctor do add different weights for routing *
      *
-     * @param p_location path of data
-     * @param p_weights  weight name
+     * @param p_weights weight name
      * @note weight reloading can be create only be reinitialize the graph
      * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    public CGraphHopper(String p_location, String p_weights) {
+    public CGraphHopper(String p_weights) {
         this.setCHShortcuts(p_weights);
-        this.initialize(p_location);
+        this.initialize();
     }
 
 
     /**
      * run graph initialize process with OSM data convert *
-     *
-     * @param p_location path of data
      */
-    private void initialize(String p_location) {
-        // define graph location
-        File l_graphlocation = new File(p_location);
+    private void initialize() {
+        // define graph location (use configuration)
+        File l_graphlocation = new File(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.replace('/', '_'));
         System.out.println("try to load graph from [" + l_graphlocation.getAbsolutePath() + "]");
 
         // convert OSM or load the graph

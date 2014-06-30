@@ -34,6 +34,8 @@ import java.util.List;
 
 /**
  * painter for routes
+ *
+ * @deprecated move to car class
  */
 public class CRoutePainter implements Painter<JXMapViewer> {
 

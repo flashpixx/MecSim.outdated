@@ -25,9 +25,16 @@ import de.tu_clausthal.in.winf.object.car.CDefaultCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
@@ -38,6 +45,10 @@ import java.util.Random;
  */
 public class CDefaultSourceFactory implements ISourceFactory {
 
+    /**
+     * logger instance *
+     */
+    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * position of the source within the map *
      */
@@ -50,6 +61,14 @@ public class CDefaultSourceFactory implements ISourceFactory {
      * random interface *
      */
     protected Random m_random = new Random();
+    /**
+     * image of the waypoint *
+     */
+    protected BufferedImage m_image = null;
+    /**
+     * waypoint color *
+     */
+    protected Color m_color = Color.CYAN;
 
 
     /**
@@ -59,6 +78,7 @@ public class CDefaultSourceFactory implements ISourceFactory {
      */
     public CDefaultSourceFactory(GeoPosition p_position) {
         m_position = p_position;
+        this.setImage();
     }
 
 
@@ -73,6 +93,30 @@ public class CDefaultSourceFactory implements ISourceFactory {
         m_NumberCarsInStep = p_number;
         if (p_number < 1)
             throw new IllegalArgumentException("number must be greater than zero");
+
+        this.setImage();
+    }
+
+
+    /**
+     * creates the image *
+     */
+    private void setImage() {
+        try {
+            BufferedImage l_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));
+
+            // modify blue value to the color of the waypoint
+            m_image = new BufferedImage(l_image.getColorModel(), l_image.copyData(null), l_image.isAlphaPremultiplied(), null);
+            for (int i = 0; i < l_image.getHeight(); i++)
+                for (int j = 0; j < l_image.getWidth(); j++) {
+                    Color l_color = new Color(l_image.getRGB(j, i));
+                    if (l_color.getBlue() > 0)
+                        m_image.setRGB(j, i, m_color.getRGB());
+                }
+
+        } catch (Exception l_exception) {
+            m_Logger.warn("could not read standard_waypoint.png", l_exception);
+        }
     }
 
 
@@ -104,6 +148,10 @@ public class CDefaultSourceFactory implements ISourceFactory {
 
     @Override
     public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+        if (m_image == null)
+            return;
 
+        Point2D point = ((JXMapViewer) o).getTileFactory().geoToPixel(m_position, ((JXMapViewer) o).getZoom());
+        graphics2D.drawImage(m_image, (int) point.getX() - m_image.getWidth() / 2, (int) point.getY() - m_image.getHeight(), null);
     }
 }

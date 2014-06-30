@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.analysis;
+package de.tu_clausthal.in.winf.object.analysis;
 
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.source.ISourceFactory;

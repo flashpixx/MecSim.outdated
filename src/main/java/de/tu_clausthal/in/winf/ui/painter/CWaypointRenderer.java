@@ -38,6 +38,8 @@ import java.util.Map;
  * own waypoint renderer to handle all waypoints,
  * can be defined with a singleton because the object
  * is used global
+ *
+ * @deprecated is moved to waypointer class
  */
 public class CWaypointRenderer extends DefaultWaypointRenderer {
 

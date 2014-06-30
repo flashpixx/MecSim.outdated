@@ -31,6 +31,7 @@ import java.awt.*;
  *
  * @see http://www.locked.de/2011/01/21/selektionsfenster-in-swingx-ws-jxmapkit/
  * @see https://github.com/msteiger/jxmapviewer2/tree/master/examples/src/sample3_interaction
+ * @deprecated move to norm range class
  */
 public class CRectanglePainter implements Painter<Object> {
 

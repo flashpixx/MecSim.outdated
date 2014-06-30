@@ -26,7 +26,7 @@ import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.analysis.CStatisticMap;
+import de.tu_clausthal.in.winf.object.analysis.CStatisticMap;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 
 import javax.swing.*;

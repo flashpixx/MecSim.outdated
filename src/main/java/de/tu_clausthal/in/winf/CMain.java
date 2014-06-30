@@ -21,8 +21,8 @@
 
 package de.tu_clausthal.in.winf;
 
-import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.ui.CFrame;
+import org.apache.commons.cli.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -41,24 +41,35 @@ public class CMain {
      * @param p_args commandline arguments
      */
     public static void main(String[] p_args) throws Exception {
+
+        // --- define CLI options --------------------------------------------------------------------------------------
+        Options l_clioptions = new Options();
+        l_clioptions.addOption("help", false, "shows this help");
+        l_clioptions.addOption("configuration", true, "configuration directory");
+
+        CommandLineParser l_parser = new BasicParser();
+        CommandLine l_cli = l_parser.parse(l_clioptions, p_args);
+
+        // --- process CLI arguments -----------------------------------------------------------------------------------
+        if (l_cli.hasOption("help")) {
+            HelpFormatter l_formatter = new HelpFormatter();
+            l_formatter.printHelp((new java.io.File(CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName()), l_clioptions);
+            System.exit(0);
+        }
+
         // read the configuration directory (default ~/.tucwinf)
         File l_config = new File(System.getProperty("user.home") + File.separator + ".tucwinf");
-        if (p_args.length > 0)
-            l_config = new File(p_args[0]);
+        if (l_cli.hasOption("configuration"))
+            l_config = new File(l_cli.getOptionValue("configuration"));
 
-        // set configuration directory and read the Json configuration file
+
+        // --- create configuration ------------------------------------------------------------------------------------
         CConfiguration.getInstance().setConfigDir(l_config);
         CConfiguration.getInstance().read();
         CBootstrap.ConfigIsLoaded(CConfiguration.getInstance());
 
-        // call Graphhopper instance (and import data if needed)
-        CGraphHopper.getInstance();
 
-        // add step runner objects to the simulation
-        //CSimulationData.getInstance().getStepListenerQueue().add(CStatisticMap.getInstance());
-
-
-        // create the UI within an invoke thread
+        // --- invoke UI -----------------------------------------------------------------------------------------------
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 CFrame l_frame = new CFrame();

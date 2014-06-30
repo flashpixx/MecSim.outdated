@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.object.car.drivemodel;
 
 import de.tu_clausthal.in.winf.object.car.ICar;
+import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 
 
 /**
@@ -33,9 +34,10 @@ public interface IDriveModel {
      * updates car
      *
      * @param p_currentstep current step number
+     * @param p_graph       graph object
      * @param p_car         car object
      * @note update is called on each thread, so sometimes it must be synchronized
      */
-    public void update(int p_currentstep, ICar p_car);
+    public void update(int p_currentstep, CGraphHopper p_graph, ICar p_car);
 
 }

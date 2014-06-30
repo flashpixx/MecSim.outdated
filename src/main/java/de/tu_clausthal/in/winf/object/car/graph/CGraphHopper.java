@@ -179,71 +179,6 @@ public class CGraphHopper extends GraphHopper {
 
 
     /**
-     * returns a route between two geo position
-     *
-     * @param p_start start geo position
-     * @param p_end   end geo position
-     * @return route response
-     *
-    public GHResponse getRoute(GeoPosition p_start, GeoPosition p_end) {
-    GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
-    l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
-    GHResponse l_result = this.route(l_request);
-    if (!l_result.getErrors().isEmpty()) {
-    for (Throwable l_msg : l_result.getErrors())
-    m_Logger.error(l_msg.getMessage());
-    throw new IllegalArgumentException("graph error");
-    }
-
-    return l_result;
-    }
-     */
-
-    /**
-     * returns the response of a route request
-     *
-     * @param p_request request object
-     * @return response
-     *
-    public GHResponse getRoute(GHRequest p_request) {
-    GHResponse l_result = this.route(p_request);
-    if (!l_result.getErrors().isEmpty()) {
-    for (Throwable l_msg : l_result.getErrors())
-    m_Logger.error(l_msg.getMessage());
-    throw new IllegalArgumentException("graph error");
-    }
-
-    return l_result;
-    }
-     */
-
-    /**
-     * returns a route request between two geo position
-     *
-     * @param p_start start geo position
-     * @param p_end   end geo position
-     * @return request object
-     *
-    public GHRequest getRouteRequest(GeoPosition p_start, GeoPosition p_end) {
-    GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
-    l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
-    return l_request;
-    }
-     */
-
-    /**
-     * returns the path list of the request and response object
-     *
-     * @param p_request  route request
-     * @param p_response route response
-     * @return path list
-     *
-    public List<Path> getRoutePaths(GHRequest p_request, GHResponse p_response) {
-    return this.getPaths(p_request, p_response);
-    }
-     */
-
-    /**
      * returns the closest edge(s) of a geo position
      *
      * @param p_position geo position
@@ -253,6 +188,7 @@ public class CGraphHopper extends GraphHopper {
         QueryResult l_result = this.getLocationIndex().findClosest(p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES);
         return l_result.getClosestEdge().getEdge();
     }
+
 
     /**
      * returns the closest edge on a point list
@@ -265,6 +201,7 @@ public class CGraphHopper extends GraphHopper {
         GeoPosition l_geo = new GeoPosition(p_points.getLatitude(p_index), p_points.getLongitude(p_index));
         return this.getClosestEdge(l_geo);
     }
+
 
     /**
      * returns the max. speed of an edge

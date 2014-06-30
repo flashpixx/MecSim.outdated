@@ -44,10 +44,10 @@ public class CNagelSchreckenberg implements IDriveModel {
 
 
     @Override
-    public void update(int p_currentstep, ICar p_car) {
+    public void update(int p_currentstep, CGraphHopper p_graph, ICar p_car) {
 
         //check maximum speed on the current edge and modify speed
-        int l_maxspeed = Math.min(p_car.getMaximumSpeed(), (int) CGraphHopper.getInstance().getEdgeSpeed(p_car.getCurrentEdge()));
+        int l_maxspeed = Math.min(p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed(p_car.getCurrentEdge()));
 
         // increment speed
         p_car.setCurrentSpeed(Math.min(l_maxspeed, (p_car.getCurrentSpeed() + p_car.getAcceleration())));

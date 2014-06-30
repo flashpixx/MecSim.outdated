@@ -21,9 +21,11 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
+import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.car.CDefaultCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
@@ -143,7 +145,9 @@ public class CDefaultSourceFactory implements ISourceFactory {
 
     @Override
     public Collection<IReturnStepableTarget<ICar>> getTargets() {
-        return null;
+        Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
+        l_collection.add((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car"));
+        return l_collection;
     }
 
     @Override

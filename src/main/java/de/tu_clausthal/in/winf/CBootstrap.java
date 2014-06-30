@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf;
 
+import de.tu_clausthal.in.winf.object.analysis.CCarCount;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
@@ -47,6 +48,9 @@ public class CBootstrap {
      * @param p_frame frame
      */
     public static void AfterFrameInit(CFrame p_frame) {
+
+        CSimulation.getInstance().getWorld().getMap().put("carcount", new CCarCount(p_frame));
+
     }
 
 

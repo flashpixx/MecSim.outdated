@@ -21,9 +21,8 @@
 
 package de.tu_clausthal.in.winf.object.analysis;
 
-import de.tu_clausthal.in.winf.object.car.ICar;
-import de.tu_clausthal.in.winf.object.source.ISourceFactory;
-import de.tu_clausthal.in.winf.simulation.IStep;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.object.world.ISingleLayer;
 import de.tu_clausthal.in.winf.ui.CFrame;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
@@ -38,12 +37,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * statistic map for creating plots of any data *
  * * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
-public class CStatisticMap implements IStep {
+public class CCarCount extends ISingleLayer {
 
     /**
      * singleton instance of the class *
      */
-    private static volatile CStatisticMap s_instance = new CStatisticMap();
+    private static volatile CCarCount s_instance = new CCarCount();
     /**
      * thread-safe static structure *
      */
@@ -61,23 +60,12 @@ public class CStatisticMap implements IStep {
 
 
     /**
-     * returns the instance
-     *
-     * @return map instance
-     */
-    static public CStatisticMap getInstance() {
-        return s_instance;
-    }
-
-
-    /**
      * adds the frame to the map for painting
      *
      * @param p_frame frame objct
      */
-    public void setFrame(CFrame p_frame) {
-        if (m_frame == null)
-            m_frame = p_frame;
+    public CCarCount(CFrame p_frame) {
+        m_frame = p_frame;
     }
 
 
@@ -129,10 +117,11 @@ public class CStatisticMap implements IStep {
 
 
     @Override
-    public void before(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars) {
+    public void step(int p_currentstep, ILayer p_layer) {
     }
 
 
+/*
     @Override
     public void after(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars) {
         if (p_currentstep == 0)
@@ -140,6 +129,6 @@ public class CStatisticMap implements IStep {
 
         this.addPlotValue("Car Count", "number", String.valueOf(p_currentstep), p_cars.length);
     }
-
+*/
 
 }

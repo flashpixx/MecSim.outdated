@@ -26,7 +26,7 @@ import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.object.analysis.CStatisticMap;
+import de.tu_clausthal.in.winf.object.analysis.CCarCount;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 
 import javax.swing.*;
@@ -53,7 +53,7 @@ public class CFrame extends JFrame {
     public CFrame() {
         super();
 
-        CStatisticMap.getInstance().setFrame(this);
+        CCarCount.getInstance().setFrame(this);
         this.setLayout(new BorderLayout());
         this.setJMenuBar(new CMenuBar());
 

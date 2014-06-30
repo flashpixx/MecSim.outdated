@@ -23,11 +23,9 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.util.CPainterQueue;
 import de.tu_clausthal.in.winf.util.CQueue;
-import de.tu_clausthal.in.winf.util.CWaypointQueue;
 
 /**
  * data structure of the simulation and view
@@ -43,7 +41,7 @@ public class CSimulationData {
     /**
      * queue for sources *
      */
-    private CWaypointQueue<ICarSourceFactory> m_sources = new CWaypointQueue(COSMViewer.getInstance());
+    //private CWaypointQueue<ISourceFactory> m_sources = new CWaypointQueue(COSMViewer.getInstance());
     /**
      * queue for cars *
      */
@@ -95,10 +93,10 @@ public class CSimulationData {
      *
      * @return queue
      */
-    public CWaypointQueue<ICarSourceFactory> getSourceQueue() {
+    /*public CWaypointQueue<ISourceFactory> getSourceQueue() {
         return m_sources;
     }
-
+*/
 
     /**
      * returns the step listener queue

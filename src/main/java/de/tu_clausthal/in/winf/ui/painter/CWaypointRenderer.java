@@ -21,7 +21,6 @@
 
 package de.tu_clausthal.in.winf.ui.painter;
 
-import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.Waypoint;
@@ -30,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,28 +82,31 @@ public class CWaypointRenderer extends DefaultWaypointRenderer {
 
     @Override
     public void paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint w) {
+        /*
         if (m_image == null)
             return;
 
         // modify blue value to the color of the waypoint
         BufferedImage l_image = m_image;
-        if (w instanceof ICarSourceFactory) {
-            l_image = m_images.get(((ICarSourceFactory) w).getColor());
+        if (w instanceof ISourceFactory) {
+            l_image = m_images.get(((ISourceFactory) w).getColor());
             if (l_image == null) {
                 l_image = new BufferedImage(m_image.getColorModel(), m_image.copyData(null), m_image.isAlphaPremultiplied(), null);
                 for (int i = 0; i < l_image.getHeight(); i++)
                     for (int j = 0; j < l_image.getWidth(); j++) {
                         Color l_color = new Color(l_image.getRGB(j, i));
                         if (l_color.getBlue() > 0)
-                            l_image.setRGB(j, i, ((ICarSourceFactory) w).getColor().getRGB());
+                            l_image.setRGB(j, i, ((ISourceFactory) w).getColor().getRGB());
 
                     }
             }
+
         }
 
         // set image
         Point2D point = map.getTileFactory().geoToPixel(w.getPosition(), map.getZoom());
         g.drawImage(l_image, (int) point.getX() - l_image.getWidth() / 2, (int) point.getY() - l_image.getHeight(), null);
+        */
     }
 
 }

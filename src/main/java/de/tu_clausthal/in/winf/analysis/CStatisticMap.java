@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.analysis;
 
 import de.tu_clausthal.in.winf.object.car.ICar;
-import de.tu_clausthal.in.winf.object.source.ICarSourceFactory;
+import de.tu_clausthal.in.winf.object.source.ISourceFactory;
 import de.tu_clausthal.in.winf.simulation.IStep;
 import de.tu_clausthal.in.winf.ui.CFrame;
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
@@ -129,12 +129,12 @@ public class CStatisticMap implements IStep {
 
 
     @Override
-    public void before(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
+    public void before(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars) {
     }
 
 
     @Override
-    public void after(int p_currentstep, ICarSourceFactory[] p_sources, ICar[] p_cars) {
+    public void after(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars) {
         if (p_currentstep == 0)
             this.addLinePlot("Car Count", "time", "number of cars", "number");
 

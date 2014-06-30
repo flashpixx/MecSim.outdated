@@ -19,38 +19,14 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation;
+package de.tu_clausthal.in.winf.object.source;
 
-import de.tu_clausthal.in.winf.object.car.ICar;
-import de.tu_clausthal.in.winf.object.source.ISourceFactory;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 
 
 /**
- * interface for getting messages before / after each call step call
- *
- * @note each object can be called on different threads, so attend synchronization
- * @deprecated
+ * layer with all sources
  */
-public interface IStep {
-
-    /**
-     * is called on before each step
-     *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
-     */
-    public void before(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars);
-
-
-    /**
-     * is called after each step
-     *
-     * @param p_currentstep step number
-     * @param p_sources     list with all sources
-     * @param p_cars        list with all cars
-     */
-    public void after(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars);
-
+public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory> {
 
 }

@@ -21,41 +21,51 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
+import de.tu_clausthal.in.winf.object.car.CNormCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
-import org.jxmapviewer.viewer.Waypoint;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
-import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 
 
 /**
- * factory interface of car - defines a source
+ * source for norm cars
  */
-public interface ICarSourceFactory extends Waypoint, Serializable {
+public class CNormSourceFactory extends CDefaultSourceFactory {
 
     /**
-     * sets the value how many cars are created in one step
+     * ctor set the position
      *
-     * @param p_number integer number greate than zero
+     * @param p_position geo position
      */
-    public void setNumberOfCars(int p_number);
-
-
-    /**
-     * creates a list of new car objects
-     *
-     * @param p_currentstep current step of the simulation
-     * @return collection of cars
-     */
-    public Collection<ICar> generate(int p_currentstep);
+    public CNormSourceFactory(GeoPosition p_position) {
+        super(p_position);
+    }
 
 
     /**
-     * define color for the waypoint
+     * ctor set positition and generate number
      *
-     * @return color value
+     * @param p_position position
+     * @param p_number   number of cars
      */
-    public Color getColor();
+    public CNormSourceFactory(GeoPosition p_position, int p_number) {
+        super(p_position, p_number);
+    }
+
+
+    @Override
+    public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
+        Collection<ICar> l_sources = new HashSet();
+
+        // use random number on care creation, to avoid traffic jam on the source
+        for (int i = 0; i < super.m_NumberCarsInStep; i++)
+            if (super.m_random.nextDouble() > 0.15)
+                l_sources.add(new CNormCar(super.m_position));
+
+        return l_sources;
+    }
 
 }

@@ -21,55 +21,23 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
-import de.tu_clausthal.in.winf.object.car.CNormCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
-import org.jxmapviewer.viewer.GeoPosition;
+import de.tu_clausthal.in.winf.simulation.IReturnStepable;
+import org.jxmapviewer.painter.Painter;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.HashSet;
+import java.io.Serializable;
 
 
 /**
- * source for norm cars
+ * factory interface of car - defines a source
  */
-public class CNormSource extends CDefaultSource {
+public interface ISourceFactory extends IReturnStepable<ICar>, Painter, Serializable {
 
     /**
-     * ctor set the position
+     * sets the value how many cars are created in one step
      *
-     * @param p_position geo position
+     * @param p_number integer number greate than zero
      */
-    public CNormSource(GeoPosition p_position) {
-        super(p_position);
-    }
+    public void setNumberOfCars(int p_number);
 
-
-    /**
-     * ctor set positition and generate number
-     *
-     * @param p_position position
-     * @param p_number   number of cars
-     */
-    public CNormSource(GeoPosition p_position, int p_number) {
-        super(p_position, p_number);
-    }
-
-
-    @Override
-    public Collection<ICar> generate(int p_currentstep) {
-        Collection<ICar> l_sources = new HashSet();
-
-        // use random number on care creation, to avoid traffic jam on the source
-        for (int i = 0; i < super.m_NumberCarsInStep; i++)
-            if (super.m_random.nextDouble() > 0.15)
-                l_sources.add(new CNormCar(super.m_position));
-
-        return l_sources;
-    }
-
-    @Override
-    public Color getColor() {
-        return Color.YELLOW;
-    }
 }

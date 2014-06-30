@@ -23,6 +23,8 @@ package de.tu_clausthal.in.winf.object.source;
 
 import de.tu_clausthal.in.winf.object.car.CDefaultCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -34,7 +36,7 @@ import java.util.Random;
 /**
  * default source for generating cars with a visualization on the map *
  */
-public class CDefaultSource implements ICarSourceFactory {
+public class CDefaultSourceFactory implements ISourceFactory {
 
     /**
      * position of the source within the map *
@@ -55,7 +57,7 @@ public class CDefaultSource implements ICarSourceFactory {
      *
      * @param p_position geo position object
      */
-    public CDefaultSource(GeoPosition p_position) {
+    public CDefaultSourceFactory(GeoPosition p_position) {
         m_position = p_position;
     }
 
@@ -66,7 +68,7 @@ public class CDefaultSource implements ICarSourceFactory {
      * @param p_position geoposition
      * @param p_number   number of cars
      */
-    public CDefaultSource(GeoPosition p_position, int p_number) {
+    public CDefaultSourceFactory(GeoPosition p_position, int p_number) {
         m_position = p_position;
         m_NumberCarsInStep = p_number;
         if (p_number < 1)
@@ -84,7 +86,7 @@ public class CDefaultSource implements ICarSourceFactory {
 
 
     @Override
-    public Collection<ICar> generate(int p_currentstep) {
+    public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
         Collection<ICar> l_sources = new HashSet();
 
         // use random number on care creation, to avoid traffic jam on the source
@@ -96,15 +98,12 @@ public class CDefaultSource implements ICarSourceFactory {
     }
 
     @Override
-    public Color getColor() {
-        return Color.CYAN;
+    public Collection<IReturnStepableTarget<ICar>> getTargets() {
+        return null;
     }
-
 
     @Override
-    public GeoPosition getPosition() {
-        return m_position;
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+
     }
-
-
 }

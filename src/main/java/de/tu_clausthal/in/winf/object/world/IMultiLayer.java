@@ -248,4 +248,9 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
 
         super.doPaint(g, component, width, height);
     }
+
+    @Override
+    public void resetData() {
+
+    }
 }

@@ -99,4 +99,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     public void set(Collection<ICar> p_data) {
         super.addAll(p_data);
     }
+
+    @Override
+    public void resetData() {
+        m_graph.clear();
+    }
 }

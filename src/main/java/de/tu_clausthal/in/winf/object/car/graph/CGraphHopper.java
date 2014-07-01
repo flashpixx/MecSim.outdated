@@ -251,6 +251,18 @@ public class CGraphHopper extends GraphHopper {
             l_item.getValue().clear();
     }
 
+    /**
+     * number of cars
+     *
+     * @return number of cars on the graph
+     */
+    public synchronized int getNumberOfCars() {
+        int l_count = 0;
+        for (CCellCarLinkage l_item : m_edgecell.values())
+            l_count += l_item.getNumberOfCars();
+        return l_count;
+    }
+
 
     /**
      * returns the linkage between edge and car

@@ -21,114 +21,49 @@
 
 package de.tu_clausthal.in.winf.object.analysis;
 
+import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.ISingleLayer;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.CFrame;
-import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 
 /**
- * statistic map for creating plots of any data *
- * * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
+ * car count statistic
+ *
+ * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public class CCarCount extends ISingleLayer {
 
     /**
-     * singleton instance of the class *
+     * data set *
      */
-    private static volatile CCarCount s_instance = new CCarCount();
-    /**
-     * thread-safe static structure *
-     */
-    private ConcurrentHashMap<String, SynchronizedDescriptiveStatistics> m_statisticdata = new ConcurrentHashMap();
+    DefaultCategoryDataset m_plotdata = new DefaultCategoryDataset();
 
     /**
-     * thread-safe map with plot objects *
-     */
-    private ConcurrentHashMap<String, DefaultCategoryDataset> m_plotdata = new ConcurrentHashMap();
-
-    /**
-     * frame to add the charts
-     */
-    private CFrame m_frame = null;
-
-
-    /**
-     * adds the frame to the map for painting
+     * ctor
      *
      * @param p_frame frame objct
      */
     public CCarCount(CFrame p_frame) {
-        m_frame = p_frame;
-    }
-
-
-    /**
-     * adds a new value to the statistic map, if the map does not exist, the object will be created
-     *
-     * @param p_name  a free-defined unique name of the statistic
-     * @param p_value a value for accumulation
-     */
-    private synchronized void addStatisticValue(String p_name, double p_value) {
-        if (!m_statisticdata.containsKey(p_name))
-            m_statisticdata.put(p_name, new SynchronizedDescriptiveStatistics());
-
-        m_statisticdata.get(p_name).addValue(p_value);
-    }
-
-
-    /**
-     * adds a new line chart to the window
-     *
-     * @param p_name   name
-     * @param p_xaxis  x axis name
-     * @param p_yaxis  y axis name
-     * @param p_series series object
-     */
-    private synchronized void addLinePlot(String p_name, String p_xaxis, String p_yaxis, String p_series) {
-        if (m_plotdata.containsKey(p_name))
-            return;
-
-        m_plotdata.put(p_name, new DefaultCategoryDataset());
-        m_frame.addUIComponent(p_name, new ChartPanel(ChartFactory.createLineChart(p_name, p_xaxis, p_yaxis, m_plotdata.get(p_name), PlotOrientation.VERTICAL, false, false, false)));
-    }
-
-
-    /**
-     * add value to a series
-     *
-     * @param p_name      plot name
-     * @param p_series    series name
-     * @param p_valuename value name
-     * @param p_value     value
-     */
-    private synchronized void addPlotValue(String p_name, String p_series, String p_valuename, double p_value) {
-        if (!m_plotdata.containsKey(p_name))
-            m_plotdata.put(p_name, new DefaultCategoryDataset());
-
-        m_plotdata.get(p_name).addValue(p_value, p_series, p_valuename);
+        p_frame.addUIComponent("Car Count", new ChartPanel(ChartFactory.createLineChart("Car Count", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false)));
     }
 
 
     @Override
     public void step(int p_currentstep, ILayer p_layer) {
+        m_plotdata.addValue(((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph().getNumberOfCars(), "number", String.valueOf(p_currentstep));
     }
 
-
-/*
     @Override
-    public void after(int p_currentstep, ISourceFactory[] p_sources, ICar[] p_cars) {
-        if (p_currentstep == 0)
-            this.addLinePlot("Car Count", "time", "number of cars", "number");
+    public void resetData() {
 
-        this.addPlotValue("Car Count", "number", String.valueOf(p_currentstep), p_cars.length);
+        m_plotdata.clear();
+
     }
-*/
 
 }

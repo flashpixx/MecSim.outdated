@@ -76,4 +76,8 @@ public abstract class ISingleLayer implements Painter, IViewableLayer, IDataLaye
     public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
     }
 
+    @Override
+    public void resetData() {
+
+    }
 }

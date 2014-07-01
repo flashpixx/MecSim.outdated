@@ -29,7 +29,25 @@ import de.tu_clausthal.in.winf.simulation.IStepable;
  */
 public interface ILayer extends IStepable {
 
+    /**
+     * checks activity of the layer
+     *
+     * @return boolean of activity
+     */
     public boolean isActive();
 
+
+    /**
+     * activates / deactivates the layer
+     *
+     * @param p_active activity
+     */
     public void setActive(boolean p_active);
+
+
+    /**
+     * resets the data of the layer *
+     */
+    public void resetData();
+
 }

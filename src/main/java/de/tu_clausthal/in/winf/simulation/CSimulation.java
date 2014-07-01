@@ -175,8 +175,12 @@ public class CSimulation {
                 m_Logger.error(l_exception.getMessage());
             }
         }
+
         m_currentstep.set(0);
+        for (ILayer l_layer : m_world.getQueue())
+            l_layer.resetData();
         m_Logger.info("simulation reset");
+
         CBootstrap.onSimulationReset(this);
     }
 

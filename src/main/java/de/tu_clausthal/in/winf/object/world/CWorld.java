@@ -23,8 +23,6 @@ package de.tu_clausthal.in.winf.object.world;
 
 import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.simulation.IQueue;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
-import org.jxmapviewer.painter.CompoundPainter;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,7 +32,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * world layer collection
  */
-public class CWorld extends CompoundPainter {
+public class CWorld {
 
 
     /**
@@ -50,7 +48,6 @@ public class CWorld extends CompoundPainter {
      * ctor
      */
     public CWorld() {
-        COSMViewer.getInstance().getCompoundPainter().addPainter(this);
         CBootstrap.AfterWorldInit(this);
     }
 

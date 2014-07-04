@@ -34,21 +34,6 @@ import java.util.Map;
  */
 public interface ICar extends Painter, IVoidStepable {
 
-    /**
-     * returns the geoposition of the start
-     *
-     * @return geoposition
-     */
-    public GeoPosition getStartPosition();
-
-
-    /**
-     * returns the geoposition of the end
-     *
-     * @return geoposition
-     */
-    public GeoPosition getEndPosition();
-
 
     /**
      * returns the maximum speed of the car
@@ -87,7 +72,7 @@ public interface ICar extends Painter, IVoidStepable {
      *
      * @return geoposition
      */
-    //public GeoPosition getCurrentPosition();
+    public GeoPosition getGeoposition();
 
 
     /**

@@ -101,7 +101,7 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
     @Override
     public boolean check(INormObject p_object) {
         synchronized (p_object) {
-            return m_georectangle.contains(p_object.getCurrentPosition().getLatitude(), p_object.getCurrentPosition().getLongitude());
+            return m_georectangle.contains(p_object.getGeoposition().getLatitude(), p_object.getGeoposition().getLongitude());
         }
     }
 

@@ -130,18 +130,6 @@ public class CDefaultCar extends IInspector implements ICar {
 
 
     @Override
-    public GeoPosition getStartPosition() {
-        return m_StartPosition;
-    }
-
-
-    @Override
-    public GeoPosition getEndPosition() {
-        return m_EndPosition;
-    }
-
-
-    @Override
     public int getMaximumSpeed() {
         return m_maxSpeed;
     }
@@ -211,13 +199,8 @@ public class CDefaultCar extends IInspector implements ICar {
         return m_routeedges.get(m_routeindex);
     }
 
-
-    /**
-     * returns the current geoposition of the car
-     *
-     * @return geoposition
-     */
-    protected GeoPosition getGeoPosition() {
+    @Override
+    public GeoPosition getGeoposition() {
         return m_graph.getEdge(m_routeedges.get(m_routeindex)).getGeoposition(this);
     }
 
@@ -249,7 +232,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         synchronized (this) {
             l_map.put("street name", m_routeedges.get(m_routeindex).getName());
-            l_map.put("current geoposition", this.getGeoPosition());
+            l_map.put("current geoposition", this.getGeoposition());
         }
 
         return l_map;
@@ -269,7 +252,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public void onClick(MouseEvent e, JXMapViewer viewer) {
-        GeoPosition l_position = this.getGeoPosition();
+        GeoPosition l_position = this.getGeoposition();
         if (l_position == null)
             return;
 
@@ -283,7 +266,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
-        GeoPosition l_position = this.getGeoPosition();
+        GeoPosition l_position = this.getGeoposition();
         if (l_position == null)
             return;
 

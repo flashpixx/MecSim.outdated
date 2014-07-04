@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -80,6 +81,8 @@ public class COSMViewer extends JXMapViewer {
         this.addMouseListener(new PanMouseInputListener(this));
         this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
         this.addKeyListener(new PanKeyListener(this));
+
+        CBootstrap.AfterOSMViewerInit(this);
     }
 
 

@@ -56,6 +56,18 @@ public class CBootstrap {
 
 
     /**
+     * is called after the OSM viewer is initialize
+     *
+     * @param p_viewer viewer object
+     */
+    public static void AfterOSMViewerInit(COSMViewer p_viewer) {
+
+        //p_viewer.getCompoundPainter().addPainter( (CSourceFactoryLayer)CSimulation.getInstance().getWorld().getMap().get("Source") );
+
+    }
+
+
+    /**
      * is called after the simulation is initialize
      *
      * @param p_simulation simulation

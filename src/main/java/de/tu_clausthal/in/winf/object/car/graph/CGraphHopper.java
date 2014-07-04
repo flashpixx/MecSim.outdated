@@ -282,6 +282,16 @@ public class CGraphHopper extends GraphHopper {
 
 
     /**
+     * returns a list of all edges
+     *
+     * @return array with edges
+     */
+    public CCellCarLinkage[] getAllEdges() {
+        return (CCellCarLinkage[]) m_edgecell.values().toArray();
+    }
+
+
+    /**
      * downloads the OSM data from Geofabrik
      *
      * @return download file with full path

@@ -42,28 +42,32 @@ import java.util.concurrent.ConcurrentHashMap;
  * class for defining the cell sampling structure of an edge
  * with the car information
  */
-public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
+public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
     /**
      * edge ID *
      */
-    private int m_edgeid = 0;
+    protected int m_edgeid = 0;
     /**
      * length of the edge (distance) *
      */
-    private double m_edgelength = 0;
+    protected double m_edgelength = 0;
     /**
      * map with car-2-position in forward direction *
      */
-    private Map<ICar, Integer> m_cars = new ConcurrentHashMap();
+    protected Map<ICar, Integer> m_cars = new ConcurrentHashMap();
     /**
      * array with cells of the forward direction *
      */
-    private ICar[] m_cells = null;
+    protected ICar[] m_cells = null;
     /**
      * array with geopositions of the cell *
      */
-    private GeoPosition[] m_cellgeoposition = null;
+    protected GeoPosition[] m_cellgeoposition = null;
+    /**
+     * array with additional information *
+     */
+    protected T[] m_additionalinformation = null;
 
     /**
      * ctor create the samples
@@ -120,6 +124,7 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
                 m_cellgeoposition[i] = new GeoPosition(l_list.getX(0) + i * l_xincrement, l_list.getY(0) + i * l_yincrement);
         }
 
+        m_additionalinformation = (T[]) new Object[m_cells.length];
     }
 
     /**
@@ -148,6 +153,37 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
         l_y.add(p_input.getLongitude(p_input.size() - 1));
 
         return new PointListArray(l_x, l_y);
+    }
+
+
+    /**
+     * retuns an element of the additional array
+     *
+     * @return data element
+     */
+    public T getAdditionalInformation(int p_position) {
+        return m_additionalinformation[p_position];
+    }
+
+
+    /**
+     * sets an element into the additional array
+     *
+     * @param p_position position
+     * @param p_object   object
+     */
+    public void setAdditionalInformation(int p_position, T p_object) {
+        m_additionalinformation[p_position] = p_object;
+    }
+
+
+    /**
+     * returns the full array of additional information
+     *
+     * @return information array
+     */
+    public T[] getAdditionalInformation() {
+        return m_additionalinformation;
     }
 
     /**
@@ -193,12 +229,22 @@ public class CCellCarLinkage implements Comparable<CCellCarLinkage> {
      * @param p_car car object
      * @return geoposition or null
      */
-    public GeoPosition getCarGeoposition(ICar p_car) {
+    public GeoPosition getGeoposition(ICar p_car) {
         Integer l_position = m_cars.get(p_car);
         if (l_position == null)
             return null;
 
         return m_cellgeoposition[l_position.intValue()];
+    }
+
+    /**
+     * returns the geoposition of index
+     *
+     * @param p_index index
+     * @return geoposition
+     */
+    public GeoPosition getGeoposition(int p_index) {
+        return m_cellgeoposition[p_index];
     }
 
     /**

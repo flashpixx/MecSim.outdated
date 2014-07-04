@@ -56,7 +56,7 @@ public class CCarCount extends ISingleLayer {
 
     @Override
     public void step(int p_currentstep, ILayer p_layer) {
-        m_plotdata.addValue(((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph().getNumberOfCars(), "number", String.valueOf(p_currentstep));
+        m_plotdata.addValue(((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph().getNumberOfCars(), "number", String.valueOf(p_currentstep));
     }
 
     @Override

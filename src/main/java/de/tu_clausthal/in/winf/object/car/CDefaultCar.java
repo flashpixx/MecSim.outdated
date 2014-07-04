@@ -111,7 +111,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position
-        CGraphHopper l_graph = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph();
+        CGraphHopper l_graph = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph();
         while (true) {
             try {
                 m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5);
@@ -164,7 +164,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public GeoPosition getCurrentPosition() {
-        return ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph().getEdge(this.getCurrentEdge()).getCarGeoposition(this);
+        return ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph().getEdge(this.getCurrentEdge()).getGeoposition(this);
     }
 
 
@@ -180,7 +180,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         //iterate over the edges in the rozre
         for (int i = m_routeindex; i < m_routeedges.size(); i++) {
-            CCellCarLinkage l_edge = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car")).getGraph().getEdge(m_routeedges.get(m_routeindex));
+            CCellCarLinkage l_edge = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph().getEdge(m_routeedges.get(m_routeindex));
 
             if (l_edge == null)
                 return null;

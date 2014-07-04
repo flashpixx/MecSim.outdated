@@ -49,7 +49,7 @@ public class CBootstrap {
      */
     public static void AfterFrameInit(CFrame p_frame) {
 
-        CSimulation.getInstance().getWorld().getMap().put("carcount", new CCarCount(p_frame));
+        CSimulation.getInstance().getWorld().getMap().put("CarCount", new CCarCount(p_frame));
 
     }
 
@@ -62,7 +62,7 @@ public class CBootstrap {
     public static void AfterSimulationInit(CSimulation p_simulation) {
 
         // add different layer
-        p_simulation.getWorld().getMap().put("car", new CCarLayer());
+        p_simulation.getWorld().getMap().put("Car", new CCarLayer());
 
     }
 

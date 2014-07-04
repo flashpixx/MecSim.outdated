@@ -68,13 +68,17 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     public CMenuBar() {
         super();
 
-        String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
-        this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
-
         String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
         CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
-        this.add(CMenuFactory.createRadioMenu("Layer", l_layer, this, m_reference));
+        JMenu l_visibilitylayer = new JMenu("Layer");
+        l_visibilitylayer.add(CMenuFactory.createRadioMenu("Enable / Disable", l_layer, this, m_reference));
+        l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
+        this.add(l_visibilitylayer);
 
+
+/*
+        String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
+        this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
 
         String[] l_actions = {"Start", "Stop", null, "Reset"};
         this.add(CMenuFactory.createMenu("Action", l_actions, this, m_reference));
@@ -90,6 +94,7 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
         String[] l_norm = {"Create Speed Norm", "Delete Norm"};
         this.add(CMenuFactory.createMenu("Norm", l_norm, this, m_reference));
+*/
 
         /*
         String[] l_mas = {"Modify Environment", "Create Agent", "Delete Agent", ""};

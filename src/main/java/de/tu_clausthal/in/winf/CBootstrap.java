@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf;
 
 import de.tu_clausthal.in.winf.object.analysis.CCarCount;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
+import de.tu_clausthal.in.winf.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.CFrame;
@@ -62,6 +63,7 @@ public class CBootstrap {
     public static void AfterSimulationInit(CSimulation p_simulation) {
 
         // add different layer
+        p_simulation.getWorld().getMap().put("Source", new CSourceFactoryLayer());
         p_simulation.getWorld().getMap().put("Car", new CCarLayer());
 
     }

@@ -26,7 +26,6 @@ import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +64,7 @@ public class CSimulation {
     /**
      * world of the simulation
      */
-    private CWorld m_world = new CWorld(COSMViewer.getInstance());
+    private CWorld m_world = new CWorld();
 
 
     /**

@@ -24,9 +24,15 @@ package de.tu_clausthal.in.winf.ui;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.norm.range.CRangeGPS;
+import de.tu_clausthal.in.winf.object.source.CDefaultSourceFactory;
+import de.tu_clausthal.in.winf.object.source.CSourceFactoryLayer;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.painter.CRectanglePainter;
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.GeoPosition;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -96,7 +102,7 @@ class COSMMouseListener extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        /*
+
         try {
             // left double-click
             if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
@@ -106,7 +112,12 @@ class COSMMouseListener extends MouseAdapter {
                 COSMViewer l_viewer = (COSMViewer) e.getSource();
                 Rectangle l_viewportBounds = l_viewer.getViewportBounds();
                 Point2D l_position = new Point(l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y);
+                GeoPosition l_geoposition = l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom());
 
+                ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get("Source")).add(new CDefaultSourceFactory(l_geoposition));
+
+
+/*
                 boolean l_remove = false;
                 for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
                     if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)) {
@@ -120,7 +131,7 @@ class COSMMouseListener extends MouseAdapter {
                         CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
                     if (m_popup.getSourceSelection().equals("norm cars"))
                         CSimulationData.getInstance().getSourceQueue().add(new CNormSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
-                }
+                }*/
             }
 
             // right-click
@@ -130,7 +141,7 @@ class COSMMouseListener extends MouseAdapter {
             }
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
-        }*/
+        }
     }
 
 

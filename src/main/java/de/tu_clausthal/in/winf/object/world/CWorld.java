@@ -38,10 +38,6 @@ public class CWorld extends CompoundPainter {
 
 
     /**
-     * viewer *
-     */
-    protected COSMViewer m_viewer = null;
-    /**
      * map with layer *
      */
     protected CMap m_layer = new CMap();
@@ -52,12 +48,9 @@ public class CWorld extends CompoundPainter {
 
     /**
      * ctor
-     *
-     * @param p_viewer viewer
      */
-    public CWorld(COSMViewer p_viewer) {
-        m_viewer = p_viewer;
-        m_viewer.getCompoundPainter().addPainter(this);
+    public CWorld() {
+        COSMViewer.getInstance().getCompoundPainter().addPainter(this);
         CBootstrap.AfterWorldInit(this);
     }
 

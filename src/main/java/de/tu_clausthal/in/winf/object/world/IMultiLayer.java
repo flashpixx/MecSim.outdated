@@ -246,7 +246,10 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
         if (!m_visible)
             return;
 
-        super.doPaint(g, component, width, height);
+        for (T l_item : this)
+            l_item.paint(g, component, width, height);
+
+        //super.doPaint(g, component, width, height);
     }
 
     @Override

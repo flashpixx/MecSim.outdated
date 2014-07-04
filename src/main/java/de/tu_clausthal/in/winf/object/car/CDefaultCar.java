@@ -94,6 +94,10 @@ public class CDefaultCar extends IInspector implements ICar {
      * individual deceleration *
      */
     protected int m_deceleration = 1;
+    /**
+     * reference to the graph
+     */
+    protected CGraphHopper m_graph = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph();
 
 
     /**
@@ -111,11 +115,10 @@ public class CDefaultCar extends IInspector implements ICar {
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position
-        CGraphHopper l_graph = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph();
         while (true) {
             try {
                 m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5);
-                List<List<EdgeIteratorState>> l_route = l_graph.getRoutes(m_StartPosition, m_EndPosition, 1);
+                List<List<EdgeIteratorState>> l_route = m_graph.getRoutes(m_StartPosition, m_EndPosition, 1);
                 if ((l_route != null) && (l_route.size() > 0)) {
                     m_routeedges = l_route.get(0);
                     break;
@@ -161,12 +164,12 @@ public class CDefaultCar extends IInspector implements ICar {
         return m_LingerProbability;
     }
 
-
+/*
     @Override
     public GeoPosition getCurrentPosition() {
-        return ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph().getEdge(this.getCurrentEdge()).getGeoposition(this);
+        return m_graph.getEdge(this.getCurrentEdge()).getGeoposition(this);
     }
-
+*/
 
     @Override
     public boolean hasEndReached() {
@@ -180,7 +183,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         //iterate over the edges in the rozre
         for (int i = m_routeindex; i < m_routeedges.size(); i++) {
-            CCellCarLinkage l_edge = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph().getEdge(m_routeedges.get(m_routeindex));
+            CCellCarLinkage l_edge = m_graph.getEdge(m_routeedges.get(m_routeindex));
 
             if (l_edge == null)
                 return null;
@@ -204,22 +207,18 @@ public class CDefaultCar extends IInspector implements ICar {
 
 
     @Override
-    public EdgeIteratorState getCurrentEdge() {
-        if (this.hasEndReached())
-            return m_routeedges.get(m_routeedges.size() - 1);
+    public EdgeIteratorState getEdge() {
         return m_routeedges.get(m_routeindex);
     }
 
 
-    @Override
-    public int getCurrentEdgeID() {
-        return m_routeedges.get(m_routeindex).getEdge();
-    }
-
-
-    @Override
-    public int getCurrentIndex() {
-        return m_routeindex;
+    /**
+     * returns the current geoposition of the car
+     *
+     * @return geoposition
+     */
+    protected GeoPosition getGeoPosition() {
+        return m_graph.getEdge(m_routeedges.get(m_routeindex)).getGeoposition(this);
     }
 
 
@@ -239,6 +238,8 @@ public class CDefaultCar extends IInspector implements ICar {
     public Map<String, Object> inspect() {
         Map<String, Object> l_map = super.inspect();
 
+
+
         l_map.put("current speed", m_speed);
         l_map.put("maximum speed", m_maxSpeed);
         l_map.put("acceleration", m_acceleration);
@@ -248,8 +249,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         synchronized (this) {
             l_map.put("street name", m_routeedges.get(m_routeindex).getName());
-            l_map.put("current edge id", this.getCurrentEdgeID());
-            l_map.put("current geoposition", this.getCurrentPosition());
+            l_map.put("current geoposition", this.getGeoPosition());
         }
 
         return l_map;
@@ -269,7 +269,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public void onClick(MouseEvent e, JXMapViewer viewer) {
-        GeoPosition l_position = this.getCurrentPosition();
+        GeoPosition l_position = this.getGeoPosition();
         if (l_position == null)
             return;
 
@@ -283,7 +283,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
-        GeoPosition l_position = this.getCurrentPosition();
+        GeoPosition l_position = this.getGeoPosition();
         if (l_position == null)
             return;
 
@@ -325,7 +325,7 @@ public class CDefaultCar extends IInspector implements ICar {
             }
 
             // get current edge of cars route
-            CCellCarLinkage l_edge = ((CCarLayer) p_layer).getGraph().getEdge(this.getCurrentEdge());
+            CCellCarLinkage l_edge = m_graph.getEdge(this.getEdge());
 
             // car is not set on the current edge, so we try to find the first position
             if (!l_edge.contains(this)) {

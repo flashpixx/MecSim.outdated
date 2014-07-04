@@ -87,7 +87,7 @@ public interface ICar extends Painter, IVoidStepable {
      *
      * @return geoposition
      */
-    public GeoPosition getCurrentPosition();
+    //public GeoPosition getCurrentPosition();
 
 
     /**
@@ -107,27 +107,11 @@ public interface ICar extends Painter, IVoidStepable {
 
 
     /**
-     * get current edge on the graph
-     *
-     * @return edge ID
-     */
-    public int getCurrentEdgeID();
-
-
-    /**
      * get current edge object on the graph
      *
      * @return edge
      */
-    public EdgeIteratorState getCurrentEdge();
-
-
-    /**
-     * index of the current edge within the route
-     *
-     * @return index value
-     */
-    public int getCurrentIndex();
+    public EdgeIteratorState getEdge();
 
 
     /**

@@ -263,6 +263,8 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         if (!m_visible)
             return;
 
+        Rectangle l_viewportBounds = object.getViewportBounds();
+        g.translate(-l_viewportBounds.x, -l_viewportBounds.y);
         for (T l_item : this)
             l_item.paint(g, object, width, height);
     }

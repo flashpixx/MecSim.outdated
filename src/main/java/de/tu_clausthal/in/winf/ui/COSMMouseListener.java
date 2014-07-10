@@ -116,7 +116,6 @@ class COSMMouseListener extends MouseAdapter {
 
                 ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get("Source")).add(new CDefaultSourceFactory(l_geoposition));
 
-
 /*
                 boolean l_remove = false;
                 for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())

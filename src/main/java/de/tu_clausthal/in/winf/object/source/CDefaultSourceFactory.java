@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
@@ -153,10 +152,15 @@ public class CDefaultSourceFactory implements ISourceFactory {
 
     @Override
     public void paint(Graphics2D g, COSMViewer object, int width, int height) {
+        System.out.println("xxx");
+/*
         if (m_image == null)
             return;
 
+
+
         Point2D point = object.getTileFactory().geoToPixel(m_position, object.getZoom());
         g.drawImage(m_image, (int) point.getX() - m_image.getWidth() / 2, (int) point.getY() - m_image.getHeight(), null);
+        */
     }
 }

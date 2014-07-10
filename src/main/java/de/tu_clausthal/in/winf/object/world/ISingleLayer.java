@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.winf.object.world;
 
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 /**
  * single layer to create a single information structure
  */
-public abstract class ISingleLayer implements Painter, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
+public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
 
     /**
      * flag for visibility *
@@ -73,7 +74,7 @@ public abstract class ISingleLayer implements Painter, IViewableLayer, IDataLaye
     }
 
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+    public void paint(Graphics2D graphics2D, COSMViewer object, int i, int i2) {
     }
 
     @Override

@@ -140,7 +140,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public void beforeStepObject(int p_currentstep, T p_object) {
     }
 
-    ;
 
     /**
      * method which is called after the object step method is called
@@ -151,7 +150,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public void afterStepObject(int p_currentstep, T p_object) {
     }
 
-    ;
 
     @Override
     public synchronized int size() {
@@ -200,14 +198,21 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     @Override
     public synchronized boolean containsAll(Collection<?> c) {
         for (Object l_item : c)
-            if ((!m_unprocess.contains(l_item)) && (!m_process.contains(l_item)))
+            if ((!m_unprocess.contains(l_item)) && (!m_process.contains(l_item))) {
+                COSMViewer.getInstance().repaint();
                 return false;
+            }
+
+        COSMViewer.getInstance().repaint();
         return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        return m_process.addAll(c);
+        boolean l_return = m_process.addAll(c);
+        COSMViewer.getInstance().repaint();
+
+        return l_return;
     }
 
     @Override
@@ -218,6 +223,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
             return false;
         }
 
+        COSMViewer.getInstance().repaint();
         return true;
     }
 
@@ -230,6 +236,8 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public synchronized void clear() {
         m_unprocess.clear();
         m_process.clear();
+
+        COSMViewer.getInstance().repaint();
     }
 
 
@@ -237,6 +245,8 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public synchronized void reset() {
         m_unprocess.addAll(m_process);
         m_process.clear();
+
+        COSMViewer.getInstance().repaint();
     }
 
     @Override

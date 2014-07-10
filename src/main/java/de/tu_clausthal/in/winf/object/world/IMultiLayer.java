@@ -24,8 +24,8 @@ package de.tu_clausthal.in.winf.object.world;
 import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.IViewableLayer;
-import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
  */
-public abstract class IMultiLayer<T extends IStepable & Painter> extends CompoundPainter<T> implements IQueue<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
+public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, IQueue<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
 
     /**
      * flag for visibility *
@@ -86,7 +86,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
 
     @Override
     public synchronized boolean add(T t) {
-        super.addPainter(t);
         return m_process.add(t);
     }
 
@@ -96,7 +95,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
             return null;
 
         T l_item = m_unprocess.remove();
-        super.removePainter(l_item);
         return l_item;
     }
 
@@ -242,14 +240,12 @@ public abstract class IMultiLayer<T extends IStepable & Painter> extends Compoun
     }
 
     @Override
-    protected void doPaint(Graphics2D g, T component, int width, int height) {
+    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
         if (!m_visible)
             return;
 
         for (T l_item : this)
-            l_item.paint(g, component, width, height);
-
-        //super.doPaint(g, component, width, height);
+            l_item.paint(g, object, width, height);
     }
 
     @Override

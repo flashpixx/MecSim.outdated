@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends Painter, IVoidStepable {
+public interface ICar extends Painter<COSMViewer>, IVoidStepable {
 
 
     /**

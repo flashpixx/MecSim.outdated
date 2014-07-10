@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.object.source;
 
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.simulation.IReturnStepable;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ import java.io.Serializable;
 /**
  * factory interface of car - defines a source
  */
-public interface ISourceFactory extends IReturnStepable<ICar>, Painter, Serializable {
+public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewer>, Serializable {
 
     /**
      * sets the value how many cars are created in one step

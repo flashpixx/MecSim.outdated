@@ -25,6 +25,7 @@ import de.tu_clausthal.in.winf.object.analysis.CCarCount;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.winf.object.world.CWorld;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.CFrame;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
@@ -62,7 +63,7 @@ public class CBootstrap {
      */
     public static void AfterOSMViewerInit(COSMViewer p_viewer) {
 
-        //p_viewer.getCompoundPainter().addPainter( (CSourceFactoryLayer)CSimulation.getInstance().getWorld().getMap().get("Source") );
+        p_viewer.getCompoundPainter().addPainter((IMultiLayer) CSimulation.getInstance().getWorld().getMap().get("Source"));
 
     }
 

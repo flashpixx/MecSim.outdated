@@ -27,7 +27,7 @@ import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
-import org.jxmapviewer.JXMapViewer;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
@@ -150,12 +150,13 @@ public class CDefaultSourceFactory implements ISourceFactory {
         return l_collection;
     }
 
+
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
         if (m_image == null)
             return;
 
-        Point2D point = ((JXMapViewer) o).getTileFactory().geoToPixel(m_position, ((JXMapViewer) o).getZoom());
-        graphics2D.drawImage(m_image, (int) point.getX() - m_image.getWidth() / 2, (int) point.getY() - m_image.getHeight(), null);
+        Point2D point = object.getTileFactory().geoToPixel(m_position, object.getZoom());
+        g.drawImage(m_image, (int) point.getX() - m_image.getWidth() / 2, (int) point.getY() - m_image.getHeight(), null);
     }
 }

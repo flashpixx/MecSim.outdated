@@ -26,6 +26,7 @@ import de.tu_clausthal.in.winf.object.car.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
@@ -265,13 +266,13 @@ public class CDefaultCar extends IInspector implements ICar {
     }
 
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
+    public void paint(Graphics2D graphics2D, COSMViewer o, int i, int i2) {
         GeoPosition l_position = this.getGeoposition();
         if (l_position == null)
             return;
 
-        int l_zoom = this.iconsize((JXMapViewer) o);
-        Point2D l_point = ((JXMapViewer) o).getTileFactory().geoToPixel(l_position, ((JXMapViewer) o).getZoom());
+        int l_zoom = this.iconsize(o);
+        Point2D l_point = o.getTileFactory().geoToPixel(l_position, o.getZoom());
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
         graphics2D.setColor(Color.DARK_GRAY);

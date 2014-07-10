@@ -69,6 +69,9 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     public CMenuBar() {
         super();
 
+        String[] l_actions = {"Start", "Stop", null, "Reset"};
+        this.add(CMenuFactory.createMenu("Simulation", l_actions, this, m_reference));
+
         String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
         CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
         JMenu l_visibilitylayer = new JMenu("Layer");
@@ -76,8 +79,6 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
         this.add(l_visibilitylayer);
 
-        String[] l_actions = {"Start", "Stop", null, "Reset"};
-        this.add(CMenuFactory.createMenu("Action", l_actions, this, m_reference));
 
 /*
         String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
@@ -108,11 +109,11 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         try {
 
 
-            if (e.getSource() == m_reference.get("Action::Start"))
+            if (e.getSource() == m_reference.get("Simulation::Start"))
                 CSimulation.getInstance().start();
-            if (e.getSource() == m_reference.get("Action::Stop"))
+            if (e.getSource() == m_reference.get("Simulation::Stop"))
                 CSimulation.getInstance().stop();
-            if (e.getSource() == m_reference.get("Action::Reset"))
+            if (e.getSource() == m_reference.get("Simulation::Reset"))
                 CSimulation.getInstance().reset();
 
 

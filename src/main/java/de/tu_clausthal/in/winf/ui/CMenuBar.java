@@ -75,7 +75,6 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
         this.add(l_visibilitylayer);
 
-
 /*
         String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
         this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
@@ -105,9 +104,18 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        /*
         try {
 
+            if (e.getSource() == m_reference.get("Visibility::Source")) {
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
+                l_layer.setVisible(!l_layer.isVisible());
+            }
+
+        } catch (Exception l_exception) {
+            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
+        }
+
+        /*
             if (e.getSource() == m_reference.get("Screenshot"))
                 this.screenshot();
             if (e.getSource() == m_reference.get("Save Sources"))
@@ -147,11 +155,6 @@ public class CMenuBar extends JMenuBar implements ActionListener {
 
             if (e.getSource() == m_reference.get("Nagel-Schreckenberg"))
                 this.setDrivingModel("Nagel-Schreckenberg");
-
-
-        } catch (Exception l_exception) {
-            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
-        }
 */
     }
 

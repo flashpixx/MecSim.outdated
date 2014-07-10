@@ -71,12 +71,14 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
     @Override
     public boolean isVisible() {
+        COSMViewer.getInstance().repaint();
         return m_visible;
     }
 
     @Override
     public void setVisible(boolean p_visible) {
         m_visible = p_visible;
+        COSMViewer.getInstance().repaint();
     }
 
     @Override

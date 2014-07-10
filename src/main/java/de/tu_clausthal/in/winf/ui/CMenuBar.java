@@ -26,6 +26,7 @@ import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
+import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 
 import javax.imageio.ImageIO;
@@ -71,16 +72,16 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
         CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
         JMenu l_visibilitylayer = new JMenu("Layer");
-        l_visibilitylayer.add(CMenuFactory.createRadioMenu("Enable / Disable", l_layer, this, m_reference));
+        l_visibilitylayer.add(CMenuFactory.createRadioMenu("Activity", l_layer, this, m_reference));
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
         this.add(l_visibilitylayer);
+
+        String[] l_actions = {"Start", "Stop", null, "Reset"};
+        this.add(CMenuFactory.createMenu("Action", l_actions, this, m_reference));
 
 /*
         String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
         this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
-
-        String[] l_actions = {"Start", "Stop", null, "Reset"};
-        this.add(CMenuFactory.createMenu("Action", l_actions, this, m_reference));
 
         String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
         this.add(CMenuFactory.createRadioMenuGroup("Graph Weights", l_weights, this, m_reference));
@@ -106,10 +107,36 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         try {
 
+
+            if (e.getSource() == m_reference.get("Action::Start"))
+                CSimulation.getInstance().start();
+            if (e.getSource() == m_reference.get("Action::Stop"))
+                CSimulation.getInstance().stop();
+            if (e.getSource() == m_reference.get("Action::Reset"))
+                CSimulation.getInstance().reset();
+
+
+            if (e.getSource() == m_reference.get("Activity::Source")) {
+                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Source");
+                l_layer.setActive(!l_layer.isActive());
+            }
+
+            if (e.getSource() == m_reference.get("Activity::Car")) {
+                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Car");
+                l_layer.setActive(!l_layer.isActive());
+            }
+
+
             if (e.getSource() == m_reference.get("Visibility::Source")) {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
                 l_layer.setVisible(!l_layer.isVisible());
             }
+
+            if (e.getSource() == m_reference.get("Visibility::Car")) {
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Car");
+                l_layer.setVisible(!l_layer.isVisible());
+            }
+
 
         } catch (Exception l_exception) {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
@@ -122,14 +149,6 @@ public class CMenuBar extends JMenuBar implements ActionListener {
                 this.saveSources();
             if (e.getSource() == m_reference.get("Load Sources"))
                 this.loadSources();
-
-
-            if (e.getSource() == m_reference.get("Start"))
-                CSimulation.getInstance().start(this.generateDrivingModel());
-            if (e.getSource() == m_reference.get("Stop"))
-                CSimulation.getInstance().stop();
-            if (e.getSource() == m_reference.get("Reset"))
-                CSimulation.getInstance().reset();
 
 
             if (e.getSource() == m_reference.get("Default"))

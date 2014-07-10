@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * multilayer to create a collection for elements
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
+ * @note
  */
 public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, IQueue<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
 
@@ -86,7 +87,10 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
     @Override
     public synchronized boolean add(T t) {
-        return m_process.add(t);
+        boolean l_return = m_process.add(t);
+        COSMViewer.getInstance().repaint();
+
+        return l_return;
     }
 
     @Override
@@ -95,6 +99,8 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
             return null;
 
         T l_item = m_unprocess.remove();
+        COSMViewer.getInstance().repaint();
+
         return l_item;
     }
 
@@ -116,7 +122,10 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         if (!m_active)
             return null;
 
-        return m_unprocess.poll();
+        T l_item = m_unprocess.poll();
+        COSMViewer.getInstance().repaint();
+
+        return l_item;
     }
 
     @Override

@@ -25,7 +25,7 @@ import de.tu_clausthal.in.winf.object.norm.*;
 import de.tu_clausthal.in.winf.object.norm.range.CUnionRangeCollection;
 import de.tu_clausthal.in.winf.object.norm.range.IRange;
 import de.tu_clausthal.in.winf.object.norm.range.IRangeCollection;
-import org.jxmapviewer.JXMapViewer;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 
 import java.awt.*;
 import java.util.Collection;
@@ -207,9 +207,9 @@ public class CDefaultInstitution implements IInstitution<INormObject> {
     }
 
     @Override
-    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
+    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
         for (IRange<INormObject> l_item : m_range)
-            l_item.paint(graphics2D, viewer);
-    }
+            l_item.paint(g, object, width, height);
 
+    }
 }

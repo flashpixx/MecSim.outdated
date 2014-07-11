@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.object.norm.range;
 
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
@@ -112,19 +113,6 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
 
 
     @Override
-    public void paint(Graphics2D graphics2D, JXMapViewer viewer) {
-        Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
-        Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
-
-        Rectangle l_rectangle = new Rectangle((int) Math.min(l_upperleft.getX(), l_lowerright.getX()), (int) Math.min(l_upperleft.getY(), l_lowerright.getY()),
-                (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
-        graphics2D.setColor(m_borderColor);
-        graphics2D.draw(l_rectangle);
-        graphics2D.setColor(m_regioColor);
-        graphics2D.fill(l_rectangle);
-    }
-
-    @Override
     public void onClick(MouseEvent e, JXMapViewer viewer) {
         Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
         Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
@@ -139,5 +127,18 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
             this.release();
         } else
             CInspector.getInstance().set(this);
+    }
+
+    @Override
+    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
+        Point2D l_upperleft = object.getTileFactory().geoToPixel(m_upperleft, object.getZoom());
+        Point2D l_lowerright = object.getTileFactory().geoToPixel(m_lowerright, object.getZoom());
+
+        Rectangle l_rectangle = new Rectangle((int) Math.min(l_upperleft.getX(), l_lowerright.getX()), (int) Math.min(l_upperleft.getY(), l_lowerright.getY()),
+                (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
+        g.setColor(m_borderColor);
+        g.draw(l_rectangle);
+        g.setColor(m_regioColor);
+        g.fill(l_rectangle);
     }
 }

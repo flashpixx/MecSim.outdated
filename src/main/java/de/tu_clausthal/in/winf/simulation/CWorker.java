@@ -140,6 +140,7 @@ public class CWorker implements Runnable {
      */
     private void processMultiLayerObject() throws BrokenBarrierException, InterruptedException {
         ILayer l_layer = null;
+
         while ((l_layer = m_world.getQueue().element()) != null) {
 
             if (m_isFirst) {
@@ -152,6 +153,7 @@ public class CWorker implements Runnable {
 
             IStepable l_object = null;
             while ((l_object = ((IMultiLayer) l_layer).poll()) != null) {
+
                 ((IMultiLayer) l_layer).add(l_object);
 
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);

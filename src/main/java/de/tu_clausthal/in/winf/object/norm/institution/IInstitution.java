@@ -24,7 +24,8 @@ package de.tu_clausthal.in.winf.object.norm.institution;
 import de.tu_clausthal.in.winf.object.norm.INorm;
 import de.tu_clausthal.in.winf.object.norm.INormMessage;
 import de.tu_clausthal.in.winf.object.norm.range.IRangeCollection;
-import de.tu_clausthal.in.winf.ui.IPainter;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.jxmapviewer.painter.Painter;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -35,7 +36,7 @@ import java.util.Collection;
  * is a collection of norms, stores collection of other institutions and
  * additional aspects
  */
-public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, IPainter {
+public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Painter<COSMViewer> {
 
 
     /**

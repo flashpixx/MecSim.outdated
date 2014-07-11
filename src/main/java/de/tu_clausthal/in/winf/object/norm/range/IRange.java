@@ -22,7 +22,8 @@
 package de.tu_clausthal.in.winf.object.norm.range;
 
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.winf.ui.IPainter;
+import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.jxmapviewer.painter.Painter;
 
 import java.io.Serializable;
 
@@ -30,7 +31,7 @@ import java.io.Serializable;
 /**
  * class to represent the workspace of an institution
  */
-public interface IRange<T> extends Serializable, IPainter {
+public interface IRange<T> extends Serializable, Painter<COSMViewer> {
 
 
     /**

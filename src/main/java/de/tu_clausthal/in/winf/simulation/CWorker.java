@@ -110,10 +110,10 @@ public class CWorker implements Runnable {
      * run process of each layer *
      */
     private void processLayer() throws BrokenBarrierException, InterruptedException {
-        ILayer l_layer = null;
-        while ((l_layer = m_world.getQueue().poll()) != null) {
 
-            m_world.getQueue().add(l_layer);
+        m_world.getQueue().reset();
+        for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().add(l_layer)) {
+
             if (!l_layer.isActive())
                 continue;
 
@@ -123,15 +123,15 @@ public class CWorker implements Runnable {
             if (l_layer instanceof IReturnStepable) {
                 Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get(), null);
                 Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_layer).getTargets();
-                if ((l_data == null) || (l_targets == null))
-                    continue;
-                for (IReturnStepableTarget l_target : l_targets)
-                    l_target.set(l_data);
+                if ((l_data != null) && (l_targets != null))
+                    for (IReturnStepableTarget l_target : l_targets)
+                        l_target.set(l_data);
             }
 
         }
+
         m_barrier.await();
-        m_world.getQueue().reset();
+
     }
 
 
@@ -139,23 +139,15 @@ public class CWorker implements Runnable {
      * run process on each object on the multilayer *
      */
     private void processMultiLayerObject() throws BrokenBarrierException, InterruptedException {
-        ILayer l_layer = null;
 
-        while ((l_layer = m_world.getQueue().element()) != null) {
+        m_world.getQueue().reset();
+        for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().add(l_layer)) {
 
-            if (m_isFirst) {
-                m_world.getQueue().poll();
-                m_world.getQueue().add(l_layer);
-            }
-
-            if ((!(l_layer instanceof IMultiLayer)) || (!l_layer.isActive()))
+            if ((!l_layer.isActive()) || (!(l_layer instanceof IMultiLayer)))
                 continue;
 
-            IStepable l_object = null;
-            while ((l_object = ((IMultiLayer) l_layer).poll()) != null) {
-
-                ((IMultiLayer) l_layer).add(l_object);
-
+            ((IMultiLayer) l_layer).reset();
+            for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).add(l_object)) {
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
 
                 if (l_object instanceof IVoidStepable)
@@ -164,20 +156,17 @@ public class CWorker implements Runnable {
                 if (l_object instanceof IReturnStepable) {
                     Collection l_data = ((IReturnStepable) l_object).step(m_currentstep.get(), l_layer);
                     Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_object).getTargets();
-                    if ((l_data == null) || (l_targets == null))
-                        continue;
-                    for (IReturnStepableTarget l_target : l_targets)
-                        l_target.set(l_data);
+                    if ((l_data != null) && (l_targets != null))
+                        for (IReturnStepableTarget l_target : l_targets)
+                            l_target.set(l_data);
                 }
 
                 ((IMultiLayer) l_layer).afterStepObject(m_currentstep.get(), l_object);
             }
 
-            m_barrier.await();
-            ((IMultiLayer) l_layer).reset();
         }
+
         m_barrier.await();
-        m_world.getQueue().reset();
     }
 
 }

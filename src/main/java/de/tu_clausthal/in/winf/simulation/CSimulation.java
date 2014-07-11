@@ -126,8 +126,8 @@ public class CSimulation {
 
         for (ILayer l_layer : m_world.getQueue())
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
-                m_Logger.warn("layer [" + l_layer + "] has not objects");
-        ;
+                m_Logger.warn("layer [" + l_layer + "] is empty");
+
 
         CBootstrap.BeforeSimulationStarts(this);
         m_Logger.info("simulation is started");

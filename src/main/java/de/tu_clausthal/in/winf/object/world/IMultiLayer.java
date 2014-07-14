@@ -124,10 +124,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         if (!m_active)
             return null;
 
-        T l_item = m_unprocess.poll();
-        COSMViewer.getInstance().repaint();
-
-        return l_item;
+        return m_unprocess.poll();
     }
 
     @Override
@@ -231,6 +228,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         for (Object l_item : c) {
             if ((m_process.remove(l_item)) || (m_unprocess.remove(l_item)))
                 continue;
+            COSMViewer.getInstance().repaint();
             return false;
         }
 
@@ -240,7 +238,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        return m_process.retainAll(c) || m_unprocess.retainAll(c);
     }
 
     @Override
@@ -256,8 +254,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public synchronized void reset() {
         m_unprocess.addAll(m_process);
         m_process.clear();
-
-        COSMViewer.getInstance().repaint();
     }
 
     @Override

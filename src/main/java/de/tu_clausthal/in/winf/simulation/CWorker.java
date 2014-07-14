@@ -159,7 +159,7 @@ public class CWorker implements Runnable {
             ((IMultiLayer) l_layer).reset();
             m_barrier.await();
 
-            for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).add(l_object)) {
+            for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).offer(l_object)) {
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
 
                 if (l_object instanceof IVoidStepable)
@@ -175,6 +175,7 @@ public class CWorker implements Runnable {
 
                 ((IMultiLayer) l_layer).afterStepObject(m_currentstep.get(), l_object);
             }
+            System.out.println("----------------");
         }
 
     }

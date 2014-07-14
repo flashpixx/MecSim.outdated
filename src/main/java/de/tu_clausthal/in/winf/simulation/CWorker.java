@@ -112,6 +112,8 @@ public class CWorker implements Runnable {
     private void processLayer() throws BrokenBarrierException, InterruptedException {
 
         m_world.getQueue().reset();
+        m_barrier.await();
+
         for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().add(l_layer)) {
 
             if (!l_layer.isActive())
@@ -130,8 +132,6 @@ public class CWorker implements Runnable {
 
         }
 
-        m_barrier.await();
-
     }
 
 
@@ -141,12 +141,24 @@ public class CWorker implements Runnable {
     private void processMultiLayerObject() throws BrokenBarrierException, InterruptedException {
 
         m_world.getQueue().reset();
-        for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().add(l_layer)) {
+        m_barrier.await();
+
+        // all threads get the layer (so we does not remove it on getter)
+        for (ILayer l_layer = null; (l_layer = m_world.getQueue().element()) != null; ) {
+
+            // only the first remove the layer (and push it back to the queue)
+            m_barrier.await();
+            if (m_isFirst) {
+                m_world.getQueue().poll();
+                m_world.getQueue().add(l_layer);
+            }
 
             if ((!l_layer.isActive()) || (!(l_layer instanceof IMultiLayer)))
                 continue;
 
             ((IMultiLayer) l_layer).reset();
+            m_barrier.await();
+
             for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).add(l_object)) {
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
 
@@ -163,10 +175,8 @@ public class CWorker implements Runnable {
 
                 ((IMultiLayer) l_layer).afterStepObject(m_currentstep.get(), l_object);
             }
-
         }
 
-        m_barrier.await();
     }
 
 }

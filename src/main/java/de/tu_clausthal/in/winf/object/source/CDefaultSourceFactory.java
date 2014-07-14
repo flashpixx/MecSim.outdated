@@ -133,7 +133,7 @@ public class CDefaultSourceFactory implements ISourceFactory {
 
     @Override
     public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
-        System.out.println("xxx");
+        System.out.println(p_currentstep);
 
         Collection<ICar> l_sources = new HashSet();
 

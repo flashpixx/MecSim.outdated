@@ -133,8 +133,6 @@ public class CDefaultSourceFactory implements ISourceFactory {
 
     @Override
     public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
-        System.out.println("source step: " + p_currentstep + "\t" + this + "\t" + p_layer);
-
         Collection<ICar> l_sources = new HashSet();
 
         // use random number on care creation, to avoid traffic jam on the source

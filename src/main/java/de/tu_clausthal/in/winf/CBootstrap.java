@@ -64,6 +64,7 @@ public class CBootstrap {
     public static void AfterOSMViewerInit(COSMViewer p_viewer) {
 
         p_viewer.getCompoundPainter().addPainter((IMultiLayer) CSimulation.getInstance().getWorld().getMap().get("Source"));
+        p_viewer.getCompoundPainter().addPainter((IMultiLayer) CSimulation.getInstance().getWorld().getMap().get("Car"));
 
     }
 

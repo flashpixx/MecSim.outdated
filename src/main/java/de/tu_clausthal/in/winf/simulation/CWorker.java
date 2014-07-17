@@ -139,8 +139,7 @@ public class CWorker implements Runnable {
             // only the first remove the layer (and push it back to the queue)
             m_barrier.await();
             if (m_isFirst)
-                m_world.getQueue().add( m_world.getQueue().poll() );
-
+                m_world.getQueue().add(m_world.getQueue().poll());
             if ((!l_layer.isActive()) || (!(l_layer instanceof IMultiLayer)))
                 continue;
 
@@ -156,9 +155,6 @@ public class CWorker implements Runnable {
 
             }
 
-            m_barrier.await();
-            if (m_isFirst)
-                System.out.println("----------------------------------------------------------------------------------");
         }
 
     }

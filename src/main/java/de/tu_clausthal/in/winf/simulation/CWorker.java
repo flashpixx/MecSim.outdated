@@ -92,10 +92,8 @@ public class CWorker implements Runnable {
                 this.processLayer();
                 this.processMultiLayerObject();
 
-                if (m_isFirst) {
-                    System.out.println("----------------------------------------");
+                if (m_isFirst)
                     m_currentstep.getAndIncrement();
-                }
 
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
 
@@ -120,17 +118,7 @@ public class CWorker implements Runnable {
 
             if (!l_layer.isActive())
                 continue;
-
-            if (l_layer instanceof IVoidStepable)
-                ((IVoidStepable) l_layer).step(m_currentstep.get(), null);
-
-            if (l_layer instanceof IReturnStepable) {
-                Collection l_data = ((IReturnStepable) l_layer).step(m_currentstep.get(), null);
-                Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_layer).getTargets();
-                if ((l_data != null) && (l_targets != null))
-                    for (IReturnStepableTarget l_target : l_targets)
-                        l_target.set(l_data);
-            }
+            this.processObject(l_layer, null);
 
         }
 
@@ -146,41 +134,55 @@ public class CWorker implements Runnable {
         m_barrier.await();
 
         // all threads get the layer (so we does not remove it on getter)
-        for (ILayer l_layer = null; (l_layer = m_world.getQueue().peek()) != null; ) {
+        for (ILayer l_layer = null; (l_layer = m_world.getQueue().peek()) != null; m_barrier.await()) {
 
             // only the first remove the layer (and push it back to the queue)
             m_barrier.await();
-            System.out.println(Thread.currentThread().getId()+": "+l_layer);
             if (m_isFirst)
                 m_world.getQueue().add( m_world.getQueue().poll() );
 
             if ((!l_layer.isActive()) || (!(l_layer instanceof IMultiLayer)))
                 continue;
 
+            // resets the layer and process objects of the layer
             ((IMultiLayer) l_layer).reset();
             m_barrier.await();
 
-            // handle objects of the layer
             for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).offer(l_object)) {
+
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
-
-                if (l_object instanceof IVoidStepable)
-                    ((IVoidStepable) l_object).step(m_currentstep.get(), l_layer);
-
-                if (l_object instanceof IReturnStepable) {
-                    Collection l_data = ((IReturnStepable) l_object).step(m_currentstep.get(), l_layer);
-                    Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) l_object).getTargets();
-                    if ((l_data != null) && (l_targets != null))
-                        for (IReturnStepableTarget l_target : l_targets)
-                            l_target.set(l_data);
-                }
-
+                this.processObject(l_object, l_layer);
                 ((IMultiLayer) l_layer).afterStepObject(m_currentstep.get(), l_object);
+
             }
 
-            m_barrier.await();
-            System.out.println();
+        }
 
+        if (m_isFirst)
+            System.out.println("----------------------------------------------------------------------------------");
+
+    }
+
+
+    /**
+     * process an object
+     *
+     * @param p_object object which should be processed
+     * @param p_layer  layer of the object or null
+     */
+    private void processObject(IStepable p_object, ILayer p_layer) {
+
+        if (p_object instanceof IVoidStepable) {
+            ((IVoidStepable) p_object).step(m_currentstep.get(), p_layer);
+            return;
+        }
+
+        if (p_object instanceof IReturnStepable) {
+            Collection l_data = ((IReturnStepable) p_object).step(m_currentstep.get(), p_layer);
+            Collection<IReturnStepableTarget> l_targets = ((IReturnStepable) p_object).getTargets();
+            if ((l_data != null) && (l_targets != null))
+                for (IReturnStepableTarget l_target : l_targets)
+                    l_target.set(l_data);
         }
 
     }

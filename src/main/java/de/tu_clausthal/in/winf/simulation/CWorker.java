@@ -92,8 +92,10 @@ public class CWorker implements Runnable {
                 this.processLayer();
                 this.processMultiLayerObject();
 
-                if (m_isFirst)
+                if (m_isFirst) {
+                    System.out.println("----------------------------------------");
                     m_currentstep.getAndIncrement();
+                }
 
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
 
@@ -144,14 +146,13 @@ public class CWorker implements Runnable {
         m_barrier.await();
 
         // all threads get the layer (so we does not remove it on getter)
-        for (ILayer l_layer = null; (l_layer = m_world.getQueue().element()) != null; ) {
+        for (ILayer l_layer = null; (l_layer = m_world.getQueue().peek()) != null; ) {
 
             // only the first remove the layer (and push it back to the queue)
             m_barrier.await();
-            if (m_isFirst) {
-                m_world.getQueue().poll();
-                m_world.getQueue().add(l_layer);
-            }
+            System.out.println(Thread.currentThread().getId()+": "+l_layer);
+            if (m_isFirst)
+                m_world.getQueue().add( m_world.getQueue().poll() );
 
             if ((!l_layer.isActive()) || (!(l_layer instanceof IMultiLayer)))
                 continue;
@@ -159,6 +160,7 @@ public class CWorker implements Runnable {
             ((IMultiLayer) l_layer).reset();
             m_barrier.await();
 
+            // handle objects of the layer
             for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).offer(l_object)) {
                 ((IMultiLayer) l_layer).beforeStepObject(m_currentstep.get(), l_object);
 
@@ -175,7 +177,10 @@ public class CWorker implements Runnable {
 
                 ((IMultiLayer) l_layer).afterStepObject(m_currentstep.get(), l_object);
             }
-            System.out.println("----------------");
+
+            m_barrier.await();
+            System.out.println();
+
         }
 
     }

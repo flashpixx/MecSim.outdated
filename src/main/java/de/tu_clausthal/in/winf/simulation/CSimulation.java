@@ -61,6 +61,7 @@ public class CSimulation {
      * barrier object to synchronize the threads *
      */
     private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
+    //private CyclicBarrier m_barrier = new CyclicBarrier(1);
     /**
      * world of the simulation
      */
@@ -121,7 +122,7 @@ public class CSimulation {
     public synchronized void start() throws IllegalAccessException, IllegalStateException, IllegalArgumentException {
         if (this.isRunning())
             throw new IllegalStateException("simulation is running");
-        if (CConfiguration.getInstance().get().MaxThreadNumber < 1)
+        if (m_barrier.getParties() < 1)
             throw new IllegalAccessException("one thread must be exists to start simulation");
 
         for (ILayer l_layer : m_world.getQueue())
@@ -132,7 +133,7 @@ public class CSimulation {
         CBootstrap.BeforeSimulationStarts(this);
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();
-        for (int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++)
+        for (int i = 0; i < m_barrier.getParties(); i++)
             m_pool.submit(new CWorker(m_barrier, i == 0, m_world, m_currentstep));
     }
 

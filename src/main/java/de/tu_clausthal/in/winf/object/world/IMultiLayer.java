@@ -38,7 +38,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * multilayer to create a collection for elements
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
- * @note
  */
 public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, IQueue<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
 

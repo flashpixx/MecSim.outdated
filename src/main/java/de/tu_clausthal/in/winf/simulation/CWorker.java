@@ -156,10 +156,10 @@ public class CWorker implements Runnable {
 
             }
 
+            m_barrier.await();
+            if (m_isFirst)
+                System.out.println("----------------------------------------------------------------------------------");
         }
-
-        if (m_isFirst)
-            System.out.println("----------------------------------------------------------------------------------");
 
     }
 

@@ -22,7 +22,6 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CBootstrap;
-import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
@@ -60,8 +59,8 @@ public class CSimulation {
     /**
      * barrier object to synchronize the threads *
      */
-    private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
-    //private CyclicBarrier m_barrier = new CyclicBarrier(1);
+    //private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
+    private CyclicBarrier m_barrier = new CyclicBarrier(1);
     /**
      * world of the simulation
      */

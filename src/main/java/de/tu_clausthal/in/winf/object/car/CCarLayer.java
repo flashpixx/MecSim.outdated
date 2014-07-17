@@ -37,9 +37,14 @@ import java.util.Collection;
 public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarget<ICar> {
 
     /**
-     * drive model *
+     * driving model list
      */
-    private IDriveModel m_drivemodel = new CNagelSchreckenberg();
+    private IDriveModel[] m_drivemodellist = {new CNagelSchreckenberg()};
+    /**
+     * driving model
+     */
+    private IDriveModel m_drivemodel = m_drivemodellist[0];
+
     /**
      * graph *
      */
@@ -71,10 +76,33 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @param p_model model
      */
-    public void setDriveModel(IDriveModel p_model) {
-        if (p_model == null)
-            throw new IllegalArgumentException("drive model need not be null");
-        m_drivemodel = p_model;
+    public void setDriveModel(String p_model) {
+        for (IDriveModel l_model : m_drivemodellist)
+            if (p_model.equals(l_model.getName()))
+                m_drivemodel = l_model;
+    }
+
+
+    /**
+     * returns the name of the driving model
+     *
+     * @return name
+     */
+    public String getDrivingModel() {
+        return m_drivemodel.getName();
+    }
+
+    /**
+     * returns a list with all driving model names
+     *
+     * @return list
+     */
+    public String[] getDrivingModelList() {
+        String[] l_list = new String[m_drivemodellist.length];
+        int i = 0;
+        for (IDriveModel l_model : m_drivemodellist)
+            l_list[i] = l_model.getName();
+        return l_list;
     }
 
 

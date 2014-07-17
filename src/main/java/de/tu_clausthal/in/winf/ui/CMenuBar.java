@@ -23,8 +23,6 @@ package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
-import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
-import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.winf.object.world.ILayer;
@@ -57,13 +55,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private Map<String, Object> m_reference = new HashMap();
     /**
-     * driving model *
-     */
-    private String m_drivemodel = "Nagel-Schreckenberg";
-    /**
      * current weight
      */
     private String m_weight = "Default";
+    /**
+     * menu names of driving models
+     */
+    private String[] m_drivingmodelname = null;
 
 
     /**
@@ -80,12 +78,18 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         l_simulation.add(l_simulationspeed);
         this.add(l_simulation);
 
+
         String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
         CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
         JMenu l_visibilitylayer = new JMenu("Layer");
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Activity", l_layer, this, m_reference));
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
         this.add(l_visibilitylayer);
+
+        m_drivingmodelname = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getDrivingModelList();
+        this.add(CMenuFactory.createRadioMenuGroup("Driving Model", m_drivingmodelname, this, m_reference));
+        for (int i = 0; i < m_drivingmodelname.length; i++)
+            m_drivingmodelname[i] = "Driving Model::" + m_drivingmodelname[i];
 
 
 /*
@@ -95,8 +99,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
         this.add(CMenuFactory.createRadioMenuGroup("Graph Weights", l_weights, this, m_reference));
 
-        String[] l_drivemodel = {"Nagel-Schreckenberg"};
-        this.add(CMenuFactory.createRadioMenuGroup("Driving Model", l_drivemodel, this, m_reference));
+
 
         String[] l_institution = {"Create Institution", "Delete Institution"};
         this.add(CMenuFactory.createMenu("Institution", l_institution, this, m_reference));
@@ -109,12 +112,22 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         String[] l_mas = {"Modify Environment", "Create Agent", "Delete Agent", ""};
         this.add(CMenuFactory.createMenu("MAS", l_mas, this, m_reference));
         */
+
     }
 
 
     @Override
     public void stateChanged(ChangeEvent e) {
         CConfiguration.getInstance().get().ThreadSleepTime = ((JSlider) e.getSource()).getValue();
+    }
+
+
+    /**
+     * throws an exception if the simulation is running
+     */
+    private void throwSimulationRunningException() {
+        if (CSimulation.getInstance().isRunning())
+            throw new IllegalStateException("simulation is running");
     }
 
 
@@ -132,11 +145,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
             if (e.getSource() == m_reference.get("Activity::Source")) {
+                this.throwSimulationRunningException();
                 ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Source");
                 l_layer.setActive(!l_layer.isActive());
             }
 
             if (e.getSource() == m_reference.get("Activity::Car")) {
+                this.throwSimulationRunningException();
                 ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Car");
                 l_layer.setActive(!l_layer.isActive());
             }
@@ -151,6 +166,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Car");
                 l_layer.setVisible(!l_layer.isVisible());
             }
+
+
+            for (String l_model : m_drivingmodelname)
+                if (e.getSource() == m_reference.get(l_model)) {
+                    this.throwSimulationRunningException();
+                    ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).setDriveModel(l_model.replace("Driving Model::", ""));
+                }
 
 
         } catch (Exception l_exception) {
@@ -185,10 +207,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 this.createSpeedNorm();
             if (e.getSource() == m_reference.get("Delete Norm"))
                 this.deleteNorm();
-
-
-            if (e.getSource() == m_reference.get("Nagel-Schreckenberg"))
-                this.setDrivingModel("Nagel-Schreckenberg");
 */
     }
 
@@ -362,39 +380,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             l_layer.setGraphWeight(p_weight);
             m_weight = p_weight;
         }
-    }
-
-
-    /**
-     * sets the driving model
-     *
-     * @param p_model model
-     * @throws IllegalStateException
-     */
-    private void setDrivingModel(String p_model) throws IllegalStateException {
-        if (CSimulation.getInstance().isRunning())
-            throw new IllegalStateException("simulation is running");
-
-        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car");
-        if (l_layer != null) {
-            l_layer.setDriveModel(this.generateDrivingModel(p_model));
-            m_drivemodel = p_model;
-        }
-
-    }
-
-
-    /**
-     * generates the driving model
-     *
-     * @param p_model string name of the model
-     * @return model
-     */
-    private IDriveModel generateDrivingModel(String p_model) {
-        if (p_model.equals("Nagel-Schreckenberg"))
-            return new CNagelSchreckenberg();
-
-        return null;
     }
 
 

@@ -223,7 +223,6 @@ public class CDefaultCar extends IInspector implements ICar {
         Map<String, Object> l_map = super.inspect();
 
 
-
         l_map.put("current speed", m_speed);
         l_map.put("maximum speed", m_maxSpeed);
         l_map.put("acceleration", m_acceleration);

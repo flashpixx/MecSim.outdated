@@ -44,6 +44,11 @@ public class CNagelSchreckenberg implements IDriveModel {
 
 
     @Override
+    public String getName() {
+        return "Nagel-Schreckenberg";
+    }
+
+    @Override
     public void update(int p_currentstep, CGraphHopper p_graph, ICar p_car) {
 
         //check maximum speed on the current edge and modify speed

@@ -31,6 +31,13 @@ import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 public interface IDriveModel {
 
     /**
+     * returns the name of the model
+     *
+     * @return string with name
+     */
+    public String getName();
+
+    /**
      * updates car
      *
      * @param p_currentstep current step number

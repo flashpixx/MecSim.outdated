@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.ui;
 
+import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
@@ -31,6 +32,8 @@ import de.tu_clausthal.in.winf.simulation.CSimulation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -43,7 +46,7 @@ import java.util.Map;
 /**
  * class for create the menubar *
  */
-public class CMenuBar extends JMenuBar implements ActionListener {
+public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener {
 
     /**
      * file chooser dialog
@@ -69,8 +72,13 @@ public class CMenuBar extends JMenuBar implements ActionListener {
     public CMenuBar() {
         super();
 
-        String[] l_actions = {"Start", "Stop", null, "Reset"};
-        this.add(CMenuFactory.createMenu("Simulation", l_actions, this, m_reference));
+        String[] l_actions = {"Start", "Stop", null, "Reset", null};
+        JMenu l_simulation = CMenuFactory.createMenu("Simulation", l_actions, this, m_reference);
+        JSlider l_simulationspeed = new JSlider(10, 1000);
+        l_simulationspeed.addChangeListener(this);
+        l_simulationspeed.setValue(Math.max(l_simulationspeed.getMinimum(), Math.min(l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime)));
+        l_simulation.add(l_simulationspeed);
+        this.add(l_simulation);
 
         String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
         CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
@@ -101,6 +109,12 @@ public class CMenuBar extends JMenuBar implements ActionListener {
         String[] l_mas = {"Modify Environment", "Create Agent", "Delete Agent", ""};
         this.add(CMenuFactory.createMenu("MAS", l_mas, this, m_reference));
         */
+    }
+
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        CConfiguration.getInstance().get().ThreadSleepTime = ((JSlider) e.getSource()).getValue();
     }
 
 
@@ -462,4 +476,5 @@ public class CMenuBar extends JMenuBar implements ActionListener {
             l_file = new File(l_file + p_suffix);
         return l_file;
     }
+
 }

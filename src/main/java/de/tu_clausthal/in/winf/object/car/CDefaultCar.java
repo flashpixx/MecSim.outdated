@@ -153,13 +153,6 @@ public class CDefaultCar extends IInspector implements ICar {
         return m_LingerProbability;
     }
 
-/*
-    @Override
-    public GeoPosition getCurrentPosition() {
-        return m_graph.getEdge(this.getCurrentEdge()).getGeoposition(this);
-    }
-*/
-
     @Override
     public boolean hasEndReached() {
         return (m_routeedges != null) && (m_routeindex >= m_routeedges.size());
@@ -197,12 +190,12 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public EdgeIteratorState getEdge() {
-        return m_routeedges.get(m_routeindex);
+        return m_routeindex < m_routeedges.size() ? m_routeedges.get(m_routeindex) : null;
     }
 
     @Override
     public GeoPosition getGeoposition() {
-        return m_graph.getEdge(m_routeedges.get(m_routeindex)).getGeoposition(this);
+        return m_routeindex < m_routeedges.size() ? m_graph.getEdge(m_routeedges.get(m_routeindex)).getGeoposition(this) : null;
     }
 
 

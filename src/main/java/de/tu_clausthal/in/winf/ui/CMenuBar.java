@@ -38,6 +38,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 
@@ -72,10 +73,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         String[] l_actions = {"Start", "Stop", null, "Reset", null};
         JMenu l_simulation = CMenuFactory.createMenu("Simulation", l_actions, this, m_reference);
-        JSlider l_simulationspeed = new JSlider(10, 1000);
+
+        JSlider l_simulationspeed = new JSlider(10, 2500);
         l_simulationspeed.addChangeListener(this);
-        l_simulationspeed.setValue(Math.max(l_simulationspeed.getMinimum(), Math.min(l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime)));
+        l_simulationspeed.setValue(l_simulationspeed.getMaximum() - Math.max(l_simulationspeed.getMinimum(), Math.min(l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime)));
         l_simulation.add(l_simulationspeed);
+        Hashtable<Integer, JLabel> l_simulationspeedlabel = new Hashtable();
+        l_simulationspeedlabel.put(l_simulationspeed.getMinimum(), new JLabel("slow"));
+        l_simulationspeedlabel.put(l_simulationspeed.getMaximum(), new JLabel("fast"));
+        l_simulationspeedlabel.put((l_simulationspeed.getMaximum() - l_simulationspeed.getMinimum()) / 2, new JLabel("Speed"));
+        l_simulationspeed.setLabelTable(l_simulationspeedlabel);
+        l_simulationspeed.setPaintLabels(true);
         this.add(l_simulation);
 
 
@@ -85,6 +93,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Activity", l_layer, this, m_reference));
         l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
         this.add(l_visibilitylayer);
+
 
         m_drivingmodelname = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getDrivingModelList();
         this.add(CMenuFactory.createRadioMenuGroup("Driving Model", m_drivingmodelname, this, m_reference));
@@ -118,7 +127,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        CConfiguration.getInstance().get().ThreadSleepTime = ((JSlider) e.getSource()).getValue();
+        CConfiguration.getInstance().get().ThreadSleepTime = ((JSlider) e.getSource()).getMaximum() - ((JSlider) e.getSource()).getValue();
     }
 
 

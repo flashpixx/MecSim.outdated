@@ -91,7 +91,7 @@ public class CWorker implements Runnable {
 
         while (!m_interrupted) {
 
-            this.processLayer();
+            //this.processLayer();
             this.processMultiLayerObject();
             if (m_isFirst)
                 m_currentstep.getAndIncrement();
@@ -111,18 +111,14 @@ public class CWorker implements Runnable {
      */
     private void processLayer() {
 
-        m_world.getQueue().reset();
-/*        if (this.barrier())
-            return;
-
-        for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().offer(l_layer)) {
+        for (ILayer l_layer = this.resetQueueBarrier(m_world.getQueue()); (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().offer(l_layer)) {
 
             if (!l_layer.isActive())
                 continue;
             this.processObject(l_layer, null);
 
         }
-*/
+
     }
 
 
@@ -131,12 +127,8 @@ public class CWorker implements Runnable {
      */
     private void processMultiLayerObject() {
 
-        m_world.getQueue().reset();
-        if (this.barrier())
-            return;
-
         // all threads get the layer (so we does not remove it on getter)
-        for (ILayer l_layer = null; ((l_layer = m_world.getQueue().peek()) != null) && (!m_interrupted); this.barrier()) {
+        for (ILayer l_layer = this.resetQueueBarrier(m_world.getQueue()); ((l_layer = m_world.getQueue().peek()) != null); this.barrier()) {
 
             // only the first remove the layer (and push it back to the queue)
             if (m_isFirst)
@@ -145,11 +137,7 @@ public class CWorker implements Runnable {
                 continue;
 
             // resets the layer and process objects of the layer
-            ((IMultiLayer) l_layer).reset();
-            if (this.barrier())
-                return;
-
-            for (IStepable l_object = null; (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).offer(l_object))
+            for (IStepable l_object = this.resetQueueBarrier((IMultiLayer) l_layer); (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).offer(l_object))
                 this.processObject(l_object, l_layer);
 
         }
@@ -194,7 +182,7 @@ public class CWorker implements Runnable {
 
 
     /**
-     * barrier to define an interrupptable strcutre
+     * barrier to define an interrupptable structure
      *
      * @return boolean if an interrupt exists
      */
@@ -202,11 +190,27 @@ public class CWorker implements Runnable {
         try {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
+            m_Logger.info("thread [" + Thread.currentThread().getId() + "] is interrupted");
             m_interrupted = true;
             return true;
         }
 
         return false;
+    }
+
+
+    /**
+     * resets a queue with a barrier structure
+     *
+     * @return null for loop initialization
+     */
+    private ILayer resetQueueBarrier(IQueue p_queue) {
+        boolean l_break = this.barrier();
+        p_queue.reset();
+        if (l_break)
+            Thread.currentThread().interrupt();
+
+        return null;
     }
 
 }

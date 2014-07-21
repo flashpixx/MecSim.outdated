@@ -147,7 +147,7 @@ public class CSimulation {
 
         m_pool.shutdown();
         try {
-            m_pool.awaitTermination(2, TimeUnit.SECONDS);
+            m_pool.awaitTermination(5, TimeUnit.SECONDS);
             m_pool = null;
         } catch (InterruptedException l_exception) {
             m_Logger.error(l_exception.getMessage());

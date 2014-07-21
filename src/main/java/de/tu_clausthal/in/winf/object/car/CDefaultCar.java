@@ -154,6 +154,14 @@ public class CDefaultCar extends IInspector implements ICar {
     }
 
     @Override
+    public void reroute() {
+        List<List<EdgeIteratorState>> l_route = m_graph.getRoutes(this.getGeoposition(), m_EndPosition, 1);
+        if ((l_route != null) && (l_route.size() > 0)) {
+            m_routeedges = l_route.get(0);
+        }
+    }
+
+    @Override
     public boolean hasEndReached() {
         return (m_routeedges != null) && (m_routeindex >= m_routeedges.size());
     }

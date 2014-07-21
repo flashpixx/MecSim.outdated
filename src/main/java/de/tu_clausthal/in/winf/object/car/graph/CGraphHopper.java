@@ -205,6 +205,9 @@ public class CGraphHopper extends GraphHopper {
      * @return speed
      */
     public double getEdgeSpeed(EdgeIteratorState p_edge) {
+        if (p_edge == null)
+            return Double.POSITIVE_INFINITY;
+
         return this.getGraph().getEncodingManager().getEncoder("CAR").getSpeed(p_edge.getFlags());
     }
 

@@ -14,15 +14,15 @@
     <appender name="file" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="log.txt"/>
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%-5p %c{1} - %m%n" />
+            <param name="ConversionPattern" value="%-5p %c{1} - %m%n"/>
         </layout>
     </appender>
 
 
     <root>
         <!-- Priority: (all|debug|info|warn|error|fatal|off|null) -->
-        <priority value="all"/>
-        <appender-ref ref="console" />
+        <priority value="off"/>
+        <appender-ref ref="console"/>
         <!-- <appender-ref ref="file" /> -->
     </root>
 

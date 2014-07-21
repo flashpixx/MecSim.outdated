@@ -69,6 +69,11 @@ public interface ICar extends Painter<COSMViewer>, IVoidStepable {
 
 
     /**
+     * create a new route from the current position
+     */
+    public void reroute();
+
+    /**
      * returns the current geo position of the car
      *
      * @return geoposition

@@ -96,8 +96,6 @@ public class CWorker implements Runnable {
             if (m_isFirst)
                 m_currentstep.getAndIncrement();
 
-            System.out.println(m_currentstep.get());
-
             try {
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
             } catch (InterruptedException l_exception) {
@@ -114,17 +112,17 @@ public class CWorker implements Runnable {
     private void processLayer() {
 
         m_world.getQueue().reset();
-        if (this.barrier())
+/*        if (this.barrier())
             return;
 
-        for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().add(l_layer)) {
+        for (ILayer l_layer = null; (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().offer(l_layer)) {
 
             if (!l_layer.isActive())
                 continue;
             this.processObject(l_layer, null);
 
         }
-
+*/
     }
 
 
@@ -134,6 +132,8 @@ public class CWorker implements Runnable {
     private void processMultiLayerObject() {
 
         m_world.getQueue().reset();
+        if (this.barrier())
+            return;
 
         // all threads get the layer (so we does not remove it on getter)
         for (ILayer l_layer = null; ((l_layer = m_world.getQueue().peek()) != null) && (!m_interrupted); this.barrier()) {
@@ -202,7 +202,6 @@ public class CWorker implements Runnable {
         try {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
-            System.out.println("bye");
             m_interrupted = true;
             return true;
         }

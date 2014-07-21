@@ -61,7 +61,6 @@ public class CSimulation {
      * barrier object to synchronize the threads *
      */
     private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
-    //private CyclicBarrier m_barrier = new CyclicBarrier(1);
     /**
      * world of the simulation
      */
@@ -96,16 +95,6 @@ public class CSimulation {
 
 
     /**
-     * returns the current step
-     *
-     * @return current step
-     */
-    public int getCurrentStep() {
-        return m_currentstep.intValue();
-    }
-
-
-    /**
      * returns the simulation world *
      */
     public CWorld getWorld() {
@@ -119,7 +108,7 @@ public class CSimulation {
      * @throws IllegalAccessException
      * @note thread pool is generated (pause structures can be created with a reentrant lock @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html )
      */
-    public synchronized void start() throws IllegalAccessException, IllegalStateException, IllegalArgumentException {
+    public synchronized void start() throws IllegalAccessException {
         if (this.isRunning())
             throw new IllegalStateException("simulation is running");
         if (m_barrier.getParties() < 1)
@@ -128,7 +117,6 @@ public class CSimulation {
         for (ILayer l_layer : m_world.getQueue())
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
                 m_Logger.warn("layer [" + l_layer + "] is empty");
-
 
         CBootstrap.BeforeSimulationStarts(this);
         m_Logger.info("simulation is started");
@@ -142,25 +130,12 @@ public class CSimulation {
      * stops the current simulation *
      * @see http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html
      */
-    public synchronized void stop() throws IllegalStateException {
+    public synchronized void stop() {
         if (!this.isRunning())
             throw new IllegalStateException("simulation is not running");
 
-        m_pool.shutdown();
-        try {
+        this.shutdown();
 
-            if (!m_pool.awaitTermination(5, TimeUnit.SECONDS))
-                m_pool.shutdownNow();
-            if (!m_pool.awaitTermination(20, TimeUnit.SECONDS))
-                m_Logger.error("thread pool cannot be terminated");
-
-        } catch (InterruptedException l_exception) {
-            m_pool.shutdownNow();
-            m_Logger.error(l_exception.getMessage());
-            Thread.currentThread().interrupt();
-        }
-
-        m_pool = null;
         m_Logger.info("simulation is stopped");
         CBootstrap.AfterSimulationStops(this);
     }
@@ -171,16 +146,8 @@ public class CSimulation {
      *
      * @bug reset
      */
-    public void reset() {
-        if (this.isRunning()) {
-            m_pool.shutdown();
-            try {
-                m_pool.awaitTermination(2, TimeUnit.SECONDS);
-                m_pool = null;
-            } catch (InterruptedException l_exception) {
-                m_Logger.error(l_exception.getMessage());
-            }
-        }
+    public synchronized void reset() {
+        this.shutdown();
 
         m_currentstep.set(0);
         for (ILayer l_layer : m_world.getQueue())
@@ -188,6 +155,31 @@ public class CSimulation {
         m_Logger.info("simulation reset");
 
         CBootstrap.onSimulationReset(this);
+    }
+
+
+    /**
+     * thread pool shutdown *
+     */
+    private synchronized void shutdown() {
+        if (!this.isRunning())
+            return;
+
+        m_pool.shutdown();
+        try {
+
+            if (!m_pool.awaitTermination(5, TimeUnit.SECONDS)) {
+                m_pool.shutdownNow();
+                if (!m_pool.awaitTermination(20, TimeUnit.SECONDS))
+                    m_Logger.error("thread pool cannot be terminated");
+            }
+
+        } catch (InterruptedException l_exception) {
+            m_pool.shutdownNow();
+            m_Logger.error(l_exception.getMessage());
+        }
+
+        m_pool = null;
     }
 
 }

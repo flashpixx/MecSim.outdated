@@ -91,7 +91,7 @@ public class CWorker implements Runnable {
 
         while (!m_interrupted) {
 
-            this.processLayer();
+            //this.processLayer();
             this.processMultiLayerObject();
             if (m_isFirst)
                 m_currentstep.getAndIncrement();
@@ -127,7 +127,7 @@ public class CWorker implements Runnable {
      */
     private void processMultiLayerObject() {
 
-        // all threads get the layer (so we does not remove it on getter)
+        // all threads get the layer (so we does not remove)
         for (ILayer l_layer = this.resetQueueBarrier(m_world.getQueue()); ((l_layer = m_world.getQueue().peek()) != null); this.barrier()) {
 
             // only the first remove the layer (and push it back to the queue)

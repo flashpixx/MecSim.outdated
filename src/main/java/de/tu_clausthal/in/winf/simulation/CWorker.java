@@ -91,7 +91,7 @@ public class CWorker implements Runnable {
 
         while (!m_interrupted) {
 
-            //this.processLayer();
+            this.processLayer();
             this.processMultiLayerObject();
             if (m_isFirst)
                 m_currentstep.getAndIncrement();
@@ -203,12 +203,13 @@ public class CWorker implements Runnable {
      * resets a queue with a barrier structure
      *
      * @return null for loop initialization
+     * @warn two barriers and the check of the first thread are needed to avoid blocking problems
      */
     private ILayer resetQueueBarrier(IQueue p_queue) {
-        boolean l_break = this.barrier();
-        p_queue.reset();
-        if (l_break)
-            Thread.currentThread().interrupt();
+        this.barrier();
+        if (m_isFirst)
+            p_queue.reset();
+        this.barrier();
 
         return null;
     }

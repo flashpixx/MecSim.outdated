@@ -134,12 +134,13 @@ public class CSimulation {
         m_Logger.info("simulation is started");
         m_pool = Executors.newCachedThreadPool();
         for (int i = 0; i < m_barrier.getParties(); i++)
-            m_pool.submit(new CWorker(m_barrier, i == 0, m_world, m_currentstep));
+            m_pool.execute(new CWorker(m_barrier, i == 0, m_world, m_currentstep));
     }
 
 
     /**
      * stops the current simulation *
+     * @see http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html
      */
     public synchronized void stop() throws IllegalStateException {
         if (!this.isRunning())
@@ -147,12 +148,19 @@ public class CSimulation {
 
         m_pool.shutdown();
         try {
-            m_pool.awaitTermination(5, TimeUnit.SECONDS);
-            m_pool = null;
+
+            if (!m_pool.awaitTermination(5, TimeUnit.SECONDS))
+                m_pool.shutdownNow();
+            if (!m_pool.awaitTermination(20, TimeUnit.SECONDS))
+                m_Logger.error("thread pool cannot be terminated");
+
         } catch (InterruptedException l_exception) {
+            m_pool.shutdownNow();
             m_Logger.error(l_exception.getMessage());
+            Thread.currentThread().interrupt();
         }
 
+        m_pool = null;
         m_Logger.info("simulation is stopped");
         CBootstrap.AfterSimulationStops(this);
     }

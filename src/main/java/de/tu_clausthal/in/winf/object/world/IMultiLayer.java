@@ -96,9 +96,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
     @Override
     public synchronized T remove() {
-        if (!m_active)
-            return null;
-
         T l_item = m_unprocess.remove();
         COSMViewer.getInstance().repaint();
 
@@ -107,9 +104,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
     @Override
     public T element() {
-        if (!m_active)
-            return null;
-
         return m_unprocess.element();
     }
 
@@ -120,17 +114,11 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
     @Override
     public T poll() {
-        if (!m_active)
-            return null;
-
         return m_unprocess.poll();
     }
 
     @Override
     public T peek() {
-        if (!m_active)
-            return null;
-
         return m_unprocess.peek();
     }
 

@@ -191,11 +191,11 @@ public class CWorker implements Runnable {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
             m_Logger.info("thread [" + Thread.currentThread().getId() + "] is interrupted");
+            Thread.currentThread().interrupt();
             m_interrupted = true;
-            return true;
         }
 
-        return false;
+        return m_interrupted;
     }
 
 

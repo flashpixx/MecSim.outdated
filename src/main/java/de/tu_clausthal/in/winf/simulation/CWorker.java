@@ -63,10 +63,6 @@ public class CWorker extends Thread {
      * reference of the world
      */
     private CWorld m_world = null;
-    /**
-     * interrupt flag *
-     */
-    private boolean m_interrupted = false;
 
     private CountDownLatch m_counter = null;
 
@@ -96,7 +92,7 @@ public class CWorker extends Thread {
     public void run() {
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] starts working");
 
-        while (!m_interrupted) {
+        while (!Thread.currentThread().isInterrupted()) {
 
             //this.processLayer();
             this.processMultiLayerObject();
@@ -106,7 +102,7 @@ public class CWorker extends Thread {
             try {
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
             } catch (InterruptedException l_exception) {
-                m_interrupted = true;
+                Thread.currentThread().interrupt();
             }
 
         }
@@ -201,10 +197,11 @@ public class CWorker extends Thread {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
             m_Logger.info("thread [" + Thread.currentThread().getId() + "] is interrupted");
-            m_interrupted = true;
+            Thread.currentThread().interrupt();
+            return true;
         }
 
-        return m_interrupted;
+        return false;
     }
 
 

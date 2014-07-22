@@ -29,8 +29,8 @@ import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -50,7 +50,7 @@ public class CSimulation {
     /**
      * thread pool *
      */
-    ExecutorService m_pool = null;
+    //ExecutorService m_pool = null;
     ThreadGroup m_runners = new ThreadGroup("Simulation");
     /**
      * current step of the simulation *
@@ -60,6 +60,10 @@ public class CSimulation {
      * barrier object to synchronize the threads *
      */
     private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
+    /**
+     * latch to detect that all threads are stopped
+     */
+    private CountDownLatch m_threadcounter = null;
     /**
      * world of the simulation
      */
@@ -103,9 +107,6 @@ public class CSimulation {
 
     /**
      * runs the simulation of the current step
-     *
-     * @throws IllegalAccessException
-     * @note thread pool is generated (pause structures can be created with a reentrant lock @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html )
      */
     public synchronized void start() {
         if (this.isRunning())
@@ -117,32 +118,25 @@ public class CSimulation {
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
                 m_Logger.warn("layer [" + l_layer + "] is empty");
 
-        CBootstrap.BeforeSimulationStarts(this);
         m_Logger.info("simulation is started");
-
+        CBootstrap.BeforeSimulationStarts(this);
+        m_threadcounter = new CountDownLatch(m_barrier.getParties());
         for (int i = 0; i < m_barrier.getParties(); i++)
-            new CWorker(m_runners, m_barrier, i == 0, m_world, m_currentstep)
+            new CWorker(m_runners, m_threadcounter, m_barrier, i == 0, m_world, m_currentstep).start();
 
-        /*
-        m_pool = Executors.newFixedThreadPool(m_barrier.getParties());
-        for (int i = 0; i < m_barrier.getParties(); i++)
-            m_pool.submit(new CWorker(m_barrier, i == 0, m_world, m_currentstep));
-        */
     }
 
 
     /**
      * stops the current simulation *
-     * @see http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html
      */
     public synchronized void stop() {
         if (!this.isRunning())
             throw new IllegalStateException("simulation is not running");
 
         this.shutdown();
-
-        m_Logger.info("simulation is stopped");
         CBootstrap.AfterSimulationStops(this);
+        m_Logger.info("simulation is stopped");
     }
 
 
@@ -156,9 +150,8 @@ public class CSimulation {
         for (ILayer l_layer : m_world.getQueue())
             l_layer.resetData();
         m_world.getQueue().reset();
-        m_Logger.info("simulation reset");
-
         CBootstrap.onSimulationReset(this);
+        m_Logger.info("simulation reset");
     }
 
 
@@ -169,39 +162,15 @@ public class CSimulation {
         if (!this.isRunning())
             return;
 
-        Thread[] l_threads = new Thread[m_runners.activeCount()];
-        m_runners.enumerate(l_threads);
-        for (Thread l_thread : l_threads)
-            l_thread.interrupt();
-
         try {
-            synchronized (m_runners) {
-                while (m_runners.activeCount() > 0)
-                    m_runners.wait(10);
-            }
+
+            m_runners.interrupt();
+            m_threadcounter.await();
+
         } catch (InterruptedException l_exception) {
             m_Logger.error(l_exception.getMessage());
-            for (Thread l_thread : l_threads)
-                l_thread.st
         }
 
-        /*
-        m_pool.shutdown();
-        try {
-
-            if (!m_pool.awaitTermination(2, TimeUnit.SECONDS)) {
-                m_pool.shutdownNow();
-                if (!m_pool.awaitTermination(3, TimeUnit.SECONDS))
-                    m_Logger.error("thread pool cannot be terminated");
-            }
-
-        } catch (InterruptedException l_exception) {
-            m_pool.shutdownNow();
-
-        }
-
-        m_pool = null;
-        */
     }
 
 }

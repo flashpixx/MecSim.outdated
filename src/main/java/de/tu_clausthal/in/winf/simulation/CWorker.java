@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -67,17 +68,22 @@ public class CWorker extends Thread {
      */
     private boolean m_interrupted = false;
 
+    private CountDownLatch m_counter = null;
+
 
     /**
      * ctor to create a working process
      *
+     * @param p_group       thread group object
+     * @param p_counter     latch to detect stopping thread
      * @param p_barrier     synchronized barrier
      * @param p_isFirst     rank ID of the process
      * @param p_world       world object
      * @param p_currentstep current step object
      */
-    public CWorker(ThreadGroup p_group, CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
+    public CWorker(ThreadGroup p_group, CountDownLatch p_counter, CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
         super(p_group, String.valueOf(Thread.currentThread().getId()));
+        m_counter = p_counter;
         m_barrier = p_barrier;
         m_isFirst = p_isFirst;
         m_world = p_world;
@@ -104,7 +110,7 @@ public class CWorker extends Thread {
             }
 
         }
-
+        m_counter.countDown();
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] stops working");
     }
 

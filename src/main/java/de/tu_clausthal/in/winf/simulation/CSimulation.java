@@ -31,8 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -53,6 +51,7 @@ public class CSimulation {
      * thread pool *
      */
     ExecutorService m_pool = null;
+    ThreadGroup m_runners = new ThreadGroup("Simulation");
     /**
      * current step of the simulation *
      */
@@ -90,7 +89,7 @@ public class CSimulation {
      * @return state
      */
     public synchronized boolean isRunning() {
-        return m_pool != null;
+        return m_runners.activeCount() > 0;
     }
 
 
@@ -108,11 +107,11 @@ public class CSimulation {
      * @throws IllegalAccessException
      * @note thread pool is generated (pause structures can be created with a reentrant lock @see http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html )
      */
-    public synchronized void start() throws IllegalAccessException {
+    public synchronized void start() {
         if (this.isRunning())
             throw new IllegalStateException("simulation is running");
         if (m_barrier.getParties() < 1)
-            throw new IllegalAccessException("one thread must be exists to start simulation");
+            throw new IllegalStateException("one thread must be exists to start simulation");
 
         for (ILayer l_layer : m_world.getQueue())
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
@@ -120,9 +119,15 @@ public class CSimulation {
 
         CBootstrap.BeforeSimulationStarts(this);
         m_Logger.info("simulation is started");
-        m_pool = Executors.newCachedThreadPool();
+
         for (int i = 0; i < m_barrier.getParties(); i++)
-            m_pool.execute(new CWorker(m_barrier, i == 0, m_world, m_currentstep));
+            new CWorker(m_runners, m_barrier, i == 0, m_world, m_currentstep)
+
+        /*
+        m_pool = Executors.newFixedThreadPool(m_barrier.getParties());
+        for (int i = 0; i < m_barrier.getParties(); i++)
+            m_pool.submit(new CWorker(m_barrier, i == 0, m_world, m_currentstep));
+        */
     }
 
 
@@ -143,8 +148,6 @@ public class CSimulation {
 
     /**
      * resets the simulation data *
-     *
-     * @bug reset
      */
     public synchronized void reset() {
         this.shutdown();
@@ -152,6 +155,7 @@ public class CSimulation {
         m_currentstep.set(0);
         for (ILayer l_layer : m_world.getQueue())
             l_layer.resetData();
+        m_world.getQueue().reset();
         m_Logger.info("simulation reset");
 
         CBootstrap.onSimulationReset(this);
@@ -165,21 +169,39 @@ public class CSimulation {
         if (!this.isRunning())
             return;
 
+        Thread[] l_threads = new Thread[m_runners.activeCount()];
+        m_runners.enumerate(l_threads);
+        for (Thread l_thread : l_threads)
+            l_thread.interrupt();
+
+        try {
+            synchronized (m_runners) {
+                while (m_runners.activeCount() > 0)
+                    m_runners.wait(10);
+            }
+        } catch (InterruptedException l_exception) {
+            m_Logger.error(l_exception.getMessage());
+            for (Thread l_thread : l_threads)
+                l_thread.st
+        }
+
+        /*
         m_pool.shutdown();
         try {
 
-            if (!m_pool.awaitTermination(5, TimeUnit.SECONDS)) {
+            if (!m_pool.awaitTermination(2, TimeUnit.SECONDS)) {
                 m_pool.shutdownNow();
-                if (!m_pool.awaitTermination(20, TimeUnit.SECONDS))
+                if (!m_pool.awaitTermination(3, TimeUnit.SECONDS))
                     m_Logger.error("thread pool cannot be terminated");
             }
 
         } catch (InterruptedException l_exception) {
             m_pool.shutdownNow();
-            m_Logger.error(l_exception.getMessage());
+
         }
 
         m_pool = null;
+        */
     }
 
 }

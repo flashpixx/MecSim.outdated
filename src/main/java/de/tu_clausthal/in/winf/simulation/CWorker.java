@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @note Exceptions of an processing object are catched to create a correct termination
  * @see http://www.ibm.com/developerworks/java/library/j-jtp05236/index.html
  */
-public class CWorker implements Runnable {
+public class CWorker extends Thread {
 
     /**
      * logger instance *
@@ -76,7 +76,8 @@ public class CWorker implements Runnable {
      * @param p_world       world object
      * @param p_currentstep current step object
      */
-    public CWorker(CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
+    public CWorker(ThreadGroup p_group, CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
+        super(p_group, String.valueOf(Thread.currentThread().getId()));
         m_barrier = p_barrier;
         m_isFirst = p_isFirst;
         m_world = p_world;
@@ -89,7 +90,7 @@ public class CWorker implements Runnable {
     public void run() {
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] starts working");
 
-        while (!m_interrupted) {
+        while ((!m_interrupted) && (!Thread.currentThread().isInterrupted())) {
 
             //this.processLayer();
             this.processMultiLayerObject();
@@ -99,7 +100,9 @@ public class CWorker implements Runnable {
             try {
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
             } catch (InterruptedException l_exception) {
-                m_interrupted = true; }
+                m_interrupted = true;
+            }
+
         }
 
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] stops working");
@@ -191,7 +194,6 @@ public class CWorker implements Runnable {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
             m_Logger.info("thread [" + Thread.currentThread().getId() + "] is interrupted");
-            Thread.currentThread().interrupt();
             m_interrupted = true;
         }
 

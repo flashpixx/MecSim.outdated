@@ -96,7 +96,7 @@ public class CWorker extends Thread {
     public void run() {
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] starts working");
 
-        while ((!m_interrupted) && (!Thread.currentThread().isInterrupted())) {
+        while (!m_interrupted) {
 
             //this.processLayer();
             this.processMultiLayerObject();
@@ -110,6 +110,7 @@ public class CWorker extends Thread {
             }
 
         }
+
         m_counter.countDown();
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] stops working");
     }

@@ -118,7 +118,7 @@ public class CDefaultCar extends IInspector implements ICar {
         // route between start and end position, so if an exception is cached, we create a new end position
         while (true) {
             try {
-                m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5);
+                m_EndPosition = new GeoPosition(m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1);
                 List<List<EdgeIteratorState>> l_route = m_graph.getRoutes(m_StartPosition, m_EndPosition, 1);
                 if ((l_route != null) && (l_route.size() > 0)) {
                     m_routeedges = l_route.get(0);

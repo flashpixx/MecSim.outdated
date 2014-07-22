@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @note Exceptions of an processing object are catched to create a correct termination
  * @see http://www.ibm.com/developerworks/java/library/j-jtp05236/index.html
  */
-public class CWorker extends Thread {
+public class CWorker implements Runnable {
 
     /**
      * logger instance *
@@ -63,22 +63,26 @@ public class CWorker extends Thread {
      * reference of the world
      */
     private CWorld m_world = null;
-
+    /**
+     * latch for counting *
+     */
     private CountDownLatch m_counter = null;
+    /**
+     * interrupt flag *
+     */
+    private boolean m_interrupt = false;
 
 
     /**
      * ctor to create a working process
      *
-     * @param p_group       thread group object
      * @param p_counter     latch to detect stopping thread
      * @param p_barrier     synchronized barrier
      * @param p_isFirst     rank ID of the process
      * @param p_world       world object
      * @param p_currentstep current step object
      */
-    public CWorker(ThreadGroup p_group, CountDownLatch p_counter, CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
-        super(p_group, String.valueOf(Thread.currentThread().getId()));
+    public CWorker(CountDownLatch p_counter, CyclicBarrier p_barrier, boolean p_isFirst, CWorld p_world, AtomicInteger p_currentstep) {
         m_counter = p_counter;
         m_barrier = p_barrier;
         m_isFirst = p_isFirst;
@@ -92,7 +96,7 @@ public class CWorker extends Thread {
     public void run() {
         m_Logger.info("thread [" + Thread.currentThread().getId() + "] starts working");
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!m_interrupt) {
 
             //this.processLayer();
             this.processMultiLayerObject();
@@ -102,7 +106,7 @@ public class CWorker extends Thread {
             try {
                 Thread.sleep(CConfiguration.getInstance().get().ThreadSleepTime);
             } catch (InterruptedException l_exception) {
-                Thread.currentThread().interrupt();
+                break;
             }
 
         }
@@ -197,11 +201,10 @@ public class CWorker extends Thread {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
             m_Logger.info("thread [" + Thread.currentThread().getId() + "] is interrupted");
-            Thread.currentThread().interrupt();
-            return true;
+            m_interrupt = true;
         }
 
-        return false;
+        return m_interrupt;
     }
 
 

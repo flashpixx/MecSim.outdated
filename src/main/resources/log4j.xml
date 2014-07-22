@@ -21,7 +21,7 @@
 
     <root>
         <!-- Priority: (all|debug|info|warn|error|fatal|off|null) -->
-        <priority value="all"/>
+        <priority value="off"/>
         <appender-ref ref="console"/>
         <!-- <appender-ref ref="file" /> -->
     </root>

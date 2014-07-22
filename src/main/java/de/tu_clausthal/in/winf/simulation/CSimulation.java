@@ -50,7 +50,6 @@ public class CSimulation {
     /**
      * thread pool *
      */
-    //ExecutorService m_pool = null;
     ThreadGroup m_runners = new ThreadGroup("Simulation");
     /**
      * current step of the simulation *
@@ -122,7 +121,7 @@ public class CSimulation {
         CBootstrap.BeforeSimulationStarts(this);
         m_threadcounter = new CountDownLatch(m_barrier.getParties());
         for (int i = 0; i < m_barrier.getParties(); i++)
-            new CWorker(m_runners, m_threadcounter, m_barrier, i == 0, m_world, m_currentstep).start();
+            new Thread(m_runners, new CWorker(m_threadcounter, m_barrier, i == 0, m_world, m_currentstep)).start();
 
     }
 
@@ -162,9 +161,9 @@ public class CSimulation {
         if (!this.isRunning())
             return;
 
+        m_runners.interrupt();
         try {
 
-            m_runners.interrupt();
             m_threadcounter.await();
 
         } catch (InterruptedException l_exception) {

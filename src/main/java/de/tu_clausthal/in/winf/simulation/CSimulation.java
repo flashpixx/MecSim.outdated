@@ -29,8 +29,6 @@ import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -42,31 +40,23 @@ public class CSimulation {
     /**
      * singleton instance *
      */
-    private static volatile CSimulation s_instance = new CSimulation();
+    private static CSimulation s_instance = new CSimulation();
     /**
      * logger instance *
      */
     private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
-     * thread pool *
-     */
-    ThreadGroup m_runners = new ThreadGroup("Simulation");
-    /**
-     * current step of the simulation *
-     */
-    private AtomicInteger m_currentstep = new AtomicInteger(0);
-    /**
-     * barrier object to synchronize the threads *
-     */
-    private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
-    /**
-     * latch to detect that all threads are stopped
-     */
-    private CountDownLatch m_threadcounter = null;
-    /**
      * world of the simulation
      */
     private CWorld m_world = new CWorld();
+    /**
+     * pool of worker threads *
+     */
+    private CWorkerPool m_worker = null;
+    /**
+     * integer of simulation step *
+     */
+    private AtomicInteger m_simulationcount = new AtomicInteger();
 
 
     /**
@@ -91,8 +81,8 @@ public class CSimulation {
      *
      * @return state
      */
-    public synchronized boolean isRunning() {
-        return m_runners.activeCount() > 0;
+    public boolean isRunning() {
+        return (m_worker != null) && (m_worker.isRunning());
     }
 
 
@@ -107,11 +97,9 @@ public class CSimulation {
     /**
      * runs the simulation of the current step
      */
-    public synchronized void start() {
+    public void start() {
         if (this.isRunning())
             throw new IllegalStateException("simulation is running");
-        if (m_barrier.getParties() < 1)
-            throw new IllegalStateException("one thread must be exists to start simulation");
 
         for (ILayer l_layer : m_world.getQueue())
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
@@ -119,17 +107,15 @@ public class CSimulation {
 
         m_Logger.info("simulation is started");
         CBootstrap.BeforeSimulationStarts(this);
-        m_threadcounter = new CountDownLatch(m_barrier.getParties());
-        for (int i = 0; i < m_barrier.getParties(); i++)
-            new Thread(m_runners, new CWorker(m_threadcounter, m_barrier, i == 0, m_world, m_currentstep)).start();
 
+        m_worker = new CWorkerPool(CConfiguration.getInstance().get().MaxThreadNumber, m_simulationcount);
     }
 
 
     /**
      * stops the current simulation *
      */
-    public synchronized void stop() {
+    public void stop() {
         if (!this.isRunning())
             throw new IllegalStateException("simulation is not running");
 
@@ -142,10 +128,10 @@ public class CSimulation {
     /**
      * resets the simulation data *
      */
-    public synchronized void reset() {
+    public void reset() {
         this.shutdown();
 
-        m_currentstep.set(0);
+        m_simulationcount.set(0);
         for (ILayer l_layer : m_world.getQueue())
             l_layer.resetData();
         m_world.getQueue().reset();
@@ -157,19 +143,17 @@ public class CSimulation {
     /**
      * thread pool shutdown *
      */
-    private synchronized void shutdown() {
+    private void shutdown() {
         if (!this.isRunning())
             return;
 
-        m_runners.interrupt();
         try {
-
-            m_threadcounter.await();
-
+            m_worker.stop();
         } catch (InterruptedException l_exception) {
             m_Logger.error(l_exception.getMessage());
         }
 
+        m_worker = null;
     }
 
 }

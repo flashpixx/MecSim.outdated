@@ -51,7 +51,7 @@ public class CBootstrap {
      */
     public static void AfterFrameInit(CFrame p_frame) {
 
-        CSimulation.getInstance().getWorld().getMap().put("CarCount", new CCarCount(p_frame));
+        CSimulation.getInstance().getWorld().getQueue().add(new CCarCount(p_frame));
 
     }
 
@@ -76,7 +76,7 @@ public class CBootstrap {
      */
     public static void AfterSimulationInit(CSimulation p_simulation) {
 
-        // add different layer
+        // add simulation layer
         p_simulation.getWorld().getMap().put("Source", new CSourceFactoryLayer());
         p_simulation.getWorld().getMap().put("Car", new CCarLayer());
 
@@ -119,7 +119,7 @@ public class CBootstrap {
      * @param p_simulation simulation object
      */
     public static void onSimulationReset(CSimulation p_simulation) {
-        //CGraphHopper.getInstance().clear();
+
         COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
         COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
         COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);

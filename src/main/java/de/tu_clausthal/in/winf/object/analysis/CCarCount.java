@@ -61,9 +61,7 @@ public class CCarCount extends ISingleLayer {
 
     @Override
     public void resetData() {
-
         m_plotdata.clear();
-
     }
 
 }

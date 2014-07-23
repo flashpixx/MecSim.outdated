@@ -37,9 +37,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * worker class for the simulation *
- *
- * @note Exceptions of an processing object are catched to create a correct termination
- * @see http://www.ibm.com/developerworks/java/library/j-jtp05236/index.html
  */
 public class CWorker implements Runnable {
 
@@ -96,7 +93,7 @@ public class CWorker implements Runnable {
 
         while (!m_interrupt) {
 
-            //this.processLayer();
+            this.processLayer();
             this.processMultiLayerObject();
             if (m_isFirst)
                 m_currentstep.getAndIncrement();
@@ -121,7 +118,8 @@ public class CWorker implements Runnable {
 
         for (ILayer l_layer = this.resetQueueBarrier(m_world.getQueue()); (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().offer(l_layer)) {
 
-            if (!l_layer.isActive())
+            // check against null, because "offer" create an exception on null value
+            if ((l_layer == null) || (!l_layer.isActive()))
                 continue;
             this.processObject(l_layer, null);
 

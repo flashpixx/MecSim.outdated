@@ -107,7 +107,6 @@ public class CSimulation {
 
         m_Logger.info("simulation is started");
         CBootstrap.BeforeSimulationStarts(this);
-
         m_worker = new CWorkerPool(CConfiguration.getInstance().get().MaxThreadNumber, m_simulationcount);
     }
 
@@ -134,7 +133,6 @@ public class CSimulation {
         m_simulationcount.set(0);
         for (ILayer l_layer : m_world.getQueue())
             l_layer.resetData();
-        m_world.getQueue().reset();
         CBootstrap.onSimulationReset(this);
         m_Logger.info("simulation reset");
     }

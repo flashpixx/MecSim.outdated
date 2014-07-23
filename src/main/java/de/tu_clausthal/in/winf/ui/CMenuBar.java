@@ -25,6 +25,8 @@ import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
+import de.tu_clausthal.in.winf.object.source.CSourceFactoryLayer;
+import de.tu_clausthal.in.winf.object.source.ISourceFactory;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 
@@ -36,7 +38,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -71,6 +75,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     public CMenuBar() {
         super();
 
+        String[] l_file = {"Load Sources", "Save Sources", null, "OSM Screenshot"};
+        this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
+
+
         String[] l_actions = {"Start", "Stop", null, "Reset", null};
         JMenu l_simulation = CMenuFactory.createMenu("Simulation", l_actions, this, m_reference);
 
@@ -102,8 +110,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
 /*
-        String[] l_file = {"Load Sources", "Save Sources", null, "Screenshot"};
-        this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
 
         String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
         this.add(CMenuFactory.createRadioMenuGroup("Graph Weights", l_weights, this, m_reference));
@@ -144,6 +150,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     public void actionPerformed(ActionEvent e) {
         try {
 
+            if (e.getSource() == m_reference.get("File::OSM Screenshot"))
+                this.screenshot();
+            if (e.getSource() == m_reference.get("File::Load Sources"))
+                this.loadSources();
+            if (e.getSource() == m_reference.get("File::Save Sources"))
+                this.saveSources();
+
 
             if (e.getSource() == m_reference.get("Simulation::Start"))
                 CSimulation.getInstance().start();
@@ -158,7 +171,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Source");
                 l_layer.setActive(!l_layer.isActive());
             }
-
             if (e.getSource() == m_reference.get("Activity::Car")) {
                 this.throwSimulationRunningException();
                 ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Car");
@@ -170,7 +182,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
                 l_layer.setVisible(!l_layer.isVisible());
             }
-
             if (e.getSource() == m_reference.get("Visibility::Car")) {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Car");
                 l_layer.setVisible(!l_layer.isVisible());
@@ -398,20 +409,19 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @throws java.io.IOException
      */
     private void saveSources() throws IOException {
-        /*
         if (m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
             return;
 
-        Set<CSerializableGeoPosition> l_positions = new HashSet();
-        for (ICarSourceFactory l_item : CSimulationData.getInstance().getSourceQueue().getAll())
-            l_positions.add(new CSerializableGeoPosition(l_item.getPosition()));
+        CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
+        ISourceFactory[] l_sources = new ISourceFactory[l_layer.size()];
+        l_layer.toArray(l_sources);
 
         FileOutputStream l_stream = new FileOutputStream(this.addFileExtension(m_filedialog.getSelectedFile(), ".src"));
         ObjectOutputStream l_output = new ObjectOutputStream(l_stream);
-        l_output.writeObject(l_positions);
+        l_output.writeObject(l_sources);
         l_output.close();
         l_stream.close();
-        */
+
     }
 
 

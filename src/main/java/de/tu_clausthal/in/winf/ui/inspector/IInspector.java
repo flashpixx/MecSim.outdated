@@ -75,9 +75,11 @@ public abstract class IInspector extends JComponent implements MouseListener {
     }
 
 
+    //http://books.google.de/books?id=YPjZNlEgAMcC&pg=PA23&lpg=PA23&dq=swing+event+dispatch+mousePressed&source=bl&ots=GP3xg_gVgg&sig=b6uxQj_utHJ0s-YnSQqNxZoKfvc&hl=de&sa=X&ei=-4X8U_DRHYKJ4gSLioDYDA&redir_esc=y#v=onepage&q=swing%20event%20dispatch%20mousePressed&f=false
+
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1)
+        if (SwingUtilities.isLeftMouseButton(e))
             this.onClick(e, COSMViewer.getInstance());
     }
 

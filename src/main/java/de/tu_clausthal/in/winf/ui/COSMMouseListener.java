@@ -59,7 +59,7 @@ class COSMMouseListener extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if ((e.getButton() != MouseEvent.BUTTON1) && (!m_drag))
+        if ((SwingUtilities.isLeftMouseButton(e)) && (!m_drag))
             return;
 
         // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
@@ -105,7 +105,7 @@ class COSMMouseListener extends MouseAdapter {
 
         try {
             // left double-click
-            if ((e.getButton() == MouseEvent.BUTTON1) && (e.getClickCount() == 2)) {
+            if ((SwingUtilities.isLeftMouseButton(e)) && (e.getClickCount() == 2)) {
                 if (CSimulation.getInstance().isRunning())
                     throw new IllegalStateException("simulation is running");
 
@@ -134,7 +134,7 @@ class COSMMouseListener extends MouseAdapter {
             }
 
             // right-click
-            if ((e.getButton() == MouseEvent.BUTTON3) && (e.getClickCount() == 1)) {
+            if ((SwingUtilities.isRightMouseButton(e)) && (e.getClickCount() == 1)) {
                 m_popup.update();
                 m_popup.show(e.getComponent(), e.getX(), e.getY());
             }

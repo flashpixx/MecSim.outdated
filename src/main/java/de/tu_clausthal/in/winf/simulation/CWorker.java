@@ -115,7 +115,6 @@ public class CWorker implements Runnable {
      * run process of each layer *
      */
     private void processLayer() {
-
         for (ILayer l_layer = this.resetQueueBarrier(m_world.getQueue()); (l_layer = m_world.getQueue().poll()) != null; m_world.getQueue().offer(l_layer)) {
 
             // check against null, because "offer" create an exception on null value
@@ -132,13 +131,12 @@ public class CWorker implements Runnable {
      * run process on each object on the multilayer *
      */
     private void processMultiLayerObject() {
-
         // all threads get the layer (so we does not remove)
         for (ILayer l_layer = this.resetQueueBarrier(m_world.getQueue()); ((l_layer = m_world.getQueue().peek()) != null); this.barrier()) {
 
             // only the first remove the layer (and push it back to the queue)
             if (m_isFirst)
-                m_world.getQueue().add(m_world.getQueue().poll());
+                m_world.getQueue().offer(m_world.getQueue().poll());
             if ((!l_layer.isActive()) || (!(l_layer instanceof IMultiLayer)))
                 continue;
 
@@ -158,7 +156,6 @@ public class CWorker implements Runnable {
      * @param p_layer  layer of the object or null
      */
     private void processObject(IStepable p_object, ILayer p_layer) {
-
         try {
 
             if ((p_layer != null) && (p_layer instanceof IMultiLayer))
@@ -212,8 +209,7 @@ public class CWorker implements Runnable {
      */
     private ILayer resetQueueBarrier(IQueue p_queue) {
         this.barrier();
-        if (m_isFirst)
-            p_queue.reset();
+        p_queue.reset( m_isFirst );
         this.barrier();
 
         return null;

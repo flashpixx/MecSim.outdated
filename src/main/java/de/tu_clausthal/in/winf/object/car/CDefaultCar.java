@@ -25,6 +25,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.winf.object.car.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
@@ -223,7 +224,6 @@ public class CDefaultCar extends IInspector implements ICar {
     public Map<String, Object> inspect() {
         Map<String, Object> l_map = super.inspect();
 
-
         l_map.put("current speed", m_speed);
         l_map.put("maximum speed", m_maxSpeed);
         l_map.put("acceleration", m_acceleration);
@@ -304,7 +304,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
             // avoid infinity loop for update
             if (i > 15) {
-                m_routeindex = m_routeedges.size();
+                m_routeindex = m_routeedges.size()-1;
                 return;
             }
 

@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
+import de.tu_clausthal.in.winf.object.car.CDefaultCar;
 import de.tu_clausthal.in.winf.object.car.CNormCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.world.ILayer;
@@ -59,12 +60,11 @@ public class CNormSourceFactory extends CDefaultSourceFactory {
     @Override
     public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
         Collection<ICar> l_sources = new HashSet();
+        if (m_random.sample() >= s_mean)
+            return l_sources;
 
-        // use random number on care creation, to avoid traffic jam on the source
-        for (int i = 0; i < super.m_NumberCarsInStep; i++)
-            if (super.m_random.nextDouble() > 0.15)
-                l_sources.add(new CNormCar(super.m_position));
-
+        for (int i = 0; i < m_NumberCarsInStep; i++)
+            l_sources.add(new CNormCar(super.m_position));
         return l_sources;
     }
 

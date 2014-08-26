@@ -28,6 +28,7 @@ import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.slf4j.Logger;
@@ -44,8 +45,13 @@ import java.util.Random;
 
 /**
  * default source for generating cars with a visualization on the map *
+ * use a exponential distribution (http://en.wikipedia.org/wiki/Exponential_distribution)
+ * to generate cars for avoiding traffic jam at the source
  */
 public class CDefaultSourceFactory implements ISourceFactory {
+
+    /** mean value of the distribution **/
+    protected static double s_mean = 1.5;
 
     /**
      * logger instance *
@@ -62,7 +68,7 @@ public class CDefaultSourceFactory implements ISourceFactory {
     /**
      * random interface *
      */
-    protected Random m_random = new Random();
+    protected ExponentialDistribution m_random = new ExponentialDistribution(s_mean);
     /**
      * image of the waypoint *
      */
@@ -134,12 +140,11 @@ public class CDefaultSourceFactory implements ISourceFactory {
     @Override
     public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
         Collection<ICar> l_sources = new HashSet();
+        if (m_random.sample() >= s_mean)
+            return l_sources;
 
-        // use random number on care creation, to avoid traffic jam on the source
         for (int i = 0; i < m_NumberCarsInStep; i++)
-            if (m_random.nextDouble() > 0.15)
                 l_sources.add(new CDefaultCar(m_position));
-
         return l_sources;
     }
 

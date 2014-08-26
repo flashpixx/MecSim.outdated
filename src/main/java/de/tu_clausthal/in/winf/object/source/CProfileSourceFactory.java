@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
-import de.tu_clausthal.in.winf.object.car.CNormCar;
+import de.tu_clausthal.in.winf.object.car.CDefaultCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -30,41 +30,64 @@ import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
 
-
 /**
- * source for norm cars
+ * source which generates cars with a profile
  */
-public class CNormSourceFactory extends CDefaultSourceFactory {
+public class CProfileSourceFactory extends IDefaultSourceFactory {
 
     /**
-     * ctor set the position
-     *
-     * @param p_position geo position
+     * waypoint color *
      */
-    public CNormSourceFactory(GeoPosition p_position) {
-        super(p_position);
+    protected Color m_color = Color.GREEN;
+    /**
+     * profile with car values *
+     */
+    protected int[] m_profile = null;
+
+
+    /**
+     * ctor to create a new profile source
+     *
+     * @param p_position geoposition
+     * @param p_profile  profile definition
+     */
+    public CProfileSourceFactory(GeoPosition p_position, int[] p_profile) {
+        super(p_position, Color.GREEN);
+        this.checkSetProfile(p_profile);
     }
 
 
     /**
-     * ctor set positition and generate number
+     * sets a new profile
      *
-     * @param p_position position
-     * @param p_number   number of cars
+     * @param p_profile profile definition
      */
-    public CNormSourceFactory(GeoPosition p_position, int p_number) {
-        super(p_position, p_number, Color.YELLOW);
+    public void setProfile(int[] p_profile) {
+        this.checkSetProfile(p_profile);
     }
 
+
+    /**
+     * check the profile definition
+     *
+     * @param p_profile profile
+     */
+    private void checkSetProfile(int[] p_profile) {
+        if (p_profile == null)
+            throw new IllegalArgumentException("profile need not to be null");
+
+        for (int i = 0; i < p_profile.length; i++)
+            if (p_profile[i] < 0)
+                throw new IllegalArgumentException("profile index [" + i + "] is less than zero");
+
+        m_profile = p_profile;
+    }
 
     @Override
     public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
         Collection<ICar> l_sources = new HashSet();
-        if (m_random.sample() >= s_mean)
-            return l_sources;
-
-        for (int i = 0; i < m_NumberCarsInStep; i++)
-            l_sources.add(new CNormCar(super.m_position));
+        for (int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++)
+            l_sources.add(new CDefaultCar(m_position));
         return l_sources;
     }
 

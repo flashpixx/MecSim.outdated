@@ -82,7 +82,7 @@ public class CWorld {
         protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
 
         @Override
-        public synchronized void reset( boolean p_reset ) {
+        public synchronized void reset(boolean p_reset) {
             if (!p_reset)
                 return;
 

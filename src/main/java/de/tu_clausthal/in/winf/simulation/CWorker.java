@@ -208,7 +208,7 @@ public class CWorker implements Runnable {
      */
     private ILayer resetQueueBarrier(IQueue p_queue) {
         this.barrier();
-        p_queue.reset( m_isFirst );
+        p_queue.reset(m_isFirst);
         this.barrier();
 
         return null;

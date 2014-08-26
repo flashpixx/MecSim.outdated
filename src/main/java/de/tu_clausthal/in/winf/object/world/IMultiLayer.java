@@ -238,7 +238,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
 
     @Override
-    public synchronized void reset( boolean p_reset ) {
+    public synchronized void reset(boolean p_reset) {
         if (!p_reset)
             return;
 

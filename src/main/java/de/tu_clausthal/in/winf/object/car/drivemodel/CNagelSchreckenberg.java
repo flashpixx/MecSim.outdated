@@ -37,7 +37,9 @@ import java.util.Random;
  */
 public class CNagelSchreckenberg implements IDriveModel {
 
-    /** defines the minimal speed **/
+    /**
+     * defines the minimal speed *
+     */
     private static int s_minimalspeed = 5;
 
     /**

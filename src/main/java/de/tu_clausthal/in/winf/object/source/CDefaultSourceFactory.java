@@ -21,26 +21,15 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
-import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.car.CDefaultCar;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.world.ILayer;
-import de.tu_clausthal.in.winf.simulation.CSimulation;
-import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
-import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
-import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Random;
 
 
 /**
@@ -48,35 +37,20 @@ import java.util.Random;
  * use a exponential distribution (http://en.wikipedia.org/wiki/Exponential_distribution)
  * to generate cars for avoiding traffic jam at the source
  */
-public class CDefaultSourceFactory implements ISourceFactory {
+public class CDefaultSourceFactory extends IDefaultSourceFactory {
 
-    /** mean value of the distribution **/
+    /**
+     * mean value of the distribution *
+     */
     protected static double s_mean = 1.5;
-
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
-    /**
-     * position of the source within the map *
-     */
-    protected GeoPosition m_position = null;
-    /**
-     * integer values how many cars are generated in a step *
-     */
-    protected int m_NumberCarsInStep = 1;
     /**
      * random interface *
      */
     protected ExponentialDistribution m_random = new ExponentialDistribution(s_mean);
     /**
-     * image of the waypoint *
+     * integer values how many cars are generated in a step *
      */
-    protected BufferedImage m_image = null;
-    /**
-     * waypoint color *
-     */
-    protected Color m_color = Color.CYAN;
+    protected int m_NumberCarsInStep = 1;
 
 
     /**
@@ -85,8 +59,7 @@ public class CDefaultSourceFactory implements ISourceFactory {
      * @param p_position geo position object
      */
     public CDefaultSourceFactory(GeoPosition p_position) {
-        m_position = p_position;
-        this.setImage();
+        super(p_position, Color.CYAN);
     }
 
 
@@ -97,38 +70,33 @@ public class CDefaultSourceFactory implements ISourceFactory {
      * @param p_number   number of cars
      */
     public CDefaultSourceFactory(GeoPosition p_position, int p_number) {
-        m_position = p_position;
+        super(p_position, Color.CYAN);
         m_NumberCarsInStep = p_number;
         if (p_number < 1)
             throw new IllegalArgumentException("number must be greater than zero");
-
-        this.setImage();
     }
 
 
     /**
-     * creates the image *
+     * ctor which sets the geo position of the source and the number of cars on a creation step
+     *
+     * @param p_position geoposition
+     * @param p_number   number of cars
+     * @param p_color    color of the source
      */
-    private void setImage() {
-        try {
-            BufferedImage l_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage(l_image.getColorModel(), l_image.copyData(null), l_image.isAlphaPremultiplied(), null);
-            for (int i = 0; i < l_image.getHeight(); i++)
-                for (int j = 0; j < l_image.getWidth(); j++) {
-                    Color l_color = new Color(l_image.getRGB(j, i));
-                    if (l_color.getBlue() > 0)
-                        m_image.setRGB(j, i, m_color.getRGB());
-                }
-
-        } catch (Exception l_exception) {
-            m_Logger.warn("could not read standard_waypoint.png", l_exception);
-        }
+    protected CDefaultSourceFactory(GeoPosition p_position, int p_number, Color p_color) {
+        super(p_position, p_color);
+        m_NumberCarsInStep = p_number;
+        if (p_number < 1)
+            throw new IllegalArgumentException("number must be greater than zero");
     }
 
 
-    @Override
+    /**
+     * sets the number of generated cars
+     *
+     * @param p_number number of cars
+     */
     public void setNumberOfCars(int p_number) {
         if (p_number < 1)
             throw new IllegalArgumentException("number must be greater than zero");
@@ -144,24 +112,8 @@ public class CDefaultSourceFactory implements ISourceFactory {
             return l_sources;
 
         for (int i = 0; i < m_NumberCarsInStep; i++)
-                l_sources.add(new CDefaultCar(m_position));
+            l_sources.add(new CDefaultCar(m_position));
         return l_sources;
     }
 
-    @Override
-    public Collection<IReturnStepableTarget<ICar>> getTargets() {
-        Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
-        l_collection.add((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car"));
-        return l_collection;
-    }
-
-
-    @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
-        if (m_image == null)
-            return;
-
-        Point2D l_point = object.getTileFactory().geoToPixel(m_position, object.getZoom());
-        g.drawImage(m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null);
-    }
 }

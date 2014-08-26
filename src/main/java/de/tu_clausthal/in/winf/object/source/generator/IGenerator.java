@@ -19,53 +19,25 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.object.source;
+package de.tu_clausthal.in.winf.object.source.generator;
 
-import de.tu_clausthal.in.winf.object.car.CNormCar;
-import de.tu_clausthal.in.winf.object.car.ICar;
-import de.tu_clausthal.in.winf.object.world.ILayer;
-import org.jxmapviewer.viewer.GeoPosition;
-
-import java.awt.*;
 import java.util.Collection;
-import java.util.HashSet;
 
 
 /**
- * source for norm cars
+ * generator interface to define different object generator
  */
-public class CNormSourceFactory extends CDefaultSourceFactory {
+public interface IGenerator<T> {
 
     /**
-     * ctor set the position
-     *
-     * @param p_position geo position
+     * generator name *
      */
-    public CNormSourceFactory(GeoPosition p_position) {
-        super(p_position);
-    }
-
+    public String getName();
 
     /**
-     * ctor set positition and generate number
-     *
-     * @param p_position position
-     * @param p_number   number of cars
+     * generate objects *
      */
-    public CNormSourceFactory(GeoPosition p_position, int p_number) {
-        super(p_position, p_number, Color.YELLOW);
-    }
+    Collection<T> generate(int p_number);
 
-
-    @Override
-    public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
-        Collection<ICar> l_sources = new HashSet();
-        if (m_random.sample() >= s_mean)
-            return l_sources;
-
-        for (int i = 0; i < m_NumberCarsInStep; i++)
-            l_sources.add(new CNormCar(super.m_position));
-        return l_sources;
-    }
 
 }

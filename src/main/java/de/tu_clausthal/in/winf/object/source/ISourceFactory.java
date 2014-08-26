@@ -34,11 +34,4 @@ import java.io.Serializable;
  */
 public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewer>, Serializable {
 
-    /**
-     * sets the value how many cars are created in one step
-     *
-     * @param p_number integer number greate than zero
-     */
-    public void setNumberOfCars(int p_number);
-
 }

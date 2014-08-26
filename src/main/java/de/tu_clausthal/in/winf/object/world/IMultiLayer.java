@@ -123,7 +123,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public void step(int p_currentstep, ILayer p_layer) {
+    public synchronized void step(int p_currentstep, ILayer p_layer) {
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public void beforeStepObject(int p_currentstep, T p_object) {
+    public synchronized void beforeStepObject(int p_currentstep, T p_object) {
     }
 
 
@@ -142,7 +142,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public void afterStepObject(int p_currentstep, T p_object) {
+    public synchronized void afterStepObject(int p_currentstep, T p_object) {
     }
 
 
@@ -244,6 +244,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
         m_unprocess.addAll(m_process);
         m_process.clear();
+        COSMViewer.getInstance().repaint();
     }
 
     @Override
@@ -261,4 +262,5 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public void resetData() {
 
     }
+
 }

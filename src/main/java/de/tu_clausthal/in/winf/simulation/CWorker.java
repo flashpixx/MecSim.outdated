@@ -143,7 +143,6 @@ public class CWorker implements Runnable {
             // resets the layer and process objects of the layer
             for (IStepable l_object = this.resetQueueBarrier((IMultiLayer) l_layer); (l_object = ((IMultiLayer) l_layer).poll()) != null; ((IMultiLayer) l_layer).offer(l_object))
                 this.processObject(l_object, l_layer);
-
         }
 
     }

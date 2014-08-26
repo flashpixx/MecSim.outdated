@@ -25,7 +25,7 @@ import java.util.Map;
 
 
 /**
- * data layer definition
+ * data layer definition, to calculate any data
  */
 public interface IDataLayer {
 

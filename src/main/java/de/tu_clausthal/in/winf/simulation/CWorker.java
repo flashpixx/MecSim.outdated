@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * worker class for the simulation *
+ * @see https://visualvm.java.net/
  */
 public class CWorker implements Runnable {
 

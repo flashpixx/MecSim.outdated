@@ -35,14 +35,14 @@ public class CLogger {
     private static final String s_loggername = "MecSim";
 
     /**
-     * Stack Index des Traces *
+     * stack index of traces *
      */
     private static final int s_client_code_stack_index;
 
-    /** statische Initialisierung **/
+    /** initialization **/
     static {
 
-        // Stack Trace  verhält sich unterschiedlich bei JDK 1.5 and 1.6
+        // strack trace difference between JDK 1.5 and 1.6
         int i = 0;
         for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
             i++;
@@ -77,12 +77,12 @@ public class CLogger {
 
 
     /**
-     * String auf eine bestimmte Länge mit einem Zeichen aufzufüllen
+     * pad / cut string of a define length
      *
-     * @param p_in     Eingabestring
-     * @param p_Filler Filler-Character
-     * @param p_len    maximale Stringlänge
-     * @return modifizierter String
+     * @param p_in     input string
+     * @param p_Filler fill character
+     * @param p_len    max string length
+     * @return modified string
      */
     private static String padCut(String p_in, char p_Filler, int p_len) {
         if (p_len < 1)
@@ -95,10 +95,10 @@ public class CLogger {
 
 
     /**
-     * erzeut einen Logeintrag
+     * creates a full log item
      *
      * @param p_status status name
-     * @param p_add    zusätzliche Logdaten
+     * @param p_add    additional log data
      */
     private static String createLogData(Level p_status, Object p_add) {
         String l_SEP = StringUtils.repeat(" ", 3);
@@ -124,69 +124,72 @@ public class CLogger {
     }
 
 
+    /**
+     * adds a warn message *
+     */
     public static void warn() {
         warn(null);
     }
 
-    /**
-     * erzeugt einen Logeintrag an dem aktuellen Punkt *
-     */
+    /** adds a warn message
+     * @param p_data log data
+     **/
     public static void warn(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.WARN_INT)
             return;
         Logger.getLogger(s_loggername).info(createLogData(Level.WARN, p_data));
     }
 
-
+    /** adds a error message **/
     public static void error() {
         error(null);
     }
 
-    /**
-     * erzeugt einen Logeintrag an dem aktuellen Punkt *
-     */
+    /** adds a error message
+     * @param p_data log data
+     **/
     public static void error(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.ERROR_INT)
             return;
         Logger.getLogger(s_loggername).info(createLogData(Level.ERROR, p_data));
     }
 
-
+    /** adds an info message **/
     public static void info() {
         info(null);
     }
 
-    /**
-     * erzeugt einen Logeintrag an dem aktuellen Punkt *
-     */
+    /** adds an info message
+     * @param p_data log data
+     **/
     public static void info(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.INFO_INT)
             return;
         Logger.getLogger(s_loggername).info(createLogData(Level.INFO, p_data));
     }
 
-
+    /** adds a debug message **/
     public static void debug() {
         debug(null);
     }
 
-    /**
-     * erzeugt einen Logeintrag an dem aktuellen Punkt *
-     */
+    /** adds a debug message
+     * @param p_data log data
+     **/
     public static void debug(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.DEBUG_INT)
             return;
         Logger.getLogger(s_loggername).info(createLogData(Level.DEBUG, p_data));
     }
 
-
+    /** adds a fatal message **/
     public static void fatal() {
         fatal(null);
     }
 
-    /**
-     * erzeugt einen Logeintrag an dem aktuellen Punkt *
-     */
+    /** adds a fatal message
+     * @param p_data log data
+     **/
     public static void fatal(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.FATAL_INT)
             return;
@@ -195,9 +198,9 @@ public class CLogger {
 
 
     /**
-     * liefert den aktuellen Methodennamen anhand des Stack-Trace Index
+     * gets the current method name
      *
-     * @return Methodenname
+     * @return method name
      */
     private static String getCurrentMethodName(int offset) {
         return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getMethodName();
@@ -205,9 +208,9 @@ public class CLogger {
 
 
     /**
-     * liefert den aktuellen Klassennamen
+     * gets the current class name
      *
-     * @return Klassenname
+     * @return class name
      */
     private static String getCurrentClassName(int offset) {
         return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getClassName();
@@ -215,22 +218,9 @@ public class CLogger {
 
 
     /**
-     * liefert den aktuellen Dateinamen anhand des Stack-Trace Index
+     * gets the current line number
      *
-     * @return Dateiname
-     */
-    private static String getCurrentFileName(int offset) {
-        String filename = Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getFileName();
-        int lineNumber = Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getLineNumber();
-
-        return filename + ":" + lineNumber;
-    }
-
-
-    /**
-     * liefert die aktuelle Zeilennummer anhand des Stack-Trace Index
-     *
-     * @return Nummer
+     * @return number
      */
     private static int getCurrentLineNumber(int offset) {
         return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getLineNumber();
@@ -238,9 +228,9 @@ public class CLogger {
 
 
     /**
-     * liefert den Namen der aufrufenden Methode anhand des Stack-Trace Index
+     * gets the current invoker method name
      *
-     * @return Methodenname
+     * @return method name
      */
     private static String getInvokingMethodName(int offset) {
         return getCurrentMethodName(offset + 1);
@@ -248,9 +238,9 @@ public class CLogger {
 
 
     /**
-     * liefert den Klassennamen der aufrufenden Methode anhand des Stack-Trace Index
+     * gets the current invoker class name
      *
-     * @return Klassenname
+     * @return class name
      */
     private static String getInvokingClassName(int offset) {
         return getCurrentClassName(offset + 1);
@@ -258,19 +248,9 @@ public class CLogger {
 
 
     /**
-     * liefert den Dateinamen der aufrufenden Methode anhand des Stack-Trace Index
+     * gets the current FQN method name
      *
-     * @return Dateiname
-     */
-    private static String getInvokingFileName(int offset) {
-        return getCurrentFileName(offset + 1);
-    }
-
-
-    /**
-     * liefert den aktuellen FQN-Methodennamen anhand des Stack-Trace Index
-     *
-     * @return FQN-Methodenname
+     * @return FQN method name
      */
     private static String getCurrentMethodNameFqn(int offset) {
         String currentClassName = getCurrentClassName(offset + 1);
@@ -281,9 +261,9 @@ public class CLogger {
 
 
     /**
-     * liefert den aktuellen aufrufenenden FQN-Methodennamen anhand des Stack-Trace Index
+     * gets the current invoker FQN method name
      *
-     * @return FQN-Methodenname
+     * @return FQN method name
      */
     private static String getInvokingMethodNameFqn(int offset) {
         String invokingClassName = getInvokingClassName(offset + 1);

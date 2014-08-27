@@ -66,7 +66,7 @@ public class CLogger {
             FileAppender appender = new FileAppender();
             appender.setName("FileLogger");
             appender.setFile(p_filename);
-            appender.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
+            appender.setLayout(new PatternLayout("%d [%c{1}] %m%n"));
             appender.setThreshold(Level.ALL);
             appender.setAppend(true);
             appender.activateOptions();
@@ -101,12 +101,13 @@ public class CLogger {
      * @param p_add    additional log data
      */
     private static String createLogData(Level p_status, Object p_add) {
-        String l_SEP = StringUtils.repeat(" ", 3);
+        String l_SEP = StringUtils.repeat(" ", 5);
         StringBuffer l_Str = new StringBuffer();
 
+        l_Str.append(l_SEP);
         l_Str.append(padCut("status [" + p_status + "]", ' ', 15));
         l_Str.append(l_SEP);
-        l_Str.append(padCut("thread [" + Thread.currentThread() + "]", ' ', 50));
+        l_Str.append(padCut("thread [" + Thread.currentThread() + "]", ' ', 100));
         l_Str.append(l_SEP);
         l_Str.append(padCut("method [" + getCurrentMethodNameFqn(2) + "]", ' ', 100));
         l_Str.append(l_SEP);

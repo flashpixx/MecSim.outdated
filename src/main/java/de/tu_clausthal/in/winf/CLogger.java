@@ -141,10 +141,12 @@ public class CLogger {
         Logger.getLogger(s_loggername).info(createLogData(Level.WARN, p_data));
     }
 
+
     /** adds a error message **/
     public static void error() {
         error(null);
     }
+
 
     /** adds a error message
      * @param p_data log data
@@ -154,6 +156,7 @@ public class CLogger {
             return;
         Logger.getLogger(s_loggername).info(createLogData(Level.ERROR, p_data));
     }
+
 
     /** adds an info message **/
     public static void info() {
@@ -183,10 +186,12 @@ public class CLogger {
         Logger.getLogger(s_loggername).info(createLogData(Level.DEBUG, p_data));
     }
 
+
     /** adds a fatal message **/
     public static void fatal() {
         fatal(null);
     }
+
 
     /** adds a fatal message
      * @param p_data log data

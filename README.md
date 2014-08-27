@@ -1,4 +1,4 @@
-# Fortgeschrittenenprojekt - Traffic Simulation
+# Traffic Simulation MecSIM
 
 ## Requirements
 

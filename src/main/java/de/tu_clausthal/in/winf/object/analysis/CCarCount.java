@@ -34,8 +34,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  * car count statistic
- *
- * @see http://commons.apache.org/proper/commons-math/userguide/stat.html
  */
 public class CCarCount extends ISingleLayer {
 

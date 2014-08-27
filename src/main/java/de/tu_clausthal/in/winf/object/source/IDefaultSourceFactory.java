@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.object.source;
 
+import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
@@ -28,8 +29,6 @@ import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -44,10 +43,6 @@ import java.util.HashSet;
  */
 abstract public class IDefaultSourceFactory implements ISourceFactory {
 
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * position of the source within the map *
      */
@@ -91,7 +86,7 @@ abstract public class IDefaultSourceFactory implements ISourceFactory {
                 }
 
         } catch (Exception l_exception) {
-            m_Logger.warn("could not read standard_waypoint.png", l_exception);
+            CLogger.warn("could not read standard_waypoint.png: " + l_exception.toString());
         }
     }
 

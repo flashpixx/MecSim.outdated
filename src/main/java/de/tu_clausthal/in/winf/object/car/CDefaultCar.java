@@ -31,8 +31,6 @@ import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import de.tu_clausthal.in.winf.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -51,10 +49,6 @@ import java.util.Random;
  */
 public class CDefaultCar extends IInspector implements ICar {
 
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * random interface *
      */

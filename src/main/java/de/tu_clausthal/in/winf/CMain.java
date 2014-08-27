@@ -23,9 +23,12 @@ package de.tu_clausthal.in.winf;
 
 import de.tu_clausthal.in.winf.ui.CFrame;
 import org.apache.commons.cli.*;
+import org.apache.log4j.Level;
 
 import javax.swing.*;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 /**
@@ -47,6 +50,8 @@ public class CMain {
         l_clioptions.addOption("help", false, "shows this help");
         l_clioptions.addOption("configuration", true, "configuration directory");
         l_clioptions.addOption("graph", true, "OSM graph URL (see configuration file description of option 'RoutingMap')");
+        l_clioptions.addOption("loglevel", true, "level of the logger");
+        l_clioptions.addOption("logfile", true, "logfile (default: mecsim-<startup datetime>.txt)");
 
         CommandLineParser l_parser = new BasicParser();
         CommandLine l_cli = l_parser.parse(l_clioptions, p_args);
@@ -59,7 +64,20 @@ public class CMain {
             System.exit(0);
         }
 
-        // read the configuration directory (default ~/.tucwinf)
+
+        // create logger instance
+        String l_logfile = "mecsim-" + (new SimpleDateFormat("yyyy-dd-MM-HH-mm")).format(Calendar.getInstance().getTime()) + ".txt";
+        if (l_cli.hasOption("logfile"))
+            l_logfile = l_cli.getOptionValue("logfile");
+
+        Level l_loglevel = Level.OFF;
+        if (l_cli.hasOption("loglevel"))
+            l_loglevel = Level.toLevel(l_cli.getOptionValue("loglevel"));
+
+        CLogger.create(l_loglevel, l_logfile);
+
+
+        // read the configuration directory (default ~/.mecsim)
         File l_config = new File(System.getProperty("user.home") + File.separator + ".mecsim");
         if (l_cli.hasOption("configuration"))
             l_config = new File(l_cli.getOptionValue("configuration"));

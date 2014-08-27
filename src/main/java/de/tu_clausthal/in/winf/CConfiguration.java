@@ -23,8 +23,6 @@ package de.tu_clausthal.in.winf;
 
 import com.google.gson.Gson;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -42,10 +40,6 @@ public class CConfiguration {
      * singleton instance variable *
      */
     private static CConfiguration s_instance = new CConfiguration();
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * property that stores the configuration data *
      */
@@ -85,7 +79,7 @@ public class CConfiguration {
 
             l_writer.close();
         } catch (Exception l_exception) {
-            m_Logger.error(l_exception.getMessage());
+            CLogger.error(l_exception.getMessage());
         }
     }
 
@@ -96,41 +90,41 @@ public class CConfiguration {
         Data l_tmp = null;
         try {
             String l_config = m_dir + File.separator + s_ConfigFilename;
-            m_Logger.info("read configuration from [" + l_config + "]");
+            CLogger.info("read configuration from [" + l_config + "]");
 
             Reader l_reader = new InputStreamReader(new FileInputStream(l_config), "UTF-8");
 
             Gson l_gson = new Gson();
             l_tmp = l_gson.fromJson(l_reader, Data.class);
         } catch (Exception l_exception) {
-            m_Logger.error(l_exception.getMessage());
+            CLogger.error(l_exception.getMessage());
         }
 
         if (l_tmp == null)
-            m_Logger.warn("configuration is null, use default configuration");
+            CLogger.warn("configuration is null, use default configuration");
         else {
             if (l_tmp.ViewPoint == null) {
-                m_Logger.warn("view point uses default value");
+                CLogger.warn("view point uses default value");
                 l_tmp.ViewPoint = m_data.ViewPoint;
             }
             if (l_tmp.WindowHeight < 100) {
-                m_Logger.warn("window height uses default value");
+                CLogger.warn("window height uses default value");
                 l_tmp.WindowHeight = m_data.WindowHeight;
             }
             if (l_tmp.WindowWidth < 100) {
-                m_Logger.warn("window width uses default value");
+                CLogger.warn("window width uses default value");
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
             if ((l_tmp.RoutingAlgorithm == null) || (l_tmp.RoutingAlgorithm.isEmpty())) {
-                m_Logger.warn("routing algorithm uses default value");
+                CLogger.warn("routing algorithm uses default value");
                 l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
             }
             if (l_tmp.CellSampling < 1) {
-                m_Logger.warn("cell sampling uses default value");
+                CLogger.warn("cell sampling uses default value");
                 l_tmp.CellSampling = m_data.CellSampling;
             }
             if (l_tmp.ThreadSleepTime < 0) {
-                m_Logger.warn("thread sleep time uses default value");
+                CLogger.warn("thread sleep time uses default value");
                 l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
             }
 
@@ -200,7 +194,7 @@ public class CConfiguration {
         /**
          * thread sleep time in miliseconds *
          */
-        public int ThreadSleepTime = 100;
+        public int ThreadSleepTime = 25;
         /**
          * geo map for graph *
          */

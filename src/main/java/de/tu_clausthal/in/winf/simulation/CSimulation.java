@@ -23,11 +23,10 @@ package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CBootstrap;
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,10 +40,6 @@ public class CSimulation {
      * singleton instance *
      */
     private static CSimulation s_instance = new CSimulation();
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * world of the simulation
      */
@@ -103,9 +98,9 @@ public class CSimulation {
 
         for (ILayer l_layer : m_world.getQueue())
             if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
-                m_Logger.warn("layer [" + l_layer + "] is empty");
+                CLogger.warn("layer [" + l_layer + "] is empty");
 
-        m_Logger.info("simulation is started");
+        CLogger.info("simulation is started");
         CBootstrap.BeforeSimulationStarts(this);
         m_worker = new CWorkerPool(CConfiguration.getInstance().get().MaxThreadNumber, m_simulationcount);
     }
@@ -120,7 +115,7 @@ public class CSimulation {
 
         this.shutdown();
         CBootstrap.AfterSimulationStops(this);
-        m_Logger.info("simulation is stopped");
+        CLogger.info("simulation is stopped");
     }
 
 
@@ -134,7 +129,7 @@ public class CSimulation {
         for (ILayer l_layer : m_world.getQueue())
             l_layer.resetData();
         CBootstrap.onSimulationReset(this);
-        m_Logger.info("simulation reset");
+        CLogger.info("simulation reset");
     }
 
 
@@ -148,7 +143,7 @@ public class CSimulation {
         try {
             m_worker.stop();
         } catch (InterruptedException l_exception) {
-            m_Logger.error(l_exception.getMessage());
+            CLogger.error(l_exception.getMessage());
         }
 
         m_worker = null;

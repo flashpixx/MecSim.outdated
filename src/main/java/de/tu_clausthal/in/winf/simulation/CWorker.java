@@ -22,11 +22,10 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.concurrent.BrokenBarrierException;
@@ -37,14 +36,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * worker class for the simulation *
+ *
  * @see https://visualvm.java.net/
  */
 public class CWorker implements Runnable {
 
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * barrier object for synchronization *
      */
@@ -90,7 +86,7 @@ public class CWorker implements Runnable {
      * run method - running simulation step *
      */
     public void run() {
-        m_Logger.info("thread [" + Thread.currentThread().getId() + "] starts working");
+        CLogger.info("thread starts working");
 
         while (!m_interrupt) {
 
@@ -108,7 +104,7 @@ public class CWorker implements Runnable {
         }
 
         m_counter.countDown();
-        m_Logger.info("thread [" + Thread.currentThread().getId() + "] stops working");
+        CLogger.info("thread stops working");
     }
 
 
@@ -178,7 +174,7 @@ public class CWorker implements Runnable {
                 ((IMultiLayer) p_layer).afterStepObject(m_currentstep.get(), p_object);
 
         } catch (Exception l_exception) {
-            LoggerFactory.getLogger(getClass()).error("object [" + p_object + "] in thread [" + Thread.currentThread().getId() + "] throws: ", l_exception);
+            CLogger.error("object [" + p_object.toString() + "] throws: " + l_exception.toString());
         }
 
     }
@@ -193,7 +189,7 @@ public class CWorker implements Runnable {
         try {
             m_barrier.await();
         } catch (BrokenBarrierException | InterruptedException l_exception) {
-            m_Logger.info("thread [" + Thread.currentThread().getId() + "] is interrupted");
+            CLogger.info("thread is interrupted");
             m_interrupt = true;
         }
 

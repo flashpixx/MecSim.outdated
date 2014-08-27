@@ -33,11 +33,10 @@ import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUpTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,10 +58,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CGraphHopper extends GraphHopper {
 
-    /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
     /**
      * map with edge-cell connection *
      */
@@ -99,7 +94,7 @@ public class CGraphHopper extends GraphHopper {
 
         // convert OSM or load the graph
         if (!this.load(l_graphlocation.getAbsolutePath())) {
-            m_Logger.info("graph cannot be found");
+            CLogger.info("graph cannot be found");
             File l_osm = this.downloadOSMData();
 
             this.setGraphHopperLocation(l_graphlocation.getAbsolutePath());
@@ -142,7 +137,7 @@ public class CGraphHopper extends GraphHopper {
         GHResponse l_result = this.route(l_request);
         if (!l_result.getErrors().isEmpty()) {
             for (Throwable l_msg : l_result.getErrors())
-                m_Logger.error(l_msg.getMessage());
+                CLogger.error(l_msg.getMessage());
             throw new IllegalArgumentException("graph error");
         }
 
@@ -313,7 +308,7 @@ public class CGraphHopper extends GraphHopper {
 
             return l_output;
         } catch (Exception l_exception) {
-            m_Logger.error(l_exception.getMessage());
+            CLogger.error(l_exception.getMessage());
         }
         return null;
 

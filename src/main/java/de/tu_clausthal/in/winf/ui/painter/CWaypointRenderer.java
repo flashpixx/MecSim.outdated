@@ -21,11 +21,10 @@
 
 package de.tu_clausthal.in.winf.ui.painter;
 
+import de.tu_clausthal.in.winf.CLogger;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.Waypoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -48,10 +47,6 @@ public class CWaypointRenderer extends DefaultWaypointRenderer {
      */
     private static volatile CWaypointRenderer s_instance = new CWaypointRenderer();
     /**
-     * logger instance *
-     */
-    private final Logger m_Logger = LoggerFactory.getLogger(getClass());
-    /**
      * image object (read from JXMapViewer
      */
     protected BufferedImage m_image = null;
@@ -68,7 +63,7 @@ public class CWaypointRenderer extends DefaultWaypointRenderer {
         try {
             m_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));
         } catch (Exception l_exception) {
-            m_Logger.warn("could not read standard_waypoint.png", l_exception);
+            CLogger.warn("could not read standard_waypoint.png" + l_exception.toString());
         }
 
     }

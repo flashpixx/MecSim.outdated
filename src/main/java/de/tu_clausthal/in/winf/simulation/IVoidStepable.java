@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
+ # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -21,8 +21,8 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
-
 import de.tu_clausthal.in.winf.object.world.ILayer;
+
 
 /**
  * interface of void-step method

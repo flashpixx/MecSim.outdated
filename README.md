@@ -13,12 +13,12 @@
 
 ## Installation / Konfiguration
 
-Mittels Maven kann ein Jar inkl. Abhängigkeiten erzeugt werden, die in dem Pfad ```target/Fortgeschrittenenprojekt-1.0-jar-with-dependencies.jar``` zu finden ist. Das Jar
+Mittels Maven kann ein Jar inkl. Abhängigkeiten erzeugt werden, die in dem Pfad ```target/MecSim-<Version>-jar-with-dependencies.jar``` zu finden ist. Das Jar
 kann direkt ausgeführt werden. Da der Graph, in dem sich die Fahrzeuge bewegen mehr RAM benötigt, muss das Programm mit dem Parameter ```-Xmx``` und einer RAM Größe gestartet werden (die Angabe ```-Xmx2g``` liefert gute Ergebnisse).
 
 ### Datenspeicherung
 
-Das Programm legt im Userverzeichnis ein Unterverzeichnis ```.tucwinf``` an, in dem die Konfiguration und die Graphen gespeichert werden. Das die Konfiguration des Programms ist in der [Json-Datei](http://de.wikipedia.org/wiki/JSON) ```config.json``` gespeichert. Die Datei hat folgenden Aufbau
+Das Programm legt im Userverzeichnis ein Unterverzeichnis ```.mecsim``` an, in dem die Konfiguration und die Graphen gespeichert werden. Das die Konfiguration des Programms ist in der [Json-Datei](http://de.wikipedia.org/wiki/JSON) ```config.json``` gespeichert. Die Datei hat folgenden Aufbau
 
 ```
 {

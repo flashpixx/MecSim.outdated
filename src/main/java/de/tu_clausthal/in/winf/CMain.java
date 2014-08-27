@@ -2,7 +2,7 @@
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - Fortgeschrittenenprojekt      #
+ # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
  # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
@@ -60,7 +60,7 @@ public class CMain {
         }
 
         // read the configuration directory (default ~/.tucwinf)
-        File l_config = new File(System.getProperty("user.home") + File.separator + ".tucwinf");
+        File l_config = new File(System.getProperty("user.home") + File.separator + ".mecsim");
         if (l_cli.hasOption("configuration"))
             l_config = new File(l_cli.getOptionValue("configuration"));
 
@@ -77,7 +77,7 @@ public class CMain {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 CFrame l_frame = new CFrame();
-                l_frame.setTitle("TU-Clausthal MEC - Traffic Simulation");
+                l_frame.setTitle("TU-Clausthal Wirtschaftsinformatik - MecSim");
                 l_frame.setVisible(true);
             }
         });

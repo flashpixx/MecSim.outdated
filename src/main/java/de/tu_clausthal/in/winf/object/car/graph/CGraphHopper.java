@@ -34,6 +34,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.CLogger;
+import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUpTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -61,7 +62,7 @@ public class CGraphHopper extends GraphHopper {
     /**
      * map with edge-cell connection *
      */
-    private Map<Integer, CCellCarLinkage> m_edgecell = new ConcurrentHashMap();
+    private Map<Integer, CCellObjectLinkage<ICar, Object>> m_edgecell = new ConcurrentHashMap();
 
 
     /**
@@ -245,7 +246,7 @@ public class CGraphHopper extends GraphHopper {
      * clears all edges
      */
     public synchronized void clear() {
-        for (Map.Entry<Integer, CCellCarLinkage> l_item : m_edgecell.entrySet())
+        for (Map.Entry<Integer, CCellObjectLinkage<ICar, Object>> l_item : m_edgecell.entrySet())
             l_item.getValue().clear();
     }
 
@@ -256,8 +257,8 @@ public class CGraphHopper extends GraphHopper {
      */
     public synchronized int getNumberOfCars() {
         int l_count = 0;
-        for (CCellCarLinkage l_item : m_edgecell.values())
-            l_count += l_item.getNumberOfCars();
+        for (CCellObjectLinkage l_item : m_edgecell.values())
+            l_count += l_item.getNumberOfObjects();
         return l_count;
     }
 
@@ -268,10 +269,10 @@ public class CGraphHopper extends GraphHopper {
      * @param p_edgestate edge object
      * @return linkage object
      */
-    public synchronized CCellCarLinkage getEdge(EdgeIteratorState p_edgestate) {
-        CCellCarLinkage l_edge = m_edgecell.get(p_edgestate.getEdge());
+    public synchronized CCellObjectLinkage getEdge(EdgeIteratorState p_edgestate) {
+        CCellObjectLinkage l_edge = m_edgecell.get(p_edgestate.getEdge());
         if (l_edge == null) {
-            l_edge = new CCellCarLinkage(p_edgestate);
+            l_edge = new CCellObjectLinkage(p_edgestate);
             m_edgecell.put(l_edge.getEdgeID(), l_edge);
         }
 

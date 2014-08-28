@@ -23,7 +23,7 @@ package de.tu_clausthal.in.winf.object.car;
 
 import de.tu_clausthal.in.winf.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.winf.object.car.drivemodel.IDriveModel;
-import de.tu_clausthal.in.winf.object.car.graph.CCellCarLinkage;
+import de.tu_clausthal.in.winf.object.car.graph.CCellObjectLinkage;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
@@ -116,9 +116,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
 
         if (p_object.hasEndReached()) {
             super.remove(p_object);
-            CCellCarLinkage l_edge = m_graph.getEdge(p_object.getEdge());
+            CCellObjectLinkage l_edge = m_graph.getEdge(p_object.getEdge());
             if (l_edge != null)
-                l_edge.removeCarFromEdge(p_object);
+                l_edge.removeObjectFromEdge(p_object);
         }
 
     }

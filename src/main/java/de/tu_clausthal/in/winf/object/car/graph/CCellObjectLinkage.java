@@ -24,7 +24,6 @@ package de.tu_clausthal.in.winf.object.car.graph;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
-import de.tu_clausthal.in.winf.object.car.ICar;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
@@ -42,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * class for defining the cell sampling structure of an edge
  * with the car information
  */
-public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
+public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> {
 
     /**
      * edge ID *
@@ -55,11 +54,11 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
     /**
      * map with car-2-position in forward direction *
      */
-    protected Map<ICar, Integer> m_cars = new ConcurrentHashMap();
+    protected Map<N, Integer> m_cars = new ConcurrentHashMap();
     /**
      * array with cells of the forward direction *
      */
-    protected ICar[] m_cells = null;
+    protected N[] m_cells = null;
     /**
      * array with geopositions of the cell *
      */
@@ -76,7 +75,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
      * @param p_id     edge ID
      * @param p_length length of the edge
      */
-    public CCellCarLinkage(CGraphHopper p_graph, int p_id, double p_length) {
+    public CCellObjectLinkage(CGraphHopper p_graph, int p_id, double p_length) {
         m_edgeid = p_id;
         m_edgelength = p_length;
         this.sampling(p_graph.getEdgeIterator(m_edgeid));
@@ -88,7 +87,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
      *
      * @param p_edgestate
      */
-    public CCellCarLinkage(EdgeIteratorState p_edgestate) {
+    public CCellObjectLinkage(EdgeIteratorState p_edgestate) {
         m_edgeid = p_edgestate.getEdge();
         m_edgelength = p_edgestate.getDistance();
         this.sampling(p_edgestate);
@@ -100,7 +99,11 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
      * @param p_edgestate edge state
      */
     private void sampling(EdgeIteratorState p_edgestate) {
-        m_cells = new ICar[(int) Math.ceil(m_edgelength / CConfiguration.getInstance().get().CellSampling)];
+        ArrayList<N> l_initlist = new ArrayList();
+        for (int i = 0; i < (int) Math.ceil(m_edgelength / CConfiguration.getInstance().get().CellSampling); i++)
+            l_initlist.add(null);
+        m_cells = (N[]) l_initlist.toArray();
+        m_additionalinformation = (T[]) l_initlist.toArray();
         m_cellgeoposition = new GeoPosition[m_cells.length];
 
         // create a spline interpolation for cell sampling of the geoposition
@@ -123,8 +126,6 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
             for (int i = 0; i < m_cells.length; i++)
                 m_cellgeoposition[i] = new GeoPosition(l_list.getX(0) + i * l_xincrement, l_list.getY(0) + i * l_yincrement);
         }
-
-        m_additionalinformation = (T[]) new Object[m_cells.length];
     }
 
 
@@ -209,24 +210,24 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
 
     /**
-     * returns the position of a car on the edge
+     * returns the position of a object on the edge
      *
-     * @param p_car car object
+     * @param p_object object
      * @return null or position
      */
-    public Integer getCarPosition(ICar p_car) {
-        return m_cars.get(p_car);
+    public Integer getObjectPosition(N p_object) {
+        return m_cars.get(p_object);
     }
 
 
     /**
-     * returns the geoposition of a car
+     * returns the geoposition of an object
      *
-     * @param p_car car object
+     * @param p_object object
      * @return geoposition or null
      */
-    public GeoPosition getGeoposition(ICar p_car) {
-        Integer l_position = m_cars.get(p_car);
+    public GeoPosition getGeoposition(N p_object) {
+        Integer l_position = m_cars.get(p_object);
         if (l_position == null)
             return null;
 
@@ -235,13 +236,13 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
 
     /**
-     * checks if a care is set on the edge
+     * checks if an object is set on the edge
      *
-     * @param p_car car object
+     * @param p_object object
      * @return boolean car existence
      */
-    public boolean contains(ICar p_car) {
-        return m_cars.containsKey(p_car);
+    public boolean contains(N p_object) {
+        return m_cars.containsKey(p_object);
     }
 
 
@@ -259,25 +260,25 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
     /**
      * adds a car to the edge
      *
-     * @param p_car      car object
+     * @param p_object   car object
      * @param p_position position
      */
-    public synchronized void addCar2Edge(ICar p_car, int p_position) {
+    public synchronized void addObject2Edge(N p_object, int p_position) {
         if (m_cells[p_position] != null)
             return;
 
-        m_cells[p_position] = p_car;
-        m_cars.put(p_car, p_position);
+        m_cells[p_position] = p_object;
+        m_cars.put(p_object, p_position);
     }
 
 
     /**
-     * remove the car from the forward edge
+     * remove the object from the edge
      *
-     * @param p_car car object
+     * @param p_object object
      */
-    public synchronized void removeCarFromEdge(ICar p_car) {
-        Integer l_pos = m_cars.remove(p_car);
+    public synchronized void removeObjectFromEdge(N p_object) {
+        Integer l_pos = m_cars.remove(p_object);
         if (l_pos != null)
             m_cells[l_pos.intValue()] = null;
     }
@@ -286,42 +287,42 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
     /**
      * check if a car can be updated within the edge
      *
-     * @param p_car  car object
+     * @param p_object  car object
      * @param p_move steps to move
      * @return boolean, true if the car can be updated
      * @note does not check for an empty position
      */
-    public synchronized boolean CarCanUpdated(ICar p_car, int p_move) {
-        if (!m_cars.containsKey(p_car))
+    public synchronized boolean CarCanUpdated(N p_object, int p_move) {
+        if (!m_cars.containsKey(p_object))
             return false;
 
-        return m_cars.get(p_car).intValue() + Math.abs(p_move) < m_cells.length;
+        return m_cars.get(p_object).intValue() + Math.abs(p_move) < m_cells.length;
     }
 
 
     /**
      * returns the number of cell, that overlaps after update
      *
-     * @param p_car  car object
+     * @param p_object object
      * @param p_move steps to move
      * @return number of cells that overlapps (positive value, cells overlapped, otherwise negative value)
      */
-    public synchronized int overlappingCells(ICar p_car, int p_move) {
-        if (!m_cars.containsKey(p_car))
+    public synchronized int overlappingCells(N p_object, int p_move) {
+        if (!m_cars.containsKey(p_object))
             return -1;
 
-        return (m_cars.get(p_car).intValue() + Math.abs(p_move)) - (m_cells.length - 1);
+        return (m_cars.get(p_object).intValue() + Math.abs(p_move)) - (m_cells.length - 1);
     }
 
 
     /**
-     * updates the car position on the edge
+     * updates the object position on the edge
      *
-     * @param p_car  car object
+     * @param p_object object
      * @param p_move moving steps
      */
-    public synchronized void updateCar(ICar p_car, int p_move) throws IllegalAccessException {
-        Integer l_position = m_cars.get(p_car);
+    public synchronized void updateObject(N p_object, int p_move) throws IllegalAccessException {
+        Integer l_position = m_cars.get(p_object);
         if (l_position == null)
             throw new IllegalAccessException("car not found");
 
@@ -334,20 +335,20 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
                 throw new IllegalAccessException("path between old and new position is not empty");
 
         m_cells[l_position.intValue()] = null;
-        m_cells[l_newposition] = p_car;
-        m_cars.put(p_car, l_newposition);
+        m_cells[l_newposition] = p_object;
+        m_cars.put(p_object, l_newposition);
     }
 
 
     /**
-     * returns the predecessor of a car on the edge
+     * returns the predecessor of an object on the edge
      *
-     * @param p_car   car object
+     * @param p_object object
      * @param p_count number of predecessors
      * @return null or map with position and car object
      */
-    public Map<Integer, ICar> getPredecessor(ICar p_car, int p_count) {
-        Integer l_pos = m_cars.get(p_car);
+    public Map<Integer, N> getPredecessor(N p_object, int p_count) {
+        Integer l_pos = m_cars.get(p_object);
         if (l_pos == null)
             return null;
 
@@ -362,8 +363,8 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
      * @param p_count    number of elements
      * @return null or map with position and car object
      */
-    public Map<Integer, ICar> getPredecessor(int p_position, int p_count) {
-        HashMap<Integer, ICar> l_items = new HashMap();
+    public Map<Integer, N> getPredecessor(int p_position, int p_count) {
+        HashMap<Integer, N> l_items = new HashMap();
         for (int i = p_position; i < m_cells.length; i++) {
             if (m_cells[i] != null)
                 l_items.put(i - p_position, m_cells[i]);
@@ -377,23 +378,23 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
 
     /**
-     * returns the number of cars on the current edge
+     * returns the number of objects on the current edge
      *
-     * @return car number
+     * @return object number
      */
-    public int getNumberOfCars() {
+    public int getNumberOfObjects() {
         return m_cars.size();
     }
 
 
     /**
-     * returns the next predecessor of a car on the edge
+     * returns the next predecessor of an object on the edge
      *
-     * @param p_car car object
+     * @param p_object car object
      * @return null or map with position and car object
      */
-    public Map<Integer, ICar> getPredecessor(ICar p_car) {
-        return this.getPredecessor(p_car, 1);
+    public Map<Integer, N> getPredecessor(N p_object) {
+        return this.getPredecessor(p_object, 1);
     }
 
     /**
@@ -402,7 +403,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
      * @param p_position index
      * @return null or map with position and car object
      */
-    public Map<Integer, ICar> getPredecessor(int p_position) {
+    public Map<Integer, N> getPredecessor(int p_position) {
         return this.getPredecessor(p_position, 1);
     }
 
@@ -422,8 +423,8 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
      * @return boolean for empty
      */
     public synchronized boolean isEmpty() {
-        for (ICar l_car : m_cells)
-            if (l_car != null)
+        for (N l_object : m_cells)
+            if (l_object != null)
                 return false;
 
         return true;
@@ -441,7 +442,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
 
     @Override
-    public int compareTo(CCellCarLinkage p_edgelink) {
+    public int compareTo(CCellObjectLinkage p_edgelink) {
         if (m_edgeid > p_edgelink.m_edgeid)
             return 1;
         if (m_edgeid < p_edgelink.m_edgeid)
@@ -452,10 +453,10 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
     @Override
     public boolean equals(Object p_object) {
-        if ((p_object == null) || (!(p_object instanceof CCellCarLinkage)))
+        if ((p_object == null) || (!(p_object instanceof CCellObjectLinkage)))
             return false;
 
-        return this.m_edgeid == ((CCellCarLinkage) p_object).m_edgeid;
+        return this.m_edgeid == ((CCellObjectLinkage) p_object).m_edgeid;
     }
 
     @Override

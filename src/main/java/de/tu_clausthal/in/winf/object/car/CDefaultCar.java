@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.winf.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.winf.object.car.graph.CCellCarLinkage;
+import de.tu_clausthal.in.winf.object.car.graph.CCellObjectLinkage;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
@@ -167,7 +167,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         //iterate over the edges in the rozre
         for (int i = m_routeindex; i < m_routeedges.size(); i++) {
-            CCellCarLinkage l_edge = m_graph.getEdge(m_routeedges.get(m_routeindex));
+            CCellObjectLinkage l_edge = m_graph.getEdge(m_routeedges.get(m_routeindex));
 
             if (l_edge == null)
                 return null;
@@ -305,14 +305,14 @@ public class CDefaultCar extends IInspector implements ICar {
             }
 
             // get current edge of cars route
-            CCellCarLinkage l_edge = m_graph.getEdge(this.getEdge());
+            CCellObjectLinkage l_edge = m_graph.getEdge(this.getEdge());
 
             // car is not set on the current edge, so we try to find the first position
             if (!l_edge.contains(this)) {
 
                 // check car can be set to the edge position
                 if ((l_steps < l_edge.getEdgeCells()) && (!l_edge.isPositionSet(l_steps))) {
-                    l_edge.addCar2Edge(this, l_steps);
+                    l_edge.addObject2Edge(this, l_steps);
                     break;
                 }
 
@@ -330,7 +330,7 @@ public class CDefaultCar extends IInspector implements ICar {
                 // because the driving model should update the current speed value for an empty cell
                 if (l_edge.CarCanUpdated(this, l_steps)) {
                     try {
-                        l_edge.updateCar(this, l_steps);
+                        l_edge.updateObject(this, l_steps);
                     } catch (Exception l_exception) {
                     }
                     break;
@@ -338,7 +338,7 @@ public class CDefaultCar extends IInspector implements ICar {
                     // car can not be updated to a new position, so remove it and add the car to the next edge
                 } else {
                     l_steps = l_edge.overlappingCells(this, l_steps);
-                    l_edge.removeCarFromEdge(this);
+                    l_edge.removeObjectFromEdge(this);
                     m_routeindex++;
                     continue;
                 }

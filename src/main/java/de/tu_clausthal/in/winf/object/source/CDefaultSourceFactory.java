@@ -68,20 +68,6 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory {
      *
      * @param p_position geoposition
      * @param p_number   number of cars
-     */
-    public CDefaultSourceFactory(GeoPosition p_position, int p_number) {
-        super(p_position, Color.CYAN);
-        m_NumberCarsInStep = p_number;
-        if (p_number < 1)
-            throw new IllegalArgumentException("number must be greater than zero");
-    }
-
-
-    /**
-     * ctor which sets the geo position of the source and the number of cars on a creation step
-     *
-     * @param p_position geoposition
-     * @param p_number   number of cars
      * @param p_color    color of the source
      */
     protected CDefaultSourceFactory(GeoPosition p_position, int p_number, Color p_color) {
@@ -89,19 +75,6 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory {
         m_NumberCarsInStep = p_number;
         if (p_number < 1)
             throw new IllegalArgumentException("number must be greater than zero");
-    }
-
-
-    /**
-     * sets the number of generated cars
-     *
-     * @param p_number number of cars
-     */
-    public void setNumberOfCars(int p_number) {
-        if (p_number < 1)
-            throw new IllegalArgumentException("number must be greater than zero");
-
-        m_NumberCarsInStep = p_number;
     }
 
 

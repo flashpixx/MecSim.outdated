@@ -68,19 +68,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
      */
     protected T[] m_additionalinformation = null;
 
-    /**
-     * ctor create the samples
-     *
-     * @param p_graph  graph object
-     * @param p_id     edge ID
-     * @param p_length length of the edge
-     */
-    public CCellObjectLinkage(CGraphHopper p_graph, int p_id, double p_length) {
-        m_edgeid = p_id;
-        m_edgelength = p_length;
-        this.sampling(p_graph.getEdgeIterator(m_edgeid));
-    }
-
 
     /**
      * ctor create the samples
@@ -190,16 +177,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
 
 
     /**
-     * returns the length of the edge
-     *
-     * @return length
-     */
-    public double getEdgeLength() {
-        return m_edgelength;
-    }
-
-
-    /**
      * returns the number of samples of the edge
      *
      * @return sample
@@ -287,8 +264,8 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
     /**
      * check if a car can be updated within the edge
      *
-     * @param p_object  car object
-     * @param p_move steps to move
+     * @param p_object car object
+     * @param p_move   steps to move
      * @return boolean, true if the car can be updated
      * @note does not check for an empty position
      */
@@ -304,7 +281,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
      * returns the number of cell, that overlaps after update
      *
      * @param p_object object
-     * @param p_move steps to move
+     * @param p_move   steps to move
      * @return number of cells that overlapps (positive value, cells overlapped, otherwise negative value)
      */
     public synchronized int overlappingCells(N p_object, int p_move) {
@@ -319,7 +296,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
      * updates the object position on the edge
      *
      * @param p_object object
-     * @param p_move moving steps
+     * @param p_move   moving steps
      */
     public synchronized void updateObject(N p_object, int p_move) throws IllegalAccessException {
         Integer l_position = m_cars.get(p_object);
@@ -344,7 +321,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
      * returns the predecessor of an object on the edge
      *
      * @param p_object object
-     * @param p_count number of predecessors
+     * @param p_count  number of predecessors
      * @return null or map with position and car object
      */
     public Map<Integer, N> getPredecessor(N p_object, int p_count) {
@@ -415,29 +392,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
         for (int i = 0; i < m_cells.length; i++)
             m_cells[i] = null;
 
-    }
-
-    /**
-     * checks if the forward edge is empty
-     *
-     * @return boolean for empty
-     */
-    public synchronized boolean isEmpty() {
-        for (N l_object : m_cells)
-            if (l_object != null)
-                return false;
-
-        return true;
-    }
-
-    /**
-     * checks if a cell is empty
-     *
-     * @param p_position position
-     * @return empty boolean
-     */
-    public synchronized boolean isEmpty(int p_position) {
-        return m_cells[p_position] == null;
     }
 
 

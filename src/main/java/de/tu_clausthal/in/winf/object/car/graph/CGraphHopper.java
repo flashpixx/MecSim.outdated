@@ -209,17 +209,6 @@ public class CGraphHopper extends GraphHopper {
 
 
     /**
-     * returns the edge length
-     *
-     * @param p_edge edge ID
-     * @return length
-     */
-    public double getEdgeLength(int p_edge) {
-        return this.getGraph().getEdgeProps(p_edge, Integer.MIN_VALUE).getDistance();
-    }
-
-
-    /**
      * returns an iterator state of an edge
      *
      * @param p_edge edge ID

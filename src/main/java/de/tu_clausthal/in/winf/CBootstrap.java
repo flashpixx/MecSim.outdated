@@ -124,6 +124,7 @@ public class CBootstrap {
         COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
         COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
         COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
+
     }
 
 }

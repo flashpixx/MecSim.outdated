@@ -132,9 +132,11 @@ public class CLogger {
         warn(null);
     }
 
-    /** adds a warn message
+    /**
+     * adds a warn message
+     *
      * @param p_data log data
-     **/
+     */
     public static void warn(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.WARN_INT)
             return;
@@ -142,15 +144,19 @@ public class CLogger {
     }
 
 
-    /** adds a error message **/
+    /**
+     * adds a error message *
+     */
     public static void error() {
         error(null);
     }
 
 
-    /** adds a error message
+    /**
+     * adds a error message
+     *
      * @param p_data log data
-     **/
+     */
     public static void error(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.ERROR_INT)
             return;
@@ -158,28 +164,39 @@ public class CLogger {
     }
 
 
-    /** adds an info message **/
+    /**
+     * adds an info message *
+     */
     public static void info() {
         info(null);
     }
 
-    /** adds an info message
+
+    /**
+     * adds an info message
+     *
      * @param p_data log data
-     **/
+     */
     public static void info(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.INFO_INT)
             return;
         Logger.getLogger(s_loggername).info(createLogData(Level.INFO, p_data));
     }
 
-    /** adds a debug message **/
+
+    /**
+     * adds a debug message *
+     */
     public static void debug() {
         debug(null);
     }
 
-    /** adds a debug message
+
+    /**
+     * adds a debug message
+     *
      * @param p_data log data
-     **/
+     */
     public static void debug(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.DEBUG_INT)
             return;
@@ -187,15 +204,19 @@ public class CLogger {
     }
 
 
-    /** adds a fatal message **/
+    /**
+     * adds a fatal message *
+     */
     public static void fatal() {
         fatal(null);
     }
 
 
-    /** adds a fatal message
+    /**
+     * adds a fatal message
+     *
      * @param p_data log data
-     **/
+     */
     public static void fatal(Object p_data) {
         if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.FATAL_INT)
             return;

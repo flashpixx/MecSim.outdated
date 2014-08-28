@@ -280,16 +280,6 @@ public class CGraphHopper extends GraphHopper {
 
 
     /**
-     * returns a list of all edges
-     *
-     * @return array with edges
-     */
-    public CCellCarLinkage[] getAllEdges() {
-        return (CCellCarLinkage[]) m_edgecell.values().toArray();
-    }
-
-
-    /**
      * downloads the OSM data from Geofabrik
      *
      * @return download file with full path
@@ -297,7 +287,7 @@ public class CGraphHopper extends GraphHopper {
      */
     private File downloadOSMData() {
         try {
-            File l_output = File.createTempFile("tucosm", ".osm.pbf");
+            File l_output = File.createTempFile("mecsim", ".osm.pbf");
             URL l_url = new URL("http://download.geofabrik.de/" + CConfiguration.getInstance().get().RoutingMap + "-latest.osm.pbf");
 
             System.out.println("download OSM map from [" + l_url + "] to [" + l_output + "]");

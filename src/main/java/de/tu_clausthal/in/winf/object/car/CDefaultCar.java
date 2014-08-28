@@ -197,7 +197,10 @@ public class CDefaultCar extends IInspector implements ICar {
 
     @Override
     public GeoPosition getGeoposition() {
-        return m_routeindex < m_routeedges.size() ? m_graph.getEdge(m_routeedges.get(m_routeindex)).getGeoposition(this) : null;
+        EdgeIteratorState l_edge = this.getEdge();
+        if (l_edge == null)
+            return null;
+        return m_graph.getEdge(l_edge).getGeoposition(this);
     }
 
 
@@ -339,7 +342,6 @@ public class CDefaultCar extends IInspector implements ICar {
                     m_routeindex++;
                     continue;
                 }
-
 
             }
 

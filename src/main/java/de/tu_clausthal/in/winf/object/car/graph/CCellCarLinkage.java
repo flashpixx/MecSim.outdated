@@ -127,6 +127,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         m_additionalinformation = (T[]) new Object[m_cells.length];
     }
 
+
     /**
      * filter point list to create a list of points which stores monoton increase points
      *
@@ -178,15 +179,6 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
 
     /**
-     * returns the full array of additional information
-     *
-     * @return information array
-     */
-    public T[] getAdditionalInformation() {
-        return m_additionalinformation;
-    }
-
-    /**
      * returns the edge ID
      *
      * @return ID
@@ -194,6 +186,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
     public int getEdgeID() {
         return m_edgeid;
     }
+
 
     /**
      * returns the length of the edge
@@ -204,6 +197,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         return m_edgelength;
     }
 
+
     /**
      * returns the number of samples of the edge
      *
@@ -212,6 +206,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
     public int getEdgeCells() {
         return m_cells.length;
     }
+
 
     /**
      * returns the position of a car on the edge
@@ -222,6 +217,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
     public Integer getCarPosition(ICar p_car) {
         return m_cars.get(p_car);
     }
+
 
     /**
      * returns the geoposition of a car
@@ -237,15 +233,6 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         return m_cellgeoposition[l_position.intValue()];
     }
 
-    /**
-     * returns the geoposition of index
-     *
-     * @param p_index index
-     * @return geoposition
-     */
-    public GeoPosition getGeoposition(int p_index) {
-        return m_cellgeoposition[p_index];
-    }
 
     /**
      * checks if a care is set on the edge
@@ -268,6 +255,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         return m_cells[p_position] != null;
     }
 
+
     /**
      * adds a car to the edge
      *
@@ -282,6 +270,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         m_cars.put(p_car, p_position);
     }
 
+
     /**
      * remove the car from the forward edge
      *
@@ -292,6 +281,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         if (l_pos != null)
             m_cells[l_pos.intValue()] = null;
     }
+
 
     /**
      * check if a car can be updated within the edge
@@ -308,6 +298,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         return m_cars.get(p_car).intValue() + Math.abs(p_move) < m_cells.length;
     }
 
+
     /**
      * returns the number of cell, that overlaps after update
      *
@@ -321,6 +312,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
 
         return (m_cars.get(p_car).intValue() + Math.abs(p_move)) - (m_cells.length - 1);
     }
+
 
     /**
      * updates the car position on the edge
@@ -345,6 +337,7 @@ public class CCellCarLinkage<T> implements Comparable<CCellCarLinkage> {
         m_cells[l_newposition] = p_car;
         m_cars.put(p_car, l_newposition);
     }
+
 
     /**
      * returns the predecessor of a car on the edge

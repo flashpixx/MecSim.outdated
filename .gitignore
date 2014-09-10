@@ -7,3 +7,4 @@ target/
 !*.java
 !*.xml
 !*.doxyfile
+!*.png

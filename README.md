@@ -1,6 +1,6 @@
 # Fortgeschrittenenprojekt - Traffic Simulation
 
-![Screenshot](screen]
+![Screenshot](screen.png)
 
 ## Requirements
 

@@ -1,5 +1,7 @@
 # Fortgeschrittenenprojekt - Traffic Simulation
 
+![Screenshot](screen.png)
+
 ## Requirements
 
 * [Java 1.7](http://www.java.com)

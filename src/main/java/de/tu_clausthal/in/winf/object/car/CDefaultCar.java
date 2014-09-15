@@ -309,11 +309,19 @@ public class CDefaultCar extends IInspector implements ICar {
         CCellObjectLinkage l_newedge     = l_currentedge;
         for( int i=0; l_newedge != null; l_newedge = m_graph.getEdge(this.getEdge(++i+m_routeindex)) ) {
             l_speed -= l_newedge.getEdgeCells();
-            if (l_speed < 0)
+            if (l_speed < 0) {
+                m_routeindex += i;
                 break;
+            }
         }
-        l_speed += l_newedge.getEdgeCells();
+        if (l_newedge == null)
+        {
+            m_routeindex = m_routeedges.size();
+            return;
+        }
 
+
+        l_speed += l_newedge.getEdgeCells();
         if ((l_currentedge == l_newedge) && (l_currentedge.contains(this)))
             l_currentedge.updateObject(this, l_speed);
         else {

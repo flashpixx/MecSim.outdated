@@ -36,10 +36,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 
 /**
@@ -186,13 +184,22 @@ public class CDefaultCar extends IInspector implements ICar {
         }
 
         return null;
-
     }
 
 
     @Override
     public EdgeIteratorState getEdge() {
-        return m_routeindex < m_routeedges.size() ? m_routeedges.get(m_routeindex) : null;
+        return this.getEdge(m_routeindex);
+    }
+
+    /** returns the edge from an index
+     *
+     * @param p_index index
+     * @return null or edge
+     */
+    private EdgeIteratorState getEdge(int p_index)
+    {
+        return p_index < m_routeedges.size() ? m_routeedges.get(p_index) : null;
     }
 
     @Override
@@ -286,12 +293,56 @@ public class CDefaultCar extends IInspector implements ICar {
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
     }
 
+    private CCellObjectLinkage getNewEdge( int p_steps )
+    {
+        int n= 0;
+        for( CCellObjectLinkage l_edge=m_graph.getEdge(this.getEdge()); (l_edge != null) && (p_steps > 0); l_edge = m_graph.getEdge(this.getEdge(++n+m_routeindex)) )
+        {
+            
+        }
+    }
+
+
     @Override
-    public void step(int p_currentstep, ILayer p_layer) {
+    public synchronized void step(int p_currentstep, ILayer p_layer) {
 
         // store current speed for modifying the position on the edge
         int l_steps = this.getCurrentSpeed();
 
+
+
+        // if the car is at the end
+        if (this.hasEndReached())
+            return;
+
+
+        CCellObjectLinkage l_currentedge = ;
+        CCellObjectLinkage l_edge        = null;
+        int n=0;
+        for(    l_edge = l_currentedge;
+                l_edge != null;
+                 )
+        {
+            l_steps -= l_edge.getEdgeCells();
+            if (l_steps <= 0)
+                break;
+        }
+
+        if (l_edge == null)
+        {
+            m_routeindex = m_routeedges.size();
+            return;
+        }
+        l_steps += l_edge.getEdgeCells();
+
+
+        if (l_edge == l_currentedge)
+            l_edge.updateObject(this, l_steps);
+
+
+
+
+/*
         for (int i = 0; true; i++) {
 
             // if the car is at the end
@@ -346,5 +397,6 @@ public class CDefaultCar extends IInspector implements ICar {
             }
 
         }
+        */
     }
 }

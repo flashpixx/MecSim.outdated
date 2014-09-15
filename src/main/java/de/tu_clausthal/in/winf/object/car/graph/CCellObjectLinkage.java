@@ -54,7 +54,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
     /**
      * map with car-2-position in forward direction *
      */
-    protected Map<N, Integer> m_cars = new ConcurrentHashMap();
+    protected Map<N, Integer> m_objects = new ConcurrentHashMap();
     /**
      * array with cells of the forward direction *
      */
@@ -187,24 +187,13 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
 
 
     /**
-     * returns the position of a object on the edge
-     *
-     * @param p_object object
-     * @return null or position
-     */
-    public Integer getObjectPosition(N p_object) {
-        return m_cars.get(p_object);
-    }
-
-
-    /**
      * returns the geoposition of an object
      *
      * @param p_object object
      * @return geoposition or null
      */
     public GeoPosition getGeoposition(N p_object) {
-        Integer l_position = m_cars.get(p_object);
+        Integer l_position = m_objects.get(p_object);
         if (l_position == null)
             return null;
 
@@ -213,25 +202,150 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
 
 
     /**
-     * checks if an object is set on the edge
+     * returns the number of objects on the current edge
      *
-     * @param p_object object
-     * @return boolean car existence
+     * @return object number
      */
-    public boolean contains(N p_object) {
-        return m_cars.containsKey(p_object);
+    public int getNumberOfObjects() {
+        return m_objects.size();
+    }
+
+
+    /** checks if a position is empty
+     *
+     * @param p_position position index
+     * @return empty
+     */
+    public boolean isEmptyCell(int p_position)
+    {
+        return m_cells[p_position] == null;
+    }
+
+    public boolean isEmpty()
+    {
+        return m_objects.isEmpty();
+    }
+
+    public boolean isEmpty(int p_position)
+    {
+        for(int i=0; i < p_position; i++)
+            if (m_cells[i] != null)
+                return false;
+        return true;
+    }
+
+
+    public Integer getPosition( N p_object )
+    {
+        return m_objects.get(p_object);
+    }
+
+
+    public synchronized void setObject( N p_object, int p_position ) throws IllegalAccessException
+    {
+        if (!this.isEmptyCell(p_position))
+            throw new IllegalAccessException("position is not empty");
+        if (m_objects.containsKey(p_object))
+            throw new IllegalAccessException("object exists");
+
+        m_cells[p_position] = p_object;
+        m_objects.put(p_object, p_position);
+    }
+
+
+    public synchronized void removeObject( N p_object )
+    {
+        if (!m_objects.containsKey(p_object))
+            return;
+
+        m_cells[m_objects.get(p_object)] = null;
+    }
+
+
+    public synchronized void updateObject( N p_object, int p_newposition ) throws IllegalAccessException
+    {
+        if (!this.isEmptyCell(p_newposition))
+            throw new IllegalAccessException("new position is not empty");
+
+        this.removeObject(p_object);
+        this.setObject(p_object, p_newposition);
     }
 
 
     /**
-     * checks if the position is set
+     * returns the predecessor of an object on the edge
      *
-     * @param p_position position index
-     * @return boolean for emptiness
-     */
-    public synchronized boolean isPositionSet(int p_position) {
-        return m_cells[p_position] != null;
+     * @param p_object object
+     * @param p_count  number of predecessors
+     * @return null or map with position and object
+     *
+     **/
+    public Map<Integer, N> getPredecessor(N p_object, int p_count) {
+        Integer l_position = m_objects.get(p_object);
+        if (l_position == null)
+            return null;
+
+        HashMap<Integer, N> l_items = new HashMap();
+        for (int i = l_position+1; i < m_cells.length; i++) {
+            if (m_cells[i] != null)
+                l_items.put(i - l_position, m_cells[i]);
+
+            if (l_items.size() >= p_count)
+                break;
+        }
+
+        return l_items;
     }
+
+
+    /**
+     * returns the next predecessor of an object on the edge
+     *
+     * @param p_object object
+     * @return null or map with position and object
+     **/
+    public Map<Integer, N> getPredecessor(N p_object) {
+        return this.getPredecessor(p_object, 1);
+    }
+
+
+    /**
+     * returns the successor of an object on the edge
+     *
+     * @param p_object object
+     * @param p_count  number of successors
+     * @return null or map with position and object
+     *
+     **/
+    public Map<Integer, N> getSuccessor(N p_object, int p_count) {
+        Integer l_position = m_objects.get(p_object);
+        if (l_position == null)
+            return null;
+
+        HashMap<Integer, N> l_items = new HashMap();
+        for (int i = l_position-1; i >= 0; i--) {
+            if (m_cells[i] != null)
+                l_items.put(l_position-i, m_cells[i]);
+
+            if (l_items.size() >= p_count)
+                break;
+        }
+
+        return l_items;
+    }
+
+    /**
+     * returns the next successor of an object on the edge
+     *
+     * @param p_object object
+     * @return null or map with position and object
+     **/
+    public Map<Integer, N> getSuccessor(N p_object) {
+        return this.getSuccessor(p_object, 1);
+    }
+
+
+
 
 
     /**
@@ -239,67 +353,67 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
      *
      * @param p_object   car object
      * @param p_position position
-     */
+     *
     public synchronized void addObject2Edge(N p_object, int p_position) {
         if (m_cells[p_position] != null)
             return;
 
         m_cells[p_position] = p_object;
-        m_cars.put(p_object, p_position);
+        m_objects.put(p_object, p_position);
     }
 
 
-    /**
+    **
      * remove the object from the edge
      *
      * @param p_object object
-     */
+     *
     public synchronized void removeObjectFromEdge(N p_object) {
-        Integer l_pos = m_cars.remove(p_object);
+        Integer l_pos = m_objects.remove(p_object);
         if (l_pos != null)
             m_cells[l_pos.intValue()] = null;
     }
 
 
-    /**
+    **
      * check if a car can be updated within the edge
      *
      * @param p_object car object
      * @param p_move   steps to move
      * @return boolean, true if the car can be updated
      * @note does not check for an empty position
-     */
+     *
     public synchronized boolean CarCanUpdated(N p_object, int p_move) {
-        if (!m_cars.containsKey(p_object))
+        if (!m_objects.containsKey(p_object))
             return false;
 
-        return m_cars.get(p_object).intValue() + Math.abs(p_move) < m_cells.length;
+        return m_objects.get(p_object).intValue() + Math.abs(p_move) < m_cells.length;
     }
 
 
-    /**
+    **
      * returns the number of cell, that overlaps after update
      *
      * @param p_object object
      * @param p_move   steps to move
      * @return number of cells that overlapps (positive value, cells overlapped, otherwise negative value)
-     */
+     *
     public synchronized int overlappingCells(N p_object, int p_move) {
-        if (!m_cars.containsKey(p_object))
+        if (!m_objects.containsKey(p_object))
             return -1;
 
-        return (m_cars.get(p_object).intValue() + Math.abs(p_move)) - (m_cells.length - 1);
+        return (m_objects.get(p_object).intValue() + Math.abs(p_move)) - (m_cells.length - 1);
     }
 
 
-    /**
+    **
      * updates the object position on the edge
      *
      * @param p_object object
      * @param p_move   moving steps
-     */
+     *
     public synchronized void updateObject(N p_object, int p_move) throws IllegalAccessException {
-        Integer l_position = m_cars.get(p_object);
+        Integer l_position = m_objects.get(p_object);
         if (l_position == null)
             throw new IllegalAccessException("car not found");
 
@@ -313,33 +427,20 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
 
         m_cells[l_position.intValue()] = null;
         m_cells[l_newposition] = p_object;
-        m_cars.put(p_object, l_newposition);
+        m_objects.put(p_object, l_newposition);
     }
 
 
-    /**
-     * returns the predecessor of an object on the edge
-     *
-     * @param p_object object
-     * @param p_count  number of predecessors
-     * @return null or map with position and car object
-     */
-    public Map<Integer, N> getPredecessor(N p_object, int p_count) {
-        Integer l_pos = m_cars.get(p_object);
-        if (l_pos == null)
-            return null;
-
-        return getPredecessor(l_pos.intValue() + 1, p_count);
-    }
 
 
-    /**
+
+    **
      * returns the predeccors of a position
      *
      * @param p_position index
      * @param p_count    number of elements
      * @return null or map with position and car object
-     */
+     *
     public Map<Integer, N> getPredecessor(int p_position, int p_count) {
         HashMap<Integer, N> l_items = new HashMap();
         for (int i = p_position; i < m_cells.length; i++) {
@@ -354,41 +455,42 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
     }
 
 
-    /**
-     * returns the number of objects on the current edge
-     *
-     * @return object number
-     */
-    public int getNumberOfObjects() {
-        return m_cars.size();
-    }
-
-
-    /**
+    **
      * returns the next predecessor of an object on the edge
      *
      * @param p_object car object
      * @return null or map with position and car object
-     */
+     *
     public Map<Integer, N> getPredecessor(N p_object) {
         return this.getPredecessor(p_object, 1);
     }
 
-    /**
+    **
      * returns the next predecessor of a position on the egde
      *
      * @param p_position index
      * @return null or map with position and car object
-     */
+     *
     public Map<Integer, N> getPredecessor(int p_position) {
         return this.getPredecessor(p_position, 1);
     }
+
+    */
+
+
+
+
+
+
+
+
+
 
     /**
      * clears the edge information
      */
     public synchronized void clear() {
-        m_cars.clear();
+        m_objects.clear();
         for (int i = 0; i < m_cells.length; i++)
             m_cells[i] = null;
 

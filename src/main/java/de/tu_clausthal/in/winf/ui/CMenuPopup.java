@@ -87,7 +87,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
             this.remove(m_institutionMenu);
             m_institution = null;
         }
-        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
+        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmptyCell())
             return;
 
         ArrayList<String> l_list = new ArrayList();

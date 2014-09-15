@@ -239,24 +239,24 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
 
-        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
+        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmptyCell())
             throw new IllegalStateException("institutions are not exist, add an institution first");
 
         String[] l_names = this.getInstitutionList();
         String l_name = (String) JOptionPane.showInputDialog(null, "set an institution for the norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
-        if ((l_name == null) || (l_name.isEmpty()))
+        if ((l_name == null) || (l_name.isEmptyCell()))
             return;
 
         IInstitution<INormObject> l_item = this.getInstitution(l_name);
         if (l_item != null) {
             String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
-            if ((l_normname == null) || (l_normname.isEmpty()))
+            if ((l_normname == null) || (l_normname.isEmptyCell()))
                 return;
             if (l_normname.contains(":"))
                 throw new IllegalArgumentException(": not allowed");
 
             String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
-            if ((l_speed == null) || (l_speed.isEmpty()))
+            if ((l_speed == null) || (l_speed.isEmptyCell()))
                 return;
 
             l_item.add(new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)));
@@ -275,7 +275,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
 
-        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmpty())
+        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmptyCell())
             throw new IllegalStateException("institutions are not exist, add an institution first");
 
         ArrayList<String> l_names = new ArrayList();
@@ -283,7 +283,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             for (INorm<INormObject> l_norm : l_item)
                 l_names.add(l_item.getName() + ":" + l_norm.getName());
         String l_name = (String) JOptionPane.showInputDialog(null, "delete an norm", "Norm", JOptionPane.QUESTION_MESSAGE, null, l_names.toArray(), l_names.toArray()[0]);
-        if ((l_name == null) || (l_name.isEmpty()))
+        if ((l_name == null) || (l_name.isEmptyCell()))
             return;
 
         String[] l_parts = l_name.split("\\:");
@@ -312,7 +312,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             throw new IllegalStateException("simulation is running");
 
         String l_input = JOptionPane.showInputDialog(null, "add a new institution name");
-        if ((l_input == null) || (l_input.isEmpty()))
+        if ((l_input == null) || (l_input.isEmptyCell()))
             return;
         if (l_input.contains(":"))
             throw new IllegalArgumentException(": not allowed");
@@ -328,7 +328,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void deleteInstitution() {
         /*
-        if (CSimulationData.getInstance().getCarInstitutionQueue().isEmpty())
+        if (CSimulationData.getInstance().getCarInstitutionQueue().isEmptyCell())
             return;
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
@@ -370,7 +370,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private IInstitution<INormObject> getInstitution(String p_name) {
         /*
-        if ((p_name == null) && (p_name.isEmpty()))
+        if ((p_name == null) && (p_name.isEmptyCell()))
             return null;
 
         for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())

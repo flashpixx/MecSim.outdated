@@ -118,7 +118,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
             super.remove(p_object);
             CCellObjectLinkage l_edge = m_graph.getEdge(p_object.getEdge());
             if (l_edge != null)
-                l_edge.removeObjectFromEdge(p_object);
+                l_edge.removeObject(p_object);
         }
 
     }

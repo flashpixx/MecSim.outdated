@@ -36,6 +36,6 @@ public interface IVoidStepable extends IStepable {
      * @param p_currentstep current step value
      * @param p_layer       layer on which is the object set or null
      */
-    public void step(int p_currentstep, ILayer p_layer);
+    public void step(int p_currentstep, ILayer p_layer) throws Exception;
 
 }

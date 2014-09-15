@@ -293,54 +293,33 @@ public class CDefaultCar extends IInspector implements ICar {
         graphics2D.fillOval((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
     }
 
-    private CCellObjectLinkage getNewEdge( int p_steps )
-    {
-        int n= 0;
-        for( CCellObjectLinkage l_edge=m_graph.getEdge(this.getEdge()); (l_edge != null) && (p_steps > 0); l_edge = m_graph.getEdge(this.getEdge(++n+m_routeindex)) )
-        {
-            
-        }
-    }
-
 
     @Override
-    public synchronized void step(int p_currentstep, ILayer p_layer) {
+    public synchronized void step(int p_currentstep, ILayer p_layer) throws Exception {
 
         // store current speed for modifying the position on the edge
-        int l_steps = this.getCurrentSpeed();
-
-
+        int l_speed = this.getCurrentSpeed();
 
         // if the car is at the end
         if (this.hasEndReached())
             return;
 
 
-        CCellObjectLinkage l_currentedge = ;
-        CCellObjectLinkage l_edge        = null;
-        int n=0;
-        for(    l_edge = l_currentedge;
-                l_edge != null;
-                 )
-        {
-            l_steps -= l_edge.getEdgeCells();
-            if (l_steps <= 0)
+        CCellObjectLinkage l_currentedge = m_graph.getEdge(this.getEdge());
+        CCellObjectLinkage l_newedge     = l_currentedge;
+        for( int i=0; l_newedge != null; l_newedge = m_graph.getEdge(this.getEdge(++i+m_routeindex)) ) {
+            l_speed -= l_newedge.getEdgeCells();
+            if (l_speed < 0)
                 break;
         }
+        l_speed += l_newedge.getEdgeCells();
 
-        if (l_edge == null)
-        {
-            m_routeindex = m_routeedges.size();
-            return;
+        if ((l_currentedge == l_newedge) && (l_currentedge.contains(this)))
+            l_currentedge.updateObject(this, l_speed);
+        else {
+            l_currentedge.removeObject(this);
+            l_newedge.setObject(this, l_speed);
         }
-        l_steps += l_edge.getEdgeCells();
-
-
-        if (l_edge == l_currentedge)
-            l_edge.updateObject(this, l_steps);
-
-
-
 
 /*
         for (int i = 0; true; i++) {
@@ -356,20 +335,20 @@ public class CDefaultCar extends IInspector implements ICar {
             }
 
             // get current edge of cars route
-            CCellObjectLinkage l_edge = m_graph.getEdge(this.getEdge());
+            CCellObjectLinkage l_newedge = m_graph.getEdge(this.getEdge());
 
             // car is not set on the current edge, so we try to find the first position
-            if (!l_edge.contains(this)) {
+            if (!l_newedge.contains(this)) {
 
                 // check car can be set to the edge position
-                if ((l_steps < l_edge.getEdgeCells()) && (!l_edge.isPositionSet(l_steps))) {
-                    l_edge.addObject2Edge(this, l_steps);
+                if ((l_steps < l_newedge.getEdgeCells()) && (!l_newedge.isPositionSet(l_steps))) {
+                    l_newedge.addObject2Edge(this, l_steps);
                     break;
                 }
 
                 // if car faster than edge length, so get the next edge
-                if (l_steps >= l_edge.getEdgeCells()) {
-                    l_steps -= l_edge.getEdgeCells();
+                if (l_steps >= l_newedge.getEdgeCells()) {
+                    l_steps -= l_newedge.getEdgeCells();
                     m_routeindex++;
                     continue;
                 }
@@ -379,17 +358,17 @@ public class CDefaultCar extends IInspector implements ICar {
 
                 // car can be updated to a new position (we did not check for empty,
                 // because the driving model should update the current speed value for an empty cell
-                if (l_edge.CarCanUpdated(this, l_steps)) {
+                if (l_newedge.CarCanUpdated(this, l_steps)) {
                     try {
-                        l_edge.updateObject(this, l_steps);
+                        l_newedge.updateObject(this, l_steps);
                     } catch (Exception l_exception) {
                     }
                     break;
 
                     // car can not be updated to a new position, so remove it and add the car to the next edge
                 } else {
-                    l_steps = l_edge.overlappingCells(this, l_steps);
-                    l_edge.removeObjectFromEdge(this);
+                    l_steps = l_newedge.overlappingCells(this, l_steps);
+                    l_newedge.removeObjectFromEdge(this);
                     m_routeindex++;
                     continue;
                 }

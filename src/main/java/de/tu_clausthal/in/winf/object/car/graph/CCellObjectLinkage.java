@@ -262,13 +262,21 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage> 
     }
 
 
-    public synchronized void updateObject( N p_object, int p_newposition ) throws IllegalAccessException
+    public synchronized void updateObject( N p_object, int p_increment ) throws IllegalAccessException
     {
-        if (!this.isEmptyCell(p_newposition))
+        Integer l_position = m_objects.get(p_object);
+        if (l_position == null)
+            throw new IllegalAccessException("object position not found");
+        if (!this.isEmptyCell(p_increment + l_position.intValue()))
             throw new IllegalAccessException("new position is not empty");
 
         this.removeObject(p_object);
-        this.setObject(p_object, p_newposition);
+        this.setObject(p_object, p_increment + l_position.intValue());
+    }
+
+    public synchronized boolean contains( N p_object )
+    {
+        return m_objects.containsKey(p_object);
     }
 
 

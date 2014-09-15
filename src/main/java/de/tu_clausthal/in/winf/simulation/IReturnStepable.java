@@ -38,7 +38,7 @@ public interface IReturnStepable<T> extends IStepable {
      * @param p_layer       layer on which is the object set or null
      * @return collection with step values
      */
-    public Collection<T> step(int p_currentstep, ILayer p_layer);
+    public Collection<T> step(int p_currentstep, ILayer p_layer) throws Exception;
 
 
     /**

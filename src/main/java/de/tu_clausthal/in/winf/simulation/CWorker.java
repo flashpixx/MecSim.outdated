@@ -58,10 +58,6 @@ public class CWorker implements Runnable {
      */
     private CWorld m_world = CSimulation.getInstance().getWorld();
     /**
-     * latch for counting *
-     */
-    private CountDownLatch m_counter = null;
-    /**
      * interrupt flag *
      */
     private boolean m_interrupt = false;
@@ -70,13 +66,11 @@ public class CWorker implements Runnable {
     /**
      * ctor to create a working process
      *
-     * @param p_counter     latch to detect stopping thread
      * @param p_barrier     synchronized barrier
      * @param p_isFirst     rank ID of the process
      * @param p_currentstep current step object
      */
-    public CWorker(CountDownLatch p_counter, CyclicBarrier p_barrier, boolean p_isFirst, AtomicInteger p_currentstep) {
-        m_counter = p_counter;
+    public CWorker(CyclicBarrier p_barrier, boolean p_isFirst, AtomicInteger p_currentstep) {
         m_barrier = p_barrier;
         m_isFirst = p_isFirst;
         m_currentstep = p_currentstep;
@@ -103,7 +97,6 @@ public class CWorker implements Runnable {
 
         }
 
-        m_counter.countDown();
         CLogger.info("thread stops working");
     }
 

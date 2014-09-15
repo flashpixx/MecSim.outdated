@@ -52,8 +52,6 @@ public class CSimulation {
      * integer of simulation step *
      */
     private AtomicInteger m_simulationcount = new AtomicInteger();
-
-
     /**
      * private ctor *
      */
@@ -77,7 +75,7 @@ public class CSimulation {
      * @return state
      */
     public boolean isRunning() {
-        return (m_worker != null) && (m_worker.isRunning());
+        return m_worker != null;
     }
 
 

@@ -21,8 +21,9 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
+import de.tu_clausthal.in.winf.CLogger;
+
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -32,19 +33,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CWorkerPool {
 
     /**
-     * thread group to bundle all working threads *
-     */
-    private ThreadGroup m_runners = new ThreadGroup(this.toString());
-
-    /**
      * barrier object to synchronize the threads *
      */
     private CyclicBarrier m_barrier = null;
 
     /**
-     * latch to detect thread finishing *
+     * thread pool executor *
      */
-    private CountDownLatch m_threadcounter = null;
+    ExecutorService m_executor = Executors.newCachedThreadPool();
 
 
     /**
@@ -60,19 +56,8 @@ public class CWorkerPool {
             throw new IllegalArgumentException("simulation counter need not to be null");
 
         m_barrier = new CyclicBarrier(p_size);
-        m_threadcounter = new CountDownLatch(p_size);
-
         for (int i = 0; i < p_size; i++)
-            new Thread(m_runners, new CWorker(m_threadcounter, m_barrier, i == 0, p_simulationcount)).start();
-    }
-
-    /**
-     * flag to detect a running process
-     *
-     * @return boolean for activity
-     */
-    public boolean isRunning() {
-        return m_runners.activeCount() > 0;
+            m_executor.execute( new CWorker(m_barrier, i == 0, p_simulationcount) );
     }
 
 
@@ -82,11 +67,8 @@ public class CWorkerPool {
      * @throws InterruptedException
      */
     public void stop() throws InterruptedException {
-        if (!this.isRunning())
-            return;
-
-        m_runners.interrupt();
-        m_threadcounter.await();
+        m_executor.shutdownNow();
+        m_executor.awaitTermination(15, TimeUnit.SECONDS);
     }
 
 }

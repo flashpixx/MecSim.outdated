@@ -306,13 +306,14 @@ public class CDefaultCar extends IInspector implements ICar {
 
         // returns the current edge and set a new edge iteration variabel
         CCellObjectLinkage l_currentedge = m_graph.getEdge(this.getEdge());
-        CCellObjectLinkage l_newedge     = l_currentedge;
-
-        // decrement speed till edge end
-        if (l_currentedge != null)
-            l_speed -= l_currentedge.getEdgeCells() - l_currentedge.getPosition(this);
+        if (l_currentedge != null) {
+            Integer l_position = l_currentedge.getPosition(this);
+            if (l_position != null)
+                l_speed -= l_currentedge.getEdgeCells() - l_position.intValue();
+        }
 
         // calculate next edge with current speed
+        CCellObjectLinkage l_newedge     = l_currentedge;
         for( int i=0; (l_speed > 0) && (l_newedge != null); l_newedge = m_graph.getEdge(this.getEdge(++i+m_routeindex)) ) {
             l_speed -= l_newedge.getEdgeCells();
             if (l_speed < 0) {

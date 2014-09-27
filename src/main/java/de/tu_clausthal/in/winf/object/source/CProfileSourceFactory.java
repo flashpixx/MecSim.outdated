@@ -29,6 +29,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 
 /**
@@ -92,4 +93,8 @@ public class CProfileSourceFactory extends IDefaultSourceFactory {
         return l_sources;
     }
 
+    @Override
+    public Map<String, Object> analyse() {
+        return null;
+    }
 }

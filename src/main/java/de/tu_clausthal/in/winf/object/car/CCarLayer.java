@@ -29,6 +29,7 @@ import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 
 import java.util.Collection;
+import java.util.Map;
 
 
 /**
@@ -134,4 +135,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
         m_graph.clear();
     }
 
+    @Override
+    public Map<String, Object> analyse() {
+        return null;
+    }
 }

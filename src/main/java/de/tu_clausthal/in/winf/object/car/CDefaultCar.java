@@ -36,8 +36,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -394,5 +396,10 @@ public class CDefaultCar extends IInspector implements ICar {
 
         }
         */
+    }
+
+    @Override
+    public Map<String, Object> analyse() {
+        return null;
     }
 }

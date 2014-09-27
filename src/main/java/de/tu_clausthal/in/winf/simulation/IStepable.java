@@ -21,11 +21,19 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
+import java.util.Map;
+
 
 /**
  * interface for all objects which are triggered by the simulation worker
  */
 public interface IStepable {
 
+    /**
+     * method for analyse object
+     *
+     * @return map with string for names and data to analyse or null for nothing
+     */
+    Map<String, Object> analyse();
 
 }

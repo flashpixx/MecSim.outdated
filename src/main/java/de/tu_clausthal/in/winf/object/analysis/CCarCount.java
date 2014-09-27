@@ -31,6 +31,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import java.util.Map;
+
 
 /**
  * car count statistic
@@ -62,4 +64,8 @@ public class CCarCount extends ISingleLayer {
         m_plotdata.clear();
     }
 
+    @Override
+    public Map<String, Object> analyse() {
+        return null;
+    }
 }

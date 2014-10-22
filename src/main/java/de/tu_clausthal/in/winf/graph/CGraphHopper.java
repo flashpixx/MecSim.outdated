@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -84,7 +85,7 @@ public class CGraphHopper extends GraphHopper {
      * private ctor do add different weights for routing *
      */
     private CGraphHopper(String p_weights) {
-        this.setCHShortcuts(p_weights);
+        this.setWeights(p_weights);
         this.initialize();
     }
 
@@ -316,7 +317,7 @@ public class CGraphHopper extends GraphHopper {
     }
 
     @Override
-    public Weighting createWeighting(String p_weighting, FlagEncoder p_encoder) {
+    public Weighting createWeighting(Map<String, Object> p_weighting, FlagEncoder p_encoder) {
         if ("TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting))
             return new CSpeedUpTrafficJam(p_encoder);
 
@@ -326,7 +327,12 @@ public class CGraphHopper extends GraphHopper {
         if ("TrafficJam".equalsIgnoreCase(p_weighting))
             return null;
 
-        return super.createWeighting(p_weighting, p_encoder);
+        Map<String, Object> l_weightning = new HashMap();
+        l_weightning.put(p_weighting, p_weighting);
+
+        //super.createWeighting(Weighting.Params.create(chWeighting), encoder)
+
+        return super.createWeighting( l_weightning, p_encoder );
     }
 
     /**

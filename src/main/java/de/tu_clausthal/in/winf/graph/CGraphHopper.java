@@ -329,10 +329,7 @@ public class CGraphHopper extends GraphHopper {
             return null;
 
 
-        return null;
-
-        //super.createWeighting(Weighting.Params.create(chWeighting), encoder)
-        //return super.createWeighting( l_weightning, p_encoder );
+        return super.createWeighting(p_weighting, p_encoder);
     }
 
     /**

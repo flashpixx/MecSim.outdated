@@ -39,7 +39,7 @@ public class CTrafficJam implements Weighting {
     }
 
     @Override
-    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse) {
+    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse, int p_prevnextEdgeID ) {
         return CGraphHopper.getInstance().getEdge(p_edge).getNumberOfCars();
     }
 

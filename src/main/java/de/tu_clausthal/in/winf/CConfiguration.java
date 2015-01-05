@@ -188,7 +188,7 @@ public class CConfiguration {
         /**
          * window width *
          */
-        public int WindowWidth = 1024;
+        public int WindowWidth = 1680;
         /**
          * window height *
          */

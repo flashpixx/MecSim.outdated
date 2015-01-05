@@ -27,13 +27,15 @@ import com.graphhopper.GraphHopper;
 import com.graphhopper.routing.Path;
 import com.graphhopper.routing.util.EdgeFilter;
 import com.graphhopper.routing.util.EncodingManager;
+import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.graph.weights.CSpeedUp;
+import de.tu_clausthal.in.winf.graph.weights.CSpeedUpTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,6 +45,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -311,22 +316,22 @@ public class CGraphHopper extends GraphHopper {
 
     }
 
-    /*
+
     @Override
-    public Weighting createWeighting( WeightingMap p_weighting, FlagEncoder p_encoder) {
-        if ("TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting.getWeighting()))
+    public Weighting createWeighting( String p_weighting, FlagEncoder p_encoder) {
+        if ("TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting))
             return new CSpeedUpTrafficJam(p_encoder);
 
-        if ("SpeedUp".equalsIgnoreCase(p_weighting.getWeighting()))
+        if ("SpeedUp".equalsIgnoreCase(p_weighting))
             return new CSpeedUp(p_encoder);
 
-        if ("TrafficJam".equalsIgnoreCase(p_weighting.getWeighting()))
+        if ("TrafficJam".equalsIgnoreCase(p_weighting))
             return null;
-
 
         return super.createWeighting(p_weighting, p_encoder);
     }
-*/
+
+
     /**
      * private inner edge classe
      *

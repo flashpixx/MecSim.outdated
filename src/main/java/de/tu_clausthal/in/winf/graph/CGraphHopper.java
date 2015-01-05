@@ -35,6 +35,7 @@ import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.graph.weights.CSpeedUpTrafficJam;
+import de.tu_clausthal.in.winf.graph.weights.CTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
@@ -319,6 +320,7 @@ public class CGraphHopper extends GraphHopper {
 
     @Override
     public Weighting createWeighting( String p_weighting, FlagEncoder p_encoder) {
+
         if ("TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting))
             return new CSpeedUpTrafficJam(p_encoder);
 
@@ -326,7 +328,7 @@ public class CGraphHopper extends GraphHopper {
             return new CSpeedUp(p_encoder);
 
         if ("TrafficJam".equalsIgnoreCase(p_weighting))
-            return null;
+            return new CTrafficJam();
 
         return super.createWeighting(p_weighting, p_encoder);
     }

@@ -60,10 +60,4 @@ public class CSpeedUpTrafficJam implements Weighting {
         return p_reverse ? m_encoder.getReverseSpeed(p_edge.getFlags()) : m_encoder.getSpeed(p_edge.getFlags()) * CGraphHopper.getInstance().getEdge(p_edge).getNumberOfCars();
     }
 
-    @Override
-    public String toString()
-    {
-        return "TrafficJam + SpeedUp";
-    }
-
 }

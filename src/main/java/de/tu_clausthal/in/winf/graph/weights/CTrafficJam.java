@@ -43,10 +43,4 @@ public class CTrafficJam implements Weighting {
         return CGraphHopper.getInstance().getEdge(p_edge).getNumberOfCars();
     }
 
-    @Override
-    public String toString()
-    {
-        return "TrafficJam";
-    }
-
 }

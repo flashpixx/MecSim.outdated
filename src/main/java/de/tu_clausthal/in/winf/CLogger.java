@@ -3,7 +3,7 @@
  # GPL License                                                                        #
  #                                                                                    #
  # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
+ # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
  # published by the Free Software Foundation, either version 3 of the                 #
@@ -22,10 +22,10 @@
 package de.tu_clausthal.in.winf;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
+import org.pmw.tinylog.Logger;
+import org.pmw.tinylog.writers.FileWriter;
 
 
 /**
@@ -60,19 +60,8 @@ public class CLogger {
      * @param p_filename p_filename
      */
     public static void create(Level p_level, String p_filename) {
-        Logger.getLogger(s_loggername).setLevel(p_level);
-
-        if (Logger.getLogger(s_loggername).getLevel() != Level.OFF) {
-            FileAppender appender = new FileAppender();
-            appender.setName("FileLogger");
-            appender.setFile(p_filename);
-            appender.setLayout(new PatternLayout("%d [%c{1}] %m%n"));
-            appender.setThreshold(Level.ALL);
-            appender.setAppend(true);
-            appender.activateOptions();
-
-            Logger.getLogger(s_loggername).addAppender(appender);
-        }
+        if (p_level != Level.OFF)
+            Configurator.defaultConfig().writer(new FileWriter(p_filename)).level(p_level).activate();
     }
 
 
@@ -138,9 +127,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void warn(Object p_data) {
-        if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.WARN_INT)
-            return;
-        Logger.getLogger(s_loggername).info(createLogData(Level.WARN, p_data));
+        Logger.info(createLogData(Level.WARNING, p_data));
     }
 
 
@@ -158,9 +145,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void error(Object p_data) {
-        if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.ERROR_INT)
-            return;
-        Logger.getLogger(s_loggername).info(createLogData(Level.ERROR, p_data));
+        Logger.info(createLogData(Level.ERROR, p_data));
     }
 
 
@@ -178,9 +163,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void info(Object p_data) {
-        if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.INFO_INT)
-            return;
-        Logger.getLogger(s_loggername).info(createLogData(Level.INFO, p_data));
+        Logger.info(createLogData(Level.INFO, p_data));
     }
 
 
@@ -198,29 +181,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void debug(Object p_data) {
-        if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.DEBUG_INT)
-            return;
-        Logger.getLogger(s_loggername).info(createLogData(Level.DEBUG, p_data));
-    }
-
-
-    /**
-     * adds a fatal message *
-     */
-    public static void fatal() {
-        fatal(null);
-    }
-
-
-    /**
-     * adds a fatal message
-     *
-     * @param p_data log data
-     */
-    public static void fatal(Object p_data) {
-        if (Logger.getLogger(s_loggername).getLevel().toInt() < Level.FATAL_INT)
-            return;
-        Logger.getLogger(s_loggername).info(createLogData(Level.FATAL, p_data));
+        Logger.info(createLogData(Level.DEBUG, p_data));
     }
 
 

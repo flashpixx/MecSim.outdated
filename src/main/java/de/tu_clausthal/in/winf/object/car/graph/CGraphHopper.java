@@ -3,7 +3,7 @@
  # GPL License                                                                        #
  #                                                                                    #
  # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
+ # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
  # published by the Free Software Foundation, either version 3 of the                 #
@@ -37,6 +37,7 @@ import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUpTrafficJam;
+import de.tu_clausthal.in.winf.object.car.graph.weights.CTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
@@ -303,7 +304,7 @@ public class CGraphHopper extends GraphHopper {
             return new CSpeedUp(p_encoder);
 
         if ("TrafficJam".equalsIgnoreCase(p_weighting))
-            return null;
+            return new CTrafficJam(this);
 
         return super.createWeighting(p_weighting, p_encoder);
     }

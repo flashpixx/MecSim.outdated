@@ -4,7 +4,7 @@
 
     <groupId>de.tu_clausthal.in.winf</groupId>
     <artifactId>MecSim</artifactId>
-    <version>1.2</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>TUC Wirtschaftsinformatik - MecSim</name>
     <url>https://mecdev.rz-housing.tu-clausthal.de/gitlab/philipp.kraus/fortgeschrittenenprojekt</url>
@@ -21,30 +21,6 @@
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>sonatype-oss-public</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>sonatype-oss-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>jfree</groupId>
@@ -55,14 +31,7 @@
         <dependency>
             <groupId>com.graphhopper</groupId>
             <artifactId>graphhopper</artifactId>
-            <version>[0.3-SNAPSHOT,)</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>[1.2.17,)</version>
-            <scope>compile</scope>
+            <version>0.3</version>
         </dependency>
         <dependency>
             <groupId>org.jxmapviewer</groupId>
@@ -73,43 +42,51 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>[2.2.4,)</version>
+            <version>2.3.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>[3.2,)</version>
+            <version>3.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.dockingframes</groupId>
             <artifactId>docking-frames-common</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
+            <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>[1.2,)</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>[3.0,)</version>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>com.fifesoft</groupId>
-            <artifactId>rsyntaxtextarea</artifactId>
-            <version>[2.5.0,)</version>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog</artifactId>
+            <version>1.0-rc-3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.sf.jason</groupId>
             <artifactId>jason</artifactId>
-            <version>[1.3.10,)</version>
+            <version>1.4.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>rsyntaxtextarea</artifactId>
+            <version>[2.5.0,)</version>
             <scope>compile</scope>
         </dependency>
         -->

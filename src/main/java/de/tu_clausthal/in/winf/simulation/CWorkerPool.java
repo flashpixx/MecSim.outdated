@@ -3,7 +3,7 @@
  # GPL License                                                                        #
  #                                                                                    #
  # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
+ # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
  # published by the Free Software Foundation, either version 3 of the                 #
@@ -21,9 +21,10 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
-import de.tu_clausthal.in.winf.CLogger;
-
-import java.util.concurrent.*;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -33,14 +34,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CWorkerPool {
 
     /**
-     * barrier object to synchronize the threads *
-     */
-    private CyclicBarrier m_barrier = null;
-
-    /**
      * thread pool executor *
      */
     ExecutorService m_executor = Executors.newCachedThreadPool();
+    /**
+     * barrier object to synchronize the threads *
+     */
+    private CyclicBarrier m_barrier = null;
 
 
     /**

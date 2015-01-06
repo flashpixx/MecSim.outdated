@@ -3,7 +3,7 @@
  # GPL License                                                                        #
  #                                                                                    #
  # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014, Philipp Kraus, <philipp.kraus@tu-clausthal.de>                 #
+ # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
  # This program is free software: you can redistribute it and/or modify               #
  # it under the terms of the GNU General Public License as                            #
  # published by the Free Software Foundation, either version 3 of the                 #
@@ -23,7 +23,7 @@ package de.tu_clausthal.in.winf;
 
 import de.tu_clausthal.in.winf.ui.CFrame;
 import org.apache.commons.cli.*;
-import org.apache.log4j.Level;
+import org.pmw.tinylog.Level;
 
 import javax.swing.*;
 import java.io.File;
@@ -72,7 +72,7 @@ public class CMain {
 
         Level l_loglevel = Level.OFF;
         if (l_cli.hasOption("loglevel"))
-            l_loglevel = Level.toLevel(l_cli.getOptionValue("loglevel"));
+            l_loglevel = Level.valueOf(l_cli.getOptionValue("loglevel"));
 
         CLogger.create(l_loglevel, l_logfile);
 

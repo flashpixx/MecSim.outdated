@@ -19,48 +19,30 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.mas.agent.jason;
 
-import de.tu_clausthal.in.winf.objects.IUIObject;
 
-import javax.swing.*;
+import jason.architecture.AgArch;
+import jason.asSemantics.ActionExec;
+import jason.asSyntax.Literal;
+
+import java.util.List;
 
 
 /**
- * inspector class to create a visual view of an object
+ * @see http://jason.sourceforge.net/api/jason/architecture/AgArch.html
  */
-public class CInspector extends JTable {
+public abstract class IArchitecture extends AgArch {
 
-    /**
-     * singleton instance *
-     */
-    private static CInspector s_inspector = new CInspector();
 
-    /**
-     * private ctor *
-     */
-    private CInspector() {
-        super(new CInspectorModel());
+    public List<Literal> perceive() {
+        return ((IAgent)this.getTS().getAg()).perceive();
     }
 
-    /**
-     * return singleton instance
-     *
-     * @return instance
-     */
-    public static CInspector getInstance() {
-        return s_inspector;
+
+    public void act(ActionExec p_action, List<ActionExec> p_feedback) {
+        ((IAgent)this.getTS().getAg()).act(p_action, p_feedback);
     }
 
-    /**
-     * sets a new object
-     *
-     * @param p_object object
-     */
-    public void set(IUIObject p_object) {
-        ((CInspectorModel) this.getModel()).set(p_object);
-    }
 
 }
-
-

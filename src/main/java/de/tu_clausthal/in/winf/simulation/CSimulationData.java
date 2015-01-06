@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.winf.simulation;
 
+import de.tu_clausthal.in.winf.mas.agent.ISystem;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.objects.ICar;
@@ -55,6 +56,10 @@ public class CSimulationData {
      * car institution *
      */
     private CPainterQueue<IInstitution<INormObject>> m_carinstitution = new CPainterQueue(COSMViewer.getInstance());
+    /**
+     * queue for all agent environments *
+     */
+    private CQueue<ISystem> m_agentsystem = new CQueue();
 
 
     /**
@@ -112,5 +117,12 @@ public class CSimulationData {
     public CPainterQueue<IInstitution<INormObject>> getCarInstitutionQueue() {
         return m_carinstitution;
     }
+
+
+    /**
+     *
+     * @return list of agent systems
+     */
+    public CQueue<ISystem> getAgentSystem() { return m_agentsystem; }
 
 }

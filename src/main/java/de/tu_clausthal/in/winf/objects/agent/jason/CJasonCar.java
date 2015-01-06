@@ -19,48 +19,20 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.objects.agent.jason;
 
-import de.tu_clausthal.in.winf.objects.IUIObject;
-
-import javax.swing.*;
+import de.tu_clausthal.in.winf.mas.agent.jason.IAgent;
+import de.tu_clausthal.in.winf.mas.agent.jason.IArchitecture;
+import jason.JasonException;
 
 
 /**
- * inspector class to create a visual view of an object
+ *
  */
-public class CInspector extends JTable {
+public class CJasonCar extends IAgent {
 
-    /**
-     * singleton instance *
-     */
-    private static CInspector s_inspector = new CInspector();
-
-    /**
-     * private ctor *
-     */
-    private CInspector() {
-        super(new CInspectorModel());
-    }
-
-    /**
-     * return singleton instance
-     *
-     * @return instance
-     */
-    public static CInspector getInstance() {
-        return s_inspector;
-    }
-
-    /**
-     * sets a new object
-     *
-     * @param p_object object
-     */
-    public void set(IUIObject p_object) {
-        ((CInspectorModel) this.getModel()).set(p_object);
+    public CJasonCar(String p_asl, IArchitecture p_architecture) throws JasonException {
+        super(p_asl, p_architecture);
     }
 
 }
-
-

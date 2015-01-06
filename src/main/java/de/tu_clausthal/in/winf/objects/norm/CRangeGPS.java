@@ -24,7 +24,7 @@ package de.tu_clausthal.in.winf.objects.norm;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.mas.norm.IRange;
-import de.tu_clausthal.in.winf.objects.IObject;
+import de.tu_clausthal.in.winf.objects.IUIObject;
 import de.tu_clausthal.in.winf.ui.CInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -38,7 +38,7 @@ import java.util.Map;
 /**
  * range for GPS rectangle
  */
-public class CRangeGPS extends IObject implements IRange<INormObject> {
+public class CRangeGPS extends IUIObject implements IRange<INormObject> {
 
     /**
      * institution of the range

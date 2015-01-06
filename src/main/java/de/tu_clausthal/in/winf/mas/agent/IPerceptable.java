@@ -22,26 +22,15 @@
 package de.tu_clausthal.in.winf.mas.agent;
 
 
-import jason.architecture.AgArch;
-import jason.asSemantics.ActionExec;
-import jason.asSyntax.Literal;
-
-import java.util.List;
-
+import java.util.Map;
 
 /**
  *
  */
-public abstract class IAgentArchitecture extends AgArch {
-
-    public List<Literal> perceive() {
-        return ((IAgent)this.getTS().getAg()).perceive();
-    }
+public interface IPerceptable {
 
 
-    public void act(ActionExec p_action, List<ActionExec> p_feedback) {
-        ((IAgent)this.getTS().getAg()).act(p_action, p_feedback);
-    }
+    public Map<String, Object> getPercepts();
 
 
 }

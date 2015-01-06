@@ -21,42 +21,13 @@
 
 package de.tu_clausthal.in.winf.mas.agent;
 
-import jason.environment.Environment;
-
-import java.util.Map;
-
-
 /**
- * class to representation of a Jason environment
- * @see http://jason.sourceforge.net/
+ * Interface of an agent framework
  */
-public abstract class IEnvironment extends Environment {
+public interface ISystem {
 
 
-    Map<String, Object> getGlobalPerceptions()
-    {
-     return null;
-    }
-
-    void setGlobalPerceptions( Map<String, Object> p_percepts )
-    {
-
-    }
-
-    Map<String, Object> getLocalPerceptions()
-    {
-      return null;
-    }
-
-    void setLocalPerceptions( Map<String, Object> p_percepts )
-    {
-
-    }
-
-    void update()
-    {
-
-    }
+    public void step();
 
 
 }

@@ -19,48 +19,34 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.mas.agent.jason;
 
-import de.tu_clausthal.in.winf.objects.IUIObject;
+import jason.environment.Environment;
 
-import javax.swing.*;
+import java.util.Map;
 
 
 /**
- * inspector class to create a visual view of an object
+ * class to representation of a Jason environment
+ * @see http://jason.sourceforge.net/api/jason/environment/Environment.html
  */
-public class CInspector extends JTable {
+public abstract class IEnvironment extends Environment {
 
-    /**
-     * singleton instance *
-     */
-    private static CInspector s_inspector = new CInspector();
 
-    /**
-     * private ctor *
-     */
-    private CInspector() {
-        super(new CInspectorModel());
+    public void setGlobalPerceptions( Map<String, Object> p_percepts )
+    {
+
     }
 
-    /**
-     * return singleton instance
-     *
-     * @return instance
-     */
-    public static CInspector getInstance() {
-        return s_inspector;
+    public void setLocalPerceptions( Map<String, Object> p_percepts )
+    {
+
     }
 
-    /**
-     * sets a new object
-     *
-     * @param p_object object
-     */
-    public void set(IUIObject p_object) {
-        ((CInspectorModel) this.getModel()).set(p_object);
+    public void update()
+    {
+
     }
+
 
 }
-
-

@@ -19,48 +19,37 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui;
+package de.tu_clausthal.in.winf.objects.agent.jason;
 
-import de.tu_clausthal.in.winf.objects.IUIObject;
 
-import javax.swing.*;
+import de.tu_clausthal.in.winf.mas.agent.ISystem;
+
 
 
 /**
- * inspector class to create a visual view of an object
+ *
  */
-public class CInspector extends JTable {
+public class CJasonSystem implements ISystem {
 
-    /**
-     * singleton instance *
-     */
-    private static CInspector s_inspector = new CInspector();
 
-    /**
-     * private ctor *
-     */
-    private CInspector() {
-        super(new CInspectorModel());
+    @Override
+    public void step() {
+        this.processPerceptions();
+        this.processEnvironment();
+        this.processAgents();
     }
 
-    /**
-     * return singleton instance
-     *
-     * @return instance
-     */
-    public static CInspector getInstance() {
-        return s_inspector;
-    }
 
-    /**
-     * sets a new object
-     *
-     * @param p_object object
-     */
-    public void set(IUIObject p_object) {
-        ((CInspectorModel) this.getModel()).set(p_object);
-    }
+    private void processPerceptions()
+    {}
+
+
+    private void processEnvironment()
+    {}
+
+
+    private void processAgents()
+    {}
+
 
 }
-
-

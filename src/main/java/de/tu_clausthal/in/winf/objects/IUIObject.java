@@ -34,12 +34,12 @@ import java.util.Map;
 /**
  * global object of the simulation with mouse event handler
  */
-public abstract class IObject extends JComponent implements MouseListener {
+public abstract class IUIObject extends JComponent implements MouseListener {
 
     /**
      * ctor to register component on the viewer *
      */
-    public IObject() {
+    public IUIObject() {
         COSMViewer.getInstance().addMouseListener(this);
     }
 

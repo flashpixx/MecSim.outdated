@@ -25,11 +25,12 @@ import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.drivemodel.IDriveModel;
 import de.tu_clausthal.in.winf.graph.CCellCarLinkage;
 import de.tu_clausthal.in.winf.graph.CGraphHopper;
+import de.tu_clausthal.in.winf.mas.agent.ISystem;
 import de.tu_clausthal.in.winf.mas.norm.IInstitution;
 import de.tu_clausthal.in.winf.mas.norm.INormObject;
 import de.tu_clausthal.in.winf.objects.ICar;
 import de.tu_clausthal.in.winf.objects.ICarSourceFactory;
-import de.tu_clausthal.in.winf.objects.IObject;
+import de.tu_clausthal.in.winf.objects.IUIObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +94,7 @@ public class CWorker implements Runnable {
             try {
 
                 this.processListener(ListenerCall.Before);
+                this.processAgentSystem();
                 this.processCars();
                 this.processSources();
                 this.processListener(ListenerCall.After);
@@ -177,7 +179,7 @@ public class CWorker implements Runnable {
                     CCellCarLinkage l_edge = CGraphHopper.getInstance().getEdge(l_car.getCurrentEdge());
                     if (l_edge != null)
                         l_edge.removeCarFromEdge(l_car);
-                    ((IObject) l_car).release();
+                    ((IUIObject) l_car).release();
                 }
 
                 // call on each car all institutions
@@ -221,6 +223,30 @@ public class CWorker implements Runnable {
         CSimulationData.getInstance().getSourceQueue().reset();
 
     }
+
+
+    /**
+     * process agent environments
+     */
+    private void processAgentSystem() throws InterruptedException, BrokenBarrierException {
+
+        ISystem l_env = null;
+        while ((l_env = CSimulationData.getInstance().getAgentSystem().pop()) != null) {
+            try {
+
+                l_env.step();
+
+            } catch (Exception l_exception) {
+                LoggerFactory.getLogger(getClass()).error("thread [" + Thread.currentThread().getId() + "] processAgentEnvironments: ", l_exception);
+            }
+
+        }
+
+        m_barrier.await();
+        CSimulationData.getInstance().getAgentSystem().reset();
+
+    }
+
 
 
     /**

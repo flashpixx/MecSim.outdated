@@ -47,7 +47,7 @@ import java.util.Random;
  *
  * @note the paint method color the car depend on the current speed and need not to be call dispose
  */
-public class CDefaultCar extends IObject implements ICar {
+public class CDefaultCar extends IUIObject implements ICar {
 
     /**
      * logger instance *

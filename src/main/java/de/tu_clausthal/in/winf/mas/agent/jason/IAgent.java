@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.agent;
+package de.tu_clausthal.in.winf.mas.agent.jason;
 
 
 import jason.JasonException;
@@ -33,14 +33,13 @@ import java.util.List;
 
 
 /**
- *
+ * @see http://jason.sourceforge.net/api/jason/asSemantics/Agent.html
  */
 public abstract class IAgent<T> extends Agent {
 
 
-    public IAgent( String p_asl, IAgentArchitecture p_architecture ) throws JasonException {
+    public IAgent( String p_asl, IArchitecture p_architecture ) throws JasonException {
 
-        //Every Agent get an own Reasoning Cycle (Laggy for 100 Car's +)
         new TransitionSystem(this, new Circumstance(), new Settings(), p_architecture);
         this.initAg(p_asl);
 
@@ -50,7 +49,6 @@ public abstract class IAgent<T> extends Agent {
     public List<T> perceive() { return null; }
 
     public void act(ActionExec p_action, List<ActionExec> p_feedback) {}
-
 
     public void update() {}
 

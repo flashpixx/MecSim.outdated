@@ -60,8 +60,8 @@ public class CLogger {
      * @param p_filename p_filename
      */
     public static void create(Level p_level, String p_filename) {
-        if (p_level != Level.OFF)
-            Configurator.defaultConfig().writer(new FileWriter(p_filename)).level(p_level).activate();
+        Configurator.defaultConfig().writer(p_level == Level.OFF ? null : new FileWriter(p_filename)).level(p_level).activate();
+        Configurator.currentConfig().formatPattern("{message}").activate();
     }
 
 
@@ -127,7 +127,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void warn(Object p_data) {
-        Logger.info(createLogData(Level.WARNING, p_data));
+        Logger.warn(createLogData(Level.WARNING, p_data));
     }
 
 
@@ -145,7 +145,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void error(Object p_data) {
-        Logger.info(createLogData(Level.ERROR, p_data));
+        Logger.error(createLogData(Level.ERROR, p_data));
     }
 
 
@@ -181,7 +181,7 @@ public class CLogger {
      * @param p_data log data
      */
     public static void debug(Object p_data) {
-        Logger.info(createLogData(Level.DEBUG, p_data));
+        Logger.debug(createLogData(Level.DEBUG, p_data));
     }
 
 

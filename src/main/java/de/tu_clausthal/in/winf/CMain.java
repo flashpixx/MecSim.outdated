@@ -72,7 +72,7 @@ public class CMain {
 
         Level l_loglevel = Level.OFF;
         if (l_cli.hasOption("loglevel"))
-            l_loglevel = Level.valueOf(l_cli.getOptionValue("loglevel"));
+            l_loglevel = Level.valueOf(l_cli.getOptionValue("loglevel").toUpperCase());
 
         CLogger.create(l_loglevel, l_logfile);
 

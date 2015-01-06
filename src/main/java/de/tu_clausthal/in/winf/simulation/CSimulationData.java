@@ -63,6 +63,19 @@ public class CSimulationData {
 
 
     /**
+     * @todo List with all
+     *                      - stepable objects    [simulation objects]
+     *                      - perceptable objects [agent objects / information for agents]
+     *                      - paintable objects   [visualization objects]
+     *                      - filterable objects  [norms / institutions]
+     *                      - counter objects     [statistic objects]
+     */
+
+
+
+
+
+    /**
      * private ctor *
      */
     private CSimulationData() {

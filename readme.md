@@ -1,5 +1,7 @@
 # Traffic Simulation MecSIM
 
+![Screenshot](screen.png)
+
 ## Requirements
 
 * [Java 1.7](http://www.java.com)

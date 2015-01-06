@@ -37,6 +37,8 @@ import de.tu_clausthal.in.winf.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.graph.weights.CSpeedUpTrafficJam;
 import de.tu_clausthal.in.winf.graph.weights.CTrafficJam;
 import org.jxmapviewer.viewer.GeoPosition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,9 +48,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -86,7 +85,7 @@ public class CGraphHopper extends GraphHopper {
      * private ctor do add different weights for routing *
      */
     private CGraphHopper(String p_weights) {
-        this.setWeights(p_weights);
+        this.setCHShortcuts(p_weights);
         this.initialize();
     }
 

@@ -296,8 +296,41 @@ public class CDefaultCar extends IInspector implements ICar {
     }
 
 
+    /**
+     * returns the current edge or null if the end is reached
+     *
+     * @return edge object or null
+     */
+    private CCellObjectLinkage getCurrentGraphLinkage() {
+        CCellObjectLinkage l_currentedge = m_graph.getEdge(this.getEdge());
+        if (l_currentedge == null)
+            m_routeindex = Integer.MAX_VALUE;
+        return l_currentedge;
+    }
+
+    /**
+     * calculate the new route index and update the object on the edge
+     *
+     * @param p_linkage      linkage object
+     * @param p_currentspeed current speed
+     */
+    private void updateRouteIndex(CCellObjectLinkage p_linkage, int p_currentspeed) {
+        // calculate the new position of the car
+        Integer l_position = p_linkage.getPosition(this);
+        if (l_position == null)
+            m_routeindex = Integer.MAX_VALUE;
+
+        // the current position on the edge must be updated, so the position
+        // is incremented with the current speed number, if the edge end is
+        // reached, increment the route index until the speed is 0
+        int l_speed = p_currentspeed;
+        l_speed -= p_linkage.getEdgeCells() - l_position.intValue();
+
+    }
+
+
     @Override
-    public synchronized void step(int p_currentstep, ILayer p_layer) throws Exception {
+    public void step(int p_currentstep, ILayer p_layer) throws Exception {
 
         // store current speed for modifying the position on the edge
         int l_speed = this.getCurrentSpeed();
@@ -306,13 +339,10 @@ public class CDefaultCar extends IInspector implements ICar {
         if (this.hasEndReached())
             return;
 
-        // returns the current edge and set a new edge iteration variabel
-        CCellObjectLinkage l_currentedge = m_graph.getEdge(this.getEdge());
-        if (l_currentedge != null) {
-            Integer l_position = l_currentedge.getPosition(this);
-            if (l_position != null)
-                l_speed -= l_currentedge.getEdgeCells() - l_position.intValue();
-        }
+/*
+
+
+
 
         // calculate next edge with current speed
         CCellObjectLinkage l_newedge = l_currentedge;
@@ -327,7 +357,7 @@ public class CDefaultCar extends IInspector implements ICar {
         // no edges exists so we reaches the end
         if (l_newedge == null)
         {
-            m_routeindex = m_routeedges.size();
+            m_routeindex = Integer.MAX_VALUE;
             return;
         }
 
@@ -339,6 +369,7 @@ public class CDefaultCar extends IInspector implements ICar {
             l_currentedge.removeObject(this);
             l_newedge.setObject(this, l_speed);
         }
+        */
 
 /*
         for (int i = 0; true; i++) {

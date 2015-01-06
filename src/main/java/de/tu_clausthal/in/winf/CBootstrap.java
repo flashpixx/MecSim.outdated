@@ -77,7 +77,6 @@ public class CBootstrap {
      */
     public static void AfterSimulationInit(CSimulation p_simulation) {
 
-        // add simulation layer
         p_simulation.getWorld().getMap().put("Source", new CSourceFactoryLayer());
         p_simulation.getWorld().getMap().put("Car", new CCarLayer());
 

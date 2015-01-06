@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.tu_clausthal.in.winf</groupId>
-    <artifactId>Fortgeschrittenenprojekt</artifactId>
-    <version>1.0</version>
+    <artifactId>MecSim</artifactId>
+    <version>1.1</version>
     <packaging>jar</packaging>
-    <name>TUC Wirtschaftsinformatik - Fortgeschrittenenpraktikum</name>
+    <name>TUC Wirtschaftsinformatik - MecSim</name>
     <url>https://mecdev.rz-housing.tu-clausthal.de/gitlab/philipp.kraus/fortgeschrittenenprojekt</url>
 
 
@@ -56,6 +56,12 @@
             <groupId>org.dockingframes</groupId>
             <artifactId>docking-frames-common</artifactId>
             <version>1.1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jason</groupId>
+            <artifactId>jason</artifactId>
+            <version>1.4.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

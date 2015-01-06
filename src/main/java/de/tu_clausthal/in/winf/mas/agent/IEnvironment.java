@@ -19,54 +19,25 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.mas.norm;
+package de.tu_clausthal.in.winf.mas.agent;
 
-import java.io.Serializable;
+import jason.environment.Environment;
+
+import java.util.Map;
 
 
 /**
- * defines a message to transfer a norm
+ * class to representation of a Jason environment
+ * @see http://jason.sourceforge.net/
  */
-public interface INormMessage<T> extends Serializable {
+abstract class IEnvironment extends Environment {
 
 
-    /**
-     * returns the norm
-     *
-     * @return norm object
-     */
-    public INorm<T> getNorm();
+    void setGlobalPerception( Map<String, Object> p_percepts )
+    {
 
+    }
 
-    /**
-     * get owner institution
-     *
-     * @return institution object
-     */
-    public IInstitution<T> getInstitution();
-
-
-    /**
-     * returns the message type
-     *
-     * @return message type
-     */
-    public ENormMessageType getType();
-
-
-    /**
-     * hops to avoid infinity loops on update process (time-to-live)
-     *
-     * @return hop value (less or equal than zero equal ignore / remove norm)
-     * @note the hop value defines the max. send operations
-     */
-    public int getTTL();
-
-
-    /**
-     * TTL decrement (time-to-live)
-     */
-    public void decrementTTL();
 
 
 }

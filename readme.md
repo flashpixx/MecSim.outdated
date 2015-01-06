@@ -1,4 +1,4 @@
-# Fortgeschrittenenprojekt - Traffic Simulation
+# MecSim - Traffic Simulation
 
 ![Screenshot](screen.png)
 
@@ -15,7 +15,7 @@
 
 ## Installation / Konfiguration
 
-Mittels Maven kann ein Jar inkl. Abhängigkeiten erzeugt werden, die in dem Pfad ```target/Fortgeschrittenenprojekt-1.0-jar-with-dependencies.jar``` zu finden ist. Das Jar
+Mittels Maven kann ein Jar inkl. Abhängigkeiten erzeugt werden, die in dem Pfad ```target/MecSim-1.1-jar-with-dependencies.jar``` zu finden ist. Das Jar
 kann direkt ausgeführt werden. Da der Graph, in dem sich die Fahrzeuge bewegen mehr RAM benötigt, muss das Programm mit dem Parameter ```-Xmx``` und einer RAM Größe gestartet werden (die Angabe ```-Xmx2g``` liefert gute Ergebnisse).
 
 ### Datenspeicherung

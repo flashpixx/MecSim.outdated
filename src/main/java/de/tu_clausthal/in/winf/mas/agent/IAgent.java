@@ -21,42 +21,37 @@
 
 package de.tu_clausthal.in.winf.mas.agent;
 
-import jason.environment.Environment;
 
-import java.util.Map;
+import jason.JasonException;
+import jason.asSemantics.ActionExec;
+import jason.asSemantics.Agent;
+import jason.asSemantics.Circumstance;
+import jason.asSemantics.TransitionSystem;
+import jason.runtime.Settings;
+
+import java.util.List;
 
 
 /**
- * class to representation of a Jason environment
- * @see http://jason.sourceforge.net/
+ *
  */
-public abstract class IEnvironment extends Environment {
+public abstract class IAgent<T> extends Agent {
 
 
-    Map<String, Object> getGlobalPerceptions()
-    {
-     return null;
-    }
+    public IAgent( String p_asl, IAgentArchitecture p_architecture ) throws JasonException {
 
-    void setGlobalPerceptions( Map<String, Object> p_percepts )
-    {
+        //Every Agent get an own Reasoning Cycle (Laggy for 100 Car's +)
+        new TransitionSystem(this, new Circumstance(), new Settings(), p_architecture);
+        this.initAg(p_asl);
 
     }
 
-    Map<String, Object> getLocalPerceptions()
-    {
-      return null;
-    }
 
-    void setLocalPerceptions( Map<String, Object> p_percepts )
-    {
+    public List<T> perceive() { return null; }
 
-    }
+    public void act(ActionExec p_action, List<ActionExec> p_feedback) {}
 
-    void update()
-    {
 
-    }
-
+    public void update() {}
 
 }

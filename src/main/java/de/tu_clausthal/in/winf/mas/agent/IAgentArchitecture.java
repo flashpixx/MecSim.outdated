@@ -21,41 +21,26 @@
 
 package de.tu_clausthal.in.winf.mas.agent;
 
-import jason.environment.Environment;
 
-import java.util.Map;
+import jason.architecture.AgArch;
+import jason.asSemantics.ActionExec;
+import jason.asSyntax.Literal;
+
+import java.util.List;
 
 
 /**
- * class to representation of a Jason environment
- * @see http://jason.sourceforge.net/
+ *
  */
-public abstract class IEnvironment extends Environment {
+public abstract class IAgentArchitecture extends AgArch {
 
-
-    Map<String, Object> getGlobalPerceptions()
-    {
-     return null;
+    public List<Literal> perceive() {
+        return ((IAgent)this.getTS().getAg()).perceive();
     }
 
-    void setGlobalPerceptions( Map<String, Object> p_percepts )
-    {
 
-    }
-
-    Map<String, Object> getLocalPerceptions()
-    {
-      return null;
-    }
-
-    void setLocalPerceptions( Map<String, Object> p_percepts )
-    {
-
-    }
-
-    void update()
-    {
-
+    public void act(ActionExec p_action, List<ActionExec> p_feedback) {
+        ((IAgent)this.getTS().getAg()).act(p_action, p_feedback);
     }
 
 

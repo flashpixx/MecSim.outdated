@@ -28,6 +28,10 @@ import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -41,17 +45,23 @@ public class CSimulation {
      */
     private static CSimulation s_instance = new CSimulation();
     /**
+     * thread pool *
+     */
+    ExecutorService m_pool = null;
+    /**
      * world of the simulation
      */
     private CWorld m_world = new CWorld();
     /**
-     * pool of worker threads *
-     */
-    private CWorkerPool m_worker = null;
-    /**
      * integer of simulation step *
      */
     private AtomicInteger m_simulationcount = new AtomicInteger();
+    /**
+     * barrier object to synchronize the threads *
+     */
+    private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
+
+
     /**
      * private ctor *
      */
@@ -75,7 +85,7 @@ public class CSimulation {
      * @return state
      */
     public boolean isRunning() {
-        return m_worker != null;
+        return m_pool != null;
     }
 
 
@@ -100,7 +110,10 @@ public class CSimulation {
 
         CLogger.info("simulation is started");
         CBootstrap.BeforeSimulationStarts(this);
-        m_worker = new CWorkerPool(CConfiguration.getInstance().get().MaxThreadNumber, m_simulationcount);
+
+        m_pool = Executors.newCachedThreadPool();
+        for (int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++)
+            m_pool.submit(new CWorker(m_barrier, i == 0, m_simulationcount));
     }
 
 
@@ -138,13 +151,13 @@ public class CSimulation {
         if (!this.isRunning())
             return;
 
+        m_pool.shutdown();
         try {
-            m_worker.stop();
+            m_pool.awaitTermination(2, TimeUnit.SECONDS);
+            m_pool = null;
         } catch (InterruptedException l_exception) {
             CLogger.error(l_exception.getMessage());
         }
-
-        m_worker = null;
     }
 
 }

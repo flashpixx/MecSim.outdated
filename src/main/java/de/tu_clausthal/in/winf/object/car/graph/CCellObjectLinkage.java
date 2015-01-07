@@ -230,7 +230,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      * @param p_position position index
      * @return empty for empty
      */
-    public boolean isEmptyCell( int p_position )
+    public boolean isEmpty( int p_position )
     {
         return m_cells[p_position] == null;
     }
@@ -244,21 +244,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     public boolean isEmpty()
     {
         return m_objects.isEmpty();
-    }
-
-
-    /**
-     * check if the cells [0, position) are empty
-     *
-     * @param p_position position index
-     * @return boolean for empty
-     */
-    public boolean isEmptyUntilPosition( int p_position )
-    {
-        for ( int i = 0; i < p_position; i++ )
-            if ( m_cells[i] != null )
-                return false;
-        return true;
     }
 
 
@@ -294,7 +279,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      */
     public synchronized void setObject( N p_object, int p_position ) throws IllegalAccessException
     {
-        if ( !this.isEmptyCell( p_position ) )
+        if ( !this.isEmpty( p_position ) )
             throw new IllegalAccessException( "position is not empty" );
         if ( m_objects.containsKey( p_object ) )
             throw new IllegalAccessException( "object exists" );
@@ -319,27 +304,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
 
 
     /**
-     * updates an object on the edge
-     *
-     * @param p_object    object
-     * @param p_increment increment of the object position
-     * @throws IllegalAccessException
-     *
-    public synchronized void updateObject( N p_object, int p_increment ) throws IllegalAccessException
-    {
-        Integer l_position = m_objects.get( p_object );
-        if ( l_position == null )
-            throw new IllegalAccessException( "object position not found" );
-        if ( !this.isEmptyCell( p_increment + l_position.intValue() ) )
-            throw new IllegalAccessException( "new position is not empty" );
-
-        this.removeObject( p_object );
-        this.setObject( p_object, p_increment + l_position.intValue() );
-    }
-     */
-
-
-    /**
      * checks if an object is on the edge
      *
      * @param p_object object
@@ -351,83 +315,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
         return m_objects.containsKey( p_object );
     }
 
-
-    /**
-     * returns the predecessor of an object on the edge
-     *
-     * @param p_object object
-     * @param p_count  number of predecessors
-     * @return null or map with position and object
-     *
-    public Map<Integer, N> getPredecessor( N p_object, int p_count )
-    {
-    Integer l_position = m_objects.get( p_object );
-    if ( l_position == null )
-    return null;
-
-    HashMap<Integer, N> l_items = new HashMap();
-    for ( int i = l_position + 1; i < m_cells.length; i++ )
-    {
-    if ( m_cells[i] != null )
-    l_items.put( i - l_position, m_cells[i] );
-
-    if ( l_items.size() >= p_count )
-    break;
-    }
-
-    return l_items;
-    }
-
-
-     **
-     * returns the next predecessor of an object on the edge
-     *
-     * @param p_object object
-     * @return null or map with position and object
-     *
-    public Map<Integer, N> getPredecessor( N p_object )
-    {
-    return this.getPredecessor( p_object, 1 );
-    }
-     */
-
-    /**
-     * returns the successor of an object on the edge
-     *
-     * @param p_object object
-     * @param p_count  number of successors
-     * @return null or map with position and object
-     *
-    public Map<Integer, N> getSuccessor( N p_object, int p_count )
-    {
-    Integer l_position = m_objects.get( p_object );
-    if ( l_position == null )
-    return null;
-
-    HashMap<Integer, N> l_items = new HashMap();
-    for ( int i = l_position - 1; i >= 0; i-- )
-    {
-    if ( m_cells[i] != null )
-    l_items.put( l_position - i, m_cells[i] );
-
-    if ( l_items.size() >= p_count )
-    break;
-    }
-
-    return l_items;
-    }
-
-     **
-     * returns the next successor of an object on the edge
-     *
-     * @param p_object object
-     * @return null or map with position and object
-     *
-    public Map<Integer, N> getSuccessor( N p_object )
-    {
-    return this.getSuccessor( p_object, 1 );
-    }
-     */
 
     /**
      * clears the edge information

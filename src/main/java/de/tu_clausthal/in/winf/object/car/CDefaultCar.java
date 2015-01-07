@@ -324,28 +324,22 @@ public class CDefaultCar extends IInspector implements ICar
         // if the route index equal to zero, set it car on the first item or wait until it is free
         if ( m_routeindex == 0 )
         {
-            if ( !m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).isEmptyCell( m_route.get( this.getCurrentSpeed() ).getRight().intValue() ) )
+            System.out.println( "first" );
+
+            if ( !m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).isEmpty( m_route.get( this.getCurrentSpeed() ).getRight().intValue() ) )
                 return;
 
-            m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( this.getCurrentSpeed() ).getRight().intValue() );
+            System.out.println( "first set" );
 
+            m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( this.getCurrentSpeed() ).getRight().intValue() );
 
         } else
         {
 
+            System.out.println( "update " + m_routeindex + "\t" + m_route.size() );
             m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
             m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
 
-/*
-            // if the edge is equal than update on the edge, otherwise remove it and set on the new one
-            if ( m_route.get( m_routeindex ).getLeft() == m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() )
-                m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).updateObject( this, this.getCurrentSpeed() );
-            else
-            {
-                m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
-                m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
-            }
-*/
         }
         m_routeindex += this.getCurrentSpeed();
 

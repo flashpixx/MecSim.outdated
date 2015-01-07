@@ -267,11 +267,8 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
 
     @Override
-    public synchronized void reset( boolean p_reset )
+    public synchronized void reset()
     {
-        if ( !p_reset )
-            return;
-
         m_unprocess.addAll( m_process );
         m_process.clear();
         COSMViewer.getInstance().repaint();

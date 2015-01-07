@@ -34,8 +34,7 @@ public interface IQueue<T> extends Queue<T>
      * moves elements from the unprocessed queue
      * to the processed queue
      *
-     * @param p_reset boolean flag, that only on true the queue is resettet
      */
-    public void reset( boolean p_reset );
+    public void reset();
 
 }

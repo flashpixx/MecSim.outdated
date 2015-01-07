@@ -87,11 +87,8 @@ public class CWorld
         protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
 
         @Override
-        public synchronized void reset( boolean p_reset )
+        public synchronized void reset()
         {
-            if ( !p_reset )
-                return;
-
             m_unprocess.addAll( m_process );
             m_process.clear();
         }

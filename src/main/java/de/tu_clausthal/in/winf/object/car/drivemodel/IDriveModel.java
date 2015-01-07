@@ -28,7 +28,8 @@ import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 /**
  * drive interface for driving models *
  */
-public interface IDriveModel {
+public interface IDriveModel
+{
 
     /**
      * returns the name of the model

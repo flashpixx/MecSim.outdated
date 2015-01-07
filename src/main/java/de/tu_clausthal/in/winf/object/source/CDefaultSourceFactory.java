@@ -38,7 +38,8 @@ import java.util.Map;
  * use a exponential distribution (http://en.wikipedia.org/wiki/Exponential_distribution)
  * to generate cars for avoiding traffic jam at the source
  */
-public class CDefaultSourceFactory extends IDefaultSourceFactory {
+public class CDefaultSourceFactory extends IDefaultSourceFactory
+{
 
     /**
      * mean value of the distribution *
@@ -59,7 +60,8 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory {
      *
      * @param p_position geo position object
      */
-    public CDefaultSourceFactory(GeoPosition p_position) {
+    public CDefaultSourceFactory(GeoPosition p_position)
+    {
         super(p_position, Color.CYAN);
     }
 
@@ -71,21 +73,23 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory {
      * @param p_number   number of cars
      * @param p_color    color of the source
      */
-    protected CDefaultSourceFactory(GeoPosition p_position, int p_number, Color p_color) {
+    protected CDefaultSourceFactory(GeoPosition p_position, int p_number, Color p_color)
+    {
         super(p_position, p_color);
         m_NumberCarsInStep = p_number;
-        if (p_number < 1)
+        if ( p_number < 1 )
             throw new IllegalArgumentException("number must be greater than zero");
     }
 
 
     @Override
-    public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
+    public Collection<ICar> step(int p_currentstep, ILayer p_layer)
+    {
         Collection<ICar> l_sources = new HashSet();
         //if (m_random.sample() >= s_mean)
         //    return l_sources;
 
-        for (int i = 0; i < m_NumberCarsInStep; i++)
+        for ( int i = 0; i < m_NumberCarsInStep; i++ )
             l_sources.add(new CDefaultCar(m_position));
         m_NumberCarsInStep = 0;
 
@@ -93,7 +97,8 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory {
     }
 
     @Override
-    public Map<String, Object> analyse() {
+    public Map<String, Object> analyse()
+    {
         return null;
     }
 }

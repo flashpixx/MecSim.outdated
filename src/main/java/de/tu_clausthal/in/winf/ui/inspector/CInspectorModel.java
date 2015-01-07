@@ -33,17 +33,20 @@ import java.util.Set;
 /**
  * table model to use the inspect object call *
  */
-public class CInspectorModel implements TableModel {
+public class CInspectorModel implements TableModel
+{
 
     /**
      * array with names *
      */
-    ArrayList<String> m_names = new ArrayList();
+    private ArrayList<String> m_names = new ArrayList();
     /**
      * array with object values *
      */
-    ArrayList<Object> m_values = new ArrayList();
-
+    private ArrayList<Object> m_values = new ArrayList();
+    /**
+     * set for model listeners *
+     */
     private Set<TableModelListener> m_listener = new HashSet();
 
 
@@ -52,29 +55,33 @@ public class CInspectorModel implements TableModel {
      *
      * @param p_object object
      */
-    public void set(IInspector p_object) {
+    public void set(IInspector p_object)
+    {
         m_names.clear();
         m_values.clear();
-        if (p_object == null)
+        if ( p_object == null )
             return;
 
         Map<String, Object> l_data = p_object.inspect();
-        if ((l_data == null) || (l_data.isEmpty()))
+        if ( (l_data == null) || (l_data.isEmpty()) )
             return;
 
-        for (Map.Entry<String, Object> l_item : l_data.entrySet()) {
+        for ( Map.Entry<String, Object> l_item : l_data.entrySet() )
+        {
             m_names.add(l_item.getKey());
             m_values.add(l_item.getValue());
         }
 
         TableModelEvent l_event = new TableModelEvent(this);
-        for (TableModelListener l_listener : m_listener)
+        for ( TableModelListener l_listener : m_listener )
             l_listener.tableChanged(l_event);
     }
 
     @Override
-    public String getColumnName(int col) {
-        switch (col) {
+    public String getColumnName(int col)
+    {
+        switch ( col )
+        {
             case 0:
                 return "Property";
             case 1:
@@ -85,8 +92,10 @@ public class CInspectorModel implements TableModel {
     }
 
     @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        switch (columnIndex) {
+    public Class<?> getColumnClass(int columnIndex)
+    {
+        switch ( columnIndex )
+        {
             case 0:
                 return String.class;
             case 1:
@@ -97,29 +106,34 @@ public class CInspectorModel implements TableModel {
     }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
+    public boolean isCellEditable(int rowIndex, int columnIndex)
+    {
         return false;
     }
 
     @Override
-    public int getRowCount() {
-        if ((m_values.isEmpty()) || (m_names.isEmpty()))
+    public int getRowCount()
+    {
+        if ( (m_values.isEmpty()) || (m_names.isEmpty()) )
             return 0;
 
         return m_names.size();
     }
 
     @Override
-    public int getColumnCount() {
+    public int getColumnCount()
+    {
         return 2;
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        if (((m_values == null) || (m_names == null)) || (rowIndex < 0) || (rowIndex >= m_names.size()))
+    public Object getValueAt(int rowIndex, int columnIndex)
+    {
+        if ( ((m_values == null) || (m_names == null)) || (rowIndex < 0) || (rowIndex >= m_names.size()) )
             return null;
 
-        switch (columnIndex) {
+        switch ( columnIndex )
+        {
             case 0:
                 return m_names.get(rowIndex);
             case 1:
@@ -130,17 +144,20 @@ public class CInspectorModel implements TableModel {
     }
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+    {
 
     }
 
     @Override
-    public void addTableModelListener(TableModelListener l) {
+    public void addTableModelListener(TableModelListener l)
+    {
         m_listener.add(l);
     }
 
     @Override
-    public void removeTableModelListener(TableModelListener l) {
+    public void removeTableModelListener(TableModelListener l)
+    {
         m_listener.remove(l);
     }
 }

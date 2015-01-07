@@ -27,7 +27,8 @@ import java.util.Queue;
 /**
  *
  */
-public interface IQueue<T> extends Queue<T> {
+public interface IQueue<T> extends Queue<T>
+{
 
     /**
      * moves elements from the unprocessed queue

@@ -29,7 +29,8 @@ import java.util.Collection;
 /**
  * interface for a step call with a return argument
  */
-public interface IReturnStepable<T> extends IStepable {
+public interface IReturnStepable<T> extends IStepable
+{
 
     /**
      * step method with return argument

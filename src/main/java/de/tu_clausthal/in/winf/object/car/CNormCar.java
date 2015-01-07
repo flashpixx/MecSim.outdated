@@ -34,7 +34,8 @@ import java.util.Map;
 /**
  * creates a car with norm context
  */
-public class CNormCar extends CDefaultCar implements INormObject {
+public class CNormCar extends CDefaultCar implements INormObject
+{
 
     /**
      * set with norms, that are matched *
@@ -47,16 +48,19 @@ public class CNormCar extends CDefaultCar implements INormObject {
      *
      * @param p_StartPosition start positions (position of the source)
      */
-    public CNormCar(GeoPosition p_StartPosition) {
+    public CNormCar(GeoPosition p_StartPosition)
+    {
         super(p_StartPosition);
     }
 
 
     @Override
-    public Map<String, Object> inspect() {
+    public Map<String, Object> inspect()
+    {
         Map<String, Object> l_map = super.inspect();
 
-        for (Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet()) {
+        for ( Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet() )
+        {
             IInstitution l_institution = l_item.getKey().getInstitution();
             l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
         }
@@ -66,12 +70,14 @@ public class CNormCar extends CDefaultCar implements INormObject {
 
 
     @Override
-    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm) {
+    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm)
+    {
         m_norms.putAll(p_norm);
     }
 
     @Override
-    public void clearMatchedNorm() {
+    public void clearMatchedNorm()
+    {
         m_norms.clear();
     }
 

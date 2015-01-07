@@ -27,7 +27,8 @@ import java.util.Collection;
 /**
  * interface of the target of a return stepable argument
  */
-public interface IReturnStepableTarget<T> {
+public interface IReturnStepableTarget<T>
+{
 
     /**
      * sets the data of a return stepable call

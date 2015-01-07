@@ -35,7 +35,8 @@ import java.util.Map;
 /**
  * defines the layer for cars
  */
-public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarget<ICar> {
+public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarget<ICar>
+{
 
     /**
      * driving model list
@@ -57,7 +58,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @return graph object
      */
-    public CGraphHopper getGraph() {
+    public CGraphHopper getGraph()
+    {
         return m_graph;
     }
 
@@ -67,7 +69,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @param p_weight weight name
      */
-    public void setGraphWeight(String p_weight) {
+    public void setGraphWeight(String p_weight)
+    {
         m_graph = new CGraphHopper(p_weight);
     }
 
@@ -77,9 +80,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @param p_model model
      */
-    public void setDriveModel(String p_model) {
-        for (IDriveModel l_model : m_drivemodellist)
-            if (p_model.equals(l_model.getName()))
+    public void setDriveModel(String p_model)
+    {
+        for ( IDriveModel l_model : m_drivemodellist )
+            if ( p_model.equals(l_model.getName()) )
                 m_drivemodel = l_model;
     }
 
@@ -89,7 +93,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @return name
      */
-    public String getDrivingModel() {
+    public String getDrivingModel()
+    {
         return m_drivemodel.getName();
     }
 
@@ -98,45 +103,52 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @return list
      */
-    public String[] getDrivingModelList() {
+    public String[] getDrivingModelList()
+    {
         String[] l_list = new String[m_drivemodellist.length];
         int i = 0;
-        for (IDriveModel l_model : m_drivemodellist)
+        for ( IDriveModel l_model : m_drivemodellist )
             l_list[i] = l_model.getName();
         return l_list;
     }
 
 
     @Override
-    public void beforeStepObject(int p_currentstep, ICar p_object) {
+    public void beforeStepObject(int p_currentstep, ICar p_object)
+    {
         m_drivemodel.update(p_currentstep, this.m_graph, p_object);
     }
 
     @Override
-    public void afterStepObject(int p_currentstep, ICar p_object) {
+    public void afterStepObject(int p_currentstep, ICar p_object)
+    {
 
-        if (p_object.hasEndReached()) {
+        if ( p_object.hasEndReached() )
+        {
             super.remove(p_object);
             CCellObjectLinkage l_edge = m_graph.getEdge(p_object.getEdge());
-            if (l_edge != null)
+            if ( l_edge != null )
                 l_edge.removeObject(p_object);
         }
 
     }
 
     @Override
-    public void set(Collection<ICar> p_data) {
+    public void set(Collection<ICar> p_data)
+    {
         super.addAll(p_data);
     }
 
     @Override
-    public void resetData() {
+    public void resetData()
+    {
         super.clear();
         m_graph.clear();
     }
 
     @Override
-    public Map<String, Object> analyse() {
+    public Map<String, Object> analyse()
+    {
         return null;
     }
 }

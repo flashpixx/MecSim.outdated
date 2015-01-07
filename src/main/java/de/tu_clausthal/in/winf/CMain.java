@@ -36,14 +36,16 @@ import java.util.Calendar;
  *
  * @note Main must be started with option "-Xmx2g", because we need memory to create graph structure
  */
-public class CMain {
+public class CMain
+{
 
     /**
      * main program
      *
      * @param p_args commandline arguments
      */
-    public static void main(String[] p_args) throws Exception {
+    public static void main(String[] p_args) throws Exception
+    {
 
         // --- define CLI options --------------------------------------------------------------------------------------
         Options l_clioptions = new Options();
@@ -58,7 +60,8 @@ public class CMain {
 
 
         // --- process CLI arguments and set configuration -------------------------------------------------------------
-        if (l_cli.hasOption("help")) {
+        if ( l_cli.hasOption("help") )
+        {
             HelpFormatter l_formatter = new HelpFormatter();
             l_formatter.printHelp((new java.io.File(CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName()), l_clioptions);
             System.exit(0);
@@ -67,11 +70,11 @@ public class CMain {
 
         // create logger instance
         String l_logfile = "mecsim-" + (new SimpleDateFormat("yyyy-dd-MM-HH-mm")).format(Calendar.getInstance().getTime()) + ".txt";
-        if (l_cli.hasOption("logfile"))
+        if ( l_cli.hasOption("logfile") )
             l_logfile = l_cli.getOptionValue("logfile");
 
         Level l_loglevel = Level.OFF;
-        if (l_cli.hasOption("loglevel"))
+        if ( l_cli.hasOption("loglevel") )
             l_loglevel = Level.valueOf(l_cli.getOptionValue("loglevel").toUpperCase());
 
         CLogger.create(l_loglevel, l_logfile);
@@ -79,21 +82,23 @@ public class CMain {
 
         // read the configuration directory (default ~/.mecsim)
         File l_config = new File(System.getProperty("user.home") + File.separator + ".mecsim");
-        if (l_cli.hasOption("configuration"))
+        if ( l_cli.hasOption("configuration") )
             l_config = new File(l_cli.getOptionValue("configuration"));
 
         CConfiguration.getInstance().setConfigDir(l_config);
         CConfiguration.getInstance().read();
 
-        if (l_cli.hasOption("graph"))
+        if ( l_cli.hasOption("graph") )
             CConfiguration.getInstance().get().RoutingMap = l_cli.getOptionValue("graph");
 
         CBootstrap.ConfigIsLoaded(CConfiguration.getInstance());
 
 
         // --- invoke UI -----------------------------------------------------------------------------------------------
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 CFrame l_frame = new CFrame();
                 l_frame.setTitle("TU-Clausthal Wirtschaftsinformatik - MecSim");
                 l_frame.setVisible(true);

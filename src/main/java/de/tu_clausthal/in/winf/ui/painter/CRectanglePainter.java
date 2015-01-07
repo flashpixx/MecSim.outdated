@@ -33,7 +33,8 @@ import java.awt.*;
  * @see https://github.com/msteiger/jxmapviewer2/tree/master/examples/src/sample3_interaction
  * @deprecated move to norm range class
  */
-public class CRectanglePainter implements Painter<Object> {
+public class CRectanglePainter implements Painter<Object>
+{
 
     /**
      * color of the rectangle fill color *
@@ -56,14 +57,16 @@ public class CRectanglePainter implements Painter<Object> {
     /**
      * ctor for blank initialization *
      */
-    public CRectanglePainter() {
+    public CRectanglePainter()
+    {
     }
 
     /**
      * ctor
      */
-    public CRectanglePainter(Point p_point) {
-        if (p_point == null)
+    public CRectanglePainter(Point p_point)
+    {
+        if ( p_point == null )
             throw new IllegalArgumentException("point need not to be null");
         m_start = new Rectangle(p_point);
     }
@@ -74,16 +77,18 @@ public class CRectanglePainter implements Painter<Object> {
      *
      * @param p_color color
      */
-    public void setBorderColor(Color p_color) {
-        if (p_color == null)
+    public void setBorderColor(Color p_color)
+    {
+        if ( p_color == null )
             throw new IllegalArgumentException("color need not to be null");
 
         m_borderColor = p_color;
     }
 
 
-    public void setRegioColor(Color p_color) {
-        if (p_color == null)
+    public void setRegioColor(Color p_color)
+    {
+        if ( p_color == null )
             throw new IllegalArgumentException("color need not to be null");
 
         m_regioColor = p_color;
@@ -93,7 +98,8 @@ public class CRectanglePainter implements Painter<Object> {
     /**
      * sets the position
      */
-    public void to(Point p_point) {
+    public void to(Point p_point)
+    {
         m_rectangle = m_start.union(new Rectangle(p_point));
     }
 
@@ -101,7 +107,8 @@ public class CRectanglePainter implements Painter<Object> {
     /**
      * sets the starts point *
      */
-    public void from(Point p_point) {
+    public void from(Point p_point)
+    {
         m_start = new Rectangle(p_point);
     }
 
@@ -109,7 +116,8 @@ public class CRectanglePainter implements Painter<Object> {
     /**
      * clears the rectangle *
      */
-    public void clear() {
+    public void clear()
+    {
         m_start = null;
         m_rectangle = null;
     }
@@ -120,8 +128,9 @@ public class CRectanglePainter implements Painter<Object> {
      *
      * @return point
      */
-    public Point getFrom() {
-        if (m_rectangle == null)
+    public Point getFrom()
+    {
+        if ( m_rectangle == null )
             return null;
 
         return m_rectangle.getLocation();
@@ -133,8 +142,9 @@ public class CRectanglePainter implements Painter<Object> {
      *
      * @return point
      */
-    public Point getTo() {
-        if (m_rectangle == null)
+    public Point getTo()
+    {
+        if ( m_rectangle == null )
             return null;
 
         return new Point((int) (this.getFrom().getX() + m_rectangle.getWidth()), (int) (this.getFrom().getY() + m_rectangle.getHeight()));
@@ -146,14 +156,16 @@ public class CRectanglePainter implements Painter<Object> {
      *
      * @return rectangle object
      */
-    public Rectangle getRectangle() {
+    public Rectangle getRectangle()
+    {
         return m_rectangle;
     }
 
 
     @Override
-    public void paint(Graphics2D graphics2D, Object o, int i, int i2) {
-        if (m_rectangle == null)
+    public void paint(Graphics2D graphics2D, Object o, int i, int i2)
+    {
+        if ( m_rectangle == null )
             return;
 
         graphics2D.setColor(m_borderColor);

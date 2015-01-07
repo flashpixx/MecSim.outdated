@@ -41,7 +41,8 @@ import java.util.HashSet;
 /**
  * class with default source implementation
  */
-abstract public class IDefaultSourceFactory implements ISourceFactory {
+abstract public class IDefaultSourceFactory implements ISourceFactory
+{
 
     /**
      * position of the source within the map *
@@ -63,7 +64,8 @@ abstract public class IDefaultSourceFactory implements ISourceFactory {
      * @param p_position geo position object
      * @param p_color    color of the source
      */
-    public IDefaultSourceFactory(GeoPosition p_position, Color p_color) {
+    public IDefaultSourceFactory(GeoPosition p_position, Color p_color)
+    {
         m_position = p_position;
         m_color = p_color;
         this.setImage();
@@ -72,27 +74,32 @@ abstract public class IDefaultSourceFactory implements ISourceFactory {
     /**
      * creates the image *
      */
-    private void setImage() {
-        try {
+    private void setImage()
+    {
+        try
+        {
             BufferedImage l_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));
 
             // modify blue value to the color of the waypoint
             m_image = new BufferedImage(l_image.getColorModel(), l_image.copyData(null), l_image.isAlphaPremultiplied(), null);
-            for (int i = 0; i < l_image.getHeight(); i++)
-                for (int j = 0; j < l_image.getWidth(); j++) {
+            for ( int i = 0; i < l_image.getHeight(); i++ )
+                for ( int j = 0; j < l_image.getWidth(); j++ )
+                {
                     Color l_color = new Color(l_image.getRGB(j, i));
-                    if (l_color.getBlue() > 0)
+                    if ( l_color.getBlue() > 0 )
                         m_image.setRGB(j, i, m_color.getRGB());
                 }
 
-        } catch (Exception l_exception) {
+        } catch ( Exception l_exception )
+        {
             CLogger.warn("could not read standard_waypoint.png: " + l_exception.toString());
         }
     }
 
 
     @Override
-    public Collection<IReturnStepableTarget<ICar>> getTargets() {
+    public Collection<IReturnStepableTarget<ICar>> getTargets()
+    {
         Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
         l_collection.add((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car"));
         return l_collection;
@@ -100,8 +107,9 @@ abstract public class IDefaultSourceFactory implements ISourceFactory {
 
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
-        if (m_image == null)
+    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    {
+        if ( m_image == null )
             return;
 
         Point2D l_point = object.getTileFactory().geoToPixel(m_position, object.getZoom());

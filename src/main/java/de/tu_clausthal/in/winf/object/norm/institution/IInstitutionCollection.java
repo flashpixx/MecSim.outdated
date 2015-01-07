@@ -30,7 +30,8 @@ import java.util.Collection;
  * collection to receive and / send norms to
  * institutions
  */
-public interface IInstitutionCollection<T> extends Collection<IInstitution<T>> {
+public interface IInstitutionCollection<T> extends Collection<IInstitution<T>>
+{
 
 
     /**

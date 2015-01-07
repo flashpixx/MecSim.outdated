@@ -28,7 +28,8 @@ import java.util.Collection;
 /**
  * class to define a collection of ranges
  */
-public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable {
+public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable
+{
 
 
     /**

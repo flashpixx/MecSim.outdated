@@ -33,7 +33,8 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends Painter<COSMViewer>, IVoidStepable {
+public interface ICar extends Painter<COSMViewer>, IVoidStepable
+{
 
 
     /**

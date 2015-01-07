@@ -38,7 +38,8 @@ import java.util.Map;
 /**
  * range for GPS rectangle
  */
-public class CRangeGPS extends IInspector implements IRange<INormObject> {
+public class CRangeGPS extends IInspector implements IRange<INormObject>
+{
 
     /**
      * institution of the range
@@ -73,12 +74,13 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
      * @param p_upperleft   left upper corner position
      * @param p_lowerright  right lower corner position
      */
-    public CRangeGPS(IInstitution<INormObject> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright) {
-        if ((p_lowerright == null) || (p_upperleft == null))
+    public CRangeGPS(IInstitution<INormObject> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright)
+    {
+        if ( (p_lowerright == null) || (p_upperleft == null) )
             throw new IllegalArgumentException("parameter need not to be null");
-        if ((p_upperleft.getLongitude() > p_lowerright.getLongitude()) || (p_upperleft.getLatitude() < p_lowerright.getLatitude()))
+        if ( (p_upperleft.getLongitude() > p_lowerright.getLongitude()) || (p_upperleft.getLatitude() < p_lowerright.getLatitude()) )
             throw new IllegalArgumentException("geoposition are not in the correct order, first argument is the upper-left ");
-        if (p_institution == null)
+        if ( p_institution == null )
             throw new IllegalArgumentException("institution need not to be null");
 
         m_upperleft = p_upperleft;
@@ -88,7 +90,8 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
     }
 
     @Override
-    public Map<String, Object> inspect() {
+    public Map<String, Object> inspect()
+    {
         Map<String, Object> l_map = super.inspect();
 
         l_map.put("upper left", m_upperleft);
@@ -100,29 +103,34 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
 
 
     @Override
-    public boolean check(INormObject p_object) {
-        synchronized (p_object) {
+    public boolean check(INormObject p_object)
+    {
+        synchronized ( p_object )
+        {
             return m_georectangle.contains(p_object.getGeoposition().getLatitude(), p_object.getGeoposition().getLongitude());
         }
     }
 
     @Override
-    public IInstitution<INormObject> getInstitution() {
+    public IInstitution<INormObject> getInstitution()
+    {
         return m_institution;
     }
 
 
     @Override
-    public void onClick(MouseEvent e, JXMapViewer viewer) {
+    public void onClick(MouseEvent e, JXMapViewer viewer)
+    {
         Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
         Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
         Rectangle l_rectangle = new Rectangle((int) (Math.min(l_upperleft.getX(), l_lowerright.getX()) - viewer.getViewportBounds().getX()), (int) (Math.min(l_upperleft.getY(), l_lowerright.getY()) - viewer.getViewportBounds().getY()),
                 (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
 
-        if (!l_rectangle.contains(e.getPoint()))
+        if ( !l_rectangle.contains(e.getPoint()) )
             return;
 
-        if (e.isControlDown()) {
+        if ( e.isControlDown() )
+        {
             m_institution.getRange().remove(this);
             this.release();
         } else
@@ -130,7 +138,8 @@ public class CRangeGPS extends IInspector implements IRange<INormObject> {
     }
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
+    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    {
         Point2D l_upperleft = object.getTileFactory().geoToPixel(m_upperleft, object.getZoom());
         Point2D l_lowerright = object.getTileFactory().geoToPixel(m_lowerright, object.getZoom());
 

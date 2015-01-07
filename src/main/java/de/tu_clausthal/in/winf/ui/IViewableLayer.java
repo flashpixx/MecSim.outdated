@@ -25,7 +25,8 @@ package de.tu_clausthal.in.winf.ui;
 /**
  * defines a viewable layer
  */
-public interface IViewableLayer {
+public interface IViewableLayer
+{
 
     public boolean isVisible();
 

@@ -31,7 +31,8 @@ import java.util.Map;
 /**
  * popmenu
  */
-public class CMenuPopup extends JPopupMenu implements ActionListener {
+public class CMenuPopup extends JPopupMenu implements ActionListener
+{
 
     /**
      * map with object for action listener
@@ -54,7 +55,8 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
     /**
      * ctor to create popup
      */
-    public CMenuPopup() {
+    public CMenuPopup()
+    {
 
         String[] l_cars = {"default cars", "norm cars"};
         this.add(CMenuFactory.createRadioMenuGroup("Sources", l_cars, this, m_reference));
@@ -62,13 +64,16 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
 
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
 
-        if (e.getSource() == m_reference.get("default cars")) {
+        if ( e.getSource() == m_reference.get("default cars") )
+        {
             this.setSource("default cars");
             return;
         }
-        if (e.getSource() == m_reference.get("norm cars")) {
+        if ( e.getSource() == m_reference.get("norm cars") )
+        {
             this.setSource("norm cars");
             return;
         }
@@ -81,7 +86,8 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
     /**
      * update method to modify internal menu structure
      */
-    public void update() {
+    public void update()
+    {
         /*
         if (m_institutionMenu != null) {
             this.remove(m_institutionMenu);
@@ -108,7 +114,8 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      *
      * @param p_name name
      */
-    private void setSource(String p_name) {
+    private void setSource(String p_name)
+    {
         m_sources = p_name;
         ((JRadioButtonMenuItem) m_reference.get(p_name)).setSelected(true);
     }
@@ -119,7 +126,8 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      *
      * @return string with definition
      */
-    public String getSourceSelection() {
+    public String getSourceSelection()
+    {
         return m_sources;
     }
 
@@ -129,7 +137,8 @@ public class CMenuPopup extends JPopupMenu implements ActionListener {
      *
      * @return name
      */
-    public String getInstitutionSelection() {
+    public String getInstitutionSelection()
+    {
         return m_institution;
     }
 

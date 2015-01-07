@@ -32,7 +32,8 @@ import java.util.Set;
 /**
  * default institution collection
  */
-public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<T> {
+public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<T>
+{
 
 
     /**
@@ -42,79 +43,94 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
 
 
     @Override
-    public void send(INormMessage<T> p_message) {
-        for (IInstitution<T> l_item : m_institution)
+    public void send(INormMessage<T> p_message)
+    {
+        for ( IInstitution<T> l_item : m_institution )
             l_item.receive(p_message);
     }
 
     @Override
-    public void release() {
-        for (IInstitution<T> l_item : m_institution)
+    public void release()
+    {
+        for ( IInstitution<T> l_item : m_institution )
             l_item.release();
     }
 
     @Override
-    public int size() {
+    public int size()
+    {
         return m_institution.size();
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return m_institution.isEmpty();
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(Object o)
+    {
         return m_institution.contains(o);
     }
 
     @Override
-    public Iterator<IInstitution<T>> iterator() {
+    public Iterator<IInstitution<T>> iterator()
+    {
         return m_institution.iterator();
     }
 
     @Override
-    public Object[] toArray() {
+    public Object[] toArray()
+    {
         return m_institution.toArray();
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(T[] a)
+    {
         return m_institution.toArray(a);
     }
 
     @Override
-    public boolean add(IInstitution<T> iInstitution) {
+    public boolean add(IInstitution<T> iInstitution)
+    {
         return m_institution.add(iInstitution);
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(Object o)
+    {
         return m_institution.remove(o);
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> c)
+    {
         return m_institution.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends IInstitution<T>> c) {
+    public boolean addAll(Collection<? extends IInstitution<T>> c)
+    {
         return m_institution.addAll(c);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c)
+    {
         return m_institution.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(Collection<?> c)
+    {
         return m_institution.retainAll(c);
     }
 
     @Override
-    public void clear() {
+    public void clear()
+    {
         m_institution.clear();
     }
 }

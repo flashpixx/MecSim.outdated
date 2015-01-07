@@ -35,7 +35,8 @@ import java.util.Map;
 /**
  * source which generates cars with a profile
  */
-public class CProfileSourceFactory extends IDefaultSourceFactory {
+public class CProfileSourceFactory extends IDefaultSourceFactory
+{
 
     /**
      * waypoint color *
@@ -53,7 +54,8 @@ public class CProfileSourceFactory extends IDefaultSourceFactory {
      * @param p_position geoposition
      * @param p_profile  profile definition
      */
-    public CProfileSourceFactory(GeoPosition p_position, int[] p_profile) {
+    public CProfileSourceFactory(GeoPosition p_position, int[] p_profile)
+    {
         super(p_position, Color.GREEN);
         this.checkSetProfile(p_profile);
     }
@@ -64,7 +66,8 @@ public class CProfileSourceFactory extends IDefaultSourceFactory {
      *
      * @param p_profile profile definition
      */
-    public void setProfile(int[] p_profile) {
+    public void setProfile(int[] p_profile)
+    {
         this.checkSetProfile(p_profile);
     }
 
@@ -74,27 +77,30 @@ public class CProfileSourceFactory extends IDefaultSourceFactory {
      *
      * @param p_profile profile
      */
-    private void checkSetProfile(int[] p_profile) {
-        if (p_profile == null)
+    private void checkSetProfile(int[] p_profile)
+    {
+        if ( p_profile == null )
             throw new IllegalArgumentException("profile need not to be null");
 
-        for (int i = 0; i < p_profile.length; i++)
-            if (p_profile[i] < 0)
+        for ( int i = 0; i < p_profile.length; i++ )
+            if ( p_profile[i] < 0 )
                 throw new IllegalArgumentException("profile index [" + i + "] is less than zero");
 
         m_profile = p_profile;
     }
 
     @Override
-    public Collection<ICar> step(int p_currentstep, ILayer p_layer) {
+    public Collection<ICar> step(int p_currentstep, ILayer p_layer)
+    {
         Collection<ICar> l_sources = new HashSet();
-        for (int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++)
+        for ( int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++ )
             l_sources.add(new CDefaultCar(m_position));
         return l_sources;
     }
 
     @Override
-    public Map<String, Object> analyse() {
+    public Map<String, Object> analyse()
+    {
         return null;
     }
 }

@@ -32,7 +32,8 @@ import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CSpeedUpTrafficJam implements Weighting {
+public class CSpeedUpTrafficJam implements Weighting
+{
 
     /**
      * flag encoder for edge data *
@@ -50,20 +51,23 @@ public class CSpeedUpTrafficJam implements Weighting {
      * @param p_graph   graph object
      * @param p_encoder encoder
      */
-    public CSpeedUpTrafficJam(CGraphHopper p_graph, FlagEncoder p_encoder) {
+    public CSpeedUpTrafficJam(CGraphHopper p_graph, FlagEncoder p_encoder)
+    {
         m_graph = p_graph;
         this.m_encoder = p_encoder;
     }
 
 
     @Override
-    public double getMinWeight(double p_weight) {
+    public double getMinWeight(double p_weight)
+    {
         return 0;
     }
 
 
     @Override
-    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse) {
+    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse)
+    {
         return p_reverse ? m_encoder.getReverseSpeed(p_edge.getFlags()) : m_encoder.getSpeed(p_edge.getFlags()) * m_graph.getEdge(p_edge).getNumberOfObjects();
     }
 

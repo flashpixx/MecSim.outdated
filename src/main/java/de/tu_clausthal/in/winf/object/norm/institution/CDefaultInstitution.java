@@ -35,7 +35,8 @@ import java.util.Iterator;
 /**
  * default institution
  */
-public class CDefaultInstitution implements IInstitution<INormObject> {
+public class CDefaultInstitution implements IInstitution<INormObject>
+{
 
     /**
      * name of the institution *
@@ -62,7 +63,8 @@ public class CDefaultInstitution implements IInstitution<INormObject> {
     /**
      * default ctor
      */
-    public CDefaultInstitution() {
+    public CDefaultInstitution()
+    {
         //CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }
 
@@ -71,41 +73,48 @@ public class CDefaultInstitution implements IInstitution<INormObject> {
      *
      * @param p_name name
      */
-    public CDefaultInstitution(String p_name) {
-        if ((p_name == null) || (p_name.isEmpty()))
+    public CDefaultInstitution(String p_name)
+    {
+        if ( (p_name == null) || (p_name.isEmpty()) )
             throw new IllegalArgumentException("name need not be empty");
         m_name = p_name;
         //CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return m_name;
     }
 
     @Override
-    public void check(INormObject p_object) {
-        if (m_range.check(p_object))
+    public void check(INormObject p_object)
+    {
+        if ( m_range.check(p_object) )
             p_object.setMatchedNorm(m_norms.match(p_object));
     }
 
     @Override
-    public IRangeCollection<INormObject> getRange() {
+    public IRangeCollection<INormObject> getRange()
+    {
         return m_range;
     }
 
     @Override
-    public void update(INorm<INormObject> p_norm) {
+    public void update(INorm<INormObject> p_norm)
+    {
         m_norms.add(p_norm);
     }
 
     @Override
-    public void receive(INormMessage<INormObject> p_message) {
-        if (p_message.getTTL() < 0)
+    public void receive(INormMessage<INormObject> p_message)
+    {
+        if ( p_message.getTTL() < 0 )
             return;
 
         p_message.decrementTTL();
-        switch (p_message.getType()) {
+        switch ( p_message.getType() )
+        {
             case Create:
                 m_norms.add(p_message.getNorm());
                 break;
@@ -122,17 +131,20 @@ public class CDefaultInstitution implements IInstitution<INormObject> {
     }
 
     @Override
-    public IInstitutionCollection getSuperior() {
+    public IInstitutionCollection getSuperior()
+    {
         return m_superior;
     }
 
     @Override
-    public IInstitutionCollection getInferior() {
+    public IInstitutionCollection getInferior()
+    {
         return m_inferior;
     }
 
     @Override
-    public void release() {
+    public void release()
+    {
         //CSimulationData.getInstance().getCarInstitutionQueue().remove(this);
         m_norms.release();
         m_range.release();
@@ -142,73 +154,87 @@ public class CDefaultInstitution implements IInstitution<INormObject> {
     }
 
     @Override
-    public int size() {
+    public int size()
+    {
         return m_norms.size();
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return m_norms.isEmpty();
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(Object o)
+    {
         return m_norms.contains(o);
     }
 
     @Override
-    public Iterator<INorm<INormObject>> iterator() {
+    public Iterator<INorm<INormObject>> iterator()
+    {
         return m_norms.iterator();
     }
 
     @Override
-    public Object[] toArray() {
+    public Object[] toArray()
+    {
         return m_norms.toArray();
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(T[] a)
+    {
         return m_norms.toArray(a);
     }
 
     @Override
-    public boolean add(INorm<INormObject> iNormCarINorm) {
+    public boolean add(INorm<INormObject> iNormCarINorm)
+    {
         return m_norms.add(iNormCarINorm);
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(Object o)
+    {
         return m_norms.remove(o);
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> c)
+    {
         return m_norms.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<INormObject>> c) {
+    public boolean addAll(Collection<? extends INorm<INormObject>> c)
+    {
         return m_norms.addAll(c);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c)
+    {
         return m_norms.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(Collection<?> c)
+    {
         return m_norms.retainAll(c);
     }
 
     @Override
-    public void clear() {
+    public void clear()
+    {
         m_norms.clear();
     }
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height) {
-        for (IRange<INormObject> l_item : m_range)
+    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    {
+        for ( IRange<INormObject> l_item : m_range )
             l_item.paint(g, object, width, height);
 
     }

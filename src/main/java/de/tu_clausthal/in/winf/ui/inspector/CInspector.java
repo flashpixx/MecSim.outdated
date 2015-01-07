@@ -27,7 +27,8 @@ import javax.swing.*;
 /**
  * inspector class to create a visual view of an object
  */
-public class CInspector extends JTable {
+public class CInspector extends JTable
+{
 
     /**
      * singleton instance *
@@ -37,7 +38,8 @@ public class CInspector extends JTable {
     /**
      * private ctor *
      */
-    private CInspector() {
+    private CInspector()
+    {
         super(new CInspectorModel());
     }
 
@@ -46,7 +48,8 @@ public class CInspector extends JTable {
      *
      * @return instance
      */
-    public static CInspector getInstance() {
+    public static CInspector getInstance()
+    {
         return s_inspector;
     }
 
@@ -55,7 +58,8 @@ public class CInspector extends JTable {
      *
      * @param p_object object
      */
-    public void set(IInspector p_object) {
+    public void set(IInspector p_object)
+    {
         ((CInspectorModel) this.getModel()).set(p_object);
     }
 

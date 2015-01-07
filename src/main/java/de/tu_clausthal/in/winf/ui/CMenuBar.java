@@ -49,7 +49,8 @@ import java.util.Map;
 /**
  * class for create the menubar *
  */
-public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener {
+public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
+{
 
     /**
      * file chooser dialog
@@ -72,7 +73,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * ctor with menu items *
      */
-    public CMenuBar() {
+    public CMenuBar()
+    {
         super();
 
         String[] l_file = {"Load Sources", "Save Sources", null, "OSM Screenshot"};
@@ -105,7 +107,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         m_drivingmodelname = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getDrivingModelList();
         this.add(CMenuFactory.createRadioMenuGroup("Driving Model", m_drivingmodelname, this, m_reference));
-        for (int i = 0; i < m_drivingmodelname.length; i++)
+        for ( int i = 0; i < m_drivingmodelname.length; i++ )
             m_drivingmodelname[i] = "Driving Model::" + m_drivingmodelname[i];
 
 
@@ -132,7 +134,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
     @Override
-    public void stateChanged(ChangeEvent e) {
+    public void stateChanged(ChangeEvent e)
+    {
         CConfiguration.getInstance().get().ThreadSleepTime = ((JSlider) e.getSource()).getMaximum() - ((JSlider) e.getSource()).getValue();
     }
 
@@ -140,62 +143,71 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * throws an exception if the simulation is running
      */
-    private void throwSimulationRunningException() {
-        if (CSimulation.getInstance().isRunning())
+    private void throwSimulationRunningException()
+    {
+        if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException("simulation is running");
     }
 
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
+    public void actionPerformed(ActionEvent e)
+    {
+        try
+        {
 
-            if (e.getSource() == m_reference.get("File::OSM Screenshot"))
+            if ( e.getSource() == m_reference.get("File::OSM Screenshot") )
                 this.screenshot();
-            if (e.getSource() == m_reference.get("File::Load Sources"))
+            if ( e.getSource() == m_reference.get("File::Load Sources") )
                 this.loadSources();
-            if (e.getSource() == m_reference.get("File::Save Sources"))
+            if ( e.getSource() == m_reference.get("File::Save Sources") )
                 this.saveSources();
 
 
-            if (e.getSource() == m_reference.get("Simulation::Start"))
+            if ( e.getSource() == m_reference.get("Simulation::Start") )
                 CSimulation.getInstance().start();
-            if (e.getSource() == m_reference.get("Simulation::Stop"))
+            if ( e.getSource() == m_reference.get("Simulation::Stop") )
                 CSimulation.getInstance().stop();
-            if (e.getSource() == m_reference.get("Simulation::Reset"))
+            if ( e.getSource() == m_reference.get("Simulation::Reset") )
                 CSimulation.getInstance().reset();
 
 
-            if (e.getSource() == m_reference.get("Activity::Source")) {
+            if ( e.getSource() == m_reference.get("Activity::Source") )
+            {
                 this.throwSimulationRunningException();
                 ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Source");
                 l_layer.setActive(!l_layer.isActive());
             }
-            if (e.getSource() == m_reference.get("Activity::Car")) {
+            if ( e.getSource() == m_reference.get("Activity::Car") )
+            {
                 this.throwSimulationRunningException();
                 ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Car");
                 l_layer.setActive(!l_layer.isActive());
             }
 
 
-            if (e.getSource() == m_reference.get("Visibility::Source")) {
+            if ( e.getSource() == m_reference.get("Visibility::Source") )
+            {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
                 l_layer.setVisible(!l_layer.isVisible());
             }
-            if (e.getSource() == m_reference.get("Visibility::Car")) {
+            if ( e.getSource() == m_reference.get("Visibility::Car") )
+            {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Car");
                 l_layer.setVisible(!l_layer.isVisible());
             }
 
 
-            for (String l_model : m_drivingmodelname)
-                if (e.getSource() == m_reference.get(l_model)) {
+            for ( String l_model : m_drivingmodelname )
+                if ( e.getSource() == m_reference.get(l_model) )
+                {
                     this.throwSimulationRunningException();
                     ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).setDriveModel(l_model.replace("Driving Model::", ""));
                 }
 
 
-        } catch (Exception l_exception) {
+        } catch ( Exception l_exception )
+        {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
 
@@ -234,7 +246,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * creates a new speed norm
      */
-    private void createSpeedNorm() {
+    private void createSpeedNorm()
+    {
         /*
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
@@ -270,7 +283,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @todo complete
      */
-    private void deleteNorm() {
+    private void deleteNorm()
+    {
         /*
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
@@ -306,7 +320,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * create a new institution
      */
-    private void createInstitution() {
+    private void createInstitution()
+    {
         /*
         if (CSimulation.getInstance().isRunning())
             throw new IllegalStateException("simulation is running");
@@ -326,7 +341,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * deletes an institution
      */
-    private void deleteInstitution() {
+    private void deleteInstitution()
+    {
         /*
         if (CSimulationData.getInstance().getCarInstitutionQueue().isEmptyCell())
             return;
@@ -347,7 +363,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @return array
      */
-    private String[] getInstitutionList() {
+    private String[] getInstitutionList()
+    {
         /*
         Queue<IInstitution<INormObject>> l_data = CSimulationData.getInstance().getCarInstitutionQueue().getAll();
         String[] l_names = new String[l_data.size()];
@@ -368,7 +385,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @param p_name name
      * @return null or institution
      */
-    private IInstitution<INormObject> getInstitution(String p_name) {
+    private IInstitution<INormObject> getInstitution(String p_name)
+    {
         /*
         if ((p_name == null) && (p_name.isEmptyCell()))
             return null;
@@ -389,14 +407,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @param p_weight weight name (see "graphhopper" class "createWeighting" method)
      * @throws IllegalStateException
      */
-    private void setGraphWeight(String p_weight) throws IllegalStateException {
-        if (CSimulation.getInstance().isRunning()) {
+    private void setGraphWeight(String p_weight) throws IllegalStateException
+    {
+        if ( CSimulation.getInstance().isRunning() )
+        {
             ((JRadioButtonMenuItem) m_reference.get(m_weight)).setSelected(true);
             throw new IllegalStateException("simulation is running");
         }
 
         CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car");
-        if (l_layer != null) {
+        if ( l_layer != null )
+        {
             l_layer.setGraphWeight(p_weight);
             m_weight = p_weight;
         }
@@ -408,8 +429,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @throws java.io.IOException
      */
-    private void saveSources() throws IOException {
-        if (m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
+    private void saveSources() throws IOException
+    {
+        if ( m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION )
             return;
 
         CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
@@ -433,7 +455,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @throws IllegalAccessException
      */
     @SuppressWarnings(value = "unchecked")
-    private void loadSources() throws IOException, ClassNotFoundException, IllegalAccessException {
+    private void loadSources() throws IOException, ClassNotFoundException, IllegalAccessException
+    {
         /*
         if (m_filedialog.showOpenDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
             return;
@@ -456,11 +479,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @throws IOException
      */
-    private void screenshot() throws IOException {
+    private void screenshot() throws IOException
+    {
         BufferedImage l_image = new BufferedImage(COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB);
         COSMViewer.getInstance().paint(l_image.getGraphics());
 
-        if (m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
+        if ( m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION )
             return;
 
         ImageIO.write(l_image, "png", this.addFileExtension(m_filedialog.getSelectedFile(), ".png"));
@@ -474,9 +498,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @param p_suffix suffix
      * @return file with extension
      */
-    private File addFileExtension(File p_file, String p_suffix) {
+    private File addFileExtension(File p_file, String p_suffix)
+    {
         File l_file = p_file;
-        if (!l_file.getAbsolutePath().endsWith(p_suffix))
+        if ( !l_file.getAbsolutePath().endsWith(p_suffix) )
             l_file = new File(l_file + p_suffix);
         return l_file;
     }

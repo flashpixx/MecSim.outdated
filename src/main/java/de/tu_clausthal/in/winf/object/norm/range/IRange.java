@@ -31,7 +31,8 @@ import java.io.Serializable;
 /**
  * class to represent the workspace of an institution
  */
-public interface IRange<T> extends Serializable, Painter<COSMViewer> {
+public interface IRange<T> extends Serializable, Painter<COSMViewer>
+{
 
 
     /**

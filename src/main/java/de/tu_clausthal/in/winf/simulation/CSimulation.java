@@ -38,7 +38,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * singleton object to run the simulation *
  */
-public class CSimulation {
+public class CSimulation
+{
 
     /**
      * singleton instance *
@@ -65,7 +66,8 @@ public class CSimulation {
     /**
      * private ctor *
      */
-    private CSimulation() {
+    private CSimulation()
+    {
         CBootstrap.AfterSimulationInit(this);
     }
 
@@ -74,7 +76,8 @@ public class CSimulation {
      *
      * @return simulation object
      */
-    public static CSimulation getInstance() {
+    public static CSimulation getInstance()
+    {
         return s_instance;
     }
 
@@ -84,7 +87,8 @@ public class CSimulation {
      *
      * @return state
      */
-    public boolean isRunning() {
+    public boolean isRunning()
+    {
         return m_pool != null;
     }
 
@@ -92,7 +96,8 @@ public class CSimulation {
     /**
      * returns the simulation world *
      */
-    public CWorld getWorld() {
+    public CWorld getWorld()
+    {
         return m_world;
     }
 
@@ -100,19 +105,20 @@ public class CSimulation {
     /**
      * runs the simulation of the current step
      */
-    public void start() {
-        if (this.isRunning())
+    public void start()
+    {
+        if ( this.isRunning() )
             throw new IllegalStateException("simulation is running");
 
-        for (ILayer l_layer : m_world.getQueue())
-            if ((l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0))
+        for ( ILayer l_layer : m_world.getQueue() )
+            if ( (l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0) )
                 CLogger.warn("layer [" + l_layer + "] is empty");
 
         CLogger.info("simulation is started");
         CBootstrap.BeforeSimulationStarts(this);
 
         m_pool = Executors.newCachedThreadPool();
-        for (int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++)
+        for ( int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++ )
             m_pool.submit(new CWorker(m_barrier, i == 0, m_simulationcount));
     }
 
@@ -120,8 +126,9 @@ public class CSimulation {
     /**
      * stops the current simulation *
      */
-    public void stop() {
-        if (!this.isRunning())
+    public void stop()
+    {
+        if ( !this.isRunning() )
             throw new IllegalStateException("simulation is not running");
 
         this.shutdown();
@@ -133,11 +140,12 @@ public class CSimulation {
     /**
      * resets the simulation data *
      */
-    public void reset() {
+    public void reset()
+    {
         this.shutdown();
 
         m_simulationcount.set(0);
-        for (ILayer l_layer : m_world.getQueue())
+        for ( ILayer l_layer : m_world.getQueue() )
             l_layer.resetData();
         CBootstrap.onSimulationReset(this);
         CLogger.info("simulation reset");
@@ -147,15 +155,18 @@ public class CSimulation {
     /**
      * thread pool shutdown *
      */
-    private void shutdown() {
-        if (!this.isRunning())
+    private void shutdown()
+    {
+        if ( !this.isRunning() )
             return;
 
         m_pool.shutdown();
-        try {
+        try
+        {
             m_pool.awaitTermination(2, TimeUnit.SECONDS);
             m_pool = null;
-        } catch (InterruptedException l_exception) {
+        } catch ( InterruptedException l_exception )
+        {
             CLogger.error(l_exception.getMessage());
         }
     }

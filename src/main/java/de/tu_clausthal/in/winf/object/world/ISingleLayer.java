@@ -33,7 +33,8 @@ import java.util.Map;
 /**
  * single layer to create a single information structure
  */
-public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLayer, IDataLayer, IVoidStepable, ILayer {
+public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLayer, IDataLayer, IVoidStepable, ILayer
+{
 
     /**
      * flag for visibility *
@@ -45,40 +46,48 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     protected boolean m_active = true;
 
     @Override
-    public boolean isActive() {
+    public boolean isActive()
+    {
         return m_active;
     }
 
     @Override
-    public void setActive(boolean p_active) {
+    public void setActive(boolean p_active)
+    {
         m_active = p_active;
     }
 
     @Override
-    public boolean isVisible() {
+    public boolean isVisible()
+    {
         return m_visible;
     }
 
     @Override
-    public void setVisible(boolean p_visible) {
+    public void setVisible(boolean p_visible)
+    {
         m_visible = p_visible;
     }
 
     @Override
-    public void step(int p_currentstep, ILayer p_layer) {
+    public void step(int p_currentstep, ILayer p_layer)
+    {
     }
 
     @Override
-    public Map<String, Object> getData() {
+    public Map<String, Object> getData()
+    {
         return null;
     }
 
     @Override
-    public void paint(Graphics2D graphics2D, COSMViewer object, int i, int i2) {
+    public void paint(Graphics2D graphics2D, COSMViewer object, int i, int i2)
+    {
     }
 
     @Override
-    public void resetData() {
+    public void resetData()
+    {
 
     }
 }

@@ -30,7 +30,8 @@ import java.io.*;
 /**
  * singleton class for configuration with a Json file *
  */
-public class CConfiguration {
+public class CConfiguration
+{
 
     /**
      * name of the configuration file *
@@ -52,7 +53,8 @@ public class CConfiguration {
     /**
      * private Ctor to avoid manual instantiation *
      */
-    private CConfiguration() {
+    private CConfiguration()
+    {
     }
 
     /**
@@ -60,16 +62,19 @@ public class CConfiguration {
      *
      * @return configuration instance
      */
-    public static CConfiguration getInstance() {
+    public static CConfiguration getInstance()
+    {
         return s_instance;
     }
 
     /**
      * write method of the configuration *
      */
-    public void write() {
-        try {
-            if (!m_dir.exists() && !m_dir.mkdirs())
+    public void write()
+    {
+        try
+        {
+            if ( !m_dir.exists() && !m_dir.mkdirs() )
                 throw new IOException("unable to create " + m_dir.getAbsolutePath());
 
             Writer l_writer = new OutputStreamWriter(new FileOutputStream(m_dir + File.separator + s_ConfigFilename), "UTF-8");
@@ -78,7 +83,8 @@ public class CConfiguration {
             l_gson.toJson(m_data, l_writer);
 
             l_writer.close();
-        } catch (Exception l_exception) {
+        } catch ( Exception l_exception )
+        {
             CLogger.error(l_exception.getMessage());
         }
     }
@@ -86,9 +92,11 @@ public class CConfiguration {
     /**
      * reads the configuration within the directory *
      */
-    public void read() {
+    public void read()
+    {
         Data l_tmp = null;
-        try {
+        try
+        {
             String l_config = m_dir + File.separator + s_ConfigFilename;
             CLogger.info("read configuration from [" + l_config + "]");
 
@@ -96,34 +104,42 @@ public class CConfiguration {
 
             Gson l_gson = new Gson();
             l_tmp = l_gson.fromJson(l_reader, Data.class);
-        } catch (Exception l_exception) {
+        } catch ( Exception l_exception )
+        {
             CLogger.error(l_exception.getMessage());
         }
 
-        if (l_tmp == null)
+        if ( l_tmp == null )
             CLogger.warn("configuration is null, use default configuration");
-        else {
-            if (l_tmp.ViewPoint == null) {
+        else
+        {
+            if ( l_tmp.ViewPoint == null )
+            {
                 CLogger.warn("view point uses default value");
                 l_tmp.ViewPoint = m_data.ViewPoint;
             }
-            if (l_tmp.WindowHeight < 100) {
+            if ( l_tmp.WindowHeight < 100 )
+            {
                 CLogger.warn("window height uses default value");
                 l_tmp.WindowHeight = m_data.WindowHeight;
             }
-            if (l_tmp.WindowWidth < 100) {
+            if ( l_tmp.WindowWidth < 100 )
+            {
                 CLogger.warn("window width uses default value");
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
-            if ((l_tmp.RoutingAlgorithm == null) || (l_tmp.RoutingAlgorithm.isEmpty())) {
+            if ( (l_tmp.RoutingAlgorithm == null) || (l_tmp.RoutingAlgorithm.isEmpty()) )
+            {
                 CLogger.warn("routing algorithm uses default value");
                 l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
             }
-            if (l_tmp.CellSampling < 1) {
+            if ( l_tmp.CellSampling < 1 )
+            {
                 CLogger.warn("cell sampling uses default value");
                 l_tmp.CellSampling = m_data.CellSampling;
             }
-            if (l_tmp.ThreadSleepTime < 0) {
+            if ( l_tmp.ThreadSleepTime < 0 )
+            {
                 CLogger.warn("thread sleep time uses default value");
                 l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
             }
@@ -140,7 +156,8 @@ public class CConfiguration {
      *
      * @return path to config dir
      */
-    public File getConfigDir() {
+    public File getConfigDir()
+    {
         return m_dir;
     }
 
@@ -149,7 +166,8 @@ public class CConfiguration {
      *
      * @param p_dir directory
      */
-    public void setConfigDir(File p_dir) {
+    public void setConfigDir(File p_dir)
+    {
         m_dir = p_dir;
     }
 
@@ -158,14 +176,16 @@ public class CConfiguration {
      *
      * @return returns the configuration data
      */
-    public Data get() {
+    public Data get()
+    {
         return m_data;
     }
 
     /**
      * private class for storing the configuration *
      */
-    public class Data {
+    public class Data
+    {
 
         /**
          * geo position object of the start viewpoint *

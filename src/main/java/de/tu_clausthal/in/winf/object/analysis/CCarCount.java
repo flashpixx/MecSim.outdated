@@ -37,7 +37,8 @@ import java.util.Map;
 /**
  * car count statistic
  */
-public class CCarCount extends ISingleLayer {
+public class CCarCount extends ISingleLayer
+{
 
     /**
      * data set *
@@ -49,23 +50,27 @@ public class CCarCount extends ISingleLayer {
      *
      * @param p_frame frame objct
      */
-    public CCarCount(CFrame p_frame) {
+    public CCarCount(CFrame p_frame)
+    {
         p_frame.addUIComponent("Car Count", new ChartPanel(ChartFactory.createLineChart("Car Count", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false)));
     }
 
 
     @Override
-    public void step(int p_currentstep, ILayer p_layer) {
+    public void step(int p_currentstep, ILayer p_layer)
+    {
         m_plotdata.addValue(((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getGraph().getNumberOfCars(), "number", String.valueOf(p_currentstep));
     }
 
     @Override
-    public void resetData() {
+    public void resetData()
+    {
         m_plotdata.clear();
     }
 
     @Override
-    public Map<String, Object> analyse() {
+    public Map<String, Object> analyse()
+    {
         return null;
     }
 }

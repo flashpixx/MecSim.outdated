@@ -27,7 +27,8 @@ import de.tu_clausthal.in.winf.object.world.ILayer;
 /**
  * interface of void-step method
  */
-public interface IVoidStepable extends IStepable {
+public interface IVoidStepable extends IStepable
+{
 
 
     /**

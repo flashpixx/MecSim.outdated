@@ -27,7 +27,8 @@ import java.io.Serializable;
 /**
  * represent a fuzzy checkresult of a norm
  */
-public interface INormCheckResult<T> extends Serializable {
+public interface INormCheckResult<T> extends Serializable
+{
 
 
     /**

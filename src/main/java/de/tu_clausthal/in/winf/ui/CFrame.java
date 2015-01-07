@@ -38,7 +38,8 @@ import java.awt.event.WindowEvent;
  * create the main frame of the simulation
  * dockable component @see http://dock.javaforge.com/
  */
-public class CFrame extends JFrame {
+public class CFrame extends JFrame
+{
 
     /**
      * control of the dock component *
@@ -49,7 +50,8 @@ public class CFrame extends JFrame {
     /**
      * ctor with frame initialization
      */
-    public CFrame() {
+    public CFrame()
+    {
         super();
 
         this.setLayout(new BorderLayout());
@@ -58,10 +60,12 @@ public class CFrame extends JFrame {
 
         this.setSize(CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.addWindowListener(new WindowAdapter() {
+        this.addWindowListener(new WindowAdapter()
+        {
 
             @Override
-            public void windowClosing(WindowEvent l_event) {
+            public void windowClosing(WindowEvent l_event)
+            {
                 CConfiguration.getInstance().get().ViewPoint = COSMViewer.getInstance().getCenterPosition();
                 CConfiguration.getInstance().get().Zoom = COSMViewer.getInstance().getZoom();
                 CConfiguration.getInstance().get().WindowHeight = l_event.getWindow().getHeight();
@@ -85,7 +89,8 @@ public class CFrame extends JFrame {
      * @param p_name  dockname
      * @param p_panel omponent
      */
-    public void addUIComponent(String p_name, Component p_panel) {
+    public void addUIComponent(String p_name, Component p_panel)
+    {
         this.createDockable(p_name, p_panel, false, CLocation.base().minimalSouth());
     }
 
@@ -98,7 +103,8 @@ public class CFrame extends JFrame {
      * @param p_close    show close button
      * @param p_location location of the panel
      */
-    private void createDockable(String p_title, Component p_panel, boolean p_close, CLocation p_location) {
+    private void createDockable(String p_title, Component p_panel, boolean p_close, CLocation p_location)
+    {
         DefaultSingleCDockable l_dock = new DefaultSingleCDockable(p_title, p_title);
         l_dock.setTitleText(p_title);
         l_dock.setCloseable(p_close);

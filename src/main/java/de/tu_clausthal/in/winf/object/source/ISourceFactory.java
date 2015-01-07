@@ -32,6 +32,7 @@ import java.io.Serializable;
 /**
  * factory interface of car - defines a source
  */
-public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewer>, Serializable {
+public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewer>, Serializable
+{
 
 }

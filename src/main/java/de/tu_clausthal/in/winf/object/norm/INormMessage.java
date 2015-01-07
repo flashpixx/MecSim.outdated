@@ -29,7 +29,8 @@ import java.io.Serializable;
 /**
  * defines a message to transfer a norm
  */
-public interface INormMessage<T> extends Serializable {
+public interface INormMessage<T> extends Serializable
+{
 
 
     /**

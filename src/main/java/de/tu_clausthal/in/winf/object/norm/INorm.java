@@ -29,7 +29,8 @@ import java.io.Serializable;
 /**
  * interface class of a norm
  */
-public interface INorm<T> extends Serializable {
+public interface INorm<T> extends Serializable
+{
 
 
     /**

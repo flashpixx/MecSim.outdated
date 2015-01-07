@@ -27,7 +27,8 @@ import java.util.Map;
 /**
  * interface for all objects which are triggered by the simulation worker
  */
-public interface IStepable {
+public interface IStepable
+{
 
     /**
      * method for analyse object

@@ -41,7 +41,8 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
  * @see https://github.com/msteiger/jxmapviewer2
  * @see https://today.java.net/pub/a/today/2007/10/30/building-maps-into-swing-app-with-jxmapviewer.html
  */
-public class COSMViewer extends JXMapViewer {
+public class COSMViewer extends JXMapViewer
+{
 
     /**
      * singleton instance *
@@ -61,7 +62,8 @@ public class COSMViewer extends JXMapViewer {
      * private ctor with loading configuration defaults
      * and listener definition
      */
-    private COSMViewer() {
+    private COSMViewer()
+    {
         super();
 
         TileFactoryInfo l_info = new OSMTileFactoryInfo();
@@ -91,7 +93,8 @@ public class COSMViewer extends JXMapViewer {
      *
      * @return viewer instance
      */
-    public static COSMViewer getInstance() {
+    public static COSMViewer getInstance()
+    {
         return s_instance;
     }
 
@@ -101,7 +104,8 @@ public class COSMViewer extends JXMapViewer {
      *
      * @return painter
      */
-    public CompoundPainter getCompoundPainter() {
+    public CompoundPainter getCompoundPainter()
+    {
         return m_painter;
     }
 

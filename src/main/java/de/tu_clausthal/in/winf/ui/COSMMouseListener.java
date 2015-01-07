@@ -41,7 +41,8 @@ import java.awt.geom.Point2D;
 /**
  * mouse listener for jxviewer *
  */
-class COSMMouseListener extends MouseAdapter {
+class COSMMouseListener extends MouseAdapter
+{
 
     /**
      * popup *
@@ -58,13 +59,15 @@ class COSMMouseListener extends MouseAdapter {
 
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        if ((SwingUtilities.isLeftMouseButton(e)) && (!m_drag))
+    public void mousePressed(MouseEvent e)
+    {
+        if ( (SwingUtilities.isLeftMouseButton(e)) && (!m_drag) )
             return;
 
         // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
         // and would create an exception, so we do the initialization process here
-        if (m_rectangle == null) {
+        if ( m_rectangle == null )
+        {
             m_rectangle = new CRectanglePainter();
             COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
         }
@@ -74,15 +77,17 @@ class COSMMouseListener extends MouseAdapter {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        if (!m_drag)
+    public void mouseReleased(MouseEvent e)
+    {
+        if ( !m_drag )
             return;
 
         m_drag = false;
         m_rectangle.to(e.getPoint());
 
         IInstitution<INormObject> l_institution = this.getSelectedInstitution();
-        if ((m_rectangle.getRectangle() == null) || (l_institution == null)) {
+        if ( (m_rectangle.getRectangle() == null) || (l_institution == null) )
+        {
             m_rectangle.clear();
             return;
         }
@@ -93,20 +98,24 @@ class COSMMouseListener extends MouseAdapter {
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
-        if (!m_drag)
+    public void mouseDragged(MouseEvent e)
+    {
+        if ( !m_drag )
             return;
         m_rectangle.to(e.getPoint());
     }
 
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e)
+    {
 
-        try {
+        try
+        {
             // left double-click
-            if ((SwingUtilities.isLeftMouseButton(e)) && (e.getClickCount() == 2)) {
-                if (CSimulation.getInstance().isRunning())
+            if ( (SwingUtilities.isLeftMouseButton(e)) && (e.getClickCount() == 2) )
+            {
+                if ( CSimulation.getInstance().isRunning() )
                     throw new IllegalStateException("simulation is running");
 
                 COSMViewer l_viewer = (COSMViewer) e.getSource();
@@ -134,11 +143,13 @@ class COSMMouseListener extends MouseAdapter {
             }
 
             // right-click
-            if ((SwingUtilities.isRightMouseButton(e)) && (e.getClickCount() == 1)) {
+            if ( (SwingUtilities.isRightMouseButton(e)) && (e.getClickCount() == 1) )
+            {
                 m_popup.update();
                 m_popup.show(e.getComponent(), e.getX(), e.getY());
             }
-        } catch (Exception l_exception) {
+        } catch ( Exception l_exception )
+        {
             JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
         }
     }
@@ -149,7 +160,8 @@ class COSMMouseListener extends MouseAdapter {
      *
      * @return popup listener
      */
-    public CMenuPopup getPopupListener() {
+    public CMenuPopup getPopupListener()
+    {
         return m_popup;
     }
 
@@ -162,8 +174,9 @@ class COSMMouseListener extends MouseAdapter {
      * @param p_size          rectangle size
      * @return boolean on existence
      */
-    private boolean inRange(Point2D p_checkposition, Point2D p_center, int p_size) {
-        if ((p_checkposition == null) || (p_center == null))
+    private boolean inRange(Point2D p_checkposition, Point2D p_center, int p_size)
+    {
+        if ( (p_checkposition == null) || (p_center == null) )
             return true;
 
         return ((p_checkposition.getX() - p_size / 2) <= p_center.getX()) && ((p_checkposition.getX() + p_size / 2) >= p_center.getX()) && ((p_checkposition.getY() - p_size / 2) <= p_center.getY()) && ((p_checkposition.getY() + p_size / 2) >= p_center.getY());
@@ -175,8 +188,9 @@ class COSMMouseListener extends MouseAdapter {
      *
      * @return institution
      */
-    private IInstitution<INormObject> getSelectedInstitution() {
-        if ((m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()))
+    private IInstitution<INormObject> getSelectedInstitution()
+    {
+        if ( (m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()) )
             return null;
 /*
         for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())

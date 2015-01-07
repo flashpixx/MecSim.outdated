@@ -27,7 +27,8 @@ import de.tu_clausthal.in.winf.simulation.IStepable;
 /**
  * interface of the layer
  */
-public interface ILayer extends IStepable {
+public interface ILayer extends IStepable
+{
 
     /**
      * checks activity of the layer

@@ -35,7 +35,8 @@ import java.util.Random;
  * acceleration/ deceleration is defined on the car object (both create a little bit more realistic driving)
  * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
  */
-public class CNagelSchreckenberg implements IDriveModel {
+public class CNagelSchreckenberg implements IDriveModel
+{
 
     /**
      * defines the minimal speed *
@@ -49,12 +50,14 @@ public class CNagelSchreckenberg implements IDriveModel {
 
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return "Nagel-Schreckenberg";
     }
 
     @Override
-    public void update(int p_currentstep, CGraphHopper p_graph, ICar p_car) {
+    public void update(int p_currentstep, CGraphHopper p_graph, ICar p_car)
+    {
 
         //check maximum speed on the current edge and modify speed
         int l_maxspeed = Math.min(p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed(p_car.getEdge()));
@@ -64,14 +67,15 @@ public class CNagelSchreckenberg implements IDriveModel {
 
         // check collision with the predecessor car
         Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
-        if ((l_predecessor != null) && (l_predecessor.size() > 0)) {
+        if ( (l_predecessor != null) && (l_predecessor.size() > 0) )
+        {
             Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
-            if (l_item.getKey().intValue() < p_car.getCurrentSpeed())
+            if ( l_item.getKey().intValue() < p_car.getCurrentSpeed() )
                 p_car.setCurrentSpeed(Math.max(s_minimalspeed, (l_item.getKey().intValue() - p_car.getDeceleration())));
         }
 
         // decrement on linger random value
-        if ((p_car.getCurrentSpeed() > 0) && (m_random.nextDouble() <= p_car.getLingerProbability()))
+        if ( (p_car.getCurrentSpeed() > 0) && (m_random.nextDouble() <= p_car.getLingerProbability()) )
             p_car.setCurrentSpeed(Math.max(s_minimalspeed, (p_car.getCurrentSpeed() - p_car.getDeceleration())));
 
     }

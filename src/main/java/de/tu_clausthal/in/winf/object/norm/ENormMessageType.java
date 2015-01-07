@@ -25,6 +25,7 @@ package de.tu_clausthal.in.winf.object.norm;
 /**
  * defines the operation on a norm transfer
  */
-public enum ENormMessageType {
+public enum ENormMessageType
+{
     Create, Update, Delete
 }

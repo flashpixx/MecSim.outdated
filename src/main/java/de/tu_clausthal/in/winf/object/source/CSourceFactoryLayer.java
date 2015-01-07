@@ -29,11 +29,13 @@ import java.util.Map;
 /**
  * layer with all sources
  */
-public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory> {
+public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
+{
 
 
     @Override
-    public Map<String, Object> analyse() {
+    public Map<String, Object> analyse()
+    {
         return null;
     }
 }

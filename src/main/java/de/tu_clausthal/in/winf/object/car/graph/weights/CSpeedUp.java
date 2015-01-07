@@ -31,7 +31,8 @@ import com.graphhopper.util.EdgeIteratorState;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CSpeedUp implements Weighting {
+public class CSpeedUp implements Weighting
+{
 
     /**
      * flag encoder for edge data *
@@ -48,20 +49,23 @@ public class CSpeedUp implements Weighting {
      *
      * @param p_encoder encoder
      */
-    public CSpeedUp(FlagEncoder p_encoder) {
+    public CSpeedUp(FlagEncoder p_encoder)
+    {
         this.m_encoder = p_encoder;
         this.m_maxSpeed = p_encoder.getMaxSpeed();
     }
 
     @Override
-    public double getMinWeight(double p_weight) {
+    public double getMinWeight(double p_weight)
+    {
         return p_weight / m_maxSpeed;
     }
 
     @Override
-    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse) {
+    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse)
+    {
         double l_speed = p_reverse ? m_encoder.getReverseSpeed(p_edge.getFlags()) : m_encoder.getSpeed(p_edge.getFlags());
-        if (l_speed == 0)
+        if ( l_speed == 0 )
             return Double.POSITIVE_INFINITY;
         return p_edge.getDistance() / l_speed;
     }

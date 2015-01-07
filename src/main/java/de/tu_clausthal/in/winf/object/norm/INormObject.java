@@ -29,7 +29,8 @@ import java.util.Map;
 /**
  * interface of an norm object to receive norms
  */
-public interface INormObject extends ICar {
+public interface INormObject extends ICar
+{
 
     /**
      * matching method of a norm

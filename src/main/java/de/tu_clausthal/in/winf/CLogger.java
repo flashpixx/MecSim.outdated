@@ -31,7 +31,8 @@ import org.pmw.tinylog.writers.FileWriter;
 /**
  * Logger class with additional Log4j support
  */
-public class CLogger {
+public class CLogger
+{
     private static final String s_loggername = "MecSim";
 
     /**
@@ -40,13 +41,15 @@ public class CLogger {
     private static final int s_client_code_stack_index;
 
     /** initialization **/
-    static {
+    static
+    {
 
         // strack trace difference between JDK 1.5 and 1.6
         int i = 0;
-        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+        for ( StackTraceElement ste : Thread.currentThread().getStackTrace() )
+        {
             i++;
-            if (ste.getClassName().equals(CLogger.class.getName()))
+            if ( ste.getClassName().equals(CLogger.class.getName()) )
                 break;
         }
         s_client_code_stack_index = i;
@@ -59,7 +62,8 @@ public class CLogger {
      * @param p_level    log level
      * @param p_filename p_filename
      */
-    public static void create(Level p_level, String p_filename) {
+    public static void create(Level p_level, String p_filename)
+    {
         Configurator.defaultConfig().writer(p_level == Level.OFF ? null : new FileWriter(p_filename)).level(p_level).activate();
         Configurator.currentConfig().formatPattern("{message}").activate();
     }
@@ -73,10 +77,11 @@ public class CLogger {
      * @param p_len    max string length
      * @return modified string
      */
-    private static String padCut(String p_in, char p_Filler, int p_len) {
-        if (p_len < 1)
+    private static String padCut(String p_in, char p_Filler, int p_len)
+    {
+        if ( p_len < 1 )
             return p_in;
-        if (p_in.length() < p_len)
+        if ( p_in.length() < p_len )
             return p_in + StringUtils.repeat(p_Filler, p_len - p_in.length());
 
         return p_in.substring(0, p_len);
@@ -89,7 +94,8 @@ public class CLogger {
      * @param p_status status name
      * @param p_add    additional log data
      */
-    private static String createLogData(Level p_status, Object p_add) {
+    private static String createLogData(Level p_status, Object p_add)
+    {
         String l_SEP = StringUtils.repeat(" ", 5);
         StringBuffer l_Str = new StringBuffer();
 
@@ -105,7 +111,8 @@ public class CLogger {
         l_Str.append(padCut("invoker [" + getInvokingMethodNameFqn(3) + "]", ' ', 100));
 
         String l_add = (p_add != null) ? p_add.toString() : "";
-        if (!l_add.isEmpty()) {
+        if ( !l_add.isEmpty() )
+        {
             l_Str.append(l_SEP);
             l_Str.append(l_add.replace("\n", "  ").replace("\t", "  ").replace("\r", ""));
         }
@@ -117,7 +124,8 @@ public class CLogger {
     /**
      * adds a warn message *
      */
-    public static void warn() {
+    public static void warn()
+    {
         warn(null);
     }
 
@@ -126,7 +134,8 @@ public class CLogger {
      *
      * @param p_data log data
      */
-    public static void warn(Object p_data) {
+    public static void warn(Object p_data)
+    {
         Logger.warn(createLogData(Level.WARNING, p_data));
     }
 
@@ -134,7 +143,8 @@ public class CLogger {
     /**
      * adds a error message *
      */
-    public static void error() {
+    public static void error()
+    {
         error(null);
     }
 
@@ -144,7 +154,8 @@ public class CLogger {
      *
      * @param p_data log data
      */
-    public static void error(Object p_data) {
+    public static void error(Object p_data)
+    {
         Logger.error(createLogData(Level.ERROR, p_data));
     }
 
@@ -152,7 +163,8 @@ public class CLogger {
     /**
      * adds an info message *
      */
-    public static void info() {
+    public static void info()
+    {
         info(null);
     }
 
@@ -162,7 +174,8 @@ public class CLogger {
      *
      * @param p_data log data
      */
-    public static void info(Object p_data) {
+    public static void info(Object p_data)
+    {
         Logger.info(createLogData(Level.INFO, p_data));
     }
 
@@ -170,7 +183,8 @@ public class CLogger {
     /**
      * adds a debug message *
      */
-    public static void debug() {
+    public static void debug()
+    {
         debug(null);
     }
 
@@ -180,7 +194,8 @@ public class CLogger {
      *
      * @param p_data log data
      */
-    public static void debug(Object p_data) {
+    public static void debug(Object p_data)
+    {
         Logger.debug(createLogData(Level.DEBUG, p_data));
     }
 
@@ -190,7 +205,8 @@ public class CLogger {
      *
      * @return method name
      */
-    private static String getCurrentMethodName(int offset) {
+    private static String getCurrentMethodName(int offset)
+    {
         return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getMethodName();
     }
 
@@ -200,7 +216,8 @@ public class CLogger {
      *
      * @return class name
      */
-    private static String getCurrentClassName(int offset) {
+    private static String getCurrentClassName(int offset)
+    {
         return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getClassName();
     }
 
@@ -210,7 +227,8 @@ public class CLogger {
      *
      * @return number
      */
-    private static int getCurrentLineNumber(int offset) {
+    private static int getCurrentLineNumber(int offset)
+    {
         return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getLineNumber();
     }
 
@@ -220,7 +238,8 @@ public class CLogger {
      *
      * @return method name
      */
-    private static String getInvokingMethodName(int offset) {
+    private static String getInvokingMethodName(int offset)
+    {
         return getCurrentMethodName(offset + 1);
     }
 
@@ -230,7 +249,8 @@ public class CLogger {
      *
      * @return class name
      */
-    private static String getInvokingClassName(int offset) {
+    private static String getInvokingClassName(int offset)
+    {
         return getCurrentClassName(offset + 1);
     }
 
@@ -240,7 +260,8 @@ public class CLogger {
      *
      * @return FQN method name
      */
-    private static String getCurrentMethodNameFqn(int offset) {
+    private static String getCurrentMethodNameFqn(int offset)
+    {
         String currentClassName = getCurrentClassName(offset + 1);
         String currentMethodName = getCurrentMethodName(offset + 1);
 
@@ -253,7 +274,8 @@ public class CLogger {
      *
      * @return FQN method name
      */
-    private static String getInvokingMethodNameFqn(int offset) {
+    private static String getInvokingMethodNameFqn(int offset)
+    {
         String invokingClassName = getInvokingClassName(offset + 1);
         String invokingMethodName = getInvokingMethodName(offset + 1);
 

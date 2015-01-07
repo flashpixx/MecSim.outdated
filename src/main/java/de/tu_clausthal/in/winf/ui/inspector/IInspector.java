@@ -34,12 +34,14 @@ import java.util.Map;
 /**
  * global object of the simulation with mouse event handler
  */
-public abstract class IInspector extends JComponent implements MouseListener {
+public abstract class IInspector extends JComponent implements MouseListener
+{
 
     /**
      * ctor to register component on the viewer *
      */
-    public IInspector() {
+    public IInspector()
+    {
         COSMViewer.getInstance().addMouseListener(this);
     }
 
@@ -49,7 +51,8 @@ public abstract class IInspector extends JComponent implements MouseListener {
      * @param e      mouse event
      * @param viewer viewer
      */
-    public void onClick(MouseEvent e, JXMapViewer viewer) {
+    public void onClick(MouseEvent e, JXMapViewer viewer)
+    {
     }
 
     /**
@@ -57,7 +60,8 @@ public abstract class IInspector extends JComponent implements MouseListener {
      *
      * @return map with name and value
      */
-    public Map<String, Object> inspect() {
+    public Map<String, Object> inspect()
+    {
         Map<String, Object> l_map = new HashMap();
 
         l_map.put("class name", this.getClass().getName());
@@ -70,33 +74,41 @@ public abstract class IInspector extends JComponent implements MouseListener {
     /**
      * release of the event handler *
      */
-    public void release() {
+    public void release()
+    {
         COSMViewer.getInstance().removeMouseListener(this);
     }
 
 
-    //http://books.google.de/books?id=YPjZNlEgAMcC&pg=PA23&lpg=PA23&dq=swing+event+dispatch+mousePressed&source=bl&ots=GP3xg_gVgg&sig=b6uxQj_utHJ0s-YnSQqNxZoKfvc&hl=de&sa=X&ei=-4X8U_DRHYKJ4gSLioDYDA&redir_esc=y#v=onepage&q=swing%20event%20dispatch%20mousePressed&f=false
-
     @Override
-    public void mousePressed(MouseEvent e) {
-        if (SwingUtilities.isLeftMouseButton(e))
+    public void mousePressed(MouseEvent e)
+    {
+        if ( SwingUtilities.isLeftMouseButton(e) )
             this.onClick(e, COSMViewer.getInstance());
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseReleased(MouseEvent e)
+    {
     }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
     }
 
 }

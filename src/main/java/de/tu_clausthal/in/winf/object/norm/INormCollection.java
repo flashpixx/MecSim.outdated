@@ -29,7 +29,8 @@ import java.util.Map;
 /**
  * norm collection
  */
-public interface INormCollection<T> extends Collection<INorm<T>>, Serializable {
+public interface INormCollection<T> extends Collection<INorm<T>>, Serializable
+{
 
 
     /**

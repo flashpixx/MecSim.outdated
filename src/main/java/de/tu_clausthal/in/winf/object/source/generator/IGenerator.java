@@ -27,7 +27,8 @@ import java.util.Collection;
 /**
  * generator interface to define different object generator
  */
-public interface IGenerator<T> {
+public interface IGenerator<T>
+{
 
     /**
      * generator name *

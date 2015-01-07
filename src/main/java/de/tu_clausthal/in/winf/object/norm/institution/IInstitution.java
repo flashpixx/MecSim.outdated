@@ -36,7 +36,8 @@ import java.util.Collection;
  * is a collection of norms, stores collection of other institutions and
  * additional aspects
  */
-public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Painter<COSMViewer> {
+public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Painter<COSMViewer>
+{
 
 
     /**

@@ -308,6 +308,7 @@ public class CDefaultCar extends IInspector implements ICar {
         return l_currentedge;
     }
 
+
     /**
      * calculate the new route index and update the object on the edge
      *
@@ -322,19 +323,19 @@ public class CDefaultCar extends IInspector implements ICar {
             return;
         }
 
-        // get the current position on the current edge of the car
+        // get the current position on the current edge of the car or if the edge is null, it is the first edge
         Integer l_position = p_linkage.getPosition(this);
         if (l_position == null) {
-            m_routeindex = Integer.MAX_VALUE;
-            return;
+            l_position = new Integer(0);
+            p_linkage.setObject(this, 0);
         }
 
         // calculate the number of cells, on which the car must be moved
         int l_newposition = p_currentspeed - (p_linkage.getEdgeCells() - l_position.intValue());
-
+        //System.out.println(l_newposition);
         // if the number of cells are lower than the current edge length, update the car
         if (l_newposition < p_linkage.getEdgeCells()) {
-            p_linkage.updateObject(this, l_newposition);
+            p_linkage.updateObject(this, p_currentspeed);
             return;
         }
 
@@ -352,6 +353,7 @@ public class CDefaultCar extends IInspector implements ICar {
 
         // otherwise
         m_routeindex = Integer.MAX_VALUE;
+
     }
 
 

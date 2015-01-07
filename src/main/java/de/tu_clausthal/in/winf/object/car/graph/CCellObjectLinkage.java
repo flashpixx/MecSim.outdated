@@ -32,7 +32,6 @@ import org.apache.commons.math3.exception.NonMonotonicSequenceException;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -229,19 +228,32 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      * checks if a position is empty
      *
      * @param p_position position index
-     * @return empty
+     * @return empty for empty
      */
     public boolean isEmptyCell( int p_position )
     {
         return m_cells[p_position] == null;
     }
 
+
+    /**
+     * check if the edge is empty
+     *
+     * @return empty boolean
+     */
     public boolean isEmpty()
     {
         return m_objects.isEmpty();
     }
 
-    public boolean isEmpty( int p_position )
+
+    /**
+     * check if the cells [0, position) are empty
+     *
+     * @param p_position position index
+     * @return boolean for empty
+     */
+    public boolean isEmptyUntilPosition( int p_position )
     {
         for ( int i = 0; i < p_position; i++ )
             if ( m_cells[i] != null )
@@ -250,12 +262,36 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     }
 
 
+    /**
+     * returns the position of an object
+     *
+     * @param p_object object
+     * @return position
+     */
     public Integer getPosition( N p_object )
     {
         return m_objects.get( p_object );
     }
 
 
+    /**
+     * returns the object on the position
+     *
+     * @param p_position position index
+     * @return object or null
+     */
+    public N getObject( int p_position )
+    {
+        return m_cells[p_position];
+    }
+
+    /**
+     * sets an object on the edge position
+     *
+     * @param p_object   object
+     * @param p_position position index
+     * @throws IllegalAccessException
+     */
     public synchronized void setObject( N p_object, int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmptyCell( p_position ) )
@@ -268,6 +304,11 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     }
 
 
+    /**
+     * removes an object of the edge
+     *
+     * @param p_object object
+     */
     public synchronized void removeObject( N p_object )
     {
         if ( !m_objects.containsKey( p_object ) )
@@ -277,6 +318,13 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     }
 
 
+    /**
+     * updates an object on the edge
+     *
+     * @param p_object    object
+     * @param p_increment increment of the object position
+     * @throws IllegalAccessException
+     *
     public synchronized void updateObject( N p_object, int p_increment ) throws IllegalAccessException
     {
         Integer l_position = m_objects.get( p_object );
@@ -288,6 +336,15 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
         this.removeObject( p_object );
         this.setObject( p_object, p_increment + l_position.intValue() );
     }
+     */
+
+
+    /**
+     * checks if an object is on the edge
+     *
+     * @param p_object object
+     * @return contains boolean
+     */
 
     public synchronized boolean contains( N p_object )
     {
@@ -301,38 +358,38 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      * @param p_object object
      * @param p_count  number of predecessors
      * @return null or map with position and object
-     */
+     *
     public Map<Integer, N> getPredecessor( N p_object, int p_count )
     {
-        Integer l_position = m_objects.get( p_object );
-        if ( l_position == null )
-            return null;
+    Integer l_position = m_objects.get( p_object );
+    if ( l_position == null )
+    return null;
 
-        HashMap<Integer, N> l_items = new HashMap();
-        for ( int i = l_position + 1; i < m_cells.length; i++ )
-        {
-            if ( m_cells[i] != null )
-                l_items.put( i - l_position, m_cells[i] );
+    HashMap<Integer, N> l_items = new HashMap();
+    for ( int i = l_position + 1; i < m_cells.length; i++ )
+    {
+    if ( m_cells[i] != null )
+    l_items.put( i - l_position, m_cells[i] );
 
-            if ( l_items.size() >= p_count )
-                break;
-        }
+    if ( l_items.size() >= p_count )
+    break;
+    }
 
-        return l_items;
+    return l_items;
     }
 
 
-    /**
+     **
      * returns the next predecessor of an object on the edge
      *
      * @param p_object object
      * @return null or map with position and object
-     */
+     *
     public Map<Integer, N> getPredecessor( N p_object )
     {
-        return this.getPredecessor( p_object, 1 );
+    return this.getPredecessor( p_object, 1 );
     }
-
+     */
 
     /**
      * returns the successor of an object on the edge
@@ -340,37 +397,37 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      * @param p_object object
      * @param p_count  number of successors
      * @return null or map with position and object
-     */
+     *
     public Map<Integer, N> getSuccessor( N p_object, int p_count )
     {
-        Integer l_position = m_objects.get( p_object );
-        if ( l_position == null )
-            return null;
+    Integer l_position = m_objects.get( p_object );
+    if ( l_position == null )
+    return null;
 
-        HashMap<Integer, N> l_items = new HashMap();
-        for ( int i = l_position - 1; i >= 0; i-- )
-        {
-            if ( m_cells[i] != null )
-                l_items.put( l_position - i, m_cells[i] );
+    HashMap<Integer, N> l_items = new HashMap();
+    for ( int i = l_position - 1; i >= 0; i-- )
+    {
+    if ( m_cells[i] != null )
+    l_items.put( l_position - i, m_cells[i] );
 
-            if ( l_items.size() >= p_count )
-                break;
-        }
-
-        return l_items;
+    if ( l_items.size() >= p_count )
+    break;
     }
 
-    /**
+    return l_items;
+    }
+
+     **
      * returns the next successor of an object on the edge
      *
      * @param p_object object
      * @return null or map with position and object
-     */
+     *
     public Map<Integer, N> getSuccessor( N p_object )
     {
-        return this.getSuccessor( p_object, 1 );
+    return this.getSuccessor( p_object, 1 );
     }
-
+     */
 
     /**
      * clears the edge information

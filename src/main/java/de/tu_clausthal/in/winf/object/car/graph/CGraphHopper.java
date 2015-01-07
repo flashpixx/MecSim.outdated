@@ -236,7 +236,7 @@ public class CGraphHopper extends GraphHopper
     /**
      * creates the full path of cells with the edge value
      *
-     * @param p_route  edge list
+     * @param p_route edge list
      * @return list with pair and edge position
      */
     public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( List<EdgeIteratorState> p_route )

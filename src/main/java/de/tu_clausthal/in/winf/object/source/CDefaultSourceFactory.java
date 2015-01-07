@@ -86,10 +86,10 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
         Collection<ICar> l_sources = new HashSet();
-        if ( m_random.sample() >= s_mean )
-            return l_sources;
+        //if ( m_random.sample() >= s_mean )
+        //    return l_sources;
 
-        for ( int i = 0; i < m_NumberCarsInStep; i++ )
+        //for ( int i = 0; i < m_NumberCarsInStep; i++ )
             l_sources.add( new CDefaultCar( m_position ) );
 
         return l_sources;

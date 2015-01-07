@@ -311,122 +311,59 @@ public class CDefaultCar extends IInspector implements ICar {
     /**
      * calculate the new route index and update the object on the edge
      *
-     * @param p_linkage      linkage object
+     * @param p_linkage      current linkage object
      * @param p_currentspeed current speed
      */
-    private void updateRouteIndex(CCellObjectLinkage p_linkage, int p_currentspeed) {
-        // calculate the new position of the car
-        Integer l_position = p_linkage.getPosition(this);
-        if (l_position == null)
+    private void updateRouteIndex(CCellObjectLinkage p_linkage, int p_currentspeed) throws IllegalAccessException {
+
+        // if linkage edge not exists finish car
+        if (p_linkage == null) {
             m_routeindex = Integer.MAX_VALUE;
+            return;
+        }
 
-        // the current position on the edge must be updated, so the position
-        // is incremented with the current speed number, if the edge end is
-        // reached, increment the route index until the speed is 0
-        int l_speed = p_currentspeed;
-        l_speed -= p_linkage.getEdgeCells() - l_position.intValue();
+        // get the current position on the current edge of the car
+        Integer l_position = p_linkage.getPosition(this);
+        if (l_position == null) {
+            m_routeindex = Integer.MAX_VALUE;
+            return;
+        }
 
+        // calculate the number of cells, on which the car must be moved
+        int l_newposition = p_currentspeed - (p_linkage.getEdgeCells() - l_position.intValue());
+
+        // if the number of cells are lower than the current edge length, update the car
+        if (l_newposition < p_linkage.getEdgeCells()) {
+            p_linkage.updateObject(this, l_newposition);
+            return;
+        }
+
+        // otherwise remove the car from the current edge and iterate over the next edges
+        p_linkage.removeObject(this);
+        for (int i = m_routeindex + 1; i < m_routeedges.size(); i++) {
+            int l_edgesize = m_graph.getEdge(this.getEdge(i)).getEdgeCells();
+            l_newposition -= l_edgesize;
+            if (l_newposition <= 0) {
+                m_routeindex = i;
+                m_graph.getEdge(this.getEdge(m_routeindex)).setObject(this, l_newposition + l_edgesize);
+                return;
+            }
+        }
+
+        // otherwise
+        m_routeindex = Integer.MAX_VALUE;
     }
 
 
     @Override
     public void step(int p_currentstep, ILayer p_layer) throws Exception {
 
-        // store current speed for modifying the position on the edge
-        int l_speed = this.getCurrentSpeed();
-
         // if the car is at the end
         if (this.hasEndReached())
             return;
 
-/*
+        this.updateRouteIndex(this.getCurrentGraphLinkage(), this.getCurrentSpeed());
 
-
-
-
-        // calculate next edge with current speed
-        CCellObjectLinkage l_newedge = l_currentedge;
-        for( int i=0; (l_speed > 0) && (l_newedge != null); l_newedge = m_graph.getEdge(this.getEdge(++i+m_routeindex)) ) {
-            l_speed -= l_newedge.getEdgeCells();
-            if (l_speed < 0) {
-                m_routeindex += i;
-                break;
-            }
-        }
-
-        // no edges exists so we reaches the end
-        if (l_newedge == null)
-        {
-            m_routeindex = Integer.MAX_VALUE;
-            return;
-        }
-
-        // update object on the current / new edge
-        l_speed += l_newedge.getEdgeCells();
-        if ((l_currentedge == l_newedge) && (l_currentedge.contains(this)))
-            l_currentedge.updateObject(this, l_speed);
-        else {
-            l_currentedge.removeObject(this);
-            l_newedge.setObject(this, l_speed);
-        }
-        */
-
-/*
-        for (int i = 0; true; i++) {
-
-            // if the car is at the end
-            if (this.hasEndReached())
-                return;
-
-            // avoid infinity loop for update
-            if (i > 15) {
-                m_routeindex = m_routeedges.size() - 1;
-                return;
-            }
-
-            // get current edge of cars route
-            CCellObjectLinkage l_newedge = m_graph.getEdge(this.getEdge());
-
-            // car is not set on the current edge, so we try to find the first position
-            if (!l_newedge.contains(this)) {
-
-                // check car can be set to the edge position
-                if ((l_steps < l_newedge.getEdgeCells()) && (!l_newedge.isPositionSet(l_steps))) {
-                    l_newedge.addObject2Edge(this, l_steps);
-                    break;
-                }
-
-                // if car faster than edge length, so get the next edge
-                if (l_steps >= l_newedge.getEdgeCells()) {
-                    l_steps -= l_newedge.getEdgeCells();
-                    m_routeindex++;
-                    continue;
-                }
-
-                // car is stored on the edge, so try to update
-            } else {
-
-                // car can be updated to a new position (we did not check for empty,
-                // because the driving model should update the current speed value for an empty cell
-                if (l_newedge.CarCanUpdated(this, l_steps)) {
-                    try {
-                        l_newedge.updateObject(this, l_steps);
-                    } catch (Exception l_exception) {
-                    }
-                    break;
-
-                    // car can not be updated to a new position, so remove it and add the car to the next edge
-                } else {
-                    l_steps = l_newedge.overlappingCells(this, l_steps);
-                    l_newedge.removeObjectFromEdge(this);
-                    m_routeindex++;
-                    continue;
-                }
-
-            }
-
-        }
-        */
     }
 
     @Override

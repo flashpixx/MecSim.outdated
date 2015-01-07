@@ -31,13 +31,14 @@ import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
-import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CSpeedUpTrafficJam;
 import de.tu_clausthal.in.winf.object.car.graph.weights.CTrafficJam;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
@@ -183,19 +184,6 @@ public class CGraphHopper extends GraphHopper {
 
 
     /**
-     * returns the closest edge on a point list
-     *
-     * @param p_points point list
-     * @param p_index  index of the list
-     * @return edge ID
-     */
-    public int getClosestEdge(PointList p_points, int p_index) {
-        GeoPosition l_geo = new GeoPosition(p_points.getLatitude(p_index), p_points.getLongitude(p_index));
-        return this.getClosestEdge(l_geo);
-    }
-
-
-    /**
      * returns the max. speed of an edge
      *
      * @param p_edge edge ID
@@ -212,11 +200,11 @@ public class CGraphHopper extends GraphHopper {
     /**
      * returns an iterator state of an edge
      *
-     * @param p_edge edge ID
+     * @param p_edgeid edge ID
      * @return iterator
      */
-    public EdgeIteratorState getEdgeIterator(int p_edge) {
-        return this.getGraph().getEdgeProps(p_edge, Integer.MIN_VALUE);
+    public EdgeIteratorState getEdgeIterator(int p_edgeid) {
+        return this.getGraph().getEdgeProps(p_edgeid, Integer.MIN_VALUE);
     }
 
 
@@ -229,6 +217,26 @@ public class CGraphHopper extends GraphHopper {
     public int getClosestNode(GeoPosition p_position) {
         QueryResult l_result = this.getLocationIndex().findClosest(p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES);
         return l_result.getClosestNode();
+    }
+
+
+    /**
+     * iterates over an edge list by a definite length
+     *
+     * @param p_edges  edge list
+     * @param p_start  start index
+     * @param p_length length / number of cells
+     * @return pair of edge list index and position on the edge or null
+     */
+    public Pair<Integer, Integer> getEdgeByLength(List<EdgeIteratorState> p_edges, int p_start, int p_length) {
+        for (int i = p_start; i < p_edges.size(); i++) {
+            int l_size = this.getEdge(p_edges.get(i)).getEdgeCells();
+            p_length -= l_size;
+            if (p_length < 0)
+                return new ImmutablePair(i, p_length + l_size);
+        }
+
+        return null;
     }
 
 

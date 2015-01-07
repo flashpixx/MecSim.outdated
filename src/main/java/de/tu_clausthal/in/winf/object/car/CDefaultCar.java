@@ -29,6 +29,7 @@ import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
 import de.tu_clausthal.in.winf.ui.inspector.CInspector;
 import de.tu_clausthal.in.winf.ui.inspector.IInspector;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -297,63 +298,43 @@ public class CDefaultCar extends IInspector implements ICar {
 
 
     /**
-     * returns the current edge or null if the end is reached
-     *
-     * @return edge object or null
-     */
-    private CCellObjectLinkage getCurrentGraphLinkage() {
-        CCellObjectLinkage l_currentedge = m_graph.getEdge(this.getEdge());
-        if (l_currentedge == null)
-            m_routeindex = Integer.MAX_VALUE;
-        return l_currentedge;
-    }
-
-
-    /**
      * calculate the new route index and update the object on the edge
      *
-     * @param p_linkage      current linkage object
+     * @param p_currentedge      current linkage object
      * @param p_currentspeed current speed
      */
-    private void updateRouteIndex(CCellObjectLinkage p_linkage, int p_currentspeed) throws IllegalAccessException {
+    private void updateRouteIndex(CCellObjectLinkage p_currentedge, int p_currentspeed) throws IllegalAccessException {
 
         // if linkage edge not exists finish car
-        if (p_linkage == null) {
+        if (p_currentedge == null) {
             m_routeindex = Integer.MAX_VALUE;
             return;
         }
 
         // get the current position on the current edge of the car or if the edge is null, it is the first edge
-        Integer l_position = p_linkage.getPosition(this);
+        Integer l_position = p_currentedge.getPosition(this);
         if (l_position == null) {
             l_position = new Integer(0);
-            p_linkage.setObject(this, 0);
+            p_currentedge.setObject(this, 0);
         }
 
         // calculate the number of cells, on which the car must be moved
-        int l_newposition = p_currentspeed - (p_linkage.getEdgeCells() - l_position.intValue());
-        //System.out.println(l_newposition);
-        // if the number of cells are lower than the current edge length, update the car
-        if (l_newposition < p_linkage.getEdgeCells()) {
-            p_linkage.updateObject(this, p_currentspeed);
+        int l_newposition = p_currentspeed - (p_currentedge.getEdgeCells() - l_position.intValue());
+        System.out.println(l_newposition);
+        // if the number of cells are grater or equal zero, the car can moved on the current edge
+        if (l_newposition > 0) {
+            p_currentedge.updateObject(this, p_currentspeed);
             return;
         }
 
-        // otherwise remove the car from the current edge and iterate over the next edges
-        p_linkage.removeObject(this);
-        for (int i = m_routeindex + 1; i < m_routeedges.size(); i++) {
-            int l_edgesize = m_graph.getEdge(this.getEdge(i)).getEdgeCells();
-            l_newposition -= l_edgesize;
-            if (l_newposition <= 0) {
-                m_routeindex = i;
-                m_graph.getEdge(this.getEdge(m_routeindex)).setObject(this, l_newposition + l_edgesize);
-                return;
-            }
+        // otherwise remove the car from the current edge get the new edge and position
+        p_currentedge.removeObject(this);
+        Pair<Integer, Integer> l_positiondata = m_graph.getEdgeByLength(m_routeedges, m_routeindex + 1, l_newposition);
+        if (l_positiondata == null) {
+            m_routeindex = Integer.MAX_VALUE;
+            return;
         }
-
-        // otherwise
-        m_routeindex = Integer.MAX_VALUE;
-
+        m_graph.getEdge(this.getEdge(l_positiondata.getLeft().intValue())).setObject(this, l_positiondata.getRight().intValue());
     }
 
 
@@ -364,7 +345,7 @@ public class CDefaultCar extends IInspector implements ICar {
         if (this.hasEndReached())
             return;
 
-        this.updateRouteIndex(this.getCurrentGraphLinkage(), this.getCurrentSpeed());
+        this.updateRouteIndex(this.m_graph.getEdge(this.getEdge()), this.getCurrentSpeed());
 
     }
 

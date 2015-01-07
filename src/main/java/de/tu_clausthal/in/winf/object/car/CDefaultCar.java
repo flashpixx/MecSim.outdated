@@ -348,10 +348,8 @@ public class CDefaultCar extends IInspector implements ICar
             m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).updateObject( this, this.getCurrentSpeed() );
         else
         {
-            EdgeIteratorState l_edge = m_route.get( m_routeindex ).getLeft();
-
-            m_graph.getEdge( l_edge ).removeObject( this );
-            m_graph.getEdge( l_edge ).setObject( this, m_route.get( m_routeindex ).getRight() );
+            m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
+            m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
         }
 
         m_routeindex += this.getCurrentSpeed();

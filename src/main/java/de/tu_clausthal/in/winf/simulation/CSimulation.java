@@ -165,7 +165,8 @@ public class CSimulation
         {
             m_pool.awaitTermination( 2, TimeUnit.SECONDS );
             m_pool = null;
-        } catch ( InterruptedException l_exception )
+        }
+        catch ( InterruptedException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }

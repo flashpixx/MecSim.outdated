@@ -206,7 +206,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
 
 
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }

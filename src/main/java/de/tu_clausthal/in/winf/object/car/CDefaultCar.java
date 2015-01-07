@@ -22,7 +22,6 @@
 package de.tu_clausthal.in.winf.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.winf.object.car.graph.CCellObjectLinkage;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
@@ -37,7 +36,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -76,11 +75,11 @@ public class CDefaultCar extends IInspector implements ICar
      */
     protected double m_LingerProbability = 0;
     /**
-     * edges of the route *
+     * cell structure of the route *
      */
-    protected List<EdgeIteratorState> m_routeedges = null;
+    protected ArrayList<Pair<EdgeIteratorState, Integer>> m_route = null;
     /**
-     * edge counter for GHResponse  *
+     * current position on the route  *
      */
     protected int m_routeindex = 0;
     /**
@@ -121,10 +120,11 @@ public class CDefaultCar extends IInspector implements ICar
                 List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
                 if ( ( l_route != null ) && ( l_route.size() > 0 ) )
                 {
-                    m_routeedges = l_route.get( 0 );
+                    m_route = m_graph.getRouteCells( l_route.get( 0 ) );
                     break;
                 }
-            } catch ( Exception l_exception )
+            }
+            catch ( Exception l_exception )
             {
             }
         }
@@ -164,20 +164,21 @@ public class CDefaultCar extends IInspector implements ICar
         List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
         if ( ( l_route != null ) && ( l_route.size() > 0 ) )
         {
-            m_routeedges = l_route.get( 0 );
+            m_route = m_graph.getRouteCells( l_route.get( 0 ) );
         }
     }
 
     @Override
     public boolean hasEndReached()
     {
-        return ( m_routeedges != null ) && ( m_routeindex >= m_routeedges.size() );
+        return ( m_route == null ) || ( m_routeindex >= m_route.size() );
     }
 
 
     @Override
     public Map<Integer, ICar> getPredecessor()
     {
+        /*
         int l_edgelength = 0;
 
         //iterate over the edges in the rozre
@@ -201,7 +202,7 @@ public class CDefaultCar extends IInspector implements ICar
 
             l_edgelength += l_edge.getEdgeCells();
         }
-
+*/
         return null;
     }
 
@@ -220,7 +221,7 @@ public class CDefaultCar extends IInspector implements ICar
      */
     private EdgeIteratorState getEdge( int p_index )
     {
-        return p_index < m_routeedges.size() ? m_routeedges.get( p_index ) : null;
+        return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
     @Override
@@ -261,7 +262,7 @@ public class CDefaultCar extends IInspector implements ICar
 
         synchronized ( this )
         {
-            l_map.put( "street name", m_routeedges.get( m_routeindex ).getName() );
+            l_map.put( "street name", m_route.get( m_routeindex ).getLeft().getName() );
             l_map.put( "current geoposition", this.getGeoposition() );
         }
 
@@ -323,58 +324,6 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
 
-    /**
-     * calculate the new route index and update the object on the edge
-     *
-     * @param p_currentedge  current linkage object
-     * @param p_currentspeed current speed
-     */
-    private void updateRouteIndex( CCellObjectLinkage p_currentedge, int p_currentspeed ) throws IllegalAccessException
-    {
-
-        // if linkage edge not exists finish car
-        if ( p_currentedge == null )
-        {
-            m_routeindex = Integer.MAX_VALUE;
-            return;
-        }
-
-        // get the current position on the current edge of the car or if the edge is null, it is the first edge
-        Integer l_position = p_currentedge.getPosition( this );
-        if ( l_position == null )
-        {
-            l_position = new Integer( 0 );
-            p_currentedge.setObject( this, 0 );
-        }
-
-        // calculate the number of cells, on which the car must be moved
-        int l_newposition = p_currentspeed - ( p_currentedge.getEdgeCells() - l_position.intValue() );
-        System.out.println( l_newposition );
-        // if the number of cells are grater or equal zero, the car can moved on the current edge
-        if ( l_newposition > 0 )
-        {
-            System.out.println( "xx" );
-            p_currentedge.updateObject( this, p_currentspeed );
-            return;
-        }
-
-        // otherwise remove the car from the current edge get the new edge and position
-        p_currentedge.removeObject( this );
-        Pair<Integer, Integer> l_positiondata = m_graph.getEdgeByLength( m_routeedges, m_routeindex + 1, l_newposition );
-        if ( l_positiondata == null )
-        {
-            m_routeindex = Integer.MAX_VALUE;
-            return;
-        }
-        System.out.println( l_positiondata.getLeft().intValue() + "\t" + l_positiondata.getRight().intValue() );
-
-        /*
-        m_graph.getEdge(this.getEdge(l_positiondata.getLeft().intValue())).setObject(this, l_positiondata.getRight().intValue());
-        m_routeindex = l_positiondata.getLeft().intValue();
-        */
-    }
-
-
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
@@ -383,7 +332,29 @@ public class CDefaultCar extends IInspector implements ICar
         if ( this.hasEndReached() )
             return;
 
-        this.updateRouteIndex( this.m_graph.getEdge( this.getEdge() ), this.getCurrentSpeed() );
+        // if the car reaches the end
+        if ( m_routeindex + this.getCurrentSpeed() >= m_route.size() )
+        {
+            m_route = null;
+            return;
+        }
+
+        // if the route index equal to zero, set it car on the first item
+        if ( m_routeindex == 0 )
+            m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).setObject( this, 0 );
+
+        // if the edge is equal than update on the edge, otherwise remove from the current edge and set on the new one
+        if ( m_route.get( m_routeindex ).getLeft() == m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() )
+            m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).updateObject( this, this.getCurrentSpeed() );
+        else
+        {
+            EdgeIteratorState l_edge = m_route.get( m_routeindex ).getLeft();
+
+            m_graph.getEdge( l_edge ).removeObject( this );
+            m_graph.getEdge( l_edge ).setObject( this, m_route.get( m_routeindex ).getRight() );
+        }
+
+        m_routeindex += this.getCurrentSpeed();
 
     }
 

@@ -90,7 +90,8 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
                         m_image.setRGB( j, i, m_color.getRGB() );
                 }
 
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             CLogger.warn( "could not read standard_waypoint.png: " + l_exception.toString() );
         }

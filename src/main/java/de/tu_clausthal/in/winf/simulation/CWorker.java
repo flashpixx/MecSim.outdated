@@ -95,7 +95,8 @@ public class CWorker implements Runnable
             try
             {
                 Thread.sleep( CConfiguration.getInstance().get().ThreadSleepTime );
-            } catch ( InterruptedException l_exception )
+            }
+            catch ( InterruptedException l_exception )
             {
                 break;
             }
@@ -179,7 +180,8 @@ public class CWorker implements Runnable
             if ( ( p_layer != null ) && ( p_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) p_layer ).afterStepObject( m_currentstep.get(), p_object );
 
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             CLogger.error( "object [" + p_object.toString() + "] throws: " + l_exception.toString() );
         }
@@ -197,7 +199,8 @@ public class CWorker implements Runnable
         try
         {
             m_barrier.await();
-        } catch ( BrokenBarrierException | InterruptedException l_exception )
+        }
+        catch ( BrokenBarrierException | InterruptedException l_exception )
         {
             CLogger.info( "thread is interrupted" );
             m_interrupt = true;

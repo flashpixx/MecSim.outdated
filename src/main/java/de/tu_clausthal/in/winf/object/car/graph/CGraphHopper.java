@@ -234,24 +234,20 @@ public class CGraphHopper extends GraphHopper
 
 
     /**
-     * iterates over an edge list by a definite length
+     * creates the full path of cells with the edge value
      *
-     * @param p_edges  edge list
-     * @param p_start  start index
-     * @param p_length length / number of cells
-     * @return pair of edge list index and position on the edge or null
+     * @param p_route  edge list
+     * @return list with pair and edge position
      */
-    public Pair<Integer, Integer> getEdgeByLength( List<EdgeIteratorState> p_edges, int p_start, int p_length )
+    public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( List<EdgeIteratorState> p_route )
     {
-        for ( int i = p_start; i < p_edges.size(); i++ )
-        {
-            int l_size = this.getEdge( p_edges.get( i ) ).getEdgeCells();
-            p_length -= l_size;
-            if ( p_length < 0 )
-                return new ImmutablePair( i, p_length + l_size );
-        }
+        ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList();
 
-        return null;
+        for ( EdgeIteratorState l_edge : p_route )
+            for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
+                l_list.add( new ImmutablePair( l_edge, i ) );
+
+        return l_list;
     }
 
 
@@ -317,7 +313,8 @@ public class CGraphHopper extends GraphHopper
             l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
 
             return l_output;
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }

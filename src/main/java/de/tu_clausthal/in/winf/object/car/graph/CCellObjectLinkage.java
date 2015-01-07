@@ -110,7 +110,8 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
             for ( int i = 0; i < m_cells.length; i++ )
                 m_cellgeoposition[i] = new GeoPosition( l_list.getX( 0 ) + i * l_increment, l_function.value( l_list.getX( 0 ) + i * l_increment ) );
 
-        } catch ( NonMonotonicSequenceException l_exception )
+        }
+        catch ( NonMonotonicSequenceException l_exception )
         {
 
             double l_xincrement = ( l_list.getX( l_list.size() - 1 ) - l_list.getX( 0 ) ) / m_cells.length;

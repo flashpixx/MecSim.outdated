@@ -83,7 +83,8 @@ public class CConfiguration
             l_gson.toJson( m_data, l_writer );
 
             l_writer.close();
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -104,7 +105,8 @@ public class CConfiguration
 
             Gson l_gson = new Gson();
             l_tmp = l_gson.fromJson( l_reader, Data.class );
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }

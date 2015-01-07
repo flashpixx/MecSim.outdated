@@ -148,7 +148,8 @@ class COSMMouseListener extends MouseAdapter
                 m_popup.update();
                 m_popup.show( e.getComponent(), e.getX(), e.getY() );
             }
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }

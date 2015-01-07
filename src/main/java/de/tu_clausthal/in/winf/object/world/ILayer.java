@@ -43,7 +43,7 @@ public interface ILayer extends IStepable
      *
      * @param p_active activity
      */
-    public void setActive(boolean p_active);
+    public void setActive( boolean p_active );
 
 
     /**

@@ -67,24 +67,24 @@ public class COSMViewer extends JXMapViewer
         super();
 
         TileFactoryInfo l_info = new OSMTileFactoryInfo();
-        DefaultTileFactory l_tileFactory = new DefaultTileFactory(l_info);
-        l_tileFactory.setThreadPoolSize(CConfiguration.getInstance().get().MaxThreadNumber);
+        DefaultTileFactory l_tileFactory = new DefaultTileFactory( l_info );
+        l_tileFactory.setThreadPoolSize( CConfiguration.getInstance().get().MaxThreadNumber );
 
-        LocalResponseCache.installResponseCache(l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false);
-        this.setTileFactory(l_tileFactory);
-        this.setZoom(CConfiguration.getInstance().get().Zoom);
-        this.setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
-        this.setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
+        LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false );
+        this.setTileFactory( l_tileFactory );
+        this.setZoom( CConfiguration.getInstance().get().Zoom );
+        this.setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
+        this.setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
 
-        this.setOverlayPainter(m_painter);
+        this.setOverlayPainter( m_painter );
 
-        this.addMouseListener(m_mouse); // new CenterMapListener(this)
-        this.addMouseMotionListener(m_mouse);
-        this.addMouseListener(new PanMouseInputListener(this));
-        this.addMouseWheelListener(new ZoomMouseWheelListenerCenter(this));
-        this.addKeyListener(new PanKeyListener(this));
+        this.addMouseListener( m_mouse ); // new CenterMapListener(this)
+        this.addMouseMotionListener( m_mouse );
+        this.addMouseListener( new PanMouseInputListener( this ) );
+        this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
+        this.addKeyListener( new PanKeyListener( this ) );
 
-        CBootstrap.AfterOSMViewerInit(this);
+        CBootstrap.AfterOSMViewerInit( this );
     }
 
 

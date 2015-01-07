@@ -40,13 +40,13 @@ public class CIntersectionRangeCollection<T> implements IRangeCollection<T>
 
 
     @Override
-    public boolean check(T p_object)
+    public boolean check( T p_object )
     {
         if ( m_ranges.isEmpty() )
             return false;
 
         for ( IRange<T> l_item : m_ranges )
-            if ( !l_item.check(p_object) )
+            if ( !l_item.check( p_object ) )
                 return false;
 
         return true;
@@ -72,9 +72,9 @@ public class CIntersectionRangeCollection<T> implements IRangeCollection<T>
     }
 
     @Override
-    public boolean contains(Object o)
+    public boolean contains( Object o )
     {
-        return m_ranges.contains(o);
+        return m_ranges.contains( o );
     }
 
     @Override
@@ -90,45 +90,45 @@ public class CIntersectionRangeCollection<T> implements IRangeCollection<T>
     }
 
     @Override
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray( T[] a )
     {
-        return m_ranges.toArray(a);
+        return m_ranges.toArray( a );
     }
 
     @Override
-    public boolean add(IRange<T> iRange)
+    public boolean add( IRange<T> iRange )
     {
-        return m_ranges.add(iRange);
+        return m_ranges.add( iRange );
     }
 
     @Override
-    public boolean remove(Object o)
+    public boolean remove( Object o )
     {
-        return m_ranges.remove(o);
+        return m_ranges.remove( o );
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll( Collection<?> c )
     {
-        return m_ranges.containsAll(c);
+        return m_ranges.containsAll( c );
     }
 
     @Override
-    public boolean addAll(Collection<? extends IRange<T>> c)
+    public boolean addAll( Collection<? extends IRange<T>> c )
     {
-        return m_ranges.addAll(c);
+        return m_ranges.addAll( c );
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll( Collection<?> c )
     {
-        return m_ranges.removeAll(c);
+        return m_ranges.removeAll( c );
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll( Collection<?> c )
     {
-        return m_ranges.retainAll(c);
+        return m_ranges.retainAll( c );
     }
 
     @Override

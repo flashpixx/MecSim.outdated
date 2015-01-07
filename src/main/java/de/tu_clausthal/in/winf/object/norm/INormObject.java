@@ -37,7 +37,7 @@ public interface INormObject extends ICar
      *
      * @param p_norm map of norm objects
      */
-    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm);
+    public void setMatchedNorm( Map<INorm<INormObject>, INormCheckResult> p_norm );
 
 
     /**

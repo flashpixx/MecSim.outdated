@@ -45,23 +45,23 @@ public class CTrafficJam implements Weighting
      *
      * @param p_graph graph object
      */
-    public CTrafficJam(CGraphHopper p_graph)
+    public CTrafficJam( CGraphHopper p_graph )
     {
         m_graph = p_graph;
     }
 
 
     @Override
-    public double getMinWeight(double p_weight)
+    public double getMinWeight( double p_weight )
     {
         return 0;
     }
 
 
     @Override
-    public double calcWeight(EdgeIteratorState p_edge, boolean p_reverse)
+    public double calcWeight( EdgeIteratorState p_edge, boolean p_reverse )
     {
-        return m_graph.getEdge(p_edge).getNumberOfObjects();
+        return m_graph.getEdge( p_edge ).getNumberOfObjects();
     }
 
 }

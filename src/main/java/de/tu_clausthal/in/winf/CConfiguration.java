@@ -48,7 +48,7 @@ public class CConfiguration
     /**
      * directory of the configuration file *
      */
-    private File m_dir = new File(System.getProperty("user.home") + File.separator + ".tucwinf");
+    private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".tucwinf" );
 
     /**
      * private Ctor to avoid manual instantiation *
@@ -75,17 +75,17 @@ public class CConfiguration
         try
         {
             if ( !m_dir.exists() && !m_dir.mkdirs() )
-                throw new IOException("unable to create " + m_dir.getAbsolutePath());
+                throw new IOException( "unable to create " + m_dir.getAbsolutePath() );
 
-            Writer l_writer = new OutputStreamWriter(new FileOutputStream(m_dir + File.separator + s_ConfigFilename), "UTF-8");
+            Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
 
             Gson l_gson = new Gson();
-            l_gson.toJson(m_data, l_writer);
+            l_gson.toJson( m_data, l_writer );
 
             l_writer.close();
         } catch ( Exception l_exception )
         {
-            CLogger.error(l_exception.getMessage());
+            CLogger.error( l_exception.getMessage() );
         }
     }
 
@@ -98,49 +98,49 @@ public class CConfiguration
         try
         {
             String l_config = m_dir + File.separator + s_ConfigFilename;
-            CLogger.info("read configuration from [" + l_config + "]");
+            CLogger.info( "read configuration from [" + l_config + "]" );
 
-            Reader l_reader = new InputStreamReader(new FileInputStream(l_config), "UTF-8");
+            Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
 
             Gson l_gson = new Gson();
-            l_tmp = l_gson.fromJson(l_reader, Data.class);
+            l_tmp = l_gson.fromJson( l_reader, Data.class );
         } catch ( Exception l_exception )
         {
-            CLogger.error(l_exception.getMessage());
+            CLogger.error( l_exception.getMessage() );
         }
 
         if ( l_tmp == null )
-            CLogger.warn("configuration is null, use default configuration");
+            CLogger.warn( "configuration is null, use default configuration" );
         else
         {
             if ( l_tmp.ViewPoint == null )
             {
-                CLogger.warn("view point uses default value");
+                CLogger.warn( "view point uses default value" );
                 l_tmp.ViewPoint = m_data.ViewPoint;
             }
             if ( l_tmp.WindowHeight < 100 )
             {
-                CLogger.warn("window height uses default value");
+                CLogger.warn( "window height uses default value" );
                 l_tmp.WindowHeight = m_data.WindowHeight;
             }
             if ( l_tmp.WindowWidth < 100 )
             {
-                CLogger.warn("window width uses default value");
+                CLogger.warn( "window width uses default value" );
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
-            if ( (l_tmp.RoutingAlgorithm == null) || (l_tmp.RoutingAlgorithm.isEmpty()) )
+            if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
             {
-                CLogger.warn("routing algorithm uses default value");
+                CLogger.warn( "routing algorithm uses default value" );
                 l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
             }
             if ( l_tmp.CellSampling < 1 )
             {
-                CLogger.warn("cell sampling uses default value");
+                CLogger.warn( "cell sampling uses default value" );
                 l_tmp.CellSampling = m_data.CellSampling;
             }
             if ( l_tmp.ThreadSleepTime < 0 )
             {
-                CLogger.warn("thread sleep time uses default value");
+                CLogger.warn( "thread sleep time uses default value" );
                 l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
             }
 
@@ -148,7 +148,7 @@ public class CConfiguration
         }
 
         // set always static values (GC + Main = 2 Threads)
-        m_data.MaxThreadNumber = Math.max(Runtime.getRuntime().availableProcessors() - 1, 1);
+        m_data.MaxThreadNumber = Math.max( Runtime.getRuntime().availableProcessors() - 1, 1 );
     }
 
     /**
@@ -166,7 +166,7 @@ public class CConfiguration
      *
      * @param p_dir directory
      */
-    public void setConfigDir(File p_dir)
+    public void setConfigDir( File p_dir )
     {
         m_dir = p_dir;
     }
@@ -190,7 +190,7 @@ public class CConfiguration
         /**
          * geo position object of the start viewpoint *
          */
-        public GeoPosition ViewPoint = new GeoPosition(51.8089, 10.3412);
+        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
         /**
          * zoom level of the viewpoint on the start point *
          */

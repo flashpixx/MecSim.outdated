@@ -43,10 +43,10 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
 
 
     @Override
-    public void send(INormMessage<T> p_message)
+    public void send( INormMessage<T> p_message )
     {
         for ( IInstitution<T> l_item : m_institution )
-            l_item.receive(p_message);
+            l_item.receive( p_message );
     }
 
     @Override
@@ -69,9 +69,9 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
     }
 
     @Override
-    public boolean contains(Object o)
+    public boolean contains( Object o )
     {
-        return m_institution.contains(o);
+        return m_institution.contains( o );
     }
 
     @Override
@@ -87,45 +87,45 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
     }
 
     @Override
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray( T[] a )
     {
-        return m_institution.toArray(a);
+        return m_institution.toArray( a );
     }
 
     @Override
-    public boolean add(IInstitution<T> iInstitution)
+    public boolean add( IInstitution<T> iInstitution )
     {
-        return m_institution.add(iInstitution);
+        return m_institution.add( iInstitution );
     }
 
     @Override
-    public boolean remove(Object o)
+    public boolean remove( Object o )
     {
-        return m_institution.remove(o);
+        return m_institution.remove( o );
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll( Collection<?> c )
     {
-        return m_institution.containsAll(c);
+        return m_institution.containsAll( c );
     }
 
     @Override
-    public boolean addAll(Collection<? extends IInstitution<T>> c)
+    public boolean addAll( Collection<? extends IInstitution<T>> c )
     {
-        return m_institution.addAll(c);
+        return m_institution.addAll( c );
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll( Collection<?> c )
     {
-        return m_institution.removeAll(c);
+        return m_institution.removeAll( c );
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll( Collection<?> c )
     {
-        return m_institution.retainAll(c);
+        return m_institution.retainAll( c );
     }
 
     @Override

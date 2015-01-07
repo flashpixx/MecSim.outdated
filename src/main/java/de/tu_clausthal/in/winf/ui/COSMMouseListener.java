@@ -59,9 +59,9 @@ class COSMMouseListener extends MouseAdapter
 
 
     @Override
-    public void mousePressed(MouseEvent e)
+    public void mousePressed( MouseEvent e )
     {
-        if ( (SwingUtilities.isLeftMouseButton(e)) && (!m_drag) )
+        if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
             return;
 
         // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
@@ -69,61 +69,61 @@ class COSMMouseListener extends MouseAdapter
         if ( m_rectangle == null )
         {
             m_rectangle = new CRectanglePainter();
-            COSMViewer.getInstance().getCompoundPainter().addPainter(m_rectangle);
+            COSMViewer.getInstance().getCompoundPainter().addPainter( m_rectangle );
         }
 
         m_drag = true;
-        m_rectangle.from(e.getPoint());
+        m_rectangle.from( e.getPoint() );
     }
 
     @Override
-    public void mouseReleased(MouseEvent e)
+    public void mouseReleased( MouseEvent e )
     {
         if ( !m_drag )
             return;
 
         m_drag = false;
-        m_rectangle.to(e.getPoint());
+        m_rectangle.to( e.getPoint() );
 
         IInstitution<INormObject> l_institution = this.getSelectedInstitution();
-        if ( (m_rectangle.getRectangle() == null) || (l_institution == null) )
+        if ( ( m_rectangle.getRectangle() == null ) || ( l_institution == null ) )
         {
             m_rectangle.clear();
             return;
         }
 
         // add range to the institution
-        l_institution.getRange().add(new CRangeGPS(l_institution, ((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getFrom()), ((JXMapViewer) e.getSource()).convertPointToGeoPosition(m_rectangle.getTo())));
+        l_institution.getRange().add( new CRangeGPS( l_institution, ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getFrom() ), ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getTo() ) ) );
         m_rectangle.clear();
     }
 
     @Override
-    public void mouseDragged(MouseEvent e)
+    public void mouseDragged( MouseEvent e )
     {
         if ( !m_drag )
             return;
-        m_rectangle.to(e.getPoint());
+        m_rectangle.to( e.getPoint() );
     }
 
 
     @Override
-    public void mouseClicked(MouseEvent e)
+    public void mouseClicked( MouseEvent e )
     {
 
         try
         {
             // left double-click
-            if ( (SwingUtilities.isLeftMouseButton(e)) && (e.getClickCount() == 2) )
+            if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( e.getClickCount() == 2 ) )
             {
                 if ( CSimulation.getInstance().isRunning() )
-                    throw new IllegalStateException("simulation is running");
+                    throw new IllegalStateException( "simulation is running" );
 
                 COSMViewer l_viewer = (COSMViewer) e.getSource();
                 Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-                Point2D l_position = new Point(l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y);
-                GeoPosition l_geoposition = l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom());
+                Point2D l_position = new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
+                GeoPosition l_geoposition = l_viewer.getTileFactory().pixelToGeo( l_position, l_viewer.getZoom() );
 
-                ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get("Source")).add(new CDefaultSourceFactory(l_geoposition));
+                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" ) ).add( new CDefaultSourceFactory( l_geoposition ) );
 
 /*
                 boolean l_remove = false;
@@ -143,14 +143,14 @@ class COSMMouseListener extends MouseAdapter
             }
 
             // right-click
-            if ( (SwingUtilities.isRightMouseButton(e)) && (e.getClickCount() == 1) )
+            if ( ( SwingUtilities.isRightMouseButton( e ) ) && ( e.getClickCount() == 1 ) )
             {
                 m_popup.update();
-                m_popup.show(e.getComponent(), e.getX(), e.getY());
+                m_popup.show( e.getComponent(), e.getX(), e.getY() );
             }
         } catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
     }
 
@@ -174,12 +174,12 @@ class COSMMouseListener extends MouseAdapter
      * @param p_size          rectangle size
      * @return boolean on existence
      */
-    private boolean inRange(Point2D p_checkposition, Point2D p_center, int p_size)
+    private boolean inRange( Point2D p_checkposition, Point2D p_center, int p_size )
     {
-        if ( (p_checkposition == null) || (p_center == null) )
+        if ( ( p_checkposition == null ) || ( p_center == null ) )
             return true;
 
-        return ((p_checkposition.getX() - p_size / 2) <= p_center.getX()) && ((p_checkposition.getX() + p_size / 2) >= p_center.getX()) && ((p_checkposition.getY() - p_size / 2) <= p_center.getY()) && ((p_checkposition.getY() + p_size / 2) >= p_center.getY());
+        return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }
 
 
@@ -190,7 +190,7 @@ class COSMMouseListener extends MouseAdapter
      */
     private IInstitution<INormObject> getSelectedInstitution()
     {
-        if ( (m_popup.getInstitutionSelection() == null) || (m_popup.getInstitutionSelection().isEmpty()) )
+        if ( ( m_popup.getInstitutionSelection() == null ) || ( m_popup.getInstitutionSelection().isEmpty() ) )
             return null;
 /*
         for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())

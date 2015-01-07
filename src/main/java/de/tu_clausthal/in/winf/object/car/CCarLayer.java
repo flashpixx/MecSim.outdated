@@ -69,9 +69,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @param p_weight weight name
      */
-    public void setGraphWeight(String p_weight)
+    public void setGraphWeight( String p_weight )
     {
-        m_graph = new CGraphHopper(p_weight);
+        m_graph = new CGraphHopper( p_weight );
     }
 
 
@@ -80,10 +80,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      *
      * @param p_model model
      */
-    public void setDriveModel(String p_model)
+    public void setDriveModel( String p_model )
     {
         for ( IDriveModel l_model : m_drivemodellist )
-            if ( p_model.equals(l_model.getName()) )
+            if ( p_model.equals( l_model.getName() ) )
                 m_drivemodel = l_model;
     }
 
@@ -114,29 +114,29 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
 
 
     @Override
-    public void beforeStepObject(int p_currentstep, ICar p_object)
+    public void beforeStepObject( int p_currentstep, ICar p_object )
     {
-        m_drivemodel.update(p_currentstep, this.m_graph, p_object);
+        m_drivemodel.update( p_currentstep, this.m_graph, p_object );
     }
 
     @Override
-    public void afterStepObject(int p_currentstep, ICar p_object)
+    public void afterStepObject( int p_currentstep, ICar p_object )
     {
 
         if ( p_object.hasEndReached() )
         {
-            super.remove(p_object);
-            CCellObjectLinkage l_edge = m_graph.getEdge(p_object.getEdge());
+            super.remove( p_object );
+            CCellObjectLinkage l_edge = m_graph.getEdge( p_object.getEdge() );
             if ( l_edge != null )
-                l_edge.removeObject(p_object);
+                l_edge.removeObject( p_object );
         }
 
     }
 
     @Override
-    public void set(Collection<ICar> p_data)
+    public void set( Collection<ICar> p_data )
     {
-        super.addAll(p_data);
+        super.addAll( p_data );
     }
 
     @Override

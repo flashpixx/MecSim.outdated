@@ -66,7 +66,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public void setActive(boolean p_active)
+    public void setActive( boolean p_active )
     {
         m_active = p_active;
     }
@@ -79,7 +79,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public void setVisible(boolean p_visible)
+    public void setVisible( boolean p_visible )
     {
         m_visible = p_visible;
         COSMViewer.getInstance().repaint();
@@ -93,9 +93,9 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
 
     @Override
-    public synchronized boolean add(T t)
+    public synchronized boolean add( T t )
     {
-        boolean l_return = m_process.add(t);
+        boolean l_return = m_process.add( t );
         COSMViewer.getInstance().repaint();
 
         return l_return;
@@ -117,9 +117,9 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public boolean offer(T t)
+    public boolean offer( T t )
     {
-        return m_process.offer(t);
+        return m_process.offer( t );
     }
 
     @Override
@@ -135,7 +135,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public synchronized void step(int p_currentstep, ILayer p_layer)
+    public synchronized void step( int p_currentstep, ILayer p_layer )
     {
     }
 
@@ -145,7 +145,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public synchronized void beforeStepObject(int p_currentstep, T p_object)
+    public synchronized void beforeStepObject( int p_currentstep, T p_object )
     {
     }
 
@@ -156,7 +156,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public synchronized void afterStepObject(int p_currentstep, T p_object)
+    public synchronized void afterStepObject( int p_currentstep, T p_object )
     {
     }
 
@@ -174,17 +174,17 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public synchronized boolean contains(Object o)
+    public synchronized boolean contains( Object o )
     {
-        return m_unprocess.contains(o) || m_process.contains(o);
+        return m_unprocess.contains( o ) || m_process.contains( o );
     }
 
     @Override
     public synchronized Iterator<T> iterator()
     {
         Queue<T> l_data = new LinkedList();
-        l_data.addAll(m_unprocess);
-        l_data.addAll(m_process);
+        l_data.addAll( m_unprocess );
+        l_data.addAll( m_process );
         return l_data.iterator();
     }
 
@@ -192,31 +192,31 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public synchronized Object[] toArray()
     {
         Queue<T> l_data = new LinkedList();
-        l_data.addAll(m_unprocess);
-        l_data.addAll(m_process);
+        l_data.addAll( m_unprocess );
+        l_data.addAll( m_process );
         return l_data.toArray();
     }
 
     @Override
-    public synchronized <S> S[] toArray(S[] a)
+    public synchronized <S> S[] toArray( S[] a )
     {
         Queue<T> l_data = new LinkedList();
-        l_data.addAll(m_unprocess);
-        l_data.addAll(m_process);
-        return l_data.toArray(a);
+        l_data.addAll( m_unprocess );
+        l_data.addAll( m_process );
+        return l_data.toArray( a );
     }
 
     @Override
-    public synchronized boolean remove(Object o)
+    public synchronized boolean remove( Object o )
     {
-        return m_process.remove(o) || m_unprocess.remove(o);
+        return m_process.remove( o ) || m_unprocess.remove( o );
     }
 
     @Override
-    public synchronized boolean containsAll(Collection<?> c)
+    public synchronized boolean containsAll( Collection<?> c )
     {
         for ( Object l_item : c )
-            if ( (!m_unprocess.contains(l_item)) && (!m_process.contains(l_item)) )
+            if ( ( !m_unprocess.contains( l_item ) ) && ( !m_process.contains( l_item ) ) )
             {
                 COSMViewer.getInstance().repaint();
                 return false;
@@ -227,20 +227,20 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c)
+    public boolean addAll( Collection<? extends T> c )
     {
-        boolean l_return = m_process.addAll(c);
+        boolean l_return = m_process.addAll( c );
         COSMViewer.getInstance().repaint();
 
         return l_return;
     }
 
     @Override
-    public synchronized boolean removeAll(Collection<?> c)
+    public synchronized boolean removeAll( Collection<?> c )
     {
         for ( Object l_item : c )
         {
-            if ( (m_process.remove(l_item)) || (m_unprocess.remove(l_item)) )
+            if ( ( m_process.remove( l_item ) ) || ( m_unprocess.remove( l_item ) ) )
                 continue;
             COSMViewer.getInstance().repaint();
             return false;
@@ -251,9 +251,9 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll( Collection<?> c )
     {
-        return m_process.retainAll(c) || m_unprocess.retainAll(c);
+        return m_process.retainAll( c ) || m_unprocess.retainAll( c );
     }
 
     @Override
@@ -267,26 +267,26 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
 
     @Override
-    public synchronized void reset(boolean p_reset)
+    public synchronized void reset( boolean p_reset )
     {
         if ( !p_reset )
             return;
 
-        m_unprocess.addAll(m_process);
+        m_unprocess.addAll( m_process );
         m_process.clear();
         COSMViewer.getInstance().repaint();
     }
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    public void paint( Graphics2D g, COSMViewer object, int width, int height )
     {
         if ( !m_visible )
             return;
 
         Rectangle l_viewportBounds = object.getViewportBounds();
-        g.translate(-l_viewportBounds.x, -l_viewportBounds.y);
+        g.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( T l_item : this )
-            l_item.paint(g, object, width, height);
+            l_item.paint( g, object, width, height );
     }
 
     @Override

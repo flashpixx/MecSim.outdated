@@ -44,66 +44,66 @@ public class CMain
      *
      * @param p_args commandline arguments
      */
-    public static void main(String[] p_args) throws Exception
+    public static void main( String[] p_args ) throws Exception
     {
 
         // --- define CLI options --------------------------------------------------------------------------------------
         Options l_clioptions = new Options();
-        l_clioptions.addOption("help", false, "shows this help");
-        l_clioptions.addOption("configuration", true, "configuration directory");
-        l_clioptions.addOption("graph", true, "OSM graph URL (see configuration file description of option 'RoutingMap')");
-        l_clioptions.addOption("loglevel", true, "level of the logger");
-        l_clioptions.addOption("logfile", true, "logfile (default: mecsim-<startup datetime>.txt)");
+        l_clioptions.addOption( "help", false, "shows this help" );
+        l_clioptions.addOption( "configuration", true, "configuration directory" );
+        l_clioptions.addOption( "graph", true, "OSM graph URL (see configuration file description of option 'RoutingMap')" );
+        l_clioptions.addOption( "loglevel", true, "level of the logger" );
+        l_clioptions.addOption( "logfile", true, "logfile (default: mecsim-<startup datetime>.txt)" );
 
         CommandLineParser l_parser = new BasicParser();
-        CommandLine l_cli = l_parser.parse(l_clioptions, p_args);
+        CommandLine l_cli = l_parser.parse( l_clioptions, p_args );
 
 
         // --- process CLI arguments and set configuration -------------------------------------------------------------
-        if ( l_cli.hasOption("help") )
+        if ( l_cli.hasOption( "help" ) )
         {
             HelpFormatter l_formatter = new HelpFormatter();
-            l_formatter.printHelp((new java.io.File(CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName()), l_clioptions);
-            System.exit(0);
+            l_formatter.printHelp( ( new java.io.File( CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getName() ), l_clioptions );
+            System.exit( 0 );
         }
 
 
         // create logger instance
-        String l_logfile = "mecsim-" + (new SimpleDateFormat("yyyy-dd-MM-HH-mm")).format(Calendar.getInstance().getTime()) + ".txt";
-        if ( l_cli.hasOption("logfile") )
-            l_logfile = l_cli.getOptionValue("logfile");
+        String l_logfile = "mecsim-" + ( new SimpleDateFormat( "yyyy-dd-MM-HH-mm" ) ).format( Calendar.getInstance().getTime() ) + ".txt";
+        if ( l_cli.hasOption( "logfile" ) )
+            l_logfile = l_cli.getOptionValue( "logfile" );
 
         Level l_loglevel = Level.OFF;
-        if ( l_cli.hasOption("loglevel") )
-            l_loglevel = Level.valueOf(l_cli.getOptionValue("loglevel").toUpperCase());
+        if ( l_cli.hasOption( "loglevel" ) )
+            l_loglevel = Level.valueOf( l_cli.getOptionValue( "loglevel" ).toUpperCase() );
 
-        CLogger.create(l_loglevel, l_logfile);
+        CLogger.create( l_loglevel, l_logfile );
 
 
         // read the configuration directory (default ~/.mecsim)
-        File l_config = new File(System.getProperty("user.home") + File.separator + ".mecsim");
-        if ( l_cli.hasOption("configuration") )
-            l_config = new File(l_cli.getOptionValue("configuration"));
+        File l_config = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
+        if ( l_cli.hasOption( "configuration" ) )
+            l_config = new File( l_cli.getOptionValue( "configuration" ) );
 
-        CConfiguration.getInstance().setConfigDir(l_config);
+        CConfiguration.getInstance().setConfigDir( l_config );
         CConfiguration.getInstance().read();
 
-        if ( l_cli.hasOption("graph") )
-            CConfiguration.getInstance().get().RoutingMap = l_cli.getOptionValue("graph");
+        if ( l_cli.hasOption( "graph" ) )
+            CConfiguration.getInstance().get().RoutingMap = l_cli.getOptionValue( "graph" );
 
-        CBootstrap.ConfigIsLoaded(CConfiguration.getInstance());
+        CBootstrap.ConfigIsLoaded( CConfiguration.getInstance() );
 
 
         // --- invoke UI -----------------------------------------------------------------------------------------------
-        SwingUtilities.invokeLater(new Runnable()
+        SwingUtilities.invokeLater( new Runnable()
         {
             public void run()
             {
                 CFrame l_frame = new CFrame();
-                l_frame.setTitle("TU-Clausthal Wirtschaftsinformatik - MecSim");
-                l_frame.setVisible(true);
+                l_frame.setTitle( "TU-Clausthal Wirtschaftsinformatik - MecSim" );
+                l_frame.setVisible( true );
             }
-        });
+        } );
     }
 
 }

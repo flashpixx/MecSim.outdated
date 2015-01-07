@@ -83,9 +83,9 @@ public class CGraphHopper extends GraphHopper
      * @note weight reloading can be create only be reinitialize the graph
      * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    public CGraphHopper(String p_weights)
+    public CGraphHopper( String p_weights )
     {
-        this.setCHShortcuts(p_weights);
+        this.setCHShortcuts( p_weights );
         this.initialize();
     }
 
@@ -96,24 +96,24 @@ public class CGraphHopper extends GraphHopper
     private void initialize()
     {
         // define graph location (use configuration)
-        File l_graphlocation = new File(CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.replace('/', '_'));
-        System.out.println("try to load graph from [" + l_graphlocation.getAbsolutePath() + "]");
+        File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.replace( '/', '_' ) );
+        System.out.println( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
 
         // convert OSM or load the graph
-        if ( !this.load(l_graphlocation.getAbsolutePath()) )
+        if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
-            CLogger.info("graph cannot be found");
+            CLogger.info( "graph cannot be found" );
             File l_osm = this.downloadOSMData();
 
-            this.setGraphHopperLocation(l_graphlocation.getAbsolutePath());
-            this.setOSMFile(l_osm.getAbsolutePath());
-            this.setEncodingManager(new EncodingManager("CAR"));
+            this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
+            this.setOSMFile( l_osm.getAbsolutePath() );
+            this.setEncodingManager( new EncodingManager( "CAR" ) );
             this.importOrLoad();
 
             l_osm.delete();
         }
 
-        System.out.println("graph is loaded successfully");
+        System.out.println( "graph is loaded successfully" );
     }
 
 
@@ -124,9 +124,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_end   end geoposition
      * @return list of list of edges
      */
-    public List<List<EdgeIteratorState>> getRoutes(GeoPosition p_start, GeoPosition p_end)
+    public List<List<EdgeIteratorState>> getRoutes( GeoPosition p_start, GeoPosition p_end )
     {
-        return this.getRoutes(p_start, p_end, Integer.MAX_VALUE);
+        return this.getRoutes( p_start, p_end, Integer.MAX_VALUE );
     }
 
 
@@ -138,23 +138,23 @@ public class CGraphHopper extends GraphHopper
      * @param p_maxroutes max. number of paths
      * @return list of list of edges
      */
-    public List<List<EdgeIteratorState>> getRoutes(GeoPosition p_start, GeoPosition p_end, int p_maxroutes)
+    public List<List<EdgeIteratorState>> getRoutes( GeoPosition p_start, GeoPosition p_end, int p_maxroutes )
     {
         // calculate routes
-        GHRequest l_request = new GHRequest(p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude());
-        l_request.setAlgorithm(CConfiguration.getInstance().get().RoutingAlgorithm);
+        GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
+        l_request.setAlgorithm( CConfiguration.getInstance().get().RoutingAlgorithm );
 
-        GHResponse l_result = this.route(l_request);
+        GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
         {
             for ( Throwable l_msg : l_result.getErrors() )
-                CLogger.error(l_msg.getMessage());
-            throw new IllegalArgumentException("graph error");
+                CLogger.error( l_msg.getMessage() );
+            throw new IllegalArgumentException( "graph error" );
         }
 
 
         // get all pathes
-        List<Path> l_routes = this.getPaths(l_request, l_result);
+        List<Path> l_routes = this.getPaths( l_request, l_result );
         if ( l_routes.size() == 0 )
             return null;
 
@@ -170,10 +170,10 @@ public class CGraphHopper extends GraphHopper
             if ( l_edgelist.size() < 3 )
                 continue;
 
-            l_edgelist.remove(0);
-            l_edgelist.remove(l_edgelist.size() - 1);
+            l_edgelist.remove( 0 );
+            l_edgelist.remove( l_edgelist.size() - 1 );
 
-            l_pathes.add(l_edgelist);
+            l_pathes.add( l_edgelist );
         }
 
         return l_pathes;
@@ -186,9 +186,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_position geo position
      * @return ID of the edge
      */
-    public int getClosestEdge(GeoPosition p_position)
+    public int getClosestEdge( GeoPosition p_position )
     {
-        QueryResult l_result = this.getLocationIndex().findClosest(p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES);
+        QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestEdge().getEdge();
     }
 
@@ -199,12 +199,12 @@ public class CGraphHopper extends GraphHopper
      * @param p_edge edge ID
      * @return speed
      */
-    public double getEdgeSpeed(EdgeIteratorState p_edge)
+    public double getEdgeSpeed( EdgeIteratorState p_edge )
     {
         if ( p_edge == null )
             return Double.POSITIVE_INFINITY;
 
-        return this.getGraph().getEncodingManager().getEncoder("CAR").getSpeed(p_edge.getFlags());
+        return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
     }
 
 
@@ -214,9 +214,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_edgeid edge ID
      * @return iterator
      */
-    public EdgeIteratorState getEdgeIterator(int p_edgeid)
+    public EdgeIteratorState getEdgeIterator( int p_edgeid )
     {
-        return this.getGraph().getEdgeProps(p_edgeid, Integer.MIN_VALUE);
+        return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
     }
 
 
@@ -226,9 +226,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_position geo position
      * @return ID of the node
      */
-    public int getClosestNode(GeoPosition p_position)
+    public int getClosestNode( GeoPosition p_position )
     {
-        QueryResult l_result = this.getLocationIndex().findClosest(p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES);
+        QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestNode();
     }
 
@@ -241,14 +241,14 @@ public class CGraphHopper extends GraphHopper
      * @param p_length length / number of cells
      * @return pair of edge list index and position on the edge or null
      */
-    public Pair<Integer, Integer> getEdgeByLength(List<EdgeIteratorState> p_edges, int p_start, int p_length)
+    public Pair<Integer, Integer> getEdgeByLength( List<EdgeIteratorState> p_edges, int p_start, int p_length )
     {
         for ( int i = p_start; i < p_edges.size(); i++ )
         {
-            int l_size = this.getEdge(p_edges.get(i)).getEdgeCells();
+            int l_size = this.getEdge( p_edges.get( i ) ).getEdgeCells();
             p_length -= l_size;
             if ( p_length < 0 )
-                return new ImmutablePair(i, p_length + l_size);
+                return new ImmutablePair( i, p_length + l_size );
         }
 
         return null;
@@ -284,13 +284,13 @@ public class CGraphHopper extends GraphHopper
      * @param p_edgestate edge object
      * @return linkage object
      */
-    public synchronized CCellObjectLinkage getEdge(EdgeIteratorState p_edgestate)
+    public synchronized CCellObjectLinkage getEdge( EdgeIteratorState p_edgestate )
     {
-        CCellObjectLinkage l_edge = m_edgecell.get(p_edgestate.getEdge());
+        CCellObjectLinkage l_edge = m_edgecell.get( p_edgestate.getEdge() );
         if ( l_edge == null )
         {
-            l_edge = new CCellObjectLinkage(p_edgestate);
-            m_edgecell.put(l_edge.getEdgeID(), l_edge);
+            l_edge = new CCellObjectLinkage( p_edgestate );
+            m_edgecell.put( l_edge.getEdgeID(), l_edge );
         }
 
         return l_edge;
@@ -307,37 +307,37 @@ public class CGraphHopper extends GraphHopper
     {
         try
         {
-            File l_output = File.createTempFile("mecsim", ".osm.pbf");
-            URL l_url = new URL("http://download.geofabrik.de/" + CConfiguration.getInstance().get().RoutingMap + "-latest.osm.pbf");
+            File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
+            URL l_url = new URL( "http://download.geofabrik.de/" + CConfiguration.getInstance().get().RoutingMap + "-latest.osm.pbf" );
 
-            System.out.println("download OSM map from [" + l_url + "] to [" + l_output + "]");
+            System.out.println( "download OSM map from [" + l_url + "] to [" + l_output + "]" );
 
-            ReadableByteChannel l_channel = Channels.newChannel(l_url.openStream());
-            FileOutputStream l_stream = new FileOutputStream(l_output);
-            l_stream.getChannel().transferFrom(l_channel, 0, Long.MAX_VALUE);
+            ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
+            FileOutputStream l_stream = new FileOutputStream( l_output );
+            l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
 
             return l_output;
         } catch ( Exception l_exception )
         {
-            CLogger.error(l_exception.getMessage());
+            CLogger.error( l_exception.getMessage() );
         }
         return null;
 
     }
 
     @Override
-    public Weighting createWeighting(String p_weighting, FlagEncoder p_encoder)
+    public Weighting createWeighting( String p_weighting, FlagEncoder p_encoder )
     {
-        if ( "TrafficJam + SpeedUp".equalsIgnoreCase(p_weighting) )
-            return new CSpeedUpTrafficJam(this, p_encoder);
+        if ( "TrafficJam + SpeedUp".equalsIgnoreCase( p_weighting ) )
+            return new CSpeedUpTrafficJam( this, p_encoder );
 
-        if ( "SpeedUp".equalsIgnoreCase(p_weighting) )
-            return new CSpeedUp(p_encoder);
+        if ( "SpeedUp".equalsIgnoreCase( p_weighting ) )
+            return new CSpeedUp( p_encoder );
 
-        if ( "TrafficJam".equalsIgnoreCase(p_weighting) )
-            return new CTrafficJam(this);
+        if ( "TrafficJam".equalsIgnoreCase( p_weighting ) )
+            return new CTrafficJam( this );
 
-        return super.createWeighting(p_weighting, p_encoder);
+        return super.createWeighting( p_weighting, p_encoder );
     }
 
 }

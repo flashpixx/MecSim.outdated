@@ -48,7 +48,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     /**
      * random interface *
      */
-    protected ExponentialDistribution m_random = new ExponentialDistribution(s_mean);
+    protected ExponentialDistribution m_random = new ExponentialDistribution( s_mean );
     /**
      * integer values how many cars are generated in a step *
      */
@@ -60,9 +60,9 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      *
      * @param p_position geo position object
      */
-    public CDefaultSourceFactory(GeoPosition p_position)
+    public CDefaultSourceFactory( GeoPosition p_position )
     {
-        super(p_position, Color.CYAN);
+        super( p_position, Color.CYAN );
     }
 
 
@@ -73,24 +73,24 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_number   number of cars
      * @param p_color    color of the source
      */
-    protected CDefaultSourceFactory(GeoPosition p_position, int p_number, Color p_color)
+    protected CDefaultSourceFactory( GeoPosition p_position, int p_number, Color p_color )
     {
-        super(p_position, p_color);
+        super( p_position, p_color );
         m_NumberCarsInStep = p_number;
         if ( p_number < 1 )
-            throw new IllegalArgumentException("number must be greater than zero");
+            throw new IllegalArgumentException( "number must be greater than zero" );
     }
 
 
     @Override
-    public Collection<ICar> step(int p_currentstep, ILayer p_layer)
+    public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
         Collection<ICar> l_sources = new HashSet();
         //if (m_random.sample() >= s_mean)
         //    return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add(new CDefaultCar(m_position));
+            l_sources.add( new CDefaultCar( m_position ) );
         m_NumberCarsInStep = 0;
 
         return l_sources;

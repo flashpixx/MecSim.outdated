@@ -55,7 +55,7 @@ public class CInspectorModel implements TableModel
      *
      * @param p_object object
      */
-    public void set(IInspector p_object)
+    public void set( IInspector p_object )
     {
         m_names.clear();
         m_values.clear();
@@ -63,22 +63,22 @@ public class CInspectorModel implements TableModel
             return;
 
         Map<String, Object> l_data = p_object.inspect();
-        if ( (l_data == null) || (l_data.isEmpty()) )
+        if ( ( l_data == null ) || ( l_data.isEmpty() ) )
             return;
 
         for ( Map.Entry<String, Object> l_item : l_data.entrySet() )
         {
-            m_names.add(l_item.getKey());
-            m_values.add(l_item.getValue());
+            m_names.add( l_item.getKey() );
+            m_values.add( l_item.getValue() );
         }
 
-        TableModelEvent l_event = new TableModelEvent(this);
+        TableModelEvent l_event = new TableModelEvent( this );
         for ( TableModelListener l_listener : m_listener )
-            l_listener.tableChanged(l_event);
+            l_listener.tableChanged( l_event );
     }
 
     @Override
-    public String getColumnName(int col)
+    public String getColumnName( int col )
     {
         switch ( col )
         {
@@ -88,11 +88,11 @@ public class CInspectorModel implements TableModel
                 return "Value";
         }
 
-        throw new IllegalArgumentException("illegal position");
+        throw new IllegalArgumentException( "illegal position" );
     }
 
     @Override
-    public Class<?> getColumnClass(int columnIndex)
+    public Class<?> getColumnClass( int columnIndex )
     {
         switch ( columnIndex )
         {
@@ -102,11 +102,11 @@ public class CInspectorModel implements TableModel
                 return Object.class;
         }
 
-        throw new IllegalArgumentException("illegal position");
+        throw new IllegalArgumentException( "illegal position" );
     }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex)
+    public boolean isCellEditable( int rowIndex, int columnIndex )
     {
         return false;
     }
@@ -114,7 +114,7 @@ public class CInspectorModel implements TableModel
     @Override
     public int getRowCount()
     {
-        if ( (m_values.isEmpty()) || (m_names.isEmpty()) )
+        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) )
             return 0;
 
         return m_names.size();
@@ -127,37 +127,37 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex)
+    public Object getValueAt( int rowIndex, int columnIndex )
     {
-        if ( ((m_values == null) || (m_names == null)) || (rowIndex < 0) || (rowIndex >= m_names.size()) )
+        if ( ( ( m_values == null ) || ( m_names == null ) ) || ( rowIndex < 0 ) || ( rowIndex >= m_names.size() ) )
             return null;
 
         switch ( columnIndex )
         {
             case 0:
-                return m_names.get(rowIndex);
+                return m_names.get( rowIndex );
             case 1:
-                return m_values.get(rowIndex);
+                return m_values.get( rowIndex );
         }
 
-        throw new IllegalArgumentException("illegal position");
+        throw new IllegalArgumentException( "illegal position" );
     }
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+    public void setValueAt( Object aValue, int rowIndex, int columnIndex )
     {
 
     }
 
     @Override
-    public void addTableModelListener(TableModelListener l)
+    public void addTableModelListener( TableModelListener l )
     {
-        m_listener.add(l);
+        m_listener.add( l );
     }
 
     @Override
-    public void removeTableModelListener(TableModelListener l)
+    public void removeTableModelListener( TableModelListener l )
     {
-        m_listener.remove(l);
+        m_listener.remove( l );
     }
 }

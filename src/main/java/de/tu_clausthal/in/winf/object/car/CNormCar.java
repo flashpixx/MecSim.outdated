@@ -48,9 +48,9 @@ public class CNormCar extends CDefaultCar implements INormObject
      *
      * @param p_StartPosition start positions (position of the source)
      */
-    public CNormCar(GeoPosition p_StartPosition)
+    public CNormCar( GeoPosition p_StartPosition )
     {
-        super(p_StartPosition);
+        super( p_StartPosition );
     }
 
 
@@ -62,7 +62,7 @@ public class CNormCar extends CDefaultCar implements INormObject
         for ( Map.Entry<INorm<INormObject>, INormCheckResult> l_item : m_norms.entrySet() )
         {
             IInstitution l_institution = l_item.getKey().getInstitution();
-            l_map.put("institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight());
+            l_map.put( "institution [" + l_institution.getName() + "] / norm [" + l_item.getKey().getName() + "] / weight", l_item.getValue().getWeight() );
         }
 
         return l_map;
@@ -70,9 +70,9 @@ public class CNormCar extends CDefaultCar implements INormObject
 
 
     @Override
-    public void setMatchedNorm(Map<INorm<INormObject>, INormCheckResult> p_norm)
+    public void setMatchedNorm( Map<INorm<INormObject>, INormCheckResult> p_norm )
     {
-        m_norms.putAll(p_norm);
+        m_norms.putAll( p_norm );
     }
 
     @Override

@@ -51,7 +51,7 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Pai
      *
      * @param p_object object
      */
-    public void check(T p_object);
+    public void check( T p_object );
 
 
     /**
@@ -68,7 +68,7 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Pai
      *
      * @param p_norm norm object
      */
-    public void update(INorm<T> p_norm);
+    public void update( INorm<T> p_norm );
 
 
     /**
@@ -76,7 +76,7 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Pai
      *
      * @param p_message norm message
      */
-    public void receive(INormMessage<T> p_message);
+    public void receive( INormMessage<T> p_message );
 
 
     /**

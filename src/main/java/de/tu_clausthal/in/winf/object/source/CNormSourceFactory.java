@@ -42,9 +42,9 @@ public class CNormSourceFactory extends CDefaultSourceFactory
      *
      * @param p_position geo position
      */
-    public CNormSourceFactory(GeoPosition p_position)
+    public CNormSourceFactory( GeoPosition p_position )
     {
-        super(p_position);
+        super( p_position );
     }
 
 
@@ -54,21 +54,21 @@ public class CNormSourceFactory extends CDefaultSourceFactory
      * @param p_position position
      * @param p_number   number of cars
      */
-    public CNormSourceFactory(GeoPosition p_position, int p_number)
+    public CNormSourceFactory( GeoPosition p_position, int p_number )
     {
-        super(p_position, p_number, Color.YELLOW);
+        super( p_position, p_number, Color.YELLOW );
     }
 
 
     @Override
-    public Collection<ICar> step(int p_currentstep, ILayer p_layer)
+    public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
         Collection<ICar> l_sources = new HashSet();
         if ( m_random.sample() >= s_mean )
             return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add(new CNormCar(super.m_position));
+            l_sources.add( new CNormCar( super.m_position ) );
         return l_sources;
     }
 

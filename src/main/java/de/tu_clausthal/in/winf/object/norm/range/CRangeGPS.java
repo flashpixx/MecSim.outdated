@@ -60,11 +60,11 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
     /**
      * color of the rectangle fill color *
      */
-    protected Color m_regioColor = new Color(200, 0, 0, 35);
+    protected Color m_regioColor = new Color( 200, 0, 0, 35 );
     /**
      * border color of the rectangle *
      */
-    protected Color m_borderColor = new Color(200, 0, 0, 75);
+    protected Color m_borderColor = new Color( 200, 0, 0, 75 );
 
 
     /**
@@ -74,19 +74,19 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
      * @param p_upperleft   left upper corner position
      * @param p_lowerright  right lower corner position
      */
-    public CRangeGPS(IInstitution<INormObject> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright)
+    public CRangeGPS( IInstitution<INormObject> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright )
     {
-        if ( (p_lowerright == null) || (p_upperleft == null) )
-            throw new IllegalArgumentException("parameter need not to be null");
-        if ( (p_upperleft.getLongitude() > p_lowerright.getLongitude()) || (p_upperleft.getLatitude() < p_lowerright.getLatitude()) )
-            throw new IllegalArgumentException("geoposition are not in the correct order, first argument is the upper-left ");
+        if ( ( p_lowerright == null ) || ( p_upperleft == null ) )
+            throw new IllegalArgumentException( "parameter need not to be null" );
+        if ( ( p_upperleft.getLongitude() > p_lowerright.getLongitude() ) || ( p_upperleft.getLatitude() < p_lowerright.getLatitude() ) )
+            throw new IllegalArgumentException( "geoposition are not in the correct order, first argument is the upper-left " );
         if ( p_institution == null )
-            throw new IllegalArgumentException("institution need not to be null");
+            throw new IllegalArgumentException( "institution need not to be null" );
 
         m_upperleft = p_upperleft;
         m_lowerright = p_lowerright;
         m_institution = p_institution;
-        m_georectangle = new Rectangle.Double(Math.min(m_upperleft.getLatitude(), m_lowerright.getLatitude()), Math.min(m_upperleft.getLongitude(), m_lowerright.getLongitude()), Math.abs(m_upperleft.getLatitude() - m_lowerright.getLatitude()), Math.abs(m_upperleft.getLongitude() - m_lowerright.getLongitude()));
+        m_georectangle = new Rectangle.Double( Math.min( m_upperleft.getLatitude(), m_lowerright.getLatitude() ), Math.min( m_upperleft.getLongitude(), m_lowerright.getLongitude() ), Math.abs( m_upperleft.getLatitude() - m_lowerright.getLatitude() ), Math.abs( m_upperleft.getLongitude() - m_lowerright.getLongitude() ) );
     }
 
     @Override
@@ -94,20 +94,20 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
     {
         Map<String, Object> l_map = super.inspect();
 
-        l_map.put("upper left", m_upperleft);
-        l_map.put("lower right", m_lowerright);
-        l_map.put("institution", m_institution.getName());
+        l_map.put( "upper left", m_upperleft );
+        l_map.put( "lower right", m_lowerright );
+        l_map.put( "institution", m_institution.getName() );
 
         return l_map;
     }
 
 
     @Override
-    public boolean check(INormObject p_object)
+    public boolean check( INormObject p_object )
     {
         synchronized ( p_object )
         {
-            return m_georectangle.contains(p_object.getGeoposition().getLatitude(), p_object.getGeoposition().getLongitude());
+            return m_georectangle.contains( p_object.getGeoposition().getLatitude(), p_object.getGeoposition().getLongitude() );
         }
     }
 
@@ -119,35 +119,35 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
 
 
     @Override
-    public void onClick(MouseEvent e, JXMapViewer viewer)
+    public void onClick( MouseEvent e, JXMapViewer viewer )
     {
-        Point2D l_upperleft = viewer.getTileFactory().geoToPixel(m_upperleft, viewer.getZoom());
-        Point2D l_lowerright = viewer.getTileFactory().geoToPixel(m_lowerright, viewer.getZoom());
-        Rectangle l_rectangle = new Rectangle((int) (Math.min(l_upperleft.getX(), l_lowerright.getX()) - viewer.getViewportBounds().getX()), (int) (Math.min(l_upperleft.getY(), l_lowerright.getY()) - viewer.getViewportBounds().getY()),
-                (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
+        Point2D l_upperleft = viewer.getTileFactory().geoToPixel( m_upperleft, viewer.getZoom() );
+        Point2D l_lowerright = viewer.getTileFactory().geoToPixel( m_lowerright, viewer.getZoom() );
+        Rectangle l_rectangle = new Rectangle( (int) ( Math.min( l_upperleft.getX(), l_lowerright.getX() ) - viewer.getViewportBounds().getX() ), (int) ( Math.min( l_upperleft.getY(), l_lowerright.getY() ) - viewer.getViewportBounds().getY() ),
+                (int) Math.abs( l_upperleft.getX() - l_lowerright.getX() ), (int) Math.abs( l_upperleft.getY() - l_lowerright.getY() ) );
 
-        if ( !l_rectangle.contains(e.getPoint()) )
+        if ( !l_rectangle.contains( e.getPoint() ) )
             return;
 
         if ( e.isControlDown() )
         {
-            m_institution.getRange().remove(this);
+            m_institution.getRange().remove( this );
             this.release();
         } else
-            CInspector.getInstance().set(this);
+            CInspector.getInstance().set( this );
     }
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    public void paint( Graphics2D g, COSMViewer object, int width, int height )
     {
-        Point2D l_upperleft = object.getTileFactory().geoToPixel(m_upperleft, object.getZoom());
-        Point2D l_lowerright = object.getTileFactory().geoToPixel(m_lowerright, object.getZoom());
+        Point2D l_upperleft = object.getTileFactory().geoToPixel( m_upperleft, object.getZoom() );
+        Point2D l_lowerright = object.getTileFactory().geoToPixel( m_lowerright, object.getZoom() );
 
-        Rectangle l_rectangle = new Rectangle((int) Math.min(l_upperleft.getX(), l_lowerright.getX()), (int) Math.min(l_upperleft.getY(), l_lowerright.getY()),
-                (int) Math.abs(l_upperleft.getX() - l_lowerright.getX()), (int) Math.abs(l_upperleft.getY() - l_lowerright.getY()));
-        g.setColor(m_borderColor);
-        g.draw(l_rectangle);
-        g.setColor(m_regioColor);
-        g.fill(l_rectangle);
+        Rectangle l_rectangle = new Rectangle( (int) Math.min( l_upperleft.getX(), l_lowerright.getX() ), (int) Math.min( l_upperleft.getY(), l_lowerright.getY() ),
+                (int) Math.abs( l_upperleft.getX() - l_lowerright.getX() ), (int) Math.abs( l_upperleft.getY() - l_lowerright.getY() ) );
+        g.setColor( m_borderColor );
+        g.draw( l_rectangle );
+        g.setColor( m_regioColor );
+        g.fill( l_rectangle );
     }
 }

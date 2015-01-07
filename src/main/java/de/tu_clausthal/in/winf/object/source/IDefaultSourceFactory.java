@@ -64,7 +64,7 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
      * @param p_position geo position object
      * @param p_color    color of the source
      */
-    public IDefaultSourceFactory(GeoPosition p_position, Color p_color)
+    public IDefaultSourceFactory( GeoPosition p_position, Color p_color )
     {
         m_position = p_position;
         m_color = p_color;
@@ -78,21 +78,21 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
     {
         try
         {
-            BufferedImage l_image = ImageIO.read(DefaultWaypointRenderer.class.getResource("/images/standard_waypoint.png"));
+            BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
 
             // modify blue value to the color of the waypoint
-            m_image = new BufferedImage(l_image.getColorModel(), l_image.copyData(null), l_image.isAlphaPremultiplied(), null);
+            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
             for ( int i = 0; i < l_image.getHeight(); i++ )
                 for ( int j = 0; j < l_image.getWidth(); j++ )
                 {
-                    Color l_color = new Color(l_image.getRGB(j, i));
+                    Color l_color = new Color( l_image.getRGB( j, i ) );
                     if ( l_color.getBlue() > 0 )
-                        m_image.setRGB(j, i, m_color.getRGB());
+                        m_image.setRGB( j, i, m_color.getRGB() );
                 }
 
         } catch ( Exception l_exception )
         {
-            CLogger.warn("could not read standard_waypoint.png: " + l_exception.toString());
+            CLogger.warn( "could not read standard_waypoint.png: " + l_exception.toString() );
         }
     }
 
@@ -101,19 +101,19 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
     public Collection<IReturnStepableTarget<ICar>> getTargets()
     {
         Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
-        l_collection.add((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car"));
+        l_collection.add( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) );
         return l_collection;
     }
 
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    public void paint( Graphics2D g, COSMViewer object, int width, int height )
     {
         if ( m_image == null )
             return;
 
-        Point2D l_point = object.getTileFactory().geoToPixel(m_position, object.getZoom());
-        g.drawImage(m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null);
+        Point2D l_point = object.getTileFactory().geoToPixel( m_position, object.getZoom() );
+        g.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
     }
 
 }

@@ -42,7 +42,7 @@ public abstract class IInspector extends JComponent implements MouseListener
      */
     public IInspector()
     {
-        COSMViewer.getInstance().addMouseListener(this);
+        COSMViewer.getInstance().addMouseListener( this );
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class IInspector extends JComponent implements MouseListener
      * @param e      mouse event
      * @param viewer viewer
      */
-    public void onClick(MouseEvent e, JXMapViewer viewer)
+    public void onClick( MouseEvent e, JXMapViewer viewer )
     {
     }
 
@@ -64,8 +64,8 @@ public abstract class IInspector extends JComponent implements MouseListener
     {
         Map<String, Object> l_map = new HashMap();
 
-        l_map.put("class name", this.getClass().getName());
-        l_map.put("object id", this.hashCode());
+        l_map.put( "class name", this.getClass().getName() );
+        l_map.put( "object id", this.hashCode() );
 
         return l_map;
     }
@@ -76,38 +76,38 @@ public abstract class IInspector extends JComponent implements MouseListener
      */
     public void release()
     {
-        COSMViewer.getInstance().removeMouseListener(this);
+        COSMViewer.getInstance().removeMouseListener( this );
     }
 
 
     @Override
-    public void mousePressed(MouseEvent e)
+    public void mousePressed( MouseEvent e )
     {
-        if ( SwingUtilities.isLeftMouseButton(e) )
-            this.onClick(e, COSMViewer.getInstance());
+        if ( SwingUtilities.isLeftMouseButton( e ) )
+            this.onClick( e, COSMViewer.getInstance() );
     }
 
 
     @Override
-    public void mouseReleased(MouseEvent e)
-    {
-    }
-
-
-    @Override
-    public void mouseEntered(MouseEvent e)
+    public void mouseReleased( MouseEvent e )
     {
     }
 
 
     @Override
-    public void mouseExited(MouseEvent e)
+    public void mouseEntered( MouseEvent e )
     {
     }
 
 
     @Override
-    public void mouseClicked(MouseEvent e)
+    public void mouseExited( MouseEvent e )
+    {
+    }
+
+
+    @Override
+    public void mouseClicked( MouseEvent e )
     {
     }
 

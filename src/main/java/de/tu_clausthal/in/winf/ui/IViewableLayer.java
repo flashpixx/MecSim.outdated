@@ -30,6 +30,6 @@ public interface IViewableLayer
 
     public boolean isVisible();
 
-    public void setVisible(boolean p_visible);
+ public void setVisible( boolean p_visible );
 
 }

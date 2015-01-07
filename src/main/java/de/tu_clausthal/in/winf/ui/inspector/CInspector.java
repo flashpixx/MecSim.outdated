@@ -40,7 +40,7 @@ public class CInspector extends JTable
      */
     private CInspector()
     {
-        super(new CInspectorModel());
+        super( new CInspectorModel() );
     }
 
     /**
@@ -58,9 +58,9 @@ public class CInspector extends JTable
      *
      * @param p_object object
      */
-    public void set(IInspector p_object)
+    public void set( IInspector p_object )
     {
-        ((CInspectorModel) this.getModel()).set(p_object);
+        ( (CInspectorModel) this.getModel() ).set( p_object );
     }
 
 }

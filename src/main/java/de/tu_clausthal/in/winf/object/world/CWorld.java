@@ -50,7 +50,7 @@ public class CWorld
      */
     public CWorld()
     {
-        CBootstrap.AfterWorldInit(this);
+        CBootstrap.AfterWorldInit( this );
     }
 
     /**
@@ -87,12 +87,12 @@ public class CWorld
         protected ConcurrentLinkedQueue<ILayer> m_process = new ConcurrentLinkedQueue();
 
         @Override
-        public synchronized void reset(boolean p_reset)
+        public synchronized void reset( boolean p_reset )
         {
             if ( !p_reset )
                 return;
 
-            m_unprocess.addAll(m_process);
+            m_unprocess.addAll( m_process );
             m_process.clear();
         }
 
@@ -109,17 +109,17 @@ public class CWorld
         }
 
         @Override
-        public synchronized boolean contains(Object o)
+        public synchronized boolean contains( Object o )
         {
-            return m_process.contains(o) || m_unprocess.contains(o);
+            return m_process.contains( o ) || m_unprocess.contains( o );
         }
 
         @Override
         public synchronized Iterator<ILayer> iterator()
         {
             Queue<ILayer> l_data = new LinkedList();
-            l_data.addAll(m_unprocess);
-            l_data.addAll(m_process);
+            l_data.addAll( m_unprocess );
+            l_data.addAll( m_process );
             return l_data.iterator();
         }
 
@@ -127,50 +127,50 @@ public class CWorld
         public synchronized Object[] toArray()
         {
             Queue<ILayer> l_data = new LinkedList();
-            l_data.addAll(m_unprocess);
-            l_data.addAll(m_process);
+            l_data.addAll( m_unprocess );
+            l_data.addAll( m_process );
             return l_data.toArray();
         }
 
         @Override
-        public synchronized <T> T[] toArray(T[] a)
+        public synchronized <T> T[] toArray( T[] a )
         {
             Queue<ILayer> l_data = new LinkedList();
-            l_data.addAll(m_unprocess);
-            l_data.addAll(m_process);
-            return l_data.toArray(a);
+            l_data.addAll( m_unprocess );
+            l_data.addAll( m_process );
+            return l_data.toArray( a );
         }
 
         @Override
-        public synchronized boolean remove(Object o)
+        public synchronized boolean remove( Object o )
         {
-            m_layer.values().remove(o);
-            return m_process.remove(o) || m_unprocess.remove(o);
+            m_layer.values().remove( o );
+            return m_process.remove( o ) || m_unprocess.remove( o );
         }
 
         @Override
-        public synchronized boolean containsAll(Collection<?> c)
+        public synchronized boolean containsAll( Collection<?> c )
         {
             Queue<ILayer> l_data = new LinkedList();
-            l_data.addAll(m_unprocess);
-            l_data.addAll(m_process);
-            return l_data.containsAll(c);
+            l_data.addAll( m_unprocess );
+            l_data.addAll( m_process );
+            return l_data.containsAll( c );
         }
 
         @Override
-        public boolean addAll(Collection<? extends ILayer> c)
+        public boolean addAll( Collection<? extends ILayer> c )
         {
-            return m_process.addAll(c);
+            return m_process.addAll( c );
         }
 
         @Override
-        public synchronized boolean removeAll(Collection<?> c)
+        public synchronized boolean removeAll( Collection<?> c )
         {
             for ( Object l_item : c )
             {
-                if ( m_process.remove(l_item) )
+                if ( m_process.remove( l_item ) )
                     continue;
-                if ( m_unprocess.remove(l_item) )
+                if ( m_unprocess.remove( l_item ) )
                     continue;
 
                 return false;
@@ -180,25 +180,25 @@ public class CWorld
         }
 
         @Override
-        public synchronized boolean retainAll(Collection<?> c)
+        public synchronized boolean retainAll( Collection<?> c )
         {
             Queue<ILayer> l_data = new LinkedList();
-            l_data.addAll(m_unprocess);
-            l_data.addAll(m_process);
-            l_data.retainAll(c);
+            l_data.addAll( m_unprocess );
+            l_data.addAll( m_process );
+            l_data.retainAll( c );
 
             ConcurrentLinkedQueue<ILayer> l_newprocess = new ConcurrentLinkedQueue();
             ConcurrentLinkedQueue<ILayer> l_newunprocess = new ConcurrentLinkedQueue();
             for ( ILayer l_item : l_data )
             {
-                if ( m_process.contains(l_item) )
+                if ( m_process.contains( l_item ) )
                 {
-                    l_newprocess.add(l_item);
+                    l_newprocess.add( l_item );
                     continue;
                 }
-                if ( m_unprocess.contains(l_item) )
+                if ( m_unprocess.contains( l_item ) )
                 {
-                    l_newunprocess.add(l_item);
+                    l_newunprocess.add( l_item );
                     continue;
                 }
 
@@ -218,15 +218,15 @@ public class CWorld
         }
 
         @Override
-        public boolean add(ILayer iLayer)
+        public boolean add( ILayer iLayer )
         {
-            return m_process.add(iLayer);
+            return m_process.add( iLayer );
         }
 
         @Override
-        public boolean offer(ILayer iLayer)
+        public boolean offer( ILayer iLayer )
         {
-            return m_process.offer(iLayer);
+            return m_process.offer( iLayer );
         }
 
         @Override
@@ -275,45 +275,45 @@ public class CWorld
         }
 
         @Override
-        public boolean containsKey(Object key)
+        public boolean containsKey( Object key )
         {
-            return m_layer.containsKey(key);
+            return m_layer.containsKey( key );
         }
 
         @Override
-        public boolean containsValue(Object value)
+        public boolean containsValue( Object value )
         {
-            return m_layer.containsValue(value);
+            return m_layer.containsValue( value );
         }
 
         @Override
-        public ILayer get(Object key)
+        public ILayer get( Object key )
         {
-            return m_layer.get(key);
+            return m_layer.get( key );
         }
 
         @Override
-        public ILayer put(String key, ILayer value)
+        public ILayer put( String key, ILayer value )
         {
-            m_queue.add(value);
-            return m_layer.put(key, value);
+            m_queue.add( value );
+            return m_layer.put( key, value );
         }
 
         @Override
-        public ILayer remove(Object key)
+        public ILayer remove( Object key )
         {
-            ILayer l_layer = m_layer.remove(key);
+            ILayer l_layer = m_layer.remove( key );
             if ( l_layer != null )
-                m_queue.remove(l_layer);
+                m_queue.remove( l_layer );
             return l_layer;
         }
 
         @Override
-        public void putAll(Map<? extends String, ? extends ILayer> m)
+        public void putAll( Map<? extends String, ? extends ILayer> m )
         {
-            m_layer.putAll(m);
+            m_layer.putAll( m );
             for ( ILayer l_layer : m.values() )
-                m_queue.add(l_layer);
+                m_queue.add( l_layer );
         }
 
         @Override

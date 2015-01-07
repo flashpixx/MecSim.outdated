@@ -39,7 +39,7 @@ public interface INormCollection<T> extends Collection<INorm<T>>, Serializable
      * @param p_object check object
      * @return map with results
      */
-    public Map<INorm<T>, INormCheckResult> match(T p_object);
+    public Map<INorm<T>, INormCheckResult> match( T p_object );
 
 
     /**

@@ -37,15 +37,15 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
 
 
     @Override
-    public Map<INorm<INormCar>, INormCheckResult> match(INormCar p_object)
+    public Map<INorm<INormCar>, INormCheckResult> match( INormCar p_object )
     {
         HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap();
 
         for ( INorm<INormCar> l_norm : m_norms )
         {
-            INormCheckResult l_check = l_norm.check(p_object);
-            if ( (l_check.getResult() instanceof Boolean) && (((Boolean) l_check.getResult())) )
-                l_map.put(l_norm, l_check);
+            INormCheckResult l_check = l_norm.check( p_object );
+            if ( ( l_check.getResult() instanceof Boolean ) && ( ( (Boolean) l_check.getResult() ) ) )
+                l_map.put( l_norm, l_check );
         }
 
         return l_map;
@@ -71,9 +71,9 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
     }
 
     @Override
-    public boolean contains(Object o)
+    public boolean contains( Object o )
     {
-        return m_norms.contains(o);
+        return m_norms.contains( o );
     }
 
     @Override
@@ -89,45 +89,45 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a)
+    public <T1> T1[] toArray( T1[] a )
     {
-        return m_norms.toArray(a);
+        return m_norms.toArray( a );
     }
 
     @Override
-    public boolean add(INorm<INormCar> iNormCarINorm)
+    public boolean add( INorm<INormCar> iNormCarINorm )
     {
-        return m_norms.add(iNormCarINorm);
+        return m_norms.add( iNormCarINorm );
     }
 
     @Override
-    public boolean remove(Object o)
+    public boolean remove( Object o )
     {
-        return m_norms.remove(o);
+        return m_norms.remove( o );
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll( Collection<?> c )
     {
-        return m_norms.containsAll(c);
+        return m_norms.containsAll( c );
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<INormCar>> c)
+    public boolean addAll( Collection<? extends INorm<INormCar>> c )
     {
-        return m_norms.addAll(c);
+        return m_norms.addAll( c );
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll( Collection<?> c )
     {
-        return m_norms.removeAll(c);
+        return m_norms.removeAll( c );
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll( Collection<?> c )
     {
-        return m_norms.retainAll(c);
+        return m_norms.retainAll( c );
     }
 
     @Override

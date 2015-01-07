@@ -35,6 +35,6 @@ public interface IReturnStepableTarget<T>
      *
      * @param p_data collection with data
      */
-    public void set(Collection<T> p_data);
+    public void set( Collection<T> p_data );
 
 }

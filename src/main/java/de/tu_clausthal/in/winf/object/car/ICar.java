@@ -58,7 +58,7 @@ public interface ICar extends Painter<COSMViewer>, IVoidStepable
      *
      * @param p_speed speed value
      */
-    public void setCurrentSpeed(int p_speed) throws IllegalArgumentException;
+    public void setCurrentSpeed( int p_speed ) throws IllegalArgumentException;
 
 
     /**

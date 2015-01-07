@@ -44,7 +44,7 @@ public class CFrame extends JFrame
     /**
      * control of the dock component *
      */
-    private CControl m_control = new CControl(this);
+    private CControl m_control = new CControl( this );
 
 
     /**
@@ -54,17 +54,17 @@ public class CFrame extends JFrame
     {
         super();
 
-        this.setLayout(new BorderLayout());
-        this.setJMenuBar(new CMenuBar());
+        this.setLayout( new BorderLayout() );
+        this.setJMenuBar( new CMenuBar() );
 
 
-        this.setSize(CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.addWindowListener(new WindowAdapter()
+        this.setSize( CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight );
+        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        this.addWindowListener( new WindowAdapter()
         {
 
             @Override
-            public void windowClosing(WindowEvent l_event)
+            public void windowClosing( WindowEvent l_event )
             {
                 CConfiguration.getInstance().get().ViewPoint = COSMViewer.getInstance().getCenterPosition();
                 CConfiguration.getInstance().get().Zoom = COSMViewer.getInstance().getZoom();
@@ -74,12 +74,12 @@ public class CFrame extends JFrame
                 l_event.getWindow().dispose();
                 m_control.destroy();
             }
-        });
+        } );
 
-        this.add(m_control.getContentArea());
-        this.createDockable("Inspector", CInspector.getInstance(), false, CLocation.base().normalEast(0.2));
-        this.createDockable("OSM", new JScrollPane(COSMViewer.getInstance()), false, CLocation.base().normalWest(0.8));
-        CBootstrap.AfterFrameInit(this);
+        this.add( m_control.getContentArea() );
+        this.createDockable( "Inspector", CInspector.getInstance(), false, CLocation.base().normalEast( 0.2 ) );
+        this.createDockable( "OSM", new JScrollPane( COSMViewer.getInstance() ), false, CLocation.base().normalWest( 0.8 ) );
+        CBootstrap.AfterFrameInit( this );
     }
 
 
@@ -89,9 +89,9 @@ public class CFrame extends JFrame
      * @param p_name  dockname
      * @param p_panel omponent
      */
-    public void addUIComponent(String p_name, Component p_panel)
+    public void addUIComponent( String p_name, Component p_panel )
     {
-        this.createDockable(p_name, p_panel, false, CLocation.base().minimalSouth());
+        this.createDockable( p_name, p_panel, false, CLocation.base().minimalSouth() );
     }
 
 
@@ -103,15 +103,15 @@ public class CFrame extends JFrame
      * @param p_close    show close button
      * @param p_location location of the panel
      */
-    private void createDockable(String p_title, Component p_panel, boolean p_close, CLocation p_location)
+    private void createDockable( String p_title, Component p_panel, boolean p_close, CLocation p_location )
     {
-        DefaultSingleCDockable l_dock = new DefaultSingleCDockable(p_title, p_title);
-        l_dock.setTitleText(p_title);
-        l_dock.setCloseable(p_close);
-        l_dock.add(p_panel);
-        l_dock.setLocation(p_location);
-        m_control.addDockable(l_dock);
-        l_dock.setVisible(true);
+        DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
+        l_dock.setTitleText( p_title );
+        l_dock.setCloseable( p_close );
+        l_dock.add( p_panel );
+        l_dock.setLocation( p_location );
+        m_control.addDockable( l_dock );
+        l_dock.setVisible( true );
     }
 
 

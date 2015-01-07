@@ -38,7 +38,7 @@ public interface IGenerator<T>
     /**
      * generate objects *
      */
-    Collection<T> generate(int p_number);
+    Collection<T> generate( int p_number );
 
 
 }

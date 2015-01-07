@@ -38,7 +38,7 @@ public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable
      * @param p_object object
      * @return boolean for existence
      */
-    public boolean check(T p_object);
+    public boolean check( T p_object );
 
 
     /**

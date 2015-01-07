@@ -59,26 +59,26 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
     {
 
         String[] l_cars = {"default cars", "norm cars"};
-        this.add(CMenuFactory.createRadioMenuGroup("Sources", l_cars, this, m_reference));
+        this.add( CMenuFactory.createRadioMenuGroup( "Sources", l_cars, this, m_reference ) );
     }
 
 
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed( ActionEvent e )
     {
 
-        if ( e.getSource() == m_reference.get("default cars") )
+        if ( e.getSource() == m_reference.get( "default cars" ) )
         {
-            this.setSource("default cars");
+            this.setSource( "default cars" );
             return;
         }
-        if ( e.getSource() == m_reference.get("norm cars") )
+        if ( e.getSource() == m_reference.get( "norm cars" ) )
         {
-            this.setSource("norm cars");
+            this.setSource( "norm cars" );
             return;
         }
 
-        m_institution = ((JRadioButtonMenuItem) e.getSource()).getText();
+        m_institution = ( (JRadioButtonMenuItem) e.getSource() ).getText();
 
     }
 
@@ -114,10 +114,10 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
      *
      * @param p_name name
      */
-    private void setSource(String p_name)
+    private void setSource( String p_name )
     {
         m_sources = p_name;
-        ((JRadioButtonMenuItem) m_reference.get(p_name)).setSelected(true);
+        ( (JRadioButtonMenuItem) m_reference.get( p_name ) ).setSelected( true );
     }
 
 

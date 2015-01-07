@@ -42,7 +42,7 @@ public class CBootstrap
      *
      * @param p_configuration configuration
      */
-    public static void ConfigIsLoaded(CConfiguration p_configuration)
+    public static void ConfigIsLoaded( CConfiguration p_configuration )
     {
     }
 
@@ -52,10 +52,10 @@ public class CBootstrap
      *
      * @param p_frame frame
      */
-    public static void AfterFrameInit(CFrame p_frame)
+    public static void AfterFrameInit( CFrame p_frame )
     {
 
-        CSimulation.getInstance().getWorld().getQueue().add(new CCarCount(p_frame));
+        CSimulation.getInstance().getWorld().getQueue().add( new CCarCount( p_frame ) );
 
     }
 
@@ -65,11 +65,11 @@ public class CBootstrap
      *
      * @param p_viewer viewer object
      */
-    public static void AfterOSMViewerInit(COSMViewer p_viewer)
+    public static void AfterOSMViewerInit( COSMViewer p_viewer )
     {
 
-        p_viewer.getCompoundPainter().addPainter((IMultiLayer) CSimulation.getInstance().getWorld().getMap().get("Source"));
-        p_viewer.getCompoundPainter().addPainter((IMultiLayer) CSimulation.getInstance().getWorld().getMap().get("Car"));
+        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" ) );
+        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) );
 
     }
 
@@ -79,11 +79,11 @@ public class CBootstrap
      *
      * @param p_simulation simulation
      */
-    public static void AfterSimulationInit(CSimulation p_simulation)
+    public static void AfterSimulationInit( CSimulation p_simulation )
     {
 
-        p_simulation.getWorld().getMap().put("Source", new CSourceFactoryLayer());
-        p_simulation.getWorld().getMap().put("Car", new CCarLayer());
+        p_simulation.getWorld().getMap().put( "Source", new CSourceFactoryLayer() );
+        p_simulation.getWorld().getMap().put( "Car", new CCarLayer() );
 
     }
 
@@ -93,7 +93,7 @@ public class CBootstrap
      *
      * @param p_world world
      */
-    public static void AfterWorldInit(CWorld p_world)
+    public static void AfterWorldInit( CWorld p_world )
     {
 
     }
@@ -104,7 +104,7 @@ public class CBootstrap
      *
      * @param p_simulation simulation object
      */
-    public static void BeforeSimulationStarts(CSimulation p_simulation)
+    public static void BeforeSimulationStarts( CSimulation p_simulation )
     {
 
     }
@@ -115,7 +115,7 @@ public class CBootstrap
      *
      * @param p_simulation simiulation object
      */
-    public static void AfterSimulationStops(CSimulation p_simulation)
+    public static void AfterSimulationStops( CSimulation p_simulation )
     {
 
     }
@@ -126,12 +126,12 @@ public class CBootstrap
      *
      * @param p_simulation simulation object
      */
-    public static void onSimulationReset(CSimulation p_simulation)
+    public static void onSimulationReset( CSimulation p_simulation )
     {
 
-        COSMViewer.getInstance().setZoom(CConfiguration.getInstance().get().Zoom);
-        COSMViewer.getInstance().setCenterPosition(CConfiguration.getInstance().get().ViewPoint);
-        COSMViewer.getInstance().setAddressLocation(CConfiguration.getInstance().get().ViewPoint);
+        COSMViewer.getInstance().setZoom( CConfiguration.getInstance().get().Zoom );
+        COSMViewer.getInstance().setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
+        COSMViewer.getInstance().setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
 
     }
 

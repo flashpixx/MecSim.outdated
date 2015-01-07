@@ -73,10 +73,10 @@ public class CDefaultInstitution implements IInstitution<INormObject>
      *
      * @param p_name name
      */
-    public CDefaultInstitution(String p_name)
+    public CDefaultInstitution( String p_name )
     {
-        if ( (p_name == null) || (p_name.isEmpty()) )
-            throw new IllegalArgumentException("name need not be empty");
+        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+            throw new IllegalArgumentException( "name need not be empty" );
         m_name = p_name;
         //CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }
@@ -88,10 +88,10 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public void check(INormObject p_object)
+    public void check( INormObject p_object )
     {
-        if ( m_range.check(p_object) )
-            p_object.setMatchedNorm(m_norms.match(p_object));
+        if ( m_range.check( p_object ) )
+            p_object.setMatchedNorm( m_norms.match( p_object ) );
     }
 
     @Override
@@ -101,13 +101,13 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public void update(INorm<INormObject> p_norm)
+    public void update( INorm<INormObject> p_norm )
     {
-        m_norms.add(p_norm);
+        m_norms.add( p_norm );
     }
 
     @Override
-    public void receive(INormMessage<INormObject> p_message)
+    public void receive( INormMessage<INormObject> p_message )
     {
         if ( p_message.getTTL() < 0 )
             return;
@@ -116,18 +116,18 @@ public class CDefaultInstitution implements IInstitution<INormObject>
         switch ( p_message.getType() )
         {
             case Create:
-                m_norms.add(p_message.getNorm());
+                m_norms.add( p_message.getNorm() );
                 break;
             case Update:
-                m_norms.add(p_message.getNorm());
+                m_norms.add( p_message.getNorm() );
                 break;
             case Delete:
-                m_norms.remove(p_message.getNorm());
+                m_norms.remove( p_message.getNorm() );
                 break;
         }
 
-        m_superior.send(p_message);
-        m_inferior.send(p_message);
+        m_superior.send( p_message );
+        m_inferior.send( p_message );
     }
 
     @Override
@@ -166,9 +166,9 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public boolean contains(Object o)
+    public boolean contains( Object o )
     {
-        return m_norms.contains(o);
+        return m_norms.contains( o );
     }
 
     @Override
@@ -184,45 +184,45 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray( T[] a )
     {
-        return m_norms.toArray(a);
+        return m_norms.toArray( a );
     }
 
     @Override
-    public boolean add(INorm<INormObject> iNormCarINorm)
+    public boolean add( INorm<INormObject> iNormCarINorm )
     {
-        return m_norms.add(iNormCarINorm);
+        return m_norms.add( iNormCarINorm );
     }
 
     @Override
-    public boolean remove(Object o)
+    public boolean remove( Object o )
     {
-        return m_norms.remove(o);
+        return m_norms.remove( o );
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll( Collection<?> c )
     {
-        return m_norms.containsAll(c);
+        return m_norms.containsAll( c );
     }
 
     @Override
-    public boolean addAll(Collection<? extends INorm<INormObject>> c)
+    public boolean addAll( Collection<? extends INorm<INormObject>> c )
     {
-        return m_norms.addAll(c);
+        return m_norms.addAll( c );
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll( Collection<?> c )
     {
-        return m_norms.removeAll(c);
+        return m_norms.removeAll( c );
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll( Collection<?> c )
     {
-        return m_norms.retainAll(c);
+        return m_norms.retainAll( c );
     }
 
     @Override
@@ -232,10 +232,10 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public void paint(Graphics2D g, COSMViewer object, int width, int height)
+    public void paint( Graphics2D g, COSMViewer object, int width, int height )
     {
         for ( IRange<INormObject> l_item : m_range )
-            l_item.paint(g, object, width, height);
+            l_item.paint( g, object, width, height );
 
     }
 }

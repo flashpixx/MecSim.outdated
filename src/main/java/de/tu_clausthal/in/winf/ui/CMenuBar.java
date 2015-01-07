@@ -78,35 +78,35 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         super();
 
         String[] l_file = {"Load Sources", "Save Sources", null, "OSM Screenshot"};
-        this.add(CMenuFactory.createMenu("File", l_file, this, m_reference));
+        this.add( CMenuFactory.createMenu( "File", l_file, this, m_reference ) );
 
 
         String[] l_actions = {"Start", "Stop", null, "Reset", null};
-        JMenu l_simulation = CMenuFactory.createMenu("Simulation", l_actions, this, m_reference);
+        JMenu l_simulation = CMenuFactory.createMenu( "Simulation", l_actions, this, m_reference );
 
-        JSlider l_simulationspeed = new JSlider(10, 150);
-        l_simulationspeed.addChangeListener(this);
-        l_simulationspeed.setValue(l_simulationspeed.getMaximum() - Math.max(l_simulationspeed.getMinimum(), Math.min(l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime)));
-        l_simulation.add(l_simulationspeed);
+        JSlider l_simulationspeed = new JSlider( 10, 150 );
+        l_simulationspeed.addChangeListener( this );
+        l_simulationspeed.setValue( l_simulationspeed.getMaximum() - Math.max( l_simulationspeed.getMinimum(), Math.min( l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime ) ) );
+        l_simulation.add( l_simulationspeed );
         Hashtable<Integer, JLabel> l_simulationspeedlabel = new Hashtable();
-        l_simulationspeedlabel.put(l_simulationspeed.getMinimum(), new JLabel("slow"));
-        l_simulationspeedlabel.put(l_simulationspeed.getMaximum(), new JLabel("fast"));
-        l_simulationspeedlabel.put((l_simulationspeed.getMaximum() - l_simulationspeed.getMinimum()) / 2, new JLabel("Speed"));
-        l_simulationspeed.setLabelTable(l_simulationspeedlabel);
-        l_simulationspeed.setPaintLabels(true);
-        this.add(l_simulation);
+        l_simulationspeedlabel.put( l_simulationspeed.getMinimum(), new JLabel( "slow" ) );
+        l_simulationspeedlabel.put( l_simulationspeed.getMaximum(), new JLabel( "fast" ) );
+        l_simulationspeedlabel.put( ( l_simulationspeed.getMaximum() - l_simulationspeed.getMinimum() ) / 2, new JLabel( "Speed" ) );
+        l_simulationspeed.setLabelTable( l_simulationspeedlabel );
+        l_simulationspeed.setPaintLabels( true );
+        this.add( l_simulation );
 
 
         String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
-        CSimulation.getInstance().getWorld().getMap().keySet().toArray(l_layer);
-        JMenu l_visibilitylayer = new JMenu("Layer");
-        l_visibilitylayer.add(CMenuFactory.createRadioMenu("Activity", l_layer, this, m_reference));
-        l_visibilitylayer.add(CMenuFactory.createRadioMenu("Visibility", l_layer, this, m_reference));
-        this.add(l_visibilitylayer);
+        CSimulation.getInstance().getWorld().getMap().keySet().toArray( l_layer );
+        JMenu l_visibilitylayer = new JMenu( "Layer" );
+        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Activity", l_layer, this, m_reference ) );
+        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", l_layer, this, m_reference ) );
+        this.add( l_visibilitylayer );
 
 
-        m_drivingmodelname = ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).getDrivingModelList();
-        this.add(CMenuFactory.createRadioMenuGroup("Driving Model", m_drivingmodelname, this, m_reference));
+        m_drivingmodelname = ( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) ).getDrivingModelList();
+        this.add( CMenuFactory.createRadioMenuGroup( "Driving Model", m_drivingmodelname, this, m_reference ) );
         for ( int i = 0; i < m_drivingmodelname.length; i++ )
             m_drivingmodelname[i] = "Driving Model::" + m_drivingmodelname[i];
 
@@ -134,9 +134,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
     @Override
-    public void stateChanged(ChangeEvent e)
+    public void stateChanged( ChangeEvent e )
     {
-        CConfiguration.getInstance().get().ThreadSleepTime = ((JSlider) e.getSource()).getMaximum() - ((JSlider) e.getSource()).getValue();
+        CConfiguration.getInstance().get().ThreadSleepTime = ( (JSlider) e.getSource() ).getMaximum() - ( (JSlider) e.getSource() ).getValue();
     }
 
 
@@ -146,69 +146,69 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void throwSimulationRunningException()
     {
         if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException("simulation is running");
+            throw new IllegalStateException( "simulation is running" );
     }
 
 
     @Override
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed( ActionEvent e )
     {
         try
         {
 
-            if ( e.getSource() == m_reference.get("File::OSM Screenshot") )
+            if ( e.getSource() == m_reference.get( "File::OSM Screenshot" ) )
                 this.screenshot();
-            if ( e.getSource() == m_reference.get("File::Load Sources") )
+            if ( e.getSource() == m_reference.get( "File::Load Sources" ) )
                 this.loadSources();
-            if ( e.getSource() == m_reference.get("File::Save Sources") )
+            if ( e.getSource() == m_reference.get( "File::Save Sources" ) )
                 this.saveSources();
 
 
-            if ( e.getSource() == m_reference.get("Simulation::Start") )
+            if ( e.getSource() == m_reference.get( "Simulation::Start" ) )
                 CSimulation.getInstance().start();
-            if ( e.getSource() == m_reference.get("Simulation::Stop") )
+            if ( e.getSource() == m_reference.get( "Simulation::Stop" ) )
                 CSimulation.getInstance().stop();
-            if ( e.getSource() == m_reference.get("Simulation::Reset") )
+            if ( e.getSource() == m_reference.get( "Simulation::Reset" ) )
                 CSimulation.getInstance().reset();
 
 
-            if ( e.getSource() == m_reference.get("Activity::Source") )
+            if ( e.getSource() == m_reference.get( "Activity::Source" ) )
             {
                 this.throwSimulationRunningException();
-                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Source");
-                l_layer.setActive(!l_layer.isActive());
+                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get( "Source" );
+                l_layer.setActive( !l_layer.isActive() );
             }
-            if ( e.getSource() == m_reference.get("Activity::Car") )
+            if ( e.getSource() == m_reference.get( "Activity::Car" ) )
             {
                 this.throwSimulationRunningException();
-                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get("Car");
-                l_layer.setActive(!l_layer.isActive());
+                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get( "Car" );
+                l_layer.setActive( !l_layer.isActive() );
             }
 
 
-            if ( e.getSource() == m_reference.get("Visibility::Source") )
+            if ( e.getSource() == m_reference.get( "Visibility::Source" ) )
             {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
-                l_layer.setVisible(!l_layer.isVisible());
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" );
+                l_layer.setVisible( !l_layer.isVisible() );
             }
-            if ( e.getSource() == m_reference.get("Visibility::Car") )
+            if ( e.getSource() == m_reference.get( "Visibility::Car" ) )
             {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get("Car");
-                l_layer.setVisible(!l_layer.isVisible());
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" );
+                l_layer.setVisible( !l_layer.isVisible() );
             }
 
 
             for ( String l_model : m_drivingmodelname )
-                if ( e.getSource() == m_reference.get(l_model) )
+                if ( e.getSource() == m_reference.get( l_model ) )
                 {
                     this.throwSimulationRunningException();
-                    ((CCarLayer) CSimulation.getInstance().getWorld().getMap().get("Car")).setDriveModel(l_model.replace("Driving Model::", ""));
+                    ( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
                 }
 
 
         } catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog(null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION);
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
 
         /*
@@ -385,7 +385,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @param p_name name
      * @return null or institution
      */
-    private IInstitution<INormObject> getInstitution(String p_name)
+    private IInstitution<INormObject> getInstitution( String p_name )
     {
         /*
         if ((p_name == null) && (p_name.isEmptyCell()))
@@ -407,18 +407,18 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @param p_weight weight name (see "graphhopper" class "createWeighting" method)
      * @throws IllegalStateException
      */
-    private void setGraphWeight(String p_weight) throws IllegalStateException
+    private void setGraphWeight( String p_weight ) throws IllegalStateException
     {
         if ( CSimulation.getInstance().isRunning() )
         {
-            ((JRadioButtonMenuItem) m_reference.get(m_weight)).setSelected(true);
-            throw new IllegalStateException("simulation is running");
+            ( (JRadioButtonMenuItem) m_reference.get( m_weight ) ).setSelected( true );
+            throw new IllegalStateException( "simulation is running" );
         }
 
-        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get("car");
+        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "car" );
         if ( l_layer != null )
         {
-            l_layer.setGraphWeight(p_weight);
+            l_layer.setGraphWeight( p_weight );
             m_weight = p_weight;
         }
     }
@@ -431,16 +431,16 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void saveSources() throws IOException
     {
-        if ( m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION )
+        if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
             return;
 
-        CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get("Source");
+        CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" );
         ISourceFactory[] l_sources = new ISourceFactory[l_layer.size()];
-        l_layer.toArray(l_sources);
+        l_layer.toArray( l_sources );
 
-        FileOutputStream l_stream = new FileOutputStream(this.addFileExtension(m_filedialog.getSelectedFile(), ".src"));
-        ObjectOutputStream l_output = new ObjectOutputStream(l_stream);
-        l_output.writeObject(l_sources);
+        FileOutputStream l_stream = new FileOutputStream( this.addFileExtension( m_filedialog.getSelectedFile(), ".src" ) );
+        ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
+        l_output.writeObject( l_sources );
         l_output.close();
         l_stream.close();
 
@@ -481,13 +481,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void screenshot() throws IOException
     {
-        BufferedImage l_image = new BufferedImage(COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB);
-        COSMViewer.getInstance().paint(l_image.getGraphics());
+        BufferedImage l_image = new BufferedImage( COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB );
+        COSMViewer.getInstance().paint( l_image.getGraphics() );
 
-        if ( m_filedialog.showSaveDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION )
+        if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
             return;
 
-        ImageIO.write(l_image, "png", this.addFileExtension(m_filedialog.getSelectedFile(), ".png"));
+        ImageIO.write( l_image, "png", this.addFileExtension( m_filedialog.getSelectedFile(), ".png" ) );
     }
 
 
@@ -498,11 +498,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @param p_suffix suffix
      * @return file with extension
      */
-    private File addFileExtension(File p_file, String p_suffix)
+    private File addFileExtension( File p_file, String p_suffix )
     {
         File l_file = p_file;
-        if ( !l_file.getAbsolutePath().endsWith(p_suffix) )
-            l_file = new File(l_file + p_suffix);
+        if ( !l_file.getAbsolutePath().endsWith( p_suffix ) )
+            l_file = new File( l_file + p_suffix );
         return l_file;
     }
 

@@ -60,7 +60,7 @@ public class CSimulation
     /**
      * barrier object to synchronize the threads *
      */
-    private CyclicBarrier m_barrier = new CyclicBarrier(CConfiguration.getInstance().get().MaxThreadNumber);
+    private CyclicBarrier m_barrier = new CyclicBarrier( CConfiguration.getInstance().get().MaxThreadNumber );
 
 
     /**
@@ -68,7 +68,7 @@ public class CSimulation
      */
     private CSimulation()
     {
-        CBootstrap.AfterSimulationInit(this);
+        CBootstrap.AfterSimulationInit( this );
     }
 
     /**
@@ -108,18 +108,18 @@ public class CSimulation
     public void start()
     {
         if ( this.isRunning() )
-            throw new IllegalStateException("simulation is running");
+            throw new IllegalStateException( "simulation is running" );
 
         for ( ILayer l_layer : m_world.getQueue() )
-            if ( (l_layer instanceof IMultiLayer) && (l_layer.isActive()) && (((IMultiLayer) l_layer).size() == 0) )
-                CLogger.warn("layer [" + l_layer + "] is empty");
+            if ( ( l_layer instanceof IMultiLayer ) && ( l_layer.isActive() ) && ( ( (IMultiLayer) l_layer ).size() == 0 ) )
+                CLogger.warn( "layer [" + l_layer + "] is empty" );
 
-        CLogger.info("simulation is started");
-        CBootstrap.BeforeSimulationStarts(this);
+        CLogger.info( "simulation is started" );
+        CBootstrap.BeforeSimulationStarts( this );
 
         m_pool = Executors.newCachedThreadPool();
         for ( int i = 0; i < CConfiguration.getInstance().get().MaxThreadNumber; i++ )
-            m_pool.submit(new CWorker(m_barrier, i == 0, m_simulationcount));
+            m_pool.submit( new CWorker( m_barrier, i == 0, m_simulationcount ) );
     }
 
 
@@ -129,11 +129,11 @@ public class CSimulation
     public void stop()
     {
         if ( !this.isRunning() )
-            throw new IllegalStateException("simulation is not running");
+            throw new IllegalStateException( "simulation is not running" );
 
         this.shutdown();
-        CBootstrap.AfterSimulationStops(this);
-        CLogger.info("simulation is stopped");
+        CBootstrap.AfterSimulationStops( this );
+        CLogger.info( "simulation is stopped" );
     }
 
 
@@ -144,11 +144,11 @@ public class CSimulation
     {
         this.shutdown();
 
-        m_simulationcount.set(0);
+        m_simulationcount.set( 0 );
         for ( ILayer l_layer : m_world.getQueue() )
             l_layer.resetData();
-        CBootstrap.onSimulationReset(this);
-        CLogger.info("simulation reset");
+        CBootstrap.onSimulationReset( this );
+        CLogger.info( "simulation reset" );
     }
 
 
@@ -163,11 +163,11 @@ public class CSimulation
         m_pool.shutdown();
         try
         {
-            m_pool.awaitTermination(2, TimeUnit.SECONDS);
+            m_pool.awaitTermination( 2, TimeUnit.SECONDS );
             m_pool = null;
         } catch ( InterruptedException l_exception )
         {
-            CLogger.error(l_exception.getMessage());
+            CLogger.error( l_exception.getMessage() );
         }
     }
 

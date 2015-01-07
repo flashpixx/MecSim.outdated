@@ -46,6 +46,6 @@ public interface IDriveModel
      * @param p_car         car object
      * @note update is called on each thread, so sometimes it must be synchronized
      */
-    public void update(int p_currentstep, CGraphHopper p_graph, ICar p_car);
+    public void update( int p_currentstep, CGraphHopper p_graph, ICar p_car );
 
 }

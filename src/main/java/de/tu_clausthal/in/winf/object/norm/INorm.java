@@ -39,7 +39,7 @@ public interface INorm<T> extends Serializable
      * @param p_object object
      * @return result
      */
-    public INormCheckResult check(T p_object);
+    public INormCheckResult check( T p_object );
 
 
     /**

@@ -133,7 +133,8 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
         {
             m_institution.getRange().remove( this );
             this.release();
-        } else
+        }
+        else
             CInspector.getInstance().set( this );
     }
 

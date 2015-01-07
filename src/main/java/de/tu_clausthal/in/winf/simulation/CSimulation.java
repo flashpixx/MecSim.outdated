@@ -59,7 +59,7 @@ public class CSimulation
     /**
      * barrier object to synchronize the threads *
      */
-    //CConfiguration.getInstance().get().MaxThreadNumber
+    // CConfiguration.getInstance().get().MaxThreadNumber
     private CyclicBarrier m_barrier = new CyclicBarrier( 1 );
 
 
@@ -117,7 +117,7 @@ public class CSimulation
         CLogger.info( "simulation is started" );
         CBootstrap.BeforeSimulationStarts( this );
 
-        m_pool = Executors.newFixedThreadPool( m_barrier.getParties() );
+        m_pool = Executors.newCachedThreadPool();
         for ( int i = 0; i < m_barrier.getParties(); i++ )
             m_pool.submit( new CWorker( m_barrier, i == 0, m_simulationcount ) );
     }

@@ -33,7 +33,6 @@ public interface IQueue<T> extends Queue<T>
     /**
      * moves elements from the unprocessed queue
      * to the processed queue
-     *
      */
     public void reset();
 

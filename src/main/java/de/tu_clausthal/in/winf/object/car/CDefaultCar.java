@@ -328,16 +328,32 @@ public class CDefaultCar extends IInspector implements ICar
             if ( !m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).isEmpty( m_route.get( this.getCurrentSpeed() ).getRight().intValue() ) )
                 return;
 
-            m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( this.getCurrentSpeed() ).getRight().intValue() );
-
-        } else
-        {
-
-            m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
-            m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
+            try
+            {
+                m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( this.getCurrentSpeed() ).getRight().intValue() );
+                m_routeindex += this.getCurrentSpeed();
+            }
+            catch ( IllegalAccessException l_ex )
+            {
+            }
 
         }
-        m_routeindex += this.getCurrentSpeed();
+        else
+        {
+
+            try
+            {
+                m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
+                m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
+                m_routeindex += this.getCurrentSpeed();
+            }
+            catch ( IllegalAccessException l_ex )
+            {
+                m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
+            }
+
+        }
+
 
     }
 

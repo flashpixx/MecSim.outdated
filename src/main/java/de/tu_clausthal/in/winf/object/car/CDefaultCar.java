@@ -203,6 +203,9 @@ public class CDefaultCar extends IInspector implements ICar
      */
     private EdgeIteratorState getEdge( int p_index )
     {
+        if ( m_route == null )
+            return null;
+
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 

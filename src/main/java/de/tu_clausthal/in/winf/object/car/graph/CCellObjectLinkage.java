@@ -280,9 +280,11 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     public synchronized void setObject( N p_object, int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmpty( p_position ) )
-            throw new IllegalAccessException( "position is not empty" );
+            throw new IllegalAccessException( "position on graph edge is not empty" );
+
+        // if the object exists on the edge, it will be moved
         if ( m_objects.containsKey( p_object ) )
-            throw new IllegalAccessException( "object exists" );
+            m_cells[m_objects.get( p_object )] = null;
 
         m_cells[p_position] = p_object;
         m_objects.put( p_object, p_position );
@@ -380,7 +382,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
         public PointListArray( ArrayList<Double> p_x, ArrayList<Double> p_y ) throws IllegalArgumentException
         {
             if ( ( p_x.size() != p_y.size() ) || ( p_x.size() < 2 ) )
-                throw new IllegalArgumentException( "point list need a least two elements and must have equal length" );
+                throw new IllegalArgumentException( "point list of the sampled graph edge need a least two elements and must have equal length" );
 
             m_x = new double[p_x.size()];
             m_y = new double[p_y.size()];

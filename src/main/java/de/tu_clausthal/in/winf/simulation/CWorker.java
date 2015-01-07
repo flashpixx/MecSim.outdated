@@ -163,10 +163,7 @@ public class CWorker implements Runnable
                 ( (IMultiLayer) p_layer ).beforeStepObject( m_currentstep.get(), p_object );
 
             if ( p_object instanceof IVoidStepable )
-            {
                 ( (IVoidStepable) p_object ).step( m_currentstep.get(), p_layer );
-                return;
-            }
 
             if ( p_object instanceof IReturnStepable )
             {

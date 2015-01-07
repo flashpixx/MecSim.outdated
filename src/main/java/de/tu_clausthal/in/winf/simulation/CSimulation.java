@@ -117,7 +117,7 @@ public class CSimulation
         CLogger.info( "simulation is started" );
         CBootstrap.BeforeSimulationStarts( this );
 
-        m_pool = Executors.newCachedThreadPool();
+        m_pool = Executors.newFixedThreadPool( m_barrier.getParties() );
         for ( int i = 0; i < m_barrier.getParties(); i++ )
             m_pool.submit( new CWorker( m_barrier, i == 0, m_simulationcount ) );
     }

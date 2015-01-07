@@ -324,19 +324,15 @@ public class CDefaultCar extends IInspector implements ICar
         // if the route index equal to zero, set it car on the first item or wait until it is free
         if ( m_routeindex == 0 )
         {
-            System.out.println( "first" );
 
             if ( !m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).isEmpty( m_route.get( this.getCurrentSpeed() ).getRight().intValue() ) )
                 return;
-
-            System.out.println( "first set" );
 
             m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( this.getCurrentSpeed() ).getRight().intValue() );
 
         } else
         {
 
-            System.out.println( "update " + m_routeindex + "\t" + m_route.size() );
             m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
             m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
 

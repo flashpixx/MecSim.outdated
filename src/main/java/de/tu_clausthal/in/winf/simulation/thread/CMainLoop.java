@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.simulation.thread;
 
 
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
@@ -71,6 +72,8 @@ public class CMainLoop implements Runnable
     @Override
     public void run()
     {
+        CLogger.info( "thread starts working" );
+
         while ( !Thread.currentThread().isInterrupted() )
         {
 
@@ -102,6 +105,7 @@ public class CMainLoop implements Runnable
             }
         }
 
+        CLogger.info( "thread stops working" );
     }
 
 

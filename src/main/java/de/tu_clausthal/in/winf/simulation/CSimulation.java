@@ -104,6 +104,9 @@ public class CSimulation
      */
     public void start()
     {
+        CLogger.info( "simulation is started" );
+        CBootstrap.BeforeSimulationStarts( this );
+
         m_run = new CMainLoop();
         new Thread( m_run );
 
@@ -114,14 +117,7 @@ public class CSimulation
         for ( ILayer l_layer : m_world.getQueue() )
             if ( ( l_layer instanceof IMultiLayer ) && ( l_layer.isActive() ) && ( ( (IMultiLayer) l_layer ).size() == 0 ) )
                 CLogger.warn( "layer [" + l_layer + "] is empty" );
-
-        CLogger.info( "simulation is started" );
-        CBootstrap.BeforeSimulationStarts( this );
-
-        m_pool = Executors.newCachedThreadPool();
-        for ( int i = 0; i < m_barrier.getParties(); i++ )
-            m_pool.submit( new CWorker( m_barrier, i == 0, m_simulationcount ) );
-            */
+        */
     }
 
 

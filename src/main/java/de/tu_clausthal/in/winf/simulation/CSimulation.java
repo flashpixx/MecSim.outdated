@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * http://www.itcuties.com/java/executorservice/
  * http://www.javacodegeeks.com/2011/12/using-threadpoolexecutor-to-parallelize.html
  * http://www.javaworld.com/article/2078809/java-concurrency/java-101-the-next-generation-java-concurrency-without-the-pain-part-1.html?null
+ * http://technicalmumbojumbo.wordpress.com/2011/05/16/java-util-concurrent-executors-thread-pools-cache-fixed-scheduled-executorcompletionservice-tutorial/
  */
 public class CSimulation
 {

@@ -19,33 +19,74 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui.inspector;
+package de.tu_clausthal.in.winf.ui;
 
-import de.tu_clausthal.in.winf.ui.IUIListener;
+import org.jxmapviewer.JXMapViewer;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 /**
- * global object of the simulation with mouse event handler
+ * class to handle UI events with encapsulate the default
+ * lister structures
  */
-public abstract class IInspector extends IUIListener
+public abstract class IUIListener implements MouseListener
 {
 
     /**
-     * returns a map to inspect current data of the car
-     *
-     * @return map with name and value
+     * ctor to register component on the viewer *
      */
-    public Map<String, Object> inspect()
+    public IUIListener()
     {
-        Map<String, Object> l_map = new HashMap();
+        COSMViewer.getInstance().addMouseListener( this );
+    }
 
-        l_map.put( "class name", this.getClass().getName() );
-        l_map.put( "object id", this.hashCode() );
+    /**
+     * click method which is called by a click on the object
+     *
+     * @param e      mouse event
+     * @param viewer viewer
+     */
+    public void onClick( MouseEvent e, JXMapViewer viewer )
+    {
+    }
 
-        return l_map;
+
+    /**
+     * release of the event handler *
+     */
+    public void release()
+    {
+        COSMViewer.getInstance().removeMouseListener( this );
+    }
+
+    @Override
+    public void mouseClicked( MouseEvent e )
+    {
+    }
+
+    @Override
+    public void mousePressed( MouseEvent e )
+    {
+        if ( SwingUtilities.isLeftMouseButton( e ) )
+            this.onClick( e, COSMViewer.getInstance() );
+    }
+
+    @Override
+    public void mouseReleased( MouseEvent e )
+    {
+    }
+
+    @Override
+    public void mouseEntered( MouseEvent e )
+    {
+    }
+
+    @Override
+    public void mouseExited( MouseEvent e )
+    {
     }
 
 }

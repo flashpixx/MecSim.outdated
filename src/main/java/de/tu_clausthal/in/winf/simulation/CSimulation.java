@@ -36,6 +36,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * singleton object to run the simulation *
+ * http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html
+ * http://www.javacodegeeks.com/2013/03/my-custom-thread-worker-executor-in-java.html
+ * http://www.coderanch.com/t/436108/threads/java/Pause-Resume-Thread
+ * http://stackoverflow.com/questions/19894607/java-how-to-stop-thread
+ * http://openbook.galileo-press.de/java7/1507_02_002.html#dodtp2e2b7bb6-7815-49a5-bd91-3a52aab74174
  */
 public class CSimulation
 {
@@ -45,7 +50,7 @@ public class CSimulation
      */
     private static CSimulation s_instance = new CSimulation();
     /**
-     * thread pool *
+     * thread worker *
      */
     ExecutorService m_pool = null;
     /**
@@ -153,7 +158,7 @@ public class CSimulation
 
 
     /**
-     * thread pool shutdown *
+     * thread worker shutdown *
      */
     private void shutdown()
     {

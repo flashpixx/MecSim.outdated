@@ -19,33 +19,54 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui.inspector;
+package de.tu_clausthal.in.winf.simulation.worker;
 
-import de.tu_clausthal.in.winf.ui.IUIListener;
 
-import java.util.HashMap;
-import java.util.Map;
+import de.tu_clausthal.in.winf.CLogger;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
+import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 
 
 /**
- * global object of the simulation with mouse event handler
+ * class to process a void-stepable item
  */
-public abstract class IInspector extends IUIListener
+public class CVoidStepable implements Runnable
 {
+    private ILayer m_layer = null;
+    private IVoidStepable m_object = null;
+    private int m_iteration = 0;
 
-    /**
-     * returns a map to inspect current data of the car
-     *
-     * @return map with name and value
-     */
-    public Map<String, Object> inspect()
+
+    public CVoidStepable( int p_iteration, IVoidStepable p_item, ILayer p_layer )
     {
-        Map<String, Object> l_map = new HashMap();
+        if ( p_item == null )
+            throw new IllegalArgumentException( "void-stepable argument need not to be null" );
 
-        l_map.put( "class name", this.getClass().getName() );
-        l_map.put( "object id", this.hashCode() );
-
-        return l_map;
+        m_object = p_item;
+        m_layer = p_layer;
+        m_iteration = p_iteration;
     }
 
+
+    @Override
+    public void run()
+    {
+        try
+        {
+            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
+                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
+
+
+            m_object.step( m_iteration, m_layer );
+
+
+            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
+                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
+        }
+    }
 }

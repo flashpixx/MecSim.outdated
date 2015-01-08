@@ -19,33 +19,51 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.ui.inspector;
+package de.tu_clausthal.in.winf.simulation.worker;
 
-import de.tu_clausthal.in.winf.ui.IUIListener;
 
-import java.util.HashMap;
-import java.util.Map;
+import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.simulation.IReturnStepable;
+import de.tu_clausthal.in.winf.simulation.IStepable;
+import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 
 
 /**
- * global object of the simulation with mouse event handler
+ * factory class to create a runnable object
  */
-public abstract class IInspector extends IUIListener
+public class CFactory
 {
 
     /**
-     * returns a map to inspect current data of the car
+     * returns a runnable object of the stepable input
      *
-     * @return map with name and value
+     * @param p_iteration iteration
+     * @param p_object    stepable object
+     * @return runnable object
      */
-    public Map<String, Object> inspect()
+    public static Runnable create( int p_iteration, IStepable p_object )
     {
-        Map<String, Object> l_map = new HashMap();
+        return create( p_iteration, p_object, null );
+    }
 
-        l_map.put( "class name", this.getClass().getName() );
-        l_map.put( "object id", this.hashCode() );
 
-        return l_map;
+    /**
+     * returns a runnable object of the stepable input
+     *
+     * @param p_iteration iteration
+     * @param p_object    stepable object
+     * @param p_layer     layer
+     * @return runnable object
+     */
+    public static Runnable create( int p_iteration, IStepable p_object, ILayer p_layer )
+    {
+        if ( p_object instanceof IVoidStepable )
+            return new CVoidStepable( p_iteration, (IVoidStepable) p_object, p_layer );
+
+        if ( p_object instanceof IReturnStepable )
+            return new CReturnStepable( p_iteration, (IReturnStepable) p_object, p_layer );
+
+        throw new IllegalArgumentException( "stepable object need not be null" );
     }
 
 }

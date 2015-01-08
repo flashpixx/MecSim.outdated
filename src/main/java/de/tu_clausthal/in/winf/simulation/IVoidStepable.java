@@ -30,7 +30,6 @@ import de.tu_clausthal.in.winf.object.world.ILayer;
 public interface IVoidStepable extends IStepable
 {
 
-
     /**
      * step method *
      *

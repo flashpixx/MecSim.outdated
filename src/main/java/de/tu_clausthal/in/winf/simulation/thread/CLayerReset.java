@@ -23,40 +23,22 @@ package de.tu_clausthal.in.winf.simulation.thread;
 
 import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.ILayer;
-import de.tu_clausthal.in.winf.object.world.IMultiLayer;
-import de.tu_clausthal.in.winf.simulation.IReturnStepable;
-import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 
-import java.util.Collection;
 
 /**
- * wrapper class to process a return-stepable item
+ * wrapper class to reset a layer
  */
-public class CReturnStepable extends IRunnable<IReturnStepable>
+public class CLayerReset extends IRunnable<ILayer>
 {
-
-    /**
-     * layer object *
-     */
-    protected ILayer m_layer = null;
-    /**
-     * iteration value *
-     */
-    protected int m_iteration = 0;
-
 
     /**
      * ctor for setting the object
      *
-     * @param p_iteration current iteration value
-     * @param p_object    return-stepable object
-     * @param p_layer     layer of the object or null
+     * @param p_object performing object
      */
-    public CReturnStepable( int p_iteration, IReturnStepable p_object, ILayer p_layer )
+    public CLayerReset( ILayer p_object )
     {
         super( p_object );
-        m_layer = p_layer;
-        m_iteration = p_iteration;
     }
 
 
@@ -68,24 +50,13 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
     {
         try
         {
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
-
-
-            Collection l_data = m_object.step( m_iteration, m_layer );
-            Collection<IReturnStepableTarget> l_targets = m_object.getTargets();
-            if ( ( l_data != null ) && ( l_targets != null ) )
-                for ( IReturnStepableTarget l_target : l_targets )
-                    l_target.push( l_data );
-
-
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
+            m_object.resetData();
         }
         catch ( Exception l_exception )
         {
             CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
         }
     }
+
 
 }

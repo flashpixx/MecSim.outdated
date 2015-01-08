@@ -42,11 +42,25 @@ import java.util.concurrent.Executors;
  */
 public class CMainLoop implements Runnable
 {
+    /**
+     * thread-pool for handling all objects *
+     */
     private ExecutorService m_pool = Executors.newWorkStealingPool();
 
+    /**
+     * task list with objects *
+     */
     private Collection<Callable<Object>> m_tasks = new LinkedList();
 
+    /**
+     * simulation counter *
+     */
     private int m_simulationcount = 0;
+
+    /**
+     * boolean to pause/resume the thread *
+     */
+    private boolean m_pause = true;
 
 
     /**
@@ -79,7 +93,15 @@ public class CMainLoop implements Runnable
 
             try
             {
+                // if thread is paused
+                if ( m_pause )
+                {
+                    Thread.yield();
+                    continue;
+                }
 
+
+                // if thread is not paused perform objects
                 m_tasks.clear();
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                     m_tasks.add( createTask( m_simulationcount, l_layer, null ) );
@@ -95,10 +117,11 @@ public class CMainLoop implements Runnable
                         m_pool.invokeAll( m_tasks );
                     }
 
+
                 m_simulationcount++;
                 Thread.sleep( CConfiguration.getInstance().get().ThreadSleepTime );
             }
-            catch ( InterruptedException e )
+            catch ( InterruptedException l_exception )
             {
                 Thread.currentThread().interrupt();
                 return;
@@ -109,9 +132,63 @@ public class CMainLoop implements Runnable
     }
 
 
+    /**
+     * thread is shut down *
+     */
     public void stop()
     {
         Thread.currentThread().interrupt();
+    }
+
+    /**
+     * checks if the thread is paused
+     *
+     * @return boolean for pause
+     */
+    public boolean isPaused()
+    {
+        return m_pause;
+    }
+
+    /**
+     * sets pause state *
+     */
+    public void pause()
+    {
+        m_pause = true;
+    }
+
+    /**
+     * resume state *
+     */
+    public void resume()
+    {
+        m_pause = false;
+    }
+
+    /**
+     * resets the thread *
+     */
+    public void reset()
+    {
+        if ( !m_pause )
+            throw new IllegalStateException( "simulation reset can run only on pause" );
+
+        CLogger.info( "thread reset" );
+
+        try
+        {
+            m_tasks.clear();
+            m_simulationcount = 0;
+            for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+                m_tasks.add( new CLayerReset( l_layer ) );
+            m_pool.invokeAll( m_tasks );
+
+        }
+        catch ( InterruptedException l_exception )
+        {
+        }
+
     }
 
 }

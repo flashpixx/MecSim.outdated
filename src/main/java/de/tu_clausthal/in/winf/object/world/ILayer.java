@@ -48,8 +48,6 @@ public interface ILayer extends IStepable
 
     /**
      * resets the data of the layer *
-     *
-     * @deprecated
      */
     public void resetData();
 

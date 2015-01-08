@@ -55,7 +55,10 @@ public class CSimulation
      */
     private CWorld m_world = new CWorld();
 
-    private CMainLoop m_run = null;
+    /**
+     * main loop *
+     */
+    private CMainLoop m_mainloop = new CMainLoop();
 
 
     /**
@@ -63,6 +66,7 @@ public class CSimulation
      */
     private CSimulation()
     {
+        new Thread( m_mainloop ).start();
         CBootstrap.AfterSimulationInit( this );
     }
 
@@ -84,7 +88,7 @@ public class CSimulation
      */
     public boolean isRunning()
     {
-        return m_run != null;
+        return !m_mainloop.isPaused();
     }
 
 
@@ -102,20 +106,13 @@ public class CSimulation
      */
     public void start()
     {
-        CLogger.info( "simulation is started" );
-        CBootstrap.BeforeSimulationStarts( this );
-
-        m_run = new CMainLoop();
-        new Thread( m_run ).start();
-
-        /*
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
-        for ( ILayer l_layer : m_world.getQueue() )
-            if ( ( l_layer instanceof IMultiLayer ) && ( l_layer.isActive() ) && ( ( (IMultiLayer) l_layer ).size() == 0 ) )
-                CLogger.warn( "layer [" + l_layer + "] is empty" );
-        */
+        CLogger.info( "simulation is started" );
+        CBootstrap.BeforeSimulationStarts( this );
+
+        m_mainloop.resume();
     }
 
 
@@ -127,10 +124,9 @@ public class CSimulation
         if ( !this.isRunning() )
             throw new IllegalStateException( "simulation is not running" );
 
-        this.shutdown();
+        m_mainloop.pause();
         CBootstrap.AfterSimulationStops( this );
         CLogger.info( "simulation is stopped" );
-
     }
 
 
@@ -139,28 +135,12 @@ public class CSimulation
      */
     public void reset()
     {
-        /*
-        this.shutdown();
+        m_mainloop.pause();
+        m_mainloop.reset();
 
-        m_simulationcount.push( 0 );
-        for ( ILayer l_layer : m_world.getQueue() )
-            l_layer.resetData();
         CBootstrap.onSimulationReset( this );
-        CLogger.info( "simulation reset" );
-        */
+        CLogger.info( "simulation is reset" );
     }
 
-
-    /**
-     * thread worker shutdown *
-     */
-    private void shutdown()
-    {
-        if ( !this.isRunning() )
-            return;
-
-        m_run.stop();
-        m_run = null;
-    }
 
 }

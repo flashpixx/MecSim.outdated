@@ -21,44 +21,33 @@
 
 package de.tu_clausthal.in.winf.simulation.thread;
 
-import de.tu_clausthal.in.winf.CLogger;
-import de.tu_clausthal.in.winf.object.world.ILayer;
-import de.tu_clausthal.in.winf.object.world.IMultiLayer;
-import de.tu_clausthal.in.winf.simulation.IReturnStepable;
-import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
+import java.util.concurrent.Callable;
 
-import java.util.Collection;
 
 /**
- * wrapper class to process a return-stepable item
+ * Created by pkraus on 08.01.15.
  */
-public class CReturnStepable extends IRunnable<IReturnStepable>
+public abstract class IRunnable<T> implements Runnable, Callable<Object>
 {
 
     /**
-     * layer object *
+     * object reference *
      */
-    protected ILayer m_layer = null;
-    /**
-     * iteration value *
-     */
-    protected int m_iteration = 0;
+    protected T m_object = null;
 
 
     /**
      * ctor for setting the object
      *
-     * @param p_iteration current iteration value
-     * @param p_object    return-stepable object
-     * @param p_layer     layer of the object or null
+     * @param p_object performing object
      */
-    public CReturnStepable( int p_iteration, IReturnStepable p_object, ILayer p_layer )
+    public IRunnable( T p_object )
     {
-        super( p_object );
-        m_layer = p_layer;
-        m_iteration = p_iteration;
-    }
+        if ( p_object == null )
+            throw new IllegalArgumentException( "object argument need not to be null" );
 
+        m_object = p_object;
+    }
 
     /**
      * run method to perform the action on
@@ -66,26 +55,21 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
      */
     protected void perform()
     {
-        try
-        {
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
+
+    }
 
 
-            Collection l_data = m_object.step( m_iteration, m_layer );
-            Collection<IReturnStepableTarget> l_targets = m_object.getTargets();
-            if ( ( l_data != null ) && ( l_targets != null ) )
-                for ( IReturnStepableTarget l_target : l_targets )
-                    l_target.push( l_data );
+    @Override
+    public Object call() throws Exception
+    {
+        this.perform();
+        return null;
+    }
 
-
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
-        }
+    @Override
+    public void run()
+    {
+        this.perform();
     }
 
 }

@@ -78,6 +78,21 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
+    public int getRowCount()
+    {
+        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) )
+            return 0;
+
+        return m_names.size();
+    }
+
+    @Override
+    public int getColumnCount()
+    {
+        return 2;
+    }
+
+    @Override
     public String getColumnName( int col )
     {
         switch ( col )
@@ -109,21 +124,6 @@ public class CInspectorModel implements TableModel
     public boolean isCellEditable( int rowIndex, int columnIndex )
     {
         return false;
-    }
-
-    @Override
-    public int getRowCount()
-    {
-        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) )
-            return 0;
-
-        return m_names.size();
-    }
-
-    @Override
-    public int getColumnCount()
-    {
-        return 2;
     }
 
     @Override

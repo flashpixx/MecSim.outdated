@@ -72,6 +72,12 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
+    public void resetData()
+    {
+
+    }
+
+    @Override
     public boolean isVisible()
     {
         COSMViewer.getInstance().repaint();
@@ -91,7 +97,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         return null;
     }
 
-
     @Override
     public synchronized boolean add( T t )
     {
@@ -99,6 +104,12 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         COSMViewer.getInstance().repaint();
 
         return l_return;
+    }
+
+    @Override
+    public boolean offer( T t )
+    {
+        return m_process.offer( t );
     }
 
     @Override
@@ -111,21 +122,15 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public T element()
-    {
-        return m_unprocess.element();
-    }
-
-    @Override
-    public boolean offer( T t )
-    {
-        return m_process.offer( t );
-    }
-
-    @Override
     public T poll()
     {
         return m_unprocess.poll();
+    }
+
+    @Override
+    public T element()
+    {
+        return m_unprocess.element();
     }
 
     @Override
@@ -149,7 +154,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     {
     }
 
-
     /**
      * method which is called after the object step method is called
      *
@@ -159,7 +163,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public synchronized void afterStepObject( int p_currentstep, T p_object )
     {
     }
-
 
     @Override
     public synchronized int size()
@@ -265,7 +268,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         COSMViewer.getInstance().repaint();
     }
 
-
     @Override
     public synchronized void reset()
     {
@@ -284,12 +286,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         g.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( T l_item : this )
             l_item.paint( g, object, width, height );
-    }
-
-    @Override
-    public void resetData()
-    {
-
     }
 
 }

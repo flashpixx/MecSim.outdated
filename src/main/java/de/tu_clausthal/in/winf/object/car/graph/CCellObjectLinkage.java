@@ -341,6 +341,11 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
         return 0;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return m_edgeid;
+    }
 
     @Override
     public boolean equals( Object p_object )
@@ -349,12 +354,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
             return false;
 
         return this.m_edgeid == ( (CCellObjectLinkage) p_object ).m_edgeid;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return m_edgeid;
     }
 
     /**

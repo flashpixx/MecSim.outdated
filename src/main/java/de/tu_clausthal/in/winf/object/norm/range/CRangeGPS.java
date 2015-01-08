@@ -90,19 +90,6 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
     }
 
     @Override
-    public Map<String, Object> inspect()
-    {
-        Map<String, Object> l_map = super.inspect();
-
-        l_map.put( "upper left", m_upperleft );
-        l_map.put( "lower right", m_lowerright );
-        l_map.put( "institution", m_institution.getName() );
-
-        return l_map;
-    }
-
-
-    @Override
     public boolean check( INormObject p_object )
     {
         synchronized ( p_object )
@@ -116,7 +103,6 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
     {
         return m_institution;
     }
-
 
     @Override
     public void onClick( MouseEvent e, JXMapViewer viewer )
@@ -136,6 +122,18 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
         }
         else
             CInspector.getInstance().set( this );
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        Map<String, Object> l_map = super.inspect();
+
+        l_map.put( "upper left", m_upperleft );
+        l_map.put( "lower right", m_lowerright );
+        l_map.put( "institution", m_institution.getName() );
+
+        return l_map;
     }
 
     @Override

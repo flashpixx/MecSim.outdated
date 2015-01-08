@@ -112,6 +112,12 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
         return l_list;
     }
 
+    @Override
+    public void resetData()
+    {
+        super.clear();
+        m_graph.clear();
+    }
 
     @Override
     public void beforeStepObject( int p_currentstep, ICar p_object )
@@ -128,7 +134,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
             super.remove( p_object );
             CCellObjectLinkage l_edge = m_graph.getEdge( p_object.getEdge() );
             if ( l_edge != null )
+            {
                 l_edge.removeObject( p_object );
+            }
         }
 
     }
@@ -137,13 +145,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     public void set( Collection<ICar> p_data )
     {
         super.addAll( p_data );
-    }
-
-    @Override
-    public void resetData()
-    {
-        super.clear();
-        m_graph.clear();
     }
 
     @Override

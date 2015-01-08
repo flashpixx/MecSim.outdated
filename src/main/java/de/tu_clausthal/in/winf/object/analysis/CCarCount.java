@@ -55,17 +55,16 @@ public class CCarCount extends ISingleLayer
         p_frame.addUIComponent( "Car Count", new ChartPanel( ChartFactory.createLineChart( "Car Count", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
 
+    @Override
+    public void resetData()
+    {
+        m_plotdata.clear();
+    }
 
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
         m_plotdata.addValue( ( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) ).getGraph().getNumberOfCars(), "number", String.valueOf( p_currentstep ) );
-    }
-
-    @Override
-    public void resetData()
-    {
-        m_plotdata.clear();
     }
 
     @Override

@@ -28,8 +28,19 @@ package de.tu_clausthal.in.winf.ui;
 public interface IViewableLayer
 {
 
+ /**
+  * returns the visibility status
+  *
+  * @return boolean of visibility
+  */
     public boolean isVisible();
 
+
+ /**
+  * sets the visibilit
+  *
+  * @param p_visible boolean visibility
+  */
  public void setVisible( boolean p_visible );
 
 }

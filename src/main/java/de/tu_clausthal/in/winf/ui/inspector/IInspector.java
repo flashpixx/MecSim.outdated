@@ -79,6 +79,10 @@ public abstract class IInspector extends JComponent implements MouseListener
         COSMViewer.getInstance().removeMouseListener( this );
     }
 
+    @Override
+    public void mouseClicked( MouseEvent e )
+    {
+    }
 
     @Override
     public void mousePressed( MouseEvent e )
@@ -87,27 +91,18 @@ public abstract class IInspector extends JComponent implements MouseListener
             this.onClick( e, COSMViewer.getInstance() );
     }
 
-
     @Override
     public void mouseReleased( MouseEvent e )
     {
     }
-
 
     @Override
     public void mouseEntered( MouseEvent e )
     {
     }
 
-
     @Override
     public void mouseExited( MouseEvent e )
-    {
-    }
-
-
-    @Override
-    public void mouseClicked( MouseEvent e )
     {
     }
 

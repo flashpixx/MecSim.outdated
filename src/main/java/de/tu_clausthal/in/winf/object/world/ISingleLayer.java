@@ -58,6 +58,12 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
+    public void resetData()
+    {
+
+    }
+
+    @Override
     public boolean isVisible()
     {
         return m_visible;
@@ -83,11 +89,5 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     @Override
     public void paint( Graphics2D graphics2D, COSMViewer object, int i, int i2 )
     {
-    }
-
-    @Override
-    public void resetData()
-    {
-
     }
 }

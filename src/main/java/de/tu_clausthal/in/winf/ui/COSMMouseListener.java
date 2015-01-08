@@ -57,55 +57,6 @@ class COSMMouseListener extends MouseAdapter
      */
     private boolean m_drag = false;
 
-
-    @Override
-    public void mousePressed( MouseEvent e )
-    {
-        if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
-            return;
-
-        // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
-        // and would create an exception, so we do the initialization process here
-        if ( m_rectangle == null )
-        {
-            m_rectangle = new CRectanglePainter();
-            COSMViewer.getInstance().getCompoundPainter().addPainter( m_rectangle );
-        }
-
-        m_drag = true;
-        m_rectangle.from( e.getPoint() );
-    }
-
-    @Override
-    public void mouseReleased( MouseEvent e )
-    {
-        if ( !m_drag )
-            return;
-
-        m_drag = false;
-        m_rectangle.to( e.getPoint() );
-
-        IInstitution<INormObject> l_institution = this.getSelectedInstitution();
-        if ( ( m_rectangle.getRectangle() == null ) || ( l_institution == null ) )
-        {
-            m_rectangle.clear();
-            return;
-        }
-
-        // add range to the institution
-        l_institution.getRange().add( new CRangeGPS( l_institution, ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getFrom() ), ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getTo() ) ) );
-        m_rectangle.clear();
-    }
-
-    @Override
-    public void mouseDragged( MouseEvent e )
-    {
-        if ( !m_drag )
-            return;
-        m_rectangle.to( e.getPoint() );
-    }
-
-
     @Override
     public void mouseClicked( MouseEvent e )
     {
@@ -155,6 +106,52 @@ class COSMMouseListener extends MouseAdapter
         }
     }
 
+    @Override
+    public void mousePressed( MouseEvent e )
+    {
+        if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
+            return;
+
+        // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
+        // and would create an exception, so we do the initialization process here
+        if ( m_rectangle == null )
+        {
+            m_rectangle = new CRectanglePainter();
+            COSMViewer.getInstance().getCompoundPainter().addPainter( m_rectangle );
+        }
+
+        m_drag = true;
+        m_rectangle.from( e.getPoint() );
+    }
+
+    @Override
+    public void mouseReleased( MouseEvent e )
+    {
+        if ( !m_drag )
+            return;
+
+        m_drag = false;
+        m_rectangle.to( e.getPoint() );
+
+        IInstitution<INormObject> l_institution = this.getSelectedInstitution();
+        if ( ( m_rectangle.getRectangle() == null ) || ( l_institution == null ) )
+        {
+            m_rectangle.clear();
+            return;
+        }
+
+        // add range to the institution
+        l_institution.getRange().add( new CRangeGPS( l_institution, ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getFrom() ), ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getTo() ) ) );
+        m_rectangle.clear();
+    }
+
+    @Override
+    public void mouseDragged( MouseEvent e )
+    {
+        if ( !m_drag )
+            return;
+        m_rectangle.to( e.getPoint() );
+    }
 
     /**
      * returns the popup listener

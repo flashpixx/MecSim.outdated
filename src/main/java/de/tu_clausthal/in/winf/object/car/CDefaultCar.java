@@ -81,6 +81,10 @@ public class CDefaultCar extends IInspector implements ICar
      */
     protected int m_routeindex = 0;
     /**
+     * boolean flag for end reached
+     */
+    protected boolean m_endReached = false;
+    /**
      * individual acceleration
      */
     protected int m_acceleration = 1;
@@ -162,16 +166,26 @@ public class CDefaultCar extends IInspector implements ICar
         List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
         if ( ( l_route != null ) && ( l_route.size() > 0 ) )
         {
-            m_route = m_graph.getRouteCells( l_route.get( 0 ) );
+            if ( m_routeindex < m_route.size() - 1 )
+                m_route.subList( m_routeindex + 1, m_route.size() ).clear();
+            m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
         }
+    }
+
+    @Override
+    public GeoPosition getGeoposition()
+    {
+        EdgeIteratorState l_edge = this.getEdge();
+        if ( l_edge == null )
+            return null;
+        return m_graph.getEdge( l_edge ).getGeoposition( this );
     }
 
     @Override
     public boolean hasEndReached()
     {
-        return ( m_route == null ) || ( m_routeindex >= m_route.size() );
+        return m_endReached;
     }
-
 
     @Override
     public Map<Integer, ICar> getPredecessor()
@@ -188,11 +202,22 @@ public class CDefaultCar extends IInspector implements ICar
         return l_predecessordistance;
     }
 
-
     @Override
     public EdgeIteratorState getEdge()
     {
         return this.getEdge( m_routeindex );
+    }
+
+    @Override
+    public int getAcceleration()
+    {
+        return m_acceleration;
+    }
+
+    @Override
+    public int getDeceleration()
+    {
+        return m_deceleration;
     }
 
     /**
@@ -209,29 +234,31 @@ public class CDefaultCar extends IInspector implements ICar
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
-    @Override
-    public GeoPosition getGeoposition()
+    /**
+     * returns the icon size
+     *
+     * @param viewer viewer object
+     * @return circle size
+     */
+    private int iconsize( JXMapViewer viewer )
     {
-        EdgeIteratorState l_edge = this.getEdge();
-        if ( l_edge == null )
-            return null;
-        return m_graph.getEdge( l_edge ).getGeoposition( this );
+        return Math.max( 9 - viewer.getZoom(), 2 );
     }
 
-
     @Override
-    public int getAcceleration()
+    public void onClick( MouseEvent e, JXMapViewer viewer )
     {
-        return m_acceleration;
+        GeoPosition l_position = this.getGeoposition();
+        if ( l_position == null )
+            return;
+
+        int l_zoom = this.iconsize( viewer );
+        Point2D l_point = viewer.getTileFactory().geoToPixel( l_position, viewer.getZoom() );
+        Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom );
+
+        if ( l_circle.contains( e.getX(), e.getY() ) )
+            CInspector.getInstance().set( this );
     }
-
-
-    @Override
-    public int getDeceleration()
-    {
-        return m_deceleration;
-    }
-
 
     @Override
     public Map<String, Object> inspect()
@@ -252,34 +279,6 @@ public class CDefaultCar extends IInspector implements ICar
         }
 
         return l_map;
-    }
-
-
-    /**
-     * returns the icon size
-     *
-     * @param viewer viewer object
-     * @return circle size
-     */
-    private int iconsize( JXMapViewer viewer )
-    {
-        return Math.max( 9 - viewer.getZoom(), 2 );
-    }
-
-
-    @Override
-    public void onClick( MouseEvent e, JXMapViewer viewer )
-    {
-        GeoPosition l_position = this.getGeoposition();
-        if ( l_position == null )
-            return;
-
-        int l_zoom = this.iconsize( viewer );
-        Point2D l_point = viewer.getTileFactory().geoToPixel( l_position, viewer.getZoom() );
-        Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom );
-
-        if ( l_circle.contains( e.getX(), e.getY() ) )
-            CInspector.getInstance().set( this );
     }
 
     @Override
@@ -306,6 +305,8 @@ public class CDefaultCar extends IInspector implements ICar
             graphics2D.setColor( Color.RED );
 
         graphics2D.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
+
+        // draw route (solid for driven way, dashed for driving way)
     }
 
 
@@ -318,23 +319,25 @@ public class CDefaultCar extends IInspector implements ICar
             return;
 
         // if the car reaches the end
-        if ( m_routeindex + this.getCurrentSpeed() >= m_route.size() )
+        int l_speed = this.getCurrentSpeed();
+        if ( m_routeindex + l_speed >= m_route.size() )
         {
-            m_route = null;
-            return;
+            m_endReached = true;
+            l_speed = m_route.size() - m_routeindex - 1;
         }
+
 
         // if the route index equal to zero, set it car on the first item or wait until it is free
         if ( m_routeindex == 0 )
         {
 
-            if ( !m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).isEmpty( m_route.get( this.getCurrentSpeed() ).getRight().intValue() ) )
+            if ( !m_graph.getEdge( m_route.get( l_speed ).getLeft() ).isEmpty( m_route.get( l_speed ).getRight().intValue() ) )
                 return;
 
             try
             {
-                m_graph.getEdge( m_route.get( this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( this.getCurrentSpeed() ).getRight().intValue() );
-                m_routeindex += this.getCurrentSpeed();
+                m_graph.getEdge( m_route.get( l_speed ).getLeft() ).setObject( this, m_route.get( l_speed ).getRight().intValue() );
+                m_routeindex += l_speed;
             }
             catch ( IllegalAccessException l_ex )
             {
@@ -347,8 +350,8 @@ public class CDefaultCar extends IInspector implements ICar
             try
             {
                 m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
-                m_graph.getEdge( m_route.get( m_routeindex + this.getCurrentSpeed() ).getLeft() ).setObject( this, m_route.get( m_routeindex + this.getCurrentSpeed() ).getRight() );
-                m_routeindex += this.getCurrentSpeed();
+                m_graph.getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
+                m_routeindex += l_speed;
             }
             catch ( IllegalAccessException l_ex )
             {

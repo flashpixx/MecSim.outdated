@@ -30,11 +30,16 @@ import de.tu_clausthal.in.winf.simulation.IReturnStepable;
 import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * main simulation thread
  */
 public class CMainLoop implements Runnable
 {
+    private ExecutorService m_pool = Executors.newWorkStealingPool();
+
     private int m_simulationcount = 0;
 
 
@@ -66,14 +71,15 @@ public class CMainLoop implements Runnable
 
             try
             {
+
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                    createTask( m_simulationcount, l_layer, null );
+                    m_pool.submit( createTask( m_simulationcount, l_layer, null ) );
 
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                     if ( l_layer instanceof IMultiLayer )
                     {
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
-                            createTask( m_simulationcount, (IStepable) l_object, l_layer );
+                            m_pool.submit( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
                     }
 
                 m_simulationcount++;

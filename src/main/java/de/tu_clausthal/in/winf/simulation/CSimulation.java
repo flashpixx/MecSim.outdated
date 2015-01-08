@@ -39,6 +39,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * https://today.java.net/article/2011/06/14/method-reducing-contention-and-overhead-worker-queues-multithreaded-java-applications
  * https://www.igvita.com/2012/02/29/work-stealing-and-recursive-partitioning-with-fork-join/
  * http://www.heise.de/developer/artikel/Das-Fork-Join-Framework-in-Java-7-1755690.html
+ * http://www.itcuties.com/java/executorservice/
+ * http://www.javacodegeeks.com/2011/12/using-threadpoolexecutor-to-parallelize.html
+ * http://www.javaworld.com/article/2078809/java-concurrency/java-101-the-next-generation-java-concurrency-without-the-pain-part-1.html?null
  */
 public class CSimulation
 {

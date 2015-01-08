@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.worker;
+package de.tu_clausthal.in.winf.simulation.thread;
 
 import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.ILayer;
@@ -62,7 +62,7 @@ public class CReturnStepable implements Runnable
             Collection<IReturnStepableTarget> l_targets = m_object.getTargets();
             if ( ( l_data != null ) && ( l_targets != null ) )
                 for ( IReturnStepableTarget l_target : l_targets )
-                    l_target.set( l_data );
+                    l_target.push( l_data );
 
 
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )

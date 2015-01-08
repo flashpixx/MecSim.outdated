@@ -102,7 +102,7 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
     public Collection<IReturnStepableTarget<ICar>> getTargets()
     {
         Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
-        l_collection.add( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) );
+        l_collection.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
         return l_collection;
     }
 

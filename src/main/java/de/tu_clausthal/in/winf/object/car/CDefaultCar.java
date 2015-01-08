@@ -95,7 +95,7 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * reference to the graph
      */
-    protected CGraphHopper m_graph = ( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) ).getGraph();
+    protected CGraphHopper m_graph = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).getGraph();
 
 
     /**
@@ -327,7 +327,7 @@ public class CDefaultCar extends IInspector implements ICar
         }
 
 
-        // if the route index equal to zero, set it car on the first item or wait until it is free
+        // if the route index equal to zero, push it car on the first item or wait until it is free
         if ( m_routeindex == 0 )
         {
 

@@ -59,7 +59,7 @@ public class CMain
         CommandLine l_cli = l_parser.parse( l_clioptions, p_args );
 
 
-        // --- process CLI arguments and set configuration -------------------------------------------------------------
+        // --- process CLI arguments and push configuration -------------------------------------------------------------
         if ( l_cli.hasOption( "help" ) )
         {
             HelpFormatter l_formatter = new HelpFormatter();

@@ -55,7 +55,7 @@ public class CBootstrap
     public static void AfterFrameInit( CFrame p_frame )
     {
 
-        CSimulation.getInstance().getWorld().getQueue().add( new CCarCount( p_frame ) );
+        CSimulation.getInstance().getWorld().put( "CarCount", new CCarCount( p_frame ) );
 
     }
 
@@ -68,8 +68,8 @@ public class CBootstrap
     public static void AfterOSMViewerInit( COSMViewer p_viewer )
     {
 
-        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" ) );
-        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) );
+        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Source" ) );
+        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
 
     }
 
@@ -82,8 +82,8 @@ public class CBootstrap
     public static void AfterSimulationInit( CSimulation p_simulation )
     {
 
-        p_simulation.getWorld().getMap().put( "Source", new CSourceFactoryLayer() );
-        p_simulation.getWorld().getMap().put( "Car", new CCarLayer() );
+        p_simulation.getWorld().put( "Source", new CSourceFactoryLayer() );
+        p_simulation.getWorld().put( "Car", new CCarLayer() );
 
     }
 

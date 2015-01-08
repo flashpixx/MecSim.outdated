@@ -23,8 +23,6 @@ package de.tu_clausthal.in.winf.object.source;
 
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 
-import java.util.Map;
-
 
 /**
  * layer with all sources
@@ -32,10 +30,4 @@ import java.util.Map;
 public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
 {
 
-
-    @Override
-    public Map<String, Object> analyse()
-    {
-        return null;
-    }
 }

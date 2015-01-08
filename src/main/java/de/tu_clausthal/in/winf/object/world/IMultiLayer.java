@@ -21,7 +21,6 @@
 
 package de.tu_clausthal.in.winf.object.world;
 
-import de.tu_clausthal.in.winf.simulation.IQueue;
 import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 import de.tu_clausthal.in.winf.ui.COSMViewer;
@@ -30,8 +29,7 @@ import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.util.*;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
 
 
 /**
@@ -39,7 +37,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * offer, poll, peek operates only of the queue
  * add, remove, element operates on the painter and on the queue
  */
-public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, IQueue<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer
+public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, List<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer
 {
 
     /**
@@ -51,13 +49,10 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      */
     protected boolean m_active = true;
     /**
-     * list of unprocessed sources *
+     * list of data items *
      */
-    protected ConcurrentLinkedQueue<T> m_unprocess = new ConcurrentLinkedQueue();
-    /**
-     * list of processed sources *
-     */
-    protected ConcurrentLinkedQueue<T> m_process = new ConcurrentLinkedQueue();
+    protected List<T> m_data = new LinkedList();
+
 
     @Override
     public boolean isActive()
@@ -98,49 +93,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public synchronized boolean add( T t )
-    {
-        boolean l_return = m_process.add( t );
-        COSMViewer.getInstance().repaint();
-
-        return l_return;
-    }
-
-    @Override
-    public boolean offer( T t )
-    {
-        return m_process.offer( t );
-    }
-
-    @Override
-    public synchronized T remove()
-    {
-        T l_item = m_unprocess.remove();
-        COSMViewer.getInstance().repaint();
-
-        return l_item;
-    }
-
-    @Override
-    public T poll()
-    {
-        return m_unprocess.poll();
-    }
-
-    @Override
-    public T element()
-    {
-        return m_unprocess.element();
-    }
-
-    @Override
-    public T peek()
-    {
-        return m_unprocess.peek();
-    }
-
-    @Override
-    public synchronized void step( int p_currentstep, ILayer p_layer )
+    public void step( int p_currentstep, ILayer p_layer )
     {
     }
 
@@ -150,7 +103,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public synchronized void beforeStepObject( int p_currentstep, T p_object )
+    public void beforeStepObject( int p_currentstep, T p_object )
     {
     }
 
@@ -160,66 +113,66 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public synchronized void afterStepObject( int p_currentstep, T p_object )
+    public void afterStepObject( int p_currentstep, T p_object )
     {
     }
 
     @Override
-    public synchronized int size()
+    public int size()
     {
-        return m_process.size() + m_unprocess.size();
+        return m_data.size();
     }
 
     @Override
-    public synchronized boolean isEmpty()
+    public boolean isEmpty()
     {
-        return m_process.isEmpty() && m_unprocess.isEmpty();
+        return m_data.isEmpty();
     }
 
     @Override
-    public synchronized boolean contains( Object o )
+    public boolean contains( Object o )
     {
-        return m_unprocess.contains( o ) || m_process.contains( o );
+        return m_data.contains( o );
     }
 
     @Override
-    public synchronized Iterator<T> iterator()
+    public Iterator<T> iterator()
     {
-        Queue<T> l_data = new LinkedList();
-        l_data.addAll( m_unprocess );
-        l_data.addAll( m_process );
-        return l_data.iterator();
+        return m_data.iterator();
     }
 
     @Override
-    public synchronized Object[] toArray()
+    public Object[] toArray()
     {
-        Queue<T> l_data = new LinkedList();
-        l_data.addAll( m_unprocess );
-        l_data.addAll( m_process );
-        return l_data.toArray();
+        return m_data.toArray();
     }
 
     @Override
-    public synchronized <S> S[] toArray( S[] a )
+    public <S> S[] toArray( S[] a )
     {
-        Queue<T> l_data = new LinkedList();
-        l_data.addAll( m_unprocess );
-        l_data.addAll( m_process );
-        return l_data.toArray( a );
+        return m_data.toArray( a );
     }
 
     @Override
-    public synchronized boolean remove( Object o )
+    public boolean add( T t )
     {
-        return m_process.remove( o ) || m_unprocess.remove( o );
+        boolean l_return = m_data.add( t );
+        COSMViewer.getInstance().repaint();
+
+        return l_return;
     }
 
     @Override
-    public synchronized boolean containsAll( Collection<?> c )
+    public boolean remove( Object o )
+    {
+        return m_data.remove( o );
+    }
+
+    @Override
+    public boolean containsAll( Collection<?> c )
     {
         for ( Object l_item : c )
-            if ( ( !m_unprocess.contains( l_item ) ) && ( !m_process.contains( l_item ) ) )
+            if ( !m_data.contains( l_item ) )
             {
                 COSMViewer.getInstance().repaint();
                 return false;
@@ -232,18 +185,27 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     @Override
     public boolean addAll( Collection<? extends T> c )
     {
-        boolean l_return = m_process.addAll( c );
+        boolean l_return = m_data.addAll( c );
         COSMViewer.getInstance().repaint();
 
         return l_return;
     }
 
     @Override
-    public synchronized boolean removeAll( Collection<?> c )
+    public boolean addAll( int index, Collection<? extends T> c )
+    {
+        boolean l_return = m_data.addAll( index, c );
+        COSMViewer.getInstance().repaint();
+
+        return l_return;
+    }
+
+    @Override
+    public boolean removeAll( Collection<?> c )
     {
         for ( Object l_item : c )
         {
-            if ( ( m_process.remove( l_item ) ) || ( m_unprocess.remove( l_item ) ) )
+            if ( m_data.remove( l_item ) )
                 continue;
             COSMViewer.getInstance().repaint();
             return false;
@@ -256,24 +218,74 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     @Override
     public boolean retainAll( Collection<?> c )
     {
-        return m_process.retainAll( c ) || m_unprocess.retainAll( c );
+        return m_data.retainAll( c );
     }
 
     @Override
-    public synchronized void clear()
+    public void clear()
     {
-        m_unprocess.clear();
-        m_process.clear();
-
+        m_data.clear();
         COSMViewer.getInstance().repaint();
     }
 
     @Override
-    public synchronized void reset()
+    public T get( int index )
     {
-        m_unprocess.addAll( m_process );
-        m_process.clear();
-        COSMViewer.getInstance().repaint();
+        return m_data.get( index );
+    }
+
+    @Override
+    public T set( int index, T element )
+    {
+        return m_data.set( index, element );
+    }
+
+    @Override
+    public void add( int index, T element )
+    {
+        m_data.add( index, element );
+    }
+
+    @Override
+    public T remove( int index )
+    {
+        return m_data.remove( index );
+    }
+
+    @Override
+    public int indexOf( Object o )
+    {
+        return m_data.indexOf( o );
+    }
+
+    @Override
+    public int lastIndexOf( Object o )
+    {
+        return m_data.lastIndexOf( o );
+    }
+
+    @Override
+    public ListIterator<T> listIterator()
+    {
+        return m_data.listIterator();
+    }
+
+    @Override
+    public ListIterator<T> listIterator( int index )
+    {
+        return m_data.listIterator( index );
+    }
+
+    @Override
+    public List<T> subList( int fromIndex, int toIndex )
+    {
+        return m_data.subList( fromIndex, toIndex );
+    }
+
+    @Override
+    public Map<String, Object> analyse()
+    {
+        return null;
     }
 
     @Override

@@ -45,7 +45,7 @@ public class CInspectorModel implements TableModel
      */
     private ArrayList<Object> m_values = new ArrayList();
     /**
-     * set for model listeners *
+     * push for model listeners *
      */
     private Set<TableModelListener> m_listener = new HashSet();
 

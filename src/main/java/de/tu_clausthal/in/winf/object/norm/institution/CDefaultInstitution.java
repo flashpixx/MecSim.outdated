@@ -51,7 +51,7 @@ public class CDefaultInstitution implements IInstitution<INormObject>
      */
     private IInstitutionCollection<INormObject> m_inferior = new CDefaultInstitutionCollection();
     /**
-     * range collection with a disjoint set *
+     * range collection with a disjoint push *
      */
     private IRangeCollection<INormObject> m_range = new CUnionRangeCollection();
     /**

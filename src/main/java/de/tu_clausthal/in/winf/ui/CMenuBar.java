@@ -97,15 +97,15 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         this.add( l_simulation );
 
 
-        String[] l_layer = new String[CSimulation.getInstance().getWorld().getMap().size()];
-        CSimulation.getInstance().getWorld().getMap().keySet().toArray( l_layer );
+        String[] l_layer = new String[CSimulation.getInstance().getWorld().size()];
+        CSimulation.getInstance().getWorld().keySet().toArray( l_layer );
         JMenu l_visibilitylayer = new JMenu( "Layer" );
         l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Activity", l_layer, this, m_reference ) );
         l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", l_layer, this, m_reference ) );
         this.add( l_visibilitylayer );
 
 
-        m_drivingmodelname = ( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) ).getDrivingModelList();
+        m_drivingmodelname = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).getDrivingModelList();
         this.add( CMenuFactory.createRadioMenuGroup( "Driving Model", m_drivingmodelname, this, m_reference ) );
         for ( int i = 0; i < m_drivingmodelname.length; i++ )
             m_drivingmodelname[i] = "Driving Model::" + m_drivingmodelname[i];
@@ -175,25 +175,25 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             if ( e.getSource() == m_reference.get( "Activity::Source" ) )
             {
                 this.throwSimulationRunningException();
-                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get( "Source" );
+                ILayer l_layer = CSimulation.getInstance().getWorld().get( "Source" );
                 l_layer.setActive( !l_layer.isActive() );
             }
             if ( e.getSource() == m_reference.get( "Activity::Car" ) )
             {
                 this.throwSimulationRunningException();
-                ILayer l_layer = CSimulation.getInstance().getWorld().getMap().get( "Car" );
+                ILayer l_layer = CSimulation.getInstance().getWorld().get( "Car" );
                 l_layer.setActive( !l_layer.isActive() );
             }
 
 
             if ( e.getSource() == m_reference.get( "Visibility::Source" ) )
             {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" );
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( "Source" );
                 l_layer.setVisible( !l_layer.isVisible() );
             }
             if ( e.getSource() == m_reference.get( "Visibility::Car" ) )
             {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" );
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( "Car" );
                 l_layer.setVisible( !l_layer.isVisible() );
             }
 
@@ -202,7 +202,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 if ( e.getSource() == m_reference.get( l_model ) )
                 {
                     this.throwSimulationRunningException();
-                    ( (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
+                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
                 }
 
 
@@ -257,7 +257,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             throw new IllegalStateException("institutions are not exist, add an institution first");
 
         String[] l_names = this.getInstitutionList();
-        String l_name = (String) JOptionPane.showInputDialog(null, "set an institution for the norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
+        String l_name = (String) JOptionPane.showInputDialog(null, "push an institution for the norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
         if ((l_name == null) || (l_name.isEmptyCell()))
             return;
 
@@ -416,7 +416,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             throw new IllegalStateException( "simulation is running" );
         }
 
-        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().getMap().get( "car" );
+        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" );
         if ( l_layer != null )
         {
             l_layer.setGraphWeight( p_weight );
@@ -435,7 +435,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
             return;
 
-        CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" );
+        CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Source" );
         ISourceFactory[] l_sources = new ISourceFactory[l_layer.size()];
         l_layer.toArray( l_sources );
 

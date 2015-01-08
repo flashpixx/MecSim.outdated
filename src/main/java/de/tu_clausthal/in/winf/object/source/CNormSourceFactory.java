@@ -38,7 +38,7 @@ public class CNormSourceFactory extends CDefaultSourceFactory
 {
 
     /**
-     * ctor set the position
+     * ctor push the position
      *
      * @param p_position geo position
      */
@@ -49,7 +49,7 @@ public class CNormSourceFactory extends CDefaultSourceFactory
 
 
     /**
-     * ctor set positition and generate number
+     * ctor push positition and generate number
      *
      * @param p_position position
      * @param p_number   number of cars

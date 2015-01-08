@@ -22,15 +22,10 @@
 package de.tu_clausthal.in.winf.simulation;
 
 import de.tu_clausthal.in.winf.CBootstrap;
-import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.CWorld;
-import de.tu_clausthal.in.winf.object.world.ILayer;
-import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -41,6 +36,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * http://www.coderanch.com/t/436108/threads/java/Pause-Resume-Thread
  * http://stackoverflow.com/questions/19894607/java-how-to-stop-thread
  * http://openbook.galileo-press.de/java7/1507_02_002.html#dodtp2e2b7bb6-7815-49a5-bd91-3a52aab74174
+ * https://today.java.net/article/2011/06/14/method-reducing-contention-and-overhead-worker-queues-multithreaded-java-applications
+ * https://www.igvita.com/2012/02/29/work-stealing-and-recursive-partitioning-with-fork-join/
+ * http://www.heise.de/developer/artikel/Das-Fork-Join-Framework-in-Java-7-1755690.html
  */
 public class CSimulation
 {
@@ -112,6 +110,7 @@ public class CSimulation
      */
     public void start()
     {
+        /*
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
@@ -125,6 +124,7 @@ public class CSimulation
         m_pool = Executors.newCachedThreadPool();
         for ( int i = 0; i < m_barrier.getParties(); i++ )
             m_pool.submit( new CWorker( m_barrier, i == 0, m_simulationcount ) );
+            */
     }
 
 
@@ -133,12 +133,14 @@ public class CSimulation
      */
     public void stop()
     {
+        /*
         if ( !this.isRunning() )
             throw new IllegalStateException( "simulation is not running" );
 
         this.shutdown();
         CBootstrap.AfterSimulationStops( this );
         CLogger.info( "simulation is stopped" );
+        */
     }
 
 
@@ -147,13 +149,15 @@ public class CSimulation
      */
     public void reset()
     {
+        /*
         this.shutdown();
 
-        m_simulationcount.set( 0 );
+        m_simulationcount.push( 0 );
         for ( ILayer l_layer : m_world.getQueue() )
             l_layer.resetData();
         CBootstrap.onSimulationReset( this );
         CLogger.info( "simulation reset" );
+        */
     }
 
 
@@ -162,6 +166,7 @@ public class CSimulation
      */
     private void shutdown()
     {
+        /*
         if ( !this.isRunning() )
             return;
 
@@ -175,6 +180,7 @@ public class CSimulation
         {
             CLogger.error( l_exception.getMessage() );
         }
+        */
     }
 
 }

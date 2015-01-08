@@ -19,32 +19,23 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.worker;
+package de.tu_clausthal.in.winf.simulation.thread;
 
 
+import de.tu_clausthal.in.winf.CConfiguration;
 import de.tu_clausthal.in.winf.object.world.ILayer;
+import de.tu_clausthal.in.winf.object.world.IMultiLayer;
+import de.tu_clausthal.in.winf.simulation.CSimulation;
 import de.tu_clausthal.in.winf.simulation.IReturnStepable;
 import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 
-
 /**
- * factory class to create a runnable object
+ * main simulation thread
  */
-public class CFactory
+public class CMainLoop implements Runnable
 {
-
-    /**
-     * returns a runnable object of the stepable input
-     *
-     * @param p_iteration iteration
-     * @param p_object    stepable object
-     * @return runnable object
-     */
-    public static Runnable create( int p_iteration, IStepable p_object )
-    {
-        return create( p_iteration, p_object, null );
-    }
+    private int m_simulationcount = 0;
 
 
     /**
@@ -55,7 +46,7 @@ public class CFactory
      * @param p_layer     layer
      * @return runnable object
      */
-    public static Runnable create( int p_iteration, IStepable p_object, ILayer p_layer )
+    private static Runnable createTask( int p_iteration, IStepable p_object, ILayer p_layer )
     {
         if ( p_object instanceof IVoidStepable )
             return new CVoidStepable( p_iteration, (IVoidStepable) p_object, p_layer );
@@ -64,6 +55,37 @@ public class CFactory
             return new CReturnStepable( p_iteration, (IReturnStepable) p_object, p_layer );
 
         throw new IllegalArgumentException( "stepable object need not be null" );
+    }
+
+
+    @Override
+    public void run()
+    {
+        while ( !Thread.currentThread().isInterrupted() )
+        {
+
+            try
+            {
+                for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+                    createTask( m_simulationcount, l_layer, null );
+
+                for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+                    if ( l_layer instanceof IMultiLayer )
+                    {
+                        for ( Object l_object : ( (IMultiLayer) l_layer ) )
+                            createTask( m_simulationcount, (IStepable) l_object, l_layer );
+                    }
+
+                m_simulationcount++;
+                Thread.sleep( CConfiguration.getInstance().get().ThreadSleepTime );
+            }
+            catch ( InterruptedException e )
+            {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+
     }
 
 }

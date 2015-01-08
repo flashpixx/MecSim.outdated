@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.winf.simulation.worker;
+package de.tu_clausthal.in.winf.simulation.thread;
 
 
 import de.tu_clausthal.in.winf.CLogger;

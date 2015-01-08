@@ -49,7 +49,7 @@ class COSMMouseListener extends MouseAdapter
      */
     private CMenuPopup m_popup = new CMenuPopup();
     /**
-     * rectangle painter to set norm ranges *
+     * rectangle painter to push norm ranges *
      */
     private CRectanglePainter m_rectangle = null;
     /**
@@ -74,7 +74,7 @@ class COSMMouseListener extends MouseAdapter
                 Point2D l_position = new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
                 GeoPosition l_geoposition = l_viewer.getTileFactory().pixelToGeo( l_position, l_viewer.getZoom() );
 
-                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().getMap().get( "Source" ) ).add( new CDefaultSourceFactory( l_geoposition ) );
+                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Source" ) ).add( new CDefaultSourceFactory( l_geoposition ) );
 
 /*
                 boolean l_remove = false;

@@ -44,7 +44,7 @@ public interface IDriveModel
      * @param p_currentstep current step number
      * @param p_graph       graph object
      * @param p_car         car object
-     * @note update is called on each thread, so sometimes it must be synchronized
+     * @warn should be "synchronized" for thread-safty
      */
     public void update( int p_currentstep, CGraphHopper p_graph, ICar p_car );
 

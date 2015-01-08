@@ -30,6 +30,9 @@ import de.tu_clausthal.in.winf.simulation.IReturnStepable;
 import de.tu_clausthal.in.winf.simulation.IStepable;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,6 +42,8 @@ import java.util.concurrent.Executors;
 public class CMainLoop implements Runnable
 {
     private ExecutorService m_pool = Executors.newWorkStealingPool();
+
+    private Collection<Callable<Object>> m_tasks = new LinkedList();
 
     private int m_simulationcount = 0;
 
@@ -51,7 +56,7 @@ public class CMainLoop implements Runnable
      * @param p_layer     layer
      * @return runnable object
      */
-    private static Runnable createTask( int p_iteration, IStepable p_object, ILayer p_layer )
+    private static Callable createTask( int p_iteration, IStepable p_object, ILayer p_layer )
     {
         if ( p_object instanceof IVoidStepable )
             return new CVoidStepable( p_iteration, (IVoidStepable) p_object, p_layer );
@@ -72,14 +77,19 @@ public class CMainLoop implements Runnable
             try
             {
 
+                m_tasks.clear();
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                    m_pool.submit( createTask( m_simulationcount, l_layer, null ) );
+                    m_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+                m_pool.invokeAll( m_tasks );
 
+
+                m_tasks.clear();
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                     if ( l_layer instanceof IMultiLayer )
                     {
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
-                            m_pool.submit( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
+                            m_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
+                        m_pool.invokeAll( m_tasks );
                     }
 
                 m_simulationcount++;
@@ -92,6 +102,12 @@ public class CMainLoop implements Runnable
             }
         }
 
+    }
+
+
+    public void stop()
+    {
+        Thread.currentThread().interrupt();
     }
 
 }

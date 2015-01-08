@@ -34,10 +34,8 @@ import java.util.List;
 
 /**
  * multilayer to create a collection for elements
- * offer, poll, peek operates only of the queue
- * add, remove, element operates on the painter and on the queue
  */
-public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, List<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer
+public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer
 {
 
     /**
@@ -192,15 +190,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public boolean addAll( int index, Collection<? extends T> c )
-    {
-        boolean l_return = m_data.addAll( index, c );
-        COSMViewer.getInstance().repaint();
-
-        return l_return;
-    }
-
-    @Override
     public boolean removeAll( Collection<?> c )
     {
         for ( Object l_item : c )
@@ -228,65 +217,13 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         COSMViewer.getInstance().repaint();
     }
 
-    @Override
-    public T get( int index )
-    {
-        return m_data.get( index );
-    }
-
-    @Override
-    public T set( int index, T element )
-    {
-        return m_data.set( index, element );
-    }
-
-    @Override
-    public void add( int index, T element )
-    {
-        m_data.add( index, element );
-    }
-
-    @Override
-    public T remove( int index )
-    {
-        return m_data.remove( index );
-    }
-
-    @Override
-    public int indexOf( Object o )
-    {
-        return m_data.indexOf( o );
-    }
-
-    @Override
-    public int lastIndexOf( Object o )
-    {
-        return m_data.lastIndexOf( o );
-    }
-
-    @Override
-    public ListIterator<T> listIterator()
-    {
-        return m_data.listIterator();
-    }
-
-    @Override
-    public ListIterator<T> listIterator( int index )
-    {
-        return m_data.listIterator( index );
-    }
-
-    @Override
-    public List<T> subList( int fromIndex, int toIndex )
-    {
-        return m_data.subList( fromIndex, toIndex );
-    }
 
     @Override
     public Map<String, Object> analyse()
     {
         return null;
     }
+
 
     @Override
     public void paint( Graphics2D g, COSMViewer object, int width, int height )

@@ -27,17 +27,36 @@ import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.IVoidStepable;
 
+import java.util.concurrent.Callable;
+
 
 /**
  * class to process a void-stepable item
  */
-public class CVoidStepable implements Runnable
+public class CVoidStepable implements Runnable, Callable<Object>
 {
+
+    /**
+     * layer object *
+     */
     private ILayer m_layer = null;
+    /**
+     * void-stepable object *
+     */
     private IVoidStepable m_object = null;
+    /**
+     * iteration value *
+     */
     private int m_iteration = 0;
 
 
+    /**
+     * ctor
+     *
+     * @param p_iteration current iteration value
+     * @param p_item      void-stepable object
+     * @param p_layer     layer of the object or null
+     */
     public CVoidStepable( int p_iteration, IVoidStepable p_item, ILayer p_layer )
     {
         if ( p_item == null )
@@ -49,8 +68,11 @@ public class CVoidStepable implements Runnable
     }
 
 
-    @Override
-    public void run()
+    /**
+     * run method to perform the action on
+     * runnable and callable interface
+     */
+    private void perform()
     {
         try
         {
@@ -68,5 +90,19 @@ public class CVoidStepable implements Runnable
         {
             CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
         }
+    }
+
+
+    @Override
+    public void run()
+    {
+        this.perform();
+    }
+
+    @Override
+    public Object call() throws Exception
+    {
+        this.perform();
+        return null;
     }
 }

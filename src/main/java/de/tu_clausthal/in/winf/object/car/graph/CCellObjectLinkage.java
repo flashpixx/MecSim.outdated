@@ -32,8 +32,8 @@ import org.apache.commons.math3.exception.NonMonotonicSequenceException;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -54,7 +54,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     /**
      * map with car-2-position in forward direction *
      */
-    protected Map<N, Integer> m_objects = new ConcurrentHashMap();
+    protected Map<N, Integer> m_objects = new HashMap();
     /**
      * array with cells of the forward direction *
      */

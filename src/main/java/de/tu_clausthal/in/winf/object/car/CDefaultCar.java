@@ -271,12 +271,8 @@ public class CDefaultCar extends IInspector implements ICar
         l_map.put( "deceleration", m_deceleration );
         l_map.put( "start position", m_StartPosition );
         l_map.put( "end position", m_EndPosition );
-
-        synchronized ( this )
-        {
-            l_map.put( "street name", m_route.get( m_routeindex ).getLeft().getName() );
-            l_map.put( "current geoposition", this.getGeoposition() );
-        }
+        l_map.put( "street name", m_route.get( m_routeindex ).getLeft().getName() );
+        l_map.put( "current geoposition", this.getGeoposition() );
 
         return l_map;
     }

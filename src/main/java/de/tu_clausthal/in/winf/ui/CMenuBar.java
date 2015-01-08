@@ -84,7 +84,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         String[] l_actions = {"Start", "Stop", null, "Reset", null};
         JMenu l_simulation = CMenuFactory.createMenu( "Simulation", l_actions, this, m_reference );
 
-        JSlider l_simulationspeed = new JSlider( 10, 150 );
+        JSlider l_simulationspeed = new JSlider( 0, 150 );
         l_simulationspeed.addChangeListener( this );
         l_simulationspeed.setValue( l_simulationspeed.getMaximum() - Math.max( l_simulationspeed.getMinimum(), Math.min( l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime ) ) );
         l_simulation.add( l_simulationspeed );

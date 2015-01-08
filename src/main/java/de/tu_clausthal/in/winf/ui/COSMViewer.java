@@ -68,7 +68,7 @@ public class COSMViewer extends JXMapViewer
 
         TileFactoryInfo l_info = new OSMTileFactoryInfo();
         DefaultTileFactory l_tileFactory = new DefaultTileFactory( l_info );
-        l_tileFactory.setThreadPoolSize( CConfiguration.getInstance().get().MaxThreadNumber );
+        l_tileFactory.setThreadPoolSize( Runtime.getRuntime().availableProcessors() );
 
         LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false );
         this.setTileFactory( l_tileFactory );

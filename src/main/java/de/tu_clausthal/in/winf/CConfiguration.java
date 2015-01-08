@@ -148,9 +148,6 @@ public class CConfiguration
 
             m_data = l_tmp;
         }
-
-        // push always static values (GC + Main = 2 Threads)
-        m_data.MaxThreadNumber = Math.max( Runtime.getRuntime().availableProcessors() - 1, 1 );
     }
 
     /**
@@ -197,10 +194,6 @@ public class CConfiguration
          * zoom level of the viewpoint on the start point *
          */
         public int Zoom = 4;
-        /**
-         * number of thread which can run in parallel *
-         */
-        public int MaxThreadNumber = 0;
         /**
          * window width *
          */

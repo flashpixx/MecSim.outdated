@@ -58,8 +58,6 @@ public class CSimulation
     private CMainLoop m_run = null;
 
 
-
-
     /**
      * private ctor *
      */

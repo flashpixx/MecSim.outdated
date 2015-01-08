@@ -226,7 +226,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 
 
     @Override
-    public void paint( Graphics2D g, COSMViewer object, int width, int height )
+    public synchronized void paint( Graphics2D g, COSMViewer object, int width, int height )
     {
         if ( !m_visible )
             return;

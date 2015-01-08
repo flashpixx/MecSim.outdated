@@ -108,7 +108,7 @@ public class CSimulation
         CBootstrap.BeforeSimulationStarts( this );
 
         m_run = new CMainLoop();
-        new Thread( m_run );
+        new Thread( m_run ).start();
 
         /*
         if ( this.isRunning() )

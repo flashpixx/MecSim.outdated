@@ -32,7 +32,7 @@ public interface IReturnStepableTarget<T>
 
     /**
      * sets the data of a return stepable call
-     *
+     * @warn should be "synchronized" for thread-safty
      * @param p_data collection with data
      */
     public void push( Collection<T> p_data );

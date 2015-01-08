@@ -148,7 +148,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     }
 
     @Override
-    public void push( Collection<ICar> p_data )
+    public synchronized void push( Collection<ICar> p_data )
     {
         super.addAll( p_data );
     }

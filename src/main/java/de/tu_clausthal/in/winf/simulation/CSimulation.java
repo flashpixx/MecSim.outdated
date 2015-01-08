@@ -29,19 +29,6 @@ import de.tu_clausthal.in.winf.simulation.thread.CMainLoop;
 
 /**
  * singleton object to run the simulation *
- * http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html
- * http://www.javacodegeeks.com/2013/03/my-custom-thread-worker-executor-in-java.html
- * http://www.coderanch.com/t/436108/threads/java/Pause-Resume-Thread
- * http://stackoverflow.com/questions/19894607/java-how-to-stop-thread
- * http://openbook.galileo-press.de/java7/1507_02_002.html#dodtp2e2b7bb6-7815-49a5-bd91-3a52aab74174
- * https://today.java.net/article/2011/06/14/method-reducing-contention-and-overhead-worker-queues-multithreaded-java-applications
- * https://www.igvita.com/2012/02/29/work-stealing-and-recursive-partitioning-with-fork-join/
- * http://www.heise.de/developer/artikel/Das-Fork-Join-Framework-in-Java-7-1755690.html
- * http://www.itcuties.com/java/executorservice/
- * http://www.javacodegeeks.com/2011/12/using-threadpoolexecutor-to-parallelize.html
- * http://www.javaworld.com/article/2078809/java-concurrency/java-101-the-next-generation-java-concurrency-without-the-pain-part-1.html?null
- * http://technicalmumbojumbo.wordpress.com/2011/05/16/java-util-concurrent-executors-thread-pools-cache-fixed-scheduled-executorcompletionservice-tutorial/
- * http://tutorials.jenkov.com/java-util-concurrent/executorservice.html
  */
 public class CSimulation
 {
@@ -50,6 +37,7 @@ public class CSimulation
      * singleton instance *
      */
     private static CSimulation s_instance = new CSimulation();
+
     /**
      * world of the simulation
      */

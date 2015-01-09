@@ -210,24 +210,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         }
 
         /*
-            if (e.getSource() == m_reference.get("Screenshot"))
-                this.screenshot();
-            if (e.getSource() == m_reference.get("Save Sources"))
-                this.saveSources();
-            if (e.getSource() == m_reference.get("Load Sources"))
-                this.loadSources();
-
-
-            if (e.getSource() == m_reference.get("Default"))
-                this.setGraphWeight("Default");
-            if (e.getSource() == m_reference.get("Speed"))
-                this.setGraphWeight("Speed");
-            if (e.getSource() == m_reference.get("Traffic Jam"))
-                this.setGraphWeight("Traffic Jam");
-            if (e.getSource() == m_reference.get("Speed & Traffic Jam"))
-                this.setGraphWeight("Speed & Traffic Jam");
-
-
             if (e.getSource() == m_reference.get("Create Institution"))
                 this.createInstitution();
             if (e.getSource() == m_reference.get("Delete Institution"))
@@ -454,10 +436,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * loads the list of sources
      *
      * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
      */
-    @SuppressWarnings(value = "unchecked")
     private void load() throws IOException
     {
         File l_load = this.openFileLoadDialog( new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );

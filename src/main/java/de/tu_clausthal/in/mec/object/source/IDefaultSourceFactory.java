@@ -34,6 +34,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -117,4 +120,32 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
         g.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
     }
 
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+        m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
+        this.setImage();
+    }
+
+
+    /**
+     * write call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException
+     */
+    private void writeObject( ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
+        p_stream.writeDouble( m_position.getLatitude() );
+        p_stream.writeDouble( m_position.getLongitude() );
+    }
 }

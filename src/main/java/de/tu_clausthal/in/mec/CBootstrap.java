@@ -48,15 +48,33 @@ public class CBootstrap
 
 
     /**
+     * is called before UI Elements are initialize
+     *
+     * @param p_frame frame
+     */
+    public static void BeforeFrameElementsInit( CFrame p_frame )
+    {
+
+    }
+
+    /**
+     * is called after UI Elements are initialize
+     *
+     * @param p_frame frame
+     */
+    public static void AfterFrameElementsInit( CFrame p_frame )
+    {
+
+    }
+
+    /**
      * is called after the frame is initialize
      *
      * @param p_frame frame
      */
     public static void AfterFrameInit( CFrame p_frame )
     {
-
         CSimulation.getInstance().getWorld().put( "CarCount", new CCarCount( p_frame ) );
-
     }
 
 

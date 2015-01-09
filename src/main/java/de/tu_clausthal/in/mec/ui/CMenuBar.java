@@ -65,6 +65,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * menu names of driving models
      */
     private String[] m_drivingmodelname = null;
+    /**
+     * visible layer names
+     */
+    private String[] m_visiblelayer = null;
+    /**
+     * active layer names
+     */
+    private String[] m_activelayer = null;
 
 
     /**
@@ -94,11 +102,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         this.add( l_simulation );
 
 
-        String[] l_layer = new String[CSimulation.getInstance().getWorld().size()];
-        CSimulation.getInstance().getWorld().keySet().toArray( l_layer );
+        m_activelayer = new String[CSimulation.getInstance().getWorld().size()];
+        CSimulation.getInstance().getWorld().keySet().toArray( m_activelayer );
+
+
+
         JMenu l_visibilitylayer = new JMenu( "Layer" );
-        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Activity", l_layer, this, m_reference ) );
-        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", l_layer, this, m_reference ) );
+        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Activity", m_activelayer, this, m_reference ) );
+        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", m_activelayer, this, m_reference ) );
         this.add( l_visibilitylayer );
 
 
@@ -150,6 +161,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
+
         try
         {
 
@@ -169,32 +181,26 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 CSimulation.getInstance().reset();
 
 
-            if ( e.getSource() == m_reference.get( "Activity::Source" ) )
-            {
-                this.throwSimulationRunningException();
-                ILayer l_layer = CSimulation.getInstance().getWorld().get( "Source" );
-                l_layer.setActive( !l_layer.isActive() );
-            }
-            if ( e.getSource() == m_reference.get( "Activity::Car" ) )
-            {
-                this.throwSimulationRunningException();
-                ILayer l_layer = CSimulation.getInstance().getWorld().get( "Car" );
-                l_layer.setActive( !l_layer.isActive() );
-            }
+            // layer action / visibility
+            for ( String l_layername : m_activelayer )
+                if ( e.getSource() == m_reference.get( "Activity::" + l_layername ) )
+                {
+                    this.throwSimulationRunningException();
+                    ILayer l_layer = CSimulation.getInstance().getWorld().get( l_layername );
+                    l_layer.setActive( !l_layer.isActive() );
+                    break;
+                }
+
+            for ( String l_layername : m_visiblelayer )
+                if ( e.getSource() == m_reference.get( "Visibility::" + l_layername ) )
+                {
+                    IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_layername );
+                    l_layer.setVisible( !l_layer.isVisible() );
+                    break;
+                }
 
 
-            if ( e.getSource() == m_reference.get( "Visibility::Source" ) )
-            {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( "Source" );
-                l_layer.setVisible( !l_layer.isVisible() );
-            }
-            if ( e.getSource() == m_reference.get( "Visibility::Car" ) )
-            {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( "Car" );
-                l_layer.setVisible( !l_layer.isVisible() );
-            }
-
-
+            // driving models
             for ( String l_model : m_drivingmodelname )
                 if ( e.getSource() == m_reference.get( l_model ) )
                 {

@@ -92,8 +92,6 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
         for ( int i = 0; i < m_NumberCarsInStep; i++ )
             l_sources.add( new CDefaultCar( m_position ) );
 
-        //m_NumberCarsInStep = 0;
-
         return l_sources;
     }
 

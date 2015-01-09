@@ -53,10 +53,7 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
-
         this.setLayout( new BorderLayout() );
-        this.setJMenuBar( new CMenuBar() );
-
 
         this.setSize( CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight );
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -77,9 +74,13 @@ public class CFrame extends JFrame
         } );
 
         this.add( m_control.getContentArea() );
+        CBootstrap.AfterFrameInit( this );
+
+        CBootstrap.BeforeFrameElementsInit( this );
+        this.setJMenuBar( new CMenuBar() );
         this.createDockable( "Inspector", CInspector.getInstance(), false, CLocation.base().normalEast( 0.2 ) );
         this.createDockable( "OSM", new JScrollPane( COSMViewer.getInstance() ), false, CLocation.base().normalWest( 0.8 ) );
-        CBootstrap.AfterFrameInit( this );
+        CBootstrap.AfterFrameElementsInit( this );
     }
 
 

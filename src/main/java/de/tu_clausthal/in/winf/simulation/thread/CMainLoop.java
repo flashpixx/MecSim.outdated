@@ -104,13 +104,14 @@ public class CMainLoop implements Runnable
                 // if thread is not paused perform objects
                 m_tasks.clear();
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                    m_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+                    if ( l_layer.isActive() )
+                        m_tasks.add( createTask( m_simulationcount, l_layer, null ) );
                 m_pool.invokeAll( m_tasks );
 
 
                 m_tasks.clear();
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                    if ( l_layer instanceof IMultiLayer )
+                    if ( ( l_layer.isActive() ) && ( l_layer instanceof IMultiLayer ) )
                     {
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
                             m_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );

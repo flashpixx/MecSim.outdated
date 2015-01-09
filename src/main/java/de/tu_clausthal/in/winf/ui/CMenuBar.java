@@ -33,13 +33,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -51,10 +49,6 @@ import java.util.Map;
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
 
-    /**
-     * file chooser dialog
-     */
-    private final JFileChooser m_filedialog = new JFileChooser();
     /**
      * current directory for file dialogs *
      */
@@ -80,7 +74,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         super();
 
-        String[] l_file = {"Load", "Save", null, "OSM Screenshot"};
+        String[] l_file = {"Load", "Save", null, "Screenshot"};
         this.add( CMenuFactory.createMenu( "File", l_file, this, m_reference ) );
 
 
@@ -159,7 +153,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         try
         {
 
-            if ( e.getSource() == m_reference.get( "File::OSM Screenshot" ) )
+            if ( e.getSource() == m_reference.get( "File::Screenshot" ) )
                 this.screenshot();
             if ( e.getSource() == m_reference.get( "File::Load" ) )
                 this.load();
@@ -435,7 +429,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void save() throws IOException
     {
-        File l_store = this.openFileSaveDialog();
+        File l_store = this.openFileSaveDialog( new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
         if ( l_store == null )
             return;
 
@@ -464,22 +458,25 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @throws IllegalAccessException
      */
     @SuppressWarnings(value = "unchecked")
-    private void load() throws IOException, ClassNotFoundException, IllegalAccessException
+    private void load() throws IOException
     {
-        /*
-        if (m_filedialog.showOpenDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
+        File l_load = this.openFileLoadDialog( new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
+        if ( l_load == null )
             return;
 
-        FileInputStream l_stream = new FileInputStream(m_filedialog.getSelectedFile());
-        ObjectInputStream l_input = new ObjectInputStream(l_stream);
-        Object l_data = l_input.readObject();
-        l_input.close();
-        l_stream.close();
-
-        if (l_data instanceof Set)
-            for (CSerializableGeoPosition l_item : (Set<CSerializableGeoPosition>) l_data)
-                CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_item.getObject()));
-                */
+        try
+        {
+            FileInputStream l_stream = new FileInputStream( l_load );
+            ObjectInputStream l_input = new ObjectInputStream( l_stream );
+            CSimulation l_instance = (CSimulation) l_input.readObject();
+            l_input.close();
+            l_stream.close();
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+            throw new IOException( "error on serialization process" );
+        }
     }
 
 
@@ -493,7 +490,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         BufferedImage l_image = new BufferedImage( COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB );
         COSMViewer.getInstance().paint( l_image.getGraphics() );
 
-        File l_store = this.openFileSaveDialog();
+        File l_store = this.openFileSaveDialog( new String[][]{{".png", "Portable Network Graphics (PNG)"}} );
         if ( l_store == null )
             return;
 
@@ -506,14 +503,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @return File or null
      */
-    private File openFileSaveDialog()
+    private File openFileSaveDialog( String[][] p_fileextensions )
     {
-        m_filedialog.setCurrentDirectory( m_filepath );
-        if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+        JFileChooser l_filedialog = this.initFileDialog( p_fileextensions );
+        if ( l_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
             return null;
-        m_filepath = m_filedialog.getCurrentDirectory();
+        m_filepath = l_filedialog.getCurrentDirectory();
 
-        return m_filedialog.getSelectedFile();
+        return l_filedialog.getSelectedFile();
     }
 
 
@@ -522,16 +519,34 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @return File or null
      */
-    private File openFileLoadDialog()
+    private File openFileLoadDialog( String[][] p_fileextensions )
     {
-        m_filedialog.setCurrentDirectory( m_filepath );
-        if ( m_filedialog.showOpenDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+        JFileChooser l_filedialog = this.initFileDialog( p_fileextensions );
+        if ( l_filedialog.showOpenDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
             return null;
-        m_filepath = m_filedialog.getCurrentDirectory();
+        m_filepath = l_filedialog.getCurrentDirectory();
 
-        return m_filedialog.getSelectedFile();
+        return l_filedialog.getSelectedFile();
     }
 
+    /**
+     * creates file dialog with extension list
+     *
+     * @param p_fileextensions arra with extension and description
+     * @return filechooser
+     */
+    private JFileChooser initFileDialog( String[][] p_fileextensions )
+    {
+        JFileChooser l_filedialog = new JFileChooser();
+        l_filedialog.setCurrentDirectory( m_filepath );
+        if ( p_fileextensions != null )
+        {
+            l_filedialog.setAcceptAllFileFilterUsed( false );
+            for ( String[] l_item : p_fileextensions )
+                l_filedialog.addChoosableFileFilter( l_item.length == 1 ? new UIFileFilter( l_item[0] ) : new UIFileFilter( l_item[0], l_item[1] ) );
+        }
+        return l_filedialog;
+    }
 
     /**
      * adds a file extension if necessary
@@ -546,6 +561,59 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( !l_file.getAbsolutePath().endsWith( p_suffix ) )
             l_file = new File( l_file + p_suffix );
         return l_file;
+    }
+
+
+    /**
+     * file filter class to create a filter list *
+     */
+    private class UIFileFilter extends FileFilter
+    {
+        /**
+         * type description *
+         */
+        private String m_description = "";
+        /**
+         * extension *
+         */
+        private String m_extension = "";
+
+        /**
+         * ctor
+         *
+         * @param p_extension extension
+         */
+        public UIFileFilter( String p_extension )
+        {
+            m_extension = p_extension;
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_extension   extension
+         * @param p_description description
+         */
+        public UIFileFilter( String p_extension, String p_description )
+        {
+            m_extension = p_extension;
+            m_description = p_description;
+
+        }
+
+        @Override
+        public boolean accept( File p_file )
+        {
+            if ( p_file.isDirectory() )
+                return true;
+            return ( p_file.getName().toLowerCase().endsWith( m_extension ) );
+        }
+
+        @Override
+        public String getDescription()
+        {
+            return m_description;
+        }
     }
 
 }

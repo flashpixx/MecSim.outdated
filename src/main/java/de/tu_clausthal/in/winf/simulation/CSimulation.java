@@ -133,4 +133,15 @@ public class CSimulation implements Serializable
     }
 
 
+    /**
+     * redefined call to de-/serialize the singleton correctly
+     *
+     * @return object instance
+     * @overload
+     */
+    private Object readResolve()
+    {
+        return s_instance;
+    }
+
 }

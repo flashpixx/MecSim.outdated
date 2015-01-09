@@ -95,6 +95,7 @@ public class CMain
 
 
         // --- invoke UI -----------------------------------------------------------------------------------------------
+        // @todo UI disable
         SwingUtilities.invokeLater( new Runnable()
         {
             public void run()

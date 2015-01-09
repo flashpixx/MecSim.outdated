@@ -4,7 +4,7 @@
 
 ## Requirements
 
-* [Java 1.7](http://www.java.com)
+* [Java 1.8](http://www.java.com)
 * [Maven](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/)
 
@@ -30,7 +30,6 @@ Das Programm legt im Userverzeichnis ein Unterverzeichnis ```.mecsim``` an, in d
        "longitude":10.249385833740234
    },
    "Zoom" : 7,
-   "MaxThreadNumber" : 5,
    "WindowWidth" : 2310,
    "WindowHeight" : 1414,
    "CellSampling" : 2,
@@ -45,11 +44,7 @@ Das Programm legt im Userverzeichnis ein Unterverzeichnis ```.mecsim``` an, in d
 * _CellSampling_ setzt die Größe (in Meter) einer Zelle
 * _RountingMap_ setzt die Karte, mit der gearbeitet werden soll (siehe "Datenimport")
 * _RoutingAlgorithm_ legt den Routing-Algorithmus, der verwendet werden soll (siehe interne Dokumentation)
-
-Folgende Elemente sind innerhalb der Konfiguration abgelegt, werden aber beim Start des Programms automatisch gesetzt:
-
-* _MaxThreadNumber_ Anzahl der Threads, die von der Simulation benutzt werden
-* _ThreadSleepTime_ Zeit (in Millisekunden), die die Threads während der Berechnung pausieren
+* _ThreadSleepTime_ Zeit (in Millisekunden), die die Threads während der Berechnung pausieren (kann durch die GUI verändert werden)
 
 ### Datenimport
 

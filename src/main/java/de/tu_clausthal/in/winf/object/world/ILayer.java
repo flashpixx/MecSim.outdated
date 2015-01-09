@@ -23,11 +23,13 @@ package de.tu_clausthal.in.winf.object.world;
 
 import de.tu_clausthal.in.winf.simulation.IStepable;
 
+import java.io.Serializable;
+
 
 /**
  * interface of the layer
  */
-public interface ILayer extends IStepable
+public interface ILayer extends IStepable, Serializable
 {
 
     /**

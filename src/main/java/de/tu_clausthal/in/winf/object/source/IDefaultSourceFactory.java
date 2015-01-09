@@ -47,11 +47,11 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
     /**
      * position of the source within the map *
      */
-    protected GeoPosition m_position = null;
+    protected transient GeoPosition m_position = null;
     /**
      * image of the waypoint *
      */
-    protected BufferedImage m_image = null;
+    protected transient BufferedImage m_image = null;
     /**
      * waypoint color *
      */

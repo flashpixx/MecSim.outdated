@@ -52,6 +52,7 @@ public class CMain
         l_clioptions.addOption( "help", false, "shows this help" );
         l_clioptions.addOption( "configuration", true, "configuration directory" );
         l_clioptions.addOption( "graph", true, "OSM graph URL (see configuration file description of option 'RoutingMap')" );
+        l_clioptions.addOption( "nogui", true, "disables the GUI and loads the stored file for simulating')" );
         l_clioptions.addOption( "loglevel", true, "level of the logger" );
         l_clioptions.addOption( "logfile", true, "logfile (default: mecsim-<startup datetime>.txt)" );
 
@@ -59,7 +60,7 @@ public class CMain
         CommandLine l_cli = l_parser.parse( l_clioptions, p_args );
 
 
-        // --- process CLI arguments and push configuration -------------------------------------------------------------
+        // --- process CLI arguments and push configuration ------------------------------------------------------------
         if ( l_cli.hasOption( "help" ) )
         {
             HelpFormatter l_formatter = new HelpFormatter();
@@ -94,17 +95,21 @@ public class CMain
         CBootstrap.ConfigIsLoaded( CConfiguration.getInstance() );
 
 
-        // --- invoke UI -----------------------------------------------------------------------------------------------
-        // @todo UI disable
-        SwingUtilities.invokeLater( new Runnable()
+        // --- invoke UI or start simulation ---------------------------------------------------------------------------
+        if ( l_cli.hasOption( "nogui" ) )
         {
-            public void run()
+
+        }
+        else
+            SwingUtilities.invokeLater( new Runnable()
             {
-                CFrame l_frame = new CFrame();
-                l_frame.setTitle( "TU-Clausthal Wirtschaftsinformatik - MecSim" );
-                l_frame.setVisible( true );
-            }
-        } );
+                public void run()
+                {
+                    CFrame l_frame = new CFrame();
+                    l_frame.setTitle( "TU-Clausthal Wirtschaftsinformatik - MecSim" );
+                    l_frame.setVisible( true );
+                }
+            } );
     }
 
 }

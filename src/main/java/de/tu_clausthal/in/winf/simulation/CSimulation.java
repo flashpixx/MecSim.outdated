@@ -26,11 +26,13 @@ import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.world.CWorld;
 import de.tu_clausthal.in.winf.simulation.thread.CMainLoop;
 
+import java.io.Serializable;
+
 
 /**
  * singleton object to run the simulation *
  */
-public class CSimulation
+public class CSimulation implements Serializable
 {
 
     /**
@@ -46,7 +48,7 @@ public class CSimulation
     /**
      * main loop *
      */
-    private CMainLoop m_mainloop = new CMainLoop();
+    private transient CMainLoop m_mainloop = new CMainLoop();
 
 
     /**

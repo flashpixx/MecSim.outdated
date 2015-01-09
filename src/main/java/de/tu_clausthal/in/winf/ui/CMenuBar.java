@@ -22,11 +22,10 @@
 package de.tu_clausthal.in.winf.ui;
 
 import de.tu_clausthal.in.winf.CConfiguration;
+import de.tu_clausthal.in.winf.CLogger;
 import de.tu_clausthal.in.winf.object.car.CCarLayer;
 import de.tu_clausthal.in.winf.object.norm.INormObject;
 import de.tu_clausthal.in.winf.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.winf.object.source.CSourceFactoryLayer;
-import de.tu_clausthal.in.winf.object.source.ISourceFactory;
 import de.tu_clausthal.in.winf.object.world.ILayer;
 import de.tu_clausthal.in.winf.simulation.CSimulation;
 
@@ -57,6 +56,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private final JFileChooser m_filedialog = new JFileChooser();
     /**
+     * current directory for file dialogs *
+     */
+    private File m_filepath = new File( System.getProperty( "user.dir" ) );
+    /**
      * map with object for action listener
      */
     private Map<String, Object> m_reference = new HashMap();
@@ -77,7 +80,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         super();
 
-        String[] l_file = {"Load Sources", "Save Sources", null, "OSM Screenshot"};
+        String[] l_file = {"Load", "Save", null, "OSM Screenshot"};
         this.add( CMenuFactory.createMenu( "File", l_file, this, m_reference ) );
 
 
@@ -158,10 +161,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
             if ( e.getSource() == m_reference.get( "File::OSM Screenshot" ) )
                 this.screenshot();
-            if ( e.getSource() == m_reference.get( "File::Load Sources" ) )
-                this.loadSources();
-            if ( e.getSource() == m_reference.get( "File::Save Sources" ) )
-                this.saveSources();
+            if ( e.getSource() == m_reference.get( "File::Load" ) )
+                this.load();
+            if ( e.getSource() == m_reference.get( "File::Save" ) )
+                this.save();
 
 
             if ( e.getSource() == m_reference.get( "Simulation::Start" ) )
@@ -430,20 +433,25 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @throws java.io.IOException
      */
-    private void saveSources() throws IOException
+    private void save() throws IOException
     {
-        if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+        File l_store = this.openFileSaveDialog();
+        if ( l_store == null )
             return;
 
-        CSourceFactoryLayer l_layer = (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Source" );
-        ISourceFactory[] l_sources = new ISourceFactory[l_layer.size()];
-        l_layer.toArray( l_sources );
-
-        FileOutputStream l_stream = new FileOutputStream( this.addFileExtension( m_filedialog.getSelectedFile(), ".src" ) );
-        ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
-        l_output.writeObject( l_sources );
-        l_output.close();
-        l_stream.close();
+        try
+        {
+            FileOutputStream l_stream = new FileOutputStream( this.addFileExtension( l_store, ".mecsim" ) );
+            ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
+            l_output.writeObject( CSimulation.getInstance() );
+            l_output.close();
+            l_stream.close();
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+            throw new IOException( "error on serialization process" );
+        }
 
     }
 
@@ -456,7 +464,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * @throws IllegalAccessException
      */
     @SuppressWarnings(value = "unchecked")
-    private void loadSources() throws IOException, ClassNotFoundException, IllegalAccessException
+    private void load() throws IOException, ClassNotFoundException, IllegalAccessException
     {
         /*
         if (m_filedialog.showOpenDialog(COSMViewer.getInstance()) != JFileChooser.APPROVE_OPTION)
@@ -485,10 +493,43 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         BufferedImage l_image = new BufferedImage( COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB );
         COSMViewer.getInstance().paint( l_image.getGraphics() );
 
-        if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+        File l_store = this.openFileSaveDialog();
+        if ( l_store == null )
             return;
 
-        ImageIO.write( l_image, "png", this.addFileExtension( m_filedialog.getSelectedFile(), ".png" ) );
+        ImageIO.write( l_image, "png", this.addFileExtension( l_store, ".png" ) );
+    }
+
+
+    /**
+     * creates a filesave dialog, which stores the current path
+     *
+     * @return File or null
+     */
+    private File openFileSaveDialog()
+    {
+        m_filedialog.setCurrentDirectory( m_filepath );
+        if ( m_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+            return null;
+        m_filepath = m_filedialog.getCurrentDirectory();
+
+        return m_filedialog.getSelectedFile();
+    }
+
+
+    /**
+     * creates a fileload dialog, which stores the current path
+     *
+     * @return File or null
+     */
+    private File openFileLoadDialog()
+    {
+        m_filedialog.setCurrentDirectory( m_filepath );
+        if ( m_filedialog.showOpenDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+            return null;
+        m_filepath = m_filedialog.getCurrentDirectory();
+
+        return m_filedialog.getSelectedFile();
     }
 
 

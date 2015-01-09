@@ -29,6 +29,8 @@ import de.tu_clausthal.in.winf.object.world.IMultiLayer;
 import de.tu_clausthal.in.winf.simulation.IReturnStepableTarget;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -41,17 +43,23 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     /**
      * driving model list
      */
-    private IDriveModel[] m_drivemodellist = {new CNagelSchreckenberg()};
+    protected transient IDriveModel[] m_drivemodellist = {new CNagelSchreckenberg()};
     /**
      * driving model
      */
-    private IDriveModel m_drivemodel = m_drivemodellist[0];
+    protected IDriveModel m_drivemodel = m_drivemodellist[0];
 
     /**
      * graph *
      */
-    private CGraphHopper m_graph = new CGraphHopper();
+    protected transient CGraphHopper m_graph = new CGraphHopper();
 
+    /**
+     * data structure - not serializable
+     *
+     * @Overload
+     */
+    protected transient List<ICar> m_data = new LinkedList();
 
     /**
      * returns the graph of the layer
@@ -152,4 +160,5 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     {
         super.addAll( p_data );
     }
+
 }

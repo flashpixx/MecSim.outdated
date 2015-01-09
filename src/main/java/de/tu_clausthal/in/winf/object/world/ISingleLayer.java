@@ -27,6 +27,9 @@ import de.tu_clausthal.in.winf.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 
@@ -89,5 +92,33 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     @Override
     public void paint( Graphics2D graphics2D, COSMViewer object, int i, int i2 )
     {
+    }
+
+    /**
+     * write object of serializable interface,
+     * write everything except the data
+     *
+     * @param p_stream output stream
+     * @throws java.io.IOException
+     */
+    protected void writeObject( ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.writeBoolean( m_active );
+        p_stream.writeBoolean( m_visible );
+    }
+
+
+    /**
+     * read object data from the input stream -
+     * serializable interface
+     *
+     * @param p_stream input stream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    protected void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        m_active = p_stream.readBoolean();
+        m_visible = p_stream.readBoolean();
     }
 }

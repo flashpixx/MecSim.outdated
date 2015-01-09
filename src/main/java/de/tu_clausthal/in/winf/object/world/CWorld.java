@@ -23,6 +23,7 @@ package de.tu_clausthal.in.winf.object.world;
 
 import de.tu_clausthal.in.winf.CBootstrap;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,13 +33,13 @@ import java.util.Set;
 /**
  * world layer collection
  */
-public class CWorld implements Map<String, ILayer>
+public class CWorld implements Map<String, ILayer>, Serializable
 {
 
     /**
      * map with layer *
      */
-    protected Map m_layer = new HashMap();
+    protected Map<String, ILayer> m_layer = new HashMap();
 
     /**
      * ctor

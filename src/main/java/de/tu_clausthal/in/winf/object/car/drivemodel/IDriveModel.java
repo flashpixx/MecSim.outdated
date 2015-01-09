@@ -24,11 +24,13 @@ package de.tu_clausthal.in.winf.object.car.drivemodel;
 import de.tu_clausthal.in.winf.object.car.ICar;
 import de.tu_clausthal.in.winf.object.car.graph.CGraphHopper;
 
+import java.io.Serializable;
+
 
 /**
  * drive interface for driving models *
  */
-public interface IDriveModel
+public interface IDriveModel extends Serializable
 {
 
     /**

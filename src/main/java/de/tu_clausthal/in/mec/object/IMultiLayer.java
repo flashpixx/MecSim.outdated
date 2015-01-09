@@ -29,7 +29,8 @@ import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -49,7 +50,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     /**
      * list of data items *
      */
-    protected List<T> m_data = new LinkedList();
+    protected Queue<T> m_data = new ConcurrentLinkedQueue();
 
 
     @Override

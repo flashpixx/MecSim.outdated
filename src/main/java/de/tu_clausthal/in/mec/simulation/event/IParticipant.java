@@ -21,6 +21,7 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
+import de.tu_clausthal.in.mec.object.IDataLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
@@ -49,7 +50,7 @@ public abstract class IParticipant
      */
     protected IParticipant()
     {
-        if ( this instanceof ILayer )
+        if ( ( this instanceof IDataLayer ) || ( this instanceof ILayer ) )
             throw new IllegalStateException( "event handler cannot register for a layer" );
         CSimulation.getInstance().getEventManager().register( this );
     }
@@ -60,7 +61,7 @@ public abstract class IParticipant
      *
      * @return name
      */
-    protected String getName()
+    public String getEventName()
     {
         return m_eventname;
     }
@@ -70,7 +71,7 @@ public abstract class IParticipant
      *
      * @return ID
      */
-    protected UUID getID()
+    public UUID getEventID()
     {
         return m_eventid;
     }

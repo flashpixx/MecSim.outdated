@@ -28,7 +28,7 @@ import java.util.Map;
 
 
 /**
- * global object of the simulation with mouse event handler
+ * global interface of the simulation with mouse event handler
  */
 public abstract class IInspector extends IUIListener
 {

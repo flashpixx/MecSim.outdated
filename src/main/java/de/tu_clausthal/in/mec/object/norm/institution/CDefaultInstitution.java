@@ -22,9 +22,7 @@
 package de.tu_clausthal.in.mec.object.norm.institution;
 
 import de.tu_clausthal.in.mec.object.norm.*;
-import de.tu_clausthal.in.mec.object.norm.range.CUnionRangeCollection;
-import de.tu_clausthal.in.mec.object.norm.range.IRange;
-import de.tu_clausthal.in.mec.object.norm.range.IRangeCollection;
+import de.tu_clausthal.in.mec.object.norm.range.*;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 
 import java.awt.*;

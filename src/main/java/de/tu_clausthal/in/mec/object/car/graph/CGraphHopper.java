@@ -21,22 +21,15 @@
 
 package de.tu_clausthal.in.mec.object.car.graph;
 
-import com.graphhopper.GHRequest;
-import com.graphhopper.GHResponse;
-import com.graphhopper.GraphHopper;
+import com.graphhopper.*;
 import com.graphhopper.routing.Path;
-import com.graphhopper.routing.util.EdgeFilter;
-import com.graphhopper.routing.util.EncodingManager;
-import com.graphhopper.routing.util.FlagEncoder;
-import com.graphhopper.routing.util.Weighting;
+import com.graphhopper.routing.util.*;
 import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUpTrafficJam;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
+import de.tu_clausthal.in.mec.object.car.graph.weights.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -46,9 +39,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 

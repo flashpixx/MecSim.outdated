@@ -19,103 +19,76 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.world;
+package de.tu_clausthal.in.mec.simulation.event;
 
-import de.tu_clausthal.in.mec.CBootstrap;
+
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 
-import java.io.Serializable;
 import java.util.*;
-
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * world layer collection
+ * eventmanager class
  */
-public class CWorld implements Map<String, ILayer>, Serializable
+public class CManager implements IVoidStepable
 {
 
     /**
-     * map with layer *
+     * list of messages *
      */
-    protected Map<String, ILayer> m_layer = new HashMap();
+    private Map<IParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
+
 
     /**
-     * ctor
+     * register a new participant
+     *
+     * @param p_receiver participant
      */
-    public CWorld()
+    public void register( IParticipant p_receiver )
     {
-        CBootstrap.AfterWorldInit( this );
+        m_data.put( p_receiver, Collections.synchronizedSet( new HashSet() ) );
     }
 
-    @Override
-    public int size()
+
+    /**
+     * unregister a participant
+     *
+     * @param p_receiver participant
+     */
+    public void unregister( IParticipant p_receiver )
     {
-        return m_layer.size();
+        m_data.remove( p_receiver );
     }
 
-    @Override
-    public boolean isEmpty()
+
+    /**
+     * pushs a message to the queue
+     *
+     * @param p_receiver receiver of the message
+     * @param p_message  message
+     */
+    public void pushMessage( IParticipant p_receiver, IMessage p_message )
     {
-        return m_layer.isEmpty();
+        Set<IMessage> l_messages = m_data.get( p_receiver );
+        l_messages.add( p_message );
     }
 
-    @Override
-    public boolean containsKey( Object key )
-    {
-        return m_layer.containsKey( key );
-    }
 
     @Override
-    public boolean containsValue( Object value )
+    public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        return m_layer.containsValue( value );
+        for ( Map.Entry<IParticipant, Set<IMessage>> l_item : m_data.entrySet() )
+        {
+            l_item.getKey().receiveMessage( l_item.getValue() );
+            l_item.getValue().clear();
+        }
     }
 
-    @Override
-    public ILayer get( Object key )
-    {
-        return m_layer.get( key );
-    }
 
     @Override
-    public ILayer put( String key, ILayer value )
+    public Map<String, Object> analyse()
     {
-        return m_layer.put( key, value );
-    }
-
-    @Override
-    public ILayer remove( Object key )
-    {
-        return m_layer.remove( key );
-    }
-
-    @Override
-    public void putAll( Map<? extends String, ? extends ILayer> m )
-    {
-        m_layer.putAll( m );
-    }
-
-    @Override
-    public void clear()
-    {
-        m_layer.clear();
-    }
-
-    @Override
-    public Set<String> keySet()
-    {
-        return m_layer.keySet();
-    }
-
-    @Override
-    public Collection<ILayer> values()
-    {
-        return m_layer.values();
-    }
-
-    @Override
-    public Set<Entry<String, ILayer>> entrySet()
-    {
-        return m_layer.entrySet();
+        return null;
     }
 }

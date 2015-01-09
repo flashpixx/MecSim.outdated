@@ -26,16 +26,11 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.IReturnStepable;
-import de.tu_clausthal.in.mec.simulation.IStepable;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.*;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * main simulation thread
@@ -103,6 +98,7 @@ public class CMainLoop implements Runnable
 
                 // if thread is not paused perform objects
                 m_tasks.clear();
+                m_tasks.add( new CVoidStepable( 0, CSimulation.getInstance().getEventManager(), null ) );
                 for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                     if ( l_layer.isActive() )
                         m_tasks.add( createTask( m_simulationcount, l_layer, null ) );

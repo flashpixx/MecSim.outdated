@@ -19,103 +19,63 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.world;
+package de.tu_clausthal.in.mec.simulation.event;
 
-import de.tu_clausthal.in.mec.CBootstrap;
-import de.tu_clausthal.in.mec.object.ILayer;
 
-import java.io.Serializable;
-import java.util.*;
-
+import java.util.UUID;
 
 /**
- * world layer collection
+ * default event message
  */
-public class CWorld implements Map<String, ILayer>, Serializable
+public class CDefaultMessage<T> implements IMessage<T>
 {
+    protected UUID m_id = UUID.randomUUID();
+    protected String m_name = m_id.toString();
+    protected T m_data = null;
+    protected IParticipant m_source = null;
 
-    /**
-     * map with layer *
-     */
-    protected Map<String, ILayer> m_layer = new HashMap();
 
-    /**
-     * ctor
-     */
-    public CWorld()
+    public CDefaultMessage( IParticipant p_source, T p_data )
     {
-        CBootstrap.AfterWorldInit( this );
+        if ( p_source == null )
+            throw new IllegalArgumentException( "source need not to be null" );
+
+        m_data = p_data;
+        m_source = p_source;
+    }
+
+    public CDefaultMessage( IParticipant p_source, String p_name, T p_data )
+    {
+        if ( p_source == null )
+            throw new IllegalArgumentException( "source need not to be null" );
+
+        m_data = p_data;
+        m_source = p_source;
+        m_name = p_name;
+    }
+
+
+    @Override
+    public T getData()
+    {
+        return m_data;
     }
 
     @Override
-    public int size()
+    public UUID getID()
     {
-        return m_layer.size();
+        return m_id;
     }
 
     @Override
-    public boolean isEmpty()
+    public String getName()
     {
-        return m_layer.isEmpty();
+        return m_name;
     }
 
     @Override
-    public boolean containsKey( Object key )
+    public IParticipant getSource()
     {
-        return m_layer.containsKey( key );
-    }
-
-    @Override
-    public boolean containsValue( Object value )
-    {
-        return m_layer.containsValue( value );
-    }
-
-    @Override
-    public ILayer get( Object key )
-    {
-        return m_layer.get( key );
-    }
-
-    @Override
-    public ILayer put( String key, ILayer value )
-    {
-        return m_layer.put( key, value );
-    }
-
-    @Override
-    public ILayer remove( Object key )
-    {
-        return m_layer.remove( key );
-    }
-
-    @Override
-    public void putAll( Map<? extends String, ? extends ILayer> m )
-    {
-        m_layer.putAll( m );
-    }
-
-    @Override
-    public void clear()
-    {
-        m_layer.clear();
-    }
-
-    @Override
-    public Set<String> keySet()
-    {
-        return m_layer.keySet();
-    }
-
-    @Override
-    public Collection<ILayer> values()
-    {
-        return m_layer.values();
-    }
-
-    @Override
-    public Set<Entry<String, ILayer>> entrySet()
-    {
-        return m_layer.entrySet();
+        return m_source;
     }
 }

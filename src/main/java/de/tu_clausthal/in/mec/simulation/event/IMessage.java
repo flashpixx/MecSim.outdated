@@ -19,103 +19,44 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.world;
-
-import de.tu_clausthal.in.mec.CBootstrap;
-import de.tu_clausthal.in.mec.object.ILayer;
+package de.tu_clausthal.in.mec.simulation.event;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.UUID;
 
 
 /**
- * world layer collection
+ * message interface to define a message
  */
-public class CWorld implements Map<String, ILayer>, Serializable
+public interface IMessage<T> extends Serializable
 {
 
     /**
-     * map with layer *
+     * the data of the message
+     *
+     * @return data
      */
-    protected Map<String, ILayer> m_layer = new HashMap();
+    T getData();
 
     /**
-     * ctor
+     * the unique ID of the message
+     *
+     * @return UUID
      */
-    public CWorld()
-    {
-        CBootstrap.AfterWorldInit( this );
-    }
+    UUID getID();
 
-    @Override
-    public int size()
-    {
-        return m_layer.size();
-    }
+    /**
+     * a name if the message
+     *
+     * @return name
+     */
+    String getName();
 
-    @Override
-    public boolean isEmpty()
-    {
-        return m_layer.isEmpty();
-    }
 
-    @Override
-    public boolean containsKey( Object key )
-    {
-        return m_layer.containsKey( key );
-    }
+    /**
+     * returns the source of the message *
+     */
+    IParticipant getSource();
 
-    @Override
-    public boolean containsValue( Object value )
-    {
-        return m_layer.containsValue( value );
-    }
 
-    @Override
-    public ILayer get( Object key )
-    {
-        return m_layer.get( key );
-    }
-
-    @Override
-    public ILayer put( String key, ILayer value )
-    {
-        return m_layer.put( key, value );
-    }
-
-    @Override
-    public ILayer remove( Object key )
-    {
-        return m_layer.remove( key );
-    }
-
-    @Override
-    public void putAll( Map<? extends String, ? extends ILayer> m )
-    {
-        m_layer.putAll( m );
-    }
-
-    @Override
-    public void clear()
-    {
-        m_layer.clear();
-    }
-
-    @Override
-    public Set<String> keySet()
-    {
-        return m_layer.keySet();
-    }
-
-    @Override
-    public Collection<ILayer> values()
-    {
-        return m_layer.values();
-    }
-
-    @Override
-    public Set<Entry<String, ILayer>> entrySet()
-    {
-        return m_layer.entrySet();
-    }
 }

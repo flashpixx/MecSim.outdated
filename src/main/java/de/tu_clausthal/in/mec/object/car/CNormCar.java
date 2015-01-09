@@ -21,9 +21,7 @@
 
 package de.tu_clausthal.in.mec.object.car;
 
-import de.tu_clausthal.in.mec.object.norm.INorm;
-import de.tu_clausthal.in.mec.object.norm.INormCheckResult;
-import de.tu_clausthal.in.mec.object.norm.INormObject;
+import de.tu_clausthal.in.mec.object.norm.*;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import org.jxmapviewer.viewer.GeoPosition;
 

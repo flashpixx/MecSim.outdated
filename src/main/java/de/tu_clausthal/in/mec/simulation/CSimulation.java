@@ -24,6 +24,7 @@ package de.tu_clausthal.in.mec.simulation;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.world.CWorld;
+import de.tu_clausthal.in.mec.simulation.event.CManager;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
 
 import java.io.Serializable;
@@ -49,6 +50,11 @@ public class CSimulation implements Serializable
      * main loop *
      */
     private transient CMainLoop m_mainloop = new CMainLoop();
+
+    /**
+     * event manager *
+     */
+    private transient CManager m_eventmanager = new CManager();
 
 
     /**
@@ -88,6 +94,14 @@ public class CSimulation implements Serializable
     public CWorld getWorld()
     {
         return m_world;
+    }
+
+    /**
+     * returns event manager *
+     */
+    public CManager getEventManager()
+    {
+        return m_eventmanager;
     }
 
 

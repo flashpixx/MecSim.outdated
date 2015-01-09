@@ -135,7 +135,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>de.tu_clausthal.in.winf.CMain</mainClass>
+                                    <mainClass>de.tu_clausthal.in.mec.CMain</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>

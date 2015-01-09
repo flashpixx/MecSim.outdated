@@ -19,38 +19,22 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.world;
+package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.IStepable;
-
-import java.io.Serializable;
+import java.util.Map;
 
 
 /**
- * interface of the layer
+ * data layer definition, to calculate any data
  */
-public interface ILayer extends IStepable, Serializable
+public interface IDataLayer
 {
 
     /**
-     * checks activity of the layer
+     * returns data of a layer
      *
-     * @return boolean of activity
+     * @return map with data of the layer
      */
-    public boolean isActive();
-
-
-    /**
-     * activates / deactivates the layer
-     *
-     * @param p_active activity
-     */
-    public void setActive( boolean p_active );
-
-
-    /**
-     * resets the data of the layer *
-     */
-    public void resetData();
+    public Map<String, Object> getData();
 
 }

@@ -21,11 +21,11 @@
 
 package de.tu_clausthal.in.mec.object.car;
 
+import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CCellObjectLinkage;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
-import de.tu_clausthal.in.mec.object.world.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
 
 import java.util.Collection;

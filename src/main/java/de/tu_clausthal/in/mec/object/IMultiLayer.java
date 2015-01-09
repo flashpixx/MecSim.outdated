@@ -19,7 +19,7 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.world;
+package de.tu_clausthal.in.mec.object;
 
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;

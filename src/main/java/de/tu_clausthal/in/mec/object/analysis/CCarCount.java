@@ -21,9 +21,9 @@
 
 package de.tu_clausthal.in.mec.object.analysis;
 
+import de.tu_clausthal.in.mec.object.IEvaluateLayer;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.world.ILayer;
-import de.tu_clausthal.in.mec.object.world.ISingleLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import org.jfree.chart.ChartFactory;
@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * car count statistic
  */
-public class CCarCount extends ISingleLayer
+public class CCarCount extends IEvaluateLayer
 {
 
     /**

@@ -21,9 +21,9 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.world.ILayer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;

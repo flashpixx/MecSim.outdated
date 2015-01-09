@@ -23,10 +23,10 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.mec.object.world.ILayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
 import javax.imageio.ImageIO;
@@ -38,6 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -104,12 +105,16 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         m_activelayer = new String[CSimulation.getInstance().getWorld().size()];
         CSimulation.getInstance().getWorld().keySet().toArray( m_activelayer );
-
-
+        ArrayList<String> l_visablelayer = new ArrayList();
+        for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
+            if ( l_item.getValue() instanceof IViewableLayer )
+                l_visablelayer.add( l_item.getKey() );
+        m_visiblelayer = new String[l_visablelayer.size()];
+        l_visablelayer.toArray( m_visiblelayer );
 
         JMenu l_visibilitylayer = new JMenu( "Layer" );
         l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Activity", m_activelayer, this, m_reference ) );
-        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", m_activelayer, this, m_reference ) );
+        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", m_visiblelayer, this, m_reference ) );
         this.add( l_visibilitylayer );
 
 

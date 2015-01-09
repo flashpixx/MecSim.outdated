@@ -24,8 +24,8 @@ package de.tu_clausthal.in.mec.simulation.thread;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.world.ILayer;
-import de.tu_clausthal.in.mec.object.world.IMultiLayer;
+import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnStepable;
 import de.tu_clausthal.in.mec.simulation.IStepable;

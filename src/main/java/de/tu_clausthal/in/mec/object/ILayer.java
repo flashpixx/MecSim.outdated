@@ -19,15 +19,38 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.simulation.IStepable;
+
+import java.io.Serializable;
 
 
 /**
- * layer with all sources
+ * interface of the layer
  */
-public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
+public interface ILayer extends IStepable, Serializable
 {
+
+    /**
+     * checks activity of the layer
+     *
+     * @return boolean of activity
+     */
+    public boolean isActive();
+
+
+    /**
+     * activates / deactivates the layer
+     *
+     * @param p_active activity
+     */
+    public void setActive( boolean p_active );
+
+
+    /**
+     * resets the data of the layer *
+     */
+    public void resetData();
 
 }

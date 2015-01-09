@@ -22,8 +22,8 @@
 package de.tu_clausthal.in.mec.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
-import de.tu_clausthal.in.mec.object.world.ILayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;

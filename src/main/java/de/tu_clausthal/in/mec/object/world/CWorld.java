@@ -22,6 +22,7 @@
 package de.tu_clausthal.in.mec.object.world;
 
 import de.tu_clausthal.in.mec.CBootstrap;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 import java.io.Serializable;
 import java.util.Collection;

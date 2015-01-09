@@ -19,22 +19,50 @@
  ######################################################################################
  **/
 
-package de.tu_clausthal.in.mec.object.world;
+package de.tu_clausthal.in.mec.object;
+
+import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 
 import java.util.Map;
 
 
 /**
- * data layer definition, to calculate any data
+ * layer for any calculation without visibility
  */
-public interface IDataLayer
+public abstract class IEvaluateLayer implements IDataLayer, ILayer, IVoidStepable
 {
 
     /**
-     * returns data of a layer
-     *
-     * @return map with data of the layer
+     * flag for activity *
      */
-    public Map<String, Object> getData();
+    protected boolean m_active = true;
+
+    @Override
+    public boolean isActive()
+    {
+        return m_active;
+    }
+
+    @Override
+    public void setActive( boolean p_active )
+    {
+        m_active = p_active;
+    }
+
+    @Override
+    public void resetData()
+    {
+    }
+
+    @Override
+    public void step( int p_currentstep, ILayer p_layer )
+    {
+    }
+
+    @Override
+    public Map<String, Object> getData()
+    {
+        return null;
+    }
 
 }

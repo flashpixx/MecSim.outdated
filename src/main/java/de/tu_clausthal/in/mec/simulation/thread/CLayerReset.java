@@ -22,7 +22,7 @@
 package de.tu_clausthal.in.mec.simulation.thread;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.world.ILayer;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 
 /**

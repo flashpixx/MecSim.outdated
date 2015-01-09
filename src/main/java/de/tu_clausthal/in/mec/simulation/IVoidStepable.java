@@ -21,7 +21,7 @@
 
 package de.tu_clausthal.in.mec.simulation;
 
-import de.tu_clausthal.in.mec.object.world.ILayer;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 
 /**

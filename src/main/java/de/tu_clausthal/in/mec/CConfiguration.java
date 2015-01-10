@@ -48,7 +48,7 @@ public class CConfiguration
     /**
      * directory of the configuration file *
      */
-    private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".tucwinf" );
+    private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
 
     /**
      * private Ctor to avoid manual instantiation *

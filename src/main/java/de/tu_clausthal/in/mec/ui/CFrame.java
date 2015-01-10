@@ -30,6 +30,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -43,6 +45,10 @@ public class CFrame extends JFrame
      * control of the dock component *
      */
     private CControl m_control = new CControl( this );
+    /**
+     * config file of the dockables *
+     */
+    private File m_configfile = new File( CConfiguration.getInstance().getConfigDir() + "/" + "ui.xml" );
 
 
     /**
@@ -61,12 +67,21 @@ public class CFrame extends JFrame
             @Override
             public void windowClosing( WindowEvent l_event )
             {
+                try
+                {
+                    m_control.writeXML( m_configfile );
+                }
+                catch ( IOException l_execption )
+                {
+                }
+
                 CConfiguration.getInstance().get().ViewPoint = COSMViewer.getInstance().getCenterPosition();
                 CConfiguration.getInstance().get().Zoom = COSMViewer.getInstance().getZoom();
                 CConfiguration.getInstance().get().WindowHeight = l_event.getWindow().getHeight();
                 CConfiguration.getInstance().get().WindowWidth = l_event.getWindow().getWidth();
                 CConfiguration.getInstance().write();
                 l_event.getWindow().dispose();
+
                 m_control.destroy();
             }
         } );
@@ -78,6 +93,15 @@ public class CFrame extends JFrame
         this.setJMenuBar( new CMenuBar() );
         this.createDockable( "Inspector", CInspector.getInstance(), false, CLocation.base().normalEast( 0.2 ) );
         this.createDockable( "OSM", new JScrollPane( COSMViewer.getInstance() ), false, CLocation.base().normalWest( 0.8 ) );
+
+        try
+        {
+            m_control.readXML( m_configfile );
+        }
+        catch ( IOException l_execption )
+        {
+        }
+
         CBootstrap.AfterFrameElementsInit( this );
     }
 

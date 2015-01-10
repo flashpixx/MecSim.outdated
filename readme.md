@@ -1,4 +1,4 @@
-# MecSIM - Traffic Simulation
+# MecSim - Traffic Simulation
 
 ![Screenshot](screen.png)
 

@@ -27,7 +27,7 @@ import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.event.CManager;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
 
-import java.io.Serializable;
+import java.io.*;
 
 
 /**
@@ -147,15 +147,27 @@ public class CSimulation implements Serializable
     }
 
 
-    /**
-     * redefined call to de-/serialize the singleton correctly
+    /** stores the simulation in an output stream
      *
-     * @return object instance
-     * @overload
+     * @param p_stream output stream
+     * @throws IOException
      */
-    private Object readResolve()
+    public void store( ObjectOutputStream p_stream ) throws IOException
     {
-        return s_instance;
+        p_stream.writeObject( this );
+    }
+
+
+    /**
+     * loads the simulation from an input stream
+     *
+     * @param p_stream input stream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void load( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        s_instance = (CSimulation) p_stream.readObject();
     }
 
 }

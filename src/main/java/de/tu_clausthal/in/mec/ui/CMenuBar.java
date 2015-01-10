@@ -427,7 +427,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             FileOutputStream l_stream = new FileOutputStream( this.addFileExtension( l_store, ".mecsim" ) );
             ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
-            l_output.writeObject( CSimulation.getInstance() );
+            CSimulation.getInstance().store( l_output );
             l_output.close();
             l_stream.close();
         }
@@ -455,7 +455,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             FileInputStream l_stream = new FileInputStream( l_load );
             ObjectInputStream l_input = new ObjectInputStream( l_stream );
-            CSimulation l_instance = (CSimulation) l_input.readObject();
+            CSimulation.getInstance().load( l_input );
             l_input.close();
             l_stream.close();
         }

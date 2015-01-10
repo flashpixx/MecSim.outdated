@@ -82,11 +82,11 @@ public class CMain
 
 
         // read the configuration directory (default ~/.mecsim)
-        File l_config = CConfiguration.getInstance().getConfigDir();
+        File l_defaultconfig = CConfiguration.getInstance().getConfigDir();
         if ( l_cli.hasOption( "configuration" ) )
-            l_config = new File( l_cli.getOptionValue( "configuration" ) );
+            l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
 
-        CConfiguration.getInstance().setConfigDir( l_config );
+        CConfiguration.getInstance().setConfigDir( l_defaultconfig );
         CConfiguration.getInstance().read();
 
         if ( l_cli.hasOption( "graph" ) )

@@ -1,4 +1,5 @@
 /**
+ @cond
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
@@ -17,16 +18,17 @@
  # You should have received a copy of the GNU General Public License                  #
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
+ @endcond
  **/
 
 package de.tu_clausthal.in.mec.simulation.event;
-
 
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * eventmanager class

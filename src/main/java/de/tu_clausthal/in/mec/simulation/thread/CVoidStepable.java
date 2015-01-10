@@ -1,4 +1,5 @@
 /**
+ @cond
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
@@ -17,10 +18,10 @@
  # You should have received a copy of the GNU General Public License                  #
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
+ @endcond
  **/
 
 package de.tu_clausthal.in.mec.simulation.thread;
-
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;

@@ -1,4 +1,5 @@
 /**
+ @cond
  ######################################################################################
  # GPL License                                                                        #
  #                                                                                    #
@@ -17,6 +18,7 @@
  # You should have received a copy of the GNU General Public License                  #
  # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
  ######################################################################################
+ @endcond
  **/
 
 package de.tu_clausthal.in.mec.simulation.thread;
@@ -28,6 +30,7 @@ import de.tu_clausthal.in.mec.simulation.IReturnStepable;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
 
 import java.util.Collection;
+
 
 /**
  * wrapper class to process a return-stepable item

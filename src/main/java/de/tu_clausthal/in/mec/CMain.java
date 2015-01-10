@@ -82,7 +82,7 @@ public class CMain
 
 
         // read the configuration directory (default ~/.mecsim)
-        File l_config = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
+        File l_config = CConfiguration.getInstance().getConfigDir();
         if ( l_cli.hasOption( "configuration" ) )
             l_config = new File( l_cli.getOptionValue( "configuration" ) );
 

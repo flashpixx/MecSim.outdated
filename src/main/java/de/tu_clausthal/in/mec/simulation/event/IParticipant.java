@@ -21,60 +21,27 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
-import de.tu_clausthal.in.mec.object.IDataLayer;
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-
-import java.util.Set;
 import java.util.UUID;
 
-
 /**
- * participant for message system
+ * interface of a participant
  */
-public abstract class IParticipant
+public interface IParticipant
 {
-
-    /**
-     * defines the event UUID *
-     */
-    protected UUID m_eventid = UUID.randomUUID();
-    /**
-     * defines the event name *
-     */
-    protected String m_eventname = m_eventid.toString();
-
-
-    /**
-     * ctor to register the object on the event messager
-     */
-    protected IParticipant()
-    {
-        if ( ( this instanceof IDataLayer ) || ( this instanceof ILayer ) )
-            throw new IllegalStateException( "event handler cannot register for a layer" );
-        CSimulation.getInstance().getEventManager().register( this );
-    }
-
 
     /**
      * get the unique name of the participant
      *
      * @return name
      */
-    public String getEventName()
-    {
-        return m_eventname;
-    }
+    public String getEventName();
 
     /**
      * get an unique ID of the participant
      *
      * @return ID
      */
-    public UUID getEventID()
-    {
-        return m_eventid;
-    }
+    public UUID getEventID();
 
     /**
      * creates a message
@@ -84,10 +51,7 @@ public abstract class IParticipant
      * @param <T>    data type
      * @return message object
      */
-    protected <T> IMessage<T> createMessage( String p_name, T p_data )
-    {
-        return new CDefaultMessage( this, p_name, p_data );
-    }
+    public <T> IMessage<T> createMessage( String p_name, T p_data );
 
 
     /**
@@ -97,10 +61,7 @@ public abstract class IParticipant
      * @param <T>    data type
      * @return message object
      */
-    protected <T> IMessage<T> createMessage( T p_data )
-    {
-        return new CDefaultMessage( this, p_data );
-    }
+    public <T> IMessage<T> createMessage( T p_data );
 
     /**
      * sends a message
@@ -108,18 +69,6 @@ public abstract class IParticipant
      * @param p_receiver receiver of the message
      * @param p_message  input message
      */
-    protected void sendMessage( IParticipant p_receiver, IMessage p_message )
-    {
-        CSimulation.getInstance().getEventManager().pushMessage( p_receiver, p_message );
-    }
+    public void sendMessage( CParticipant p_receiver, IMessage p_message );
 
-
-    /**
-     * receives all messages, each message is unique
-     *
-     * @param p_messages set of messages
-     */
-    protected void receiveMessage( Set<IMessage> p_messages )
-    {
-    }
 }

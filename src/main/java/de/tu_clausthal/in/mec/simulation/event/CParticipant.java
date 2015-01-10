@@ -21,74 +21,95 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
-
+import de.tu_clausthal.in.mec.object.IDataLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
+import java.util.UUID;
+
 
 /**
- * eventmanager class
+ * participant of the event message system
  */
-public class CManager implements IVoidStepable
+public class CParticipant implements IParticipant, IMessageReceiver
 {
 
     /**
-     * list of messages *
+     * defines the event UUID *
      */
-    private Map<CParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
+    protected UUID m_eventid = UUID.randomUUID();
+    /**
+     * defines the event name *
+     */
+    protected String m_eventname = m_eventid.toString();
+    /**
+     * receiver object *
+     */
+    protected IMessageReceiver m_receiver = null;
 
 
     /**
-     * register a new participant
-     *
-     * @param p_receiver participant
+     * ctor to register the object on the event messager
      */
-    public void register( CParticipant p_receiver )
+    public CParticipant( IMessageReceiver p_receiver )
     {
-        m_data.put( p_receiver, Collections.synchronizedSet( new HashSet() ) );
+        if ( ( this instanceof IDataLayer ) || ( this instanceof ILayer ) )
+            throw new IllegalStateException( "event handler cannot register for a layer" );
+
+        m_receiver = p_receiver;
+        CSimulation.getInstance().getEventManager().register( this );
     }
 
 
     /**
-     * unregister a participant
+     * get the unique name of the participant
      *
-     * @param p_receiver participant
+     * @return name
      */
-    public void unregister( CParticipant p_receiver )
+    public String getEventName()
     {
-        m_data.remove( p_receiver );
+        return m_eventname;
     }
 
-
     /**
-     * pushs a message to the queue
+     * get an unique ID of the participant
      *
-     * @param p_receiver receiver of the message
-     * @param p_message  message
+     * @return ID
      */
-    public void pushMessage( CParticipant p_receiver, IMessage p_message )
+    public UUID getEventID()
     {
-        Set<IMessage> l_messages = m_data.get( p_receiver );
-        l_messages.add( p_message );
+        return m_eventid;
+    }
+
+    @Override
+    public <N> IMessage<N> createMessage( String p_name, N p_data )
+    {
+        return new CMessage( this, p_name, p_data );
     }
 
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    public <N> IMessage createMessage( N p_data )
     {
-        for ( Map.Entry<CParticipant, Set<IMessage>> l_item : m_data.entrySet() )
-        {
-            l_item.getKey().receiveMessage( l_item.getValue() );
-            l_item.getValue().clear();
-        }
+        return new CMessage( this, p_data );
     }
 
 
     @Override
-    public Map<String, Object> analyse()
+    public void sendMessage( CParticipant p_receiver, IMessage p_message )
     {
-        return null;
+        CSimulation.getInstance().getEventManager().pushMessage( p_receiver, p_message );
     }
+
+
+    @Override
+    public void receiveMessage( Set<IMessage> p_messages )
+    {
+        if ( m_receiver == null )
+            return;
+        m_receiver.receiveMessage( p_messages );
+    }
+
+
 }

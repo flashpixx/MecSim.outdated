@@ -22,73 +22,72 @@
 package de.tu_clausthal.in.mec.simulation.event;
 
 
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
 
 /**
- * eventmanager class
+ * default event message
  */
-public class CManager implements IVoidStepable
+public class CMessage<T> implements IMessage<T>
 {
-
     /**
-     * list of messages *
+     * UUID of the message *
      */
-    private Map<CParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
-
-
+    protected UUID m_id = UUID.randomUUID();
     /**
-     * register a new participant
-     *
-     * @param p_receiver participant
+     * name of the message *
      */
-    public void register( CParticipant p_receiver )
+    protected String m_name = m_id.toString();
+    /**
+     * data of the message *
+     */
+    protected T m_data = null;
+    /**
+     * source of the message *
+     */
+    protected IParticipant m_source = null;
+
+
+    public CMessage( IParticipant p_source, T p_data )
     {
-        m_data.put( p_receiver, Collections.synchronizedSet( new HashSet() ) );
+        if ( p_source == null )
+            throw new IllegalArgumentException( "source need not to be null" );
+
+        m_data = p_data;
+        m_source = p_source;
     }
 
-
-    /**
-     * unregister a participant
-     *
-     * @param p_receiver participant
-     */
-    public void unregister( CParticipant p_receiver )
+    public CMessage( IParticipant p_source, String p_name, T p_data )
     {
-        m_data.remove( p_receiver );
-    }
+        if ( p_source == null )
+            throw new IllegalArgumentException( "source need not to be null" );
 
-
-    /**
-     * pushs a message to the queue
-     *
-     * @param p_receiver receiver of the message
-     * @param p_message  message
-     */
-    public void pushMessage( CParticipant p_receiver, IMessage p_message )
-    {
-        Set<IMessage> l_messages = m_data.get( p_receiver );
-        l_messages.add( p_message );
+        m_data = p_data;
+        m_source = p_source;
+        m_name = p_name;
     }
 
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    public T getData()
     {
-        for ( Map.Entry<CParticipant, Set<IMessage>> l_item : m_data.entrySet() )
-        {
-            l_item.getKey().receiveMessage( l_item.getValue() );
-            l_item.getValue().clear();
-        }
+        return m_data;
     }
 
+    @Override
+    public UUID getID()
+    {
+        return m_id;
+    }
 
     @Override
-    public Map<String, Object> analyse()
+    public String getName()
     {
-        return null;
+        return m_name;
+    }
+
+    @Override
+    public IParticipant getSource()
+    {
+        return m_source;
     }
 }

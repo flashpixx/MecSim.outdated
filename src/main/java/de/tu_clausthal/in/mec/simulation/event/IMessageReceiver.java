@@ -22,60 +22,19 @@
 package de.tu_clausthal.in.mec.simulation.event;
 
 
-import java.util.UUID;
+import java.util.Set;
 
 /**
- * default event message
+ * message receiver
  */
-public class CDefaultMessage<T> implements IMessage<T>
+public interface IMessageReceiver
 {
-    protected UUID m_id = UUID.randomUUID();
-    protected String m_name = m_id.toString();
-    protected T m_data = null;
-    protected IParticipant m_source = null;
 
+    /**
+     * receives all messages, each message is unique
+     *
+     * @param p_messages set of messages
+     */
+    public void receiveMessage( Set<IMessage> p_messages );
 
-    public CDefaultMessage( IParticipant p_source, T p_data )
-    {
-        if ( p_source == null )
-            throw new IllegalArgumentException( "source need not to be null" );
-
-        m_data = p_data;
-        m_source = p_source;
-    }
-
-    public CDefaultMessage( IParticipant p_source, String p_name, T p_data )
-    {
-        if ( p_source == null )
-            throw new IllegalArgumentException( "source need not to be null" );
-
-        m_data = p_data;
-        m_source = p_source;
-        m_name = p_name;
-    }
-
-
-    @Override
-    public T getData()
-    {
-        return m_data;
-    }
-
-    @Override
-    public UUID getID()
-    {
-        return m_id;
-    }
-
-    @Override
-    public String getName()
-    {
-        return m_name;
-    }
-
-    @Override
-    public IParticipant getSource()
-    {
-        return m_source;
-    }
 }

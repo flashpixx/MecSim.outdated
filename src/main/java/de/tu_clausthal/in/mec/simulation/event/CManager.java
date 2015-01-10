@@ -37,7 +37,7 @@ public class CManager implements IVoidStepable
     /**
      * list of messages *
      */
-    private Map<CParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
+    private Map<IParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
 
 
     /**
@@ -45,7 +45,7 @@ public class CManager implements IVoidStepable
      *
      * @param p_receiver participant
      */
-    public void register( CParticipant p_receiver )
+    public void register( IParticipant p_receiver )
     {
         m_data.put( p_receiver, Collections.synchronizedSet( new HashSet() ) );
     }
@@ -56,7 +56,7 @@ public class CManager implements IVoidStepable
      *
      * @param p_receiver participant
      */
-    public void unregister( CParticipant p_receiver )
+    public void unregister( IParticipant p_receiver )
     {
         m_data.remove( p_receiver );
     }
@@ -68,17 +68,28 @@ public class CManager implements IVoidStepable
      * @param p_receiver receiver of the message
      * @param p_message  message
      */
-    public void pushMessage( CParticipant p_receiver, IMessage p_message )
+    public void pushMessage( IParticipant p_receiver, IMessage p_message )
     {
         Set<IMessage> l_messages = m_data.get( p_receiver );
         l_messages.add( p_message );
     }
 
 
+    /**
+     * returns a set of all current participants
+     *
+     * @return participant set
+     */
+    public Set<IParticipant> getParticipants()
+    {
+        return m_data.keySet();
+    }
+
+
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        for ( Map.Entry<CParticipant, Set<IMessage>> l_item : m_data.entrySet() )
+        for ( Map.Entry<IParticipant, Set<IMessage>> l_item : m_data.entrySet() )
         {
             l_item.getKey().receiveMessage( l_item.getValue() );
             l_item.getValue().clear();

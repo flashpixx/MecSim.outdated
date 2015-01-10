@@ -147,7 +147,8 @@ public class CSimulation implements Serializable
     }
 
 
-    /** stores the simulation in an output stream
+    /**
+     * stores the simulation in an output stream
      *
      * @param p_stream output stream
      * @throws IOException

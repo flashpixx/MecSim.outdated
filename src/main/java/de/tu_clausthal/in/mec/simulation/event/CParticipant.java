@@ -32,7 +32,7 @@ import java.util.UUID;
 /**
  * participant of the event message system
  */
-public class CParticipant implements IParticipant, IMessageReceiver
+public class CParticipant implements IParticipant
 {
 
     /**

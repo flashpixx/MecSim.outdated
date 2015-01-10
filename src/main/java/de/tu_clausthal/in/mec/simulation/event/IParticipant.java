@@ -26,7 +26,7 @@ import java.util.UUID;
 /**
  * interface of a participant
  */
-public interface IParticipant
+public interface IParticipant extends IMessageReceiver
 {
 
     /**

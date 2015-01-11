@@ -174,14 +174,21 @@ public class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
-        CBootstrap.BeforeSimulationIsLoaded( this );
+        // @todo
+        // remove all bindings between objects and UI
+        // and detect connection between layers
+
 
         m_eventmanager.clear();
         m_world.clear();
         m_world = (CWorld) p_stream.readObject();
         this.reset();
 
-        CBootstrap.AfterSimulationIsLoaded( this );
+        // @todo
+        // recreate all bindings between new objects and UI
+        // and reconstruct layer connections
+
+
         CLogger.info( "simulation is loaded" );
     }
 

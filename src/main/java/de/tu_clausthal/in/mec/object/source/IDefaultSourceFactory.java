@@ -44,7 +44,7 @@ import java.util.HashSet;
 /**
  * class with default source implementation
  */
-abstract public class IDefaultSourceFactory implements ISourceFactory
+abstract public class IDefaultSourceFactory implements ISourceFactory, Serializable
 {
 
     /**
@@ -145,4 +145,5 @@ abstract public class IDefaultSourceFactory implements ISourceFactory
         p_stream.writeDouble( m_position.getLatitude() );
         p_stream.writeDouble( m_position.getLongitude() );
     }
+
 }

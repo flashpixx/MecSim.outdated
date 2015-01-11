@@ -208,6 +208,14 @@ public class CLogger
 
     /**
      * adds a output message
+     */
+    public static void out()
+    {
+        out( null );
+    }
+
+    /**
+     * adds a output message
      *
      * @param p_data log data
      */
@@ -216,7 +224,7 @@ public class CLogger
         if ( s_level == Level.OFF )
             System.out.println( p_data );
         else
-            Logger.info( createLogData( Level.INFO, p_data )  );
+            Logger.info( createLogData( Level.INFO, p_data ) );
     }
 
 

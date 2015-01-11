@@ -1405,3 +1405,8 @@ tr.heading h2 {
 	color: white;
 }
 
+.image img
+{
+	max-height: 800px;
+	weight: auto;
+}

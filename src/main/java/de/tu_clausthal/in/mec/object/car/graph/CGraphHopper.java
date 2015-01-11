@@ -86,7 +86,7 @@ public class CGraphHopper extends GraphHopper
     private void initialize()
     {
         // define graph location (use configuration)
-        File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.replace( '/', '_' ) );
+        File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.name.replace( '/', '_' ) );
         System.out.println( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
 
         // convert OSM or load the graph
@@ -294,7 +294,7 @@ public class CGraphHopper extends GraphHopper
         try
         {
             File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            URL l_url = new URL( "http://download.geofabrik.de/" + CConfiguration.getInstance().get().RoutingMap + "-latest.osm.pbf" );
+            URL l_url = new URL( CConfiguration.getInstance().get().RoutingMap.url );
 
             System.out.println( "download OSM map from [" + l_url + "] to [" + l_output + "]" );
 

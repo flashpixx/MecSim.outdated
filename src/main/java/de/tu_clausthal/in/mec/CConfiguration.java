@@ -215,12 +215,28 @@ public class CConfiguration
         /**
          * geo map for graph *
          */
-        public String RoutingMap = "europe/germany/niedersachsen";
+        public RoutingMap RoutingMap = new RoutingMap();
         /**
          * graph algorithm: astar (A* algorithm, default), astarbi (bidirectional A*) dijkstra (Dijkstra), dijkstrabi
          * and dijkstraNativebi (a bit faster bidirectional Dijkstra)  *
          */
         public String RoutingAlgorithm = "astarbi";
+
+        /**
+         * object of the routing map *
+         */
+        public class RoutingMap
+        {
+            /**
+             * download URL *
+             */
+            public String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
+
+            /**
+             * name of the map *
+             */
+            public String name = "europe/germany/lowersaxony";
+        }
 
     }
 

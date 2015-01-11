@@ -38,6 +38,7 @@ public class CLogger
      * stack index of traces *
      */
     private static final int s_client_code_stack_index;
+
     /** initialization **/
     static
     {

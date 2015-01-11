@@ -107,6 +107,28 @@ public class CBootstrap
 
     }
 
+    /**
+     * is called before the simulation is deserialized to unregister UI components
+     *
+     * @param p_simulation simulation objects
+     */
+    public static void BeforeSimulationIsLoaded( CSimulation p_simulation )
+    {
+        COSMViewer.getInstance().getCompoundPainter().removePainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Source" ) );
+        COSMViewer.getInstance().getCompoundPainter().removePainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
+    }
+
+
+    /**
+     * is called after the simulation is deserialized to register UI components
+     *
+     * @param p_simulation simulation objects
+     */
+    public static void AfterSimulationIsLoaded( CSimulation p_simulation )
+    {
+        COSMViewer.getInstance().getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Source" ) );
+        COSMViewer.getInstance().getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
+    }
 
     /**
      * is called after the world is initialize

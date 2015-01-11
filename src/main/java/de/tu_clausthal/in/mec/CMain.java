@@ -35,9 +35,7 @@ import java.util.Calendar;
 
 /**
  * main class of the application
- *
- * @include license.md
- **/
+ */
 public class CMain
 {
 

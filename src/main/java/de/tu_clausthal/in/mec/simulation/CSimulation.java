@@ -25,9 +25,13 @@ package de.tu_clausthal.in.mec.simulation;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.event.CManager;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.IViewableLayer;
+import org.jxmapviewer.painter.Painter;
 
 import java.io.*;
 
@@ -35,7 +39,7 @@ import java.io.*;
 /**
  * singleton object to run the simulation *
  */
-public class CSimulation implements Serializable
+public class CSimulation
 {
 
     /**
@@ -51,12 +55,12 @@ public class CSimulation implements Serializable
     /**
      * main loop *
      */
-    private transient CMainLoop m_mainloop = new CMainLoop();
+    private CMainLoop m_mainloop = new CMainLoop();
 
     /**
      * event manager *
      */
-    private transient CManager m_eventmanager = new CManager();
+    private CManager m_eventmanager = new CManager();
 
 
     /**
@@ -156,7 +160,10 @@ public class CSimulation implements Serializable
      */
     public void store( ObjectOutputStream p_stream ) throws IOException
     {
-        p_stream.writeObject( this );
+        if ( this.isRunning() )
+            throw new IllegalStateException( "simulation is running" );
+
+        p_stream.writeObject( m_world );
         CLogger.info( "simulation is stored" );
     }
 
@@ -171,12 +178,23 @@ public class CSimulation implements Serializable
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
+        // remove UI bindings
+        for ( ILayer l_layer : m_world.values() )
+            if ( l_layer instanceof IViewableLayer )
+                COSMViewer.getInstance().getCompoundPainter().removePainter( (Painter) l_layer );
+
+        m_world = (CWorld) p_stream.readObject();
+        CLogger.info( "simulation is loaded" );
+
+        // set new UI bindings
+        for ( ILayer l_layer : m_world.values() )
+            if ( l_layer instanceof IViewableLayer )
+                COSMViewer.getInstance().getCompoundPainter().addPainter( (Painter) l_layer );
+
+        // reset layer
         m_eventmanager.clear();
         m_world.clear();
         this.reset();
-
-        s_instance = (CSimulation) p_stream.readObject();
-        CLogger.info( "simulation is loaded" );
     }
 
 }

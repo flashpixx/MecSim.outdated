@@ -456,7 +456,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
-            throw new IOException( "error on serialization process" );
+            throw new IOException( "error on deserialization process" );
         }
     }
 

@@ -35,7 +35,8 @@ import java.util.Calendar;
 
 /**
  * main class of the application
- */
+ * http://blog.kennardconsulting.com/2013/04/java-based-json-and-json-schema-user.html
+ **/
 public class CMain
 {
 
@@ -43,7 +44,7 @@ public class CMain
      * main program
      *
      * @param p_args commandline arguments
-     */
+     **/
     public static void main( String[] p_args )
     {
 

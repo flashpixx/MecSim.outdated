@@ -25,11 +25,16 @@ package de.tu_clausthal.in.mec.simulation;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.event.CManager;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.jxmapviewer.painter.Painter;
 
-import java.io.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.*;
 
 
 /**
@@ -154,12 +159,23 @@ public class CSimulation
      *
      * @param p_stream output stream
      */
-    public void store( ObjectOutputStream p_stream ) throws IOException
+    public void store( ObjectOutputStream p_stream ) throws Exception
     {
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
+        // store the world data
         p_stream.writeObject( m_world );
+
+        // read all painter object and store the list
+        List<String> l_painter = new ArrayList();
+        for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
+            if ( COSMViewer.getInstance().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
+                l_painter.add( l_item.getKey() );
+
+        p_stream.writeObject( l_painter );
+
+
         CLogger.info( "simulation is stored" );
     }
 
@@ -169,24 +185,28 @@ public class CSimulation
      *
      * @param p_stream input stream
      */
-    public void load( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    public void load( ObjectInputStream p_stream ) throws Exception
     {
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
-        // @todo
-        // remove all bindings between objects and UI
-        // and detect connection between layers
-
-
+        // clear current values
         m_eventmanager.clear();
         m_world.clear();
-        m_world = (CWorld) p_stream.readObject();
-        this.reset();
+        for ( ILayer l_item : m_world.values() )
+            COSMViewer.getInstance().getCompoundPainter().removePainter( (Painter) l_item );
 
-        // @todo
-        // recreate all bindings between new objects and UI
-        // and reconstruct layer connections
+
+        // read world and painter list and add objects to the painter
+        m_world = (CWorld) p_stream.readObject();
+        ArrayList<String> l_painter = (ArrayList<String>) p_stream.readObject();
+
+        for ( String l_item : l_painter )
+            COSMViewer.getInstance().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
+
+
+        // reset all layer
+        this.reset();
 
 
         CLogger.info( "simulation is loaded" );

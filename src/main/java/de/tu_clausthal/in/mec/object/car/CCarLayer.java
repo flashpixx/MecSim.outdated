@@ -30,6 +30,8 @@ import de.tu_clausthal.in.mec.object.car.graph.CCellObjectLinkage;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.*;
 
 
@@ -42,11 +44,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     /**
      * driving model list
      */
-    protected transient IDriveModel[] m_drivemodellist = {new CNagelSchreckenberg()};
+    protected static IDriveModel[] s_drivemodellist = {new CNagelSchreckenberg()};
     /**
      * driving model
      */
-    protected IDriveModel m_drivemodel = m_drivemodellist[0];
+    protected IDriveModel m_drivemodel = s_drivemodellist[0];
 
     /**
      * graph *
@@ -87,7 +89,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      */
     public void setDriveModel( String p_model )
     {
-        for ( IDriveModel l_model : m_drivemodellist )
+        for ( IDriveModel l_model : s_drivemodellist )
             if ( p_model.equals( l_model.getName() ) )
                 m_drivemodel = l_model;
     }
@@ -110,9 +112,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      */
     public String[] getDrivingModelList()
     {
-        String[] l_list = new String[m_drivemodellist.length];
+        String[] l_list = new String[s_drivemodellist.length];
         int i = 0;
-        for ( IDriveModel l_model : m_drivemodellist )
+        for ( IDriveModel l_model : s_drivemodellist )
             l_list[i] = l_model.getName();
         return l_list;
     }
@@ -153,9 +155,20 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     }
 
     @Override
-    public synchronized void push( Collection<ICar> p_data )
+    public void push( Collection<ICar> p_data )
     {
         super.addAll( p_data );
+    }
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     */
+    private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+        m_graph = new CGraphHopper();
     }
 
 }

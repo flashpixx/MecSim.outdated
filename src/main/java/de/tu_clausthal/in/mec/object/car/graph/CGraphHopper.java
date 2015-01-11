@@ -87,7 +87,7 @@ public class CGraphHopper extends GraphHopper
     {
         // define graph location (use configuration)
         File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.name.replace( '/', '_' ) );
-        System.out.println( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
+        CLogger.out( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
 
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
@@ -103,7 +103,7 @@ public class CGraphHopper extends GraphHopper
             l_osm.delete();
         }
 
-        System.out.println( "graph is loaded successfully" );
+        CLogger.out( "graph is loaded successfully" );
     }
 
 
@@ -296,7 +296,7 @@ public class CGraphHopper extends GraphHopper
             File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
             URL l_url = new URL( CConfiguration.getInstance().get().RoutingMap.url );
 
-            System.out.println( "download OSM map from [" + l_url + "] to [" + l_output + "]" );
+            CLogger.out( "download OSM map from [" + l_url + "] to [" + l_output + "]" );
 
             ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
             FileOutputStream l_stream = new FileOutputStream( l_output );

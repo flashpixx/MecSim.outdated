@@ -33,13 +33,14 @@ import org.pmw.tinylog.writers.FileWriter;
  */
 public class CLogger
 {
+    /**
+     * logger instance name *
+     */
     private static final String s_loggername = "MecSim";
-
     /**
      * stack index of traces *
      */
     private static final int s_client_code_stack_index;
-
     /** initialization **/
     static
     {
@@ -55,6 +56,10 @@ public class CLogger
         s_client_code_stack_index = i;
     }
 
+    /**
+     * defines the global log level *
+     */
+    private static Level s_level = Level.OFF;
 
     /**
      * creates the logger with prooperties
@@ -64,6 +69,7 @@ public class CLogger
      */
     public static void create( Level p_level, String p_filename )
     {
+        s_level = p_level;
         Configurator.defaultConfig().writer( p_level == Level.OFF ? null : new FileWriter( p_filename ) ).level( p_level ).activate();
         Configurator.currentConfig().formatPattern( "{message}" ).activate();
     }
@@ -122,7 +128,7 @@ public class CLogger
 
 
     /**
-     * adds a warn message *
+     * adds a warn message
      */
     public static void warn()
     {
@@ -141,7 +147,7 @@ public class CLogger
 
 
     /**
-     * adds a error message *
+     * adds a error message
      */
     public static void error()
     {
@@ -161,7 +167,7 @@ public class CLogger
 
 
     /**
-     * adds an info message *
+     * adds an info message
      */
     public static void info()
     {
@@ -181,7 +187,7 @@ public class CLogger
 
 
     /**
-     * adds a debug message *
+     * adds a debug message
      */
     public static void debug()
     {
@@ -197,6 +203,20 @@ public class CLogger
     public static void debug( Object p_data )
     {
         Logger.debug( createLogData( Level.DEBUG, p_data ) );
+    }
+
+
+    /**
+     * adds a output message
+     *
+     * @param p_data log data
+     */
+    public static void out( Object p_data )
+    {
+        if ( s_level == Level.OFF )
+            System.out.println( p_data );
+        else
+            Logger.info( createLogData( Level.INFO, p_data )  );
     }
 
 

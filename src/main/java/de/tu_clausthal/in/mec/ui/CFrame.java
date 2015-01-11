@@ -58,6 +58,7 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
+        this.setTitle( "TU-Clausthal - MecSim Traffic Simulation" );
         this.setLayout( new BorderLayout() );
 
         this.setSize( CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight );
@@ -95,6 +96,7 @@ public class CFrame extends JFrame
         this.createDockable( "Inspector", CInspector.getInstance(), false, CLocation.base().normalEast( 0.2 ) );
         this.createDockable( "OSM", new JScrollPane( COSMViewer.getInstance() ), false, CLocation.base().normalWest( 0.8 ) );
 
+        // UI loading can be run after the dock structure is full initialized
         try
         {
             m_control.readXML( m_configfile );
@@ -104,6 +106,9 @@ public class CFrame extends JFrame
         }
 
         CBootstrap.AfterFrameElementsInit( this );
+
+        // visibility must be set at the end, because of modification
+        this.setVisible( true );
     }
 
 

@@ -23,20 +23,19 @@
 
 package de.tu_clausthal.in.mec;
 
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import org.apache.commons.cli.*;
 import org.pmw.tinylog.Level;
 
-import javax.swing.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
 /**
- * main class of the application
- * http://blog.kennardconsulting.com/2013/04/java-based-json-and-json-schema-user.html
- **/
+ * main class of the application http://blog.kennardconsulting.com/2013/04/java-based-json-and-json-schema-user.html
+ */
 public class CMain
 {
 
@@ -44,7 +43,7 @@ public class CMain
      * main program
      *
      * @param p_args commandline arguments
-     **/
+     */
     public static void main( String[] p_args )
     {
 
@@ -107,15 +106,8 @@ public class CMain
 
         }
         else
-            SwingUtilities.invokeLater( new Runnable()
-            {
-                public void run()
-                {
-                    CFrame l_frame = new CFrame();
-                    l_frame.setTitle( "TU-Clausthal Wirtschaftsinformatik - MecSim" );
-                    l_frame.setVisible( true );
-                }
-            } );
+            CSimulation.getInstance().setUI( new CFrame() );
+
     }
 
 }

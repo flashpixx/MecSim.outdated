@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.event.CManager;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
+import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 
@@ -44,7 +45,7 @@ public class CSimulation
 {
 
     /**
-     * singleton instance *
+     * singleton instance
      */
     private static CSimulation s_instance = new CSimulation();
 
@@ -59,13 +60,18 @@ public class CSimulation
     private CMainLoop m_mainloop = new CMainLoop();
 
     /**
-     * event manager *
+     * event manager
      */
     private CManager m_eventmanager = new CManager();
 
+    /**
+     * frame object
+     */
+    private CFrame m_ui = null;
+
 
     /**
-     * private ctor *
+     * private ctor
      */
     private CSimulation()
     {
@@ -96,7 +102,7 @@ public class CSimulation
 
 
     /**
-     * returns the simulation world *
+     * returns the simulation world
      */
     public CWorld getWorld()
     {
@@ -109,6 +115,38 @@ public class CSimulation
     public CManager getEventManager()
     {
         return m_eventmanager;
+    }
+
+    /**
+     * returns the UI frame
+     *
+     * @return null or frame
+     */
+    public CFrame getUI()
+    {
+        return m_ui;
+    }
+
+    /**
+     * sets the UI frame
+     *
+     * @param p_frame frame object
+     */
+    public void setUI( CFrame p_frame )
+    {
+        if ( m_ui != null )
+            throw new IllegalStateException( "UI frame cannot be changed after frame is set" );
+        m_ui = p_frame;
+    }
+
+    /**
+     * returns a boolean for existing UI
+     *
+     * @return UI exists
+     */
+    public boolean hasUI()
+    {
+        return m_ui != null;
     }
 
 
@@ -128,7 +166,7 @@ public class CSimulation
 
 
     /**
-     * stops the current simulation *
+     * stops the current simulation
      */
     public void stop()
     {

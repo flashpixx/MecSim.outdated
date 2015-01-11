@@ -35,7 +35,9 @@ import java.util.Calendar;
 
 /**
  * main class of the application
- */
+ *
+ * @include license.md
+ **/
 public class CMain
 {
 
@@ -44,7 +46,7 @@ public class CMain
      *
      * @param p_args commandline arguments
      */
-    public static void main( String[] p_args ) throws Exception
+    public static void main( String[] p_args )
     {
 
         // --- define CLI options --------------------------------------------------------------------------------------
@@ -56,7 +58,16 @@ public class CMain
         l_clioptions.addOption( "logfile", true, "logfile (default: mecsim-<startup datetime>.txt)" );
 
         CommandLineParser l_parser = new BasicParser();
-        CommandLine l_cli = l_parser.parse( l_clioptions, p_args );
+        CommandLine l_cli = null;
+        try
+        {
+            l_cli = l_parser.parse( l_clioptions, p_args );
+        }
+        catch ( Exception l_exception )
+        {
+            System.out.println( "argument parse error" );
+            System.exit( -1 );
+        }
 
 
         // --- process CLI arguments and push configuration ------------------------------------------------------------

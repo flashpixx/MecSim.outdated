@@ -33,10 +33,7 @@ import org.pmw.tinylog.writers.FileWriter;
  */
 public class CLogger
 {
-    /**
-     * logger instance name *
-     */
-    private static final String s_loggername = "MecSim";
+
     /**
      * stack index of traces *
      */
@@ -62,7 +59,7 @@ public class CLogger
     private static Level s_level = Level.OFF;
 
     /**
-     * creates the logger with prooperties
+     * creates the logger with properties
      *
      * @param p_level    log level
      * @param p_filename p_filename

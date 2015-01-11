@@ -27,7 +27,8 @@ import java.util.Set;
 
 
 /**
- * message receiver
+ * message receiver interface for defining an object which can
+ * handle the message of a participant object
  */
 public interface IMessageReceiver
 {

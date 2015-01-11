@@ -49,6 +49,12 @@ public class CMessage<T> implements IMessage<T>
     protected IParticipant m_source = null;
 
 
+    /**
+     * ctor - creates a message with data
+     *
+     * @param p_source source object of the message
+     * @param p_data   data of the message
+     */
     public CMessage( IParticipant p_source, T p_data )
     {
         if ( p_source == null )
@@ -58,6 +64,14 @@ public class CMessage<T> implements IMessage<T>
         m_source = p_source;
     }
 
+
+    /**
+     * ctor - creates a message with data and name
+     *
+     * @param p_source source object of the message
+     * @param p_name   name of the message
+     * @param p_data   data of the message
+     */
     public CMessage( IParticipant p_source, String p_name, T p_data )
     {
         if ( p_source == null )

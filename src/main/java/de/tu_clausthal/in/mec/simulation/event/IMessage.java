@@ -28,7 +28,7 @@ import java.util.UUID;
 
 
 /**
- * message interface to define a message
+ * message interface to define a event message
  */
 public interface IMessage<T> extends Serializable
 {

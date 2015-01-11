@@ -74,7 +74,7 @@ The default import is _Lower Saxony (Europe Germany)_.
 For map replacing the value _RoutingMap_ must be changed:
 
 * get the new URL of your favorite map (it must be an URL to a [PBF](http://wiki.openstreetmap.org/wiki/PBF_Format) file)
-* replace the _URL_ value on the _RoutingMap_ and set an unique name in the _name_ value
+* replace the _url_ value on the _RoutingMap_ and set an unique name in the _name_ value
 
 
 

@@ -64,21 +64,13 @@ public class CParticipant implements IParticipant
     }
 
 
-    /**
-     * get the unique name of the participant
-     *
-     * @return name
-     */
+    @Override
     public String getEventName()
     {
         return m_eventname;
     }
 
-    /**
-     * get an unique ID of the participant
-     *
-     * @return ID
-     */
+    @Override
     public UUID getEventID()
     {
         return m_eventid;

@@ -27,7 +27,7 @@ import java.util.UUID;
 
 
 /**
- * interface of a participant
+ * interface of a participant of the event system
  */
 public interface IParticipant extends IMessageReceiver
 {

@@ -44,7 +44,7 @@ public interface IRangeCollection<T> extends Collection<IRange<T>>, Serializable
 
 
     /**
-     * release call *
+     * release call
      */
     public void release();
 

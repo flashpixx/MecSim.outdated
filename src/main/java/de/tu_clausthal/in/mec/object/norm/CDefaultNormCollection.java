@@ -33,7 +33,7 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
 {
 
     /**
-     * map with norms *
+     * map with norms
      */
     private HashSet<INorm<INormCar>> m_norms = new HashSet();
 

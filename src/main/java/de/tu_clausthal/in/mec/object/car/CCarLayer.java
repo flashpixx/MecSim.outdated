@@ -51,7 +51,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     protected IDriveModel m_drivemodel = s_drivemodellist[0];
 
     /**
-     * graph *
+     * graph
      */
     protected transient CGraphHopper m_graph = new CGraphHopper();
 

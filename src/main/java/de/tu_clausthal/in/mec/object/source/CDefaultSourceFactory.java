@@ -41,15 +41,15 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
 {
 
     /**
-     * mean value of the distribution *
+     * mean value of the distribution
      */
     protected static double s_mean = 1.5;
     /**
-     * random interface *
+     * random interface
      */
     protected ExponentialDistribution m_random = new ExponentialDistribution( s_mean );
     /**
-     * integer values how many cars are generated in a step *
+     * integer values how many cars are generated in a step
      */
     protected int m_NumberCarsInStep = 1;
 

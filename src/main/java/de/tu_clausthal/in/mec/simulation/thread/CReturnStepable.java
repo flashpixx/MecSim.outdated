@@ -39,11 +39,11 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
 {
 
     /**
-     * layer object *
+     * layer object
      */
     protected ILayer m_layer = null;
     /**
-     * iteration value *
+     * iteration value
      */
     protected int m_iteration = 0;
 

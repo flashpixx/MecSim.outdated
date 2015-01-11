@@ -48,15 +48,15 @@ abstract public class IDefaultSourceFactory implements ISourceFactory, Serializa
 {
 
     /**
-     * position of the source within the map *
+     * position of the source within the map
      */
     protected transient GeoPosition m_position = null;
     /**
-     * image of the waypoint *
+     * image of the waypoint
      */
     protected transient BufferedImage m_image = null;
     /**
-     * waypoint color *
+     * waypoint color
      */
     protected Color m_color = null;
 
@@ -75,7 +75,7 @@ abstract public class IDefaultSourceFactory implements ISourceFactory, Serializa
     }
 
     /**
-     * creates the image *
+     * creates the image
      */
     private void setImage()
     {

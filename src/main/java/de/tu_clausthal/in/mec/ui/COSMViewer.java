@@ -42,7 +42,7 @@ public class COSMViewer extends JXMapViewer
 {
 
     /**
-     * singleton instance *
+     * singleton instance
      */
     private static COSMViewer s_instance = new COSMViewer();
     /**

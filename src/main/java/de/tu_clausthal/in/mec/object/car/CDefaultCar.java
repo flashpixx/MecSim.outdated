@@ -49,35 +49,35 @@ public class CDefaultCar extends IInspector implements ICar
 {
 
     /**
-     * random interface *
+     * random interface
      */
     protected Random m_random = new Random();
     /**
-     * geo position of the start *
+     * geo position of the start
      */
     protected GeoPosition m_StartPosition = null;
     /**
-     * geo position of the end *
+     * geo position of the end
      */
     protected GeoPosition m_EndPosition = null;
     /**
-     * current speed *
+     * current speed
      */
     protected int m_speed = 0;
     /**
-     * maximum speed definition *
+     * maximum speed definition
      */
     protected int m_maxSpeed = 200;
     /**
-     * linger probability value *
+     * linger probability value
      */
     protected double m_LingerProbability = 0;
     /**
-     * cell structure of the route *
+     * cell structure of the route
      */
     protected ArrayList<Pair<EdgeIteratorState, Integer>> m_route = null;
     /**
-     * current position on the route  *
+     * current position on the route
      */
     protected int m_routeindex = 0;
     /**
@@ -302,7 +302,7 @@ public class CDefaultCar extends IInspector implements ICar
 
         graphics2D.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
 
-        // draw route (solid for driven way, dashed for driving way)
+        // @todo draw route (solid for driven way, dashed for driving way)
     }
 
 

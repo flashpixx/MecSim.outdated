@@ -36,7 +36,7 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
 
 
     /**
-     * list of insitutions *
+     * list of insitutions
      */
     private Set<IInstitution<T>> m_institution = new HashSet();
 

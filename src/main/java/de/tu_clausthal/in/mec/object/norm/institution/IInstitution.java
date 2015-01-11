@@ -42,7 +42,7 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Pai
 
 
     /**
-     * returns a name of the institution *
+     * returns a name of the institution
      */
     public String getName();
 
@@ -94,7 +94,7 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Pai
 
 
     /**
-     * release call *
+     * release call
      */
     public void release();
 

@@ -32,19 +32,19 @@ import java.util.UUID;
 public class CMessage<T> implements IMessage<T>
 {
     /**
-     * UUID of the message *
+     * UUID of the message
      */
     protected UUID m_id = UUID.randomUUID();
     /**
-     * name of the message *
+     * name of the message
      */
     protected String m_name = m_id.toString();
     /**
-     * data of the message *
+     * data of the message
      */
     protected T m_data = null;
     /**
-     * source of the message *
+     * source of the message
      */
     protected IParticipant m_source = null;
 

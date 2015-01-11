@@ -44,7 +44,7 @@ public interface IInstitutionCollection<T> extends Collection<IInstitution<T>>
 
 
     /**
-     * release call *
+     * release call
      */
     public void release();
 

@@ -30,21 +30,21 @@ import java.util.*;
 
 
 /**
- * table model to use the inspect object call *
+ * table model to use the inspect object call
  */
 public class CInspectorModel implements TableModel
 {
 
     /**
-     * array with names *
+     * array with names
      */
     private ArrayList<String> m_names = new ArrayList();
     /**
-     * array with object values *
+     * array with object values
      */
     private ArrayList<Object> m_values = new ArrayList();
     /**
-     * push for model listeners *
+     * push for model listeners
      */
     private Set<TableModelListener> m_listener = new HashSet();
 

@@ -37,7 +37,7 @@ public class CManager implements IVoidStepable
 {
 
     /**
-     * list of messages *
+     * list of messages
      */
     private Map<IParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
 
@@ -88,7 +88,7 @@ public class CManager implements IVoidStepable
     }
 
     /**
-     * clears all messages *
+     * clears all messages
      */
     public void clear()
     {

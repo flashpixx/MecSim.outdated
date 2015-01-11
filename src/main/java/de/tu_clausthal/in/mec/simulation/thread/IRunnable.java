@@ -27,13 +27,14 @@ import java.util.concurrent.Callable;
 
 
 /**
- * Created by pkraus on 08.01.15.
+ * runnable class to define objects which
+ * is callable and runable for thread-pool
  */
 public abstract class IRunnable<T> implements Runnable, Callable<Object>
 {
 
     /**
-     * object reference *
+     * object reference
      */
     protected T m_object = null;
 

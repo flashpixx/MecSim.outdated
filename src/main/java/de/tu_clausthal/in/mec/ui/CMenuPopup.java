@@ -41,11 +41,11 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
      */
     private Map<String, Object> m_reference = new HashMap();
     /**
-     * selected car definition *
+     * selected car definition
      */
     private String m_sources = "default cars";
     /**
-     * reference to the institution menu, to remove it on update *
+     * reference to the institution menu, to remove it on update
      */
     private JMenu m_institutionMenu = null;
     /**

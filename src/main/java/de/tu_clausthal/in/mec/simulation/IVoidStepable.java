@@ -33,7 +33,7 @@ public interface IVoidStepable extends IStepable
 {
 
     /**
-     * step method *
+     * step method
      *
      * @param p_currentstep current step value
      * @param p_layer       layer on which is the object push or null

@@ -43,7 +43,7 @@ public class CCarCount extends IEvaluateLayer
 {
 
     /**
-     * data push *
+     * data push
      */
     DefaultCategoryDataset m_plotdata = new DefaultCategoryDataset();
 

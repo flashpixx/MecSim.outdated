@@ -52,7 +52,8 @@ The [JSON](http://en.wikipedia.org/wiki/JSON) file has got the following structu
     }
 
 * _CellSampling_ defines the cell sampling size (in metre) of any lane / road
-* _RoutingAlgorithm_ defines the routing algorithm on the graph (values are: _dijkstra_, _astar_ and _astarbi_)
+* _RoutingAlgorithm_ defines the routing algorithm on the graph (values are: _astar_ & _astarbi_ (A* algorithm),
+_dijkstra_, _dijkstrabi_, _dijkstraOneToMany_ (Dijkstra algorithm))
 * _RountingMap_ defines the imported OpenStreetMap dataset (see data import), the value _name_ defines the name of
 card (all ```/``` will be replaces with ```_```) and _url_ defines the download URL of the
 [PBF](http://wiki.openstreetmap.org/wiki/PBF_Format) file

@@ -54,7 +54,7 @@ public class CGraphHopper extends GraphHopper
 {
 
     /**
-     * map with edge-cell connection *
+     * map with edge-cell connection
      */
     private Map<Integer, CCellObjectLinkage<ICar, Object>> m_edgecell = new ConcurrentHashMap();
 
@@ -68,7 +68,7 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
-     * private ctor do add different weights for routing *
+     * private ctor do add different weights for routing
      *
      * @param p_weights weight name
      * @see https://github.com/graphhopper/graphhopper/issues/111
@@ -81,7 +81,7 @@ public class CGraphHopper extends GraphHopper
 
 
     /**
-     * run graph initialize process with OSM data convert *
+     * run graph initialize process with OSM data convert
      */
     private void initialize()
     {
@@ -284,10 +284,9 @@ public class CGraphHopper extends GraphHopper
 
 
     /**
-     * downloads the OSM data from Geofabrik
+     * downloads the OSM data
      *
      * @return download file with full path
-     * @see http://download.geofabrik.de/
      */
     private File downloadOSMData()
     {

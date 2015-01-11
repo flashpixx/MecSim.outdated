@@ -33,12 +33,12 @@ public class CInspector extends JTable
 {
 
     /**
-     * singleton instance *
+     * singleton instance
      */
     private static CInspector s_inspector = new CInspector();
 
     /**
-     * private ctor *
+     * private ctor
      */
     private CInspector()
     {

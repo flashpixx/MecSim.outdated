@@ -51,7 +51,7 @@ public interface ILayer extends IStepable, Serializable
 
 
     /**
-     * resets the data of the layer *
+     * resets the data of the layer
      */
     public void resetData();
 

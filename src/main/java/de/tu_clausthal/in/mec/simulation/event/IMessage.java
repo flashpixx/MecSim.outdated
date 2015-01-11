@@ -56,7 +56,7 @@ public interface IMessage<T> extends Serializable
 
 
     /**
-     * returns the source of the message *
+     * returns the source of the message
      */
     IParticipant getSource();
 

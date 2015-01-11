@@ -33,17 +33,20 @@ public class CSpeedNorm implements INorm<INormObject>
 {
 
     /**
-     * tolerance value in [0,1] *
+     * tolerance value in [0,1]
      */
     private double m_tolerance = 0.1;
-    /* maximum speed value for check **/
-    private int m_maxspeed = Integer.MAX_VALUE;
     /**
-     * dedicated institution *
+     * maximum speed value for check
+     */
+    private int m_maxspeed = Integer.MAX_VALUE;
+
+    /**
+     * dedicated institution
      */
     private IInstitution<INormObject> m_institution = null;
     /**
-     * name der norm *
+     * name der norm
      */
     private String m_name = this.getClass().getName();
 

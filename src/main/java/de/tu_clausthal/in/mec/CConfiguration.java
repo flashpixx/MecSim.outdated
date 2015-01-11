@@ -30,30 +30,30 @@ import java.io.*;
 
 
 /**
- * singleton class for configuration with a Json file *
+ * singleton class for configuration with a Json file
  */
 public class CConfiguration
 {
 
     /**
-     * name of the configuration file *
+     * name of the configuration file
      */
     private static final String s_ConfigFilename = "config.json";
     /**
-     * singleton instance variable *
+     * singleton instance variable
      */
     private static CConfiguration s_instance = new CConfiguration();
     /**
-     * property that stores the configuration data *
+     * property that stores the configuration data
      */
     private Data m_data = new Data();
     /**
-     * directory of the configuration file *
+     * directory of the configuration file
      */
     private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
 
     /**
-     * private Ctor to avoid manual instantiation *
+     * private Ctor to avoid manual instantiation
      */
     private CConfiguration()
     {
@@ -70,7 +70,7 @@ public class CConfiguration
     }
 
     /**
-     * write method of the configuration *
+     * write method of the configuration
      */
     public void write()
     {
@@ -93,7 +93,7 @@ public class CConfiguration
     }
 
     /**
-     * reads the configuration within the directory *
+     * reads the configuration within the directory
      */
     public void read()
     {
@@ -183,57 +183,56 @@ public class CConfiguration
     }
 
     /**
-     * private class for storing the configuration *
+     * private class for storing the configuration
      */
     public class Data
     {
 
         /**
-         * geo position object of the start viewpoint *
+         * geo position object of the start viewpoint
          */
         public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
         /**
-         * zoom level of the viewpoint on the start point *
+         * zoom level of the viewpoint on the start point
          */
         public int Zoom = 4;
         /**
-         * window width *
+         * window width
          */
         public int WindowWidth = 1684;
         /**
-         * window height *
+         * window height
          */
         public int WindowHeight = 1024;
         /**
-         * cell size for sampling *
+         * cell size for sampling
          */
         public int CellSampling = 2;
         /**
-         * thread sleep time in miliseconds *
+         * thread sleep time in miliseconds
          */
         public int ThreadSleepTime = 25;
         /**
-         * geo map for graph *
+         * geo map for graph
          */
         public RoutingMap RoutingMap = new RoutingMap();
         /**
-         * graph algorithm: astar (A* algorithm, default), astarbi (bidirectional A*) dijkstra (Dijkstra), dijkstrabi
-         * and dijkstraNativebi (a bit faster bidirectional Dijkstra)  *
+         * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra algorithm)
          */
         public String RoutingAlgorithm = "astarbi";
 
         /**
-         * object of the routing map *
+         * object of the routing map
          */
         public class RoutingMap
         {
             /**
-             * download URL *
+             * download URL
              */
             public String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
 
             /**
-             * name of the map *
+             * name of the map
              */
             public String name = "europe/germany/lowersaxony";
         }

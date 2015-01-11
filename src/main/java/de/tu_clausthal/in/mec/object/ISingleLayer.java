@@ -39,11 +39,11 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
 {
 
     /**
-     * flag for visibility *
+     * flag for visibility
      */
     protected boolean m_visible = true;
     /**
-     * flag for activity *
+     * flag for activity
      */
     protected boolean m_active = true;
 

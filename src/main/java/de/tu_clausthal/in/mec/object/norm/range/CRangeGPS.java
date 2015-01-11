@@ -56,15 +56,15 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
      */
     protected GeoPosition m_lowerright = null;
     /**
-     * rectangle of the geoposition *
+     * rectangle of the geoposition
      */
     protected Rectangle.Double m_georectangle = null;
     /**
-     * color of the rectangle fill color *
+     * color of the rectangle fill color
      */
     protected Color m_regioColor = new Color( 200, 0, 0, 35 );
     /**
-     * border color of the rectangle *
+     * border color of the rectangle
      */
     protected Color m_borderColor = new Color( 200, 0, 0, 75 );
 

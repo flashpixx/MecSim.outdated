@@ -44,13 +44,13 @@ import java.util.*;
 
 
 /**
- * class for create the menubar *
+ * class for create the menubar
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
 
     /**
-     * current directory for file dialogs *
+     * current directory for file dialogs
      */
     private File m_filepath = new File( System.getProperty( "user.dir" ) );
     /**
@@ -76,7 +76,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
     /**
-     * ctor with menu items *
+     * ctor with menu items
      */
     public CMenuBar()
     {
@@ -544,16 +544,16 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
     /**
-     * file filter class to create a filter list *
+     * file filter class to create a filter list
      */
     private class UIFileFilter extends FileFilter
     {
         /**
-         * type description *
+         * type description
          */
         private String m_description = "";
         /**
-         * extension *
+         * extension
          */
         private String m_extension = "";
 

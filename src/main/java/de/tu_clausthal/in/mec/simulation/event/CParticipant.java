@@ -38,15 +38,15 @@ public class CParticipant implements IParticipant
 {
 
     /**
-     * defines the event UUID *
+     * defines the event UUID
      */
     protected UUID m_eventid = UUID.randomUUID();
     /**
-     * defines the event name *
+     * defines the event name
      */
     protected String m_eventname = m_eventid.toString();
     /**
-     * receiver object *
+     * receiver object
      */
     protected IMessageReceiver m_receiver = null;
 

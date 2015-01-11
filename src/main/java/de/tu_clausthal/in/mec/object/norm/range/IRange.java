@@ -55,7 +55,7 @@ public interface IRange<T> extends Serializable, Painter<COSMViewer>
 
 
     /**
-     * release call *
+     * release call
      */
     public void release();
 

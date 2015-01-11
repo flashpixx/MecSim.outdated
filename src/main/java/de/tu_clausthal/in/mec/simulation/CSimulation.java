@@ -39,7 +39,7 @@ import java.util.*;
 
 
 /**
- * singleton object to run the simulation *
+ * singleton object to run the simulation
  */
 public class CSimulation
 {
@@ -55,7 +55,7 @@ public class CSimulation
     private CWorld m_world = new CWorld();
 
     /**
-     * main loop *
+     * main loop
      */
     private CMainLoop m_mainloop = new CMainLoop();
 
@@ -110,7 +110,7 @@ public class CSimulation
     }
 
     /**
-     * returns event manager *
+     * returns event manager
      */
     public CManager getEventManager()
     {
@@ -180,7 +180,7 @@ public class CSimulation
 
 
     /**
-     * resets the simulation data *
+     * resets the simulation data
      */
     public void reset()
     {

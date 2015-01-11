@@ -40,22 +40,22 @@ import java.util.concurrent.*;
 public class CMainLoop implements Runnable
 {
     /**
-     * thread-pool for handling all objects *
+     * thread-pool for handling all objects
      */
     private ExecutorService m_pool = Executors.newWorkStealingPool();
 
     /**
-     * task list with objects *
+     * task list with objects
      */
     private Collection<Callable<Object>> m_tasks = new LinkedList();
 
     /**
-     * simulation counter *
+     * simulation counter
      */
     private int m_simulationcount = 0;
 
     /**
-     * boolean to pause/resume the thread *
+     * boolean to pause/resume the thread
      */
     private boolean m_pause = true;
 
@@ -132,7 +132,7 @@ public class CMainLoop implements Runnable
 
 
     /**
-     * thread is shut down *
+     * thread is shut down
      */
     public void stop()
     {
@@ -150,7 +150,7 @@ public class CMainLoop implements Runnable
     }
 
     /**
-     * sets pause state *
+     * sets pause state
      */
     public void pause()
     {
@@ -158,7 +158,7 @@ public class CMainLoop implements Runnable
     }
 
     /**
-     * resume state *
+     * resume state
      */
     public void resume()
     {
@@ -166,7 +166,7 @@ public class CMainLoop implements Runnable
     }
 
     /**
-     * resets the thread *
+     * resets the thread
      */
     public void reset()
     {

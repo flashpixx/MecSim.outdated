@@ -41,27 +41,27 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
 {
 
     /**
-     * edge ID *
+     * edge ID
      */
     protected int m_edgeid = 0;
     /**
-     * length of the edge (distance) *
+     * length of the edge (distance)
      */
     protected double m_edgelength = 0;
     /**
-     * map with car-2-position in forward direction *
+     * map with car-2-position in forward direction
      */
     protected Map<N, Integer> m_objects = new HashMap();
     /**
-     * array with cells of the forward direction *
+     * array with cells of the forward direction
      */
     protected N[] m_cells = null;
     /**
-     * array with geopositions of the cell *
+     * array with geopositions of the cell
      */
     protected GeoPosition[] m_cellgeoposition = null;
     /**
-     * array with additional information *
+     * array with additional information
      */
     protected T[] m_additionalinformation = null;
 
@@ -357,11 +357,11 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     {
 
         /**
-         * x values *
+         * x values
          */
         double[] m_x = null;
         /**
-         * y values *
+         * y values
          */
         double[] m_y = null;
 

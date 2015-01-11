@@ -39,11 +39,11 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
 {
 
     /**
-     * waypoint color *
+     * waypoint color
      */
     protected Color m_color = Color.GREEN;
     /**
-     * profile with car values *
+     * profile with car values
      */
     protected int[] m_profile = null;
 

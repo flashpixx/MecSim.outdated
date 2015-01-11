@@ -61,7 +61,7 @@ public interface INorm<T> extends Serializable
 
 
     /**
-     * release call *
+     * release call
      */
     public void release();
 

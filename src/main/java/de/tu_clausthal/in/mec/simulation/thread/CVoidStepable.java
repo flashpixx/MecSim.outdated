@@ -36,11 +36,11 @@ public class CVoidStepable extends IRunnable<IVoidStepable>
 {
 
     /**
-     * layer object *
+     * layer object
      */
     protected ILayer m_layer = null;
     /**
-     * iteration value *
+     * iteration value
      */
     protected int m_iteration = 0;
 

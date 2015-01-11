@@ -33,7 +33,7 @@ public class CUnionRangeCollection<T> implements IRangeCollection<T>
 {
 
     /**
-     * list of ranges *
+     * list of ranges
      */
     private Set<IRange<T>> m_ranges = new HashSet();
 

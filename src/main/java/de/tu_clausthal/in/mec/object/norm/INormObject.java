@@ -43,7 +43,7 @@ public interface INormObject extends ICar
 
 
     /**
-     * clears the mached norms *
+     * clears the mached norms
      */
     public void clearMatchedNorm();
 

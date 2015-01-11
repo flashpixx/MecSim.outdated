@@ -33,12 +33,12 @@ public interface IGenerator<T>
 {
 
     /**
-     * generator name *
+     * generator name
      */
     public String getName();
 
     /**
-     * generate objects *
+     * generate objects
      */
     Collection<T> generate( int p_number );
 

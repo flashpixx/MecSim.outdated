@@ -37,7 +37,7 @@ public abstract class IUIListener implements MouseListener
 {
 
     /**
-     * ctor to register component on the viewer *
+     * ctor to register component on the viewer
      */
     public IUIListener()
     {
@@ -56,7 +56,7 @@ public abstract class IUIListener implements MouseListener
 
 
     /**
-     * release of the event handler *
+     * release of the event handler
      */
     public void release()
     {

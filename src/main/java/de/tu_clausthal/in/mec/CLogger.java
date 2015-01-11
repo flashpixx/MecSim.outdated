@@ -35,7 +35,7 @@ public class CLogger
 {
 
     /**
-     * stack index of traces *
+     * stack index of traces
      */
     private static final int s_client_code_stack_index;
 
@@ -55,7 +55,7 @@ public class CLogger
     }
 
     /**
-     * defines the global log level *
+     * defines the global log level
      */
     private static Level s_level = Level.OFF;
 

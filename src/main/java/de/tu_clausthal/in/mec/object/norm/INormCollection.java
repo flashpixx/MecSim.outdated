@@ -45,7 +45,7 @@ public interface INormCollection<T> extends Collection<INorm<T>>, Serializable
 
 
     /**
-     * release call *
+     * release call
      */
     public void release();
 

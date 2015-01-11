@@ -25,12 +25,9 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.mec.object.norm.range.CRangeGPS;
 import de.tu_clausthal.in.mec.object.source.CDefaultSourceFactory;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.ui.painter.CRectanglePainter;
-import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
@@ -41,21 +38,21 @@ import java.awt.geom.Point2D;
 
 
 /**
- * mouse listener for jxviewer *
+ * mouse listener for JxViewer
  */
 class COSMMouseListener extends MouseAdapter
 {
 
     /**
-     * popup *
+     * popup
      */
     private CMenuPopup m_popup = new CMenuPopup();
     /**
-     * rectangle painter to push norm ranges *
+     * rectangle painter to push norm ranges
      */
-    private CRectanglePainter m_rectangle = null;
+    //private CRectanglePainter m_rectangle = null;
     /**
-     * flag to detect dragging *
+     * flag to detect dragging
      */
     private boolean m_drag = false;
 
@@ -111,6 +108,7 @@ class COSMMouseListener extends MouseAdapter
     @Override
     public void mousePressed( MouseEvent e )
     {
+        /*
         if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
             return;
 
@@ -124,11 +122,13 @@ class COSMMouseListener extends MouseAdapter
 
         m_drag = true;
         m_rectangle.from( e.getPoint() );
+        */
     }
 
     @Override
     public void mouseReleased( MouseEvent e )
     {
+        /*
         if ( !m_drag )
             return;
 
@@ -145,14 +145,17 @@ class COSMMouseListener extends MouseAdapter
         // add range to the institution
         l_institution.getRange().add( new CRangeGPS( l_institution, ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getFrom() ), ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getTo() ) ) );
         m_rectangle.clear();
+        */
     }
 
     @Override
     public void mouseDragged( MouseEvent e )
     {
+        /*
         if ( !m_drag )
             return;
         m_rectangle.to( e.getPoint() );
+        */
     }
 
     /**

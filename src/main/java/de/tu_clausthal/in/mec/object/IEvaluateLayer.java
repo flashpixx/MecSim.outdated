@@ -35,7 +35,7 @@ public abstract class IEvaluateLayer implements IDataLayer, ILayer, IVoidStepabl
 {
 
     /**
-     * flag for activity *
+     * flag for activity
      */
     protected boolean m_active = true;
 

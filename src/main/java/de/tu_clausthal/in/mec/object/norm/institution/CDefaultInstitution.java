@@ -39,23 +39,23 @@ public class CDefaultInstitution implements IInstitution<INormObject>
 {
 
     /**
-     * name of the institution *
+     * name of the institution
      */
     String m_name = "Default Institution";
     /**
-     * superior institutions *
+     * superior institutions
      */
     private IInstitutionCollection<INormObject> m_superior = new CDefaultInstitutionCollection();
     /**
-     * inferior instituions *
+     * inferior instituions
      */
     private IInstitutionCollection<INormObject> m_inferior = new CDefaultInstitutionCollection();
     /**
-     * range collection with a disjoint push *
+     * range collection with a disjoint push
      */
     private IRangeCollection<INormObject> m_range = new CUnionRangeCollection();
     /**
-     * norms of the institution *
+     * norms of the institution
      */
     private INormCollection<INormObject> m_norms = new CDefaultNormCollection();
 

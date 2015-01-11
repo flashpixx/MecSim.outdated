@@ -43,11 +43,11 @@ public class CFrame extends JFrame
 {
 
     /**
-     * control of the dock component *
+     * control of the dock component
      */
     private CControl m_control = new CControl( this );
     /**
-     * config file of the dockables *
+     * config file of the dockables
      */
     private File m_configfile = new File( CConfiguration.getInstance().getConfigDir() + "/" + "ui.xml" );
 

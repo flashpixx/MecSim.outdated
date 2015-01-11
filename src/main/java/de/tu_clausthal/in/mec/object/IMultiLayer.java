@@ -42,15 +42,15 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
 {
 
     /**
-     * flag for visibility *
+     * flag for visibility
      */
     protected boolean m_visible = true;
     /**
-     * flag for activity *
+     * flag for activity
      */
     protected boolean m_active = true;
     /**
-     * list of data items *
+     * list of data items
      */
     protected Queue<T> m_data = new ConcurrentLinkedQueue();
 

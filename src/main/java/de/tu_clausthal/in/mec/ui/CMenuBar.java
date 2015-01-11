@@ -1,25 +1,26 @@
 /**
- @cond
- ######################################################################################
- # GPL License                                                                        #
- #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
- # This program is free software: you can redistribute it and/or modify               #
- # it under the terms of the GNU General Public License as                            #
- # published by the Free Software Foundation, either version 3 of the                 #
- # License, or (at your option) any later version.                                    #
- #                                                                                    #
- # This program is distributed in the hope that it will be useful,                    #
- # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- # GNU General Public License for more details.                                       #
- #                                                                                    #
- # You should have received a copy of the GNU General Public License                  #
- # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
- ######################################################################################
- @endcond
+ * @cond
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * * # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ * ######################################################################################
+ * @endcond
  **/
+
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
@@ -211,7 +212,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                     ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
                 }
 
-
         }
         catch ( Exception l_exception )
         {
@@ -269,8 +269,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * deletes a norm
-     *
-     * @todo complete
      */
     private void deleteNorm()
     {
@@ -394,7 +392,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * sets the graph weights
      *
      * @param p_weight weight name (see "graphhopper" class "createWeighting" method)
-     * @throws IllegalStateException
      */
     private void setGraphWeight( String p_weight ) throws IllegalStateException
     {
@@ -415,8 +412,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * stores the list of sources
-     *
-     * @throws java.io.IOException
      */
     private void save() throws IOException
     {
@@ -443,8 +438,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * loads the list of sources
-     *
-     * @throws IOException
      */
     private void load() throws IOException
     {
@@ -470,8 +463,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * create a screenshot of the OSM view
-     *
-     * @throws IOException
      */
     private void screenshot() throws IOException
     {

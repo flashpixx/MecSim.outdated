@@ -1,24 +1,24 @@
 /**
- @cond
- ######################################################################################
- # GPL License                                                                        #
- #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
- # This program is free software: you can redistribute it and/or modify               #
- # it under the terms of the GNU General Public License as                            #
- # published by the Free Software Foundation, either version 3 of the                 #
- # License, or (at your option) any later version.                                    #
- #                                                                                    #
- # This program is distributed in the hope that it will be useful,                    #
- # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- # GNU General Public License for more details.                                       #
- #                                                                                    #
- # You should have received a copy of the GNU General Public License                  #
- # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
- ######################################################################################
- @endcond
+ * @cond
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * * # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ * ######################################################################################
+ * @endcond
  **/
 
 package de.tu_clausthal.in.mec.ui;
@@ -33,8 +33,7 @@ import org.jxmapviewer.viewer.*;
 
 
 /**
- * openstreetmap viewer class - must be a singleton because
- * we would to use only one instance with a global access
+ * openstreetmap viewer class - must be a singleton because we would to use only one instance with a global access
  *
  * @see https://github.com/msteiger/jxmapviewer2
  * @see https://today.java.net/pub/a/today/2007/10/30/building-maps-into-swing-app-with-jxmapviewer.html
@@ -57,8 +56,7 @@ public class COSMViewer extends JXMapViewer
 
 
     /**
-     * private ctor with loading configuration defaults
-     * and listener definition
+     * private ctor with loading configuration defaults and listener definition
      */
     private COSMViewer()
     {

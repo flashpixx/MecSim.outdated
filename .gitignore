@@ -6,6 +6,9 @@ target/
 !*.md
 !*.java
 !*.xml
-!*.doxyfile
 !*.png
+!documentation.doxyfile
+!layout.css
+!footer.htm
+
 

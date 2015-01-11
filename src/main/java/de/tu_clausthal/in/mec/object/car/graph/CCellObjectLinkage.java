@@ -1,24 +1,24 @@
 /**
- @cond
- ######################################################################################
- # GPL License                                                                        #
- #                                                                                    #
- # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>              #
- # This program is free software: you can redistribute it and/or modify               #
- # it under the terms of the GNU General Public License as                            #
- # published by the Free Software Foundation, either version 3 of the                 #
- # License, or (at your option) any later version.                                    #
- #                                                                                    #
- # This program is distributed in the hope that it will be useful,                    #
- # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- # GNU General Public License for more details.                                       #
- #                                                                                    #
- # You should have received a copy of the GNU General Public License                  #
- # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
- ######################################################################################
- @endcond
+ * @cond
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * * # Copyright (c) 2014-15, Philipp Kraus, <philipp.kraus@tu-clausthal.de>            #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see <http://www.gnu.org/licenses/>.               #
+ * ######################################################################################
+ * @endcond
  **/
 
 package de.tu_clausthal.in.mec.object.car.graph;
@@ -35,8 +35,7 @@ import java.util.*;
 
 
 /**
- * class for defining the cell sampling structure of an edge
- * with the car information
+ * class for defining the cell sampling structure of an edge with the car information
  */
 public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
 {
@@ -69,8 +68,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
 
     /**
      * ctor create the samples
-     *
-     * @param p_edgestate
      */
     public CCellObjectLinkage( EdgeIteratorState p_edgestate )
     {
@@ -273,7 +270,6 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      *
      * @param p_object   object
      * @param p_position position index
-     * @throws IllegalAccessException
      */
     public synchronized void setObject( N p_object, int p_position ) throws IllegalAccessException
     {

@@ -22,33 +22,23 @@
     </properties>
 
     <dependencies>
+        <!-- UI components -->
         <dependency>
-            <groupId>jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.13</version>
+            <groupId>org.metawidget.modules</groupId>
+            <artifactId>metawidget-core</artifactId>
+            <version>4.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.graphhopper</groupId>
-            <artifactId>graphhopper</artifactId>
-            <version>0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jxmapviewer</groupId>
-            <artifactId>jxmapviewer2</artifactId>
-            <version>2.0</version>
+            <groupId>org.metawidget.modules.swing</groupId>
+            <artifactId>metawidget-swing</artifactId>
+            <version>4.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.3.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.4</version>
+            <groupId>org.metawidget.modules</groupId>
+            <artifactId>metawidget-annotation</artifactId>
+            <version>4.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -58,9 +48,31 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.tinylog</groupId>
-            <artifactId>tinylog</artifactId>
-            <version>1.0-rc-3</version>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.13</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jxmapviewer</groupId>
+            <artifactId>jxmapviewer2</artifactId>
+            <version>2.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>rsyntaxtextarea</artifactId>
+            <version>2.5.6</version>
+            <scope>compile</scope>
+        </dependency>
+        -->
+
+        <!-- algorithms & data structure components -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -75,18 +87,30 @@
             <version>1.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog</artifactId>
+            <version>1.0-rc-3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.graphhopper</groupId>
+            <artifactId>graphhopper</artifactId>
+            <version>0.3</version>
+        </dependency>
 
+        <!-- agent frameworks -->
         <!--
         <dependency>
             <groupId>net.sf.jason</groupId>
             <artifactId>jason</artifactId>
             <version>1.4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fifesoft</groupId>
-            <artifactId>rsyntaxtextarea</artifactId>
-            <version>2.5.6</version>
             <scope>compile</scope>
         </dependency>
         -->

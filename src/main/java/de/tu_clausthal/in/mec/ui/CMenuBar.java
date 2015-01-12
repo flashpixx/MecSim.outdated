@@ -82,7 +82,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         super();
 
-        String[] l_file = {"Load", "Save", null, "Screenshot"};
+        String[] l_file = {"Load", "Save", null, "Screenshot", null, "Preferences"};
         this.add( CMenuFactory.createMenu( "File", l_file, this, m_reference ) );
 
 
@@ -175,6 +175,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 this.load();
             if ( e.getSource() == m_reference.get( "File::Save" ) )
                 this.save();
+            if ( e.getSource() == m_reference.get( "File::Preferences" ) )
+                this.preferences();
+
 
 
             if ( e.getSource() == m_reference.get( "Simulation::Start" ) )
@@ -408,6 +411,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             m_weight = p_weight;
         }
     }
+
+    /**
+     * handles the preferences
+     */
+    private void preferences()
+    {
+        CPreferenceDialog l_dialog = new CPreferenceDialog();
+        l_dialog.setAlwaysOnTop( true );
+        l_dialog.setVisible( true );
+    }
+
 
 
     /**

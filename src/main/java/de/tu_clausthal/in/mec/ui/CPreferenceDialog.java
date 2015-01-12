@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import org.jdesktop.beansbinding.AutoBinding;
 import org.metawidget.inspector.annotation.MetawidgetAnnotationInspector;
 import org.metawidget.inspector.composite.CompositeInspector;
 import org.metawidget.inspector.composite.CompositeInspectorConfig;
@@ -32,22 +33,44 @@ import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyl
 import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyleConfig;
 import org.metawidget.inspector.propertytype.PropertyTypeInspector;
 import org.metawidget.swing.SwingMetawidget;
+import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessor;
+import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessorConfig;
 
 import javax.swing.*;
+import java.awt.*;
 
 
 /**
- * preference dialog http://blog.kennardconsulting.com/2008/06/metawidget-and-tooltips.html
- * http://blog.kennardconsulting.com/2008/06/metawidget-and-namevalue-pairs.html http://blog.kennardconsulting.com/2008/07/metawidget-and-filtering-properties.html
- * http://metawidget.sourceforge.net/doc/reference/en/html/ch01.html#section-introduction-java-part1
+ * preference class to visualize the configuration - create a modal window
  */
 public class CPreferenceDialog extends JDialog
 {
 
+    /**
+     * ctor *
+     */
     public CPreferenceDialog()
     {
+        this.initialize();
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_frame parent frame
+     */
+    public CPreferenceDialog( Frame p_frame )
+    {
+        this.setLocationRelativeTo( p_frame );
+        this.initialize();
+    }
+
+    /**
+     * create UI with data binding *
+     */
+    private void initialize()
+    {
         this.setSize( 800, 300 );
-        //this.setLocationRelativeTo( p_frame );
         this.setModalityType( ModalityType.APPLICATION_MODAL );
 
 
@@ -65,6 +88,12 @@ public class CPreferenceDialog extends JDialog
                                 new PropertyTypeInspector( l_inspectconfig ),
                                 new MetawidgetAnnotationInspector( l_inspectconfig )
                         )
+                )
+        );
+
+        l_widget.addWidgetProcessor(
+                new BeansBindingProcessor(
+                        new BeansBindingProcessorConfig().setUpdateStrategy( AutoBinding.UpdateStrategy.READ_WRITE )
                 )
         );
 

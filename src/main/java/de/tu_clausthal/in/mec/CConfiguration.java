@@ -224,7 +224,8 @@ public class CConfiguration
          */
         public RoutingMap RoutingMap = new RoutingMap();
         /**
-         * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra algorithm)
+         * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
+         * algorithm)
          */
         @UiLabel("Routing algorithm")
         @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})

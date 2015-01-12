@@ -53,8 +53,7 @@ public class CBootstrap
 
 
     /**
-     * is called after the frame is initialize
-     * and before the UI configuration is load
+     * is called after the frame is initialize and before the UI configuration is load
      *
      * @param p_frame frame
      */
@@ -62,7 +61,7 @@ public class CBootstrap
     {
         CSimulation.getInstance().getWorld().put( "CarCount", new CCarCount( p_frame ) );
 
-        p_frame.addWidget( "Inspector", CInspector.getInstance(), CFrame.Position.EAST, 0.2 );
+        p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
         p_frame.addWidget( "OSM", new JScrollPane( COSMViewer.getInstance() ), CFrame.Position.WEST, 0.8 );
     }
 

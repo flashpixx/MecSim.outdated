@@ -257,7 +257,7 @@ public class CDefaultCar extends IInspector implements ICar
         Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom );
 
         if ( l_circle.contains( e.getX(), e.getY() ) )
-            CInspector.getInstance().set( this );
+            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override

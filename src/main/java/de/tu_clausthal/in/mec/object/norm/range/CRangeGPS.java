@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.norm.range;
 
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
@@ -123,7 +124,7 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
             this.release();
         }
         else
-            CInspector.getInstance().set( this );
+            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override

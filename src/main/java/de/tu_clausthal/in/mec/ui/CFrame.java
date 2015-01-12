@@ -127,6 +127,7 @@ public class CFrame extends JFrame
         l_dock.setLocation( p_location );
         m_control.addDockable( l_dock );
         l_dock.setVisible( true );
+        m_widgets.put( p_title, p_panel );
     }
 
     /**

@@ -416,7 +416,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void preferences()
     {
-        CPreferenceDialog l_dialog = new CPreferenceDialog();
+        CConfigurationDialog l_dialog = new CConfigurationDialog();
         l_dialog.setAlwaysOnTop( true );
         l_dialog.setVisible( true );
     }

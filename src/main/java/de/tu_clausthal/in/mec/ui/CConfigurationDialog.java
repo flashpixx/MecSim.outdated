@@ -43,13 +43,13 @@ import java.awt.*;
 /**
  * preference class to visualize the configuration - create a modal window
  */
-public class CPreferenceDialog extends JDialog
+public class CConfigurationDialog extends JDialog
 {
 
     /**
      * ctor *
      */
-    public CPreferenceDialog()
+    public CConfigurationDialog()
     {
         this.initialize();
     }
@@ -59,7 +59,7 @@ public class CPreferenceDialog extends JDialog
      *
      * @param p_frame parent frame
      */
-    public CPreferenceDialog( Frame p_frame )
+    public CConfigurationDialog( Frame p_frame )
     {
         this.setLocationRelativeTo( p_frame );
         this.initialize();

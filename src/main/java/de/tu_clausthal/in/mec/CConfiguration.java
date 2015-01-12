@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec;
 
 import com.google.gson.Gson;
 import org.jxmapviewer.viewer.GeoPosition;
+import org.metawidget.inspector.annotation.*;
 
 import java.io.*;
 
@@ -191,26 +192,32 @@ public class CConfiguration
         /**
          * geo position object of the start viewpoint
          */
+        @UiHidden
         public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
         /**
          * zoom level of the viewpoint on the start point
          */
+        @UiHidden
         public int Zoom = 4;
         /**
          * window width
          */
+        @UiLabel("Main Window Width")
         public int WindowWidth = 1684;
         /**
          * window height
          */
+        @UiLabel("Main Window Height")
         public int WindowHeight = 1024;
         /**
          * cell size for sampling
          */
+        @UiLabel("Cell size of the graph sampling (in metre)")
         public int CellSampling = 2;
         /**
          * thread sleep time in miliseconds
          */
+        @UiHidden
         public int ThreadSleepTime = 25;
         /**
          * geo map for graph
@@ -219,6 +226,8 @@ public class CConfiguration
         /**
          * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra algorithm)
          */
+        @UiLabel("Routing algorithm")
+        @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})
         public String RoutingAlgorithm = "astarbi";
 
         /**
@@ -229,11 +238,13 @@ public class CConfiguration
             /**
              * download URL
              */
+            @UiLabel("Download URL of the OpenStreetMap PBF file")
             public String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
 
             /**
              * name of the map
              */
+            @UiLabel("Unique name of the OpenStreetMap data")
             public String name = "europe/germany/lowersaxony";
         }
 

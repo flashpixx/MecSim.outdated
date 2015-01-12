@@ -24,6 +24,12 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import org.metawidget.inspector.annotation.MetawidgetAnnotationInspector;
+import org.metawidget.inspector.composite.CompositeInspector;
+import org.metawidget.inspector.composite.CompositeInspectorConfig;
+import org.metawidget.inspector.impl.BaseObjectInspectorConfig;
+import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyle;
+import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyleConfig;
 import org.metawidget.inspector.propertytype.PropertyTypeInspector;
 import org.metawidget.swing.SwingMetawidget;
 
@@ -40,8 +46,28 @@ public class CPreferenceDialog extends JDialog
 
     public CPreferenceDialog()
     {
+        this.setSize( 800, 300 );
+        //this.setLocationRelativeTo( p_frame );
+        this.setModalityType( ModalityType.APPLICATION_MODAL );
+
+
         SwingMetawidget l_widget = new SwingMetawidget();
-        l_widget.setInspector( new PropertyTypeInspector() );
+
+        BaseObjectInspectorConfig l_inspectconfig = new BaseObjectInspectorConfig().setPropertyStyle(
+                new JavaBeanPropertyStyle(
+                        new JavaBeanPropertyStyleConfig().setSupportPublicFields( true )
+                )
+        );
+
+        l_widget.setInspector(
+                new CompositeInspector(
+                        new CompositeInspectorConfig().setInspectors(
+                                new PropertyTypeInspector( l_inspectconfig ),
+                                new MetawidgetAnnotationInspector( l_inspectconfig )
+                        )
+                )
+        );
+
         l_widget.setToInspect( CConfiguration.getInstance().get() );
         this.add( l_widget );
     }

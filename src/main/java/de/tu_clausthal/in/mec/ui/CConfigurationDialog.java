@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
-import org.jdesktop.beansbinding.AutoBinding;
 import org.metawidget.inspector.annotation.MetawidgetAnnotationInspector;
 import org.metawidget.inspector.composite.CompositeInspector;
 import org.metawidget.inspector.composite.CompositeInspectorConfig;
@@ -33,8 +32,6 @@ import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyl
 import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyleConfig;
 import org.metawidget.inspector.propertytype.PropertyTypeInspector;
 import org.metawidget.swing.SwingMetawidget;
-import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessor;
-import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessorConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,6 +51,7 @@ public class CConfigurationDialog extends JDialog
         this.initialize();
     }
 
+
     /**
      * ctor
      *
@@ -65,12 +63,15 @@ public class CConfigurationDialog extends JDialog
         this.initialize();
     }
 
+
     /**
      * create UI with data binding *
      */
     private void initialize()
     {
-        this.setSize( 800, 300 );
+        //this.setSize( 800, 300 );
+        this.setAlwaysOnTop( true );
+        this.setResizable( false );
         this.setModalityType( ModalityType.APPLICATION_MODAL );
 
         // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
@@ -96,15 +97,20 @@ public class CConfigurationDialog extends JDialog
 
         // at last we need a databinding between UI components and properties of the object, so that
         // the properties are update automatically on changing
+        /*
         l_widget.addWidgetProcessor(
                 new BeansBindingProcessor(
                         new BeansBindingProcessorConfig().setUpdateStrategy( AutoBinding.UpdateStrategy.READ_WRITE )
                 )
         );
+        */
 
         // bind the object to the UI and add the metawidget to the frame
         l_widget.setToInspect( CConfiguration.getInstance().get() );
+
+        this.setLayout( new FlowLayout() );
         this.add( l_widget );
+        this.pack();
     }
 
 }

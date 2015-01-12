@@ -200,33 +200,38 @@ public class CConfiguration
         @UiHidden
         public int Zoom = 4;
         /**
-         * window width
-         */
-        @UiLabel("Main Window Width")
-        public int WindowWidth = 1684;
-        /**
-         * window height
-         */
-        @UiLabel("Main Window Height")
-        public int WindowHeight = 1024;
-        /**
-         * cell size for sampling
-         */
-        @UiLabel("Cell size of the graph sampling (in metre)")
-        public int CellSampling = 2;
-        /**
          * thread sleep time in miliseconds
          */
         @UiHidden
         public int ThreadSleepTime = 25;
         /**
+         * window width
+         */
+        @UiHidden
+        public int WindowWidth = 1684;
+        /**
+         * window height
+         */
+        @UiHidden
+        public int WindowHeight = 1024;
+
+        /**
          * geo map for graph
          */
+        @UiSection("Data Source / Download")
+        @UiLabel("")
         public RoutingMap RoutingMap = new RoutingMap();
+        /**
+         * cell size for sampling
+         */
+        @UiSection("Traffic Graph")
+        @UiLabel("Cell size of the graph sampling (in metre)")
+        public int CellSampling = 2;
         /**
          * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
          * algorithm)
          */
+        @UiComesAfter("CellSampling")
         @UiLabel("Routing algorithm")
         @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})
         public String RoutingAlgorithm = "astarbi";

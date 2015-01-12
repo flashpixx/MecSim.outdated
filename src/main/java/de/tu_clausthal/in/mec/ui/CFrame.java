@@ -25,8 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.location.TreeLocationRoot;
-import de.tu_clausthal.in.mec.CBootstrap;
-import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,18 +94,17 @@ public class CFrame extends JFrame
         } );
 
         this.add( m_control.getContentArea() );
-        CBootstrap.AfterFrameInit( this );
-
         this.setJMenuBar( new CMenuBar() );
-        CBootstrap.BeforeWidgetConfigurationIsLoaded( this );
 
         // UI loading can be run after the dock structure is full initialized
         try
         {
+            CBootstrap.AfterFrameInit( this );
             m_control.readXML( m_configfile );
         }
-        catch ( IOException l_execption )
+        catch ( Exception l_execption )
         {
+            CLogger.error( l_execption );
         }
 
         // visibility and pack must be run at the end, because of modification

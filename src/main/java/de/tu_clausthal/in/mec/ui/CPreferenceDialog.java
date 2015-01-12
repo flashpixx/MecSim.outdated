@@ -73,7 +73,6 @@ public class CPreferenceDialog extends JDialog
         this.setSize( 800, 300 );
         this.setModalityType( ModalityType.APPLICATION_MODAL );
 
-
         // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
         // public properties instead
         SwingMetawidget l_widget = new SwingMetawidget();
@@ -103,7 +102,7 @@ public class CPreferenceDialog extends JDialog
                 )
         );
 
-        // we add the object of the UI
+        // bind the object to the UI and add the metawidget to the frame
         l_widget.setToInspect( CConfiguration.getInstance().get() );
         this.add( l_widget );
     }

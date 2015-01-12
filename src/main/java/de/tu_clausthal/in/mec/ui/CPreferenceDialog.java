@@ -74,6 +74,8 @@ public class CPreferenceDialog extends JDialog
         this.setModalityType( ModalityType.APPLICATION_MODAL );
 
 
+        // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
+        // public properties instead
         SwingMetawidget l_widget = new SwingMetawidget();
 
         BaseObjectInspectorConfig l_inspectconfig = new BaseObjectInspectorConfig().setPropertyStyle(
@@ -82,6 +84,8 @@ public class CPreferenceDialog extends JDialog
                 )
         );
 
+        // there exists object-in-object relation and annotation in the object, so we redefine the inspector
+        // as a composit inspector and within a propertytype and annotation inspector
         l_widget.setInspector(
                 new CompositeInspector(
                         new CompositeInspectorConfig().setInspectors(
@@ -91,12 +95,15 @@ public class CPreferenceDialog extends JDialog
                 )
         );
 
+        // at last we need a databinding between UI components and properties of the object, so that
+        // the properties are update automatically on changing
         l_widget.addWidgetProcessor(
                 new BeansBindingProcessor(
                         new BeansBindingProcessorConfig().setUpdateStrategy( AutoBinding.UpdateStrategy.READ_WRITE )
                 )
         );
 
+        // we add the object of the UI
         l_widget.setToInspect( CConfiguration.getInstance().get() );
         this.add( l_widget );
     }

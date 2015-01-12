@@ -31,6 +31,9 @@ import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.inspector.CInspector;
+
+import javax.swing.*;
 
 
 /**
@@ -50,23 +53,14 @@ public class CBootstrap
 
 
     /**
-     * is called before UI Elements are initialize
-     *
-     * @param p_frame frame
-     */
-    public static void BeforeFrameElementsInit( CFrame p_frame )
-    {
-
-    }
-
-    /**
      * is called after UI Elements are initialize
      *
      * @param p_frame frame
      */
-    public static void AfterFrameElementsInit( CFrame p_frame )
+    public static void BeforeWidgetConfigurationIsLoaded( CFrame p_frame )
     {
-
+        p_frame.addWidget( "Inspector", CInspector.getInstance(), CFrame.Position.EAST, 0.2 );
+        p_frame.addWidget( "OSM", new JScrollPane( COSMViewer.getInstance() ), CFrame.Position.WEST, 0.8 );
     }
 
     /**

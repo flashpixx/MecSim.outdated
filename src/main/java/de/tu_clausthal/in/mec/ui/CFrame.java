@@ -24,9 +24,9 @@
 package de.tu_clausthal.in.mec.ui;
 
 import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.location.TreeLocationRoot;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +34,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 
 /**
@@ -46,11 +47,16 @@ public class CFrame extends JFrame
      * control of the dock component
      */
     private CControl m_control = new CControl( this );
+
+    ;
     /**
      * config file of the dockables
      */
     private File m_configfile = new File( CConfiguration.getInstance().getConfigDir() + "/" + "ui.xml" );
-
+    /**
+     * map with widgets
+     */
+    private Map<String, Component> m_widgets = new HashMap();
 
     /**
      * ctor with frame initialization
@@ -91,10 +97,8 @@ public class CFrame extends JFrame
         this.add( m_control.getContentArea() );
         CBootstrap.AfterFrameInit( this );
 
-        CBootstrap.BeforeFrameElementsInit( this );
         this.setJMenuBar( new CMenuBar() );
-        this.createDockable( "Inspector", CInspector.getInstance(), false, CLocation.base().normalEast( 0.2 ) );
-        this.createDockable( "OSM", new JScrollPane( COSMViewer.getInstance() ), false, CLocation.base().normalWest( 0.8 ) );
+        CBootstrap.BeforeWidgetConfigurationIsLoaded( this );
 
         // UI loading can be run after the dock structure is full initialized
         try
@@ -105,42 +109,143 @@ public class CFrame extends JFrame
         {
         }
 
-        CBootstrap.AfterFrameElementsInit( this );
-
-        // visibility must be set at the end, because of modification
+        // visibility and pack must be run at the end, because of modification
         this.setVisible( true );
     }
-
-
-    /**
-     * add component to the frame
-     *
-     * @param p_name  dockname
-     * @param p_panel omponent
-     */
-    public void addUIComponent( String p_name, Component p_panel )
-    {
-        this.createDockable( p_name, p_panel, false, CLocation.base().minimalSouth() );
-    }
-
 
     /**
      * creates a single dockable and adds it to the dockable control
      *
      * @param p_title    unique title
      * @param p_panel    panel
-     * @param p_close    show close button
      * @param p_location location of the panel
      */
-    private void createDockable( String p_title, Component p_panel, boolean p_close, CLocation p_location )
+    private void createDockable( String p_title, Component p_panel, CLocation p_location )
     {
         DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
         l_dock.setTitleText( p_title );
-        l_dock.setCloseable( p_close );
+        l_dock.setCloseable( false );
         l_dock.add( p_panel );
         l_dock.setLocation( p_location );
         m_control.addDockable( l_dock );
         l_dock.setVisible( true );
+    }
+
+    /**
+     * add component to the frame
+     *
+     * @param p_name  dockname
+     * @param p_panel component
+     */
+    public void addWidget( String p_name, Component p_panel )
+    {
+        if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
+            throw new IllegalArgumentException( "name or panel are empty" );
+
+        this.createDockable( p_name, p_panel, CLocation.base().minimalSouth() );
+    }
+
+    /**
+     * add component to the frame
+     *
+     * @param p_name     dockname
+     * @param p_panel    component
+     * @param p_position position of the widget on the frame
+     * @param p_size     size of the widget
+     */
+    public void addWidget( String p_name, Component p_panel, Position p_position, double p_size )
+    {
+        if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
+            throw new IllegalArgumentException( "name or panel are empty" );
+
+        TreeLocationRoot l_position = null;
+        switch ( p_position )
+        {
+            case SOUTH:
+                l_position = CLocation.base().normalSouth( p_size );
+                break;
+            case NORTH:
+                l_position = CLocation.base().normalNorth( p_size );
+                break;
+            case EAST:
+                l_position = CLocation.base().normalEast( p_size );
+                break;
+            case WEST:
+                l_position = CLocation.base().normalWest( p_size );
+                break;
+        }
+        this.createDockable( p_name, p_panel, l_position );
+    }
+
+    /**
+     * returns a widget
+     *
+     * @param p_name name of the widget
+     * @return null or component
+     */
+    public Component getWidget( String p_name )
+    {
+        return m_widgets.get( p_name );
+    }
+
+    /**
+     * checks if a widget exists
+     *
+     * @param p_name name of the widget
+     * @return boolean existence
+     */
+    public boolean containsWidget( String p_name )
+    {
+        return m_widgets.containsKey( p_name );
+    }
+
+    /**
+     * removes the widget
+     *
+     * @param p_name name of the widget
+     * @return component
+     */
+    public Component removeWidget( String p_name )
+    {
+        return m_widgets.remove( p_name );
+    }
+
+    /**
+     * returns all widgets
+     *
+     * @return widget collection
+     */
+    public Collection<Component> getWidgetsComponent()
+    {
+        return m_widgets.values();
+    }
+
+    /**
+     * returns a set of all widget names
+     *
+     * @return name set
+     */
+    public Set<String> getWidgetNames()
+    {
+        return m_widgets.keySet();
+    }
+
+    /**
+     * returns the entry set of all widgets
+     *
+     * @return widget entry set
+     */
+    public Set<Map.Entry<String, Component>> getWidgetEntrySet()
+    {
+        return m_widgets.entrySet();
+    }
+
+    /**
+     * enum of widget position *
+     */
+    public enum Position
+    {
+        SOUTH, NORTH, EAST, WEST
     }
 
 }

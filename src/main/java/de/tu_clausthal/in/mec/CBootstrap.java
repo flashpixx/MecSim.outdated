@@ -33,8 +33,6 @@ import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 
-import javax.swing.*;
-
 
 /**
  * class to create the bootstrap of the program
@@ -62,7 +60,7 @@ public class CBootstrap
         CSimulation.getInstance().getWorld().put( "CarCount", new CCarCount( p_frame ) );
 
         p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
-        p_frame.addWidget( "OSM", new JScrollPane( COSMViewer.getInstance() ), CFrame.Position.WEST, 0.8 );
+        p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.WEST, 0.8 );
     }
 
 
@@ -134,10 +132,13 @@ public class CBootstrap
      */
     public static void onSimulationReset( CSimulation p_simulation )
     {
+        COSMViewer l_osm = COSMViewer.getSimulationOSM();
+        if ( l_osm == null )
+            return;
 
-        COSMViewer.getInstance().setZoom( CConfiguration.getInstance().get().Zoom );
-        COSMViewer.getInstance().setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
-        COSMViewer.getInstance().setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
+        l_osm.setZoom( CConfiguration.getInstance().get().Zoom );
+        l_osm.setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
+        l_osm.setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
 
     }
 

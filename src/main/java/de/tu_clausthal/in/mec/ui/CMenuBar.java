@@ -477,8 +477,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void screenshot() throws IOException
     {
-        BufferedImage l_image = new BufferedImage( COSMViewer.getInstance().getWidth(), COSMViewer.getInstance().getHeight(), BufferedImage.TYPE_INT_RGB );
-        COSMViewer.getInstance().paint( l_image.getGraphics() );
+        BufferedImage l_image = new BufferedImage( COSMViewer.getSimulationOSM().getWidth(), COSMViewer.getSimulationOSM().getHeight(), BufferedImage.TYPE_INT_RGB );
+        COSMViewer.getSimulationOSM().paint( l_image.getGraphics() );
 
         File l_store = this.openFileSaveDialog( new String[][]{{".png", "Portable Network Graphics (PNG)"}} );
         if ( l_store == null )
@@ -496,7 +496,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private File openFileSaveDialog( String[][] p_fileextensions )
     {
         JFileChooser l_filedialog = this.initFileDialog( p_fileextensions );
-        if ( l_filedialog.showSaveDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+        if ( l_filedialog.showSaveDialog( CSimulation.getInstance().getUI() ) != JFileChooser.APPROVE_OPTION )
             return null;
         m_filepath = l_filedialog.getCurrentDirectory();
 
@@ -512,7 +512,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private File openFileLoadDialog( String[][] p_fileextensions )
     {
         JFileChooser l_filedialog = this.initFileDialog( p_fileextensions );
-        if ( l_filedialog.showOpenDialog( COSMViewer.getInstance() ) != JFileChooser.APPROVE_OPTION )
+        if ( l_filedialog.showOpenDialog( CSimulation.getInstance().getUI() ) != JFileChooser.APPROVE_OPTION )
             return null;
         m_filepath = l_filedialog.getCurrentDirectory();
 

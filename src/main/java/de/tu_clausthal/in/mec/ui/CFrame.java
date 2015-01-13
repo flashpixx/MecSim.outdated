@@ -82,8 +82,8 @@ public class CFrame extends JFrame
                 {
                 }
 
-                CConfiguration.getInstance().get().ViewPoint = COSMViewer.getInstance().getCenterPosition();
-                CConfiguration.getInstance().get().Zoom = COSMViewer.getInstance().getZoom();
+                CConfiguration.getInstance().get().ViewPoint = COSMViewer.getSimulationOSM().getCenterPosition();
+                CConfiguration.getInstance().get().Zoom = COSMViewer.getSimulationOSM().getZoom();
                 CConfiguration.getInstance().get().WindowHeight = l_event.getWindow().getHeight();
                 CConfiguration.getInstance().get().WindowWidth = l_event.getWindow().getWidth();
                 CConfiguration.getInstance().write();

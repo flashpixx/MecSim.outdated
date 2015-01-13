@@ -208,7 +208,7 @@ public class CSimulation
         // read all painter object and store the list
         List<String> l_painter = new ArrayList();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
-            if ( COSMViewer.getInstance().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
+            if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
                 l_painter.add( l_item.getKey() );
 
         p_stream.writeObject( l_painter );
@@ -232,7 +232,7 @@ public class CSimulation
         m_eventmanager.clear();
         m_world.clear();
         for ( ILayer l_item : m_world.values() )
-            COSMViewer.getInstance().getCompoundPainter().removePainter( (Painter) l_item );
+            COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) l_item );
 
 
         // read world and painter list and add objects to the painter
@@ -240,7 +240,7 @@ public class CSimulation
         ArrayList<String> l_painter = (ArrayList<String>) p_stream.readObject();
 
         for ( String l_item : l_painter )
-            COSMViewer.getInstance().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
+            COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
 
 
         // reset all layer

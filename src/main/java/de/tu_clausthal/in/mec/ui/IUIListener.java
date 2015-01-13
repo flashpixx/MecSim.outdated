@@ -41,7 +41,7 @@ public abstract class IUIListener implements MouseListener
      */
     public IUIListener()
     {
-        COSMViewer.getInstance().addMouseListener( this );
+        COSMViewer.getSimulationOSM().addMouseListener( this );
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class IUIListener implements MouseListener
      */
     public void release()
     {
-        COSMViewer.getInstance().removeMouseListener( this );
+        COSMViewer.getSimulationOSM().removeMouseListener( this );
     }
 
     @Override
@@ -72,7 +72,7 @@ public abstract class IUIListener implements MouseListener
     public void mousePressed( MouseEvent e )
     {
         if ( SwingUtilities.isLeftMouseButton( e ) )
-            this.onClick( e, COSMViewer.getInstance() );
+            this.onClick( e, COSMViewer.getSimulationOSM() );
     }
 
     @Override

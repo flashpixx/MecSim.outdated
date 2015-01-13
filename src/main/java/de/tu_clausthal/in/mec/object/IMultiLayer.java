@@ -76,7 +76,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     @Override
     public boolean isVisible()
     {
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
         return m_visible;
     }
 
@@ -84,7 +84,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public void setVisible( boolean p_visible )
     {
         m_visible = p_visible;
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
     }
 
     @Override
@@ -158,7 +158,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public boolean add( T t )
     {
         boolean l_return = m_data.add( t );
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
 
         return l_return;
     }
@@ -175,11 +175,11 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         for ( Object l_item : c )
             if ( !m_data.contains( l_item ) )
             {
-                COSMViewer.getInstance().repaint();
+                COSMViewer.getSimulationOSM().repaint();
                 return false;
             }
 
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
         return true;
     }
 
@@ -187,7 +187,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public boolean addAll( Collection<? extends T> c )
     {
         boolean l_return = m_data.addAll( c );
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
 
         return l_return;
     }
@@ -199,11 +199,11 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         {
             if ( m_data.remove( l_item ) )
                 continue;
-            COSMViewer.getInstance().repaint();
+            COSMViewer.getSimulationOSM().repaint();
             return false;
         }
 
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
         return true;
     }
 
@@ -217,7 +217,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public void clear()
     {
         m_data.clear();
-        COSMViewer.getInstance().repaint();
+        COSMViewer.getSimulationOSM().repaint();
     }
 
 

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.*;
@@ -42,10 +43,6 @@ public class COSMViewer extends JXMapViewer
 {
 
     /**
-     * singleton instance
-     */
-    private static COSMViewer s_instance = new COSMViewer();
-    /**
      * compounend painter
      */
     private CompoundPainter m_painter = new CompoundPainter();
@@ -58,7 +55,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * private ctor with loading configuration defaults and listener definition
      */
-    private COSMViewer()
+    public COSMViewer()
     {
         super();
 
@@ -85,13 +82,13 @@ public class COSMViewer extends JXMapViewer
 
 
     /**
-     * return instance
+     * static method to get the OSM viewer from the current UI widget
      *
-     * @return viewer instance
+     * @return OSM Viewer
      */
-    public static COSMViewer getInstance()
+    public static COSMViewer getSimulationOSM()
     {
-        return s_instance;
+        return (COSMViewer) CSimulation.getInstance().getUI().getWidget( "OSM" );
     }
 
 

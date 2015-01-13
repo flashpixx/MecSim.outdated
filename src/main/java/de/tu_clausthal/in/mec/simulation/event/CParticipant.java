@@ -40,11 +40,11 @@ public class CParticipant implements IParticipant
     /**
      * defines the event UUID
      */
-    protected UUID m_eventid = UUID.randomUUID();
+    protected final UUID m_eventid = UUID.randomUUID();
     /**
      * defines the event name
      */
-    protected String m_eventname = m_eventid.toString();
+    protected final String m_eventname = m_eventid.toString();
     /**
      * receiver object
      */

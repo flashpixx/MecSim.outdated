@@ -94,7 +94,6 @@ public class CFrame extends JFrame
         } );
 
         this.add( m_control.getContentArea() );
-        this.setJMenuBar( new CMenuBar() );
 
         // UI loading can be run after the dock structure is full initialized
         try
@@ -107,7 +106,8 @@ public class CFrame extends JFrame
             CLogger.error( l_execption );
         }
 
-        // visibility and pack must be run at the end, because of modification
+        // visibility and menubar must be run at the end, because of modification within the bootstrap call
+        this.setJMenuBar( new CMenuBar() );
         this.setVisible( true );
     }
 

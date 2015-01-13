@@ -40,6 +40,14 @@ public class CManager implements IVoidStepable
      * list of messages
      */
     private Map<IParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
+    /**
+     * list of UUID -> participant
+     */
+    private Map<UUID, IParticipant> m_uuidparticipant = new ConcurrentHashMap();
+    /**
+     * list of name -> participant
+     */
+    private Map<String, IParticipant> m_nameparticipant = new ConcurrentHashMap();
 
 
     /**
@@ -50,6 +58,8 @@ public class CManager implements IVoidStepable
     public void register( IParticipant p_receiver )
     {
         m_data.put( p_receiver, Collections.synchronizedSet( new HashSet() ) );
+        m_uuidparticipant.put( p_receiver.getEventID(), p_receiver );
+        m_nameparticipant.put( p_receiver.getEventName(), p_receiver );
     }
 
 
@@ -61,6 +71,8 @@ public class CManager implements IVoidStepable
     public void unregister( IParticipant p_receiver )
     {
         m_data.remove( p_receiver );
+        m_uuidparticipant.remove( p_receiver.getEventID() );
+        m_nameparticipant.remove( p_receiver.getEventName() );
     }
 
 
@@ -82,9 +94,32 @@ public class CManager implements IVoidStepable
      *
      * @return participant set
      */
-    public Set<IParticipant> getParticipants()
+    public Set<IParticipant> getParticipant()
     {
         return m_data.keySet();
+    }
+
+    /**
+     * returns a participant on the name
+     *
+     * @param p_name name
+     * @return participant or null
+     */
+    public IParticipant getParticipant( String p_name )
+    {
+        return m_nameparticipant.get( p_name );
+    }
+
+
+    /**
+     * returns a participant on the UUID
+     *
+     * @param p_id UUID
+     * @return participant or null
+     */
+    public IParticipant getParticipant( UUID p_id )
+    {
+        return m_uuidparticipant.get( p_id );
     }
 
     /**
@@ -93,6 +128,8 @@ public class CManager implements IVoidStepable
     public void clear()
     {
         m_data.clear();
+        m_uuidparticipant.clear();
+        m_nameparticipant.clear();
     }
 
     @Override

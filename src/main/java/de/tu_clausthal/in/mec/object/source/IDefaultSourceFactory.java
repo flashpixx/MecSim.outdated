@@ -105,7 +105,7 @@ abstract public class IDefaultSourceFactory implements ISourceFactory, Serializa
     public Collection<IReturnStepableTarget<ICar>> getTargets()
     {
         Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
-        l_collection.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
+        l_collection.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
         return l_collection;
     }
 

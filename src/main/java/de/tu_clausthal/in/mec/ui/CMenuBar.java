@@ -117,7 +117,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         this.add( l_visibilitylayer );
 
 
-        m_drivingmodelname = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).getDrivingModelList();
+        m_drivingmodelname = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList();
         this.add( CMenuFactory.createRadioMenuGroup( "Driving Model", m_drivingmodelname, this, m_reference ) );
         for ( int i = 0; i < m_drivingmodelname.length; i++ )
             m_drivingmodelname[i] = "Driving Model::" + m_drivingmodelname[i];

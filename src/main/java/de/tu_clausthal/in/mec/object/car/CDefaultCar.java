@@ -95,7 +95,7 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * reference to the graph
      */
-    protected CGraphHopper m_graph = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).getGraph();
+    protected CGraphHopper m_graph = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph();
 
 
     /**

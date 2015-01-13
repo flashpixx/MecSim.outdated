@@ -73,7 +73,7 @@ public class CBootstrap
     {
 
         p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
-        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
+        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
 
     }
 
@@ -87,7 +87,7 @@ public class CBootstrap
     {
 
         p_simulation.getWorld().put( "Sources", new CSourceFactoryLayer() );
-        p_simulation.getWorld().put( "Car", new CCarLayer() );
+        p_simulation.getWorld().put( "Cars", new CCarLayer() );
 
     }
 

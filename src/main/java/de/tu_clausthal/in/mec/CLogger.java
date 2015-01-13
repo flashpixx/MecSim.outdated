@@ -95,6 +95,7 @@ public class CLogger
     /**
      * creates a full log item
      *
+     * @note numbers are relative stracktrace position of the caller methods
      * @param p_status status name
      * @param p_add    additional log data
      */
@@ -108,11 +109,11 @@ public class CLogger
         l_Str.append( l_SEP );
         l_Str.append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( 2 ) + "]", ' ', 100 ) );
+        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "line no [" + getCurrentLineNumber( 2 ) + "]", ' ', 15 ) );
+        l_Str.append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 15 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 3 ) + "]", ' ', 100 ) );
+        l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
 
         String l_add = ( p_add != null ) ? p_add.toString() : "";
         if ( !l_add.isEmpty() )
@@ -130,7 +131,17 @@ public class CLogger
      */
     public static void warn()
     {
-        warn( null );
+        warn( null, true );
+    }
+
+    /**
+     * adds a warn message *
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void warn( boolean p_write )
+    {
+        warn( null, p_write );
     }
 
     /**
@@ -140,7 +151,19 @@ public class CLogger
      */
     public static void warn( Object p_data )
     {
-        Logger.warn( createLogData( Level.WARNING, p_data ) );
+        warn( p_data, true );
+    }
+
+    /**
+     * adds a warn message
+     *
+     * @param p_data  log data
+     * @param p_write boolean on true message is written
+     */
+    public static void warn( Object p_data, boolean p_write )
+    {
+        if ( p_write )
+            Logger.warn( createLogData( Level.WARNING, p_data ) );
     }
 
 
@@ -149,9 +172,18 @@ public class CLogger
      */
     public static void error()
     {
-        error( null );
+        error( null, true );
     }
 
+    /**
+     * adds a error message
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void error( boolean p_write )
+    {
+        error( null, p_write );
+    }
 
     /**
      * adds a error message
@@ -160,7 +192,19 @@ public class CLogger
      */
     public static void error( Object p_data )
     {
-        Logger.error( createLogData( Level.ERROR, p_data ) );
+        error( p_data, true );
+    }
+
+    /**
+     * adds a error message
+     *
+     * @param p_data  log data
+     * @param p_write boolean on true message is written
+     */
+    public static void error( Object p_data, boolean p_write )
+    {
+        if ( p_write )
+            Logger.error( createLogData( Level.ERROR, p_data ) );
     }
 
 
@@ -169,7 +213,17 @@ public class CLogger
      */
     public static void info()
     {
-        info( null );
+        info( null, true );
+    }
+
+    /**
+     * adds an info message
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void info( boolean p_write )
+    {
+        info( null, p_write );
     }
 
 
@@ -180,7 +234,19 @@ public class CLogger
      */
     public static void info( Object p_data )
     {
-        Logger.info( createLogData( Level.INFO, p_data ) );
+        info( p_data, true );
+    }
+
+    /**
+     * adds an info message
+     *
+     * @param p_data  log data
+     * @param p_write boolean on true message is written
+     */
+    public static void info( Object p_data, boolean p_write )
+    {
+        if ( p_write )
+            Logger.info( createLogData( Level.INFO, p_data ) );
     }
 
 
@@ -189,9 +255,18 @@ public class CLogger
      */
     public static void debug()
     {
-        debug( null );
+        debug( null, true );
     }
 
+    /**
+     * adds a debug message
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void debug( boolean p_write )
+    {
+        debug( null, p_write );
+    }
 
     /**
      * adds a debug message
@@ -200,7 +275,18 @@ public class CLogger
      */
     public static void debug( Object p_data )
     {
-        Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        debug( p_data, true );
+    }
+
+    /**
+     * adds a debug message
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void debug( Object p_data, boolean p_write )
+    {
+        if ( p_write )
+            Logger.debug( createLogData( Level.DEBUG, p_data ) );
     }
 
 
@@ -209,8 +295,19 @@ public class CLogger
      */
     public static void out()
     {
-        out( null );
+        out( null, true );
     }
+
+    /**
+     * adds a output message
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void out( boolean p_write )
+    {
+        out( null, p_write );
+    }
+
 
     /**
      * adds a output message
@@ -219,6 +316,20 @@ public class CLogger
      */
     public static void out( Object p_data )
     {
+        out( p_data, true );
+    }
+
+    /**
+     * adds a output message
+     *
+     * @param p_data  log data
+     * @param p_write boolean on true message is written
+     */
+    public static void out( Object p_data, boolean p_write )
+    {
+        if ( !p_write )
+            return;
+
         if ( s_level == Level.OFF )
             System.out.println( p_data );
         else

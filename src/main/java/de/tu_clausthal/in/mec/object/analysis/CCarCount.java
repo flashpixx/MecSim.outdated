@@ -54,7 +54,7 @@ public class CCarCount extends IEvaluateLayer
      */
     public CCarCount( CFrame p_frame )
     {
-        p_frame.addWidget( "Car Count", new ChartPanel( ChartFactory.createLineChart( "Car Count", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
+        p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( "Count Cars", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
 
     @Override

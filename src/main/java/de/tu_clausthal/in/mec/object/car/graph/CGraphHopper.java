@@ -255,7 +255,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return number of cars on the graph
      */
-    public synchronized int getNumberOfCars()
+    public synchronized int getNumberOfObjects()
     {
         int l_count = 0;
         for ( CCellObjectLinkage l_item : m_edgecell.values() )

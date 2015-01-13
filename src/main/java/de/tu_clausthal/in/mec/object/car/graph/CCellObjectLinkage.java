@@ -295,7 +295,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
         if ( !m_objects.containsKey( p_object ) )
             return;
 
-        m_cells[m_objects.get( p_object )] = null;
+        m_cells[m_objects.remove( p_object )] = null;
     }
 
 

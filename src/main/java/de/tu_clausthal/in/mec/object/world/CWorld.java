@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.world;
 
 import de.tu_clausthal.in.mec.CBootstrap;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 
 import java.io.Serializable;
@@ -76,7 +77,9 @@ public class CWorld implements Map<String, ILayer>, Serializable
     @Override
     public ILayer get( Object key )
     {
-        return m_layer.get( key );
+        ILayer l_layer = m_layer.get( key );
+        CLogger.warn( "layer [" + l_layer.toString() + "] not exists", l_layer == null );
+        return l_layer;
     }
 
     @Override

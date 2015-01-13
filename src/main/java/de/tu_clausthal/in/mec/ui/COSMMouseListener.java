@@ -73,7 +73,7 @@ class COSMMouseListener extends MouseAdapter
                 Point2D l_position = new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
                 GeoPosition l_geoposition = l_viewer.getTileFactory().pixelToGeo( l_position, l_viewer.getZoom() );
 
-                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Source" ) ).add( new CDefaultSourceFactory( l_geoposition ) );
+                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add( new CDefaultSourceFactory( l_geoposition ) );
 
 /*
                 boolean l_remove = false;

@@ -72,7 +72,7 @@ public class CBootstrap
     public static void AfterOSMViewerInit( COSMViewer p_viewer )
     {
 
-        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Source" ) );
+        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
         p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Car" ) );
 
     }
@@ -86,7 +86,7 @@ public class CBootstrap
     public static void AfterSimulationInit( CSimulation p_simulation )
     {
 
-        p_simulation.getWorld().put( "Source", new CSourceFactoryLayer() );
+        p_simulation.getWorld().put( "Sources", new CSourceFactoryLayer() );
         p_simulation.getWorld().put( "Car", new CCarLayer() );
 
     }

@@ -202,16 +202,15 @@ public class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
-        // store the world data
-        p_stream.writeObject( m_world );
-
         // read all painter object and store the list
-        List<String> l_painter = new ArrayList();
+        List<String> l_osmpainter = new ArrayList();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
-                l_painter.add( l_item.getKey() );
+                l_osmpainter.add( l_item.getKey() );
 
-        p_stream.writeObject( l_painter );
+        // store data (layers, OSM painter layers)
+        p_stream.writeObject( m_world );
+        p_stream.writeObject( l_osmpainter );
 
 
         CLogger.info( "simulation is stored" );
@@ -228,20 +227,24 @@ public class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
 
-        // clear current values
+        if ( this.hasUI() )
+            for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
+            {
+                // check if layer is a JXMapViewer Painter
+                if ( l_item.getValue() instanceof Painter )
+                    COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) l_item.getValue() );
+                m_ui.removeWidget( l_item.getKey() );
+            }
+
+        // clear and load world
         m_eventmanager.clear();
         m_world.clear();
-        for ( ILayer l_item : m_world.values() )
-            COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) l_item );
-
-
-        // read world and painter list and add objects to the painter
         m_world = (CWorld) p_stream.readObject();
-        ArrayList<String> l_painter = (ArrayList<String>) p_stream.readObject();
 
-        for ( String l_item : l_painter )
-            COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
-
+        // restore OSM painter layers
+        if ( this.hasUI() )
+            for ( String l_item : (ArrayList<String>) p_stream.readObject() )
+                COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
 
         // reset all layer
         this.reset();

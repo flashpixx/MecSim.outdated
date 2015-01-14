@@ -33,6 +33,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Map;
 
 
@@ -47,12 +49,17 @@ public class CCarCount extends IEvaluateLayer
      */
     DefaultCategoryDataset m_plotdata = new DefaultCategoryDataset();
 
-    /**
-     * ctor
-     *
-     * @param p_frame frame objct
-     */
+
     public CCarCount( CFrame p_frame )
+    {
+        this.initialize( p_frame );
+    }
+
+    /** initialize for setting up the frame
+     *
+     * @param p_frame frame
+     */
+    private void initialize( CFrame p_frame )
     {
         p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( "Count Cars", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
@@ -66,6 +73,9 @@ public class CCarCount extends IEvaluateLayer
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
+        if ( !CSimulation.getInstance().hasUI() )
+            return;
+
         m_plotdata.addValue( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getNumberOfObjects(), "number", String.valueOf( p_currentstep ) );
     }
 
@@ -73,5 +83,18 @@ public class CCarCount extends IEvaluateLayer
     public Map<String, Object> analyse()
     {
         return null;
+    }
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     */
+    private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        if ( CSimulation.getInstance().hasUI() )
+            this.initialize( CSimulation.getInstance().getUI() );
     }
 }

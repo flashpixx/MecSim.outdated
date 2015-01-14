@@ -73,6 +73,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * active layer names
      */
     private String[] m_activelayer = null;
+    /**
+     * graph weight names
+     */
+    private String[] m_graphweights = null;
 
 
     /**
@@ -82,10 +86,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         super();
 
+        // File-Menu
         String[] l_file = {"Preferences", null, "Load", "Save", null, "Screenshot"};
         this.add( CMenuFactory.createMenu( "File", l_file, this, m_reference ) );
 
 
+        // Simulation-Menu
         String[] l_actions = {"Start", "Stop", null, "Reset", null};
         JMenu l_simulation = CMenuFactory.createMenu( "Simulation", l_actions, this, m_reference );
 
@@ -102,6 +108,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         this.add( l_simulation );
 
 
+        // Layer-menu
         m_activelayer = new String[CSimulation.getInstance().getWorld().size()];
         CSimulation.getInstance().getWorld().keySet().toArray( m_activelayer );
         ArrayList<String> l_visablelayer = new ArrayList();
@@ -117,19 +124,20 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         this.add( l_visibilitylayer );
 
 
+        // Drivingmodel-Menu
         m_drivingmodelname = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList();
         this.add( CMenuFactory.createRadioMenuGroup( "Driving Model", m_drivingmodelname, this, m_reference ) );
         for ( int i = 0; i < m_drivingmodelname.length; i++ )
             m_drivingmodelname[i] = "Driving Model::" + m_drivingmodelname[i];
 
 
+        // Graphweights-Menu
+        m_graphweights = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList();
+        this.add( CMenuFactory.createRadioMenuGroup( "Routing Weights", m_graphweights, this, m_reference ) );
+        for ( int i = 0; i < m_graphweights.length; i++ )
+            m_graphweights[i] = "Routing Weights::" + m_graphweights[i];
+
 /*
-
-        String[] l_weights = {"Default", "Speed", "Traffic Jam", "Speed & Traffic Jam"};
-        this.add(CMenuFactory.createRadioMenuGroup("Graph Weights", l_weights, this, m_reference));
-
-
-
         String[] l_institution = {"Create Institution", "Delete Institution"};
         this.add(CMenuFactory.createMenu("Institution", l_institution, this, m_reference));
 
@@ -166,6 +174,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     public void actionPerformed( ActionEvent e )
     {
 
+        // file / layer
         try
         {
 
@@ -227,6 +236,22 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 {
                     this.throwSimulationRunningException();
                     ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
+                }
+                catch ( Exception l_exception )
+                {
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+                }
+            }
+
+
+        // graph weights
+        for ( String l_weight : m_graphweights )
+            if ( e.getSource() == m_reference.get( l_weight ) )
+            {
+                try
+                {
+                    this.throwSimulationRunningException();
+                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setGraphWeight( l_weight.replace( "Routing Weights::", "" ) );
                 }
                 catch ( Exception l_exception )
                 {
@@ -404,27 +429,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         return null;
     }
 
-
-    /**
-     * sets the graph weights
-     *
-     * @param p_weight weight name (see "graphhopper" class "createWeighting" method)
-     */
-    private void setGraphWeight( String p_weight ) throws IllegalStateException
-    {
-        if ( CSimulation.getInstance().isRunning() )
-        {
-            ( (JRadioButtonMenuItem) m_reference.get( m_weight ) ).setSelected( true );
-            throw new IllegalStateException( "simulation is running" );
-        }
-
-        CCarLayer l_layer = (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" );
-        if ( l_layer != null )
-        {
-            l_layer.setGraphWeight( p_weight );
-            m_weight = p_weight;
-        }
-    }
 
     /**
      * handles the preferences

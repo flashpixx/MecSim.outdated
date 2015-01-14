@@ -311,6 +311,16 @@ public class CGraphHopper extends GraphHopper
 
     }
 
+    /**
+     * returns a string list with weightening names
+     *
+     * @return string list
+     */
+    public String[] getWeightingList()
+    {
+        return new String[]{"Default", "TrafficJam + SpeedUp", "SpeedUp", "TrafficJam"};
+    }
+
     @Override
     public Weighting createWeighting( String p_weighting, FlagEncoder p_encoder )
     {

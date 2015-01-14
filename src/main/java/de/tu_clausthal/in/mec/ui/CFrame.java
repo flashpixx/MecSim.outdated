@@ -206,7 +206,10 @@ public class CFrame extends JFrame
      */
     public Component removeWidget( String p_name )
     {
-        return m_widgets.remove( p_name );
+        Component l_component = m_widgets.remove( p_name );
+        if ( l_component != null )
+            m_control.removeDockable( m_control.getSingleDockable( p_name ) );
+        return l_component;
     }
 
     /**

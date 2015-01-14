@@ -185,40 +185,55 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 CSimulation.getInstance().stop();
             if ( e.getSource() == m_reference.get( "Simulation::Reset" ) )
                 CSimulation.getInstance().reset();
-
-
-            // layer action / visibility
-            for ( String l_layername : m_activelayer )
-                if ( e.getSource() == m_reference.get( "Activity::" + l_layername ) )
-                {
-                    this.throwSimulationRunningException();
-                    ILayer l_layer = CSimulation.getInstance().getWorld().get( l_layername );
-                    l_layer.setActive( !l_layer.isActive() );
-                    break;
-                }
-
-            for ( String l_layername : m_visiblelayer )
-                if ( e.getSource() == m_reference.get( "Visibility::" + l_layername ) )
-                {
-                    IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_layername );
-                    l_layer.setVisible( !l_layer.isVisible() );
-                    break;
-                }
-
-
-            // driving models
-            for ( String l_model : m_drivingmodelname )
-                if ( e.getSource() == m_reference.get( l_model ) )
-                {
-                    this.throwSimulationRunningException();
-                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
-                }
-
         }
         catch ( Exception l_exception )
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
+
+
+        // layer action / visibility
+        for ( String l_layername : m_activelayer )
+            if ( e.getSource() == m_reference.get( "Activity::" + l_layername ) )
+            {
+                ILayer l_layer = CSimulation.getInstance().getWorld().get( l_layername );
+                try
+                {
+                    this.throwSimulationRunningException();
+                    l_layer.setActive( !l_layer.isActive() );
+                }
+                catch ( Exception l_exception )
+                {
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+                }
+                break;
+            }
+
+        for ( String l_layername : m_visiblelayer )
+            if ( e.getSource() == m_reference.get( "Visibility::" + l_layername ) )
+            {
+                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_layername );
+                l_layer.setVisible( !l_layer.isVisible() );
+
+                break;
+            }
+
+
+        // driving models
+        for ( String l_model : m_drivingmodelname )
+            if ( e.getSource() == m_reference.get( l_model ) )
+            {
+                try
+                {
+                    this.throwSimulationRunningException();
+                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
+                }
+                catch ( Exception l_exception )
+                {
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+                }
+            }
+
 
         /*
             if (e.getSource() == m_reference.get("Create Institution"))

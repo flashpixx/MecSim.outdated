@@ -30,12 +30,15 @@ import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -57,22 +60,16 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      * map with object for action listener
      */
     private Map<String, Object> m_reference = new HashMap();
-    /**
-     * current weight
-     */
-    private String m_weight = "Default";
+
+    private Map<String, Pair<String[], Component>> m_menuitems = new HashMap();
+
+    private Map<String, JMenu> m_mainmenus = new HashMap();
+
+
     /**
      * menu names of driving models
      */
     private String[] m_drivingmodelname = null;
-    /**
-     * visible layer names
-     */
-    private String[] m_visiblelayer = null;
-    /**
-     * active layer names
-     */
-    private String[] m_activelayer = null;
     /**
      * graph weight names
      */
@@ -94,34 +91,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         // Simulation-Menu
         String[] l_actions = {"Start", "Stop", null, "Reset", null};
         JMenu l_simulation = CMenuFactory.createMenu( "Simulation", l_actions, this, m_reference );
-
-        JSlider l_simulationspeed = new JSlider( 0, 150 );
-        l_simulationspeed.addChangeListener( this );
-        l_simulationspeed.setValue( l_simulationspeed.getMaximum() - Math.max( l_simulationspeed.getMinimum(), Math.min( l_simulationspeed.getMaximum(), CConfiguration.getInstance().get().ThreadSleepTime ) ) );
-        l_simulation.add( l_simulationspeed );
-        Hashtable<Integer, JLabel> l_simulationspeedlabel = new Hashtable();
-        l_simulationspeedlabel.put( l_simulationspeed.getMinimum(), new JLabel( "slow" ) );
-        l_simulationspeedlabel.put( l_simulationspeed.getMaximum(), new JLabel( "fast" ) );
-        l_simulationspeedlabel.put( ( l_simulationspeed.getMaximum() - l_simulationspeed.getMinimum() ) / 2, new JLabel( "Speed" ) );
-        l_simulationspeed.setLabelTable( l_simulationspeedlabel );
-        l_simulationspeed.setPaintLabels( true );
+        l_simulation.add( CMenuFactory.createSlider( "Speed", CConfiguration.getInstance().get().ThreadSleepTime, "slow", 0, "fast", 150, this ) );
         this.add( l_simulation );
 
 
-        // Layer-menu
-        m_activelayer = new String[CSimulation.getInstance().getWorld().size()];
-        CSimulation.getInstance().getWorld().keySet().toArray( m_activelayer );
-        ArrayList<String> l_visablelayer = new ArrayList();
-        for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
-            if ( l_item.getValue() instanceof IViewableLayer )
-                l_visablelayer.add( l_item.getKey() );
-        m_visiblelayer = new String[l_visablelayer.size()];
-        l_visablelayer.toArray( m_visiblelayer );
+        m_mainmenus.put( "layer", new JMenu( "Layer" ) );
+        this.refreshMenuItems();
 
-        JMenu l_visibilitylayer = new JMenu( "Layer" );
-        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Activity", m_activelayer, this, m_reference ) );
-        l_visibilitylayer.add( CMenuFactory.createRadioMenu( "Visibility", m_visiblelayer, this, m_reference ) );
-        this.add( l_visibilitylayer );
+        for ( JMenu l_item : m_mainmenus.values() )
+            this.add( l_item );
+
+
 
 
         // Drivingmodel-Menu
@@ -152,6 +132,50 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     }
 
+    private void refreshMenuItems()
+    {
+        // Layer-menu
+        String[] l_activelayer = new String[CSimulation.getInstance().getWorld().size()];
+        ArrayList<String> l_help = new ArrayList();
+
+        CSimulation.getInstance().getWorld().keySet().toArray( l_activelayer );
+        for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
+            if ( l_item.getValue() instanceof IViewableLayer )
+                l_help.add( l_item.getKey() );
+        String[] l_visablelayer = new String[l_help.size()];
+        l_help.toArray( l_visablelayer );
+
+        // remove old items, create new items and add them
+        m_mainmenus.get( "layer" ).remove( this.getMenuComponent( "activeLayer" ) );
+        m_mainmenus.get( "layer" ).remove( this.getMenuComponent( "visibleLayer" ) );
+
+        m_menuitems.put( "activeLayer", new MutablePair( l_activelayer, CMenuFactory.createRadioMenu( "Activity", l_activelayer, this, m_reference ) ) );
+        m_menuitems.put( "visibleLayer", new MutablePair( l_visablelayer, CMenuFactory.createRadioMenu( "Visibility", l_visablelayer, this, m_reference ) ) );
+
+        m_mainmenus.get( "layer" ).add( this.getMenuComponent( "activeLayer" ) );
+        m_mainmenus.get( "layer" ).add( this.getMenuComponent( "visibleLayer" ) );
+
+        // set enable / disable option2
+    }
+
+    private Component getMenuComponent( String p_name )
+    {
+        Pair<String[], Component> l_pair = m_menuitems.get( p_name );
+        if ( l_pair == null )
+            return null;
+
+        return l_pair.getRight();
+    }
+
+    private String[] getMenuList( String p_name )
+    {
+        Pair<String[], Component> l_pair = m_menuitems.get( p_name );
+        if ( l_pair == null )
+            return null;
+
+        return l_pair.getLeft();
+    }
+
 
     @Override
     public void stateChanged( ChangeEvent e )
@@ -173,6 +197,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
+
+        this.refreshMenuItems();
 
         // file / layer
         try
@@ -202,7 +228,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
         // layer action / visibility
-        for ( String l_layername : m_activelayer )
+        for ( String l_layername : this.getMenuList( "activeLayer" ) )
             if ( e.getSource() == m_reference.get( "Activity::" + l_layername ) )
             {
                 ILayer l_layer = CSimulation.getInstance().getWorld().get( l_layername );
@@ -218,7 +244,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 break;
             }
 
-        for ( String l_layername : m_visiblelayer )
+        for ( String l_layername : this.getMenuList( "visibleLayer" ) )
             if ( e.getSource() == m_reference.get( "Visibility::" + l_layername ) )
             {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_layername );

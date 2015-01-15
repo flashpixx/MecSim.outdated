@@ -24,7 +24,9 @@
 package de.tu_clausthal.in.mec.ui;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
 import java.util.Map;
 
 
@@ -33,6 +35,36 @@ import java.util.Map;
  */
 public class CMenuFactory
 {
+
+    /**
+     * create a slider menu item
+     *
+     * @param p_label    label of menu entry
+     * @param p_value    current value
+     * @param p_labelmin label of the minimum
+     * @param p_min      minimum value
+     * @param p_labelmax label of the maximum
+     * @param p_max      maximum value
+     * @param p_listener listener
+     */
+    public static JSlider createSlider( String p_label, int p_value, String p_labelmin, int p_min, String p_labelmax, int p_max, ChangeListener p_listener )
+    {
+        JSlider l_slider = new JSlider( p_min, p_max, p_value );
+        l_slider.addChangeListener( p_listener );
+
+        if ( ( p_labelmax != null ) && ( p_labelmin != null ) )
+        {
+            Hashtable<Integer, JLabel> l_label = new Hashtable();
+            l_label.put( l_slider.getMinimum(), new JLabel( p_labelmin ) );
+            l_label.put( l_slider.getMaximum(), new JLabel( p_labelmax ) );
+            l_label.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( p_label ) );
+
+            l_slider.setLabelTable( l_label );
+            l_slider.setPaintLabels( true );
+        }
+
+        return l_slider;
+    }
 
 
     /**

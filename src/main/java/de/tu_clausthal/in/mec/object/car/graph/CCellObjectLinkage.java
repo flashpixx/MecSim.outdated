@@ -344,10 +344,10 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     @Override
     public boolean equals( Object p_object )
     {
-        if ( ( p_object == null ) || ( !( p_object instanceof CCellObjectLinkage ) ) )
-            return false;
+        if ( p_object instanceof CCellObjectLinkage )
+            return this.hashCode() == p_object.hashCode();
 
-        return this.m_edgeid == ( (CCellObjectLinkage) p_object ).m_edgeid;
+        return false;
     }
 
     /**

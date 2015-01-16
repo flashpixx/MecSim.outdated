@@ -55,7 +55,8 @@ public class CCarCount extends IEvaluateLayer
         this.initialize( p_frame );
     }
 
-    /** initialize for setting up the frame
+    /**
+     * initialize for setting up the frame
      *
      * @param p_frame frame
      */

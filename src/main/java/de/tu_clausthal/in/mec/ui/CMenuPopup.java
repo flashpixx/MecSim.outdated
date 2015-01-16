@@ -61,7 +61,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
     {
 
         String[] l_cars = {"default cars", "norm cars"};
-        this.add( CMenuFactory.createRadioMenuGroup( "Sources", l_cars, this, m_reference ) );
+        //this.add( CMenuFactory.createRadioMenuGroup( "Sources", l_cars, this, m_reference ) );
     }
 
 

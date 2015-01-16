@@ -49,9 +49,20 @@ public class CMenuStorage
      * @param p_path path
      * @return element or null
      */
-    public JComponent getElement( String p_path )
+    public JComponent get( String p_path )
     {
         return m_elements.get( new Path( p_path ) );
+    }
+
+    /**
+     * returns the element
+     *
+     * @param p_path path
+     * @return element or null
+     */
+    public JComponent get( Path p_path )
+    {
+        return m_elements.get( p_path );
     }
 
     /**
@@ -65,15 +76,19 @@ public class CMenuStorage
         JComponent l_parent = null;
         for ( Path l_item : p_path )
         {
-            if ( !m_elements.containsKey( l_item ) )
-                m_elements.put( l_item, new JMenu( l_item.getSuffix() ) );
-
             JComponent l_current = m_elements.get( l_item );
+
+            if ( l_current == null )
+            {
+                l_current = new JMenu( l_item.getSuffix() );
+                if ( l_parent != null )
+                    l_parent.add( l_current );
+                m_elements.put( l_item, l_current );
+            }
+
             if ( !( l_current instanceof JMenu ) )
                 throw new IllegalStateException( "item on [" + l_item + "] is not a JMenu" );
 
-            if ( l_parent != null )
-                l_parent.add( l_current );
             l_parent = l_current;
         }
 
@@ -105,20 +120,72 @@ public class CMenuStorage
         // get parent
         JMenu l_menu = null;
         String l_label = l_path.removeSuffix();
-        if ( l_path.size() == 0 ) ;
-        l_menu = this.GetOrCreatePath( l_path );
+
+        if ( l_path.size() > 0 )
+            l_menu = this.GetOrCreatePath( l_path );
 
         // create menu entry
         JMenuItem l_item = new JMenuItem( l_label );
         l_item.addActionListener( p_listen );
-        if ( l_menu == null )
+        if ( l_menu != null )
             l_menu.add( l_item );
 
         m_elements.put( new Path( p_path ), l_item );
     }
 
+
+    /**
+     * adds a list of items
+     *
+     * @param p_path     parent path
+     * @param p_elements array with item names (null adds a seperator)
+     * @param p_listen   action listener for the item
+     */
+    public void addItem( String p_path, String[] p_elements, ActionListener p_listen )
+    {
+        Path l_path = new Path( p_path );
+        if ( m_elements.containsKey( l_path ) )
+            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+
+        // get parent
+        JMenu l_menu = null;
+        if ( l_path.size() > 0 )
+            l_menu = this.GetOrCreatePath( l_path );
+
+        // add all elements
+        for ( String l_name : p_elements )
+        {
+            if ( ( l_name == null ) || ( l_name.isEmpty() ) )
+            {
+                if ( l_menu != null )
+                    l_menu.addSeparator();
+            }
+            else
+            {
+                Path l_fullpath = new Path( p_path, l_name );
+                if ( m_elements.containsKey( l_fullpath ) )
+                    continue;
+
+                JMenuItem l_item = new JMenuItem( l_name );
+                l_item.addActionListener( p_listen );
+                m_elements.put( l_fullpath, l_item );
+                if ( l_menu != null )
+                    l_menu.add( l_item );
+            }
+        }
+    }
+
+
     /**
      * adds a slider
+     *
+     * @param p_path     path of the element
+     * @param p_value    initialization value
+     * @param p_labelmin label of the minimum (null removes the label)
+     * @param p_min      minimum value
+     * @param p_labelmax label of the maximum (null removes the label)
+     * @param p_max      maximum value
+     * @param p_listen   change listener
      */
     public void addSlider( String p_path, int p_value, String p_labelmin, int p_min, String p_labelmax, int p_max, ChangeListener p_listen )
     {
@@ -129,7 +196,7 @@ public class CMenuStorage
         // get parent
         JMenu l_menu = null;
         String l_label = l_path.removeSuffix();
-        if ( l_path.size() == 0 )
+        if ( l_path.size() > 0 )
             l_menu = this.GetOrCreatePath( l_path );
 
         // create menu entry
@@ -147,18 +214,89 @@ public class CMenuStorage
             l_slider.setPaintLabels( true );
         }
 
-        if ( l_menu == null )
+        if ( l_menu != null )
             l_menu.add( l_slider );
 
         m_elements.put( new Path( p_path ), l_slider );
     }
 
     /**
+     * adds single radio items
+     *
+     * @param p_path     parent path
+     * @param p_elements array with item names (null adds a seperator)
+     * @param p_listen   action listener for the item
+     */
+    public void addRadioItems( String p_path, String[] p_elements, ActionListener p_listen )
+    {
+        this.addRadioGroup( p_path, p_elements, null, p_listen );
+    }
+
+    /**
+     * adds a radio group
+     *
+     * @param p_path     parent path
+     * @param p_elements array with item names (null adds a seperator)
+     * @param p_listen   action listener for the item
+     */
+    public void addRadioGroup( String p_path, String[] p_elements, ActionListener p_listen )
+    {
+        this.addRadioGroup( p_path, p_elements, new ButtonGroup(), p_listen );
+    }
+
+
+    /**
+     * adds a radio group
+     *
+     * @param p_path     parent path
+     * @param p_elements array with item names (null adds a seperator)
+     * @param p_group    button group or null
+     * @param p_listen   action listener for the item
+     */
+    private void addRadioGroup( String p_path, String[] p_elements, ButtonGroup p_group, ActionListener p_listen )
+    {
+        Path l_path = new Path( p_path );
+        if ( m_elements.containsKey( l_path ) )
+            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+
+        // get parent
+        JMenu l_menu = null;
+        if ( l_path.size() > 0 )
+            l_menu = this.GetOrCreatePath( l_path );
+
+        // add all elements
+        for ( String l_name : p_elements )
+        {
+            if ( ( l_name == null ) || ( l_name.isEmpty() ) )
+            {
+                if ( l_menu != null )
+                    l_menu.addSeparator();
+            }
+            else
+            {
+                Path l_fullpath = new Path( p_path, l_name );
+                if ( m_elements.containsKey( l_fullpath ) )
+                    continue;
+
+                JRadioButtonMenuItem l_item = new JRadioButtonMenuItem( l_name );
+                l_item.setSelected( false );
+                l_item.addActionListener( p_listen );
+                if ( p_group != null )
+                    p_group.add( l_item );
+                m_elements.put( l_fullpath, l_item );
+                if ( l_menu != null )
+                    l_menu.add( l_item );
+            }
+        }
+    }
+
+
+    /**
      * returns the full menu list
      *
      * @return JMenu list
      */
-    public Collection<JComponent> getRootElements()
+    public Collection<JComponent> getRoot()
     {
         List<JComponent> l_root = new ArrayList();
 
@@ -173,9 +311,9 @@ public class CMenuStorage
      * returns all elements within a path
      *
      * @param p_path prefix path
-     * @return list
+     * @return list elements
      */
-    public Collection<JComponent> getPathElements( String p_path )
+    public Collection<JComponent> getElements( String p_path )
     {
         Path l_path = new Path( p_path );
 
@@ -188,17 +326,91 @@ public class CMenuStorage
         return l_elements;
     }
 
+
+    /**
+     * returns all elements within a path
+     *
+     * @param p_path prefix path
+     * @return list with names
+     */
+    public Collection<Path> getPaths( String p_path )
+    {
+        Path l_path = new Path( p_path );
+        List<Path> l_elements = new ArrayList();
+
+        for ( Map.Entry<Path, JComponent> l_item : m_elements.entrySet() )
+            if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
+                l_elements.add( l_item.getKey() );
+
+        return l_elements;
+    }
+
+
+    /**
+     * returns the full entry set
+     *
+     * @return set all entries
+     */
+    public Set<Map.Entry<Path, JComponent>> entrySet()
+    {
+        return m_elements.entrySet();
+    }
+
+
+    /**
+     * returns the entry set of a path without the root element
+     *
+     * @param p_path path
+     * @return set with elements
+     */
+    public Set<Map.Entry<Path, JComponent>> entrySet( String p_path )
+    {
+        return this.entrySet( p_path, false );
+    }
+
+
+    /**
+     * returns the entry set of a path
+     *
+     * @param p_path     path
+     * @param p_withroot enables / disables the addition of the root node
+     * @return set with elements
+     */
+    public Set<Map.Entry<Path, JComponent>> entrySet( String p_path, boolean p_withroot )
+    {
+        Path l_path = new Path( p_path );
+        Map<Path, JComponent> l_set = new HashMap();
+
+        for ( Map.Entry<Path, JComponent> l_item : m_elements.entrySet() )
+            if ( p_withroot )
+            {
+                if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
+                    l_set.put( l_item.getKey(), l_item.getValue() );
+            }
+            else
+            {
+                if ( ( !l_item.getKey().getPath().equals( l_path.getPath() ) ) && ( l_item.getKey().getPath().startsWith( l_path.getPath() ) ) )
+                    l_set.put( l_item.getKey(), l_item.getValue() );
+            }
+
+        return l_set.entrySet();
+    }
+
+
     /**
      * path class to define a full menu path *
      */
-    private class Path implements Iterable<Path>
+    public static class Path implements Iterable<Path>
     {
-        protected static final String s_seperator = "/";
+        /**
+         * seperator of the path elements *
+         */
+        private static final String s_seperator = "/";
 
         /**
          * list with path parts *
          */
-        protected ArrayList<String> m_path = null;
+        private List<String> m_path = new ArrayList();
 
         /**
          * ctor
@@ -229,6 +441,8 @@ public class CMenuStorage
         public Path( String[] p_value )
         {
             m_path = new ArrayList( Arrays.asList( p_value ) );
+            if ( m_path.size() == 0 )
+                throw new IllegalArgumentException( "path is empty" );
         }
 
         /**
@@ -263,7 +477,7 @@ public class CMenuStorage
          */
         public String getSuffix()
         {
-            return m_path.get( m_path.size() - 1 );
+            return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
         }
 
         /**
@@ -273,8 +487,10 @@ public class CMenuStorage
          */
         public String removeSuffix()
         {
+
             String l_suffix = this.getSuffix();
-            m_path.remove( m_path.size() - 1 );
+            if ( m_path.size() > 0 )
+                m_path.remove( m_path.size() - 1 );
             return l_suffix;
         }
 
@@ -300,22 +516,6 @@ public class CMenuStorage
         }
 
         @Override
-        public boolean equals( Object p_object )
-        {
-            if ( ( p_object instanceof String ) || ( p_object instanceof Path ) )
-                return this.getPath().equals( p_object );
-
-
-            return false;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.getPath();
-        }
-
-        @Override
         public Iterator<Path> iterator()
         {
             return new Iterator<Path>()
@@ -331,167 +531,34 @@ public class CMenuStorage
                 @Override
                 public Path next()
                 {
-                    String[] l_list = new String[m_index];
-                    m_path.subList( 0, m_index++ ).toArray( l_list );
+                    String[] l_list = new String[m_index + 1];
+                    m_path.subList( 0, ++m_index ).toArray( l_list );
                     return new Path( l_list );
                 }
             };
         }
-    }
 
+        @Override
+        public int hashCode()
+        {
+            return this.getPath().hashCode();
+        }
 
-    /**
-     * create a slider menu item
-     *
-     * @param p_label    label of menu entry
-     * @param p_value    current value
-     * @param p_labelmin label of the minimum
-     * @param p_min      minimum value
-     * @param p_labelmax label of the maximum
-     * @param p_max      maximum value
-     * @param p_listener listener
-     *
-    public void createSlider( String p_label, int p_value, String p_labelmin, int p_min, String p_labelmax, int p_max, ChangeListener p_listener )
-    {
-    JSlider l_slider = new JSlider( p_min, p_max, p_value );
-    l_slider.addChangeListener( p_listener );
+        @Override
+        public boolean equals( Object p_object )
+        {
+            if ( ( p_object instanceof String ) || ( p_object instanceof Path ) )
+                return this.hashCode() == p_object.hashCode();
 
-    if ( ( p_labelmax != null ) && ( p_labelmin != null ) )
-    {
-    Hashtable<Integer, JLabel> l_label = new Hashtable();
-    l_label.put( l_slider.getMinimum(), new JLabel( p_labelmin ) );
-    l_label.put( l_slider.getMaximum(), new JLabel( p_labelmax ) );
-    l_label.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( p_label ) );
+            return false;
+        }
 
-    l_slider.setLabelTable( l_label );
-    l_slider.setPaintLabels( true );
-    }
-
+        @Override
+        public String toString()
+        {
+            return this.getPath();
+        }
 
     }
-
-
-     **
-     * creates a menu
-     *
-     * @param p_label     menu label
-     * @param p_list      string with items
-     * @param p_listener  listener
-     * @param p_reference reference map with object for action listener
-     * @return menu
-     *
-    public static JMenu createMenu( String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference )
-    {
-    if ( p_label == null )
-    return null;
-    if ( ( p_list == null ) || ( p_listener == null ) || ( p_reference == null ) )
-    return new JMenu( p_label );
-
-    JMenu l_menu = new JMenu( p_label );
-    for ( String l_item : p_list )
-    if ( ( l_item == null ) || ( l_item.isEmpty() ) )
-    l_menu.addSeparator();
-    else
-    createMenuItem( l_item, p_label, l_menu, p_listener, p_reference );
-
-    return l_menu;
-    }
-
-     **
-     * creates a menu with radio buttons in a group
-     *
-     * @param p_label     menu label
-     * @param p_list      string with items
-     * @param p_listener  listener
-     * @param p_reference reference map with object for action listener
-     * @return menu
-     *
-    public static JMenu createRadioMenuGroup( String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference )
-    {
-    if ( p_label == null )
-    return null;
-    if ( ( p_list == null ) || ( p_listener == null ) || ( p_reference == null ) )
-    return new JMenu( p_label );
-
-    JMenu l_menu = new JMenu( p_label );
-    ButtonGroup l_group = new ButtonGroup();
-
-    for ( int i = 0; i < p_list.length; i++ )
-    if ( ( p_list[i] == null ) || ( p_list[i].isEmpty() ) )
-    l_menu.addSeparator();
-    else
-    createRadioMenuItem( p_list[i], p_label, l_menu, p_listener, p_reference, l_group, i == 0 );
-
-    return l_menu;
-    }
-
-
-     **
-     * creates a menu with radio buttons in a group
-     *
-     * @param p_label     menu label
-     * @param p_list      string with items
-     * @param p_listener  listener
-     * @param p_reference reference map with object for action listener
-     * @return menu
-     *
-    public static JMenu createRadioMenu( String p_label, String[] p_list, ActionListener p_listener, Map<String, Object> p_reference )
-    {
-    if ( p_label == null )
-    return null;
-    if ( ( p_list == null ) || ( p_listener == null ) || ( p_reference == null ) )
-    return new JMenu( p_label );
-
-    JMenu l_menu = new JMenu( p_label );
-    for ( int i = 0; i < p_list.length; i++ )
-    if ( ( p_list[i] == null ) || ( p_list[i].isEmpty() ) )
-    l_menu.addSeparator();
-    else
-    createRadioMenuItem( p_list[i], p_label, l_menu, p_listener, p_reference, null, true );
-
-    return l_menu;
-    }
-
-
-     **
-     * creates a menu item
-     *
-     * @param p_label     label
-     * @param p_main      main name of the menu
-     * @param p_menu      menu
-     * @param p_listener  listener
-     * @param p_reference reference map with object for action listener
-     *
-    private static void createMenuItem( String p_label, String p_main, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference )
-    {
-    JMenuItem l_item = new JMenuItem( p_label );
-    p_reference.put( p_main + "/" + l_item.getText(), l_item );
-    l_item.addActionListener( p_listener );
-    p_menu.add( l_item );
-    }
-
-
-     **
-     * creates a radio menu item
-     *
-     * @param p_label     label
-     * @param p_main      main name of the menu
-     * @param p_menu      menu
-     * @param p_listener  listener
-     * @param p_reference reference map with object for action listener
-     * @param p_group     group or null
-     * @param p_select    item default selected
-     *
-    private static void createRadioMenuItem( String p_label, String p_main, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference, ButtonGroup p_group, boolean p_select )
-    {
-    JRadioButtonMenuItem l_item = new JRadioButtonMenuItem( p_label );
-    p_reference.put( p_main + "/" + l_item.getText(), l_item );
-    l_item.setSelected( p_select );
-    l_item.addActionListener( p_listener );
-    if ( p_group != null )
-    p_group.add( l_item );
-    p_menu.add( l_item );
-    }
-     **/
 
 }

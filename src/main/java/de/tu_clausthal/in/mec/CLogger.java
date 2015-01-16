@@ -95,7 +95,6 @@ public class CLogger
     /**
      * creates a full log item
      *
-     * @note numbers are relative stracktrace position of the caller methods
      * @param p_status status name
      * @param p_add    additional log data
      */
@@ -281,6 +280,7 @@ public class CLogger
     /**
      * adds a debug message
      *
+     * @param p_data log data
      * @param p_write boolean on true message is written
      */
     public static void debug( Object p_data, boolean p_write )

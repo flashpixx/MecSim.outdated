@@ -49,12 +49,14 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      * driving model
      */
     protected IDriveModel m_drivemodel = s_drivemodellist[0];
-
     /**
      * graph
      */
     protected transient CGraphHopper m_graph = new CGraphHopper();
-
+    /**
+     * weight name
+     */
+    protected String m_weight = m_graph.getWeightingList()[0];
     /**
      * data structure - not serializable
      */
@@ -70,6 +72,15 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
         return m_graph;
     }
 
+    /**
+     * returns the current graph weight
+     *
+     * @return weight name
+     */
+    public String getGraphWeight()
+    {
+        return m_weight;
+    }
 
     /**
      * sets the graph with a weight
@@ -78,9 +89,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      */
     public void setGraphWeight( String p_weight )
     {
+        m_weight = p_weight;
         m_graph = new CGraphHopper( p_weight );
     }
-
 
     /**
      * sets the drive model
@@ -168,7 +179,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
-        m_graph = new CGraphHopper();
+        m_graph = new CGraphHopper( m_weight );
     }
 
 }

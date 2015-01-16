@@ -204,21 +204,21 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         try
         {
 
-            if ( e.getSource() == m_reference.get( "File::Screenshot" ) )
+            if ( e.getSource() == m_reference.get( "File/Screenshot" ) )
                 this.screenshot();
-            if ( e.getSource() == m_reference.get( "File::Load" ) )
+            if ( e.getSource() == m_reference.get( "File/Load" ) )
                 this.load();
-            if ( e.getSource() == m_reference.get( "File::Save" ) )
+            if ( e.getSource() == m_reference.get( "File/Save" ) )
                 this.save();
-            if ( e.getSource() == m_reference.get( "File::Preferences" ) )
+            if ( e.getSource() == m_reference.get( "File/Preferences" ) )
                 this.preferences();
 
 
-            if ( e.getSource() == m_reference.get( "Simulation::Start" ) )
+            if ( e.getSource() == m_reference.get( "Simulation/Start" ) )
                 CSimulation.getInstance().start();
-            if ( e.getSource() == m_reference.get( "Simulation::Stop" ) )
+            if ( e.getSource() == m_reference.get( "Simulation/Stop" ) )
                 CSimulation.getInstance().stop();
-            if ( e.getSource() == m_reference.get( "Simulation::Reset" ) )
+            if ( e.getSource() == m_reference.get( "Simulation/Reset" ) )
                 CSimulation.getInstance().reset();
         }
         catch ( Exception l_exception )
@@ -229,7 +229,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         // layer action / visibility
         for ( String l_layername : this.getMenuList( "activeLayer" ) )
-            if ( e.getSource() == m_reference.get( "Activity::" + l_layername ) )
+            if ( e.getSource() == m_reference.get( "Activity/" + l_layername ) )
             {
                 ILayer l_layer = CSimulation.getInstance().getWorld().get( l_layername );
                 try
@@ -245,7 +245,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             }
 
         for ( String l_layername : this.getMenuList( "visibleLayer" ) )
-            if ( e.getSource() == m_reference.get( "Visibility::" + l_layername ) )
+            if ( e.getSource() == m_reference.get( "Visibility/" + l_layername ) )
             {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_layername );
                 l_layer.setVisible( !l_layer.isVisible() );
@@ -261,7 +261,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 try
                 {
                     this.throwSimulationRunningException();
-                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model::", "" ) );
+                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setDriveModel( l_model.replace( "Driving Model/", "" ) );
                 }
                 catch ( Exception l_exception )
                 {
@@ -277,7 +277,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 try
                 {
                     this.throwSimulationRunningException();
-                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setGraphWeight( l_weight.replace( "Routing Weights::", "" ) );
+                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Car" ) ).setGraphWeight( l_weight.replace( "Routing Weights/", "" ) );
                 }
                 catch ( Exception l_exception )
                 {

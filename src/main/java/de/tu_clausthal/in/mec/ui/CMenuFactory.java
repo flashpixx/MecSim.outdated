@@ -161,7 +161,7 @@ public class CMenuFactory
     private static void createMenuItem( String p_label, String p_main, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference )
     {
         JMenuItem l_item = new JMenuItem( p_label );
-        p_reference.put( p_main + "::" + l_item.getText(), l_item );
+        p_reference.put( p_main + "/" + l_item.getText(), l_item );
         l_item.addActionListener( p_listener );
         p_menu.add( l_item );
     }
@@ -181,7 +181,7 @@ public class CMenuFactory
     private static void createRadioMenuItem( String p_label, String p_main, JMenu p_menu, ActionListener p_listener, Map<String, Object> p_reference, ButtonGroup p_group, boolean p_select )
     {
         JRadioButtonMenuItem l_item = new JRadioButtonMenuItem( p_label );
-        p_reference.put( p_main + "::" + l_item.getText(), l_item );
+        p_reference.put( p_main + "/" + l_item.getText(), l_item );
         l_item.setSelected( p_select );
         l_item.addActionListener( p_listener );
         if ( p_group != null )

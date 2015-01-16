@@ -81,10 +81,7 @@ public class CConfiguration
                 throw new IOException( "unable to create " + m_dir.getAbsolutePath() );
 
             Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
-
-            Gson l_gson = new Gson();
-            l_gson.toJson( m_data, l_writer );
-
+            new Gson().toJson( m_data, l_writer );
             l_writer.close();
         }
         catch ( Exception l_exception )
@@ -105,9 +102,8 @@ public class CConfiguration
             CLogger.info( "read configuration from [" + l_config + "]" );
 
             Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
-
-            Gson l_gson = new Gson();
-            l_tmp = l_gson.fromJson( l_reader, Data.class );
+            l_tmp = new Gson().fromJson( l_reader, Data.class );
+            l_reader.close();
         }
         catch ( Exception l_exception )
         {

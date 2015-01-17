@@ -106,6 +106,6 @@ The simulation Jar file supports different startup parameters:
 * ```--help``` shows all definied parameters
 * ```--configuration``` defines the configuration path (default: ```~/.mecsim```)
 * ```--nogui``` starts the program without UI and loads the file which is defined after the command
-* ```--step``` runs the simulation _n_ steps (must use in combination with ```--nogui```)
+* ```--step``` runs the simulation _n_ steps (must be used in combination with ```--nogui```)
 * ```--loglevel``` defines the logging level (allowed values are: _off_, _debug_, _error_, _info_, _trace_, _warning_)
 * ```--logfile``` defines the logfile (defaul value: ```<current directory>/mecsim-<timestamp>.txt```)

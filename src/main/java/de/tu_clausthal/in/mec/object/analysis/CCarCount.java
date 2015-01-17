@@ -50,6 +50,11 @@ public class CCarCount extends IEvaluateLayer
     DefaultCategoryDataset m_plotdata = new DefaultCategoryDataset();
 
 
+    /**
+     * ctor with frame initialization
+     *
+     * @param p_frame frame object
+     */
     public CCarCount( CFrame p_frame )
     {
         this.initialize( p_frame );
@@ -72,18 +77,18 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
         if ( !CSimulation.getInstance().hasUI() )
             return;
 
         m_plotdata.addValue( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getNumberOfObjects(), "number", String.valueOf( p_currentstep ) );
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return Integer.MAX_VALUE;
     }
 
     @Override

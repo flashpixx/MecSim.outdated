@@ -84,22 +84,25 @@ public class CMainLoop implements Runnable
     /**
      * creates an array with the layer objects depends on the ordering value
      *
-     * @return array with layers
+     * @return returns a list of layer
      */
-    private static ILayer[] getOrderedLayer()
+    private static List<ILayer> getOrderedLayer()
     {
+
         MultiMap<Integer, ILayer> l_order = new MultiValueMap();
         for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
             l_order.put( l_layer.getCalculationIndex(), l_layer );
 
+        // get key values and sort it
+        Object[] l_sortkeys = l_order.keySet().toArray();
+        Arrays.sort( l_sortkeys );
+
+        // build the list of the layer
         ArrayList<ILayer> l_list = new ArrayList();
-        for ( Map.Entry<Integer, Object> l_item : l_order.entrySet() )
-            l_list.addAll( (Collection) l_item.getValue() );
+        for ( Object l_key : l_sortkeys )
+            l_list.addAll( (Collection) l_order.get( l_key ) );
 
-        ILayer[] l_return = new ILayer[l_list.size()];
-        l_list.toArray( l_return );
-
-        return l_return;
+        return l_list;
     }
 
     @Override
@@ -109,7 +112,8 @@ public class CMainLoop implements Runnable
 
         // order of all layer - the order will be read only once
         // so the thread need not be startup on program initializing
-        ILayer[] l_layerorder = getOrderedLayer();
+        List<ILayer> l_layerorder = getOrderedLayer();
+        CLogger.info( l_layerorder );
 
         while ( !Thread.currentThread().isInterrupted() )
         {

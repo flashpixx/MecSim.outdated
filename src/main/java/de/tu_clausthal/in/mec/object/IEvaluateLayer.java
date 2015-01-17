@@ -57,6 +57,12 @@ public abstract class IEvaluateLayer implements IDataLayer, ILayer, IVoidStepabl
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
     }

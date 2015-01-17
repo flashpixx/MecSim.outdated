@@ -27,6 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.*;
 import org.pmw.tinylog.writers.FileWriter;
 
+import java.util.Collection;
+
 
 /**
  * Logger class with additional Log4j support
@@ -114,7 +116,20 @@ public class CLogger
         l_Str.append( l_SEP );
         l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
 
-        String l_add = ( p_add != null ) ? p_add.toString() : "";
+        String l_add = "";
+        if ( p_add != null )
+        {
+            if ( p_add instanceof Collection )
+            {
+                l_add = "[   ";
+                for ( Object l_item : (Collection) p_add )
+                    l_add += l_item + "   ";
+                l_add += "]";
+            }
+            else
+                l_add = p_add.toString();
+        }
+
         if ( !l_add.isEmpty() )
         {
             l_Str.append( l_SEP );

@@ -26,7 +26,7 @@ suffix ```-Xmx<Memory Size>``` (a good value can be ```2g```)
 The program can be used in two structures:
 
  * GUI based - you need run the Jar file directly
- * non-ui based - you need run the Jar file with the parameter ```--nogui <mecsim data file, that should load> --step <number of iterations>```
+ * non-ui based - you need run the Jar file with the parameter ```--nogui <mecsim data file, that should be loaded> --step <number of iterations>```
 
 ### Configuration
 

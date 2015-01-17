@@ -107,6 +107,10 @@ public class CMainLoop implements Runnable
     {
         CLogger.info( "thread starts working" );
 
+        // order of all layer - the order will be read only once
+        // so the thread need not be startup on program initializing
+        ILayer[] l_layerorder = getOrderedLayer();
+
         while ( !Thread.currentThread().isInterrupted() )
         {
 
@@ -118,9 +122,6 @@ public class CMainLoop implements Runnable
                     Thread.yield();
                     continue;
                 }
-
-                // order of all layer
-                ILayer[] l_layerorder = getOrderedLayer();
 
 
                 // if thread is not paused perform objects

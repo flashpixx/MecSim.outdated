@@ -65,6 +65,11 @@ public class CSimulation
     private CManager m_eventmanager = new CManager();
 
     /**
+     * object of the thread loop *
+     */
+    private Thread m_mainloopthread = null;
+
+    /**
      * frame object
      */
     private CFrame m_ui = null;
@@ -75,7 +80,6 @@ public class CSimulation
      */
     private CSimulation()
     {
-        new Thread( m_mainloop ).start();
         CBootstrap.AfterSimulationInit( this );
     }
 
@@ -157,6 +161,13 @@ public class CSimulation
     {
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
+
+        // on the first start, thread is initialize
+        if ( m_mainloopthread == null )
+        {
+            m_mainloopthread = new Thread( m_mainloop );
+            m_mainloopthread.start();
+        }
 
         CLogger.info( "simulation is started" );
         CBootstrap.BeforeSimulationStarts( this );

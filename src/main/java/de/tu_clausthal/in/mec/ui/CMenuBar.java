@@ -164,7 +164,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 this.preferences();
 
             if ( e.getSource() == m_items.get( "Simulation/Start" ) )
-                CSimulation.getInstance().start();
+                CSimulation.getInstance().start( 5 );
             if ( e.getSource() == m_items.get( "Simulation/Stop" ) )
                 CSimulation.getInstance().stop();
             if ( e.getSource() == m_items.get( "Simulation/Reset" ) )

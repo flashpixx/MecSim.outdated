@@ -58,6 +58,11 @@ public class CMainLoop implements Runnable
      */
     private boolean m_pause = true;
 
+    /**
+     * number of threads for running *
+     */
+    private int m_shutdownstep = Integer.MAX_VALUE;
+
 
     /**
      * returns a runnable object of the stepable input
@@ -101,6 +106,9 @@ public class CMainLoop implements Runnable
                     continue;
                 }
 
+                // shutdown
+                if ( m_simulationcount >= m_shutdownstep )
+                    break;
 
                 // if thread is not paused perform objects
                 m_tasks.clear();
@@ -131,6 +139,7 @@ public class CMainLoop implements Runnable
             }
         }
 
+        m_pause = true;
         CLogger.info( "thread stops working" );
     }
 
@@ -166,6 +175,18 @@ public class CMainLoop implements Runnable
      */
     public void resume()
     {
+        m_pause = false;
+    }
+
+    /**
+     * resumes thread and shut down thread after
+     */
+    public void resume( int p_steps )
+    {
+        if ( p_steps < 1 )
+            throw new IllegalArgumentException( "step number must be greater than zero" );
+
+        m_shutdownstep = m_simulationcount+p_steps;
         m_pause = false;
     }
 

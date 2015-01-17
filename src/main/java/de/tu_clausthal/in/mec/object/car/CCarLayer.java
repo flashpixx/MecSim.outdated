@@ -146,7 +146,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     @Override
     public void afterStepObject( int p_currentstep, ICar p_object )
     {
-
         if ( p_object.hasEndReached() )
         {
             super.remove( p_object );

@@ -51,7 +51,8 @@ public class CMain
         Options l_clioptions = new Options();
         l_clioptions.addOption( "help", false, "shows this help" );
         l_clioptions.addOption( "configuration", true, "configuration directory" );
-        l_clioptions.addOption( "nogui", true, "disables the GUI and loads the stored file for simulating')" );
+        l_clioptions.addOption( "nogui", true, "disables the GUI and loads the stored file for simulating" );
+        l_clioptions.addOption( "steps", true, "number of running simulation steps (must use with 'nogui' together)" );
         l_clioptions.addOption( "loglevel", true, "level of the logger" );
         l_clioptions.addOption( "logfile", true, "logfile (default: mecsim-<startup datetime>.txt)" );
 
@@ -105,6 +106,8 @@ public class CMain
         {
             try
             {
+                if ( !l_cli.hasOption( "steps" ) )
+                    throw new IllegalArgumentException( "step value is not set" );
 
                 FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
                 ObjectInputStream l_input = new ObjectInputStream( l_stream );
@@ -112,7 +115,7 @@ public class CMain
                 l_input.close();
                 l_stream.close();
 
-                CSimulation.getInstance().start();
+                CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "steps" ) ) );
 
             }
             catch ( Exception l_exception )

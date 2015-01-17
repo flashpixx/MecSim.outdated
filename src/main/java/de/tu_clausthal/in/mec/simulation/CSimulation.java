@@ -155,19 +155,46 @@ public class CSimulation
 
 
     /**
+     * starts the thread worker *
+     */
+    private void threadStartUp()
+    {
+        if ( m_mainloopthread != null )
+            return;
+
+        m_mainloopthread = new Thread( m_mainloop );
+        m_mainloopthread.start();
+    }
+
+    /**
+     * runs the simulation for n steps
+     *
+     * @param p_steps number of steps
+     */
+    public void start( int p_steps ) throws InterruptedException, IllegalArgumentException
+    {
+        if ( this.isRunning() )
+            throw new IllegalStateException( "simulation is running" );
+        this.threadStartUp();
+
+        CLogger.info( "simulation is started" );
+        CBootstrap.BeforeSimulationStarts( this );
+
+        // run thread and wait until thread is finished
+        m_mainloop.resume( p_steps );
+        m_mainloopthread.join();
+
+        m_mainloopthread = null;
+    }
+
+    /**
      * runs the simulation of the current step
      */
     public void start()
     {
         if ( this.isRunning() )
             throw new IllegalStateException( "simulation is running" );
-
-        // on the first start, thread is initialize
-        if ( m_mainloopthread == null )
-        {
-            m_mainloopthread = new Thread( m_mainloop );
-            m_mainloopthread.start();
-        }
+        this.threadStartUp();
 
         CLogger.info( "simulation is started" );
         CBootstrap.BeforeSimulationStarts( this );
@@ -257,9 +284,9 @@ public class CSimulation
             for ( String l_item : (ArrayList<String>) p_stream.readObject() )
                 COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
 
+
         // reset all layer
         this.reset();
-
 
         CLogger.info( "simulation is loaded" );
     }

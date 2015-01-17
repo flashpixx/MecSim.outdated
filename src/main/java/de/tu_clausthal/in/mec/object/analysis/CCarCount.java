@@ -73,7 +73,8 @@ public class CCarCount extends IEvaluateLayer
     @Override
     public void resetData()
     {
-        m_plotdata.clear();
+        if ( m_plotdata != null )
+            m_plotdata.clear();
     }
 
     @Override

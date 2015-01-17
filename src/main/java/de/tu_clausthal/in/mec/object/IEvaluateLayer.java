@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * layer for any calculation without visibility
  */
-public abstract class IEvaluateLayer implements IDataLayer, ILayer, IVoidStepable
+public abstract class IEvaluateLayer implements ILayer, IVoidStepable
 {
 
     /**
@@ -63,14 +63,14 @@ public abstract class IEvaluateLayer implements IDataLayer, ILayer, IVoidStepabl
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
-    {
-    }
-
-    @Override
     public Map<String, Object> getData()
     {
         return null;
+    }
+
+    @Override
+    public void step( int p_currentstep, ILayer p_layer )
+    {
     }
 
 }

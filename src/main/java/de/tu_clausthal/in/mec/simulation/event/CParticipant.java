@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
-import de.tu_clausthal.in.mec.object.IDataLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
@@ -56,7 +55,7 @@ public class CParticipant implements IParticipant
      */
     public CParticipant( IMessageReceiver p_receiver )
     {
-        if ( ( this instanceof IDataLayer ) || ( this instanceof ILayer ) )
+        if ( ( this instanceof ILayer ) )
             throw new IllegalStateException( "event handler cannot register for a layer" );
 
         m_receiver = p_receiver;

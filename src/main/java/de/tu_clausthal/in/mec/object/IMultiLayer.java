@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * multilayer to create a collection for elements
  */
-public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IDataLayer, IVoidStepable, ILayer
+public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidStepable, ILayer
 {
 
     /**
@@ -80,6 +80,12 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
+    public Map<String, Object> getData()
+    {
+        return null;
+    }
+
+    @Override
     public boolean isVisible()
     {
         try
@@ -103,12 +109,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         catch ( Exception l_exception )
         {
         }
-    }
-
-    @Override
-    public Map<String, Object> getData()
-    {
-        return null;
     }
 
     @Override

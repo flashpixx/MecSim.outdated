@@ -28,9 +28,10 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.*;
+import org.apache.commons.collections4.MultiMap;
+import org.apache.commons.collections4.map.MultiValueMap;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.*;
 
 
@@ -80,6 +81,27 @@ public class CMainLoop implements Runnable
     }
 
 
+    /**
+     * creates an array with the layer objects depends on the ordering value
+     *
+     * @return array with layers
+     */
+    private static ILayer[] getOrderedLayer()
+    {
+        MultiMap<Integer, ILayer> l_order = new MultiValueMap();
+        for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+            l_order.put( l_layer.getCalculationIndex(), l_layer );
+
+        ArrayList<ILayer> l_list = new ArrayList();
+        for ( Map.Entry<Integer, Object> l_item : l_order.entrySet() )
+            l_list.addAll( (Collection) l_item.getValue() );
+
+        ILayer[] l_return = new ILayer[l_list.size()];
+        l_list.toArray( l_return );
+
+        return l_return;
+    }
+
     @Override
     public void run()
     {
@@ -97,18 +119,21 @@ public class CMainLoop implements Runnable
                     continue;
                 }
 
+                // order of all layer
+                ILayer[] l_layerorder = getOrderedLayer();
+
 
                 // if thread is not paused perform objects
                 m_tasks.clear();
                 m_tasks.add( new CVoidStepable( 0, CSimulation.getInstance().getEventManager(), null ) );
-                for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+                for ( ILayer l_layer : l_layerorder )
                     if ( l_layer.isActive() )
                         m_tasks.add( createTask( m_simulationcount, l_layer, null ) );
                 m_pool.invokeAll( m_tasks );
 
 
                 m_tasks.clear();
-                for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+                for ( ILayer l_layer : l_layerorder )
                     if ( ( l_layer.isActive() ) && ( l_layer instanceof IMultiLayer ) )
                     {
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )

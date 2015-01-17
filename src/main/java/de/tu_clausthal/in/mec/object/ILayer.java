@@ -55,4 +55,12 @@ public interface ILayer extends IStepable, Serializable
      */
     public void resetData();
 
+
+    /**
+     * returns an index value to defining an order for calculation
+     *
+     * @return index value of ordering (need not be unique)
+     */
+    public int getCalculationIndex();
+
 }

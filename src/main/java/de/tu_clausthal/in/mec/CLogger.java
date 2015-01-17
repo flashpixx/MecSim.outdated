@@ -280,7 +280,7 @@ public class CLogger
     /**
      * adds a debug message
      *
-     * @param p_data log data
+     * @param p_data  log data
      * @param p_write boolean on true message is written
      */
     public static void debug( Object p_data, boolean p_write )

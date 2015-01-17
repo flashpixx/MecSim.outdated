@@ -32,4 +32,10 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
 {
 
+    @Override
+    public int getCalculationIndex()
+    {
+        return 1;
+    }
+
 }

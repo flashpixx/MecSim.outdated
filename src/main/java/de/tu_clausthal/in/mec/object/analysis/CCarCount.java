@@ -81,6 +81,12 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public Map<String, Object> analyse()
     {
         return null;

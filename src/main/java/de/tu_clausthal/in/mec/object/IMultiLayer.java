@@ -74,6 +74,12 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return 0;
+    }
+
+    @Override
     public boolean isVisible()
     {
         try
@@ -269,13 +275,11 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         }
     }
 
-
     @Override
     public Map<String, Object> analyse()
     {
         return null;
     }
-
 
     @Override
     public void paint( Graphics2D g, COSMViewer object, int width, int height )

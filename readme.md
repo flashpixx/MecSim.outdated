@@ -19,10 +19,9 @@
 
 Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
 
-The Maven package build creates a Jar file in the path ```target/MecSim-<Version>-jar-with-dependencies.jar```. You can
-get a help information of all command-line parameter with the ```--help``` suffix. The program must use more memory of
-the Java VM on graph downloading and converting, so the Jar must be started with the suffix ```-Xmx<Memory Size>``` (a
-good value can be ```2g```)
+The Maven package build creates a Jar file in the path ```target/MecSim-<Version>-jar-with-dependencies.jar```. The
+program must use more memory of the Java VM on graph downloading and converting, so the Jar must be started with the
+suffix ```-Xmx<Memory Size>``` (a good value can be ```2g```)
 
 The program can be used in two structures:
 
@@ -106,5 +105,7 @@ The simulation Jar file supports different startup parameters:
 
 * ```--help``` shows all definied parameters
 * ```--configuration``` defines the configuration path (default: ```~/.mecsim```)
+* ```--nogui``` starts the program without UI and loads the file which is defined after the command
+* ```--step``` runs the simulation _n_ steps (must use in combination with ```--nogui```)
 * ```--loglevel``` defines the logging level (allowed values are: _off_, _debug_, _error_, _info_, _trace_, _warning_)
 * ```--logfile``` defines the logfile (defaul value: ```<current directory>/mecsim-<timestamp>.txt```)

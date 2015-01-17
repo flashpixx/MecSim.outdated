@@ -52,7 +52,7 @@ public class CMain
         l_clioptions.addOption( "help", false, "shows this help" );
         l_clioptions.addOption( "configuration", true, "configuration directory" );
         l_clioptions.addOption( "nogui", true, "disables the GUI and loads the stored file for simulating" );
-        l_clioptions.addOption( "steps", true, "number of running simulation steps (must use with 'nogui' together)" );
+        l_clioptions.addOption( "step", true, "number of running simulation steps (must use with 'nogui' together)" );
         l_clioptions.addOption( "loglevel", true, "level of the logger" );
         l_clioptions.addOption( "logfile", true, "logfile (default: mecsim-<startup datetime>.txt)" );
 
@@ -102,11 +102,13 @@ public class CMain
 
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
-        if ( l_cli.hasOption( "nogui" ) )
+        if ( !l_cli.hasOption( "nogui" ) )
+            CSimulation.getInstance().setUI( new CFrame() );
+        else
         {
             try
             {
-                if ( !l_cli.hasOption( "steps" ) )
+                if ( !l_cli.hasOption( "step" ) )
                     throw new IllegalArgumentException( "step value is not set" );
 
                 FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
@@ -115,7 +117,7 @@ public class CMain
                 l_input.close();
                 l_stream.close();
 
-                CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "steps" ) ) );
+                CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "step" ) ) );
 
             }
             catch ( Exception l_exception )
@@ -124,8 +126,6 @@ public class CMain
                 CLogger.out( "Error on loading / running simulation data" );
             }
         }
-        else
-            CSimulation.getInstance().setUI( new CFrame() );
 
     }
 

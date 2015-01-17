@@ -19,9 +19,15 @@
 
 Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
 
-The Maven package build creates a Jar file in the path ```target/MecSim-<Version>-jar-with-dependencies.jar``` and can
-be run directly. On the first run a parameter ```-Xmx<Memory Size>``` for the Java VM should be passed, because the
-initialization of the traffic graph structure need more memory (a good value can be ```2g```).
+The Maven package build creates a Jar file in the path ```target/MecSim-<Version>-jar-with-dependencies.jar```. You can
+get a help information of all command-line parameter with the ```--help``` suffix. The program must use more memory of
+the Java VM on graph downloading and converting, so the Jar must be started with the suffix ```-Xmx<Memory Size>``` (a
+good value can be ```2g```)
+
+The program can be used in two structures:
+
+ * GUI based - you need run the Jar file directly
+ * non-ui based - you need run the Jar file with the parameter ```--nogui <mecsim data file, that should load> --step <number of iterations>```
 
 ### Configuration
 

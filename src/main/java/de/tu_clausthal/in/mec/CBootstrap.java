@@ -132,6 +132,7 @@ public class CBootstrap
      */
     public static void onSimulationReset( CSimulation p_simulation )
     {
+
         COSMViewer l_osm = COSMViewer.getSimulationOSM();
         if ( l_osm == null )
             return;

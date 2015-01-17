@@ -88,6 +88,9 @@ public class COSMViewer extends JXMapViewer
      */
     public static COSMViewer getSimulationOSM()
     {
+        if ( !CSimulation.getInstance().hasUI() )
+            return null;
+
         return (COSMViewer) CSimulation.getInstance().getUI().getWidget( "OSM" );
     }
 

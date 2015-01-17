@@ -222,6 +222,7 @@ public class CSimulation
      */
     public void reset()
     {
+        this.threadStartUp();
         m_mainloop.pause();
         m_mainloop.reset();
 

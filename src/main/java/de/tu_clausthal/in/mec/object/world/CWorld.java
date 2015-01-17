@@ -26,6 +26,8 @@ package de.tu_clausthal.in.mec.object.world;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
+import org.apache.commons.collections4.MultiMap;
+import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.io.Serializable;
 import java.util.*;
@@ -48,6 +50,31 @@ public class CWorld implements Map<String, ILayer>, Serializable
     public CWorld()
     {
         CBootstrap.AfterWorldInit( this );
+    }
+
+
+    /**
+     * creates a list with the layer objects depends on the ordering value
+     *
+     * @return returns a list of layer
+     */
+    public List<ILayer> getOrderedLayer()
+    {
+
+        MultiMap<Integer, ILayer> l_order = new MultiValueMap();
+        for ( ILayer l_layer : m_layer.values() )
+            l_order.put( l_layer.getCalculationIndex(), l_layer );
+
+        // get key values and sort it
+        Object[] l_sortkeys = l_order.keySet().toArray();
+        Arrays.sort( l_sortkeys );
+
+        // build the list of the layer
+        ArrayList<ILayer> l_list = new ArrayList();
+        for ( Object l_key : l_sortkeys )
+            l_list.addAll( (Collection) l_order.get( l_key ) );
+
+        return l_list;
     }
 
     @Override

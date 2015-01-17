@@ -70,7 +70,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_items.addItem( "File", new String[]{"Preferences", null, "Load", "Save", null, "Screenshot"}, this );
 
         m_items.addItem( "Simulation", new String[]{"Start", "Stop", null, "Reset", null}, this );
-        m_items.addSlider( "Simulation/Speed", CConfiguration.getInstance().get().ThreadSleepTime, "slow", 0, "fast", 150, this );
+        m_items.addSlider( "Simulation/Speed", CConfiguration.getInstance().get().getThreadsleeptime(), "slow", 0, "fast", 150, this );
 
         m_items.addRadioGroup( "Graph Weights", ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(), this );
         m_items.addRadioGroup( "Driving Model", ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(), this );
@@ -112,7 +112,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     @Override
     public void stateChanged( ChangeEvent e )
     {
-        CConfiguration.getInstance().get().ThreadSleepTime = ( (JSlider) e.getSource() ).getMaximum() - ( (JSlider) e.getSource() ).getValue();
+        CConfiguration.getInstance().get().setThreadsleeptime( ( (JSlider) e.getSource() ).getMaximum() - ( (JSlider) e.getSource() ).getValue() );
     }
 
 
@@ -413,7 +413,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void preferences()
     {
-        CConfigurationDialog l_dialog = new CConfigurationDialog();
+        CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
         l_dialog.setVisible( true );
     }
 

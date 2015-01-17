@@ -136,9 +136,9 @@ public class CBootstrap
         if ( l_osm == null )
             return;
 
-        l_osm.setZoom( CConfiguration.getInstance().get().Zoom );
-        l_osm.setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
-        l_osm.setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
+        l_osm.setZoom( CConfiguration.getInstance().get().getZoom() );
+        l_osm.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
+        l_osm.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
 
     }
 

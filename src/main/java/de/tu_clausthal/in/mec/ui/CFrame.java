@@ -66,7 +66,7 @@ public class CFrame extends JFrame
         this.setTitle( "TU-Clausthal - MecSim Traffic Simulation" );
         this.setLayout( new BorderLayout() );
 
-        this.setSize( CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight );
+        this.setSize( CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() );
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         this.addWindowListener( new WindowAdapter()
         {
@@ -82,10 +82,10 @@ public class CFrame extends JFrame
                 {
                 }
 
-                CConfiguration.getInstance().get().ViewPoint = COSMViewer.getSimulationOSM().getCenterPosition();
-                CConfiguration.getInstance().get().Zoom = COSMViewer.getSimulationOSM().getZoom();
-                CConfiguration.getInstance().get().WindowHeight = l_event.getWindow().getHeight();
-                CConfiguration.getInstance().get().WindowWidth = l_event.getWindow().getWidth();
+                CConfiguration.getInstance().get().setViewpoint( COSMViewer.getSimulationOSM().getCenterPosition() );
+                CConfiguration.getInstance().get().setZoom( COSMViewer.getSimulationOSM().getZoom() );
+                CConfiguration.getInstance().get().setWindowheight( l_event.getWindow().getHeight() );
+                CConfiguration.getInstance().get().setWindowwidth( l_event.getWindow().getWidth() );
                 CConfiguration.getInstance().write();
                 l_event.getWindow().dispose();
 

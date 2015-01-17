@@ -48,6 +48,18 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.metawidget.modules</groupId>
+            <artifactId>metawidget-oval</artifactId>
+            <version>4.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.oval</groupId>
+            <artifactId>oval</artifactId>
+            <version>1.84</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>nl.cloudfarming.client</groupId>
             <artifactId>lib-beansbinding</artifactId>
             <version>1.2.2-NB80</version>

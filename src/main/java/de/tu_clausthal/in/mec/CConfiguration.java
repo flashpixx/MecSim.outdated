@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec;
 
 import com.google.gson.Gson;
+import net.sf.oval.constraint.Min;
+import net.sf.oval.constraint.NotEmpty;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.*;
 
@@ -181,56 +183,144 @@ public class CConfiguration
 
     /**
      * private class for storing the configuration
+     *
+     * @see http://metawidget.sourceforge.net/doc/reference/en/html/ch04s03.html
      */
     public class Data
     {
 
         /**
+         * cell size for sampling
+         */
+        public int CellSampling = 2;
+        /**
          * geo position object of the start viewpoint
          */
-        @UiHidden
-        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
+        private GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
         /**
          * zoom level of the viewpoint on the start point
          */
-        @UiHidden
-        public int Zoom = 4;
+        private int Zoom = 4;
         /**
          * thread sleep time in miliseconds
          */
-        @UiHidden
-        public int ThreadSleepTime = 25;
+        private int ThreadSleepTime = 25;
         /**
          * window width
          */
-        @UiHidden
-        public int WindowWidth = 1684;
+        private int WindowWidth = 1684;
         /**
          * window height
          */
-        @UiHidden
-        public int WindowHeight = 1024;
-
+        private int WindowHeight = 1024;
         /**
          * geo map for graph
          */
-        @UiSection("Data Source / Download")
-        @UiLabel("")
-        public RoutingMap RoutingMap = new RoutingMap();
-        /**
-         * cell size for sampling
-         */
-        @UiSection("Traffic Graph")
-        @UiLabel("Cell size of the graph sampling (in metre)")
-        public int CellSampling = 2;
+        //@UiSection("Data Source / Download")
+        //@UiLabel("")
+        private RoutingMap RoutingMap = new RoutingMap();
         /**
          * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
          * algorithm)
          */
-        @UiComesAfter("CellSampling")
+        private String RoutingAlgorithm = "astarbi";
+
+
+        @UiSection("Traffic Graph")
+        @UiLabel("Cell size of the graph sampling (in metre)")
+        @Min(1)
+        public int getCellsampling()
+        {
+            return CellSampling;
+        }
+
+        public void setCellsampling( int p_value )
+        {
+            CellSampling = p_value;
+        }
+
+        @UiComesAfter("Cellsampling")
         @UiLabel("Routing algorithm")
         @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})
-        public String RoutingAlgorithm = "astarbi";
+        @NotEmpty
+        public String getRoutingalgorithm()
+        {
+            return RoutingAlgorithm;
+        }
+
+        public void setRoutingalgorithm( String p_value )
+        {
+            RoutingAlgorithm = p_value;
+        }
+
+        @UiComesAfter("Routingalgorithm")
+        @UiLabel("")
+        public RoutingMap getRoutingmap()
+        {
+            return RoutingMap;
+        }
+
+        public void setRoutingmap( RoutingMap p_value )
+        {
+            RoutingMap = p_value;
+        }
+
+        @UiHidden
+        public GeoPosition getViewpoint()
+        {
+            return ViewPoint;
+        }
+
+        public void setViewpoint( GeoPosition p_value )
+        {
+            ViewPoint = p_value;
+        }
+
+        @UiHidden
+        public int getZoom()
+        {
+            return Zoom;
+        }
+
+        public void setZoom( int p_value )
+        {
+            Zoom = p_value;
+        }
+
+        @UiHidden
+        public int getThreadsleeptime()
+        {
+            return ThreadSleepTime;
+        }
+
+        public void setThreadsleeptime( int p_value )
+        {
+            ThreadSleepTime = p_value;
+        }
+
+        @UiHidden
+        public int getWindowwidth()
+        {
+            return WindowWidth;
+        }
+
+        public void setWindowwidth( int p_value )
+        {
+            WindowWidth = p_value;
+        }
+
+        @UiHidden
+        public int getWindowheight()
+        {
+            return WindowHeight;
+        }
+
+        public void setWindowheight( int p_value )
+        {
+            WindowHeight = p_value;
+        }
+
+
 
         /**
          * object of the routing map
@@ -240,14 +330,35 @@ public class CConfiguration
             /**
              * download URL
              */
-            @UiLabel("Download URL of the OpenStreetMap PBF file")
-            public String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
+            private String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
 
             /**
              * name of the map
              */
+            private String name = "europe/germany/lowersaxony";
+
+
             @UiLabel("Unique name of the OpenStreetMap data")
-            public String name = "europe/germany/lowersaxony";
+            public String getName()
+            {
+                return name;
+            }
+
+            public void setName( String p_value )
+            {
+                name = p_value;
+            }
+
+            @UiLabel("Download URL of the OpenStreetMap PBF file")
+            public String getUrl()
+            {
+                return url;
+            }
+
+            public void setUrl( String p_value )
+            {
+                url = p_value;
+            }
         }
 
     }

@@ -86,7 +86,7 @@ public class CGraphHopper extends GraphHopper
     private void initialize()
     {
         // define graph location (use configuration)
-        File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().RoutingMap.name.replace( '/', '_' ) );
+        File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
         CLogger.out( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
 
         // convert OSM or load the graph
@@ -132,7 +132,7 @@ public class CGraphHopper extends GraphHopper
     {
         // calculate routes
         GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
-        l_request.setAlgorithm( CConfiguration.getInstance().get().RoutingAlgorithm );
+        l_request.setAlgorithm( CConfiguration.getInstance().get().getRoutingalgorithm() );
 
         GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
@@ -293,7 +293,7 @@ public class CGraphHopper extends GraphHopper
         try
         {
             File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            URL l_url = new URL( CConfiguration.getInstance().get().RoutingMap.url );
+            URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
 
             CLogger.out( "download OSM map from [" + l_url + "] to [" + l_output + "]" );
 

@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.ui.CFrame;
 import org.apache.commons.cli.*;
 import org.pmw.tinylog.Level;
 
-import java.io.File;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -103,7 +103,23 @@ public class CMain
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
         if ( l_cli.hasOption( "nogui" ) )
         {
+            try
+            {
 
+                FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
+                ObjectInputStream l_input = new ObjectInputStream( l_stream );
+                CSimulation.getInstance().load( l_input );
+                l_input.close();
+                l_stream.close();
+
+                CSimulation.getInstance().start();
+
+            }
+            catch ( Exception l_exception )
+            {
+                CLogger.error( l_exception );
+                CLogger.out( "Error on loading / running simulation data" );
+            }
         }
         else
             CSimulation.getInstance().setUI( new CFrame() );

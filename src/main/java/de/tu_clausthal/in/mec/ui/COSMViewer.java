@@ -65,9 +65,9 @@ public class COSMViewer extends JXMapViewer
 
         LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false );
         this.setTileFactory( l_tileFactory );
-        this.setZoom( CConfiguration.getInstance().get().Zoom );
-        this.setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
-        this.setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
+        this.setZoom( CConfiguration.getInstance().get().getZoom() );
+        this.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
+        this.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
 
         this.setOverlayPainter( m_painter );
 

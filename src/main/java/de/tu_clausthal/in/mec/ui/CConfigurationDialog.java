@@ -24,14 +24,16 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import org.jdesktop.beansbinding.AutoBinding;
 import org.metawidget.inspector.annotation.MetawidgetAnnotationInspector;
 import org.metawidget.inspector.composite.CompositeInspector;
 import org.metawidget.inspector.composite.CompositeInspectorConfig;
 import org.metawidget.inspector.impl.BaseObjectInspectorConfig;
-import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyle;
-import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyleConfig;
+import org.metawidget.inspector.oval.OvalInspector;
 import org.metawidget.inspector.propertytype.PropertyTypeInspector;
 import org.metawidget.swing.SwingMetawidget;
+import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessor;
+import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessorConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +71,6 @@ public class CConfigurationDialog extends JDialog
      */
     private void initialize()
     {
-        //this.setSize( 800, 300 );
         this.setAlwaysOnTop( true );
         this.setResizable( false );
         this.setModalityType( ModalityType.APPLICATION_MODAL );
@@ -78,32 +79,26 @@ public class CConfigurationDialog extends JDialog
         // public properties instead
         SwingMetawidget l_widget = new SwingMetawidget();
 
-        BaseObjectInspectorConfig l_inspectconfig = new BaseObjectInspectorConfig().setPropertyStyle(
-                new JavaBeanPropertyStyle(
-                        new JavaBeanPropertyStyleConfig().setSupportPublicFields( true )
-                )
-        );
-
         // there exists object-in-object relation and annotation in the object, so we redefine the inspector
         // as a composit inspector and within a propertytype and annotation inspector
+        BaseObjectInspectorConfig l_inspectconfig = new BaseObjectInspectorConfig();
         l_widget.setInspector(
                 new CompositeInspector(
                         new CompositeInspectorConfig().setInspectors(
                                 new PropertyTypeInspector( l_inspectconfig ),
-                                new MetawidgetAnnotationInspector( l_inspectconfig )
+                                new MetawidgetAnnotationInspector( l_inspectconfig ),
+                                new OvalInspector( l_inspectconfig )
                         )
                 )
         );
 
         // at last we need a databinding between UI components and properties of the object, so that
         // the properties are update automatically on changing
-        /*
         l_widget.addWidgetProcessor(
                 new BeansBindingProcessor(
                         new BeansBindingProcessorConfig().setUpdateStrategy( AutoBinding.UpdateStrategy.READ_WRITE )
                 )
         );
-        */
 
         // bind the object to the UI and add the metawidget to the frame
         l_widget.setToInspect( CConfiguration.getInstance().get() );

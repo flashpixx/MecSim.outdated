@@ -28,8 +28,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.*;
-import org.apache.commons.collections4.MultiMap;
-import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -81,30 +79,6 @@ public class CMainLoop implements Runnable
     }
 
 
-    /**
-     * creates an array with the layer objects depends on the ordering value
-     *
-     * @return returns a list of layer
-     */
-    private static List<ILayer> getOrderedLayer()
-    {
-
-        MultiMap<Integer, ILayer> l_order = new MultiValueMap();
-        for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-            l_order.put( l_layer.getCalculationIndex(), l_layer );
-
-        // get key values and sort it
-        Object[] l_sortkeys = l_order.keySet().toArray();
-        Arrays.sort( l_sortkeys );
-
-        // build the list of the layer
-        ArrayList<ILayer> l_list = new ArrayList();
-        for ( Object l_key : l_sortkeys )
-            l_list.addAll( (Collection) l_order.get( l_key ) );
-
-        return l_list;
-    }
-
     @Override
     public void run()
     {
@@ -112,7 +86,7 @@ public class CMainLoop implements Runnable
 
         // order of all layer - the order will be read only once
         // so the thread need not be startup on program initializing
-        List<ILayer> l_layerorder = getOrderedLayer();
+        List<ILayer> l_layerorder = CSimulation.getInstance().getWorld().getOrderedLayer();
         CLogger.info( l_layerorder );
 
         while ( !Thread.currentThread().isInterrupted() )
@@ -148,7 +122,7 @@ public class CMainLoop implements Runnable
 
 
                 m_simulationcount++;
-                Thread.sleep( CConfiguration.getInstance().get().ThreadSleepTime );
+                Thread.sleep( CConfiguration.getInstance().get().getThreadsleeptime() );
             }
             catch ( InterruptedException l_exception )
             {

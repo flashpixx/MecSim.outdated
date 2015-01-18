@@ -177,7 +177,7 @@ public class CSimulation
             throw new IllegalStateException( "simulation is running" );
         this.threadStartUp();
 
-        CLogger.info( "simulation is started" );
+        CLogger.info( "simulation is started for [" + p_steps + "] steps" );
         CBootstrap.BeforeSimulationStarts( this );
 
         // run thread and wait until thread is finished

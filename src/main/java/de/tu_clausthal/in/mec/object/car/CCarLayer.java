@@ -126,7 +126,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
         String[] l_list = new String[s_drivemodellist.length];
         int i = 0;
         for ( IDriveModel l_model : s_drivemodellist )
-            l_list[i] = l_model.getName();
+            l_list[i++] = l_model.getName();
+
         return l_list;
     }
 

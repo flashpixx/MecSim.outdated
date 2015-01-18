@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
+import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
 import javax.imageio.ImageIO;
@@ -89,11 +90,18 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         l_help.toArray( l_visibility );
         m_items.addRadioItems( "Layer/Visibility", l_visibility, this );
 
+
+        String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
+        m_items.addRadioGroup( "Car Sources", l_sources, this );
+        ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
+
+
+
         this.refreshDynamicItems();
 
 
         // get main menus to define order in the UI
-        for ( String l_root : new String[]{"File", "Simulation", "Layer", "Graph Weights", "Driving Model"} )
+        for ( String l_root : new String[]{"File", "Simulation", "Layer", "Car Sources", "Graph Weights", "Driving Model"} )
             this.add( m_items.get( l_root ) );
 
 /*
@@ -249,6 +257,21 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             if (e.getSource() == m_reference.get("Delete Norm"))
                 this.deleteNorm();
 */
+    }
+
+
+    /**
+     * returns the name of the selected source
+     *
+     * @return source name
+     */
+    private String getSelectedSource()
+    {
+        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Sources" ) )
+            if ( ( (JRadioButtonMenuItem) ( l_item.getValue() ) ).isSelected() )
+                return l_item.getKey().getSuffix();
+
+        return null;
     }
 
 

@@ -44,10 +44,6 @@ class COSMMouseListener extends MouseAdapter
 {
 
     /**
-     * popup
-     */
-    private CMenuPopup m_popup = new CMenuPopup();
-    /**
      * rectangle painter to push norm ranges
      */
     //private CRectanglePainter m_rectangle = null;
@@ -92,12 +88,6 @@ class COSMMouseListener extends MouseAdapter
                 }*/
             }
 
-            // right-click
-            if ( ( SwingUtilities.isRightMouseButton( e ) ) && ( e.getClickCount() == 1 ) )
-            {
-                m_popup.update();
-                m_popup.show( e.getComponent(), e.getX(), e.getY() );
-            }
         }
         catch ( Exception l_exception )
         {
@@ -156,16 +146,6 @@ class COSMMouseListener extends MouseAdapter
             return;
         m_rectangle.to( e.getPoint() );
         */
-    }
-
-    /**
-     * returns the popup listener
-     *
-     * @return popup listener
-     */
-    public CMenuPopup getPopupListener()
-    {
-        return m_popup;
     }
 
 

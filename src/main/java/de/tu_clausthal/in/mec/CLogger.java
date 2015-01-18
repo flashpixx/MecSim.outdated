@@ -110,16 +110,17 @@ public class CLogger
         l_Str.append( l_SEP );
         l_Str.append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) );
-        l_Str.append( l_SEP );
-        l_Str.append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 15 ) );
-        l_Str.append( l_SEP );
 
         // on the main method we must redefine the index (invoker does not exist)
         if ( Thread.currentThread().getStackTrace().length < 6 )
             l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
         else
             l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
+
+        l_Str.append( l_SEP );
+        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) );
+        l_Str.append( l_SEP );
+        l_Str.append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
 
 
         String l_add = "";

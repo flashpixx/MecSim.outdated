@@ -79,6 +79,9 @@ abstract public class IDefaultSourceFactory implements ISourceFactory, Serializa
      */
     private void setImage()
     {
+        if ( m_color == null )
+            return;
+
         try
         {
             BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );

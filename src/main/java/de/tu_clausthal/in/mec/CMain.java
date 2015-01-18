@@ -128,7 +128,6 @@ public class CMain
             }
         }
 
-        System.exit( 0 );
     }
 
 }

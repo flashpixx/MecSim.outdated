@@ -23,10 +23,12 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -37,21 +39,9 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
 {
 
     /**
-     * map with object for action listener
+     * menu item storage *
      */
-    private Map<String, Object> m_reference = new HashMap();
-    /**
-     * selected car definition
-     */
-    private String m_sources = "default cars";
-    /**
-     * reference to the institution menu, to remove it on update
-     */
-    private JMenu m_institutionMenu = null;
-    /**
-     * name of the institution
-     */
-    private String m_institution = null;
+    protected CMenuStorage m_items = new CMenuStorage();
 
 
     /**
@@ -59,9 +49,32 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
      */
     public CMenuPopup()
     {
+        super();
 
-        String[] l_cars = {"default cars", "norm cars"};
-        //this.add( CMenuFactory.createRadioMenuGroup( "Sources", l_cars, this, m_reference ) );
+
+        String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
+        m_items.addRadioGroup( "Sources", l_sources, this );
+        ( (JRadioButtonMenuItem) m_items.get( "Sources/" + l_sources[0] ) ).setSelected( true );
+
+
+        // get main menus to define order in the UI
+        for ( String l_root : new String[]{"Sources"} )
+            this.add( m_items.get( l_root ) );
+    }
+
+
+    /**
+     * returns the name of the selected source
+     *
+     * @return source name
+     */
+    public String getSelectedSource()
+    {
+        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Sources" ) )
+            if ( ( (JRadioButtonMenuItem) ( l_item.getValue() ) ).isSelected() )
+                return l_item.getKey().getSuffix();
+
+        return null;
     }
 
 
@@ -69,6 +82,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
     public void actionPerformed( ActionEvent e )
     {
 
+        /*
         if ( e.getSource() == m_reference.get( "default cars" ) )
         {
             this.setSource( "default cars" );
@@ -81,6 +95,7 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
         }
 
         m_institution = ( (JRadioButtonMenuItem) e.getSource() ).getText();
+        */
 
     }
 
@@ -110,38 +125,5 @@ public class CMenuPopup extends JPopupMenu implements ActionListener
         */
     }
 
-
-    /**
-     * sets the source option
-     *
-     * @param p_name name
-     */
-    private void setSource( String p_name )
-    {
-        m_sources = p_name;
-        ( (JRadioButtonMenuItem) m_reference.get( p_name ) ).setSelected( true );
-    }
-
-
-    /**
-     * returns the current source selection
-     *
-     * @return string with definition
-     */
-    public String getSourceSelection()
-    {
-        return m_sources;
-    }
-
-
-    /**
-     * returns the selected institution
-     *
-     * @return name
-     */
-    public String getInstitutionSelection()
-    {
-        return m_institution;
-    }
 
 }

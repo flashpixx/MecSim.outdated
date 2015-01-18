@@ -193,9 +193,10 @@ class COSMMouseListener extends MouseAdapter
      */
     private IInstitution<INormObject> getSelectedInstitution()
     {
+/*
         if ( ( m_popup.getInstitutionSelection() == null ) || ( m_popup.getInstitutionSelection().isEmpty() ) )
             return null;
-/*
+
         for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
             if (l_item.getName().equals(m_popup.getInstitutionSelection()))
                 return l_item;

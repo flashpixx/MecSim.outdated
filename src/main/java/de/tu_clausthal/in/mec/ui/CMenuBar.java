@@ -50,7 +50,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
 
     /**
-     * menu item storage *
+     * menu item storage
      */
     protected CMenuStorage m_items = new CMenuStorage();
     /**

@@ -71,7 +71,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_items.addItem( "File", new String[]{"Preferences", null, "Load", "Save", null, "Screenshot"}, this );
 
         m_items.addItem( "Simulation", new String[]{"Start", "Stop", null, "Reset", null}, this );
-        m_items.addSlider( "Simulation/Speed", CConfiguration.getInstance().get().getThreadsleeptime(), "slow", 0, "fast", 150, this );
+        m_items.addSlider( "Simulation/Speed", 150 - CConfiguration.getInstance().get().getThreadsleeptime(), "slow", 0, "fast", 150, this );
 
         m_items.addRadioGroup( "Graph Weights", ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(), this );
         m_items.addRadioGroup( "Driving Model", ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(), this );
@@ -94,7 +94,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
         m_items.addRadioGroup( "Car Sources", l_sources, this );
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
-
 
 
         this.refreshDynamicItems();
@@ -172,7 +171,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 this.preferences();
 
             if ( e.getSource() == m_items.get( "Simulation/Start" ) )
-                CSimulation.getInstance().start( 5 );
+                CSimulation.getInstance().start();
             if ( e.getSource() == m_items.get( "Simulation/Stop" ) )
                 CSimulation.getInstance().stop();
             if ( e.getSource() == m_items.get( "Simulation/Reset" ) )
@@ -265,9 +264,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      *
      * @return source name
      */
-    private String getSelectedSource()
+    public String getSelectedSourceName()
     {
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Sources" ) )
+        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Car Sources" ) )
             if ( ( (JRadioButtonMenuItem) ( l_item.getValue() ) ).isSelected() )
                 return l_item.getKey().getSuffix();
 

@@ -25,8 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.mec.object.source.CDefaultSourceFactory;
-import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
+import de.tu_clausthal.in.mec.object.source.*;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -44,10 +43,6 @@ class COSMMouseListener extends MouseAdapter
 {
 
     /**
-     * rectangle painter to push norm ranges
-     */
-    //private CRectanglePainter m_rectangle = null;
-    /**
      * flag to detect dragging
      */
     private boolean m_drag = false;
@@ -64,12 +59,18 @@ class COSMMouseListener extends MouseAdapter
                 if ( CSimulation.getInstance().isRunning() )
                     throw new IllegalStateException( "simulation is running" );
 
-                COSMViewer l_viewer = (COSMViewer) e.getSource();
-                Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-                Point2D l_position = new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
-                GeoPosition l_geoposition = l_viewer.getTileFactory().pixelToGeo( l_position, l_viewer.getZoom() );
 
-                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add( new CDefaultSourceFactory( l_geoposition ) );
+                switch ( ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName() )
+                {
+
+                    case "Default":
+                        ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add( new CDefaultSourceFactory( this.getMousePosition( e ) ) );
+                        break;
+                    case "Norm":
+                        ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add( new CNormSourceFactory( this.getMousePosition( e ) ) );
+                        break;
+
+                }
 
 /*
                 boolean l_remove = false;
@@ -148,6 +149,19 @@ class COSMMouseListener extends MouseAdapter
         */
     }
 
+    /**
+     * returns the geoposition of a mouse position
+     *
+     * @param e mouse event
+     * @return geoposition
+     */
+    private GeoPosition getMousePosition( MouseEvent e )
+    {
+        COSMViewer l_viewer = (COSMViewer) e.getSource();
+        Rectangle l_viewportBounds = l_viewer.getViewportBounds();
+        Point2D l_position = new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
+        return l_viewer.getTileFactory().pixelToGeo( l_position, l_viewer.getZoom() );
+    }
 
     /**
      * checks if a point is in a box around another point

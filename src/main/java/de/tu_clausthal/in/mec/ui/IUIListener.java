@@ -47,6 +47,17 @@ public abstract class IUIListener implements MouseListener
     }
 
     /**
+     * returns the icon size
+     *
+     * @param viewer viewer object
+     * @return circle size
+     */
+    protected int iconsize( JXMapViewer viewer )
+    {
+        return Math.max( 9 - viewer.getZoom(), 3 );
+    }
+
+    /**
      * click method which is called by a click on the object
      *
      * @param e      mouse event

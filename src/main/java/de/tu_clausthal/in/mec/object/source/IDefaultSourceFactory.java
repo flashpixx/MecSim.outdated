@@ -29,22 +29,26 @@ import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.inspector.CInspector;
+import de.tu_clausthal.in.mec.ui.inspector.IInspector;
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 
 /**
  * class with default source implementation
  */
-abstract public class IDefaultSourceFactory implements ISourceFactory, Serializable
+abstract public class IDefaultSourceFactory extends IInspector implements ISourceFactory, Serializable
 {
 
     /**
@@ -72,6 +76,27 @@ abstract public class IDefaultSourceFactory implements ISourceFactory, Serializa
         m_position = p_position;
         m_color = p_color;
         this.setImage();
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        Map<String, Object> l_map = super.inspect();
+        l_map.put( "geoposition", m_position );
+        return l_map;
+    }
+
+    @Override
+    public void onClick( MouseEvent e, JXMapViewer viewer )
+    {
+        if ( m_position == null )
+            return;
+
+        Point2D l_point = viewer.getTileFactory().geoToPixel( m_position, viewer.getZoom() );
+        Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), this.iconsize( viewer ), this.iconsize( viewer ) );
+
+        if ( l_circle.contains( e.getX(), e.getY() ) )
+            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
     }
 
     /**

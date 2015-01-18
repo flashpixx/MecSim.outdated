@@ -237,17 +237,6 @@ public class CDefaultCar extends IInspector implements ICar
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
-    /**
-     * returns the icon size
-     *
-     * @param viewer viewer object
-     * @return circle size
-     */
-    private int iconsize( JXMapViewer viewer )
-    {
-        return Math.max( 9 - viewer.getZoom(), 2 );
-    }
-
     @Override
     public void onClick( MouseEvent e, JXMapViewer viewer )
     {

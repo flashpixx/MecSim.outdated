@@ -186,7 +186,7 @@ public class CMainLoop implements Runnable
         if ( p_steps < 1 )
             throw new IllegalArgumentException( "step number must be greater than zero" );
 
-        m_shutdownstep = m_simulationcount+p_steps;
+        m_shutdownstep = m_simulationcount + p_steps;
         m_pause = false;
     }
 

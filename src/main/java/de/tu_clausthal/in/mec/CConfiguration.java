@@ -321,7 +321,6 @@ public class CConfiguration
         }
 
 
-
         /**
          * object of the routing map
          */

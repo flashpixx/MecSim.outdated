@@ -102,6 +102,16 @@ public class CLogger
      */
     private static String createLogData( Level p_status, Object p_add )
     {
+        int l_indexCurrentMethodName = 3;
+        int l_indexInvokingMethodName = 4;
+
+        // on the main method we must redfine the index
+        if ( Thread.currentThread().getStackTrace().length < 6 )
+        {
+            l_indexCurrentMethodName = 3;
+            l_indexInvokingMethodName = 3;
+        }
+
         String l_SEP = StringUtils.repeat( " ", 5 );
         StringBuffer l_Str = new StringBuffer();
 
@@ -110,11 +120,11 @@ public class CLogger
         l_Str.append( l_SEP );
         l_Str.append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) );
+        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( l_indexCurrentMethodName ) + "]", ' ', 100 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 15 ) );
+        l_Str.append( padCut( "line no [" + getCurrentLineNumber( l_indexCurrentMethodName ) + "]", ' ', 15 ) );
         l_Str.append( l_SEP );
-        l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
+        l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( l_indexInvokingMethodName ) + "]", ' ', 100 ) );
 
         String l_add = "";
         if ( p_add != null )

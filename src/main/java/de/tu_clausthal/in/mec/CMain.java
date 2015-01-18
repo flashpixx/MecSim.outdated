@@ -108,8 +108,8 @@ public class CMain
         {
             try
             {
-                if ( !l_cli.hasOption( "step" ) )
-                    throw new IllegalArgumentException( "step value is not set" );
+                if ( ( !l_cli.hasOption( "step" ) ) )
+                    throw new IllegalAccessException( "step value is not set" );
 
                 FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
                 ObjectInputStream l_input = new ObjectInputStream( l_stream );
@@ -124,9 +124,11 @@ public class CMain
             {
                 CLogger.error( l_exception );
                 CLogger.out( "Error on loading / running simulation data" );
+                System.exit( -1 );
             }
         }
 
+        System.exit( 0 );
     }
 
 }

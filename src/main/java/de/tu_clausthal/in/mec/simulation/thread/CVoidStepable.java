@@ -67,6 +67,7 @@ public class CVoidStepable extends IRunnable<IVoidStepable>
     {
         try
         {
+
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
 
@@ -76,6 +77,7 @@ public class CVoidStepable extends IRunnable<IVoidStepable>
 
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
+
         }
         catch ( Exception l_exception )
         {

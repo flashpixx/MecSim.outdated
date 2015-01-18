@@ -70,6 +70,7 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
     {
         try
         {
+
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
 
@@ -83,6 +84,7 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
 
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
+
         }
         catch ( Exception l_exception )
         {

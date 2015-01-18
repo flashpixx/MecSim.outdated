@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
@@ -41,7 +42,8 @@ public abstract class IUIListener implements MouseListener
      */
     public IUIListener()
     {
-        COSMViewer.getSimulationOSM().addMouseListener( this );
+        if ( CSimulation.getInstance().hasUI() )
+            COSMViewer.getSimulationOSM().addMouseListener( this );
     }
 
     /**

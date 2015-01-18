@@ -105,6 +105,9 @@ public class CDefaultCar extends IInspector implements ICar
      */
     public CDefaultCar( GeoPosition p_StartPosition )
     {
+        if ( p_StartPosition == null )
+            throw new IllegalArgumentException( "startposition need not be null" );
+
         m_StartPosition = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
         while ( m_speed < 50 )

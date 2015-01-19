@@ -66,6 +66,18 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
 
 
     /**
+     * ctor which sets the geo position of the source and the color
+     *
+     * @param p_position geoposition
+     * @param p_color    color of the source
+     */
+    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color )
+    {
+        super( p_position, p_color );
+    }
+
+
+    /**
      * ctor which sets the geo position of the source and the number of cars on a creation step
      *
      * @param p_position geoposition

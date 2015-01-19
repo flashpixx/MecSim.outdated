@@ -21,52 +21,33 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.mas.jason;
 
-import de.tu_clausthal.in.mec.object.IMultiLayer;
-import org.jxmapviewer.viewer.GeoPosition;
+import de.tu_clausthal.in.mec.simulation.IStepable;
+import org.jxmapviewer.painter.Painter;
+
+import java.awt.*;
+import java.util.Map;
 
 
 /**
- * layer with all sources
+ * class of a Jason agent
+ *
+ * @see http://jason.sourceforge.net/
  */
-public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
+public class CAgent implements IStepable, Painter
 {
 
-    /**
-     * returns a list of source names
-     *
-     * @return source names
-     */
-    public String[] getSourceNamesList()
+    @Override
+    public Map<String, Object> analyse()
     {
-        return new String[]{"Default", "Norm", "Profile"};
-    }
-
-
-    /**
-     * creates a source
-     *
-     * @param p_name     name of the source type
-     * @param p_position geo position of the source
-     * @return source object
-     */
-    public ISourceFactory getSource( String p_name, GeoPosition p_position )
-    {
-        if ( p_name.equals( "Default" ) )
-            return new CDefaultSourceFactory( p_position );
-        if ( p_name.equals( "Norm" ) )
-            return new CNormSourceFactory( p_position );
-        //if (p_name.equals( "Profile" ))
-        //    return new CProfileSourceFactory( p_position );
-
-        throw new IllegalArgumentException( "source name not found" );
+        return null;
     }
 
     @Override
-    public int getCalculationIndex()
+    public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
     {
-        return 2;
+
     }
 
 }

@@ -139,6 +139,12 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return 1;
+    }
+
+    @Override
     public void beforeStepObject( int p_currentstep, ICar p_object )
     {
         m_drivemodel.update( p_currentstep, this.m_graph, p_object );

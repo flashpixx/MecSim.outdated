@@ -21,52 +21,35 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import org.jxmapviewer.viewer.GeoPosition;
+import jason.environment.Environment;
 
 
 /**
- * layer with all sources
+ * class of the Jason environment
+ *
+ * @see http://jason.sourceforge.net/
  */
-public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
+public class CEnvironment extends IMultiLayer<CAgent>
 {
 
-    /**
-     * returns a list of source names
-     *
-     * @return source names
-     */
-    public String[] getSourceNamesList()
-    {
-        return new String[]{"Default", "Norm", "Profile"};
-    }
-
-
-    /**
-     * creates a source
-     *
-     * @param p_name     name of the source type
-     * @param p_position geo position of the source
-     * @return source object
-     */
-    public ISourceFactory getSource( String p_name, GeoPosition p_position )
-    {
-        if ( p_name.equals( "Default" ) )
-            return new CDefaultSourceFactory( p_position );
-        if ( p_name.equals( "Norm" ) )
-            return new CNormSourceFactory( p_position );
-        //if (p_name.equals( "Profile" ))
-        //    return new CProfileSourceFactory( p_position );
-
-        throw new IllegalArgumentException( "source name not found" );
-    }
-
     @Override
-    public int getCalculationIndex()
+    public void step( int p_currentstep, ILayer p_layer )
     {
-        return 2;
+        //this.processPerceptions();
+        //this.processEnvironment();
+        //this.processAgents();
+    }
+
+    /**
+     * class of the Jason environment
+     */
+    protected class CJasonWrapper extends Environment
+    {
+
     }
 
 }

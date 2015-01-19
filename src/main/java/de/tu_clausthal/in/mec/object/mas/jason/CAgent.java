@@ -24,16 +24,19 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.asSemantics.*;
+import jason.asSyntax.Literal;
 import jason.runtime.Settings;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -41,8 +44,9 @@ import java.util.Map;
  *
  * @note encapsulate the Jason AgentArch structure to run more than one agent
  * @see http://jason.sourceforge.net/
+ * http://jason.sourceforge.net/faq/faq.html#SECTION00030000000000000000
  */
-public class CAgent<T extends IStepable> extends AgArch implements IStepable, Painter
+public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable, Painter
 {
 
     /**
@@ -97,6 +101,7 @@ public class CAgent<T extends IStepable> extends AgArch implements IStepable, Pa
      */
     public void removeAgent( String p_name )
     {
+        this.
         m_agents.remove( p_name );
     }
 
@@ -113,11 +118,34 @@ public class CAgent<T extends IStepable> extends AgArch implements IStepable, Pa
 
     }
 
+    @Override
+    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    {
+        List<Literal> l_localPercepts = new LinkedList();
+
+        //l_localPercepts.add( ASSyntax.createLiteral( "layer", ASSyntax.crea ) ) );
+
+
+        this.getTS().reasoningCycle();
+    }
+
+    @Override
+    public boolean canSleep()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isRunning()
+    {
+        return true;
+    }
+
 
     /**
      * a class of a Jason agent *
      */
-    private class CJasonAgentWrapper extends Agent
+    protected class CJasonAgentWrapper extends Agent
     {
 
         public CJasonAgentWrapper( String p_aslfile ) throws JasonException

@@ -70,7 +70,7 @@ public class CEnvironment extends IMultiLayer<CAgent>
     /**
      * class of the Jason environment
      */
-    protected class CJasonEnvironmentWrapper<T> extends Environment
+    protected class CJasonEnvironmentWrapper extends Environment
     {
 
         @Override

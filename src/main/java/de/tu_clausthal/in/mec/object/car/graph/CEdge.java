@@ -277,11 +277,11 @@ public class CEdge<N, T> implements Comparable<CEdge>
             throw new IllegalAccessException( "position on graph edge is not empty" );
 
         // if the object exists on the edge, it will be moved
-        if ( m_objects.containsKey( p_object ) )
-            m_cells[m_objects.get( p_object )] = null;
-
         synchronized ( m_cells )
         {
+            if ( m_objects.containsKey( p_object ) )
+                m_cells[m_objects.get( p_object )] = null;
+
             m_cells[p_position] = p_object;
         }
         m_objects.put( p_object, p_position );

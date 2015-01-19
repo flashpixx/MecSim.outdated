@@ -37,7 +37,7 @@ import java.util.*;
 /**
  * class for defining the cell sampling structure of an edge with the car information
  */
-public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
+public class CEdge<N, T> implements Comparable<CEdge>
 {
 
     /**
@@ -69,7 +69,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     /**
      * ctor create the samples
      */
-    public CCellObjectLinkage( EdgeIteratorState p_edgestate )
+    public CEdge( EdgeIteratorState p_edgestate )
     {
         m_edgeid = p_edgestate.getEdge();
         m_edgelength = p_edgestate.getDistance();
@@ -333,7 +333,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
 
 
     @Override
-    public int compareTo( CCellObjectLinkage p_edgelink )
+    public int compareTo( CEdge p_edgelink )
     {
         if ( m_edgeid > p_edgelink.m_edgeid )
             return 1;
@@ -352,7 +352,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     @Override
     public boolean equals( Object p_object )
     {
-        if ( p_object instanceof CCellObjectLinkage )
+        if ( p_object instanceof CEdge )
             return this.hashCode() == p_object.hashCode();
 
         return false;

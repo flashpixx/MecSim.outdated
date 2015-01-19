@@ -56,7 +56,7 @@ public class CGraphHopper extends GraphHopper
     /**
      * map with edge-cell connection
      */
-    private Map<Integer, CCellObjectLinkage<ICar, Object>> m_edgecell = new ConcurrentHashMap();
+    private Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap();
 
 
     /**
@@ -246,7 +246,7 @@ public class CGraphHopper extends GraphHopper
      */
     public synchronized void clear()
     {
-        for ( Map.Entry<Integer, CCellObjectLinkage<ICar, Object>> l_item : m_edgecell.entrySet() )
+        for ( Map.Entry<Integer, CEdge<ICar, Object>> l_item : m_edgecell.entrySet() )
             l_item.getValue().clear();
     }
 
@@ -258,7 +258,7 @@ public class CGraphHopper extends GraphHopper
     public synchronized int getNumberOfObjects()
     {
         int l_count = 0;
-        for ( CCellObjectLinkage l_item : m_edgecell.values() )
+        for ( CEdge l_item : m_edgecell.values() )
             l_count += l_item.getNumberOfObjects();
         return l_count;
     }
@@ -270,12 +270,12 @@ public class CGraphHopper extends GraphHopper
      * @param p_edgestate edge object
      * @return linkage object
      */
-    public synchronized CCellObjectLinkage getEdge( EdgeIteratorState p_edgestate )
+    public synchronized CEdge getEdge( EdgeIteratorState p_edgestate )
     {
-        CCellObjectLinkage l_edge = m_edgecell.get( p_edgestate.getEdge() );
+        CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
         if ( l_edge == null )
         {
-            l_edge = new CCellObjectLinkage( p_edgestate );
+            l_edge = new CEdge( p_edgestate );
             m_edgecell.put( l_edge.getEdgeID(), l_edge );
         }
 

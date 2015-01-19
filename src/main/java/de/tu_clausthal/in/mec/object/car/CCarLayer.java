@@ -26,7 +26,7 @@ package de.tu_clausthal.in.mec.object.car;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
-import de.tu_clausthal.in.mec.object.car.graph.CCellObjectLinkage;
+import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
 
@@ -150,7 +150,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
         if ( p_object.hasEndReached() )
         {
             super.remove( p_object );
-            CCellObjectLinkage l_edge = m_graph.getEdge( p_object.getEdge() );
+            CEdge l_edge = m_graph.getEdge( p_object.getEdge() );
             if ( l_edge != null )
             {
                 l_edge.removeObject( p_object );

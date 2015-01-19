@@ -23,13 +23,14 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import jason.asSyntax.ASSyntax;
-import jason.asSyntax.Literal;
+import jason.asSyntax.*;
 import jason.environment.Environment;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,9 +43,17 @@ import java.util.List;
 public class CEnvironment extends IMultiLayer<CAgent>
 {
 
+    protected transient Method[] m_method = null;
     protected transient CJasonEnvironmentWrapper m_jason = new CJasonEnvironmentWrapper();
 
 
+    public CEnvironment( Class p_class )
+    {
+        if ( p_class == null )
+            throw new IllegalArgumentException( "class definition need not to be null" );
+
+        m_method = p_class.getMethods();
+    }
 
     @Override
     public void step( int p_currentstep, ILayer p_layer )
@@ -55,18 +64,28 @@ public class CEnvironment extends IMultiLayer<CAgent>
         for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
             l_globalPercepts.addAll( CCommon.getLiteralList( l_layer.analyse() ) );
 
-
-
-        //this.processPerceptions();
-        //this.processEnvironment();
-        //this.processAgents();
+        // @todo l_globalPercept -> global environment ?
     }
 
     /**
      * class of the Jason environment
      */
-    protected class CJasonEnvironmentWrapper extends Environment
+    protected class CJasonEnvironmentWrapper<T> extends Environment
     {
+
+        @Override
+        public boolean executeAction( String p_agent, Structure p_action )
+        {
+
+            for ( Method l_method : m_method )
+                if ( p_action.getFunctor().equals( l_method.getName() ) )
+                {
+                    CLogger.info( "agent [" + p_agent + "] run method [" + l_method.getName() + "]" );
+                    return true;
+                }
+
+            return false;
+        }
 
     }
 

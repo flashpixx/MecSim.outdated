@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
@@ -35,6 +36,7 @@ import jason.runtime.Settings;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -49,13 +51,13 @@ import java.util.List;
 public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable, Painter
 {
 
+    protected static String s_aslpath = CConfiguration.getInstance().getConfigDir() + File.separator + "mas" + File.separator + "json" + File.separator;
     /**
      * source object that is connect with the agents *
      */
     protected T m_source = null;
     protected Circumstance m_jsoncircumstance = new Circumstance();
     protected Settings m_jsonsettings = new Settings();
-    protected Map<String, Agent> m_agents = new HashMap();
 
 
     /**
@@ -76,33 +78,17 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
      * adds a new agent to the architecture
      *
      * @param p_name    name of the agent
-     * @param p_aslfile ASL file
      */
-    public void createAgent( String p_name, String p_aslfile )
+    public void createAgent( String p_name )
     {
-        if ( m_agents.containsKey( p_name ) )
-            throw new IllegalArgumentException( "agent [" + p_name + "] exists" );
-
         try
         {
-            m_agents.put( p_name, new CJasonAgentWrapper( p_aslfile ) );
+            new CJasonAgentWrapper( s_aslpath + p_name.toLowerCase() + ".asl" );
         }
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
         }
-    }
-
-
-    /**
-     * removes an agent from the architecture
-     *
-     * @param p_name name
-     */
-    public void removeAgent( String p_name )
-    {
-        this.
-        m_agents.remove( p_name );
     }
 
 
@@ -122,10 +108,13 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
         List<Literal> l_localPercepts = new LinkedList();
+        l_localPercepts.addAll( CCommon.getLiteralList( this.analyse() ) );
 
+        // @todo object reference set to percepts ?
         //l_localPercepts.add( ASSyntax.createLiteral( "layer", ASSyntax.crea ) ) );
+        //l_localPercepts.add( ASSyntax.createLiteral( "source", ASSyntax.crea ) ) );
 
-
+        // @todo cycle here correct?
         this.getTS().reasoningCycle();
     }
 

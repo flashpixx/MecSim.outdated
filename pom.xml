@@ -136,14 +136,12 @@
         </dependency>
 
         <!-- agent frameworks -->
-        <!--
         <dependency>
             <groupId>net.sf.jason</groupId>
             <artifactId>jason</artifactId>
             <version>1.4.1</version>
             <scope>compile</scope>
         </dependency>
-        -->
     </dependencies>
 
     <build>

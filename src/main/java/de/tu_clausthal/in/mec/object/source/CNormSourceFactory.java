@@ -70,7 +70,8 @@ public class CNormSourceFactory extends CDefaultSourceFactory
             return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add( new CNormCar( super.m_position ) );
+            l_sources.add( new CNormCar( m_position ) );
+
         return l_sources;
     }
 

@@ -51,7 +51,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     /**
      * map with car-2-position in forward direction
      */
-    protected Map<N, Integer> m_objects = new HashMap();
+    protected Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap() );
     /**
      * array with cells of the forward direction
      */
@@ -271,7 +271,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      * @param p_object   object
      * @param p_position position index
      */
-    public synchronized void setObject( N p_object, int p_position ) throws IllegalAccessException
+    public void setObject( N p_object, int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmpty( p_position ) )
             throw new IllegalAccessException( "position on graph edge is not empty" );
@@ -280,7 +280,10 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
         if ( m_objects.containsKey( p_object ) )
             m_cells[m_objects.get( p_object )] = null;
 
-        m_cells[p_position] = p_object;
+        synchronized ( m_cells )
+        {
+            m_cells[p_position] = p_object;
+        }
         m_objects.put( p_object, p_position );
     }
 
@@ -290,12 +293,15 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      *
      * @param p_object object
      */
-    public synchronized void removeObject( N p_object )
+    public void removeObject( N p_object )
     {
         if ( !m_objects.containsKey( p_object ) )
             return;
 
-        m_cells[m_objects.remove( p_object )] = null;
+        synchronized ( m_cells )
+        {
+            m_cells[m_objects.remove( p_object )] = null;
+        }
     }
 
 
@@ -306,7 +312,7 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
      * @return contains boolean
      */
 
-    public synchronized boolean contains( N p_object )
+    public boolean contains( N p_object )
     {
         return m_objects.containsKey( p_object );
     }
@@ -315,12 +321,14 @@ public class CCellObjectLinkage<N, T> implements Comparable<CCellObjectLinkage>
     /**
      * clears the edge information
      */
-    public synchronized void clear()
+    public void clear()
     {
         m_objects.clear();
-        for ( int i = 0; i < m_cells.length; i++ )
-            m_cells[i] = null;
-
+        synchronized ( m_cells )
+        {
+            for ( int i = 0; i < m_cells.length; i++ )
+                m_cells[i] = null;
+        }
     }
 
 

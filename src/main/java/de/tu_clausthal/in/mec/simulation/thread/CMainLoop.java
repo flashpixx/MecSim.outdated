@@ -44,11 +44,6 @@ public class CMainLoop implements Runnable
     private ExecutorService m_pool = Executors.newWorkStealingPool();
 
     /**
-     * task list with objects
-     */
-    private Collection<Callable<Object>> m_tasks = new LinkedList();
-
-    /**
      * simulation counter
      */
     private int m_simulationcount = 0;
@@ -89,6 +84,8 @@ public class CMainLoop implements Runnable
     {
         CLogger.info( "thread starts working" );
 
+        Collection<Callable<Object>> l_tasks = new LinkedList();
+
         // order of all layer - the order will be read only once
         // so the thread need not be startup on program initializing
         List<ILayer> l_layerorder = CSimulation.getInstance().getWorld().getOrderedLayer();
@@ -111,21 +108,21 @@ public class CMainLoop implements Runnable
                     break;
 
                 // if thread is not paused perform objects
-                m_tasks.clear();
-                m_tasks.add( new CVoidStepable( 0, CSimulation.getInstance().getEventManager(), null ) );
+                l_tasks.clear();
+                l_tasks.add( new CVoidStepable( 0, CSimulation.getInstance().getEventManager(), null ) );
                 for ( ILayer l_layer : l_layerorder )
                     if ( l_layer.isActive() )
-                        m_tasks.add( createTask( m_simulationcount, l_layer, null ) );
-                m_pool.invokeAll( m_tasks );
+                        l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+                m_pool.invokeAll( l_tasks );
 
 
-                m_tasks.clear();
+                l_tasks.clear();
                 for ( ILayer l_layer : l_layerorder )
                     if ( ( l_layer.isActive() ) && ( l_layer instanceof IMultiLayer ) )
                     {
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
-                            m_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
-                        m_pool.invokeAll( m_tasks );
+                            l_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
+                        m_pool.invokeAll( l_tasks );
                     }
 
 
@@ -202,11 +199,11 @@ public class CMainLoop implements Runnable
 
         try
         {
-            m_tasks.clear();
             m_simulationcount = 0;
+            Collection<Callable<Object>> l_tasks = new LinkedList();
             for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                m_tasks.add( new CLayerReset( l_layer ) );
-            m_pool.invokeAll( m_tasks );
+                l_tasks.add( new CLayerReset( l_layer ) );
+            m_pool.invokeAll( l_tasks );
 
         }
         catch ( InterruptedException l_exception )

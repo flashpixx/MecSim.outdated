@@ -105,11 +105,11 @@ public class CLogger
         String l_SEP = StringUtils.repeat( " ", 5 );
         StringBuffer l_Str = new StringBuffer();
 
-        l_Str.append( l_SEP );
-        l_Str.append( padCut( "status [" + p_status + "]", ' ', 15 ) );
-        l_Str.append( l_SEP );
-        l_Str.append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) );
-        l_Str.append( l_SEP );
+        l_Str.append( l_SEP ).
+                append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
+                append( l_SEP ).
+                append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
+                append( l_SEP );
 
         // on the main method we must redefine the index (invoker does not exist)
         if ( Thread.currentThread().getStackTrace().length < 6 )
@@ -117,10 +117,10 @@ public class CLogger
         else
             l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
 
-        l_Str.append( l_SEP );
-        l_Str.append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) );
-        l_Str.append( l_SEP );
-        l_Str.append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
+        l_Str.append( l_SEP ).
+                append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
+                append( l_SEP ).
+                append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
 
 
         String l_add = "";
@@ -139,8 +139,8 @@ public class CLogger
 
         if ( !l_add.isEmpty() )
         {
-            l_Str.append( l_SEP );
-            l_Str.append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ) );
+            l_Str.append( l_SEP ).
+                    append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ) );
         }
 
         return l_Str.toString();

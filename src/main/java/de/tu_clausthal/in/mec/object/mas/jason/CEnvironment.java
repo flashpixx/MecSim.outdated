@@ -41,7 +41,7 @@ import java.util.*;
 public class CEnvironment extends IMultiLayer<CAgent>
 {
 
-    protected transient CJasonWrapper m_jason = new CJasonWrapper();
+    protected transient CJasonEnvironmentWrapper m_jason = new CJasonEnvironmentWrapper();
 
 
     /**
@@ -105,7 +105,7 @@ public class CEnvironment extends IMultiLayer<CAgent>
     /**
      * class of the Jason environment
      */
-    protected class CJasonWrapper extends Environment
+    protected class CJasonEnvironmentWrapper extends Environment
     {
 
     }

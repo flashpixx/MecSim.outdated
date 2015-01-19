@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 
 import java.io.Serializable;
-import java.util.Map;
 
 
 /**
@@ -63,13 +62,5 @@ public interface ILayer extends IStepable, Serializable
      * @return index value of ordering (need not be unique)
      */
     public int getCalculationIndex();
-
-
-    /**
-     * returns data of a layer
-     *
-     * @return map with data of the layer or null
-     */
-    public Map<String, Object> getData();
 
 }

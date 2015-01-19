@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
-import java.util.Map;
 
 
 /**
@@ -69,12 +68,6 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     public int getCalculationIndex()
     {
         return 0;
-    }
-
-    @Override
-    public Map<String, Object> getData()
-    {
-        return null;
     }
 
     @Override

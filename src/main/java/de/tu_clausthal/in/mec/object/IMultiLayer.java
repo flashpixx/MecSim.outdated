@@ -80,12 +80,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public Map<String, Object> getData()
-    {
-        return null;
-    }
-
-    @Override
     public boolean isVisible()
     {
         try

@@ -25,8 +25,6 @@ package de.tu_clausthal.in.mec.object;
 
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 
-import java.util.Map;
-
 
 /**
  * layer for any calculation without visibility
@@ -60,12 +58,6 @@ public abstract class IEvaluateLayer implements ILayer, IVoidStepable
     public int getCalculationIndex()
     {
         return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public Map<String, Object> getData()
-    {
-        return null;
     }
 
     @Override

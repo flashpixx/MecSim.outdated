@@ -23,86 +23,88 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
-import jason.asSyntax.*;
+import jason.asSyntax.Structure;
 import jason.environment.EnvironmentInfraTier;
 import jason.runtime.RuntimeServicesInfraTier;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 
 /**
  * class of the Jason environment
  *
- * @see http://jason.sourceforge.net/
+ * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContainer<T>>
+public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContainer<T>> implements EnvironmentInfraTier
 {
 
     /**
      * global literal storage *
      */
     protected CLiteralStorage m_global = new CLiteralStorage();
+    /**
+     * map with actions of the environment *
+     */
+    protected Map<String, Pair<Method, Object>> m_actions = new HashMap();
 
 
-
+    /**
+     * register object methods
+     *
+     * @param p_object object
+     */
+    public void registerObjectMethods( Object p_object )
+    {
+        m_actions.putAll( m_global.addObjectMethods( p_object ) );
+    }
 
 
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
-        List<Literal> l_globalPercepts = new LinkedList();
-        l_globalPercepts.add( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
-
-        //for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-        //    l_globalPercepts.addAll( CLiteralStorage.getLiteralList( l_layer.analyse() ) );
-
-        // clear all perceptions and renew the perception data
-        //for ( Literal l_percept : l_globalPercepts )
-        //    m_jason.addPercept( l_percept );
-
+        m_global.add( "simulationstep", p_currentstep );
+        m_global.addObjectFields( this );
 
     }
 
-    /**
-     * wrapper class of a Jason environment
-     * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
-     */
-    protected class CJasonEnvironmentInfraTier implements EnvironmentInfraTier
+    @Override
+    public void informAgsEnvironmentChanged( String... strings )
     {
 
+    }
 
-        @Override
-        public void informAgsEnvironmentChanged( String... strings )
-        {
+    @Override
+    public void informAgsEnvironmentChanged( Collection<String> collection )
+    {
+    }
 
-        }
+    @Override
+    public RuntimeServicesInfraTier getRuntimeServices()
+    {
+        return null;
+    }
 
-        @Override
-        public void informAgsEnvironmentChanged( Collection<String> collection )
-        {
+    @Override
+    public boolean isRunning()
+    {
+        return true;
+    }
 
-        }
+    @Override
+    public void actionExecuted( String agName, Structure actTerm, boolean success, Object infraData )
+    {
+        if ( !success )
+            return;
 
-        @Override
-        public RuntimeServicesInfraTier getRuntimeServices()
-        {
-            return null;
-        }
-
-        @Override
-        public boolean isRunning()
-        {
-            return true;
-        }
-
-        @Override
-        public void actionExecuted( String s, Structure structure, boolean b, Object o )
-        {
-
-        }
+        for ( Map.Entry<String, Pair<Method, Object>> l_item : m_actions.entrySet() )
+            if ( actTerm.getFunctor().equals( l_item.getKey() ) )
+                CLogger.info( "agent [" + agName + "] runs method [" + l_item.getValue().getLeft().getName() + "] on object [" + l_item.getValue().getRight() + "]");
     }
 
 }

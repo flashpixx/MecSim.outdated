@@ -182,8 +182,20 @@ public class CLiteralStorage implements Collection<Literal>
         if ( p_data == null )
             throw new IllegalArgumentException( "map need not be empty" );
 
-        for ( Map.Entry<String, Object> l_data : p_data.entrySet() )
-            m_literals.add( getLiteral( l_data.getKey(), l_data.getValue() ) );
+        for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
+            this.add( l_item.getKey(), l_item.getValue() );
+    }
+
+
+    /**
+     * create a literal with value
+     *
+     * @param p_name  name
+     * @param p_value value
+     */
+    public void add( String p_name, Object p_value )
+    {
+        m_literals.add( getLiteral( p_name, p_value ) );
     }
 
 

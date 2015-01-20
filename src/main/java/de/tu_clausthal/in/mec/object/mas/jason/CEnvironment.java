@@ -111,7 +111,7 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContain
     @Override
     public RuntimeServicesInfraTier getRuntimeServices()
     {
-        return new CRuntimeService();
+        return new CRuntimeService( m_runner );
     }
 
     @Override

@@ -23,59 +23,39 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
-import jason.asSyntax.ASSyntax;
-import jason.asSyntax.Literal;
-
-import java.util.*;
+import java.lang.reflect.Field;
 
 
 /**
- * Jason common functions
+ * Created by pkraus on 20.01.15.
  */
-public class CCommon
+public class IPropertyFilter
 {
 
     /**
-     * converts a map into Jason literals
+     * method to filter properties for the environment
      *
-     * @param p_data map with data
-     * @return literal list
+     * @param p_object   object that is referenced to bind the field
+     * @param p_property fild which should be bind
+     * @return true / false to bind field
      */
-    public static List<Literal> getLiteralList( Map<String, Object> p_data )
+    public boolean filter( Object p_object, Field p_property )
     {
-        List<Literal> l_literals = new LinkedList();
-        if ( p_data == null )
-            return l_literals;
+        return true;
+    }
 
-        for ( Map.Entry<String, Object> l_data : p_data.entrySet() )
-        {
-            // null value into atom
-            if ( l_data.getValue() == null )
-            {
-                l_literals.add( ASSyntax.createAtom( l_data.getKey() ) );
-                continue;
-            }
 
-            // number value into number
-            if ( l_data.getValue() instanceof Number )
-            {
-                l_literals.add( ASSyntax.createLiteral( l_data.getKey(), ASSyntax.createNumber( ( (Number) l_data.getValue() ).doubleValue() ) ) );
-                continue;
-            }
-
-            // collection into term list
-            if ( l_data.getValue() instanceof Collection )
-            {
-                l_literals.add( ASSyntax.createLiteral( l_data.getKey(), ASSyntax.createList( (Collection) l_data.getValue() ) ) );
-                continue;
-            }
-
-            // otherwise into string
-            l_literals.add( ASSyntax.createLiteral( l_data.getKey(), ASSyntax.createString( l_data.getValue().toString() ) ) );
-
-        }
-
-        return l_literals;
+    /**
+     * method to filter properties for an agent
+     *
+     * @param p_agent    agent that will be used for the bind
+     * @param p_object   object that is referenced to bind the field
+     * @param p_property fild which should be bind
+     * @return true / false to bind field
+     */
+    public boolean filter( CAgentContainer p_agent, Object p_object, Field p_property )
+    {
+        return true;
     }
 
 }

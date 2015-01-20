@@ -24,30 +24,28 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
-import jason.JasonException;
-import jason.architecture.AgArch;
-import jason.asSemantics.Agent;
-import jason.asSemantics.TransitionSystem;
+import jason.architecture.AgArchInfraTier;
+import jason.asSemantics.ActionExec;
+import jason.asSemantics.Message;
 import jason.asSyntax.Literal;
+import jason.runtime.RuntimeServicesInfraTier;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.io.File;
-import java.lang.reflect.Method;
-import java.util.*;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * class of a Jason agent
+ * class of a Jason agent architecture
  *
- * @see http://jason.sourceforge.net/
+ * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  */
-public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable, Painter
+public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IVoidStepable, Painter
 {
     /**
      * path to Jason ASL files *
@@ -57,10 +55,6 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
      * source object that is connect with the agents
      */
     protected T m_source = null;
-    /**
-     * methods of the source object to call it for Jason actions
-     */
-    protected Method[] m_sourcemethods = null;
 
 
     /**
@@ -68,59 +62,31 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
      *
      * @param p_source source object of the agent
      */
-    public CAgent( T p_source )
+    public CAgentContainer( T p_source )
     {
         if ( p_source == null )
             throw new IllegalArgumentException( "source value need not to be null" );
 
         m_source = p_source;
-        m_sourcemethods = p_source.getClass().getDeclaredMethods();
-    }
-
-
-    /**
-     * adds a new agent to the architecture
-     *
-     * @param p_name name of the agent
-     */
-    public void createAgent( String p_name )
-    {
-        // @todo filter for method names
-
-        try
-        {
-            new CJasonAgentWrapper( s_aslpath + p_name.toLowerCase() + ".asl" );
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
     }
 
 
     @Override
-    public Map<String, Object> analyse()
+    public List<Literal> perceive()
     {
-        return m_source.analyse();
+        return null;
     }
 
     @Override
-    public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
+    public void checkMail()
     {
+
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    public void act( ActionExec actionExec, List<ActionExec> list )
     {
-        List<Literal> l_localPercepts = new LinkedList();
-        l_localPercepts.addAll( CCommon.getLiteralList( this.analyse() ) );
 
-        // @todo object reference set to percepts ?
-        //l_localPercepts.add( ASSyntax.createLiteral( "layer", ASSyntax.crea ) ) );
-        //l_localPercepts.add( ASSyntax.createLiteral( "source", ASSyntax.crea ) ) );
-
-        // @todo cycle here correct?
-        this.getTS().reasoningCycle();
     }
 
     @Override
@@ -130,24 +96,62 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
     }
 
     @Override
+    public String getAgName()
+    {
+        return null;
+    }
+
+    @Override
+    public void sendMsg( Message message ) throws Exception
+    {
+
+    }
+
+    @Override
+    public void broadcast( Message message ) throws Exception
+    {
+
+    }
+
+    @Override
     public boolean isRunning()
     {
-        return true;
+        return false;
     }
 
-
-    /**
-     * a class of a Jason agent *
-     */
-    protected class CJasonAgentWrapper extends Agent
+    @Override
+    public void sleep()
     {
 
-        public CJasonAgentWrapper( String p_aslfile ) throws JasonException
-        {
-            new TransitionSystem( this, null, null, CAgent.this );
-            this.initAg( p_aslfile );
-        }
+    }
+
+    @Override
+    public void wake()
+    {
 
     }
 
+    @Override
+    public RuntimeServicesInfraTier getRuntimeServices()
+    {
+        return null;
+    }
+
+    @Override
+    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    {
+
+    }
+
+    @Override
+    public Map<String, Object> analyse()
+    {
+        return null;
+    }
+
+    @Override
+    public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
+    {
+
+    }
 }

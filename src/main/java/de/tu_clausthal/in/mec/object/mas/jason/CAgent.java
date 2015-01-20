@@ -30,13 +30,14 @@ import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import jason.JasonException;
 import jason.architecture.AgArch;
-import jason.asSemantics.*;
+import jason.asSemantics.Agent;
+import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.Literal;
-import jason.runtime.Settings;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
 
@@ -44,20 +45,22 @@ import java.util.List;
 /**
  * class of a Jason agent
  *
- * @note encapsulate the Jason AgentArch structure to run more than one agent
  * @see http://jason.sourceforge.net/
- * http://jason.sourceforge.net/faq/faq.html#SECTION00030000000000000000
  */
 public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable, Painter
 {
-
+    /**
+     * path to Jason ASL files *
+     */
     protected static String s_aslpath = CConfiguration.getInstance().getConfigDir() + File.separator + "mas" + File.separator + "json" + File.separator;
     /**
-     * source object that is connect with the agents *
+     * source object that is connect with the agents
      */
     protected T m_source = null;
-    protected Circumstance m_jsoncircumstance = new Circumstance();
-    protected Settings m_jsonsettings = new Settings();
+    /**
+     * methods of the source object to call it for Jason actions
+     */
+    protected Method[] m_sourcemethods = null;
 
 
     /**
@@ -71,16 +74,19 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
             throw new IllegalArgumentException( "source value need not to be null" );
 
         m_source = p_source;
+        m_sourcemethods = p_source.getClass().getDeclaredMethods();
     }
 
 
     /**
      * adds a new agent to the architecture
      *
-     * @param p_name    name of the agent
+     * @param p_name name of the agent
      */
     public void createAgent( String p_name )
     {
+        // @todo filter for method names
+
         try
         {
             new CJasonAgentWrapper( s_aslpath + p_name.toLowerCase() + ".asl" );
@@ -101,7 +107,6 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
     @Override
     public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
     {
-
     }
 
     @Override
@@ -139,9 +144,10 @@ public class CAgent<T extends IStepable> extends AgArch implements IVoidStepable
 
         public CJasonAgentWrapper( String p_aslfile ) throws JasonException
         {
-            new TransitionSystem( this, m_jsoncircumstance, m_jsonsettings, CAgent.this );
+            new TransitionSystem( this, null, null, CAgent.this );
             this.initAg( p_aslfile );
         }
+
     }
 
 }

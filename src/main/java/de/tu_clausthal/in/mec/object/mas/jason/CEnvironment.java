@@ -27,12 +27,14 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.simulation.IStepable;
 import jason.asSyntax.*;
 import jason.environment.Environment;
+import jason.environment.EnvironmentInfraTier;
 
 import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 
 /**
@@ -40,20 +42,40 @@ import java.util.List;
  *
  * @see http://jason.sourceforge.net/
  */
-public class CEnvironment extends IMultiLayer<CAgent>
+public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgent<T>>
 {
 
-    protected transient Method[] m_method = null;
-    protected transient CJasonEnvironmentWrapper m_jason = new CJasonEnvironmentWrapper();
+    /**
+     * map with action of the environment
+     */
+    protected transient Map<Method, Object> m_action = new HashMap();
+    /**
+     * Jason environment object
+     */
+    protected transient CJasonEnvironment m_jason = new CJasonEnvironment();
 
 
-    public CEnvironment( Class p_class )
+    /**
+     * registered from each object all public methods for environment actions
+     *
+     * @param p_object any object
+     */
+    public void registerAction( Object p_object )
     {
-        if ( p_class == null )
-            throw new IllegalArgumentException( "class definition need not to be null" );
+        for ( Method l_item : p_object.getClass().getDeclaredMethods() )
+        {
+            if ( m_action.containsKey( l_item.getName() ) )
+            {
+                CLogger.error( "method [" + l_item.getName() + "] is registered with the object [" + m_action.get( l_item.getName() ) + "] - skipped" );
+                continue;
+            }
 
-        m_method = p_class.getMethods();
+            // only public method can be registred for Jason actions
+            if ( Modifier.isPublic( l_item.getModifiers() ) )
+                m_action.put( l_item, p_object );
+        }
     }
+
 
     @Override
     public void step( int p_currentstep, ILayer p_layer )
@@ -64,27 +86,49 @@ public class CEnvironment extends IMultiLayer<CAgent>
         for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
             l_globalPercepts.addAll( CCommon.getLiteralList( l_layer.analyse() ) );
 
-        // @todo l_globalPercept -> global environment ?
+        // clear all perceptions and renew the perception data
+        m_jason.clearAllPercepts();
+        for ( Literal l_percept : l_globalPercepts )
+            m_jason.addPercept( l_percept );
+
+        m_jason.step();
     }
 
     /**
      * class of the Jason environment
+     * @note the environment must be full-redesigned because the Jason
+     * environment is a fixed implemented class with thread-pool
+     * structure. A manual calling interface does not exist
+     * so we create a own Jason environment to use it with
+     * the simulation
      */
-    protected class CJasonEnvironmentWrapper extends Environment
+    protected class CJasonEnvironment
     {
+        // centerialized
+        protected EnvironmentInfraTier m_infrastructure = null;
 
-        @Override
+
+        public void addPercept( Literal p_literal )
+        {}
+
+        public void clearAllPercepts()
+        {}
+
         public boolean executeAction( String p_agent, Structure p_action )
         {
-
-            for ( Method l_method : m_method )
-                if ( p_action.getFunctor().equals( l_method.getName() ) )
+            for ( Map.Entry<Method, Object> l_item : m_action.entrySet() )
+                if ( p_action.getFunctor().equals( l_item.getKey().getName() ) )
                 {
-                    CLogger.info( "agent [" + p_agent + "] run method [" + l_method.getName() + "]" );
+                    CLogger.info( "agent [" + p_agent + "] invoke method [" + l_item.getKey().getName() + "]" );
                     return true;
                 }
 
             return false;
+        }
+
+        public void step()
+        {
+
         }
 
     }

@@ -90,7 +90,7 @@ public class CBootstrap
 
         p_simulation.getWorld().put( "Sources", new CSourceFactoryLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
-        p_simulation.getWorld().put( "Jason Car Agents", new CEnvironment( ICar.class ) );
+        p_simulation.getWorld().put( "Jason Car Agents", new CEnvironment<ICar>() );
 
     }
 

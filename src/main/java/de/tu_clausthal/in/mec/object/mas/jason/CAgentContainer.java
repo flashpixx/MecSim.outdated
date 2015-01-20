@@ -31,6 +31,7 @@ import jason.architecture.AgArchInfraTier;
 import jason.asSemantics.ActionExec;
 import jason.asSemantics.Message;
 import jason.asSyntax.Literal;
+import jason.environment.Environment;
 import jason.runtime.RuntimeServicesInfraTier;
 import org.jxmapviewer.painter.Painter;
 
@@ -51,6 +52,7 @@ public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IV
      * path to Jason ASL files *
      */
     protected static String s_aslpath = CConfiguration.getInstance().getConfigDir() + File.separator + "mas" + File.separator + "json" + File.separator;
+    protected Environment m_environment = null;
     /**
      * source object that is connect with the agents
      */
@@ -62,11 +64,14 @@ public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IV
      *
      * @param p_source source object of the agent
      */
-    public CAgentContainer( T p_source )
+    public CAgentContainer( Environment p_environment, T p_source )
     {
+        if ( p_environment == null )
+            throw new IllegalArgumentException( "environment need not be null" );
         if ( p_source == null )
-            throw new IllegalArgumentException( "source value need not to be null" );
+            throw new IllegalArgumentException( "source value need not be null" );
 
+        m_environment = p_environment;
         m_source = p_source;
     }
 
@@ -86,7 +91,6 @@ public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IV
     @Override
     public void act( ActionExec actionExec, List<ActionExec> list )
     {
-
     }
 
     @Override
@@ -116,7 +120,7 @@ public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IV
     @Override
     public boolean isRunning()
     {
-        return false;
+        return true;
     }
 
     @Override

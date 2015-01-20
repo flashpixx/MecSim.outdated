@@ -23,12 +23,14 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
+import jason.asSemantics.ActionExec;
 import jason.asSyntax.Structure;
 import jason.environment.EnvironmentInfraTier;
+import jason.infra.centralised.CentralisedAgArch;
+import jason.infra.centralised.RunCentralisedMAS;
 import jason.runtime.RuntimeServicesInfraTier;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -53,6 +55,8 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContain
      */
     protected Map<String, Pair<Method, Object>> m_actions = new HashMap();
 
+    protected RunCentralisedMAS m_runner = null;
+
 
     /**
      * register object methods
@@ -74,20 +78,40 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContain
     }
 
     @Override
-    public void informAgsEnvironmentChanged( String... strings )
+    public void informAgsEnvironmentChanged( String... agents )
     {
+        if ( agents.length == 0 )
+            for ( CentralisedAgArch l_agentarchitecture : m_runner.getAgs().values() )
+                l_agentarchitecture.wake();
 
+        else
+            for ( String l_agent : agents )
+            {
+                CentralisedAgArch l_agentarchitecture = m_runner.getAg( l_agent );
+                if ( l_agentarchitecture != null )
+                    l_agentarchitecture.wake();
+            }
     }
 
     @Override
-    public void informAgsEnvironmentChanged( Collection<String> collection )
+    public void informAgsEnvironmentChanged( Collection<String> agentsToNotify )
     {
+        if ( agentsToNotify == null )
+            informAgsEnvironmentChanged();
+
+        else
+            for ( String l_agent : agentsToNotify )
+            {
+                CentralisedAgArch l_agentarchitecture = m_runner.getAg( l_agent );
+                if ( l_agentarchitecture != null )
+                    l_agentarchitecture.wake();
+            }
     }
 
     @Override
     public RuntimeServicesInfraTier getRuntimeServices()
     {
-        return null;
+        return new CRuntimeService();
     }
 
     @Override
@@ -99,12 +123,12 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContain
     @Override
     public void actionExecuted( String agName, Structure actTerm, boolean success, Object infraData )
     {
-        if ( !success )
-            return;
+        ActionExec l_action = (ActionExec) infraData;
+        l_action.setResult( success );
+        CentralisedAgArch l_agent = m_runner.getAg( agName );
+        if ( l_agent != null )
+            l_agent.actionExecuted( l_action );
 
-        for ( Map.Entry<String, Pair<Method, Object>> l_item : m_actions.entrySet() )
-            if ( actTerm.getFunctor().equals( l_item.getKey() ) )
-                CLogger.info( "agent [" + agName + "] runs method [" + l_item.getValue().getLeft().getName() + "] on object [" + l_item.getValue().getRight() + "]");
     }
 
 }

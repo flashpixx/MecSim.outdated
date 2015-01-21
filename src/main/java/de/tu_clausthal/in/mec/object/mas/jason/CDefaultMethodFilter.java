@@ -40,7 +40,7 @@ public class CDefaultMethodFilter extends IMethodFilter
     }
 
     @Override
-    public boolean filter( CAgentContainer p_agent, Object p_object, Method p_method )
+    public boolean filter( CAgentArchitecture p_agent, Object p_object, Method p_method )
     {
         return Modifier.isPublic( p_method.getModifiers() );
     }

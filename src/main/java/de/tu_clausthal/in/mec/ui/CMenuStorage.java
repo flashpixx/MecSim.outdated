@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 
-import org.apache.commons.lang3.StringUtils;
+import de.tu_clausthal.in.mec.common.CPath;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -41,7 +41,7 @@ public class CMenuStorage
     /**
      * stores path and menu / items *
      */
-    private Map<Path, JComponent> m_elements = new HashMap();
+    private Map<CPath, JComponent> m_elements = new HashMap();
 
     /**
      * returns the element
@@ -51,7 +51,7 @@ public class CMenuStorage
      */
     public JComponent get( String p_path )
     {
-        return m_elements.get( new Path( p_path ) );
+        return m_elements.get( new CPath( p_path ) );
     }
 
     /**
@@ -60,7 +60,7 @@ public class CMenuStorage
      * @param p_path path
      * @return element or null
      */
-    public JComponent get( Path p_path )
+    public JComponent get( CPath p_path )
     {
         return m_elements.get( p_path );
     }
@@ -71,10 +71,10 @@ public class CMenuStorage
      * @param p_path full path (without item)
      * @return menu object
      */
-    private JMenu GetOrCreatePath( Path p_path )
+    private JMenu GetOrCreatePath( CPath p_path )
     {
         JComponent l_parent = null;
-        for ( Path l_item : p_path )
+        for ( CPath l_item : p_path )
         {
             JComponent l_current = m_elements.get( l_item );
 
@@ -102,7 +102,7 @@ public class CMenuStorage
      */
     public void addMenu( String p_path )
     {
-        this.GetOrCreatePath( new Path( p_path ) );
+        this.GetOrCreatePath( new CPath( p_path ) );
     }
 
     /**
@@ -113,7 +113,7 @@ public class CMenuStorage
      */
     public void addItem( String p_path, ActionListener p_listen )
     {
-        Path l_path = new Path( p_path );
+        CPath l_path = new CPath( p_path );
         if ( m_elements.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
@@ -130,7 +130,7 @@ public class CMenuStorage
         if ( l_menu != null )
             l_menu.add( l_item );
 
-        m_elements.put( new Path( p_path ), l_item );
+        m_elements.put( new CPath( p_path ), l_item );
     }
 
 
@@ -143,7 +143,7 @@ public class CMenuStorage
      */
     public void addItem( String p_path, String[] p_elements, ActionListener p_listen )
     {
-        Path l_path = new Path( p_path );
+        CPath l_path = new CPath( p_path );
         if ( m_elements.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
@@ -162,7 +162,7 @@ public class CMenuStorage
             }
             else
             {
-                Path l_fullpath = new Path( p_path, l_name );
+                CPath l_fullpath = new CPath( p_path, l_name );
                 if ( m_elements.containsKey( l_fullpath ) )
                     continue;
 
@@ -189,7 +189,7 @@ public class CMenuStorage
      */
     public void addSlider( String p_path, int p_value, String p_labelmin, int p_min, String p_labelmax, int p_max, ChangeListener p_listen )
     {
-        Path l_path = new Path( p_path );
+        CPath l_path = new CPath( p_path );
         if ( m_elements.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
@@ -217,7 +217,7 @@ public class CMenuStorage
         if ( l_menu != null )
             l_menu.add( l_slider );
 
-        m_elements.put( new Path( p_path ), l_slider );
+        m_elements.put( new CPath( p_path ), l_slider );
     }
 
     /**
@@ -255,7 +255,7 @@ public class CMenuStorage
      */
     private void addRadioGroup( String p_path, String[] p_elements, ButtonGroup p_group, ActionListener p_listen )
     {
-        Path l_path = new Path( p_path );
+        CPath l_path = new CPath( p_path );
         if ( m_elements.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
@@ -274,7 +274,7 @@ public class CMenuStorage
             }
             else
             {
-                Path l_fullpath = new Path( p_path, l_name );
+                CPath l_fullpath = new CPath( p_path, l_name );
                 if ( m_elements.containsKey( l_fullpath ) )
                     continue;
 
@@ -300,7 +300,7 @@ public class CMenuStorage
     {
         List<JComponent> l_root = new ArrayList();
 
-        for ( Map.Entry<Path, JComponent> l_item : m_elements.entrySet() )
+        for ( Map.Entry<CPath, JComponent> l_item : m_elements.entrySet() )
             if ( l_item.getKey().size() == 1 )
                 l_root.add( l_item.getValue() );
 
@@ -315,11 +315,11 @@ public class CMenuStorage
      */
     public Collection<JComponent> getElements( String p_path )
     {
-        Path l_path = new Path( p_path );
+        CPath l_path = new CPath( p_path );
 
         List<JComponent> l_elements = new ArrayList();
 
-        for ( Map.Entry<Path, JComponent> l_item : m_elements.entrySet() )
+        for ( Map.Entry<CPath, JComponent> l_item : m_elements.entrySet() )
             if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
                 l_elements.add( l_item.getValue() );
 
@@ -333,12 +333,12 @@ public class CMenuStorage
      * @param p_path prefix path
      * @return list with names
      */
-    public Collection<Path> getPaths( String p_path )
+    public Collection<CPath> getPaths( String p_path )
     {
-        Path l_path = new Path( p_path );
-        List<Path> l_elements = new ArrayList();
+        CPath l_path = new CPath( p_path );
+        List<CPath> l_elements = new ArrayList();
 
-        for ( Map.Entry<Path, JComponent> l_item : m_elements.entrySet() )
+        for ( Map.Entry<CPath, JComponent> l_item : m_elements.entrySet() )
             if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
                 l_elements.add( l_item.getKey() );
 
@@ -351,7 +351,7 @@ public class CMenuStorage
      *
      * @return set all entries
      */
-    public Set<Map.Entry<Path, JComponent>> entrySet()
+    public Set<Map.Entry<CPath, JComponent>> entrySet()
     {
         return m_elements.entrySet();
     }
@@ -363,7 +363,7 @@ public class CMenuStorage
      * @param p_path path
      * @return set with elements
      */
-    public Set<Map.Entry<Path, JComponent>> entrySet( String p_path )
+    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path )
     {
         return this.entrySet( p_path, false );
     }
@@ -376,12 +376,12 @@ public class CMenuStorage
      * @param p_withroot enables / disables the addition of the root node
      * @return set with elements
      */
-    public Set<Map.Entry<Path, JComponent>> entrySet( String p_path, boolean p_withroot )
+    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path, boolean p_withroot )
     {
-        Path l_path = new Path( p_path );
-        Map<Path, JComponent> l_set = new HashMap();
+        CPath l_path = new CPath( p_path );
+        Map<CPath, JComponent> l_set = new HashMap();
 
-        for ( Map.Entry<Path, JComponent> l_item : m_elements.entrySet() )
+        for ( Map.Entry<CPath, JComponent> l_item : m_elements.entrySet() )
             if ( p_withroot )
             {
                 if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
@@ -394,171 +394,6 @@ public class CMenuStorage
             }
 
         return l_set.entrySet();
-    }
-
-
-    /**
-     * path class to define a full menu path *
-     */
-    public static class Path implements Iterable<Path>
-    {
-        /**
-         * seperator of the path elements *
-         */
-        private static final String s_seperator = "/";
-
-        /**
-         * list with path parts *
-         */
-        private List<String> m_path = new ArrayList();
-
-        /**
-         * ctor
-         *
-         * @param p_parent defines the parent
-         * @param p_item   defines the last item on the path
-         */
-        public Path( String p_parent, String p_item )
-        {
-            this.initialize( p_parent + s_seperator + p_item );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_value defines a full path
-         */
-        public Path( String p_value )
-        {
-            this.initialize( p_value );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_value creates a path of an string array
-         */
-        public Path( String[] p_value )
-        {
-            m_path = new ArrayList( Arrays.asList( p_value ) );
-            if ( m_path.size() == 0 )
-                throw new IllegalArgumentException( "path is empty" );
-        }
-
-        /**
-         * splits the string data
-         *
-         * @param p_fqn full path
-         */
-        private void initialize( String p_fqn )
-        {
-            for ( String l_item : p_fqn.split( s_seperator ) )
-                if ( !l_item.isEmpty() )
-                    m_path.add( l_item );
-
-            if ( m_path.size() == 0 )
-                throw new IllegalArgumentException( "path is empty" );
-        }
-
-        /**
-         * returns the full path as string
-         *
-         * @return string path
-         */
-        public String getPath()
-        {
-            return StringUtils.join( m_path, s_seperator );
-        }
-
-        /**
-         * returns the last part of the path
-         *
-         * @return string
-         */
-        public String getSuffix()
-        {
-            return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
-        }
-
-        /**
-         * remove the suffix from the path
-         *
-         * @return last item of the path
-         */
-        public String removeSuffix()
-        {
-
-            String l_suffix = this.getSuffix();
-            if ( m_path.size() > 0 )
-                m_path.remove( m_path.size() - 1 );
-            return l_suffix;
-        }
-
-        /**
-         * returns an part of the path
-         *
-         * @param p_index index position
-         * @return element
-         */
-        public String getIndex( int p_index )
-        {
-            return m_path.get( p_index );
-        }
-
-        /**
-         * returns the number of path elements
-         *
-         * @return size
-         */
-        public int size()
-        {
-            return m_path.size();
-        }
-
-        @Override
-        public Iterator<Path> iterator()
-        {
-            return new Iterator<Path>()
-            {
-                private int m_index = 0;
-
-                @Override
-                public boolean hasNext()
-                {
-                    return m_index < m_path.size();
-                }
-
-                @Override
-                public Path next()
-                {
-                    String[] l_list = new String[m_index + 1];
-                    m_path.subList( 0, ++m_index ).toArray( l_list );
-                    return new Path( l_list );
-                }
-            };
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return this.getPath().hashCode();
-        }
-
-        @Override
-        public boolean equals( Object p_object )
-        {
-            if ( ( p_object instanceof String ) || ( p_object instanceof Path ) )
-                return this.hashCode() == p_object.hashCode();
-
-            return false;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.getPath();
-        }
-
     }
 
 }

@@ -46,7 +46,7 @@ import java.util.Map;
  *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  */
-public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IVoidStepable, Painter
+public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier, IVoidStepable, Painter
 {
     /**
      * path to Jason ASL files *
@@ -64,7 +64,7 @@ public class CAgentContainer<T extends IStepable> implements AgArchInfraTier, IV
      *
      * @param p_source source object of the agent
      */
-    public CAgentContainer( Environment p_environment, T p_source )
+    public CAgentArchitecture( Environment p_environment, T p_source )
     {
         if ( p_environment == null )
             throw new IllegalArgumentException( "environment need not be null" );

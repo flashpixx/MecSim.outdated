@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
@@ -128,17 +129,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void refreshDynamicItems()
     {
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() ).isActive() );
 
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (IViewableLayer) CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() ) ).isVisible() );
 
 
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Driving Model" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Driving Model" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModel().equals( l_item.getKey().getSuffix() ) );
 
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraphWeight().equals( l_item.getKey().getSuffix() ) );
     }
 
@@ -184,7 +185,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
         // layer action / visibility
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
             if ( e.getSource() == l_item.getValue() )
             {
                 try
@@ -200,7 +201,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 break;
             }
 
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
             if ( e.getSource() == l_item.getValue() )
             {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
@@ -209,7 +210,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
         // driving models
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Driving Model" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Driving Model" ) )
             if ( e.getSource() == l_item.getValue() )
             {
                 try
@@ -226,7 +227,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
         // graph weights
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             if ( e.getSource() == l_item.getValue() )
             {
                 try
@@ -266,7 +267,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     public String getSelectedSourceName()
     {
-        for ( Map.Entry<CMenuStorage.Path, JComponent> l_item : m_items.entrySet( "Car Sources" ) )
+        for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Car Sources" ) )
             if ( ( (JRadioButtonMenuItem) ( l_item.getValue() ) ).isSelected() )
                 return l_item.getKey().getSuffix();
 

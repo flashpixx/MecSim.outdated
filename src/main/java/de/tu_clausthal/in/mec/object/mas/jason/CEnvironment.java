@@ -43,7 +43,7 @@ import java.util.*;
  *
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentContainer<T>> implements EnvironmentInfraTier
+public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchitecture<T>> implements EnvironmentInfraTier
 {
 
     /**

@@ -69,6 +69,8 @@ public class CRuntimeService implements RuntimeServicesInfraTier
     @Override
     public AgArch clone( Agent agent, List<String> list, String s ) throws JasonException
     {
+
+
         return null;
     }
 

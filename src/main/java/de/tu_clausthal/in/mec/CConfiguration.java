@@ -54,6 +54,11 @@ public class CConfiguration
      * directory of the configuration file
      */
     private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
+    /**
+     * directory of the agent (MAS) files
+     */
+    private File m_masdir = new File( m_dir + File.separator + "mas" );
+
 
     /**
      * private Ctor to avoid manual instantiation
@@ -81,6 +86,9 @@ public class CConfiguration
         {
             if ( !m_dir.exists() && !m_dir.mkdirs() )
                 throw new IOException( "unable to create " + m_dir.getAbsolutePath() );
+
+            if ( !m_masdir.exists() && !m_masdir.mkdirs() )
+                throw new IOException( "unable to create " + m_masdir.getAbsolutePath() );
 
             Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
             new Gson().toJson( m_data, l_writer );
@@ -169,6 +177,16 @@ public class CConfiguration
     public void setConfigDir( File p_dir )
     {
         m_dir = p_dir;
+    }
+
+    /**
+     * returns the path for MAS files
+     *
+     * @return path to mas files
+     */
+    public File getMASDir()
+    {
+        return m_masdir;
     }
 
     /**

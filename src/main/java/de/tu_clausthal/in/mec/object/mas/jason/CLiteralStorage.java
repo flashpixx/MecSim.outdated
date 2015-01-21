@@ -62,6 +62,18 @@ public class CLiteralStorage implements Collection<Literal>
         m_fieldfilter.add( new CDefaultFieldFilter() );
     }
 
+
+    /**
+     * returns a Jason literal
+     *
+     * @param p_name name of the literal
+     * @return literal
+     */
+    public static Literal getLiteral( String p_name )
+    {
+        return getLiteral( p_name, null );
+    }
+
     /**
      * creates a Jason literal with optional data
      *
@@ -69,7 +81,7 @@ public class CLiteralStorage implements Collection<Literal>
      * @param p_data data of the literal
      * @return literal object
      */
-    private static Literal getLiteral( String p_name, Object p_data )
+    public static Literal getLiteral( String p_name, Object p_data )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name need not to be empty" );

@@ -269,6 +269,31 @@ public class CNode<T>
         return traverseToRoot( this );
     }
 
+    public Set<CPath> getSubTree( boolean p_withroot )
+    {
+        Set<CPath> l_list = new HashSet();
+
+        CPath l_path = p_withroot ? new CPath( m_id ) : new CPath();
+        this.getSubTreeRecursive( l_path, this, l_list );
+
+        return l_list;
+
+    }
+
+    protected void getSubTreeRecursive( CPath p_path, CNode<T> p_node, Set<CPath> p_set )
+    {
+        if ( !p_path.isEmpty() )
+            p_set.add( p_path );
+
+        for ( Map.Entry<String, CNode<T>> l_item : m_childs.entrySet() )
+        {
+            CPath l_path = new CPath( p_path );
+            l_path.pushback( l_item.getKey() );
+            this.getSubTreeRecursive( l_path, l_item.getValue(), p_set );
+        }
+    }
+
+
 
     /**
      * get ID of the node
@@ -287,7 +312,7 @@ public class CNode<T>
      * @param p_node node
      * @return ID
      */
-    private CPath traverseToRoot( CNode<T> p_node )
+    protected CPath traverseToRoot( CNode<T> p_node )
     {
         if ( m_parent != null )
         {

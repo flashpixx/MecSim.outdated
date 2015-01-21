@@ -53,6 +53,17 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * copy-ctor
+     *
+     * @param p_path path object
+     */
+    public CPath( CPath p_path )
+    {
+        m_seperator = p_path.m_seperator;
+        m_path.addAll( p_path.m_path );
+    }
+
+    /**
      * ctor
      *
      * @param p_parent defines the parent

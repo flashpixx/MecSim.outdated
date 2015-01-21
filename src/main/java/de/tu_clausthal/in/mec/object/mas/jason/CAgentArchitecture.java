@@ -39,8 +39,8 @@ import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -77,7 +77,7 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
     @Override
     public List<Literal> perceive()
     {
-        m_percepts.get();
+        return new LinkedList( m_percepts.get() );
     }
 
     @Override

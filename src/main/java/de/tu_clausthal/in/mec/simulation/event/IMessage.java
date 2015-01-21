@@ -23,8 +23,9 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
+import de.tu_clausthal.in.mec.common.CPath;
+
 import java.io.Serializable;
-import java.util.UUID;
 
 
 /**
@@ -38,26 +39,28 @@ public interface IMessage<T> extends Serializable
      *
      * @return data
      */
-    T getData();
+    public T getData();
 
-    /**
-     * the unique ID of the message
-     *
-     * @return UUID
-     */
-    UUID getID();
 
     /**
      * a name if the message
      *
      * @return name
      */
-    String getName();
+    public String getTitle();
 
 
     /**
      * returns the source of the message
      */
-    IParticipant getSource();
+    public CPath getSource();
+
+
+    /**
+     * decrements the time-to-live value and returns the decrement value and on zero the message is discarded
+     *
+     * @return current value
+     */
+    public int ttl();
 
 }

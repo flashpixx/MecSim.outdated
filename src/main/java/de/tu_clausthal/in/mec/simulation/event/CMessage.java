@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
-import java.util.UUID;
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
@@ -31,14 +31,11 @@ import java.util.UUID;
  */
 public class CMessage<T> implements IMessage<T>
 {
+
     /**
-     * UUID of the message
+     * title of the message
      */
-    protected UUID m_id = UUID.randomUUID();
-    /**
-     * name of the message
-     */
-    protected String m_name = m_id.toString();
+    protected String m_title = null;
     /**
      * data of the message
      */
@@ -46,40 +43,30 @@ public class CMessage<T> implements IMessage<T>
     /**
      * source of the message
      */
-    protected IParticipant m_source = null;
-
-
+    protected CPath m_source = null;
     /**
-     * ctor - creates a message with data
-     *
-     * @param p_source source object of the message
-     * @param p_data   data of the message
+     * time-to-live value *
      */
-    public CMessage( IParticipant p_source, T p_data )
-    {
-        if ( p_source == null )
-            throw new IllegalArgumentException( "source need not to be null" );
-
-        m_data = p_data;
-        m_source = p_source;
-    }
+    private int m_ttl = 10;
 
 
     /**
      * ctor - creates a message with data and name
      *
-     * @param p_source source object of the message
-     * @param p_name   name of the message
+     * @param p_source path of the source
+     * @param p_title  title of the message
      * @param p_data   data of the message
      */
-    public CMessage( IParticipant p_source, String p_name, T p_data )
+    public CMessage( CPath p_source, String p_title, T p_data )
     {
-        if ( p_source == null )
+        if ( ( p_source == null ) || ( p_source.isEmpty() ) )
             throw new IllegalArgumentException( "source need not to be null" );
+        if ( ( p_title == null ) || ( p_title.isEmpty() ) )
+            throw new IllegalArgumentException( "title need not to be null" );
 
         m_data = p_data;
         m_source = p_source;
-        m_name = p_name;
+        m_title = p_title;
     }
 
 
@@ -90,20 +77,20 @@ public class CMessage<T> implements IMessage<T>
     }
 
     @Override
-    public UUID getID()
+    public String getTitle()
     {
-        return m_id;
+        return m_title;
     }
 
     @Override
-    public String getName()
-    {
-        return m_name;
-    }
-
-    @Override
-    public IParticipant getSource()
+    public CPath getSource()
     {
         return m_source;
+    }
+
+    @Override
+    public int ttl()
+    {
+        return m_ttl--;
     }
 }

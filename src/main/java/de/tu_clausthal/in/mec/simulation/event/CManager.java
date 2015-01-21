@@ -23,11 +23,14 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
+import de.tu_clausthal.in.mec.common.CNode;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -37,108 +40,74 @@ public class CManager implements IVoidStepable
 {
 
     /**
-     * list of messages
+     * tree structure of all objects (root-node is equal to this object)
      */
-    private Map<IParticipant, Set<IMessage>> m_data = new ConcurrentHashMap();
-    /**
-     * list of UUID -> participant
-     */
-    private Map<UUID, IParticipant> m_uuidparticipant = new ConcurrentHashMap();
-    /**
-     * list of name -> participant
-     */
-    private Map<String, IParticipant> m_nameparticipant = new ConcurrentHashMap();
+    private CNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CNode( this.toString() );
 
 
     /**
      * register a new participant
      *
+     * @param p_path     path of the receiver
      * @param p_receiver participant
      */
-    public void register( IParticipant p_receiver )
+    public synchronized void register( CPath p_path, IParticipant p_receiver )
     {
-        m_data.put( p_receiver, Collections.synchronizedSet( new HashSet() ) );
-        m_uuidparticipant.put( p_receiver.getEventID(), p_receiver );
-        m_nameparticipant.put( p_receiver.getEventName(), p_receiver );
+        CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
+
+        if ( l_node.isDataNull() )
+            l_node.setData( new ImmutablePair( new HashSet(), new HashSet() ) );
+
+        l_node.getData().getLeft().add( p_receiver );
     }
 
 
     /**
      * unregister a participant
      *
+     * @param p_path     path of the receiver
      * @param p_receiver participant
      */
-    public void unregister( IParticipant p_receiver )
+    public synchronized void unregister( CPath p_path, IParticipant p_receiver )
     {
-        m_data.remove( p_receiver );
-        m_uuidparticipant.remove( p_receiver.getEventID() );
-        m_nameparticipant.remove( p_receiver.getEventName() );
+        if ( !m_root.pathexist( p_path ) )
+            return;
+
+        CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
+        l_node.getData().getLeft().remove( p_receiver );
     }
 
 
     /**
      * pushs a message to the queue
      *
-     * @param p_receiver receiver of the message
-     * @param p_message  message
+     * @param p_path    of objects
+     * @param p_message message
      */
-    public void pushMessage( IParticipant p_receiver, IMessage p_message )
+    public void pushMessage( CPath p_path, IMessage p_message )
     {
-        Set<IMessage> l_messages = m_data.get( p_receiver );
-        l_messages.add( p_message );
+        if ( !m_root.pathexist( p_path ) )
+            return;
+
+        // check time to live value
+        if ( p_message.ttl() < 0 )
+            return;
+
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.traverseto( p_path, false ).getSubData() )
+            l_item.getRight().add( p_message );
     }
 
-
-    /**
-     * returns a set of all current participants
-     *
-     * @return participant set
-     */
-    public Set<IParticipant> getParticipant()
-    {
-        return m_data.keySet();
-    }
-
-    /**
-     * returns a participant on the name
-     *
-     * @param p_name name
-     * @return participant or null
-     */
-    public IParticipant getParticipant( String p_name )
-    {
-        return m_nameparticipant.get( p_name );
-    }
-
-
-    /**
-     * returns a participant on the UUID
-     *
-     * @param p_id UUID
-     * @return participant or null
-     */
-    public IParticipant getParticipant( UUID p_id )
-    {
-        return m_uuidparticipant.get( p_id );
-    }
-
-    /**
-     * clears all messages
-     */
-    public void clear()
-    {
-        m_data.clear();
-        m_uuidparticipant.clear();
-        m_nameparticipant.clear();
-    }
 
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        for ( Map.Entry<IParticipant, Set<IMessage>> l_item : m_data.entrySet() )
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData() )
         {
-            l_item.getKey().receiveMessage( l_item.getValue() );
-            l_item.getValue().clear();
+            for ( IParticipant l_receiver : l_item.getLeft() )
+                l_receiver.receiveMessage( l_item.getRight() );
+
+            // clear all messages
+            l_item.getRight().clear();
         }
     }
 

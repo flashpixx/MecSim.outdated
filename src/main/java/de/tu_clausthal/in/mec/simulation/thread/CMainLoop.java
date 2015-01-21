@@ -75,7 +75,7 @@ public class CMainLoop implements Runnable
         if ( p_object instanceof IReturnStepable )
             return new CReturnStepable( p_iteration, (IReturnStepable) p_object, p_layer );
 
-        throw new IllegalArgumentException( "stepable object need not be null" );
+        throw new IllegalArgumentException( "stepable object need not to be null" );
     }
 
 

@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
-import java.util.UUID;
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
@@ -31,20 +31,6 @@ import java.util.UUID;
  */
 public interface IParticipant extends IMessageReceiver
 {
-
-    /**
-     * get the unique name of the participant
-     *
-     * @return name
-     */
-    public String getEventName();
-
-    /**
-     * get an unique ID of the participant
-     *
-     * @return ID
-     */
-    public UUID getEventID();
 
     /**
      * creates a message
@@ -67,9 +53,9 @@ public interface IParticipant extends IMessageReceiver
     /**
      * sends a message
      *
-     * @param p_receiver receiver of the message
-     * @param p_message  input message
+     * @param p_path    message receiver path
+     * @param p_message input message
      */
-    public void sendMessage( CParticipant p_receiver, IMessage p_message );
+    public void sendMessage( CPath p_path, IMessage p_message );
 
 }

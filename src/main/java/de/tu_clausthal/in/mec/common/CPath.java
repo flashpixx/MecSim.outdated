@@ -46,6 +46,13 @@ public class CPath implements Iterable<CPath>
 
 
     /**
+     * ctor for empty path
+     */
+    public CPath()
+    {
+    }
+
+    /**
      * ctor
      *
      * @param p_parent defines the parent
@@ -78,6 +85,64 @@ public class CPath implements Iterable<CPath>
             throw new IllegalArgumentException( "path is empty" );
     }
 
+
+    /**
+     * check if the path is empty
+     *
+     * @return empty flag
+     */
+    public boolean isEmpty()
+    {
+        return m_path.isEmpty();
+    }
+
+
+    /**
+     * adds a path at the end
+     *
+     * @param p_path path
+     */
+    public void pushback( CPath p_path )
+    {
+        m_path.addAll( p_path.m_path );
+    }
+
+
+    /**
+     * adds a path at the end
+     *
+     * @param p_path string path
+     */
+    public void pushback( String p_path )
+    {
+        this.pushback( new CPath( p_path ) );
+    }
+
+
+    /**
+     * adds a path to the front of the path
+     *
+     * @param p_path path
+     */
+    public void pushfront( CPath p_path )
+    {
+        ArrayList<String> l_path = new ArrayList( p_path.m_path );
+        l_path.addAll( m_path );
+        m_path = l_path;
+    }
+
+
+    /**
+     * adds a path at the front
+     *
+     * @param p_path string path
+     */
+    public void pushfront( String p_path )
+    {
+        this.pushfront( new CPath( p_path ) );
+    }
+
+
     /**
      * returns the seperator
      *
@@ -96,7 +161,7 @@ public class CPath implements Iterable<CPath>
     public void setSeperator( String p_seperator )
     {
         if ( ( p_seperator == null ) || ( p_seperator.isEmpty() ) )
-            throw new IllegalArgumentException( "seperator need not be empty" );
+            throw new IllegalArgumentException( "seperator need not to be empty" );
 
         m_seperator = p_seperator;
     }
@@ -135,6 +200,7 @@ public class CPath implements Iterable<CPath>
     {
         return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
     }
+
 
     /**
      * remove the suffix from the path

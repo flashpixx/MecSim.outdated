@@ -76,7 +76,7 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     public CDefaultInstitution( String p_name )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( "name need not be empty" );
+            throw new IllegalArgumentException( "name need not to be empty" );
         m_name = p_name;
         //CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }

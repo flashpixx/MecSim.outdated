@@ -67,9 +67,9 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
     public CAgentArchitecture( Environment p_environment, T p_source )
     {
         if ( p_environment == null )
-            throw new IllegalArgumentException( "environment need not be null" );
+            throw new IllegalArgumentException( "environment need not to be null" );
         if ( p_source == null )
-            throw new IllegalArgumentException( "source value need not be null" );
+            throw new IllegalArgumentException( "source value need not to be null" );
 
         m_environment = p_environment;
         m_source = p_source;

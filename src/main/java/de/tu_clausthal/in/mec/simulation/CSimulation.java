@@ -276,7 +276,6 @@ public class CSimulation
             }
 
         // clear and load world
-        m_eventmanager.clear();
         m_world.clear();
         m_world = (CWorld) p_stream.readObject();
 

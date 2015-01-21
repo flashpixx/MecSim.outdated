@@ -180,7 +180,7 @@ public class CLiteralStorage implements Collection<Literal>
     public void addAll( Map<String, Object> p_data )
     {
         if ( p_data == null )
-            throw new IllegalArgumentException( "map need not be empty" );
+            throw new IllegalArgumentException( "map need not to be empty" );
 
         for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
             this.add( l_item.getKey(), l_item.getValue() );

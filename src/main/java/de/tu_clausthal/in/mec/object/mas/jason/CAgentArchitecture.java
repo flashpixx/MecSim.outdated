@@ -23,24 +23,22 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.*;
+import de.tu_clausthal.in.mec.simulation.IStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import de.tu_clausthal.in.mec.simulation.event.IReceiver;
-import jason.architecture.AgArchInfraTier;
-import jason.asSemantics.ActionExec;
-import jason.asSemantics.Message;
-import jason.asSyntax.Literal;
-import jason.runtime.RuntimeServicesInfraTier;
+import jason.architecture.AgArch;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -48,7 +46,7 @@ import java.util.List;
  *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  */
-public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier, IVoidStepable, Painter, IReceiver
+public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, Painter, IReceiver
 {
 
 
@@ -59,6 +57,42 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
      */
     protected T m_source = null;
 
+    /*
+        http://jason.sourceforge.net/api/jason/asSemantics/Agent.html
+        http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
+
+        Agent x = new Agent();
+        x.initDefaultFunctions();
+
+       	addBel(Literal bel)
+        addInitialBel(Literal b)
+        addInitialBelsInBB()
+        addInitialGoal(Literal g)
+        addInitialGoalsInTS()
+
+        Agent create(AgArch arch, java.lang.String agClass, ClassParameters bbPars, java.lang.String asSrc, Settings stts)
+
+
+        x.parseAS( new File( CConfiguration.getInstance().getMASDir() + File.separator + "test.asl") );
+     */
+
+
+    public CAgentArchitecture()
+    {
+        AgArch l_arch = new AgArch();
+
+        // read all ASL files from the agent directors and build from each ASL file an agent
+        for ( String l_asl : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
+            try
+            {
+                //Agent.create( l_arch, new File( CConfiguration.getInstance().getMASDir() + File.separator + l_asl ).toString(), null, null, null );
+            }
+            catch ( Exception l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+
+    }
 
     /**
      * ctor
@@ -73,84 +107,6 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
         m_source = p_source;
     }
 
-
-    @Override
-    public List<Literal> perceive()
-    {
-        return new LinkedList( m_percepts.get() );
-    }
-
-    @Override
-    public void checkMail()
-    {
-
-    }
-
-    @Override
-    public void act( ActionExec actionExec, List<ActionExec> list )
-    {
-        for ( Map.Entry<String, Pair<Method, Object>> l_action : m_action.entrySet() )
-            if ( actionExec.getActionTerm().getFunctor().equals( l_action.getKey() ) )
-                try
-                {
-                    l_action.getValue().getLeft().invoke( l_action.getValue().getRight(), null );
-                }
-                catch ( Exception l_exception )
-                {
-                    CLogger.error( "agent action error [" + l_action.getKey() + "] on [" + l_action.getValue().getRight() + "]: " + l_exception.getMessage() );
-                }
-
-        list.add( actionExec );
-    }
-
-    @Override
-    public boolean canSleep()
-    {
-        return false;
-    }
-
-    @Override
-    public String getAgName()
-    {
-        return null;
-    }
-
-
-    @Override
-    public void sendMsg( Message message ) throws Exception
-    {
-        CSimulation.getInstance().getEventManager().pushMessage( new CPath( message.getReceiver() ), new CAgentMessage( message ) );
-    }
-
-    @Override
-    public void broadcast( Message message ) throws Exception
-    {
-        CSimulation.getInstance().getEventManager().pushMessage( new CPath(), new CAgentMessage( message ) );
-    }
-
-    @Override
-    public boolean isRunning()
-    {
-        return true;
-    }
-
-    @Override
-    public void sleep()
-    {
-
-    }
-
-    @Override
-    public void wake()
-    {
-
-    }
-
-    @Override
-    public RuntimeServicesInfraTier getRuntimeServices()
-    {
-        return null;
-    }
 
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception

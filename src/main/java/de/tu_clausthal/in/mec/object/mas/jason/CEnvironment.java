@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -60,6 +61,8 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
     public CEnvironment()
     {
         m_actions = m_percepts.addObjectMethods( this );
+
+        new CAgentArchitecture<ICar>();
     }
 
 

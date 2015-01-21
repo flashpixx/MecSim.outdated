@@ -31,11 +31,13 @@ import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.architecture.AgArch;
+import jason.asSemantics.Agent;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +87,7 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
         for ( String l_asl : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
             try
             {
-                //Agent.create( l_arch, new File( CConfiguration.getInstance().getMASDir() + File.separator + l_asl ).toString(), null, null, null );
+                Agent.create( l_arch, CAgent.class.getName(), null, new File( CConfiguration.getInstance().getMASDir() + File.separator + l_asl ).toString(), null );
             }
             catch ( Exception l_exception )
             {

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 import de.tu_clausthal.in.mec.CLogger;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -86,20 +87,28 @@ public class CLiteralStorage implements Collection<Literal>
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name need not to be empty" );
 
+
+        // first char must be lower-case - split on spaces and create camel-case
+        String[] l_parts = p_name.split( " " );
+        for ( int i = 0; i < l_parts.length; i++ )
+            l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
+        String l_name = StringUtils.join( l_parts ).replaceAll( "\\W", "" );
+
+
         // null value into atom
         if ( p_data == null )
-            return ASSyntax.createAtom( p_name );
+            return ASSyntax.createAtom( l_name );
 
         // number value into number
         if ( p_data instanceof Number )
-            return ASSyntax.createLiteral( p_name, ASSyntax.createNumber( ( (Number) p_data ).doubleValue() ) );
+            return ASSyntax.createLiteral( l_name, ASSyntax.createNumber( ( (Number) p_data ).doubleValue() ) );
 
         // collection into term list
         if ( p_data instanceof Collection )
-            return ASSyntax.createLiteral( p_name, ASSyntax.createList( (Collection) p_data ) );
+            return ASSyntax.createLiteral( l_name, ASSyntax.createList( (Collection) p_data ) );
 
         // otherwise into string
-        return ASSyntax.createLiteral( p_name, ASSyntax.createString( p_data.toString() ) );
+        return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
     }
 
     /**

@@ -42,7 +42,7 @@ public class CManager implements IVoidStepable
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
-    private CNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CNode( this.toString() );
+    protected CNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CNode( this.toString() );
 
 
     /**
@@ -84,7 +84,7 @@ public class CManager implements IVoidStepable
      * @param p_path    of objects
      * @param p_message message
      */
-    public void pushMessage( CPath p_path, IMessage p_message )
+    public synchronized void pushMessage( CPath p_path, IMessage p_message )
     {
         if ( !m_root.pathexist( p_path ) )
             return;

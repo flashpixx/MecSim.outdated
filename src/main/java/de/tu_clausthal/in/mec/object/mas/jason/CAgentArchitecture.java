@@ -23,22 +23,24 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
-import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IStepable;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.*;
+import de.tu_clausthal.in.mec.simulation.event.IMessage;
+import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.architecture.AgArchInfraTier;
 import jason.asSemantics.ActionExec;
 import jason.asSemantics.Message;
 import jason.asSyntax.Literal;
-import jason.environment.Environment;
 import jason.runtime.RuntimeServicesInfraTier;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
-import java.io.File;
+import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -46,13 +48,12 @@ import java.util.Map;
  *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  */
-public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier, IVoidStepable, Painter
+public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier, IVoidStepable, Painter, IReceiver
 {
-    /**
-     * path to Jason ASL files *
-     */
-    protected static String s_aslpath = CConfiguration.getInstance().getConfigDir() + File.separator + "mas" + File.separator + "json" + File.separator;
-    protected Environment m_environment = null;
+
+
+    protected CLiteralStorage m_percepts;
+    protected Map<String, Pair<Method, Object>> m_action;
     /**
      * source object that is connect with the agents
      */
@@ -64,14 +65,11 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
      *
      * @param p_source source object of the agent
      */
-    public CAgentArchitecture( Environment p_environment, T p_source )
+    public CAgentArchitecture( T p_source )
     {
-        if ( p_environment == null )
-            throw new IllegalArgumentException( "environment need not to be null" );
         if ( p_source == null )
             throw new IllegalArgumentException( "source value need not to be null" );
 
-        m_environment = p_environment;
         m_source = p_source;
     }
 
@@ -91,6 +89,18 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
     @Override
     public void act( ActionExec actionExec, List<ActionExec> list )
     {
+        for ( Map.Entry<String, Pair<Method, Object>> l_action : m_action.entrySet() )
+            if ( actionExec.getActionTerm().getFunctor().equals( l_action.getKey() ) )
+                try
+                {
+                    l_action.getValue().getLeft().invoke( l_action.getValue().getRight(), null );
+                }
+                catch ( Exception l_exception )
+                {
+                    CLogger.error( "agent action error [" + l_action.getKey() + "] on [" + l_action.getValue().getRight() + "]: " + l_exception.getMessage() );
+                }
+
+        list.add( actionExec );
     }
 
     @Override
@@ -105,16 +115,17 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
         return null;
     }
 
+
     @Override
     public void sendMsg( Message message ) throws Exception
     {
-
+        CSimulation.getInstance().getEventManager().pushMessage( new CPath( message.getReceiver() ), new CAgentMessage( message ) );
     }
 
     @Override
     public void broadcast( Message message ) throws Exception
     {
-
+        CSimulation.getInstance().getEventManager().pushMessage( new CPath(), new CAgentMessage( message ) );
     }
 
     @Override
@@ -157,5 +168,10 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
     public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
     {
 
+    }
+
+    @Override
+    public void receiveMessage( Set<IMessage> p_messages )
+    {
     }
 }

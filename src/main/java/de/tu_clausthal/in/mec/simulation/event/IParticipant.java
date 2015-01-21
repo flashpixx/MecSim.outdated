@@ -29,7 +29,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 /**
  * interface of a participant of the event system
  */
-public interface IParticipant extends IMessageReceiver
+public interface IParticipant extends IReceiver
 {
 
     /**

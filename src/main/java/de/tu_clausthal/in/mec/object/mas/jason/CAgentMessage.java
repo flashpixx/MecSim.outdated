@@ -21,74 +21,32 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.event;
+package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.simulation.event.IMessage;
+import jason.asSemantics.Message;
 
 
 /**
- * default event message
+ *
  */
-public class CMessage<T> implements IMessage<T>
+public class CAgentMessage implements IMessage<Message>
 {
-
-    /**
-     * title of the message
-     */
-    protected String m_title = null;
-    /**
-     * data of the message
-     */
-    protected T m_data = null;
-    /**
-     * source of the message
-     */
-    protected CPath m_source = null;
-    /**
-     * time-to-live value *
-     */
-    private int m_ttl = 10;
+    private Message m_data = null;
+    private int m_ttl = 50;
 
 
-    /**
-     * ctor - creates a message with data and name
-     *
-     * @param p_source path of the source
-     * @param p_title  title of the message
-     */
-    public CMessage( CPath p_source, String p_title )
+    public CAgentMessage( Message p_message )
     {
-        if ( ( p_source == null ) || ( p_source.isEmpty() ) )
-            throw new IllegalArgumentException( "source need not to be null" );
-        if ( ( p_title == null ) || ( p_title.isEmpty() ) )
-            throw new IllegalArgumentException( "title need not to be null" );
+        if ( p_message == null )
+            throw new IllegalArgumentException( "message data need not to be null" );
 
-        m_source = p_source;
-        m_title = p_title;
+        m_data = p_message;
     }
-
-    /**
-     * ctor - creates a message with data and name
-     *
-     * @param p_source path of the source
-     * @param p_title  title of the message
-     * @param p_data   data of the message
-     */
-    public CMessage( CPath p_source, String p_title, T p_data )
-    {
-        if ( ( p_source == null ) || ( p_source.isEmpty() ) )
-            throw new IllegalArgumentException( "source need not to be null" );
-        if ( ( p_title == null ) || ( p_title.isEmpty() ) )
-            throw new IllegalArgumentException( "title need not to be null" );
-
-        m_source = p_source;
-        m_title = p_title;
-        m_data = p_data;
-    }
-
 
     @Override
-    public T getData()
+    public Message getData()
     {
         return m_data;
     }
@@ -96,13 +54,13 @@ public class CMessage<T> implements IMessage<T>
     @Override
     public String getTitle()
     {
-        return m_title;
+        return this.getClass().getName();
     }
 
     @Override
     public CPath getSource()
     {
-        return m_source;
+        return new CPath( m_data.getSender() );
     }
 
     @Override

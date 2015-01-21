@@ -77,7 +77,7 @@ public class CAgentArchitecture<T extends IStepable> implements AgArchInfraTier,
     @Override
     public List<Literal> perceive()
     {
-        return null;
+        m_percepts.get();
     }
 
     @Override

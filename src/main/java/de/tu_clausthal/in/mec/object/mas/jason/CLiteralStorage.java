@@ -245,6 +245,16 @@ public class CLiteralStorage implements Collection<Literal>
         return m_literals.contains( getLiteral( p_name, p_value ) );
     }
 
+    /**
+     * returns the full list of all literals
+     *
+     * @return set of literals
+     */
+    public Set<Literal> get()
+    {
+        return m_literals;
+    }
+
 
     @Override
     public int size()

@@ -62,6 +62,9 @@ public class CBootstrap
 
         p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.WEST, 0.8 );
+
+        // @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
+        // @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
         p_frame.addWidget( "Jason Mindinspector", new CBrowser( "http://localhost:3272" ) );
     }
 

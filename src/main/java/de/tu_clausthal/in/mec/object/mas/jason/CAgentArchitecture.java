@@ -96,7 +96,7 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
 	                at jason.bb.BeliefBase.<clinit>(BeliefBase.java:50)
 	                at jason.asSemantics.Agent.create(Agent.java:132)
                 */
-                Agent.create( l_arch, CAgent.class.getName(), null, CConfiguration.getInstance().getMASDir( l_asl ).toString(), null );
+                Agent.create( l_arch, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( l_asl ).toString(), null );
             }
             catch ( Exception l_exception )
             {

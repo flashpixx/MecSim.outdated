@@ -26,29 +26,36 @@ package de.tu_clausthal.in.mec.ui;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 
 /**
- * create a plain browser component
+ * create a plain browser component to show any URL
  *
  * @see http://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
  */
 public class CBrowser extends JFXPanel
 {
-    private WebView webView;
-    private WebEngine webEngine;
+    /**
+     * webkit view
+     */
+    protected WebView m_webview = null;
 
+
+
+    /** ctor with instantiation the engine
+     *
+     * @param p_url string with URL
+     */
     public CBrowser( String p_url )
     {
+        if ((p_url == null) || (p_url.isEmpty()))
+            throw new IllegalArgumentException( "URL need not to be empty" );
+
         Platform.runLater( () -> {
-            webView = new WebView();
-
-            webEngine = webView.getEngine();
-            webEngine.load( p_url );
-
-            this.setScene( new Scene( webView ) );
+            m_webview = new WebView();
+            m_webview.getEngine().load( p_url );
+            this.setScene( new Scene( m_webview ) );
         } );
     }
 

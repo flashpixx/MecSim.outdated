@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.JasonException;
 import jason.architecture.AgArch;
+import jason.asSemantics.ActionExec;
 import jason.asSemantics.Agent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
@@ -38,6 +39,7 @@ import org.jxmapviewer.painter.Painter;
 import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -45,17 +47,13 @@ import java.util.*;
  *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  */
-public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, Painter, IReceiver
+public class CAgentArchitecture<T extends IStepable> extends AgArch implements IVoidStepable, Painter, IReceiver
 {
 
     /**
      * literal storage of all agents literals *
      */
     protected CLiteralStorage m_literals = new CLiteralStorage();
-    /**
-     * Jason AgArch structure to defining the reasoning cycle *
-     */
-    protected AgArch m_agentarchitecture = new AgArch();
     /**
      * map of all actions which can be called by the agents *
      */
@@ -97,6 +95,7 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
      */
     public CAgentArchitecture( T p_source )
     {
+        super();
         if ( p_source == null )
             throw new IllegalArgumentException( "source value need not to be null" );
 
@@ -112,7 +111,7 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
     public void createAgent( String p_asl ) throws JasonException
     {
 
-        Agent.create( m_agentarchitecture, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( p_asl + ".asl" ).toString(), null );
+        Agent.create( this, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( p_asl + ".asl" ).toString(), null );
         m_agents++;
     }
 
@@ -139,8 +138,14 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        m_agentarchitecture.checkMail();
-        m_agentarchitecture.reasoningCycleStarting();
+        // the reasoning cycle must be called within the transition system
+        this.getTS().reasoningCycle();
+    }
+
+    @Override
+    public void act( ActionExec action, List<ActionExec> feedback )
+    {
+        super.act( action, feedback );
     }
 
     @Override

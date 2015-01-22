@@ -23,10 +23,12 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.simulation.IStepable;
+import de.tu_clausthal.in.mec.ui.CBrowser;
+import de.tu_clausthal.in.mec.ui.CFrame;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Method;
@@ -47,27 +49,34 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
     /**
      * global literal storage *
      */
-    protected CLiteralStorage m_percepts = new CLiteralStorage();
+    protected CLiteralStorage m_literals = new CLiteralStorage();
     /**
      * map with actions of the environment *
      */
     protected Map<String, Pair<Method, Object>> m_actions = new HashMap();
+    /**
+     * agent architecture
+     */
+    protected CAgentArchitecture<myTest> m_agentarchitecture = null;
+    /**
+     * browser of the mindinspector - binding to the server port can be done after the first agent is exists
+     */
+    protected CBrowser m_mindinspector = new CBrowser();
 
     /**
      * the centralised runner defines a structure, that the environment can communicate with the agent-architecture
      * structure to tranfer any data from / to the environment to the agent structure
      */
     //protected RunCentralisedMAS m_mas = new CRuntimeService();
-    public CEnvironment()
+    public CEnvironment( CFrame p_frame )
     {
-        m_actions = m_percepts.addObjectMethods( this );
+        // @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
+        // @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
+        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
 
-        //Agent x = new Agent();
-        //x.parseAS(  )
-
-        new CAgentArchitecture<ICar>();
+        m_agentarchitecture = new CAgentArchitecture<myTest>( new myTest() );
+        m_actions = m_literals.addObjectMethods( this );
     }
-
 
     /**
      * register object methods
@@ -76,21 +85,42 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
      */
     public void registerObjectMethods( Object p_object )
     {
-        m_actions.putAll( m_percepts.addObjectMethods( p_object ) );
+        m_actions.putAll( m_literals.addObjectMethods( p_object ) );
     }
-
 
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
         // get all data for global perceptions (get analyse function and all properties of the object
-        m_percepts.addAll( this.analyse() );
-        m_percepts.addObjectFields( this );
-        m_percepts.add( "simulationstep", p_currentstep );
+        m_literals.addAll( this.analyse() );
+        m_literals.addObjectFields( this );
+        m_literals.add( "simulationstep", p_currentstep );
 
 
-        // on each step the world can change - so inform all agents that there can be changes
-        //m_mas.getEnvironmentInfraTier().informAgsEnvironmentChanged();
+        try
+        {
+            // mind inspector works after an agent exists, so we need
+            // to bind the browser after the first agent exists
+            m_agentarchitecture.createAgent( "agent" );
+
+            if ( m_agentarchitecture.getAgentNumber() == 1 )
+                m_mindinspector.load( "http://localhost:3272" );
+
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
+
+    private class myTest implements IStepable
+    {
+
+        @Override
+        public Map<String, Object> analyse()
+        {
+            return null;
+        }
     }
 
 }

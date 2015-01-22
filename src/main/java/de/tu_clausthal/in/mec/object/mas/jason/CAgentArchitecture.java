@@ -24,22 +24,20 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import de.tu_clausthal.in.mec.simulation.event.IReceiver;
+import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -50,9 +48,23 @@ import java.util.Set;
 public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, Painter, IReceiver
 {
 
+    /**
+     * literal storage of all agents literals *
+     */
+    protected CLiteralStorage m_literals = new CLiteralStorage();
+    /**
+     * Jason AgArch structure to defining the reasoning cycle *
+     */
+    protected AgArch m_agentarchitecture = new AgArch();
+    /**
+     * map of all actions which can be called by the agents *
+     */
+    protected Map<String, Pair<Method, Object>> m_action = new HashMap();
+    /**
+     * number of agents *
+     */
+    protected int m_agents = 0;
 
-    protected CLiteralStorage m_percepts;
-    protected Map<String, Pair<Method, Object>> m_action;
     /**
      * source object that is connect with the agents
      */
@@ -78,32 +90,6 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
      */
 
 
-    public CAgentArchitecture()
-    {
-        AgArch l_arch = new AgArch();
-
-        // read all ASL files from the agent directors and build from each ASL file an agent
-        for ( String l_asl : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
-            try
-            {
-                 /*
-                 java.lang.NullPointerException
-	                at java.io.File.<init>(File.java:277)
-	                at jason.jeditplugin.Config.fix(Config.java:265)
-	                at jason.jeditplugin.Config.get(Config.java:101)
-	                at jason.jeditplugin.Config.get(Config.java:94)
-	                at jason.asSyntax.Structure.<clinit>(Structure.java:349)
-	                at jason.bb.BeliefBase.<clinit>(BeliefBase.java:50)
-	                at jason.asSemantics.Agent.create(Agent.java:132)
-                */
-                Agent.create( l_arch, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( l_asl ).toString(), null );
-            }
-            catch ( Exception l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-    }
-
     /**
      * ctor
      *
@@ -117,6 +103,38 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
         m_source = p_source;
     }
 
+
+    /**
+     * creates an agent with it's name / ASL file
+     *
+     * @param p_asl filename of the ASL
+     */
+    public void createAgent( String p_asl ) throws JasonException
+    {
+
+        Agent.create( m_agentarchitecture, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( p_asl + ".asl" ).toString(), null );
+        m_agents++;
+    }
+
+    /**
+     * returns the literal object of the agent
+     *
+     * @return literal object
+     */
+    public CLiteralStorage getLiteralStorage()
+    {
+        return m_literals;
+    }
+
+    /**
+     * returns the number of agents
+     *
+     * @return agent count
+     */
+    public int getAgentNumber()
+    {
+        return m_agents;
+    }
 
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception

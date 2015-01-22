@@ -43,6 +43,17 @@ public class CBrowser extends JFXPanel
 
 
     /**
+     * ctor with instantiation a blank engine
+     */
+    public CBrowser()
+    {
+        Platform.runLater( () -> {
+            m_webview = new WebView();
+            this.setScene( new Scene( m_webview ) );
+        } );
+    }
+
+    /**
      * ctor with instantiation the engine
      *
      * @param p_url string with URL
@@ -56,6 +67,50 @@ public class CBrowser extends JFXPanel
             m_webview = new WebView();
             m_webview.getEngine().load( p_url );
             this.setScene( new Scene( m_webview ) );
+        } );
+    }
+
+
+    /**
+     * loads a URL on the browser
+     *
+     * @param p_url string with URL
+     */
+    public void load( String p_url )
+    {
+        Platform.runLater( () -> {
+            m_webview.getEngine().load( p_url );
+        } );
+    }
+
+
+    /**
+     * refresh the current URL
+     */
+    public void reload()
+    {
+        Platform.runLater( () -> {
+            m_webview.getEngine().reload();
+        } );
+    }
+
+    /**
+     * navigates one item back
+     */
+    public void back()
+    {
+        Platform.runLater( () -> {
+            m_webview.getEngine().getHistory().go( -1 );
+        } );
+    }
+
+    /**
+     * navigates on item forward
+     */
+    public void forward()
+    {
+        Platform.runLater( () -> {
+            m_webview.getEngine().getHistory().go( 1 );
         } );
     }
 

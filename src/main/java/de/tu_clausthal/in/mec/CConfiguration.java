@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec;
 import com.google.gson.Gson;
 import net.sf.oval.constraint.Min;
 import net.sf.oval.constraint.NotEmpty;
+import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.*;
 
@@ -84,11 +85,7 @@ public class CConfiguration
     {
         try
         {
-            if ( !m_dir.exists() && !m_dir.mkdirs() )
-                throw new IOException( "unable to create " + m_dir.getAbsolutePath() );
-
-            if ( !m_masdir.exists() && !m_masdir.mkdirs() )
-                throw new IOException( "unable to create " + m_masdir.getAbsolutePath() );
+            this.createDirectories();
 
             Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
             new Gson().toJson( m_data, l_writer );
@@ -101,6 +98,18 @@ public class CConfiguration
     }
 
     /**
+     * creates the configuration directories
+     */
+    private void createDirectories() throws IOException
+    {
+        if ( !m_dir.exists() && !m_dir.mkdirs() )
+            throw new IOException( "unable to create " + m_dir.getAbsolutePath() );
+
+        if ( !m_masdir.exists() && !m_masdir.mkdirs() )
+            throw new IOException( "unable to create " + m_masdir.getAbsolutePath() );
+    }
+
+    /**
      * reads the configuration within the directory
      */
     public void read()
@@ -108,6 +117,8 @@ public class CConfiguration
         Data l_tmp = null;
         try
         {
+            this.createDirectories();
+
             String l_config = m_dir + File.separator + s_ConfigFilename;
             CLogger.info( "read configuration from [" + l_config + "]" );
 
@@ -162,11 +173,15 @@ public class CConfiguration
     /**
      * returns the config dir
      *
+     * @param p_varargs path components after the MAS dir
      * @return path to config dir
      */
-    public File getConfigDir()
+    public File getConfigDir( String... p_varargs )
     {
-        return m_dir;
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            return m_dir;
+
+        return new File( m_dir + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
 
     /**
@@ -182,11 +197,15 @@ public class CConfiguration
     /**
      * returns the path for MAS files
      *
+     * @param p_varargs path components after the MAS dir
      * @return path to mas files
      */
-    public File getMASDir()
+    public File getMASDir( String... p_varargs )
     {
-        return m_masdir;
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            return m_masdir;
+
+        return new File( m_masdir + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
 
     /**

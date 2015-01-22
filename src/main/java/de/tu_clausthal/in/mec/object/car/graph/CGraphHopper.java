@@ -86,7 +86,7 @@ public class CGraphHopper extends GraphHopper
     private void initialize()
     {
         // define graph location (use configuration)
-        File l_graphlocation = new File( CConfiguration.getInstance().getConfigDir() + File.separator + "graphs" + File.separator + CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
+        File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
         CLogger.out( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
 
         // convert OSM or load the graph

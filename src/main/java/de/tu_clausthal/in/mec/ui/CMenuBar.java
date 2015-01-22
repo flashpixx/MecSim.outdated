@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -97,11 +98,22 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
 
 
+        // @todo refactor agent file reading
+        List<String> l_jason = new ArrayList( Arrays.asList( CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) ) );
+        l_jason.add( null );
+        l_jason.add( "new agent" );
+        l_jason.add( null );
+        l_jason.add( "mindinspector" );
+        String[] l_jasonmenu = new String[l_jason.size()];
+        l_jason.toArray( l_jasonmenu );
+        m_items.addItem( "MAS/Jason", l_jasonmenu, this );
+
+
         this.refreshDynamicItems();
 
 
         // get main menus to define order in the UI
-        for ( String l_root : new String[]{"File", "Simulation", "Layer", "Car Sources", "Graph Weights", "Driving Model"} )
+        for ( String l_root : new String[]{"File", "Simulation", "Layer", "Car Sources", "Graph Weights", "Driving Model", "MAS"} )
             this.add( m_items.get( l_root ) );
 
 /*

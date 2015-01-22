@@ -62,6 +62,9 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
     {
         m_actions = m_percepts.addObjectMethods( this );
 
+        //Agent x = new Agent();
+        //x.parseAS(  )
+
         new CAgentArchitecture<ICar>();
     }
 

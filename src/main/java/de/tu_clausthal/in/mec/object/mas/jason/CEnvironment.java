@@ -57,24 +57,25 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
     /**
      * agent architecture
      */
-    protected CAgentArchitecture<myTest> m_agentarchitecture = null;
+    protected CAgentArchitecture<myBindingTest> m_agentarchitecture = null;
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     protected CBrowser m_mindinspector = new CBrowser();
 
-    /**
-     * the centralised runner defines a structure, that the environment can communicate with the agent-architecture
-     * structure to tranfer any data from / to the environment to the agent structure
+
+    /** ctor of Jason structure
+     *
+     * @param p_frame frame object set Jason mindinspector
+     * @param p_title title of the mindinspector
      */
-    //protected RunCentralisedMAS m_mas = new CRuntimeService();
-    public CEnvironment( CFrame p_frame )
+    public CEnvironment( CFrame p_frame, String p_title )
     {
         // @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
         // @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
-        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
+        p_frame.addWidget( "Jason Mindinspector [" + p_title + "]", m_mindinspector );
 
-        m_agentarchitecture = new CAgentArchitecture<myTest>( new myTest() );
+        m_agentarchitecture = new CAgentArchitecture<myBindingTest>( new myBindingTest() );
         m_actions = m_literals.addObjectMethods( this );
     }
 
@@ -113,7 +114,11 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
         }
     }
 
-    private class myTest implements IStepable
+
+    /**
+     * test class for agent method / field binding *
+     */
+    private class myBindingTest implements IStepable
     {
 
         @Override

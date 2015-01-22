@@ -46,6 +46,8 @@ import java.util.List;
  * class of a Jason agent architecture
  *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
+ * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
+ * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
 public class CAgentArchitecture<T extends IStepable> extends AgArch implements IVoidStepable, Painter, IReceiver
 {
@@ -68,24 +70,6 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
      */
     protected T m_source = null;
 
-    /*
-        http://jason.sourceforge.net/api/jason/asSemantics/Agent.html
-        http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
-
-        Agent x = new Agent();
-        x.initDefaultFunctions();
-
-       	addBel(Literal bel)
-        addInitialBel(Literal b)
-        addInitialBelsInBB()
-        addInitialGoal(Literal g)
-        addInitialGoalsInTS()
-
-        Agent create(AgArch arch, java.lang.String agClass, ClassParameters bbPars, java.lang.String asSrc, Settings stts)
-
-
-        x.parseAS( new File( CConfiguration.getInstance().getMASDir() + File.separator + "test.asl") );
-     */
 
 
     /**
@@ -139,6 +123,7 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
         // the reasoning cycle must be called within the transition system
+        this.setCycleNumber( p_currentstep );
         this.getTS().reasoningCycle();
     }
 

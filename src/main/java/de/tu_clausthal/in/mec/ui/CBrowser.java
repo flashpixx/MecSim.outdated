@@ -42,14 +42,14 @@ public class CBrowser extends JFXPanel
     protected WebView m_webview = null;
 
 
-
-    /** ctor with instantiation the engine
+    /**
+     * ctor with instantiation the engine
      *
      * @param p_url string with URL
      */
     public CBrowser( String p_url )
     {
-        if ((p_url == null) || (p_url.isEmpty()))
+        if ( ( p_url == null ) || ( p_url.isEmpty() ) )
             throw new IllegalArgumentException( "URL need not to be empty" );
 
         Platform.runLater( () -> {

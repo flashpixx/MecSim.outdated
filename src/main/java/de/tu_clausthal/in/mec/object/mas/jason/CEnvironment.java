@@ -35,9 +35,9 @@ import java.util.Map;
 
 
 /**
- * class of the Jason environment - the task of this class is the communication with outside
- * data (IO with other structure), in this context the environment class encapsulate all
- * behaviour inside, because it will be triggerd from the simulation core thread
+ * class of the Jason environment - the task of this class is the communication with outside data (IO with other
+ * structure), in this context the environment class encapsulate all behaviour inside, because it will be triggerd from
+ * the simulation core thread
  *
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */

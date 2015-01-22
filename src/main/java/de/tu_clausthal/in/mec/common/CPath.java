@@ -45,7 +45,6 @@ public class CPath implements Iterable<CPath>
     private List<String> m_path = new ArrayList();
 
 
-
     /**
      * copy-ctor
      *

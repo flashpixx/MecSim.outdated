@@ -34,9 +34,6 @@ import java.util.*;
 
 /**
  * structure to store all menu items
- * @note the tree menu structure is designed only with a hash map,
- * because on a menu exists a few items only, so a full tree structure
- * is not needed
  */
 public class CMenuStorage
 {

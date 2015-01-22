@@ -294,7 +294,6 @@ public class CNode<T>
     }
 
 
-
     /**
      * get ID of the node
      *

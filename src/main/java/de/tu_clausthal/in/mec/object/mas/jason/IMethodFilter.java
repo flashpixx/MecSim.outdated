@@ -53,7 +53,7 @@ public abstract class IMethodFilter
      * @param p_method method which should be bind
      * @return true / false to bind method
      */
-    public boolean filter( CAgentArchitecture p_agent, Object p_object, Method p_method )
+    public boolean filter( CAgentCollection p_agent, Object p_object, Method p_method )
     {
         return true;
     }

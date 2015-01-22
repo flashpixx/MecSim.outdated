@@ -64,7 +64,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * ctor with menu items
-     * @todo refactor Jason agent file reading
      */
     public CMenuBar()
     {

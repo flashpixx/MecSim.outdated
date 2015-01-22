@@ -53,7 +53,7 @@ public class IPropertyFilter
      * @param p_property fild which should be bind
      * @return true / false to bind field
      */
-    public boolean filter( CAgentArchitecture p_agent, Object p_object, Field p_property )
+    public boolean filter( CAgentCollection p_agent, Object p_object, Field p_property )
     {
         return true;
     }

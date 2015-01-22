@@ -35,7 +35,6 @@ import java.util.concurrent.*;
 
 /**
  * main simulation thread
- * @bug breaks down on some longer runs (debugging)
  */
 public class CMainLoop implements Runnable
 {

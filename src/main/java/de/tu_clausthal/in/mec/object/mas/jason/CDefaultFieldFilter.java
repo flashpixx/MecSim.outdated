@@ -17,7 +17,7 @@ public class CDefaultFieldFilter extends IPropertyFilter
     }
 
     @Override
-    public boolean filter( CAgentArchitecture p_agent, Object p_object, Field p_property )
+    public boolean filter( CAgentCollection p_agent, Object p_object, Field p_property )
     {
         return Modifier.isPublic( p_property.getModifiers() );
     }

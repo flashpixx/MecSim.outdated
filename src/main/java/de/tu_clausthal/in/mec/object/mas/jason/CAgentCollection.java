@@ -31,7 +31,6 @@ import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.JasonException;
 import jason.architecture.AgArch;
-import jason.asSemantics.ActionExec;
 import jason.asSemantics.Agent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
@@ -39,7 +38,6 @@ import org.jxmapviewer.painter.Painter;
 import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.List;
 
 
 /**
@@ -49,7 +47,7 @@ import java.util.List;
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
  * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
-public class CAgentArchitecture<T extends IStepable> extends AgArch implements IVoidStepable, Painter, IReceiver
+public class CAgentCollection<T extends IStepable> implements IVoidStepable, Painter, IReceiver
 {
 
     /**
@@ -60,10 +58,8 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
      * map of all actions which can be called by the agents *
      */
     protected Map<String, Pair<Method, Object>> m_action = new HashMap();
-    /**
-     * number of agents *
-     */
-    protected int m_agents = 0;
+
+    protected Set<CAgentArchitecture> m_agents = new HashSet();
 
     /**
      * source object that is connect with the agents
@@ -71,13 +67,12 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
     protected T m_source = null;
 
 
-
     /**
      * ctor
      *
      * @param p_source source object of the agent
      */
-    public CAgentArchitecture( T p_source )
+    public CAgentCollection( T p_source )
     {
         super();
         if ( p_source == null )
@@ -94,9 +89,9 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
      */
     public void createAgent( String p_asl ) throws JasonException
     {
-
-        Agent.create( this, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( p_asl + ".asl" ).toString(), null );
-        m_agents++;
+        CAgentArchitecture l_architecture = new CAgentArchitecture();
+        Agent.create( l_architecture, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( p_asl + ".asl" ).toString(), null );
+        m_agents.add( l_architecture );
     }
 
     /**
@@ -116,21 +111,20 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
      */
     public int getAgentNumber()
     {
-        return m_agents;
+        return m_agents.size();
+    }
+
+    @Override
+    public void receiveMessage( Set<IMessage> p_messages )
+    {
+
     }
 
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        // the reasoning cycle must be called within the transition system
-        this.setCycleNumber( p_currentstep );
-        this.getTS().reasoningCycle();
-    }
-
-    @Override
-    public void act( ActionExec action, List<ActionExec> feedback )
-    {
-        super.act( action, feedback );
+        for ( CAgentArchitecture l_agent : m_agents )
+            l_agent.cycle( p_currentstep );
     }
 
     @Override
@@ -145,8 +139,19 @@ public class CAgentArchitecture<T extends IStepable> extends AgArch implements I
 
     }
 
-    @Override
-    public void receiveMessage( Set<IMessage> p_messages )
+
+    /**
+     * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture
+     */
+    private class CAgentArchitecture extends AgArch
     {
+
+        public void cycle( int p_currentstep )
+        {
+            // the reasoning cycle must be called within the transition system
+            this.setCycleNumber( p_currentstep );
+            this.getTS().reasoningCycle();
+        }
+
     }
 }

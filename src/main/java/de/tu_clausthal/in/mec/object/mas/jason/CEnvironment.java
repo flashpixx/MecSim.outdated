@@ -44,7 +44,7 @@ import java.util.Map;
  *
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAgentArchitecture<T>>
+public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAgentCollection<T>>
 {
 
     /**
@@ -59,25 +59,22 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     protected CBrowser m_mindinspector = new CBrowser();
+
+    private T x = null;
+
+
     /**
-     * running test *
-     */
-    protected CAgentArchitecture<T> m_agentarchitecture = null;
-
-
-    /** ctor of Jason structure
+     * ctor of Jason structure
      *
-     * @param p_bind test binding object
+     * @param p_bind  test binding object
      * @param p_frame frame object set Jason mindinspector
-     * @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
      * @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
      */
     public CEnvironment( T p_bind, CFrame p_frame )
     {
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
 
-        m_agentarchitecture = new CAgentArchitecture( p_bind );
-        m_data.add( m_agentarchitecture );
+        x = p_bind;
         m_actions = m_literals.addObjectMethods( this );
     }
 
@@ -99,14 +96,17 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         m_literals.addObjectFields( this );
         m_literals.add( "simulationstep", p_currentstep );
 
-
+        System.out.println();
         try
         {
+            CAgentCollection l_agentarchitecture = new CAgentCollection( x );
+            m_data.add( l_agentarchitecture );
+
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
-            m_agentarchitecture.createAgent( "agent" );
+            l_agentarchitecture.createAgent( "agent" );
 
-            if ( m_agentarchitecture.getAgentNumber() == 1 )
+            if ( m_data.size() > 0 )
                 m_mindinspector.load( "http://localhost:3272" );
 
         }

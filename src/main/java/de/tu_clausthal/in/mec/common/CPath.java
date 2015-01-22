@@ -45,12 +45,6 @@ public class CPath implements Iterable<CPath>
     private List<String> m_path = new ArrayList();
 
 
-    /**
-     * ctor for empty path
-     */
-    public CPath()
-    {
-    }
 
     /**
      * copy-ctor
@@ -66,34 +60,12 @@ public class CPath implements Iterable<CPath>
     /**
      * ctor
      *
-     * @param p_parent defines the parent
-     * @param p_item   defines the last item on the path
+     * @param p_varargs path component
      */
-    public CPath( String p_parent, String p_item )
+    public CPath( String... p_varargs )
     {
-        this.initialize( p_parent + m_seperator + p_item );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_value defines a full path
-     */
-    public CPath( String p_value )
-    {
-        this.initialize( p_value );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_value creates a path of an string array
-     */
-    public CPath( String[] p_value )
-    {
-        m_path = new ArrayList( Arrays.asList( p_value ) );
-        if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( "path is empty" );
+        if ( ( p_varargs != null ) && ( p_varargs.length > 0 ) )
+            this.initialize( StringUtils.join( p_varargs, m_seperator ) );
     }
 
 

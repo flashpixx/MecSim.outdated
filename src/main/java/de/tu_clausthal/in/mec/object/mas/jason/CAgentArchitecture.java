@@ -86,6 +86,16 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
         for ( String l_asl : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
             try
             {
+                 /*
+                 java.lang.NullPointerException
+	                at java.io.File.<init>(File.java:277)
+	                at jason.jeditplugin.Config.fix(Config.java:265)
+	                at jason.jeditplugin.Config.get(Config.java:101)
+	                at jason.jeditplugin.Config.get(Config.java:94)
+	                at jason.asSyntax.Structure.<clinit>(Structure.java:349)
+	                at jason.bb.BeliefBase.<clinit>(BeliefBase.java:50)
+	                at jason.asSemantics.Agent.create(Agent.java:132)
+                */
                 Agent.create( l_arch, CAgent.class.getName(), null, CConfiguration.getInstance().getMASDir( l_asl ).toString(), null );
             }
             catch ( Exception l_exception )

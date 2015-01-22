@@ -102,8 +102,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         List<String> l_jason = new ArrayList( Arrays.asList( CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) ) );
         l_jason.add( null );
         l_jason.add( "new agent" );
-        l_jason.add( null );
-        l_jason.add( "mindinspector" );
         String[] l_jasonmenu = new String[l_jason.size()];
         l_jason.toArray( l_jasonmenu );
         m_items.addItem( "MAS/Jason", l_jasonmenu, this );

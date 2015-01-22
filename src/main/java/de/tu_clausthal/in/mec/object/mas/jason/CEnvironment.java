@@ -99,12 +99,16 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         System.out.println();
         try
         {
-            CAgentCollection l_agentarchitecture = new CAgentCollection( x );
-            m_data.add( l_agentarchitecture );
 
-            // mind inspector works after an agent exists, so we need
-            // to bind the browser after the first agent exists
-            l_agentarchitecture.createAgent( "agent" );
+            for ( int i = 0; i < 100; i++ )
+            {
+                CAgentCollection l_agentarchitecture = new CAgentCollection( x );
+                m_data.add( l_agentarchitecture );
+
+                // mind inspector works after an agent exists, so we need
+                // to bind the browser after the first agent exists
+                l_agentarchitecture.createAgent( "agent" );
+            }
 
             if ( m_data.size() > 0 )
                 m_mindinspector.load( "http://localhost:3272" );

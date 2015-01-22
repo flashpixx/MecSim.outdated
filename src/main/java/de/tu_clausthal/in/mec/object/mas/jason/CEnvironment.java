@@ -69,13 +69,12 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
      *
      * @param p_bind test binding object
      * @param p_frame frame object set Jason mindinspector
-     * @param p_title title of the mindinspector
      * @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
      * @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
      */
-    public CEnvironment( T p_bind, CFrame p_frame, String p_title )
+    public CEnvironment( T p_bind, CFrame p_frame )
     {
-        p_frame.addWidget( "Jason Mindinspector [" + p_title + "]", m_mindinspector );
+        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
 
         m_agentarchitecture = new CAgentArchitecture( p_bind );
         m_data.add( m_agentarchitecture );

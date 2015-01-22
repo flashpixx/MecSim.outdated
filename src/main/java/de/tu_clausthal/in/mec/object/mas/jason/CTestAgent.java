@@ -23,68 +23,29 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.simulation.IStepable;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.jxmapviewer.painter.Painter;
 
-import jason.JasonException;
-import jason.architecture.AgArch;
-import jason.asSemantics.Agent;
-import jason.mas2j.ClassParameters;
-import jason.runtime.RuntimeServicesInfraTier;
-import jason.runtime.Settings;
-
-import java.util.List;
-import java.util.Set;
+import java.awt.*;
+import java.util.Map;
 
 
 /**
- * Jason runtime service
- *
- * @see http://jason.sourceforge.net/api/jason/runtime/RuntimeServicesInfraTier.html
+ * test class for the agent layer
  */
-public class CRuntimeService implements RuntimeServicesInfraTier
+public class CTestAgent implements IStepable, Painter<COSMViewer>
 {
-
-
     @Override
-    public String createAgent( String agName, String agSource, String agClass, List<String> archClasses, ClassParameters bbPars, Settings stts ) throws Exception
+    public Map<String, Object> analyse()
     {
         return null;
     }
 
-    @Override
-    public void startAgent( String s )
-    {
-
-    }
 
     @Override
-    public AgArch clone( Agent agent, List<String> list, String s ) throws JasonException
+    public void paint( Graphics2D graphics2D, COSMViewer cosmViewer, int i, int i1 )
     {
 
-
-        return null;
-    }
-
-    @Override
-    public boolean killAgent( String agName, String byAg )
-    {
-
-        return false;
-    }
-
-    @Override
-    public Set<String> getAgentsNames()
-    {
-        return null;
-    }
-
-    @Override
-    public int getAgentsQty()
-    {
-        return 0;
-    }
-
-    @Override
-    public void stopMAS() throws Exception
-    {
     }
 }

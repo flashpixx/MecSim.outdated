@@ -272,6 +272,7 @@ public class CDefaultCar extends IInspector implements ICar
         return l_map;
     }
 
+    /** @todo draw route (solid for driven way, dashed for driving way) **/
     @Override
     public void paint( Graphics2D graphics2D, COSMViewer o, int i, int i2 )
     {
@@ -296,8 +297,6 @@ public class CDefaultCar extends IInspector implements ICar
             graphics2D.setColor( Color.RED );
 
         graphics2D.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
-
-        // @todo draw route (solid for driven way, dashed for driving way)
     }
 
 

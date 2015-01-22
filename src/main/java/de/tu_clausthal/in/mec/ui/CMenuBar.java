@@ -64,6 +64,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * ctor with menu items
+     * @todo refactor Jason agent file reading
      */
     public CMenuBar()
     {
@@ -98,7 +99,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
 
 
-        // @todo refactor agent file reading
         List<String> l_jason = new ArrayList( Arrays.asList( CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) ) );
         l_jason.add( null );
         l_jason.add( "new agent" );

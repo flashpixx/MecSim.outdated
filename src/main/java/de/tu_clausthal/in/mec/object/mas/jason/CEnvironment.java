@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jxmapviewer.painter.Painter;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ import java.util.Map;
  *
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchitecture<T>>
+public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAgentArchitecture<T>>
 {
 
     /**
@@ -55,27 +56,29 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
      */
     protected Map<String, Pair<Method, Object>> m_actions = new HashMap();
     /**
-     * agent architecture
-     */
-    protected CAgentArchitecture<myBindingTest> m_agentarchitecture = null;
-    /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     protected CBrowser m_mindinspector = new CBrowser();
+    /**
+     * running test *
+     */
+    protected CAgentArchitecture<T> m_agentarchitecture = null;
 
 
     /** ctor of Jason structure
      *
+     * @param p_bind test binding object
      * @param p_frame frame object set Jason mindinspector
      * @param p_title title of the mindinspector
+     * @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
+     * @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
      */
-    public CEnvironment( CFrame p_frame, String p_title )
+    public CEnvironment( T p_bind, CFrame p_frame, String p_title )
     {
-        // @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of disabeling / modifiying
-        // @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
         p_frame.addWidget( "Jason Mindinspector [" + p_title + "]", m_mindinspector );
 
-        m_agentarchitecture = new CAgentArchitecture<myBindingTest>( new myBindingTest() );
+        m_agentarchitecture = new CAgentArchitecture( p_bind );
+        m_data.add( m_agentarchitecture );
         m_actions = m_literals.addObjectMethods( this );
     }
 
@@ -111,20 +114,6 @@ public class CEnvironment<T extends IStepable> extends IMultiLayer<CAgentArchite
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
-        }
-    }
-
-
-    /**
-     * test class for agent method / field binding *
-     */
-    private class myBindingTest implements IStepable
-    {
-
-        @Override
-        public Map<String, Object> analyse()
-        {
-            return null;
         }
     }
 

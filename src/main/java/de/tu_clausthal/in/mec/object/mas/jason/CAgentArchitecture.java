@@ -139,7 +139,8 @@ public class CAgentArchitecture<T extends IStepable> implements IVoidStepable, P
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-
+        m_agentarchitecture.checkMail();
+        m_agentarchitecture.reasoningCycleStarting();
     }
 
     @Override

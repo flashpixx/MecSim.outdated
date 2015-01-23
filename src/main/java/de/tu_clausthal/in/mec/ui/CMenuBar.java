@@ -48,6 +48,8 @@ import java.util.*;
 
 /**
  * class for create the menubar
+ *
+ * @todo refactor Jason agent file reading
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {

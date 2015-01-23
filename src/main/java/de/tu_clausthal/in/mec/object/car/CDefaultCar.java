@@ -272,7 +272,9 @@ public class CDefaultCar extends IInspector implements ICar
         return l_map;
     }
 
-    /** @todo draw route (solid for driven way, dashed for driving way) **/
+    /**
+     * @todo draw route (solid for driven way, dashed for driving way) *
+     */
     @Override
     public void paint( Graphics2D graphics2D, COSMViewer o, int i, int i2 )
     {

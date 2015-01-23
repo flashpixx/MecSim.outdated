@@ -47,6 +47,8 @@ import java.util.*;
  * structure), in this context the environment class encapsulate all behaviour inside, because it will be triggerd from
  * the simulation core thread
  *
+ * @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind
+ * of disabeling / modifiying - https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
 public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAgentCollection<T>>

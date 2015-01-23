@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
-import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
@@ -85,12 +84,12 @@ public class CAgentCollection<T extends IStepable> implements IVoidStepable, Pai
     /**
      * creates an agent with it's name / ASL file
      *
-     * @param p_asl filename of the ASL
+     * @param p_agent agent name
      */
-    public void createAgent( String p_asl ) throws JasonException
+    public void createAgent( String p_agent ) throws JasonException
     {
         CAgentArchitecture l_architecture = new CAgentArchitecture();
-        Agent.create( l_architecture, Agent.class.getName(), null, CConfiguration.getInstance().getMASDir( p_asl + ".asl" ).toString(), null );
+        Agent.create( l_architecture, Agent.class.getName(), null, CEnvironment.getFilename( p_agent ).toString(), null );
         m_agents.add( l_architecture );
     }
 

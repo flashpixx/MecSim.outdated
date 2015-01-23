@@ -30,6 +30,8 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
+import jason.architecture.AgArch;
+import jason.asSemantics.Agent;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
@@ -118,6 +120,20 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         l_list.toArray( l_return );
         return l_return;
     }
+
+
+    public static void checkSyntax( String p_agentname )
+    {
+        try
+        {
+            Agent.create( new AgArch(), Agent.class.getName(), null, getFilename( p_agentname ).toString(), null );
+        }
+        catch ( Exception l_exception )
+        {
+            throw new IllegalStateException( "agent [" + p_agentname + "] error: " + l_exception.getMessage() );
+        }
+    }
+
 
     /**
      * register object methods

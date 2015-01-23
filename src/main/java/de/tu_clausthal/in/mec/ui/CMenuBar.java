@@ -100,6 +100,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getFilenamelist() ) );
         l_jason.add( null );
         l_jason.add( "new agent" );
+        l_jason.add( "check syntax" );
         String[] l_jasonmenu = new String[l_jason.size()];
         l_jason.toArray( l_jasonmenu );
         m_items.addItem( "MAS/Jason", l_jasonmenu, this );
@@ -270,13 +271,21 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.createFile( l_name ) );
 
             }
-            else
+
+            if ( e.getSource() == m_items.get( "MAS/Jason/check syntax" ) )
+            {
                 for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
-                    if ( e.getSource() == l_item.getValue() )
-                    {
-                        ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
-                        break;
-                    }
+                    if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
+                        CEnvironment.checkSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
+            }
+
+
+            for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
+                if ( ( e.getSource() == l_item.getValue() ) && ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
+                {
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
+                    break;
+                }
 
         }
         catch ( Exception l_exception )

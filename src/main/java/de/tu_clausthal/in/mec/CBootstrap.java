@@ -31,8 +31,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.CTestAgent;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.ui.CFrame;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.*;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 
 
@@ -64,6 +63,7 @@ public class CBootstrap
 
         p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.WEST, 0.8 );
+        p_frame.addWidget( "Editor", new CSourceEditor() );
     }
 
 

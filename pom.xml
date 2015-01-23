@@ -83,14 +83,12 @@
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
-        <!--
         <dependency>
             <groupId>com.fifesoft</groupId>
             <artifactId>rsyntaxtextarea</artifactId>
-            <version>2.5.6</version>
+            <version>r239</version>
             <scope>compile</scope>
         </dependency>
-        -->
 
         <!-- algorithms & data structure components -->
         <dependency>

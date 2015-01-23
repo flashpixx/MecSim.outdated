@@ -105,6 +105,32 @@ public class CMenuStorage
         this.GetOrCreatePath( new CPath( p_path ) );
     }
 
+
+    /**
+     * removes all items with their subitems
+     *
+     * @param p_path path of the item
+     * @return root item
+     */
+    public JComponent removeItems( String p_path )
+    {
+        CPath l_path = new CPath( p_path );
+        JComponent l_root = m_elements.get( l_path );
+        if ( l_root == null )
+            return l_root;
+
+        List<CPath> l_remove = new LinkedList();
+
+        for ( Map.Entry<CPath, JComponent> l_item : m_elements.entrySet() )
+            if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
+                l_remove.add( l_item.getKey() );
+
+        for ( CPath l_item : l_remove )
+            m_elements.remove( l_item );
+
+        return l_root;
+    }
+
     /**
      * adds a new menu item
      *

@@ -23,18 +23,21 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -76,6 +79,44 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
 
         x = p_bind;
         m_actions = m_literals.addObjectMethods( this );
+    }
+
+    /**
+     * creates an ASL file
+     *
+     * @param p_agentname name of the agent (ASL file)
+     * @return file object
+     */
+    public static File createFile( String p_agentname ) throws IOException, IllegalArgumentException, IllegalStateException
+    {
+        if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
+            throw new IllegalArgumentException( "ASL file name need not be empty" );
+
+        File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
+        if ( l_asl.exists() )
+            throw new IllegalStateException( "ASL file exists" );
+
+        l_asl.createNewFile();
+        return l_asl;
+    }
+
+    public static File getFilename( String p_agentname )
+    {
+        if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
+            throw new IllegalArgumentException( "ASL file name need not be empty" );
+
+        return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
+    }
+
+    public static String[] getFilenamelist()
+    {
+        List<String> l_list = new LinkedList();
+        for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
+            l_list.add( new File( l_file ).getName() );
+
+        String[] l_return = new String[l_list.size()];
+        l_list.toArray( l_return );
+        return l_return;
     }
 
     /**

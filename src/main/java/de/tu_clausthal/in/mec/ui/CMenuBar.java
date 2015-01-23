@@ -28,11 +28,10 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.norm.INormObject;
-import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
+import de.tu_clausthal.in.mec.object.mas.jason.CEnvironment;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -48,8 +47,6 @@ import java.util.*;
 
 /**
  * class for create the menubar
- *
- * @todo refactor Jason agent file reading
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
@@ -100,7 +97,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
 
 
-        List<String> l_jason = new ArrayList( Arrays.asList( CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) ) );
+        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getFilenamelist() ) );
         l_jason.add( null );
         l_jason.add( "new agent" );
         String[] l_jasonmenu = new String[l_jason.size()];
@@ -121,9 +118,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         String[] l_norm = {"Create Speed Norm", "Delete Norm"};
         this.add(CMenuFactory.createMenu("Norm", l_norm, this, m_reference));
-
-        String[] l_mas = {"Modify Environment", "Create Agent", "Delete Agent", ""};
-        this.add(CMenuFactory.createMenu("MAS", l_mas, this, m_reference));
 */
 
     }
@@ -152,8 +146,21 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraphWeight().equals( l_item.getKey().getSuffix() ) );
+
     }
 
+    /*
+    private JComponent getMASJason()
+    {
+
+
+        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getFilenamelist() ) );
+        l_jason.add( null );
+        l_jason.add( "new agent" );
+        String[] l_jasonmenu = new String[l_jason.size()];
+        l_jason.toArray( l_jasonmenu );
+    }
+*/
 
     /**
      * throws an exception if the simulation is running
@@ -253,23 +260,37 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 break;
             }
 
+        // MAS Jason elements
+        try
+        {
+            if ( e.getSource() == m_items.get( "MAS/Jason/new agent" ) )
+            {
+                String l_name = this.openTextInputDialog( "Jason Agent Creation", "Set a name of the agent (ASL filename)" );
+                if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.createFile( l_name ) );
+
+            }
+            else
+                for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
+                    if ( e.getSource() == l_item.getValue() )
+                    {
+                        ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
+                        break;
+                    }
+
+        }
+        catch ( Exception l_exception )
+        {
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+        }
+
 
         // refresh all dynamic items
         this.refreshDynamicItems();
-
-/*
-            if (e.getSource() == m_reference.get("Create Institution"))
-                this.createInstitution();
-            if (e.getSource() == m_reference.get("Delete Institution"))
-                this.deleteInstitution();
-
-            if (e.getSource() == m_reference.get("Create Speed Norm"))
-                this.createSpeedNorm();
-            if (e.getSource() == m_reference.get("Delete Norm"))
-                this.deleteNorm();
-*/
     }
 
+
+    // --- External Caller ---------------------------------------------------------------------------------------------
 
     /**
      * returns the name of the selected source
@@ -286,161 +307,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     }
 
 
-    /**
-     * creates a new speed norm
-     */
-    private void createSpeedNorm()
-    {
-        /*
-        if (CSimulation.getInstance().isRunning())
-            throw new IllegalStateException("simulation is running");
-
-        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmptyCell())
-            throw new IllegalStateException("institutions are not exist, add an institution first");
-
-        String[] l_names = this.getInstitutionList();
-        String l_name = (String) JOptionPane.showInputDialog(null, "push an institution for the norm", "Norm Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
-        if ((l_name == null) || (l_name.isEmptyCell()))
-            return;
-
-        IInstitution<INormObject> l_item = this.getInstitution(l_name);
-        if (l_item != null) {
-            String l_normname = (String) JOptionPane.showInputDialog(null, "insert a norm name", "name", JOptionPane.PLAIN_MESSAGE);
-            if ((l_normname == null) || (l_normname.isEmptyCell()))
-                return;
-            if (l_normname.contains(":"))
-                throw new IllegalArgumentException(": not allowed");
-
-            String l_speed = (String) JOptionPane.showInputDialog(null, "insert a speed limit", "speed limit norm", JOptionPane.PLAIN_MESSAGE);
-            if ((l_speed == null) || (l_speed.isEmptyCell()))
-                return;
-
-            l_item.add(new CSpeedNorm(l_item, l_normname, Integer.valueOf(l_speed)));
-        }
-        */
-    }
-
-
-    /**
-     * deletes a norm
-     */
-    private void deleteNorm()
-    {
-        /*
-        if (CSimulation.getInstance().isRunning())
-            throw new IllegalStateException("simulation is running");
-
-        if (CSimulationData.getInstance().getCarInstitutionQueue().getAll().isEmptyCell())
-            throw new IllegalStateException("institutions are not exist, add an institution first");
-
-        ArrayList<String> l_names = new ArrayList();
-        for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-            for (INorm<INormObject> l_norm : l_item)
-                l_names.add(l_item.getName() + ":" + l_norm.getName());
-        String l_name = (String) JOptionPane.showInputDialog(null, "delete an norm", "Norm", JOptionPane.QUESTION_MESSAGE, null, l_names.toArray(), l_names.toArray()[0]);
-        if ((l_name == null) || (l_name.isEmptyCell()))
-            return;
-
-        String[] l_parts = l_name.split("\\:");
-        if (l_parts.length != 2)
-            throw new IllegalStateException("cannot split institution and norm name");
-
-        IInstitution<INormObject> l_item = this.getInstitution(l_parts[0]);
-        if (l_item == null)
-            throw new IllegalStateException("cannot found exception");
-
-        for (INorm<INormObject> l_norm : l_item)
-            if (l_norm.getName().equals(l_parts[1])) {
-                l_item.remove(l_norm);
-                l_norm.release();
-            }
-        */
-    }
-
-
-    /**
-     * create a new institution
-     */
-    private void createInstitution()
-    {
-        /*
-        if (CSimulation.getInstance().isRunning())
-            throw new IllegalStateException("simulation is running");
-
-        String l_input = JOptionPane.showInputDialog(null, "add a new institution name");
-        if ((l_input == null) || (l_input.isEmptyCell()))
-            return;
-        if (l_input.contains(":"))
-            throw new IllegalArgumentException(": not allowed");
-
-        new CDefaultInstitution(l_input);
-        COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
-        */
-    }
-
-
-    /**
-     * deletes an institution
-     */
-    private void deleteInstitution()
-    {
-        /*
-        if (CSimulationData.getInstance().getCarInstitutionQueue().isEmptyCell())
-            return;
-        if (CSimulation.getInstance().isRunning())
-            throw new IllegalStateException("simulation is running");
-
-        String[] l_names = this.getInstitutionList();
-        String l_name = (String) JOptionPane.showInputDialog(null, "delete an institution", "Institution", JOptionPane.QUESTION_MESSAGE, null, l_names, l_names[0]);
-        IInstitution<INormObject> l_item = this.getInstitution(l_name);
-        if (l_item != null)
-            l_item.release();
-        COSMViewer.getInstance().getMainMouseListener().getPopupListener().update();
-        */
-    }
-
-    /**
-     * returns a string list of the institutions
-     *
-     * @return array
-     */
-    private String[] getInstitutionList()
-    {
-        /*
-        Queue<IInstitution<INormObject>> l_data = CSimulationData.getInstance().getCarInstitutionQueue().getAll();
-        String[] l_names = new String[l_data.size()];
-        int i = 0;
-        for (IInstitution<INormObject> l_item : l_data) {
-            l_names[i] = l_item.getName();
-            i++;
-        }
-        return l_names;
-        */
-        return null;
-    }
-
-
-    /**
-     * returns an institution object by the name
-     *
-     * @param p_name name
-     * @return null or institution
-     */
-    private IInstitution<INormObject> getInstitution( String p_name )
-    {
-        /*
-        if ((p_name == null) && (p_name.isEmptyCell()))
-            return null;
-
-        for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-            if (l_item.getName().equals(p_name))
-                return l_item;
-
-        return null;
-        */
-        return null;
-    }
-
+    // --- File Menu ---------------------------------------------------------------------------------------------------
 
     /**
      * handles the preferences
@@ -518,6 +385,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         ImageIO.write( l_image, "png", this.addFileExtension( l_store, ".png" ) );
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
+
+    // --- Helper structures -------------------------------------------------------------------------------------------
 
     /**
      * creates a filesave dialog, which stores the current path
@@ -532,6 +403,20 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_filepath = l_filedialog.getCurrentDirectory();
 
         return l_filedialog.getSelectedFile();
+    }
+
+
+    /**
+     * create input text dialog
+     *
+     * @param p_title       title
+     * @param p_description description text
+     * @return string with content or null
+     */
+    private String openTextInputDialog( String p_title, String... p_description )
+    {
+        return (String) JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
+                p_title, JOptionPane.PLAIN_MESSAGE );
     }
 
 

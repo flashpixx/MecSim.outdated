@@ -95,14 +95,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_items.addRadioGroup( "Car Sources", l_sources, this );
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
 
-
-        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getAgentFilenames() ) );
-        l_jason.add( null );
-        l_jason.add( "new agent" );
-        l_jason.add( "check syntax" );
-        m_items.addItem( "MAS/Jason", CCommon.ColletionToArray( String[].class, l_jason ), this );
-
-
         this.refreshDynamicItems();
 
 
@@ -145,20 +137,26 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraphWeight().equals( l_item.getKey().getSuffix() ) );
 
+        this.MASJasonMenu();
     }
 
-    /*
-    private JComponent getMASJason()
+
+    /**
+     * create MAS-Jason menu
+     */
+    private void MASJasonMenu()
     {
+        List<String> l_menu = new ArrayList( Arrays.asList( CEnvironment.getAgentFilenames() ) );
+        l_menu.add( null );
+        l_menu.add( "new agent" );
+        l_menu.add( "check syntax" );
 
-
-        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getAgentFilenames() ) );
-        l_jason.add( null );
-        l_jason.add( "new agent" );
-        String[] l_jasonmenu = new String[l_jason.size()];
-        l_jason.toArray( l_jasonmenu );
+        JComponent l_root = m_items.removeItems( "MAS/Jason" );
+        m_items.addItem( "MAS/Jason", CCommon.ColletionToArray( String[].class, l_menu ), this );
+        if ( l_root != null )
+            m_items.get( "MAS" ).remove( l_root );
     }
-*/
+
 
     /**
      * throws an exception if the simulation is running
@@ -174,24 +172,28 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     public void actionPerformed( ActionEvent e )
     {
 
+        // store
+        CPath l_actionpath = m_items.get( (JComponent) e.getSource() );
+        this.refreshDynamicItems();
+
         // file / simulation menu
         try
         {
 
-            if ( e.getSource() == m_items.get( "File/Screenshot" ) )
+            if ( l_actionpath.equals( "File/Screenshot" ) )
                 this.screenshot();
-            if ( e.getSource() == m_items.get( "File/Load" ) )
+            if ( l_actionpath.equals( "File/Load" ) )
                 this.load();
-            if ( e.getSource() == m_items.get( "File/Save" ) )
+            if ( l_actionpath.equals( "File/Save" ) )
                 this.save();
-            if ( e.getSource() == m_items.get( "File/Preferences" ) )
+            if ( l_actionpath.equals( "File/Preferences" ) )
                 this.preferences();
 
-            if ( e.getSource() == m_items.get( "Simulation/Start" ) )
+            if ( l_actionpath.equals( "Simulation/Start" ) )
                 CSimulation.getInstance().start();
-            if ( e.getSource() == m_items.get( "Simulation/Stop" ) )
+            if ( l_actionpath.equals( "Simulation/Stop" ) )
                 CSimulation.getInstance().stop();
-            if ( e.getSource() == m_items.get( "Simulation/Reset" ) )
+            if ( l_actionpath.equals( "Simulation/Reset" ) )
                 CSimulation.getInstance().reset();
         }
         catch ( Exception l_exception )
@@ -202,7 +204,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         // layer action / visibility
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
-            if ( e.getSource() == l_item.getValue() )
+            if ( l_actionpath.equals( l_item.getKey() ) )
             {
                 try
                 {
@@ -218,7 +220,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             }
 
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
-            if ( e.getSource() == l_item.getValue() )
+            if ( l_actionpath.equals( l_item.getKey() ) )
             {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
                 l_layer.setVisible( !l_layer.isVisible() );
@@ -227,7 +229,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         // driving models
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Driving Model" ) )
-            if ( e.getSource() == l_item.getValue() )
+            if ( l_actionpath.equals( l_item.getKey() ) )
             {
                 try
                 {
@@ -244,7 +246,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         // graph weights
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
-            if ( e.getSource() == l_item.getValue() )
+            if ( l_actionpath.equals( l_item.getKey() ) )
             {
                 try
                 {
@@ -261,7 +263,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         // MAS Jason elements
         try
         {
-            if ( e.getSource() == m_items.get( "MAS/Jason/new agent" ) )
+            if ( l_actionpath.equals( "MAS/Jason/new agent" ) )
             {
                 String l_name = this.openTextInputDialog( "Jason Agent Creation", "Set a name of the agent (ASL filename)" );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
@@ -269,7 +271,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
             }
 
-            if ( e.getSource() == m_items.get( "MAS/Jason/check syntax" ) )
+            if ( l_actionpath.equals( "MAS/Jason/check syntax" ) )
             {
                 for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                     if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
@@ -278,7 +280,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
-                if ( ( e.getSource() == l_item.getValue() ) && ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
+                if ( ( l_actionpath.equals( l_item.getKey() ) ) && ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
                 {
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     break;
@@ -291,8 +293,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         }
 
 
-        // refresh all dynamic items
         this.refreshDynamicItems();
+
     }
 
 

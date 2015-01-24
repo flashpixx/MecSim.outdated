@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
+import jason.runtime.Settings;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
@@ -145,9 +146,11 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
      */
     public static void checkAgentFileSyntax( String p_agentname )
     {
+        Settings x = new Settings();
+        System.out.println( x.logLevel() );
         try
         {
-            Agent.create( new AgArch(), Agent.class.getName(), null, getFilename( p_agentname ).toString(), null );
+            Agent.create( new AgArch(), Agent.class.getName(), null, getFilename( p_agentname ).toString(), x );
         }
         catch ( Exception l_exception )
         {

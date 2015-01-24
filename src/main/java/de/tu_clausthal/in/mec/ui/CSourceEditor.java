@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.math3.util.Pair;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
@@ -87,9 +87,10 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             l_toolbar.setFloatable( false );
             l_tab.add( l_toolbar, BorderLayout.NORTH );
 
-            for( String l_item : new String[]{"save.png", "delete.png", "reload.png"})
+
+            for ( String l_item : new String[]{"sourceeditor_save.png", "sourceeditor_delete.png", "sourceeditor_reload.png"} )
             {
-                JButton l_button = new JButton( new ImageIcon( ImageIO.read( this.getClass().getResource( "../../../../../icons/" + l_item ) ) ) );
+                JButton l_button = new JButton( new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item ) ) ) );
                 l_button.addActionListener( this );
                 l_toolbar.add( l_button );
 
@@ -106,6 +107,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         }
         catch ( Exception l_exception )
         {
+            CLogger.error( l_exception );
             throw new IllegalStateException( "error on file [" + p_file + "] reading" );
         }
     }
@@ -126,7 +128,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         try
         {
 
-            if ( l_item.getLeft().equalsIgnoreCase( "save.png" ) )
+            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_save.png" ) )
             {
                 FileWriter l_filewriter = new FileWriter( l_item.getRight() );
                 BufferedWriter l_writer = new BufferedWriter( l_filewriter );
@@ -135,7 +137,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
                 l_filewriter.close();
             }
 
-            if ( l_item.getLeft().equalsIgnoreCase( "delete.png" ) )
+            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_delete.png" ) )
             {
                 if ( !l_item.getRight().delete() )
                     throw new IllegalStateException( "file [" + l_item.getRight().getName() + "] cannot be deleted" );
@@ -147,6 +149,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             }
 
         } catch (Exception l_exception) {
+            CLogger.error( l_exception );
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
 

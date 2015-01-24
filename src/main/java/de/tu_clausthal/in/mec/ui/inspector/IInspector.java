@@ -36,18 +36,22 @@ public abstract class IInspector extends IUIListener
 {
 
     /**
+     * inspect variable *
+     */
+    private Map<String, Object> m_inspect = new HashMap();
+
+
+    /**
      * returns a map to inspect current data of the car
      *
      * @return map with name and value
      */
     public Map<String, Object> inspect()
     {
-        Map<String, Object> l_map = new HashMap();
+        m_inspect.put( "class name", this.getClass().getName() );
+        m_inspect.put( "object id", this.hashCode() );
 
-        l_map.put( "class name", this.getClass().getName() );
-        l_map.put( "object id", this.hashCode() );
-
-        return l_map;
+        return m_inspect;
     }
 
 }

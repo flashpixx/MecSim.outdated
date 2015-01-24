@@ -34,8 +34,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -56,19 +55,28 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      */
     protected Map<JComponent, ImmutablePair<String, File>> m_actionobject = new HashMap();
     /**
-     * menubar reference *
+     * set of action listener that will call on editor action
      */
-    protected CMenuBar m_menubar = null;
+    protected Set<ActionListener> m_listener = new HashSet();
 
+
+    /** adds an action listener
+     *
+     * @param p_listener action listener
+     */
+    public void addActionListener( ActionListener p_listener )
+    {
+        m_listener.add( p_listener );
+    }
 
     /**
-     * sets the menubar
+     * removes an action listener
      *
-     * @param p_menubar menubar
+     * @param p_listener action listener
      */
-    public void setMenubar( CMenuBar p_menubar )
+    public void removeActionListener( ActionListener p_listener )
     {
-        m_menubar = p_menubar;
+        m_listener.remove( p_listener );
     }
 
 
@@ -156,12 +164,15 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * remove all data of a tab from the internal maps
      *
      * @param p_tab tab object
+     * @param p_file file object
      */
-    protected void removeTabData( JComponent p_tab )
+    protected void removeTabData( JComponent p_tab, File p_file )
     {
         for ( int i = 0; i < p_tab.getComponentCount(); i++ )
             m_actionobject.remove( p_tab.getComponent( i ) );
+
         this.remove( p_tab );
+        m_tabs.remove( p_file );
     }
 
 
@@ -186,17 +197,14 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
                 this.readFile( l_component.getRight(), l_item.getRight() );
 
             if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_close.png" ) )
-                this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft() );
+                this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft(), l_item.getRight() );
 
             if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_delete.png" ) )
             {
                 if ( !l_item.getRight().delete() )
                     throw new IllegalStateException( "file [" + l_item.getRight().getName() + "] cannot be deleted" );
 
-                this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft() );
-
-                if ( m_menubar != null )
-                    m_menubar.refreshDynamicItems();
+                this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft(), l_item.getRight() );
             }
 
         }
@@ -205,6 +213,9 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             CLogger.error( l_exception );
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
+
+        for ( ActionListener l_action : m_listener )
+            l_action.actionPerformed( e );
 
     }
 }

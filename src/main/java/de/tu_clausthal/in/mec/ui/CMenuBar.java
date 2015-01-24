@@ -122,7 +122,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * refreshes the dynamic items *
      */
-    public void refreshDynamicItems()
+    private void refreshDynamicItems()
     {
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() ).isActive() );
@@ -174,9 +174,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
 
         // refresh menubar reference within the editor window and refresh the data
-        ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).setMenubar( this );
+        ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).addActionListener( this );
         CPath l_actionpath = m_items.get( (JComponent) e.getSource() );
         this.refreshDynamicItems();
+
+        if ( l_actionpath == null )
+            return;
+
 
         // file / simulation menu
         try
@@ -282,7 +286,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
-                if ( ( l_actionpath.equals( l_item.getKey() ) ) && ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
+                if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
                 {
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     break;

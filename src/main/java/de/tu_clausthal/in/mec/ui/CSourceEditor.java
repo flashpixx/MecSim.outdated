@@ -97,11 +97,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
                 m_actionobject.put( l_button, new ImmutablePair<String, File>( l_item, p_file ) );
             }
 
-
-            // read file into editor
-            BufferedReader l_reader = new BufferedReader( new FileReader( p_file ) );
-            l_editor.read( l_reader, null );
-            l_reader.close();
+            this.readFile( l_editor, p_file );
             l_tab.add( new RTextScrollPane( l_editor ), BorderLayout.CENTER );
 
         }
@@ -110,6 +106,35 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             CLogger.error( l_exception );
             throw new IllegalStateException( "error on file [" + p_file + "] reading" );
         }
+    }
+
+
+    /**
+     * reads data from file into the editor
+     *
+     * @param p_editor editor
+     * @param p_file   input file
+     */
+    protected void readFile( RSyntaxTextArea p_editor, File p_file ) throws IOException
+    {
+        BufferedReader l_reader = new BufferedReader( new FileReader( p_file ) );
+        p_editor.read( l_reader, null );
+        l_reader.close();
+    }
+
+    /**
+     * writes data from editor into file
+     *
+     * @param p_editor editor
+     * @param p_file   output file
+     */
+    protected void writeFile( RSyntaxTextArea p_editor, File p_file ) throws IOException
+    {
+        FileWriter l_filewriter = new FileWriter( p_file );
+        BufferedWriter l_writer = new BufferedWriter( l_filewriter );
+        p_editor.write( l_writer );
+        l_writer.close();
+        l_filewriter.close();
     }
 
 
@@ -124,18 +149,14 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         if (l_component == null)
             return;
 
-
         try
         {
 
             if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_save.png" ) )
-            {
-                FileWriter l_filewriter = new FileWriter( l_item.getRight() );
-                BufferedWriter l_writer = new BufferedWriter( l_filewriter );
-                l_component.getRight().write( l_writer );
-                l_writer.close();
-                l_filewriter.close();
-            }
+                this.writeFile( l_component.getRight(), l_item.getRight() );
+
+            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_reload.png" ) )
+                this.readFile( l_component.getRight(), l_item.getRight() );
 
             if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_delete.png" ) )
             {

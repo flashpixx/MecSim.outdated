@@ -88,7 +88,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             l_tab.add( l_toolbar, BorderLayout.NORTH );
 
 
-            for ( String l_item : new String[]{"sourceeditor_save.png", "sourceeditor_delete.png", "sourceeditor_reload.png"} )
+            for ( String l_item : new String[]{"sourceeditor_save.png", "sourceeditor_delete.png", "sourceeditor_reload.png", "sourceeditor_close.png"} )
             {
                 JButton l_button = new JButton( new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item ) ) ) );
                 l_button.addActionListener( this );
@@ -99,6 +99,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
             this.readFile( l_editor, p_file );
             l_tab.add( new RTextScrollPane( l_editor ), BorderLayout.CENTER );
+
 
         }
         catch ( Exception l_exception )
@@ -138,6 +139,19 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     }
 
 
+    /**
+     * remove all data of a tab from the internal maps
+     *
+     * @param p_tab tab object
+     */
+    protected void removeTabData( JComponent p_tab )
+    {
+        for ( int i = 0; i < p_tab.getComponentCount(); i++ )
+            m_actionobject.remove( p_tab.getComponent( i ) );
+        this.remove( p_tab );
+    }
+
+
     @Override
     public void actionPerformed( ActionEvent e )
     {
@@ -158,15 +172,15 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_reload.png" ) )
                 this.readFile( l_component.getRight(), l_item.getRight() );
 
+            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_close.png" ) )
+                this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft() );
+
             if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_delete.png" ) )
             {
                 if ( !l_item.getRight().delete() )
                     throw new IllegalStateException( "file [" + l_item.getRight().getName() + "] cannot be deleted" );
 
-                JComponent l_tab = m_tabs.get( l_item.getRight() ).getLeft();
-                for(int i=0; i < l_tab.getComponentCount(); i++)
-                    m_actionobject.remove( l_tab.getComponent( i ) );
-                this.remove( l_tab );
+                this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft() );
             }
 
         } catch (Exception l_exception) {

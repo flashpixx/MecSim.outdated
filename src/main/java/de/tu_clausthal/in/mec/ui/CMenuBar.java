@@ -122,7 +122,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * refreshes the dynamic items *
      */
-    private void refreshDynamicItems()
+    public void refreshDynamicItems()
     {
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() ).isActive() );
@@ -136,6 +136,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraphWeight().equals( l_item.getKey().getSuffix() ) );
+
 
         this.MASJasonMenu();
     }
@@ -172,7 +173,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     public void actionPerformed( ActionEvent e )
     {
 
-        // store
+        // refresh menubar reference within the editor window and refresh the data
+        ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).setMenubar( this );
         CPath l_actionpath = m_items.get( (JComponent) e.getSource() );
         this.refreshDynamicItems();
 
@@ -292,7 +294,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
 
-
+        // refresh after any action
         this.refreshDynamicItems();
 
     }

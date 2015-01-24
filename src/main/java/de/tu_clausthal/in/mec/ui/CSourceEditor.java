@@ -55,7 +55,21 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * map with components (buttons), button name, file object
      */
     protected Map<JComponent, ImmutablePair<String, File>> m_actionobject = new HashMap();
+    /**
+     * menubar reference *
+     */
+    protected CMenuBar m_menubar = null;
 
+
+    /**
+     * sets the menubar
+     *
+     * @param p_menubar menubar
+     */
+    public void setMenubar( CMenuBar p_menubar )
+    {
+        m_menubar = p_menubar;
+    }
 
 
     /**
@@ -99,7 +113,6 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
             this.readFile( l_editor, p_file );
             l_tab.add( new RTextScrollPane( l_editor ), BorderLayout.CENTER );
-
 
         }
         catch ( Exception l_exception )
@@ -156,11 +169,11 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     public void actionPerformed( ActionEvent e )
     {
         ImmutablePair<String, File> l_item = m_actionobject.get( e.getSource() );
-        if (l_item == null)
+        if ( l_item == null )
             return;
 
-        ImmutablePair<JComponent,RSyntaxTextArea> l_component = m_tabs.get( l_item.getRight() );
-        if (l_component == null)
+        ImmutablePair<JComponent, RSyntaxTextArea> l_component = m_tabs.get( l_item.getRight() );
+        if ( l_component == null )
             return;
 
         try
@@ -181,9 +194,14 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
                     throw new IllegalStateException( "file [" + l_item.getRight().getName() + "] cannot be deleted" );
 
                 this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft() );
+
+                if ( m_menubar != null )
+                    m_menubar.refreshDynamicItems();
             }
 
-        } catch (Exception l_exception) {
+        }
+        catch ( Exception l_exception )
+        {
             CLogger.error( l_exception );
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }

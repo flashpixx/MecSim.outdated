@@ -235,9 +235,7 @@ public class CPath implements Iterable<CPath>
             @Override
             public CPath next()
             {
-                String[] l_list = new String[m_index + 1];
-                m_path.subList( 0, ++m_index ).toArray( l_list );
-                return new CPath( l_list );
+                return new CPath( CCommon.ColletionToArray( String[].class, m_path.subList( 0, ++m_index ) ) );
             }
         };
     }

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
@@ -83,13 +84,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_items.addRadioItems( "Layer/Activity", l_activity, this );
 
 
-        List<String> l_help = new ArrayList();
+        List<String> l_visibility = new ArrayList();
         for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
             if ( l_item.getValue() instanceof IViewableLayer )
-                l_help.add( l_item.getKey() );
-        String[] l_visibility = new String[l_help.size()];
-        l_help.toArray( l_visibility );
-        m_items.addRadioItems( "Layer/Visibility", l_visibility, this );
+                l_visibility.add( l_item.getKey() );
+        m_items.addRadioItems( "Layer/Visibility", CCommon.ColletionToArray( String[].class, l_visibility ), this );
 
 
         String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
@@ -101,9 +100,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         l_jason.add( null );
         l_jason.add( "new agent" );
         l_jason.add( "check syntax" );
-        String[] l_jasonmenu = new String[l_jason.size()];
-        l_jason.toArray( l_jasonmenu );
-        m_items.addItem( "MAS/Jason", l_jasonmenu, this );
+        m_items.addItem( "MAS/Jason", CCommon.ColletionToArray( String[].class, l_jason ), this );
 
 
         this.refreshDynamicItems();

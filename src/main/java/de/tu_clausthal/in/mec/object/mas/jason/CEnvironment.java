@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.IStepable;
@@ -132,9 +133,7 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 
-        String[] l_return = new String[l_list.size()];
-        l_list.toArray( l_return );
-        return l_return;
+        return CCommon.ColletionToArray( String[].class, l_list );
     }
 
 

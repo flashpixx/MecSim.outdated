@@ -75,7 +75,6 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
      *
      * @param p_bind  test binding object
      * @param p_frame frame object set Jason mindinspector
-     * @see https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
      */
     public CEnvironment( T p_bind, CFrame p_frame )
     {
@@ -85,13 +84,14 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         m_actions = m_literals.addObjectMethods( this );
     }
 
+
     /**
-     * creates an ASL file
+     * creates an agent filename on an agent name
      *
-     * @param p_agentname name of the agent (ASL file)
+     * @param p_agentname agent name
      * @return file object
      */
-    public static File createFile( String p_agentname ) throws IOException, IllegalArgumentException, IllegalStateException
+    public static File getAgentFilename( String p_agentname ) throws IOException
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( "ASL file name need not be empty" );
@@ -104,6 +104,14 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         return l_asl;
     }
 
+
+    /**
+     * get from an agent name the storing file name
+     *
+     * @param p_agentname agent name
+     * @return existing file object
+     * @note must support a agent filename as file with extension and without extension
+     */
     public static File getFilename( String p_agentname )
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
@@ -112,7 +120,13 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
     }
 
-    public static String[] getFilenamelist()
+
+    /**
+     * gets a list of all agents file names
+     *
+     * @return string list with the filenames only
+     */
+    public static String[] getAgentFilenames()
     {
         List<String> l_list = new LinkedList();
         for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
@@ -124,7 +138,13 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
     }
 
 
-    public static void checkSyntax( String p_agentname )
+    /**
+     * checks the syntax of an agent
+     *
+     * @param p_agentname agent name
+     * @note should throw exception on syntax error
+     */
+    public static void checkAgentFileSyntax( String p_agentname )
     {
         try
         {

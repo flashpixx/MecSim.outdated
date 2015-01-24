@@ -97,7 +97,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
 
 
-        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getFilenamelist() ) );
+        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getAgentFilenames() ) );
         l_jason.add( null );
         l_jason.add( "new agent" );
         l_jason.add( "check syntax" );
@@ -155,7 +155,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
 
 
-        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getFilenamelist() ) );
+        List<String> l_jason = new ArrayList( Arrays.asList( CEnvironment.getAgentFilenames() ) );
         l_jason.add( null );
         l_jason.add( "new agent" );
         String[] l_jasonmenu = new String[l_jason.size()];
@@ -268,7 +268,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 String l_name = this.openTextInputDialog( "Jason Agent Creation", "Set a name of the agent (ASL filename)" );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
-                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.createFile( l_name ) );
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getAgentFilename( l_name ) );
 
             }
 
@@ -276,7 +276,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                     if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
-                        CEnvironment.checkSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
+                        CEnvironment.checkAgentFileSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
             }
 
 

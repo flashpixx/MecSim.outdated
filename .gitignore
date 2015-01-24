@@ -4,10 +4,10 @@ target/
 !.gitignore
 !*.md
 !*.java
-!*.xml
-!*.png
-!documentation.doxyfile
-!layout.css
-!footer.htm
 
+!documentation/*.css
+!documentation/*.htm
+!documentation/*.doxyfile
 
+!src/main/resources/**/*.xml
+!src/main/resources/**/*.png

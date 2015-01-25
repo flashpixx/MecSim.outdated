@@ -38,7 +38,7 @@ import java.io.*;
  *
  * @todo add multilanguage support - use XML structur of the file http://docs.oracle.com/javase/8/docs/api/java/util/ResourceBundle.html
  * / http://tutorials.jenkov.com/java-internationalization/resourcebundle.html / http://www.java-blog-buch.de/d-mehrsprachigkeit-mit-bundles-in-java/
- * / https://www.jetbrains.com/idea/help/extracting-hard-coded-string-literals.html
+ * / https://www.jetbrains.com/idea/help/extracting-hard-coded-string-literals.html / http://stackoverflow.com/questions/2451049/do-resource-bundles-in-java-support-runtime-string-substitution
  */
 public class CConfiguration
 {
@@ -257,18 +257,36 @@ public class CConfiguration
         /**
          * geo map for graph
          */
-        //@UiSection("Data Source / Download")
-        //@UiLabel("")
         private RoutingMap RoutingMap = new RoutingMap();
         /**
          * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
          * algorithm)
          */
         private String RoutingAlgorithm = "astarbi";
+        /**
+         * language code
+         */
+        private String Language = "en";
+
+
+        @UiSection("General")
+        @UiLabel("UI language")
+        @UiLookup({"en", "de"})
+        @NotEmpty
+        public String getLanguage()
+        {
+            return Language;
+        }
+
+        public void setLanguage( String p_value )
+        {
+            Language = p_value;
+        }
 
 
         @UiSection("Traffic Graph")
-        @UiLabel("Cell size of the graph sampling (in metre)")
+        @UiComesAfter("language")
+        @UiLabel("Cell Size (in metre)")
         @Min(1)
         public int getCellsampling()
         {
@@ -280,7 +298,8 @@ public class CConfiguration
             CellSampling = p_value;
         }
 
-        @UiComesAfter("Cellsampling")
+
+        @UiComesAfter("cellsampling")
         @UiLabel("Routing algorithm")
         @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})
         @NotEmpty
@@ -294,7 +313,9 @@ public class CConfiguration
             RoutingAlgorithm = p_value;
         }
 
-        @UiComesAfter("Routingalgorithm")
+
+        @UiSection("Openstreetmap")
+        @UiComesAfter("routingalgorithm")
         @UiLabel("")
         public RoutingMap getRoutingmap()
         {
@@ -305,6 +326,7 @@ public class CConfiguration
         {
             RoutingMap = p_value;
         }
+
 
         @UiHidden
         public GeoPosition getViewpoint()
@@ -388,6 +410,7 @@ public class CConfiguration
             {
                 name = p_value;
             }
+
 
             @UiLabel("Download URL of the OpenStreetMap PBF file")
             public String getUrl()

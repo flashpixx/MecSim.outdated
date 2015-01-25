@@ -36,8 +36,9 @@ import java.io.*;
 /**
  * singleton class for configuration with a Json file
  *
- * @todo add multilanguage support http://docs.oracle.com/javase/8/docs/api/java/util/ResourceBundle.html /
- * http://tutorials.jenkov.com/java-internationalization/resourcebundle.html / http://www.java-blog-buch.de/d-mehrsprachigkeit-mit-bundles-in-java/
+ * @todo add multilanguage support - use XML structur of the file http://docs.oracle.com/javase/8/docs/api/java/util/ResourceBundle.html
+ * / http://tutorials.jenkov.com/java-internationalization/resourcebundle.html / http://www.java-blog-buch.de/d-mehrsprachigkeit-mit-bundles-in-java/
+ * / https://www.jetbrains.com/idea/help/extracting-hard-coded-string-literals.html
  */
 public class CConfiguration
 {

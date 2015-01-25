@@ -181,26 +181,47 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( l_actionpath == null )
             return;
 
-
         // file / simulation menu
         try
         {
 
             if ( l_actionpath.equals( "File/Screenshot" ) )
+            {
                 this.screenshot();
+                return;
+            }
             if ( l_actionpath.equals( "File/Load" ) )
+            {
                 this.load();
+                return;
+            }
             if ( l_actionpath.equals( "File/Save" ) )
+            {
                 this.save();
+                return;
+            }
             if ( l_actionpath.equals( "File/Preferences" ) )
+            {
                 this.preferences();
+                return;
+            }
 
             if ( l_actionpath.equals( "Simulation/Start" ) )
+            {
                 CSimulation.getInstance().start();
+                return;
+            }
             if ( l_actionpath.equals( "Simulation/Stop" ) )
+            {
                 CSimulation.getInstance().stop();
+                return;
+            }
             if ( l_actionpath.equals( "Simulation/Reset" ) )
+            {
                 CSimulation.getInstance().reset();
+                return;
+            }
+
         }
         catch ( Exception l_exception )
         {
@@ -222,7 +243,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 {
                     JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
                 }
-                break;
+                return;
             }
 
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
@@ -230,6 +251,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
                 l_layer.setVisible( !l_layer.isVisible() );
+                return;
             }
 
 
@@ -246,7 +268,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 {
                     JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
                 }
-                break;
+                return;
             }
 
 
@@ -263,7 +285,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 {
                     JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
                 }
-                break;
+                return;
             }
 
         // MAS Jason elements
@@ -274,7 +296,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 String l_name = this.openTextInputDialog( "Jason Agent Creation", "Set a name of the agent (ASL filename)" );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getAgentFilename( l_name ) );
-
+                this.refreshDynamicItems();
+                return;
             }
 
             if ( l_actionpath.equals( "MAS/Jason/check syntax" ) )
@@ -282,14 +305,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                     if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
                         CEnvironment.checkAgentFileSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
+                return;
             }
-
 
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                 if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
                 {
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
-                    break;
+                    return;
                 }
 
         }
@@ -297,9 +320,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
         }
-
-        // refresh after any action
-        this.refreshDynamicItems();
 
     }
 

@@ -235,6 +235,7 @@ public class CSimulation
      * stores the simulation in an output stream
      *
      * @param p_stream output stream
+     * @todo store MAS agent files also within the file (name and file content are needed)
      */
     public void store( ObjectOutputStream p_stream ) throws Exception
     {
@@ -260,6 +261,8 @@ public class CSimulation
      * loads the simulation from an input stream
      *
      * @param p_stream input stream
+     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
+     * equal overwrite the file, otherwise rename existing file and create a new one with the store content
      */
     public void load( ObjectInputStream p_stream ) throws Exception
     {

@@ -48,6 +48,7 @@ public class CAgentMessage implements IMessage<Message>
 
     /**
      * ctor
+     *
      * @param p_message Jason message
      */
     public CAgentMessage( Message p_message )

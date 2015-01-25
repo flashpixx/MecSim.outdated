@@ -60,7 +60,8 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     protected Set<ActionListener> m_listener = new HashSet();
 
 
-    /** adds an action listener
+    /**
+     * adds an action listener
      *
      * @param p_listener action listener
      */
@@ -163,7 +164,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     /**
      * remove all data of a tab from the internal maps
      *
-     * @param p_tab tab object
+     * @param p_tab  tab object
      * @param p_file file object
      */
     protected void removeTabData( JComponent p_tab, File p_file )

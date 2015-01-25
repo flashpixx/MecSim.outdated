@@ -165,7 +165,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void throwSimulationRunningException()
     {
         if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException( "simulation is running" );
+            throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
     }
 
 
@@ -225,7 +225,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         }
         catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
 
 
@@ -241,7 +241,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
                 catch ( Exception l_exception )
                 {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
                 }
                 return;
             }
@@ -266,7 +266,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
                 catch ( Exception l_exception )
                 {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
                 }
                 return;
             }
@@ -283,7 +283,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
                 catch ( Exception l_exception )
                 {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
                 }
                 return;
             }
@@ -293,7 +293,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             if ( l_actionpath.equals( "MAS/Jason/new agent" ) )
             {
-                String l_name = this.openTextInputDialog( "Jason Agent Creation", "Set a name of the agent (ASL filename)" );
+                String l_name = this.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getAgentFilename( l_name ) );
                 this.refreshDynamicItems();
@@ -318,7 +318,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         }
         catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
 
     }

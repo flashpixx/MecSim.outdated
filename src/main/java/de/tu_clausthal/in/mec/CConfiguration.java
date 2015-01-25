@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
  * @todo add multilanguage support - use XML structur of the file http://docs.oracle.com/javase/8/docs/api/java/util/ResourceBundle.html
  * / http://tutorials.jenkov.com/java-internationalization/resourcebundle.html / http://www.java-blog-buch.de/d-mehrsprachigkeit-mit-bundles-in-java/
  * / https://www.jetbrains.com/idea/help/extracting-hard-coded-string-literals.html / http://stackoverflow.com/questions/2451049/do-resource-bundles-in-java-support-runtime-string-substitution
- * / http://www.tutorialspoint.com/java/util/resourcebundle_getbundle_control.htm
+ * / http://www.tutorialspoint.com/java/util/resourcebundle_getbundle_control.htm / http://www.russellbeattie.com/blog/1007850
  */
 public class CConfiguration
 {

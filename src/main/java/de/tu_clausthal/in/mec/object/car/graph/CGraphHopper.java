@@ -30,6 +30,7 @@ import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.weights.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -87,12 +88,12 @@ public class CGraphHopper extends GraphHopper
     {
         // define graph location (use configuration)
         File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
-        CLogger.out( "try to load graph from [" + l_graphlocation.getAbsolutePath() + "]" );
+        CLogger.out( CCommon.getResouceString( this, "path", l_graphlocation.getAbsolutePath() ) );
 
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
-            CLogger.info( "graph cannot be found" );
+            CLogger.info( CCommon.getResouceString( this, "notloaded") );
             File l_osm = this.downloadOSMData();
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
@@ -103,7 +104,8 @@ public class CGraphHopper extends GraphHopper
             l_osm.delete();
         }
 
-        CLogger.out( "graph is loaded successfully" );
+
+        CLogger.out( CCommon.getResouceString( this, "loaded" ) );
     }
 
 
@@ -295,7 +297,7 @@ public class CGraphHopper extends GraphHopper
             File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
             URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
 
-            CLogger.out( "download OSM map from [" + l_url + "] to [" + l_output + "]" );
+            CLogger.out( CCommon.getResouceString( this, "download", l_url, l_output ) );
 
             ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
             FileOutputStream l_stream = new FileOutputStream( l_output );

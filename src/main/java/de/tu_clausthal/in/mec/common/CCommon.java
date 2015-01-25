@@ -23,7 +23,10 @@
 
 package de.tu_clausthal.in.mec.common;
 
+import de.tu_clausthal.in.mec.CConfiguration;
+
 import java.lang.reflect.Array;
+import java.text.MessageFormat;
 import java.util.Collection;
 
 
@@ -45,6 +48,17 @@ public class CCommon
         T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
         p_collection.toArray( l_return );
         return l_return;
+    }
+
+    /** returns a string of the resouce file
+     *
+     * @param p_object object for label
+     * @param p_label label name of the object
+     * @return resource string
+     */
+    public static String getResouceString( Object p_object, String p_label, Object... p_parameter )
+    {
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getSimpleName().toLowerCase() + "." + p_label.toLowerCase() ), p_parameter );
     }
 
 }

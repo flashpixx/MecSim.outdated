@@ -31,6 +31,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.*;
 
 import java.io.*;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 
@@ -182,10 +183,15 @@ public class CConfiguration
      *
      * @return resource bundle
      */
-    public ResourceBundle getLanguageBundle()
+    public ResourceBundle getResourceBundle()
     {
+        switch (m_data.Language)
+        {
+            case "en" : Locale.setDefault( Locale.ENGLISH );    break;
+            case "de" : Locale.setDefault( Locale.GERMANY );    break;
+        }
 
-        return null;
+        return ResourceBundle.getBundle( "language.locals" );
     }
 
 

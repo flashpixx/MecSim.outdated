@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CNode;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
@@ -53,6 +54,12 @@ public class CManager implements IVoidStepable
      */
     public synchronized void register( CPath p_path, IParticipant p_receiver )
     {
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
+        {
+            CLogger.error( "receiver [" + p_receiver + "] cannot unregister at path [" + p_path + "]" );
+            return;
+        }
+
         CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
 
         if ( l_node.isDataNull() )
@@ -70,8 +77,11 @@ public class CManager implements IVoidStepable
      */
     public synchronized void unregister( CPath p_path, IParticipant p_receiver )
     {
-        if ( !m_root.pathexist( p_path ) )
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathexist( p_path ) ) )
+        {
+            CLogger.error( "receiver [" + p_receiver + "] cannot unregister at path [" + p_path + "]" );
             return;
+        }
 
         CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
         l_node.getData().getLeft().remove( p_receiver );
@@ -81,17 +91,26 @@ public class CManager implements IVoidStepable
     /**
      * pushs a message to the queue
      *
-     * @param p_path    of objects
+     * @param p_path    receiver
      * @param p_message message
      */
     public synchronized void pushMessage( CPath p_path, IMessage p_message )
     {
-        if ( !m_root.pathexist( p_path ) )
+        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) || ( !m_root.pathexist( p_path ) ) )
             return;
+
+        if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( ( p_message.getSource().getPath().contains( p_path.getPath() ) ) && ( !p_message.getSource().getPath().equals( p_path ) ) ) )
+        {
+            CLogger.error( "messager [" + p_message + " / " + p_path + "] is not allowed, because source is empty or receiver is part of source" );
+            return;
+        }
 
         // check time to live value
         if ( p_message.ttl() < 0 )
+        {
+            CLogger.info( "messager [" + p_message + "] time-to-live is reached - removed" );
             return;
+        }
 
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.traverseto( p_path, false ).getSubData() )
             l_item.getRight().add( p_message );

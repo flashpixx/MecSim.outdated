@@ -29,14 +29,27 @@ import jason.asSemantics.Message;
 
 
 /**
- *
+ * class to encapsulate a Jason message for the event manager
  */
 public class CAgentMessage implements IMessage<Message>
 {
+
+    /**
+     * message data
+     *
+     * @note Jason message data
+     */
     private Message m_data = null;
-    private int m_ttl = 50;
+    /**
+     * ttl of the message *
+     */
+    private int m_ttl = 10;
 
 
+    /**
+     * ctor
+     * @param p_message Jason message
+     */
     public CAgentMessage( Message p_message )
     {
         if ( p_message == null )

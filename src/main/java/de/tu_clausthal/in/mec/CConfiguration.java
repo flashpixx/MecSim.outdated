@@ -31,8 +31,9 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.*;
 
 import java.io.*;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
 
 
 /**
@@ -40,8 +41,9 @@ import java.util.ResourceBundle;
  *
  * @todo add multilanguage support - use XML structur of the file http://docs.oracle.com/javase/8/docs/api/java/util/ResourceBundle.html
  * / http://tutorials.jenkov.com/java-internationalization/resourcebundle.html / http://www.java-blog-buch.de/d-mehrsprachigkeit-mit-bundles-in-java/
- * / https://www.jetbrains.com/idea/help/extracting-hard-coded-string-literals.html / http://stackoverflow.com/questions/2451049/do-resource-bundles-in-java-support-runtime-string-substitution
- * / http://www.tutorialspoint.com/java/util/resourcebundle_getbundle_control.htm / http://www.russellbeattie.com/blog/1007850
+ * / https://www.jetbrains.com/idea/help/extracting-hard-coded-string-literals.html /
+ * http://stackoverflow.com/questions/2451049/do-resource-bundles-in-java-support-runtime-string-substitution /
+ * http://www.tutorialspoint.com/java/util/resourcebundle_getbundle_control.htm / http://www.russellbeattie.com/blog/1007850
  */
 public class CConfiguration
 {
@@ -66,6 +68,10 @@ public class CConfiguration
      * directory of the agent (MAS) files
      */
     private File m_masdir = new File( m_dir + File.separator + "mas" );
+    /**
+     * UTF-8 property reader
+     */
+    private ResourceBundle.Control m_reader = new UTF8Control();
 
 
     /**
@@ -185,13 +191,18 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        switch (m_data.Language)
-        {
-            case "en" : Locale.setDefault( Locale.ENGLISH );    break;
-            case "de" : Locale.setDefault( Locale.GERMANY );    break;
-        }
+        if ( m_data.Language != null )
+            switch ( m_data.Language )
+            {
+                case "en":
+                    Locale.setDefault( Locale.ENGLISH );
+                    break;
+                case "de":
+                    Locale.setDefault( Locale.GERMANY );
+                    break;
+            }
 
-        return ResourceBundle.getBundle( "language.locals" );
+        return ResourceBundle.getBundle( "language.locals", m_reader );
     }
 
 
@@ -445,6 +456,56 @@ public class CConfiguration
             }
         }
 
+    }
+
+
+    /**
+     * private class to read UTF-8 encoded property file
+     *
+     * @note Java default encoding for property files is ISO-Latin-1
+     */
+    private class UTF8Control extends ResourceBundle.Control
+    {
+
+        public ResourceBundle newBundle( String baseName, Locale locale, String format, ClassLoader loader,
+                                         boolean reload
+        ) throws IllegalAccessException, InstantiationException, IOException
+        {
+
+            String bundleName = toBundleName( baseName, locale );
+            String resourceName = toResourceName( bundleName, "properties" );
+            ResourceBundle bundle = null;
+            InputStream stream = null;
+            if ( reload )
+            {
+                URL url = loader.getResource( resourceName );
+                if ( url != null )
+                {
+                    URLConnection connection = url.openConnection();
+                    if ( connection != null )
+                    {
+                        connection.setUseCaches( false );
+                        stream = connection.getInputStream();
+                    }
+                }
+            }
+            else
+            {
+                stream = loader.getResourceAsStream( resourceName );
+            }
+            if ( stream != null )
+            {
+                try
+                {
+                    bundle = new PropertyResourceBundle( new InputStreamReader( stream, "UTF-8" ) );
+                }
+                finally
+                {
+                    stream.close();
+                }
+            }
+            return bundle;
+        }
     }
 
 }

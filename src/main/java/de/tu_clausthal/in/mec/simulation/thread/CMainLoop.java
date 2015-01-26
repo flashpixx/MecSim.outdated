@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.simulation.thread;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.simulation.*;
@@ -77,14 +78,14 @@ public class CMainLoop implements Runnable
         if ( p_object instanceof IReturnStepable )
             return new CReturnStepable( p_iteration, (IReturnStepable) p_object, p_layer );
 
-        throw new IllegalArgumentException( "stepable object need not to be null" );
+        throw new IllegalArgumentException( CCommon.getResouceString( CMainLoop.class, "notstepable" ) );
     }
 
 
     @Override
     public void run()
     {
-        CLogger.info( "thread starts working" );
+        CLogger.info( CCommon.getResouceString( this, "start" ) );
 
         Collection<Callable<Object>> l_tasks = new LinkedList();
 
@@ -139,7 +140,7 @@ public class CMainLoop implements Runnable
         }
 
         m_pause = true;
-        CLogger.info( "thread stops working" );
+        CLogger.info( CCommon.getResouceString( this, "stop" ) );
     }
 
 
@@ -183,7 +184,7 @@ public class CMainLoop implements Runnable
     public void resume( int p_steps )
     {
         if ( p_steps < 1 )
-            throw new IllegalArgumentException( "step number must be greater than zero" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "stepnumber" ) );
 
         m_shutdownstep = m_simulationcount + p_steps;
         m_pause = false;
@@ -195,9 +196,9 @@ public class CMainLoop implements Runnable
     public void reset()
     {
         if ( !m_pause )
-            throw new IllegalStateException( "simulation reset can run only on pause" );
+            throw new IllegalStateException( CCommon.getResouceString( this, "pause" ) );
 
-        CLogger.info( "thread reset" );
+        CLogger.info( CCommon.getResouceString( this, "reset" ) );
 
         try
         {

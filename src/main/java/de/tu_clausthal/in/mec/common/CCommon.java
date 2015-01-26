@@ -61,4 +61,16 @@ public class CCommon
         return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getSimpleName().toLowerCase() + "." + p_label.toLowerCase() ), p_parameter );
     }
 
+    /**
+     * returns a string of the resouce file
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @return resource string
+     */
+    public static String getResouceString( Class p_class, String p_label, Object... p_parameter )
+    {
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getSimpleName().toLowerCase() + "." + p_label.toLowerCase() ), p_parameter );
+    }
+
 }

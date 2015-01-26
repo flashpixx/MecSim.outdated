@@ -25,22 +25,31 @@ package de.tu_clausthal.in.mec.ui;
 
 
 import javax.swing.*;
+import java.awt.*;
 
 
 /**
  * text console to show log messages within the UI
  */
-public class CConsole extends JScrollPane
+public class CConsole extends JPanel
 {
 
-    protected JEditorPane m_pane = new JEditorPane();
+    protected JEditorPane m_output = new JEditorPane();
+
 
 
     public CConsole()
     {
-        this.add( m_pane );
-        this.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
-        this.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+        super( new BorderLayout() );
+
+        m_output.setEditable( false );
+        //m_output.setBackground( UIManager.getDefaults().getColor( "TextPane.background" ) );
+
+        JScrollPane l_scroll = new JScrollPane( m_output );
+        l_scroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
+        l_scroll.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+
+        this.add( l_scroll, BorderLayout.CENTER );
     }
 
 
@@ -53,7 +62,7 @@ public class CConsole extends JScrollPane
     {
         try
         {
-            m_pane.getDocument().insertString( m_pane.getDocument().getLength(), p_object.toString() + "\n", null );
+            m_output.getDocument().insertString( m_output.getDocument().getLength(), p_object.toString() + "\n", null );
         }
         catch ( Exception l_exception )
         {
@@ -66,7 +75,7 @@ public class CConsole extends JScrollPane
      */
     public void clear()
     {
-        m_pane.setText( null );
+        m_output.setText( null );
     }
 
 }

@@ -40,6 +40,7 @@ import org.jxmapviewer.painter.Painter;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -61,9 +62,13 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
      */
     protected CLiteralStorage m_literals = new CLiteralStorage();
     /**
-     * map with actions of the environment *
+     * map of all actions which can be called by the agents *
      */
-    protected Map<String, Pair<Method, Object>> m_actions = new HashMap();
+    protected Map<String, Pair<Method, Object>> m_methods = new HashMap();
+    /**
+     * field list of object fields that converted to belief-base data
+     */
+    protected Map<String, Pair<Field, Object>> m_fields = new HashMap();
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
@@ -78,10 +83,9 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
     public CEnvironment( CFrame p_frame )
     {
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
+        this.addObjectMethods( this );
 
-        m_actions = m_literals.addObjectMethods( this );
     }
-
 
     /**
      * creates an agent filename on an agent name
@@ -102,7 +106,6 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         return l_asl;
     }
 
-
     /**
      * get from an agent name the storing file name
      *
@@ -118,7 +121,6 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
     }
 
-
     /**
      * gets a list of all agents file names
      *
@@ -132,7 +134,6 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
 
         return CCommon.ColletionToArray( String[].class, l_list );
     }
-
 
     /**
      * checks the syntax of an agent
@@ -154,16 +155,26 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         }
     }
 
-
     /**
-     * register object methods
+     * adds all object fields to the agent, fields are converted to literals by means of their data type
      *
      * @param p_object object
      */
-    public void registerObjectMethods( Object p_object )
+    public void addObjectFields( Object p_object )
     {
-        m_actions.putAll( m_literals.addObjectMethods( p_object ) );
+        m_fields.putAll( m_literals.addObjectFields( p_object ) );
     }
+
+    /**
+     * adds all object methods to the agent, methods are converted to internal actions
+     *
+     * @param p_object object
+     */
+    public void addObjectMethods( Object p_object )
+    {
+        m_methods.putAll( m_literals.addObjectMethods( p_object ) );
+    }
+
 
     @Override
     public void resetData()
@@ -180,13 +191,9 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
 
         try
         {
-
-
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
-            CAgent<T> x = new CAgent( "agent", new CTestAgent() );
-            m_data.add( x );
-
+            m_data.add( new CAgent( "agent", new CTestAgent() ) );
 
             if ( m_data.size() > 0 )
                 m_mindinspector.load( "http://localhost:3272" );

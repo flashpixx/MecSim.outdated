@@ -64,6 +64,7 @@ public class CBootstrap
         p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.WEST, 0.8 );
         p_frame.addWidget( "Editor", new CSourceEditor() );
+        p_frame.addWidget( "Console", new CConsole() );
     }
 
 

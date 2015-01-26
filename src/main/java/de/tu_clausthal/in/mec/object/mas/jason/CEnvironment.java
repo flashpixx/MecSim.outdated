@@ -29,8 +29,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.ui.CBrowser;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.ui.*;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
 import jason.runtime.Settings;
@@ -83,14 +83,6 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
     {
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
         this.addObjectMethods( this );
-        try
-        {
-            m_data.add( new CAgent<T>( "I'm the first", "agent" ) );
-            m_data.add( new CAgent<T>( "I'm the first", "agent" ) );
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     /**
@@ -190,6 +182,7 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
         m_data.clear();
     }
 
+
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
@@ -203,8 +196,7 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
             // to bind the browser after the first agent exists
             m_data.add( new CAgent( "agent", new CTestAgent() ) );
 
-            if ( m_data.size() > 0 )
-                m_mindinspector.load( "http://localhost:3272" );
+            ( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).append( "xxx" );
 
         }
         catch ( Exception l_exception )
@@ -212,5 +204,8 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
             CLogger.error( l_exception );
         }
 
+
+        if ( m_data.size() > 0 )
+            m_mindinspector.load( "http://localhost:3272" );
     }
 }

@@ -21,17 +21,15 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas.jason;
+package de.tu_clausthal.in.mec.object.mas;
+
+import de.tu_clausthal.in.mec.simulation.IReturnStepable;
+
 
 /**
- * test class for the agent layer
+ * interface of an agent
  */
-public class CTestAgent
+public interface IReturnAgent extends IAgent, IReturnStepable
 {
-
-    public int a = 1;
-    public String name = "foo";
-    private int x = 123;
-    private String xxx = "bar";
 
 }

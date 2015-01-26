@@ -21,17 +21,37 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas.jason;
+package de.tu_clausthal.in.mec.object.mas;
+
+
+import de.tu_clausthal.in.mec.simulation.event.IReceiver;
+import org.jxmapviewer.painter.Painter;
+
 
 /**
- * test class for the agent layer
+ * interface of an agent
  */
-public class CTestAgent
+public interface IAgent extends Painter, IReceiver
 {
 
-    public int a = 1;
-    public String name = "foo";
-    private int x = 123;
-    private String xxx = "bar";
+    /**
+     * release agent call *
+     */
+    public void release();
+
+    /**
+     * adds all object fields to the agent, fields are converted on their data type
+     *
+     * @param p_object object
+     */
+    public void addObjectFields( Object p_object );
+
+
+    /**
+     * adds all object methods to the agent, methods are converted to internal call
+     *
+     * @param p_object object
+     */
+    public void addObjectMethods( Object p_object );
 
 }

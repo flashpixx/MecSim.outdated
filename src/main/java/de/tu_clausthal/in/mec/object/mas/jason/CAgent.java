@@ -24,17 +24,14 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IStepable;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
-import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -49,7 +46,7 @@ import java.util.*;
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
  * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
-public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IReceiver
+public class CAgent<T> implements IVoidAgent
 {
 
     /**
@@ -104,7 +101,7 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      */
     public CAgent( String p_asl ) throws JasonException
     {
-        this.initialize( this.getUniqueName(), p_asl, null );
+        this.initialize( this.getName(), p_asl, null );
     }
 
     /**
@@ -115,7 +112,7 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      */
     public CAgent( String p_asl, T p_bind ) throws JasonException
     {
-        this.initialize( this.getUniqueName(), p_asl, p_bind );
+        this.initialize( this.getName(), p_asl, p_bind );
     }
 
 
@@ -124,7 +121,7 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      *
      * @return string with name
      */
-    protected String getUniqueName()
+    public String getName()
     {
         return this.getClass().getSimpleName() + "@" + this.hashCode();
     }
@@ -154,21 +151,20 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     }
 
 
-    /**
-     * adds all object fields to the agent, fields are converted to literals by means of their data type
-     *
-     * @param p_object object
-     */
+    @Override
+    public void release()
+    {
+        MindInspectorWeb.get().removeAg( m_agent );
+    }
+
+
+    @Override
     public void addObjectFields( Object p_object )
     {
         m_fields.putAll( m_literals.addObjectFields( p_object ) );
     }
 
-    /**
-     * adds all object methods to the agent, methods are converted to internal actions
-     *
-     * @param p_object object
-     */
+    @Override
     public void addObjectMethods( Object p_object )
     {
         m_methods.putAll( m_literals.addObjectMethods( p_object ) );

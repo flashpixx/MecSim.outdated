@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
@@ -36,7 +35,6 @@ import jason.asSemantics.Agent;
 import jason.runtime.Settings;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jxmapviewer.painter.Painter;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +52,7 @@ import java.util.*;
  * of disabeling / modifiying - https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAgent<T>>
+public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
 
     /**
@@ -86,6 +84,7 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         this.addObjectMethods( this );
         try
         {
+            m_data.add( new CAgent<T>( "I'm the first", "agent" ) );
             m_data.add( new CAgent<T>( "I'm the first", "agent" ) );
         }
         catch ( Exception l_exception )

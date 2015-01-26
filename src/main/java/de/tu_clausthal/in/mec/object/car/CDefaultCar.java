@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
@@ -260,14 +261,14 @@ public class CDefaultCar extends IInspector implements ICar
     {
         Map<String, Object> l_map = super.inspect();
 
-        l_map.put( "current speed", m_speed );
-        l_map.put( "maximum speed", m_maxSpeed );
-        l_map.put( "acceleration", m_acceleration );
-        l_map.put( "deceleration", m_deceleration );
-        l_map.put( "start position", m_StartPosition );
-        l_map.put( "end position", m_EndPosition );
-        l_map.put( "street name", m_route.get( m_routeindex ).getLeft().getName() );
-        l_map.put( "current geoposition", this.getGeoposition() );
+        l_map.put( CCommon.getResouceString( this, "currentspeed" ), m_speed );
+        l_map.put( CCommon.getResouceString( this, "maximumspeed" ), m_maxSpeed );
+        l_map.put( CCommon.getResouceString( this, "acceleration" ), m_acceleration );
+        l_map.put( CCommon.getResouceString( this, "deceleration" ), m_deceleration );
+        l_map.put( CCommon.getResouceString( this, "startposition" ), m_StartPosition );
+        l_map.put( CCommon.getResouceString( this, "endposition" ), m_EndPosition );
+        l_map.put( CCommon.getResouceString( this, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
+        l_map.put( CCommon.getResouceString( this, "currentgeoposition" ), this.getGeoposition() );
 
         return l_map;
     }

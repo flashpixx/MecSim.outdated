@@ -58,7 +58,7 @@ public class CCommon
      */
     public static String getResouceString( Object p_object, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getSimpleName().toLowerCase() + "." + p_label.toLowerCase() ), p_parameter );
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getSimpleName().toLowerCase() + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
     /**
@@ -70,7 +70,7 @@ public class CCommon
      */
     public static String getResouceString( Class p_class, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getSimpleName().toLowerCase() + "." + p_label.toLowerCase() ), p_parameter );
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getSimpleName().toLowerCase() + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
 }

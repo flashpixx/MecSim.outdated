@@ -32,7 +32,6 @@ import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
-import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.runtime.Settings;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -188,7 +187,6 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
             CAgent<T> x = new CAgent( "agent", new CTestAgent() );
             m_data.add( x );
 
-            MindInspectorWeb.get().registerAg( x.getAgent() );
 
             if ( m_data.size() > 0 )
                 m_mindinspector.load( "http://localhost:3272" );

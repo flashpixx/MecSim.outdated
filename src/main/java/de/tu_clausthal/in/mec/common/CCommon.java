@@ -50,10 +50,11 @@ public class CCommon
         return l_return;
     }
 
-    /** returns a string of the resouce file
+    /**
+     * returns a string of the resouce file
      *
      * @param p_object object for label
-     * @param p_label label name of the object
+     * @param p_label  label name of the object
      * @return resource string
      */
     public static String getResouceString( Object p_object, String p_label, Object... p_parameter )

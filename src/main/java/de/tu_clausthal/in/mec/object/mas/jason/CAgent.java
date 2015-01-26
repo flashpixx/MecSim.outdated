@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.JasonException;
 import jason.architecture.AgArch;
+import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
@@ -58,21 +59,29 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * map of all actions which can be called by the agents *
      */
-    protected Map<String, Pair<Method, Field>> m_action = new HashMap();
-
+    protected Map<String, Pair<Method, Object>> m_methods = new HashMap();
+    /**
+     * field list of object fields that converted to belief-base data
+     */
+    protected Map<String, Pair<Field, Object>> m_fields = new HashMap();
+    /**
+     * Jason interal agent architecture to run the reasoning cycle
+     */
     protected CAgentArchitecture m_agentarchitecture = new CAgentArchitecture();
-
+    /**
+     * Jason agent object
+     */
     protected Agent m_agent = null;
 
+
     /**
-     * source object that is connect with the agents
+     * ctor
+     *
+     * @param p_name agent name (ASL file)
      */
-    protected T m_bind = null;
-
-
     public CAgent( String p_name ) throws JasonException
     {
-        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
+        this.initialize( p_name, null );
     }
 
     /**
@@ -83,26 +92,46 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      */
     public CAgent( String p_name, T p_bind ) throws JasonException
     {
-        m_bind = p_bind;
-        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
-    }
-
-
-    public Agent getAgent()
-    {
-        return m_agent;
+        this.initialize( p_name, p_bind );
     }
 
 
     /**
-     * returns the literal object of the agent
+     * initialize the object data
      *
-     * @return literal object
+     * @param p_name agent name (ASL file)
+     * @param p_bind object that should be bind with the agent
      */
-    public CLiteralStorage getLiteralStorage()
+    protected void initialize( String p_name, T p_bind ) throws JasonException
     {
-        return m_literals;
+        this.addObjectFields( p_bind );
+        //this.addObjectMethods( p_bind );
+
+        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
+        MindInspectorWeb.get().registerAg( m_agent );
     }
+
+
+    /**
+     * adds all object fields to the agent, fields are converted to literals by means of their data type
+     *
+     * @param p_object object
+     */
+    public void addObjectFields( Object p_object )
+    {
+        m_fields.putAll( m_literals.addObjectFields( p_object ) );
+    }
+
+    /**
+     * adds all object methods to the agent, methods are converted to internal actions
+     *
+     * @param p_object object
+     */
+    public void addObjectMethods( Object p_object )
+    {
+        m_methods.putAll( m_literals.addObjectMethods( p_object ) );
+    }
+
 
     @Override
     public void receiveMessage( Set<IMessage> p_messages )
@@ -113,15 +142,9 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        m_literals.addObjectFields( m_bind );
         for ( Literal l_literal : m_literals.get() )
-        {
-            System.out.println( l_literal );
             m_agent.addBel( l_literal );
-        }
 
-
-        //m_agent.addBel( ASSyntax.createLiteral( "blubnum", ASSyntax.createNumber( 5 ) ) );
         m_agentarchitecture.cycle( p_currentstep );
     }
 
@@ -141,8 +164,8 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture
      *
-     * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class
-     * to create an own cycle call
+     * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
+     * create an own cycle call
      */
     private class CAgentArchitecture extends AgArch
     {

@@ -93,7 +93,7 @@ public class CGraphHopper extends GraphHopper
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
-            CLogger.info( CCommon.getResouceString( this, "notloaded") );
+            CLogger.info( CCommon.getResouceString( this, "notloaded" ) );
             File l_osm = this.downloadOSMData();
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );

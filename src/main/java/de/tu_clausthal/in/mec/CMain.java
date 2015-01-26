@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import org.apache.commons.cli.*;
@@ -49,12 +50,12 @@ public class CMain
 
         // --- define CLI options --------------------------------------------------------------------------------------
         Options l_clioptions = new Options();
-        l_clioptions.addOption( "help", false, "shows this help" );
-        l_clioptions.addOption( "configuration", true, "configuration directory" );
-        l_clioptions.addOption( "nogui", true, "disables the GUI and loads the stored file for simulating" );
-        l_clioptions.addOption( "step", true, "number of running simulation steps (must use in combination with 'nogui')" );
-        l_clioptions.addOption( "loglevel", true, "level of the logger" );
-        l_clioptions.addOption( "logfile", true, "logfile (default: mecsim-<startup datetime>.txt)" );
+        l_clioptions.addOption( "help", false, CCommon.getResouceString( CMain.class, "help" ) );
+        l_clioptions.addOption( "configuration", true, CCommon.getResouceString( CMain.class, "config" ) );
+        l_clioptions.addOption( "nogui", true, CCommon.getResouceString( CMain.class, "nogui" ) );
+        l_clioptions.addOption( "step", true, CCommon.getResouceString( CMain.class, "step" ) );
+        l_clioptions.addOption( "loglevel", true, CCommon.getResouceString( CMain.class, "loglevel" ) );
+        l_clioptions.addOption( "logfile", true, CCommon.getResouceString( CMain.class, "logfile" ) );
 
         CommandLineParser l_parser = new BasicParser();
         CommandLine l_cli = null;
@@ -64,7 +65,7 @@ public class CMain
         }
         catch ( Exception l_exception )
         {
-            System.out.println( "argument parse error" );
+            System.out.println( CCommon.getResouceString( CMain.class, "parseerror" ) );
             System.exit( -1 );
         }
 
@@ -109,7 +110,7 @@ public class CMain
             try
             {
                 if ( ( !l_cli.hasOption( "step" ) ) )
-                    throw new IllegalAccessException( "step value is not set" );
+                    throw new IllegalAccessException( CCommon.getResouceString( CMain.class, "stepnotset" ) );
 
                 FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
                 ObjectInputStream l_input = new ObjectInputStream( l_stream );
@@ -123,7 +124,7 @@ public class CMain
             catch ( Exception l_exception )
             {
                 CLogger.error( l_exception );
-                CLogger.out( "Error on loading / running simulation data" );
+                CLogger.out( CCommon.getResouceString( CMain.class, "loadingerror" ) );
                 System.exit( -1 );
             }
         }

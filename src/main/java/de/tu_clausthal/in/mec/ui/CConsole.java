@@ -33,7 +33,7 @@ import javax.swing.*;
 public class CConsole extends JScrollPane
 {
 
-    protected JTextPane m_pane = new JTextPane();
+    protected JEditorPane m_pane = new JEditorPane();
 
 
     public CConsole()

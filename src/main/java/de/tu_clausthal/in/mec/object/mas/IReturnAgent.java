@@ -27,7 +27,7 @@ import de.tu_clausthal.in.mec.simulation.IReturnStepable;
 
 
 /**
- * interface of an agent
+ * interface of an agent with return-stepable interface
  */
 public interface IReturnAgent extends IAgent, IReturnStepable
 {

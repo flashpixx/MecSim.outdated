@@ -36,6 +36,12 @@ import java.util.Map;
  */
 public class CTestAgent implements IStepable, Painter<COSMViewer>
 {
+
+    public int a = 1;
+    public String name = "foo";
+    private int x = 123;
+    private String xxx = "bar";
+
     @Override
     public Map<String, Object> analyse()
     {

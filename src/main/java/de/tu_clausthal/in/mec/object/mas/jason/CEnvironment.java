@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
+import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.runtime.Settings;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -69,20 +70,16 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
      */
     protected CBrowser m_mindinspector = new CBrowser();
 
-    private T m_bind = null;
-
 
     /**
      * ctor of Jason structure
      *
-     * @param p_bind  test binding object
      * @param p_frame frame object set Jason mindinspector
      */
-    public CEnvironment( T p_bind, CFrame p_frame )
+    public CEnvironment( CFrame p_frame )
     {
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
 
-        m_bind = p_bind;
         m_actions = m_literals.addObjectMethods( this );
     }
 
@@ -170,6 +167,12 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
     }
 
     @Override
+    public void resetData()
+    {
+        m_data.clear();
+    }
+
+    @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
         // get all data for global perceptions (get analyse function and all properties of the object
@@ -179,16 +182,13 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         try
         {
 
-            //    for ( int i = 0; i < 100; i++ )
-            //    {
-            //        CAgentCollection l_agentarchitecture = new CAgentCollection( x );
-            //        m_data.add( l_agentarchitecture );
 
-                // mind inspector works after an agent exists, so we need
-                // to bind the browser after the first agent exists
+            // mind inspector works after an agent exists, so we need
+            // to bind the browser after the first agent exists
+            CAgent<T> x = new CAgent( "agent", new CTestAgent() );
+            m_data.add( x );
 
-            m_data.add( new CAgent<T>( "agent", null ) );
-            //    }
+            MindInspectorWeb.get().registerAg( x.getAgent() );
 
             if ( m_data.size() > 0 )
                 m_mindinspector.load( "http://localhost:3272" );
@@ -200,5 +200,4 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
         }
 
     }
-
 }

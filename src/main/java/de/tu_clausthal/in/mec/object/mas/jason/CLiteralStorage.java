@@ -36,7 +36,9 @@ import java.util.*;
 
 
 /**
- * Jason common functions
+ * Jason collection structure for storing any literal
+ *
+ * @note atoms can be added only at the initial state of an agent
  */
 public class CLiteralStorage implements Collection<Literal>
 {
@@ -140,6 +142,8 @@ public class CLiteralStorage implements Collection<Literal>
     public Map<String, Pair<Field, Object>> addObjectFields( Object p_object )
     {
         Map<String, Pair<Field, Object>> l_data = new HashMap();
+        if ( p_object == null )
+            return l_data;
 
         for ( Field l_field : p_object.getClass().getDeclaredFields() )
         {
@@ -174,6 +178,8 @@ public class CLiteralStorage implements Collection<Literal>
     public Map<String, Pair<Method, Object>> addObjectMethods( Object p_object )
     {
         Map<String, Pair<Method, Object>> l_data = new HashMap();
+        if ( p_object == null )
+            return l_data;
 
         for ( Method l_method : p_object.getClass().getDeclaredMethods() )
         {

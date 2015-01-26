@@ -31,10 +31,12 @@ import de.tu_clausthal.in.mec.simulation.event.IReceiver;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
+import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -56,15 +58,22 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * map of all actions which can be called by the agents *
      */
-    protected Map<String, Pair<Method, Object>> m_action = new HashMap();
+    protected Map<String, Pair<Method, Field>> m_action = new HashMap();
 
     protected CAgentArchitecture m_agentarchitecture = new CAgentArchitecture();
+
+    protected Agent m_agent = null;
 
     /**
      * source object that is connect with the agents
      */
     protected T m_bind = null;
 
+
+    public CAgent( String p_name ) throws JasonException
+    {
+        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
+    }
 
     /**
      * ctor
@@ -74,10 +83,14 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      */
     public CAgent( String p_name, T p_bind ) throws JasonException
     {
-        //if ( p_bind == null )
-        //    throw new IllegalArgumentException( "source value need not to be null" );
+        m_bind = p_bind;
+        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
+    }
 
-        Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
+
+    public Agent getAgent()
+    {
+        return m_agent;
     }
 
 
@@ -100,6 +113,15 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
+        m_literals.addObjectFields( m_bind );
+        for ( Literal l_literal : m_literals.get() )
+        {
+            System.out.println( l_literal );
+            m_agent.addBel( l_literal );
+        }
+
+
+        //m_agent.addBel( ASSyntax.createLiteral( "blubnum", ASSyntax.createNumber( 5 ) ) );
         m_agentarchitecture.cycle( p_currentstep );
     }
 

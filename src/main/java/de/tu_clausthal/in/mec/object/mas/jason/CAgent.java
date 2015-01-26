@@ -46,7 +46,7 @@ import java.util.*;
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
  * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
-public class CAgentCollection<T extends IStepable> implements IVoidStepable, Painter, IReceiver
+public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IReceiver
 {
 
     /**
@@ -58,40 +58,28 @@ public class CAgentCollection<T extends IStepable> implements IVoidStepable, Pai
      */
     protected Map<String, Pair<Method, Object>> m_action = new HashMap();
 
-    protected Set<CAgentArchitecture> m_agents = new HashSet();
+    protected CAgentArchitecture m_agentarchitecture = new CAgentArchitecture();
 
     /**
      * source object that is connect with the agents
      */
-    protected T m_source = null;
+    protected T m_bind = null;
 
 
     /**
      * ctor
      *
-     * @param p_source source object of the agent
+     * @param p_name agent name (ASL file)
+     * @param p_bind object that should be bind with the agent
      */
-    public CAgentCollection( T p_source )
+    public CAgent( String p_name, T p_bind ) throws JasonException
     {
-        super();
-        if ( p_source == null )
-            throw new IllegalArgumentException( "source value need not to be null" );
+        //if ( p_bind == null )
+        //    throw new IllegalArgumentException( "source value need not to be null" );
 
-        m_source = p_source;
+        Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
     }
 
-
-    /**
-     * creates an agent with it's name / ASL file
-     *
-     * @param p_agent agent name
-     */
-    public void createAgent( String p_agent ) throws JasonException
-    {
-        CAgentArchitecture l_architecture = new CAgentArchitecture();
-        Agent.create( l_architecture, Agent.class.getName(), null, CEnvironment.getFilename( p_agent ).toString(), null );
-        m_agents.add( l_architecture );
-    }
 
     /**
      * returns the literal object of the agent
@@ -103,16 +91,6 @@ public class CAgentCollection<T extends IStepable> implements IVoidStepable, Pai
         return m_literals;
     }
 
-    /**
-     * returns the number of agents
-     *
-     * @return agent count
-     */
-    public int getAgentNumber()
-    {
-        return m_agents.size();
-    }
-
     @Override
     public void receiveMessage( Set<IMessage> p_messages )
     {
@@ -122,8 +100,7 @@ public class CAgentCollection<T extends IStepable> implements IVoidStepable, Pai
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        for ( CAgentArchitecture l_agent : m_agents )
-            l_agent.cycle( p_currentstep );
+        m_agentarchitecture.cycle( p_currentstep );
     }
 
     @Override
@@ -141,6 +118,9 @@ public class CAgentCollection<T extends IStepable> implements IVoidStepable, Pai
 
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture
+     *
+     * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class
+     * to create an own cycle call
      */
     private class CAgentArchitecture extends AgArch
     {

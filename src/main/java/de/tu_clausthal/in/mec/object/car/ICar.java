@@ -91,6 +91,12 @@ public interface ICar extends Painter<COSMViewer>, IVoidStepable
 
 
     /**
+     * release function to remove a car from the simulation *
+     */
+    public void release();
+
+
+    /**
      * returns the current predecessor of the car and the distance
      *
      * @return predecessor car object and its distance

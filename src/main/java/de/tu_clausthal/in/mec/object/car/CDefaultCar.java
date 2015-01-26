@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.car;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -107,7 +108,7 @@ public class CDefaultCar extends IInspector implements ICar
     public CDefaultCar( GeoPosition p_StartPosition )
     {
         if ( p_StartPosition == null )
-            throw new IllegalArgumentException( "startposition need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
 
         m_StartPosition = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
@@ -122,7 +123,7 @@ public class CDefaultCar extends IInspector implements ICar
             try
             {
 
-                m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.5, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.5 );
+                m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
                 List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
 
                 if ( ( l_route != null ) && ( l_route.size() > 0 ) )
@@ -138,13 +139,11 @@ public class CDefaultCar extends IInspector implements ICar
 
     }
 
-
     @Override
     public int getMaximumSpeed()
     {
         return m_maxSpeed;
     }
-
 
     @Override
     public int getCurrentSpeed()
@@ -152,13 +151,11 @@ public class CDefaultCar extends IInspector implements ICar
         return m_speed;
     }
 
-
     @Override
     public void setCurrentSpeed( int p_speed )
     {
         m_speed = Math.min( Math.max( p_speed, 15 ), m_maxSpeed );
     }
-
 
     @Override
     public double getLingerProbability()
@@ -254,6 +251,14 @@ public class CDefaultCar extends IInspector implements ICar
 
         if ( l_circle.contains( e.getX(), e.getY() ) )
             ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
+    }
+
+    @Override
+    public void release()
+    {
+        CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        if ( l_edge != null )
+            l_edge.removeObject( this );
     }
 
     @Override

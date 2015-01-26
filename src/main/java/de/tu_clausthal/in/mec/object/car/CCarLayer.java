@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object.car;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
-import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
 
@@ -153,14 +152,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     @Override
     public void afterStepObject( int p_currentstep, ICar p_object )
     {
-        if ( p_object.hasEndReached() )
-        {
-            super.remove( p_object );
-            CEdge l_edge = m_graph.getEdge( p_object.getEdge() );
-            if ( l_edge != null )
-                l_edge.removeObject( p_object );
-        }
+        if ( !p_object.hasEndReached() )
+            return;
 
+        super.remove( p_object );
+        p_object.release();
     }
 
     @Override

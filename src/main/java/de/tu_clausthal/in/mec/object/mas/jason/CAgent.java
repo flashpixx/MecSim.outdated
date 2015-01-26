@@ -67,7 +67,7 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
-    protected CAgentArchitecture m_agentarchitecture = new CAgentArchitecture();
+    protected CAgentArchitecture m_agentarchitecture = null;
     /**
      * Jason agent object
      */
@@ -77,24 +77,34 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * ctor
      *
-     * @param p_name agent name (ASL file)
+     * @param p_asl agent name (ASL file)
      */
-    public CAgent( String p_name ) throws JasonException
+    public CAgent( String p_asl ) throws JasonException
     {
-        this.initialize( p_name, null );
+        this.initialize( this.getUniqueName(), p_asl, null );
     }
 
     /**
      * ctor
      *
-     * @param p_name agent name (ASL file)
+     * @param p_asl agent name (ASL file)
      * @param p_bind object that should be bind with the agent
      */
-    public CAgent( String p_name, T p_bind ) throws JasonException
+    public CAgent( String p_asl, T p_bind ) throws JasonException
     {
-        this.initialize( p_name, p_bind );
+        this.initialize( this.getUniqueName(), p_asl, p_bind );
     }
 
+
+    /**
+     * returns an unique agent name
+     *
+     * @return string with name
+     */
+    protected String getUniqueName()
+    {
+        return this.getClass().getSimpleName() + "@" + this.hashCode();
+    }
 
     /**
      * initialize the object data
@@ -102,12 +112,18 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      * @param p_name agent name (ASL file)
      * @param p_bind object that should be bind with the agent
      */
-    protected void initialize( String p_name, T p_bind ) throws JasonException
+    protected void initialize( String p_name, String p_asl, T p_bind ) throws JasonException
     {
         this.addObjectFields( p_bind );
         //this.addObjectMethods( p_bind );
 
-        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_name ).toString(), null );
+        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
+        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
+        m_agentarchitecture = new CAgentArchitecture( p_name );
+        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_asl ).toString(), null );
+        m_agentarchitecture.insertAgArch( m_agentarchitecture );
+
+        // register the agent on the web mindinspector (DoS threat)
         MindInspectorWeb.get().registerAg( m_agent );
     }
 
@@ -166,10 +182,43 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      *
      * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
      * create an own cycle call
+     * @warn An AgArch is a linked list of AgArchs, the agent name can read if an AgArch has got a successor only
+     * (Jason code design error)
      */
     private class CAgentArchitecture extends AgArch
     {
+        /**
+         * agent name *
+         */
+        protected String m_agentname = null;
 
+        /**
+         * ctor for setting agent name
+         *
+         * @param p_name name
+         */
+        public CAgentArchitecture( String p_name )
+        {
+            m_agentname = p_name;
+        }
+
+        @Override
+        public boolean canSleep()
+        {
+            return false;
+        }
+
+        @Override
+        public String getAgName()
+        {
+            return m_agentname;
+        }
+
+
+        /** manual call of the reasoning cycle
+         *
+         * @param p_currentstep current step
+         */
         public void cycle( int p_currentstep )
         {
             // the reasoning cycle must be called within the transition system

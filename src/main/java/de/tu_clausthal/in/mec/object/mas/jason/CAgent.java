@@ -77,7 +77,30 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * ctor
      *
-     * @param p_asl agent name (ASL file)
+     * @param p_name name of the agent
+     * @param p_asl  agent ASL file
+     */
+    public CAgent( String p_name, String p_asl ) throws JasonException
+    {
+        this.initialize( p_name, p_asl, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_name name of the agent
+     * @param p_asl  agent ASL file
+     * @param p_bind object that should be bind with the agent
+     */
+    public CAgent( String p_name, String p_asl, T p_bind ) throws JasonException
+    {
+        this.initialize( p_name, p_asl, p_bind );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_asl agent ASL file
      */
     public CAgent( String p_asl ) throws JasonException
     {
@@ -87,7 +110,7 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
     /**
      * ctor
      *
-     * @param p_asl agent name (ASL file)
+     * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      */
     public CAgent( String p_asl, T p_bind ) throws JasonException
@@ -114,6 +137,9 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      */
     protected void initialize( String p_name, String p_asl, T p_bind ) throws JasonException
     {
+        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+            throw new IllegalArgumentException( "agent name need not to be empty" );
+
         this.addObjectFields( p_bind );
         //this.addObjectMethods( p_bind );
 
@@ -182,8 +208,8 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
      *
      * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
      * create an own cycle call
-     * @warn An AgArch is a linked list of AgArchs, the agent name can read if an AgArch has got a successor only
-     * (Jason code design error)
+     * @warn An AgArch is a linked list of AgArchs, the agent name can read if an AgArch has got a successor only (Jason
+     * code design error)
      */
     private class CAgentArchitecture extends AgArch
     {
@@ -215,7 +241,8 @@ public class CAgent<T extends IStepable> implements IVoidStepable, Painter, IRec
         }
 
 
-        /** manual call of the reasoning cycle
+        /**
+         * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
          */

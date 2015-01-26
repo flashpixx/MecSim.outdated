@@ -84,7 +84,13 @@ public class CEnvironment<T extends IStepable & Painter> extends IMultiLayer<CAg
     {
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
         this.addObjectMethods( this );
-
+        try
+        {
+            m_data.add( new CAgent<T>( "I'm the first", "agent" ) );
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
     /**

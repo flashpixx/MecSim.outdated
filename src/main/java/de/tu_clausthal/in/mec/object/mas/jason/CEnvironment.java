@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
@@ -184,6 +185,8 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
     @Override
     public void resetData()
     {
+        for ( IAgent l_agent : m_data )
+            l_agent.release();
         m_data.clear();
     }
 

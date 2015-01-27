@@ -101,7 +101,7 @@ public class CAgent<T> implements IVoidAgent
      */
     public CAgent( String p_asl ) throws JasonException
     {
-        this.initialize( this.getName(), p_asl, null );
+        this.initialize( this.createName(), p_asl, null );
     }
 
     /**
@@ -112,7 +112,7 @@ public class CAgent<T> implements IVoidAgent
      */
     public CAgent( String p_asl, T p_bind ) throws JasonException
     {
-        this.initialize( this.getName(), p_asl, p_bind );
+        this.initialize( this.createName(), p_asl, p_bind );
     }
 
 
@@ -121,7 +121,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return string with name
      */
-    public String getName()
+    private String createName()
     {
         return this.getClass().getSimpleName() + "@" + this.hashCode();
     }
@@ -168,6 +168,12 @@ public class CAgent<T> implements IVoidAgent
     public void addObjectMethods( Object p_object )
     {
         m_methods.putAll( m_literals.addObjectMethods( p_object ) );
+    }
+
+    @Override
+    public String getName()
+    {
+        return m_agentarchitecture.getAgName();
     }
 
 

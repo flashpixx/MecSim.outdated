@@ -54,4 +54,12 @@ public interface IAgent extends Painter, IReceiver
      */
     public void addObjectMethods( Object p_object );
 
+
+    /**
+     * returns the name of the agent
+     *
+     * @return name of the agent
+     */
+    public String getName();
+
 }

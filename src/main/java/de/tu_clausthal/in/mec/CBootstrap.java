@@ -137,13 +137,20 @@ public class CBootstrap
     public static void onSimulationReset( CSimulation p_simulation )
     {
 
-        COSMViewer l_osm = COSMViewer.getSimulationOSM();
-        if ( l_osm == null )
-            return;
+        // clear UI elements
+        if ( CSimulation.getInstance().hasUI() )
+        {
 
-        l_osm.setZoom( CConfiguration.getInstance().get().getZoom() );
-        l_osm.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
-        l_osm.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
+            COSMViewer l_osm = COSMViewer.getSimulationOSM();
+            if ( l_osm != null )
+            {
+                l_osm.setZoom( CConfiguration.getInstance().get().getZoom() );
+                l_osm.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
+                l_osm.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
+            }
+
+            ( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).clear();
+        }
 
     }
 

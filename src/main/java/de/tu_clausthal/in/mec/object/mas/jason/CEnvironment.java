@@ -29,8 +29,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.ui.*;
+import de.tu_clausthal.in.mec.ui.CBrowser;
+import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
 import jason.runtime.Settings;
@@ -195,9 +195,6 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
             m_data.add( new CAgent( "agent", new CTestAgent() ) );
-
-            ( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).append( "xxx" );
-
         }
         catch ( Exception l_exception )
         {

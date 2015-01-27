@@ -137,14 +137,18 @@ public class CAgent<T> implements IVoidAgent
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "agent name need not to be empty" );
 
-        this.addObjectFields( p_bind );
-        //this.addObjectMethods( p_bind );
-
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
         m_agentarchitecture = new CAgentArchitecture( p_name );
         m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_asl ).toString(), null );
         m_agentarchitecture.insertAgArch( m_agentarchitecture );
+
+        // get the bindings and push the initial beliefs to the agent
+        this.addObjectFields( p_bind );
+        //this.addObjectMethods( p_bind );
+
+        for ( Literal l_literal : m_literals )
+            m_agent.addInitialBel( l_literal );
 
         // register the agent on the web mindinspector (DoS threat)
         MindInspectorWeb.get().registerAg( m_agent );
@@ -250,6 +254,9 @@ public class CAgent<T> implements IVoidAgent
          */
         public void cycle( int p_currentstep )
         {
+            // clears the current literals
+            m_literals.clear();
+
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( p_currentstep );
             this.getTS().reasoningCycle();

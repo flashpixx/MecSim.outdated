@@ -54,6 +54,10 @@ public class CLiteralStorage implements Collection<Literal>
      * set with all literals *
      */
     protected Set<Literal> m_literals = new HashSet();
+    /**
+     * bool flag to convert null values to atoms
+     */
+    protected boolean m_nulltoatom = false;
 
 
     /**
@@ -61,10 +65,20 @@ public class CLiteralStorage implements Collection<Literal>
      */
     public CLiteralStorage()
     {
-        m_methodfilter.add( new CDefaultMethodFilter() );
-        m_fieldfilter.add( new CDefaultFieldFilter() );
+        this.initialize();
     }
 
+
+    /**
+     * ctor - creates default filters
+     *
+     * @param p_nulltoatom bool flag to convert null to atoms
+     */
+    public CLiteralStorage( boolean p_nulltoatom )
+    {
+        m_nulltoatom = p_nulltoatom;
+        this.initialize();
+    }
 
     /**
      * returns a Jason literal
@@ -74,7 +88,19 @@ public class CLiteralStorage implements Collection<Literal>
      */
     public static Literal getLiteral( String p_name )
     {
-        return getLiteral( p_name, null );
+        return getLiteral( p_name, null, true );
+    }
+
+    /**
+     * returns a Jason literal
+     *
+     * @param p_name       name of the literal
+     * @param p_nulltoatom bool to convert null values into atoms or empty string literals
+     * @return literal
+     */
+    public static Literal getLiteral( String p_name, boolean p_nulltoatom )
+    {
+        return getLiteral( p_name, null, p_nulltoatom );
     }
 
     /**
@@ -85,6 +111,19 @@ public class CLiteralStorage implements Collection<Literal>
      * @return literal object
      */
     public static Literal getLiteral( String p_name, Object p_data )
+    {
+        return getLiteral( p_name, p_data, true );
+    }
+
+    /**
+     * creates a Jason literal with optional data
+     *
+     * @param p_name       name of the literal
+     * @param p_data       data of the literal
+     * @param p_nulltoatom bool to convert null values into atoms or empty string literals
+     * @return literal object
+     */
+    public static Literal getLiteral( String p_name, Object p_data, boolean p_nulltoatom )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name need not to be empty" );
@@ -99,7 +138,10 @@ public class CLiteralStorage implements Collection<Literal>
 
         // null value into atom
         if ( p_data == null )
-            return ASSyntax.createAtom( l_name );
+            if ( p_nulltoatom )
+                return ASSyntax.createAtom( l_name );
+            else
+                return ASSyntax.createLiteral( l_name, ASSyntax.createString( "" ) );
 
         // number value into number
         if ( p_data instanceof Number )
@@ -111,6 +153,35 @@ public class CLiteralStorage implements Collection<Literal>
 
         // otherwise into string
         return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
+    }
+
+    /**
+     * default initialization *
+     */
+    protected void initialize()
+    {
+        m_methodfilter.add( new CDefaultMethodFilter() );
+        m_fieldfilter.add( new CDefaultFieldFilter() );
+    }
+
+    /**
+     * gets the boolean flag for converting null to atoms
+     *
+     * @return boolean flag
+     */
+    public boolean getNullToAtom()
+    {
+        return m_nulltoatom;
+    }
+
+    /**
+     * sets the boolean flag to convert null values to atoms
+     *
+     * @param p_value boolean value
+     */
+    public void setNullToAtom( boolean p_value )
+    {
+        m_nulltoatom = p_value;
     }
 
     /**
@@ -154,7 +225,7 @@ public class CLiteralStorage implements Collection<Literal>
 
                 try
                 {
-                    Literal l_literal = getLiteral( l_field.getName(), l_field.get( p_object ) );
+                    Literal l_literal = getLiteral( l_field.getName(), l_field.get( p_object ), m_nulltoatom );
                     m_literals.add( l_literal );
                     l_data.put( l_field.getName(), new ImmutablePair<Field, Object>( l_field, p_object ) );
                 }
@@ -189,7 +260,7 @@ public class CLiteralStorage implements Collection<Literal>
                 if ( !l_filter.filter( p_object, l_method ) )
                     continue;
 
-                Literal l_literal = getLiteral( l_method.getName(), null );
+                Literal l_literal = getLiteral( l_method.getName(), null, m_nulltoatom );
                 m_literals.add( l_literal );
                 l_data.put( l_literal.toString(), new ImmutablePair<Method, Object>( l_method, p_object ) );
             }
@@ -222,7 +293,7 @@ public class CLiteralStorage implements Collection<Literal>
      */
     public void add( String p_name, Object p_value )
     {
-        m_literals.add( getLiteral( p_name, p_value ) );
+        m_literals.add( getLiteral( p_name, p_value, m_nulltoatom ) );
     }
 
 
@@ -233,7 +304,7 @@ public class CLiteralStorage implements Collection<Literal>
      */
     public void add( String p_value )
     {
-        m_literals.add( getLiteral( p_value, null ) );
+        m_literals.add( getLiteral( p_value, null, m_nulltoatom ) );
     }
 
 
@@ -245,7 +316,7 @@ public class CLiteralStorage implements Collection<Literal>
      */
     public boolean remove( String p_value )
     {
-        return m_literals.remove( getLiteral( p_value, null ) );
+        return m_literals.remove( getLiteral( p_value, null, m_nulltoatom ) );
     }
 
 
@@ -269,7 +340,7 @@ public class CLiteralStorage implements Collection<Literal>
      */
     public boolean contains( String p_name, Object p_value )
     {
-        return m_literals.contains( getLiteral( p_name, p_value ) );
+        return m_literals.contains( getLiteral( p_name, p_value, m_nulltoatom ) );
     }
 
     /**

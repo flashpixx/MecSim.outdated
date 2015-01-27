@@ -31,6 +31,7 @@ public class CTestAgent
 
     public int a = 1;
     public String name = "foo";
+    public String mynull = null;
     private int x = 123;
     private String xxx = "bar";
 

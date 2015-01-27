@@ -31,7 +31,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
 
@@ -40,7 +39,7 @@ import java.util.*;
  *
  * @note atoms can be added only at the initial state of an agent
  */
-public class CLiteralStorage implements Collection<Literal>
+public class CLiteralStorage
 {
     /**
      * set with all method filters *
@@ -53,66 +52,14 @@ public class CLiteralStorage implements Collection<Literal>
     /**
      * set with all literals *
      */
-    protected Set<Literal> m_literals = new HashSet();
-    /**
-     * bool flag to convert null values to atoms
-     */
-    protected boolean m_nulltoatom = false;
+    protected Set<Literal> m_staticliterals = new HashSet();
+
+    protected Map<Literal, Pair<Field, Object>> m_fieldliterals = new HashMap();
 
 
-    /**
-     * ctor - creates default filters
-     */
     public CLiteralStorage()
     {
         this.initialize();
-    }
-
-
-    /**
-     * ctor - creates default filters
-     *
-     * @param p_nulltoatom bool flag to convert null to atoms
-     */
-    public CLiteralStorage( boolean p_nulltoatom )
-    {
-        m_nulltoatom = p_nulltoatom;
-        this.initialize();
-    }
-
-    /**
-     * returns a Jason literal
-     *
-     * @param p_name name of the literal
-     * @return literal
-     */
-    public static Literal getLiteral( String p_name )
-    {
-        return getLiteral( p_name, null, true );
-    }
-
-    /**
-     * returns a Jason literal
-     *
-     * @param p_name       name of the literal
-     * @param p_nulltoatom bool to convert null values into atoms or empty string literals
-     * @return literal
-     */
-    public static Literal getLiteral( String p_name, boolean p_nulltoatom )
-    {
-        return getLiteral( p_name, null, p_nulltoatom );
-    }
-
-    /**
-     * creates a Jason literal with optional data
-     *
-     * @param p_name name of the literal
-     * @param p_data data of the literal
-     * @return literal object
-     */
-    public static Literal getLiteral( String p_name, Object p_data )
-    {
-        return getLiteral( p_name, p_data, true );
     }
 
     /**
@@ -120,10 +67,9 @@ public class CLiteralStorage implements Collection<Literal>
      *
      * @param p_name       name of the literal
      * @param p_data       data of the literal
-     * @param p_nulltoatom bool to convert null values into atoms or empty string literals
      * @return literal object
      */
-    public static Literal getLiteral( String p_name, Object p_data, boolean p_nulltoatom )
+    public static Literal getLiteral( String p_name, Object p_data )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name need not to be empty" );
@@ -138,10 +84,7 @@ public class CLiteralStorage implements Collection<Literal>
 
         // null value into atom
         if ( p_data == null )
-            if ( p_nulltoatom )
-                return ASSyntax.createAtom( l_name );
-            else
-                return ASSyntax.createLiteral( l_name, ASSyntax.createString( "" ) );
+            return ASSyntax.createLiteral( l_name, ASSyntax.createString( null ) );
 
         // number value into number
         if ( p_data instanceof Number )
@@ -164,25 +107,6 @@ public class CLiteralStorage implements Collection<Literal>
         m_fieldfilter.add( new CDefaultFieldFilter() );
     }
 
-    /**
-     * gets the boolean flag for converting null to atoms
-     *
-     * @return boolean flag
-     */
-    public boolean getNullToAtom()
-    {
-        return m_nulltoatom;
-    }
-
-    /**
-     * sets the boolean flag to convert null values to atoms
-     *
-     * @param p_value boolean value
-     */
-    public void setNullToAtom( boolean p_value )
-    {
-        m_nulltoatom = p_value;
-    }
 
     /**
      * get set with method filters
@@ -204,17 +128,24 @@ public class CLiteralStorage implements Collection<Literal>
         return m_fieldfilter;
     }
 
+
+    public void addStaticLiteral( String p_name, Object p_data )
+    {
+        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+            return;
+
+        m_staticliterals.add( getLiteral( p_name, p_data ) );
+    }
+
     /**
      * transform the object fields to Jason literals with values and returns a map with all object reference data
      *
      * @param p_object object with data
-     * @return map with literal name and pair of field and object definition
      */
-    public Map<String, Pair<Field, Object>> addObjectFields( Object p_object )
+    public void addObjectFields( Object p_object )
     {
-        Map<String, Pair<Field, Object>> l_data = new HashMap();
         if ( p_object == null )
-            return l_data;
+            return;
 
         for ( Field l_field : p_object.getClass().getDeclaredFields() )
         {
@@ -225,9 +156,7 @@ public class CLiteralStorage implements Collection<Literal>
 
                 try
                 {
-                    Literal l_literal = getLiteral( l_field.getName(), l_field.get( p_object ), m_nulltoatom );
-                    m_literals.add( l_literal );
-                    l_data.put( l_field.getName(), new ImmutablePair<Field, Object>( l_field, p_object ) );
+                    m_fieldliterals.put( getLiteral( l_field.getName(), l_field.get( p_object ) ), new ImmutablePair<Field, Object>( l_field, p_object ) );
                 }
                 catch ( Exception l_exception )
                 {
@@ -235,9 +164,69 @@ public class CLiteralStorage implements Collection<Literal>
                 }
             }
         }
-
-        return l_data;
     }
+
+
+    public Set<Literal> getStaticLiteral()
+    {
+        return m_staticliterals;
+    }
+
+    public Set<Literal> getObjectFields()
+    {
+        return m_fieldliterals.keySet();
+    }
+
+    /*
+    public void syncLiteral( Literal p_literal )
+    {
+        if (m_staticliterals.contains( p_literal ))
+        {
+            m_staticliterals.add( p_literal );
+            return;
+        }
+
+        if (m_fieldliterals.containsKey( p_literal ))
+        {
+            Pair<Field, Object> l_reference = m_fieldliterals.get( p_literal );
+            List<Term> l_terms = p_literal.getTerms();
+            if ( l_terms.size() == 1 )
+            {
+                this.setTermToObject( l_reference.getRight(), l_reference.getLeft(), l_terms.get( 0 ) );
+            }
+            return;
+        }
+    }
+
+
+    protected void setTermToObject( Object p_object, Field p_field, Term p_term )
+    {
+
+        try {
+
+            if (p_term.isNumeric())
+                p_field.set( p_object, ((NumberTerm)p_term).solve() );
+
+            if (p_term.isString())
+            {
+                String l_str = ((StringTerm)p_term).getString();
+                if (l_str.equalsIgnoreCase( "null" ))
+                    p_field.set( p_object, null );
+                else
+                    p_field.set( p_object, l_str );
+            }
+
+            //if (p_term.isList())
+
+
+        } catch (Exception l_exception)
+        {
+            CLogger.error( l_exception );
+        }
+    }
+*/
+
+
 
 
     /**
@@ -245,7 +234,7 @@ public class CLiteralStorage implements Collection<Literal>
      *
      * @param p_object object with methods
      * @return map with literal names and pair of methods and object reference
-     */
+     *
     public Map<String, Pair<Method, Object>> addObjectMethods( Object p_object )
     {
         Map<String, Pair<Method, Object>> l_data = new HashMap();
@@ -268,167 +257,6 @@ public class CLiteralStorage implements Collection<Literal>
 
         return l_data;
     }
-
-    /**
-     * converts a map into Jason literals
-     *
-     * @param p_data map with data
-     * @return literal list
      */
-    public void addAll( Map<String, Object> p_data )
-    {
-        if ( ( p_data == null ) || ( p_data.isEmpty() ) )
-            return;
 
-        for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
-            this.add( l_item.getKey(), l_item.getValue() );
-    }
-
-
-    /**
-     * create a literal with value
-     *
-     * @param p_name  name
-     * @param p_value value
-     */
-    public void add( String p_name, Object p_value )
-    {
-        m_literals.add( getLiteral( p_name, p_value, m_nulltoatom ) );
-    }
-
-
-    /**
-     * adds a string literal
-     *
-     * @param p_value string literal
-     */
-    public void add( String p_value )
-    {
-        m_literals.add( getLiteral( p_value, null, m_nulltoatom ) );
-    }
-
-
-    /**
-     * removes a literal
-     *
-     * @param p_value string literal
-     * @return bool flag
-     */
-    public boolean remove( String p_value )
-    {
-        return m_literals.remove( getLiteral( p_value, null, m_nulltoatom ) );
-    }
-
-
-    /**
-     * contains method for string literals
-     *
-     * @param p_value string literal
-     * @return bool for exist
-     */
-    public boolean contains( String p_value )
-    {
-        return this.contains( p_value, null );
-    }
-
-    /**
-     * contains of a literals with value
-     *
-     * @param p_name  literal name
-     * @param p_value literal value
-     * @return bool for exist
-     */
-    public boolean contains( String p_name, Object p_value )
-    {
-        return m_literals.contains( getLiteral( p_name, p_value, m_nulltoatom ) );
-    }
-
-    /**
-     * returns the full list of all literals
-     *
-     * @return set of literals
-     */
-    public Set<Literal> get()
-    {
-        return m_literals;
-    }
-
-
-    @Override
-    public int size()
-    {
-        return m_literals.size();
-    }
-
-    @Override
-    public boolean isEmpty()
-    {
-        return m_literals.isEmpty();
-    }
-
-    @Override
-    public boolean contains( Object o )
-    {
-        return m_literals.contains( o );
-    }
-
-    @Override
-    public Iterator<Literal> iterator()
-    {
-        return m_literals.iterator();
-    }
-
-    @Override
-    public Object[] toArray()
-    {
-        return m_literals.toArray();
-    }
-
-    @Override
-    public <T> T[] toArray( T[] a )
-    {
-        return m_literals.toArray( a );
-    }
-
-    @Override
-    public boolean add( Literal literal )
-    {
-        return m_literals.add( literal );
-    }
-
-    @Override
-    public boolean remove( Object o )
-    {
-        return m_literals.remove( o );
-    }
-
-    @Override
-    public boolean containsAll( Collection<?> c )
-    {
-        return m_literals.containsAll( c );
-    }
-
-    @Override
-    public boolean addAll( Collection<? extends Literal> c )
-    {
-        return m_literals.addAll( c );
-    }
-
-    @Override
-    public boolean removeAll( Collection<?> c )
-    {
-        return m_literals.removeAll( c );
-    }
-
-    @Override
-    public boolean retainAll( Collection<?> c )
-    {
-        return m_literals.retainAll( c );
-    }
-
-    @Override
-    public void clear()
-    {
-        m_literals.clear();
-    }
 }

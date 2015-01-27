@@ -31,12 +31,10 @@ import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Literal;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -54,14 +52,6 @@ public class CAgent<T> implements IVoidAgent
      */
     protected CLiteralStorage m_literals = new CLiteralStorage();
     /**
-     * map of all actions which can be called by the agents *
-     */
-    protected Map<String, Pair<Method, Object>> m_methods = new HashMap();
-    /**
-     * field list of object fields that converted to belief-base data
-     */
-    protected Map<String, Pair<Field, Object>> m_fields = new HashMap();
-    /**
      * Jason interal agent architecture to run the reasoning cycle
      */
     protected CAgentArchitecture m_agentarchitecture = null;
@@ -69,6 +59,8 @@ public class CAgent<T> implements IVoidAgent
      * Jason agent object
      */
     protected Agent m_agent = null;
+
+    private T bind = null;
 
 
     /**
@@ -143,15 +135,12 @@ public class CAgent<T> implements IVoidAgent
         m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_asl ).toString(), null );
         m_agentarchitecture.insertAgArch( m_agentarchitecture );
 
-        // get the bindings and push the initial beliefs to the agent
         this.addObjectFields( p_bind );
-        //this.addObjectMethods( p_bind );
-
-        for ( Literal l_literal : m_literals )
-            m_agent.addInitialBel( l_literal );
 
         // register the agent on the web mindinspector (DoS threat)
         MindInspectorWeb.get().registerAg( m_agent );
+
+        bind = p_bind;
     }
 
 
@@ -165,13 +154,13 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addObjectFields( Object p_object )
     {
-        m_fields.putAll( m_literals.addObjectFields( p_object ) );
+        m_literals.addObjectFields( p_object );
     }
 
     @Override
     public void addObjectMethods( Object p_object )
     {
-        m_methods.putAll( m_literals.addObjectMethods( p_object ) );
+
     }
 
     @Override
@@ -190,10 +179,17 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        for ( Literal l_literal : m_literals.get() )
+        for ( Literal l_literal : m_literals.getStaticLiteral() )
+            m_agent.addBel( l_literal );
+        for ( Literal l_literal : m_literals.getObjectFields() )
             m_agent.addBel( l_literal );
 
         m_agentarchitecture.cycle( p_currentstep );
+
+        //for ( Literal l_literal : m_agent.getBB() )
+        //    m_literals.syncLiteral( l_literal );
+
+        //System.out.println(bind);
     }
 
     @Override
@@ -254,9 +250,6 @@ public class CAgent<T> implements IVoidAgent
          */
         public void cycle( int p_currentstep )
         {
-            // clears the current literals
-            m_literals.clear();
-
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( p_currentstep );
             this.getTS().reasoningCycle();

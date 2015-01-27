@@ -160,7 +160,7 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public void addObjectFields( Object p_object )
     {
-        m_fields.putAll( m_literals.addObjectFields( p_object ) );
+        //m_fields.putAll( m_literals.addObjectFields( p_object ) );
     }
 
     /**
@@ -170,7 +170,7 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public void addObjectMethods( Object p_object )
     {
-        m_methods.putAll( m_literals.addObjectMethods( p_object ) );
+        //m_methods.putAll( m_literals.addObjectMethods( p_object ) );
     }
 
 
@@ -187,11 +187,12 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
     public void step( int p_currentstep, ILayer p_layer )
     {
         // get all data for global perceptions (get analyse function and all properties of the object
-        m_literals.addAll( this.analyse() );
-        m_literals.addObjectFields( this );
+        //m_literals.addAll( this.analyse() );
+        //m_literals.addObjectFields( this );
 
         try
         {
+
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
             m_data.add( new CAgent( "agent", new CTestAgent() ) );

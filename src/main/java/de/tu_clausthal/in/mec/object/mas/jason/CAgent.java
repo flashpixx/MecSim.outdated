@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.actions.CPushBack;
@@ -272,6 +273,9 @@ public class CAgent<T> implements IVoidAgent
 
     /**
      * class of an own Jason agent to handle Jason stdlib internal action includes
+     *
+     * @note we do the initialization process manually, because some internal actions
+     * are removed from the default behaviour
      */
     private class CJasonAgent extends Agent
     {
@@ -287,18 +291,28 @@ public class CAgent<T> implements IVoidAgent
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( new DefaultBeliefBase() );
             this.setPL( new PlanLibrary() );
-
-/*
-            if (initialGoals == null) initialGoals = new ArrayList<Literal>();
-            if (initialBels  == null) initialBels  = new ArrayList<Literal>();
-
-            if (internalActions == null) internalActions = new HashMap<String, InternalAction>();
-            initDefaultFunctions();
-*/
-            if ( !"false".equals( Config.get().getProperty( Config.START_WEB_MI ) ) )
-                MindInspectorWeb.get().registerAg( this );
-
             this.load( p_asl.toString() );
+            this.initDefaultFunctions();
+
+            try
+            {
+                CCommon.getPrivateField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
+                CCommon.getPrivateField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
+
+                // create internal actions map - reset the map and insert with getIA the minimal structure
+                CCommon.getPrivateField( super.getClass().getSuperclass(), "internalActions" ).set( this, new HashMap() );
+                for ( String l_action : new String[]{"send", "tell", "findall", "print", "add_plan", "remove_plan", "relevant_plans", "add_nested_source", "list", "ground", "literal", "drop_desire"} )
+                    this.getIA( l_action );
+
+            }
+            catch ( Exception l_exception )
+            {
+                System.out.println( "---> " + l_exception );
+            }
+
+
+            if ( !( "false".equals( Config.get().getProperty( Config.START_WEB_MI ) ) ) )
+                MindInspectorWeb.get().registerAg( this );
         }
 
     }

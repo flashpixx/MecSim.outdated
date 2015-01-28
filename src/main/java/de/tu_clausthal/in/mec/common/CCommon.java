@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.common;
 import de.tu_clausthal.in.mec.CConfiguration;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Collection;
 
@@ -72,6 +73,22 @@ public class CCommon
     public static String getResouceString( Class p_class, String p_label, Object... p_parameter )
     {
         return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getSimpleName().toLowerCase() + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+    }
+
+
+    /**
+     * returns a private field of a class
+     *
+     * @param p_class class
+     * @param p_file  fieldname
+     * @return field
+     */
+    public static Field getPrivateField( Class p_class, String p_file ) throws NoSuchFieldException
+    {
+        Field l_field = p_class.getDeclaredField( p_file );
+        l_field.setAccessible( true );
+        return l_field;
+
     }
 
 }

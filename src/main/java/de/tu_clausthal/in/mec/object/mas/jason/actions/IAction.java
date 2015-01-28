@@ -21,29 +21,45 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas;
+package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
-import de.tu_clausthal.in.mec.simulation.event.IReceiver;
-import org.jxmapviewer.painter.Painter;
+import jason.asSemantics.ActionExec;
 
 
 /**
- * interface of an agent
+ * action of an agent
  */
-public interface IAgent extends Painter, IReceiver
+public abstract class IAction
 {
 
     /**
-     * release agent call *
+     * returns the name of the action
+     *
+     * @return name of the action
      */
-    public void release();
+    public String getName()
+    {
+        return null;
+    }
 
     /**
-     * returns the name of the agent
-     *
-     * @return name of the agent
+     * runs the action *
      */
-    public String getName();
+    public void act( ActionExec p_action )
+    {
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.getName().hashCode();
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        return this.hashCode() == obj.hashCode();
+    }
 
 }

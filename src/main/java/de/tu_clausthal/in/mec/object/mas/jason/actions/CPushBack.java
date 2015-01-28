@@ -21,29 +21,39 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas;
+package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
-import de.tu_clausthal.in.mec.simulation.event.IReceiver;
-import org.jxmapviewer.painter.Painter;
+import jason.asSemantics.ActionExec;
 
 
 /**
- * interface of an agent
+ * creates a action to synchronize bind-object with agent
  */
-public interface IAgent extends Painter, IReceiver
+public class CPushBack<T> extends IAction
 {
+    protected T m_bind = null;
 
-    /**
-     * release agent call *
-     */
-    public void release();
 
-    /**
-     * returns the name of the agent
-     *
-     * @return name of the agent
-     */
-    public String getName();
+    public CPushBack( T p_bind )
+    {
+        if ( p_bind == null )
+            throw new IllegalArgumentException( "bind object need not to be null" );
+
+        m_bind = p_bind;
+    }
+
+
+    @Override
+    public String getName()
+    {
+        return "pushback";
+    }
+
+    @Override
+    public void act( ActionExec p_action )
+    {
+        System.out.println( "-- run --> " + p_action );
+    }
 
 }

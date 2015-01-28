@@ -25,16 +25,17 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.jason.actions.CPushBack;
+import de.tu_clausthal.in.mec.object.mas.jason.actions.IAction;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
-import jason.architecture.MindInspectorWeb;
+import jason.asSemantics.ActionExec;
 import jason.asSemantics.Agent;
-import jason.asSyntax.Literal;
 
 import java.awt.*;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -48,19 +49,25 @@ public class CAgent<T> implements IVoidAgent
 {
 
     /**
-     * literal storage of all agents literals *
-     */
-    protected CLiteralStorage m_literals = new CLiteralStorage();
-    /**
      * Jason interal agent architecture to run the reasoning cycle
      */
-    protected CAgentArchitecture m_agentarchitecture = null;
+    protected CArchitecture m_architecture = null;
     /**
      * Jason agent object
      */
     protected Agent m_agent = null;
-
-    private T bind = null;
+    /**
+     * set with build-in actions of this implementation *
+     */
+    protected Set<IAction> m_buildinaction = new HashSet();
+    /**
+     * external user actions e.g. environment based *
+     */
+    protected Set<IAction> m_useraction = new HashSet();
+    /**
+     * name of the agent *
+     */
+    protected String m_name = null;
 
 
     /**
@@ -73,6 +80,7 @@ public class CAgent<T> implements IVoidAgent
     {
         this.initialize( p_name, p_asl, null );
     }
+
 
     /**
      * ctor
@@ -113,7 +121,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return string with name
      */
-    private String createName()
+    protected String createName()
     {
         return this.getClass().getSimpleName() + "@" + this.hashCode();
     }
@@ -129,44 +137,33 @@ public class CAgent<T> implements IVoidAgent
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "agent name need not to be empty" );
 
+        m_name = p_name;
+        if ( p_bind != null )
+            m_buildinaction.add( new CPushBack<T>( p_bind ) );
+
+
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
-        m_agentarchitecture = new CAgentArchitecture( p_name );
-        m_agent = Agent.create( m_agentarchitecture, Agent.class.getName(), null, CEnvironment.getFilename( p_asl ).toString(), null );
-        m_agentarchitecture.insertAgArch( m_agentarchitecture );
+        m_architecture = new CArchitecture();
+        m_architecture.insertAgArch( m_architecture );
 
-        this.addObjectFields( p_bind );
-
-        // register the agent on the web mindinspector (DoS threat)
-        MindInspectorWeb.get().registerAg( m_agent );
-
-        bind = p_bind;
+        // @todo build agent self, beause we would like to modify the internal actions
+        m_agent = Agent.create( m_architecture, Agent.class.getName(), null, CEnvironment.getFilename( p_asl ).toString(), null );
     }
 
 
     @Override
     public void release()
     {
-        MindInspectorWeb.get().removeAg( m_agent );
+        // remove agent from the mindinspector
+        m_agent.stopAg();
     }
 
-
-    @Override
-    public void addObjectFields( Object p_object )
-    {
-        m_literals.addObjectFields( p_object );
-    }
-
-    @Override
-    public void addObjectMethods( Object p_object )
-    {
-
-    }
 
     @Override
     public String getName()
     {
-        return m_agentarchitecture.getAgName();
+        return m_name;
     }
 
 
@@ -179,18 +176,9 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        for ( Literal l_literal : m_literals.getStaticLiteral() )
-            m_agent.addBel( l_literal );
-        for ( Literal l_literal : m_literals.getObjectFields() )
-            m_agent.addBel( l_literal );
-
-        m_agentarchitecture.cycle( p_currentstep );
-
-        //for ( Literal l_literal : m_agent.getBB() )
-        //    m_literals.syncLiteral( l_literal );
-
-        //System.out.println(bind);
+        m_architecture.cycle( p_currentstep );
     }
+
 
     @Override
     public Map<String, Object> analyse()
@@ -213,21 +201,17 @@ public class CAgent<T> implements IVoidAgent
      * @warn An AgArch is a linked list of AgArchs, the agent name can read if an AgArch has got a successor only (Jason
      * code design error)
      */
-    private class CAgentArchitecture extends AgArch
+    private class CArchitecture extends AgArch
     {
-        /**
-         * agent name *
-         */
-        protected String m_agentname = null;
 
-        /**
-         * ctor for setting agent name
-         *
-         * @param p_name name
-         */
-        public CAgentArchitecture( String p_name )
+        @Override
+        public void act( ActionExec action, List<ActionExec> feedback )
         {
-            m_agentname = p_name;
+            if ( this.runActions( m_buildinaction, action, feedback ) )
+                return;
+
+            if ( this.runActions( m_useraction, action, feedback ) )
+                return;
         }
 
         @Override
@@ -239,9 +223,33 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public String getAgName()
         {
-            return m_agentname;
+            return m_name;
         }
 
+        /**
+         * runs a set of actions
+         *
+         * @param p_actions action set
+         * @param action    action that should be run
+         * @param feedback  feedback
+         * @return action is run
+         */
+        protected boolean runActions( Set<IAction> p_actions, ActionExec action, List<ActionExec> feedback )
+        {
+            for ( IAction l_action : p_actions )
+                if ( l_action.getName().equals( action.getActionTerm().getFunctor() ) )
+                    try
+                    {
+                        l_action.act( action );
+                        feedback.add( action );
+                        return true;
+                    }
+                    catch ( Exception l_exception )
+                    {
+                        // @todo create error
+                    }
+            return false;
+        }
 
         /**
          * manual call of the reasoning cycle
@@ -256,4 +264,5 @@ public class CAgent<T> implements IVoidAgent
         }
 
     }
+
 }

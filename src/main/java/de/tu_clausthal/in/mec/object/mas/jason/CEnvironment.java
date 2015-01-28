@@ -33,15 +33,14 @@ import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
+import jason.jeditplugin.Config;
 import jason.runtime.Settings;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -57,18 +56,6 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
 
     /**
-     * global literal storage *
-     */
-    protected CLiteralStorage m_literals = new CLiteralStorage();
-    /**
-     * map of all actions which can be called by the agents *
-     */
-    protected Map<String, Pair<Method, Object>> m_methods = new HashMap();
-    /**
-     * field list of object fields that converted to belief-base data
-     */
-    protected Map<String, Pair<Field, Object>> m_fields = new HashMap();
-    /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     protected CBrowser m_mindinspector = new CBrowser();
@@ -81,8 +68,9 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public CEnvironment( CFrame p_frame )
     {
+        // register web mindinspector (DoS threat) and set it for all agentsto enable
+        Config.get().setProperty( Config.START_WEB_MI, "true" );
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
-        this.addObjectMethods( this );
     }
 
     /**
@@ -153,26 +141,6 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
         }
     }
 
-    /**
-     * adds all object fields to the agent, fields are converted to literals by means of their data type
-     *
-     * @param p_object object
-     */
-    public void addObjectFields( Object p_object )
-    {
-        //m_fields.putAll( m_literals.addObjectFields( p_object ) );
-    }
-
-    /**
-     * adds all object methods to the agent, methods are converted to internal actions
-     *
-     * @param p_object object
-     */
-    public void addObjectMethods( Object p_object )
-    {
-        //m_methods.putAll( m_literals.addObjectMethods( p_object ) );
-    }
-
 
     @Override
     public void resetData()
@@ -186,24 +154,17 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
-        // get all data for global perceptions (get analyse function and all properties of the object
-        //m_literals.addAll( this.analyse() );
-        //m_literals.addObjectFields( this );
-
         try
         {
-
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
             m_data.add( new CAgent( "agent", new CTestAgent() ) );
+
+            m_mindinspector.load( "http://localhost:3272" );
         }
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
         }
-
-
-        if ( m_data.size() > 0 )
-            m_mindinspector.load( "http://localhost:3272" );
     }
 }

@@ -38,6 +38,7 @@ import java.util.*;
  * Jason collection structure for storing any literal
  *
  * @note atoms can be added only at the initial state of an agent
+ * @deprecated
  */
 public class CLiteralStorage
 {
@@ -65,8 +66,8 @@ public class CLiteralStorage
     /**
      * creates a Jason literal with optional data
      *
-     * @param p_name       name of the literal
-     * @param p_data       data of the literal
+     * @param p_name name of the literal
+     * @param p_data data of the literal
      * @return literal object
      */
     public static Literal getLiteral( String p_name, Object p_data )
@@ -177,7 +178,7 @@ public class CLiteralStorage
         return m_fieldliterals.keySet();
     }
 
-    /*
+/*
     public void syncLiteral( Literal p_literal )
     {
         if (m_staticliterals.contains( p_literal ))
@@ -227,8 +228,6 @@ public class CLiteralStorage
 */
 
 
-
-
     /**
      * transform the object methods to Jason literals
      *
@@ -237,25 +236,25 @@ public class CLiteralStorage
      *
     public Map<String, Pair<Method, Object>> addObjectMethods( Object p_object )
     {
-        Map<String, Pair<Method, Object>> l_data = new HashMap();
-        if ( p_object == null )
-            return l_data;
+    Map<String, Pair<Method, Object>> l_data = new HashMap();
+    if ( p_object == null )
+    return l_data;
 
-        for ( Method l_method : p_object.getClass().getDeclaredMethods() )
-        {
-            for ( IMethodFilter l_filter : m_methodfilter )
-            {
+    for ( Method l_method : p_object.getClass().getDeclaredMethods() )
+    {
+    for ( IMethodFilter l_filter : m_methodfilter )
+    {
 
-                if ( !l_filter.filter( p_object, l_method ) )
-                    continue;
+    if ( !l_filter.filter( p_object, l_method ) )
+    continue;
 
-                Literal l_literal = getLiteral( l_method.getName(), null, m_nulltoatom );
-                m_literals.add( l_literal );
-                l_data.put( l_literal.toString(), new ImmutablePair<Method, Object>( l_method, p_object ) );
-            }
-        }
+    Literal l_literal = getLiteral( l_method.getName(), null, m_nulltoatom );
+    m_literals.add( l_literal );
+    l_data.put( l_literal.toString(), new ImmutablePair<Method, Object>( l_method, p_object ) );
+    }
+    }
 
-        return l_data;
+    return l_data;
     }
      */
 

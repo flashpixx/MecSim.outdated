@@ -30,10 +30,11 @@ import de.tu_clausthal.in.mec.object.mas.jason.actions.IAction;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
-import jason.asSemantics.ActionExec;
-import jason.asSemantics.Agent;
+import jason.asSemantics.*;
+import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
-    protected CArchitecture m_architecture = null;
+    protected CJasonArchitecture m_architecture = null;
     /**
      * Jason agent object
      */
@@ -144,11 +145,11 @@ public class CAgent<T> implements IVoidAgent
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
-        m_architecture = new CArchitecture();
+        m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
-        // @todo build agent self, beause we would like to modify the internal actions
-        m_agent = Agent.create( m_architecture, Agent.class.getName(), null, CEnvironment.getFilename( p_asl ).toString(), null );
+        // build an own agent to handle manual internal actions
+        m_agent = new CJasonAgent( CEnvironment.getFilename( p_asl ), m_architecture );
     }
 
 
@@ -198,10 +199,10 @@ public class CAgent<T> implements IVoidAgent
      *
      * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
      * create an own cycle call
-     * @warn An AgArch is a linked list of AgArchs, the agent name can read if an AgArch has got a successor only (Jason
+     * @warn An AgArch is a linked-list of AgArchs, the agent name can read if an AgArch has got a successor only (Jason
      * code design error)
      */
-    private class CArchitecture extends AgArch
+    private class CJasonArchitecture extends AgArch
     {
 
         @Override
@@ -261,6 +262,29 @@ public class CAgent<T> implements IVoidAgent
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( p_currentstep );
             this.getTS().reasoningCycle();
+        }
+
+    }
+
+
+    /**
+     * class of an own Jason agent to handle Jason stdlib internal action includes
+     */
+    private class CJasonAgent extends Agent
+    {
+
+        /**
+         * ctor
+         *
+         * @param p_asl          ASL file
+         * @param p_architecture architecture
+         */
+        public CJasonAgent( File p_asl, AgArch p_architecture ) throws JasonException
+        {
+            new TransitionSystem( this, null, null, p_architecture );
+            this.setBB( new DefaultBeliefBase() );
+            this.initAg();
+            this.load( p_asl.toString() );
         }
 
     }

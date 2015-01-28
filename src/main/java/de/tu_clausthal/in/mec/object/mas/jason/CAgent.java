@@ -30,8 +30,11 @@ import de.tu_clausthal.in.mec.object.mas.jason.actions.IAction;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
+import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
+import jason.asSyntax.PlanLibrary;
 import jason.bb.DefaultBeliefBase;
+import jason.jeditplugin.Config;
 
 import java.awt.*;
 import java.io.File;
@@ -281,9 +284,20 @@ public class CAgent<T> implements IVoidAgent
          */
         public CJasonAgent( File p_asl, AgArch p_architecture ) throws JasonException
         {
-            new TransitionSystem( this, null, null, p_architecture );
+            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( new DefaultBeliefBase() );
-            this.initAg();
+            this.setPL( new PlanLibrary() );
+
+/*
+            if (initialGoals == null) initialGoals = new ArrayList<Literal>();
+            if (initialBels  == null) initialBels  = new ArrayList<Literal>();
+
+            if (internalActions == null) internalActions = new HashMap<String, InternalAction>();
+            initDefaultFunctions();
+*/
+            if ( !"false".equals( Config.get().getProperty( Config.START_WEB_MI ) ) )
+                MindInspectorWeb.get().registerAg( this );
+
             this.load( p_asl.toString() );
         }
 

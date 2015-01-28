@@ -291,18 +291,16 @@ public class CAgent<T> implements IVoidAgent
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( new DefaultBeliefBase() );
             this.setPL( new PlanLibrary() );
-            this.load( p_asl.toString() );
-            this.initDefaultFunctions();
 
+            this.initDefaultFunctions();
             try
             {
                 CCommon.getPrivateField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
                 CCommon.getPrivateField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
 
-                // create internal actions map - reset the map and insert with getIA the minimal structure
+                // create internal actions map - reset the map and insert all default Jason action and overwrite
+                // not useable actions with placeholder
                 CCommon.getPrivateField( super.getClass().getSuperclass(), "internalActions" ).set( this, new HashMap() );
-                for ( String l_action : new String[]{"send", "tell", "findall", "print", "add_plan", "remove_plan", "relevant_plans", "add_nested_source", "list", "ground", "literal", "drop_desire"} )
-                    this.getIA( l_action );
 
             }
             catch ( Exception l_exception )
@@ -310,6 +308,7 @@ public class CAgent<T> implements IVoidAgent
                 System.out.println( "---> " + l_exception );
             }
 
+            this.load( p_asl.toString() );
 
             if ( !( "false".equals( Config.get().getProperty( Config.START_WEB_MI ) ) ) )
                 MindInspectorWeb.get().registerAg( this );

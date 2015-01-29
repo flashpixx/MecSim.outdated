@@ -24,10 +24,11 @@
 package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
 
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -35,15 +36,36 @@ import java.util.List;
  */
 public class CPushBack<T> extends IAction
 {
+
+    /**
+     * bind object *
+     */
     protected T m_bind = null;
+    /**
+     * set with forbidden field names *
+     */
+    protected Set<String> m_forbidden = new HashSet();
 
-
+    /** ctor - with bind object
+     *
+     * @param p_bind bind object
+     */
     public CPushBack( T p_bind )
     {
         if ( p_bind == null )
             throw new IllegalArgumentException( "bind object need not to be null" );
 
         m_bind = p_bind;
+    }
+
+    /**
+     * returns the forbidden set
+     *
+     * @return set with forbidden names
+     */
+    public Set<String> getForbidden()
+    {
+        return m_forbidden;
     }
 
 
@@ -56,10 +78,28 @@ public class CPushBack<T> extends IAction
     @Override
     public void act( Structure p_args )
     {
+
+        // check number of argument first
         List<Term> l_data = p_args.getTerms();
         if ( l_data.size() < 2 )
             throw new IllegalArgumentException( "arguments are incorrect" );
 
-        //m_bind.getClass().getDeclaredField(  )
+        // first argument must changed to a string (cast calls are not needed, we use the object string call)
+        String l_fieldname = l_data.get( 0 ).toString();
+        try
+        {
+
+            for ( String l_name : m_forbidden )
+                if ( l_name.equals( l_fieldname ) )
+                    throw new IllegalAccessException( "field [" + l_fieldname + "] not accessible" );
+
+            CCommon.getClassField( m_bind.getClass(), l_fieldname ).set( m_bind, l_data.get( 1 ) );
+
+        }
+        catch ( Exception l_exception )
+        {
+            throw new IllegalArgumentException( "field name [" + l_fieldname + "] not found" );
+        }
+
     }
 }

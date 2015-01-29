@@ -141,7 +141,7 @@ public class CAgent<T> implements IVoidAgent
 
         m_name = p_name;
         if ( p_bind != null )
-            m_action.add( new CPushBack<T>( p_bind ) );
+            m_action.add( new CPushBack( "local", p_bind ) );
 
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch

@@ -80,13 +80,21 @@ public class CCommon
      * returns a private field of a class
      *
      * @param p_class class
-     * @param p_file  fieldname
+     * @param p_field  fieldname
      * @return field
      */
-    public static Field getClassField( Class p_class, String p_field ) throws NoSuchFieldException
+    public static Field getClassField( Class p_class, String p_field )
     {
-        Field l_field = p_class.getDeclaredField( p_field );
-        l_field.setAccessible( true );
+        Field l_field = null;
+        try
+        {
+            l_field = p_class.getDeclaredField( p_field );
+            l_field.setAccessible( true );
+        }
+        catch ( Exception l_exception )
+        {
+            throw new IllegalArgumentException( "field [" + p_field + "] not found in class [" + p_class.getCanonicalName() + "]" );
+        }
         return l_field;
 
     }

@@ -34,28 +34,63 @@ import java.util.*;
 /**
  * creates a action to synchronize bind-object with agent
  */
-public class CPushBack<T> extends IAction
+public class CPushBack extends IAction
 {
 
     /**
      * bind object *
      */
-    protected T m_bind = null;
+    protected Map<String, Object> m_bind = new HashMap();
     /**
      * set with forbidden field names *
      */
-    protected Set<String> m_forbidden = new HashSet();
+    protected Map<String, Set<String>> m_forbidden = new HashMap();
 
-    /** ctor - with bind object
-     *
-     * @param p_bind bind object
+
+    /**
+     * ctor - default
      */
-    public CPushBack( T p_bind )
+    public CPushBack()
     {
-        if ( p_bind == null )
-            throw new IllegalArgumentException( "bind object need not to be null" );
 
-        m_bind = p_bind;
+    }
+
+    /**
+     * ctor bind an object
+     *
+     * @param p_name name of the binding object
+     * @param p_bind object
+     */
+    public CPushBack( String p_name, Object p_bind )
+    {
+        m_forbidden.put( p_name, new HashSet() );
+        m_bind.put( p_name, p_bind );
+    }
+
+
+    /**
+     * adds a new bind object
+     *
+     * @param p_name   name
+     * @param p_object bind object
+     */
+    public void push( String p_name, Object p_object )
+    {
+        m_forbidden.put( p_name, new HashSet() );
+        m_bind.put( p_name, p_object );
+    }
+
+
+    /**
+     * removes an object from the bind
+     *
+     * @param p_name name
+     * @return bind object
+     */
+    public Object remove( String p_name )
+    {
+        m_forbidden.remove( p_name );
+        return m_bind.get( p_name );
     }
 
     /**
@@ -63,9 +98,9 @@ public class CPushBack<T> extends IAction
      *
      * @return set with forbidden names
      */
-    public Set<String> getForbidden()
+    public Set<String> getForbidden( String p_name )
     {
-        return m_forbidden;
+        return m_forbidden.get( p_name );
     }
 
 
@@ -81,26 +116,28 @@ public class CPushBack<T> extends IAction
 
         // check number of argument first
         List<Term> l_data = p_args.getTerms();
-        if ( l_data.size() < 2 )
+        if ( l_data.size() < 3 )
             throw new IllegalArgumentException( "arguments are incorrect" );
 
-        // first argument must changed to a string (cast calls are not needed, we use the object string call)
-        String l_fieldname = l_data.get( 0 ).toString();
+        // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
+        String l_objectname = l_data.get( 0 ).toString();
+        Object l_target = m_bind.get( l_objectname );
+        if ( l_target == null )
+            throw new IllegalArgumentException( "object key [" + l_objectname + "] not found" );
 
-        System.out.println();
+        String l_fieldname = l_data.get( 1 ).toString();
         try
         {
 
-            for ( String l_name : m_forbidden )
+            for ( String l_name : m_forbidden.get( l_objectname ) )
                 if ( l_name.equals( l_fieldname ) )
-                    throw new IllegalAccessException( "field [" + l_fieldname + "] not accessible" );
+                    throw new IllegalAccessException( "field [" + l_fieldname + "] not accessible for the object [" + l_objectname + "]" );
 
-            CCommon.getClassField( m_bind.getClass(), l_fieldname ).set( m_bind, 0 );
-
+            CCommon.getClassField( l_target.getClass(), l_fieldname ).set( l_target, 0 );
         }
         catch ( Exception l_exception )
         {
-            throw new IllegalArgumentException( "field name [" + l_fieldname + "] not found" );
+            throw new IllegalArgumentException( l_exception.getMessage() );
         }
 
     }

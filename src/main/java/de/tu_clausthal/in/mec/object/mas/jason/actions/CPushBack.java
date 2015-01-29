@@ -86,6 +86,8 @@ public class CPushBack<T> extends IAction
 
         // first argument must changed to a string (cast calls are not needed, we use the object string call)
         String l_fieldname = l_data.get( 0 ).toString();
+
+        System.out.println();
         try
         {
 
@@ -93,7 +95,7 @@ public class CPushBack<T> extends IAction
                 if ( l_name.equals( l_fieldname ) )
                     throw new IllegalAccessException( "field [" + l_fieldname + "] not accessible" );
 
-            CCommon.getClassField( m_bind.getClass(), l_fieldname ).set( m_bind, l_data.get( 1 ) );
+            CCommon.getClassField( m_bind.getClass(), l_fieldname ).set( m_bind, 0 );
 
         }
         catch ( Exception l_exception )

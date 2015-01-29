@@ -25,8 +25,7 @@ package de.tu_clausthal.in.mec.common;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.text.MessageFormat;
 import java.util.Collection;
 
@@ -96,7 +95,44 @@ public class CCommon
             throw new IllegalArgumentException( "field [" + p_field + "] not found in class [" + p_class.getCanonicalName() + "]" );
         }
         return l_field;
+    }
 
+
+    /**
+     * returns a void-method from a class
+     *
+     * @param p_class  class
+     * @param p_method methodname
+     * @return method
+     */
+    public static Method getClassMethod( Class p_class, String p_method )
+    {
+        return getClassMethod( p_class, p_method, null );
+    }
+
+
+    /**
+     * returns a void-method from a class
+     *
+     * @param p_class     class
+     * @param p_method    methodname
+     * @param p_parameter array with type-classes to define method parameter e.g. new Class[]{Integer.TYPE,
+     *                    Integer.TYPE};
+     * @return method
+     */
+    public static Method getClassMethod( Class p_class, String p_method, Class[] p_parameter )
+    {
+        Method l_method = null;
+        try
+        {
+            l_method = p_class.getDeclaredMethod( p_method, p_parameter );
+            l_method.setAccessible( true );
+        }
+        catch ( Exception l_exception )
+        {
+            throw new IllegalArgumentException( "method [" + p_method + "] not found in class [" + p_class.getCanonicalName() + "]" );
+        }
+        return l_method;
     }
 
 }

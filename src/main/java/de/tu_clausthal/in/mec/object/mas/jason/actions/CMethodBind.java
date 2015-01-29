@@ -24,17 +24,19 @@
 package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 
 /**
  * action to invoke any method on an object
  */
-public class CMethodInvoke extends IAction
+public class CMethodBind extends IAction
 {
 
     /**
@@ -46,7 +48,7 @@ public class CMethodInvoke extends IAction
     /**
      * ctor - default
      */
-    public CMethodInvoke()
+    public CMethodBind()
     {
 
     }
@@ -57,7 +59,7 @@ public class CMethodInvoke extends IAction
      * @param p_name   name of the binding object
      * @param p_object object
      */
-    public CMethodInvoke( String p_name, Object p_object )
+    public CMethodBind( String p_name, Object p_object )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
     }
@@ -111,7 +113,7 @@ public class CMethodInvoke extends IAction
     {
         // check number of argument first
         List<Term> l_args = p_args.getTerms();
-        if ( l_args.size() < 3 )
+        if ( l_args.size() < 2 )
             throw new IllegalArgumentException( "arguments are incorrect" );
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
@@ -127,6 +129,8 @@ public class CMethodInvoke extends IAction
             for ( String l_name : l_object.getRight() )
                 if ( l_name.equals( l_methodname ) )
                     throw new IllegalAccessException( "method [" + l_methodname + "] not accessible for the object [" + l_objectname + "]" );
+
+            Method l_method = l_args.size() == 2 ? CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname ) : CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname, null );
 
         }
         catch ( Exception l_exception )

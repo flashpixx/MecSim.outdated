@@ -34,31 +34,66 @@ import jason.asSyntax.Term;
 public class CInternalEmpty extends DefaultInternalAction
 {
 
+    /**
+     * default result value *
+     */
     protected boolean m_result = true;
+    /** minimum number of arguments **/
     protected int m_minimumarguments = super.getMinArgs();
+    /** maximum number of arguments **/
     protected int m_maximumarguments = super.getMaxArgs();
 
 
+    /**
+     * default ctor
+     */
     public CInternalEmpty()
     {
     }
 
+
+    /**
+     * ctor
+     *
+     * @param p_min minimum of arguments
+     * @param p_max maximum of arguments
+     * @param p_result result value
+     */
     public CInternalEmpty( int p_min, int p_max, boolean p_result )
     {
         this.initialize( p_min, p_max, p_result );
     }
 
+
+    /**
+     * ctor
+     *
+     * @param p_min minimum of arguments
+     * @param p_max maximum of arguments
+     */
     public CInternalEmpty( int p_min, int p_max )
     {
         this.initialize( p_min, p_max, true );
     }
 
+
+    /**
+     * ctor
+     *
+     * @param p_result result value
+     */
     public CInternalEmpty( boolean p_result )
     {
         this.initialize( 0, 0, p_result );
     }
 
 
+    /**
+     * initialize
+     * @param p_min minimum of arguments
+     * @param p_max maximum of arguments
+     * @param p_result result value
+     */
     protected void initialize( int p_min, int p_max, boolean p_result )
     {
         m_minimumarguments = Math.abs( p_min );

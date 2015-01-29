@@ -6,6 +6,8 @@ import java.lang.reflect.Modifier;
 
 /**
  * default filter for object properties, only public properties are accepted
+ *
+ * @deprecated
  */
 public class CDefaultFieldFilter extends IPropertyFilter
 {

@@ -29,6 +29,8 @@ import java.lang.reflect.Modifier;
 
 /**
  * default filter for object methods, only public methods are accepted
+ *
+ * @deprecated
  */
 public class CDefaultMethodFilter extends IMethodFilter
 {

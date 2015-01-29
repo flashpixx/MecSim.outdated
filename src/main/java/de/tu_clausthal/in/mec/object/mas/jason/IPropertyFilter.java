@@ -27,7 +27,8 @@ import java.lang.reflect.Field;
 
 
 /**
- * Created by pkraus on 20.01.15.
+ *
+ * @deprecated
  */
 public class IPropertyFilter
 {

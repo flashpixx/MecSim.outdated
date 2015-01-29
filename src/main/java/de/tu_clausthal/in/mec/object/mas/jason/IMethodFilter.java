@@ -28,6 +28,8 @@ import java.lang.reflect.Method;
 
 /**
  * abstract class to filter perceptions and actions
+ *
+ * @deprecated
  */
 public abstract class IMethodFilter
 {

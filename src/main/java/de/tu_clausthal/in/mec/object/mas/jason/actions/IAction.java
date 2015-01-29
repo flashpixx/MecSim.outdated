@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
-import jason.asSemantics.ActionExec;
+import jason.asSyntax.Structure;
 
 
 /**
@@ -45,8 +45,10 @@ public abstract class IAction
 
     /**
      * runs the action *
+     *
+     * @param p_args arguments of the action
      */
-    public void act( ActionExec p_action )
+    public void act( Structure p_args )
     {
     }
 

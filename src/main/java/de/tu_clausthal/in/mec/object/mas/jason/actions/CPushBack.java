@@ -24,7 +24,10 @@
 package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
-import jason.asSemantics.ActionExec;
+import jason.asSyntax.Structure;
+import jason.asSyntax.Term;
+
+import java.util.List;
 
 
 /**
@@ -51,9 +54,12 @@ public class CPushBack<T> extends IAction
     }
 
     @Override
-    public void act( ActionExec p_action )
+    public void act( Structure p_args )
     {
-        System.out.println( "-- run --> " + p_action );
-    }
+        List<Term> l_data = p_args.getTerms();
+        if ( l_data.size() < 2 )
+            throw new IllegalArgumentException( "arguments are incorrect" );
 
+        //m_bind.getClass().getDeclaredField(  )
+    }
 }

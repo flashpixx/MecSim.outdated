@@ -33,6 +33,7 @@ import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.PlanLibrary;
 import jason.bb.DefaultBeliefBase;
 import jason.jeditplugin.Config;
@@ -64,11 +65,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * set with build-in actions of this implementation *
      */
-    protected Set<IAction> m_buildinaction = new HashSet();
-    /**
-     * external user actions e.g. environment based *
-     */
-    protected Set<IAction> m_useraction = new HashSet();
+    protected Set<IAction> m_action = new HashSet();
     /**
      * name of the agent *
      */
@@ -144,7 +141,7 @@ public class CAgent<T> implements IVoidAgent
 
         m_name = p_name;
         if ( p_bind != null )
-            m_buildinaction.add( new CPushBack<T>( p_bind ) );
+            m_action.add( new CPushBack<T>( p_bind ) );
 
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -212,11 +209,23 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public void act( ActionExec action, List<ActionExec> feedback )
         {
-            if ( this.runActions( m_buildinaction, action, feedback ) )
-                return;
+            for ( IAction l_action : m_action )
+                if ( ( l_action.getName() != null ) && ( l_action.getName().equals( action.getActionTerm().getFunctor() ) ) )
+                {
+                    try
+                    {
+                        l_action.act( action.getActionTerm() );
+                        action.setResult( true );
+                    }
+                    catch ( Exception l_exception )
+                    {
+                        action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
+                        action.setResult( false );
+                    }
 
-            if ( this.runActions( m_useraction, action, feedback ) )
-                return;
+                    feedback.add( action );
+                    return;
+                }
         }
 
         @Override
@@ -229,31 +238,6 @@ public class CAgent<T> implements IVoidAgent
         public String getAgName()
         {
             return m_name;
-        }
-
-        /**
-         * runs a set of actions
-         *
-         * @param p_actions action set
-         * @param action    action that should be run
-         * @param feedback  feedback
-         * @return action is run
-         */
-        protected boolean runActions( Set<IAction> p_actions, ActionExec action, List<ActionExec> feedback )
-        {
-            for ( IAction l_action : p_actions )
-                if ( l_action.getName().equals( action.getActionTerm().getFunctor() ) )
-                    try
-                    {
-                        l_action.act( action );
-                        feedback.add( action );
-                        return true;
-                    }
-                    catch ( Exception l_exception )
-                    {
-                        // @todo create error
-                    }
-            return false;
         }
 
         /**
@@ -281,7 +265,7 @@ public class CAgent<T> implements IVoidAgent
     {
 
         /**
-         * ctor
+         * ctor - for building a "blank / empty" agent
          *
          * @param p_asl          ASL file
          * @param p_architecture architecture
@@ -291,23 +275,23 @@ public class CAgent<T> implements IVoidAgent
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( new DefaultBeliefBase() );
             this.setPL( new PlanLibrary() );
-
             this.initDefaultFunctions();
+
             try
             {
-                CCommon.getPrivateField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
-                CCommon.getPrivateField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
+                CCommon.getClassField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
+                CCommon.getClassField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                Map<String, InternalAction> l_actions = new HashMap();
+                Map<String, InternalAction> l_action = new HashMap();
 
-                l_actions.put( "jason.stdlib.clone", new CInternalEmpty() );
-                l_actions.put( "jason.stdlib.wait", new CInternalEmpty( 1, 3 ) );
-                l_actions.put( "jason.stdlib.create_agent", new CInternalEmpty( 1, 3 ) );
-                l_actions.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
-                l_actions.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+                l_action.put( "jason.stdlib.clone", new CInternalEmpty() );
+                l_action.put( "jason.stdlib.wait", new CInternalEmpty( 1, 3 ) );
+                l_action.put( "jason.stdlib.create_agent", new CInternalEmpty( 1, 3 ) );
+                l_action.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
+                l_action.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
-                CCommon.getPrivateField( super.getClass().getSuperclass(), "internalActions" ).set( this, l_actions );
+                CCommon.getClassField( super.getClass().getSuperclass(), "internalActions" ).set( this, l_action );
 
             }
             catch ( Exception l_exception )

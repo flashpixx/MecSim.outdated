@@ -83,7 +83,7 @@ public class CCommon
      * @param p_file  fieldname
      * @return field
      */
-    public static Field getPrivateField( Class p_class, String p_file ) throws NoSuchFieldException
+    public static Field getClassField( Class p_class, String p_file ) throws NoSuchFieldException
     {
         Field l_field = p_class.getDeclaredField( p_file );
         l_field.setAccessible( true );

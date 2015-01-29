@@ -25,16 +25,16 @@ package de.tu_clausthal.in.mec.object.mas.jason.actions;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import jason.asSyntax.Structure;
-import jason.asSyntax.Term;
+import jason.asSyntax.*;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 
 /**
  * creates a action to synchronize bind-object with agent
  */
-public class CPushBack extends IAction
+public class CFieldBind extends IAction
 {
 
     /**
@@ -50,7 +50,7 @@ public class CPushBack extends IAction
     /**
      * ctor - default
      */
-    public CPushBack()
+    public CFieldBind()
     {
 
     }
@@ -61,7 +61,7 @@ public class CPushBack extends IAction
      * @param p_name name of the binding object
      * @param p_bind object
      */
-    public CPushBack( String p_name, Object p_bind )
+    public CFieldBind( String p_name, Object p_bind )
     {
         m_forbidden.put( p_name, new HashSet() );
         m_bind.put( p_name, p_bind );
@@ -107,7 +107,7 @@ public class CPushBack extends IAction
     @Override
     public String getName()
     {
-        return "pushback";
+        return "pushfield";
     }
 
     @Override
@@ -115,17 +115,17 @@ public class CPushBack extends IAction
     {
 
         // check number of argument first
-        List<Term> l_data = p_args.getTerms();
-        if ( l_data.size() < 3 )
+        List<Term> l_args = p_args.getTerms();
+        if ( l_args.size() < 3 )
             throw new IllegalArgumentException( "arguments are incorrect" );
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
-        String l_objectname = l_data.get( 0 ).toString();
-        Object l_target = m_bind.get( l_objectname );
-        if ( l_target == null )
+        String l_objectname = l_args.get( 0 ).toString();
+        Object l_object = m_bind.get( l_objectname );
+        if ( l_object == null )
             throw new IllegalArgumentException( "object key [" + l_objectname + "] not found" );
 
-        String l_fieldname = l_data.get( 1 ).toString();
+        String l_fieldname = l_args.get( 1 ).toString();
         try
         {
 
@@ -133,7 +133,16 @@ public class CPushBack extends IAction
                 if ( l_name.equals( l_fieldname ) )
                     throw new IllegalAccessException( "field [" + l_fieldname + "] not accessible for the object [" + l_objectname + "]" );
 
-            CCommon.getClassField( l_target.getClass(), l_fieldname ).set( l_target, 0 );
+
+            if ( l_args.get( 2 ).isNumeric() )
+            {
+                Field l_field = CCommon.getClassField( l_object.getClass(), l_fieldname );
+                l_field.set( l_object, l_field.getType().cast( ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
+            }
+
+            if ( l_args.get( 2 ).isString() )
+                CCommon.getClassField( l_object.getClass(), l_fieldname ).set( l_object, ( (StringTerm) l_args.get( 2 ) ).getString() );
+
         }
         catch ( Exception l_exception )
         {

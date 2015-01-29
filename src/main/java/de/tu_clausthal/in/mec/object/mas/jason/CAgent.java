@@ -23,11 +23,11 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.jason.actions.CPushBack;
-import de.tu_clausthal.in.mec.object.mas.jason.actions.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.actions.*;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
@@ -274,8 +274,8 @@ public class CAgent<T> implements IVoidAgent
     /**
      * class of an own Jason agent to handle Jason stdlib internal action includes
      *
-     * @note we do the initialization process manually, because some internal actions
-     * are removed from the default behaviour
+     * @note we do the initialization process manually, because some internal actions are removed from the default
+     * behaviour
      */
     private class CJasonAgent extends Agent
     {
@@ -298,14 +298,21 @@ public class CAgent<T> implements IVoidAgent
                 CCommon.getPrivateField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
                 CCommon.getPrivateField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
 
-                // create internal actions map - reset the map and insert all default Jason action and overwrite
-                // not useable actions with placeholder
-                CCommon.getPrivateField( super.getClass().getSuperclass(), "internalActions" ).set( this, new HashMap() );
+                // create internal actions map - reset the map and overwrite not useable actions with placeholder
+                Map<String, InternalAction> l_actions = new HashMap();
+
+                l_actions.put( "jason.stdlib.clone", new CInternalEmpty() );
+                l_actions.put( "jason.stdlib.wait", new CInternalEmpty( 1, 3 ) );
+                l_actions.put( "jason.stdlib.create_agent", new CInternalEmpty( 1, 3 ) );
+                l_actions.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
+                l_actions.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+
+                CCommon.getPrivateField( super.getClass().getSuperclass(), "internalActions" ).set( this, l_actions );
 
             }
             catch ( Exception l_exception )
             {
-                System.out.println( "---> " + l_exception );
+                CLogger.error( l_exception );
             }
 
             this.load( p_asl.toString() );

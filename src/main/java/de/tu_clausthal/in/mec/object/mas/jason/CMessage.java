@@ -31,7 +31,7 @@ import jason.asSemantics.Message;
 /**
  * class to encapsulate a Jason message for the event manager
  */
-public class CAgentMessage implements IMessage<Message>
+public class CMessage implements IMessage<Message>
 {
 
     /**
@@ -51,7 +51,7 @@ public class CAgentMessage implements IMessage<Message>
      *
      * @param p_message Jason message
      */
-    public CAgentMessage( Message p_message )
+    public CMessage( Message p_message )
     {
         if ( p_message == null )
             throw new IllegalArgumentException( "message data need not to be null" );

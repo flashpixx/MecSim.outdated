@@ -25,10 +25,12 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.actions.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
@@ -234,7 +236,6 @@ public class CAgent<T> implements IVoidAgent
      */
     private class CJasonArchitecture extends AgArch
     {
-
         @Override
         public void act( ActionExec action, List<ActionExec> feedback )
         {
@@ -267,6 +268,21 @@ public class CAgent<T> implements IVoidAgent
         public String getAgName()
         {
             return m_name;
+        }
+
+        @Override
+        public void sendMsg( Message m ) throws Exception
+        {
+            CSimulation.getInstance().getEventManager().pushMessage( new CPath( m.getReceiver() ), new CMessage( m ) );
+        }
+
+        @Override
+        /**
+         * @todo bind to event messangener
+         */
+        public void broadcast( Message m ) throws Exception
+        {
+            super.broadcast( m );
         }
 
         /**

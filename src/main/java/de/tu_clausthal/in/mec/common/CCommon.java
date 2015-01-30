@@ -37,6 +37,12 @@ public class CCommon
 {
 
     /**
+     * package base for translation *
+     */
+    private static final String s_packageroot = "de.tu_clausthal.in.mec.";
+
+
+    /**
      * converts any collection type into a typed array
      *
      * @param p_collection collection
@@ -59,7 +65,7 @@ public class CCommon
      */
     public static String getResouceString( Object p_object, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getSimpleName().toLowerCase() + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getCanonicalName().toLowerCase().replace( s_packageroot, "" ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
     /**
@@ -71,7 +77,7 @@ public class CCommon
      */
     public static String getResouceString( Class p_class, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getSimpleName().toLowerCase() + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getCanonicalName().toLowerCase().replace( s_packageroot, "" ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
 

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.object.source.*;
@@ -57,7 +58,7 @@ class COSMMouseListener extends MouseAdapter
             if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( e.getClickCount() == 2 ) )
             {
                 if ( CSimulation.getInstance().isRunning() )
-                    throw new IllegalStateException( "simulation is running" );
+                    throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
 
                 switch ( ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName() )

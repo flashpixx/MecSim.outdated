@@ -56,7 +56,7 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
-    protected CBrowser m_mindinspector = new CBrowser();
+    protected CBrowser m_mindinspector = null;
 
 
     /**
@@ -67,7 +67,11 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
     public CEnvironment( CFrame p_frame )
     {
         // register web mindinspector (DoS threat)
-        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
+        if ( ( p_frame != null ) && ( !p_frame.containsWidget( "Jason Mindinspector" ) ) )
+        {
+            m_mindinspector = new CBrowser();
+            p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
+        }
     }
 
     /**
@@ -154,7 +158,9 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
             m_data.add( new CAgent( "agent", new CTestAgent() ) );
-            m_mindinspector.load( "http://localhost:3272" );
+
+            if ( m_mindinspector != null )
+                m_mindinspector.load( "http://localhost:3272" );
         }
         catch ( Exception l_exception )
         {

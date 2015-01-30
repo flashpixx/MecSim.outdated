@@ -243,6 +243,11 @@ public class CAgent<T> implements IVoidAgent
      */
     private class CJasonArchitecture extends AgArch
     {
+        /**
+         * cycle number *
+         */
+        protected int m_cycle = 0;
+
         @Override
         public void act( ActionExec action, List<ActionExec> feedback )
         {
@@ -300,6 +305,15 @@ public class CAgent<T> implements IVoidAgent
         public void cycle( int p_currentstep )
         {
             // update all beliefs
+            m_agent.getBB().clear();
+            try
+            {
+                m_agent.addBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
             for ( IBelief l_item : m_beliefs )
             {
                 l_item.clear();
@@ -315,7 +329,7 @@ public class CAgent<T> implements IVoidAgent
             }
 
             // the reasoning cycle must be called within the transition system
-            this.setCycleNumber( p_currentstep );
+            this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
         }
 

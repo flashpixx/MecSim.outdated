@@ -38,6 +38,7 @@ import java.util.*;
  * Jason collection structure for storing any literal
  *
  * @note atoms can be added only at the initial state of an agent
+ *
  * @deprecated
  */
 public class CLiteralStorage

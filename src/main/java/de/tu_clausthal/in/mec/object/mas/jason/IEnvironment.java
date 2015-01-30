@@ -44,9 +44,10 @@ import java.util.List;
  * structure), in this context the environment class encapsulate all behaviour inside, because it will be triggerd from
  * the simulation core thread
  *
- * @todo try to refactor - Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind
- * of disabeling / modifiying - https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
- * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
+ * @warn Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of changing the
+ * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
+ *
+ * @see http://jason.sourceforge.net/
  */
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
@@ -78,7 +79,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * @param p_agentname agent name
      * @return file object
      */
-    public static File getAgentFilename( String p_agentname ) throws IOException
+    public static File createAgentFile( String p_agentname ) throws IOException
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( "ASL file name need not be empty" );
@@ -97,8 +98,9 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * @param p_agentname agent name
      * @return existing file object
      * @note must support a agent filename as file with extension and without extension
+     * @todo add ASL build-in files with the resource directory
      */
-    public static File getFilename( String p_agentname )
+    public static File getAgentFile( String p_agentname )
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( "ASL file name need not be empty" );
@@ -110,8 +112,9 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
+     * @todo add ASL build-in files with the resource directory
      */
-    public static String[] getAgentFilenames()
+    public static String[] getAgentFiles()
     {
         List<String> l_list = new LinkedList();
         for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
@@ -130,7 +133,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     {
         try
         {
-            Agent.create( new AgArch(), Agent.class.getName(), null, getFilename( p_agentname ).toString(), null );
+            Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
         }
         catch ( Exception l_exception )
         {

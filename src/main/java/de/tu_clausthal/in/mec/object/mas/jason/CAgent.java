@@ -165,7 +165,7 @@ public class CAgent<T> implements IVoidAgent
         m_architecture.insertAgArch( m_architecture );
 
         // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent( IEnvironment.getFilename( p_asl ), m_architecture );
+        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
     }
 
 

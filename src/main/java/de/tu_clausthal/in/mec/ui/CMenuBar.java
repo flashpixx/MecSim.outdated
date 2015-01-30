@@ -147,7 +147,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void MASJasonMenu()
     {
-        List<String> l_menu = new ArrayList( Arrays.asList( IEnvironment.getAgentFilenames() ) );
+        List<String> l_menu = new ArrayList( Arrays.asList( IEnvironment.getAgentFiles() ) );
         l_menu.add( null );
         l_menu.add( "new agent" );
         l_menu.add( "check syntax" );
@@ -295,7 +295,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 String l_name = this.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
-                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getAgentFilename( l_name ) );
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
                 this.refreshDynamicItems();
                 return;
             }
@@ -311,7 +311,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                 if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
                 {
-                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getAgentFile( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     return;
                 }
 

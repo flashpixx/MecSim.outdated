@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.analysis;
 
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import org.jfree.chart.ChartFactory;
@@ -89,7 +88,7 @@ public class CCarCount extends IEvaluateLayer
         if ( !CSimulation.getInstance().hasUI() )
             return;
 
-        m_plotdata.addValue( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getNumberOfObjects(), "number", String.valueOf( p_currentstep ) );
+        m_plotdata.addValue( Integer.parseInt( CSimulation.getInstance().getWorld().get( "Cars" ).analyse().get( "car count" ).toString() ), "number", String.valueOf( p_currentstep ) );
     }
 
     @Override

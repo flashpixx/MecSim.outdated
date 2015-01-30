@@ -21,23 +21,27 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas.jason;
+package de.tu_clausthal.in.mec.object.car;
+
+
+import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
+import de.tu_clausthal.in.mec.ui.CFrame;
+
 
 /**
- * test class for the agent layer
- *
- * @deprecated
+ * layer for car agents
  */
-public class CTestAgent
+public class CCarAgentLayer extends IEnvironment<CDefaultCar>
 {
 
-    public int a = 1;
-    public String name = "foo";
-    public String mynull = null;
-
-    @Override
-    public String toString()
+    /**
+     * ctor of Jason structure
+     *
+     * @param p_frame frame object set Jason mindinspector
+     */
+    public CCarAgentLayer( CFrame p_frame )
     {
-        return "==> " + a + " - " + name + " - " + mynull + " <==";
+        super( p_frame );
     }
+
 }

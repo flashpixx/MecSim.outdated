@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
@@ -49,7 +48,7 @@ import java.util.List;
  * of disabeling / modifiying - https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class IEnvironment<T> extends IMultiLayer<CAgent<T>>
+public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
 
     /**
@@ -152,18 +151,8 @@ public class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     @Override
     public void step( int p_currentstep, ILayer p_layer )
     {
-        try
-        {
-            // mind inspector works after an agent exists, so we need
-            // to bind the browser after the first agent exists
-            m_data.add( new CAgent( "agent", new CTestAgent() ) );
-
-            if ( m_mindinspector != null )
-                m_mindinspector.load( "http://localhost:3272" );
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
+        // mindinspector needs to load if there exists agents
+        if ( ( m_mindinspector != null ) && ( m_data.size() == 0 ) )
+            m_mindinspector.load( "http://localhost:3272" );
     }
 }

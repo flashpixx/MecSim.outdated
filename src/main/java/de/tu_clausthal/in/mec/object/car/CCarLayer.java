@@ -60,6 +60,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
      * data structure - not serializable
      */
     protected transient List<ICar> m_data = new LinkedList();
+    /**
+     * map of analyse call
+     */
+    protected transient Map<String, Object> m_analyse = new HashMap();
+
 
     /**
      * returns the graph of the layer
@@ -162,7 +167,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     @Override
     public Map<String, Object> analyse()
     {
-        return null;
+        m_analyse.put( "car count", this.getGraph().getNumberOfObjects() );
+        return m_analyse;
     }
 
     @Override

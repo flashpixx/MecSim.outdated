@@ -24,9 +24,14 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
+import de.tu_clausthal.in.mec.CLogger;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 
@@ -40,6 +45,7 @@ public class CFieldBind implements IBelief
      */
     protected Map<String, ImmutablePair<Object, Set<String>>> m_bind = new HashMap();
 
+    protected Set<Literal> m_literals = new HashSet();
 
     /**
      * ctor - default
@@ -52,26 +58,60 @@ public class CFieldBind implements IBelief
     /**
      * ctor bind an object
      *
-     * @param p_name   name of the binding object
-     * @param p_object object
+     * @param p_name   name / annotion of the object
+     * @param p_object bind object
      */
     public CFieldBind( String p_name, Object p_object )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
     }
 
+    /**
+     * creates a Jason literal with optional data
+     *
+     * @param p_name name of the literal
+     * @param p_data data of the literal
+     * @return literal object
+     */
+    protected static Literal getLiteral( String p_name, Object p_data )
+    {
+        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+            throw new IllegalArgumentException( "name need not to be empty" );
+
+
+        // first char must be lower-case - split on spaces and create camel-case
+        String[] l_parts = p_name.split( " " );
+        for ( int i = 0; i < l_parts.length; i++ )
+            l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
+        String l_name = StringUtils.join( l_parts ).replaceAll( "\\W", "" );
+
+
+        // null value into atom
+        if ( p_data == null )
+            return ASSyntax.createLiteral( l_name, ASSyntax.createString( null ) );
+
+        // number value into number
+        if ( p_data instanceof Number )
+            return ASSyntax.createLiteral( l_name, ASSyntax.createNumber( ( (Number) p_data ).doubleValue() ) );
+
+        // collection into term list
+        if ( p_data instanceof Collection )
+            return ASSyntax.createLiteral( l_name, ASSyntax.createList( (Collection) p_data ) );
+
+        // otherwise into string
+        return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
+    }
 
     /**
      * adds a new bind object
      *
-     * @param p_name   name
+     * @param p_name   name / annotion of the object
      * @param p_object bind object
      */
     public void push( String p_name, Object p_object )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
     }
-
 
     /**
      * removes an object from the bind
@@ -86,27 +126,50 @@ public class CFieldBind implements IBelief
     /**
      * returns the forbidden set
      *
+     * @param p_name bind name
      * @return set with forbidden names
      */
     public Set<String> getForbidden( String p_name )
     {
-        ImmutablePair<Object, Set<String>> l_object = m_bind.get( p_name );
-        if ( l_object == null )
-            return null;
-
-        return l_object.getRight();
-    }
-
-
-    @Override
-    public Set<Literal> getAtoms()
-    {
-        return null;
+        return m_bind.get( p_name ).getRight();
     }
 
     @Override
     public Set<Literal> getLiterals()
     {
-        return null;
+        return m_literals;
+    }
+
+    @Override
+    public void update()
+    {
+        for ( Map.Entry<String, ImmutablePair<Object, Set<String>>> l_item : m_bind.entrySet() )
+            for ( Field l_field : l_item.getValue().getLeft().getClass().getDeclaredFields() )
+            {
+                if ( ( l_item.getValue().getRight().contains( l_field.getName() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) ||
+                        ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
+                    continue;
+
+                // we get access to all objects field, create a literal of the field data and add the annotation to the object name
+                try
+                {
+
+                    l_field.setAccessible( true );
+                    Literal l_literal = getLiteral( l_field.getName(), l_field.get( l_item.getValue().getLeft() ) );
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
+                    m_literals.add( l_literal );
+
+                }
+                catch ( Exception l_exception )
+                {
+                    CLogger.error( l_exception );
+                }
+            }
+    }
+
+    @Override
+    public void clear()
+    {
+        m_literals.clear();
     }
 }

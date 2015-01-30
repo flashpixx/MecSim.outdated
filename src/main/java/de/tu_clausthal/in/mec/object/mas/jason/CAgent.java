@@ -28,13 +28,13 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.actions.*;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
-import jason.asSyntax.ASSyntax;
-import jason.asSyntax.PlanLibrary;
+import jason.asSyntax.*;
 import jason.bb.DefaultBeliefBase;
 import jason.jeditplugin.Config;
 
@@ -63,9 +63,13 @@ public class CAgent<T> implements IVoidAgent
      */
     protected Agent m_agent = null;
     /**
-     * set with build-in actions of this implementation *
+     * set with actions of this implementation *
      */
     protected Set<IAction> m_action = new HashSet();
+    /**
+     * set with belief binds
+     */
+    protected Set<IBelief> m_beliefs = new HashSet();
     /**
      * name of the agent *
      */
@@ -142,8 +146,9 @@ public class CAgent<T> implements IVoidAgent
         m_name = p_name;
         if ( p_bind != null )
         {
-            m_action.add( new CFieldBind( "local", p_bind ) );
-            m_action.add( new CMethodBind( "local", p_bind ) );
+            m_action.add( new de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind( "self", p_bind ) );
+            m_action.add( new CMethodBind( "self", p_bind ) );
+            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
         }
 
 
@@ -250,6 +255,21 @@ public class CAgent<T> implements IVoidAgent
          */
         public void cycle( int p_currentstep )
         {
+            // update all beliefs
+            for ( IBelief l_item : m_beliefs )
+            {
+                l_item.clear();
+                l_item.update();
+                for ( Literal l_literal : l_item.getLiterals() )
+                    try
+                    {
+                        m_agent.addBel( l_literal );
+                    }
+                    catch ( Exception l_exception )
+                    {
+                    }
+            }
+
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( p_currentstep );
             this.getTS().reasoningCycle();

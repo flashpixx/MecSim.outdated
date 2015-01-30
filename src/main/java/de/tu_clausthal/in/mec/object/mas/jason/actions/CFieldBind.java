@@ -55,7 +55,7 @@ public class CFieldBind extends IAction
     /**
      * ctor bind an object
      *
-     * @param p_name name of the binding object
+     * @param p_name   name of the binding object
      * @param p_object object
      */
     public CFieldBind( String p_name, Object p_object )

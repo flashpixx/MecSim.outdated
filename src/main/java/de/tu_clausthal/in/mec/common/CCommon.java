@@ -79,7 +79,7 @@ public class CCommon
      * returns a private field of a class
      *
      * @param p_class class
-     * @param p_field  fieldname
+     * @param p_field fieldname
      * @return field
      */
     public static Field getClassField( Class p_class, String p_field )

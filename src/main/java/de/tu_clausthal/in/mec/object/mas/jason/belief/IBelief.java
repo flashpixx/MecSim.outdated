@@ -36,18 +36,20 @@ public interface IBelief
 {
 
     /**
-     * get atoms
-     *
-     * @return atom literals
-     */
-    public Set<Literal> getAtoms();
-
-
-    /**
      * get non-atom literals
      *
      * @return non-atom literals
      */
     public Set<Literal> getLiterals();
+
+    /**
+     * update the literals *
+     */
+    public void update();
+
+    /**
+     * clear all literals *
+     */
+    public void clear();
 
 }

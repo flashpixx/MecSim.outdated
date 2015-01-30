@@ -151,7 +151,6 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
         }
 
-
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
         m_architecture = new CJasonArchitecture();

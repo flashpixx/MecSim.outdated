@@ -108,6 +108,9 @@ public class CFieldBind extends IAction
     }
 
     @Override
+    /**
+     * @todo handle term list
+     */
     public void act( Structure p_args )
     {
 
@@ -139,8 +142,6 @@ public class CFieldBind extends IAction
 
             if ( l_args.get( 2 ).isString() )
                 l_field.set( l_object.getLeft(), ( (StringTerm) l_args.get( 2 ) ).getString() );
-
-            // @todo term list
 
         }
         catch ( Exception l_exception )

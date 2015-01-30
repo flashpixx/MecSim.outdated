@@ -49,7 +49,7 @@ import java.util.List;
  * of disabeling / modifiying - https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/api/jason/environment/package-summary.html
  */
-public class IEnvironment<T> extends IMultiLayer<IAgent<T>>
+public class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
 
     /**
@@ -156,7 +156,7 @@ public class IEnvironment<T> extends IMultiLayer<IAgent<T>>
         {
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
-            m_data.add( new IAgent( "agent", new CTestAgent() ) );
+            m_data.add( new CAgent( "agent", new CTestAgent() ) );
 
             if ( m_mindinspector != null )
                 m_mindinspector.load( "http://localhost:3272" );

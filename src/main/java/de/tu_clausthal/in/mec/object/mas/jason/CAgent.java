@@ -53,7 +53,7 @@ import java.util.List;
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
  * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
-public class IAgent<T> implements IVoidAgent
+public class CAgent<T> implements IVoidAgent
 {
 
     /**
@@ -88,7 +88,7 @@ public class IAgent<T> implements IVoidAgent
      * @param p_name name of the agent
      * @param p_asl  agent ASL file
      */
-    public IAgent( String p_name, String p_asl ) throws JasonException
+    public CAgent( String p_name, String p_asl ) throws JasonException
     {
         this.initialize( p_name, p_asl, null );
     }
@@ -101,7 +101,7 @@ public class IAgent<T> implements IVoidAgent
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      */
-    public IAgent( String p_name, String p_asl, T p_bind ) throws JasonException
+    public CAgent( String p_name, String p_asl, T p_bind ) throws JasonException
     {
         this.initialize( p_name, p_asl, p_bind );
     }
@@ -111,7 +111,7 @@ public class IAgent<T> implements IVoidAgent
      *
      * @param p_asl agent ASL file
      */
-    public IAgent( String p_asl ) throws JasonException
+    public CAgent( String p_asl ) throws JasonException
     {
         this.initialize( this.createName(), p_asl, null );
     }
@@ -122,7 +122,7 @@ public class IAgent<T> implements IVoidAgent
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      */
-    public IAgent( String p_asl, T p_bind ) throws JasonException
+    public CAgent( String p_asl, T p_bind ) throws JasonException
     {
         this.initialize( this.createName(), p_asl, p_bind );
     }

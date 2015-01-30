@@ -97,6 +97,12 @@ public class CCarCount extends IEvaluateLayer
         return null;
     }
 
+    @Override
+    public void release()
+    {
+
+    }
+
     /**
      * read call of serialize interface
      *

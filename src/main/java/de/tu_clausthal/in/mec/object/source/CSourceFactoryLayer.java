@@ -69,4 +69,9 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
         return 2;
     }
 
+    @Override
+    public void release()
+    {
+
+    }
 }

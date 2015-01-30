@@ -39,4 +39,11 @@ public interface IStepable
      */
     Map<String, Object> analyse();
 
+
+    /**
+     * release function to remove object *
+     */
+    public void release();
+
+
 }

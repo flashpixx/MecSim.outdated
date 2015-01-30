@@ -136,4 +136,10 @@ public class CManager implements IVoidStepable
     {
         return null;
     }
+
+    @Override
+    public void release()
+    {
+
+    }
 }

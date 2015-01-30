@@ -45,15 +45,16 @@ public class CCarAgent extends CDefaultCar
     /**
      * ctor to create the initial values
      *
+     * @param p_asl agent ASL file
      * @param p_StartPosition start positions (position of the source)
      */
-    public CCarAgent( GeoPosition p_StartPosition )
+    public CCarAgent( String p_asl, GeoPosition p_StartPosition )
     {
         super( p_StartPosition );
 
         try
         {
-            m_agent = new CAgent( "agent", this );
+            m_agent = new CAgent( p_asl, this );
 
             ( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).add( m_agent );
         }

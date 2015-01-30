@@ -33,24 +33,6 @@ public interface IParticipant extends IReceiver
 {
 
     /**
-     * creates a message
-     *
-     * @param p_name name of the message
-     * @param p_data data
-     * @return message object
-     */
-    public <T> IMessage<T> createMessage( String p_name, T p_data );
-
-
-    /**
-     * creates a message
-     *
-     * @param p_data data
-     * @return message object
-     */
-    public <T> IMessage<T> createMessage( T p_data );
-
-    /**
      * sends a message
      *
      * @param p_path    message receiver path

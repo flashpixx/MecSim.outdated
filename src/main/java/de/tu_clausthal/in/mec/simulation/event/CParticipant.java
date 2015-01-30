@@ -53,19 +53,6 @@ public class CParticipant implements IParticipant
         m_owner = p_owner;
     }
 
-
-    @Override
-    public <T> IMessage<T> createMessage( String p_name, T p_data )
-    {
-        return null;
-    }
-
-    @Override
-    public <T> IMessage<T> createMessage( T p_data )
-    {
-        return null;
-    }
-
     @Override
     public void sendMessage( CPath p_path, IMessage p_message )
     {

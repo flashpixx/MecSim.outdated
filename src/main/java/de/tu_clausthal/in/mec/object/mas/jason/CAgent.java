@@ -282,7 +282,7 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public void sendMsg( Message m ) throws Exception
         {
-            CSimulation.getInstance().getEventManager().pushMessage( new CPath( m.getReceiver() ), new CMessage( m ) );
+            m_participant.sendMessage( new CPath( m.getReceiver() ), new CMessage( m ) );
         }
 
         @Override

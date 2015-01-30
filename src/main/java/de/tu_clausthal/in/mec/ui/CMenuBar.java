@@ -29,7 +29,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.mas.jason.CEnvironment;
+import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.apache.commons.lang3.StringUtils;
@@ -147,7 +147,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void MASJasonMenu()
     {
-        List<String> l_menu = new ArrayList( Arrays.asList( CEnvironment.getAgentFilenames() ) );
+        List<String> l_menu = new ArrayList( Arrays.asList( IEnvironment.getAgentFilenames() ) );
         l_menu.add( null );
         l_menu.add( "new agent" );
         l_menu.add( "check syntax" );
@@ -295,7 +295,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 String l_name = this.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
-                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getAgentFilename( l_name ) );
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getAgentFilename( l_name ) );
                 this.refreshDynamicItems();
                 return;
             }
@@ -304,14 +304,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                     if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
-                        CEnvironment.checkAgentFileSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
+                        IEnvironment.checkAgentFileSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
                 return;
             }
 
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                 if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
                 {
-                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( CEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
+                    ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getFilename( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     return;
                 }
 

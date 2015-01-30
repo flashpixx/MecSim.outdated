@@ -26,8 +26,8 @@ package de.tu_clausthal.in.mec;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CCarCount;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.mas.jason.CEnvironment;
 import de.tu_clausthal.in.mec.object.mas.jason.CTestAgent;
+import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
@@ -59,7 +59,7 @@ public class CBootstrap
     public static void AfterFrameInit( CFrame p_frame )
     {
         CSimulation.getInstance().getWorld().put( "Count Cars", new CCarCount( p_frame ) );
-        CSimulation.getInstance().getWorld().put( "Jason Car Agents", new CEnvironment<CTestAgent>( p_frame ) );
+        CSimulation.getInstance().getWorld().put( "Jason Car Agents", new IEnvironment<CTestAgent>( p_frame ) );
 
         p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.WEST, 0.8 );

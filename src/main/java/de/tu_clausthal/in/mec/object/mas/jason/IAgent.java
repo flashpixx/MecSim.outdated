@@ -53,7 +53,7 @@ import java.util.List;
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
  * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
-public class CAgent<T> implements IVoidAgent
+public class IAgent<T> implements IVoidAgent
 {
 
     /**
@@ -88,7 +88,7 @@ public class CAgent<T> implements IVoidAgent
      * @param p_name name of the agent
      * @param p_asl  agent ASL file
      */
-    public CAgent( String p_name, String p_asl ) throws JasonException
+    public IAgent( String p_name, String p_asl ) throws JasonException
     {
         this.initialize( p_name, p_asl, null );
     }
@@ -101,7 +101,7 @@ public class CAgent<T> implements IVoidAgent
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      */
-    public CAgent( String p_name, String p_asl, T p_bind ) throws JasonException
+    public IAgent( String p_name, String p_asl, T p_bind ) throws JasonException
     {
         this.initialize( p_name, p_asl, p_bind );
     }
@@ -111,7 +111,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_asl agent ASL file
      */
-    public CAgent( String p_asl ) throws JasonException
+    public IAgent( String p_asl ) throws JasonException
     {
         this.initialize( this.createName(), p_asl, null );
     }
@@ -122,7 +122,7 @@ public class CAgent<T> implements IVoidAgent
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      */
-    public CAgent( String p_asl, T p_bind ) throws JasonException
+    public IAgent( String p_asl, T p_bind ) throws JasonException
     {
         this.initialize( this.createName(), p_asl, p_bind );
     }
@@ -165,7 +165,7 @@ public class CAgent<T> implements IVoidAgent
         m_architecture.insertAgArch( m_architecture );
 
         // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent( CEnvironment.getFilename( p_asl ), m_architecture );
+        m_agent = new CJasonAgent( IEnvironment.getFilename( p_asl ), m_architecture );
     }
 
 

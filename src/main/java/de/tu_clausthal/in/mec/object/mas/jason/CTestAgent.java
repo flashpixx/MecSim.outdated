@@ -25,6 +25,8 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 /**
  * test class for the agent layer
+ *
+ * @deprecated
  */
 public class CTestAgent
 {

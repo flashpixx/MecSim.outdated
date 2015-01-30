@@ -33,8 +33,6 @@ import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
-import jason.jeditplugin.Config;
-import jason.runtime.Settings;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.File;
@@ -68,8 +66,7 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public CEnvironment( CFrame p_frame )
     {
-        // register web mindinspector (DoS threat) and set it for all agentsto enable
-        Config.get().setProperty( Config.START_WEB_MI, "true" );
+        // register web mindinspector (DoS threat)
         p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
     }
 
@@ -129,11 +126,9 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public static void checkAgentFileSyntax( String p_agentname )
     {
-        Settings x = new Settings();
-        System.out.println( x.logLevel() );
         try
         {
-            Agent.create( new AgArch(), Agent.class.getName(), null, getFilename( p_agentname ).toString(), x );
+            Agent.create( new AgArch(), Agent.class.getName(), null, getFilename( p_agentname ).toString(), null );
         }
         catch ( Exception l_exception )
         {
@@ -159,7 +154,6 @@ public class CEnvironment<T> extends IMultiLayer<CAgent<T>>
             // mind inspector works after an agent exists, so we need
             // to bind the browser after the first agent exists
             m_data.add( new CAgent( "agent", new CTestAgent() ) );
-
             m_mindinspector.load( "http://localhost:3272" );
         }
         catch ( Exception l_exception )

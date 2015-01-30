@@ -39,7 +39,6 @@ import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
 import jason.asSyntax.*;
 import jason.bb.DefaultBeliefBase;
-import jason.jeditplugin.Config;
 
 import java.awt.*;
 import java.io.File;
@@ -195,9 +194,8 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void release()
     {
-        // remove agent from the mindinspector
         m_agent.stopAg();
-
+        MindInspectorWeb.get().removeAg( m_agent );
         CSimulation.getInstance().getEventManager().unregister( new CPath( m_name ), m_participant );
     }
 
@@ -369,9 +367,7 @@ public class CAgent<T> implements IVoidAgent
             }
 
             this.load( p_asl.toString() );
-
-            if ( !( "false".equals( Config.get().getProperty( Config.START_WEB_MI ) ) ) )
-                MindInspectorWeb.get().registerAg( this );
+            MindInspectorWeb.get().registerAg( this );
         }
 
     }

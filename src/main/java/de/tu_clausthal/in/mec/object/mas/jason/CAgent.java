@@ -162,6 +162,28 @@ public class CAgent<T> implements IVoidAgent
     }
 
 
+    /**
+     * returns the set of actions
+     *
+     * @return action set
+     */
+    public Set<IAction> getActions()
+    {
+        return m_action;
+    }
+
+
+    /**
+     * returns a set of belief obejcts
+     *
+     * @return belief set
+     */
+    public Set<IBelief> getBelief()
+    {
+        return m_beliefs;
+    }
+
+
     @Override
     public void release()
     {

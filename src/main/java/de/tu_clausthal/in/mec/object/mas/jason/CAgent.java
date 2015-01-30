@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.actions.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.simulation.event.CParticipant;
 import de.tu_clausthal.in.mec.simulation.event.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
@@ -76,6 +77,10 @@ public class CAgent<T> implements IVoidAgent
      * name of the agent *
      */
     protected String m_name = null;
+    /**
+     * participant object *
+     */
+    protected CParticipant m_participant = new CParticipant( this );
 
 
     /**
@@ -153,6 +158,8 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
         }
 
+        CSimulation.getInstance().getEventManager().register( new CPath( m_name ), m_participant );
+
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
         m_architecture = new CJasonArchitecture();
@@ -190,6 +197,8 @@ public class CAgent<T> implements IVoidAgent
     {
         // remove agent from the mindinspector
         m_agent.stopAg();
+
+        CSimulation.getInstance().getEventManager().unregister( new CPath( m_name ), m_participant );
     }
 
 

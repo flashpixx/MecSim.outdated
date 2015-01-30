@@ -48,7 +48,7 @@ public class CCarAgentLayer extends IEnvironment<CDefaultCar>
     @Override
     public void release()
     {
-        for( CAgent l_agent : m_data )
+        for ( CAgent l_agent : m_data )
             l_agent.release();
     }
 }

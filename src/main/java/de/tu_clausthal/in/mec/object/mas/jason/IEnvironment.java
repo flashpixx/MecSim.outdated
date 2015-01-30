@@ -44,9 +44,8 @@ import java.util.List;
  * structure), in this context the environment class encapsulate all behaviour inside, because it will be triggerd from
  * the simulation core thread
  *
- * @warn Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of changing the
+ * @warning Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of changing the
  * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
- *
  * @see http://jason.sourceforge.net/
  */
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>

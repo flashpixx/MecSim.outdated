@@ -76,16 +76,16 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public void release()
     {
         if ( m_plotdata != null )
             m_plotdata.clear();
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return Integer.MAX_VALUE;
     }
 
     @Override

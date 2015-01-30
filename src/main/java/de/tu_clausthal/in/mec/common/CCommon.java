@@ -45,9 +45,10 @@ public class CCommon
     /**
      * converts any collection type into a typed array
      *
+     * @param p_class      class array
      * @param p_collection collection
-     * @param <T>          collection / array type
      * @return typed array
+     * @tparam T collection / array type
      */
     public static <T> T[] ColletionToArray( Class<T[]> p_class, Collection<T> p_collection )
     {
@@ -59,8 +60,9 @@ public class CCommon
     /**
      * returns a string of the resouce file
      *
-     * @param p_object object for label
-     * @param p_label  label name of the object
+     * @param p_object    object for label
+     * @param p_label     label name of the object
+     * @param p_parameter object array with substitutions
      * @return resource string
      */
     public static String getResouceString( Object p_object, String p_label, Object... p_parameter )
@@ -71,8 +73,9 @@ public class CCommon
     /**
      * returns a string of the resouce file
      *
-     * @param p_class class for static calls
-     * @param p_label label name of the object
+     * @param p_class     class for static calls
+     * @param p_label     label name of the object
+     * @param p_parameter object array with substitutions
      * @return resource string
      */
     public static String getResouceString( Class p_class, String p_label, Object... p_parameter )

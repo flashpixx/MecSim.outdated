@@ -141,7 +141,8 @@ public class CAgent<T> implements IVoidAgent
     /**
      * initialize the object data
      *
-     * @param p_name agent name (ASL file)
+     * @param p_name agent name
+     * @param p_asl  ASL file
      * @param p_bind object that should be bind with the agent
      */
     protected void initialize( String p_name, String p_asl, T p_bind ) throws JasonException
@@ -238,8 +239,8 @@ public class CAgent<T> implements IVoidAgent
      *
      * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
      * create an own cycle call
-     * @warn An AgArch is a linked-list of AgArchs, the agent name can read if an AgArch has got a successor only (Jason
-     * code design error)
+     * @warning An AgArch is a linked-list of AgArchs, the agent name can read if an AgArch has got a successor only
+     * (Jason code design error)
      */
     private class CJasonArchitecture extends AgArch
     {

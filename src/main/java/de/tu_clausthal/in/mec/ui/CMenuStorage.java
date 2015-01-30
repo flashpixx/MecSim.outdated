@@ -35,6 +35,8 @@ import java.util.*;
 
 /**
  * structure to store all menu items
+ *
+ * @todo create menu elements with different labels and path structure
  */
 public class CMenuStorage
 {

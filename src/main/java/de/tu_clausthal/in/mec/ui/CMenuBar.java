@@ -48,6 +48,8 @@ import java.util.*;
 
 /**
  * class for create the menubar
+ *
+ * @todo add multilanguage support
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {

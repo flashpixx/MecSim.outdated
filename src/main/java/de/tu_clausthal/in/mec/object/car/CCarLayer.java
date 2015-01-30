@@ -136,13 +136,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     }
 
     @Override
-    public void resetData()
-    {
-        super.clear();
-        m_graph.clear();
-    }
-
-    @Override
     public int getCalculationIndex()
     {
         return 1;
@@ -174,7 +167,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     @Override
     public void release()
     {
-
+        super.clear();
+        m_graph.clear();
     }
 
     @Override

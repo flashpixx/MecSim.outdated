@@ -140,7 +140,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 
 
     @Override
-    public void resetData()
+    public void release()
     {
         for ( de.tu_clausthal.in.mec.object.mas.IAgent l_agent : m_data )
             l_agent.release();

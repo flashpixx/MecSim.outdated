@@ -59,12 +59,6 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
-    public void resetData()
-    {
-
-    }
-
-    @Override
     public int getCalculationIndex()
     {
         return 0;

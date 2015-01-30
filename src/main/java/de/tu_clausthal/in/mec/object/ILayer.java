@@ -49,13 +49,6 @@ public interface ILayer extends IStepable, Serializable
      */
     public void setActive( boolean p_active );
 
-
-    /**
-     * resets the data of the layer
-     */
-    public void resetData();
-
-
     /**
      * returns an index value to defining an order for calculation
      *

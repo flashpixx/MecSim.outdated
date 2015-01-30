@@ -51,7 +51,7 @@ public class CLayerReset extends IRunnable<ILayer>
     {
         try
         {
-            m_object.resetData();
+            m_object.release();
         }
         catch ( Exception l_exception )
         {

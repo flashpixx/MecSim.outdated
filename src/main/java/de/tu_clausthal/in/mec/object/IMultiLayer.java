@@ -68,12 +68,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     }
 
     @Override
-    public void resetData()
-    {
-
-    }
-
-    @Override
     public int getCalculationIndex()
     {
         return 0;

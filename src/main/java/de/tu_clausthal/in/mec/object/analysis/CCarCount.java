@@ -70,7 +70,13 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
-    public void resetData()
+    public Map<String, Object> analyse()
+    {
+        return null;
+    }
+
+    @Override
+    public void release()
     {
         if ( m_plotdata != null )
             m_plotdata.clear();
@@ -89,18 +95,6 @@ public class CCarCount extends IEvaluateLayer
             return;
 
         m_plotdata.addValue( Integer.parseInt( CSimulation.getInstance().getWorld().get( "Cars" ).analyse().get( "car count" ).toString() ), "number", String.valueOf( p_currentstep ) );
-    }
-
-    @Override
-    public Map<String, Object> analyse()
-    {
-        return null;
-    }
-
-    @Override
-    public void release()
-    {
-
     }
 
     /**

@@ -50,14 +50,14 @@ public abstract class IEvaluateLayer implements ILayer, IVoidStepable
     }
 
     @Override
-    public void resetData()
-    {
-    }
-
-    @Override
     public int getCalculationIndex()
     {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public void release()
+    {
     }
 
     @Override

@@ -109,6 +109,9 @@ public class CMethodBind extends IAction
     }
 
     @Override
+    /**
+     * @bug incomplete - method call does not work
+     */
     public void act( Structure p_args )
     {
         // check number of argument first

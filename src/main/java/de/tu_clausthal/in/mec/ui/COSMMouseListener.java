@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CCommonUI;
+import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
@@ -61,11 +63,18 @@ class COSMMouseListener extends MouseAdapter
                     throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
 
-                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add(
-                        ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSource(
-                                ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName(),
+                // source adding
+                CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
+                CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
+
+                String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
+                String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), "Choose Agent File" ) : null;
+
+                l_sourcelayer.add(
+                        l_sourcelayer.getSource(
+                                l_sourcename,
                                 this.getMousePosition( e ),
-                                "agent"
+                                l_aslname
                         )
                 );
 

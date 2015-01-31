@@ -69,6 +69,12 @@ public class CCommonUI
     }
 
 
+    public static String openGroupSelectDialog( String[] p_values, String p_title, String... p_description )
+    {
+        return (String) JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
+                p_title, JOptionPane.PLAIN_MESSAGE, null, p_values, p_values[0] );
+    }
+
     /**
      * creates a fileload dialog, which stores the current path
      *

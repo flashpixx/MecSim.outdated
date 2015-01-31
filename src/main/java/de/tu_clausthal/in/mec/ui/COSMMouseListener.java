@@ -26,7 +26,7 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.mec.object.source.*;
+import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -61,17 +61,13 @@ class COSMMouseListener extends MouseAdapter
                     throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
 
-                switch ( ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName() )
-                {
-
-                    case "Default":
-                        ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add( new CDefaultSourceFactory( this.getMousePosition( e ) ) );
-                        break;
-                    case "Norm":
-                        ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add( new CNormSourceFactory( this.getMousePosition( e ) ) );
-                        break;
-
-                }
+                ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).add(
+                        ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSource(
+                                ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName(),
+                                this.getMousePosition( e ),
+                                "agent"
+                        )
+                );
 
 /*
                 boolean l_remove = false;

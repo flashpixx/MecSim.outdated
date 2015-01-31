@@ -36,6 +36,8 @@ import java.util.*;
 /**
  * default source for generating cars with a visualization on the map * use a exponential distribution
  * (http://en.wikipedia.org/wiki/Exponential_distribution) to generate cars for avoiding traffic jam at the source
+ *
+ * @todo set mean value with ctor
  */
 public class CDefaultSourceFactory extends IDefaultSourceFactory
 {
@@ -43,11 +45,11 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     /**
      * mean value of the distribution
      */
-    protected static double s_mean = 1.5;
+    protected double m_mean = 1.5;
     /**
      * random interface
      */
-    protected ExponentialDistribution m_random = new ExponentialDistribution( s_mean );
+    protected ExponentialDistribution m_random = new ExponentialDistribution( m_mean );
     /**
      * integer values how many cars are generated in a step
      */
@@ -93,11 +95,33 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     }
 
 
+    /**
+     * set the mean value
+     *
+     * @param p_mean mean value of exponential distribution
+     */
+    public void setMean( double p_mean )
+    {
+        m_mean = Math.abs( p_mean );
+    }
+
+
+    /**
+     * set the number of cars that are generated on each step
+     *
+     * @param p_number number of cars
+     */
+    public void setCarNumber( int p_number )
+    {
+        m_NumberCarsInStep = Math.abs( p_number );
+    }
+
+
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
         Collection<ICar> l_sources = new HashSet();
-        if ( m_random.sample() >= s_mean )
+        if ( m_random.sample() >= m_mean )
             return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )

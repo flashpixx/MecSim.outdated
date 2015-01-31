@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
@@ -33,7 +34,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 /**
  * agent car
  */
-public class CCarAgent extends CDefaultCar
+public class CCarJasonAgent extends CDefaultCar
 {
 
     /**
@@ -48,7 +49,7 @@ public class CCarAgent extends CDefaultCar
      * @param p_asl           agent ASL file
      * @param p_StartPosition start positions (position of the source)
      */
-    public CCarAgent( String p_asl, GeoPosition p_StartPosition )
+    public CCarJasonAgent( String p_asl, GeoPosition p_StartPosition )
     {
         super( p_StartPosition );
 
@@ -60,6 +61,7 @@ public class CCarAgent extends CDefaultCar
         }
         catch ( Exception l_exception )
         {
+            CLogger.error( l_exception );
         }
     }
 

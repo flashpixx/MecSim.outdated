@@ -21,34 +21,56 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.car;
+package de.tu_clausthal.in.mec.object.source;
 
 
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
-import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import org.jxmapviewer.viewer.GeoPosition;
+
+import java.awt.*;
+import java.util.*;
 
 
 /**
- * layer for car agents
+ * source to create a Jason car agent
  */
-public class CCarAgentLayer extends IEnvironment<CDefaultCar>
+public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 {
 
     /**
-     * ctor of Jason structure
-     *
-     * @param p_frame frame object set Jason mindinspector
+     * ASL file *
      */
-    public CCarAgentLayer( CFrame p_frame )
+    protected String m_asl = null;
+
+    /**
+     * ctor that sets the geo position of the source
+     *
+     * @param p_position geo position object
+     */
+    public CJasonAgentSourceFactory( GeoPosition p_position, String p_asl )
     {
-        super( p_frame );
+        super( p_position, Color.red );
+        m_asl = p_asl;
     }
 
     @Override
-    public void release()
+    public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
-        for ( CAgent l_agent : m_data )
-            l_agent.release();
+        Collection<ICar> l_sources = new HashSet();
+        if ( m_random.sample() >= m_mean )
+            return l_sources;
+
+        for ( int i = 0; i < m_NumberCarsInStep; i++ )
+            l_sources.add( new CCarJasonAgent( m_asl, m_position ) );
+
+        return l_sources;
+    }
+
+    @Override
+    public Map<String, Object> analyse()
+    {
+        return null;
     }
 }

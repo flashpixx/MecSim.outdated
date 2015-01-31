@@ -21,60 +21,34 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.car;
 
-import de.tu_clausthal.in.mec.object.IMultiLayer;
-import org.jxmapviewer.viewer.GeoPosition;
+
+import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
+import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
+import de.tu_clausthal.in.mec.ui.CFrame;
 
 
 /**
- * layer with all sources
+ * layer for car agents
  */
-public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
+public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
 
     /**
-     * returns a list of source names
+     * ctor of Jason structure
      *
-     * @return source names
+     * @param p_frame frame object set Jason mindinspector
      */
-    public String[] getSourceNamesList()
+    public CCarJasonAgentLayer( CFrame p_frame )
     {
-        return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
-    }
-
-
-    /**
-     * creates a source
-     *
-     * @param p_name     name of the source type
-     * @param p_position geo position of the source
-     * @param p_varargs optional arguments of the sources
-     * @return source object
-     */
-    public ISourceFactory getSource( String p_name, GeoPosition p_position, Object... p_varargs )
-    {
-        if ( p_name.equals( "Default" ) )
-            return new CDefaultSourceFactory( p_position );
-        if ( p_name.equals( "Norm" ) )
-            return new CNormSourceFactory( p_position );
-        if ( ( p_name.equals( "Jason Agent" ) ) && ( p_varargs != null ) && ( p_varargs.length > 0 ) )
-            return new CJasonAgentSourceFactory( p_position, (String) p_varargs[0] );
-        //if (p_name.equals( "Profile" ))
-        //    return new CProfileSourceFactory( p_position );
-
-        throw new IllegalArgumentException( "source name not found" );
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return 2;
+        super( p_frame );
     }
 
     @Override
     public void release()
     {
-
+        for ( CAgent l_agent : m_data )
+            l_agent.release();
     }
 }

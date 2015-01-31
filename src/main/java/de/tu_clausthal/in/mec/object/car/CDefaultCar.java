@@ -266,14 +266,14 @@ public class CDefaultCar extends IInspector implements ICar
     {
         Map<String, Object> l_map = super.inspect();
 
-        l_map.put( CCommon.getResouceString( this, "currentspeed" ), m_speed );
-        l_map.put( CCommon.getResouceString( this, "maximumspeed" ), m_maxSpeed );
-        l_map.put( CCommon.getResouceString( this, "acceleration" ), m_acceleration );
-        l_map.put( CCommon.getResouceString( this, "deceleration" ), m_deceleration );
-        l_map.put( CCommon.getResouceString( this, "startposition" ), m_StartPosition );
-        l_map.put( CCommon.getResouceString( this, "endposition" ), m_EndPosition );
-        l_map.put( CCommon.getResouceString( this, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
-        l_map.put( CCommon.getResouceString( this, "currentgeoposition" ), this.getGeoposition() );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "currentspeed" ), m_speed );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "maximumspeed" ), m_maxSpeed );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "acceleration" ), m_acceleration );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "deceleration" ), m_deceleration );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "startposition" ), m_StartPosition );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "endposition" ), m_EndPosition );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
+        l_map.put( CCommon.getResouceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
 
         return l_map;
     }

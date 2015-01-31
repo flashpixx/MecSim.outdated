@@ -38,9 +38,15 @@ public class CCommon
 {
 
     /**
-     * package base for translation *
+     * remove from a string the system package name
+     *
+     * @param p_package package / class path
+     * @return path without main package name
      */
-    private static final String s_packageroot = "de.tu_clausthal.in.mec.";
+    public static String removePackageName( String p_package )
+    {
+        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+    }
 
 
     /**
@@ -68,7 +74,7 @@ public class CCommon
      */
     public static String getResouceString( Object p_object, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_object.getClass().getCanonicalName().toLowerCase().replace( s_packageroot, "" ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_object.getClass().getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
     /**
@@ -81,7 +87,7 @@ public class CCommon
      */
     public static String getResouceString( Class p_class, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( p_class.getCanonicalName().toLowerCase().replace( s_packageroot, "" ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
 

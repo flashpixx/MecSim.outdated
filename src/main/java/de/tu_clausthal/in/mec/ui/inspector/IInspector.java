@@ -49,7 +49,7 @@ public abstract class IInspector extends IUIListener
      */
     public Map<String, Object> inspect()
     {
-        m_inspect.put( CCommon.getResouceString( IInspector.class, "classname" ), this.getClass().getName() );
+        m_inspect.put( CCommon.getResouceString( IInspector.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
         m_inspect.put( CCommon.getResouceString( IInspector.class, "objectid" ), this.hashCode() );
 
         return m_inspect;

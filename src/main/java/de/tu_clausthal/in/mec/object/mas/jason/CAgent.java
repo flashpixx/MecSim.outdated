@@ -245,7 +245,8 @@ public class CAgent<T> implements IVoidAgent
     private class CJasonArchitecture extends AgArch
     {
         /**
-         * cycle number *
+         * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime
+         * of the agent)
          */
         protected int m_cycle = 0;
 
@@ -302,6 +303,7 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
+         * @bug clear the existing / updated beliefs only
          */
         public void cycle( int p_currentstep )
         {

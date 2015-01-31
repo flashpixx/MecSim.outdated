@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.common;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 
+import java.io.File;
 import java.lang.reflect.*;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -142,6 +143,22 @@ public class CCommon
             throw new IllegalArgumentException( "method [" + p_method + "] not found in class [" + p_class.getCanonicalName() + "]" );
         }
         return l_method;
+    }
+
+
+    /**
+     * adds a file extension if necessary
+     *
+     * @param p_file   file object
+     * @param p_suffix suffix
+     * @return file with extension
+     */
+    public static File addFileExtension( File p_file, String p_suffix )
+    {
+        File l_file = p_file;
+        if ( !l_file.getAbsolutePath().endsWith( p_suffix ) )
+            l_file = new File( l_file + p_suffix );
+        return l_file;
     }
 
 }

@@ -25,20 +25,17 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.common.*;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -295,7 +292,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             if ( l_actionpath.equals( "MAS/Jason/new agent" ) )
             {
-                String l_name = this.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
+                String l_name = CCommonUI.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
                 this.refreshDynamicItems();
@@ -360,13 +357,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void save() throws IOException
     {
-        File l_store = this.openFileSaveDialog( new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
+        File l_store = CCommonUI.openFileSaveDialog( m_filepath, new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
         if ( l_store == null )
             return;
 
         try
         {
-            FileOutputStream l_stream = new FileOutputStream( this.addFileExtension( l_store, ".mecsim" ) );
+            FileOutputStream l_stream = new FileOutputStream( CCommon.addFileExtension( l_store, ".mecsim" ) );
             ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
             CSimulation.getInstance().store( l_output );
             l_output.close();
@@ -386,7 +383,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void load() throws IOException
     {
-        File l_load = this.openFileLoadDialog( new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
+        File l_load = CCommonUI.openFileLoadDialog( m_filepath, new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
         if ( l_load == null )
             return;
 
@@ -414,148 +411,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         BufferedImage l_image = new BufferedImage( COSMViewer.getSimulationOSM().getWidth(), COSMViewer.getSimulationOSM().getHeight(), BufferedImage.TYPE_INT_RGB );
         COSMViewer.getSimulationOSM().paint( l_image.getGraphics() );
 
-        File l_store = this.openFileSaveDialog( new String[][]{{".png", "Portable Network Graphics (PNG)"}} );
+        File l_store = CCommonUI.openFileSaveDialog( m_filepath, new String[][]{{".png", "Portable Network Graphics (PNG)"}} );
         if ( l_store == null )
             return;
 
-        ImageIO.write( l_image, "png", this.addFileExtension( l_store, ".png" ) );
+        ImageIO.write( l_image, "png", CCommon.addFileExtension( l_store, ".png" ) );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
-
-    // --- Helper structures -------------------------------------------------------------------------------------------
-
-    /**
-     * creates a filesave dialog, which stores the current path
-     *
-     * @return File or null
-     */
-    private File openFileSaveDialog( String[][] p_fileextensions )
-    {
-        JFileChooser l_filedialog = this.initFileDialog( p_fileextensions );
-        if ( l_filedialog.showSaveDialog( CSimulation.getInstance().getUI() ) != JFileChooser.APPROVE_OPTION )
-            return null;
-        m_filepath = l_filedialog.getCurrentDirectory();
-
-        return l_filedialog.getSelectedFile();
-    }
-
-
-    /**
-     * create input text dialog
-     *
-     * @param p_title       title
-     * @param p_description description text
-     * @return string with content or null
-     */
-    private String openTextInputDialog( String p_title, String... p_description )
-    {
-        return (String) JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
-                p_title, JOptionPane.PLAIN_MESSAGE );
-    }
-
-
-    /**
-     * creates a fileload dialog, which stores the current path
-     *
-     * @return File or null
-     */
-    private File openFileLoadDialog( String[][] p_fileextensions )
-    {
-        JFileChooser l_filedialog = this.initFileDialog( p_fileextensions );
-        if ( l_filedialog.showOpenDialog( CSimulation.getInstance().getUI() ) != JFileChooser.APPROVE_OPTION )
-            return null;
-        m_filepath = l_filedialog.getCurrentDirectory();
-
-        return l_filedialog.getSelectedFile();
-    }
-
-    /**
-     * creates file dialog with extension list
-     *
-     * @param p_fileextensions arra with extension and description
-     * @return filechooser
-     */
-    private JFileChooser initFileDialog( String[][] p_fileextensions )
-    {
-        JFileChooser l_filedialog = new JFileChooser();
-        l_filedialog.setCurrentDirectory( m_filepath );
-        if ( p_fileextensions != null )
-        {
-            l_filedialog.setAcceptAllFileFilterUsed( false );
-            for ( String[] l_item : p_fileextensions )
-                l_filedialog.addChoosableFileFilter( l_item.length == 1 ? new UIFileFilter( l_item[0] ) : new UIFileFilter( l_item[0], l_item[1] ) );
-        }
-        return l_filedialog;
-    }
-
-    /**
-     * adds a file extension if necessary
-     *
-     * @param p_file   file object
-     * @param p_suffix suffix
-     * @return file with extension
-     */
-    private File addFileExtension( File p_file, String p_suffix )
-    {
-        File l_file = p_file;
-        if ( !l_file.getAbsolutePath().endsWith( p_suffix ) )
-            l_file = new File( l_file + p_suffix );
-        return l_file;
-    }
-
-
-    /**
-     * file filter class to create a filter list
-     */
-    private class UIFileFilter extends FileFilter
-    {
-        /**
-         * type description
-         */
-        private String m_description = "";
-        /**
-         * extension
-         */
-        private String m_extension = "";
-
-        /**
-         * ctor
-         *
-         * @param p_extension extension
-         */
-        public UIFileFilter( String p_extension )
-        {
-            m_extension = p_extension;
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_extension   extension
-         * @param p_description description
-         */
-        public UIFileFilter( String p_extension, String p_description )
-        {
-            m_extension = p_extension;
-            m_description = p_description;
-
-        }
-
-        @Override
-        public boolean accept( File p_file )
-        {
-            if ( p_file.isDirectory() )
-                return true;
-            return ( p_file.getName().toLowerCase().endsWith( m_extension ) );
-        }
-
-        @Override
-        public String getDescription()
-        {
-            return m_description;
-        }
-    }
 
 }

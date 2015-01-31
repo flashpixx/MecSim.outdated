@@ -65,7 +65,9 @@ public class CInternalEmpty extends DefaultInternalAction
      */
     public CInternalEmpty( int p_min, int p_max, boolean p_result )
     {
-        this.initialize( p_min, p_max, p_result );
+        m_minimumarguments = Math.abs( p_min );
+        m_maximumarguments = Math.abs( p_max );
+        m_result = p_result;
     }
 
 
@@ -77,7 +79,7 @@ public class CInternalEmpty extends DefaultInternalAction
      */
     public CInternalEmpty( int p_min, int p_max )
     {
-        this.initialize( p_min, p_max, true );
+        this( p_min, p_max, true );
     }
 
 
@@ -88,22 +90,7 @@ public class CInternalEmpty extends DefaultInternalAction
      */
     public CInternalEmpty( boolean p_result )
     {
-        this.initialize( 0, 0, p_result );
-    }
-
-
-    /**
-     * initialize
-     *
-     * @param p_min    minimum of arguments
-     * @param p_max    maximum of arguments
-     * @param p_result result value
-     */
-    protected void initialize( int p_min, int p_max, boolean p_result )
-    {
-        m_minimumarguments = Math.abs( p_min );
-        m_maximumarguments = Math.abs( p_max );
-        m_result = p_result;
+        this( 0, 0, p_result );
     }
 
 

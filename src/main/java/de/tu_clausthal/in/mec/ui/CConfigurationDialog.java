@@ -50,7 +50,7 @@ public class CConfigurationDialog extends JDialog
      */
     public CConfigurationDialog()
     {
-        this.initialize();
+        this( null );
     }
 
 
@@ -61,16 +61,9 @@ public class CConfigurationDialog extends JDialog
      */
     public CConfigurationDialog( Frame p_frame )
     {
-        this.setLocationRelativeTo( p_frame );
-        this.initialize();
-    }
+        if ( p_frame != null )
+            this.setLocationRelativeTo( p_frame );
 
-
-    /**
-     * create UI with data binding *
-     */
-    private void initialize()
-    {
         this.setAlwaysOnTop( true );
         this.setResizable( false );
         this.setModalityType( ModalityType.APPLICATION_MODAL );

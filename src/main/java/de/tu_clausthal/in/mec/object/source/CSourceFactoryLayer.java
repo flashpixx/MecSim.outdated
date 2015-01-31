@@ -49,7 +49,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      *
      * @param p_name     name of the source type
      * @param p_position geo position of the source
-     * @param p_varargs optional arguments of the sources
+     * @param p_varargs  optional arguments of the sources
      * @return source object
      */
     public ISourceFactory getSource( String p_name, GeoPosition p_position, Object... p_varargs )

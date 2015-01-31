@@ -95,7 +95,7 @@ public class CAgent<T> implements IVoidAgent
      */
     public CAgent( String p_name, String p_asl ) throws JasonException
     {
-        this.initialize( p_name, p_asl, null );
+        this( p_name, p_asl, null );
     }
 
 
@@ -108,54 +108,10 @@ public class CAgent<T> implements IVoidAgent
      */
     public CAgent( String p_name, String p_asl, T p_bind ) throws JasonException
     {
-        this.initialize( p_name, p_asl, p_bind );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_asl agent ASL file
-     */
-    public CAgent( String p_asl ) throws JasonException
-    {
-        this.initialize( this.createName(), p_asl, null );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_asl  agent ASL file
-     * @param p_bind object that should be bind with the agent
-     */
-    public CAgent( String p_asl, T p_bind ) throws JasonException
-    {
-        this.initialize( this.createName(), p_asl, p_bind );
-    }
-
-
-    /**
-     * returns an unique agent name
-     *
-     * @return string with name
-     */
-    protected String createName()
-    {
-        return this.getClass().getSimpleName() + "@" + this.hashCode();
-    }
-
-    /**
-     * initialize the object data
-     *
-     * @param p_name agent name
-     * @param p_asl  ASL file
-     * @param p_bind object that should be bind with the agent
-     */
-    protected void initialize( String p_name, String p_asl, T p_bind ) throws JasonException
-    {
-        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( "agent name need not to be empty" );
-
         m_name = p_name;
+        if ( ( m_name == null ) || ( m_name.isEmpty() ) )
+            m_name = this.getClass().getSimpleName() + "@" + this.hashCode();
+
         if ( p_bind != null )
         {
             m_action.add( new de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind( "self", p_bind ) );
@@ -172,6 +128,27 @@ public class CAgent<T> implements IVoidAgent
 
         // build an own agent to handle manual internal actions
         m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_asl agent ASL file
+     */
+    public CAgent( String p_asl ) throws JasonException
+    {
+        this( null, p_asl, null );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_asl  agent ASL file
+     * @param p_bind object that should be bind with the agent
+     */
+    public CAgent( String p_asl, T p_bind ) throws JasonException
+    {
+        this( null, p_asl, p_bind );
     }
 
 

@@ -65,7 +65,7 @@ public class CGraphHopper extends GraphHopper
      */
     public CGraphHopper()
     {
-        this.initialize();
+        this( null );
     }
 
     /**
@@ -76,16 +76,9 @@ public class CGraphHopper extends GraphHopper
      */
     public CGraphHopper( String p_weights )
     {
-        this.setCHShortcuts( p_weights );
-        this.initialize();
-    }
+        if ( ( p_weights != null ) && ( !p_weights.isEmpty() ) )
+            this.setCHShortcuts( p_weights );
 
-
-    /**
-     * run graph initialize process with OSM data convert
-     */
-    private void initialize()
-    {
         // define graph location (use configuration)
         File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
         CLogger.out( CCommon.getResouceString( this, "path", l_graphlocation.getAbsolutePath() ) );

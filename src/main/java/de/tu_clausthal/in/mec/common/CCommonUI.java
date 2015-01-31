@@ -69,6 +69,14 @@ public class CCommonUI
     }
 
 
+    /**
+     * select input dialog
+     *
+     * @param p_values      selected values
+     * @param p_title       title
+     * @param p_description description text
+     * @return selected value
+     */
     public static String openGroupSelectDialog( String[] p_values, String p_title, String... p_description )
     {
         return (String) JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),

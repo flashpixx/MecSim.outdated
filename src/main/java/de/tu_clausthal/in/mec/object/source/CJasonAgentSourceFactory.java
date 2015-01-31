@@ -52,6 +52,9 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
     public CJasonAgentSourceFactory( GeoPosition p_position, String p_asl )
     {
         super( p_position, Color.red );
+
+        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
+            throw new IllegalArgumentException( "ASL file not not to be null" );
         m_asl = p_asl;
     }
 

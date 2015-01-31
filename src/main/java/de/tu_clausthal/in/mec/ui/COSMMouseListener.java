@@ -51,6 +51,9 @@ class COSMMouseListener extends MouseAdapter
     private boolean m_drag = false;
 
     @Override
+    /**
+     * @todo remove source adding / Jason source
+     */
     public void mouseClicked( MouseEvent e )
     {
 
@@ -68,7 +71,7 @@ class COSMMouseListener extends MouseAdapter
                 CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
 
                 String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
-                String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), "Choose Agent File" ) : null;
+                String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
 
                 l_sourcelayer.add(
                         l_sourcelayer.getSource(

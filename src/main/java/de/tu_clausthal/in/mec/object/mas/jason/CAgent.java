@@ -65,6 +65,11 @@ public class CAgent<T> implements IVoidAgent
      */
     protected Agent m_agent = null;
     /**
+     * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
+     * agent)
+     */
+    protected int m_cycle = 0;
+    /**
      * set with actions of this implementation *
      */
     protected Set<IAction> m_action = new HashSet();
@@ -207,6 +212,11 @@ public class CAgent<T> implements IVoidAgent
         return m_name;
     }
 
+    @Override
+    public int getCycle()
+    {
+        return m_cycle;
+    }
 
     @Override
     public void receiveMessage( Set<IMessage> p_messages )
@@ -244,11 +254,6 @@ public class CAgent<T> implements IVoidAgent
      */
     private class CJasonArchitecture extends AgArch
     {
-        /**
-         * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime
-         * of the agent)
-         */
-        protected int m_cycle = 0;
 
         @Override
         public void act( ActionExec action, List<ActionExec> feedback )

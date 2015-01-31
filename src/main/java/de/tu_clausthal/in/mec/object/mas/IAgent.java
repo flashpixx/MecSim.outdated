@@ -46,4 +46,11 @@ public interface IAgent extends Painter, IReceiver
      */
     public String getName();
 
+    /**
+     * returns the current cycle
+     *
+     * @return cycle number
+     */
+    public int getCycle();
+
 }

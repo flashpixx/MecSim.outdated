@@ -49,6 +49,148 @@ public class CMenuStorage
     protected Map<JComponent, CPath> m_objectpath = new HashMap();
 
 
+
+    /**
+     * creates a full path and returns the latest element
+     *
+     * @param p_path full path (without item)
+     * @return menu object
+     */
+    protected JMenu GetOrCreatePath( CPath p_path )
+    {
+        JComponent l_parent = null;
+        for ( CPath l_item : p_path )
+        {
+            JComponent l_current = m_pathobject.get( l_item );
+
+            if ( l_current == null )
+            {
+                l_current = new JMenu( l_item.getSuffix() );
+                if ( l_parent != null )
+                    l_parent.add( l_current );
+
+                m_pathobject.put( l_item, l_current );
+                m_objectpath.put( l_current, l_item );
+            }
+
+            if ( !( l_current instanceof JMenu ) )
+                throw new IllegalStateException( "item on [" + l_item + "] is not a JMenu" );
+
+            l_parent = l_current;
+        }
+
+        return (JMenu) l_parent;
+    }
+
+
+    // --- getter for data ---------------------------------------------------------------------------------------------
+
+    /**
+     * returns the full menu list
+     *
+     * @return JMenu list
+     */
+    public Collection<JComponent> getRoot()
+    {
+        List<JComponent> l_root = new ArrayList();
+
+        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
+            if ( l_item.getKey().size() == 1 )
+                l_root.add( l_item.getValue() );
+
+        return l_root;
+    }
+
+    /**
+     * returns all elements within a path
+     *
+     * @param p_path prefix path
+     * @return list elements
+     */
+    public Collection<JComponent> getElements( String p_path )
+    {
+        CPath l_path = new CPath( p_path );
+
+        List<JComponent> l_elements = new ArrayList();
+
+        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
+            if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
+                l_elements.add( l_item.getValue() );
+
+        return l_elements;
+    }
+
+
+    /**
+     * returns all elements within a path
+     *
+     * @param p_path prefix path
+     * @return list with names
+     */
+    public Collection<CPath> getPaths( String p_path )
+    {
+        CPath l_path = new CPath( p_path );
+        List<CPath> l_elements = new ArrayList();
+
+        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
+            if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
+                l_elements.add( l_item.getKey() );
+
+        return l_elements;
+    }
+
+
+    /**
+     * returns the full entry set
+     *
+     * @return set all entries
+     */
+    public Set<Map.Entry<CPath, JComponent>> entrySet()
+    {
+        return m_pathobject.entrySet();
+    }
+
+
+    /**
+     * returns the entry set of a path without the root element
+     *
+     * @param p_path path
+     * @return set with elements
+     */
+    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path )
+    {
+        return this.entrySet( p_path, false );
+    }
+
+
+    /**
+     * returns the entry set of a path
+     *
+     * @param p_path     path
+     * @param p_withroot enables / disables the addition of the root node
+     * @return set with elements
+     */
+    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path, boolean p_withroot )
+    {
+        CPath l_path = new CPath( p_path );
+        Map<CPath, JComponent> l_set = new HashMap();
+
+        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
+            if ( p_withroot )
+            {
+                if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
+                    l_set.put( l_item.getKey(), l_item.getValue() );
+            }
+            else
+            {
+                if ( ( !l_item.getKey().getPath().equals( l_path.getPath() ) ) && ( l_item.getKey().getPath().startsWith( l_path.getPath() ) ) )
+                    l_set.put( l_item.getKey(), l_item.getValue() );
+            }
+
+        return l_set.entrySet();
+    }
+
+
     /**
      * returns the element
      *
@@ -82,37 +224,8 @@ public class CMenuStorage
         return m_pathobject.get( p_path );
     }
 
-    /**
-     * creates a full path and returns the latest element
-     *
-     * @param p_path full path (without item)
-     * @return menu object
-     */
-    protected JMenu GetOrCreatePath( CPath p_path )
-    {
-        JComponent l_parent = null;
-        for ( CPath l_item : p_path )
-        {
-            JComponent l_current = m_pathobject.get( l_item );
 
-            if ( l_current == null )
-            {
-                l_current = new JMenu( l_item.getSuffix() );
-                if ( l_parent != null )
-                    l_parent.add( l_current );
-
-                m_pathobject.put( l_item, l_current );
-                m_objectpath.put( l_current, l_item );
-            }
-
-            if ( !( l_current instanceof JMenu ) )
-                throw new IllegalStateException( "item on [" + l_item + "] is not a JMenu" );
-
-            l_parent = l_current;
-        }
-
-        return (JMenu) l_parent;
-    }
+    // --- add / remove menu elements ----------------------------------------------------------------------------------
 
     /**
      * adds a new menu
@@ -378,112 +491,6 @@ public class CMenuStorage
                     l_menu.add( l_item );
             }
         }
-    }
-
-
-    /**
-     * returns the full menu list
-     *
-     * @return JMenu list
-     */
-    public Collection<JComponent> getRoot()
-    {
-        List<JComponent> l_root = new ArrayList();
-
-        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
-            if ( l_item.getKey().size() == 1 )
-                l_root.add( l_item.getValue() );
-
-        return l_root;
-    }
-
-    /**
-     * returns all elements within a path
-     *
-     * @param p_path prefix path
-     * @return list elements
-     */
-    public Collection<JComponent> getElements( String p_path )
-    {
-        CPath l_path = new CPath( p_path );
-
-        List<JComponent> l_elements = new ArrayList();
-
-        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
-            if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
-                l_elements.add( l_item.getValue() );
-
-        return l_elements;
-    }
-
-
-    /**
-     * returns all elements within a path
-     *
-     * @param p_path prefix path
-     * @return list with names
-     */
-    public Collection<CPath> getPaths( String p_path )
-    {
-        CPath l_path = new CPath( p_path );
-        List<CPath> l_elements = new ArrayList();
-
-        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
-            if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
-                l_elements.add( l_item.getKey() );
-
-        return l_elements;
-    }
-
-
-    /**
-     * returns the full entry set
-     *
-     * @return set all entries
-     */
-    public Set<Map.Entry<CPath, JComponent>> entrySet()
-    {
-        return m_pathobject.entrySet();
-    }
-
-
-    /**
-     * returns the entry set of a path without the root element
-     *
-     * @param p_path path
-     * @return set with elements
-     */
-    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path )
-    {
-        return this.entrySet( p_path, false );
-    }
-
-
-    /**
-     * returns the entry set of a path
-     *
-     * @param p_path     path
-     * @param p_withroot enables / disables the addition of the root node
-     * @return set with elements
-     */
-    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path, boolean p_withroot )
-    {
-        CPath l_path = new CPath( p_path );
-        Map<CPath, JComponent> l_set = new HashMap();
-
-        for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
-            if ( p_withroot )
-            {
-                if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
-                    l_set.put( l_item.getKey(), l_item.getValue() );
-            }
-            else
-            {
-                if ( ( !l_item.getKey().getPath().equals( l_path.getPath() ) ) && ( l_item.getKey().getPath().startsWith( l_path.getPath() ) ) )
-                    l_set.put( l_item.getKey(), l_item.getValue() );
-            }
-
-        return l_set.entrySet();
     }
 
 }

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -61,7 +62,7 @@ public class CBrowser extends JFXPanel
     public CBrowser( String p_url )
     {
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
-            throw new IllegalArgumentException( "URL need not to be empty" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "urlempty" ) );
 
         Platform.runLater( () -> {
             m_webview = new WebView();

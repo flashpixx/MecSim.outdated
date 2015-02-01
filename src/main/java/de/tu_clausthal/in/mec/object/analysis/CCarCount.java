@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.analysis;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
@@ -66,7 +67,7 @@ public class CCarCount extends IEvaluateLayer
      */
     private void initialize( CFrame p_frame )
     {
-        p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( "Count Cars", "time", "number of cars", m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
+        p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( CCommon.getResouceString( this, "charttitle" ), CCommon.getResouceString( this, "xaxis" ), CCommon.getResouceString( this, "yaxis" ), m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
 
     @Override

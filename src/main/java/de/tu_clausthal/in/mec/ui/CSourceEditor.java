@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -111,13 +112,13 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             l_tab.add( l_toolbar, BorderLayout.NORTH );
 
 
-            for ( String l_item : new String[]{"sourceeditor_save.png", "sourceeditor_delete.png", "sourceeditor_reload.png", "sourceeditor_close.png"} )
+            for ( String[] l_item : new String[][]{{"save", "sourceeditor_save.png"}, {"delete", "sourceeditor_delete.png"}, {"reload", "sourceeditor_reload.png"}, {"close", "sourceeditor_close.png"}} )
             {
-                JButton l_button = new JButton( new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item ) ) ) );
+                JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
                 l_button.addActionListener( this );
                 l_toolbar.add( l_button );
 
-                m_actionobject.put( l_button, new ImmutablePair<String, File>( l_item, p_file ) );
+                m_actionobject.put( l_button, new ImmutablePair<String, File>( l_item[0], p_file ) );
             }
 
             this.readFile( l_editor, p_file );
@@ -191,16 +192,16 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         try
         {
 
-            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_save.png" ) )
+            if ( l_item.getLeft().equalsIgnoreCase( "save" ) )
                 this.writeFile( l_component.getRight(), l_item.getRight() );
 
-            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_reload.png" ) )
+            if ( l_item.getLeft().equalsIgnoreCase( "reload" ) )
                 this.readFile( l_component.getRight(), l_item.getRight() );
 
-            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_close.png" ) )
+            if ( l_item.getLeft().equalsIgnoreCase( "close" ) )
                 this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft(), l_item.getRight() );
 
-            if ( l_item.getLeft().equalsIgnoreCase( "sourceeditor_delete.png" ) )
+            if ( l_item.getLeft().equalsIgnoreCase( "delete" ) )
             {
                 if ( !l_item.getRight().delete() )
                     throw new IllegalStateException( "file [" + l_item.getRight().getName() + "] cannot be deleted" );

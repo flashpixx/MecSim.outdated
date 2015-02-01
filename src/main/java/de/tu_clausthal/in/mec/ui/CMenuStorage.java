@@ -88,7 +88,7 @@ public class CMenuStorage
      * @param p_path full path (without item)
      * @return menu object
      */
-    private JMenu GetOrCreatePath( CPath p_path )
+    protected JMenu GetOrCreatePath( CPath p_path )
     {
         JComponent l_parent = null;
         for ( CPath l_item : p_path )
@@ -173,13 +173,27 @@ public class CMenuStorage
         return this.removeItems( p_path, true );
     }
 
+
     /**
-     * adds a new menu item
+     * adds an menu item
      *
      * @param p_path   full path
      * @param p_listen action listener for the item
      */
     public void addItem( String p_path, ActionListener p_listen )
+    {
+        this.addItem( p_path, p_path, p_listen );
+    }
+
+
+    /**
+     * adds a new menu item
+     *
+     * @param p_path   full path
+     * @param p_label  label of the item
+     * @param p_listen action listener for the item
+     */
+    public void addItem( String p_path, String p_label, ActionListener p_listen )
     {
         CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )

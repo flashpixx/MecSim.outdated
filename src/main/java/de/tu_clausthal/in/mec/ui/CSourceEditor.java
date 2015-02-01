@@ -93,7 +93,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             return;
 
         if ( ( !p_file.exists() ) || ( !p_file.canRead() ) || ( !p_file.canWrite() ) )
-            throw new IllegalStateException( "file [" + p_file + "] does not exist or cannot be read / written" );
+            throw new IllegalStateException( CCommon.getResouceString( this, "readwrite", p_file ) );
 
         try
         {
@@ -204,7 +204,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             if ( l_item.getLeft().equalsIgnoreCase( "delete" ) )
             {
                 if ( !l_item.getRight().delete() )
-                    throw new IllegalStateException( "file [" + l_item.getRight().getName() + "] cannot be deleted" );
+                    throw new IllegalStateException( CCommon.getResouceString( this, "filedelete", l_item.getRight().getName() ) );
 
                 this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft(), l_item.getRight() );
             }
@@ -213,7 +213,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
 
         for ( ActionListener l_action : m_listener )

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.ui;
 import bibliothek.gui.dock.common.*;
 import bibliothek.gui.dock.common.location.TreeLocationRoot;
 import de.tu_clausthal.in.mec.*;
+import de.tu_clausthal.in.mec.common.CCommon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,7 +64,7 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
-        this.setTitle( "TU-Clausthal - MecSim Traffic Simulation" );
+        this.setTitle( "TU-Clausthal - MecSim " + CCommon.getResouceString( this, "title" ) );
         this.setLayout( new BorderLayout() );
 
         this.setSize( CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() );

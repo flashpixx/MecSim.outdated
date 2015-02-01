@@ -59,8 +59,8 @@ public class CCarJasonAgent extends CDefaultCar
 
         try
         {
-            m_agent = new CAgent( p_asl );
 
+            m_agent = new CAgent( p_asl );
 
             // set forbidden elements for methods and properties
             Set<String> l_forbidden = new HashSet();
@@ -91,6 +91,7 @@ public class CCarJasonAgent extends CDefaultCar
 
             // add agent to layer
             ( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).add( m_agent );
+
         }
         catch ( Exception l_exception )
         {

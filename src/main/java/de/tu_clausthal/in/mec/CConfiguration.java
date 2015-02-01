@@ -292,7 +292,7 @@ public class CConfiguration
         /**
          * language code
          */
-        private String Language = "en";
+        private String Language = null;
 
 
         @UiSection("General")

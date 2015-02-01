@@ -27,8 +27,12 @@ package de.tu_clausthal.in.mec.object.car;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
+import de.tu_clausthal.in.mec.object.mas.jason.actions.CMethodBind;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -55,8 +59,37 @@ public class CCarJasonAgent extends CDefaultCar
 
         try
         {
-            m_agent = new CAgent( p_asl, this );
+            m_agent = new CAgent( p_asl );
 
+
+            // set forbidden elements for methods and properties
+            Set<String> l_forbidden = new HashSet();
+            l_forbidden.add( "m_agent" );
+            l_forbidden.add( "m_graph" );
+            l_forbidden.add( "m_inspect" );
+            l_forbidden.add( "m_random" );
+            l_forbidden.add( "m_endReached" );
+            l_forbidden.add( "m_routeindex" );
+            l_forbidden.add( "m_EndPosition" );
+            l_forbidden.add( "m_StartPosition" );
+
+            // add the belief bind to the agent
+            de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", this );
+            l_belief.getForbidden( "self" ).addAll( l_forbidden );
+            m_agent.getBelief().add( l_belief );
+
+            // add the method bind to the agent
+            CMethodBind l_method = new CMethodBind( "self", this );
+            l_method.getForbidden( "self" ).addAll( l_forbidden );
+            m_agent.getActions().add( l_method );
+
+            // add the pushback bind to the agent
+            de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind l_pusback = new de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind( "self", this );
+            l_pusback.getForbidden( "self" ).addAll( l_forbidden );
+            m_agent.getActions().add( l_pusback );
+
+
+            // add agent to layer
             ( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).add( m_agent );
         }
         catch ( Exception l_exception )

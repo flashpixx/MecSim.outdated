@@ -110,6 +110,7 @@ public class CFieldBind extends IAction
     @Override
     /**
      * @todo handle term list
+     * @todo check field of super classes
      */
     public void act( Structure p_args )
     {

@@ -44,7 +44,9 @@ public class CFieldBind implements IBelief
      * bind object *
      */
     protected Map<String, ImmutablePair<Object, Set<String>>> m_bind = new HashMap();
-
+    /**
+     * set with literals
+     */
     protected Set<Literal> m_literals = new HashSet();
 
     /**

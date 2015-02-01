@@ -73,13 +73,19 @@ class COSMMouseListener extends MouseAdapter
                 String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
                 String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
 
-                l_sourcelayer.add(
-                        l_sourcelayer.getSource(
-                                l_sourcename,
-                                this.getMousePosition( e ),
-                                l_aslname
-                        )
-                );
+                try
+                {
+                    l_sourcelayer.add(
+                            l_sourcelayer.getSource(
+                                    l_sourcename,
+                                    this.getMousePosition( e ),
+                                    l_aslname
+                            )
+                    );
+                }
+                catch ( Exception l_exception )
+                {
+                }
 
 /*
                 boolean l_remove = false;

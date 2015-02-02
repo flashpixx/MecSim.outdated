@@ -24,8 +24,7 @@
 package de.tu_clausthal.in.mec.simulation.event;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CNode;
-import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.common.*;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -56,7 +55,7 @@ public class CManager implements IVoidStepable
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
         {
-            CLogger.error( "receiver [" + p_receiver + "] cannot unregister at path [" + p_path + "]" );
+            CLogger.error( CCommon.getResouceString( this, "register", p_receiver, p_path ) );
             return;
         }
 
@@ -79,7 +78,7 @@ public class CManager implements IVoidStepable
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathexist( p_path ) ) )
         {
-            CLogger.error( "receiver [" + p_receiver + "] cannot unregister at path [" + p_path + "]" );
+            CLogger.error( CCommon.getResouceString( this, "unregister", p_receiver, p_path ) );
             return;
         }
 
@@ -101,14 +100,14 @@ public class CManager implements IVoidStepable
 
         if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( ( p_message.getSource().getPath().contains( p_path.getPath() ) ) && ( !p_message.getSource().getPath().equals( p_path ) ) ) )
         {
-            CLogger.error( "messager [" + p_message + " / " + p_path + "] is not allowed, because source is empty or receiver is part of source" );
+            CLogger.error( CCommon.getResouceString( this, "push", p_message, p_path ) );
             return;
         }
 
         // check time to live value
         if ( p_message.ttl() < 0 )
         {
-            CLogger.info( "messager [" + p_message + "] time-to-live is reached - removed" );
+            CLogger.info( CCommon.getResouceString( this, "ttl", p_message ) );
             return;
         }
 
@@ -118,8 +117,12 @@ public class CManager implements IVoidStepable
 
 
     @Override
+    /**
+     * @bug creates a null pointer exception
+     */
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
+        /*
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData() )
         {
             for ( IParticipant l_receiver : l_item.getLeft() )
@@ -128,6 +131,7 @@ public class CManager implements IVoidStepable
             // clear all messages
             l_item.getRight().clear();
         }
+        */
     }
 
 

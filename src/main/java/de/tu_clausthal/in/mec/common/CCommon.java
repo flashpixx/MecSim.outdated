@@ -98,7 +98,7 @@ public class CCommon
      * @param p_field fieldname
      * @return field
      */
-    public static Field getClassField( Class p_class, String p_field )
+    public static Field getClassField( Class p_class, String p_field ) throws IllegalArgumentException
     {
         Field l_field = null;
         try
@@ -108,7 +108,7 @@ public class CCommon
         }
         catch ( Exception l_exception )
         {
-            throw new IllegalArgumentException( "field [" + p_field + "] not found in class [" + p_class.getCanonicalName() + "]" );
+            throw new IllegalArgumentException( getResouceString( CCommon.class, "fieldnotfound", p_field, p_class.getCanonicalName() ) );
         }
         return l_field;
     }
@@ -121,7 +121,7 @@ public class CCommon
      * @param p_method methodname
      * @return method
      */
-    public static Method getClassMethod( Class p_class, String p_method )
+    public static Method getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException
     {
         return getClassMethod( p_class, p_method, null );
     }
@@ -136,7 +136,7 @@ public class CCommon
      *                    Integer.TYPE};
      * @return method
      */
-    public static Method getClassMethod( Class p_class, String p_method, Class[] p_parameter )
+    public static Method getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException
     {
         Method l_method = null;
         try
@@ -146,7 +146,7 @@ public class CCommon
         }
         catch ( Exception l_exception )
         {
-            throw new IllegalArgumentException( "method [" + p_method + "] not found in class [" + p_class.getCanonicalName() + "]" );
+            throw new IllegalArgumentException( getResouceString( CCommon.class, "methodnotfound", p_method, p_class.getCanonicalName() ) );
         }
         return l_method;
     }

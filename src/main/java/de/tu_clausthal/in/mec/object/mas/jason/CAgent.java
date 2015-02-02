@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.jason.actions.*;
+import de.tu_clausthal.in.mec.object.mas.jason.action.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.event.CParticipant;
@@ -114,7 +114,7 @@ public class CAgent<T> implements IVoidAgent
 
         if ( p_bind != null )
         {
-            m_action.add( new de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind( "self", p_bind ) );
+            m_action.add( new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", p_bind ) );
             m_action.add( new CMethodBind( "self", p_bind ) );
             m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
         }

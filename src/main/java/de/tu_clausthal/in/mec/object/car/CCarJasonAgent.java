@@ -27,7 +27,7 @@ package de.tu_clausthal.in.mec.object.car;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
-import de.tu_clausthal.in.mec.object.mas.jason.actions.CMethodBind;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -84,7 +84,7 @@ public class CCarJasonAgent extends CDefaultCar
             m_agent.getActions().add( l_method );
 
             // add the pushback bind to the agent
-            de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind l_pusback = new de.tu_clausthal.in.mec.object.mas.jason.actions.CFieldBind( "self", this );
+            de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_pusback = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", this );
             l_pusback.getForbidden( "self" ).addAll( l_forbidden );
             m_agent.getActions().add( l_pusback );
 

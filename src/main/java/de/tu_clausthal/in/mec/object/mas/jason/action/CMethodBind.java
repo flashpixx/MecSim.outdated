@@ -21,22 +21,22 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas.jason.actions;
+package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import jason.asSyntax.*;
+import jason.asSyntax.Structure;
+import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Method;
 import java.util.*;
 
 
 /**
- * action to synchronize bind-object with agent value
+ * action to invoke any method on an object
  */
-public class CFieldBind extends IAction
+public class CMethodBind extends IAction
 {
 
     /**
@@ -44,10 +44,11 @@ public class CFieldBind extends IAction
      */
     protected Map<String, ImmutablePair<Object, Set<String>>> m_bind = new HashMap();
 
+
     /**
      * ctor - default
      */
-    public CFieldBind()
+    public CMethodBind()
     {
 
     }
@@ -58,7 +59,7 @@ public class CFieldBind extends IAction
      * @param p_name   name of the binding object
      * @param p_object object
      */
-    public CFieldBind( String p_name, Object p_object )
+    public CMethodBind( String p_name, Object p_object )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
     }
@@ -104,46 +105,51 @@ public class CFieldBind extends IAction
     @Override
     public String getName()
     {
-        return "pushfield";
+        return "invokemethod";
     }
 
     @Override
     /**
-     * @todo handle term list
-     * @todo check field of super classes
+     * @bug incomplete - method call does not work
      */
     public void act( Structure p_args )
     {
-
         // check number of argument first
         List<Term> l_args = p_args.getTerms();
-        if ( l_args.size() < 3 )
-            throw new IllegalArgumentException( "arguments are incorrect" );
+        if ( l_args.size() < 2 )
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
         String l_objectname = l_args.get( 0 ).toString();
         ImmutablePair<Object, Set<String>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
-            throw new IllegalArgumentException( "object key [" + l_objectname + "] not found" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 
-        String l_fieldname = l_args.get( 1 ).toString();
+        String l_methodname = l_args.get( 1 ).toString();
         try
         {
 
             for ( String l_name : l_object.getRight() )
-                if ( l_name.equals( l_fieldname ) )
-                    throw new IllegalAccessException( "field [" + l_fieldname + "] not accessible for the object [" + l_objectname + "]" );
+                if ( l_name.equals( l_methodname ) )
+                    throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_methodname, l_objectname ) );
 
-            Field l_field = CCommon.getClassField( l_object.getLeft().getClass(), l_fieldname );
-            if ( ( Modifier.isFinal( l_field.getModifiers() ) ) || ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) )
-                throw new IllegalAccessException( "abstract, final, static or interface field [" + l_fieldname + "] at object [" + l_objectname + "] cannot be set" );
 
-            if ( l_args.get( 2 ).isNumeric() )
-                l_field.set( l_object.getLeft(), l_field.getType().cast( ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
+            Method l_method = null;
+            for ( Class l_class = l_object.getLeft().getClass(); ( l_class != null ) && ( l_method == null ); l_class = l_class.getSuperclass() )
+                try
+                {
+                    // add signature components
+                    l_method = CCommon.getClassMethod( l_class, l_methodname );
+                }
+                catch ( Exception l_exception )
+                {
+                }
 
-            if ( l_args.get( 2 ).isString() )
-                l_field.set( l_object.getLeft(), ( (StringTerm) l_args.get( 2 ) ).getString() );
 
+            if ( l_method == null )
+                throw new IllegalArgumentException( CCommon.getResouceString( this, "methodnotfound", l_methodname, l_objectname ) );
+
+            // run l_method with data
         }
         catch ( Exception l_exception )
         {

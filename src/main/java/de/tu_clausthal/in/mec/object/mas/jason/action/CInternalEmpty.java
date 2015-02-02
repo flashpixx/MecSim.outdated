@@ -21,47 +21,95 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas.jason.actions;
+package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
-import jason.asSyntax.Structure;
+import jason.asSemantics.*;
+import jason.asSyntax.Term;
 
 
 /**
- * action of an agent
+ * empty action to overwrite default behaviour
  */
-public abstract class IAction
+public class CInternalEmpty extends DefaultInternalAction
 {
 
     /**
-     * returns the name of the action
-     *
-     * @return name of the action
+     * default result value *
      */
-    public String getName()
-    {
-        return null;
-    }
+    protected boolean m_result = true;
+    /**
+     * minimum number of arguments *
+     */
+    protected int m_minimumarguments = super.getMinArgs();
+    /**
+     * maximum number of arguments *
+     */
+    protected int m_maximumarguments = super.getMaxArgs();
+
 
     /**
-     * runs the action *
-     *
-     * @param p_args arguments of the action
+     * default ctor
      */
-    public void act( Structure p_args )
+    public CInternalEmpty()
     {
     }
 
-    @Override
-    public int hashCode()
+
+    /**
+     * ctor
+     *
+     * @param p_min    minimum of arguments
+     * @param p_max    maximum of arguments
+     * @param p_result result value
+     */
+    public CInternalEmpty( int p_min, int p_max, boolean p_result )
     {
-        return this.getName().hashCode();
+        m_minimumarguments = Math.abs( p_min );
+        m_maximumarguments = Math.abs( p_max );
+        m_result = p_result;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_min minimum of arguments
+     * @param p_max maximum of arguments
+     */
+    public CInternalEmpty( int p_min, int p_max )
+    {
+        this( p_min, p_max, true );
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_result result value
+     */
+    public CInternalEmpty( boolean p_result )
+    {
+        this( 0, 0, p_result );
+    }
+
+
+    @Override
+    public int getMinArgs()
+    {
+        return m_minimumarguments;
     }
 
     @Override
-    public boolean equals( Object obj )
+    public int getMaxArgs()
     {
-        return this.hashCode() == obj.hashCode();
+        return m_maximumarguments;
+    }
+
+    @Override
+    public Object execute( TransitionSystem p_ts, Unifier p_unifier, Term[] p_args ) throws Exception
+    {
+        return m_result;
     }
 
 }

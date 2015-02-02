@@ -288,7 +288,6 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         * @bug clear the existing / updated beliefs only
          */
         public void cycle( int p_currentstep )
         {

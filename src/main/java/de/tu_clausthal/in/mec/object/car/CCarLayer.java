@@ -27,7 +27,9 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -150,11 +152,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     @Override
     public void afterStepObject( int p_currentstep, ICar p_object )
     {
-        if ( !p_object.hasEndReached() )
-            return;
+        // if a car has reached its end, remove it
+        if ( p_object.hasEndReached() )
+        {
+            super.remove( p_object );
+            p_object.release();
+        }
 
-        super.remove( p_object );
-        p_object.release();
+        // repaint the OSM viewer (supress flickering)
+        if ( CSimulation.getInstance().hasUI() )
+            COSMViewer.getSimulationOSM().repaint();
     }
 
     @Override

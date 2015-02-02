@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -51,6 +52,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      * @param p_position geo position of the source
      * @param p_varargs  optional arguments of the sources
      * @return source object
+     * @todo add profile source
      */
     public ISourceFactory getSource( String p_name, GeoPosition p_position, Object... p_varargs )
     {
@@ -63,7 +65,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
         //if (p_name.equals( "Profile" ))
         //    return new CProfileSourceFactory( p_position );
 
-        throw new IllegalArgumentException( "source name not found" );
+        throw new IllegalArgumentException( CCommon.getResouceString( this, "nosource" ) );
     }
 
     @Override

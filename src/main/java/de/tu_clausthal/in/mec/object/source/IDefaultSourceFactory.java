@@ -130,7 +130,7 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
         }
         catch ( Exception l_exception )
         {
-            CLogger.warn( "could not read standard_waypoint.png: " + l_exception.toString() );
+            CLogger.warn( l_exception );
         }
     }
 

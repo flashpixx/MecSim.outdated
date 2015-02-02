@@ -292,11 +292,11 @@ public class CAgent<T> implements IVoidAgent
          */
         public void cycle( int p_currentstep )
         {
-            // clear old simulationstep belief and create a new one
+            // add the simulationstep belief with the new number and remove the old one
             try
             {
-                m_agent.delBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
                 m_agent.addBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
+                m_agent.delBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
             }
             catch ( Exception l_exception )
             {

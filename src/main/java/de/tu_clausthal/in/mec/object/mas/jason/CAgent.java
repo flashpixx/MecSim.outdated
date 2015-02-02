@@ -367,9 +367,11 @@ public class CAgent<T> implements IVoidAgent
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 Map<String, InternalAction> l_action = new HashMap();
 
+                CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
+
                 l_action.put( "jason.stdlib.clone", new CInternalEmpty() );
-                l_action.put( "jason.stdlib.wait", new CInternalEmpty( 1, 3 ) );
-                l_action.put( "jason.stdlib.create_agent", new CInternalEmpty( 1, 3 ) );
+                l_action.put( "jason.stdlib.wait", l_empty13 );
+                l_action.put( "jason.stdlib.create_agent", l_empty13 );
                 l_action.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
                 l_action.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 

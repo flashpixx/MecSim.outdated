@@ -185,7 +185,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
         catch ( Exception l_exception )
         {
         }
-
         return l_result;
     }
 
@@ -194,16 +193,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     {
         for ( Object l_item : c )
             if ( !m_data.contains( l_item ) )
-            {
-                try
-                {
-                    COSMViewer.getSimulationOSM().repaint();
-                }
-                catch ( Exception l_exception )
-                {
-                }
                 return false;
-            }
 
         try
         {
@@ -238,17 +228,16 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
             if ( m_data.remove( l_item ) )
                 continue;
 
-            try
-            {
-                COSMViewer.getSimulationOSM().repaint();
-            }
-            catch ( Exception l_exception )
-            {
-            }
             return false;
         }
 
-        COSMViewer.getSimulationOSM().repaint();
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
         return true;
     }
 

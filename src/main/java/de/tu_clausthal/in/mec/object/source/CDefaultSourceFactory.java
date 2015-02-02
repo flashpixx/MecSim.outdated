@@ -37,7 +37,7 @@ import java.util.*;
  * default source for generating cars with a visualization on the map * use a exponential distribution
  * (http://en.wikipedia.org/wiki/Exponential_distribution) to generate cars for avoiding traffic jam at the source
  *
- * @todo set mean value with ctor
+ * @todo set mean & number of cars value with ctor
  */
 public class CDefaultSourceFactory extends IDefaultSourceFactory
 {

@@ -140,6 +140,13 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         }
     }
 
+    @Override
+    public void step( int p_currentstep, ILayer p_layer )
+    {
+        // mindinspector needs to load if there exists agents
+        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
+            m_mindinspector.load( "http://localhost:3272" );
+    }
 
     @Override
     public void release()
@@ -147,14 +154,5 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         for ( de.tu_clausthal.in.mec.object.mas.IAgent l_agent : m_data )
             l_agent.release();
         m_data.clear();
-    }
-
-
-    @Override
-    public void step( int p_currentstep, ILayer p_layer )
-    {
-        // mindinspector needs to load if there exists agents
-        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
-            m_mindinspector.load( "http://localhost:3272" );
     }
 }

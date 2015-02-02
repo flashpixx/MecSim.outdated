@@ -51,7 +51,6 @@ public class CMenuStorage
     protected Map<JComponent, CPath> m_objectpath = new HashMap();
 
 
-
     /**
      * creates a full path and returns the latest element
      *

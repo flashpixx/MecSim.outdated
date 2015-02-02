@@ -197,7 +197,7 @@ public class CAgent<T> implements IVoidAgent
 
     @Override
     /**
-     * @todo cach data for agent cycle check mail
+     * @todo cache data for agent cycle check mail
      */
     public void receiveMessage( Set<IMessage> p_messages )
     {

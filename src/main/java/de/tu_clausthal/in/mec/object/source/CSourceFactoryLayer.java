@@ -66,6 +66,12 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
         throw new IllegalArgumentException( "source name not found" );
     }
 
+    @Override
+    public int getCalculationIndex()
+    {
+        return 2;
+    }
+
     /**
      * release overwrite, because all sources will be removed of the reset is called
      */
@@ -73,12 +79,6 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     public void release()
     {
 
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return 2;
     }
 
 }

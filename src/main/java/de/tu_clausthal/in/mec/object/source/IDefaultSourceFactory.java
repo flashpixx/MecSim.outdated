@@ -174,4 +174,11 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
         p_stream.writeDouble( m_position.getLongitude() );
     }
 
+
+    @Override
+    public GeoPosition getPosition()
+    {
+        return m_position;
+    }
+
 }

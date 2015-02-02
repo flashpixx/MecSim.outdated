@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
+import de.tu_clausthal.in.mec.object.source.ISourceFactory;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -51,24 +52,33 @@ class COSMMouseListener extends MouseAdapter
     private boolean m_drag = false;
 
     @Override
-    /**
-     * @todo remove source adding / Jason source
-     */
     public void mouseClicked( MouseEvent e )
     {
 
         try
         {
+            // get source definition
+            COSMViewer l_viewer = (COSMViewer) e.getSource();
+
+
             // left double-click
             if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( e.getClickCount() == 2 ) )
             {
                 if ( CSimulation.getInstance().isRunning() )
                     throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
-
-                // source adding
-                CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
+                // remove source (check source position and remove the source that is within the range)
                 CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
+                for ( ISourceFactory l_source : l_sourcelayer )
+                    if ( this.inRange( this.getMousePosition( e, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), 10 ) )
+                    {
+                        l_sourcelayer.remove( l_source );
+                        l_viewer.repaint();
+                        return;
+                    }
+
+                // source adding (if no source is removed, add a new one)
+                CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
 
                 String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
                 String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
@@ -78,7 +88,7 @@ class COSMMouseListener extends MouseAdapter
                     l_sourcelayer.add(
                             l_sourcelayer.getSource(
                                     l_sourcename,
-                                    this.getMousePosition( e ),
+                                    this.getMouseGeoPosition( e, l_viewer ),
                                     l_aslname
                             )
                     );
@@ -86,28 +96,12 @@ class COSMMouseListener extends MouseAdapter
                 catch ( Exception l_exception )
                 {
                 }
-
-/*
-                boolean l_remove = false;
-                for (ICarSourceFactory l_source : CSimulationData.getInstance().getSourceQueue().getAll())
-                    if (this.inRange(l_position, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), 10)) {
-                        CSimulationData.getInstance().getSourceQueue().remove(l_source);
-                        l_remove = true;
-                        break;
-                    }
-
-                if (!l_remove) {
-                    if (m_popup.getSourceSelection().equals("default cars"))
-                        CSimulationData.getInstance().getSourceQueue().add(new CDefaultSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
-                    if (m_popup.getSourceSelection().equals("norm cars"))
-                        CSimulationData.getInstance().getSourceQueue().add(new CNormSource(l_viewer.getTileFactory().pixelToGeo(l_position, l_viewer.getZoom())));
-                }*/
             }
 
         }
         catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), "Warning", JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResouceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
     }
 
@@ -167,15 +161,28 @@ class COSMMouseListener extends MouseAdapter
     /**
      * returns the geoposition of a mouse position
      *
-     * @param e mouse event
+     * @param e        mouse event
+     * @param p_viewer OSM viewer
      * @return geoposition
      */
-    private GeoPosition getMousePosition( MouseEvent e )
+    protected GeoPosition getMouseGeoPosition( MouseEvent e, COSMViewer p_viewer )
     {
-        COSMViewer l_viewer = (COSMViewer) e.getSource();
-        Rectangle l_viewportBounds = l_viewer.getViewportBounds();
-        Point2D l_position = new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
-        return l_viewer.getTileFactory().pixelToGeo( l_position, l_viewer.getZoom() );
+        Point2D l_position = this.getMousePosition( e, p_viewer );
+        return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
+    }
+
+
+    /**
+     * returns the 2D position of a mouse position
+     *
+     * @param e        mouse event
+     * @param p_viewer OSM viewer
+     * @return point
+     */
+    protected Point2D getMousePosition( MouseEvent e, COSMViewer p_viewer )
+    {
+        Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        return new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
     }
 
     /**
@@ -186,10 +193,10 @@ class COSMMouseListener extends MouseAdapter
      * @param p_size          rectangle size
      * @return boolean on existence
      */
-    private boolean inRange( Point2D p_checkposition, Point2D p_center, int p_size )
+    protected boolean inRange( Point2D p_checkposition, Point2D p_center, int p_size )
     {
         if ( ( p_checkposition == null ) || ( p_center == null ) )
-            return true;
+            return false;
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }

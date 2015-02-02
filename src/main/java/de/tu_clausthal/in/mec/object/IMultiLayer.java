@@ -54,7 +54,6 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
      */
     protected Queue<T> m_data = new ConcurrentLinkedQueue();
 
-
     @Override
     public boolean isActive()
     {
@@ -267,6 +266,13 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     public Map<String, Object> analyse()
     {
         return null;
+    }
+
+    @Override
+    public void release()
+    {
+        for ( IStepable l_item : m_data )
+            l_item.release();
     }
 
     @Override

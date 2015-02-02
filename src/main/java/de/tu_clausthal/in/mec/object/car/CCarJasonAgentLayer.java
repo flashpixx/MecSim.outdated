@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.car;
 
 
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import de.tu_clausthal.in.mec.ui.CFrame;
 
@@ -45,10 +44,4 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
         super( p_frame );
     }
 
-    @Override
-    public void release()
-    {
-        for ( CAgent l_agent : m_data )
-            l_agent.release();
-    }
 }

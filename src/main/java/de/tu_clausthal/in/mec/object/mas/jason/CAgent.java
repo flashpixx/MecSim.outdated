@@ -196,6 +196,9 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
+    /**
+     * @todo cach data for agent cycle check mail
+     */
     public void receiveMessage( Set<IMessage> p_messages )
     {
 
@@ -289,19 +292,33 @@ public class CAgent<T> implements IVoidAgent
          */
         public void cycle( int p_currentstep )
         {
-            // update all beliefs
-            m_agent.getBB().clear();
+            // clear old simulationstep belief and create a new one
             try
             {
+                m_agent.delBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
                 m_agent.addBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
             }
             catch ( Exception l_exception )
             {
             }
 
+            // update other beliefs
             for ( IBelief l_item : m_beliefs )
             {
+                // remove old belief within the agent
+                for ( Literal l_literal : l_item.getLiterals() )
+                    try
+                    {
+                        m_agent.delBel( l_literal );
+                    }
+                    catch ( Exception l_exception )
+                    {
+                    }
+
+                // clear belief storage
                 l_item.clear();
+
+                // update beliefs and set them into the agent
                 l_item.update();
                 for ( Literal l_literal : l_item.getLiterals() )
                     try

@@ -315,11 +315,11 @@ public class CAgent<T> implements IVoidAgent
                     {
                     }
 
-                // clear belief storage
+                // clear belief storage and update the entries
                 l_item.clear();
-
-                // update beliefs and set them into the agent
                 l_item.update();
+
+                // set new belief into the agent
                 for ( Literal l_literal : l_item.getLiterals() )
                     try
                     {

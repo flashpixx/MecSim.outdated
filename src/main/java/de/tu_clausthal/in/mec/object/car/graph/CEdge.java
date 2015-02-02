@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.car.graph;
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.*;
 import org.apache.commons.math3.exception.NonMonotonicSequenceException;
@@ -274,7 +275,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public void setObject( N p_object, int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmpty( p_position ) )
-            throw new IllegalAccessException( "position on graph edge is not empty" );
+            throw new IllegalAccessException( CCommon.getResouceString( this, "emptyposition" ) );
 
         // if the object exists on the edge, it will be moved
         synchronized ( m_cells )
@@ -383,7 +384,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         public PointListArray( ArrayList<Double> p_x, ArrayList<Double> p_y ) throws IllegalArgumentException
         {
             if ( ( p_x.size() != p_y.size() ) || ( p_x.size() < 2 ) )
-                throw new IllegalArgumentException( "point list of the sampled graph edge need a least two elements and must have equal length" );
+                throw new IllegalArgumentException( CCommon.getResouceString( this, "pointerror" ) );
 
             m_x = new double[p_x.size()];
             m_y = new double[p_y.size()];

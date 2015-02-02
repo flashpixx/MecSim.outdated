@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
@@ -141,8 +140,10 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public void afterStepObject( int p_currentstep, CAgent<T> p_object )
     {
+        super.afterStepObject( p_currentstep, p_object );
+
         // mindinspector needs to load if there exists agents
         if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
             m_mindinspector.load( "http://localhost:3272" );

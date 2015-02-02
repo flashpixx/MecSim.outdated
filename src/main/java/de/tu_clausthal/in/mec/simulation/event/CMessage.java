@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.simulation.event;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 
 
@@ -59,9 +60,9 @@ public class CMessage<T> implements IMessage<T>
     public CMessage( CPath p_source, String p_title )
     {
         if ( ( p_source == null ) || ( p_source.isEmpty() ) )
-            throw new IllegalArgumentException( "source need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "sourcenull" ) );
         if ( ( p_title == null ) || ( p_title.isEmpty() ) )
-            throw new IllegalArgumentException( "title need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "titlenull" ) );
 
         m_source = p_source;
         m_title = p_title;
@@ -77,9 +78,9 @@ public class CMessage<T> implements IMessage<T>
     public CMessage( CPath p_source, String p_title, T p_data )
     {
         if ( ( p_source == null ) || ( p_source.isEmpty() ) )
-            throw new IllegalArgumentException( "source need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "sourcenull" ) );
         if ( ( p_title == null ) || ( p_title.isEmpty() ) )
-            throw new IllegalArgumentException( "title need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "titlenull" ) );
 
         m_source = p_source;
         m_title = p_title;

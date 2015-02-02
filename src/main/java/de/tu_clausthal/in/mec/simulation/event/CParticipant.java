@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.simulation.event;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
@@ -48,7 +49,7 @@ public class CParticipant implements IParticipant
     public CParticipant( IReceiver p_owner )
     {
         if ( p_owner == null )
-            throw new IllegalArgumentException( "owner object need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "ownernull" ) );
 
         m_owner = p_owner;
     }

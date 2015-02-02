@@ -110,7 +110,7 @@ public class CFieldBind extends IAction
     @Override
     /**
      * @todo handle term list
-     * @todo check field of super classes
+     * @bug numeric type cast fails
      */
     public void act( Structure p_args )
     {
@@ -130,14 +130,29 @@ public class CFieldBind extends IAction
         try
         {
 
+            // check accessible of the field
             for ( String l_name : l_object.getRight() )
                 if ( l_name.equals( l_fieldname ) )
                     throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_fieldname, l_objectname ) );
 
-            Field l_field = CCommon.getClassField( l_object.getLeft().getClass(), l_fieldname );
+            // try to get field
+            Field l_field = null;
+            for ( Class l_class = l_object.getLeft().getClass(); ( l_class != null ) && ( l_field == null ); l_class = l_class.getSuperclass() )
+                try
+                {
+                    l_field = CCommon.getClassField( l_class, l_fieldname );
+                }
+                catch ( Exception l_exception )
+                {
+                }
+
+            if ( l_field == null )
+                throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
             if ( ( Modifier.isFinal( l_field.getModifiers() ) ) || ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) )
                 throw new IllegalAccessException( CCommon.getResouceString( this, "modifier", l_fieldname, l_objectname ) );
 
+
+            // set field value
             if ( l_args.get( 2 ).isNumeric() )
                 l_field.set( l_object.getLeft(), l_field.getType().cast( ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
 

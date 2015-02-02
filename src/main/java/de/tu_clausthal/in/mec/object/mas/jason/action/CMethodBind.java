@@ -30,6 +30,7 @@ import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 
@@ -129,11 +130,12 @@ public class CMethodBind extends IAction
         try
         {
 
+            // check accessible of the method
             for ( String l_name : l_object.getRight() )
                 if ( l_name.equals( l_methodname ) )
                     throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_methodname, l_objectname ) );
 
-
+            // try to get method
             Method l_method = null;
             for ( Class l_class = l_object.getLeft().getClass(); ( l_class != null ) && ( l_method == null ); l_class = l_class.getSuperclass() )
                 try
@@ -145,11 +147,13 @@ public class CMethodBind extends IAction
                 {
                 }
 
-
             if ( l_method == null )
                 throw new IllegalArgumentException( CCommon.getResouceString( this, "methodnotfound", l_methodname, l_objectname ) );
+            if ( ( Modifier.isFinal( l_method.getModifiers() ) ) || ( Modifier.isAbstract( l_method.getModifiers() ) ) || ( Modifier.isInterface( l_method.getModifiers() ) ) || ( Modifier.isStatic( l_method.getModifiers() ) ) )
+                throw new IllegalAccessException( CCommon.getResouceString( this, "modifier", l_methodname, l_objectname ) );
 
-            // run l_method with data
+
+            // invoke method with parameter
         }
         catch ( Exception l_exception )
         {

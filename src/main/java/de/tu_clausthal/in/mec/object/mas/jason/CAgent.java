@@ -277,7 +277,7 @@ public class CAgent<T> implements IVoidAgent
 
         @Override
         /**
-         * @todo bind to event messangener
+         * @todo bind to event messengener
          */
         public void broadcast( Message m ) throws Exception
         {

@@ -180,6 +180,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( l_actionpath == null )
             return;
 
+        // the following items will be skipped
+        if ( l_actionpath.getPath().startsWith( "Car Sources" ) )
+            return;
+
+
         // file / simulation menu
         try
         {
@@ -288,6 +293,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             }
 
         // MAS Jason elements
+
         try
         {
             if ( l_actionpath.equals( "MAS/Jason/new agent" ) )
@@ -313,7 +319,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getAgentFile( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     return;
                 }
-
         }
         catch ( Exception l_exception )
         {

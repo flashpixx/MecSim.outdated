@@ -97,7 +97,6 @@ public class CGraphHopper extends GraphHopper
             l_osm.delete();
         }
 
-
         CLogger.out( CCommon.getResouceString( this, "loaded" ) );
     }
 
@@ -222,7 +221,7 @@ public class CGraphHopper extends GraphHopper
      * creates the full path of cells with the edge value
      *
      * @param p_route edge list
-     * @return list with pair and edge position
+     * @return list with pair of edge and cell position
      */
     public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( List<EdgeIteratorState> p_route )
     {

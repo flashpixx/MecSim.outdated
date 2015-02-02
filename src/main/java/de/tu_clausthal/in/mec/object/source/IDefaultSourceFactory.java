@@ -60,6 +60,11 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
      */
     protected transient BufferedImage m_image = null;
     /**
+     * map with targets
+     */
+    protected transient Collection<IReturnStepableTarget<ICar>> m_target = new HashSet();
+
+    /**
      * waypoint color
      */
     protected Color m_color = null;
@@ -76,6 +81,7 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
         m_position = p_position;
         m_color = p_color;
         this.setImage();
+        m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
     }
 
     @Override
@@ -132,9 +138,7 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
     @Override
     public Collection<IReturnStepableTarget<ICar>> getTargets()
     {
-        Collection<IReturnStepableTarget<ICar>> l_collection = new HashSet();
-        l_collection.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
-        return l_collection;
+        return m_target;
     }
 
 

@@ -112,7 +112,7 @@ public class CMainLoop implements Runnable
 
                 // if thread is not paused perform objects
                 l_tasks.clear();
-                l_tasks.add( new CVoidStepable( 0, CSimulation.getInstance().getEventManager(), null ) );
+                l_tasks.add( new CVoidStepable( m_simulationcount, CSimulation.getInstance().getEventManager(), null ) );
                 for ( ILayer l_layer : l_layerorder )
                     if ( l_layer.isActive() )
                         l_tasks.add( createTask( m_simulationcount, l_layer, null ) );

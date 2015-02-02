@@ -177,7 +177,16 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     @Override
     public boolean remove( Object o )
     {
-        return m_data.remove( o );
+        boolean l_result = m_data.remove( o );
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
+
+        return l_result;
     }
 
     @Override

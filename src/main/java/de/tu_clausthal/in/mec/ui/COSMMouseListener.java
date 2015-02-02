@@ -73,7 +73,6 @@ class COSMMouseListener extends MouseAdapter
                     if ( this.inRange( this.getMousePosition( e, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), 10 ) )
                     {
                         l_sourcelayer.remove( l_source );
-                        l_viewer.repaint();
                         return;
                     }
 

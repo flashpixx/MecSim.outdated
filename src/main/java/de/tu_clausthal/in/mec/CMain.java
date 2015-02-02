@@ -35,7 +35,7 @@ import java.util.Calendar;
 
 
 /**
- * main class of the application http://blog.kennardconsulting.com/2013/04/java-based-json-and-json-schema-user.html
+ * main class of the application
  */
 public class CMain
 {

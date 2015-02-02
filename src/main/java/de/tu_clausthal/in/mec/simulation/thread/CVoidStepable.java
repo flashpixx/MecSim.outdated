@@ -81,7 +81,7 @@ public class CVoidStepable extends IRunnable<IVoidStepable>
         }
         catch ( Exception l_exception )
         {
-            CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
+            CLogger.error( l_exception );
         }
     }
 

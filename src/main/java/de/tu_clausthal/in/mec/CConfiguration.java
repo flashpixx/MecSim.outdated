@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec;
 
 import com.google.gson.Gson;
+import de.tu_clausthal.in.mec.common.CCommon;
 import net.sf.oval.constraint.Min;
 import net.sf.oval.constraint.NotEmpty;
 import org.apache.commons.lang3.StringUtils;
@@ -110,10 +111,10 @@ public class CConfiguration
     private void createDirectories() throws IOException
     {
         if ( !m_dir.exists() && !m_dir.mkdirs() )
-            throw new IOException( "unable to create " + m_dir.getAbsolutePath() );
+            throw new IOException( CCommon.getResouceString( this, "notcreate", m_dir.getAbsolutePath() ) );
 
         if ( !m_masdir.exists() && !m_masdir.mkdirs() )
-            throw new IOException( "unable to create " + m_masdir.getAbsolutePath() );
+            throw new IOException( CCommon.getResouceString( this, "notcreate", m_masdir.getAbsolutePath() ) );
     }
 
     /**
@@ -127,7 +128,7 @@ public class CConfiguration
             this.createDirectories();
 
             String l_config = m_dir + File.separator + s_ConfigFilename;
-            CLogger.info( "read configuration from [" + l_config + "]" );
+            CLogger.info( CCommon.getResouceString( this, "read", l_config ) );
 
             Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
             l_tmp = new Gson().fromJson( l_reader, Data.class );
@@ -139,37 +140,37 @@ public class CConfiguration
         }
 
         if ( l_tmp == null )
-            CLogger.warn( "configuration is null, use default configuration" );
+            CLogger.warn( CCommon.getResouceString( this, "default" ) );
         else
         {
             if ( l_tmp.ViewPoint == null )
             {
-                CLogger.warn( "view point uses default value" );
+                CLogger.warn( CCommon.getResouceString( this, "viewpointdefault" ) );
                 l_tmp.ViewPoint = m_data.ViewPoint;
             }
             if ( l_tmp.WindowHeight < 100 )
             {
-                CLogger.warn( "window height uses default value" );
+                CLogger.warn( CCommon.getResouceString( this, "heightdefault" ) );
                 l_tmp.WindowHeight = m_data.WindowHeight;
             }
             if ( l_tmp.WindowWidth < 100 )
             {
-                CLogger.warn( "window width uses default value" );
+                CLogger.warn( CCommon.getResouceString( this, "widthdefault" ) );
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
             if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
             {
-                CLogger.warn( "routing algorithm uses default value" );
+                CLogger.warn( CCommon.getResouceString( this, "routingdefault" ) );
                 l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
             }
             if ( l_tmp.CellSampling < 1 )
             {
-                CLogger.warn( "cell sampling uses default value" );
+                CLogger.warn( CCommon.getResouceString( this, "cellsamplingdefault" ) );
                 l_tmp.CellSampling = m_data.CellSampling;
             }
             if ( l_tmp.ThreadSleepTime < 0 )
             {
-                CLogger.warn( "thread sleep time uses default value" );
+                CLogger.warn( CCommon.getResouceString( this, "threadsleepdefault" ) );
                 l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
             }
 

@@ -88,7 +88,7 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
         }
         catch ( Exception l_exception )
         {
-            CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
+            CLogger.error( l_exception );
         }
     }
 

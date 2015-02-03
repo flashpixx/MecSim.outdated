@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
@@ -53,6 +54,8 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
+     *
+     * @bug mind inspector is not cleared at reset
      */
     protected CBrowser m_mindinspector = null;
 
@@ -81,11 +84,11 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     public static File createAgentFile( String p_agentname ) throws IOException
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file name need not be empty" );
+            throw new IllegalArgumentException( CCommon.getResouceString( IEnvironment.class, "aslempty" ) );
 
         File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
         if ( l_asl.exists() )
-            throw new IllegalStateException( "ASL file exists" );
+            throw new IllegalStateException( CCommon.getResouceString( IEnvironment.class, "aslexist" ) );
 
         l_asl.createNewFile();
         return l_asl;
@@ -102,7 +105,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     public static File getAgentFile( String p_agentname )
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file name need not be empty" );
+            throw new IllegalArgumentException( CCommon.getResouceString( IEnvironment.class, "aslempty" ) );
 
         return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
     }
@@ -136,7 +139,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         }
         catch ( Exception l_exception )
         {
-            throw new IllegalStateException( "agent [" + p_agentname + "] error: " + l_exception.getMessage() );
+            throw new IllegalStateException( CCommon.getResouceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
         }
     }
 
@@ -153,7 +156,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     @Override
     public void release()
     {
-        for ( de.tu_clausthal.in.mec.object.mas.IAgent l_agent : m_data )
+        for ( IAgent l_agent : m_data )
             l_agent.release();
         m_data.clear();
     }

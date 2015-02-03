@@ -110,6 +110,7 @@ public class CFieldBind extends IAction
     @Override
     /**
      * @todo handle term list
+     * @todo move field search to ccommon
      */
     public void act( Structure p_args )
     {

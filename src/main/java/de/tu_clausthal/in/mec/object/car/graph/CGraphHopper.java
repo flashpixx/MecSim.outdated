@@ -275,9 +275,9 @@ public class CGraphHopper extends GraphHopper
     /**
      * returns the linkage between edge and car
      *
-     * @note listener object will be set at the edge instantiation process
      * @param p_edgestate edge object
      * @return linkage object
+     * @note listener object will be set at the edge instantiation process
      */
     public synchronized CEdge getEdge( EdgeIteratorState p_edgestate )
     {

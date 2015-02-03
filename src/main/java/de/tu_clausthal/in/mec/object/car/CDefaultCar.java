@@ -224,6 +224,11 @@ public class CDefaultCar extends IInspector implements ICar
         return m_deceleration;
     }
 
+    public void blub()
+    {
+        System.out.print( "-----> blub is called" );
+    }
+
     /**
      * returns the edge from an index
      *

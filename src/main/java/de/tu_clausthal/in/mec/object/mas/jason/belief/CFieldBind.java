@@ -142,6 +142,9 @@ public class CFieldBind implements IBelief
         return m_literals;
     }
 
+    /**
+     * @todo move method search to ccommon
+     */
     @Override
     public void update()
     {

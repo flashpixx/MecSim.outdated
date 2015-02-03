@@ -25,8 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import jason.asSyntax.Structure;
-import jason.asSyntax.Term;
+import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.reflect.Method;
@@ -114,6 +113,7 @@ public class CMethodBind extends IAction
      * @bug incomplete - method call does not work
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
+     * @todo move method search to ccommon
      */
     public void act( Structure p_args )
     {
@@ -137,13 +137,39 @@ public class CMethodBind extends IAction
                 if ( l_name.equals( l_methodname ) )
                     throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_methodname, l_objectname ) );
 
+
+            // add method signature - the third parameter is ignored if it is not a term list, the term list
+            // defines a list of Java class names without the .class suffix to define the signature parameter
+            Class[] l_parametertype = null;
+            if ( l_args.size() > 2 )
+            {
+                if ( !l_args.get( 2 ).isList() )
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "termlist" ) );
+
+                l_parametertype = new Class[( (ListTerm) l_args.get( 2 ) ).size()];
+                for ( int i = 0; i < l_parametertype.length; i++ )
+                {
+                    String l_typename = ( (ListTerm) l_args.get( 2 ) ).get( i ).toString();
+
+                    try
+                    {
+                        l_parametertype[i] = Class.forName( l_typename.endsWith( ".class" ) ? l_typename : l_typename + ".class" );
+                    }
+                    catch ( ClassNotFoundException l_exception )
+                    {
+                        throw new IllegalArgumentException( CCommon.getResouceString( this, "typenotfound", i, l_typename ) );
+                    }
+                }
+
+            }
+
+
             // try to get method
             Method l_method = null;
             for ( Class l_class = l_object.getLeft().getClass(); ( l_class != null ) && ( l_method == null ); l_class = l_class.getSuperclass() )
                 try
                 {
-                    // add signature components
-                    l_method = CCommon.getClassMethod( l_class, l_methodname );
+                    l_method = CCommon.getClassMethod( l_class, l_methodname, l_parametertype );
                 }
                 catch ( Exception l_exception )
                 {

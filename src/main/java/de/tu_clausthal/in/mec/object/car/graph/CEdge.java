@@ -65,6 +65,10 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * array with additional information
      */
     protected T[] m_additionalinformation = null;
+    /**
+     * set with listener
+     */
+    protected Set<IAction<N, T>> m_listener = new HashSet();
 
 
     /**
@@ -286,6 +290,10 @@ public class CEdge<N, T> implements Comparable<CEdge>
             m_cells[p_position] = p_object;
         }
         m_objects.put( p_object, p_position );
+
+        // call listener
+        for ( IAction l_action : m_listener )
+            l_action.actionPerformed( this, p_position, p_object );
     }
 
 

@@ -28,8 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.invoke.*;
 import java.util.*;
 
 
@@ -128,6 +127,7 @@ public class CMethodBind extends IAction
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 
+
         String l_methodname = l_args.get( 1 ).toString();
         try
         {
@@ -138,8 +138,39 @@ public class CMethodBind extends IAction
                     throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_methodname, l_objectname ) );
 
 
+            // method parameter (return & argument default type)
+            Class l_returntype = Void.class;
+            Class[] l_argumenttype = null;
+
+            if ( ( l_args.size() > 3 ) && ( !l_args.get( 2 ).isList() ) )
+            {
+                l_returntype = this.convertTermToClass( l_args.get( 2 ) );
+                l_argumenttype = l_args.get( 3 ).isList() ? this.convertTermListToArray( (ListTerm) l_args.get( 3 ) ) : this.convertTermListToArray( l_args.get( 3 ) );
+            }
+            else if ( l_args.size() > 2 )
+            {
+                if ( l_args.get( 2 ).isList() )
+                    l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 2 ) );
+                else
+                    l_returntype = this.convertTermToClass( l_args.get( 2 ) );
+            }
+
+
+            // create method handle
+            MethodHandle l_method = null;
+            /*
+            if (l_argumenttype == null)
+                l_method = MethodHandles.lookup().findVirtual( l_object.getLeft().getClass(), l_methodname, MethodType.methodType( l_returntype ) );
+            else
+                l_method = MethodHandles.lookup().findVirtual( l_object.getLeft().getClass(), l_methodname, MethodType.methodType( l_returntype, l_argumenttype ) );
+            */
+            l_method = MethodHandles.lookup().findVirtual( l_object.getLeft().getClass(), "blub", MethodType.methodType( Void.class ) );
+            //System.out.println( l_method );
+
+
             // add method signature - the third parameter is ignored if it is not a term list, the term list
             // defines a list of Java class names without the .class suffix to define the signature parameter
+            /*
             Class[] l_parametertype = null;
             if ( l_args.size() > 2 )
             {
@@ -181,10 +212,36 @@ public class CMethodBind extends IAction
                 throw new IllegalAccessException( CCommon.getResouceString( this, "modifier", l_methodname, l_objectname ) );
 
             // invoke method with parameter
+            */
         }
         catch ( Exception l_exception )
         {
             throw new IllegalArgumentException( l_exception.getMessage() );
         }
+    }
+
+
+    protected Class convertTermToClass( Term p_term ) throws ClassNotFoundException
+    {
+        String l_classname = p_term.toString();
+        if ( !l_classname.contains( "." ) )
+            l_classname = "java.lang." + l_classname;
+        return Class.forName( l_classname );
+    }
+
+
+    protected Class[] convertTermListToArray( ListTerm p_list ) throws ClassNotFoundException
+    {
+        Class[] l_classes = new Class[p_list.size()];
+        for ( int i = 0; i < l_classes.length; i++ )
+            l_classes[i] = this.convertTermToClass( p_list.get( i ) );
+        return l_classes;
+    }
+
+    protected Class[] convertTermListToArray( Term p_term ) throws ClassNotFoundException
+    {
+        Class[] l_classes = new Class[1];
+        l_classes[0] = this.convertTermToClass( p_term );
+        return l_classes;
     }
 }

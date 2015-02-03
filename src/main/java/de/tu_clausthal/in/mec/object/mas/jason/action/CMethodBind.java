@@ -112,6 +112,8 @@ public class CMethodBind extends IAction
     @Override
     /**
      * @bug incomplete - method call does not work
+     * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
+     * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
      */
     public void act( Structure p_args )
     {
@@ -151,7 +153,6 @@ public class CMethodBind extends IAction
                 throw new IllegalArgumentException( CCommon.getResouceString( this, "methodnotfound", l_methodname, l_objectname ) );
             if ( ( Modifier.isFinal( l_method.getModifiers() ) ) || ( Modifier.isAbstract( l_method.getModifiers() ) ) || ( Modifier.isInterface( l_method.getModifiers() ) ) || ( Modifier.isStatic( l_method.getModifiers() ) ) )
                 throw new IllegalAccessException( CCommon.getResouceString( this, "modifier", l_methodname, l_objectname ) );
-
 
             // invoke method with parameter
         }

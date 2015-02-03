@@ -154,7 +154,38 @@ public class CFieldBind extends IAction
 
             // set field value
             if ( l_args.get( 2 ).isNumeric() )
-                l_field.set( l_object.getLeft(), l_field.getType().cast( ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
+            {
+                // Jason stores numeric values with a native double, but we need to test is the target type / field type
+                // a boxed or a non-boxed type e.g. Integer vs int, only boxed-types can be casted
+                double l_value = ( (NumberTerm) l_args.get( 2 ) ).solve();
+                switch ( l_field.getType().toString() )
+                {
+                    case "char":
+                        l_field.set( l_object.getLeft(), (char) l_value );
+                        break;
+                    case "byte":
+                        l_field.set( l_object.getLeft(), (byte) l_value );
+                        break;
+                    case "short":
+                        l_field.set( l_object.getLeft(), (short) l_value );
+                        break;
+                    case "int":
+                        l_field.set( l_object.getLeft(), (int) l_value );
+                        break;
+                    case "long":
+                        l_field.set( l_object.getLeft(), (long) l_value );
+                        break;
+                    case "float":
+                        l_field.set( l_object.getLeft(), (float) l_value );
+                        break;
+                    case "double":
+                        l_field.set( l_object.getLeft(), l_value );
+                        break;
+
+                    default:
+                        l_field.set( l_object.getLeft(), l_field.getType().cast( new Double( l_value ) ) );
+                }
+            }
 
             if ( l_args.get( 2 ).isString() )
                 l_field.set( l_object.getLeft(), ( (StringTerm) l_args.get( 2 ) ).getString() );

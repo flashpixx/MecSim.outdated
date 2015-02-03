@@ -50,6 +50,7 @@ public class CConsole extends JPanel
     public CConsole()
     {
         super( new BorderLayout() );
+        m_output.setEditable( false );
 
         JScrollPane l_scroll = new JScrollPane( m_output );
         l_scroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );

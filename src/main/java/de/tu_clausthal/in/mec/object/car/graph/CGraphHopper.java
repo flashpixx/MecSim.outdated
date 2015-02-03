@@ -57,7 +57,11 @@ public class CGraphHopper extends GraphHopper
     /**
      * map with edge-cell connection
      */
-    private Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap();
+    protected Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap();
+    /**
+     * set with listerner of the edges
+     */
+    protected Set<IAction<ICar, Object>> m_edgelister = new HashSet();
 
 
     /**
@@ -259,8 +263,19 @@ public class CGraphHopper extends GraphHopper
 
 
     /**
+     * adds an edge listener
+     *
+     * @note listener object will be set at the edge instantiation process
+     */
+    public synchronized void addEdgeListener( IAction<ICar, Object> p_listener )
+    {
+        m_edgelister.add( p_listener );
+    }
+
+    /**
      * returns the linkage between edge and car
      *
+     * @note listener object will be set at the edge instantiation process
      * @param p_edgestate edge object
      * @return linkage object
      */
@@ -270,6 +285,7 @@ public class CGraphHopper extends GraphHopper
         if ( l_edge == null )
         {
             l_edge = new CEdge( p_edgestate );
+            l_edge.addListener( m_edgelister );
             m_edgecell.put( l_edge.getEdgeID(), l_edge );
         }
 

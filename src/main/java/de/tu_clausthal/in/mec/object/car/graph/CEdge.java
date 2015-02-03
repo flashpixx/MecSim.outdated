@@ -270,6 +270,51 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_cells[p_position];
     }
 
+
+    /**
+     * adds a set of edge listener
+     *
+     * @param p_listener listener collection
+     */
+    public void addListener( Collection<IAction<N, T>> p_listener )
+    {
+        m_listener.addAll( p_listener );
+    }
+
+    /**
+     * adds an edge listener
+     *
+     * @param p_listener listener
+     */
+    public void addListener( IAction<N, T> p_listener )
+    {
+        m_listener.add( p_listener );
+    }
+
+    /**
+     * removes an edge listener
+     *
+     * @param p_listener listener
+     * @return remove bool flag
+     */
+    public boolean removeListener( IAction<N, T> p_listener )
+    {
+        return m_listener.remove( p_listener );
+    }
+
+
+    /**
+     * removes a collection of edge listener
+     *
+     * @param p_listener listener collection
+     * @return remove bool flag
+     */
+    public boolean removeListener( Collection<IAction<N, T>> p_listener )
+    {
+        return m_listener.removeAll( p_listener );
+    }
+
+
     /**
      * sets an object on the edge position
      *

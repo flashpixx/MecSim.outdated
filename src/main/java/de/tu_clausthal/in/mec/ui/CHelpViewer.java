@@ -24,12 +24,15 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
+import javafx.application.Platform;
 import org.apache.commons.io.IOUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
 
 
 /**
@@ -37,25 +40,63 @@ import java.io.InputStreamReader;
  *
  * @note help files are stored in Markdown syntax within the "help" directory
  */
-public class CHelpViewer extends CBrowser
+public class CHelpViewer extends JDialog
 {
 
     /**
-     * markdown processor *
+     * default language - safe structure because configuration can push a null value *
      */
-    protected PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
-
+    protected static String s_defaultlanguage = "en";
 
     public CHelpViewer()
     {
-        try
+        this( null );
+    }
+
+    /**
+     * ctor with window set (not modal) *
+     */
+    public CHelpViewer( Frame p_frame )
+    {
+        if ( p_frame != null )
+            this.setLocationRelativeTo( p_frame );
+
+        this.setDefaultCloseOperation( JDialog.HIDE_ON_CLOSE );
+        this.add( new CHelpBrowser( "help" + File.separatorChar + ( CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage() ) + File.separator + "index.md" ) );
+        this.pack();
+    }
+
+
+    /**
+     * class to encapsulate browser component *
+     */
+    protected class CHelpBrowser extends CBrowser
+    {
+
+        /**
+         * markdown processor *
+         */
+        protected PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
+
+        /** ctor
+         *
+         * @param p_resource resource markdown file
+         */
+        public CHelpBrowser( String p_resource )
         {
-            BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( "help/" + CConfiguration.getInstance().get().getLanguage() + "/index.md" ) ) );
-            m_webview.getEngine().loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray() ) );
-            l_reader.close();
-        }
-        catch ( Exception l_exception )
-        {
+            super();
+            Platform.runLater( () -> {
+                try
+                {
+                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( p_resource ) ) );
+                    m_webview.getEngine().loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray() ) );
+                    l_reader.close();
+                }
+                catch ( Exception l_exception )
+                {
+                    CLogger.error( l_exception );
+                }
+            } );
         }
     }
 

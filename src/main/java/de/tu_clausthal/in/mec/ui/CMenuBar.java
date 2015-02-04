@@ -58,7 +58,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * current directory for file dialogs
      */
-    private File m_filepath = new File( System.getProperty( "user.dir" ) );
+    protected File m_filepath = new File( System.getProperty( "user.dir" ) );
+    /**
+     * help dialog
+     */
+    protected CHelpViewer m_help = new CHelpViewer( CSimulation.getInstance().getUI() );
 
 
     /**
@@ -68,8 +72,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         super();
 
-
-        m_items.addItem( "File", new String[]{"Preferences", null, "Load", "Save", null, "Screenshot"}, this );
+        m_items.addItem( "File", new String[]{"Help", "Preferences", null, "Load", "Save", null, "Screenshot"}, this );
 
         m_items.addItem( "Simulation", new String[]{"Start", "Stop", null, "Reset", null}, this );
         m_items.addSlider( "Simulation/Speed", 150 - CConfiguration.getInstance().get().getThreadsleeptime(), "slow", 0, "fast", 150, this );
@@ -207,6 +210,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             if ( l_actionpath.equals( "File/Preferences" ) )
             {
                 this.preferences();
+                return;
+            }
+            if ( l_actionpath.equals( "File/Help" ) )
+            {
+                m_help.setVisible( true );
                 return;
             }
 

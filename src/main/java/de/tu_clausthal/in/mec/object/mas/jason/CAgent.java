@@ -243,7 +243,7 @@ public class CAgent<T> implements IVoidAgent
                 {
                     try
                     {
-                        l_action.act( action.getActionTerm() );
+                        l_action.act( m_agent, action.getActionTerm() );
                         action.setResult( true );
                     }
                     catch ( Exception l_exception )

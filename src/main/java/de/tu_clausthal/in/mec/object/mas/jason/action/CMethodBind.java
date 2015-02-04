@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CMethodCache;
+import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 
 import java.lang.invoke.MethodHandle;
@@ -113,7 +114,7 @@ public class CMethodBind extends IAction
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
      * @todo handle return type
      */
-    public void act( Structure p_args )
+    public void act( Agent p_agent, Structure p_args )
     {
         // check number of argument first
         List<Term> l_args = p_args.getTerms();

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -112,7 +113,7 @@ public class CFieldBind extends IAction
      * @todo handle term list
      * @todo move field search to ccommon
      */
-    public void act( Structure p_args )
+    public void act( Agent p_agent, Structure p_args )
     {
 
         // check number of argument first

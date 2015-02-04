@@ -26,6 +26,8 @@ package de.tu_clausthal.in.mec.common;
 import de.tu_clausthal.in.mec.CConfiguration;
 
 import java.io.File;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.text.MessageFormat;
 import java.util.*;
@@ -144,7 +146,7 @@ public class CCommon
      * @param p_method methodname
      * @return method
      */
-    public static Method getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException
+    public static MethodHandle getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
     {
         return getClassMethod( p_class, p_method, null );
     }
@@ -159,7 +161,7 @@ public class CCommon
      *                    Integer.TYPE};
      * @return method
      */
-    public static Method getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException
+    public static MethodHandle getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
     {
         Method l_method = null;
         for ( Class l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
@@ -175,7 +177,7 @@ public class CCommon
             throw new IllegalArgumentException( getResouceString( CCommon.class, "methodnotfound", p_method, p_class.getCanonicalName() ) );
 
         l_method.setAccessible( true );
-        return l_method;
+        return MethodHandles.lookup().unreflect( l_method );
     }
 
 

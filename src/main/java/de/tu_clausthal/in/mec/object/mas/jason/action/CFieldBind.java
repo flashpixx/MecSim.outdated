@@ -60,7 +60,7 @@ public class CFieldBind extends IAction
      */
     public CFieldBind( String p_name, Object p_object )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
+        this.push( p_name, p_object );
     }
 
 

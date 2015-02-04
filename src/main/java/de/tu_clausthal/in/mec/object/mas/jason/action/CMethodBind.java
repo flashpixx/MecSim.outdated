@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.lang.invoke.MethodHandle;
 import java.util.*;
 
 
@@ -59,7 +60,7 @@ public class CMethodBind extends IAction
      */
     public CMethodBind( String p_name, Object p_object )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
+        this.push( p_name, p_object );
     }
 
 
@@ -154,12 +155,9 @@ public class CMethodBind extends IAction
 
 
             // method invokation
-            CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname ).invoke( l_object.getLeft() );
-/*
-            MethodHandle l_invoker = MethodHandles.lookup().unreflect( CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname ) );
-            l_invoker.bindTo( l_object.getLeft() );
-            l_invoker.invoke();
-*/
+            MethodHandle l_invoke = CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname, l_argumenttype );
+            l_invoke.invoke( l_object.getLeft() );
+
 
         }
         catch ( Exception l_exception )

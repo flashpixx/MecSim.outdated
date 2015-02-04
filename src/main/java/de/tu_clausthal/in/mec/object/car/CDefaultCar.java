@@ -226,7 +226,7 @@ public class CDefaultCar extends IInspector implements ICar
 
     public void blub()
     {
-        System.out.print( "-----> blub is called" );
+        System.out.println( "-----> blub is called: " );
     }
 
     /**

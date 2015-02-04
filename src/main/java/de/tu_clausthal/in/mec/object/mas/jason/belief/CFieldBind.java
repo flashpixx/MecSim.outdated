@@ -151,25 +151,25 @@ public class CFieldBind implements IBelief
     {
         for ( Map.Entry<String, ImmutablePair<Object, Set<String>>> l_item : m_bind.entrySet() )
             for ( Field l_field : CCommon.getClassFields( l_item.getValue().getLeft().getClass() ) )
+            {
+                if ( ( l_item.getValue().getRight().contains( l_field.getName() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) ||
+                        ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
+                    continue;
+
+                // we get access to all objects field, create a literal of the field data and add the annotation to the object name
+                try
                 {
-                    if ( ( l_item.getValue().getRight().contains( l_field.getName() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) ||
-                            ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
-                        continue;
 
-                    // we get access to all objects field, create a literal of the field data and add the annotation to the object name
-                    try
-                    {
+                    Literal l_literal = getLiteral( l_field.getName(), l_field.get( l_item.getValue().getLeft() ) );
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
+                    m_literals.add( l_literal );
 
-                        Literal l_literal = getLiteral( l_field.getName(), l_field.get( l_item.getValue().getLeft() ) );
-                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
-                        m_literals.add( l_literal );
-
-                    }
-                    catch ( Exception l_exception )
-                    {
-                        CLogger.error( l_exception );
-                    }
                 }
+                catch ( Exception l_exception )
+                {
+                    CLogger.error( l_exception );
+                }
+            }
     }
 
     @Override

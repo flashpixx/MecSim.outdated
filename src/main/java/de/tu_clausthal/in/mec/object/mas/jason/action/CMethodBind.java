@@ -25,8 +25,8 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CMethodCache;
 import jason.asSyntax.*;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.invoke.MethodHandle;
 import java.util.*;
@@ -41,7 +41,7 @@ public class CMethodBind extends IAction
     /**
      * bind object *
      */
-    protected Map<String, ImmutablePair<Object, Set<String>>> m_bind = new HashMap();
+    protected Map<String, CMethodCache<Object>> m_bind = new HashMap();
 
 
     /**
@@ -72,7 +72,7 @@ public class CMethodBind extends IAction
      */
     public void push( String p_name, Object p_object )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
+        m_bind.put( p_name, new CMethodCache( p_object ) );
     }
 
 
@@ -93,11 +93,11 @@ public class CMethodBind extends IAction
      */
     public Set<String> getForbidden( String p_name )
     {
-        ImmutablePair<Object, Set<String>> l_object = m_bind.get( p_name );
+        CMethodCache l_object = m_bind.get( p_name );
         if ( l_object == null )
             return null;
 
-        return l_object.getRight();
+        return l_object.getForbidden();
     }
 
 
@@ -111,6 +111,7 @@ public class CMethodBind extends IAction
     /**
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
+     * @todo handle return type
      */
     public void act( Structure p_args )
     {
@@ -121,20 +122,12 @@ public class CMethodBind extends IAction
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
         String l_objectname = l_args.get( 0 ).toString();
-        ImmutablePair<Object, Set<String>> l_object = m_bind.get( l_objectname );
+        CMethodCache<Object> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 
-
-        String l_methodname = l_args.get( 1 ).toString();
         try
         {
-
-            // check accessible of the method
-            for ( String l_name : l_object.getRight() )
-                if ( l_name.equals( l_methodname ) )
-                    throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_methodname, l_objectname ) );
-
 
             // method parameter (return & argument default type)
             Class l_returntype = Void.class;
@@ -153,11 +146,9 @@ public class CMethodBind extends IAction
                     l_returntype = this.convertTermToClass( l_args.get( 2 ) );
             }
 
-
-            // method invokation
-            MethodHandle l_invoke = CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname, l_argumenttype );
-            l_invoke.invoke( l_object.getLeft() );
-
+            // get method handle
+            MethodHandle l_invoke = l_object.getHandler( l_args.get( 1 ).toString(), l_argumenttype );
+            l_invoke.invoke( l_object.getObject() );
 
         }
         catch ( Exception l_exception )
@@ -190,7 +181,6 @@ public class CMethodBind extends IAction
      *
      * @param p_list term list
      * @return class array
-     * @throws ClassNotFoundException
      */
     protected Class[] convertTermListToArray( ListTerm p_list ) throws ClassNotFoundException
     {
@@ -205,7 +195,6 @@ public class CMethodBind extends IAction
      *
      * @param p_term term
      * @return class object array
-     * @throws ClassNotFoundException
      */
     protected Class[] convertTermListToArray( Term p_term ) throws ClassNotFoundException
     {

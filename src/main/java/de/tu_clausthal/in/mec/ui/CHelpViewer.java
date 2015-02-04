@@ -79,7 +79,8 @@ public class CHelpViewer extends JDialog
          */
         protected PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
 
-        /** ctor
+        /**
+         * ctor
          *
          * @param p_resource resource markdown file
          */

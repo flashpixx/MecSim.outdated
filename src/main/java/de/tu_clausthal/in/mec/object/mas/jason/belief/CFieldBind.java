@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.StringUtils;
@@ -143,14 +144,13 @@ public class CFieldBind implements IBelief
     }
 
     /**
-     * @todo move method search to ccommon
+     * @todo modify field access with cache
      */
     @Override
     public void update()
     {
         for ( Map.Entry<String, ImmutablePair<Object, Set<String>>> l_item : m_bind.entrySet() )
-            for ( Class l_class = l_item.getValue().getLeft().getClass(); l_class != null; l_class = l_class.getSuperclass() )
-                for ( Field l_field : l_class.getDeclaredFields() )
+            for ( Field l_field : CCommon.getClassFields( l_item.getValue().getLeft().getClass() ) )
                 {
                     if ( ( l_item.getValue().getRight().contains( l_field.getName() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) ||
                             ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
@@ -160,7 +160,6 @@ public class CFieldBind implements IBelief
                     try
                     {
 
-                        l_field.setAccessible( true );
                         Literal l_literal = getLiteral( l_field.getName(), l_field.get( l_item.getValue().getLeft() ) );
                         l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
                         m_literals.add( l_literal );

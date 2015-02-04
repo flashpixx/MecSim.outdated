@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import java.io.File;
 import java.lang.reflect.*;
 import java.text.MessageFormat;
-import java.util.Collection;
+import java.util.*;
 
 
 /**
@@ -101,16 +101,39 @@ public class CCommon
     public static Field getClassField( Class p_class, String p_field ) throws IllegalArgumentException
     {
         Field l_field = null;
-        try
-        {
-            l_field = p_class.getDeclaredField( p_field );
-            l_field.setAccessible( true );
-        }
-        catch ( Exception l_exception )
-        {
+        for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+            try
+            {
+                l_field = p_class.getDeclaredField( p_field );
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
+        if ( l_field == null )
             throw new IllegalArgumentException( getResouceString( CCommon.class, "fieldnotfound", p_field, p_class.getCanonicalName() ) );
-        }
+
+        l_field.setAccessible( true );
         return l_field;
+    }
+
+
+    /**
+     * returns a list with all fields of the class
+     *
+     * @param p_class class
+     * @return list with all fields
+     */
+    public static List<Field> getClassFields( Class p_class )
+    {
+        List<Field> l_fields = new LinkedList();
+        for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
+            for ( Field l_field : l_class.getDeclaredFields() )
+            {
+                l_field.setAccessible( true );
+                l_fields.add( l_field );
+            }
+        return l_fields;
     }
 
 
@@ -139,15 +162,19 @@ public class CCommon
     public static Method getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException
     {
         Method l_method = null;
-        try
-        {
-            l_method = p_class.getDeclaredMethod( p_method, p_parameter );
-            l_method.setAccessible( true );
-        }
-        catch ( Exception l_exception )
-        {
+        for ( Class l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+            try
+            {
+                l_method = l_class.getDeclaredMethod( p_method, p_parameter );
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
+        if ( l_method == null )
             throw new IllegalArgumentException( getResouceString( CCommon.class, "methodnotfound", p_method, p_class.getCanonicalName() ) );
-        }
+
+        l_method.setAccessible( true );
         return l_method;
     }
 

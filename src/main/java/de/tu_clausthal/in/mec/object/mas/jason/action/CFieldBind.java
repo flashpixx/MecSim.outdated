@@ -136,16 +136,7 @@ public class CFieldBind extends IAction
                     throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_fieldname, l_objectname ) );
 
             // try to get field
-            Field l_field = null;
-            for ( Class l_class = l_object.getLeft().getClass(); ( l_class != null ) && ( l_field == null ); l_class = l_class.getSuperclass() )
-                try
-                {
-                    l_field = CCommon.getClassField( l_class, l_fieldname );
-                }
-                catch ( Exception l_exception )
-                {
-                }
-
+            Field l_field = CCommon.getClassField( l_object.getLeft().getClass(), l_fieldname );
             if ( l_field == null )
                 throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
             if ( ( Modifier.isFinal( l_field.getModifiers() ) ) || ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) )

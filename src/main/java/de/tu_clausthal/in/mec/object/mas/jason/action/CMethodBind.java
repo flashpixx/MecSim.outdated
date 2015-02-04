@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import java.lang.invoke.*;
 import java.util.*;
 
 
@@ -109,10 +108,8 @@ public class CMethodBind extends IAction
 
     @Override
     /**
-     * @bug incomplete - method call does not work
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
-     * @todo move method search to ccommon
      */
     public void act( Structure p_args )
     {
@@ -156,63 +153,8 @@ public class CMethodBind extends IAction
             }
 
 
-            // create method handle
-            MethodHandle l_method = null;
-            /*
-            if (l_argumenttype == null)
-                l_method = MethodHandles.lookup().findVirtual( l_object.getLeft().getClass(), l_methodname, MethodType.methodType( l_returntype ) );
-            else
-                l_method = MethodHandles.lookup().findVirtual( l_object.getLeft().getClass(), l_methodname, MethodType.methodType( l_returntype, l_argumenttype ) );
-            */
-            l_method = MethodHandles.lookup().findVirtual( l_object.getLeft().getClass(), "blub", MethodType.methodType( Void.class ) );
-            //System.out.println( l_method );
-
-
-            // add method signature - the third parameter is ignored if it is not a term list, the term list
-            // defines a list of Java class names without the .class suffix to define the signature parameter
-            /*
-            Class[] l_parametertype = null;
-            if ( l_args.size() > 2 )
-            {
-                if ( !l_args.get( 2 ).isList() )
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "termlist" ) );
-
-                l_parametertype = new Class[( (ListTerm) l_args.get( 2 ) ).size()];
-                for ( int i = 0; i < l_parametertype.length; i++ )
-                {
-                    String l_typename = ( (ListTerm) l_args.get( 2 ) ).get( i ).toString();
-
-                    try
-                    {
-                        l_parametertype[i] = Class.forName( l_typename.endsWith( ".class" ) ? l_typename : l_typename + ".class" );
-                    }
-                    catch ( ClassNotFoundException l_exception )
-                    {
-                        throw new IllegalArgumentException( CCommon.getResouceString( this, "typenotfound", i, l_typename ) );
-                    }
-                }
-
-            }
-
-
-            // try to get method
-            Method l_method = null;
-            for ( Class l_class = l_object.getLeft().getClass(); ( l_class != null ) && ( l_method == null ); l_class = l_class.getSuperclass() )
-                try
-                {
-                    l_method = CCommon.getClassMethod( l_class, l_methodname, l_parametertype );
-                }
-                catch ( Exception l_exception )
-                {
-                }
-
-            if ( l_method == null )
-                throw new IllegalArgumentException( CCommon.getResouceString( this, "methodnotfound", l_methodname, l_objectname ) );
-            if ( ( Modifier.isFinal( l_method.getModifiers() ) ) || ( Modifier.isAbstract( l_method.getModifiers() ) ) || ( Modifier.isInterface( l_method.getModifiers() ) ) || ( Modifier.isStatic( l_method.getModifiers() ) ) )
-                throw new IllegalAccessException( CCommon.getResouceString( this, "modifier", l_methodname, l_objectname ) );
-
-            // invoke method with parameter
-            */
+            // method invokation
+            CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname ).invoke( l_object.getLeft() );
         }
         catch ( Exception l_exception )
         {
@@ -221,6 +163,12 @@ public class CMethodBind extends IAction
     }
 
 
+    /**
+     * converts a term value into a class object
+     *
+     * @param p_term Jason term
+     * @return class object
+     */
     protected Class convertTermToClass( Term p_term ) throws ClassNotFoundException
     {
         String l_classname = p_term.toString();
@@ -229,7 +177,13 @@ public class CMethodBind extends IAction
         return Class.forName( l_classname );
     }
 
-
+    /**
+     * converts a list of terms int an array of class objects
+     *
+     * @param p_list term list
+     * @return class array
+     * @throws ClassNotFoundException
+     */
     protected Class[] convertTermListToArray( ListTerm p_list ) throws ClassNotFoundException
     {
         Class[] l_classes = new Class[p_list.size()];
@@ -238,6 +192,13 @@ public class CMethodBind extends IAction
         return l_classes;
     }
 
+    /**
+     * converts a term into an array of class objects
+     *
+     * @param p_term term
+     * @return class object array
+     * @throws ClassNotFoundException
+     */
     protected Class[] convertTermListToArray( Term p_term ) throws ClassNotFoundException
     {
         Class[] l_classes = new Class[1];

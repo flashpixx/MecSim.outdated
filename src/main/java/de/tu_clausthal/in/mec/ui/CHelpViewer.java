@@ -39,6 +39,7 @@ import java.io.*;
  * help window
  *
  * @note help files are stored in Markdown syntax within the "help" directory
+ * @todo add back / forward button with action listener
  */
 public class CHelpViewer extends JDialog
 {

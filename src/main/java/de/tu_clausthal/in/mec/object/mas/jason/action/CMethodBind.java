@@ -147,7 +147,7 @@ public class CMethodBind extends IAction
             }
 
             // get method handle
-            MethodHandle l_invoke = l_object.getHandler( l_args.get( 1 ).toString(), l_argumenttype );
+            MethodHandle l_invoke = l_object.getHandle( l_args.get( 1 ).toString(), l_argumenttype );
             l_invoke.invoke( l_object.getObject() );
 
         }

@@ -30,7 +30,7 @@ import java.util.*;
 
 
 /**
- * cache class of invoker structure *
+ * cache class of method invoker structure *
  */
 public class CMethodCache<T>
 {
@@ -87,9 +87,9 @@ public class CMethodCache<T>
      * @param p_methodname method name
      * @return handle
      */
-    public MethodHandle getHandler( String p_methodname ) throws IllegalAccessException
+    public MethodHandle getHandle( String p_methodname ) throws IllegalAccessException
     {
-        return getHandler( p_methodname, null );
+        return getHandle( p_methodname, null );
     }
 
 
@@ -100,7 +100,7 @@ public class CMethodCache<T>
      * @param p_arguments  method arguments
      * @return handle
      */
-    public MethodHandle getHandler( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
+    public MethodHandle getHandle( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
     {
         ImmutablePair<String, Class[]> l_method = new ImmutablePair<String, Class[]>( p_methodname, p_arguments );
         if ( m_cache.containsKey( l_method ) )

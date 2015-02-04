@@ -155,10 +155,20 @@ public class CMethodBind extends IAction
 
             // method invokation
             CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname ).invoke( l_object.getLeft() );
+/*
+            MethodHandle l_invoker = MethodHandles.lookup().unreflect( CCommon.getClassMethod( l_object.getLeft().getClass(), l_methodname ) );
+            l_invoker.bindTo( l_object.getLeft() );
+            l_invoker.invoke();
+*/
+
         }
         catch ( Exception l_exception )
         {
             throw new IllegalArgumentException( l_exception.getMessage() );
+        }
+        catch ( Throwable l_throwable )
+        {
+            throw new IllegalArgumentException( l_throwable.getMessage() );
         }
     }
 

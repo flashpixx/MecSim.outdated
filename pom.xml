@@ -89,6 +89,13 @@
             <version>r239</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.pegdown</groupId>
+            <artifactId>pegdown</artifactId>
+            <version>1.4.2</version>
+            <scope>compile</scope>
+        </dependency>
+
 
         <!-- algorithms & data structure components -->
         <dependency>

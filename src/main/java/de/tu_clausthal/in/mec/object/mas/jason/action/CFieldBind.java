@@ -104,7 +104,7 @@ public class CFieldBind extends IAction
     @Override
     public String getName()
     {
-        return "pushfield";
+        return "set";
     }
 
     @Override

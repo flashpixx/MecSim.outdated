@@ -103,7 +103,7 @@ public class CMethodBind extends IAction
     @Override
     public String getName()
     {
-        return "invokemethod";
+        return "invoke";
     }
 
     @Override

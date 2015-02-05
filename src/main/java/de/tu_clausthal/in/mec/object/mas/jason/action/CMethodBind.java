@@ -135,17 +135,24 @@ public class CMethodBind extends IAction
                 l_argumenttype = l_args.get( 3 ).isList() ? this.convertTermListToArray( (ListTerm) l_args.get( 3 ) ) : this.convertTermListToArray( l_args.get( 3 ) );
             }
             else if ( l_args.size() > 2 )
-            {
-                if ( l_args.get( 2 ).isList() )
-                    l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 2 ) );
-                else
-                    l_returntype = this.convertTermToClass( l_args.get( 2 ) );
-            }
+                l_argumenttype = this.convertTermListToArray( l_args.get( 2 ).isList() ? (ListTerm) l_args.get( 2 ) : l_args.get( 2 ) );
 
             // get method handle
             MethodHandle l_invoke = l_object.getHandle( l_args.get( 1 ).toString(), l_argumenttype );
-            l_invoke.invoke( l_object.getObject() );
+            if ( l_argumenttype == null )
+                l_invoke.invoke( l_object.getObject() );
+            else
+            {
+                List<Object> l_invokedata = new LinkedList();
+                l_invokedata.add( l_object.getObject() );
+                for ( int i = l_args.size() - l_argumenttype.length; i < l_args.size(); i++ )
+                    if ( l_args.get( i ).isNumeric() )
+                        l_invokedata.add( ( (NumberTerm) l_args.get( i ) ).solve() );
+                    else
+                        l_invokedata.add( l_args.get( i ) );
 
+                l_invoke.invokeWithArguments( l_invokedata );
+            }
         }
         catch ( Exception l_exception )
         {
@@ -167,8 +174,10 @@ public class CMethodBind extends IAction
     protected Class convertTermToClass( Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
-        Class l_class = null;
+        if ( l_classname.equalsIgnoreCase( "void" ) )
+            return void.class;
 
+        Class l_class = null;
         try
         {
 

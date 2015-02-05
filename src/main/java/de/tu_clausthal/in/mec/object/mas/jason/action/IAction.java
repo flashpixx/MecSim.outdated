@@ -35,16 +35,6 @@ public abstract class IAction
 {
 
     /**
-     * returns the name of the action
-     *
-     * @return name of the action
-     */
-    public String getName()
-    {
-        return null;
-    }
-
-    /**
      * runs the action *
      *
      * @param p_agent agent which is run the action
@@ -52,18 +42,6 @@ public abstract class IAction
      */
     public void act( Agent p_agent, Structure p_args )
     {
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return this.getName().hashCode();
-    }
-
-    @Override
-    public boolean equals( Object obj )
-    {
-        return this.hashCode() == obj.hashCode();
     }
 
 }

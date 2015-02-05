@@ -103,12 +103,6 @@ public class CFieldBind extends IAction
 
 
     @Override
-    public String getName()
-    {
-        return "set";
-    }
-
-    @Override
     /**
      * @todo handle term list
      * @todo move field search to ccommon

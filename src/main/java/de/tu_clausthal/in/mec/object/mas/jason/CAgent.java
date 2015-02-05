@@ -72,7 +72,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * set with actions of this implementation *
      */
-    protected Set<IAction> m_action = new HashSet();
+    protected Map<String, IAction> m_action = new HashMap();
     /**
      * set with belief binds
      */
@@ -114,8 +114,8 @@ public class CAgent<T> implements IVoidAgent
 
         if ( p_bind != null )
         {
-            m_action.add( new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", p_bind ) );
-            m_action.add( new CMethodBind( "self", p_bind ) );
+            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", p_bind ) );
+            m_action.put( "invoke", new CMethodBind( "self", p_bind ) );
             m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
         }
 
@@ -157,7 +157,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return action set
      */
-    public Set<IAction> getActions()
+    public Map<String, IAction> getActions()
     {
         return m_action;
     }
@@ -236,25 +236,22 @@ public class CAgent<T> implements IVoidAgent
     {
 
         @Override
-        public void act( ActionExec action, List<ActionExec> feedback )
+        public void act( ActionExec p_action, List<ActionExec> p_feedback )
         {
-            for ( IAction l_action : m_action )
-                if ( ( l_action.getName() != null ) && ( l_action.getName().equals( action.getActionTerm().getFunctor() ) ) )
-                {
+            IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
+            if ( l_action != null )
                     try
                     {
-                        l_action.act( m_agent, action.getActionTerm() );
-                        action.setResult( true );
+                        l_action.act( m_agent, p_action.getActionTerm() );
+                        p_action.setResult( true );
                     }
                     catch ( Exception l_exception )
                     {
-                        action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
-                        action.setResult( false );
+                        p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
+                        p_action.setResult( false );
                     }
 
-                    feedback.add( action );
-                    return;
-                }
+            p_feedback.add( p_action );
         }
 
         @Override

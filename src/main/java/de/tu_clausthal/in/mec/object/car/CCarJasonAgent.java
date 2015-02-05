@@ -81,12 +81,12 @@ public class CCarJasonAgent extends CDefaultCar
             // add the method bind to the agent
             CMethodBind l_method = new CMethodBind( "self", this );
             l_method.getForbidden( "self" ).addAll( l_forbidden );
-            m_agent.getActions().add( l_method );
+            m_agent.getActions().put( "invoke", l_method );
 
             // add the pushback bind to the agent
             de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_pusback = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", this );
             l_pusback.getForbidden( "self" ).addAll( l_forbidden );
-            m_agent.getActions().add( l_pusback );
+            m_agent.getActions().put( "set", l_pusback );
 
 
             // add agent to layer

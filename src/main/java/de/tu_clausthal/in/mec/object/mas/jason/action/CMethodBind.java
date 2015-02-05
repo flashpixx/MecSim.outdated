@@ -103,12 +103,6 @@ public class CMethodBind extends IAction
 
 
     @Override
-    public String getName()
-    {
-        return "invoke";
-    }
-
-    @Override
     /**
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html

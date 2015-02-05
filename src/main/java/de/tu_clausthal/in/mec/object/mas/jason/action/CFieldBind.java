@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
 import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -131,7 +132,7 @@ public class CFieldBind extends IAction
                     throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_fieldname, l_objectname ) );
 
             // try to get field
-            Field l_field = CCommon.getClassField( l_object.getLeft().getClass(), l_fieldname );
+            Field l_field = CReflection.getClassField( l_object.getLeft().getClass(), l_fieldname );
             if ( l_field == null )
                 throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
             if ( ( Modifier.isFinal( l_field.getModifiers() ) ) || ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) )

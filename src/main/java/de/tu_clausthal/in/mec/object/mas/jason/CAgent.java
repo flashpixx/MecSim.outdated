@@ -24,8 +24,8 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.*;
@@ -240,16 +240,16 @@ public class CAgent<T> implements IVoidAgent
         {
             IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
             if ( l_action != null )
-                    try
-                    {
-                        l_action.act( m_agent, p_action.getActionTerm() );
-                        p_action.setResult( true );
-                    }
-                    catch ( Exception l_exception )
-                    {
-                        p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
-                        p_action.setResult( false );
-                    }
+                try
+                {
+                    l_action.act( m_agent, p_action.getActionTerm() );
+                    p_action.setResult( true );
+                }
+                catch ( Exception l_exception )
+                {
+                    p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
+                    p_action.setResult( false );
+                }
 
             p_feedback.add( p_action );
         }
@@ -358,8 +358,8 @@ public class CAgent<T> implements IVoidAgent
 
             try
             {
-                CCommon.getClassField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
-                CCommon.getClassField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
+                CReflection.getClassField( super.getClass().getSuperclass(), "initialGoals" ).set( this, new ArrayList() );
+                CReflection.getClassField( super.getClass().getSuperclass(), "initialBels" ).set( this, new ArrayList() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 Map<String, InternalAction> l_action = new HashMap();
@@ -372,7 +372,7 @@ public class CAgent<T> implements IVoidAgent
                 l_action.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
                 l_action.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
-                CCommon.getClassField( super.getClass().getSuperclass(), "internalActions" ).set( this, l_action );
+                CReflection.getClassField( super.getClass().getSuperclass(), "internalActions" ).set( this, l_action );
 
             }
             catch ( Exception l_exception )

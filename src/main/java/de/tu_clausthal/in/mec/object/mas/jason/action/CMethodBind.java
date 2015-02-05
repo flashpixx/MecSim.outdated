@@ -164,12 +164,59 @@ public class CMethodBind extends IAction
      * @param p_term Jason term
      * @return class object
      */
-    protected Class convertTermToClass( Term p_term ) throws ClassNotFoundException
+    protected Class convertTermToClass( Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
-        if ( !l_classname.contains( "." ) )
-            l_classname = "java.lang." + l_classname;
-        return Class.forName( l_classname );
+        Class l_class = null;
+
+        try
+        {
+
+            switch ( l_classname )
+            {
+                // check primitive datatypes
+                case "bool":
+                    l_class = Boolean.TYPE;
+                    break;
+                case "boolean":
+                    l_class = Boolean.TYPE;
+                    break;
+                case "byte":
+                    l_class = Byte.TYPE;
+                    break;
+                case "char":
+                    l_class = Character.TYPE;
+                    break;
+                case "short":
+                    l_class = Short.TYPE;
+                    break;
+                case "int":
+                    l_class = Integer.TYPE;
+                    break;
+                case "long":
+                    l_class = Long.TYPE;
+                    break;
+                case "float":
+                    l_class = Float.TYPE;
+                    break;
+                case "double":
+                    l_class = Double.TYPE;
+                    break;
+
+                // object types
+                default:
+                    if ( !l_classname.contains( "." ) )
+                        l_classname = "java.lang." + l_classname;
+                    l_class = Class.forName( l_classname );
+            }
+
+        }
+        catch ( ClassNotFoundException l_exception )
+        {
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "classnotfound", l_classname ) );
+        }
+
+        return l_class;
     }
 
     /**

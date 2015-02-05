@@ -127,7 +127,7 @@ public class CHelpViewer extends JDialog implements ActionListener
             return;
         }
 
-        if (l_item.equalsIgnoreCase( "home" ))
+        if ( l_item.equalsIgnoreCase( "home" ) )
         {
             m_browser.home();
             return;
@@ -145,7 +145,9 @@ public class CHelpViewer extends JDialog implements ActionListener
          * markdown processor *
          */
         protected PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
-        /** home source **/
+        /**
+         * home source *
+         */
         protected String m_home = null;
 
 
@@ -161,13 +163,15 @@ public class CHelpViewer extends JDialog implements ActionListener
             this.home();
         }
 
-        /** read the start page **/
+        /**
+         * read the start page *
+         */
         public void home()
         {
             Platform.runLater( () -> {
                 try
                 {
-                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( m_home) ) );
+                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( m_home ) ) );
                     m_webview.getEngine().loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray() ) );
                     l_reader.close();
                 }

@@ -26,11 +26,9 @@ package de.tu_clausthal.in.mec.common;
 import de.tu_clausthal.in.mec.CConfiguration;
 
 import java.io.File;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Collection;
 
 
 /**
@@ -91,95 +89,6 @@ public class CCommon
     {
         return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
-
-
-    /**
-     * returns a private field of a class
-     *
-     * @param p_class class
-     * @param p_field fieldname
-     * @return field
-     */
-    public static Field getClassField( Class p_class, String p_field ) throws IllegalArgumentException
-    {
-        Field l_field = null;
-        for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
-            try
-            {
-                l_field = p_class.getDeclaredField( p_field );
-            }
-            catch ( Exception l_exception )
-            {
-            }
-
-        if ( l_field == null )
-            throw new IllegalArgumentException( getResouceString( CCommon.class, "fieldnotfound", p_field, p_class.getCanonicalName() ) );
-
-        l_field.setAccessible( true );
-        return l_field;
-    }
-
-
-    /**
-     * returns a list with all fields of the class
-     *
-     * @param p_class class
-     * @return list with all fields
-     */
-    public static List<Field> getClassFields( Class p_class )
-    {
-        List<Field> l_fields = new LinkedList();
-        for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
-            for ( Field l_field : l_class.getDeclaredFields() )
-            {
-                l_field.setAccessible( true );
-                l_fields.add( l_field );
-            }
-        return l_fields;
-    }
-
-
-    /**
-     * returns a void-method from a class
-     *
-     * @param p_class  class
-     * @param p_method methodname
-     * @return method
-     */
-    public static MethodHandle getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
-    {
-        return getClassMethod( p_class, p_method, null );
-    }
-
-
-    /**
-     * returns a void-method from a class
-     *
-     * @param p_class     class
-     * @param p_method    methodname
-     * @param p_parameter array with type-classes to define method parameter e.g. new Class[]{Integer.TYPE,
-     *                    Integer.TYPE};
-     * @return method
-     */
-    public static MethodHandle getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
-    {
-        Method l_method = null;
-        for ( Class l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
-            try
-            {
-                l_method = l_class.getDeclaredMethod( p_method, p_parameter );
-            }
-            catch ( Exception l_exception )
-            {
-            }
-
-        if ( l_method == null )
-            throw new IllegalArgumentException( getResouceString( CCommon.class, "methodnotfound", p_method, p_class.getCanonicalName() ) );
-
-        l_method.setAccessible( true );
-        return MethodHandles.lookup().unreflect( l_method );
-    }
-
 
     /**
      * adds a file extension if necessary

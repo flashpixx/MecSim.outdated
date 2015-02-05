@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.StringUtils;
@@ -150,7 +150,7 @@ public class CFieldBind implements IBelief
     public void update()
     {
         for ( Map.Entry<String, ImmutablePair<Object, Set<String>>> l_item : m_bind.entrySet() )
-            for ( Field l_field : CCommon.getClassFields( l_item.getValue().getLeft().getClass() ) )
+            for ( Field l_field : CReflection.getClassFields( l_item.getValue().getLeft().getClass() ) )
             {
                 if ( ( l_item.getValue().getRight().contains( l_field.getName() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) ||
                         ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )

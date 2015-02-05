@@ -224,9 +224,9 @@ public class CDefaultCar extends IInspector implements ICar
         return m_deceleration;
     }
 
-    public int blub()
+    public int blub( int x )
     {
-        System.out.println( "-----> blub is called: " );
+        System.out.println( "-----> blub is called: " + x );
         return 123;
     }
 

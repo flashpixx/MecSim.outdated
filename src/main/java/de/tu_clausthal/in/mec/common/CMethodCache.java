@@ -110,7 +110,7 @@ public class CMethodCache<T>
             if ( p_methodname.equals( l_item ) )
                 throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
 
-        MethodHandle l_handle = CCommon.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+        MethodHandle l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
         m_cache.put( l_method, l_handle );
         return l_handle;
     }

@@ -139,8 +139,9 @@ public class CMethodBind extends IAction
 
             // get method handle
             MethodHandle l_invoke = l_object.getHandle( l_args.get( 1 ).toString(), l_argumenttype );
+            Object l_return = null;
             if ( l_argumenttype == null )
-                l_invoke.invoke( l_object.getObject() );
+                l_return = l_invoke.invoke( l_object.getObject() );
             else
             {
                 List<Object> l_invokedata = new LinkedList();
@@ -151,7 +152,7 @@ public class CMethodBind extends IAction
                     else
                         l_invokedata.add( l_args.get( i ) );
 
-                l_invoke.invokeWithArguments( l_invokedata );
+                l_return = l_invoke.invokeWithArguments( l_invokedata );
             }
         }
         catch ( Exception l_exception )

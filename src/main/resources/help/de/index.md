@@ -31,5 +31,3 @@ nicht beachtet werden muss:
   * ```set( <Objektname>, <Eigenschaftname>, <Wert> )``` setzt den Wert einer Eigenschaft eines Objektes. Der erste
   Parameter ist der Name des Objektes, der zweite der Eigenschaft und der dritte Wert ist der Wert, wobei
   Typenkonvertierung automatisch durchgeführt wird
-
-

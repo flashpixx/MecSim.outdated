@@ -137,8 +137,10 @@ public class CHelpViewer extends JDialog implements ActionListener
 
     /**
      * class to encapsulate browser component *
+     *
+     * @todo add event handler for href / img tags http://blogs.kiyut.com/tonny/2013/07/30/javafx-webview-addhyperlinklistener/#.VNOE5mSG93o
      */
-    protected class CHelpBrowser extends CBrowser
+    protected class CHelpBrowser extends CBrowser //implements ChangeListener<Worker.State>
     {
 
         /**
@@ -159,6 +161,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         public CHelpBrowser( String p_resource )
         {
             super();
+            //m_webview.getEngine().getLoadWorker().stateProperty().addListener(this);
             m_home = p_resource;
             this.home();
         }
@@ -181,6 +184,15 @@ public class CHelpViewer extends JDialog implements ActionListener
                 }
             } );
         }
+
+/*
+        @Override
+        public void changed( ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue )
+        {
+            if (newValue != Worker.State.SUCCEEDED)
+                return;
+        }
+*/
 
     }
 

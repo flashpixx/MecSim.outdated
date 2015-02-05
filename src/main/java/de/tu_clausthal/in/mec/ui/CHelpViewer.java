@@ -25,14 +25,20 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
 import org.apache.commons.io.IOUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -41,14 +47,26 @@ import java.io.*;
  * @note help files are stored in Markdown syntax within the "help" directory
  * @todo add back / forward button with action listener
  */
-public class CHelpViewer extends JDialog
+public class CHelpViewer extends JDialog implements ActionListener
 {
 
     /**
      * default language - safe structure because configuration can push a null value *
      */
     protected static String s_defaultlanguage = "en";
+    /**
+     * components
+     */
+    protected Map<JComponent, String> m_components = new HashMap();
+    /**
+     * browser
+     */
+    protected CBrowser m_browser = new CHelpBrowser( "help" + File.separatorChar + ( CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage() ) + File.separator + "index.md" );
 
+
+    /**
+     * ctor
+     */
     public CHelpViewer()
     {
         this( null );
@@ -61,10 +79,52 @@ public class CHelpViewer extends JDialog
     {
         if ( p_frame != null )
             this.setLocationRelativeTo( p_frame );
-
         this.setDefaultCloseOperation( JDialog.HIDE_ON_CLOSE );
-        this.add( new CHelpBrowser( "help" + File.separatorChar + ( CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage() ) + File.separator + "index.md" ) );
+
+
+        JToolBar l_toolbar = new JToolBar();
+        l_toolbar.setFloatable( false );
+        l_toolbar.setLayout( new FlowLayout( FlowLayout.CENTER ) );
+
+        for ( String[] l_item : new String[][]{{"back", "helpbrowser_back.png"}, {"forward", "helpbrowser_forward.png"}} )
+
+            try
+            {
+                JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
+                l_button.addActionListener( this );
+                l_toolbar.add( l_button );
+                m_components.put( l_button, l_item[0] );
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
+        JPanel l_panel = new JPanel( new BorderLayout() );
+        l_panel.add( l_toolbar, BorderLayout.NORTH );
+        l_panel.add( m_browser, BorderLayout.CENTER );
+
+        this.add( l_panel );
         this.pack();
+    }
+
+    @Override
+    public void actionPerformed( ActionEvent e )
+    {
+        String l_item = m_components.get( e.getSource() );
+        if ( l_item == null )
+            return;
+
+        if ( l_item.equalsIgnoreCase( "back" ) )
+        {
+            m_browser.back();
+            return;
+        }
+
+        if ( l_item.equalsIgnoreCase( "forward" ) )
+        {
+            m_browser.forward();
+            return;
+        }
     }
 
 

@@ -107,6 +107,7 @@ public class CMethodBind extends IAction
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
      * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
      * @todo handle return type
+     * @todo add arguments to invoke
      */
     public void act( Agent p_agent, Structure p_args )
     {

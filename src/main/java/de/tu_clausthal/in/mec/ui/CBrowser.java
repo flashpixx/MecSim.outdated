@@ -100,6 +100,9 @@ public class CBrowser extends JFXPanel
      */
     public void back()
     {
+        if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 )
+            return;
+
         Platform.runLater( () -> {
             m_webview.getEngine().getHistory().go( -1 );
         } );
@@ -110,8 +113,11 @@ public class CBrowser extends JFXPanel
      */
     public void forward()
     {
+        if ( m_webview.getEngine().getHistory().getCurrentIndex() >= m_webview.getEngine().getHistory().getMaxSize() - 1 )
+            return;
+
         Platform.runLater( () -> {
-            m_webview.getEngine().getHistory().go( 1 );
+            m_webview.getEngine().getHistory().go( +1 );
         } );
     }
 

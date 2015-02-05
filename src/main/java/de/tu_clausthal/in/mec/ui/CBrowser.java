@@ -25,9 +25,19 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.events.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -37,11 +47,15 @@ import javafx.scene.web.WebView;
  */
 public class CBrowser extends JFXPanel
 {
+
     /**
      * webkit view
      */
     protected WebView m_webview = null;
-
+    /**
+     * listener *
+     */
+    protected Set<IActionListener> m_listener = new HashSet();
 
     /**
      * ctor with instantiation a blank engine
@@ -49,10 +63,10 @@ public class CBrowser extends JFXPanel
     public CBrowser()
     {
         Platform.runLater( () -> {
-            m_webview = new WebView();
-            this.setScene( new Scene( m_webview ) );
+            this.initialize();
         } );
     }
+
 
     /**
      * ctor with instantiation the engine
@@ -65,12 +79,66 @@ public class CBrowser extends JFXPanel
             throw new IllegalArgumentException( CCommon.getResouceString( this, "urlempty" ) );
 
         Platform.runLater( () -> {
-            m_webview = new WebView();
+            this.initialize();
             m_webview.getEngine().load( p_url );
-            this.setScene( new Scene( m_webview ) );
         } );
     }
 
+    /**
+     * adds a action listener to the browser content
+     *
+     * @param p_listener listen
+     */
+    public void addContentActionListener( IActionListener p_listener )
+    {
+        m_listener.add( p_listener );
+    }
+
+    /**
+     * removes the browser content action listener
+     */
+    public boolean removeContentActionListener( IActionListener p_listener )
+    {
+        return m_listener.remove( p_listener );
+    }
+
+    /**
+     * runs the initialization with listener
+     */
+    protected void initialize()
+    {
+        m_webview = new WebView();
+        this.setScene( new Scene( m_webview ) );
+
+        m_webview.getEngine().getLoadWorker().stateProperty().addListener( new ChangeListener<Worker.State>()
+        {
+            @Override
+            public void changed( ObservableValue ov, Worker.State oldState, Worker.State newState )
+            {
+                if ( newState != Worker.State.SUCCEEDED )
+                    return;
+
+
+                // listener for href tags
+                EventListener l_hreflistener = new EventListener()
+                {
+                    @Override
+                    public void handleEvent( Event p_event )
+                    {
+                        if ( !p_event.getType().equalsIgnoreCase( "click" ) )
+                            return;
+
+                        for ( IActionListener l_item : m_listener )
+                            l_item.onHrefClick( m_webview.getEngine(), (Element) p_event.getTarget() );
+                    }
+                };
+
+                NodeList l_hrefnodes = m_webview.getEngine().getDocument().getElementsByTagName( "a" );
+                for ( int i = 0; i < l_hrefnodes.getLength(); i++ )
+                    ( (EventTarget) l_hrefnodes.item( i ) ).addEventListener( "click", l_hreflistener, false );
+            }
+        } );
+    }
 
     /**
      * loads a URL on the browser
@@ -83,7 +151,6 @@ public class CBrowser extends JFXPanel
             m_webview.getEngine().load( p_url );
         } );
     }
-
 
     /**
      * refresh the current URL
@@ -119,6 +186,25 @@ public class CBrowser extends JFXPanel
         Platform.runLater( () -> {
             m_webview.getEngine().getHistory().go( +1 );
         } );
+    }
+
+    /**
+     * content action listener *
+     */
+    public abstract class IActionListener
+    {
+
+        /**
+         * click on a href tag
+         *
+         * @param p_web     engine
+         * @param p_element full html element
+         */
+        public void onHrefClick( WebEngine p_web, Element p_element )
+        {
+        }
+
+        //public void onImgLoad( WebEngine p_web, Element p_element ) {}
     }
 
 }

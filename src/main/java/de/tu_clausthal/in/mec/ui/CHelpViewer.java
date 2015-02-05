@@ -27,9 +27,11 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
+import javafx.scene.web.WebEngine;
 import org.apache.commons.io.IOUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
+import org.w3c.dom.Element;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,6 +39,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +49,6 @@ import java.util.Map;
  * help window
  *
  * @note help files are stored in Markdown syntax within the "help" directory
- * @todo add back / forward button with action listener
  */
 public class CHelpViewer extends JDialog implements ActionListener
 {
@@ -61,7 +64,7 @@ public class CHelpViewer extends JDialog implements ActionListener
     /**
      * browser
      */
-    protected CHelpBrowser m_browser = new CHelpBrowser( "help" + File.separatorChar + ( CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage() ) + File.separator + "index.md" );
+    protected CHelpBrowser m_browser = new CHelpBrowser( this.getFile( "index.md" ) );
 
 
     /**
@@ -108,6 +111,18 @@ public class CHelpViewer extends JDialog implements ActionListener
         this.pack();
     }
 
+
+    /**
+     * returns a full path of a file within the help directory
+     *
+     * @param p_markdownfile file name
+     * @return full path
+     */
+    protected String getFile( String p_markdownfile )
+    {
+        return "help" + File.separatorChar + ( CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage() ) + File.separator + p_markdownfile;
+    }
+
     @Override
     public void actionPerformed( ActionEvent e )
     {
@@ -137,10 +152,8 @@ public class CHelpViewer extends JDialog implements ActionListener
 
     /**
      * class to encapsulate browser component *
-     *
-     * @todo add event handler for href / img tags http://blogs.kiyut.com/tonny/2013/07/30/javafx-webview-addhyperlinklistener/#.VNOE5mSG93o
      */
-    protected class CHelpBrowser extends CBrowser //implements ChangeListener<Worker.State>
+    protected class CHelpBrowser extends CBrowser
     {
 
         /**
@@ -151,8 +164,6 @@ public class CHelpViewer extends JDialog implements ActionListener
          * home source *
          */
         protected String m_home = null;
-
-
         /**
          * ctor
          *
@@ -161,8 +172,10 @@ public class CHelpViewer extends JDialog implements ActionListener
         public CHelpBrowser( String p_resource )
         {
             super();
-            //m_webview.getEngine().getLoadWorker().stateProperty().addListener(this);
+
             m_home = p_resource;
+
+            this.addContentActionListener( new CTagListener() );
             this.home();
         }
 
@@ -171,11 +184,22 @@ public class CHelpViewer extends JDialog implements ActionListener
          */
         public void home()
         {
+            this.processMarkdown( m_webview.getEngine(), m_home );
+        }
+
+        /**
+         * process the markdown transformation
+         *
+         * @param p_engine web engine
+         * @param p_source path of the markdown file
+         */
+        protected void processMarkdown( WebEngine p_engine, String p_source )
+        {
             Platform.runLater( () -> {
                 try
                 {
-                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( m_home ) ) );
-                    m_webview.getEngine().loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray() ) );
+                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( p_source ) ) );
+                    p_engine.loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray() ) );
                     l_reader.close();
                 }
                 catch ( Exception l_exception )
@@ -185,14 +209,29 @@ public class CHelpViewer extends JDialog implements ActionListener
             } );
         }
 
-/*
-        @Override
-        public void changed( ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue )
+
+        /**
+         * action listener to read markdown files from the Jar help directory
+         */
+        protected class CTagListener extends CBrowser.IActionListener
         {
-            if (newValue != Worker.State.SUCCEEDED)
-                return;
+
+            @Override
+            public void onHrefClick( WebEngine p_web, Element p_element )
+            {
+                try
+                {
+                    new URL( p_element.getAttribute( "href" ) );
+                    return;
+                }
+                catch ( MalformedURLException l_exception )
+                {
+                }
+
+                processMarkdown( p_web, getFile( p_element.getAttribute( "href" ) + ".md" ) );
+            }
+
         }
-*/
 
     }
 

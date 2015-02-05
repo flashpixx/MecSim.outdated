@@ -228,7 +228,10 @@ public class CHelpViewer extends JDialog implements ActionListener
                 {
                 }
 
-                processMarkdown( p_web, getFile( p_element.getAttribute( "href" ) + ".md" ) );
+                String l_file = p_element.getAttribute( "href" );
+                if ( !l_file.endsWith( ".md" ) )
+                    l_file += ".md";
+                processMarkdown( p_web, getFile( l_file ) );
             }
 
         }

@@ -25,12 +25,13 @@
 package de.tu_clausthal.in.mec.common;
 
 
+import de.tu_clausthal.in.mec.CLogger;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -38,6 +39,104 @@ import java.util.List;
  */
 public class CReflection
 {
+
+    /**
+     * interface of field filtering
+     */
+    public interface IFieldFilter
+    {
+
+        /** filter method
+         *
+         * @param p_field field object
+         * @return true field will be added, false field will be ignored
+         */
+        public boolean filter( Field p_field );
+    }
+
+
+    /**
+     * get a class field of the class or super classes
+     * and returns getter / setter handles
+     *
+     * @param p_class class
+     * @param p_field fieldname
+     * @return getter / setter handle object
+     * @throws IllegalArgumentException
+     */
+    public static CGetSet getClassFieldNew( Class p_class, String p_field ) throws IllegalArgumentException
+    {
+        Field l_field = null;
+        for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+            try
+            {
+                l_field = l_class.getDeclaredField( p_field );
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
+        if ( l_field == null )
+            throw new IllegalArgumentException( CCommon.getResouceString( CReflection.class, "fieldnotfound", p_field, p_class.getCanonicalName() ) );
+
+        l_field.setAccessible( true );
+        CGetSet l_struct = null;
+        try {
+            l_struct = new CGetSet( MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) );
+        }
+        catch ( IllegalAccessException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+
+        return l_struct;
+    }
+
+    /**
+     * returns all fields of a class and the super classes
+     *
+     * @param p_class class
+     * @return map with field name and getter / setter handle
+     */
+    public static Map<String,CGetSet> getClassFieldsNew( Class p_class )
+    {
+        return getClassFieldsNew( p_class, null );
+    }
+
+
+    /**
+     * returns filtered fields of a class and the super classes
+     *
+     * @param p_class class
+     * @param p_filter filtering object
+     * @return map with field name and getter / setter handle
+     */
+    public static Map<String,CGetSet> getClassFieldsNew( Class p_class, IFieldFilter p_filter )
+    {
+        Map<String,CGetSet> l_fields = new HashMap();
+        for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
+            for ( Field l_field : l_class.getDeclaredFields() )
+            {
+                l_field.setAccessible( true );
+                if ((p_filter != null) && (!p_filter.filter( l_field )))
+                    continue;
+
+                try {
+                    l_fields.put( l_field.getName(), new CGetSet( MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) ) );
+                }
+                catch ( IllegalAccessException l_exception )
+                {
+                    CLogger.error( l_exception );
+                }
+            }
+        return l_fields;
+    }
+
+
+
+
+
+
 
     /**
      * returns a private field of a class
@@ -168,7 +267,7 @@ public class CReflection
          */
         public MethodHandle getSetter()
         {
-            return m_getter;
+            return m_setter;
         }
 
         /**

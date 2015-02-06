@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.StringUtils;
@@ -41,10 +42,12 @@ import java.util.*;
  */
 public class CFieldBind implements IBelief
 {
+
     /**
-     * bind object *
+     * bind objects - map uses a name / annotation as key value and a pair of object
+     * and the map of fields and getter / setter handles, so each bind can configurate individual
      */
-    protected Map<String, ImmutablePair<Object, Set<String>>> m_bind = new HashMap();
+    protected Map<String, ImmutablePair<Object, Map<String,CReflection.CGetSet>>> m_bind = new HashMap();
     /**
      * set with literals
      */
@@ -61,12 +64,23 @@ public class CFieldBind implements IBelief
     /**
      * ctor bind an object
      *
-     * @param p_name   name / annotion of the object
+     * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
     public CFieldBind( String p_name, Object p_object )
     {
-        this.push( p_name, p_object );
+        this.push( p_name, p_object, null );
+    }
+
+    /**
+     * ctor
+     * @param p_name name / annotation of the bind object
+     * @param p_object bind object
+     * @param p_forbiddennames set with forbidden field names of the object fields
+     */
+    public CFieldBind( String p_name, Object p_object, Set<String> p_forbiddennames )
+    {
+        this.push( p_name, p_object, p_forbiddennames );
     }
 
     /**
@@ -105,15 +119,28 @@ public class CFieldBind implements IBelief
         return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
     }
 
+
     /**
-     * adds a new bind object
+     * adds / binds an object
      *
-     * @param p_name   name / annotion of the object
-     * @param p_object bind object
+     * @param p_name name / annotation of the object
+     * @param p_object object
      */
     public void push( String p_name, Object p_object )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
+        this.push( p_name, p_object, null );
+    }
+
+    /**
+     * adds a new bind object
+     *
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     * @param p_forbiddennames set with forbidden names of the object fields
+     */
+    public void push( String p_name, Object p_object, Set<String> p_forbiddennames )
+    {
+        m_bind.put( p_name, new ImmutablePair<Object, Map<String,CReflection.CGetSet>>( p_object, CReflection.getClassFieldsNew( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
 
     /**
@@ -126,16 +153,6 @@ public class CFieldBind implements IBelief
         m_bind.remove( p_name );
     }
 
-    /**
-     * returns the forbidden set
-     *
-     * @param p_name bind name
-     * @return set with forbidden names
-     */
-    public Set<String> getForbidden( String p_name )
-    {
-        return m_bind.get( p_name ).getRight();
-    }
 
     @Override
     public Set<Literal> getLiterals()
@@ -143,24 +160,22 @@ public class CFieldBind implements IBelief
         return m_literals;
     }
 
-    /**
-     * @todo modify field access with cache
-     */
+
     @Override
     public void update()
     {
-        for ( Map.Entry<String, ImmutablePair<Object, Set<String>>> l_item : m_bind.entrySet() )
-            for ( Field l_field : CReflection.getClassFields( l_item.getValue().getLeft().getClass() ) )
-            {
-                if ( ( l_item.getValue().getRight().contains( l_field.getName() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) ||
-                        ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isFinal( l_field.getModifiers() ) ) )
-                    continue;
+        // iterate over all binded objects
+        for ( Map.Entry<String, ImmutablePair<Object, Map<String,CReflection.CGetSet>>> l_item : m_bind.entrySet() )
 
-                // we get access to all objects field, create a literal of the field data and add the annotation to the object name
+            // iterate over all object fields
+            for( Map.Entry<String,CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet() )
                 try
                 {
+                    // invoke / call the getter of the object field - field name will be the belief name, return value
+                    // of the getter invoke call is set for the belief value
+                    Literal l_literal = getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
 
-                    Literal l_literal = getLiteral( l_field.getName(), l_field.get( l_item.getValue().getLeft() ) );
+                    // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
                     m_literals.add( l_literal );
 
@@ -169,7 +184,10 @@ public class CFieldBind implements IBelief
                 {
                     CLogger.error( l_exception );
                 }
-            }
+                catch ( Throwable l_throwable )
+                {
+                    CLogger.error( l_throwable );
+                }
     }
 
     @Override

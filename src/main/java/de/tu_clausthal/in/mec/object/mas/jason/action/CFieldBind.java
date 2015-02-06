@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -42,9 +43,12 @@ public class CFieldBind extends IAction
 {
 
     /**
-     * bind object *
+     * bind objects - map uses a name / annotation as key value and a pair of object
+     * and the map of fields and getter / setter handles, so each bind can configurate individual
      */
-    protected Map<String, ImmutablePair<Object, Set<String>>> m_bind = new HashMap();
+    protected Map<String, ImmutablePair<Object, Map<String,CReflection.CGetSet>>> m_bind = new HashMap();
+
+
 
     /**
      * ctor - default
@@ -54,27 +58,53 @@ public class CFieldBind extends IAction
 
     }
 
+
     /**
      * ctor bind an object
      *
-     * @param p_name   name of the binding object
-     * @param p_object object
+     * @param p_name name / annotation of the bind object
+     * @param p_object bind object
      */
     public CFieldBind( String p_name, Object p_object )
     {
-        this.push( p_name, p_object );
+        this.push( p_name, p_object, null );
+    }
+
+
+    /**
+     * ctor
+     * @param p_name name / annotation of the bind object
+     * @param p_object bind object
+     * @param p_forbiddennames set with forbidden field names of the object fields
+     */
+    public CFieldBind( String p_name, Object p_object, Set<String> p_forbiddennames )
+    {
+        this.push( p_name, p_object, p_forbiddennames );
+    }
+
+
+    /**
+     * adds / binds an object
+     *
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     */
+    public void push( String p_name, Object p_object )
+    {
+        this.push( p_name, p_object, null );
     }
 
 
     /**
      * adds a new bind object
      *
-     * @param p_name   name
-     * @param p_object bind object
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     * @param p_forbiddennames set with forbidden names of the object fields
      */
-    public void push( String p_name, Object p_object )
+    public void push( String p_name, Object p_object, Set<String> p_forbiddennames )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Set<String>>( p_object, new HashSet() ) );
+        m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFieldsNew( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
 
 
@@ -88,25 +118,10 @@ public class CFieldBind extends IAction
         m_bind.remove( p_name );
     }
 
-    /**
-     * returns the forbidden set
-     *
-     * @return set with forbidden names
-     */
-    public Set<String> getForbidden( String p_name )
-    {
-        ImmutablePair<Object, Set<String>> l_object = m_bind.get( p_name );
-        if ( l_object == null )
-            return null;
-
-        return l_object.getRight();
-    }
-
 
     @Override
     /**
      * @todo handle term list
-     * @todo move field search to ccommon
      */
     public void act( Agent p_agent, Structure p_args )
     {
@@ -116,71 +131,30 @@ public class CFieldBind extends IAction
         if ( l_args.size() < 3 )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
 
-        // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
+        // first argument is the object name - try to get object
         String l_objectname = l_args.get( 0 ).toString();
-        ImmutablePair<Object, Set<String>> l_object = m_bind.get( l_objectname );
+        ImmutablePair<Object, Map<String,CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 
+        // second argument is the field name - try to get the field
         String l_fieldname = l_args.get( 1 ).toString();
+        CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
+        if (l_handle == null)
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
+
+
         try
         {
-
-            // check accessible of the field
-            for ( String l_name : l_object.getRight() )
-                if ( l_name.equals( l_fieldname ) )
-                    throw new IllegalAccessException( CCommon.getResouceString( this, "access", l_fieldname, l_objectname ) );
-
-            // try to get field
-            Field l_field = CReflection.getClassField( l_object.getLeft().getClass(), l_fieldname );
-            if ( l_field == null )
-                throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
-            if ( ( Modifier.isFinal( l_field.getModifiers() ) ) || ( Modifier.isAbstract( l_field.getModifiers() ) ) || ( Modifier.isInterface( l_field.getModifiers() ) ) || ( Modifier.isStatic( l_field.getModifiers() ) ) )
-                throw new IllegalAccessException( CCommon.getResouceString( this, "modifier", l_fieldname, l_objectname ) );
-
-
-            // set field value
-            if ( l_args.get( 2 ).isNumeric() )
-            {
-                // Jason stores numeric values with a native double, but we need to test is the target type / field type
-                // a boxed or a non-boxed type e.g. Integer vs int, only boxed-types can be casted
-                double l_value = ( (NumberTerm) l_args.get( 2 ) ).solve();
-                switch ( l_field.getType().toString() )
-                {
-                    case "char":
-                        l_field.set( l_object.getLeft(), (char) l_value );
-                        break;
-                    case "byte":
-                        l_field.set( l_object.getLeft(), (byte) l_value );
-                        break;
-                    case "short":
-                        l_field.set( l_object.getLeft(), (short) l_value );
-                        break;
-                    case "int":
-                        l_field.set( l_object.getLeft(), (int) l_value );
-                        break;
-                    case "long":
-                        l_field.set( l_object.getLeft(), (long) l_value );
-                        break;
-                    case "float":
-                        l_field.set( l_object.getLeft(), (float) l_value );
-                        break;
-                    case "double":
-                        l_field.set( l_object.getLeft(), l_value );
-                        break;
-
-                    default:
-                        l_field.set( l_object.getLeft(), l_field.getType().cast( new Double( l_value ) ) );
-                }
-            }
-
-            if ( l_args.get( 2 ).isString() )
-                l_field.set( l_object.getLeft(), ( (StringTerm) l_args.get( 2 ) ).getString() );
-
+            // set value with the setter handle
+            if (l_args.get( 2 ).isNumeric())
+                l_handle.getSetter().invoke( l_object.getLeft(), (Number)((NumberTerm)l_args.get( 2 )).solve() );
+            else
+                l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
         }
-        catch ( Exception l_exception )
+        catch ( Throwable throwable )
         {
-            throw new IllegalArgumentException( l_exception.getMessage() );
+            throwable.printStackTrace();
         }
     }
 }

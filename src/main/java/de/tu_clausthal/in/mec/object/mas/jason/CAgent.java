@@ -373,11 +373,14 @@ public class CAgent<T> implements IVoidAgent
                 l_action.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
                 CReflection.getClassField( this.getClass(), "internalActions" ).set( this, l_action );
-
             }
             catch ( Exception l_exception )
             {
                 CLogger.error( l_exception );
+            }
+            catch ( Throwable throwable )
+            {
+                System.out.println(throwable);
             }
 
             this.load( p_asl.toString() );

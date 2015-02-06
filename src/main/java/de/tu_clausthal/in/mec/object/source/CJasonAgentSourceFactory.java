@@ -48,6 +48,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * ctor that sets the geo position of the source
      *
      * @param p_position geo position object
+     * @param p_asl ASL / agent name
      */
     public CJasonAgentSourceFactory( GeoPosition p_position, String p_asl )
     {

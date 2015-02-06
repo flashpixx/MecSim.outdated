@@ -358,8 +358,8 @@ public class CAgent<T> implements IVoidAgent
 
             try
             {
-                CReflection.getClassField( super.getClass(), "initialGoals" ).set( this, new ArrayList() );
-                CReflection.getClassField( super.getClass(), "initialBels" ).set( this, new ArrayList() );
+                CReflection.getClassField( this.getClass(), "initialGoals" ).set( this, new ArrayList() );
+                CReflection.getClassField( this.getClass(), "initialBels" ).set( this, new ArrayList() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 Map<String, InternalAction> l_action = new HashMap();
@@ -372,7 +372,7 @@ public class CAgent<T> implements IVoidAgent
                 l_action.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
                 l_action.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
-                CReflection.getClassField( super.getClass(), "internalActions" ).set( this, l_action );
+                CReflection.getClassField( this.getClass(), "internalActions" ).set( this, l_action );
 
             }
             catch ( Exception l_exception )

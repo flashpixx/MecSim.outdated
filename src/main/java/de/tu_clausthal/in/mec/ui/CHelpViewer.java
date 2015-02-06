@@ -29,8 +29,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import org.apache.commons.io.IOUtils;
-import org.pegdown.Extensions;
-import org.pegdown.PegDownProcessor;
+import org.pegdown.*;
+import org.pegdown.ast.*;
 import org.w3c.dom.Element;
 
 import javax.imageio.ImageIO;
@@ -39,8 +39,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +63,7 @@ public class CHelpViewer extends JDialog implements ActionListener
     /**
      * browser
      */
-    protected CHelpBrowser m_browser = new CHelpBrowser( this.getFile( "index.md" ) );
+    protected CHelpBrowser m_browser = new CHelpBrowser( "index.md" );
 
 
     /**
@@ -113,14 +112,24 @@ public class CHelpViewer extends JDialog implements ActionListener
 
 
     /**
+     * returns the language code
+     *
+     * @return language code
+     */
+    protected String getLanguage()
+    {
+        return CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage();
+    }
+
+    /**
      * returns a full path of a file within the help directory
      *
-     * @param p_markdownfile file name
+     * @param p_file file name
      * @return full path
      */
-    protected String getFile( String p_markdownfile )
+    protected URL getFileURL( String p_file )
     {
-        return "help" + File.separatorChar + ( CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage() ) + File.separator + p_markdownfile;
+        return this.getClass().getClassLoader().getResource( "help" + File.separatorChar + this.getLanguage() + File.separator + p_file );
     }
 
     @Override
@@ -151,6 +160,42 @@ public class CHelpViewer extends JDialog implements ActionListener
 
 
     /**
+     * link renderer to redefine link names *
+     */
+    protected class CLinkRenderer extends LinkRenderer
+    {
+
+        @Override
+        public Rendering render( ExpImageNode node, String text )
+        {
+            try
+            {
+                new URL( node.url );
+            }
+            catch ( MalformedURLException l_exception )
+            {
+                return super.render( new ExpImageNode( node.title, getFileURL( node.url ).toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
+            }
+            return super.render( node, text );
+        }
+
+        @Override
+        public Rendering render( WikiLinkNode node )
+        {
+            try
+            {
+                return super.render( new ExpLinkNode( node.getText(), "http://" + getLanguage() + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( node.getText(), "UTF-8" ), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), node.getText() );
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
+            return super.render( node );
+        }
+    }
+
+
+    /**
      * class to encapsulate browser component *
      */
     protected class CHelpBrowser extends CBrowser
@@ -160,6 +205,10 @@ public class CHelpViewer extends JDialog implements ActionListener
          * markdown processor *
          */
         protected PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
+        /**
+         * link renderer
+         */
+        protected LinkRenderer m_renderer = new CLinkRenderer();
         /**
          * home source *
          */
@@ -199,8 +248,8 @@ public class CHelpViewer extends JDialog implements ActionListener
             Platform.runLater( () -> {
                 try
                 {
-                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( this.getClass().getClassLoader().getResourceAsStream( p_source ) ) );
-                    p_engine.loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray() ) );
+                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( getFileURL( p_source ).openStream() ) );
+                    p_engine.loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray(), m_renderer ) );
                     l_reader.close();
                 }
                 catch ( Exception l_exception )
@@ -232,7 +281,7 @@ public class CHelpViewer extends JDialog implements ActionListener
                 String l_file = p_element.getAttribute( "href" );
                 if ( !l_file.endsWith( ".md" ) )
                     l_file += ".md";
-                processMarkdown( p_web, getFile( l_file ) );
+                processMarkdown( p_web, l_file );
             }
 
         }

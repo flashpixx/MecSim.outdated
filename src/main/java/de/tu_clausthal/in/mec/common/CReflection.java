@@ -31,7 +31,8 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -39,21 +40,6 @@ import java.util.*;
  */
 public class CReflection
 {
-
-    /**
-     * interface of field filtering
-     */
-    public interface IFieldFilter
-    {
-
-        /** filter method
-         *
-         * @param p_field field object
-         * @return true field will be added, false field will be ignored
-         */
-        public boolean filter( Field p_field );
-    }
-
 
     /**
      * get a class field of the class or super classes
@@ -81,7 +67,8 @@ public class CReflection
 
         l_field.setAccessible( true );
         CGetSet l_struct = null;
-        try {
+        try
+        {
             l_struct = new CGetSet( MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) );
         }
         catch ( IllegalAccessException l_exception )
@@ -98,11 +85,10 @@ public class CReflection
      * @param p_class class
      * @return map with field name and getter / setter handle
      */
-    public static Map<String,CGetSet> getClassFieldsNew( Class p_class )
+    public static Map<String, CGetSet> getClassFieldsNew( Class p_class )
     {
         return getClassFieldsNew( p_class, null );
     }
-
 
     /**
      * returns filtered fields of a class and the super classes
@@ -111,73 +97,24 @@ public class CReflection
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
      */
-    public static Map<String,CGetSet> getClassFieldsNew( Class p_class, IFieldFilter p_filter )
+    public static Map<String, CGetSet> getClassFieldsNew( Class p_class, IFieldFilter p_filter )
     {
-        Map<String,CGetSet> l_fields = new HashMap();
+        Map<String, CGetSet> l_fields = new HashMap();
         for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
             for ( Field l_field : l_class.getDeclaredFields() )
             {
                 l_field.setAccessible( true );
-                if ((p_filter != null) && (!p_filter.filter( l_field )))
+                if ( ( p_filter != null ) && ( !p_filter.filter( l_field ) ) )
                     continue;
 
-                try {
+                try
+                {
                     l_fields.put( l_field.getName(), new CGetSet( MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) ) );
                 }
                 catch ( IllegalAccessException l_exception )
                 {
                     CLogger.error( l_exception );
                 }
-            }
-        return l_fields;
-    }
-
-
-
-
-
-
-
-    /**
-     * returns a private field of a class
-     *
-     * @param p_class class
-     * @param p_field fieldname
-     * @return field
-     */
-    public static Field getClassField( Class p_class, String p_field ) throws IllegalArgumentException
-    {
-        Field l_field = null;
-        for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
-            try
-            {
-                l_field = l_class.getDeclaredField( p_field );
-            }
-            catch ( Exception l_exception )
-            {
-            }
-
-        if ( l_field == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( CReflection.class, "fieldnotfound", p_field, p_class.getCanonicalName() ) );
-
-        l_field.setAccessible( true );
-        return l_field;
-    }
-
-    /**
-     * returns a list with all fields of the class
-     *
-     * @param p_class class
-     * @return list with all fields
-     */
-    public static List<Field> getClassFields( Class p_class )
-    {
-        List<Field> l_fields = new LinkedList();
-        for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
-            for ( Field l_field : l_class.getDeclaredFields() )
-            {
-                l_field.setAccessible( true );
-                l_fields.add( l_field );
             }
         return l_fields;
     }
@@ -220,6 +157,21 @@ public class CReflection
 
         l_method.setAccessible( true );
         return MethodHandles.lookup().unreflect( l_method );
+    }
+
+    /**
+     * interface of field filtering
+     */
+    public interface IFieldFilter
+    {
+
+        /**
+         * filter method
+         *
+         * @param p_field field object
+         * @return true field will be added, false field will be ignored
+         */
+        public boolean filter( Field p_field );
     }
 
     /**

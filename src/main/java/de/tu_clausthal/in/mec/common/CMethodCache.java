@@ -106,9 +106,8 @@ public class CMethodCache<T>
         if ( m_cache.containsKey( l_method ) )
             return m_cache.get( l_method );
 
-        for ( String l_item : m_forbidden )
-            if ( p_methodname.equals( l_item ) )
-                throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
+        if ( m_forbidden.contains( p_methodname ) )
+            throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
 
         MethodHandle l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
         m_cache.put( l_method, l_handle );

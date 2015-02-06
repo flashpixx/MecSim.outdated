@@ -118,27 +118,33 @@ public class CBrowser extends JFXPanel
                 if ( newState != Worker.State.SUCCEEDED )
                     return;
 
-
-                // listener for href tags
-                EventListener l_hreflistener = new EventListener()
-                {
-                    @Override
-                    public void handleEvent( Event p_event )
-                    {
-                        if ( !p_event.getType().equalsIgnoreCase( "click" ) )
-                            return;
-
-                        for ( IActionListener l_item : m_listener )
-                            l_item.onHrefClick( m_webview.getEngine(), (Element) p_event.getTarget() );
-                    }
-                };
-
-                NodeList l_hrefnodes = m_webview.getEngine().getDocument().getElementsByTagName( "a" );
-                for ( int i = 0; i < l_hrefnodes.getLength(); i++ )
-                    ( (EventTarget) l_hrefnodes.item( i ) ).addEventListener( "click", l_hreflistener, false );
+                createHrefClickListener();
             }
         } );
     }
+
+    /** create listener of href-click-event
+     */
+    protected void createHrefClickListener()
+    {
+        EventListener l_listener = new EventListener()
+        {
+            @Override
+            public void handleEvent( Event p_event )
+            {
+                if ( !p_event.getType().equalsIgnoreCase( "click" ) )
+                    return;
+
+                for ( IActionListener l_item : m_listener )
+                    l_item.onHrefClick( m_webview.getEngine(), (Element) p_event.getTarget() );
+            }
+        };
+
+        NodeList l_nodes = m_webview.getEngine().getDocument().getElementsByTagName( "a" );
+        for ( int i = 0; i < l_nodes.getLength(); i++ )
+            ( (EventTarget) l_nodes.item( i ) ).addEventListener( "click", l_listener, false );
+    }
+
 
     /**
      * loads a URL on the browser

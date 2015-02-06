@@ -39,7 +39,6 @@ import java.util.List;
 public class CReflection
 {
 
-
     /**
      * returns a private field of a class
      *
@@ -66,7 +65,6 @@ public class CReflection
         return l_field;
     }
 
-
     /**
      * returns a list with all fields of the class
      *
@@ -85,7 +83,6 @@ public class CReflection
         return l_fields;
     }
 
-
     /**
      * returns a void-method from a class
      *
@@ -97,7 +94,6 @@ public class CReflection
     {
         return getClassMethod( p_class, p_method, null );
     }
-
 
     /**
      * returns a void-method from a class
@@ -125,6 +121,77 @@ public class CReflection
 
         l_method.setAccessible( true );
         return MethodHandles.lookup().unreflect( l_method );
+    }
+
+    /**
+     * structure for getter and setter method handles
+     */
+    public static class CGetSet
+    {
+
+        /**
+         * getter method handle *
+         */
+        protected MethodHandle m_getter = null;
+        /**
+         * setter method handle *
+         */
+        protected MethodHandle m_setter = null;
+
+
+        /**
+         * ctor
+         *
+         * @param p_getter getter handle or null
+         * @param p_setter setter handle or null
+         */
+        public CGetSet( MethodHandle p_getter, MethodHandle p_setter )
+        {
+            m_getter = p_getter;
+            m_setter = p_setter;
+        }
+
+        /**
+         * returns the getter
+         *
+         * @return handle
+         */
+        public MethodHandle getGetter()
+        {
+            return m_getter;
+        }
+
+        /**
+         * returns the setter
+         *
+         * @return handle
+         */
+        public MethodHandle getSetter()
+        {
+            return m_getter;
+        }
+
+        /**
+         * check getter exist
+         *
+         * @return bool flag
+         */
+        public boolean hasGetter()
+        {
+            return m_getter != null;
+        }
+
+
+        /**
+         * check setter exist
+         *
+         * @return bool flag
+         */
+        public boolean hasSetter()
+        {
+            return m_setter != null;
+        }
+
     }
 
 }

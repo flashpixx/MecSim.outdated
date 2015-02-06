@@ -52,7 +52,7 @@ public class CReflection
         for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
             try
             {
-                l_field = p_class.getDeclaredField( p_field );
+                l_field = l_class.getDeclaredField( p_field );
             }
             catch ( Exception l_exception )
             {

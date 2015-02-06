@@ -224,6 +224,11 @@ public class CDefaultCar extends IInspector implements ICar
         return m_deceleration;
     }
 
+    /**
+     * is used for method invocation of asl-test
+     *
+     * @deprecated
+     */
     public int blub( int x )
     {
         System.out.println( "-----> blub is called: " + x );

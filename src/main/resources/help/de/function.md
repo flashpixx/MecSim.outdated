@@ -1,0 +1,3 @@
+# Funktionsweise
+
+## Weltaufbau

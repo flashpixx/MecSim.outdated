@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CMethodCache;
+import de.tu_clausthal.in.mec.common.CReflection;
 import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 
@@ -42,7 +42,7 @@ public class CMethodBind extends IAction
     /**
      * bind object *
      */
-    protected Map<String, CMethodCache<Object>> m_bind = new HashMap();
+    protected Map<String, CReflection.CMethodCache<Object>> m_bind = new HashMap();
 
 
     /**
@@ -73,7 +73,7 @@ public class CMethodBind extends IAction
      */
     public void push( String p_name, Object p_object )
     {
-        m_bind.put( p_name, new CMethodCache( p_object ) );
+        m_bind.put( p_name, new CReflection.CMethodCache( p_object ) );
     }
 
 
@@ -94,7 +94,7 @@ public class CMethodBind extends IAction
      */
     public Set<String> getForbidden( String p_name )
     {
-        CMethodCache l_object = m_bind.get( p_name );
+        CReflection.CMethodCache l_object = m_bind.get( p_name );
         if ( l_object == null )
             return null;
 
@@ -118,7 +118,7 @@ public class CMethodBind extends IAction
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
         String l_objectname = l_args.get( 0 ).toString();
-        CMethodCache<Object> l_object = m_bind.get( l_objectname );
+        CReflection.CMethodCache<Object> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 

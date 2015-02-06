@@ -26,13 +26,13 @@ package de.tu_clausthal.in.mec.common;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -242,5 +242,94 @@ public class CReflection
         }
 
     }
+
+
+    /**
+     * cache class of method invoker structure *
+     */
+    public static class CMethodCache<T>
+    {
+
+        /**
+         * object reference *
+         */
+        protected T m_object = null;
+        /**
+         * forbidden names *
+         */
+        protected Set<String> m_forbidden = new HashSet();
+        /**
+         * cache map *
+         */
+        protected Map<ImmutablePair<String, Class[]>, MethodHandle> m_cache = new HashMap();
+
+
+        /**
+         * ctor
+         *
+         * @param p_bind bind object
+         */
+        public CMethodCache( T p_bind )
+        {
+            m_object = p_bind;
+        }
+
+        /**
+         * object getter
+         *
+         * @return bind object
+         */
+        public T getObject()
+        {
+            return m_object;
+        }
+
+
+        /**
+         * get forbidden set
+         *
+         * @return set with names
+         */
+        public Set<String> getForbidden()
+        {
+            return m_forbidden;
+        }
+
+
+        /**
+         * get the method handle
+         *
+         * @param p_methodname method name
+         * @return handle
+         */
+        public MethodHandle getHandle( String p_methodname ) throws IllegalAccessException
+        {
+            return getHandle( p_methodname, null );
+        }
+
+
+        /**
+         * get the method handle
+         *
+         * @param p_methodname method name
+         * @param p_arguments  method arguments
+         * @return handle
+         */
+        public MethodHandle getHandle( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
+        {
+            ImmutablePair<String, Class[]> l_method = new ImmutablePair<String, Class[]>( p_methodname, p_arguments );
+            if ( m_cache.containsKey( l_method ) )
+                return m_cache.get( l_method );
+
+            if ( m_forbidden.contains( p_methodname ) )
+                throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
+
+            MethodHandle l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+            m_cache.put( l_method, l_handle );
+            return l_handle;
+        }
+
+    }
+
 
 }

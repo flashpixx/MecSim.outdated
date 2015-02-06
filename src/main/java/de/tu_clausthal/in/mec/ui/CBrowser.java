@@ -198,7 +198,7 @@ public class CBrowser extends JFXPanel
     /**
      * content action listener *
      */
-    public abstract class IActionListener
+    public static interface IActionListener
     {
 
         /**
@@ -207,11 +207,8 @@ public class CBrowser extends JFXPanel
          * @param p_web     engine
          * @param p_element full html element
          */
-        public void onHrefClick( WebEngine p_web, Element p_element )
-        {
-        }
+        public void onHrefClick( WebEngine p_web, Element p_element );
 
-        //public void onImgLoad( WebEngine p_web, Element p_element ) {}
     }
 
 }

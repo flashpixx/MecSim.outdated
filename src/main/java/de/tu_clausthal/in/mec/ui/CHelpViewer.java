@@ -263,7 +263,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         /**
          * action listener to read markdown files from the Jar help directory
          */
-        protected class CTagListener extends CBrowser.IActionListener
+        protected class CTagListener implements CBrowser.IActionListener
         {
 
             @Override

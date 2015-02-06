@@ -42,15 +42,13 @@ public class CReflection
 {
 
     /**
-     * get a class field of the class or super classes
-     * and returns getter / setter handles
+     * get a class field of the class or super classes and returns getter / setter handles
      *
      * @param p_class class
      * @param p_field fieldname
      * @return getter / setter handle object
-     * @throws IllegalArgumentException
      */
-    public static CGetSet getClassFieldNew( Class p_class, String p_field ) throws IllegalArgumentException
+    public static CGetSet getClassField( Class p_class, String p_field ) throws IllegalArgumentException
     {
         Field l_field = null;
         for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
@@ -85,19 +83,19 @@ public class CReflection
      * @param p_class class
      * @return map with field name and getter / setter handle
      */
-    public static Map<String, CGetSet> getClassFieldsNew( Class p_class )
+    public static Map<String, CGetSet> getClassFields( Class p_class )
     {
-        return getClassFieldsNew( p_class, null );
+        return getClassFields( p_class, null );
     }
 
     /**
      * returns filtered fields of a class and the super classes
      *
-     * @param p_class class
+     * @param p_class  class
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
      */
-    public static Map<String, CGetSet> getClassFieldsNew( Class p_class, IFieldFilter p_filter )
+    public static Map<String, CGetSet> getClassFields( Class p_class, IFieldFilter p_filter )
     {
         Map<String, CGetSet> l_fields = new HashMap();
         for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )

@@ -31,17 +31,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-/** class to filter object fields **/
+/**
+ * class to filter object fields *
+ */
 public class CFieldFilter implements CReflection.IFieldFilter
 {
 
-    /** set with forbidden field names **/
+    /**
+     * set with forbidden field names *
+     */
     protected Set<String> m_forbiddennames = new HashSet();
 
-    /** ctor **/
-    public CFieldFilter() {}
+    /**
+     * ctor *
+     */
+    public CFieldFilter()
+    {
+    }
 
-    /** ctor
+    /**
+     * ctor
      *
      * @param p_names set with forbidden field names
      */
@@ -53,7 +62,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
     @Override
     public boolean filter( Field p_field )
     {
-        return ! ( m_forbiddennames.contains( p_field.getName() ) ) || ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface( p_field.getModifiers() ) ) ||
+        return !( m_forbiddennames.contains( p_field.getName() ) ) || ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface( p_field.getModifiers() ) ) ||
                 ( Modifier.isAbstract( p_field.getModifiers() ) ) || ( Modifier.isFinal( p_field.getModifiers() ) );
     }
 

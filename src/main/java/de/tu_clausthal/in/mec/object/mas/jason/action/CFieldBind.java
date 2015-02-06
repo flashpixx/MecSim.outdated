@@ -31,8 +31,6 @@ import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 
 
@@ -43,11 +41,10 @@ public class CFieldBind extends IAction
 {
 
     /**
-     * bind objects - map uses a name / annotation as key value and a pair of object
-     * and the map of fields and getter / setter handles, so each bind can configurate individual
+     * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
+     * setter handles, so each bind can configurate individual
      */
-    protected Map<String, ImmutablePair<Object, Map<String,CReflection.CGetSet>>> m_bind = new HashMap();
-
+    protected Map<String, ImmutablePair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap();
 
 
     /**
@@ -62,7 +59,7 @@ public class CFieldBind extends IAction
     /**
      * ctor bind an object
      *
-     * @param p_name name / annotation of the bind object
+     * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
     public CFieldBind( String p_name, Object p_object )
@@ -73,8 +70,9 @@ public class CFieldBind extends IAction
 
     /**
      * ctor
-     * @param p_name name / annotation of the bind object
-     * @param p_object bind object
+     *
+     * @param p_name           name / annotation of the bind object
+     * @param p_object         bind object
      * @param p_forbiddennames set with forbidden field names of the object fields
      */
     public CFieldBind( String p_name, Object p_object, Set<String> p_forbiddennames )
@@ -86,7 +84,7 @@ public class CFieldBind extends IAction
     /**
      * adds / binds an object
      *
-     * @param p_name name / annotation of the object
+     * @param p_name   name / annotation of the object
      * @param p_object object
      */
     public void push( String p_name, Object p_object )
@@ -98,13 +96,13 @@ public class CFieldBind extends IAction
     /**
      * adds a new bind object
      *
-     * @param p_name name / annotation of the object
-     * @param p_object object
+     * @param p_name           name / annotation of the object
+     * @param p_object         object
      * @param p_forbiddennames set with forbidden names of the object fields
      */
     public void push( String p_name, Object p_object, Set<String> p_forbiddennames )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFieldsNew( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
+        m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
 
 
@@ -133,22 +131,22 @@ public class CFieldBind extends IAction
 
         // first argument is the object name - try to get object
         String l_objectname = l_args.get( 0 ).toString();
-        ImmutablePair<Object, Map<String,CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
+        ImmutablePair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 
         // second argument is the field name - try to get the field
         String l_fieldname = l_args.get( 1 ).toString();
         CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
-        if (l_handle == null)
+        if ( l_handle == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
 
 
         try
         {
             // set value with the setter handle
-            if (l_args.get( 2 ).isNumeric())
-                l_handle.getSetter().invoke( l_object.getLeft(), (Number)((NumberTerm)l_args.get( 2 )).solve() );
+            if ( l_args.get( 2 ).isNumeric() )
+                l_handle.getSetter().invoke( l_object.getLeft(), (Number) ( (NumberTerm) l_args.get( 2 ) ).solve() );
             else
                 l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
         }

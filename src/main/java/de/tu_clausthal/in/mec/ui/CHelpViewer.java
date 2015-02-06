@@ -164,6 +164,7 @@ public class CHelpViewer extends JDialog implements ActionListener
          * home source *
          */
         protected String m_home = null;
+
         /**
          * ctor
          *

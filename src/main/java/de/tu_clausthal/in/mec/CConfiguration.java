@@ -207,7 +207,7 @@ public class CConfiguration
         try
         {
             URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class[]{URL.class} ).invoke( l_classloader, m_jardir.toURI().toURL() );
+            CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class[]{URL.class} ).getHandle().invoke( l_classloader, m_jardir.toURI().toURL() );
         }
         catch ( Exception l_exception )
         {

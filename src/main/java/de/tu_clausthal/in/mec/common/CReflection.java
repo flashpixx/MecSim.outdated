@@ -77,6 +77,7 @@ public class CReflection
         return l_struct;
     }
 
+
     /**
      * returns all fields of a class and the super classes
      *
@@ -124,7 +125,7 @@ public class CReflection
      * @param p_method methodname
      * @return method
      */
-    public static MethodHandle getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
+    public static CMethod getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
     {
         return getClassMethod( p_class, p_method, null );
     }
@@ -138,7 +139,7 @@ public class CReflection
      *                    Integer.TYPE};
      * @return method
      */
-    public static MethodHandle getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
+    public static CMethod getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
     {
         Method l_method = null;
         for ( Class l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
@@ -154,7 +155,7 @@ public class CReflection
             throw new IllegalArgumentException( CCommon.getResouceString( CReflection.class, "methodnotfound", p_method, p_class.getCanonicalName() ) );
 
         l_method.setAccessible( true );
-        return MethodHandles.lookup().unreflect( l_method );
+        return new CMethod( l_method );
     }
 
     /**
@@ -170,6 +171,55 @@ public class CReflection
          * @return true field will be added, false field will be ignored
          */
         public boolean filter( Field p_field );
+    }
+
+
+    /**
+     * class for storing method access
+     */
+    public static class CMethod
+    {
+        /**
+         * method object *
+         */
+        protected Method m_method = null;
+        /**
+         * method handle *
+         */
+        protected MethodHandle m_handle = null;
+
+
+        /**
+         * ctor
+         *
+         * @param p_method method object
+         */
+        public CMethod( Method p_method ) throws IllegalAccessException
+        {
+            m_method = p_method;
+            m_handle = MethodHandles.lookup().unreflect( m_method );
+        }
+
+        /**
+         * returns the method object
+         *
+         * @return method object
+         */
+        public Method getMethod()
+        {
+            return m_method;
+        }
+
+        /**
+         * returns the method handle object
+         *
+         * @return handle object
+         */
+        public MethodHandle getHandle()
+        {
+            return m_handle;
+        }
+
     }
 
     /**
@@ -324,7 +374,7 @@ public class CReflection
             if ( m_forbidden.contains( p_methodname ) )
                 throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
 
-            MethodHandle l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+            MethodHandle l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments ).getHandle();
             m_cache.put( l_method, l_handle );
             return l_handle;
         }

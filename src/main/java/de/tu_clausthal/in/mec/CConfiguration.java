@@ -94,14 +94,22 @@ public class CConfiguration
         try
         {
             this.createDirectories();
-
-            Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
-            new Gson().toJson( m_data, l_writer );
-            l_writer.close();
         }
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
+        }
+
+
+        try (
+                Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
+        )
+        {
+            new Gson().toJson( m_data, l_writer );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception );
         }
     }
 
@@ -126,18 +134,26 @@ public class CConfiguration
         try
         {
             this.createDirectories();
-
-            String l_config = m_dir + File.separator + s_ConfigFilename;
-            CLogger.info( CCommon.getResouceString( this, "read", l_config ) );
-
-            Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
-            l_tmp = new Gson().fromJson( l_reader, Data.class );
-            l_reader.close();
         }
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
+
+        String l_config = m_dir + File.separator + s_ConfigFilename;
+        CLogger.info( CCommon.getResouceString( this, "read", l_config ) );
+
+        try (
+            Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
+        )
+        {
+            l_tmp = new Gson().fromJson( l_reader, Data.class );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
+
 
         if ( l_tmp == null )
             CLogger.warn( CCommon.getResouceString( this, "default" ) );

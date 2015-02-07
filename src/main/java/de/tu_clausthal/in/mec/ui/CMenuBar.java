@@ -374,13 +374,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( l_store == null )
             return;
 
-        try
+        try (
+                FileOutputStream l_stream = new FileOutputStream( CCommon.addFileExtension( l_store, ".mecsim" ) );
+                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
+        )
         {
-            FileOutputStream l_stream = new FileOutputStream( CCommon.addFileExtension( l_store, ".mecsim" ) );
-            ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
             CSimulation.getInstance().store( l_output );
-            l_output.close();
-            l_stream.close();
         }
         catch ( Exception l_exception )
         {
@@ -400,13 +399,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( l_load == null )
             return;
 
-        try
+        try (
+                FileInputStream l_stream = new FileInputStream( l_load );
+                ObjectInputStream l_input = new ObjectInputStream( l_stream );
+        )
         {
-            FileInputStream l_stream = new FileInputStream( l_load );
-            ObjectInputStream l_input = new ObjectInputStream( l_stream );
             CSimulation.getInstance().load( l_input );
-            l_input.close();
-            l_stream.close();
         }
         catch ( Exception l_exception )
         {

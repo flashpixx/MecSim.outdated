@@ -249,11 +249,11 @@ public class CHelpViewer extends JDialog implements ActionListener
         protected void processMarkdown( WebEngine p_engine, String p_source )
         {
             Platform.runLater( () -> {
-                try
+                try (
+                        BufferedReader l_reader = new BufferedReader( new InputStreamReader( getFileURL( p_source ).openStream() ) );
+                )
                 {
-                    BufferedReader l_reader = new BufferedReader( new InputStreamReader( getFileURL( p_source ).openStream() ) );
                     p_engine.loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray(), m_renderer ) );
-                    l_reader.close();
                 }
                 catch ( Exception l_exception )
                 {

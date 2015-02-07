@@ -311,7 +311,7 @@ public class CReflection
         /**
          * cache map *
          */
-        protected Map<ImmutablePair<String, Class[]>, MethodHandle> m_cache = new HashMap();
+        protected Map<ImmutablePair<String, Class[]>, CMethod> m_cache = new HashMap();
 
 
         /**
@@ -352,9 +352,9 @@ public class CReflection
          * @param p_methodname method name
          * @return handle
          */
-        public MethodHandle getHandle( String p_methodname ) throws IllegalAccessException
+        public CMethod get( String p_methodname ) throws IllegalAccessException
         {
-            return getHandle( p_methodname, null );
+            return get( p_methodname, null );
         }
 
 
@@ -365,7 +365,7 @@ public class CReflection
          * @param p_arguments  method arguments
          * @return handle
          */
-        public MethodHandle getHandle( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
+        public CMethod get( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
         {
             ImmutablePair<String, Class[]> l_method = new ImmutablePair<String, Class[]>( p_methodname, p_arguments );
             if ( m_cache.containsKey( l_method ) )
@@ -374,7 +374,7 @@ public class CReflection
             if ( m_forbidden.contains( p_methodname ) )
                 throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
 
-            MethodHandle l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments ).getHandle();
+            CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
             m_cache.put( l_method, l_handle );
             return l_handle;
         }

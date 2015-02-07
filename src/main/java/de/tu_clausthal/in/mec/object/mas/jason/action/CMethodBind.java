@@ -138,7 +138,7 @@ public class CMethodBind extends IAction
                 l_argumenttype = this.convertTermListToArray( l_args.get( 2 ).isList() ? (ListTerm) l_args.get( 2 ) : l_args.get( 2 ) );
 
             // get method handle
-            MethodHandle l_invoke = l_object.getHandle( l_args.get( 1 ).toString(), l_argumenttype );
+            MethodHandle l_invoke = l_object.get( l_args.get( 1 ).toString(), l_argumenttype ).getHandle();
             Object l_return = null;
             if ( l_argumenttype == null )
                 l_return = l_invoke.invoke( l_object.getObject() );

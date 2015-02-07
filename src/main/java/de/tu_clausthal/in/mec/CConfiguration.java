@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec;
 
 import com.google.gson.Gson;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
 import net.sf.oval.constraint.Min;
 import net.sf.oval.constraint.NotEmpty;
 import org.apache.commons.lang3.StringUtils;
@@ -32,8 +33,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.*;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.*;
 
 
@@ -63,6 +63,10 @@ public class CConfiguration
      * directory of the agent (MAS) files
      */
     private File m_masdir = new File( m_dir + File.separator + "mas" );
+    /**
+     * directory of external Jar files
+     */
+    private File m_jardir = new File( m_dir + File.separator + "jar" );
     /**
      * UTF-8 property reader
      */
@@ -123,6 +127,9 @@ public class CConfiguration
 
         if ( !m_masdir.exists() && !m_masdir.mkdirs() )
             throw new IOException( CCommon.getResouceString( this, "notcreate", m_masdir.getAbsolutePath() ) );
+
+        if ( !m_jardir.exists() && !m_jardir.mkdirs() )
+            throw new IOException( CCommon.getResouceString( this, "notcreate", m_jardir.getAbsolutePath() ) );
     }
 
     /**
@@ -130,6 +137,8 @@ public class CConfiguration
      */
     public void read()
     {
+
+        // create the configuration directory
         Data l_tmp = null;
         try
         {
@@ -143,6 +152,7 @@ public class CConfiguration
         String l_config = m_dir + File.separator + s_ConfigFilename;
         CLogger.info( CCommon.getResouceString( this, "read", l_config ) );
 
+        // read main configuration
         try (
             Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
         )
@@ -154,7 +164,7 @@ public class CConfiguration
             CLogger.error( l_exception.getMessage() );
         }
 
-
+        // check the configuration values and set it
         if ( l_tmp == null )
             CLogger.warn( CCommon.getResouceString( this, "default" ) );
         else
@@ -191,6 +201,21 @@ public class CConfiguration
             }
 
             m_data = l_tmp;
+        }
+
+        // append classpath to system class loader
+        try
+        {
+            URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class[]{URL.class} ).invoke( l_classloader, m_jardir.toURI().toURL() );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+        catch ( Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
         }
     }
 

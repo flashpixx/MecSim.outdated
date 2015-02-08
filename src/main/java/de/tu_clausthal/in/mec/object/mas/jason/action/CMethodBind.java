@@ -124,35 +124,42 @@ public class CMethodBind extends IAction
         try
         {
 
-            // method parameter (return & argument default type)
+            // construct method signature with data
             Class l_returntype = Void.class;
             Class[] l_argumenttype = null;
+            List<Term> l_argumentdata = null;
 
-            if ( ( l_args.size() > 3 ) && ( !l_args.get( 2 ).isList() ) )
+            if ( ( l_args.size() > 2 ) && ( l_args.get( 2 ).isList() ) )
+            {
+                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 2 ) );
+                l_argumentdata = l_args.subList( 3, l_args.size() );
+            }
+            else if ( ( l_args.size() > 3 ) && ( l_args.get( 3 ).isList() ) )
             {
                 l_returntype = this.convertTermToClass( l_args.get( 2 ) );
-                l_argumenttype = l_args.get( 3 ).isList() ? this.convertTermListToArray( (ListTerm) l_args.get( 3 ) ) : this.convertTermListToArray( l_args.get( 3 ) );
+                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 3 ) );
+                l_argumentdata = l_args.subList( 4, l_args.size() );
             }
-            else if ( l_args.size() > 2 )
-                l_argumenttype = this.convertTermListToArray( l_args.get( 2 ).isList() ? (ListTerm) l_args.get( 2 ) : l_args.get( 2 ) );
 
-            // get method handle
+            if ( ( l_argumentdata == null ) || ( l_argumenttype == null ) || ( l_argumentdata.size() != l_argumenttype.length ) )
+                throw new IllegalArgumentException( CCommon.getResouceString( this, "argumentnumber" ) );
+
+
+            // build invoke parameter with explizit cast of the argument types
+            List<Object> l_argumentinvokedata = new LinkedList();
+            l_argumentinvokedata.add( l_object.getObject() );
+
+            for ( int i = 0; i < l_argumentdata.size(); i++ )
+                if ( l_argumentdata.get( i ).isNumeric() )
+                    l_argumentinvokedata.add( l_argumenttype[i].cast( ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
+                else
+                    l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
+
+
+            // invoke and cast return data
             CReflection.CMethod l_invoke = l_object.get( l_args.get( 1 ).toString(), l_argumenttype );
-            Object l_return = null;
-            if ( l_argumenttype == null )
-                l_return = l_invoke.getHandle().invoke( l_object.getObject() );
-            else
-            {
-                List<Object> l_invokedata = new LinkedList();
-                l_invokedata.add( l_object.getObject() );
-                for ( int i = Math.max( 3, l_args.size() - l_argumenttype.length ); i < l_args.size(); i++ )
-                    if ( l_args.get( i ).isNumeric() )
-                        l_invokedata.add( ( (NumberTerm) l_args.get( i ) ).solve() );
-                    else
-                        l_invokedata.add( l_args.get( i ) );
+            Object l_return = ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata );
 
-                l_return = l_invoke.getHandle().invokeWithArguments( l_invokedata );
-            }
         }
         catch ( Exception l_exception )
         {

@@ -105,10 +105,7 @@ public class CMethodBind extends IAction
 
     @Override
     /**
-     * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodHandle.html
-     * @see http://docs.oracle.com/javase/7/docs/api/java/lang/invoke/MethodType.html
      * @todo handle return type
-     * @todo add arguments to invoke
      */
     public void act( Agent p_agent, Structure p_args )
     {
@@ -153,7 +150,7 @@ public class CMethodBind extends IAction
 
             for ( int i = 0; i < l_argumentdata.size(); i++ )
                 if ( l_argumentdata.get( i ).isNumeric() )
-                    l_argumentinvokedata.add( l_argumenttype[i].cast( ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
+                    l_argumentinvokedata.add( this.convertNumber( l_argumenttype[i], ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
                 else
                     l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
 
@@ -227,6 +224,33 @@ public class CMethodBind extends IAction
 
         return l_class;
     }
+
+
+    /**
+     * converts a Double into a number
+     *
+     * @param p_class class that is the target type
+     * @param p_value double value
+     * @return converted boxed-type
+     */
+    protected Number convertNumber( Class p_class, Double p_value )
+    {
+        if ( p_class.equals( Byte.class ) )
+            return new Byte( p_value.byteValue() );
+        if ( p_class.equals( Double.class ) )
+            return p_value;
+        if ( p_class.equals( Float.class ) )
+            return new Float( p_value.floatValue() );
+        if ( p_class.equals( Integer.class ) )
+            return new Integer( p_value.intValue() );
+        if ( p_class.equals( Long.class ) )
+            return new Long( p_value.longValue() );
+        if ( p_class.equals( Short.class ) )
+            return new Short( p_value.shortValue() );
+
+        return null;
+    }
+
 
     /**
      * converts a list of terms int an array of class objects

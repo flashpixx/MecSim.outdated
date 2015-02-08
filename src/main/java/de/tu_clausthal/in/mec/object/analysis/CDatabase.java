@@ -21,55 +21,57 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.analysis;
 
 
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
-import de.tu_clausthal.in.mec.object.car.ICar;
-import org.jxmapviewer.viewer.GeoPosition;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.IEvaluateLayer;
+import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.awt.*;
-import java.util.*;
+import java.util.Map;
 
 
 /**
- * source to create a Jason car agent
+ * class for writing data into a database
+ *
+ * @note JDBC driver is needed
+ * @bug incomplete e.g. database creating are not exists
+ * @see http://commons.apache.org/proper/commons-dbcp/
  */
-public class CJasonAgentSourceFactory extends CDefaultSourceFactory
+public class CDatabase extends IEvaluateLayer
 {
-
     /**
-     * ASL file *
+     * datasource *
      */
-    protected String m_asl = null;
+    protected BasicDataSource m_datasource = null;
+
 
     /**
-     * ctor that sets the geo position of the source
+     * ctor - context initialization
      *
-     * @param p_position geo position object
-     * @param p_asl      ASL / agent name
+     * @param p_args connection data (database driver name & connection URL needed)
      */
-    public CJasonAgentSourceFactory( GeoPosition p_position, String p_asl )
+    public CDatabase( String... p_args )
     {
-        super( p_position, Color.red );
+        if ( ( p_args == null ) || ( p_args.length < 2 ) )
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
 
-        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file not not to be null" );
-        m_asl = p_asl;
+        m_datasource = new BasicDataSource();
+        m_datasource.setDriverClassName( p_args[0] );
+        m_datasource.setUrl( p_args[1] );
+
+        if ( p_args.length < 4 )
+        {
+            m_datasource.setUsername( p_args[2] );
+            m_datasource.setPassword( p_args[3] );
+        }
+
     }
 
     @Override
-    public Collection<ICar> step( int p_currentstep, ILayer p_layer )
+    public int getCalculationIndex()
     {
-        Collection<ICar> l_sources = new HashSet();
-        if ( m_random.sample() >= m_mean )
-            return l_sources;
-
-        for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add( new CCarJasonAgent( m_asl, m_position ) );
-
-        return l_sources;
+        return Integer.MAX_VALUE;
     }
 
     @Override

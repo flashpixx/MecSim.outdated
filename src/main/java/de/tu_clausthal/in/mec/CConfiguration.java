@@ -154,7 +154,7 @@ public class CConfiguration
 
         // read main configuration
         try (
-            Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
+                Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
         )
         {
             l_tmp = new Gson().fromJson( l_reader, Data.class );

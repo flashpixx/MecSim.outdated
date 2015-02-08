@@ -102,7 +102,7 @@ public class CCommonUI
      * creates file dialog with extension list
      *
      * @param p_defaultfilepath changes / gets the default file path
-     * @param p_fileextensions arra with extension and description
+     * @param p_fileextensions  arra with extension and description
      * @return filechooser
      */
     private static JFileChooser initFileDialog( File p_defaultfilepath, String[][] p_fileextensions )

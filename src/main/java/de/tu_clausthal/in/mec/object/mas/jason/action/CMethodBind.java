@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 
-import java.lang.invoke.MethodHandle;
 import java.util.*;
 
 
@@ -138,21 +137,21 @@ public class CMethodBind extends IAction
                 l_argumenttype = this.convertTermListToArray( l_args.get( 2 ).isList() ? (ListTerm) l_args.get( 2 ) : l_args.get( 2 ) );
 
             // get method handle
-            MethodHandle l_invoke = l_object.get( l_args.get( 1 ).toString(), l_argumenttype ).getHandle();
+            CReflection.CMethod l_invoke = l_object.get( l_args.get( 1 ).toString(), l_argumenttype );
             Object l_return = null;
             if ( l_argumenttype == null )
-                l_return = l_invoke.invoke( l_object.getObject() );
+                l_return = l_invoke.getHandle().invoke( l_object.getObject() );
             else
             {
                 List<Object> l_invokedata = new LinkedList();
                 l_invokedata.add( l_object.getObject() );
-                for ( int i = l_args.size() - l_argumenttype.length; i < l_args.size(); i++ )
+                for ( int i = Math.max( 3, l_args.size() - l_argumenttype.length ); i < l_args.size(); i++ )
                     if ( l_args.get( i ).isNumeric() )
                         l_invokedata.add( ( (NumberTerm) l_args.get( i ) ).solve() );
                     else
                         l_invokedata.add( l_args.get( i ) );
 
-                l_return = l_invoke.invokeWithArguments( l_invokedata );
+                l_return = l_invoke.getHandle().invokeWithArguments( l_invokedata );
             }
         }
         catch ( Exception l_exception )

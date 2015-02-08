@@ -225,16 +225,6 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     /**
-     * is used for method invocation of asl-test
-     *
-     * @deprecated
-     */
-    public void blub( Integer x )
-    {
-        System.out.println( "-----> blub is called: " + x );
-    }
-
-    /**
      * returns the edge from an index
      *
      * @param p_index index

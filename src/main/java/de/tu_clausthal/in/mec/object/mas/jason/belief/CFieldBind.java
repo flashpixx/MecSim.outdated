@@ -26,10 +26,10 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.*;
@@ -80,42 +80,6 @@ public class CFieldBind implements IBelief
     public CFieldBind( String p_name, Object p_object, Set<String> p_forbiddennames )
     {
         this.push( p_name, p_object, p_forbiddennames );
-    }
-
-    /**
-     * creates a Jason literal with optional data
-     *
-     * @param p_name name of the literal
-     * @param p_data data of the literal
-     * @return literal object
-     */
-    protected static Literal getLiteral( String p_name, Object p_data )
-    {
-        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( "name need not to be empty" );
-
-
-        // first char must be lower-case - split on spaces and create camel-case
-        String[] l_parts = p_name.split( " " );
-        for ( int i = 0; i < l_parts.length; i++ )
-            l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
-        String l_name = StringUtils.join( l_parts ).replaceAll( "\\W", "" );
-
-
-        // null value into atom
-        if ( p_data == null )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createString( null ) );
-
-        // number value into number
-        if ( p_data instanceof Number )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createNumber( ( (Number) p_data ).doubleValue() ) );
-
-        // collection into term list
-        if ( p_data instanceof Collection )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createList( (Collection) p_data ) );
-
-        // otherwise into string
-        return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
     }
 
 
@@ -172,7 +136,7 @@ public class CFieldBind implements IBelief
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
-                    Literal l_literal = getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
+                    Literal l_literal = CCommon.getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );

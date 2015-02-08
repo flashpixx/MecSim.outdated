@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import jason.asSemantics.Agent;
 import jason.asSyntax.*;
@@ -105,33 +104,36 @@ public class CMethodBind extends IAction
 
     @Override
     /**
-     * @todo handle return type
+     * @todo handle term list
      */
     public void act( Agent p_agent, Structure p_args )
     {
         // check number of argument first
         List<Term> l_args = p_args.getTerms();
         if ( l_args.size() < 2 )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
+            throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "argument" ) );
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
         String l_objectname = l_args.get( 0 ).toString();
         CReflection.CMethodCache<Object> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
+            throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "object", l_objectname ) );
 
         try
         {
 
             // construct method signature with data
+            String l_returnname = null;
             Class l_returntype = Void.class;
             Class[] l_argumenttype = null;
             List<Term> l_argumentdata = null;
 
-            if ( ( l_args.size() > 2 ) && ( l_args.get( 2 ).isList() ) )
+            if ( ( l_args.size() > 4 ) && ( l_args.get( 4 ).isList() ) )
             {
-                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 2 ) );
-                l_argumentdata = l_args.subList( 3, l_args.size() );
+                l_returnname = l_args.get( 2 ).toString();
+                l_returntype = this.convertTermToClass( l_args.get( 3 ) );
+                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 4 ) );
+                l_argumentdata = l_args.subList( 5, l_args.size() );
             }
             else if ( ( l_args.size() > 3 ) && ( l_args.get( 3 ).isList() ) )
             {
@@ -139,9 +141,14 @@ public class CMethodBind extends IAction
                 l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 3 ) );
                 l_argumentdata = l_args.subList( 4, l_args.size() );
             }
+            else if ( ( l_args.size() > 2 ) && ( l_args.get( 2 ).isList() ) )
+            {
+                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 2 ) );
+                l_argumentdata = l_args.subList( 3, l_args.size() );
+            }
 
             if ( ( l_argumentdata == null ) || ( l_argumenttype == null ) || ( l_argumentdata.size() != l_argumenttype.length ) )
-                throw new IllegalArgumentException( CCommon.getResouceString( this, "argumentnumber" ) );
+                throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "argumentnumber" ) );
 
 
             // build invoke parameter with explizit cast of the argument types
@@ -156,8 +163,18 @@ public class CMethodBind extends IAction
 
 
             // invoke and cast return data
-            CReflection.CMethod l_invoke = l_object.get( l_args.get( 1 ).toString(), l_argumenttype );
+            String l_methodname = l_args.get( 1 ).toString();
+            CReflection.CMethod l_invoke = l_object.get( l_methodname, l_argumenttype );
             Object l_return = l_returntype.cast( ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata ) );
+
+            // push return data into the agent
+            if ( ( l_return != null ) && ( !l_return.getClass().equals( void.class ) ) )
+            {
+                Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( ( l_returnname == null ) || ( l_returnname.isEmpty() ) ? l_methodname : l_returnname, l_return );
+                l_literalreturn.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_objectname ) ) );
+                p_agent.addBel( l_literalreturn );
+            }
+
 
         }
         catch ( Exception l_exception )
@@ -191,23 +208,23 @@ public class CMethodBind extends IAction
             {
                 // check primitive datatypes
                 case "bool":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "boolean":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "byte":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "char":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "short":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "int":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "long":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "float":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "double":
-                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
 
                 // object types
                 default:
@@ -219,7 +236,7 @@ public class CMethodBind extends IAction
         }
         catch ( ClassNotFoundException l_exception )
         {
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "classnotfound", l_classname ) );
+            throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "classnotfound", l_classname ) );
         }
 
         return l_class;

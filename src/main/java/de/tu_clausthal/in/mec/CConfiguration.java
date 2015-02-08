@@ -335,6 +335,10 @@ public class CConfiguration
          * language code
          */
         private String Language = null;
+        /**
+         * database driver (optional)
+         */
+        private String DatabaseDriver = null;
 
 
         @UiSection("General")
@@ -351,9 +355,21 @@ public class CConfiguration
             Language = p_value;
         }
 
+        @UiLabel("Database Driver")
+        @UiComesAfter("language")
+        public String getDatabasedriver()
+        {
+            return DatabaseDriver;
+        }
+
+        public void setDatabasedriver( String p_value )
+        {
+            DatabaseDriver = p_value;
+        }
+
 
         @UiSection("Traffic Graph")
-        @UiComesAfter("language")
+        @UiComesAfter("databasedriver")
         @UiLabel("Cell Size (in metre)")
         @Min(1)
         public int getCellsampling()

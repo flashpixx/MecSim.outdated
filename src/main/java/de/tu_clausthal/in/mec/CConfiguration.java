@@ -199,6 +199,16 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResouceString( this, "threadsleepdefault" ) );
                 l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
             }
+            if ( l_tmp.RoutingMap == null )
+            {
+                CLogger.warn( CCommon.getResouceString( this, "routingmapdefault" ) );
+                l_tmp.RoutingMap = m_data.RoutingMap;
+            }
+            if ( l_tmp.Database == null )
+            {
+                CLogger.warn( CCommon.getResouceString( this, "databasedefault" ) );
+                l_tmp.Database = m_data.Database;
+            }
 
             m_data = l_tmp;
         }

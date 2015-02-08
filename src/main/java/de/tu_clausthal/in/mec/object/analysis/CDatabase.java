@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.analysis;
 
 
-import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -48,24 +48,18 @@ public class CDatabase extends IEvaluateLayer
 
     /**
      * ctor - context initialization
-     *
-     * @param p_args connection data (database driver name & connection URL needed)
      */
-    public CDatabase( String... p_args )
+    public CDatabase()
     {
-        if ( ( p_args == null ) || ( p_args.length < 2 ) )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
+        if ( !CConfiguration.getInstance().get().getDatabase().connectable() )
+            return;
+
 
         m_datasource = new BasicDataSource();
-        m_datasource.setDriverClassName( p_args[0] );
-        m_datasource.setUrl( p_args[1] );
-
-        if ( p_args.length < 4 )
-        {
-            m_datasource.setUsername( p_args[2] );
-            m_datasource.setPassword( p_args[3] );
-        }
-
+        m_datasource.setDriverClassName( CConfiguration.getInstance().get().getDatabase().getDriver() );
+        m_datasource.setUrl( CConfiguration.getInstance().get().getDatabase().getServer() );
+        m_datasource.setUsername( CConfiguration.getInstance().get().getDatabase().getUsername() );
+        m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().getPassword() );
     }
 
     @Override

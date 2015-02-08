@@ -158,7 +158,7 @@ public class CMethodBind extends IAction
 
             // invoke and cast return data
             CReflection.CMethod l_invoke = l_object.get( l_args.get( 1 ).toString(), l_argumenttype );
-            Object l_return = ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata );
+            Object l_return = l_returntype.cast( ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata ) );
 
         }
         catch ( Exception l_exception )

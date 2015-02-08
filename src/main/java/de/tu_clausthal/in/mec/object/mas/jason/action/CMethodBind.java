@@ -34,6 +34,8 @@ import java.util.*;
 
 /**
  * action to invoke any method on an object
+ *
+ * @warn methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
  */
 public class CMethodBind extends IAction
 {
@@ -192,32 +194,23 @@ public class CMethodBind extends IAction
             {
                 // check primitive datatypes
                 case "bool":
-                    l_class = Boolean.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "boolean":
-                    l_class = Boolean.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "byte":
-                    l_class = Byte.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "char":
-                    l_class = Character.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "short":
-                    l_class = Short.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "int":
-                    l_class = Integer.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "long":
-                    l_class = Long.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "float":
-                    l_class = Float.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
                 case "double":
-                    l_class = Double.TYPE;
-                    break;
+                    throw new IllegalArgumentException( CCommon.getResouceString( this, "primitive", l_classname ) );
 
                 // object types
                 default:

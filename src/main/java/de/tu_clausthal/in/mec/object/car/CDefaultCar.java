@@ -229,10 +229,9 @@ public class CDefaultCar extends IInspector implements ICar
      *
      * @deprecated
      */
-    public int blub( int x )
+    public void blub( Integer x )
     {
         System.out.println( "-----> blub is called: " + x );
-        return 123;
     }
 
     /**

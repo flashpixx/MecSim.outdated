@@ -338,7 +338,7 @@ public class CConfiguration
         /**
          * database driver (optional)
          */
-        private String DatabaseDriver = null;
+        private DatabaseDriver Database = new DatabaseDriver();
 
 
         @UiSection("General")
@@ -355,21 +355,9 @@ public class CConfiguration
             Language = p_value;
         }
 
-        @UiLabel("Database Driver")
-        @UiComesAfter("language")
-        public String getDatabasedriver()
-        {
-            return DatabaseDriver;
-        }
-
-        public void setDatabasedriver( String p_value )
-        {
-            DatabaseDriver = p_value;
-        }
-
 
         @UiSection("Traffic Graph")
-        @UiComesAfter("databasedriver")
+        @UiComesAfter("language")
         @UiLabel("Cell Size (in metre)")
         @Min(1)
         public int getCellsampling()
@@ -411,6 +399,19 @@ public class CConfiguration
             RoutingMap = p_value;
         }
 
+
+        @UiSection("Analysis Database")
+        @UiComesAfter("routingmap")
+        @UiLabel("")
+        public DatabaseDriver getDatabase()
+        {
+            return Database;
+        }
+
+        public void setDatabase( DatabaseDriver p_value )
+        {
+            Database = p_value;
+        }
 
         @UiHidden
         public GeoPosition getViewpoint()
@@ -469,7 +470,7 @@ public class CConfiguration
 
 
         /**
-         * object of the routing map
+         * class of the routing map
          */
         public class RoutingMap
         {
@@ -505,6 +506,113 @@ public class CConfiguration
             public void setUrl( String p_value )
             {
                 url = p_value;
+            }
+        }
+
+
+        /**
+         * class of the database driver
+         */
+        public class DatabaseDriver
+        {
+
+            /**
+             * driver *
+             */
+            private String driver = null;
+
+            /**
+             * server url *
+             */
+            private String server = null;
+
+            /**
+             * login user name *
+             */
+            private String username = null;
+
+            /**
+             * login password *
+             */
+            private String password = null;
+            /**
+             * table prefix
+             */
+            private String tableprefix = null;
+
+
+            @UiLabel("Database Driver")
+            public String getDriver()
+            {
+                return driver;
+            }
+
+            public void setDriver( String p_value )
+            {
+                driver = p_value;
+            }
+
+
+            @UiLabel("Server URL")
+            @UiComesAfter("driver")
+            public String getServer()
+            {
+                return server;
+            }
+
+            public void setServer( String p_value )
+            {
+                server = p_value;
+            }
+
+
+            @UiLabel("Login Username")
+            @UiComesAfter("server")
+            public String getUsername()
+            {
+                return username;
+            }
+
+            public void setUsername( String p_value )
+            {
+                username = p_value;
+            }
+
+
+            @UiLabel("Login Password")
+            @UiComesAfter("username")
+            @UiMasked
+            public String getPassword()
+            {
+                return password;
+            }
+
+            public void setPassword( String p_value )
+            {
+                password = p_value;
+            }
+
+
+            @UiLabel("Table Prefix")
+            @UiComesAfter("password")
+            public String getTableprefix()
+            {
+                return tableprefix;
+            }
+
+            public void setTableprefix( String p_value )
+            {
+                tableprefix = p_value;
+            }
+
+            /**
+             * checks if the server can connect
+             *
+             * @return boolean flag
+             */
+            public boolean connectable()
+            {
+                return ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );
             }
         }
 

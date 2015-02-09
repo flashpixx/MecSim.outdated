@@ -527,7 +527,10 @@ public class CConfiguration
          */
         public class DatabaseDriver
         {
-
+            /**
+             * enable / disable without removing settings *
+             */
+            private boolean active = false;
             /**
              * driver *
              */
@@ -553,7 +556,16 @@ public class CConfiguration
             private String tableprefix = null;
 
 
+            @UiLabel("Enable")
+            public boolean isActive()
+            {
+                return active;
+            }
+
+            public void setActive( boolean p_value ) { active =p_value; }
+
             @UiLabel("Database Driver")
+            @UiComesAfter( "active" )
             public String getDriver()
             {
                 return driver;
@@ -624,7 +636,7 @@ public class CConfiguration
              */
             public boolean connectable()
             {
-                return ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );
+                return ( active ) && ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );
             }
         }
 

@@ -34,7 +34,7 @@ import java.util.*;
 /**
  * action to invoke any method on an object
  *
- * @warn methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
+ * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
  */
 public class CMethodBind extends IAction
 {
@@ -175,7 +175,6 @@ public class CMethodBind extends IAction
                 p_agent.addBel( l_literalreturn );
             }
 
-
         }
         catch ( Exception l_exception )
         {
@@ -226,7 +225,7 @@ public class CMethodBind extends IAction
                 case "double":
                     throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "primitive", l_classname ) );
 
-                // object types
+                    // object types
                 default:
                     if ( !l_classname.contains( "." ) )
                         l_classname = "java.lang." + l_classname;

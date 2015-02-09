@@ -232,7 +232,7 @@ public class CAgent<T> implements IVoidAgent
      * @warning An AgArch is a linked-list of AgArchs, the agent name can read if an AgArch has got a successor only
      * (Jason code design error)
      */
-    private class CJasonArchitecture extends AgArch
+    protected class CJasonArchitecture extends AgArch
     {
 
         @Override

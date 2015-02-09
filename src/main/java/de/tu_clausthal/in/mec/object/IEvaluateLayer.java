@@ -159,5 +159,4 @@ public abstract class IEvaluateLayer<T extends IStepable> implements ILayer, IVo
             l_item.release();
     }
 
-
 }

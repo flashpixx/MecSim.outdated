@@ -415,7 +415,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * class for storing the interpolation data *
      */
-    private class PointListArray
+    protected class PointListArray
     {
 
         /**

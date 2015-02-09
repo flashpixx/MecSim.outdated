@@ -147,6 +147,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 
     /**
      * set the frame - if not exists
+     *
      * @param p_frame frame object set Jason mindinspector
      */
     public void setFrame( CFrame p_frame )

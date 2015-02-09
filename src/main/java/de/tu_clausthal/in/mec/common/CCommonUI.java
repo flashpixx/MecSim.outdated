@@ -105,7 +105,7 @@ public class CCommonUI
      * @param p_fileextensions  arra with extension and description
      * @return filechooser
      */
-    private static JFileChooser initFileDialog( File p_defaultfilepath, String[][] p_fileextensions )
+    protected static JFileChooser initFileDialog( File p_defaultfilepath, String[][] p_fileextensions )
     {
         JFileChooser l_filedialog = new JFileChooser();
         l_filedialog.setCurrentDirectory( p_defaultfilepath );
@@ -122,7 +122,7 @@ public class CCommonUI
     /**
      * file filter class to create a filter list
      */
-    private static class UIFileFilter extends FileFilter
+    protected static class UIFileFilter extends FileFilter
     {
         /**
          * type description

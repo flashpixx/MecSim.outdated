@@ -76,7 +76,7 @@ public class CConsole extends JPanel
      *
      * @todo add line limit
      */
-    private class ConsoleOutputStream extends ByteArrayOutputStream
+    protected class ConsoleOutputStream extends ByteArrayOutputStream
     {
         /* system default end-of-line separator **/
         private final String EOL = System.getProperty( "line.separator" );

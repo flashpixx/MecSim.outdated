@@ -303,7 +303,7 @@ public class CConfiguration
     }
 
     /**
-     * private class for storing the configuration
+     * class for storing the configuration
      *
      * @see http://metawidget.sourceforge.net/doc/reference/en/html/ch04s03.html
      */
@@ -562,10 +562,13 @@ public class CConfiguration
                 return active;
             }
 
-            public void setActive( boolean p_value ) { active =p_value; }
+            public void setActive( boolean p_value )
+            {
+                active = p_value;
+            }
 
             @UiLabel("Database Driver")
-            @UiComesAfter( "active" )
+            @UiComesAfter("active")
             public String getDriver()
             {
                 return driver;
@@ -644,11 +647,11 @@ public class CConfiguration
 
 
     /**
-     * private class to read UTF-8 encoded property file
+     * class to read UTF-8 encoded property file
      *
      * @note Java default encoding for property files is ISO-Latin-1
      */
-    private class UTF8Control extends ResourceBundle.Control
+    protected class UTF8Control extends ResourceBundle.Control
     {
 
         public ResourceBundle newBundle( String baseName, Locale locale, String format, ClassLoader loader,

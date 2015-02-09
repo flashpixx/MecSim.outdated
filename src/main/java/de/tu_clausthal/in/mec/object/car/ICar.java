@@ -106,7 +106,6 @@ public interface ICar extends Painter<COSMViewer>, IVoidStepable
     public Map<Integer, ICar> getPredecessor( int p_count );
 
 
-
     /**
      * get current edge object on the graph
      *

@@ -72,6 +72,11 @@ public class CCarJasonAgent extends CDefaultCar
             l_forbidden.add( "m_routeindex" );
             l_forbidden.add( "m_EndPosition" );
             l_forbidden.add( "m_StartPosition" );
+            l_forbidden.add( "release" );
+            l_forbidden.add( "paint" );
+            l_forbidden.add( "step" );
+            l_forbidden.add( "inspect" );
+            l_forbidden.add( "onClick" );
 
             // add the belief bind to the agent
             de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", this, l_forbidden );

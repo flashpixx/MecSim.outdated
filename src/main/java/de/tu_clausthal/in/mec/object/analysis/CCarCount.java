@@ -57,6 +57,7 @@ public class CCarCount extends IEvaluateLayer
      */
     public CCarCount( CFrame p_frame )
     {
+        m_active = false;
         this.initialize( p_frame );
     }
 
@@ -71,22 +72,9 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
-    public Map<String, Object> analyse()
-    {
-        return null;
-    }
-
-    @Override
     public int getCalculationIndex()
     {
         return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public void release()
-    {
-        if ( m_plotdata != null )
-            m_plotdata.clear();
     }
 
     @Override
@@ -96,6 +84,19 @@ public class CCarCount extends IEvaluateLayer
             return;
 
         m_plotdata.addValue( Integer.parseInt( CSimulation.getInstance().getWorld().get( "Cars" ).analyse().get( "car count" ).toString() ), "number", String.valueOf( p_currentstep ) );
+    }
+
+    @Override
+    public Map<String, Object> analyse()
+    {
+        return null;
+    }
+
+    @Override
+    public void release()
+    {
+        if ( m_plotdata != null )
+            m_plotdata.clear();
     }
 
     /**

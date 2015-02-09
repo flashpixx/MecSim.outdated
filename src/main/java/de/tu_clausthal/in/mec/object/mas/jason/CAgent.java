@@ -324,6 +324,7 @@ public class CAgent<T> implements IVoidAgent
                     catch ( Exception l_exception )
                     {
                     }
+
             }
 
             // the reasoning cycle must be called within the transition system

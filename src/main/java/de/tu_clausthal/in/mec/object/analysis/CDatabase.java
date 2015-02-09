@@ -27,10 +27,13 @@ package de.tu_clausthal.in.mec.object.analysis;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
+import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Map;
 
 
 /**
@@ -40,7 +43,7 @@ import java.sql.ResultSet;
  * @bug incomplete e.g. database creating are not exists
  * @see http://commons.apache.org/proper/commons-dbcp/
  */
-public class CDatabase extends IEvaluateLayer
+public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
 {
     /**
      * datasource *
@@ -63,7 +66,6 @@ public class CDatabase extends IEvaluateLayer
         m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().getPassword() );
 
         this.createTableIfNotExists( "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)", new String[]{"add primary key (step,zonegroup,zone)"} );
-
     }
 
     /**
@@ -102,6 +104,31 @@ public class CDatabase extends IEvaluateLayer
     public int getCalculationIndex()
     {
         return Integer.MAX_VALUE;
+    }
+
+
+    /**
+     * worker class to push data to the database *
+     */
+    protected class CWorker implements IVoidStepable
+    {
+
+        @Override
+        public void step( int p_currentstep, ILayer p_layer ) throws Exception
+        {
+        }
+
+        @Override
+        public Map<String, Object> analyse()
+        {
+            return null;
+        }
+
+        @Override
+        public void release()
+        {
+
+        }
     }
 
 }

@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import net.sf.oval.constraint.Min;
 import net.sf.oval.constraint.NotEmpty;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.*;
@@ -213,11 +214,12 @@ public class CConfiguration
             m_data = l_tmp;
         }
 
-        // append classpath to system class loader
+        // append all Jar files to the classpath of the system class loader
         try
         {
             URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class[]{URL.class} ).getHandle().invoke( l_classloader, m_jardir.toURI().toURL() );
+            for ( String l_jar : m_jardir.list( new WildcardFileFilter( "*.jar" ) ) )
+                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class[]{URL.class} ).getHandle().invoke( l_classloader, new File( m_jardir + File.separator + l_jar ).toURI().toURL() );
         }
         catch ( Exception l_exception )
         {

@@ -25,10 +25,12 @@ package de.tu_clausthal.in.mec.object.analysis;
 
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 
 /**
@@ -54,12 +56,35 @@ public class CDatabase extends IEvaluateLayer
         if ( !CConfiguration.getInstance().get().getDatabase().connectable() )
             return;
 
-
         m_datasource = new BasicDataSource();
         m_datasource.setDriverClassName( CConfiguration.getInstance().get().getDatabase().getDriver() );
         m_datasource.setUrl( CConfiguration.getInstance().get().getDatabase().getServer() );
         m_datasource.setUsername( CConfiguration.getInstance().get().getDatabase().getUsername() );
         m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().getPassword() );
+
+        this.createTableIfNotExists( "zonescount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)" );
+
+    }
+
+    protected void createTableIfNotExists( String p_tablename, String p_fieldsql )
+    {
+        String l_table = CConfiguration.getInstance().get().getDatabase().getTableprefix() == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().getTableprefix() + p_tablename;
+
+        try (
+                Connection l_connect = m_datasource.getConnection();
+        )
+        {
+            ResultSet l_result = l_connect.getMetaData().getTables( null, null, p_tablename, new String[]{"TABLE"} );
+            if ( !l_result.next() )
+                l_connect.createStatement().execute( "create table " + l_table + " " + p_fieldsql );
+
+            l_result.close();
+        }
+        catch ( Exception l_exception )
+        {
+            System.out.println( l_exception );
+            CLogger.error( l_exception );
+        }
     }
 
     @Override
@@ -68,9 +93,4 @@ public class CDatabase extends IEvaluateLayer
         return Integer.MAX_VALUE;
     }
 
-    @Override
-    public Map<String, Object> analyse()
-    {
-        return null;
-    }
 }

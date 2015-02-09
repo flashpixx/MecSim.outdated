@@ -62,11 +62,19 @@ public class CDatabase extends IEvaluateLayer
         m_datasource.setUsername( CConfiguration.getInstance().get().getDatabase().getUsername() );
         m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().getPassword() );
 
-        this.createTableIfNotExists( "zonescount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)" );
+        this.createTableIfNotExists( "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)", new String[]{"add primary key (step,zonegroup,zone)"} );
 
     }
 
-    protected void createTableIfNotExists( String p_tablename, String p_fieldsql )
+    /**
+     * creates the table structure
+     *
+     * @param p_tablename  table name without prefix (will append automatically)
+     * @param p_createsql  create sql without "create <tablename>"
+     * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
+     * @todo check database independence
+     */
+    protected void createTableIfNotExists( String p_tablename, String p_createsql, String[] p_altertable )
     {
         String l_table = CConfiguration.getInstance().get().getDatabase().getTableprefix() == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().getTableprefix() + p_tablename;
 
@@ -76,8 +84,11 @@ public class CDatabase extends IEvaluateLayer
         {
             ResultSet l_result = l_connect.getMetaData().getTables( null, null, p_tablename, new String[]{"TABLE"} );
             if ( !l_result.next() )
-                l_connect.createStatement().execute( "create table " + l_table + " " + p_fieldsql );
-
+            {
+                l_connect.createStatement().execute( "create table " + l_table + " " + p_createsql );
+                for ( String l_item : p_altertable )
+                    l_connect.createStatement().execute( "alter table " + l_table + " " + l_item );
+            }
             l_result.close();
         }
         catch ( Exception l_exception )

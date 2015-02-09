@@ -341,7 +341,7 @@ public class CAgent<T> implements IVoidAgent
      * @note we do the initialization process manually, because some internal actions are removed from the default
      * behaviour
      */
-    private class CJasonAgent extends Agent
+    protected class CJasonAgent extends Agent
     {
 
         /**

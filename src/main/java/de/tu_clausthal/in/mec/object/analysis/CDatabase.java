@@ -84,7 +84,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
                 Connection l_connect = m_datasource.getConnection();
         )
         {
-            ResultSet l_result = l_connect.getMetaData().getTables( null, null, p_tablename, new String[]{"TABLE"} );
+            ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );
             if ( !l_result.next() )
             {
                 l_connect.createStatement().execute( "create table " + l_table + " " + p_createsql );

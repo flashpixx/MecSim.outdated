@@ -23,15 +23,23 @@
 
 package de.tu_clausthal.in.mec.object;
 
+import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
  * layer for any calculation without visibility
  */
-public abstract class IEvaluateLayer implements ILayer, IVoidStepable
+public abstract class IEvaluateLayer<T extends IStepable> implements ILayer, IVoidStepable, Collection<T>
 {
 
+    /**
+     * list of data items
+     */
+    protected Queue<T> m_data = new ConcurrentLinkedQueue();
     /**
      * flag for activity
      */
@@ -56,13 +64,100 @@ public abstract class IEvaluateLayer implements ILayer, IVoidStepable
     }
 
     @Override
-    public void release()
+    public void step( int p_currentstep, ILayer p_layer )
     {
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public int size()
     {
+        return m_data.size();
     }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return m_data.isEmpty();
+    }
+
+    @Override
+    public boolean contains( Object o )
+    {
+        return m_data.contains( o );
+    }
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return m_data.iterator();
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        return m_data.toArray();
+    }
+
+    @Override
+    public <S> S[] toArray( S[] a )
+    {
+        return m_data.toArray( a );
+    }
+
+    @Override
+    public boolean add( T t )
+    {
+        return m_data.add( t );
+    }
+
+    @Override
+    public boolean remove( Object o )
+    {
+        return m_data.remove( o );
+    }
+
+    @Override
+    public boolean containsAll( Collection<?> c )
+    {
+        return m_data.containsAll( c );
+    }
+
+    @Override
+    public boolean addAll( Collection<? extends T> c )
+    {
+        return m_data.addAll( c );
+    }
+
+    @Override
+    public boolean removeAll( Collection<?> c )
+    {
+        return m_data.removeAll( c );
+    }
+
+    @Override
+    public boolean retainAll( Collection<?> c )
+    {
+        return m_data.retainAll( c );
+    }
+
+    @Override
+    public void clear()
+    {
+        m_data.clear();
+    }
+
+    @Override
+    public Map<String, Object> analyse()
+    {
+        return null;
+    }
+
+    @Override
+    public void release()
+    {
+        for ( IStepable l_item : m_data )
+            l_item.release();
+    }
+
 
 }

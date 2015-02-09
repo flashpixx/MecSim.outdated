@@ -26,8 +26,7 @@ package de.tu_clausthal.in.mec.simulation.thread;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.*;
 import de.tu_clausthal.in.mec.simulation.*;
 
 import java.util.*;
@@ -121,12 +120,20 @@ public class CMainLoop implements Runnable
 
                 l_tasks.clear();
                 for ( ILayer l_layer : l_layerorder )
-                    if ( ( l_layer.isActive() ) && ( l_layer instanceof IMultiLayer ) )
-                    {
+                {
+                    if ( !l_layer.isActive() )
+                        continue;
+
+                    // evaluate- & multilayer can creates tasks
+                    if ( l_layer instanceof IMultiLayer )
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
                             l_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
-                        m_pool.invokeAll( l_tasks );
-                    }
+                    if ( l_layer instanceof IEvaluateLayer )
+                        for ( Object l_object : ( (IEvaluateLayer) l_layer ) )
+                            l_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
+
+                    m_pool.invokeAll( l_tasks );
+                }
 
 
                 m_simulationcount++;

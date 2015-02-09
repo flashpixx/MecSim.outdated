@@ -154,7 +154,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public void setCurrentSpeed( int p_speed )
     {
-        m_speed = Math.min( Math.max( p_speed, 15 ), m_maxSpeed );
+        m_speed = p_speed;
     }
 
     @Override

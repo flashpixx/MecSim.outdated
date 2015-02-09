@@ -121,7 +121,7 @@ public class CMainLoop implements Runnable
                 l_tasks.clear();
                 for ( ILayer l_layer : l_layerorder )
                 {
-                    if ( !l_layer.isActive() )
+                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
                         continue;
 
                     // evaluate- & multilayer can creates tasks

@@ -123,6 +123,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     /**
      * refreshes the dynamic items *
+     * @bug does not work correct - enable / disable flags will be inconsistent on multiple clicks
      */
     private void refreshDynamicItems()
     {

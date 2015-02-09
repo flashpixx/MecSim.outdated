@@ -58,7 +58,8 @@ public class CBootstrap
     public static void AfterFrameInit( CFrame p_frame )
     {
         CSimulation.getInstance().getWorld().put( "Count Cars", new CCarCount( p_frame ) );
-        CSimulation.getInstance().getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( p_frame ) );
+
+        ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
 
         p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.EAST, 0.2 );
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.WEST, 0.8 );
@@ -74,10 +75,8 @@ public class CBootstrap
      */
     public static void AfterOSMViewerInit( COSMViewer p_viewer )
     {
-
         p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
         p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
-
     }
 
 
@@ -88,10 +87,9 @@ public class CBootstrap
      */
     public static void AfterSimulationInit( CSimulation p_simulation )
     {
-
         p_simulation.getWorld().put( "Sources", new CSourceFactoryLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
-
+        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
     }
 
 

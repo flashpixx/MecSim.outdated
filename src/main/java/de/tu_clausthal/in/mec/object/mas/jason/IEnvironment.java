@@ -59,6 +59,13 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     protected CBrowser m_mindinspector = null;
 
+    /**
+     * ctor of Jason structure
+     */
+    public IEnvironment()
+    {
+        this( null );
+    }
 
     /**
      * ctor of Jason structure
@@ -67,12 +74,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public IEnvironment( CFrame p_frame )
     {
-        // register web mindinspector (DoS threat)
-        if ( ( p_frame != null ) && ( !p_frame.containsWidget( "Jason Mindinspector" ) ) )
-        {
-            m_mindinspector = new CBrowser();
-            p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
-        }
+        this.setFrame( p_frame );
     }
 
     /**
@@ -140,6 +142,23 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         catch ( Exception l_exception )
         {
             throw new IllegalStateException( CCommon.getResouceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
+        }
+    }
+
+    /**
+     * set the frame - if not exists
+     * @param p_frame frame object set Jason mindinspector
+     */
+    public void setFrame( CFrame p_frame )
+    {
+        if ( m_mindinspector != null )
+            throw new IllegalStateException( CCommon.getResouceString( IEnvironment.class, "frame" ) );
+
+        // register web mindinspector (DoS threat)
+        if ( ( p_frame != null ) && ( !p_frame.containsWidget( "Jason Mindinspector" ) ) )
+        {
+            m_mindinspector = new CBrowser();
+            p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
         }
     }
 

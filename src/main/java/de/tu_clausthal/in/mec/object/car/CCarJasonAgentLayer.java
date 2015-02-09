@@ -36,6 +36,14 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 
     /**
      * ctor of Jason structure
+     */
+    public CCarJasonAgentLayer()
+    {
+        super();
+    }
+
+    /**
+     * ctor of Jason structure
      *
      * @param p_frame frame object set Jason mindinspector
      */

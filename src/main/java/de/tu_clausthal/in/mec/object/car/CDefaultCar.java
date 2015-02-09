@@ -193,6 +193,12 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public Map<Integer, ICar> getPredecessor()
     {
+        return this.getPredecessor( 1 );
+    }
+
+    @Override
+    public Map<Integer, ICar> getPredecessor( int p_count )
+    {
         Map<Integer, ICar> l_predecessordistance = new HashMap();
 
         // we get the nearest predecessor within the speed range (performance boost)
@@ -200,7 +206,11 @@ public class CDefaultCar extends IInspector implements ICar
         {
             ICar l_object = (ICar) m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
             if ( l_object != null )
+            {
                 l_predecessordistance.put( i - m_routeindex, l_object );
+                if ( l_predecessordistance.size() >= p_count )
+                    break;
+            }
         }
 
         return l_predecessordistance;

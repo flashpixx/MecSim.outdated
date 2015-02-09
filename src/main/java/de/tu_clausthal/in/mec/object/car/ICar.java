@@ -98,6 +98,16 @@ public interface ICar extends Painter<COSMViewer>, IVoidStepable
 
 
     /**
+     * returns the current predecessor of the car and the distance
+     *
+     * @param p_count number of predecessors
+     * @return predecessor car object and its distance
+     */
+    public Map<Integer, ICar> getPredecessor( int p_count );
+
+
+
+    /**
      * get current edge object on the graph
      *
      * @return edge

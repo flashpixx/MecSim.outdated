@@ -45,11 +45,11 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     /**
      * mean value of the distribution
      */
-    protected double m_mean = 1.5;
+    protected double m_mean = 4;
     /**
      * random interface
      */
-    protected ExponentialDistribution m_random = new ExponentialDistribution( m_mean );
+    protected ExponentialDistribution m_random = new ExponentialDistribution( 0.5 * m_mean );
     /**
      * integer values how many cars are generated in a step
      */
@@ -121,7 +121,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
         Collection<ICar> l_sources = new HashSet();
-        if ( m_random.sample() >= m_mean )
+        if ( m_random.sample() < m_mean )
             return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )

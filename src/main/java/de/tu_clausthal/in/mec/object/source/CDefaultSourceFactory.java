@@ -49,7 +49,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     /**
      * random interface
      */
-    protected ExponentialDistribution m_random = new ExponentialDistribution( 0.5 * m_mean );
+    protected ExponentialDistribution m_random = new ExponentialDistribution( 0.75 * m_mean );
     /**
      * integer values how many cars are generated in a step
      */

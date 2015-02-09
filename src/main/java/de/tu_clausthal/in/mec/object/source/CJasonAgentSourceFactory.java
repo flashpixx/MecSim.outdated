@@ -68,7 +68,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )
             l_sources.add( new CCarJasonAgent( m_asl, m_position ) );
-
+        m_NumberCarsInStep = 0;
         return l_sources;
     }
 

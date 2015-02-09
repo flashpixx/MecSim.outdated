@@ -51,6 +51,7 @@ public class CFieldBind implements IBelief
      */
     protected Set<Literal> m_literals = new HashSet();
 
+
     /**
      * ctor - default
      */
@@ -145,11 +146,11 @@ public class CFieldBind implements IBelief
                 }
                 catch ( Exception l_exception )
                 {
-                    CLogger.error( l_exception );
+                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage() ) );
                 }
                 catch ( Throwable l_throwable )
                 {
-                    CLogger.error( l_throwable );
+                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage() ) );
                 }
     }
 

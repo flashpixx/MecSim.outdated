@@ -95,7 +95,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         }
         catch ( Exception l_exception )
         {
-            System.out.println( l_exception );
             CLogger.error( l_exception );
         }
     }

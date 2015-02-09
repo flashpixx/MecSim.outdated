@@ -65,6 +65,7 @@ public class CCarJasonAgent extends CDefaultCar
             // set forbidden elements for methods and properties
             Set<String> l_forbidden = new HashSet();
             l_forbidden.add( "m_agent" );
+            l_forbidden.add( "m_route" );
             l_forbidden.add( "m_graph" );
             l_forbidden.add( "m_inspect" );
             l_forbidden.add( "m_random" );

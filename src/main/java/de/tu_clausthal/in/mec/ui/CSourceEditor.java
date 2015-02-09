@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
@@ -50,11 +51,11 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     /**
      * map to store reference file, tab and editor
      */
-    protected Map<File, ImmutablePair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap();
+    protected Map<File, Pair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap();
     /**
      * map with components (buttons), button name, file object
      */
-    protected Map<JComponent, ImmutablePair<String, File>> m_actionobject = new HashMap();
+    protected Map<JComponent, Pair<String, File>> m_actionobject = new HashMap();
     /**
      * set of action listener that will call on editor action
      */
@@ -181,11 +182,11 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        ImmutablePair<String, File> l_item = m_actionobject.get( e.getSource() );
+        Pair<String, File> l_item = m_actionobject.get( e.getSource() );
         if ( l_item == null )
             return;
 
-        ImmutablePair<JComponent, RSyntaxTextArea> l_component = m_tabs.get( l_item.getRight() );
+        Pair<JComponent, RSyntaxTextArea> l_component = m_tabs.get( l_item.getRight() );
         if ( l_component == null )
             return;
 

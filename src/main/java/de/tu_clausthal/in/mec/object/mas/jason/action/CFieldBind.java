@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSemantics.Agent;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
@@ -44,7 +45,7 @@ public class CFieldBind extends IAction
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
      */
-    protected Map<String, ImmutablePair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap();
+    protected Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap();
 
 
     /**
@@ -131,7 +132,7 @@ public class CFieldBind extends IAction
 
         // first argument is the object name - try to get object
         String l_objectname = l_args.get( 0 ).toString();
-        ImmutablePair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
+        Pair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 

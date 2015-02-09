@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.common;
 
 import de.tu_clausthal.in.mec.CLogger;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -311,7 +312,7 @@ public class CReflection
         /**
          * cache map *
          */
-        protected Map<ImmutablePair<String, Class[]>, CMethod> m_cache = new HashMap();
+        protected Map<Pair<String, Class[]>, CMethod> m_cache = new HashMap();
 
 
         /**
@@ -367,7 +368,7 @@ public class CReflection
          */
         public CMethod get( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
         {
-            ImmutablePair<String, Class[]> l_method = new ImmutablePair<String, Class[]>( p_methodname, p_arguments );
+            Pair<String, Class[]> l_method = new ImmutablePair<String, Class[]>( p_methodname, p_arguments );
             if ( m_cache.containsKey( l_method ) )
                 return m_cache.get( l_method );
 

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.analysis;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class CZoneTable<T, S>
     /**
      * map with zone names and zone definition *
      */
-    protected Map<String, ImmutablePair<S, Integer>> m_zones = new HashMap();
+    protected Map<String, Pair<S, Integer>> m_zones = new HashMap();
     /**
      * check object *
      */
@@ -95,7 +96,7 @@ public class CZoneTable<T, S>
      */
     public void reset()
     {
-        for ( ImmutablePair<S, Integer> l_item : m_zones.values() )
+        for ( Pair<S, Integer> l_item : m_zones.values() )
             l_item.getRight().valueOf( 0 );
     }
 
@@ -106,7 +107,7 @@ public class CZoneTable<T, S>
      */
     public void count( T p_data )
     {
-        for ( ImmutablePair<S, Integer> l_item : m_zones.values() )
+        for ( Pair<S, Integer> l_item : m_zones.values() )
             if ( m_validation.validate( p_data, l_item.getLeft() ) )
             {
                 l_item.getRight().valueOf( l_item.getRight().intValue() + 1 );
@@ -122,7 +123,7 @@ public class CZoneTable<T, S>
     public Map<String, Integer> getTable()
     {
         Map<String, Integer> l_table = new HashMap();
-        for ( Map.Entry<String, ImmutablePair<S, Integer>> l_item : m_zones.entrySet() )
+        for ( Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )
             l_table.put( l_item.getKey(), l_item.getValue().getRight() );
         return l_table;
     }

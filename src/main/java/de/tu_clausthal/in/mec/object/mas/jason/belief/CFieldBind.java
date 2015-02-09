@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class CFieldBind implements IBelief
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
      */
-    protected Map<String, ImmutablePair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap();
+    protected Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap();
     /**
      * set with literals
      */
@@ -129,7 +130,7 @@ public class CFieldBind implements IBelief
     public void update()
     {
         // iterate over all binded objects
-        for ( Map.Entry<String, ImmutablePair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
+        for ( Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
 
             // iterate over all object fields
             for ( Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet() )

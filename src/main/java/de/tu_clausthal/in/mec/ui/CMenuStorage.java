@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -253,7 +254,7 @@ public class CMenuStorage
         if ( l_root == null )
             return l_root;
 
-        List<ImmutablePair<CPath, JComponent>> l_remove = new LinkedList();
+        List<Pair<CPath, JComponent>> l_remove = new LinkedList();
         if ( p_deleteroot )
         {
             for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
@@ -267,7 +268,7 @@ public class CMenuStorage
                     l_remove.add( new ImmutablePair<CPath, JComponent>( l_item.getKey(), l_item.getValue() ) );
         }
 
-        for ( ImmutablePair<CPath, JComponent> l_item : l_remove )
+        for ( Pair<CPath, JComponent> l_item : l_remove )
         {
             m_pathobject.remove( l_item.getLeft() );
             m_objectpath.remove( l_item.getRight() );

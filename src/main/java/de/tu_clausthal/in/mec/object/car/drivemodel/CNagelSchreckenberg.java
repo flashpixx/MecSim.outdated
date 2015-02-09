@@ -41,7 +41,7 @@ public class CNagelSchreckenberg implements IDriveModel
     /**
      * defines the minimal speed *
      */
-    protected int m_minimalspeed = 5;
+    protected int m_minimalspeed = 15;
 
     /**
      * random object for linger probability *
@@ -66,7 +66,6 @@ public class CNagelSchreckenberg implements IDriveModel
         p_car.setCurrentSpeed( Math.min( l_maxspeed, p_car.getCurrentSpeed() + p_car.getAcceleration() ) );
 
         // check collision with the predecessor car
-
         Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
         if ( ( l_predecessor != null ) && ( l_predecessor.size() > 0 ) )
         {

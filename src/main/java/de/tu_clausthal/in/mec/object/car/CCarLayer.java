@@ -41,7 +41,10 @@ import java.util.*;
  */
 public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarget<ICar>
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * driving model list
      */

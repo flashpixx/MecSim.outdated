@@ -120,7 +120,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
-        Collection<ICar> l_sources = new HashSet();
+        Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )
             return l_sources;
 

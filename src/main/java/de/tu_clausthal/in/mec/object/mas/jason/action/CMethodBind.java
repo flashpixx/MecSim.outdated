@@ -124,8 +124,8 @@ public class CMethodBind extends IAction
 
             // construct method signature with data
             String l_returnname = null;
-            Class l_returntype = Void.class;
-            Class[] l_argumenttype = null;
+            Class<?> l_returntype = Void.class;
+            Class<?>[] l_argumenttype = null;
             List<Term> l_argumentdata = null;
 
             if ( ( l_args.size() > 4 ) && ( l_args.get( 4 ).isList() ) )
@@ -152,7 +152,7 @@ public class CMethodBind extends IAction
 
 
             // build invoke parameter with explizit cast of the argument types
-            List<Object> l_argumentinvokedata = new LinkedList();
+            List<Object> l_argumentinvokedata = new LinkedList<>();
             l_argumentinvokedata.add( l_object.getObject() );
 
             for ( int i = 0; i < l_argumentdata.size(); i++ )

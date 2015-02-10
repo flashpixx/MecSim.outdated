@@ -206,7 +206,10 @@ public class CHelpViewer extends JDialog implements ActionListener
      */
     protected class CHelpBrowser extends CBrowser
     {
-
+        /**
+         * serialize version ID *
+         */
+        static final long serialVersionUID = 1L;
         /**
          * markdown processor *
          */

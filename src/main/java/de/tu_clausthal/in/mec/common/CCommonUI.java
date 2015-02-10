@@ -64,7 +64,7 @@ public class CCommonUI
      */
     public static String openTextInputDialog( String p_title, String... p_description )
     {
-        return (String) JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
+        return JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
                 p_title, JOptionPane.PLAIN_MESSAGE );
     }
 

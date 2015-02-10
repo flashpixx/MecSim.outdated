@@ -84,13 +84,13 @@ public interface IInstitution<T> extends Collection<INorm<T>>, Serializable, Pai
      *
      * @return collection
      */
-    public IInstitutionCollection getSuperior();
+    public IInstitutionCollection<?> getSuperior();
 
 
     /**
      * returns all institutions which are inferior of this institution
      */
-    public IInstitutionCollection getInferior();
+    public IInstitutionCollection<?> getInferior();
 
 
     /**

@@ -49,7 +49,7 @@ public class CMenuStorage
     /**
      * map between object and path
      */
-    protected Map<JComponent, CPath> m_objectpath = new HashMap();
+    protected Map<JComponent, CPath> m_objectpath = new HashMap<>();
 
 
     /**
@@ -94,7 +94,7 @@ public class CMenuStorage
      */
     public Collection<JComponent> getRoot()
     {
-        List<JComponent> l_root = new ArrayList();
+        List<JComponent> l_root = new ArrayList<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( l_item.getKey().size() == 1 )
@@ -113,7 +113,7 @@ public class CMenuStorage
     {
         CPath l_path = new CPath( p_path );
 
-        List<JComponent> l_elements = new ArrayList();
+        List<JComponent> l_elements = new ArrayList<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )

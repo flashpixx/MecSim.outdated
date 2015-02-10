@@ -49,7 +49,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * compounend painter
      */
-    private CompoundPainter m_painter = new CompoundPainter();
+    private CompoundPainter m_painter = new CompoundPainter<>();
     /**
      * mouse listener
      */

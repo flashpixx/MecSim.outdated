@@ -76,7 +76,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
         // build the list of the layer
         ArrayList<ILayer> l_list = new ArrayList<>();
         for ( Object l_key : l_sortkeys )
-            l_list.addAll( (Collection) l_order.get( l_key ) );
+            l_list.addAll( (Collection<ILayer>) l_order.get( l_key ) );
 
         return l_list;
     }

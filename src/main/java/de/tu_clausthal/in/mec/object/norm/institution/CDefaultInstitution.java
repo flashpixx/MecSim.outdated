@@ -48,19 +48,19 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     /**
      * superior institutions
      */
-    private IInstitutionCollection<INormObject> m_superior = new CDefaultInstitutionCollection();
+    private IInstitutionCollection<INormObject> m_superior = new CDefaultInstitutionCollection<>();
     /**
      * inferior instituions
      */
-    private IInstitutionCollection<INormObject> m_inferior = new CDefaultInstitutionCollection();
+    private IInstitutionCollection<INormObject> m_inferior = new CDefaultInstitutionCollection<>();
     /**
      * range collection with a disjoint push
      */
-    private IRangeCollection<INormObject> m_range = new CUnionRangeCollection();
+    private IRangeCollection<INormObject> m_range = new CUnionRangeCollection<>();
     /**
      * norms of the institution
      */
-    private INormCollection<INormObject> m_norms = new CDefaultNormCollection();
+    private INormCollection<INormObject> m_norms = new CDefaultNormCollection<>();
 
 
     /**

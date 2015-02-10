@@ -31,7 +31,10 @@ import java.util.*;
  */
 public class CDefaultNormCollection<INormCar> implements INormCollection<INormCar>
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * map with norms
      */

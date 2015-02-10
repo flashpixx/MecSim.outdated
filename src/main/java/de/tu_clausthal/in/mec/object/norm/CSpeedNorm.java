@@ -135,7 +135,10 @@ public class CSpeedNorm implements INorm<INormObject>
      */
     public class CNormResultSpeed implements INormCheckResult<Boolean>
     {
-
+        /**
+         * serialize version ID *
+         */
+        static final long serialVersionUID = 1L;
         /**
          * satisfiable boolean *
          */

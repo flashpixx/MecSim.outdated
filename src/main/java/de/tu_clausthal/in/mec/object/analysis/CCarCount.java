@@ -43,7 +43,10 @@ import java.util.Map;
  */
 public class CCarCount extends IEvaluateLayer
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * data push
      */

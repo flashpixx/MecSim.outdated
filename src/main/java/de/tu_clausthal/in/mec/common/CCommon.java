@@ -85,7 +85,7 @@ public class CCommon
      * @param p_parameter object array with substitutions
      * @return resource string
      */
-    public static String getResouceString( Class p_class, String p_label, Object... p_parameter )
+    public static String getResouceString( Class<?> p_class, String p_label, Object... p_parameter )
     {
         return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }

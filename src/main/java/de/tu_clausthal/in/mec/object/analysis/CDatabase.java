@@ -56,7 +56,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     public CDatabase()
     {
-        if ( !CConfiguration.getInstance().get().getDatabase().connectable() )
+        if ( !CConfiguration.getInstance().get().getDatabase().isConnectable() )
             return;
 
         m_datasource = new BasicDataSource();

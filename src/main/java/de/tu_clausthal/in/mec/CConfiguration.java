@@ -637,7 +637,7 @@ public class CConfiguration
              *
              * @return boolean flag
              */
-            public boolean connectable()
+            public boolean isConnectable()
             {
                 return ( active ) && ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );
             }

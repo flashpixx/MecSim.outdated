@@ -86,7 +86,7 @@ public class CMainLoop implements Runnable
     {
         CLogger.info( CCommon.getResouceString( this, "start" ) );
 
-        Collection<Callable<Object>> l_tasks = new LinkedList();
+        Collection<Callable<Object>> l_tasks = new LinkedList<>();
 
         // order of all layer - the order will be read only once
         // so the thread need not be startup on program initializing
@@ -210,7 +210,7 @@ public class CMainLoop implements Runnable
         try
         {
             m_simulationcount = 0;
-            Collection<Callable<Object>> l_tasks = new LinkedList();
+            Collection<Callable<Object>> l_tasks = new LinkedList<>();
             for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                 l_tasks.add( new CLayerReset( l_layer ) );
             m_pool.invokeAll( l_tasks );

@@ -31,6 +31,10 @@ import javax.swing.*;
  */
 public class CInspector extends JTable
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * private ctor

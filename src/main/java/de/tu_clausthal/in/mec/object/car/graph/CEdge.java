@@ -52,7 +52,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * map with car-2-position in forward direction
      */
-    protected Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap() );
+    protected Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
     /**
      * array with cells of the forward direction
      */
@@ -68,7 +68,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * set with listener
      */
-    protected Set<IAction<N, T>> m_listener = new HashSet();
+    protected Set<IAction<N, T>> m_listener = new HashSet<>();
 
 
     /**
@@ -88,7 +88,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     private void sampling( EdgeIteratorState p_edgestate )
     {
-        ArrayList<N> l_initlist = new ArrayList();
+        ArrayList<N> l_initlist = new ArrayList<>();
         for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().CellSampling ); i++ )
             l_initlist.add( null );
         m_cells = (N[]) l_initlist.toArray();
@@ -130,8 +130,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     private PointListArray filterPointList( PointList p_input, double p_epsilon )
     {
-        ArrayList<Double> l_x = new ArrayList();
-        ArrayList<Double> l_y = new ArrayList();
+        ArrayList<Double> l_x = new ArrayList<>();
+        ArrayList<Double> l_y = new ArrayList<>();
 
         l_x.add( p_input.getLatitude( 0 ) );
         l_y.add( p_input.getLongitude( 0 ) );

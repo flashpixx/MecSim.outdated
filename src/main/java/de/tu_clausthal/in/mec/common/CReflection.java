@@ -49,10 +49,10 @@ public class CReflection
      * @param p_field fieldname
      * @return getter / setter handle object
      */
-    public static CGetSet getClassField( Class p_class, String p_field ) throws IllegalArgumentException
+    public static CGetSet getClassField( Class<?> p_class, String p_field ) throws IllegalArgumentException
     {
         Field l_field = null;
-        for ( Class l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+        for ( Class<?> l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
             try
             {
                 l_field = l_class.getDeclaredField( p_field );
@@ -85,7 +85,7 @@ public class CReflection
      * @param p_class class
      * @return map with field name and getter / setter handle
      */
-    public static Map<String, CGetSet> getClassFields( Class p_class )
+    public static Map<String, CGetSet> getClassFields( Class<?> p_class )
     {
         return getClassFields( p_class, null );
     }
@@ -97,10 +97,10 @@ public class CReflection
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
      */
-    public static Map<String, CGetSet> getClassFields( Class p_class, IFieldFilter p_filter )
+    public static Map<String, CGetSet> getClassFields( Class<?> p_class, IFieldFilter p_filter )
     {
-        Map<String, CGetSet> l_fields = new HashMap();
-        for ( Class l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
+        Map<String, CGetSet> l_fields = new HashMap<>();
+        for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
             for ( Field l_field : l_class.getDeclaredFields() )
             {
                 l_field.setAccessible( true );
@@ -126,7 +126,7 @@ public class CReflection
      * @param p_method methodname
      * @return method
      */
-    public static CMethod getClassMethod( Class p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
+    public static CMethod getClassMethod( Class<?> p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
     {
         return getClassMethod( p_class, p_method, null );
     }
@@ -140,10 +140,10 @@ public class CReflection
      *                    Integer.TYPE};
      * @return method
      */
-    public static CMethod getClassMethod( Class p_class, String p_method, Class[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
+    public static CMethod getClassMethod( Class<?> p_class, String p_method, Class<?>[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
     {
         Method l_method = null;
-        for ( Class l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
+        for ( Class<?> l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
             try
             {
                 l_method = l_class.getDeclaredMethod( p_method, p_parameter );
@@ -308,11 +308,11 @@ public class CReflection
         /**
          * forbidden names *
          */
-        protected Set<String> m_forbidden = new HashSet();
+        protected Set<String> m_forbidden = new HashSet<>();
         /**
          * cache map *
          */
-        protected Map<Pair<String, Class[]>, CMethod> m_cache = new HashMap();
+        protected Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
 
 
         /**
@@ -366,9 +366,9 @@ public class CReflection
          * @param p_arguments  method arguments
          * @return handle
          */
-        public CMethod get( String p_methodname, Class[] p_arguments ) throws IllegalAccessException
+        public CMethod get( String p_methodname, Class<?>[] p_arguments ) throws IllegalAccessException
         {
-            Pair<String, Class[]> l_method = new ImmutablePair<String, Class[]>( p_methodname, p_arguments );
+            Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
             if ( m_cache.containsKey( l_method ) )
                 return m_cache.get( l_method );
 

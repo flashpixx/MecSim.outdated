@@ -41,6 +41,10 @@ import java.util.*;
  */
 public class CDefaultSourceFactory extends IDefaultSourceFactory
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * mean value of the distribution
@@ -165,7 +169,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
-        Collection<ICar> l_sources = new HashSet();
+        Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )
             return l_sources;
 

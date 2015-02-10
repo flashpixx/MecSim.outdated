@@ -41,6 +41,10 @@ import org.jxmapviewer.viewer.*;
  */
 public class COSMViewer extends JXMapViewer
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * compounend painter

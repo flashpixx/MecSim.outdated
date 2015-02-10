@@ -50,6 +50,10 @@ import java.util.*;
  */
 abstract public class IDefaultSourceFactory extends IInspector implements ISourceFactory, Serializable
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * position of the source within the map
@@ -62,7 +66,7 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
     /**
      * map with targets
      */
-    protected transient Collection<IReturnStepableTarget<ICar>> m_target = new HashSet();
+    protected transient Collection<IReturnStepableTarget<ICar>> m_target = new HashSet<>();
 
     /**
      * waypoint color

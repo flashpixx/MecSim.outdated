@@ -199,7 +199,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public Map<Integer, ICar> getPredecessor( int p_count )
     {
-        Map<Integer, ICar> l_predecessordistance = new HashMap();
+        Map<Integer, ICar> l_predecessordistance = new HashMap<>();
 
         // we get the nearest predecessor within the speed range (performance boost)
         for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )

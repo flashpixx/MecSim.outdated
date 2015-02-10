@@ -43,7 +43,7 @@ public class CZoneTable<T, S>
     /**
      * map with zone names and zone definition *
      */
-    protected Map<String, Pair<S, Integer>> m_zones = new HashMap();
+    protected Map<String, Pair<S, Integer>> m_zones = new HashMap<>();
     /**
      * check object *
      */
@@ -122,7 +122,7 @@ public class CZoneTable<T, S>
      */
     public Map<String, Integer> getTable()
     {
-        Map<String, Integer> l_table = new HashMap();
+        Map<String, Integer> l_table = new HashMap<>();
         for ( Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )
             l_table.put( l_item.getKey(), l_item.getValue().getRight() );
         return l_table;

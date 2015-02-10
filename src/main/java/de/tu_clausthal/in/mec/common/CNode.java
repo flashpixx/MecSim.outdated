@@ -36,7 +36,7 @@ public class CNode<T>
     /**
      * map with child names and nodes *
      */
-    protected Map<String, CNode<T>> m_childs = new HashMap();
+    protected Map<String, CNode<T>> m_childs = new HashMap<>();
     /**
      * reference to the parent node *
      */
@@ -204,7 +204,7 @@ public class CNode<T>
      */
     public List<T> getSubData( boolean p_withroot )
     {
-        List<T> l_list = new LinkedList();
+        List<T> l_list = new LinkedList<>();
 
         if ( p_withroot )
             l_list.add( this.getData() );
@@ -271,7 +271,7 @@ public class CNode<T>
 
     public Set<CPath> getSubTree( boolean p_withroot )
     {
-        Set<CPath> l_list = new HashSet();
+        Set<CPath> l_list = new HashSet<>();
 
         CPath l_path = p_withroot ? new CPath( m_id ) : new CPath();
         this.getSubTreeRecursive( l_path, this, l_list );

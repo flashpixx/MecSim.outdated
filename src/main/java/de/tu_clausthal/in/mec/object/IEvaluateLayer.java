@@ -35,11 +35,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public abstract class IEvaluateLayer<T extends IStepable> implements ILayer, IVoidStepable, Collection<T>
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * list of data items
      */
-    protected Queue<T> m_data = new ConcurrentLinkedQueue();
+    protected Queue<T> m_data = new ConcurrentLinkedQueue<>();
     /**
      * flag for activity
      */

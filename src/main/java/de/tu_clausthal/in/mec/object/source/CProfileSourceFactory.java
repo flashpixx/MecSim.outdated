@@ -39,6 +39,10 @@ import java.util.*;
  */
 public class CProfileSourceFactory extends IDefaultSourceFactory
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * waypoint color
@@ -84,7 +88,7 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
-        Collection<ICar> l_sources = new HashSet();
+        Collection<ICar> l_sources = new HashSet<>();
         for ( int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++ )
             l_sources.add( new CDefaultCar( m_position ) );
         return l_sources;

@@ -39,7 +39,7 @@ public abstract class IInspector extends IUIListener
     /**
      * inspect variable *
      */
-    private Map<String, Object> m_inspect = new HashMap();
+    private Map<String, Object> m_inspect = new HashMap<>();
 
 
     /**

@@ -62,7 +62,7 @@ public class CManager implements IVoidStepable
         CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
 
         if ( l_node.isDataNull() )
-            l_node.setData( new ImmutablePair( new HashSet(), new HashSet() ) );
+            l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
 
         l_node.getData().getLeft().add( p_receiver );
     }

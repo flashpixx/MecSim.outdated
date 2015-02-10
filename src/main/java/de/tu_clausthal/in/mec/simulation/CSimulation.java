@@ -244,7 +244,7 @@ public class CSimulation
             throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
         // read all painter object and store the list
-        List<String> l_osmpainter = new ArrayList();
+        List<String> l_osmpainter = new ArrayList<>();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
                 l_osmpainter.add( l_item.getKey() );

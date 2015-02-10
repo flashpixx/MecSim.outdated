@@ -40,6 +40,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidStepable, ILayer
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * flag for visibility
@@ -52,7 +56,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     /**
      * list of data items
      */
-    protected Queue<T> m_data = new ConcurrentLinkedQueue();
+    protected Queue<T> m_data = new ConcurrentLinkedQueue<>();
 
     @Override
     public boolean isActive()

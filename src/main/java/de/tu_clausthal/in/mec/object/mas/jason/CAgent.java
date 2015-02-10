@@ -72,11 +72,11 @@ public class CAgent<T> implements IVoidAgent
     /**
      * set with actions of this implementation *
      */
-    protected Map<String, IAction> m_action = new HashMap();
+    protected Map<String, IAction> m_action = new HashMap<>();
     /**
      * set with belief binds
      */
-    protected Set<IBelief> m_beliefs = new HashSet();
+    protected Set<IBelief> m_beliefs = new HashSet<>();
     /**
      * name of the agent *
      */
@@ -359,11 +359,11 @@ public class CAgent<T> implements IVoidAgent
 
             try
             {
-                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList() );
-                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList() );
+                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
+                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                Map<String, InternalAction> l_action = new HashMap();
+                Map<String, InternalAction> l_action = new HashMap<>();
 
                 CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
 

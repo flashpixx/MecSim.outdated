@@ -51,6 +51,10 @@ import java.util.List;
  */
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
@@ -120,7 +124,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public static String[] getAgentFiles()
     {
-        List<String> l_list = new LinkedList();
+        List<String> l_list = new LinkedList<>();
         for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 

@@ -47,6 +47,10 @@ import java.util.Set;
  */
 public class CBrowser extends JFXPanel
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * webkit view
@@ -55,7 +59,7 @@ public class CBrowser extends JFXPanel
     /**
      * listener *
      */
-    protected Set<IActionListener> m_listener = new HashSet();
+    protected Set<IActionListener> m_listener = new HashSet<>();
 
     /**
      * ctor with instantiation a blank engine

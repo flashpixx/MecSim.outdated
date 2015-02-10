@@ -47,19 +47,22 @@ import java.util.*;
  */
 public class CSourceEditor extends JTabbedPane implements ActionListener
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * map to store reference file, tab and editor
      */
-    protected Map<File, Pair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap();
+    protected Map<File, Pair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap<>();
     /**
      * map with components (buttons), button name, file object
      */
-    protected Map<JComponent, Pair<String, File>> m_actionobject = new HashMap();
+    protected Map<JComponent, Pair<String, File>> m_actionobject = new HashMap<>();
     /**
      * set of action listener that will call on editor action
      */
-    protected Set<ActionListener> m_listener = new HashSet();
+    protected Set<ActionListener> m_listener = new HashSet<>();
 
 
     /**

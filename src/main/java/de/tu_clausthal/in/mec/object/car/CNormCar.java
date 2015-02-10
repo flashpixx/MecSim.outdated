@@ -40,7 +40,7 @@ public class CNormCar extends CDefaultCar implements INormObject
     /**
      * push with norms, that are matched
      */
-    protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap();
+    protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap<>();
 
 
     /**

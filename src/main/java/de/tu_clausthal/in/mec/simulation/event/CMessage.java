@@ -32,6 +32,10 @@ import de.tu_clausthal.in.mec.common.CPath;
  */
 public class CMessage<T> implements IMessage<T>
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * title of the message

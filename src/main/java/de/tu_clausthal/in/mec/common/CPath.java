@@ -42,7 +42,7 @@ public class CPath implements Iterable<CPath>
     /**
      * list with path parts *
      */
-    private List<String> m_path = new ArrayList();
+    private List<String> m_path = new ArrayList<>();
 
 
     /**
@@ -108,7 +108,7 @@ public class CPath implements Iterable<CPath>
      */
     public void pushfront( CPath p_path )
     {
-        ArrayList<String> l_path = new ArrayList( p_path.m_path );
+        ArrayList<String> l_path = new ArrayList<>( p_path.m_path );
         l_path.addAll( m_path );
         m_path = l_path;
     }

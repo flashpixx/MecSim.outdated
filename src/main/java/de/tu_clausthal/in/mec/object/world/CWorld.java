@@ -38,11 +38,15 @@ import java.util.*;
  */
 public class CWorld implements Map<String, ILayer>, Serializable
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * map with layer
      */
-    protected Map<String, ILayer> m_layer = new HashMap();
+    protected Map<String, ILayer> m_layer = new HashMap<>();
 
     /**
      * ctor
@@ -61,7 +65,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     public List<ILayer> getOrderedLayer()
     {
 
-        MultiMap<Integer, ILayer> l_order = new MultiValueMap();
+        MultiMap<Integer, ILayer> l_order = new MultiValueMap<>();
         for ( ILayer l_layer : m_layer.values() )
             l_order.put( l_layer.getCalculationIndex(), l_layer );
 
@@ -70,7 +74,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
         Arrays.sort( l_sortkeys );
 
         // build the list of the layer
-        ArrayList<ILayer> l_list = new ArrayList();
+        ArrayList<ILayer> l_list = new ArrayList<>();
         for ( Object l_key : l_sortkeys )
             l_list.addAll( (Collection) l_order.get( l_key ) );
 

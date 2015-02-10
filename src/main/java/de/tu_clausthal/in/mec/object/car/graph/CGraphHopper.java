@@ -57,11 +57,11 @@ public class CGraphHopper extends GraphHopper
     /**
      * map with edge-cell connection
      */
-    protected Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap();
+    protected Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap<>();
     /**
      * set with listerner of the edges
      */
-    protected Set<IAction<ICar, Object>> m_edgelister = new HashSet();
+    protected Set<IAction<ICar, Object>> m_edgelister = new HashSet<>();
 
 
     /**
@@ -147,7 +147,7 @@ public class CGraphHopper extends GraphHopper
             return null;
 
         // create edge list with routes
-        List<List<EdgeIteratorState>> l_pathes = new ArrayList();
+        List<List<EdgeIteratorState>> l_pathes = new ArrayList<>();
         for ( Path l_path : l_routes )
         {
             if ( l_pathes.size() >= p_maxroutes )
@@ -229,11 +229,11 @@ public class CGraphHopper extends GraphHopper
      */
     public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( List<EdgeIteratorState> p_route )
     {
-        ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList();
+        ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
 
         for ( EdgeIteratorState l_edge : p_route )
             for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
-                l_list.add( new ImmutablePair( l_edge, i ) );
+                l_list.add( new ImmutablePair<>( l_edge, i ) );
 
         return l_list;
     }

@@ -42,6 +42,10 @@ import java.util.*;
  */
 public class CFrame extends JFrame
 {
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
 
     /**
      * control of the dock component
@@ -56,7 +60,7 @@ public class CFrame extends JFrame
     /**
      * map with widgets
      */
-    private Map<String, Component> m_widgets = new HashMap();
+    private Map<String, Component> m_widgets = new HashMap<>();
 
     /**
      * ctor with frame initialization

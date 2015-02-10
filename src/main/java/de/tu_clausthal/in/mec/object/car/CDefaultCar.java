@@ -202,15 +202,11 @@ public class CDefaultCar extends IInspector implements ICar
         Map<Integer, ICar> l_predecessordistance = new HashMap();
 
         // we get the nearest predecessor within the speed range (performance boost)
-        for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ); i++ )
+        for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )
         {
             ICar l_object = (ICar) m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
             if ( l_object != null )
-            {
                 l_predecessordistance.put( i - m_routeindex, l_object );
-                if ( l_predecessordistance.size() >= p_count )
-                    break;
-            }
         }
 
         return l_predecessordistance;

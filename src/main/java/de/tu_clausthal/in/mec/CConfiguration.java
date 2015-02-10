@@ -637,6 +637,7 @@ public class CConfiguration
              *
              * @return boolean flag
              */
+            @UiHidden
             public boolean isConnectable()
             {
                 return ( active ) && ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );

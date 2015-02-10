@@ -34,7 +34,7 @@ nicht beachtet werden muss:
 
 ## Code-Beispiel
 
-Der Code eines Agenten kann über den Editor eingegeben:
+Der Code eines Agenten kann über den Editor eingegeben werden:
 
 ```
 !init.

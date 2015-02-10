@@ -1,3 +1,6 @@
 # Help
 
-_exists only in german language at the moment_
+ * [GUI Specification](gui)
+ * [Functionality](function)
+ * [Vehicle Sources](sources)
+ * [Agents with Jason](jason)

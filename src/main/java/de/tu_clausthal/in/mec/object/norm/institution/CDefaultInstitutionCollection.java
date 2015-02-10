@@ -38,7 +38,7 @@ public class CDefaultInstitutionCollection<T> implements IInstitutionCollection<
     /**
      * list of insitutions
      */
-    private Set<IInstitution<T>> m_institution = new HashSet();
+    private Set<IInstitution<T>> m_institution = new HashSet<>();
 
 
     @Override

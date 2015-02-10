@@ -41,7 +41,7 @@ public class CDefaultNormCollection<INormCar> implements INormCollection<INormCa
     @Override
     public Map<INorm<INormCar>, INormCheckResult> match( INormCar p_object )
     {
-        HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap();
+        HashMap<INorm<INormCar>, INormCheckResult> l_map = new HashMap<>();
 
         for ( INorm<INormCar> l_norm : m_norms )
         {

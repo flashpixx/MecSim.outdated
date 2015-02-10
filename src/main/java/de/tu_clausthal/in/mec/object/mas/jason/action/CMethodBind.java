@@ -193,13 +193,13 @@ public class CMethodBind extends IAction
      * @param p_term Jason term
      * @return class object
      */
-    protected Class convertTermToClass( Term p_term ) throws IllegalArgumentException
+    protected Class<?> convertTermToClass( Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
         if ( l_classname.equalsIgnoreCase( "void" ) )
             return void.class;
 
-        Class l_class = null;
+        Class<?> l_class = null;
         try
         {
 
@@ -249,7 +249,7 @@ public class CMethodBind extends IAction
      * @param p_value double value
      * @return converted boxed-type
      */
-    protected Number convertNumber( Class p_class, Double p_value )
+    protected Number convertNumber( Class<?> p_class, Double p_value )
     {
         if ( p_class.equals( Byte.class ) )
             return new Byte( p_value.byteValue() );
@@ -274,9 +274,9 @@ public class CMethodBind extends IAction
      * @param p_list term list
      * @return class array
      */
-    protected Class[] convertTermListToArray( ListTerm p_list ) throws ClassNotFoundException
+    protected Class<?>[] convertTermListToArray( ListTerm p_list ) throws ClassNotFoundException
     {
-        Class[] l_classes = new Class[p_list.size()];
+        Class<?>[] l_classes = new Class<?>[p_list.size()];
         for ( int i = 0; i < l_classes.length; i++ )
             l_classes[i] = this.convertTermToClass( p_list.get( i ) );
         return l_classes;
@@ -288,9 +288,9 @@ public class CMethodBind extends IAction
      * @param p_term term
      * @return class object array
      */
-    protected Class[] convertTermListToArray( Term p_term ) throws ClassNotFoundException
+    protected Class<?>[] convertTermListToArray( Term p_term ) throws ClassNotFoundException
     {
-        Class[] l_classes = new Class[1];
+        Class<?>[] l_classes = new Class<?>[1];
         l_classes[0] = this.convertTermToClass( p_term );
         return l_classes;
     }

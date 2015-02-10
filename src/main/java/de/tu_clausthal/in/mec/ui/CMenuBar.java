@@ -86,7 +86,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_items.addRadioItems( "Layer/Activity", l_activity, this );
 
 
-        List<String> l_visibility = new ArrayList();
+        List<String> l_visibility = new ArrayList<>();
         for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
             if ( l_item.getValue() instanceof IViewableLayer )
                 l_visibility.add( l_item.getKey() );
@@ -151,7 +151,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void MASJasonMenu()
     {
-        List<String> l_menu = new ArrayList( Arrays.asList( IEnvironment.getAgentFiles() ) );
+        List<String> l_menu = new ArrayList<>( Arrays.asList( IEnvironment.getAgentFiles() ) );
         l_menu.add( null );
         l_menu.add( "new agent" );
         l_menu.add( "check syntax" );

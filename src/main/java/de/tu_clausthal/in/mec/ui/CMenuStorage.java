@@ -45,7 +45,7 @@ public class CMenuStorage
     /**
      * stores path and menu / items *
      */
-    protected Map<CPath, JComponent> m_pathobject = new HashMap();
+    protected Map<CPath, JComponent> m_pathobject = new HashMap<>();
     /**
      * map between object and path
      */

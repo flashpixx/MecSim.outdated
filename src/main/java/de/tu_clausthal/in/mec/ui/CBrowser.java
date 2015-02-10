@@ -117,7 +117,7 @@ public class CBrowser extends JFXPanel
         m_webview.getEngine().getLoadWorker().stateProperty().addListener( new ChangeListener<Worker.State>()
         {
             @Override
-            public void changed( ObservableValue ov, Worker.State oldState, Worker.State newState )
+            public void changed( ObservableValue<? extends Worker.State> ov, Worker.State oldState, Worker.State newState )
             {
                 if ( newState != Worker.State.SUCCEEDED )
                     return;

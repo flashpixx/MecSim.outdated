@@ -66,7 +66,7 @@ public class CNormSourceFactory extends CDefaultSourceFactory
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
         Collection<ICar> l_sources = new HashSet();
-        if ( m_random.sample() >= m_mean )
+        if ( m_random.sample() < m_mean )
             return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )

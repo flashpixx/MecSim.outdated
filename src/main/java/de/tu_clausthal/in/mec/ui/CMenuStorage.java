@@ -132,7 +132,7 @@ public class CMenuStorage
     public Collection<CPath> getPaths( String p_path )
     {
         CPath l_path = new CPath( p_path );
-        List<CPath> l_elements = new ArrayList();
+        List<CPath> l_elements = new ArrayList<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
@@ -175,7 +175,7 @@ public class CMenuStorage
     public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path, boolean p_withroot )
     {
         CPath l_path = new CPath( p_path );
-        Map<CPath, JComponent> l_set = new HashMap();
+        Map<CPath, JComponent> l_set = new HashMap<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( p_withroot )
@@ -254,7 +254,7 @@ public class CMenuStorage
         if ( l_root == null )
             return l_root;
 
-        List<Pair<CPath, JComponent>> l_remove = new LinkedList();
+        List<Pair<CPath, JComponent>> l_remove = new LinkedList<>();
         if ( p_deleteroot )
         {
             for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
@@ -393,7 +393,7 @@ public class CMenuStorage
 
         if ( ( p_labelmax != null ) && ( p_labelmin != null ) )
         {
-            Hashtable<Integer, JLabel> l_sliderlabel = new Hashtable();
+            Hashtable<Integer, JLabel> l_sliderlabel = new Hashtable<>();
             l_sliderlabel.put( l_slider.getMinimum(), new JLabel( p_labelmin ) );
             l_sliderlabel.put( l_slider.getMaximum(), new JLabel( p_labelmax ) );
             l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( l_label ) );

@@ -54,7 +54,10 @@ import java.util.Map;
  */
 public class CHelpViewer extends JDialog implements ActionListener
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * default language - safe structure because configuration can push a null value *
      */
@@ -62,7 +65,7 @@ public class CHelpViewer extends JDialog implements ActionListener
     /**
      * components
      */
-    protected Map<JComponent, String> m_components = new HashMap();
+    protected Map<JComponent, String> m_components = new HashMap<>();
     /**
      * browser
      */

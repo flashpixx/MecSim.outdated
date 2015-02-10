@@ -37,7 +37,10 @@ import java.util.Random;
  */
 public class CNagelSchreckenberg implements IDriveModel
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * defines the minimal speed *
      */

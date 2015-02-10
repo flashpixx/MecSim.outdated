@@ -38,7 +38,10 @@ import java.util.*;
  */
 public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * ASL file *
      */

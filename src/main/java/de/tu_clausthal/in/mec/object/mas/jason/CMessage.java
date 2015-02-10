@@ -33,7 +33,10 @@ import jason.asSemantics.Message;
  */
 public class CMessage implements IMessage<Message>
 {
-
+    /**
+     * serialize version ID *
+     */
+    static final long serialVersionUID = 1L;
     /**
      * message data
      *

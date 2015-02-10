@@ -61,11 +61,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarge
     /**
      * data structure - not serializable
      */
-    protected transient List<ICar> m_data = new LinkedList();
+    protected transient List<ICar> m_data = new LinkedList<>();
     /**
      * map of analyse call
      */
-    protected transient Map<String, Object> m_analyse = new HashMap();
+    protected transient Map<String, Object> m_analyse = new HashMap<>();
 
 
     /**

@@ -61,7 +61,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
         if ( p_name.equals( "Norm" ) )
             return new CNormSourceFactory( p_position );
         if ( ( p_name.equals( "Jason Agent" ) ) && ( p_varargs != null ) && ( p_varargs.length > 0 ) )
-            return new CJasonAgentSourceFactory( p_position, (String) p_varargs[0] );
+            return new CJasonAgentSourceFactory( (String) p_varargs[0], p_position );
         //if (p_name.equals( "Profile" ))
         //    return new CProfileSourceFactory( p_position );
 

@@ -64,22 +64,11 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
 
 
     /**
-     * sets a new profile
-     *
-     * @param p_profile profile definition
-     */
-    public void setProfile( int[] p_profile )
-    {
-        this.checkSetProfile( p_profile );
-    }
-
-
-    /**
      * check the profile definition
      *
      * @param p_profile profile
      */
-    private void checkSetProfile( int[] p_profile )
+    protected void checkSetProfile( int[] p_profile )
     {
         if ( p_profile == null )
             throw new IllegalArgumentException( "profile need not to be null" );
@@ -91,6 +80,7 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
         m_profile = p_profile;
     }
 
+
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
     {
@@ -99,6 +89,7 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
             l_sources.add( new CDefaultCar( m_position ) );
         return l_sources;
     }
+
 
     @Override
     public Map<String, Object> analyse()

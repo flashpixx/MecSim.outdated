@@ -49,11 +49,38 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     /**
      * random interface
      */
-    protected ExponentialDistribution m_random = new ExponentialDistribution( 0.75 * m_mean );
+    protected ExponentialDistribution m_random = new ExponentialDistribution( 3 );
     /**
      * integer values how many cars are generated in a step
      */
     protected int m_NumberCarsInStep = 1;
+
+
+    /**
+     * ctor
+     *
+     * @param p_position geo position object
+     * @param p_mean     mean value
+     * @param p_distmean distribution mean
+     * @param p_number   creating car number
+     */
+    public CDefaultSourceFactory( GeoPosition p_position, double p_mean, double p_distmean, int p_number )
+    {
+        this( p_position, Color.CYAN, p_mean, p_distmean, p_number );
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_position geo position object
+     * @param p_mean     mean value
+     * @param p_distmean distribution mean
+     */
+    public CDefaultSourceFactory( GeoPosition p_position, double p_mean, double p_distmean )
+    {
+        this( p_position, Color.CYAN, p_mean, p_distmean );
+    }
 
 
     /**
@@ -63,7 +90,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      */
     public CDefaultSourceFactory( GeoPosition p_position )
     {
-        super( p_position, Color.CYAN );
+        this( p_position, Color.CYAN );
     }
 
 
@@ -80,40 +107,58 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
 
 
     /**
-     * ctor which sets the geo position of the source and the number of cars on a creation step
+     * ctor which sets the geo position of the source and the color
      *
      * @param p_position geoposition
-     * @param p_number   number of cars
      * @param p_color    color of the source
+     * @param p_mean     mean value
+     * @param p_distmean distribution mean
      */
-    protected CDefaultSourceFactory( GeoPosition p_position, int p_number, Color p_color )
+    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color, double p_mean, double p_distmean )
     {
         super( p_position, p_color );
+
+        m_mean = p_mean;
+        m_random = new ExponentialDistribution( p_distmean );
+    }
+
+
+    /**
+     * ctor which sets the geo position of the source and the color
+     *
+     * @param p_position geoposition
+     * @param p_color    color of the source
+     * @param p_mean     mean value
+     * @param p_distmean distribution mean
+     * @param p_number   creating car number
+     */
+    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color, double p_mean, double p_distmean, int p_number )
+    {
+        super( p_position, p_color );
+
+        m_mean = p_mean;
+        m_random = new ExponentialDistribution( p_distmean );
         m_NumberCarsInStep = p_number;
+
         if ( p_number < 1 )
             throw new IllegalArgumentException( "number must be greater than zero" );
     }
 
 
     /**
-     * set the mean value
+     * ctor which sets the geo position of the source and the number of cars on a creation step
      *
-     * @param p_mean mean value of exponential distribution
+     * @param p_position geoposition
+     * @param p_color    color of the source
+     * @param p_number   number of cars
      */
-    public void setMean( double p_mean )
+    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color, int p_number )
     {
-        m_mean = Math.abs( p_mean );
-    }
+        super( p_position, p_color );
+        m_NumberCarsInStep = p_number;
 
-
-    /**
-     * set the number of cars that are generated on each step
-     *
-     * @param p_number number of cars
-     */
-    public void setCarNumber( int p_number )
-    {
-        m_NumberCarsInStep = Math.abs( p_number );
+        if ( p_number < 1 )
+            throw new IllegalArgumentException( "number must be greater than zero" );
     }
 
 
@@ -129,6 +174,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
 
         return l_sources;
     }
+
 
     @Override
     public Map<String, Object> analyse()

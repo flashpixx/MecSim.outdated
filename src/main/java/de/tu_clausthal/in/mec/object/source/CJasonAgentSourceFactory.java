@@ -44,13 +44,67 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      */
     protected String m_asl = null;
 
+
+    /**
+     * ctor
+     *
+     * @param p_asl      ASL / agent name
+     * @param p_position geo position object
+     * @param p_mean     mean value
+     * @param p_distmean distribution mean
+     */
+    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position, double p_mean, double p_distmean )
+    {
+        super( p_position, Color.red, p_mean, p_distmean );
+
+        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
+            throw new IllegalArgumentException( "ASL file not not to be null" );
+        m_asl = p_asl;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_asl      ASL / agent name
+     * @param p_position geo position object
+     * @param p_mean     mean value
+     * @param p_distmean distribution mean
+     * @param p_number   creating car number
+     */
+    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position, double p_mean, double p_distmean, int p_number )
+    {
+        super( p_position, Color.red, p_mean, p_distmean, p_number );
+
+        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
+            throw new IllegalArgumentException( "ASL file not not to be null" );
+        m_asl = p_asl;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_asl      ASL / agent name
+     * @param p_position geo position object
+     * @param p_number   creating car number
+     */
+    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position, int p_number )
+    {
+        super( p_position, Color.red, p_number );
+
+        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
+            throw new IllegalArgumentException( "ASL file not not to be null" );
+        m_asl = p_asl;
+    }
+
     /**
      * ctor that sets the geo position of the source
      *
-     * @param p_position geo position object
      * @param p_asl      ASL / agent name
+     * @param p_position geo position object
      */
-    public CJasonAgentSourceFactory( GeoPosition p_position, String p_asl )
+    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position )
     {
         super( p_position, Color.red );
 
@@ -58,6 +112,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
             throw new IllegalArgumentException( "ASL file not not to be null" );
         m_asl = p_asl;
     }
+
 
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer )
@@ -71,6 +126,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 
         return l_sources;
     }
+
 
     @Override
     public Map<String, Object> analyse()

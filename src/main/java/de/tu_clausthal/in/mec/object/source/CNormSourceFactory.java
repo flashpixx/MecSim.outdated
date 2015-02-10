@@ -58,7 +58,7 @@ public class CNormSourceFactory extends CDefaultSourceFactory
      */
     public CNormSourceFactory( GeoPosition p_position, int p_number )
     {
-        super( p_position, p_number, Color.YELLOW );
+        super( p_position, Color.YELLOW, p_number );
     }
 
 

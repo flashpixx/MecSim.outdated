@@ -21,6 +21,20 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+
+    <!-- non-default repositories -->
+    <repositories>
+        <repository>
+            <id>netbeans</id>
+            <name>Repository hosting NetBeans modules</name>
+            <url>http://bits.netbeans.org/nexus/content/groups/netbeans</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
     <dependencies>
         <!-- UI components -->
         <dependency>

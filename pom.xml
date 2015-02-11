@@ -6,10 +6,38 @@
     <artifactId>MecSim</artifactId>
     <version>1.1</version>
     <packaging>jar</packaging>
+
+    <!-- project meta information -->
     <name>TUC Wirtschaftsinformatik - MecSim</name>
     <url>https://mecdev.rz-housing.tu-clausthal.de/gitlab/philipp.kraus/fortgeschrittenenprojekt</url>
 
+    <organization>
+        <name>TU Clausthal - MecLab</name>
+        <url>http://meclab.in.tu-clausthal.de/</url>
+    </organization>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License 3</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.en.html</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>pkr</id>
+            <name>Philipp Kraus</name>
+            <email>philipp.kraus@tu-clausthal.de</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+    </developers>
+
+
+    <!-- main configuration -->
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
@@ -177,6 +205,8 @@
 
     <build>
         <plugins>
+
+            <!-- compiler build -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
@@ -186,6 +216,8 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+
+            <!-- documentation build -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -209,6 +241,18 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.8</version>
             </plugin>
+
+            <!-- jar build -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -221,7 +265,8 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <appendAssemblyId>true</appendAssemblyId>
+
+                        <appendAssemblyId>true</appendAssemblyId>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>

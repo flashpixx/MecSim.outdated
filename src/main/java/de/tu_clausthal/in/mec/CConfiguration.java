@@ -655,44 +655,42 @@ public class CConfiguration
     protected class UTF8Control extends ResourceBundle.Control
     {
 
-        public ResourceBundle newBundle( String baseName, Locale locale, String format, ClassLoader loader,
-                                         boolean reload
-        ) throws IllegalAccessException, InstantiationException, IOException
+        public ResourceBundle newBundle( String p_basename, Locale p_locale, String p_format, ClassLoader p_loader, boolean p_reload ) throws IllegalAccessException, InstantiationException, IOException
         {
+            InputStream l_stream = null;
+            String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
 
-            String bundleName = toBundleName( baseName, locale );
-            String resourceName = toResourceName( bundleName, "properties" );
-            ResourceBundle bundle = null;
-            InputStream stream = null;
-            if ( reload )
-            {
-                URL url = loader.getResource( resourceName );
-                if ( url != null )
-                {
-                    URLConnection connection = url.openConnection();
-                    if ( connection != null )
-                    {
-                        connection.setUseCaches( false );
-                        stream = connection.getInputStream();
-                    }
-                }
-            }
+            if ( !p_reload )
+                l_stream = p_loader.getResourceAsStream( l_resource );
             else
             {
-                stream = loader.getResourceAsStream( resourceName );
+
+                URL l_url = p_loader.getResource( l_resource );
+                if ( l_url == null )
+                    return null;
+
+                URLConnection l_connection = l_url.openConnection();
+                if ( l_connection == null )
+                    return null;
+
+                l_connection.setUseCaches( false );
+                l_stream = l_connection.getInputStream();
             }
-            if ( stream != null )
+
+            try
             {
-                try
-                {
-                    bundle = new PropertyResourceBundle( new InputStreamReader( stream, "UTF-8" ) );
-                }
-                finally
-                {
-                    stream.close();
-                }
+                return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
+
             }
-            return bundle;
+            catch ( Exception l_exception )
+            {
+            }
+            finally
+            {
+                l_stream.close();
+            }
+
+            return null;
         }
     }
 

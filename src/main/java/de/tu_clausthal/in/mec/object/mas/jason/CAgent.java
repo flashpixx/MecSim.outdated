@@ -30,8 +30,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
-import de.tu_clausthal.in.mec.simulation.message.CParticipant;
-import de.tu_clausthal.in.mec.simulation.message.IMessage;
+import de.tu_clausthal.in.mec.simulation.message.*;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
@@ -213,7 +212,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public CPath getReceiverPath()
     {
-        return new CPath( m_name );
+        return CNames.getName( this, m_name );
     }
 
     @Override

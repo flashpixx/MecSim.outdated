@@ -60,11 +60,11 @@ public class CMessageSystem implements IVoidStepable
         }
 
         CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
-
         if ( l_node.isDataNull() )
             l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
-
         l_node.getData().getLeft().add( p_receiver );
+
+        CLogger.info( CCommon.getResouceString( this, "registered", p_receiver, p_path ) );
     }
 
 
@@ -84,6 +84,8 @@ public class CMessageSystem implements IVoidStepable
 
         CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
         l_node.getData().getLeft().remove( p_receiver );
+
+        CLogger.info( CCommon.getResouceString( this, "unregistered", p_receiver, p_path ) );
     }
 
 

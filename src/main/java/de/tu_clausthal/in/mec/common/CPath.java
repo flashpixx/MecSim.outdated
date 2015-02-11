@@ -69,6 +69,20 @@ public class CPath implements Iterable<CPath>
 
 
     /**
+     * creates a path object from different items
+     *
+     * @param p_varargs list of strings (first element is the seperator)
+     * @return path object
+     */
+    public static CPath createPath( String... p_varargs )
+    {
+        if ( p_varargs.length < 2 )
+            throw new IllegalArgumentException( CCommon.getResouceString( CPath.class, "createpath" ) );
+
+        return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
+    }
+
+    /**
      * check if the path is empty
      *
      * @return empty flag

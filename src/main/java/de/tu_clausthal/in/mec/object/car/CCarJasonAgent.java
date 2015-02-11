@@ -115,8 +115,11 @@ public class CCarJasonAgent extends CDefaultCar
     public Map<String, Object> inspect()
     {
         Map<String, Object> l_map = super.inspect();
-        l_map.put( CCommon.getResouceString( this, "cycle" ), m_agent.getCycle() );
+        if ( m_agent == null )
+            return l_map;
+
         l_map.put( CCommon.getResouceString( this, "asl" ), m_agent.getSource() );
+        l_map.put( CCommon.getResouceString( this, "cycle" ), m_agent.getCycle() );
         l_map.put( CCommon.getResouceString( this, "agent" ), m_agent.getName() );
         return l_map;
     }

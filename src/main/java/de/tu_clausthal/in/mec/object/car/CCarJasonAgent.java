@@ -25,14 +25,14 @@ package de.tu_clausthal.in.mec.object.car;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -103,12 +103,21 @@ public class CCarJasonAgent extends CDefaultCar
         }
     }
 
-
     @Override
     public void release()
     {
         super.release();
         if ( m_agent != null )
             m_agent.release();
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        Map<String, Object> l_map = super.inspect();
+        l_map.put( CCommon.getResouceString( this, "cycle" ), m_agent.getCycle() );
+        l_map.put( CCommon.getResouceString( this, "asl" ), m_agent.getSource() );
+        l_map.put( CCommon.getResouceString( this, "agent" ), m_agent.getName() );
+        return l_map;
     }
 }

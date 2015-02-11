@@ -53,4 +53,11 @@ public interface IAgent extends Painter, IReceiver
      */
     public int getCycle();
 
+    /**
+     * returns the source / file of the agent
+     *
+     * @return source
+     */
+    public String getSource();
+
 }

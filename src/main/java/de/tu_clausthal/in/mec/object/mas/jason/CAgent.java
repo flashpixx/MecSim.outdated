@@ -196,6 +196,12 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
+    public String getSource()
+    {
+        return new File( m_agent.getASLSrc() ).getName();
+    }
+
+    @Override
     /**
      * @todo cache data for agent cycle check mail
      */

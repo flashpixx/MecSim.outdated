@@ -52,17 +52,32 @@ public class CParticipant implements IParticipant
             throw new IllegalArgumentException( CCommon.getResouceString( this, "ownernull" ) );
 
         m_owner = p_owner;
+        CSimulation.getInstance().getMessageSystem().register( this.getReceiverPath(), this );
+    }
+
+    /**
+     * release *
+     */
+    public void release()
+    {
+        CSimulation.getInstance().getMessageSystem().unregister( m_owner.getReceiverPath(), this );
     }
 
     @Override
     public void sendMessage( CPath p_path, IMessage p_message )
     {
-        CSimulation.getInstance().getEventManager().pushMessage( p_path, p_message );
+        CSimulation.getInstance().getMessageSystem().pushMessage( p_path, p_message );
     }
 
     @Override
     public void receiveMessage( Set<IMessage> p_messages )
     {
         m_owner.receiveMessage( p_messages );
+    }
+
+    @Override
+    public CPath getReceiverPath()
+    {
+        return m_owner.getReceiverPath();
     }
 }

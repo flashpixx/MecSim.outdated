@@ -36,7 +36,7 @@ import java.util.*;
 /**
  * eventmanager class
  */
-public class CManager implements IVoidStepable
+public class CMessageSystem implements IVoidStepable
 {
 
     /**

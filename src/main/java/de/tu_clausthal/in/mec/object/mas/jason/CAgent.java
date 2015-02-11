@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.message.CParticipant;
 import de.tu_clausthal.in.mec.simulation.message.IMessage;
 import jason.JasonException;
@@ -84,7 +83,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * participant object *
      */
-    protected CParticipant m_participant = new CParticipant( this );
+    protected CParticipant m_participant = null;
 
 
     /**
@@ -119,8 +118,6 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
         }
 
-        CSimulation.getInstance().getEventManager().register( new CPath( m_name ), m_participant );
-
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
         m_architecture = new CJasonArchitecture();
@@ -128,6 +125,9 @@ public class CAgent<T> implements IVoidAgent
 
         // build an own agent to handle manual internal actions
         m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
+
+        // initialize message system
+        m_participant = new CParticipant( this );
     }
 
     /**
@@ -178,8 +178,8 @@ public class CAgent<T> implements IVoidAgent
     public void release()
     {
         m_agent.stopAg();
+        m_participant.release();
         MindInspectorWeb.get().removeAg( m_agent );
-        CSimulation.getInstance().getEventManager().unregister( new CPath( m_name ), m_participant );
     }
 
 
@@ -208,6 +208,12 @@ public class CAgent<T> implements IVoidAgent
     public void receiveMessage( Set<IMessage> p_messages )
     {
 
+    }
+
+    @Override
+    public CPath getReceiverPath()
+    {
+        return new CPath( m_name );
     }
 
     @Override

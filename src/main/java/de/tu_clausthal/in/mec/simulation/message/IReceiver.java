@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.simulation.message;
 
+import de.tu_clausthal.in.mec.common.CPath;
+
 import java.util.Set;
 
 
@@ -38,5 +40,12 @@ public interface IReceiver
      * @param p_messages set of messages
      */
     public void receiveMessage( Set<IMessage> p_messages );
+
+    /**
+     * returns the path of the object
+     *
+     * @return path
+     */
+    public CPath getReceiverPath();
 
 }

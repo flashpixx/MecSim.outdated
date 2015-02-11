@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
-import de.tu_clausthal.in.mec.simulation.message.CManager;
+import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -63,7 +63,7 @@ public class CSimulation
     /**
      * event manager
      */
-    private CManager m_eventmanager = new CManager();
+    private CMessageSystem m_messagesystem = new CMessageSystem();
 
     /**
      * object of the thread loop *
@@ -117,9 +117,9 @@ public class CSimulation
     /**
      * returns event manager
      */
-    public CManager getEventManager()
+    public CMessageSystem getMessageSystem()
     {
-        return m_eventmanager;
+        return m_messagesystem;
     }
 
     /**

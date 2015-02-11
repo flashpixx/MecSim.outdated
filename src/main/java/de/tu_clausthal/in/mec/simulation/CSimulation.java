@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
-import de.tu_clausthal.in.mec.simulation.event.CManager;
+import de.tu_clausthal.in.mec.simulation.message.CManager;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;

@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas;
 
 
-import de.tu_clausthal.in.mec.simulation.event.IReceiver;
+import de.tu_clausthal.in.mec.simulation.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
 
 

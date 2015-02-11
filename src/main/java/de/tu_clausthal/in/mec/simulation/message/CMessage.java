@@ -21,7 +21,7 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.event;
+package de.tu_clausthal.in.mec.simulation.message;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;

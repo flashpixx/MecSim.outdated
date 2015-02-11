@@ -21,46 +21,23 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.event;
+package de.tu_clausthal.in.mec.simulation.message;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
-import java.io.Serializable;
-
 
 /**
- * message interface to define a event message
+ * interface of a participant of the event system
  */
-public interface IMessage<T> extends Serializable
+public interface IParticipant extends IReceiver
 {
 
     /**
-     * the data of the message
+     * sends a message
      *
-     * @return data
+     * @param p_path    message receiver path
+     * @param p_message input message
      */
-    public T getData();
-
-
-    /**
-     * a name if the message
-     *
-     * @return name
-     */
-    public String getTitle();
-
-
-    /**
-     * returns the source of the message
-     */
-    public CPath getSource();
-
-
-    /**
-     * decrements the time-to-live value and returns the decrement value and on zero the message is discarded
-     *
-     * @return current value
-     */
-    public int ttl();
+    public void sendMessage( CPath p_path, IMessage p_message );
 
 }

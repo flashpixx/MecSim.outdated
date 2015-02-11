@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.simulation.event.IMessage;
+import de.tu_clausthal.in.mec.simulation.message.IMessage;
 import jason.asSemantics.Message;
 
 

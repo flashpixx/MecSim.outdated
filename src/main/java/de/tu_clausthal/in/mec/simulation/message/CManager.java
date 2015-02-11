@@ -21,7 +21,7 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.event;
+package de.tu_clausthal.in.mec.simulation.message;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.*;
@@ -122,16 +122,14 @@ public class CManager implements IVoidStepable
      */
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        /*
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData() )
         {
             for ( IParticipant l_receiver : l_item.getLeft() )
                 l_receiver.receiveMessage( l_item.getRight() );
 
-            // clear all messages
+            // clear all messages, that are received
             l_item.getRight().clear();
         }
-        */
     }
 
 

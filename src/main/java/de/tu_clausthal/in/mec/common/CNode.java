@@ -222,7 +222,7 @@ public class CNode<T>
      */
     public List<T> getSubData()
     {
-        return this.getSubData( true );
+        return this.getSubData( false );
     }
 
 

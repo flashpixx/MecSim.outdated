@@ -78,6 +78,7 @@ public class CNode<T>
 
         m_id = p_id;
         m_parent = p_parent;
+        p_parent.m_childs.put( m_id, this );
     }
 
 
@@ -210,7 +211,7 @@ public class CNode<T>
             l_list.add( this.getData() );
 
         for ( CNode<T> l_child : m_childs.values() )
-            l_list.addAll( this.getSubData( true ) );
+            l_list.addAll( l_child.getSubData( true ) );
 
         return l_list;
     }
@@ -266,9 +267,26 @@ public class CNode<T>
      */
     public CPath getFQN()
     {
-        return traverseToRoot( this );
+        return traverseUpToRoot( this );
     }
 
+
+    /**
+     * returns a set of all sub nodes
+     *
+     * @return set of nodes
+     */
+    public Set<CPath> getSubTree()
+    {
+        return this.getSubTree( true );
+    }
+
+    /**
+     * returns a set of all sub nodes
+     *
+     * @param p_withroot with root node
+     * @return set of nodes
+     */
     public Set<CPath> getSubTree( boolean p_withroot )
     {
         Set<CPath> l_list = new HashSet<>();
@@ -280,6 +298,12 @@ public class CNode<T>
 
     }
 
+    /** traversing of the nodes
+     *
+     * @param p_path start node path
+     * @param p_node start node
+     * @param p_set return set
+     */
     protected void getSubTreeRecursive( CPath p_path, CNode<T> p_node, Set<CPath> p_set )
     {
         if ( !p_path.isEmpty() )
@@ -289,7 +313,7 @@ public class CNode<T>
         {
             CPath l_path = new CPath( p_path );
             l_path.pushback( l_item.getKey() );
-            this.getSubTreeRecursive( l_path, l_item.getValue(), p_set );
+            l_item.getValue().getSubTreeRecursive( l_path, l_item.getValue(), p_set );
         }
     }
 
@@ -311,17 +335,14 @@ public class CNode<T>
      * @param p_node node
      * @return ID
      */
-    protected CPath traverseToRoot( CNode<T> p_node )
+    protected CPath traverseUpToRoot( CNode<T> p_node )
     {
-        if ( m_parent != null )
-        {
-            CPath l_path = new CPath( m_id );
-            l_path.pushfront( traverseToRoot( m_parent ) );
-            return l_path;
-        }
+        CPath l_path = new CPath( p_node.m_id );
 
+        if ( p_node.m_parent != null )
+            l_path.pushfront( traverseUpToRoot( p_node.m_parent ) );
 
-        return new CPath( m_id );
+        return l_path;
     }
 
 }

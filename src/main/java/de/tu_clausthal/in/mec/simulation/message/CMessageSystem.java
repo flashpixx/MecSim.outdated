@@ -132,11 +132,14 @@ public class CMessageSystem implements IVoidStepable
     {
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData() )
         {
+            //System.out.println(l_item);
+            /*
             for ( IParticipant l_receiver : l_item.getLeft() )
-                l_receiver.receiveMessage( l_item.getRight() );
+            l_receiver.receiveMessage( l_item.getRight() );
 
             // clear all messages, that are received
             l_item.getRight().clear();
+            */
         }
     }
 

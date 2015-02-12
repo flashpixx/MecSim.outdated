@@ -201,21 +201,6 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    /**
-     * @todo cache data for agent cycle check mail
-     */
-    public void receiveMessage( Set<IMessage> p_messages )
-    {
-
-    }
-
-    @Override
-    public CPath getReceiverPath()
-    {
-        return CNames.getName( this, m_name );
-    }
-
-    @Override
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
         m_architecture.cycle( p_currentstep );
@@ -232,6 +217,29 @@ public class CAgent<T> implements IVoidAgent
     public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
     {
 
+    }
+
+    @Override
+    /**
+     * @todo cache data for agent cycle check mail
+     */
+    public void receiveMessage( Set<IMessage> p_messages )
+    {
+        for ( IMessage l_msg : p_messages )
+            if ( l_msg instanceof CMessage )
+            {
+                Message l_jasonmsg = (Message) l_msg.getData();
+                CLogger.info( l_jasonmsg );
+
+                //Literal l_iteral = CCommon.getLiteral( l_jasonmsg.get  ).
+                //m_beliefs.add(  );
+            }
+    }
+
+    @Override
+    public CPath getReceiverPath()
+    {
+        return CNames.getName( this, m_name );
     }
 
 

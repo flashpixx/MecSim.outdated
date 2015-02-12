@@ -126,10 +126,10 @@ public class CNode<T>
         for ( CPath l_item : p_path )
         {
             if ( !l_node.m_childs.containsKey( l_item.getSuffix() ) )
-                if ( p_create )
-                    m_childs.put( l_item.getSuffix(), new CNode<T>( l_item.getSuffix() ) );
-                else
+                if ( !p_create )
                     return l_node;
+                else
+                    l_node.m_childs.put( l_item.getSuffix(), new CNode<>( l_item.getSuffix() ) );
 
             l_node = l_node.m_childs.get( l_item.getSuffix() );
         }

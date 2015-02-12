@@ -83,6 +83,10 @@ public class CAgent<T> implements IVoidAgent
      * participant object *
      */
     protected CParticipant m_participant = null;
+    /**
+     * set with received messages
+     */
+    protected Set<IMessage> m_receivedmessages = new HashSet<>();
 
 
     /**
@@ -225,14 +229,8 @@ public class CAgent<T> implements IVoidAgent
      */
     public void receiveMessage( Set<IMessage> p_messages )
     {
-        for ( IMessage l_msg : p_messages )
-            if ( l_msg instanceof CMessage )
-            {
-                Message l_jasonmsg = (Message) l_msg.getData();
-
-                //Literal l_iteral = CCommon.getLiteral( l_jasonmsg.get  ).
-                //m_beliefs.add(  );
-            }
+        m_receivedmessages.clear();
+        m_receivedmessages.addAll( p_messages );
     }
 
     @Override
@@ -316,7 +314,27 @@ public class CAgent<T> implements IVoidAgent
             {
             }
 
-            // update other beliefs
+            // run belief updates
+            this.updateBindBeliefs();
+            this.updateMessageBeliefs();
+
+            // the reasoning cycle must be called within the transition system
+            this.setCycleNumber( m_cycle++ );
+            this.getTS().reasoningCycle();
+        }
+
+        /**
+         * updates all beliefs that are read from the message queue
+         */
+        protected void updateMessageBeliefs()
+        {
+        }
+
+        /**
+         * updates all beliefs, that will read from the bind objects
+         */
+        protected void updateBindBeliefs()
+        {
             for ( IBelief l_item : m_beliefs )
             {
                 // remove old belief within the agent
@@ -333,6 +351,7 @@ public class CAgent<T> implements IVoidAgent
                 l_item.clear();
                 l_item.update();
 
+
                 // set new belief into the agent
                 for ( Literal l_literal : l_item.getLiterals() )
                     try
@@ -342,12 +361,7 @@ public class CAgent<T> implements IVoidAgent
                     catch ( Exception l_exception )
                     {
                     }
-
             }
-
-            // the reasoning cycle must be called within the transition system
-            this.setCycleNumber( m_cycle++ );
-            this.getTS().reasoningCycle();
         }
 
     }

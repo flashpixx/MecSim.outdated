@@ -35,7 +35,9 @@ import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
+import jason.asSemantics.Event;
 import jason.asSyntax.*;
+import jason.bb.BeliefBase;
 import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
@@ -46,6 +48,8 @@ import java.util.List;
 
 /**
  * class of a Jason agent architecture
+ *
+ * @bug check agent name / structure
  *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
@@ -343,6 +347,11 @@ public class CAgent<T> implements IVoidAgent
                             m_agent.addBel( l_literal );
                         if ( l_jmsg.isUnTell() )
                             m_agent.delBel( l_literal );
+                        if ( l_jmsg.isKnownPerformative() )
+                        {
+                            l_literal.addAnnot( BeliefBase.TPercept );
+                            this.getTS().getC().addEvent( new Event( new Trigger( Trigger.TEOperator.add, Trigger.TEType.belief, l_literal ), Intention.EmptyInt ) );
+                        }
 
                         continue;
                     }

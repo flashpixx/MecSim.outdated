@@ -37,6 +37,8 @@ import java.util.*;
 
 /**
  * agent car
+ *
+ * @bug check agent name / structure
  */
 public class CCarJasonAgent extends CDefaultCar
 {

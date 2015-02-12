@@ -12,3 +12,5 @@ target/
 !src/main/resources/**/*.xml
 !src/main/resources/**/*.png
 !src/main/resources/**/*.properties
+
+src/main/resources/documentation/developer/**

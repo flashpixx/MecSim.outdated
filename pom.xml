@@ -34,6 +34,24 @@
             </roles>
             <timezone>Europe/Berlin</timezone>
         </developer>
+        <developer>
+            <id>tho</id>
+            <name>Thomas Hornoff</name>
+            <email>thomas.hornoff@tu-clausthal.de</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+        <developer>
+            <id>cku</id>
+            <name>Christoph Kuper</name>
+            <email>christoph.kuper@tu-clausthal.de</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
     </developers>
 
 
@@ -217,10 +235,16 @@
                 </configuration>
             </plugin>
 
-            <!-- documentation build -->
+            <!-- jar build -->
             <plugin>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.8</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -228,7 +252,7 @@
                 <version>1.3.2</version>
                 <executions>
                     <execution>
-                        <phase>site</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -241,17 +265,16 @@
                     </arguments>
                 </configuration>
             </plugin>
-
-            <!-- jar build -->
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.6.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/resources/documentation/developer</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

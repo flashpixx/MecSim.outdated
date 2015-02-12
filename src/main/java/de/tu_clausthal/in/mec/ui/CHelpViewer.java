@@ -135,8 +135,20 @@ public class CHelpViewer extends JDialog implements ActionListener
      */
     protected URL getFileURL( String p_file )
     {
-        return this.getClass().getClassLoader().getResource( "help" + File.separatorChar + this.getLanguage() + File.separator + p_file );
+        return this.getClass().getClassLoader().getResource( "documentation" + File.separatorChar + this.getLanguage() + File.separator + p_file );
     }
+
+    /**
+     * returns the URL to the documentation directory
+     *
+     * @param p_file filename
+     * * @return full path
+     */
+    protected URL getDocumentationURL( String p_file )
+    {
+        return this.getClass().getClassLoader().getResource( "documentation" + File.separator + p_file );
+    }
+
 
     @Override
     public void actionPerformed( ActionEvent e )
@@ -170,6 +182,15 @@ public class CHelpViewer extends JDialog implements ActionListener
      */
     protected class CLinkRenderer extends LinkRenderer
     {
+        @Override
+        public Rendering render( ExpLinkNode node, String text )
+        {
+            // check path for developer documentation
+            if (node.url.startsWith( "developer" ))
+                return super.render( new ExpLinkNode( text, getDocumentationURL( node.url.toString() ).toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
+
+            return super.render( node, text );
+        }
 
         @Override
         public Rendering render( ExpImageNode node, String text )
@@ -288,6 +309,12 @@ public class CHelpViewer extends JDialog implements ActionListener
                 }
 
                 String l_file = p_element.getAttribute( "href" );
+
+                // on internal links the href can be null, so ignore it
+                if (l_file == null)
+                    return;
+
+                // otherwise check markdown extension and call the markdown processor
                 if ( !l_file.endsWith( ".md" ) )
                     l_file += ".md";
                 processMarkdown( p_web, l_file );

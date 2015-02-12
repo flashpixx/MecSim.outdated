@@ -95,10 +95,16 @@ public class CMessageSystem implements IVoidStepable
      * @param p_path    receiver
      * @param p_message message
      */
-    public synchronized void pushMessage( CPath p_path, IMessage p_message )
+    public synchronized void pushMessage( CPath p_path, IMessage<?> p_message )
     {
-        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) || ( !m_root.pathexist( p_path ) ) )
+        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
             return;
+
+        if ( !m_root.pathexist( p_path ) )
+        {
+            CLogger.error( CCommon.getResouceString( this, "messagefail", p_message.getData(), p_path ) );
+            return;
+        }
 
         if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( ( p_message.getSource().getPath().contains( p_path.getPath() ) ) && ( !p_message.getSource().getPath().equals( p_path ) ) ) )
         {

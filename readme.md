@@ -41,20 +41,29 @@ The [JSON](http://en.wikipedia.org/wiki/JSON) file has got the following structu
 
     {
         "CellSampling": 2,
+        "Database": {
+            "active": false,
+            "driver": "com.mysql.jdbc.Driver",
+            "password": "root",
+            "server": "jdbc:mysql://localhost/mecsim?useUnicode=true&characterEncoding=utf8",
+            "username": "root"
+        },
+        "Language": "de",
         "RoutingAlgorithm": "astarbi",
         "RoutingMap": {
             "name": "europe/germany/lowersaxony",
             "url": "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf"
         },
-        "ThreadSleepTime": 25,
+        "ThreadSleepTime": 48,
         "ViewPoint": {
-            "latitude": 51.80890000000001,
-            "longitude": 10.3412
+            "latitude": 51.81275388745832,
+            "longitude": 10.3471040725708
         },
-        "WindowHeight": 1024,
-        "WindowWidth": 1684,
-        "Zoom": 4
+        "WindowHeight": 1178,
+        "WindowWidth": 2121,
+        "Zoom": 5
     }
+
 
 * _CellSampling_ defines the cell sampling size (in metre) of any lane / road
 * _RoutingAlgorithm_ defines the routing algorithm on the graph (values are: _astar_ & _astarbi_ (A* algorithm),
@@ -62,6 +71,8 @@ _dijkstra_, _dijkstrabi_, _dijkstraOneToMany_ (Dijkstra algorithm))
 * _RountingMap_ defines the imported OpenStreetMap dataset (see data import), the value _name_ defines the name of
 card (all ```/``` will be replaces with ```_```) and _url_ defines the download URL of the
 [PBF](http://wiki.openstreetmap.org/wiki/PBF_Format) file
+* _Database_ sets the [JDBC](http://en.wikipedia.org/wiki/Java_Database_Connectivity) settings to connect any database,
+the drive Jar file is stored in the ```jar``` directory of the configuration directory (the example shows a mySQL connection)
 * _ThreadSleepTime_ defines the time (in milliseconds) of the thread sleep (the value represent the simulation speed)
 * _ViewPoint_ defines the _latitude_ and _longitude_ geo coordinates of the current position, which is shown on startup
 * _WindowWidth_ and _WindowHeight_ define the main window size

@@ -5,9 +5,9 @@ target/
 !*.md
 !*.java
 
-!documentation/*.css
-!documentation/*.htm
-!documentation/*.doxyfile
+!src/main/doxygen/*.css
+!src/main/doxygen/*.htm
+!src/main/doxygen/*.doxyfile
 
 !src/main/resources/**/*.xml
 !src/main/resources/**/*.png

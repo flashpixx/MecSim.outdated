@@ -229,7 +229,6 @@ public class CAgent<T> implements IVoidAgent
             if ( l_msg instanceof CMessage )
             {
                 Message l_jasonmsg = (Message) l_msg.getData();
-                CLogger.info( l_jasonmsg );
 
                 //Literal l_iteral = CCommon.getLiteral( l_jasonmsg.get  ).
                 //m_beliefs.add(  );

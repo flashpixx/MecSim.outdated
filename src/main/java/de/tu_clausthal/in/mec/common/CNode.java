@@ -208,7 +208,7 @@ public class CNode<T>
         List<T> l_list = new LinkedList<>();
 
         if ( p_withroot )
-            l_list.add( this.getData() );
+            l_list.add( m_data );
 
         for ( CNode<T> l_child : m_childs.values() )
             l_list.addAll( l_child.getSubData( true ) );
@@ -223,7 +223,7 @@ public class CNode<T>
      */
     public List<T> getSubData()
     {
-        return this.getSubData( false );
+        return this.getSubData( true );
     }
 
 

@@ -119,7 +119,7 @@ public class CMessageSystem implements IVoidStepable
             return;
         }
 
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.traverseto( p_path, false ).getSubData() )
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.traverseto( p_path ).getSubData() )
             l_item.getRight().add( p_message );
     }
 
@@ -130,16 +130,20 @@ public class CMessageSystem implements IVoidStepable
      */
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData() )
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData( false ) )
         {
-            //System.out.println(l_item);
-            /*
+            // data element within the tree can be used null values, so this items will be skipped
+            // the item is also skipped, if there does not exists messages
+            if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) )
+                continue;
+
+
             for ( IParticipant l_receiver : l_item.getLeft() )
-            l_receiver.receiveMessage( l_item.getRight() );
+                l_receiver.receiveMessage( l_item.getRight() );
 
             // clear all messages, that are received
             l_item.getRight().clear();
-            */
+
         }
     }
 

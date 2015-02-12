@@ -328,6 +328,34 @@ public class CAgent<T> implements IVoidAgent
          */
         protected void updateMessageBeliefs()
         {
+            for ( IMessage l_msg : m_receivedmessages )
+                try
+                {
+
+                    // if message is a message from Jason internal message system
+                    if ( l_msg instanceof CMessage )
+                    {
+                        Message l_jmsg = ( (Message) l_msg.getData() );
+                        Literal l_literal = (Literal) l_jmsg.getPropCont();
+                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getReceiver() ) ) );
+
+                        if ( l_jmsg.isTell() )
+                            m_agent.addBel( l_literal );
+                        if ( l_jmsg.isUnTell() )
+                            m_agent.delBel( l_literal );
+
+                        continue;
+                    }
+
+                    // otherwise message will direct converted
+                    Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_msg.getSource().toString() ) ) );
+                    m_agent.addBel( l_literal );
+
+                }
+                catch ( Exception l_exception )
+                {
+                }
         }
 
         /**

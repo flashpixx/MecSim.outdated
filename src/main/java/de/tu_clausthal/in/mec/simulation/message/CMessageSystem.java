@@ -125,9 +125,6 @@ public class CMessageSystem implements IVoidStepable
 
 
     @Override
-    /**
-     * @bug creates a null pointer exception
-     */
     public void step( int p_currentstep, ILayer p_layer ) throws Exception
     {
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData( false ) )

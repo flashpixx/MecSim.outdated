@@ -35,6 +35,7 @@ import java.util.Map;
 /**
  * representation of a zone table - how many elemnts within a zone
  *
+ * @todo must be tested with database layer
  * @see http://en.wikipedia.org/wiki/Trip_distribution
  */
 public class CZoneTable<T, S>

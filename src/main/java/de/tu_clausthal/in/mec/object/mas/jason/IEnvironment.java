@@ -58,8 +58,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
-     *
-     * @bug mind inspector is not cleared at reset
      */
     protected CBrowser m_mindinspector = null;
 

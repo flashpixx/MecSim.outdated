@@ -39,8 +39,9 @@ import java.util.Map;
 /**
  * class for writing data into a database
  *
+ * @bug incomplete e.g. table creating process does not exists exists
+ * @todo add an example to write down data e.g. OD-matrix structure
  * @note JDBC driver is needed
- * @bug incomplete e.g. database creating are not exists
  * @see http://commons.apache.org/proper/commons-dbcp/
  */
 public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>

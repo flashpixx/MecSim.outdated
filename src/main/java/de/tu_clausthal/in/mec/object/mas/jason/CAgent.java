@@ -228,9 +228,6 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    /**
-     * @todo cache data for agent cycle check mail
-     */
     public void receiveMessage( Set<IMessage> p_messages )
     {
         m_receivedmessages.clear();

@@ -13,4 +13,7 @@ target/
 !src/main/resources/**/*.png
 !src/main/resources/**/*.properties
 
+!src/main/styleguide/*.xml
+!src/main/styleguide/*.md
+
 src/main/resources/documentation/developer/**

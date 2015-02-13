@@ -219,9 +219,28 @@
             <version>1.4.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.3</version>
+        </dependency>
+        -->
+
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.puppycrawl.tools</groupId>
+                    <artifactId>checkstyle</artifactId>
+                    <version>6.3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
 
             <!-- compiler configuration -->
@@ -235,7 +254,7 @@
                 </configuration>
             </plugin>
 
-            <!-- jar build -->
+            <!-- Jar default build -->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.5</version>
@@ -246,6 +265,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Doxygen and clean call -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -276,6 +297,8 @@
                     </filesets>
                 </configuration>
             </plugin>
+
+            <!-- Jar manifest definition -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -301,7 +324,34 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--
+            http://checkstyle.sourceforge.net/config_javadoc.html
+            http://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.14</version>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <configLocation>src/main/styleguide/style.xml</configLocation>
+                            <encoding>UTF-8</encoding>
+                            <consoleOutput>true</consoleOutput>
+                            <failsOnError>true</failsOnError>
+                            <linkXRef>false</linkXRef>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+
         </plugins>
     </build>
-
 </project>

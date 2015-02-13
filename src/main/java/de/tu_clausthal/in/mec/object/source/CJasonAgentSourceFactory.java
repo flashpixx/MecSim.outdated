@@ -61,7 +61,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red, p_mean, p_distmean );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file not not to be null" );
+            throw new IllegalArgumentException( "ASL file must not be null" );
         m_asl = p_asl;
     }
 
@@ -80,7 +80,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red, p_mean, p_distmean, p_number );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file not not to be null" );
+            throw new IllegalArgumentException( "ASL file must not be null" );
         m_asl = p_asl;
     }
 
@@ -97,7 +97,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red, p_number );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file not not to be null" );
+            throw new IllegalArgumentException( "ASL file must not be null" );
         m_asl = p_asl;
     }
 
@@ -112,7 +112,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file not not to be null" );
+            throw new IllegalArgumentException( "ASL file must not be null" );
         m_asl = p_asl;
     }
 

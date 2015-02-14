@@ -29,8 +29,12 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import org.apache.commons.io.IOUtils;
-import org.pegdown.*;
-import org.pegdown.ast.*;
+import org.pegdown.Extensions;
+import org.pegdown.LinkRenderer;
+import org.pegdown.PegDownProcessor;
+import org.pegdown.ast.ExpImageNode;
+import org.pegdown.ast.ExpLinkNode;
+import org.pegdown.ast.WikiLinkNode;
 import org.w3c.dom.Element;
 
 import javax.imageio.ImageIO;
@@ -38,8 +42,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -141,8 +149,7 @@ public class CHelpViewer extends JDialog implements ActionListener
     /**
      * returns the URL to the documentation directory
      *
-     * @param p_file filename
-     * * @return full path
+     * @param p_file filename * @return full path
      */
     protected URL getDocumentationURL( String p_file )
     {
@@ -186,7 +193,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         public Rendering render( ExpLinkNode node, String text )
         {
             // check path for developer documentation
-            if (node.url.startsWith( "developer" ))
+            if ( node.url.startsWith( "developer" ) )
                 return super.render( new ExpLinkNode( text, getDocumentationURL( node.url.toString() ).toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
 
             return super.render( node, text );
@@ -311,7 +318,7 @@ public class CHelpViewer extends JDialog implements ActionListener
                 String l_file = p_element.getAttribute( "href" );
 
                 // on internal links the href can be null, so ignore it
-                if (l_file == null)
+                if ( l_file == null )
                     return;
 
                 // otherwise check markdown extension and call the markdown processor

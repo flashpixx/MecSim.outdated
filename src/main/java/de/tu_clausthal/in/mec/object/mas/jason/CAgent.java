@@ -28,29 +28,44 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.jason.action.*;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
+import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
-import de.tu_clausthal.in.mec.simulation.message.*;
+import de.tu_clausthal.in.mec.simulation.message.CNames;
+import de.tu_clausthal.in.mec.simulation.message.CParticipant;
+import de.tu_clausthal.in.mec.simulation.message.IMessage;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
-import jason.asSemantics.*;
+import jason.asSemantics.ActionExec;
+import jason.asSemantics.Agent;
 import jason.asSemantics.Event;
-import jason.asSyntax.*;
+import jason.asSemantics.Intention;
+import jason.asSemantics.InternalAction;
+import jason.asSemantics.Message;
+import jason.asSemantics.TransitionSystem;
+import jason.asSyntax.ASSyntax;
+import jason.asSyntax.Literal;
+import jason.asSyntax.PlanLibrary;
+import jason.asSyntax.Trigger;
 import jason.bb.BeliefBase;
 import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
  * class of a Jason agent architecture
  *
  * @bug check agent name / structure
- *
  * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
  * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
  * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html

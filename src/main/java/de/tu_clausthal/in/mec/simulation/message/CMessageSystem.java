@@ -24,13 +24,17 @@
 package de.tu_clausthal.in.mec.simulation.message;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.*;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CNode;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

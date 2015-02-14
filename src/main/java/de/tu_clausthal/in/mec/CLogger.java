@@ -24,7 +24,9 @@
 package de.tu_clausthal.in.mec;
 
 import org.apache.commons.lang3.StringUtils;
-import org.pmw.tinylog.*;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
+import org.pmw.tinylog.Logger;
 import org.pmw.tinylog.writers.FileWriter;
 
 import java.util.Collection;

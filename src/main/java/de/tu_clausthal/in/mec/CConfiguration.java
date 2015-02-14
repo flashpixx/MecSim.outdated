@@ -31,11 +31,28 @@ import net.sf.oval.constraint.NotEmpty;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.metawidget.inspector.annotation.*;
+import org.metawidget.inspector.annotation.UiComesAfter;
+import org.metawidget.inspector.annotation.UiHidden;
+import org.metawidget.inspector.annotation.UiLabel;
+import org.metawidget.inspector.annotation.UiLookup;
+import org.metawidget.inspector.annotation.UiMasked;
+import org.metawidget.inspector.annotation.UiSection;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 
 /**
@@ -655,7 +672,7 @@ public class CConfiguration
     protected class UTF8Control extends ResourceBundle.Control
     {
 
-        public ResourceBundle newBundle( String p_basename, Locale p_locale, String p_format, ClassLoader p_loader, boolean p_reload ) throws IllegalAccessException, InstantiationException, IOException
+        public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader, final boolean p_reload ) throws IllegalAccessException, InstantiationException, IOException
         {
             InputStream l_stream = null;
             String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );

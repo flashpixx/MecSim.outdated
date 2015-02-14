@@ -23,9 +23,13 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import bibliothek.gui.dock.common.*;
+import bibliothek.gui.dock.common.CControl;
+import bibliothek.gui.dock.common.CLocation;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.location.TreeLocationRoot;
-import de.tu_clausthal.in.mec.*;
+import de.tu_clausthal.in.mec.CBootstrap;
+import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 
 import javax.swing.*;
@@ -34,7 +38,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

@@ -48,6 +48,7 @@ public class CConfigurationDialog extends JDialog
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
+
     /**
      * ctor *
      */

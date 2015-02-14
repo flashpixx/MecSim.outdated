@@ -26,9 +26,18 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 import de.tu_clausthal.in.mec.common.CReflection;
 import jason.asSemantics.Agent;
-import jason.asSyntax.*;
+import jason.asSyntax.ASSyntax;
+import jason.asSyntax.ListTerm;
+import jason.asSyntax.Literal;
+import jason.asSyntax.NumberTerm;
+import jason.asSyntax.Structure;
+import jason.asSyntax.Term;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

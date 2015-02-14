@@ -26,7 +26,10 @@ package de.tu_clausthal.in.mec.object;
 import de.tu_clausthal.in.mec.simulation.IStepable;
 import de.tu_clausthal.in.mec.simulation.IVoidStepable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 

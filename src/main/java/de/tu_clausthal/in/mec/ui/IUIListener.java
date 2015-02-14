@@ -49,21 +49,21 @@ public abstract class IUIListener implements MouseListener
     /**
      * returns the icon size
      *
-     * @param viewer viewer object
+     * @param p_viewer viewer object
      * @return circle size
      */
-    protected int iconsize( JXMapViewer viewer )
+    protected int iconsize( final JXMapViewer p_viewer )
     {
-        return Math.max( 9 - viewer.getZoom(), 3 );
+        return Math.max( 9 - p_viewer.getZoom(), 3 );
     }
 
     /**
      * click method which is called by a click on the object
      *
-     * @param e      mouse event
-     * @param viewer viewer
+     * @param p_event  mouse event
+     * @param p_viewer viewer
      */
-    public void onClick( MouseEvent e, JXMapViewer viewer )
+    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
     }
 
@@ -77,29 +77,29 @@ public abstract class IUIListener implements MouseListener
     }
 
     @Override
-    public void mouseClicked( MouseEvent e )
+    public void mouseClicked( MouseEvent p_event )
     {
     }
 
     @Override
-    public void mousePressed( MouseEvent e )
+    public void mousePressed( final MouseEvent p_event )
     {
-        if ( SwingUtilities.isLeftMouseButton( e ) )
-            this.onClick( e, COSMViewer.getSimulationOSM() );
+        if ( SwingUtilities.isLeftMouseButton( p_event ) )
+            this.onClick( p_event, COSMViewer.getSimulationOSM() );
     }
 
     @Override
-    public void mouseReleased( MouseEvent e )
-    {
-    }
-
-    @Override
-    public void mouseEntered( MouseEvent e )
+    public void mouseReleased( final MouseEvent p_event )
     {
     }
 
     @Override
-    public void mouseExited( MouseEvent e )
+    public void mouseEntered( final MouseEvent p_event )
+    {
+    }
+
+    @Override
+    public void mouseExited( final MouseEvent p_event )
     {
     }
 

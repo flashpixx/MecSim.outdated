@@ -28,11 +28,16 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSemantics.Agent;
-import jason.asSyntax.*;
+import jason.asSyntax.NumberTerm;
+import jason.asSyntax.Structure;
+import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

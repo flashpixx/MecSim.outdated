@@ -32,7 +32,9 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

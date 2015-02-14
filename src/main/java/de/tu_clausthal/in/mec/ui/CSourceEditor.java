@@ -35,8 +35,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -183,9 +191,9 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
 
     @Override
-    public void actionPerformed( ActionEvent e )
+    public void actionPerformed( ActionEvent p_event )
     {
-        Pair<String, File> l_item = m_actionobject.get( e.getSource() );
+        Pair<String, File> l_item = m_actionobject.get( p_event.getSource() );
         if ( l_item == null )
             return;
 
@@ -221,7 +229,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         }
 
         for ( ActionListener l_action : m_listener )
-            l_action.actionPerformed( e );
+            l_action.actionPerformed( p_event );
 
     }
 }

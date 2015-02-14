@@ -26,7 +26,10 @@ package de.tu_clausthal.in.mec.ui.inspector;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -92,9 +95,9 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public String getColumnName( int col )
+    public String getColumnName( int p_column )
     {
-        switch ( col )
+        switch ( p_column )
         {
             case 0:
                 return "Property";
@@ -106,9 +109,9 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public Class<?> getColumnClass( int columnIndex )
+    public Class<?> getColumnClass( int p_column )
     {
-        switch ( columnIndex )
+        switch ( p_column )
         {
             case 0:
                 return String.class;
@@ -120,43 +123,43 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public boolean isCellEditable( int rowIndex, int columnIndex )
+    public boolean isCellEditable( int p_row, int p_column )
     {
         return false;
     }
 
     @Override
-    public Object getValueAt( int rowIndex, int columnIndex )
+    public Object getValueAt( int p_row, int p_column )
     {
-        if ( ( ( m_values == null ) || ( m_names == null ) ) || ( rowIndex < 0 ) || ( rowIndex >= m_names.size() ) )
+        if ( ( ( m_values == null ) || ( m_names == null ) ) || ( p_row < 0 ) || ( p_row >= m_names.size() ) )
             return null;
 
-        switch ( columnIndex )
+        switch ( p_column )
         {
             case 0:
-                return m_names.get( rowIndex );
+                return m_names.get( p_row );
             case 1:
-                return m_values.get( rowIndex );
+                return m_values.get( p_row );
         }
 
         throw new IllegalArgumentException( "illegal position" );
     }
 
     @Override
-    public void setValueAt( Object aValue, int rowIndex, int columnIndex )
+    public void setValueAt( Object p_value, int p_row, int p_column )
     {
 
     }
 
     @Override
-    public void addTableModelListener( TableModelListener l )
+    public void addTableModelListener( TableModelListener p_listener )
     {
-        m_listener.add( l );
+        m_listener.add( p_listener );
     }
 
     @Override
-    public void removeTableModelListener( TableModelListener l )
+    public void removeTableModelListener( TableModelListener p_listener )
     {
-        m_listener.remove( l );
+        m_listener.remove( p_listener );
     }
 }

@@ -82,6 +82,7 @@
 
 
     <dependencies>
+
         <!-- UI components -->
         <dependency>
             <groupId>org.metawidget.modules</groupId>
@@ -220,29 +221,28 @@
             <scope>compile</scope>
         </dependency>
 
-        <!--
-        <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>6.3</version>
-        </dependency>
-        -->
-
     </dependencies>
 
     <build>
 
-        <!--
+        <!-- using newer build plugins -->
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>com.puppycrawl.tools</groupId>
-                    <artifactId>checkstyle</artifactId>
-                    <version>6.3</version>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.14</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>6.3</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
-        -->
+
 
         <plugins>
 
@@ -328,10 +328,7 @@
                 </executions>
             </plugin>
 
-            <!--
-            http://checkstyle.sourceforge.net/config_javadoc.html
-            http://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html
-
+            <!-- checkstyle is run at compile / validation phase
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -340,21 +337,19 @@
                     <execution>
                         <id>validate</id>
                         <phase>validate</phase>
-                        <configuration>
-                            <configLocation>src/main/styleguide/style.xml</configLocation>
-                            <encoding>UTF-8</encoding>
-                            <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                            <linkXRef>false</linkXRef>
-                        </configuration>
                         <goals>
                             <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <configLocation>src/main/styleguide/style.xml</configLocation>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                </configuration>
             </plugin>
             -->
-
         </plugins>
     </build>
 </project>

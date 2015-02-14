@@ -24,7 +24,13 @@
 package de.tu_clausthal.in.mec.common;
 
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -298,11 +304,12 @@ public class CNode<T>
 
     }
 
-    /** traversing of the nodes
+    /**
+     * traversing of the nodes
      *
      * @param p_path start node path
      * @param p_node start node
-     * @param p_set return set
+     * @param p_set  return set
      */
     protected void getSubTreeRecursive( CPath p_path, CNode<T> p_node, Set<CPath> p_set )
     {

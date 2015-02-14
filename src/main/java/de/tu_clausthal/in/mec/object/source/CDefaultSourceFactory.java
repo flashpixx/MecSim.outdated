@@ -30,7 +30,9 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
 
 
 /**

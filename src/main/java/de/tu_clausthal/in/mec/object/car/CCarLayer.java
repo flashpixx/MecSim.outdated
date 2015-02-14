@@ -33,7 +33,11 @@ import de.tu_clausthal.in.mec.ui.COSMViewer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 /**

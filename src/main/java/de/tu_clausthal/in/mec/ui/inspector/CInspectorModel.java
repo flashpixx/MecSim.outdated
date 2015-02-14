@@ -140,6 +140,7 @@ public class CInspectorModel implements TableModel
                 return m_names.get( p_row );
             case 1:
                 return m_values.get( p_row );
+            default:
         }
 
         throw new IllegalArgumentException( "illegal position" );

@@ -40,7 +40,6 @@
         </module>
         <module name="JavadocType">
             <property name="scope" value="public"/>
-            <property name="excludeScope" value="public"/>
         </module>
         <module name="JavadocMethod">
             <property name="minLineCount" value="1"/>
@@ -51,10 +50,14 @@
         </module>
         <module name="JavadocStyle">
             <property name="scope" value="public"/>
+            <property name="checkFirstSentence" value="false"/>
             <property name="checkEmptyJavadoc" value="true"/>
         </module>
 
 
+        <module name="AbstractClassName">
+            <property name="format" value="I[A-Z]{1,3}([a-z0-9]+[A-Z]{0,2})*$"/>
+        </module>
         <module name="LocalVariableName">
             <property name="format" value="l_[a-zA-Z0-9]{1,}$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
@@ -101,7 +104,7 @@
             <property name="countEmpty" value="false"/>
         </module>
         <module name="ParameterNumber">
-            <property name="max" value="8"/>
+            <property name="max" value="5"/>
         </module>
 
 

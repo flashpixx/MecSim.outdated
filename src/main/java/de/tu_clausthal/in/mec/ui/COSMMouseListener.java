@@ -52,17 +52,17 @@ class COSMMouseListener extends MouseAdapter
     private boolean m_drag = false;
 
     @Override
-    public void mouseClicked( MouseEvent e )
+    public void mouseClicked( MouseEvent p_event )
     {
 
         try
         {
             // get source definition
-            COSMViewer l_viewer = (COSMViewer) e.getSource();
+            COSMViewer l_viewer = (COSMViewer) p_event.getSource();
 
 
             // left double-click
-            if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( e.getClickCount() == 2 ) )
+            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
             {
                 if ( CSimulation.getInstance().isRunning() )
                     throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
@@ -70,7 +70,7 @@ class COSMMouseListener extends MouseAdapter
                 // remove source (check source position and remove the source that is within the range)
                 CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
                 for ( ISourceFactory l_source : l_sourcelayer )
-                    if ( this.inRange( this.getMousePosition( e, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), 10 ) )
+                    if ( this.inRange( this.getMousePosition( p_event, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), 10 ) )
                     {
                         l_source.release();
                         l_sourcelayer.remove( l_source );
@@ -88,7 +88,7 @@ class COSMMouseListener extends MouseAdapter
                     l_sourcelayer.add(
                             l_sourcelayer.getSource(
                                     l_sourcename,
-                                    this.getMouseGeoPosition( e, l_viewer ),
+                                    this.getMouseGeoPosition( p_event, l_viewer ),
                                     l_aslname
                             )
                     );
@@ -106,7 +106,7 @@ class COSMMouseListener extends MouseAdapter
     }
 
     @Override
-    public void mousePressed( MouseEvent e )
+    public void mousePressed( MouseEvent p_event )
     {
         /*
         if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
@@ -126,7 +126,7 @@ class COSMMouseListener extends MouseAdapter
     }
 
     @Override
-    public void mouseReleased( MouseEvent e )
+    public void mouseReleased( MouseEvent p_event )
     {
         /*
         if ( !m_drag )
@@ -149,7 +149,7 @@ class COSMMouseListener extends MouseAdapter
     }
 
     @Override
-    public void mouseDragged( MouseEvent e )
+    public void mouseDragged( MouseEvent p_event )
     {
         /*
         if ( !m_drag )
@@ -165,9 +165,9 @@ class COSMMouseListener extends MouseAdapter
      * @param p_viewer OSM viewer
      * @return geoposition
      */
-    protected GeoPosition getMouseGeoPosition( MouseEvent e, COSMViewer p_viewer )
+    protected GeoPosition getMouseGeoPosition( MouseEvent p_event, COSMViewer p_viewer )
     {
-        Point2D l_position = this.getMousePosition( e, p_viewer );
+        Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
@@ -179,10 +179,10 @@ class COSMMouseListener extends MouseAdapter
      * @param p_viewer OSM viewer
      * @return point
      */
-    protected Point2D getMousePosition( MouseEvent e, COSMViewer p_viewer )
+    protected Point2D getMousePosition( MouseEvent p_event, COSMViewer p_viewer )
     {
         Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        return new Point( l_viewportBounds.x + e.getPoint().x, l_viewportBounds.y + e.getPoint().y );
+        return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
     /**

@@ -261,7 +261,7 @@
             <property name="format" value="^[A-Z]$"/>
         </module>
 
-        <module name="MissingCtor"/>
+        <!-- <module name="MissingCtor"/> -->
 
         <module name="MissingDeprecated"/>
 

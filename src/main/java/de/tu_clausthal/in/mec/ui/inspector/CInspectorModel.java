@@ -57,14 +57,14 @@ public class CInspectorModel implements TableModel
      *
      * @param p_object object
      */
-    public void set( IInspector p_object )
+    public final void set( final IInspector p_object )
     {
         m_names.clear();
         m_values.clear();
         if ( p_object == null )
             return;
 
-        Map<String, Object> l_data = p_object.inspect();
+        final Map<String, Object> l_data = p_object.inspect();
         if ( ( l_data == null ) || ( l_data.isEmpty() ) )
             return;
 
@@ -74,13 +74,13 @@ public class CInspectorModel implements TableModel
             m_values.add( l_item.getValue() );
         }
 
-        TableModelEvent l_event = new TableModelEvent( this );
+        final TableModelEvent l_event = new TableModelEvent( this );
         for ( TableModelListener l_listener : m_listener )
             l_listener.tableChanged( l_event );
     }
 
     @Override
-    public int getRowCount()
+    public final int getRowCount()
     {
         if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) )
             return 0;
@@ -89,13 +89,13 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public int getColumnCount()
+    public final int getColumnCount()
     {
         return 2;
     }
 
     @Override
-    public String getColumnName( int p_column )
+    public final String getColumnName( final int p_column )
     {
         switch ( p_column )
         {
@@ -110,7 +110,7 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public Class<?> getColumnClass( int p_column )
+    public final Class<?> getColumnClass( final int p_column )
     {
         switch ( p_column )
         {
@@ -125,13 +125,13 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public boolean isCellEditable( int p_row, int p_column )
+    public final boolean isCellEditable( final int p_row, final int p_column )
     {
         return false;
     }
 
     @Override
-    public Object getValueAt( int p_row, int p_column )
+    public final Object getValueAt( final int p_row, final int p_column )
     {
         if ( ( ( m_values == null ) || ( m_names == null ) ) || ( p_row < 0 ) || ( p_row >= m_names.size() ) )
             return null;
@@ -149,19 +149,18 @@ public class CInspectorModel implements TableModel
     }
 
     @Override
-    public void setValueAt( Object p_value, int p_row, int p_column )
+    public void setValueAt( final Object p_value, final int p_row, final int p_column )
     {
-
     }
 
     @Override
-    public void addTableModelListener( TableModelListener p_listener )
+    public final void addTableModelListener( final TableModelListener p_listener )
     {
         m_listener.add( p_listener );
     }
 
     @Override
-    public void removeTableModelListener( TableModelListener p_listener )
+    public final void removeTableModelListener( final TableModelListener p_listener )
     {
         m_listener.remove( p_listener );
     }

@@ -263,7 +263,7 @@ public class CPath implements Iterable<CPath>
     }
 
     @Override
-    public boolean equals( Object p_object )
+    public final boolean equals( Object p_object )
     {
         if ( ( p_object instanceof String ) || ( p_object instanceof CPath ) )
             return this.hashCode() == p_object.hashCode();

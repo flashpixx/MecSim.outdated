@@ -412,7 +412,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     @Override
-    public boolean equals( Object p_object )
+    public final boolean equals( Object p_object )
     {
         if ( p_object instanceof CEdge )
             return this.hashCode() == p_object.hashCode();

@@ -139,7 +139,7 @@ public class CBrowser extends JFXPanel
             @Override
             public void handleEvent( Event p_event )
             {
-                if ( !p_event.getType().equalsIgnoreCase( "click" ) )
+                if ( !"click".equalsIgnoreCase( p_event.getType() ) )
                     return;
 
                 for ( IActionListener l_item : m_listener )

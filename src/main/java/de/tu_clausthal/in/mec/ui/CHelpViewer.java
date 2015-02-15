@@ -164,19 +164,19 @@ public class CHelpViewer extends JDialog implements ActionListener
         if ( l_item == null )
             return;
 
-        if ( l_item.equalsIgnoreCase( "back" ) )
+        if ( "back".equalsIgnoreCase( l_item ) )
         {
             m_browser.back();
             return;
         }
 
-        if ( l_item.equalsIgnoreCase( "forward" ) )
+        if ( "forward".equalsIgnoreCase( l_item ) )
         {
             m_browser.forward();
             return;
         }
 
-        if ( l_item.equalsIgnoreCase( "home" ) )
+        if ( "home".equalsIgnoreCase( l_item ) )
         {
             m_browser.home();
             return;
@@ -192,9 +192,13 @@ public class CHelpViewer extends JDialog implements ActionListener
         @Override
         public Rendering render( ExpLinkNode node, String text )
         {
-            // check path for developer documentation
+            // check path for developer documentation (null value must be checked)
             if ( node.url.startsWith( "developer" ) )
-                return super.render( new ExpLinkNode( text, getDocumentationURL( node.url.toString() ).toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
+            {
+                URL l_url = getDocumentationURL( node.url.toString() );
+                if ( l_url != null )
+                    return super.render( new ExpLinkNode( text, l_url.toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
+            }
 
             return super.render( node, text );
         }
@@ -324,6 +328,7 @@ public class CHelpViewer extends JDialog implements ActionListener
                 // otherwise check markdown extension and call the markdown processor
                 if ( !l_file.endsWith( ".md" ) )
                     l_file += ".md";
+
                 processMarkdown( p_web, l_file );
             }
 

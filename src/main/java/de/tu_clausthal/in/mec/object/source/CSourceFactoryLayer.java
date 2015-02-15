@@ -60,13 +60,13 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      */
     public ISourceFactory getSource( String p_name, GeoPosition p_position, Object... p_varargs )
     {
-        if ( p_name.equals( "Default" ) )
+        if ( "Default".equals( p_name ) )
             return new CDefaultSourceFactory( p_position );
-        if ( p_name.equals( "Norm" ) )
+        if ( "Norm".equals( p_name ) )
             return new CNormSourceFactory( p_position );
-        if ( ( p_name.equals( "Jason Agent" ) ) && ( p_varargs != null ) && ( p_varargs.length > 0 ) )
+        if ( ( "Jason Agent".equals( p_name ) ) && ( p_varargs != null ) && ( p_varargs.length > 0 ) )
             return new CJasonAgentSourceFactory( (String) p_varargs[0], p_position );
-        //if (p_name.equals( "Profile" ))
+        //if ("Profile".equals( p_name ))
         //    return new CProfileSourceFactory( p_position );
 
         throw new IllegalArgumentException( CCommon.getResouceString( this, "nosource" ) );

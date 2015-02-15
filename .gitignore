@@ -14,6 +14,7 @@ target/
 !src/main/resources/**/*.properties
 
 !src/main/styleguide/*.xml
+!src/main/styleguide/*.header
 !src/main/styleguide/*.md
 
 src/main/resources/documentation/developer/**

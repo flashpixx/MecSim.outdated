@@ -9,6 +9,8 @@
     and is realigned at a hungarian notation and excerpts of
     the Google styleguide
 
+    @see http://checkstyle.sourceforge.net/availablechecks.html
+
 -->
 
 <module name="Checker">
@@ -25,6 +27,11 @@
         <property name="eachLine" value="true"/>
     </module>
 
+    <module name="Header">
+        <property name="headerFile" value="src/main/styleguide/java.header"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
+
     <module name="RegexpSingleline">
         <property name="format" value="\s+$"/>
         <property name="minimum" value="0"/>
@@ -34,6 +41,92 @@
 
 
     <module name="TreeWalker">
+
+        <module name="AbbreviationAsWordInName"/>
+
+        <module name="AbstractClassName">
+            <property name="format" value="I[A-Z]{1,3}([a-z0-9]+[A-Z]{0,2})*$"/>
+        </module>
+
+        <module name="AnnotationLocation">
+            <property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
+        </module>
+
+        <module name="AnnotationUseStyle"/>
+
+        <module name="AnonInnerLength"/>
+
+        <!-- <module name="ArrayTrailingComma"/> -->
+
+        <module name="ArrayTypeStyle"/>
+
+        <module name="AtclauseOrder">
+            <property name="tagOrder"
+                      value="@author, @version, @see, @since, @param, @return, @throws, @exception, @serial, @serialField, @serialData, @deprecated"/>
+        </module>
+
+        <module name="AvoidEscapedUnicodeCharacters"/>
+
+        <module name="AvoidInlineConditionals"/>
+
+        <module name="AvoidNestedBlocks"/>
+
+        <module name="AvoidStarImport">
+            <property name="excludes" value="java.swing, javax.swing, java.awt"/>
+            <property name="allowClassImports" value="false"/>
+            <property name="allowStaticMemberImports" value="false"/>
+        </module>
+
+        <module name="AvoidStaticImport"/>
+
+        <module name="BooleanExpressionComplexity">
+            <property name="max" value="4"/>
+        </module>
+
+        <!-- <module name="ClassDataAbstractionCoupling" /> -->
+
+        <!-- <module name="ClassFanOutComplexity"/> -->
+
+        <module name="ClassTypeParameterName">
+            <property name="format" value="[A-Z]{1}$"/>
+        </module>
+
+        <module name="ConstantName">
+            <property name="format" value="const_[a-zA-Z0-9]{3,}$"/>
+        </module>
+
+        <module name="CovariantEquals"/>
+
+        <!-- <module name="CustomImportOrder"/> -->
+
+        <module name="CyclomaticComplexity">
+            <property name="max" value="6"/>
+        </module>
+
+        <module name="DeclarationOrder"/>
+
+        <module name="DefaultComesLast"/>
+
+        <!-- <module name="DescendantToken"/> -->
+
+        <module name="DesignForExtension"/>
+
+        <module name="EmptyBlock"/>
+
+        <module name="EmptyForInitializerPad">
+            <property name="option" value="space"/>
+        </module>
+
+        <module name="EmptyForIteratorPad">
+            <property name="option" value="space"/>
+        </module>
+
+        <module name="EmptyLineSeparator"/>
+
+        <module name="EmptyStatement"/>
+
+        <module name="EqualsAvoidNull"/>
+
 
         <module name="MissingOverride">
             <property name="javaFiveCompatibility" value="true"/>
@@ -55,9 +148,7 @@
         </module>
 
 
-        <module name="AbstractClassName">
-            <property name="format" value="I[A-Z]{1,3}([a-z0-9]+[A-Z]{0,2})*$"/>
-        </module>
+
         <module name="LocalVariableName">
             <property name="format" value="l_[a-zA-Z0-9]{1,}$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
@@ -80,8 +171,9 @@
         <module name="PackageName">
             <property name="format" value="[a-z]{2,}$"/>
         </module>
-        <module name="ConstantName">
-            <property name="format" value="const_[a-zA-Z0-9]{3,}$"/>
+        <module name="RequireThis">
+            <property name="checkFields" value="false"/>
+            <property name="checkMethods" value="true"/>
         </module>
         <module name="TypeName"/>
         <module name="ModifiedControlVariable"/>
@@ -89,13 +181,9 @@
 
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
-        <module name="AvoidStarImport">
-            <property name="excludes" value="java.swing, javax.swing, java.awt"/>
-            <property name="allowClassImports" value="false"/>
-            <property name="allowStaticMemberImports" value="false"/>
-        </module>
 
 
+        <module name="Indentation"/>
         <module name="LineLength">
             <property name="max" value="120"/>
         </module>
@@ -108,10 +196,13 @@
         </module>
 
 
+        <module name="GenericWhitespace"/>
         <module name="NoWhitespaceAfter"/>
         <module name="NoWhitespaceBefore"/>
         <module name="OperatorWrap"/>
-        <module name="ParenPad"/>
+        <module name="ParenPad">
+            <property name="option" value="space"/>
+        </module>
         <module name="TypecastParenPad"/>
         <module name="MethodParamPad">
             <property name="option" value="space"/>
@@ -126,7 +217,6 @@
         </module>
 
 
-        <module name="EmptyBlock"/>
         <module name="NeedBraces">
             <property name="allowSingleLineIf" value="true"/>
         </module>
@@ -140,7 +230,7 @@
 
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="AvoidInlineConditionals"/>
+
         <module name="HiddenField"/>
 
 

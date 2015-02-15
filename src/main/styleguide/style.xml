@@ -15,13 +15,7 @@
 
 <module name="Checker">
 
-    <property name="localeLanguage" value="en"/>
-    <property name="charset" value="UTF-8"/>
-    <property name="fileExtensions" value="java, properties"/>
-
-    <module name="NewlineAtEndOfFile">
-        <property name="lineSeparator" value="lf"/>
-    </module>
+    <!-- <modul name="FileLength"/> -->
 
     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
@@ -31,6 +25,17 @@
         <property name="headerFile" value="src/main/styleguide/java.header"/>
         <property name="fileExtensions" value="java"/>
     </module>
+
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="lf"/>
+    </module>
+
+
+    <property name="localeLanguage" value="en"/>
+    <property name="charset" value="UTF-8"/>
+    <property name="fileExtensions" value="java, properties"/>
+
+
 
     <module name="RegexpSingleline">
         <property name="format" value="\s+$"/>
@@ -127,87 +132,218 @@
 
         <module name="EqualsAvoidNull"/>
 
+        <module name="EqualsHashCode"/>
 
-        <module name="MissingOverride">
-            <property name="javaFiveCompatibility" value="true"/>
-        </module>
-        <module name="JavadocType">
-            <property name="scope" value="public"/>
-        </module>
+        <!-- <module name="ExecutableStatementCount"/> -->
+
+        <module name="ExplicitInitialization"/>
+
+        <module name="FallThrough"/>
+
+        <!-- <module name="FinalClass"/> -->
+
+        <module name="FinalLocalVariable"/>
+
+        <module name="FinalParameters"/>
+
+        <module name="GenericWhitespace"/>
+
+        <module name="HiddenField"/>
+
+        <!-- <module name="HideUtilityClassConstructor"/> -->
+
+        <module name="IllegalCatch"/>
+
+        <module name="IllegalImport"/>
+
+        <module name="IllegalInstantiation"/>
+
+        <module name="IllegalThrows"/>
+
+        <module name="IllegalToken"/>
+
+        <!-- <module name="IllegalTokenText/> -->
+
+        <!-- <module name="IllegalType"/> -->
+
+        <!-- <module name="ImportControl"/> -->
+
+        <!-- <module name="ImportOrder"/> -->
+
+        <module name="Indentation"/>
+
+        <module name="InnerAssignment"/>
+
+        <module name="InnerTypeLast"/>
+
+        <module name="JavaNCSS"/>
+
+        <!-- <module name="InterfaceIsType"/> -->
+
+        <!-- <module name="InterfaceTypeParameterName"/> -->
+
         <module name="JavadocMethod">
             <property name="minLineCount" value="1"/>
             <property name="scope" value="public"/>
         </module>
-        <module name="JavadocVariable">
-            <property name="scope" value="public"/>
-        </module>
+
+        <!-- <module name="JavadocPackage"/> -->
+
+        <!-- <module name="JavadocTagContinuationIndentation"/> -->
+
+        <!-- <module name="JavadocParagraph"/> -->
+
         <module name="JavadocStyle">
             <property name="scope" value="public"/>
             <property name="checkFirstSentence" value="false"/>
             <property name="checkEmptyJavadoc" value="true"/>
         </module>
 
+        <module name="JavadocType">
+            <property name="scope" value="public"/>
+        </module>
 
+        <module name="JavadocVariable">
+            <property name="scope" value="public"/>
+        </module>
+
+        <module name="LeftCurly">
+            <property name="option" value="nl"/>
+        </module>
+
+        <module name="LineLength">
+            <property name="max" value="120"/>
+        </module>
+
+        <module name="LocalFinalVariableName">
+            <property name="format" value="^l_[a-zA-Z0-9]{1,}$"/>
+        </module>
 
         <module name="LocalVariableName">
-            <property name="format" value="l_[a-zA-Z0-9]{1,}$"/>
+            <property name="format" value="^l_[a-zA-Z0-9]{1,}$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
         </module>
-        <module name="LocalFinalVariableName">
-            <property name="format" value="l_[a-zA-Z0-9]{1,}$"/>
-        </module>
+
+        <module name="MagicNumber"/>
+
         <module name="MemberName">
-            <property name="format" value="m_[a-zA-Z0-9]{3,}$"/>
+            <property name="format" value="^m_[a-zA-Z0-9]{3,}$"/>
         </module>
+
+        <module name="MethodCount">
+            <property name="maxTotal" value="20"/>
+        </module>
+
+        <module name="MethodLength">
+            <property name="max" value="35"/>
+            <property name="countEmpty" value="false"/>
+        </module>
+
+        <module name="MethodName">
+            <property name="format" value="^[a-z]{2}[a-zA-Z0-9]*$"/>
+        </module>
+
+        <module name="MethodParamPad">
+            <property name="option" value="space"/>
+            <property name="allowLineBreaks" value="false"/>
+        </module>
+
+        <module name="MethodTypeParameterName">
+            <property name="format" value="^[A-Z]$"/>
+        </module>
+
+        <module name="MissingCtor"/>
+
+        <module name="MissingDeprecated"/>
+
+        <module name="MissingOverride">
+            <property name="javaFiveCompatibility" value="true"/>
+        </module>
+
+        <module name="MissingSwitchDefault"/>
+
+        <module name="ModifiedControlVariable"/>
+
+        <module name="ModifierOrder"/>
+
+        <module name="MultipleStringLiterals"/>
+
+        <module name="MultipleVariableDeclarations"/>
+
+        <module name="MutableException"/>
+
+        <module name="NPathComplexity">
+            <property name="max" value="20"/>
+        </module>
+
+        <!-- <module name="NeedBraces">
+            <property name="allowSingleLineIf" value="true"/>
+        </module>
+        -->
+
+        <module name="NestedForDepth"/>
+
+        <module name="NestedIfDepth"/>
+
+        <module name="NestedTryDepth"/>
+
+        <module name="NoClone"/>
+
+        <module name="NoFinalizer"/>
+
+        <module name="NonEmptyAtclauseDescription"/>
+
+        <module name="NoLineWrap"/>
+
+        <module name="NoWhitespaceAfter"/>
+
+        <module name="NoWhitespaceBefore"/>
+
+        <module name="OneStatementPerLine"/>
+
+        <module name="OneTopLevelClass"/>
+
+        <module name="OperatorWrap"/>
+
+        <module name="OuterTypeFilename"/>
+
+        <module name="OuterTypeNumber"/>
+
+        <module name="PackageAnnotation"/>
+
+        <module name="PackageDeclaration"/>
+
+
         <module name="ParameterName">
-            <property name="format" value="p_[a-zA-Z0-9]{3,}$"/>
+            <property name="format" value="^p_[a-zA-Z0-9]{3,}$"/>
         </module>
         <module name="StaticVariableName">
-            <property name="format" value="s_[a-zA-Z0-9]{3,}$"/>
+            <property name="format" value="^s_[a-zA-Z0-9]{3,}$"/>
         </module>
-        <module name="MethodName">
-            <property name="format" value="[a-z]{2}[a-zA-Z0-9]*$"/>
-        </module>
+
         <module name="PackageName">
-            <property name="format" value="[a-z]{2,}$"/>
+            <property name="format" value="^[a-z]{2,}$"/>
         </module>
         <module name="RequireThis">
             <property name="checkFields" value="false"/>
             <property name="checkMethods" value="true"/>
         </module>
         <module name="TypeName"/>
-        <module name="ModifiedControlVariable"/>
-
 
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
 
-
-        <module name="Indentation"/>
-        <module name="LineLength">
-            <property name="max" value="120"/>
-        </module>
-        <module name="MethodLength">
-            <property name="max" value="35"/>
-            <property name="countEmpty" value="false"/>
-        </module>
         <module name="ParameterNumber">
             <property name="max" value="5"/>
         </module>
 
 
-        <module name="GenericWhitespace"/>
-        <module name="NoWhitespaceAfter"/>
-        <module name="NoWhitespaceBefore"/>
         <module name="OperatorWrap"/>
         <module name="ParenPad">
             <property name="option" value="space"/>
         </module>
         <module name="TypecastParenPad"/>
-        <module name="MethodParamPad">
-            <property name="option" value="space"/>
-            <property name="allowLineBreaks" value="false"/>
-        </module>
+
         <module name="WhitespaceAfter">
             <property name="tokens" value="COMMA"/>
         </module>
@@ -217,38 +353,17 @@
         </module>
 
 
-        <module name="NeedBraces">
-            <property name="allowSingleLineIf" value="true"/>
-        </module>
-        <module name="LeftCurly">
-            <property name="option" value="nl"/>
-        </module>
         <module name="RightCurly">
             <property name="option" value="alone"/>
         </module>
 
-
-        <module name="EmptyStatement"/>
-        <module name="EqualsHashCode"/>
-
-        <module name="HiddenField"/>
-
-
-        <module name="IllegalInstantiation"/>
-        <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
-        <module name="MissingSwitchDefault"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
 
         <module name="DesignForExtension"/>
-        <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
 
-        <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 

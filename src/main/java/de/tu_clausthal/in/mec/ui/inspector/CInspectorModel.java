@@ -103,6 +103,7 @@ public class CInspectorModel implements TableModel
                 return "Property";
             case 1:
                 return "Value";
+            default:
         }
 
         throw new IllegalArgumentException( "illegal position" );
@@ -117,6 +118,7 @@ public class CInspectorModel implements TableModel
                 return String.class;
             case 1:
                 return Object.class;
+            default:
         }
 
         throw new IllegalArgumentException( "illegal position" );

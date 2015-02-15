@@ -78,7 +78,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      *
      * @param p_listener action listener
      */
-    public void addActionListener( ActionListener p_listener )
+    public void addActionListener( final ActionListener p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -88,7 +88,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      *
      * @param p_listener action listener
      */
-    public void removeActionListener( ActionListener p_listener )
+    public void removeActionListener( final ActionListener p_listener )
     {
         m_listener.remove( p_listener );
     }
@@ -99,7 +99,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      *
      * @param p_file input file
      */
-    public void open( File p_file )
+    public void open( final File p_file )
     {
         if ( m_tabs.containsKey( p_file ) )
             return;
@@ -109,24 +109,24 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
         try
         {
-            JComponent l_tab = new JPanel();
+            final JComponent l_tab = new JPanel();
             this.add( p_file.getName(), l_tab );
             l_tab.setLayout( new BorderLayout() );
 
             // create editor
-            RSyntaxTextArea l_editor = new RSyntaxTextArea();
+            final RSyntaxTextArea l_editor = new RSyntaxTextArea();
             l_editor.setAutoIndentEnabled( true );
             m_tabs.put( p_file, new ImmutablePair<JComponent, RSyntaxTextArea>( l_tab, l_editor ) );
 
             // tab toolbar
-            JToolBar l_toolbar = new JToolBar();
+            final JToolBar l_toolbar = new JToolBar();
             l_toolbar.setFloatable( false );
             l_tab.add( l_toolbar, BorderLayout.NORTH );
 
 
             for ( String[] l_item : new String[][]{{"save", "sourceeditor_save.png"}, {"delete", "sourceeditor_delete.png"}, {"reload", "sourceeditor_reload.png"}, {"close", "sourceeditor_close.png"}} )
             {
-                JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
+                final JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
                 l_button.addActionListener( this );
                 l_toolbar.add( l_button );
 
@@ -151,9 +151,9 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * @param p_editor editor
      * @param p_file   input file
      */
-    protected void readFile( RSyntaxTextArea p_editor, File p_file ) throws IOException
+    protected void readFile( final RSyntaxTextArea p_editor, final File p_file ) throws IOException
     {
-        BufferedReader l_reader = new BufferedReader( new FileReader( p_file ) );
+        final BufferedReader l_reader = new BufferedReader( new FileReader( p_file ) );
         p_editor.read( l_reader, null );
         l_reader.close();
     }
@@ -164,10 +164,10 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * @param p_editor editor
      * @param p_file   output file
      */
-    protected void writeFile( RSyntaxTextArea p_editor, File p_file ) throws IOException
+    protected void writeFile( final RSyntaxTextArea p_editor, final File p_file ) throws IOException
     {
-        FileWriter l_filewriter = new FileWriter( p_file );
-        BufferedWriter l_writer = new BufferedWriter( l_filewriter );
+        final FileWriter l_filewriter = new FileWriter( p_file );
+        final BufferedWriter l_writer = new BufferedWriter( l_filewriter );
         p_editor.write( l_writer );
         l_writer.close();
         l_filewriter.close();
@@ -180,7 +180,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * @param p_tab  tab object
      * @param p_file file object
      */
-    protected void removeTabData( JComponent p_tab, File p_file )
+    protected void removeTabData( final JComponent p_tab, final File p_file )
     {
         for ( int i = 0; i < p_tab.getComponentCount(); i++ )
             m_actionobject.remove( p_tab.getComponent( i ) );
@@ -191,13 +191,13 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
 
     @Override
-    public void actionPerformed( ActionEvent p_event )
+    public void actionPerformed( final ActionEvent p_event )
     {
-        Pair<String, File> l_item = m_actionobject.get( p_event.getSource() );
+        final Pair<String, File> l_item = m_actionobject.get( p_event.getSource() );
         if ( l_item == null )
             return;
 
-        Pair<JComponent, RSyntaxTextArea> l_component = m_tabs.get( l_item.getRight() );
+        final Pair<JComponent, RSyntaxTextArea> l_component = m_tabs.get( l_item.getRight() );
         if ( l_component == null )
             return;
 

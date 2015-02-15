@@ -207,43 +207,43 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         try
         {
 
-            if ( l_actionpath.equals( "File/Screenshot" ) )
+            if ( "File/Screenshot".equals( l_actionpath.toString() ) )
             {
                 this.screenshot();
                 return;
             }
-            if ( l_actionpath.equals( "File/Load" ) )
+            if ( "File/Load".equals( l_actionpath.toString() ) )
             {
                 this.load();
                 return;
             }
-            if ( l_actionpath.equals( "File/Save" ) )
+            if ( "File/Save".equals( l_actionpath.toString() ) )
             {
                 this.save();
                 return;
             }
-            if ( l_actionpath.equals( "File/Preferences" ) )
+            if ( "File/Preferences".equals( l_actionpath.toString() ) )
             {
                 this.preferences();
                 return;
             }
-            if ( l_actionpath.equals( "File/Help" ) )
+            if ( "File/Help".equals( l_actionpath.toString() ) )
             {
                 m_help.setVisible( true );
                 return;
             }
 
-            if ( l_actionpath.equals( "Simulation/Start" ) )
+            if ( "Simulation/Start".equals( l_actionpath.toString() ) )
             {
                 CSimulation.getInstance().start();
                 return;
             }
-            if ( l_actionpath.equals( "Simulation/Stop" ) )
+            if ( "Simulation/Stop".equals( l_actionpath.toString() ) )
             {
                 CSimulation.getInstance().stop();
                 return;
             }
-            if ( l_actionpath.equals( "Simulation/Reset" ) )
+            if ( "Simulation/Reset".equals( l_actionpath.toString() ) )
             {
                 CSimulation.getInstance().reset();
                 return;
@@ -319,7 +319,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         try
         {
-            if ( l_actionpath.equals( "MAS/Jason/new agent" ) )
+            if ( "MAS/Jason/new agent".equals( l_actionpath.toString() ) )
             {
                 String l_name = CCommonUI.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
@@ -328,16 +328,16 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 return;
             }
 
-            if ( l_actionpath.equals( "MAS/Jason/check syntax" ) )
+            if ( "MAS/Jason/check syntax".equals( l_actionpath ) )
             {
                 for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
-                    if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
+                    if ( ( !"MAS/Jason/check syntax".equals( l_item.getKey().toString() ) ) && ( !"MAS/Jason/new agent".equals( l_item.getKey().toString() ) ) )
                         IEnvironment.checkAgentFileSyntax( ( (JMenuItem) l_item.getValue() ).getText() );
                 return;
             }
 
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
-                if ( ( !l_item.getKey().equals( "MAS/Jason/check syntax" ) ) && ( !l_item.getKey().equals( "MAS/Jason/new agent" ) ) )
+                if ( ( !"MAS/Jason/check syntax".equals( l_item.getKey().toString() ) ) && ( !"MAS/Jason/new agent".equals( l_item.getKey().toString() ) ) )
                 {
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getAgentFile( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     return;

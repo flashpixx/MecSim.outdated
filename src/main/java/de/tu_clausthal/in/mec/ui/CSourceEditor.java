@@ -204,16 +204,16 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         try
         {
 
-            if ( l_item.getLeft().equalsIgnoreCase( "save" ) )
+            if ( "save".equalsIgnoreCase( l_item.getLeft() ) )
                 this.writeFile( l_component.getRight(), l_item.getRight() );
 
-            if ( l_item.getLeft().equalsIgnoreCase( "reload" ) )
+            if ( "reload".equalsIgnoreCase( l_item.getLeft() ) )
                 this.readFile( l_component.getRight(), l_item.getRight() );
 
-            if ( l_item.getLeft().equalsIgnoreCase( "close" ) )
+            if ( "close".equalsIgnoreCase( l_item.getLeft() ) )
                 this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft(), l_item.getRight() );
 
-            if ( l_item.getLeft().equalsIgnoreCase( "delete" ) )
+            if ( "delete".equalsIgnoreCase( l_item.getLeft() ) )
             {
                 if ( !l_item.getRight().delete() )
                     throw new IllegalStateException( CCommon.getResouceString( this, "filedelete", l_item.getRight().getName() ) );

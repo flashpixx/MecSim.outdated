@@ -107,7 +107,7 @@
         </module>
 
         <module name="ConstantName">
-            <property name="format" value="const_[a-zA-Z0-9]{3,}$"/>
+            <property name="format" value="c_[a-zA-Z0-9]{3,}$"/>
         </module>
 
         <module name="CovariantEquals"/>

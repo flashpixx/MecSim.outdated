@@ -38,6 +38,16 @@ public abstract class IUIListener implements MouseListener
 {
 
     /**
+     * maximum zoom value *
+     */
+    protected static final int c_maxzoom = 9;
+    /**
+     * minimum icon size *
+     */
+    protected static final int c_miniconsize = 3;
+
+
+    /**
      * ctor to register component on the viewer
      */
     public IUIListener()
@@ -54,7 +64,7 @@ public abstract class IUIListener implements MouseListener
      */
     protected int iconsize( final JXMapViewer p_viewer )
     {
-        return Math.max( 9 - p_viewer.getZoom(), 3 );
+        return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
     }
 
     /**
@@ -67,7 +77,6 @@ public abstract class IUIListener implements MouseListener
     {
     }
 
-
     /**
      * release of the event handler
      */
@@ -77,7 +86,7 @@ public abstract class IUIListener implements MouseListener
     }
 
     @Override
-    public void mouseClicked( MouseEvent p_event )
+    public void mouseClicked( final MouseEvent p_event )
     {
     }
 

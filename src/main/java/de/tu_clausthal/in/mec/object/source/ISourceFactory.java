@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.io.Serializable;
 
 
@@ -44,5 +45,11 @@ public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewe
      * @return geoposition of the source
      */
     public GeoPosition getPosition();
+
+    /**
+     * return the Color of the Source Waypoint
+     * @return Color
+     */
+    public Color getColor();
 
 }

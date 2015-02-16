@@ -144,13 +144,15 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
             l_item.paint( g, object, width, height );
 
         //Paint Destinations
-        for (GeoPosition l_geo : m_destinationMap.values()) {
-            if(l_geo != null) {
+        for (ISourceFactory l_source : m_destinationMap.keySet()) {
+            if(m_destinationMap.get(l_source) != null) {
                 //Paint Destinations as Red Rectangles (Might be changed later)
-                int l_zoom = Math.max(15 - object.getZoom(), 3);
-                g.setColor(Color.RED);
-                Point2D l_point = object.getTileFactory().geoToPixel(l_geo, object.getZoom());
+                int l_zoom = Math.max(20 - object.getZoom(), 3);
+                g.setColor(l_source.getColor());
+                Point2D l_point = object.getTileFactory().geoToPixel(m_destinationMap.get(l_source), object.getZoom());
                 g.fillRect((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+                g.setColor(Color.BLACK);
+                g.drawRect((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
             }
         }
 
@@ -172,7 +174,13 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     public void addDestination(GeoPosition p_destination)
     {
         m_destinationMap.put(m_lastSource, p_destination);
-        CLogger.out(m_destinationMap, true);
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
 

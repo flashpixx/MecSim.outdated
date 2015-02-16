@@ -102,4 +102,9 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
     {
         return null;
     }
+
+    @Override
+    public Color getColor() {
+        return m_color;
+    }
 }

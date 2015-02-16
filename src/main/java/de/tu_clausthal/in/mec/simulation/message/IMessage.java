@@ -30,6 +30,8 @@ import java.io.Serializable;
 
 /**
  * message interface to define a event message
+ *
+ * @tparam T type of the message data
  */
 public interface IMessage<T> extends Serializable
 {

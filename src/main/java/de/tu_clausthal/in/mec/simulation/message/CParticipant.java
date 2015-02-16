@@ -45,8 +45,10 @@ public class CParticipant implements IParticipant
 
     /**
      * ctor to register an object *
+     *
+     * @param p_owner owner of the message
      */
-    public CParticipant( IReceiver p_owner )
+    public CParticipant( final IReceiver p_owner )
     {
         if ( p_owner == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "ownernull" ) );
@@ -64,13 +66,13 @@ public class CParticipant implements IParticipant
     }
 
     @Override
-    public void sendMessage( CPath p_path, IMessage p_message )
+    public void sendMessage( final CPath p_path, final IMessage p_message )
     {
         CSimulation.getInstance().getMessageSystem().pushMessage( p_path, p_message );
     }
 
     @Override
-    public void receiveMessage( Set<IMessage> p_messages )
+    public void receiveMessage( final Set<IMessage> p_messages )
     {
         m_owner.receiveMessage( p_messages );
     }

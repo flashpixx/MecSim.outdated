@@ -82,7 +82,7 @@ public class CDefaultInstitution implements IInstitution<INormObject>
      *
      * @param p_name name
      */
-    public CDefaultInstitution( String p_name )
+    public CDefaultInstitution( final String p_name )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name need not to be empty" );
@@ -97,7 +97,7 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public void check( INormObject p_object )
+    public void check( final INormObject p_object )
     {
         if ( m_range.check( p_object ) )
             p_object.setMatchedNorm( m_norms.match( p_object ) );
@@ -110,13 +110,13 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     }
 
     @Override
-    public void update( INorm<INormObject> p_norm )
+    public void update( final INorm<INormObject> p_norm )
     {
         m_norms.add( p_norm );
     }
 
     @Override
-    public void receive( INormMessage<INormObject> p_message )
+    public void receive( final INormMessage<INormObject> p_message )
     {
         if ( p_message.getTTL() < 0 )
             return;

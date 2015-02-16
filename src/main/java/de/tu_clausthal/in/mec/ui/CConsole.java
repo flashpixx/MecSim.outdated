@@ -58,7 +58,7 @@ public class CConsole extends JPanel
         super( new BorderLayout() );
         m_output.setEditable( false );
 
-        JScrollPane l_scroll = new JScrollPane( m_output );
+        final JScrollPane l_scroll = new JScrollPane( m_output );
         l_scroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
         l_scroll.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
         this.add( l_scroll, BorderLayout.CENTER );
@@ -85,7 +85,7 @@ public class CConsole extends JPanel
     protected class ConsoleOutputStream extends ByteArrayOutputStream
     {
         /* system default end-of-line separator **/
-        private final String EOL = System.getProperty( "line.separator" );
+        private final String m_eol = System.getProperty( "line.separator" );
         /**
          * format attributes *
          */
@@ -110,7 +110,7 @@ public class CConsole extends JPanel
          * @param p_document  document, which should be written
          * @param p_textcolor color of the text
          */
-        public ConsoleOutputStream( Document p_document, Color p_textcolor )
+        public ConsoleOutputStream( final Document p_document, final Color p_textcolor )
         {
             m_document = p_document;
 
@@ -126,7 +126,7 @@ public class CConsole extends JPanel
          */
         public void flush()
         {
-            String l_message = toString();
+            final String l_message = toString();
             if ( l_message.length() == 0 ) return;
 
             this.append( l_message );
@@ -138,17 +138,17 @@ public class CConsole extends JPanel
          *
          * @param p_message string
          */
-        private void append( String p_message )
+        private void append( final String p_message )
         {
             if ( m_document.getLength() == 0 )
                 m_buffer.setLength( 0 );
 
-            if ( EOL.equals( p_message ) )
+            if ( m_eol.equals( p_message ) )
                 m_buffer.append( p_message );
             else
             {
                 m_buffer.append( p_message );
-                clear();
+                this.clear();
             }
 
         }
@@ -159,7 +159,7 @@ public class CConsole extends JPanel
         private void clear()
         {
             if ( ( m_isFirstLine ) && ( m_document.getLength() != 0 ) )
-                m_buffer.insert( 0, EOL );
+                m_buffer.insert( 0, m_eol );
 
             m_isFirstLine = false;
             try
@@ -167,7 +167,7 @@ public class CConsole extends JPanel
                 m_document.insertString( m_document.getLength(), m_buffer.toString(), m_attributes );
                 m_output.setCaretPosition( m_document.getLength() );
             }
-            catch ( BadLocationException ble )
+            catch ( BadLocationException l_exception )
             {
             }
 

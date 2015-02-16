@@ -63,8 +63,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- source & target option are set on bottom compiler definition -->
     </properties>
 
 
@@ -224,45 +223,11 @@
     </dependencies>
 
 
-    <!-- profile for differenct build sections -->
-    <profiles>
-        <profile>
-            <id>jdk18</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <build>
-                <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                    <excludes>
-                        <exclude>CMainBootstrap.java</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>compile-jdk18</id>
-                        <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
-                        </configuration>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            </plugins>
-            </build>
-        </profile>
-    </profiles>
-
 
 
     <!-- main build -->
     <build>
+        <defaultGoal>package</defaultGoal>
 
         <!-- using newer build plugins -->
         <pluginManagement>
@@ -285,18 +250,42 @@
 
         <plugins>
 
-            <!-- compiler configuration -->
+            <!-- compiler configuration - for JRE bootstrap check we need two different compiling calls -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
-                <configuration>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <compilerArgument>-Xlint:all</compilerArgument>
+                            <showWarnings>true</showWarnings>
+                            <showDeprecation>true</showDeprecation>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                            <excludes>
+                                <exclude>**/CMainBootstrap.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bootstrap-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <source>1.2</source>
+                            <target>1.2</target>
+                            <includes>
+                                <include>**/CMainBootstrap.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
-            <!-- Jar default build -->
+
+            <!-- Jar disable default build -->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.5</version>
@@ -308,7 +297,7 @@
                 </executions>
             </plugin>
 
-            <!-- Doxygen and clean call -->
+            <!-- Doxygen and modified clean call - Doxygen generation code must be stores under the resource directory -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

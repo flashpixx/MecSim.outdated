@@ -72,7 +72,10 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
      * map with targets
      */
     protected transient Collection<IReturnStepableTarget<ICar>> m_target = new HashSet<>();
-
+    /**
+     * Destination of the Cars which are generated from this Sources
+     */
+    protected GeoPosition m_destination = null;
     /**
      * waypoint color
      */
@@ -143,7 +146,6 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
         }
     }
 
-
     @Override
     public Collection<IReturnStepableTarget<ICar>> getTargets()
     {
@@ -159,6 +161,17 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
 
         Point2D l_point = object.getTileFactory().geoToPixel( m_position, object.getZoom() );
         g.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
+
+        if (m_destination == null)
+            return;
+
+        int l_zoom = Math.max(20 - object.getZoom(), 3);
+        g.setColor(m_color);
+        Point2D l_destination = object.getTileFactory().geoToPixel(m_destination, object.getZoom());
+        g.fillRect((int) l_destination.getX(), (int) l_destination.getY(), l_zoom, l_zoom);
+        g.setColor(Color.BLACK);
+        g.drawRect((int) l_destination.getX(), (int) l_destination.getY(), l_zoom, l_zoom);
+
     }
 
 
@@ -192,6 +205,17 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
     public GeoPosition getPosition()
     {
         return m_position;
+    }
+
+
+    @Override
+    public Color getColor() {
+        return m_color;
+    }
+
+    @Override
+    public void setDestination(GeoPosition p_destination) {
+        m_destination = p_destination;
     }
 
 }

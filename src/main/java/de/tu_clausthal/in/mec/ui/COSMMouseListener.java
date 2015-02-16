@@ -55,6 +55,7 @@ class COSMMouseListener extends MouseAdapter
      */
     private boolean m_drag = false;
 
+
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
@@ -181,7 +182,6 @@ class COSMMouseListener extends MouseAdapter
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
-
     /**
      * returns the 2D position of a mouse position
      *
@@ -210,7 +210,6 @@ class COSMMouseListener extends MouseAdapter
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }
-
 
     /**
      * returns the selected institution

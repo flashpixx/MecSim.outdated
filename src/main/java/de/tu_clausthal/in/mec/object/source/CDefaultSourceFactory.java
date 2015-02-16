@@ -189,8 +189,4 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     }
 
 
-    @Override
-    public Color getColor() {
-        return m_color;
-    }
 }

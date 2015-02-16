@@ -4,10 +4,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CLogger;
 import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.input.PanKeyListener;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -36,27 +33,37 @@ public class COSMKeyListener implements  KeyListener{
      * CTOR Key Listener
      * @param p_viewer
      */
-    public COSMKeyListener(JXMapViewer p_viewer) {
+    public COSMKeyListener(JXMapViewer p_viewer)
+    {
         this.m_viewer = p_viewer;
     }
 
+    /**
+     * Method which will trigger if a key was typed
+     * @param p_event
+     */
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent p_event)
+    {
 
     }
 
+    /**
+     * Method which will trigger if a key was pressed
+     * @param p_event
+     */
     @Override
-    public void keyPressed(KeyEvent e)
+    public void keyPressed(KeyEvent p_event)
     {
         //Set Shift Status if Shift is pressed
-        if(e.getKeyCode() == KeyEvent.VK_SHIFT)
+        if(p_event.getKeyCode() == KeyEvent.VK_SHIFT)
             m_shiftPressed = true;
 
         //Check if Arrows are Pressed and Repaint the Map
         int delta_x = 0;
         int delta_y = 0;
 
-        switch (e.getKeyCode())
+        switch (p_event.getKeyCode())
         {
             case KeyEvent.VK_LEFT:
                 delta_x = -m_OFFSET;
@@ -82,9 +89,14 @@ public class COSMKeyListener implements  KeyListener{
         }
     }
 
+    /**
+     * Method which will trigger if a key was released
+     * @param p_event
+     */
     @Override
-    public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_SHIFT)
+    public void keyReleased(KeyEvent p_event)
+    {
+        if(p_event.getKeyCode() == KeyEvent.VK_SHIFT)
             m_shiftPressed = false;
     }
 
@@ -92,7 +104,8 @@ public class COSMKeyListener implements  KeyListener{
      * Return the Status of the Shift Key
      * @return boolean
      */
-    public boolean isShiftPressed(){
+    public boolean isShiftPressed()
+    {
         return m_shiftPressed;
     }
 

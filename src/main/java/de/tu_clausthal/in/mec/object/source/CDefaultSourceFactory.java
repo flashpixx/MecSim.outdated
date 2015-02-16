@@ -175,8 +175,13 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
         if ( m_random.sample() < m_mean )
             return l_sources;
 
-        for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add( new CDefaultCar( m_position ) );
+        for ( int i = 0; i < m_NumberCarsInStep; i++ ){
+            if(this.getDestination()==null){
+                l_sources.add( new CDefaultCar( m_position ) );
+            }else{
+                l_sources.add( new CDefaultCar( m_position, this.getDestination() ) );
+            }
+        }
 
         return l_sources;
     }
@@ -187,6 +192,5 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     {
         return null;
     }
-
 
 }

@@ -53,6 +53,12 @@ public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewe
     public Color getColor();
 
     /**
+     * Method which returns the Destination of a Source
+     * @return GeoPosition
+     */
+    public GeoPosition getDestination();
+
+    /**
      * Add a Destination to Source
      * @param p_destination
      */

@@ -86,7 +86,6 @@ class COSMMouseListener extends MouseAdapter
                 final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
 
                 final String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
-                final String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
 
                 try
                 {
@@ -94,6 +93,7 @@ class COSMMouseListener extends MouseAdapter
                     if(l_viewer.getKeyListener().isShiftPressed() && l_sourcelayer.checkForSource()){
                         l_sourcelayer.addDestination(this.getMouseGeoPosition(p_event, l_viewer));
                     }else{
+                        final String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
                         l_sourcelayer.add(
                                 l_sourcelayer.getSource(
                                         l_sourcename,

@@ -142,6 +142,45 @@ public class CDefaultCar extends IInspector implements ICar
 
     }
 
+    /**
+     * Second CTOR with specific Destination
+     * @param p_StartPosition
+     * @param p_EndPosition
+     */
+    public CDefaultCar(GeoPosition p_StartPosition, GeoPosition p_EndPosition)
+    {
+
+        if ( p_StartPosition == null )
+            throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
+
+        m_StartPosition = p_StartPosition;
+        m_EndPosition = p_EndPosition;
+        m_LingerProbability = m_random.nextDouble();
+        while ( m_speed < 50 )
+            m_speed = m_random.nextInt( m_maxSpeed );
+        m_acceleration = m_random.nextInt( 40 ) + 20;
+        m_deceleration = m_random.nextInt( 40 ) + 20;
+
+        // we try to find a route within the geo data, so we get a random end position and try to calculate a
+        // route between start and end position, so if an exception is cached, we create a new end position
+        while ( true )
+            try
+            {
+                List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
+
+                if ( ( l_route != null ) && ( l_route.size() > 0 ) )
+                {
+                    m_route = m_graph.getRouteCells( l_route.get( 0 ) );
+                    break;
+                }
+
+            }
+            catch ( Exception l_exception )
+            {
+            }
+
+    }
+
     @Override
     public int getMaximumSpeed()
     {

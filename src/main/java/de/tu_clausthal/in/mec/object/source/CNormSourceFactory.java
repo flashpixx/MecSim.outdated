@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.CNormCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -73,8 +74,13 @@ public class CNormSourceFactory extends CDefaultSourceFactory
         if ( m_random.sample() < m_mean )
             return l_sources;
 
-        for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add( new CNormCar( m_position ) );
+        for ( int i = 0; i < m_NumberCarsInStep; i++ ){
+            if(this.getDestination()==null){
+                l_sources.add( new CNormCar( m_position ) );
+            }else{
+                l_sources.add( new CNormCar( m_position, this.getDestination() ) );
+            }
+        }
 
         return l_sources;
     }

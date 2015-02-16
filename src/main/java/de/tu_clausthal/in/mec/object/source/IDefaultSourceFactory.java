@@ -213,9 +213,16 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
         return m_color;
     }
 
+
     @Override
     public void setDestination(GeoPosition p_destination) {
         m_destination = p_destination;
+    }
+
+
+    @Override
+    public GeoPosition getDestination() {
+        return m_destination;
     }
 
 }

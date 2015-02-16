@@ -31,14 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -65,7 +58,7 @@ public class CMenuStorage
      * @param p_path full path (without item)
      * @return menu object
      */
-    protected JMenu GetOrCreatePath( CPath p_path )
+    protected JMenu getOrCreatePath( final CPath p_path )
     {
         JComponent l_parent = null;
         for ( CPath l_item : p_path )
@@ -101,7 +94,7 @@ public class CMenuStorage
      */
     public Collection<JComponent> getRoot()
     {
-        List<JComponent> l_root = new ArrayList<>();
+        final List<JComponent> l_root = new ArrayList<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( l_item.getKey().size() == 1 )
@@ -116,11 +109,10 @@ public class CMenuStorage
      * @param p_path prefix path
      * @return list elements
      */
-    public Collection<JComponent> getElements( String p_path )
+    public Collection<JComponent> getElements( final String p_path )
     {
-        CPath l_path = new CPath( p_path );
-
-        List<JComponent> l_elements = new ArrayList<>();
+        final CPath l_path = new CPath( p_path );
+        final List<JComponent> l_elements = new ArrayList<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
@@ -136,10 +128,10 @@ public class CMenuStorage
      * @param p_path prefix path
      * @return list with names
      */
-    public Collection<CPath> getPaths( String p_path )
+    public Collection<CPath> getPaths( final String p_path )
     {
-        CPath l_path = new CPath( p_path );
-        List<CPath> l_elements = new ArrayList<>();
+        final CPath l_path = new CPath( p_path );
+        final List<CPath> l_elements = new ArrayList<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( l_item.getKey().getPath().startsWith( l_path.getPath() ) )
@@ -166,7 +158,7 @@ public class CMenuStorage
      * @param p_path path
      * @return set with elements
      */
-    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path )
+    public Set<Map.Entry<CPath, JComponent>> entrySet( final String p_path )
     {
         return this.entrySet( p_path, false );
     }
@@ -179,10 +171,10 @@ public class CMenuStorage
      * @param p_withroot enables / disables the addition of the root node
      * @return set with elements
      */
-    public Set<Map.Entry<CPath, JComponent>> entrySet( String p_path, boolean p_withroot )
+    public Set<Map.Entry<CPath, JComponent>> entrySet( final String p_path, final boolean p_withroot )
     {
-        CPath l_path = new CPath( p_path );
-        Map<CPath, JComponent> l_set = new HashMap<>();
+        final CPath l_path = new CPath( p_path );
+        final Map<CPath, JComponent> l_set = new HashMap<>();
 
         for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
             if ( p_withroot )
@@ -206,7 +198,7 @@ public class CMenuStorage
      * @param p_path path
      * @return element or null
      */
-    public JComponent get( String p_path )
+    public JComponent get( final String p_path )
     {
         return m_pathobject.get( new CPath( p_path ) );
     }
@@ -217,7 +209,7 @@ public class CMenuStorage
      * @param p_object object
      * @return path
      */
-    public CPath get( JComponent p_object )
+    public CPath get( final JComponent p_object )
     {
         return m_objectpath.get( p_object );
     }
@@ -228,7 +220,7 @@ public class CMenuStorage
      * @param p_path path
      * @return element or null
      */
-    public JComponent get( CPath p_path )
+    public JComponent get( final CPath p_path )
     {
         return m_pathobject.get( p_path );
     }
@@ -241,9 +233,9 @@ public class CMenuStorage
      *
      * @param p_path full path without item
      */
-    public void addMenu( String p_path )
+    public void addMenu( final String p_path )
     {
-        this.GetOrCreatePath( new CPath( p_path ) );
+        this.getOrCreatePath( new CPath( p_path ) );
     }
 
 
@@ -254,14 +246,14 @@ public class CMenuStorage
      * @param p_deleteroot bool flag to remove the root item
      * @return root item
      */
-    public JComponent removeItems( String p_path, boolean p_deleteroot )
+    public JComponent removeItems( final String p_path, final boolean p_deleteroot )
     {
-        CPath l_path = new CPath( p_path );
-        JComponent l_root = m_pathobject.get( l_path );
+        final CPath l_path = new CPath( p_path );
+        final JComponent l_root = m_pathobject.get( l_path );
         if ( l_root == null )
             return l_root;
 
-        List<Pair<CPath, JComponent>> l_remove = new LinkedList<>();
+        final List<Pair<CPath, JComponent>> l_remove = new LinkedList<>();
         if ( p_deleteroot )
         {
             for ( Map.Entry<CPath, JComponent> l_item : m_pathobject.entrySet() )
@@ -290,7 +282,7 @@ public class CMenuStorage
      * @param p_path path of the item
      * @return root item
      */
-    public JComponent removeItems( String p_path )
+    public JComponent removeItems( final String p_path )
     {
         return this.removeItems( p_path, true );
     }
@@ -302,7 +294,7 @@ public class CMenuStorage
      * @param p_path   full path
      * @param p_listen action listener for the item
      */
-    public void addItem( String p_path, ActionListener p_listen )
+    public void addItem( final String p_path, final ActionListener p_listen )
     {
         CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )
@@ -310,13 +302,13 @@ public class CMenuStorage
 
         // get parent
         JMenu l_menu = null;
-        String l_label = l_path.removeSuffix();
+        final String l_label = l_path.removeSuffix();
 
         if ( l_path.size() > 0 )
-            l_menu = this.GetOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path );
 
         // create menu entry
-        JMenuItem l_item = new JMenuItem( l_label );
+        final JMenuItem l_item = new JMenuItem( l_label );
         l_item.addActionListener( p_listen );
         if ( l_menu != null )
             l_menu.add( l_item );
@@ -334,16 +326,16 @@ public class CMenuStorage
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
      */
-    public void addItem( String p_path, String[] p_elements, ActionListener p_listen )
+    public void addItem( final String p_path, final String[] p_elements, final ActionListener p_listen )
     {
-        CPath l_path = new CPath( p_path );
+        final CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
         // get parent
         JMenu l_menu = null;
         if ( l_path.size() > 0 )
-            l_menu = this.GetOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path );
 
         // add all elements
         for ( String l_name : p_elements )
@@ -355,11 +347,11 @@ public class CMenuStorage
             }
             else
             {
-                CPath l_fullpath = new CPath( p_path, l_name );
+                final CPath l_fullpath = new CPath( p_path, l_name );
                 if ( m_pathobject.containsKey( l_fullpath ) )
                     continue;
 
-                JMenuItem l_item = new JMenuItem( l_name );
+                final JMenuItem l_item = new JMenuItem( l_name );
                 l_item.addActionListener( p_listen );
 
                 m_pathobject.put( l_fullpath, l_item );
@@ -382,7 +374,7 @@ public class CMenuStorage
      * @param p_max      maximum value
      * @param p_listen   change listener
      */
-    public void addSlider( String p_path, int p_value, String p_labelmin, int p_min, String p_labelmax, int p_max, ChangeListener p_listen )
+    public void addSlider( final String p_path, final int p_value, final String p_labelmin, final int p_min, final String p_labelmax, final int p_max, final ChangeListener p_listen )
     {
         CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )
@@ -390,17 +382,17 @@ public class CMenuStorage
 
         // get parent
         JMenu l_menu = null;
-        String l_label = l_path.removeSuffix();
+        final String l_label = l_path.removeSuffix();
         if ( l_path.size() > 0 )
-            l_menu = this.GetOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path );
 
         // create menu entry
-        JSlider l_slider = new JSlider( p_min, p_max, p_value );
+        final JSlider l_slider = new JSlider( p_min, p_max, p_value );
         l_slider.addChangeListener( p_listen );
 
         if ( ( p_labelmax != null ) && ( p_labelmin != null ) )
         {
-            Hashtable<Integer, JLabel> l_sliderlabel = new Hashtable<>();
+            final Hashtable<Integer, JLabel> l_sliderlabel = new Hashtable<>();
             l_sliderlabel.put( l_slider.getMinimum(), new JLabel( p_labelmin ) );
             l_sliderlabel.put( l_slider.getMaximum(), new JLabel( p_labelmax ) );
             l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( l_label ) );
@@ -424,7 +416,7 @@ public class CMenuStorage
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
      */
-    public void addRadioItems( String p_path, String[] p_elements, ActionListener p_listen )
+    public void addRadioItems( final String p_path, final String[] p_elements, final ActionListener p_listen )
     {
         this.addRadioGroup( p_path, p_elements, null, p_listen );
     }
@@ -436,7 +428,7 @@ public class CMenuStorage
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
      */
-    public void addRadioGroup( String p_path, String[] p_elements, ActionListener p_listen )
+    public void addRadioGroup( final String p_path, final String[] p_elements, final ActionListener p_listen )
     {
         this.addRadioGroup( p_path, p_elements, new ButtonGroup(), p_listen );
     }
@@ -450,16 +442,16 @@ public class CMenuStorage
      * @param p_group    button group or null
      * @param p_listen   action listener for the item
      */
-    private void addRadioGroup( String p_path, String[] p_elements, ButtonGroup p_group, ActionListener p_listen )
+    private void addRadioGroup( final String p_path, final String[] p_elements, final ButtonGroup p_group, final ActionListener p_listen )
     {
-        CPath l_path = new CPath( p_path );
+        final CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
         // get parent
         JMenu l_menu = null;
         if ( l_path.size() > 0 )
-            l_menu = this.GetOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path );
 
         // add all elements
         for ( String l_name : p_elements )
@@ -471,11 +463,11 @@ public class CMenuStorage
             }
             else
             {
-                CPath l_fullpath = new CPath( p_path, l_name );
+                final CPath l_fullpath = new CPath( p_path, l_name );
                 if ( m_pathobject.containsKey( l_fullpath ) )
                     continue;
 
-                JRadioButtonMenuItem l_item = new JRadioButtonMenuItem( l_name );
+                final JRadioButtonMenuItem l_item = new JRadioButtonMenuItem( l_name );
                 l_item.setSelected( false );
                 l_item.addActionListener( p_listen );
                 if ( p_group != null )

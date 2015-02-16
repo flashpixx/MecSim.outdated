@@ -223,6 +223,45 @@
 
     </dependencies>
 
+
+    <!-- profile for differenct build sections -->
+    <profiles>
+        <profile>
+            <id>jdk18</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                    <excludes>
+                        <exclude>CMainBootstrap.java</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>compile-jdk18</id>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                        </configuration>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+
+    <!-- main build -->
     <build>
 
         <!-- using newer build plugins -->
@@ -320,7 +359,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>de.tu_clausthal.in.mec.CMain</mainClass>
+                                    <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>

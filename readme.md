@@ -4,7 +4,7 @@
 
 ## Requirements
 
-* [Java 1.8](http://www.java.com)
+* [Oracle Java 1.8](http://www.java.com)
 * [Maven](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/)
 

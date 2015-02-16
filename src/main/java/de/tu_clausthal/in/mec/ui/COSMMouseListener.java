@@ -47,18 +47,22 @@ class COSMMouseListener extends MouseAdapter
 {
 
     /**
+     * size of the click range
+     */
+    private static final int c_rangesize = 10;
+    /**
      * flag to detect dragging
      */
     private boolean m_drag = false;
 
     @Override
-    public void mouseClicked( MouseEvent p_event )
+    public void mouseClicked( final MouseEvent p_event )
     {
 
         try
         {
             // get source definition
-            COSMViewer l_viewer = (COSMViewer) p_event.getSource();
+            final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
 
 
             // left double-click
@@ -68,9 +72,9 @@ class COSMMouseListener extends MouseAdapter
                     throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
                 // remove source (check source position and remove the source that is within the range)
-                CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
+                final CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
                 for ( ISourceFactory l_source : l_sourcelayer )
-                    if ( this.inRange( this.getMousePosition( p_event, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), 10 ) )
+                    if ( this.inRange( this.getMousePosition( p_event, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
                     {
                         l_source.release();
                         l_sourcelayer.remove( l_source );
@@ -78,10 +82,10 @@ class COSMMouseListener extends MouseAdapter
                     }
 
                 // source adding (if no source is removed, add a new one)
-                CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
+                final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
 
-                String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
-                String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
+                final String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
+                final String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
 
                 try
                 {
@@ -106,7 +110,7 @@ class COSMMouseListener extends MouseAdapter
     }
 
     @Override
-    public void mousePressed( MouseEvent p_event )
+    public void mousePressed( final MouseEvent p_event )
     {
         /*
         if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
@@ -126,7 +130,7 @@ class COSMMouseListener extends MouseAdapter
     }
 
     @Override
-    public void mouseReleased( MouseEvent p_event )
+    public void mouseReleased( final MouseEvent p_event )
     {
         /*
         if ( !m_drag )
@@ -149,7 +153,7 @@ class COSMMouseListener extends MouseAdapter
     }
 
     @Override
-    public void mouseDragged( MouseEvent p_event )
+    public void mouseDragged( final MouseEvent p_event )
     {
         /*
         if ( !m_drag )
@@ -161,13 +165,13 @@ class COSMMouseListener extends MouseAdapter
     /**
      * returns the geoposition of a mouse position
      *
-     * @param e        mouse event
+     * @param p_event  mouse event
      * @param p_viewer OSM viewer
      * @return geoposition
      */
-    protected GeoPosition getMouseGeoPosition( MouseEvent p_event, COSMViewer p_viewer )
+    protected GeoPosition getMouseGeoPosition( final MouseEvent p_event, final COSMViewer p_viewer )
     {
-        Point2D l_position = this.getMousePosition( p_event, p_viewer );
+        final Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
@@ -175,13 +179,13 @@ class COSMMouseListener extends MouseAdapter
     /**
      * returns the 2D position of a mouse position
      *
-     * @param e        mouse event
+     * @param p_event  mouse event
      * @param p_viewer OSM viewer
      * @return point
      */
-    protected Point2D getMousePosition( MouseEvent p_event, COSMViewer p_viewer )
+    protected Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
     {
-        Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
@@ -193,7 +197,7 @@ class COSMMouseListener extends MouseAdapter
      * @param p_size          rectangle size
      * @return boolean on existence
      */
-    protected boolean inRange( Point2D p_checkposition, Point2D p_center, int p_size )
+    protected boolean inRange( final Point2D p_checkposition, final Point2D p_center, final int p_size )
     {
         if ( ( p_checkposition == null ) || ( p_center == null ) )
             return false;

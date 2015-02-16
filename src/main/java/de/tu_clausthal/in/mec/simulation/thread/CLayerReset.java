@@ -38,7 +38,7 @@ public class CLayerReset extends IRunnable<ILayer>
      *
      * @param p_object performing object
      */
-    public CLayerReset( ILayer p_object )
+    public CLayerReset( final ILayer p_object )
     {
         super( p_object );
     }

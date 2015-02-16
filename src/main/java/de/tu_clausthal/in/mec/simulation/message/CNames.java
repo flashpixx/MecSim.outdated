@@ -41,7 +41,7 @@ public class CNames
      * @param p_object object
      * @return fqn path
      */
-    public static CPath getName( Object p_object )
+    public static CPath getName( final Object p_object )
     {
         return getName( p_object, p_object.toString() );
     }
@@ -54,9 +54,9 @@ public class CNames
      * @param p_name   name
      * @return fqn path
      */
-    public static CPath getName( Object p_object, String p_name )
+    public static CPath getName( final Object p_object, final String p_name )
     {
-        CPath l_path = getGroup( p_object );
+        final CPath l_path = getGroup( p_object );
         l_path.pushback( p_name );
         return l_path;
     }
@@ -68,7 +68,7 @@ public class CNames
      * @param p_object object
      * @return group path
      */
-    protected static CPath getGroup( Object p_object )
+    protected static CPath getGroup( final Object p_object )
     {
 
         if ( p_object instanceof CAgent )

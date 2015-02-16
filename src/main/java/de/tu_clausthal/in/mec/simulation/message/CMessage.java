@@ -61,7 +61,7 @@ public class CMessage<T> implements IMessage<T>
      * @param p_source path of the source
      * @param p_title  title of the message
      */
-    public CMessage( CPath p_source, String p_title )
+    public CMessage( final CPath p_source, final String p_title )
     {
         if ( ( p_source == null ) || ( p_source.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "sourcenull" ) );
@@ -79,7 +79,7 @@ public class CMessage<T> implements IMessage<T>
      * @param p_title  title of the message
      * @param p_data   data of the message
      */
-    public CMessage( CPath p_source, String p_title, T p_data )
+    public CMessage( final CPath p_source, final String p_title, final T p_data )
     {
         if ( ( p_source == null ) || ( p_source.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "sourcenull" ) );

@@ -55,7 +55,7 @@ public class CMessageSystem implements IVoidStepable
      * @param p_path     path of the receiver
      * @param p_receiver participant
      */
-    public synchronized void register( CPath p_path, IParticipant p_receiver )
+    public synchronized void register( final CPath p_path, final IParticipant p_receiver )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
         {
@@ -63,7 +63,7 @@ public class CMessageSystem implements IVoidStepable
             return;
         }
 
-        CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
+        final CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
         if ( l_node.isDataNull() )
             l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
         l_node.getData().getLeft().add( p_receiver );
@@ -78,7 +78,7 @@ public class CMessageSystem implements IVoidStepable
      * @param p_path     path of the receiver
      * @param p_receiver participant
      */
-    public synchronized void unregister( CPath p_path, IParticipant p_receiver )
+    public synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathexist( p_path ) ) )
         {
@@ -86,7 +86,7 @@ public class CMessageSystem implements IVoidStepable
             return;
         }
 
-        CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
+        final CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
         l_node.getData().getLeft().remove( p_receiver );
 
         CLogger.info( CCommon.getResouceString( this, "unregistered", p_receiver, p_path ) );
@@ -99,7 +99,7 @@ public class CMessageSystem implements IVoidStepable
      * @param p_path    receiver
      * @param p_message message
      */
-    public synchronized void pushMessage( CPath p_path, IMessage<?> p_message )
+    public synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
     {
         if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
             return;
@@ -129,7 +129,7 @@ public class CMessageSystem implements IVoidStepable
 
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData( false ) )
         {

@@ -40,7 +40,7 @@ public interface IInstitutionCollection<T> extends Collection<IInstitution<T>>
      *
      * @param p_message norm message
      */
-    public void send( INormMessage<T> p_message );
+    public void send( final INormMessage<T> p_message );
 
 
     /**

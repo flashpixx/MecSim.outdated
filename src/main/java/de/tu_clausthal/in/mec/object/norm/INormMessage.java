@@ -30,6 +30,8 @@ import java.io.Serializable;
 
 /**
  * defines a message to transfer a norm
+ *
+ * @tparam T norm type
  */
 public interface INormMessage<T> extends Serializable
 {

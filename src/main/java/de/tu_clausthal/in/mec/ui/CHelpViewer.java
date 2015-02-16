@@ -89,16 +89,17 @@ public class CHelpViewer extends JDialog implements ActionListener
     }
 
     /**
-     * ctor with window set (not modal) *
+     * ctor with window set (not modal)
+     *
+     * @param p_frame parent frame
      */
-    public CHelpViewer( Frame p_frame )
+    public CHelpViewer( final Frame p_frame )
     {
         if ( p_frame != null )
             this.setLocationRelativeTo( p_frame );
         this.setDefaultCloseOperation( JDialog.HIDE_ON_CLOSE );
 
-
-        JToolBar l_toolbar = new JToolBar();
+        final JToolBar l_toolbar = new JToolBar();
         l_toolbar.setFloatable( false );
         l_toolbar.setLayout( new FlowLayout( FlowLayout.CENTER ) );
 
@@ -106,7 +107,7 @@ public class CHelpViewer extends JDialog implements ActionListener
 
             try
             {
-                JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
+                final JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
                 l_button.addActionListener( this );
                 l_toolbar.add( l_button );
                 m_components.put( l_button, l_item[0] );
@@ -116,7 +117,7 @@ public class CHelpViewer extends JDialog implements ActionListener
                 CLogger.error( l_exception );
             }
 
-        JPanel l_panel = new JPanel( new BorderLayout() );
+        final JPanel l_panel = new JPanel( new BorderLayout() );
         l_panel.add( l_toolbar, BorderLayout.NORTH );
         l_panel.add( m_browser, BorderLayout.CENTER );
 
@@ -141,7 +142,7 @@ public class CHelpViewer extends JDialog implements ActionListener
      * @param p_file file name
      * @return full path
      */
-    protected URL getFileURL( String p_file )
+    protected URL getFileURL( final String p_file )
     {
         return this.getClass().getClassLoader().getResource( "documentation" + File.separatorChar + this.getLanguage() + File.separator + p_file );
     }
@@ -151,16 +152,16 @@ public class CHelpViewer extends JDialog implements ActionListener
      *
      * @param p_file filename * @return full path
      */
-    protected URL getDocumentationURL( String p_file )
+    protected URL getDocumentationURL( final String p_file )
     {
         return this.getClass().getClassLoader().getResource( "documentation" + File.separator + p_file );
     }
 
 
     @Override
-    public void actionPerformed( ActionEvent e )
+    public void actionPerformed( final ActionEvent p_event )
     {
-        String l_item = m_components.get( e.getSource() );
+        final String l_item = m_components.get( p_event.getSource() );
         if ( l_item == null )
             return;
 
@@ -190,45 +191,45 @@ public class CHelpViewer extends JDialog implements ActionListener
     protected class CLinkRenderer extends LinkRenderer
     {
         @Override
-        public Rendering render( ExpLinkNode node, String text )
+        public Rendering render( final ExpLinkNode p_node, final String p_text )
         {
             // check path for developer documentation (null value must be checked)
-            if ( node.url.startsWith( "developer" ) )
+            if ( p_node.url.startsWith( "developer" ) )
             {
-                URL l_url = getDocumentationURL( node.url.toString() );
+                final URL l_url = getDocumentationURL( p_node.url.toString() );
                 if ( l_url != null )
-                    return super.render( new ExpLinkNode( text, l_url.toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
+                    return super.render( new ExpLinkNode( p_text, l_url.toString(), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
             }
 
-            return super.render( node, text );
+            return super.render( p_node, p_text );
         }
 
         @Override
-        public Rendering render( ExpImageNode node, String text )
+        public Rendering render( final ExpImageNode p_node, final String p_text )
         {
             try
             {
-                new URL( node.url );
+                new URL( p_node.url );
             }
             catch ( MalformedURLException l_exception )
             {
-                return super.render( new ExpImageNode( node.title, getFileURL( node.url ).toString(), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), text );
+                return super.render( new ExpImageNode( p_node.title, getFileURL( p_node.url ).toString(), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
             }
-            return super.render( node, text );
+            return super.render( p_node, p_text );
         }
 
         @Override
-        public Rendering render( WikiLinkNode node )
+        public Rendering render( final WikiLinkNode p_node )
         {
             try
             {
-                return super.render( new ExpLinkNode( node.getText(), "http://" + getLanguage() + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( node.getText(), "UTF-8" ), ( node.getChildren() == null ) || ( node.getChildren().isEmpty() ) ? null : node.getChildren().get( 0 ) ), node.getText() );
+                return super.render( new ExpLinkNode( p_node.getText(), "http://" + getLanguage() + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( p_node.getText(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_node.getText() );
             }
             catch ( Exception l_exception )
             {
             }
 
-            return super.render( node );
+            return super.render( p_node );
         }
     }
 
@@ -260,7 +261,7 @@ public class CHelpViewer extends JDialog implements ActionListener
          *
          * @param p_resource resource markdown file
          */
-        public CHelpBrowser( String p_resource )
+        public CHelpBrowser( final String p_resource )
         {
             super();
 
@@ -284,7 +285,7 @@ public class CHelpViewer extends JDialog implements ActionListener
          * @param p_engine web engine
          * @param p_source path of the markdown file
          */
-        protected void processMarkdown( WebEngine p_engine, String p_source )
+        protected void processMarkdown( final WebEngine p_engine, final String p_source )
         {
             Platform.runLater( () -> {
                 try (
@@ -308,7 +309,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         {
 
             @Override
-            public void onHrefClick( WebEngine p_web, Element p_element )
+            public void onHrefClick( final WebEngine p_web, final Element p_element )
             {
                 try
                 {

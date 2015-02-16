@@ -79,7 +79,7 @@ public class CMainLoop implements Runnable
      * @param p_layer     layer
      * @return runnable object
      */
-    private static Callable createTask( int p_iteration, IStepable p_object, ILayer p_layer )
+    private static Callable createTask( final int p_iteration, final IStepable p_object, final ILayer p_layer )
     {
         if ( p_object instanceof IVoidStepable )
             return new CVoidStepable( p_iteration, (IVoidStepable) p_object, p_layer );
@@ -96,11 +96,11 @@ public class CMainLoop implements Runnable
     {
         CLogger.info( CCommon.getResouceString( this, "start" ) );
 
-        Collection<Callable<Object>> l_tasks = new LinkedList<>();
+        final Collection<Callable<Object>> l_tasks = new LinkedList<>();
 
         // order of all layer - the order will be read only once
         // so the thread need not be startup on program initializing
-        List<ILayer> l_layerorder = CSimulation.getInstance().getWorld().getOrderedLayer();
+        final List<ILayer> l_layerorder = CSimulation.getInstance().getWorld().getOrderedLayer();
         CLogger.info( l_layerorder );
 
         while ( !Thread.currentThread().isInterrupted() )
@@ -197,8 +197,10 @@ public class CMainLoop implements Runnable
 
     /**
      * resumes thread and shut down thread after
+     *
+     * @param p_steps number of steps which are run
      */
-    public void resume( int p_steps )
+    public void resume( final int p_steps )
     {
         if ( p_steps < 1 )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "stepnumber" ) );
@@ -220,11 +222,10 @@ public class CMainLoop implements Runnable
         try
         {
             m_simulationcount = 0;
-            Collection<Callable<Object>> l_tasks = new LinkedList<>();
+            final Collection<Callable<Object>> l_tasks = new LinkedList<>();
             for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                 l_tasks.add( new CLayerReset( l_layer ) );
             m_pool.invokeAll( l_tasks );
-
         }
         catch ( InterruptedException l_exception )
         {

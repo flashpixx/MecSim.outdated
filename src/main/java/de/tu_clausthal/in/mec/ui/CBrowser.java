@@ -79,7 +79,7 @@ public class CBrowser extends JFXPanel
      *
      * @param p_url string with URL
      */
-    public CBrowser( String p_url )
+    public CBrowser( final String p_url )
     {
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "urlempty" ) );
@@ -95,7 +95,7 @@ public class CBrowser extends JFXPanel
      *
      * @param p_listener listen
      */
-    public void addContentActionListener( IActionListener p_listener )
+    public void addContentActionListener( final IActionListener p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -103,7 +103,7 @@ public class CBrowser extends JFXPanel
     /**
      * removes the browser content action listener
      */
-    public boolean removeContentActionListener( IActionListener p_listener )
+    public boolean removeContentActionListener( final IActionListener p_listener )
     {
         return m_listener.remove( p_listener );
     }
@@ -119,9 +119,9 @@ public class CBrowser extends JFXPanel
         m_webview.getEngine().getLoadWorker().stateProperty().addListener( new ChangeListener<Worker.State>()
         {
             @Override
-            public void changed( ObservableValue<? extends Worker.State> ov, Worker.State oldState, Worker.State newState )
+            public void changed( final ObservableValue<? extends Worker.State> p_value, final Worker.State p_oldstate, final Worker.State p_newstate )
             {
-                if ( newState != Worker.State.SUCCEEDED )
+                if ( p_newstate != Worker.State.SUCCEEDED )
                     return;
 
                 createHrefClickListener();
@@ -137,7 +137,7 @@ public class CBrowser extends JFXPanel
         EventListener l_listener = new EventListener()
         {
             @Override
-            public void handleEvent( Event p_event )
+            public void handleEvent( final Event p_event )
             {
                 if ( !"click".equalsIgnoreCase( p_event.getType() ) )
                     return;
@@ -147,7 +147,7 @@ public class CBrowser extends JFXPanel
             }
         };
 
-        NodeList l_nodes = m_webview.getEngine().getDocument().getElementsByTagName( "a" );
+        final NodeList l_nodes = m_webview.getEngine().getDocument().getElementsByTagName( "a" );
         for ( int i = 0; i < l_nodes.getLength(); i++ )
             ( (EventTarget) l_nodes.item( i ) ).addEventListener( "click", l_listener, false );
     }
@@ -158,7 +158,7 @@ public class CBrowser extends JFXPanel
      *
      * @param p_url string with URL
      */
-    public void load( String p_url )
+    public void load( final String p_url )
     {
         Platform.runLater( () -> {
             m_webview.getEngine().load( p_url );

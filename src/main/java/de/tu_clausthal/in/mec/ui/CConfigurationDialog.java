@@ -63,7 +63,7 @@ public class CConfigurationDialog extends JDialog
      *
      * @param p_frame parent frame
      */
-    public CConfigurationDialog( Frame p_frame )
+    public CConfigurationDialog( final Frame p_frame )
     {
         if ( p_frame != null )
             this.setLocationRelativeTo( p_frame );
@@ -74,11 +74,11 @@ public class CConfigurationDialog extends JDialog
 
         // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
         // public properties instead
-        SwingMetawidget l_widget = new SwingMetawidget();
+        final SwingMetawidget l_widget = new SwingMetawidget();
 
         // there exists object-in-object relation and annotation in the object, so we redefine the inspector
         // as a composit inspector and within a propertytype and annotation inspector
-        BaseObjectInspectorConfig l_inspectconfig = new BaseObjectInspectorConfig();
+        final BaseObjectInspectorConfig l_inspectconfig = new BaseObjectInspectorConfig();
         l_widget.setInspector(
                 new CompositeInspector(
                         new CompositeInspectorConfig().setInspectors(

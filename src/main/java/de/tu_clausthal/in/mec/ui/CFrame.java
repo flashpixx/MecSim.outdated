@@ -53,13 +53,10 @@ public class CFrame extends JFrame
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
-
     /**
      * control of the dock component
      */
     private CControl m_control = new CControl( this );
-
-    ;
     /**
      * config file of the dockables
      */
@@ -84,7 +81,7 @@ public class CFrame extends JFrame
         {
 
             @Override
-            public void windowClosing( WindowEvent l_event )
+            public void windowClosing( final WindowEvent p_event )
             {
                 try
                 {
@@ -96,10 +93,10 @@ public class CFrame extends JFrame
 
                 CConfiguration.getInstance().get().setViewpoint( COSMViewer.getSimulationOSM().getCenterPosition() );
                 CConfiguration.getInstance().get().setZoom( COSMViewer.getSimulationOSM().getZoom() );
-                CConfiguration.getInstance().get().setWindowheight( l_event.getWindow().getHeight() );
-                CConfiguration.getInstance().get().setWindowwidth( l_event.getWindow().getWidth() );
+                CConfiguration.getInstance().get().setWindowheight( p_event.getWindow().getHeight() );
+                CConfiguration.getInstance().get().setWindowwidth( p_event.getWindow().getWidth() );
                 CConfiguration.getInstance().write();
-                l_event.getWindow().dispose();
+                p_event.getWindow().dispose();
 
                 m_control.destroy();
             }
@@ -130,9 +127,9 @@ public class CFrame extends JFrame
      * @param p_panel    panel
      * @param p_location location of the panel
      */
-    private void createDockable( String p_title, Component p_panel, CLocation p_location )
+    private void createDockable( final String p_title, final Component p_panel, final CLocation p_location )
     {
-        DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
+        final DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
         l_dock.setTitleText( p_title );
         l_dock.setCloseable( false );
         l_dock.add( p_panel );
@@ -148,7 +145,7 @@ public class CFrame extends JFrame
      * @param p_name  dockname
      * @param p_panel component
      */
-    public void addWidget( String p_name, Component p_panel )
+    public void addWidget( final String p_name, final Component p_panel )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name or panel are empty" );
@@ -164,7 +161,7 @@ public class CFrame extends JFrame
      * @param p_position position of the widget on the frame
      * @param p_size     size of the widget
      */
-    public void addWidget( String p_name, Component p_panel, Position p_position, double p_size )
+    public void addWidget( final String p_name, final Component p_panel, final Position p_position, final double p_size )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name or panel are empty" );
@@ -184,6 +181,7 @@ public class CFrame extends JFrame
             case WEST:
                 l_position = CLocation.base().normalWest( p_size );
                 break;
+            default:
         }
         this.createDockable( p_name, p_panel, l_position );
     }
@@ -194,7 +192,7 @@ public class CFrame extends JFrame
      * @param p_name name of the widget
      * @return null or component
      */
-    public Component getWidget( String p_name )
+    public Component getWidget( final String p_name )
     {
         return m_widgets.get( p_name );
     }
@@ -216,9 +214,9 @@ public class CFrame extends JFrame
      * @param p_name name of the widget
      * @return component
      */
-    public Component removeWidget( String p_name )
+    public Component removeWidget( final String p_name )
     {
-        Component l_component = m_widgets.remove( p_name );
+        final Component l_component = m_widgets.remove( p_name );
         if ( l_component != null )
             m_control.removeDockable( m_control.getSingleDockable( p_name ) );
         return l_component;

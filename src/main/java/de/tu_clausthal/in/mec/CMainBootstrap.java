@@ -28,7 +28,7 @@ package de.tu_clausthal.in.mec;
  * bootstrap for the Java main call -
  * checking of the correct installed JRE
  *
- * @warning the class must be compiled with a lower target version of the compiler,
+ * @warning the class must be compiled with a lower target version of the JRE,
  * the Maven build script uses different profiles to do this
  */
 public class CMainBootstrap
@@ -45,7 +45,7 @@ public class CMainBootstrap
         // check JRE information
         if ( !(("Oracle Corporation".equalsIgnoreCase( System.getProperty( "java.vendor" ) )) && (System.getProperty( "java.version" ).startsWith( "1.8" ) ) ) )
         {
-            System.err.println( "An Oracle Corporation JRE 1.8 must be installed");
+            System.err.println( "JRE from Oracle Corporation (http://www.java.com/) version 1.8 or newer must be installed to run the program" );
             System.exit( -1 );
         }
 

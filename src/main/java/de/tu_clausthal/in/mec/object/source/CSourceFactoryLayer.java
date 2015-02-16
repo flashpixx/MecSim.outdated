@@ -23,9 +23,17 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -37,6 +45,15 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
+    /**
+     * Last Source which might get a Destination via "shift+double-left-click"
+     */
+    static ISourceFactory m_lastSource;
+    /**
+     * Map which maps the sources to a Destination
+     */
+    static Map<ISourceFactory, GeoPosition> m_destinationMap = new ConcurrentHashMap<>();
+
 
     /**
      * returns a list of source names
@@ -47,7 +64,6 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     {
         return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
     }
-
 
     /**
      * creates a source
@@ -86,5 +102,78 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     {
 
     }
+
+    /**
+     * add overwrite, beceause we need to safe the last source Source which was added
+     * @param p_source
+     * @return l_return
+     */
+    @Override
+    public boolean add(ISourceFactory p_source)
+    {
+        boolean l_return = m_data.add(p_source);
+        m_lastSource = p_source;
+
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
+
+        return l_return;
+    }
+
+    /**
+     * Overwrite paint because we need to paint Destinations
+     * @param g
+     * @param object
+     * @param width
+     * @param height
+     */
+    public void paint( Graphics2D g, COSMViewer object, int width, int height )
+    {
+        if ( !m_visible )
+            return;
+
+        //Paint Data from the Source Layer (Sources)
+        Rectangle l_viewportBounds = object.getViewportBounds();
+        g.translate(-l_viewportBounds.x, -l_viewportBounds.y);
+        for (ISourceFactory l_item : this )
+            l_item.paint( g, object, width, height );
+
+        //Paint Destinations
+        for (GeoPosition l_geo : m_destinationMap.values()) {
+            if(l_geo != null) {
+                //Paint Destinations as Red Rectangles (Might be changed later)
+                int l_zoom = Math.max(15 - object.getZoom(), 3);
+                g.setColor(Color.RED);
+                Point2D l_point = object.getTileFactory().geoToPixel(l_geo, object.getZoom());
+                g.fillRect((int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom);
+            }
+        }
+
+    }
+
+    /**
+     * Checks if there is an Source so the User is able to add a Destination
+     * @return
+     */
+    public boolean checkForSource()
+    {
+        return m_lastSource != null;
+    }
+
+    /**
+     * Method which adds a Destination to the Last Source
+     * @param p_destination
+     */
+    public void addDestination(GeoPosition p_destination)
+    {
+        m_destinationMap.put(m_lastSource, p_destination);
+        CLogger.out(m_destinationMap, true);
+    }
+
 
 }

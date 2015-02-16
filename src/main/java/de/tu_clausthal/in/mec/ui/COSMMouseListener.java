@@ -89,13 +89,19 @@ class COSMMouseListener extends MouseAdapter
 
                 try
                 {
-                    l_sourcelayer.add(
-                            l_sourcelayer.getSource(
-                                    l_sourcename,
-                                    this.getMouseGeoPosition( p_event, l_viewer ),
-                                    l_aslname
-                            )
-                    );
+
+                    if(l_viewer.getKeyListener().isShiftPressed() && l_sourcelayer.checkForSource()){
+                        l_sourcelayer.addDestination(this.getMouseGeoPosition(p_event, l_viewer));
+                    }else{
+                        l_sourcelayer.add(
+                                l_sourcelayer.getSource(
+                                        l_sourcename,
+                                        this.getMouseGeoPosition( p_event, l_viewer ),
+                                        l_aslname
+                                )
+                        );
+                    }
+
                 }
                 catch ( Exception l_exception )
                 {

@@ -25,9 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CCommonUI;
-import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.common.*;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
@@ -41,16 +39,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 
 /**
@@ -94,19 +84,19 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         m_items.addRadioGroup( "Driving Model", ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(), this );
 
 
-        String[] l_activity = new String[CSimulation.getInstance().getWorld().size()];
+        final String[] l_activity = new String[CSimulation.getInstance().getWorld().size()];
         CSimulation.getInstance().getWorld().keySet().toArray( l_activity );
         m_items.addRadioItems( "Layer/Activity", l_activity, this );
 
 
-        List<String> l_visibility = new ArrayList<>();
+        final List<String> l_visibility = new ArrayList<>();
         for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
             if ( l_item.getValue() instanceof IViewableLayer )
                 l_visibility.add( l_item.getKey() );
         m_items.addRadioItems( "Layer/Visibility", CCommon.ColletionToArray( String[].class, l_visibility ), this );
 
 
-        String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
+        final String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
         m_items.addRadioGroup( "Car Sources", l_sources, this );
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
 
@@ -128,9 +118,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     }
 
     @Override
-    public void stateChanged( ChangeEvent e )
+    public void stateChanged( final ChangeEvent p_event )
     {
-        CConfiguration.getInstance().get().setThreadsleeptime( ( (JSlider) e.getSource() ).getMaximum() - ( (JSlider) e.getSource() ).getValue() );
+        CConfiguration.getInstance().get().setThreadsleeptime( ( (JSlider) p_event.getSource() ).getMaximum() - ( (JSlider) p_event.getSource() ).getValue() );
     }
 
 
@@ -155,21 +145,21 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraphWeight().equals( l_item.getKey().getSuffix() ) );
 
 
-        this.MASJasonMenu();
+        this.updateJasonMenu();
     }
 
 
     /**
      * create MAS-Jason menu
      */
-    private void MASJasonMenu()
+    private void updateJasonMenu()
     {
-        List<String> l_menu = new ArrayList<>( Arrays.asList( IEnvironment.getAgentFiles() ) );
+        final List<String> l_menu = new ArrayList<>( Arrays.asList( IEnvironment.getAgentFiles() ) );
         l_menu.add( null );
         l_menu.add( "new agent" );
         l_menu.add( "check syntax" );
 
-        JComponent l_root = m_items.removeItems( "MAS/Jason" );
+        final JComponent l_root = m_items.removeItems( "MAS/Jason" );
         m_items.addItem( "MAS/Jason", CCommon.ColletionToArray( String[].class, l_menu ), this );
         if ( l_root != null )
             m_items.get( "MAS" ).remove( l_root );
@@ -187,12 +177,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
 
     @Override
-    public void actionPerformed( ActionEvent e )
+    public void actionPerformed( final ActionEvent p_event )
     {
 
         // refresh menubar reference within the editor window and refresh the data
         ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).addActionListener( this );
-        CPath l_actionpath = m_items.get( (JComponent) e.getSource() );
+        final CPath l_actionpath = m_items.get( (JComponent) p_event.getSource() );
         this.refreshDynamicItems();
 
         if ( l_actionpath == null )
@@ -263,7 +253,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 try
                 {
                     this.throwSimulationRunningException();
-                    ILayer l_layer = CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
+                    final ILayer l_layer = CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
                     l_layer.setActive( !l_layer.isActive() );
                 }
                 catch ( Exception l_exception )
@@ -276,7 +266,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Visibility" ) )
             if ( l_actionpath.equals( l_item.getKey() ) )
             {
-                IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
+                final IViewableLayer l_layer = (IViewableLayer) CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() );
                 l_layer.setVisible( !l_layer.isVisible() );
                 return;
             }
@@ -321,7 +311,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             if ( "MAS/Jason/new agent".equals( l_actionpath.toString() ) )
             {
-                String l_name = CCommonUI.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
+                final String l_name = CCommonUI.openTextInputDialog( CCommon.getResouceString( this, "jasoncreatetitle" ), CCommon.getResouceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
                 this.refreshDynamicItems();
@@ -375,9 +365,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void preferences()
     {
-        CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
+        final CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
         l_dialog.setVisible( true );
     }
+
 
 
     /**
@@ -385,7 +376,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void save() throws IOException
     {
-        File l_store = CCommonUI.openFileSaveDialog( m_filepath, new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
+        final File l_store = CCommonUI.openFileSaveDialog( m_filepath, new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
         if ( l_store == null )
             return;
 
@@ -410,7 +401,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void load() throws IOException
     {
-        File l_load = CCommonUI.openFileLoadDialog( m_filepath, new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
+        final File l_load = CCommonUI.openFileLoadDialog( m_filepath, new String[][]{{".mecsim", "Mec-Simulation (MecSim)"}} );
         if ( l_load == null )
             return;
 
@@ -437,7 +428,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         BufferedImage l_image = new BufferedImage( COSMViewer.getSimulationOSM().getWidth(), COSMViewer.getSimulationOSM().getHeight(), BufferedImage.TYPE_INT_RGB );
         COSMViewer.getSimulationOSM().paint( l_image.getGraphics() );
 
-        File l_store = CCommonUI.openFileSaveDialog( m_filepath, new String[][]{{".png", "Portable Network Graphics (PNG)"}} );
+        final File l_store = CCommonUI.openFileSaveDialog( m_filepath, new String[][]{{".png", "Portable Network Graphics (PNG)"}} );
         if ( l_store == null )
             return;
 

@@ -55,7 +55,7 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
      * @param p_object    return-stepable object
      * @param p_layer     layer of the object or null
      */
-    public CReturnStepable( int p_iteration, IReturnStepable p_object, ILayer p_layer )
+    public CReturnStepable( final int p_iteration, final IReturnStepable p_object, final ILayer p_layer )
     {
         super( p_object );
         m_layer = p_layer;
@@ -75,8 +75,8 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
                 ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
 
 
-            Collection<?> l_data = m_object.step( m_iteration, m_layer );
-            Collection<IReturnStepableTarget> l_targets = m_object.getTargets();
+            final Collection<?> l_data = m_object.step( m_iteration, m_layer );
+            final Collection<IReturnStepableTarget> l_targets = m_object.getTargets();
             if ( ( l_data != null ) && ( l_targets != null ) )
                 for ( IReturnStepableTarget l_target : l_targets )
                     l_target.push( l_data );

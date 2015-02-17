@@ -4,4 +4,4 @@
 
 ## Startup
 
-![Bootstrap](image/bootstrap-diagram.svg)
+![Bootstrap](image/bootstrap-diagram.png)

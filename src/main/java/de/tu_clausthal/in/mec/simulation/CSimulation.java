@@ -84,7 +84,7 @@ public class CSimulation
      */
     private CSimulation()
     {
-        CBootstrap.AfterSimulationInit( this );
+        CBootstrap.afterSimulationInit( this );
     }
 
     /**
@@ -183,7 +183,7 @@ public class CSimulation
         this.threadStartUp();
 
         CLogger.info( CCommon.getResouceString( this, "startsteps", p_steps ) );
-        CBootstrap.BeforeSimulationStarts( this );
+        CBootstrap.beforeSimulationStarts( this );
 
         // run thread and wait until thread is finished
         m_mainloop.resume( p_steps );
@@ -202,7 +202,7 @@ public class CSimulation
         this.threadStartUp();
 
         CLogger.info( CCommon.getResouceString( this, "start" ) );
-        CBootstrap.BeforeSimulationStarts( this );
+        CBootstrap.beforeSimulationStarts( this );
 
         m_mainloop.resume();
     }
@@ -217,7 +217,7 @@ public class CSimulation
             throw new IllegalStateException( CCommon.getResouceString( this, "notrunning" ) );
 
         m_mainloop.pause();
-        CBootstrap.AfterSimulationStops( this );
+        CBootstrap.afterSimulationStops( this );
         CLogger.info( CCommon.getResouceString( this, "stop" ) );
     }
 

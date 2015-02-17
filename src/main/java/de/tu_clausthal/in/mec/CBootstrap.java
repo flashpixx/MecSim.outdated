@@ -49,7 +49,7 @@ public class CBootstrap
      *
      * @param p_configuration configuration
      */
-    public static void ConfigIsLoaded( final CConfiguration p_configuration )
+    public static void configIsLoaded( final CConfiguration p_configuration )
     {
     }
 
@@ -59,7 +59,7 @@ public class CBootstrap
      *
      * @param p_frame frame
      */
-    public static void AfterFrameInit( final CFrame p_frame )
+    public static void afterFrameInit( final CFrame p_frame )
     {
         CSimulation.getInstance().getWorld().put( "Count Cars", new CCarCount( p_frame ) );
 
@@ -77,7 +77,7 @@ public class CBootstrap
      *
      * @param p_viewer viewer object
      */
-    public static void AfterOSMViewerInit( final COSMViewer p_viewer )
+    public static void afterOSMViewerInit( final COSMViewer p_viewer )
     {
         p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
         p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
@@ -89,7 +89,7 @@ public class CBootstrap
      *
      * @param p_simulation simulation
      */
-    public static void AfterSimulationInit( final CSimulation p_simulation )
+    public static void afterSimulationInit( final CSimulation p_simulation )
     {
         p_simulation.getWorld().put( "Database", new CDatabase() );
         p_simulation.getWorld().put( "Sources", new CSourceFactoryLayer() );
@@ -103,7 +103,7 @@ public class CBootstrap
      *
      * @param p_world world
      */
-    public static void AfterWorldInit( final CWorld p_world )
+    public static void afterWorldInit( final CWorld p_world )
     {
 
     }
@@ -114,7 +114,7 @@ public class CBootstrap
      *
      * @param p_simulation simulation object
      */
-    public static void BeforeSimulationStarts( final CSimulation p_simulation )
+    public static void beforeSimulationStarts( final CSimulation p_simulation )
     {
 
     }
@@ -125,7 +125,7 @@ public class CBootstrap
      *
      * @param p_simulation simiulation object
      */
-    public static void AfterSimulationStops( final CSimulation p_simulation )
+    public static void afterSimulationStops( final CSimulation p_simulation )
     {
 
     }
@@ -143,7 +143,7 @@ public class CBootstrap
         if ( CSimulation.getInstance().hasUI() )
         {
 
-            COSMViewer l_osm = COSMViewer.getSimulationOSM();
+            final COSMViewer l_osm = COSMViewer.getSimulationOSM();
             if ( l_osm != null )
             {
                 l_osm.setZoom( CConfiguration.getInstance().get().getZoom() );

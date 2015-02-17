@@ -107,7 +107,7 @@ public class CFrame extends JFrame
         // UI loading can be run after the dock structure is full initialized
         try
         {
-            CBootstrap.AfterFrameInit( this );
+            CBootstrap.afterFrameInit( this );
             m_control.readXML( m_configfile );
         }
         catch ( Exception l_execption )

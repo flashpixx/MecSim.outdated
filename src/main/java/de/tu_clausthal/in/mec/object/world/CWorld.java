@@ -59,7 +59,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
      */
     public CWorld()
     {
-        CBootstrap.AfterWorldInit( this );
+        CBootstrap.afterWorldInit( this );
     }
 
 

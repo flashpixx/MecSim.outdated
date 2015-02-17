@@ -105,7 +105,7 @@ public class CMain
         CConfiguration.getInstance().setConfigDir( l_defaultconfig );
         CConfiguration.getInstance().read();
 
-        CBootstrap.ConfigIsLoaded( CConfiguration.getInstance() );
+        CBootstrap.configIsLoaded( CConfiguration.getInstance() );
 
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------

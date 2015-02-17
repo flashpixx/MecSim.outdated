@@ -86,7 +86,7 @@ public class COSMViewer extends JXMapViewer
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
         this.addKeyListener( new PanKeyListener( this ) );
 
-        CBootstrap.AfterOSMViewerInit( this );
+        CBootstrap.afterOSMViewerInit( this );
     }
 
 

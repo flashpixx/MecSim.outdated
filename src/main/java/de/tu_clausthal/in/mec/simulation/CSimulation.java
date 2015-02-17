@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class CSimulation
      *
      * @param p_frame frame object
      */
-    public void setUI( CFrame p_frame )
+    public void setUI( final CFrame p_frame )
     {
         if ( m_ui != null )
             throw new IllegalStateException( CCommon.getResouceString( this, "uiframeset" ) );
@@ -173,8 +174,9 @@ public class CSimulation
      * runs the simulation for n steps
      *
      * @param p_steps number of steps
+     * @throws InterruptedException throws the exception on thread startup
      */
-    public void start( int p_steps ) throws InterruptedException, IllegalArgumentException
+    public void start( final int p_steps ) throws InterruptedException
     {
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
@@ -238,15 +240,16 @@ public class CSimulation
      * stores the simulation in an output stream
      *
      * @param p_stream output stream
+     * @throws IOException throws the exception on file writing
      * @todo store MAS agent files also within the file (name and file content are needed)
      */
-    public void store( ObjectOutputStream p_stream ) throws Exception
+    public void store( final ObjectOutputStream p_stream ) throws IOException
     {
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
 
         // read all painter object and store the list
-        List<String> l_osmpainter = new ArrayList<>();
+        final List<String> l_osmpainter = new ArrayList<>();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
                 l_osmpainter.add( l_item.getKey() );
@@ -264,10 +267,12 @@ public class CSimulation
      * loads the simulation from an input stream
      *
      * @param p_stream input stream
-     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
-     * equal overwrite the file, otherwise rename existing file and create a new one with the store content
+     * @throws IOException throws the exception on file reading error
+     * @throws ClassNotFoundException throws the exception on deserialization
+     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content
+     * are equal overwrite the file, otherwise rename existing file and create a new one with the store content
      */
-    public void load( ObjectInputStream p_stream ) throws Exception
+    public void load( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );

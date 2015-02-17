@@ -77,7 +77,7 @@
 
         <module name="AtclauseOrder">
             <property name="tagOrder"
-                      value="@author, @version, @see, @since, @param, @return, @throws, @exception, @serial, @serialField, @serialData, @deprecated"/>
+                      value="@author, @version, @see, @since, @param, @return, @throws, @bug, @todo, @exception, @serial, @serialField, @serialData, @deprecated"/>
         </module>
 
         <module name="AvoidEscapedUnicodeCharacters"/>
@@ -238,7 +238,7 @@
         <module name="MagicNumber"/>
 
         <module name="MemberName">
-            <property name="format" value="^m_[a-zA-Z0-9]{3,}$"/>
+            <property name="format" value="^m_[a-zA-Z0-9]{2,}$"/>
         </module>
 
         <module name="MethodCount">

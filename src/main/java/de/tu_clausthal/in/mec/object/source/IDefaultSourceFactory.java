@@ -152,12 +152,12 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
 
 
     @Override
-    public void paint( Graphics2D p_graphic, COSMViewer p_object, int p_width, int p_height )
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         if ( m_image == null )
             return;
 
-        final Point2D l_point = p_object.getTileFactory().geoToPixel( m_position, p_object.getZoom() );
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
     }
 
@@ -166,8 +166,10 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      * read call of serialize interface
      *
      * @param p_stream stream
+     * @throws IOException throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
      */
-    private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
         m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
@@ -179,8 +181,9 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      * write call of serialize interface
      *
      * @param p_stream stream
+     * @throws IOException throws the exception on loading data
      */
-    private void writeObject( ObjectOutputStream p_stream ) throws IOException
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
         p_stream.defaultWriteObject();
         p_stream.writeDouble( m_position.getLatitude() );

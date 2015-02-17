@@ -19,7 +19,7 @@
 
 Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
 
-The Maven package build creates a Jar file in the path ```target/MecSim-<Version>-jar-with-dependencies.jar```. The
+The Maven package build creates a Jar file in the path ```target/MecSim-<Version>.jar```. The
 program must use more memory of the Java VM on graph downloading and converting, so the Jar must be started with the
 suffix ```-Xmx<Memory Size>``` (a good value can be ```2g```)
 

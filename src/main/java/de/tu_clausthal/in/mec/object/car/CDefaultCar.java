@@ -110,36 +110,7 @@ public class CDefaultCar extends IInspector implements ICar
      */
     public CDefaultCar( GeoPosition p_StartPosition )
     {
-        if ( p_StartPosition == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
-
-        m_StartPosition = p_StartPosition;
-        m_LingerProbability = m_random.nextDouble();
-        while ( m_speed < 50 )
-            m_speed = m_random.nextInt( m_maxSpeed );
-        m_acceleration = m_random.nextInt( 40 ) + 20;
-        m_deceleration = m_random.nextInt( 40 ) + 20;
-
-        // we try to find a route within the geo data, so we get a random end position and try to calculate a
-        // route between start and end position, so if an exception is cached, we create a new end position
-        while ( true )
-            try
-            {
-
-                m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
-                List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
-
-                if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-                {
-                    m_route = m_graph.getRouteCells( l_route.get( 0 ) );
-                    break;
-                }
-
-            }
-            catch ( Exception l_exception )
-            {
-            }
-
+        this(p_StartPosition, null);
     }
 
     /**
@@ -152,6 +123,10 @@ public class CDefaultCar extends IInspector implements ICar
 
         if ( p_StartPosition == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
+
+        if ( p_EndPosition == null)
+            m_EndPosition = new GeoPosition( p_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, p_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
+
 
         m_StartPosition = p_StartPosition;
         m_EndPosition = p_EndPosition;

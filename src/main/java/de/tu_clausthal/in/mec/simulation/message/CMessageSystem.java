@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNode;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -40,7 +40,7 @@ import java.util.Set;
 /**
  * eventmanager class
  */
-public class CMessageSystem implements IVoidStepable
+public class CMessageSystem implements IVoidSteppable
 {
 
     /**

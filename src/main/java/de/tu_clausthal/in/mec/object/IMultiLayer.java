@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.IStepable;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.ISteppable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * multilayer to create a collection for elements
  */
-public abstract class IMultiLayer<T extends IStepable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidStepable, ILayer
+public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
 {
     /**
      * serialize version ID *
@@ -275,7 +275,7 @@ public abstract class IMultiLayer<T extends IStepable & Painter> implements Pain
     @Override
     public void release()
     {
-        for ( IStepable l_item : m_data )
+        for ( ISteppable l_item : m_data )
             l_item.release();
     }
 

@@ -20,22 +20,24 @@
  * ######################################################################################
  * @endcond
  **/
+
 package de.tu_clausthal.in.mec.simulation;
 
-import java.util.Collection;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 
 /**
- * interface of the target of a return stepable argument
+ * interface of void-step method
  */
-public interface IReturnStepableTarget<T>
+public interface IVoidSteppable extends ISteppable
 {
 
     /**
-     * sets the data of a return stepable call
+     * step method
      *
-     * @param p_data collection with data
+     * @param p_currentstep current step value
+     * @param p_layer       layer on which is the object push or null
      */
-    public void push( Collection<T> p_data );
+    public void step( int p_currentstep, ILayer p_layer ) throws Exception;
 
 }

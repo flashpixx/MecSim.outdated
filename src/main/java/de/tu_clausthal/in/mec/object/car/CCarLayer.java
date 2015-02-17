@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ import java.util.Map;
 /**
  * defines the layer for cars
  */
-public class CCarLayer extends IMultiLayer<ICar> implements IReturnStepableTarget<ICar>
+public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>
 {
     /**
      * serialize version ID *

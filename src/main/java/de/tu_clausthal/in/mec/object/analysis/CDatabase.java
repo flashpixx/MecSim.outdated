@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
@@ -110,7 +110,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     /**
      * worker class to push data to the database *
      */
-    protected class CWorker implements IVoidStepable
+    protected class CWorker implements IVoidSteppable
     {
 
         @Override

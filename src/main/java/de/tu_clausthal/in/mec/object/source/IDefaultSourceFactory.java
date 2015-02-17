@@ -27,7 +27,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
@@ -71,7 +71,7 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
     /**
      * map with targets
      */
-    protected transient Collection<IReturnStepableTarget<ICar>> m_target = new HashSet<>();
+    protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet<>();
     /**
      * Destination of the Cars which are generated from this Sources
      */
@@ -147,7 +147,7 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
     }
 
     @Override
-    public Collection<IReturnStepableTarget<ICar>> getTargets()
+    public Collection<IReturnSteppableTarget<ICar>> getTargets()
     {
         return m_target;
     }
@@ -213,16 +213,16 @@ abstract public class IDefaultSourceFactory extends IInspector implements ISourc
         return m_color;
     }
 
-
     @Override
-    public void setDestination(GeoPosition p_destination) {
-        m_destination = p_destination;
+    public GeoPosition getDestination()
+    {
+        return m_destination;
     }
 
-
     @Override
-    public GeoPosition getDestination() {
-        return m_destination;
+    public void setDestination( GeoPosition p_destination )
+    {
+        m_destination = p_destination;
     }
 
 }

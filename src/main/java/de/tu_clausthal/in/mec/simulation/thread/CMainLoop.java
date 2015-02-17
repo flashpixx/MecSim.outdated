@@ -31,9 +31,9 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.IReturnStepable;
-import de.tu_clausthal.in.mec.simulation.IStepable;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
+import de.tu_clausthal.in.mec.simulation.ISteppable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -72,22 +72,22 @@ public class CMainLoop implements Runnable
 
 
     /**
-     * returns a runnable object of the stepable input
+     * returns a runnable object of the steppable input
      *
      * @param p_iteration iteration
-     * @param p_object    stepable object
+     * @param p_object    steppable object
      * @param p_layer     layer
      * @return runnable object
      */
-    private static Callable createTask( final int p_iteration, final IStepable p_object, final ILayer p_layer )
+    private static Callable createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
     {
-        if ( p_object instanceof IVoidStepable )
-            return new CVoidStepable( p_iteration, (IVoidStepable) p_object, p_layer );
+        if ( p_object instanceof IVoidSteppable )
+            return new CVoidSteppable( p_iteration, (IVoidSteppable) p_object, p_layer );
 
-        if ( p_object instanceof IReturnStepable )
-            return new CReturnStepable( p_iteration, (IReturnStepable) p_object, p_layer );
+        if ( p_object instanceof IReturnSteppable )
+            return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
 
-        throw new IllegalArgumentException( CCommon.getResouceString( CMainLoop.class, "notstepable" ) );
+        throw new IllegalArgumentException( CCommon.getResouceString( CMainLoop.class, "notsteppable" ) );
     }
 
 
@@ -121,7 +121,7 @@ public class CMainLoop implements Runnable
 
                 // if thread is not paused perform objects
                 l_tasks.clear();
-                l_tasks.add( new CVoidStepable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
+                l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
                 for ( ILayer l_layer : l_layerorder )
                     if ( l_layer.isActive() )
                         l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
@@ -137,10 +137,10 @@ public class CMainLoop implements Runnable
                     // evaluate- & multilayer can creates tasks
                     if ( l_layer instanceof IMultiLayer )
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
-                            l_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
+                            l_tasks.add( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
                     if ( l_layer instanceof IEvaluateLayer )
                         for ( Object l_object : ( (IEvaluateLayer) l_layer ) )
-                            l_tasks.add( createTask( m_simulationcount, (IStepable) l_object, l_layer ) );
+                            l_tasks.add( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
 
                     m_pool.invokeAll( l_tasks );
                 }

@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.IStepable;
+import de.tu_clausthal.in.mec.simulation.ISteppable;
 
 import java.io.Serializable;
 
@@ -31,7 +31,7 @@ import java.io.Serializable;
 /**
  * interface of the layer
  */
-public interface ILayer extends IStepable, Serializable
+public interface ILayer extends ISteppable, Serializable
 {
 
     /**

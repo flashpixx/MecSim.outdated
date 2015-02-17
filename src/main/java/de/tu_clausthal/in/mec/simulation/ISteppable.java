@@ -23,21 +23,26 @@
 
 package de.tu_clausthal.in.mec.simulation;
 
-import de.tu_clausthal.in.mec.object.ILayer;
+import java.util.Map;
 
 
 /**
- * interface of void-step method
+ * interface for all objects which are triggered by the simulation worker
  */
-public interface IVoidStepable extends IStepable
+public interface ISteppable
 {
 
     /**
-     * step method
+     * method for analyse object
      *
-     * @param p_currentstep current step value
-     * @param p_layer       layer on which is the object push or null
+     * @return map with string for names and data to analyse or null for nothing
      */
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception;
+    Map<String, Object> analyse();
+
+
+    /**
+     * release function to remove object *
+     */
+    public void release();
 
 }

@@ -26,13 +26,13 @@ package de.tu_clausthal.in.mec.simulation.thread;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 
 
 /**
- * wrapper class to process a void-stepable item
+ * wrapper class to process a void-steppable item
  */
-public class CVoidStepable extends IRunnable<IVoidStepable>
+public class CVoidSteppable extends IRunnable<IVoidSteppable>
 {
 
     /**
@@ -49,10 +49,10 @@ public class CVoidStepable extends IRunnable<IVoidStepable>
      * ctor
      *
      * @param p_iteration current iteration value
-     * @param p_object    void-stepable object
+     * @param p_object    void-steppable object
      * @param p_layer     layer of the object or null
      */
-    public CVoidStepable( int p_iteration, IVoidStepable p_object, ILayer p_layer )
+    public CVoidSteppable( int p_iteration, IVoidSteppable p_object, ILayer p_layer )
     {
         super( p_object );
         m_layer = p_layer;

@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * car interface for defining the car structure
  */
-public interface ICar extends Painter<COSMViewer>, IVoidStepable
+public interface ICar extends Painter<COSMViewer>, IVoidSteppable
 {
 
 

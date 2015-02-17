@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.simulation.IReturnStepable;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -36,7 +36,7 @@ import java.io.Serializable;
 /**
  * factory interface of car source - defines a source
  */
-public interface ISourceFactory extends IReturnStepable<ICar>, Painter<COSMViewer>, Serializable
+public interface ISourceFactory extends IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
 {
 
     /**

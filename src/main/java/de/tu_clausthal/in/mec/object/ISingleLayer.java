@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
@@ -34,7 +34,7 @@ import java.awt.*;
 /**
  * single layer to create a single information structure
  */
-public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLayer, IVoidStepable, ILayer
+public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLayer, IVoidSteppable, ILayer
 {
 
     /**

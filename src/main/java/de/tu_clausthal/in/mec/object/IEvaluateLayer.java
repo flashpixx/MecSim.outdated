@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.IStepable;
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.ISteppable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * layer for any calculation without visibility
  */
-public abstract class IEvaluateLayer<T extends IStepable> implements ILayer, IVoidStepable, Collection<T>
+public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IVoidSteppable, Collection<T>
 {
     /**
      * serialize version ID *
@@ -162,7 +162,7 @@ public abstract class IEvaluateLayer<T extends IStepable> implements ILayer, IVo
     @Override
     public void release()
     {
-        for ( IStepable l_item : m_data )
+        for ( ISteppable l_item : m_data )
             l_item.release();
     }
 

@@ -31,7 +31,7 @@ import java.util.Collection;
 /**
  * interface for a step call with a return argument
  */
-public interface IReturnStepable<T> extends IStepable
+public interface IReturnSteppable<T> extends ISteppable
 {
 
     /**
@@ -49,6 +49,6 @@ public interface IReturnStepable<T> extends IStepable
      *
      * @return objects which gets the data
      */
-    public Collection<IReturnStepableTarget<T>> getTargets();
+    public Collection<IReturnSteppableTarget<T>> getTargets();
 
 }

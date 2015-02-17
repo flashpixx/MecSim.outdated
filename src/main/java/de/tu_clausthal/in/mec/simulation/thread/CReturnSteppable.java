@@ -26,16 +26,16 @@ package de.tu_clausthal.in.mec.simulation.thread;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.simulation.IReturnStepable;
-import de.tu_clausthal.in.mec.simulation.IReturnStepableTarget;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 
 import java.util.Collection;
 
 
 /**
- * wrapper class to process a return-stepable item
+ * wrapper class to process a return-steppable item
  */
-public class CReturnStepable extends IRunnable<IReturnStepable>
+public class CReturnSteppable extends IRunnable<IReturnSteppable>
 {
 
     /**
@@ -52,10 +52,10 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
      * ctor for setting the object
      *
      * @param p_iteration current iteration value
-     * @param p_object    return-stepable object
+     * @param p_object    return-steppable object
      * @param p_layer     layer of the object or null
      */
-    public CReturnStepable( final int p_iteration, final IReturnStepable p_object, final ILayer p_layer )
+    public CReturnSteppable( final int p_iteration, final IReturnSteppable p_object, final ILayer p_layer )
     {
         super( p_object );
         m_layer = p_layer;
@@ -76,9 +76,9 @@ public class CReturnStepable extends IRunnable<IReturnStepable>
 
 
             final Collection<?> l_data = m_object.step( m_iteration, m_layer );
-            final Collection<IReturnStepableTarget> l_targets = m_object.getTargets();
+            final Collection<IReturnSteppableTarget> l_targets = m_object.getTargets();
             if ( ( l_data != null ) && ( l_targets != null ) )
-                for ( IReturnStepableTarget l_target : l_targets )
+                for ( IReturnSteppableTarget l_target : l_targets )
                     l_target.push( l_data );
 
 

@@ -20,29 +20,22 @@
  * ######################################################################################
  * @endcond
  **/
-
 package de.tu_clausthal.in.mec.simulation;
 
-import java.util.Map;
+import java.util.Collection;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * interface of the target of a return steppable argument
  */
-public interface IStepable
+public interface IReturnSteppableTarget<T>
 {
 
     /**
-     * method for analyse object
+     * sets the data of a return steppable call
      *
-     * @return map with string for names and data to analyse or null for nothing
+     * @param p_data collection with data
      */
-    Map<String, Object> analyse();
-
-
-    /**
-     * release function to remove object *
-     */
-    public void release();
+    public void push( Collection<T> p_data );
 
 }

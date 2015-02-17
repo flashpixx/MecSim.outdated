@@ -23,13 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.mas;
 
-import de.tu_clausthal.in.mec.simulation.IVoidStepable;
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 
 
 /**
- * interface of an agent with void-stepable interface
+ * interface of an agent with void-steppable interface
  */
-public interface IVoidAgent extends IAgent, IVoidStepable
+public interface IVoidAgent extends IAgent, IVoidSteppable
 {
 
 }

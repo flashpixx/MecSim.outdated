@@ -23,13 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.mas;
 
-import de.tu_clausthal.in.mec.simulation.IReturnStepable;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 
 
 /**
- * interface of an agent with return-stepable interface
+ * interface of an agent with return-steppable interface
  */
-public interface IReturnAgent extends IAgent, IReturnStepable
+public interface IReturnAgent extends IAgent, IReturnSteppable
 {
 
 }

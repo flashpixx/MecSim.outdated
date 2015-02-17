@@ -9,6 +9,7 @@ target/
 !src/main/doxygen/*.htm
 !src/main/doxygen/*.doxyfile
 
+!src/main/resources/**/*.svg
 !src/main/resources/**/*.xml
 !src/main/resources/**/*.png
 !src/main/resources/**/*.properties

@@ -71,16 +71,16 @@ public class CWorld implements Map<String, ILayer>, Serializable
     public List<ILayer> getOrderedLayer()
     {
 
-        MultiMap<Integer, ILayer> l_order = new MultiValueMap<>();
+        final MultiMap<Integer, ILayer> l_order = new MultiValueMap<>();
         for ( ILayer l_layer : m_layer.values() )
             l_order.put( l_layer.getCalculationIndex(), l_layer );
 
         // get key values and sort it
-        Object[] l_sortkeys = l_order.keySet().toArray();
+        final Object[] l_sortkeys = l_order.keySet().toArray();
         Arrays.sort( l_sortkeys );
 
         // build the list of the layer
-        ArrayList<ILayer> l_list = new ArrayList<>();
+        final ArrayList<ILayer> l_list = new ArrayList<>();
         for ( Object l_key : l_sortkeys )
             l_list.addAll( (Collection<ILayer>) l_order.get( l_key ) );
 
@@ -100,41 +100,41 @@ public class CWorld implements Map<String, ILayer>, Serializable
     }
 
     @Override
-    public boolean containsKey( Object key )
+    public boolean containsKey( final Object p_key )
     {
-        return m_layer.containsKey( key );
+        return m_layer.containsKey( p_key );
     }
 
     @Override
-    public boolean containsValue( Object value )
+    public boolean containsValue( final Object p_value )
     {
-        return m_layer.containsValue( value );
+        return m_layer.containsValue( p_value );
     }
 
     @Override
-    public ILayer get( Object key )
+    public ILayer get( final Object p_key )
     {
-        ILayer l_layer = m_layer.get( key );
+        final ILayer l_layer = m_layer.get( p_key );
         CLogger.warn( "layer [" + l_layer.toString() + "] not exists", l_layer == null );
         return l_layer;
     }
 
     @Override
-    public ILayer put( String key, ILayer value )
+    public ILayer put( final String p_key, final ILayer p_value )
     {
-        return m_layer.put( key, value );
+        return m_layer.put( p_key, p_value );
     }
 
     @Override
-    public ILayer remove( Object key )
+    public ILayer remove( final Object p_key )
     {
-        return m_layer.remove( key );
+        return m_layer.remove( p_key );
     }
 
     @Override
-    public void putAll( Map<? extends String, ? extends ILayer> m )
+    public void putAll( final Map<? extends String, ? extends ILayer> p_value )
     {
-        m_layer.putAll( m );
+        m_layer.putAll( p_value );
     }
 
     @Override

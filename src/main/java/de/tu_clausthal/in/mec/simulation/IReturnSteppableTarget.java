@@ -20,6 +20,7 @@
  * ######################################################################################
  * @endcond
  **/
+
 package de.tu_clausthal.in.mec.simulation;
 
 import java.util.Collection;
@@ -27,6 +28,8 @@ import java.util.Collection;
 
 /**
  * interface of the target of a return steppable argument
+ *
+ * @tparam T parameter of target object
  */
 public interface IReturnSteppableTarget<T>
 {

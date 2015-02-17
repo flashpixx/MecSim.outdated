@@ -29,6 +29,8 @@ import de.tu_clausthal.in.mec.common.CPath;
 
 /**
  * default event message
+ *
+ * @tparam T type of the message data
  */
 public class CMessage<T> implements IMessage<T>
 {

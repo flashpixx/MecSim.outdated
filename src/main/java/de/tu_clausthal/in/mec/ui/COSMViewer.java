@@ -61,7 +61,7 @@ public class COSMViewer extends JXMapViewer
 
 
     /**
-     * private ctor with loading configuration defaults and listener definition
+     * ctor with loading configuration defaults and listener definition
      */
     public COSMViewer()
     {

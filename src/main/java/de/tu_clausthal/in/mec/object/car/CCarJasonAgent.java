@@ -50,14 +50,6 @@ public class CCarJasonAgent extends CDefaultCar
      */
     protected CAgent<CDefaultCar> m_agent = null;
 
-    /**
-     * CTOR Jason Car
-     * @param p_asl
-     * @param p_StartPosition
-     */
-    public CCarJasonAgent( String p_asl, GeoPosition p_StartPosition){
-        this(p_asl, p_StartPosition, null);
-    }
 
     /**
      * ctor to create the initial values
@@ -65,9 +57,9 @@ public class CCarJasonAgent extends CDefaultCar
      * @param p_asl           agent ASL file
      * @param p_StartPosition start positions (position of the source)
      */
-    public CCarJasonAgent( String p_asl, GeoPosition p_StartPosition, GeoPosition p_EndPosition )
+    public CCarJasonAgent( String p_asl, GeoPosition p_StartPosition )
     {
-        super( p_StartPosition, p_EndPosition );
+        super( p_StartPosition );
 
         try
         {

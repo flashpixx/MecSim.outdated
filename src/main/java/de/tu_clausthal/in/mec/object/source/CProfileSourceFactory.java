@@ -102,5 +102,4 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
     {
         return null;
     }
-
 }

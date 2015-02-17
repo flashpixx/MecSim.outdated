@@ -44,6 +44,7 @@ public class CNormCar extends CDefaultCar implements INormObject
      */
     protected Map<INorm<INormObject>, INormCheckResult> m_norms = new HashMap<>();
 
+
     /**
      * ctor to create the initial values
      *
@@ -54,14 +55,6 @@ public class CNormCar extends CDefaultCar implements INormObject
         super( p_StartPosition );
     }
 
-    /**
-     * Second CTOR with specific Destination
-     * @param p_StartPosition
-     * @param p_EndPosition
-     */
-    public CNormCar(GeoPosition p_StartPosition, GeoPosition p_EndPosition) {
-        super(p_StartPosition, p_EndPosition);
-    }
 
     @Override
     public Map<String, Object> inspect()
@@ -76,6 +69,7 @@ public class CNormCar extends CDefaultCar implements INormObject
 
         return l_map;
     }
+
 
     @Override
     public void setMatchedNorm( Map<INorm<INormObject>, INormCheckResult> p_norm )

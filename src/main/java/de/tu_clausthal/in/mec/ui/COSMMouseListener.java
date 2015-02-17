@@ -55,7 +55,6 @@ class COSMMouseListener extends MouseAdapter
      */
     private boolean m_drag = false;
 
-
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
@@ -86,23 +85,17 @@ class COSMMouseListener extends MouseAdapter
                 final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
 
                 final String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
+                final String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
 
                 try
                 {
-
-                    if(l_viewer.getKeyListener().isShiftPressed() && l_sourcelayer.checkForSource()){
-                        l_sourcelayer.addDestination(this.getMouseGeoPosition(p_event, l_viewer));
-                    }else{
-                        final String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResouceString( this, "chooseasl" ), CCommon.getResouceString( this, "chooseasldescription" ) ) : null;
-                        l_sourcelayer.add(
-                                l_sourcelayer.getSource(
-                                        l_sourcename,
-                                        this.getMouseGeoPosition( p_event, l_viewer ),
-                                        l_aslname
-                                )
-                        );
-                    }
-
+                    l_sourcelayer.add(
+                            l_sourcelayer.getSource(
+                                    l_sourcename,
+                                    this.getMouseGeoPosition( p_event, l_viewer ),
+                                    l_aslname
+                            )
+                    );
                 }
                 catch ( Exception l_exception )
                 {
@@ -182,6 +175,7 @@ class COSMMouseListener extends MouseAdapter
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
+
     /**
      * returns the 2D position of a mouse position
      *
@@ -210,6 +204,7 @@ class COSMMouseListener extends MouseAdapter
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }
+
 
     /**
      * returns the selected institution

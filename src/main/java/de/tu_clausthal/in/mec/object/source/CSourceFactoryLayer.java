@@ -25,8 +25,8 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
+
 
 /**
  * layer with all sources
@@ -37,11 +37,6 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
-    /**
-     * Last Source which might get a Destination via "shift+double-left-click"
-     */
-    static ISourceFactory m_lastSource;
-
 
     /**
      * returns a list of source names
@@ -52,6 +47,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     {
         return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
     }
+
 
     /**
      * creates a source
@@ -90,53 +86,5 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     {
 
     }
-
-    /**
-     * add overwrite, because we need to safe the last source Source which was added
-     * @param p_source
-     * @return l_return
-     */
-    @Override
-    public boolean add(ISourceFactory p_source)
-    {
-        boolean l_return = m_data.add(p_source);
-        m_lastSource = p_source;
-
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
-
-        return l_return;
-    }
-
-    /**
-     * Checks if there is an Source so the User is able to add a Destination
-     * @return
-     */
-    public boolean checkForSource()
-    {
-        return m_lastSource != null;
-    }
-
-    /**
-     * Method which adds a Destination to the Last Source
-     * @param p_destination
-     */
-    public void addDestination(GeoPosition p_destination)
-    {
-        m_lastSource.setDestination(p_destination);
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
-    }
-
 
 }

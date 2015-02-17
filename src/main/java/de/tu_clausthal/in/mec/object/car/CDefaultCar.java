@@ -110,26 +110,10 @@ public class CDefaultCar extends IInspector implements ICar
      */
     public CDefaultCar( GeoPosition p_StartPosition )
     {
-        this(p_StartPosition, null);
-    }
-
-    /**
-     * Second CTOR with specific Destination
-     * @param p_StartPosition
-     * @param p_EndPosition
-     */
-    public CDefaultCar(GeoPosition p_StartPosition, GeoPosition p_EndPosition)
-    {
-
         if ( p_StartPosition == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
 
-        if ( p_EndPosition == null)
-            m_EndPosition = new GeoPosition( p_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, p_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
-
-
         m_StartPosition = p_StartPosition;
-        m_EndPosition = p_EndPosition;
         m_LingerProbability = m_random.nextDouble();
         while ( m_speed < 50 )
             m_speed = m_random.nextInt( m_maxSpeed );
@@ -141,6 +125,8 @@ public class CDefaultCar extends IInspector implements ICar
         while ( true )
             try
             {
+
+                m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
                 List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
 
                 if ( ( l_route != null ) && ( l_route.size() > 0 ) )

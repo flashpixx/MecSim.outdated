@@ -316,7 +316,7 @@
                 <configuration>
                     <executable>doxygen</executable>
                     <arguments>
-                        <argument>src/main/doxygen/documentation.doxyfile</argument>
+                        <argument>src/main/documentation/configuration.doxyfile</argument>
                     </arguments>
                 </configuration>
             </plugin>

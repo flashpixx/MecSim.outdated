@@ -346,7 +346,7 @@
                     <archive>
                         <manifestEntries>
                             <Built-By>${project.organization.name} (${project.organization.url})</Built-By>
-                            <Build-Version>${project.build}}</Build-Version>
+                            <Build-Version>${project.version}</Build-Version>
                             <Project-URL>${project.url}</Project-URL>
                         </manifestEntries>
                         <manifest>

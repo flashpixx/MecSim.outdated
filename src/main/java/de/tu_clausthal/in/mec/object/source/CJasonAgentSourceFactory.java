@@ -58,7 +58,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * @param p_mean     mean value
      * @param p_distmean distribution mean
      */
-    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position, double p_mean, double p_distmean )
+    public CJasonAgentSourceFactory( final String p_asl, final GeoPosition p_position, final double p_mean, final double p_distmean )
     {
         super( p_position, Color.red, p_mean, p_distmean );
 
@@ -77,7 +77,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * @param p_distmean distribution mean
      * @param p_number   creating car number
      */
-    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position, double p_mean, double p_distmean, int p_number )
+    public CJasonAgentSourceFactory( final String p_asl, final GeoPosition p_position, final double p_mean, final double p_distmean, final int p_number )
     {
         super( p_position, Color.red, p_mean, p_distmean, p_number );
 
@@ -94,7 +94,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * @param p_position geo position object
      * @param p_number   creating car number
      */
-    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position, int p_number )
+    public CJasonAgentSourceFactory( final String p_asl, final GeoPosition p_position, final int p_number )
     {
         super( p_position, Color.red, p_number );
 
@@ -109,7 +109,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * @param p_asl      ASL / agent name
      * @param p_position geo position object
      */
-    public CJasonAgentSourceFactory( String p_asl, GeoPosition p_position )
+    public CJasonAgentSourceFactory( final String p_asl, final GeoPosition p_position )
     {
         super( p_position, Color.red );
 
@@ -120,9 +120,9 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 
 
     @Override
-    public Collection<ICar> step( int p_currentstep, ILayer p_layer )
+    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
     {
-        Collection<ICar> l_sources = new HashSet<>();
+        final Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )
             return l_sources;
 

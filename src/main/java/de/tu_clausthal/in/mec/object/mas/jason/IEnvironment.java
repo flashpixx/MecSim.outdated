@@ -45,6 +45,7 @@ import java.util.List;
  * structure), in this context the environment class encapsulate all behaviour inside, because it will be triggerd from
  * the simulation core thread
  *
+ * @tparam T typ of binding objects
  * @warning Jason binds a WebMindInspector on all network interfaces at the port 3272, without any kind of changing the
  * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/
@@ -74,7 +75,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      *
      * @param p_frame frame object set Jason mindinspector
      */
-    public IEnvironment( CFrame p_frame )
+    public IEnvironment( final CFrame p_frame )
     {
         this.setFrame( p_frame );
     }
@@ -85,12 +86,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * @param p_agentname agent name
      * @return file object
      */
-    public static File createAgentFile( String p_agentname ) throws IOException
+    public static File createAgentFile( final String p_agentname ) throws IOException
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResouceString( IEnvironment.class, "aslempty" ) );
 
-        File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
+        final File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
         if ( l_asl.exists() )
             throw new IllegalStateException( CCommon.getResouceString( IEnvironment.class, "aslexist" ) );
 
@@ -106,7 +107,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * @note must support a agent filename as file with extension and without extension
      * @todo add ASL build-in files with the resource directory
      */
-    public static File getAgentFile( String p_agentname )
+    public static File getAgentFile( final String p_agentname )
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResouceString( IEnvironment.class, "aslempty" ) );
@@ -122,7 +123,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public static String[] getAgentFiles()
     {
-        List<String> l_list = new LinkedList<>();
+        final List<String> l_list = new LinkedList<>();
         for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 
@@ -135,7 +136,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * @param p_agentname agent name
      * @note should throw exception on syntax error
      */
-    public static void checkAgentFileSyntax( String p_agentname )
+    public static void checkAgentFileSyntax( final String p_agentname )
     {
         try
         {
@@ -152,7 +153,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      *
      * @param p_frame frame object set Jason mindinspector
      */
-    public void setFrame( CFrame p_frame )
+    public void setFrame( final CFrame p_frame )
     {
         if ( m_mindinspector != null )
             throw new IllegalStateException( CCommon.getResouceString( IEnvironment.class, "frame" ) );
@@ -166,7 +167,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
         super.step( p_currentstep, p_layer );
 

@@ -108,7 +108,7 @@ public class CDefaultCar extends IInspector implements ICar
      *
      * @param p_StartPosition start positions (position of the source)
      */
-    public CDefaultCar( GeoPosition p_StartPosition )
+    public CDefaultCar( final GeoPosition p_StartPosition )
     {
         if ( p_StartPosition == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
@@ -127,7 +127,7 @@ public class CDefaultCar extends IInspector implements ICar
             {
 
                 m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
-                List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
+                final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
 
                 if ( ( l_route != null ) && ( l_route.size() > 0 ) )
                 {
@@ -155,7 +155,7 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public void setCurrentSpeed( int p_speed )
+    public void setCurrentSpeed( final int p_speed )
     {
         m_speed = p_speed;
     }
@@ -169,7 +169,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public void reroute()
     {
-        List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
+        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
         if ( ( l_route != null ) && ( l_route.size() > 0 ) )
         {
             if ( m_routeindex < m_route.size() - 1 )
@@ -181,7 +181,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public GeoPosition getGeoposition()
     {
-        EdgeIteratorState l_edge = this.getEdge();
+        final EdgeIteratorState l_edge = this.getEdge();
         if ( l_edge == null )
             return null;
         return m_graph.getEdge( l_edge ).getGeoposition( this );
@@ -200,14 +200,14 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public Map<Integer, ICar> getPredecessor( int p_count )
+    public Map<Integer, ICar> getPredecessor( final int p_count )
     {
-        Map<Integer, ICar> l_predecessordistance = new HashMap<>();
+        final Map<Integer, ICar> l_predecessordistance = new HashMap<>();
 
         // we get the nearest predecessor within the speed range (performance boost)
         for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )
         {
-            ICar l_object = (ICar) m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
+            final ICar l_object = (ICar) m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
             if ( l_object != null )
                 l_predecessordistance.put( i - m_routeindex, l_object );
         }
@@ -239,7 +239,7 @@ public class CDefaultCar extends IInspector implements ICar
      * @param p_index index
      * @return null or edge
      */
-    private EdgeIteratorState getEdge( int p_index )
+    private EdgeIteratorState getEdge( final int p_index )
     {
         if ( m_route == null )
             return null;
@@ -248,24 +248,24 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public void onClick( MouseEvent e, JXMapViewer viewer )
+    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
-        GeoPosition l_position = this.getGeoposition();
+        final GeoPosition l_position = this.getGeoposition();
         if ( l_position == null )
             return;
 
-        int l_zoom = this.iconsize( viewer );
-        Point2D l_point = viewer.getTileFactory().geoToPixel( l_position, viewer.getZoom() );
-        Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - viewer.getViewportBounds().getX(), l_point.getY() - viewer.getViewportBounds().getY(), l_zoom, l_zoom );
+        final int l_zoom = this.iconsize( p_viewer );
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom );
 
-        if ( l_circle.contains( e.getX(), e.getY() ) )
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
             ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override
     public void release()
     {
-        CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
         if ( l_edge != null )
             l_edge.removeObject( this );
     }
@@ -273,7 +273,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public Map<String, Object> inspect()
     {
-        Map<String, Object> l_map = super.inspect();
+        final Map<String, Object> l_map = super.inspect();
 
         l_map.put( CCommon.getResouceString( CDefaultCar.class, "currentspeed" ), m_speed );
         l_map.put( CCommon.getResouceString( CDefaultCar.class, "maximumspeed" ), m_maxSpeed );
@@ -291,34 +291,34 @@ public class CDefaultCar extends IInspector implements ICar
      * @todo draw route (solid for driven way, dashed for driving way) *
      */
     @Override
-    public void paint( Graphics2D graphics2D, COSMViewer o, int i, int i2 )
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        GeoPosition l_position = this.getGeoposition();
+        final GeoPosition l_position = this.getGeoposition();
         if ( l_position == null )
             return;
 
-        int l_zoom = this.iconsize( o );
-        Point2D l_point = o.getTileFactory().geoToPixel( l_position, o.getZoom() );
+        final int l_zoom = this.iconsize( p_viewer );
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
-        graphics2D.setColor( Color.DARK_GRAY );
+        p_graphic.setColor( Color.DARK_GRAY );
         if ( m_speed >= 50 )
-            graphics2D.setColor( Color.MAGENTA );
+            p_graphic.setColor( Color.MAGENTA );
         if ( m_speed >= 60 )
-            graphics2D.setColor( Color.PINK );
+            p_graphic.setColor( Color.PINK );
         if ( m_speed >= 80 )
-            graphics2D.setColor( Color.BLUE );
+            p_graphic.setColor( Color.BLUE );
         if ( m_speed >= 100 )
-            graphics2D.setColor( Color.CYAN );
+            p_graphic.setColor( Color.CYAN );
         if ( m_speed >= 130 )
-            graphics2D.setColor( Color.RED );
+            p_graphic.setColor( Color.RED );
 
-        graphics2D.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
+        p_graphic.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
     }
 
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
 
         // if the car is at the end

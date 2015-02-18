@@ -304,16 +304,21 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public void sendMsg( final Message p_message ) throws Exception
         {
+            p_message.setSender( getReceiverPath().toString() );
             m_participant.sendMessage( new CPath( p_message.getReceiver() ), new CMessage( p_message ) );
         }
 
         @Override
-        /**
-         * @todo bind to event messengener
-         */
         public void broadcast( final Message p_message ) throws Exception
         {
-            super.broadcast( p_message );
+            CPath l_path = getReceiverPath();
+            p_message.setSender( l_path.toString() );
+
+            if ( l_path.size() > 0 )
+                l_path = l_path.getSubPath( 0, l_path.size() - 1 );
+            p_message.setReceiver( l_path.toString() );
+
+            m_participant.sendMessage( l_path, new CMessage( p_message ) );
         }
 
         /**
@@ -356,7 +361,7 @@ public class CAgent<T> implements IVoidAgent
                     {
                         final Message l_jmsg = ( (Message) l_msg.getData() );
                         final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getReceiver() ) ) );
+                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getSender() ) ) );
 
                         if ( l_jmsg.isTell() )
                             m_agent.addBel( l_literal );

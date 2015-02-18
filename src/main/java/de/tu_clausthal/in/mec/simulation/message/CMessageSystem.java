@@ -110,7 +110,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( ( p_message.getSource().getPath().contains( p_path.getPath() ) ) && ( !p_message.getSource().getPath().equals( p_path ) ) ) )
+        if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( p_message.getSource().getPath().equals( p_path ) ) )
         {
             CLogger.error( CCommon.getResouceString( this, "push", p_message, p_path ) );
             return;
@@ -124,7 +124,13 @@ public class CMessageSystem implements IVoidSteppable
         }
 
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.traverseto( p_path ).getSubData() )
+        {
+            // if item equal null skip
+            if ( l_item == null )
+                continue;
+
             l_item.getRight().add( p_message );
+        }
     }
 
 

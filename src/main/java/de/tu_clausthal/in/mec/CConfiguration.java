@@ -68,7 +68,7 @@ public class CConfiguration
     /**
      * singleton instance variable
      */
-    private static CConfiguration s_instance = new CConfiguration();
+    private static final CConfiguration s_instance = new CConfiguration();
     /**
      * property that stores the configuration data
      */

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSemantics.Agent;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.ListTerm;
@@ -166,7 +167,7 @@ public class CMethodBind extends IAction
 
             for ( int i = 0; i < l_argumentdata.size(); i++ )
                 if ( l_argumentdata.get( i ).isNumeric() )
-                    l_argumentinvokedata.add( this.convertNumber( l_argumenttype[i], ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
+                    l_argumentinvokedata.add( CCommon.convertNumber( l_argumenttype[i], ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
                 else
                     l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
 
@@ -251,30 +252,7 @@ public class CMethodBind extends IAction
     }
 
 
-    /**
-     * converts a Double into a number
-     *
-     * @param p_class class that is the target type
-     * @param p_value double value
-     * @return converted boxed-type
-     */
-    protected Number convertNumber( Class<?> p_class, Double p_value )
-    {
-        if ( p_class.equals( Byte.class ) )
-            return new Byte( p_value.byteValue() );
-        if ( p_class.equals( Double.class ) )
-            return p_value;
-        if ( p_class.equals( Float.class ) )
-            return new Float( p_value.floatValue() );
-        if ( p_class.equals( Integer.class ) )
-            return new Integer( p_value.intValue() );
-        if ( p_class.equals( Long.class ) )
-            return new Long( p_value.longValue() );
-        if ( p_class.equals( Short.class ) )
-            return new Short( p_value.shortValue() );
 
-        return null;
-    }
 
 
     /**

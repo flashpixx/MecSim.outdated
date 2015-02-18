@@ -73,4 +73,30 @@ public class CCommon
         return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
     }
 
+
+    /**
+     * converts a Double into a number
+     *
+     * @param p_class class that is the target type
+     * @param p_value double value
+     * @return converted boxed-type
+     */
+    public static Number convertNumber( Class<?> p_class, Double p_value )
+    {
+        if ( ( p_class.equals( Byte.class ) ) || ( p_class.equals( Byte.TYPE ) ) )
+            return new Byte( p_value.byteValue() );
+        if ( ( p_class.equals( Double.class ) ) || ( p_class.equals( Double.TYPE ) ) )
+            return p_value;
+        if ( ( p_class.equals( Float.class ) ) || ( p_class.equals( Float.TYPE ) ) )
+            return new Float( p_value.floatValue() );
+        if ( ( p_class.equals( Integer.class ) ) || ( p_class.equals( Integer.TYPE ) ) )
+            return new Integer( p_value.intValue() );
+        if ( ( p_class.equals( Long.class ) ) || ( p_class.equals( Long.TYPE ) ) )
+            return new Long( p_value.longValue() );
+        if ( ( p_class.equals( Short.class ) ) || ( p_class.equals( Short.TYPE ) ) )
+            return new Short( p_value.shortValue() );
+
+        throw new IllegalArgumentException( "class unknown" );
+    }
+
 }

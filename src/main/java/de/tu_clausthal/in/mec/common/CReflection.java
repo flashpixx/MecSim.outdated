@@ -70,7 +70,7 @@ public class CReflection
         CGetSet l_struct = null;
         try
         {
-            l_struct = new CGetSet( MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) );
+            l_struct = new CGetSet( l_field, MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) );
         }
         catch ( IllegalAccessException l_exception )
         {
@@ -111,7 +111,7 @@ public class CReflection
 
                 try
                 {
-                    l_fields.put( l_field.getName(), new CGetSet( MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) ) );
+                    l_fields.put( l_field.getName(), new CGetSet( l_field, MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) ) );
                 }
                 catch ( IllegalAccessException l_exception )
                 {
@@ -239,6 +239,10 @@ public class CReflection
          * setter method handle *
          */
         protected MethodHandle m_setter = null;
+        /**
+         * field of the property
+         */
+        protected Field m_field = null;
 
 
         /**
@@ -247,10 +251,25 @@ public class CReflection
          * @param p_getter getter handle or null
          * @param p_setter setter handle or null
          */
-        public CGetSet( MethodHandle p_getter, MethodHandle p_setter )
+        public CGetSet( Field p_field, MethodHandle p_getter, MethodHandle p_setter )
         {
+            if ( p_field == null )
+                throw new IllegalArgumentException( "field parameter need not be null" );
+
+            m_field = p_field;
             m_getter = p_getter;
             m_setter = p_setter;
+        }
+
+
+        /**
+         * returns the field of the bind
+         *
+         * @return field
+         */
+        public Field getField()
+        {
+            return m_field;
         }
 
         /**

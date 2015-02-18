@@ -52,7 +52,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     /**
      * map with layer
      */
-    protected Map<String, ILayer> m_layer = new HashMap<>();
+    protected final Map<String, ILayer> m_layer = new HashMap<>();
 
     /**
      * ctor

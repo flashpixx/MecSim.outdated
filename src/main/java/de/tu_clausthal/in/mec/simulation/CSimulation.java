@@ -51,23 +51,19 @@ public class CSimulation
     /**
      * singleton instance
      */
-    private static CSimulation s_instance = new CSimulation();
-
+    private static final CSimulation s_instance = new CSimulation();
+    /**
+     * main loop
+     */
+    private final CMainLoop m_mainloop = new CMainLoop();
+    /**
+     * event manager
+     */
+    private final CMessageSystem m_messagesystem = new CMessageSystem();
     /**
      * world of the simulation
      */
     private CWorld m_world = new CWorld();
-
-    /**
-     * main loop
-     */
-    private CMainLoop m_mainloop = new CMainLoop();
-
-    /**
-     * event manager
-     */
-    private CMessageSystem m_messagesystem = new CMessageSystem();
-
     /**
      * object of the thread loop *
      */

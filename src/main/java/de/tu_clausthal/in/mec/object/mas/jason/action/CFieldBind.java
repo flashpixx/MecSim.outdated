@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
@@ -68,7 +69,7 @@ public class CFieldBind extends IAction
      * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind( String p_name, Object p_object )
+    public CFieldBind( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -81,7 +82,7 @@ public class CFieldBind extends IAction
      * @param p_object         bind object
      * @param p_forbiddennames set with forbidden field names of the object fields
      */
-    public CFieldBind( String p_name, Object p_object, Set<String> p_forbiddennames )
+    public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         this.push( p_name, p_object, p_forbiddennames );
     }
@@ -93,7 +94,7 @@ public class CFieldBind extends IAction
      * @param p_name   name / annotation of the object
      * @param p_object object
      */
-    public void push( String p_name, Object p_object )
+    public void push( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -106,7 +107,7 @@ public class CFieldBind extends IAction
      * @param p_object         object
      * @param p_forbiddennames set with forbidden names of the object fields
      */
-    public void push( String p_name, Object p_object, Set<String> p_forbiddennames )
+    public void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
@@ -117,7 +118,7 @@ public class CFieldBind extends IAction
      *
      * @param p_name name
      */
-    public void remove( String p_name )
+    public void remove( final String p_name )
     {
         m_bind.remove( p_name );
     }
@@ -127,7 +128,7 @@ public class CFieldBind extends IAction
     /**
      * @todo handle term list
      */
-    public void act( Agent p_agent, Structure p_args )
+    public void act( final Agent p_agent, final Structure p_args )
     {
 
         // check number of argument first
@@ -136,29 +137,31 @@ public class CFieldBind extends IAction
             throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
 
         // first argument is the object name - try to get object
-        String l_objectname = l_args.get( 0 ).toString();
-        Pair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
+        final String l_objectname = l_args.get( 0 ).toString();
+        final Pair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
 
         // second argument is the field name - try to get the field
-        String l_fieldname = l_args.get( 1 ).toString();
-        CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
+        final String l_fieldname = l_args.get( 1 ).toString();
+        final CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
         if ( l_handle == null )
             throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
 
 
         try
         {
-            // set value with the setter handle
+
+            // set value with the setter handle (for numeric types we need an explicit type cast, because Jason returns only double values)
             if ( l_args.get( 2 ).isNumeric() )
-                l_handle.getSetter().invoke( l_object.getLeft(), (Number) ( (NumberTerm) l_args.get( 2 ) ).solve() );
+                l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertNumber( l_handle.getField().getType(), ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
             else
                 l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
+
         }
-        catch ( Throwable throwable )
+        catch ( Throwable l_throwable )
         {
-            throwable.printStackTrace();
+            CLogger.error( l_throwable );
         }
     }
 }

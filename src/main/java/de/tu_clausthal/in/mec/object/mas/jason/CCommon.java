@@ -44,17 +44,17 @@ public class CCommon
      * @param p_data data of the literal
      * @return literal object
      */
-    public static Literal getLiteral( String p_name, Object p_data )
+    public static Literal getLiteral( final String p_name, final Object p_data )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( "name need not to be empty" );
 
 
         // first char must be lower-case - split on spaces and create camel-case
-        String[] l_parts = p_name.split( " " );
+        final String[] l_parts = p_name.split( " " );
         for ( int i = 0; i < l_parts.length; i++ )
             l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
-        String l_name = StringUtils.join( l_parts ).replaceAll( "\\W", "" );
+        final String l_name = StringUtils.join( l_parts ).replaceAll( "\\W", "" );
 
 
         // null value into atom
@@ -81,7 +81,7 @@ public class CCommon
      * @param p_value double value
      * @return converted boxed-type
      */
-    public static Number convertNumber( Class<?> p_class, Double p_value )
+    public static Number convertNumber( final Class<?> p_class, final Double p_value )
     {
         if ( ( p_class.equals( Byte.class ) ) || ( p_class.equals( Byte.TYPE ) ) )
             return new Byte( p_value.byteValue() );

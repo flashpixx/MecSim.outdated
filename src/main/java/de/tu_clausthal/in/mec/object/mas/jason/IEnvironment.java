@@ -85,6 +85,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      *
      * @param p_agentname agent name
      * @return file object
+     * @throws IOException throws IO exception on file creating error
      */
     public static File createAgentFile( final String p_agentname ) throws IOException
     {

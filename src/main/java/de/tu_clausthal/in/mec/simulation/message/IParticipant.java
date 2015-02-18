@@ -38,6 +38,6 @@ public interface IParticipant extends IReceiver
      * @param p_path    message receiver path
      * @param p_message input message
      */
-    public void sendMessage( CPath p_path, IMessage p_message );
+    public void sendMessage( final CPath p_path, final IMessage p_message );
 
 }

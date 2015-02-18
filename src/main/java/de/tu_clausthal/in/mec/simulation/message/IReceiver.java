@@ -39,7 +39,7 @@ public interface IReceiver
      *
      * @param p_messages set of messages
      */
-    public void receiveMessage( Set<IMessage> p_messages );
+    public void receiveMessage( final Set<IMessage> p_messages );
 
     /**
      * returns the path of the object

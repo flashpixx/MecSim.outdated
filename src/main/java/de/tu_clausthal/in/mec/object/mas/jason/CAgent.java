@@ -65,10 +65,8 @@ import java.util.Set;
 /**
  * class of a Jason agent architecture
  *
+ * @tparam T typ of binding objects
  * @bug check agent name / structure
- * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
- * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
- * @see http://jason.sourceforge.net/api/jason/stdlib/package-summary.html
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -113,8 +111,9 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_name name of the agent
      * @param p_asl  agent ASL file
+     * @throws JasonException throws an Jason exception
      */
-    public CAgent( String p_name, String p_asl ) throws JasonException
+    public CAgent( final String p_name, final String p_asl ) throws JasonException
     {
         this( p_name, p_asl, null );
     }
@@ -126,8 +125,9 @@ public class CAgent<T> implements IVoidAgent
      * @param p_name name of the agent
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
+     * @throws JasonException throws an Jason exception
      */
-    public CAgent( String p_name, String p_asl, T p_bind ) throws JasonException
+    public CAgent( final String p_name, final String p_asl, final T p_bind ) throws JasonException
     {
         m_name = p_name;
         if ( ( m_name == null ) || ( m_name.isEmpty() ) )
@@ -156,8 +156,9 @@ public class CAgent<T> implements IVoidAgent
      * ctor
      *
      * @param p_asl agent ASL file
+     * @throws JasonException throws an Jason exception
      */
-    public CAgent( String p_asl ) throws JasonException
+    public CAgent( final String p_asl ) throws JasonException
     {
         this( null, p_asl, null );
     }
@@ -167,8 +168,9 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
+     * @throws JasonException throws an Jason exception
      */
-    public CAgent( String p_asl, T p_bind ) throws JasonException
+    public CAgent( final String p_asl, final T p_bind ) throws JasonException
     {
         this( null, p_asl, p_bind );
     }
@@ -224,7 +226,7 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer ) throws Exception
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
         m_architecture.cycle( p_currentstep );
     }
@@ -237,13 +239,13 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public void paint( Graphics2D graphics2D, Object o, int i, int i1 )
+    public void paint( final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height )
     {
 
     }
 
     @Override
-    public void receiveMessage( Set<IMessage> p_messages )
+    public void receiveMessage( final Set<IMessage> p_messages )
     {
         m_receivedmessages.clear();
         m_receivedmessages.addAll( p_messages );
@@ -259,6 +261,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture
      *
+     * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
      * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
      * create an own cycle call
      * @warning An AgArch is a linked-list of AgArchs, the agent name can read if an AgArch has got a successor only
@@ -268,9 +271,9 @@ public class CAgent<T> implements IVoidAgent
     {
 
         @Override
-        public void act( ActionExec p_action, List<ActionExec> p_feedback )
+        public void act( final ActionExec p_action, final List<ActionExec> p_feedback )
         {
-            IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
+            final IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
             if ( l_action != null )
                 try
                 {
@@ -299,18 +302,18 @@ public class CAgent<T> implements IVoidAgent
         }
 
         @Override
-        public void sendMsg( Message m ) throws Exception
+        public void sendMsg( final Message p_message ) throws Exception
         {
-            m_participant.sendMessage( new CPath( m.getReceiver() ), new CMessage( m ) );
+            m_participant.sendMessage( new CPath( p_message.getReceiver() ), new CMessage( p_message ) );
         }
 
         @Override
         /**
          * @todo bind to event messengener
          */
-        public void broadcast( Message m ) throws Exception
+        public void broadcast( final Message p_message ) throws Exception
         {
-            super.broadcast( m );
+            super.broadcast( p_message );
         }
 
         /**
@@ -318,7 +321,7 @@ public class CAgent<T> implements IVoidAgent
          *
          * @param p_currentstep current step
          */
-        public void cycle( int p_currentstep )
+        public void cycle( final int p_currentstep )
         {
             // add the simulationstep belief with the new number and remove the old one
             try
@@ -351,8 +354,8 @@ public class CAgent<T> implements IVoidAgent
                     // if message is a message from Jason internal message system
                     if ( l_msg instanceof CMessage )
                     {
-                        Message l_jmsg = ( (Message) l_msg.getData() );
-                        Literal l_literal = (Literal) l_jmsg.getPropCont();
+                        final Message l_jmsg = ( (Message) l_msg.getData() );
+                        final Literal l_literal = (Literal) l_jmsg.getPropCont();
                         l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getReceiver() ) ) );
 
                         if ( l_jmsg.isTell() )
@@ -369,7 +372,7 @@ public class CAgent<T> implements IVoidAgent
                     }
 
                     // otherwise message will direct converted
-                    Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
+                    final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_msg.getSource().toString() ) ) );
                     m_agent.addBel( l_literal );
 
@@ -419,6 +422,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * class of an own Jason agent to handle Jason stdlib internal action includes
      *
+     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      * @note we do the initialization process manually, because some internal actions are removed from the default
      * behaviour
      */
@@ -431,7 +435,7 @@ public class CAgent<T> implements IVoidAgent
          * @param p_asl          ASL file
          * @param p_architecture architecture
          */
-        public CJasonAgent( File p_asl, AgArch p_architecture ) throws JasonException
+        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
         {
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( new DefaultBeliefBase() );
@@ -444,9 +448,8 @@ public class CAgent<T> implements IVoidAgent
                 CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                Map<String, InternalAction> l_action = new HashMap<>();
-
-                CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
+                final Map<String, InternalAction> l_action = new HashMap<>();
+                final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
 
                 l_action.put( "jason.stdlib.clone", new CInternalEmpty() );
                 l_action.put( "jason.stdlib.wait", l_empty13 );

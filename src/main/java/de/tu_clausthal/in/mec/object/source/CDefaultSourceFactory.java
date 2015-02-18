@@ -70,7 +70,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_distmean distribution mean
      * @param p_number   creating car number
      */
-    public CDefaultSourceFactory( GeoPosition p_position, double p_mean, double p_distmean, int p_number )
+    public CDefaultSourceFactory( final GeoPosition p_position, final double p_mean, final double p_distmean, final int p_number )
     {
         this( p_position, Color.CYAN, p_mean, p_distmean, p_number );
     }
@@ -83,7 +83,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_mean     mean value
      * @param p_distmean distribution mean
      */
-    public CDefaultSourceFactory( GeoPosition p_position, double p_mean, double p_distmean )
+    public CDefaultSourceFactory( final GeoPosition p_position, final double p_mean, final double p_distmean )
     {
         this( p_position, Color.CYAN, p_mean, p_distmean );
     }
@@ -94,7 +94,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      *
      * @param p_position geo position object
      */
-    public CDefaultSourceFactory( GeoPosition p_position )
+    public CDefaultSourceFactory( final GeoPosition p_position )
     {
         this( p_position, Color.CYAN );
     }
@@ -106,7 +106,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_position geoposition
      * @param p_color    color of the source
      */
-    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color )
+    protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color )
     {
         super( p_position, p_color );
     }
@@ -120,7 +120,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_mean     mean value
      * @param p_distmean distribution mean
      */
-    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color, double p_mean, double p_distmean )
+    protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color, final double p_mean, final double p_distmean )
     {
         super( p_position, p_color );
 
@@ -138,7 +138,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_distmean distribution mean
      * @param p_number   creating car number
      */
-    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color, double p_mean, double p_distmean, int p_number )
+    protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color, final double p_mean, final double p_distmean, final int p_number )
     {
         super( p_position, p_color );
 
@@ -158,7 +158,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
      * @param p_color    color of the source
      * @param p_number   number of cars
      */
-    protected CDefaultSourceFactory( GeoPosition p_position, Color p_color, int p_number )
+    protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color, final int p_number )
     {
         super( p_position, p_color );
         m_NumberCarsInStep = p_number;
@@ -169,9 +169,9 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
 
 
     @Override
-    public Collection<ICar> step( int p_currentstep, ILayer p_layer )
+    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
     {
-        Collection<ICar> l_sources = new HashSet<>();
+        final Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )
             return l_sources;
 

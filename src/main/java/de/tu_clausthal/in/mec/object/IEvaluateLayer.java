@@ -59,7 +59,7 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public void setActive( boolean p_active )
+    public void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -71,7 +71,7 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
     }
 
@@ -88,9 +88,9 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public boolean contains( Object o )
+    public boolean contains( final Object p_object )
     {
-        return m_data.contains( o );
+        return m_data.contains( p_object );
     }
 
     @Override
@@ -106,45 +106,45 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public <S> S[] toArray( S[] a )
+    public <S> S[] toArray( final S[] p_value )
     {
-        return m_data.toArray( a );
+        return m_data.toArray( p_value );
     }
 
     @Override
-    public boolean add( T t )
+    public boolean add( final T p_value )
     {
-        return m_data.add( t );
+        return m_data.add( p_value );
     }
 
     @Override
-    public boolean remove( Object o )
+    public boolean remove( final Object p_object )
     {
-        return m_data.remove( o );
+        return m_data.remove( p_object );
     }
 
     @Override
-    public boolean containsAll( Collection<?> c )
+    public boolean containsAll( final Collection<?> p_collection )
     {
-        return m_data.containsAll( c );
+        return m_data.containsAll( p_collection );
     }
 
     @Override
-    public boolean addAll( Collection<? extends T> c )
+    public boolean addAll( final Collection<? extends T> p_collection )
     {
-        return m_data.addAll( c );
+        return m_data.addAll( p_collection );
     }
 
     @Override
-    public boolean removeAll( Collection<?> c )
+    public boolean removeAll( final Collection<?> p_collection )
     {
-        return m_data.removeAll( c );
+        return m_data.removeAll( p_collection );
     }
 
     @Override
-    public boolean retainAll( Collection<?> c )
+    public boolean retainAll( final Collection<?> p_collection )
     {
-        return m_data.retainAll( c );
+        return m_data.retainAll( p_collection );
     }
 
     @Override

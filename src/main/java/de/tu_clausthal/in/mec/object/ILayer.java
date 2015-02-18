@@ -47,7 +47,7 @@ public interface ILayer extends ISteppable, Serializable
      *
      * @param p_active activity
      */
-    public void setActive( boolean p_active );
+    public void setActive( final boolean p_active );
 
     /**
      * returns an index value to defining an order for calculation

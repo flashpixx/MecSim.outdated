@@ -53,7 +53,7 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
-    public void setActive( boolean p_active )
+    public void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -71,18 +71,18 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
-    public void setVisible( boolean p_visible )
+    public void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
     }
 
     @Override
-    public void paint( Graphics2D graphics2D, COSMViewer object, int i, int i2 )
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
     }
 

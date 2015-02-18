@@ -92,7 +92,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public void setVisible( boolean p_visible )
+    public void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
         try
@@ -105,7 +105,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
     }
 
@@ -115,7 +115,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public void beforeStepObject( int p_currentstep, T p_object )
+    public void beforeStepObject( final int p_currentstep, final T p_object )
     {
     }
 
@@ -125,7 +125,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      * @param p_currentstep current step
      * @param p_object      object
      */
-    public void afterStepObject( int p_currentstep, T p_object )
+    public void afterStepObject( final int p_currentstep, final T p_object )
     {
     }
 
@@ -142,9 +142,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean contains( Object o )
+    public boolean contains( final Object p_object )
     {
-        return m_data.contains( o );
+        return m_data.contains( p_object );
     }
 
     @Override
@@ -160,15 +160,15 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public <S> S[] toArray( S[] a )
+    public <S> S[] toArray( final S[] p_value )
     {
-        return m_data.toArray( a );
+        return m_data.toArray( p_value );
     }
 
     @Override
-    public boolean add( T t )
+    public boolean add( final T p_value )
     {
-        boolean l_return = m_data.add( t );
+        boolean l_return = m_data.add( p_value );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -181,9 +181,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean remove( Object o )
+    public boolean remove( final Object p_object )
     {
-        boolean l_result = m_data.remove( o );
+        boolean l_result = m_data.remove( p_object );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -195,9 +195,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean containsAll( Collection<?> c )
+    public boolean containsAll( final Collection<?> p_collection )
     {
-        for ( Object l_item : c )
+        for ( Object l_item : p_collection )
             if ( !m_data.contains( l_item ) )
                 return false;
 
@@ -212,9 +212,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean addAll( Collection<? extends T> c )
+    public boolean addAll( final Collection<? extends T> p_collection )
     {
-        boolean l_return = m_data.addAll( c );
+        boolean l_return = m_data.addAll( p_collection );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -227,9 +227,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean removeAll( Collection<?> c )
+    public boolean removeAll( final Collection<?> p_collection )
     {
-        for ( Object l_item : c )
+        for ( Object l_item : p_collection )
         {
             if ( m_data.remove( l_item ) )
                 continue;
@@ -248,9 +248,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean retainAll( Collection<?> c )
+    public boolean retainAll( Collection<?> p_collection )
     {
-        return m_data.retainAll( c );
+        return m_data.retainAll( p_collection );
     }
 
     @Override
@@ -280,15 +280,15 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public void paint( Graphics2D g, COSMViewer object, int width, int height )
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         if ( !m_visible )
             return;
 
-        Rectangle l_viewportBounds = object.getViewportBounds();
-        g.translate( -l_viewportBounds.x, -l_viewportBounds.y );
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( T l_item : this )
-            l_item.paint( g, object, width, height );
+            l_item.paint( p_graphic, p_viewer, p_width, p_height );
     }
 
 }

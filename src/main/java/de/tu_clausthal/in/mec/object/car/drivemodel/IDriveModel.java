@@ -49,6 +49,6 @@ public interface IDriveModel extends Serializable
      * @param p_graph       graph object
      * @param p_car         car object
      */
-    public void update( int p_currentstep, CGraphHopper p_graph, ICar p_car );
+    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car );
 
 }

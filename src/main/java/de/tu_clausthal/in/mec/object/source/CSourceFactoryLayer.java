@@ -58,7 +58,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      * @return source object
      * @todo add profile source
      */
-    public ISourceFactory getSource( String p_name, GeoPosition p_position, Object... p_varargs )
+    public ISourceFactory getSource( final String p_name, final GeoPosition p_position, final Object... p_varargs )
     {
         if ( "Default".equals( p_name ) )
             return new CDefaultSourceFactory( p_position );

@@ -51,7 +51,7 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
      *
      * @param p_frame frame object set Jason mindinspector
      */
-    public CCarJasonAgentLayer( CFrame p_frame )
+    public CCarJasonAgentLayer( final CFrame p_frame )
     {
         super( p_frame );
     }

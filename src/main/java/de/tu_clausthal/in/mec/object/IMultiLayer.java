@@ -39,6 +39,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * multilayer to create a collection for elements
+ *
+ * @tparam T object type of the layer
  */
 public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
 {
@@ -67,7 +69,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public void setActive( boolean p_active )
+    public void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -168,7 +170,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public boolean add( final T p_value )
     {
-        boolean l_return = m_data.add( p_value );
+        final boolean l_return = m_data.add( p_value );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -183,7 +185,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public boolean remove( final Object p_object )
     {
-        boolean l_result = m_data.remove( p_object );
+        final boolean l_result = m_data.remove( p_object );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -214,7 +216,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public boolean addAll( final Collection<? extends T> p_collection )
     {
-        boolean l_return = m_data.addAll( p_collection );
+        final boolean l_return = m_data.addAll( p_collection );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -248,7 +250,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean retainAll( Collection<?> p_collection )
+    public boolean retainAll( final Collection<?> p_collection )
     {
         return m_data.retainAll( p_collection );
     }

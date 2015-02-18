@@ -58,7 +58,7 @@ public class CCarCount extends IEvaluateLayer
      *
      * @param p_frame frame object
      */
-    public CCarCount( CFrame p_frame )
+    public CCarCount( final CFrame p_frame )
     {
         m_active = false;
         this.initialize( p_frame );
@@ -69,7 +69,7 @@ public class CCarCount extends IEvaluateLayer
      *
      * @param p_frame frame
      */
-    private void initialize( CFrame p_frame )
+    private void initialize( final CFrame p_frame )
     {
         p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( CCommon.getResouceString( this, "charttitle" ), CCommon.getResouceString( this, "xaxis" ), CCommon.getResouceString( this, "yaxis" ), m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
@@ -81,7 +81,7 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
-    public void step( int p_currentstep, ILayer p_layer )
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
         if ( !CSimulation.getInstance().hasUI() )
             return;
@@ -106,8 +106,10 @@ public class CCarCount extends IEvaluateLayer
      * read call of serialize interface
      *
      * @param p_stream stream
+     * @throws IOException throws exception on reading
+     * @throws ClassNotFoundException throws on deserialization
      */
-    private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 

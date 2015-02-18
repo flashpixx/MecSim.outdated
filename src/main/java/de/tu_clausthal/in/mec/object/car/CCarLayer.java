@@ -100,7 +100,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_weight weight name
      */
-    public void setGraphWeight( String p_weight )
+    public void setGraphWeight( final String p_weight )
     {
         m_weight = p_weight;
         m_graph = new CGraphHopper( p_weight );
@@ -111,7 +111,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_model model
      */
-    public void setDriveModel( String p_model )
+    public void setDriveModel( final String p_model )
     {
         for ( IDriveModel l_model : s_drivemodellist )
             if ( p_model.equals( l_model.getName() ) )
@@ -136,8 +136,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     public String[] getDrivingModelList()
     {
-        String[] l_list = new String[s_drivemodellist.length];
         int i = 0;
+        final String[] l_list = new String[s_drivemodellist.length];
         for ( IDriveModel l_model : s_drivemodellist )
             l_list[i++] = l_model.getName();
 
@@ -151,13 +151,13 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public void beforeStepObject( int p_currentstep, ICar p_object )
+    public void beforeStepObject( final int p_currentstep, final ICar p_object )
     {
         m_drivemodel.update( p_currentstep, this.m_graph, p_object );
     }
 
     @Override
-    public void afterStepObject( int p_currentstep, ICar p_object )
+    public void afterStepObject( final int p_currentstep, final ICar p_object )
     {
         // if a car has reached its end, remove it
         if ( p_object.hasEndReached() )
@@ -186,7 +186,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public void push( Collection<ICar> p_data )
+    public void push( final Collection<ICar> p_data )
     {
         super.addAll( p_data );
     }
@@ -195,8 +195,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * read call of serialize interface
      *
      * @param p_stream stream
+     * @throws IOException throws exception on reading
+     * @throws ClassNotFoundException throws on deserialization
      */
-    private void readObject( ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
         m_graph = new CGraphHopper( m_weight );

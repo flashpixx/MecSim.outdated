@@ -59,7 +59,7 @@ public class CNagelSchreckenberg implements IDriveModel
     }
 
     @Override
-    public void update( int p_currentstep, CGraphHopper p_graph, ICar p_car )
+    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
     {
 
         //check maximum speed on the current edge and modify speed

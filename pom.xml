@@ -344,6 +344,10 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
+                        <manifestEntries>
+                            <Built-By>${project.organization.name} (${project.organization.url})</Built-By>
+                            <Project-URL>${project.url}</Project-URL>
+                        </manifestEntries>
                         <manifest>
                             <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>
                         </manifest>

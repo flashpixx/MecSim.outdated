@@ -9,7 +9,7 @@ Micro traffic simulation with multi-agent structure based on  [Jason](jason.sour
 
 * [Oracle Java 1.8](http://www.java.com)
 * [Maven](http://maven.apache.org/)
-* [Doxygen](http://www.doxygen.org/)
+* [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
 
 ### tested IDEs
 

@@ -77,15 +77,15 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
      * @todo check database independence
      */
-    protected void createTableIfNotExists( String p_tablename, String p_createsql, String[] p_altertable )
+    protected void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
     {
-        String l_table = CConfiguration.getInstance().get().getDatabase().getTableprefix() == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().getTableprefix() + p_tablename;
+        final String l_table = CConfiguration.getInstance().get().getDatabase().getTableprefix() == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().getTableprefix() + p_tablename;
 
         try (
-                Connection l_connect = m_datasource.getConnection();
+                final Connection l_connect = m_datasource.getConnection();
         )
         {
-            ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );
+            final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );
             if ( !l_result.next() )
             {
                 l_connect.createStatement().execute( "create table " + l_table + " " + p_createsql );
@@ -114,7 +114,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     {
 
         @Override
-        public void step( int p_currentstep, ILayer p_layer ) throws Exception
+        public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
         }
 

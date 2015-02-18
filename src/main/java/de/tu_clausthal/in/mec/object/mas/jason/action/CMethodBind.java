@@ -52,7 +52,7 @@ public class CMethodBind extends IAction
     /**
      * bind object *
      */
-    protected Map<String, CReflection.CMethodCache<Object>> m_bind = new HashMap<>();
+    protected final Map<String, CReflection.CMethodCache<Object>> m_bind = new HashMap<>();
 
 
     /**
@@ -69,7 +69,7 @@ public class CMethodBind extends IAction
      * @param p_name   name of the binding object
      * @param p_object object
      */
-    public CMethodBind( String p_name, Object p_object )
+    public CMethodBind( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object );
     }
@@ -81,7 +81,7 @@ public class CMethodBind extends IAction
      * @param p_name   name
      * @param p_object bind object
      */
-    public void push( String p_name, Object p_object )
+    public void push( final String p_name, final Object p_object )
     {
         m_bind.put( p_name, new CReflection.CMethodCache( p_object ) );
     }
@@ -92,7 +92,7 @@ public class CMethodBind extends IAction
      *
      * @param p_name name
      */
-    public void remove( String p_name )
+    public void remove( final String p_name )
     {
         m_bind.remove( p_name );
     }
@@ -100,11 +100,12 @@ public class CMethodBind extends IAction
     /**
      * returns the forbidden set
      *
+     * @param p_name name of the object
      * @return set with forbidden names
      */
-    public Set<String> getForbidden( String p_name )
+    public Set<String> getForbidden( final String p_name )
     {
-        CReflection.CMethodCache l_object = m_bind.get( p_name );
+        final CReflection.CMethodCache l_object = m_bind.get( p_name );
         if ( l_object == null )
             return null;
 
@@ -116,16 +117,16 @@ public class CMethodBind extends IAction
     /**
      * @todo handle term list
      */
-    public void act( Agent p_agent, Structure p_args )
+    public void act( final Agent p_agent, final Structure p_args )
     {
         // check number of argument first
-        List<Term> l_args = p_args.getTerms();
+        final List<Term> l_args = p_args.getTerms();
         if ( l_args.size() < 2 )
             throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "argument" ) );
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
-        String l_objectname = l_args.get( 0 ).toString();
-        CReflection.CMethodCache<Object> l_object = m_bind.get( l_objectname );
+        final String l_objectname = l_args.get( 0 ).toString();
+        final CReflection.CMethodCache<Object> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResouceString( this, "object", l_objectname ) );
 
@@ -162,7 +163,7 @@ public class CMethodBind extends IAction
 
 
             // build invoke parameter with explizit cast of the argument types
-            List<Object> l_argumentinvokedata = new LinkedList<>();
+            final List<Object> l_argumentinvokedata = new LinkedList<>();
             l_argumentinvokedata.add( l_object.getObject() );
 
             for ( int i = 0; i < l_argumentdata.size(); i++ )
@@ -173,14 +174,14 @@ public class CMethodBind extends IAction
 
 
             // invoke and cast return data
-            String l_methodname = l_args.get( 1 ).toString();
-            CReflection.CMethod l_invoke = l_object.get( l_methodname, l_argumenttype );
-            Object l_return = l_returntype.cast( ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata ) );
+            final String l_methodname = l_args.get( 1 ).toString();
+            final CReflection.CMethod l_invoke = l_object.get( l_methodname, l_argumenttype );
+            final Object l_return = l_returntype.cast( ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata ) );
 
             // push return data into the agent
             if ( ( l_return != null ) && ( !void.class.equals( l_return.getClass() ) ) )
             {
-                Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( ( l_returnname == null ) || ( l_returnname.isEmpty() ) ? l_methodname : l_returnname, l_return );
+                final Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( ( l_returnname == null ) || ( l_returnname.isEmpty() ) ? l_methodname : l_returnname, l_return );
                 l_literalreturn.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_objectname ) ) );
                 p_agent.addBel( l_literalreturn );
             }
@@ -203,7 +204,7 @@ public class CMethodBind extends IAction
      * @param p_term Jason term
      * @return class object
      */
-    protected Class<?> convertTermToClass( Term p_term ) throws IllegalArgumentException
+    protected Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
         if ( "void".equalsIgnoreCase( l_classname ) )
@@ -261,9 +262,9 @@ public class CMethodBind extends IAction
      * @param p_list term list
      * @return class array
      */
-    protected Class<?>[] convertTermListToArray( ListTerm p_list ) throws ClassNotFoundException
+    protected Class<?>[] convertTermListToArray( final ListTerm p_list ) throws ClassNotFoundException
     {
-        Class<?>[] l_classes = new Class<?>[p_list.size()];
+        final Class<?>[] l_classes = new Class<?>[p_list.size()];
         for ( int i = 0; i < l_classes.length; i++ )
             l_classes[i] = this.convertTermToClass( p_list.get( i ) );
         return l_classes;
@@ -275,9 +276,9 @@ public class CMethodBind extends IAction
      * @param p_term term
      * @return class object array
      */
-    protected Class<?>[] convertTermListToArray( Term p_term ) throws ClassNotFoundException
+    protected Class<?>[] convertTermListToArray( final Term p_term ) throws ClassNotFoundException
     {
-        Class<?>[] l_classes = new Class<?>[1];
+        final Class<?>[] l_classes = new Class<?>[1];
         l_classes[0] = this.convertTermToClass( p_term );
         return l_classes;
     }

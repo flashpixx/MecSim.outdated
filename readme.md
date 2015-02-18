@@ -24,7 +24,7 @@ Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jen
 
 The Maven package build creates a Jar file in the path ```target/MecSim-<Version>.jar```. The
 program must use more memory of the Java VM on graph downloading and converting, so the Jar must be started with the
-suffix ```-Xmx<Memory Size>``` (a good value can be ```2g```)
+suffix ```-Xmx<Memory Size>``` (a good value can be ```3g```)
 
 The program can be used in two structures:
 

@@ -1,5 +1,8 @@
 # MecSim - Traffic Simulation
 
+Micro traffic simulation with multi-agent structure based on  [Jason](jason.sourceforge.net) and
+[GraphHopper](https://graphhopper.com) OpenStreepMap library.
+
 ![Screenshot](screen.png)
 
 ## Requirements

@@ -49,11 +49,11 @@ public class CFieldBind implements IBelief
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
      */
-    protected Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
+    protected final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
     /**
      * set with literals
      */
-    protected Set<Literal> m_literals = new HashSet<>();
+    protected final Set<Literal> m_literals = new HashSet<>();
 
 
     /**
@@ -70,7 +70,7 @@ public class CFieldBind implements IBelief
      * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind( String p_name, Object p_object )
+    public CFieldBind( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -82,7 +82,7 @@ public class CFieldBind implements IBelief
      * @param p_object         bind object
      * @param p_forbiddennames set with forbidden field names of the object fields
      */
-    public CFieldBind( String p_name, Object p_object, Set<String> p_forbiddennames )
+    public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         this.push( p_name, p_object, p_forbiddennames );
     }
@@ -94,7 +94,7 @@ public class CFieldBind implements IBelief
      * @param p_name   name / annotation of the object
      * @param p_object object
      */
-    public void push( String p_name, Object p_object )
+    public void push( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -106,7 +106,7 @@ public class CFieldBind implements IBelief
      * @param p_object         object
      * @param p_forbiddennames set with forbidden names of the object fields
      */
-    public void push( String p_name, Object p_object, Set<String> p_forbiddennames )
+    public void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
@@ -116,7 +116,7 @@ public class CFieldBind implements IBelief
      *
      * @param p_name name
      */
-    public void remove( String p_name )
+    public void remove( final String p_name )
     {
         m_bind.remove( p_name );
     }
@@ -141,7 +141,7 @@ public class CFieldBind implements IBelief
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
-                    Literal l_literal = CCommon.getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
+                    final Literal l_literal = CCommon.getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );

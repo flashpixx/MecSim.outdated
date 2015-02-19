@@ -70,6 +70,7 @@
 
         <!-- will be set outside (build parameter) -->
         <build.number></build.number>
+        <build.commit></build.commit>
     </properties>
 
 
@@ -356,6 +357,7 @@
                             <Built-By-URL>${project.organization.url}</Built-By-URL>
                             <Build-Version>${project.version}</Build-Version>
                             <Build-Number>${build.number}</Build-Number>
+                            <Build-Commit>${build.commit}</Build-Commit>
                         </manifestEntries>
                         <manifest>
                             <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>

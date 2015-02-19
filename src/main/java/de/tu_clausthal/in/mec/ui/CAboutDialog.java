@@ -135,6 +135,14 @@ public class CAboutDialog extends JDialog
 
         l_layout.gridx = 0;
         l_layout.gridy = 2;
+        l_panel.add( new JLabel( CCommon.getResouceString( this, "buildcommit" ), JLabel.RIGHT ), l_layout );
+        l_layout.gridx = 1;
+        l_panel.add( Box.createHorizontalStrut( 25 ) );
+        l_layout.gridx = 2;
+        l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Commit" ) ), l_layout );
+
+        l_layout.gridx = 0;
+        l_layout.gridy = 3;
         l_panel.add( new JLabel( CCommon.getResouceString( this, "license" ), JLabel.RIGHT ), l_layout );
         l_layout.gridx = 1;
         l_panel.add( Box.createHorizontalStrut( 25 ) );

@@ -29,18 +29,12 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 
 /**
@@ -129,7 +123,7 @@ public class CAboutDialog extends JDialog
         l_layout.gridx = 1;
         l_panel.add( Box.createHorizontalStrut( 25 ) );
         l_layout.gridx = 2;
-        l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Version" ), JLabel.LEFT ), l_layout );
+        l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Version" ) ), l_layout );
 
         l_layout.gridx = 0;
         l_layout.gridy = 1;
@@ -137,16 +131,15 @@ public class CAboutDialog extends JDialog
         l_layout.gridx = 1;
         l_panel.add( Box.createHorizontalStrut( 25 ) );
         l_layout.gridx = 2;
-        l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Number" ), JLabel.LEFT ), l_layout );
+        l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Number" ) ), l_layout );
 
-        /*
+        l_layout.gridx = 0;
         l_layout.gridy = 2;
-        l_panel.add( new JLabel( CCommon.getResouceString( this, "license" ) ), l_layout );
+        l_panel.add( new JLabel( CCommon.getResouceString( this, "license" ), JLabel.RIGHT ), l_layout );
         l_layout.gridx = 1;
         l_panel.add( Box.createHorizontalStrut( 25 ) );
         l_layout.gridx = 2;
         l_panel.add( new CLinkLabel( CConfiguration.getInstance().getManifest().get( "License" ), CConfiguration.getInstance().getManifest().get( "License-URL" ) ), l_layout );
-        */
 
         return l_panel;
     }

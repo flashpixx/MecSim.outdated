@@ -220,33 +220,26 @@ public class CAboutDialog extends JDialog
                 {
                 }
 
-            this.addMouseListener(
+
+            if ( ( Desktop.isDesktopSupported() ) && ( m_uri != null ) )
+                this.addMouseListener(
                     new MouseAdapter()
                     {
                         public void mouseClicked( MouseEvent p_event )
                         {
-                            open();
+                            try
+                            {
+                                Desktop.getDesktop().browse( m_uri );
+                            }
+                            catch ( IOException l_exception )
+                            {
+                                CLogger.error( l_exception );
+                            }
                         }
-                    } );
+                    }
+                );
         }
 
-        /**
-         * open with default browser *
-         */
-        private void open()
-        {
-            if ( ( !Desktop.isDesktopSupported() ) || ( m_uri == null ) )
-                return;
-
-            try
-            {
-                Desktop.getDesktop().browse( m_uri );
-            }
-            catch ( IOException l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-        }
     }
 
 }

@@ -67,6 +67,9 @@
         <!-- source & target option are set also on bottom compiler definition -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- will be set outside (build parameter) -->
+        <build.number></build.number>
     </properties>
 
 
@@ -347,6 +350,7 @@
                         <manifestEntries>
                             <Built-By>${project.organization.name} (${project.organization.url})</Built-By>
                             <Build-Version>${project.version}</Build-Version>
+                            <Build-Number>${build.number}</Build-Number>
                             <Project-URL>${project.url}</Project-URL>
                         </manifestEntries>
                         <manifest>

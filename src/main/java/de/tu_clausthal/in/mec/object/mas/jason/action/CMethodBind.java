@@ -253,9 +253,6 @@ public class CMethodBind extends IAction
     }
 
 
-
-
-
     /**
      * converts a list of terms int an array of class objects
      *

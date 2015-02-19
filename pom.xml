@@ -230,8 +230,6 @@
     </dependencies>
 
 
-
-
     <!-- main build -->
     <build>
         <defaultGoal>package</defaultGoal>

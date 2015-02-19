@@ -202,8 +202,9 @@ public class CPath implements Iterable<CPath>
 
     /**
      * creates a path of the indices
+     *
      * @param p_fromIndex start index
-     * @param p_toIndex end index (exclusive)
+     * @param p_toIndex   end index (exclusive)
      * @return path
      */
     public CPath getSubPath( final int p_fromIndex, final int p_toIndex )

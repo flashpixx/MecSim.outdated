@@ -30,7 +30,6 @@ import bibliothek.gui.dock.common.location.TreeLocationRoot;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
 
 import javax.swing.*;
 import java.awt.*;

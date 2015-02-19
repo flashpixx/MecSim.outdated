@@ -263,10 +263,10 @@ public class CSimulation
      * loads the simulation from an input stream
      *
      * @param p_stream input stream
-     * @throws IOException throws the exception on file reading error
+     * @throws IOException            throws the exception on file reading error
      * @throws ClassNotFoundException throws the exception on deserialization
-     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content
-     * are equal overwrite the file, otherwise rename existing file and create a new one with the store content
+     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
+     * equal overwrite the file, otherwise rename existing file and create a new one with the store content
      */
     public void load( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {

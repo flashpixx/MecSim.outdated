@@ -166,7 +166,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException throws exception on loading the data
+     * @throws IOException            throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

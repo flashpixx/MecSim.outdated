@@ -46,8 +46,9 @@ public class CAboutDialog extends JDialog
     /**
      * ctor
      */
-    public CAboutDialog() {
-        this(null);
+    public CAboutDialog()
+    {
+        this( null );
     }
 
 
@@ -58,7 +59,7 @@ public class CAboutDialog extends JDialog
      */
     public CAboutDialog( final Frame p_frame )
     {
-        super(p_frame);
+        super( p_frame );
         if ( p_frame != null )
             this.setLocationRelativeTo( p_frame );
 
@@ -159,9 +160,10 @@ public class CAboutDialog extends JDialog
      */
     protected class CLinkLabel extends JLabel
     {
-        /** URI **/
+        /**
+         * URI *
+         */
         private URI m_uri = null;
-
 
 
         /**
@@ -200,7 +202,7 @@ public class CAboutDialog extends JDialog
          * ctor
          *
          * @param p_text text of the label
-         * @param p_uri link
+         * @param p_uri  link
          */
         public CLinkLabel( final String p_text, final String p_uri, final int _horizontalalignment )
         {
@@ -208,17 +210,18 @@ public class CAboutDialog extends JDialog
             this.setText( p_text );
             this.setHorizontalAlignment( _horizontalalignment );
 
-            try {
-                m_uri = new URI(p_uri);
-            }
-            catch ( URISyntaxException l_exception )
-            {
-            }
+            if ( p_uri != null )
+                try
+                {
+                    m_uri = new URI( p_uri );
+                }
+                catch ( URISyntaxException l_exception )
+                {
+                }
 
             this.addMouseListener(
                     new MouseAdapter()
                     {
-
                         public void mouseClicked( MouseEvent e )
                         {
                             open();
@@ -226,10 +229,12 @@ public class CAboutDialog extends JDialog
                     } );
         }
 
-        /** open with default browser **/
+        /**
+         * open with default browser *
+         */
         private void open()
         {
-            if ( !Desktop.isDesktopSupported() )
+            if ( ( !Desktop.isDesktopSupported() ) || ( m_uri == null ) )
                 return;
 
             try

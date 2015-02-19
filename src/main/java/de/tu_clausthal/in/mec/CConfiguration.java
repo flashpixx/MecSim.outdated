@@ -99,7 +99,6 @@ public class CConfiguration
     private Map<String, String> m_manifest = new HashMap<>();
 
 
-
     /**
      * private Ctor to avoid manual instantiation with manifest reading
      */
@@ -108,11 +107,12 @@ public class CConfiguration
         try
         {
             Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
-            for( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet())
+            for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
                 m_manifest.put( l_item.getKey().toString(), l_item.getValue().toString() );
         }
         catch ( IOException l_exception )
-        {;
+        {
+            ;
         }
     }
 
@@ -127,7 +127,8 @@ public class CConfiguration
     }
 
 
-    /** reads the manifest data
+    /**
+     * reads the manifest data
      *
      * @return map with string key and value
      */

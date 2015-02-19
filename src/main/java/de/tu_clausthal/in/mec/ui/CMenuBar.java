@@ -391,7 +391,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     }
 
 
-
     /**
      * stores the list of sources
      */

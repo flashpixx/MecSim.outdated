@@ -261,11 +261,11 @@ public class CAgent<T> implements IVoidAgent
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture
      *
-     * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
      * @note Jason needs on the Agent.create call an instance of AgArch and not AgArchTier, so we need an own class to
      * create an own cycle call
      * @warning An AgArch is a linked-list of AgArchs, the agent name can read if an AgArch has got a successor only
      * (Jason code design error)
+     * @see http://jason.sourceforge.net/api/jason/architecture/AgArchInfraTier.html
      */
     protected class CJasonArchitecture extends AgArch
     {
@@ -427,9 +427,9 @@ public class CAgent<T> implements IVoidAgent
     /**
      * class of an own Jason agent to handle Jason stdlib internal action includes
      *
-     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      * @note we do the initialization process manually, because some internal actions are removed from the default
      * behaviour
+     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      */
     protected class CJasonAgent extends Agent
     {

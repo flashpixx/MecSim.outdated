@@ -223,7 +223,7 @@ public class CAboutDialog extends JDialog
             this.addMouseListener(
                     new MouseAdapter()
                     {
-                        public void mouseClicked( MouseEvent e )
+                        public void mouseClicked( MouseEvent p_event )
                         {
                             open();
                         }

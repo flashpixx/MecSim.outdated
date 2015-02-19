@@ -52,7 +52,7 @@ public class CMain
     /**
      * needed memory in gigabyte
      */
-    private static final float c_neededmemory = 2f;
+    private static final float c_neededmemory = 2.5f;
 
 
     /**

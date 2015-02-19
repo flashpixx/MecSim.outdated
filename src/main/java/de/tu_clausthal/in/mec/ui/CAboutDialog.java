@@ -203,12 +203,13 @@ public class CAboutDialog extends JDialog
          *
          * @param p_text text of the label
          * @param p_uri  link
+         * @param p_horizontalalignment horizontal alignment
          */
-        public CLinkLabel( final String p_text, final String p_uri, final int _horizontalalignment )
+        public CLinkLabel( final String p_text, final String p_uri, final int p_horizontalalignment )
         {
             super();
             this.setText( p_text );
-            this.setHorizontalAlignment( _horizontalalignment );
+            this.setHorizontalAlignment( p_horizontalalignment );
 
             if ( p_uri != null )
                 try

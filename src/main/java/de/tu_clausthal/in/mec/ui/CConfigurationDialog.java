@@ -71,7 +71,7 @@ public class CConfigurationDialog extends JDialog
 
         this.setAlwaysOnTop( true );
         this.setResizable( false );
-        this.setModalityType( ModalityType.APPLICATION_MODAL );
+        this.setModalityType( ModalityType.TOOLKIT_MODAL );
 
         // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
         // public properties instead

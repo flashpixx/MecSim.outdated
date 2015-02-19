@@ -34,7 +34,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 
 
 /**
@@ -48,7 +49,10 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
-
+    /**
+     * list of data items
+     */
+    protected final Queue<T> m_data = new ConcurrentLinkedDeque<>();
     /**
      * flag for visibility
      */
@@ -57,10 +61,6 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      * flag for activity
      */
     protected boolean m_active = true;
-    /**
-     * list of data items
-     */
-    protected Queue<T> m_data = new ConcurrentLinkedQueue<>();
 
     @Override
     public boolean isActive()

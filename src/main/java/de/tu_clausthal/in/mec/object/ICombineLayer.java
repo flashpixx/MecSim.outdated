@@ -23,34 +23,122 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.ISteppable;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 
+import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.IViewableLayer;
+import org.jxmapviewer.painter.Painter;
+
+import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * layer for any calculation without visibility
+ * combined layer to define block-structured layer data for parallizing / sequential object calculation
  */
-public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IVoidSteppable, Collection<T>
+public class ICombineLayer implements Painter<COSMViewer>, Collection<IMultiLayer<?>>, IViewableLayer, IVoidSteppable, ILayer
 {
     /**
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
-
     /**
      * list of data items
      */
-    protected final Queue<T> m_data = new ConcurrentLinkedQueue<>();
+    protected final Map<String, IMultiLayer<?>> m_data = new ConcurrentHashMap<>();
+    /**
+     * flag for visibility
+     */
+    protected boolean m_visible = true;
     /**
      * flag for activity
      */
     protected boolean m_active = true;
+
+    @Override
+    public int size()
+    {
+        int l_size = 0;
+        for ( IMultiLayer<?> l_item : m_data.values() )
+            l_size += l_item.size();
+
+        return l_size;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return m_data.isEmpty();
+    }
+
+    @Override
+    public boolean contains( final Object p_key )
+    {
+        return m_data.containsKey( p_key );
+    }
+
+    @Override
+    public Iterator<IMultiLayer<?>> iterator()
+    {
+        return m_data.values().iterator();
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        return m_data.values().toArray();
+    }
+
+    @Override
+    public <T> T[] toArray( final T[] p_value )
+    {
+        return m_data.values().toArray( p_value );
+    }
+
+    @Override
+    public boolean add( final IMultiLayer<?> p_layer )
+    {
+        return false;
+    }
+
+    @Override
+    public boolean remove( final Object p_key )
+    {
+        return m_data.remove( p_key ) != null;
+    }
+
+    @Override
+    public boolean containsAll( final Collection<?> p_collection )
+    {
+        return m_data.values().containsAll( p_collection );
+    }
+
+    @Override
+    public boolean addAll( final Collection<? extends IMultiLayer<?>> p_collection )
+    {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll( final Collection<?> p_collection )
+    {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll( Collection<?> c )
+    {
+        return false;
+    }
+
+    @Override
+    public void clear()
+    {
+        m_data.clear();
+    }
 
     @Override
     public boolean isActive()
@@ -67,90 +155,13 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     @Override
     public int getCalculationIndex()
     {
-        return Integer.MAX_VALUE;
+        return 0;
     }
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-    }
 
-    @Override
-    public int size()
-    {
-        return m_data.size();
-    }
-
-    @Override
-    public boolean isEmpty()
-    {
-        return m_data.isEmpty();
-    }
-
-    @Override
-    public boolean contains( final Object p_object )
-    {
-        return m_data.contains( p_object );
-    }
-
-    @Override
-    public Iterator<T> iterator()
-    {
-        return m_data.iterator();
-    }
-
-    @Override
-    public Object[] toArray()
-    {
-        return m_data.toArray();
-    }
-
-    @Override
-    public <S> S[] toArray( final S[] p_value )
-    {
-        return m_data.toArray( p_value );
-    }
-
-    @Override
-    public boolean add( final T p_value )
-    {
-        return m_data.add( p_value );
-    }
-
-    @Override
-    public boolean remove( final Object p_object )
-    {
-        return m_data.remove( p_object );
-    }
-
-    @Override
-    public boolean containsAll( final Collection<?> p_collection )
-    {
-        return m_data.containsAll( p_collection );
-    }
-
-    @Override
-    public boolean addAll( final Collection<? extends T> p_collection )
-    {
-        return m_data.addAll( p_collection );
-    }
-
-    @Override
-    public boolean removeAll( final Collection<?> p_collection )
-    {
-        return m_data.removeAll( p_collection );
-    }
-
-    @Override
-    public boolean retainAll( final Collection<?> p_collection )
-    {
-        return m_data.retainAll( p_collection );
-    }
-
-    @Override
-    public void clear()
-    {
-        m_data.clear();
     }
 
     @Override
@@ -162,8 +173,24 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     @Override
     public void release()
     {
-        for ( ISteppable l_item : m_data )
-            l_item.release();
+
     }
 
+    @Override
+    public boolean isVisible()
+    {
+        return m_visible;
+    }
+
+    @Override
+    public void setVisible( final boolean p_visible )
+    {
+        m_visible = p_visible;
+    }
+
+    @Override
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+
+    }
 }

@@ -89,15 +89,13 @@ public class CAboutDialog extends JDialog
         final GridBagConstraints l_layout = new GridBagConstraints();
         l_layout.fill = GridBagConstraints.HORIZONTAL;
 
-        final JLabel l_title = new CLinkLabel( CConfiguration.getInstance().getManifest().get( "Project-Name" ), CConfiguration.getInstance().getManifest().get( "Project-URL" ) );
+        final JLabel l_title = new CLinkLabel( CConfiguration.getInstance().getManifest().get( "Project-Name" ), CConfiguration.getInstance().getManifest().get( "Project-URL" ), JLabel.CENTER );
         l_title.setFont( new Font( l_title.getFont().getName(), Font.BOLD, (int) ( l_title.getFont().getSize() * 1.5 ) ) );
-        l_title.setHorizontalAlignment( JLabel.CENTER );
         l_layout.gridx = 1;
         l_layout.gridy = 0;
         l_panel.add( l_title, l_layout );
 
-        final JLabel l_url = new CLinkLabel( CConfiguration.getInstance().getManifest().get( "Project-URL" ) );
-        l_url.setHorizontalAlignment( JLabel.CENTER );
+        final JLabel l_url = new CLinkLabel( CConfiguration.getInstance().getManifest().get( "Project-URL" ), JLabel.CENTER );
         l_layout.gridx = 1;
         l_layout.gridy = 1;
         l_panel.add( l_url, l_layout );
@@ -165,14 +163,37 @@ public class CAboutDialog extends JDialog
         private URI m_uri = null;
 
 
+
         /**
          * ctor
          *
-         * @param p_url url
+         * @param p_uri uri
          */
-        public CLinkLabel( final String p_url )
+        public CLinkLabel( final String p_uri )
         {
-            this(p_url, p_url);
+            this( p_uri, p_uri, 0 );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_uri                 uri
+         * @param p_horizontalalignment horizontal alignment
+         */
+        public CLinkLabel( final String p_uri, final int p_horizontalalignment )
+        {
+            this( p_uri, p_uri, p_horizontalalignment );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_text text
+         * @param p_uri  uri
+         */
+        public CLinkLabel( final String p_text, final String p_uri )
+        {
+            this( p_text, p_uri, 0 );
         }
 
         /**
@@ -181,10 +202,11 @@ public class CAboutDialog extends JDialog
          * @param p_text text of the label
          * @param p_uri link
          */
-        public CLinkLabel( final String p_text, final String p_uri)
+        public CLinkLabel( final String p_text, final String p_uri, final int _horizontalalignment )
         {
             super();
-            this.setText(p_text);
+            this.setText( p_text );
+            this.setHorizontalAlignment( _horizontalalignment );
 
             try {
                 m_uri = new URI(p_uri);

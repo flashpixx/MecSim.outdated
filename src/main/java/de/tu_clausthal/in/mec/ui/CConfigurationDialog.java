@@ -65,6 +65,7 @@ public class CConfigurationDialog extends JDialog
      */
     public CConfigurationDialog( final Frame p_frame )
     {
+        super(p_frame);
         if ( p_frame != null )
             this.setLocationRelativeTo( p_frame );
 

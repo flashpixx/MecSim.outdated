@@ -348,10 +348,14 @@
                     </descriptorRefs>
                     <archive>
                         <manifestEntries>
-                            <Built-By>${project.organization.name} (${project.organization.url})</Built-By>
+                            <Project-Name>${project.name}</Project-Name>
+                            <Project-URL>${project.url}</Project-URL>
+                            <License>${project.licenses.license.name}</License>
+                            <License-URL>${project.licenses.license.url}</License-URL>
+                            <Built-By>${project.organization.name}</Built-By>
+                            <Built-By-URL>${project.organization.url}</Built-By-URL>
                             <Build-Version>${project.version}</Build-Version>
                             <Build-Number>${build.number}</Build-Number>
-                            <Project-URL>${project.url}</Project-URL>
                         </manifestEntries>
                         <manifest>
                             <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>

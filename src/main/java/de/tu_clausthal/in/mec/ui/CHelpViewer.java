@@ -119,7 +119,7 @@ public class CHelpViewer extends JDialog implements ActionListener
             }
 
         final JPanel l_panel = new JPanel( new BorderLayout() );
-        l_panel.add( l_toolbar, BorderLayout.NORTH );
+        l_panel.add( l_toolbar, BorderLayout.PAGE_START );
         l_panel.add( m_browser, BorderLayout.CENTER );
 
         this.add( l_panel );

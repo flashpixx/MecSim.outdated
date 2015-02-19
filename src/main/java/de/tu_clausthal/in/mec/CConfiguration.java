@@ -50,9 +50,13 @@ import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 
 /**
@@ -89,13 +93,27 @@ public class CConfiguration
      * UTF-8 property reader
      */
     private ResourceBundle.Control m_reader = new UTF8Control();
+    /**
+     * manifest data
+     */
+    private Map<String, String> m_manifest = new HashMap<>();
+
 
 
     /**
-     * private Ctor to avoid manual instantiation
+     * private Ctor to avoid manual instantiation with manifest reading
      */
     private CConfiguration()
     {
+        try
+        {
+            Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
+            for( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet())
+                m_manifest.put( l_item.getKey().toString(), l_item.getValue().toString() );
+        }
+        catch ( IOException l_exception )
+        {;
+        }
     }
 
     /**
@@ -107,6 +125,17 @@ public class CConfiguration
     {
         return s_instance;
     }
+
+
+    /** reads the manifest data
+     *
+     * @return map with string key and value
+     */
+    public Map<String, String> getManifest()
+    {
+        return m_manifest;
+    }
+
 
     /**
      * write method of the configuration

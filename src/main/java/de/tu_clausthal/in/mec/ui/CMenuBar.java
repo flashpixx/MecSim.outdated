@@ -85,7 +85,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         super();
 
-        m_items.addItem( "File", new String[]{"Help", "Preferences", null, "Load", "Save", null, "Screenshot"}, this );
+        m_items.addItem( "File", new String[]{"About", null, "Help", "Preferences", null, "Load", "Save", null, "Screenshot"}, this );
 
         m_items.addItem( "Simulation", new String[]{"Start", "Stop", null, "Reset", null}, this );
         m_items.addSlider( "Simulation/Speed", 150 - CConfiguration.getInstance().get().getThreadsleeptime(), "slow", 0, "fast", 150, this );
@@ -230,6 +230,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             if ( "File/Help".equals( l_actionpath.toString() ) )
             {
                 m_help.setVisible( true );
+                return;
+            }
+            if ( "File/About".equals( l_actionpath.toString() ) )
+            {
+                this.about();
                 return;
             }
 
@@ -377,6 +382,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         final CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
         l_dialog.setVisible( true );
+    }
+
+    private void about()
+    {
+        final CAboutDialog l_about = new CAboutDialog( CSimulation.getInstance().getUI() );
+        l_about.setVisible( true );
     }
 
 

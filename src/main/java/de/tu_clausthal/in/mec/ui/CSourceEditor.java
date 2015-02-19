@@ -121,7 +121,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             // tab toolbar
             final JToolBar l_toolbar = new JToolBar();
             l_toolbar.setFloatable( false );
-            l_tab.add( l_toolbar, BorderLayout.NORTH );
+            l_tab.add( l_toolbar, BorderLayout.PAGE_START );
 
 
             for ( String[] l_item : new String[][]{{"save", "sourceeditor_save.png"}, {"delete", "sourceeditor_delete.png"}, {"reload", "sourceeditor_reload.png"}, {"close", "sourceeditor_close.png"}} )

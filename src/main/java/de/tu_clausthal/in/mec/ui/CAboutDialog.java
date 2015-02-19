@@ -210,7 +210,9 @@ public class CAboutDialog extends JDialog
 
             try {
                 m_uri = new URI(p_uri);
-            } catch (URISyntaxException e) {
+            }
+            catch ( URISyntaxException l_exception )
+            {
             }
 
             this.addMouseListener(

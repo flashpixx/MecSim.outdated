@@ -67,7 +67,7 @@ public class CAboutDialog extends JDialog
         this.setModalityType( ModalityType.TOOLKIT_MODAL );
 
         final JPanel l_panel = new JPanel();
-        l_panel.setLayout( new BorderLayout( 10, 10 ) );
+        l_panel.setLayout( new BorderLayout( 8, 8 ) );
         this.add( l_panel );
 
         l_panel.add( this.getHeader(), BorderLayout.PAGE_START );
@@ -121,7 +121,7 @@ public class CAboutDialog extends JDialog
         l_layout.gridy = 0;
         l_panel.add( new JLabel( "Build-Version", JLabel.RIGHT ), l_layout );
         l_layout.gridx = 1;
-        l_panel.add( Box.createHorizontalStrut( 25 ) );
+        l_panel.add( Box.createHorizontalStrut( 20 ) );
         l_layout.gridx = 2;
         l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Version" ) ), l_layout );
 
@@ -129,7 +129,7 @@ public class CAboutDialog extends JDialog
         l_layout.gridy = 1;
         l_panel.add( new JLabel( CCommon.getResouceString( this, "buildnumber" ), JLabel.RIGHT ), l_layout );
         l_layout.gridx = 1;
-        l_panel.add( Box.createHorizontalStrut( 25 ) );
+        l_panel.add( Box.createHorizontalStrut( 20 ) );
         l_layout.gridx = 2;
         l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Number" ) ), l_layout );
 
@@ -137,15 +137,18 @@ public class CAboutDialog extends JDialog
         l_layout.gridy = 2;
         l_panel.add( new JLabel( CCommon.getResouceString( this, "buildcommit" ), JLabel.RIGHT ), l_layout );
         l_layout.gridx = 1;
-        l_panel.add( Box.createHorizontalStrut( 25 ) );
+        l_panel.add( Box.createHorizontalStrut( 20 ) );
         l_layout.gridx = 2;
-        l_panel.add( new JLabel( CConfiguration.getInstance().getManifest().get( "Build-Commit" ) ), l_layout );
+        String l_commit = CConfiguration.getInstance().getManifest().get( "Build-Commit" );
+        if ( l_commit != null )
+            l_commit = l_commit.substring( 0, Math.min( 9, l_commit.length() ) );
+        l_panel.add( new JLabel( l_commit ), l_layout );
 
         l_layout.gridx = 0;
         l_layout.gridy = 3;
         l_panel.add( new JLabel( CCommon.getResouceString( this, "license" ), JLabel.RIGHT ), l_layout );
         l_layout.gridx = 1;
-        l_panel.add( Box.createHorizontalStrut( 25 ) );
+        l_panel.add( Box.createHorizontalStrut( 20 ) );
         l_layout.gridx = 2;
         l_panel.add( new CLinkLabel( CConfiguration.getInstance().getManifest().get( "License" ), CConfiguration.getInstance().getManifest().get( "License-URL" ) ), l_layout );
 

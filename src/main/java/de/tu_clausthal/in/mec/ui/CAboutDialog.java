@@ -211,33 +211,34 @@ public class CAboutDialog extends JDialog
             this.setText( p_text );
             this.setHorizontalAlignment( p_horizontalalignment );
 
-            if ( p_uri != null )
+            if ( ( Desktop.isDesktopSupported() ) && ( p_uri != null ) )
+            {
                 try
                 {
                     m_uri = new URI( p_uri );
                 }
                 catch ( URISyntaxException l_exception )
                 {
+                    CLogger.error( l_exception );
                 }
 
-
-            if ( ( Desktop.isDesktopSupported() ) && ( m_uri != null ) )
                 this.addMouseListener(
-                    new MouseAdapter()
-                    {
-                        public void mouseClicked( MouseEvent p_event )
+                        new MouseAdapter()
                         {
-                            try
+                            public void mouseClicked( MouseEvent p_event )
                             {
-                                Desktop.getDesktop().browse( m_uri );
-                            }
-                            catch ( IOException l_exception )
-                            {
-                                CLogger.error( l_exception );
+                                try
+                                {
+                                    Desktop.getDesktop().browse( m_uri );
+                                }
+                                catch ( IOException l_exception )
+                                {
+                                    CLogger.error( l_exception );
+                                }
                             }
                         }
-                    }
                 );
+            }
         }
 
     }

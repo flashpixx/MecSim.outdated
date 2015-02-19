@@ -1,7 +1,7 @@
 # Jason (ASL Syntax)
 
 [[Software-Agenten]] können mit Hilfe der Sprache [Jason](http://jason.sourceforge.net/) entwickelt werden, was
-eine Instanz der Sprache [Agentspeak](http://en.wikipedia.org/wiki/AgentSpeak) ist. Dazu sind einige Einschränkungen /
+eine Instanz der Sprache [[en|AgentSpeak|AgentSpeak]] ist. Dazu sind einige Einschränkungen /
 Erweiterungen zu beachten.
 
 ## Deaktivierte Befehle

@@ -1,6 +1,6 @@
 # Jason (ASL Syntax)
 
-[[Software-Agents]] can be developed with the help of the language [Jason](http://jason.sourceforge.net/). Jason is an instance of the language [Agentspeak](http://en.wikipedia.org/wiki/AgentSpeak). There are some constraints and extensions which have to be considered.
+[[Software-Agents]] can be developed with the help of the language [Jason](http://jason.sourceforge.net/). Jason is an instance of the language [[AgentSpeak]]. There are some constraints and extensions which have to be considered.
 
 ## Disabled Commands
 

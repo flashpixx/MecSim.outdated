@@ -36,17 +36,17 @@ import java.util.Set;
 /**
  * tree structure
  */
-public class CNode<T>
+public class CTreeNode<T>
 {
 
     /**
      * map with child names and nodes *
      */
-    protected Map<String, CNode<T>> m_childs = new HashMap<>();
+    protected Map<String, CTreeNode<T>> m_childs = new HashMap<>();
     /**
      * reference to the parent node *
      */
-    protected CNode<T> m_parent = null;
+    protected CTreeNode<T> m_parent = null;
     /**
      * data of the node *
      */
@@ -62,7 +62,7 @@ public class CNode<T>
      *
      * @param p_id name of the node
      */
-    public CNode( String p_id )
+    public CTreeNode( String p_id )
     {
         if ( ( p_id == null ) || ( p_id.isEmpty() ) )
             throw new IllegalArgumentException( "ID need not to be null" );
@@ -77,7 +77,7 @@ public class CNode<T>
      * @param p_id     name of the node
      * @param p_parent parent node
      */
-    public CNode( String p_id, CNode<T> p_parent )
+    public CTreeNode( String p_id, CTreeNode<T> p_parent )
     {
         if ( ( p_id == null ) || ( p_id.isEmpty() ) )
             throw new IllegalArgumentException( "ID need not to be null" );
@@ -96,7 +96,7 @@ public class CNode<T>
      */
     public boolean pathexist( CPath p_path )
     {
-        CNode<T> l_node = this;
+        CTreeNode<T> l_node = this;
 
         for ( CPath l_item : p_path )
         {
@@ -115,7 +115,7 @@ public class CNode<T>
      * @param p_path path of the node under the current
      * @return node
      */
-    public CNode<T> traverseto( CPath p_path )
+    public CTreeNode<T> traverseto( CPath p_path )
     {
         return traverseto( p_path, true );
     }
@@ -127,16 +127,16 @@ public class CNode<T>
      * @param p_create creates non-existing nodes
      * @return node
      */
-    public CNode<T> traverseto( CPath p_path, boolean p_create )
+    public CTreeNode<T> traverseto( CPath p_path, boolean p_create )
     {
-        CNode<T> l_node = this;
+        CTreeNode<T> l_node = this;
         for ( CPath l_item : p_path )
         {
             if ( !l_node.m_childs.containsKey( l_item.getSuffix() ) )
                 if ( !p_create )
                     return l_node;
                 else
-                    l_node.m_childs.put( l_item.getSuffix(), new CNode<>( l_item.getSuffix() ) );
+                    l_node.m_childs.put( l_item.getSuffix(), new CTreeNode<>( l_item.getSuffix() ) );
 
             l_node = l_node.m_childs.get( l_item.getSuffix() );
         }
@@ -150,7 +150,7 @@ public class CNode<T>
      * @param p_name name
      * @return node
      */
-    public CNode<T> getChild( String p_name )
+    public CTreeNode<T> getChild( String p_name )
     {
         return m_childs.get( p_name );
     }
@@ -163,9 +163,9 @@ public class CNode<T>
      */
     public void addChilds( CPath p_path )
     {
-        CNode<T> l_sub = null;
+        CTreeNode<T> l_sub = null;
         for ( CPath l_item : p_path )
-            l_sub = new CNode<T>( l_item.getSuffix(), l_sub );
+            l_sub = new CTreeNode<T>( l_item.getSuffix(), l_sub );
 
         m_childs.put( p_path.getIndex( 0 ), l_sub );
     }
@@ -188,7 +188,7 @@ public class CNode<T>
      * @param p_name ID
      * @return removed node
      */
-    public CNode<T> removeChild( String p_name )
+    public CTreeNode<T> removeChild( String p_name )
     {
         return m_childs.remove( p_name );
     }
@@ -198,7 +198,7 @@ public class CNode<T>
      *
      * @return collection of child nodes
      */
-    public Collection<CNode<T>> getChilds()
+    public Collection<CTreeNode<T>> getChilds()
     {
         return m_childs.values();
     }
@@ -216,7 +216,7 @@ public class CNode<T>
         if ( p_withroot )
             l_list.add( m_data );
 
-        for ( CNode<T> l_child : m_childs.values() )
+        for ( CTreeNode<T> l_child : m_childs.values() )
             l_list.addAll( l_child.getSubData( true ) );
 
         return l_list;
@@ -311,12 +311,12 @@ public class CNode<T>
      * @param p_node start node
      * @param p_set  return set
      */
-    protected void getSubTreeRecursive( CPath p_path, CNode<T> p_node, Set<CPath> p_set )
+    protected void getSubTreeRecursive( CPath p_path, CTreeNode<T> p_node, Set<CPath> p_set )
     {
         if ( !p_path.isEmpty() )
             p_set.add( p_path );
 
-        for ( Map.Entry<String, CNode<T>> l_item : m_childs.entrySet() )
+        for ( Map.Entry<String, CTreeNode<T>> l_item : m_childs.entrySet() )
         {
             CPath l_path = new CPath( p_path );
             l_path.pushback( l_item.getKey() );
@@ -342,7 +342,7 @@ public class CNode<T>
      * @param p_node node
      * @return ID
      */
-    protected CPath traverseUpToRoot( CNode<T> p_node )
+    protected CPath traverseUpToRoot( CTreeNode<T> p_node )
     {
         CPath l_path = new CPath( p_node.m_id );
 

@@ -159,6 +159,16 @@ public class CHelpViewer extends JDialog implements ActionListener
     }
 
 
+    /** returns the link to the CSS file
+     *
+     * @return CSS URL
+     */
+    protected URL getCSSURL()
+    {
+        return getDocumentationURL( "layout.css" );
+    }
+
+
     @Override
     public void actionPerformed( final ActionEvent p_event )
     {
@@ -305,13 +315,30 @@ public class CHelpViewer extends JDialog implements ActionListener
                         BufferedReader l_reader = new BufferedReader( new InputStreamReader( getFileURL( p_source ).openStream() ) );
                 )
                 {
-                    p_engine.loadContent( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray(), m_renderer ) );
+                    // markdown processor renders only HTML snipplet, so we create a full HTML document around
+                    p_engine.loadContent( this.createFullHTML( m_markdown.markdownToHtml( IOUtils.toString( l_reader ).toCharArray(), m_renderer ) ) );
                 }
                 catch ( Exception l_exception )
                 {
                     CLogger.error( l_exception );
                 }
             } );
+        }
+
+
+        /** creates a full HTML document
+         *
+         * @param p_input HTML snipplet
+         * @return full HTML document
+         */
+        protected String createFullHTML( final String p_input )
+        {
+            return "<?xml version=\"1.0\" ?>" +
+                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
+                   "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
+                   "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + getCSSURL() + "\"></head><body>" +
+                   p_input +
+                   "</body></html>";
         }
 
 

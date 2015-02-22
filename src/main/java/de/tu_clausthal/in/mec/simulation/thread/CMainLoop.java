@@ -134,14 +134,22 @@ public class CMainLoop implements Runnable
                     if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
                         continue;
 
-                    // evaluate- & multilayer can creates tasks
+                    // connect- & evaluate- & multilayer can creates tasks
                     if ( l_layer instanceof IMultiLayer )
                         for ( Object l_object : ( (IMultiLayer) l_layer ) )
                             l_tasks.add( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
                     if ( l_layer instanceof IEvaluateLayer )
                         for ( Object l_object : ( (IEvaluateLayer) l_layer ) )
                             l_tasks.add( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
-
+                    /*
+                    if ( l_layer instanceof INetworkLayer )
+                    {
+                        ((INetworkLayer)l_layer).begin( m_shutdownstep );
+                        for ( Object l_object : ( (INetworkLayer) l_layer ) )
+                            m_pool.submit( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
+                        ((INetworkLayer)l_layer).finish( m_shutdownstep );
+                    }
+                    */
                     m_pool.invokeAll( l_tasks );
                 }
 

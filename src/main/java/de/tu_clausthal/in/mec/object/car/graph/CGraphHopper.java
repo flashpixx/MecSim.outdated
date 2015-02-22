@@ -68,11 +68,11 @@ public class CGraphHopper extends GraphHopper
     /**
      * map with edge-cell connection
      */
-    protected Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap<>();
+    protected final Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap<>();
     /**
      * set with listerner of the edges
      */
-    protected Set<IAction<ICar, Object>> m_edgelister = new HashSet<>();
+    protected final Set<IAction<ICar, Object>> m_edgelister = new HashSet<>();
 
 
     /**
@@ -85,24 +85,24 @@ public class CGraphHopper extends GraphHopper
 
     /**
      * private ctor do add different weights for routing
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      *
      * @param p_weights weight name
-     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    public CGraphHopper( String p_weights )
+    public CGraphHopper( final String p_weights )
     {
         if ( ( p_weights != null ) && ( !p_weights.isEmpty() ) )
             this.setCHShortcuts( p_weights );
 
         // define graph location (use configuration)
-        File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
+        final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
         CLogger.out( CCommon.getResouceString( this, "path", l_graphlocation.getAbsolutePath() ) );
 
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResouceString( this, "notloaded" ) );
-            File l_osm = this.downloadOSMData();
+            final File l_osm = this.downloadOSMData();
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
             this.setOSMFile( l_osm.getAbsolutePath() );
@@ -123,7 +123,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_end   end geoposition
      * @return list of list of edges
      */
-    public List<List<EdgeIteratorState>> getRoutes( GeoPosition p_start, GeoPosition p_end )
+    public List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
     {
         return this.getRoutes( p_start, p_end, Integer.MAX_VALUE );
     }
@@ -137,13 +137,13 @@ public class CGraphHopper extends GraphHopper
      * @param p_maxroutes max. number of paths
      * @return list of list of edges
      */
-    public List<List<EdgeIteratorState>> getRoutes( GeoPosition p_start, GeoPosition p_end, int p_maxroutes )
+    public List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final int p_maxroutes )
     {
         // calculate routes
-        GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
+        final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
         l_request.setAlgorithm( CConfiguration.getInstance().get().getRoutingalgorithm() );
 
-        GHResponse l_result = this.route( l_request );
+        final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
         {
             for ( Throwable l_msg : l_result.getErrors() )
@@ -153,19 +153,19 @@ public class CGraphHopper extends GraphHopper
 
 
         // get all pathes
-        List<Path> l_routes = this.getPaths( l_request, l_result );
+        final List<Path> l_routes = this.getPaths( l_request, l_result );
         if ( l_routes.size() == 0 )
             return null;
 
         // create edge list with routes
-        List<List<EdgeIteratorState>> l_pathes = new ArrayList<>();
+        final List<List<EdgeIteratorState>> l_pathes = new ArrayList<>();
         for ( Path l_path : l_routes )
         {
             if ( l_pathes.size() >= p_maxroutes )
                 return l_pathes;
 
             // we must delete the first and last element, because the items are "virtual"
-            List<EdgeIteratorState> l_edgelist = l_path.calcEdges();
+            final List<EdgeIteratorState> l_edgelist = l_path.calcEdges();
             if ( l_edgelist.size() < 3 )
                 continue;
 
@@ -185,9 +185,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_position geo position
      * @return ID of the edge
      */
-    public int getClosestEdge( GeoPosition p_position )
+    public int getClosestEdge( final GeoPosition p_position )
     {
-        QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
+        final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestEdge().getEdge();
     }
 
@@ -198,7 +198,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_edge edge ID
      * @return speed
      */
-    public double getEdgeSpeed( EdgeIteratorState p_edge )
+    public double getEdgeSpeed( final EdgeIteratorState p_edge )
     {
         if ( p_edge == null )
             return Double.POSITIVE_INFINITY;
@@ -213,7 +213,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_edgeid edge ID
      * @return iterator
      */
-    public EdgeIteratorState getEdgeIterator( int p_edgeid )
+    public EdgeIteratorState getEdgeIterator( final int p_edgeid )
     {
         return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
     }
@@ -225,9 +225,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_position geo position
      * @return ID of the node
      */
-    public int getClosestNode( GeoPosition p_position )
+    public int getClosestNode( final GeoPosition p_position )
     {
-        QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
+        final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestNode();
     }
 
@@ -238,9 +238,9 @@ public class CGraphHopper extends GraphHopper
      * @param p_route edge list
      * @return list with pair of edge and cell position
      */
-    public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( List<EdgeIteratorState> p_route )
+    public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( final List<EdgeIteratorState> p_route )
     {
-        ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
 
         for ( EdgeIteratorState l_edge : p_route )
             for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
@@ -278,7 +278,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @note listener object will be set at the edge instantiation process
      */
-    public synchronized void addEdgeListener( IAction<ICar, Object> p_listener )
+    public synchronized void addEdgeListener( final IAction<ICar, Object> p_listener )
     {
         m_edgelister.add( p_listener );
     }
@@ -290,7 +290,7 @@ public class CGraphHopper extends GraphHopper
      * @return linkage object
      * @note listener object will be set at the edge instantiation process
      */
-    public synchronized CEdge getEdge( EdgeIteratorState p_edgestate )
+    public synchronized CEdge getEdge( final EdgeIteratorState p_edgestate )
     {
         CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
         if ( l_edge == null )
@@ -313,13 +313,13 @@ public class CGraphHopper extends GraphHopper
     {
         try
         {
-            File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
+            final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
+            final URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
 
             CLogger.out( CCommon.getResouceString( this, "download", l_url, l_output ) );
 
-            ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
-            FileOutputStream l_stream = new FileOutputStream( l_output );
+            final ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
+            final FileOutputStream l_stream = new FileOutputStream( l_output );
             l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
 
             return l_output;
@@ -343,7 +343,7 @@ public class CGraphHopper extends GraphHopper
     }
 
     @Override
-    public Weighting createWeighting( String p_weighting, FlagEncoder p_encoder )
+    public Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
     {
         if ( "TrafficJam + SpeedUp".equalsIgnoreCase( p_weighting ) )
             return new CSpeedUpTrafficJam( this, p_encoder );

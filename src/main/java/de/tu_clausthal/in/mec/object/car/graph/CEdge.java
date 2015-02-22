@@ -50,6 +50,14 @@ public class CEdge<N, T> implements Comparable<CEdge>
 {
 
     /**
+     * map with car-2-position in forward direction
+     */
+    protected final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
+    /**
+     * set with listener
+     */
+    protected final Set<IAction<N, T>> m_listener = new HashSet<>();
+    /**
      * edge ID
      */
     protected int m_edgeid = 0;
@@ -57,10 +65,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * length of the edge (distance)
      */
     protected double m_edgelength = 0;
-    /**
-     * map with car-2-position in forward direction
-     */
-    protected Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
     /**
      * array with cells of the forward direction
      */
@@ -73,16 +77,12 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * array with additional information
      */
     protected T[] m_additionalinformation = null;
-    /**
-     * set with listener
-     */
-    protected Set<IAction<N, T>> m_listener = new HashSet<>();
 
 
     /**
      * ctor create the samples
      */
-    public CEdge( EdgeIteratorState p_edgestate )
+    public CEdge( final EdgeIteratorState p_edgestate )
     {
         m_edgeid = p_edgestate.getEdge();
         m_edgelength = p_edgestate.getDistance();
@@ -94,7 +94,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_edgestate edge state
      */
-    private void sampling( EdgeIteratorState p_edgestate )
+    private void sampling( final EdgeIteratorState p_edgestate )
     {
         ArrayList<N> l_initlist = new ArrayList<>();
         for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().CellSampling ); i++ )
@@ -136,7 +136,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_epsilon epsilon value of the monotonic increase
      * @return point list array
      */
-    private PointListArray filterPointList( PointList p_input, double p_epsilon )
+    private PointListArray filterPointList( final PointList p_input, final double p_epsilon )
     {
         ArrayList<Double> l_x = new ArrayList<>();
         ArrayList<Double> l_y = new ArrayList<>();
@@ -165,7 +165,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @return data element
      */
-    public T getAdditionalInformation( int p_position )
+    public T getAdditionalInformation( final int p_position )
     {
         return m_additionalinformation[p_position];
     }
@@ -177,7 +177,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_position position
      * @param p_object   object
      */
-    public void setAdditionalInformation( int p_position, T p_object )
+    public void setAdditionalInformation( final int p_position, final T p_object )
     {
         m_additionalinformation[p_position] = p_object;
     }
@@ -211,7 +211,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_object object
      * @return geoposition or null
      */
-    public GeoPosition getGeoposition( N p_object )
+    public GeoPosition getGeoposition( final N p_object )
     {
         Integer l_position = m_objects.get( p_object );
         if ( l_position == null )
@@ -238,7 +238,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_position position index
      * @return empty for empty
      */
-    public boolean isEmpty( int p_position )
+    public boolean isEmpty( final int p_position )
     {
         return m_cells[p_position] == null;
     }
@@ -261,7 +261,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_object object
      * @return position
      */
-    public Integer getPosition( N p_object )
+    public Integer getPosition( final N p_object )
     {
         return m_objects.get( p_object );
     }
@@ -273,7 +273,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_position position index
      * @return object or null
      */
-    public N getObject( int p_position )
+    public N getObject( final int p_position )
     {
         return m_cells[p_position];
     }
@@ -284,7 +284,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_listener listener collection
      */
-    public void addListener( Collection<IAction<N, T>> p_listener )
+    public void addListener( final Collection<IAction<N, T>> p_listener )
     {
         m_listener.addAll( p_listener );
     }
@@ -294,7 +294,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_listener listener
      */
-    public void addListener( IAction<N, T> p_listener )
+    public void addListener( final IAction<N, T> p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -305,7 +305,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_listener listener
      * @return remove bool flag
      */
-    public boolean removeListener( IAction<N, T> p_listener )
+    public boolean removeListener( final IAction<N, T> p_listener )
     {
         return m_listener.remove( p_listener );
     }
@@ -317,7 +317,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_listener listener collection
      * @return remove bool flag
      */
-    public boolean removeListener( Collection<IAction<N, T>> p_listener )
+    public boolean removeListener( final Collection<IAction<N, T>> p_listener )
     {
         return m_listener.removeAll( p_listener );
     }
@@ -329,7 +329,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_object   object
      * @param p_position position index
      */
-    public void setObject( N p_object, int p_position ) throws IllegalAccessException
+    public void setObject( final N p_object, final int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmpty( p_position ) )
             throw new IllegalAccessException( CCommon.getResouceString( this, "emptyposition" ) );
@@ -355,7 +355,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_object object
      */
-    public void removeObject( N p_object )
+    public void removeObject( final N p_object )
     {
         if ( !m_objects.containsKey( p_object ) )
             return;
@@ -374,7 +374,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @return contains boolean
      */
 
-    public boolean contains( N p_object )
+    public boolean contains( final N p_object )
     {
         return m_objects.containsKey( p_object );
     }
@@ -395,7 +395,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
 
     @Override
-    public int compareTo( CEdge p_edgelink )
+    public int compareTo( final CEdge p_edgelink )
     {
         if ( m_edgeid > p_edgelink.m_edgeid )
             return 1;
@@ -412,7 +412,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     @Override
-    public final boolean equals( Object p_object )
+    public final boolean equals( final Object p_object )
     {
         if ( p_object instanceof CEdge )
             return this.hashCode() == p_object.hashCode();
@@ -442,7 +442,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * @param p_x list with x values
          * @param p_y list with y values
          */
-        public PointListArray( ArrayList<Double> p_x, ArrayList<Double> p_y ) throws IllegalArgumentException
+        public PointListArray( final ArrayList<Double> p_x, final ArrayList<Double> p_y ) throws IllegalArgumentException
         {
             if ( ( p_x.size() != p_y.size() ) || ( p_x.size() < 2 ) )
                 throw new IllegalArgumentException( CCommon.getResouceString( this, "pointerror" ) );
@@ -474,7 +474,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * @param p_index index of the value
          * @return value
          */
-        public double getX( int p_index )
+        public double getX( final int p_index )
         {
             return m_x[p_index];
         }
@@ -497,7 +497,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * @param p_index index of the value
          * @return value
          */
-        public double getY( int p_index )
+        public double getY( final int p_index )
         {
             return m_y[p_index];
         }

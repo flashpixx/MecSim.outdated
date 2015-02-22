@@ -37,7 +37,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 
-
 /**
  * multilayer to create a collection for elements
  *

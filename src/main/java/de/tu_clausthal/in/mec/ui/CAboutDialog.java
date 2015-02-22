@@ -201,8 +201,8 @@ public class CAboutDialog extends JDialog
         /**
          * ctor
          *
-         * @param p_text text of the label
-         * @param p_uri  link
+         * @param p_text                text of the label
+         * @param p_uri                 link
          * @param p_horizontalalignment horizontal alignment
          */
         public CLinkLabel( final String p_text, final String p_uri, final int p_horizontalalignment )

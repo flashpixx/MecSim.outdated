@@ -27,9 +27,9 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
+import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.INetworkLayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
@@ -162,16 +162,15 @@ public class CMainLoop implements Runnable
                         continue;
                     }
 
-                    if ( l_layer instanceof INetworkLayer )
+                    if ( l_layer instanceof IFeedForwardLayer )
                     {
-                        ((INetworkLayer)l_layer).begin( m_shutdownstep );
-                        while ( !( (INetworkLayer) l_layer ).isEmpty() )
-                            this.invokeTasks( l_layer, (INetworkLayer) l_layer );
-                        ((INetworkLayer)l_layer).finish( m_shutdownstep );
+                        ( (IFeedForwardLayer) l_layer ).beforeStepAllObject( m_shutdownstep );
+                        while ( !( (IFeedForwardLayer) l_layer ).isEmpty() )
+                            this.invokeTasks( l_layer, (IFeedForwardLayer) l_layer );
+                        ( (IFeedForwardLayer) l_layer ).afterStepAllObject( m_shutdownstep );
                         continue;
                     }
                 }
-
 
 
                 m_simulationcount++;

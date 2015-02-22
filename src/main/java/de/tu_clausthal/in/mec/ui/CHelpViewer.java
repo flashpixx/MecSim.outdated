@@ -159,7 +159,8 @@ public class CHelpViewer extends JDialog implements ActionListener
     }
 
 
-    /** returns the link to the CSS file
+    /**
+     * returns the link to the CSS file
      *
      * @return CSS URL
      */
@@ -326,7 +327,8 @@ public class CHelpViewer extends JDialog implements ActionListener
         }
 
 
-        /** creates a full HTML document
+        /**
+         * creates a full HTML document
          *
          * @param p_input HTML snipplet
          * @return full HTML document
@@ -334,11 +336,11 @@ public class CHelpViewer extends JDialog implements ActionListener
         protected String createFullHTML( final String p_input )
         {
             return "<?xml version=\"1.0\" ?>" +
-                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
-                   "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
-                   "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + getCSSURL() + "\"></head><body>" +
-                   p_input +
-                   "</body></html>";
+                    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
+                    "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
+                    "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + getCSSURL() + "\"></head><body>" +
+                    p_input +
+                    "</body></html>";
         }
 
 

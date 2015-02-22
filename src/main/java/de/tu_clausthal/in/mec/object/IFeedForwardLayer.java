@@ -41,12 +41,12 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 
 /**
- * layer with connected elements - elements are return stepable and the element queue will be processed until all
- * elements are finished
+ * layer with connected elements - elements are return-stepable and the element queue will be processed until all
+ * elements are finished, it corresponds to a feed-forward structure
  *
- * @warning there exists no cycle check, so detection of infinity loops must be manually
+ * @note there exists no cycle check, so detection of infinity loops must be manually
  */
-public abstract class INetworkLayer<T extends INetworkLayer.IFinish & IReturnSteppable<?> & IReturnSteppableTarget<T> & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
+public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IReturnSteppable<?> & IReturnSteppableTarget<T> & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
 {
 
     /**
@@ -144,17 +144,26 @@ public abstract class INetworkLayer<T extends INetworkLayer.IFinish & IReturnSte
             m_processingdata.add( p_object );
     }
 
-    public void begin( final int p_currentstep )
+    /**
+     * method is run, before all objects run
+     *
+     * @param p_currentstep step number
+     */
+    public void beforeStepAllObject( final int p_currentstep )
     {
         m_processingdata.addAll( m_finisheddata );
         m_finisheddata.clear();
     }
 
-    public void finish( final int p_currentstep )
+    /**
+     * method is run, after all objects are finished
+     *
+     * @param p_currentstep step number
+     */
+    public void afterStepAllObject( final int p_currentstep )
     {
-        m_processingdata.clear();
-        m_processingdata.addAll( m_finisheddata );
     }
+
 
     @Override
     public int size()

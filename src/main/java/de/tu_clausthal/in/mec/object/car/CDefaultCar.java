@@ -111,7 +111,7 @@ public class CDefaultCar extends IInspector implements ICar
     public CDefaultCar( final GeoPosition p_StartPosition )
     {
         if ( p_StartPosition == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "startnull" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "startnull") );
 
         m_StartPosition = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
@@ -275,14 +275,14 @@ public class CDefaultCar extends IInspector implements ICar
     {
         final Map<String, Object> l_map = super.inspect();
 
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "currentspeed" ), m_speed );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "maximumspeed" ), m_maxSpeed );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "acceleration" ), m_acceleration );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "deceleration" ), m_deceleration );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "startposition" ), m_StartPosition );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "endposition" ), m_EndPosition );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
-        l_map.put( CCommon.getResouceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "currentspeed"), m_speed );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "maximumspeed"), m_maxSpeed );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "acceleration"), m_acceleration );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "deceleration"), m_deceleration );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "startposition"), m_StartPosition );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "endposition"), m_EndPosition );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "streetname"), m_route.get( m_routeindex ).getLeft().getName() );
+        l_map.put( CCommon.getResourceString(CDefaultCar.class, "currentgeoposition"), this.getGeoposition() );
 
         return l_map;
     }

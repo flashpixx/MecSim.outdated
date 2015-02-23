@@ -72,7 +72,7 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
-        this.setTitle( "TU-Clausthal - MecSim " + CCommon.getResouceString( this, "title" ) );
+        this.setTitle( "TU-Clausthal - MecSim " + CCommon.getResourceString(this, "title") );
         this.setLayout( new BorderLayout() );
 
         this.setSize( CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() );

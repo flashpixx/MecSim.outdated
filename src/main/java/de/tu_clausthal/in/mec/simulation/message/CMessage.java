@@ -66,9 +66,9 @@ public class CMessage<T> implements IMessage<T>
     public CMessage( final CPath p_source, final String p_title )
     {
         if ( ( p_source == null ) || ( p_source.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "sourcenull" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "sourcenull") );
         if ( ( p_title == null ) || ( p_title.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "titlenull" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "titlenull") );
 
         m_source = p_source;
         m_title = p_title;
@@ -84,9 +84,9 @@ public class CMessage<T> implements IMessage<T>
     public CMessage( final CPath p_source, final String p_title, final T p_data )
     {
         if ( ( p_source == null ) || ( p_source.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "sourcenull" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "sourcenull") );
         if ( ( p_title == null ) || ( p_title.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "titlenull" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "titlenull") );
 
         m_source = p_source;
         m_title = p_title;

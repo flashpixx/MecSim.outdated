@@ -79,7 +79,7 @@ public class CPath implements Iterable<CPath>
     public static CPath createPath( final String... p_varargs )
     {
         if ( p_varargs.length < 2 )
-            throw new IllegalArgumentException( CCommon.getResouceString( CPath.class, "createpath" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(CPath.class, "createpath") );
 
         return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
     }
@@ -266,7 +266,7 @@ public class CPath implements Iterable<CPath>
             @Override
             public CPath next()
             {
-                return new CPath( CCommon.ColletionToArray( String[].class, m_path.subList( 0, ++m_index ) ) );
+                return new CPath( CCommon.CollectionToArray(String[].class, m_path.subList(0, ++m_index)) );
             }
         };
     }

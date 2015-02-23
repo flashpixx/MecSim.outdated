@@ -56,12 +56,12 @@ public class CMain
 
         // --- define CLI options --------------------------------------------------------------------------------------
         Options l_clioptions = new Options();
-        l_clioptions.addOption( "help", false, CCommon.getResouceString( CMain.class, "help" ) );
-        l_clioptions.addOption( "configuration", true, CCommon.getResouceString( CMain.class, "config" ) );
-        l_clioptions.addOption( "nogui", true, CCommon.getResouceString( CMain.class, "nogui" ) );
-        l_clioptions.addOption( "step", true, CCommon.getResouceString( CMain.class, "step" ) );
-        l_clioptions.addOption( "loglevel", true, CCommon.getResouceString( CMain.class, "loglevel" ) );
-        l_clioptions.addOption( "logfile", true, CCommon.getResouceString( CMain.class, "logfile" ) );
+        l_clioptions.addOption( "help", false, CCommon.getResourceString(CMain.class, "help") );
+        l_clioptions.addOption( "configuration", true, CCommon.getResourceString(CMain.class, "config") );
+        l_clioptions.addOption( "nogui", true, CCommon.getResourceString(CMain.class, "nogui") );
+        l_clioptions.addOption( "step", true, CCommon.getResourceString(CMain.class, "step") );
+        l_clioptions.addOption( "loglevel", true, CCommon.getResourceString(CMain.class, "loglevel") );
+        l_clioptions.addOption( "logfile", true, CCommon.getResourceString(CMain.class, "logfile") );
 
         CommandLineParser l_parser = new BasicParser();
         CommandLine l_cli = null;
@@ -71,7 +71,7 @@ public class CMain
         }
         catch ( Exception l_exception )
         {
-            System.out.println( CCommon.getResouceString( CMain.class, "parseerror" ) );
+            System.out.println( CCommon.getResourceString(CMain.class, "parseerror") );
             System.exit( -1 );
         }
 
@@ -116,7 +116,7 @@ public class CMain
             try
             {
                 if ( ( !l_cli.hasOption( "step" ) ) )
-                    throw new IllegalAccessException( CCommon.getResouceString( CMain.class, "stepnotset" ) );
+                    throw new IllegalAccessException( CCommon.getResourceString(CMain.class, "stepnotset") );
 
                 FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
                 ObjectInputStream l_input = new ObjectInputStream( l_stream );
@@ -130,7 +130,7 @@ public class CMain
             catch ( Exception l_exception )
             {
                 CLogger.error( l_exception );
-                CLogger.out( CCommon.getResouceString( CMain.class, "loadingerror" ) );
+                CLogger.out( CCommon.getResourceString(CMain.class, "loadingerror") );
                 System.exit( -1 );
             }
         }

@@ -96,12 +96,12 @@ public class CGraphHopper extends GraphHopper
 
         // define graph location (use configuration)
         File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
-        CLogger.out( CCommon.getResouceString( this, "path", l_graphlocation.getAbsolutePath() ) );
+        CLogger.out( CCommon.getResourceString(this, "path", l_graphlocation.getAbsolutePath()) );
 
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
-            CLogger.info( CCommon.getResouceString( this, "notloaded" ) );
+            CLogger.info( CCommon.getResourceString(this, "notloaded") );
             File l_osm = this.downloadOSMData();
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
@@ -112,7 +112,7 @@ public class CGraphHopper extends GraphHopper
             l_osm.delete();
         }
 
-        CLogger.out( CCommon.getResouceString( this, "loaded" ) );
+        CLogger.out( CCommon.getResourceString(this, "loaded") );
     }
 
 
@@ -316,7 +316,7 @@ public class CGraphHopper extends GraphHopper
             File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
             URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
 
-            CLogger.out( CCommon.getResouceString( this, "download", l_url, l_output ) );
+            CLogger.out( CCommon.getResourceString(this, "download", l_url, l_output) );
 
             ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
             FileOutputStream l_stream = new FileOutputStream( l_output );
@@ -343,6 +343,7 @@ public class CGraphHopper extends GraphHopper
     }
 
     @Override
+    // TODO: discuss translation of menu labels of these menu items
     public Weighting createWeighting( String p_weighting, FlagEncoder p_encoder )
     {
         if ( "TrafficJam + SpeedUp".equalsIgnoreCase( p_weighting ) )

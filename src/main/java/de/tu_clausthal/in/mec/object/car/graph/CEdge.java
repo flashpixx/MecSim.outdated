@@ -332,7 +332,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public void setObject( N p_object, int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmpty( p_position ) )
-            throw new IllegalAccessException( CCommon.getResouceString( this, "emptyposition" ) );
+            throw new IllegalAccessException( CCommon.getResourceString(this, "emptyposition") );
 
         // if the object exists on the edge, it will be moved
         synchronized ( m_cells )
@@ -445,7 +445,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         public PointListArray( ArrayList<Double> p_x, ArrayList<Double> p_y ) throws IllegalArgumentException
         {
             if ( ( p_x.size() != p_y.size() ) || ( p_x.size() < 2 ) )
-                throw new IllegalArgumentException( CCommon.getResouceString( this, "pointerror" ) );
+                throw new IllegalArgumentException( CCommon.getResourceString(this, "pointerror") );
 
             m_x = new double[p_x.size()];
             m_y = new double[p_y.size()];

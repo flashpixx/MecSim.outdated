@@ -134,19 +134,19 @@ public class CFieldBind extends IAction
         // check number of argument first
         List<Term> l_args = p_args.getTerms();
         if ( l_args.size() < 3 )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "argument" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "argument") );
 
         // first argument is the object name - try to get object
         final String l_objectname = l_args.get( 0 ).toString();
         final Pair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "object", l_objectname ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "object", l_objectname) );
 
         // second argument is the field name - try to get the field
         final String l_fieldname = l_args.get( 1 ).toString();
         final CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
         if ( l_handle == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "fieldnotfound", l_fieldname, l_objectname) );
 
 
         try

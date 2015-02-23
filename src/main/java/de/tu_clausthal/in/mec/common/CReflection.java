@@ -64,7 +64,7 @@ public class CReflection
             }
 
         if ( l_field == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( CReflection.class, "fieldnotfound", p_field, p_class.getCanonicalName() ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(CReflection.class, "fieldnotfound", p_field, p_class.getCanonicalName()) );
 
         l_field.setAccessible( true );
         CGetSet l_struct = null;
@@ -155,7 +155,7 @@ public class CReflection
             }
 
         if ( l_method == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( CReflection.class, "methodnotfound", p_method, p_class.getCanonicalName() ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(CReflection.class, "methodnotfound", p_method, p_class.getCanonicalName()) );
 
         l_method.setAccessible( true );
         return new CMethod( l_method );
@@ -395,7 +395,7 @@ public class CReflection
                 return m_cache.get( l_method );
 
             if ( m_forbidden.contains( p_methodname ) )
-                throw new IllegalAccessException( CCommon.getResouceString( this, "access", p_methodname ) );
+                throw new IllegalAccessException( CCommon.getResourceString(this, "access", p_methodname) );
 
             CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
             m_cache.put( l_method, l_handle );

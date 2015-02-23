@@ -84,6 +84,43 @@ public class CMenuStorage
         return (JMenu) l_parent;
     }
 
+    /**
+     * get of create path according to selected language
+     *
+     * @author Thomas Hornoff ( thomas.hornoff@gmail.com )
+     *
+     * @param p_path full path (without item)
+     * @param p_path_trans translated path according to selected language
+     * 
+     * @return menu object
+     */
+    
+    protected JMenu getOrCreatePath( final CPath p_path, final String p_path_trans )
+    {
+        JComponent l_parent = null;
+        for (CPath l_item : p_path )
+        {
+            JComponent l_current = m_pathobject.get( l_item );
+
+            if ( l_current == null )
+            {
+                l_current = new JMenu( p_path_trans );
+                if ( l_parent != null )
+                    l_parent.add( l_current );
+
+                m_pathobject.put( l_item, l_current );
+                m_objectpath.put( l_current, l_item );
+            }
+
+            if ( !( l_current instanceof JMenu ) )
+                throw new IllegalStateException( "item on [" + l_item + "] is not a JMenu" );
+
+            l_parent = l_current;
+        }
+
+        return (JMenu) l_parent;
+    }
+
 
     // --- getter for data ---------------------------------------------------------------------------------------------
 
@@ -238,6 +275,19 @@ public class CMenuStorage
         this.getOrCreatePath( new CPath( p_path ) );
     }
 
+    /**
+     * add a new menu according to selected language
+     *
+     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
+     *
+     * @param p_path full path without item
+     * @param p_path_trans translation of full path
+     */
+    public void addMenu( final String p_path, final String p_path_trans)
+    {
+        this.getOrCreatePath( new CPath( p_path ), p_path_trans );
+    }
+
 
     /**
      * removes all items with their subitems
@@ -362,6 +412,56 @@ public class CMenuStorage
         }
     }
 
+    /**
+     * adds a list of items according to selected language
+     *
+     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
+     *
+     * @param p_path parent path
+     * @param p_path_trans parent path translated to selected language
+     * @param p_elements array with item names (null adds a seperator)
+     * @param p_elements_trans array with items names according to selected language
+     * @param p_listen action listener for the item
+     */
+    public void addItem( final String p_path, final String p_path_trans, final String[] p_elements, final String[] p_elements_trans, final ActionListener p_listen )
+    {
+        final List l_elementsList = Arrays.asList(p_elements);
+
+        final CPath l_path = new CPath( p_path );
+        if ( m_pathobject.containsKey( l_path ) )
+            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+
+        //get parent
+        JMenu l_menu = null;
+        if ( l_path.size() > 0 )
+            l_menu = this.getOrCreatePath( l_path, p_path_trans );
+
+        // add all elements
+        for ( String l_name : p_elements )
+        {
+
+            if ( ( l_name == null ) || ( l_name.isEmpty() ) )
+            {
+                if ( l_menu != null )
+                    l_menu.addSeparator();
+            }
+            else
+            {
+                final CPath l_fullpath = new CPath( p_path, l_name );
+                if ( m_pathobject.containsKey( l_fullpath ) )
+                    continue;
+
+                final JMenuItem l_item = new JMenuItem( p_elements_trans[ l_elementsList.indexOf( l_name ) ] );
+                l_item.addActionListener( p_listen );
+
+                m_pathobject.put( l_fullpath, l_item );
+                m_objectpath.put( l_item, l_fullpath );
+                if ( l_menu != null )
+                    l_menu.add( l_item );
+            }
+        }
+    }
+
 
     /**
      * adds a slider
@@ -373,8 +473,11 @@ public class CMenuStorage
      * @param p_labelmax label of the maximum (null removes the label)
      * @param p_max      maximum value
      * @param p_listen   change listener
+     *
+     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
+     * @param p_label_trans label according to selected language
      */
-    public void addSlider( final String p_path, final int p_value, final String p_labelmin, final int p_min, final String p_labelmax, final int p_max, final ChangeListener p_listen )
+    public void addSlider( final String p_path, final String p_label_trans, final int p_value, final String p_labelmin, final int p_min, final String p_labelmax, final int p_max, final ChangeListener p_listen )
     {
         CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )
@@ -384,7 +487,7 @@ public class CMenuStorage
         JMenu l_menu = null;
         final String l_label = l_path.removeSuffix();
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path, p_label_trans );
 
         // create menu entry
         final JSlider l_slider = new JSlider( p_min, p_max, p_value );
@@ -395,7 +498,8 @@ public class CMenuStorage
             final Hashtable<Integer, JLabel> l_sliderlabel = new Hashtable<>();
             l_sliderlabel.put( l_slider.getMinimum(), new JLabel( p_labelmin ) );
             l_sliderlabel.put( l_slider.getMaximum(), new JLabel( p_labelmax ) );
-            l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( l_label ) );
+            //l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( l_label ) );
+            l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( p_label_trans ) );
 
             l_slider.setLabelTable( l_sliderlabel );
             l_slider.setPaintLabels( true );
@@ -416,9 +520,9 @@ public class CMenuStorage
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
      */
-    public void addRadioItems( final String p_path, final String[] p_elements, final ActionListener p_listen )
+    public void addRadioItems( final String p_path, final String p_label_trans, final String[] p_elements, final ActionListener p_listen )
     {
-        this.addRadioGroup( p_path, p_elements, null, p_listen );
+        this.addRadioGroup( p_path, p_label_trans, p_elements, null, p_listen );
     }
 
     /**
@@ -427,10 +531,13 @@ public class CMenuStorage
      * @param p_path     parent path
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
+     *
+     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
+     * @param p_label_trans label according to selected language
      */
-    public void addRadioGroup( final String p_path, final String[] p_elements, final ActionListener p_listen )
+    public void addRadioGroup( final String p_path, final String p_label_trans, final String[] p_elements, final ActionListener p_listen )
     {
-        this.addRadioGroup( p_path, p_elements, new ButtonGroup(), p_listen );
+        this.addRadioGroup( p_path, p_label_trans, p_elements, new ButtonGroup(), p_listen );
     }
 
 
@@ -442,7 +549,7 @@ public class CMenuStorage
      * @param p_group    button group or null
      * @param p_listen   action listener for the item
      */
-    private void addRadioGroup( final String p_path, final String[] p_elements, final ButtonGroup p_group, final ActionListener p_listen )
+    private void addRadioGroup( final String p_path, final String p_label_trans, final String[] p_elements, final ButtonGroup p_group, final ActionListener p_listen )
     {
         final CPath l_path = new CPath( p_path );
         if ( m_pathobject.containsKey( l_path ) )
@@ -451,7 +558,7 @@ public class CMenuStorage
         // get parent
         JMenu l_menu = null;
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path, p_label_trans );
 
         // add all elements
         for ( String l_name : p_elements )

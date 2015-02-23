@@ -57,7 +57,7 @@ public class CCommon
      * @return typed array
      * @tparam T collection / array type
      */
-    public static <T> T[] ColletionToArray( Class<T[]> p_class, Collection<T> p_collection )
+    public static <T> T[] CollectionToArray(Class<T[]> p_class, Collection<T> p_collection)
     {
         T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
         p_collection.toArray( l_return );
@@ -65,27 +65,27 @@ public class CCommon
     }
 
     /**
-     * returns a string of the resouce file
+     * returns a string of the resource file
      *
      * @param p_object    object for label
      * @param p_label     label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
-    public static String getResouceString( Object p_object, String p_label, Object... p_parameter )
+    public static String getResourceString(Object p_object, String p_label, Object... p_parameter)
     {
         return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_object.getClass().getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }
 
     /**
-     * returns a string of the resouce file
+     * returns a string of the resource file
      *
      * @param p_class     class for static calls
      * @param p_label     label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
-    public static String getResouceString( Class<?> p_class, String p_label, Object... p_parameter )
+    public static String getResourceString(Class<?> p_class, String p_label, Object... p_parameter)
     {
         return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
     }

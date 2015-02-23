@@ -108,7 +108,7 @@ public class CHelpViewer extends JDialog implements ActionListener
 
             try
             {
-                final JButton l_button = new JButton( CCommon.getResouceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
+                final JButton l_button = new JButton( CCommon.getResourceString(this, l_item[0]), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
                 l_button.addActionListener( this );
                 l_toolbar.add( l_button );
                 m_components.put( l_button, l_item[0] );

@@ -69,7 +69,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
         //if ("Profile".equals( p_name ))
         //    return new CProfileSourceFactory( p_position );
 
-        throw new IllegalArgumentException( CCommon.getResouceString( this, "nosource" ) );
+        throw new IllegalArgumentException( CCommon.getResourceString(this, "nosource") );
     }
 
     @Override

@@ -139,7 +139,7 @@ public class CSimulation
     public void setUI( final CFrame p_frame )
     {
         if ( m_ui != null )
-            throw new IllegalStateException( CCommon.getResouceString( this, "uiframeset" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "uiframeset") );
         m_ui = p_frame;
     }
 
@@ -175,10 +175,10 @@ public class CSimulation
     public void start( final int p_steps ) throws InterruptedException
     {
         if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "running") );
         this.threadStartUp();
 
-        CLogger.info( CCommon.getResouceString( this, "startsteps", p_steps ) );
+        CLogger.info( CCommon.getResourceString(this, "startsteps", p_steps) );
         CBootstrap.beforeSimulationStarts( this );
 
         // run thread and wait until thread is finished
@@ -194,10 +194,10 @@ public class CSimulation
     public void start()
     {
         if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "running") );
         this.threadStartUp();
 
-        CLogger.info( CCommon.getResouceString( this, "start" ) );
+        CLogger.info( CCommon.getResourceString(this, "start") );
         CBootstrap.beforeSimulationStarts( this );
 
         m_mainloop.resume();
@@ -210,11 +210,11 @@ public class CSimulation
     public void stop()
     {
         if ( !this.isRunning() )
-            throw new IllegalStateException( CCommon.getResouceString( this, "notrunning" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "notrunning") );
 
         m_mainloop.pause();
         CBootstrap.afterSimulationStops( this );
-        CLogger.info( CCommon.getResouceString( this, "stop" ) );
+        CLogger.info( CCommon.getResourceString(this, "stop") );
     }
 
 
@@ -228,7 +228,7 @@ public class CSimulation
         m_mainloop.reset();
 
         CBootstrap.onSimulationReset( this );
-        CLogger.info( CCommon.getResouceString( this, "reset" ) );
+        CLogger.info( CCommon.getResourceString(this, "reset") );
     }
 
 
@@ -242,7 +242,7 @@ public class CSimulation
     public void store( final ObjectOutputStream p_stream ) throws IOException
     {
         if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "running") );
 
         // read all painter object and store the list
         final List<String> l_osmpainter = new ArrayList<>();
@@ -255,7 +255,7 @@ public class CSimulation
         p_stream.writeObject( l_osmpainter );
 
 
-        CLogger.info( CCommon.getResouceString( this, "store" ) );
+        CLogger.info( CCommon.getResourceString(this, "store") );
     }
 
 
@@ -271,7 +271,7 @@ public class CSimulation
     public void load( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResouceString( this, "running" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "running") );
 
         if ( this.hasUI() )
             for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
@@ -295,7 +295,7 @@ public class CSimulation
         // reset all layer
         this.reset();
 
-        CLogger.info( CCommon.getResouceString( this, "load" ) );
+        CLogger.info( CCommon.getResourceString(this, "load") );
     }
 
 }

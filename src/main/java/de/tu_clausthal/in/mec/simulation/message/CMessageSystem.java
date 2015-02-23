@@ -59,7 +59,7 @@ public class CMessageSystem implements IVoidSteppable
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
         {
-            CLogger.error( CCommon.getResouceString( this, "register", p_receiver, p_path ) );
+            CLogger.error( CCommon.getResourceString(this, "register", p_receiver, p_path) );
             return;
         }
 
@@ -68,7 +68,7 @@ public class CMessageSystem implements IVoidSteppable
             l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
         l_node.getData().getLeft().add( p_receiver );
 
-        CLogger.info( CCommon.getResouceString( this, "registered", p_receiver, p_path ) );
+        CLogger.info( CCommon.getResourceString(this, "registered", p_receiver, p_path) );
     }
 
 
@@ -82,14 +82,14 @@ public class CMessageSystem implements IVoidSteppable
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathexist( p_path ) ) )
         {
-            CLogger.error( CCommon.getResouceString( this, "unregister", p_receiver, p_path ) );
+            CLogger.error( CCommon.getResourceString(this, "unregister", p_receiver, p_path) );
             return;
         }
 
         final CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
         l_node.getData().getLeft().remove( p_receiver );
 
-        CLogger.info( CCommon.getResouceString( this, "unregistered", p_receiver, p_path ) );
+        CLogger.info( CCommon.getResourceString(this, "unregistered", p_receiver, p_path) );
     }
 
 
@@ -106,20 +106,20 @@ public class CMessageSystem implements IVoidSteppable
 
         if ( !m_root.pathexist( p_path ) )
         {
-            CLogger.error( CCommon.getResouceString( this, "messagefail", p_message.getData(), p_path ) );
+            CLogger.error( CCommon.getResourceString(this, "messagefail", p_message.getData(), p_path) );
             return;
         }
 
         if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( p_message.getSource().getPath().equals( p_path ) ) )
         {
-            CLogger.error( CCommon.getResouceString( this, "push", p_message, p_path ) );
+            CLogger.error( CCommon.getResourceString(this, "push", p_message, p_path) );
             return;
         }
 
         // check time to live value
         if ( p_message.ttl() < 0 )
         {
-            CLogger.info( CCommon.getResouceString( this, "ttl", p_message ) );
+            CLogger.info( CCommon.getResourceString(this, "ttl", p_message) );
             return;
         }
 

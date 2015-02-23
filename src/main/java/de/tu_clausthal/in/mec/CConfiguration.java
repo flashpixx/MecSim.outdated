@@ -141,13 +141,13 @@ public class CConfiguration
     private void createDirectories() throws IOException
     {
         if ( !m_dir.exists() && !m_dir.mkdirs() )
-            throw new IOException( CCommon.getResouceString( this, "notcreate", m_dir.getAbsolutePath() ) );
+            throw new IOException( CCommon.getResourceString(this, "notcreate", m_dir.getAbsolutePath()) );
 
         if ( !m_masdir.exists() && !m_masdir.mkdirs() )
-            throw new IOException( CCommon.getResouceString( this, "notcreate", m_masdir.getAbsolutePath() ) );
+            throw new IOException( CCommon.getResourceString(this, "notcreate", m_masdir.getAbsolutePath()) );
 
         if ( !m_jardir.exists() && !m_jardir.mkdirs() )
-            throw new IOException( CCommon.getResouceString( this, "notcreate", m_jardir.getAbsolutePath() ) );
+            throw new IOException( CCommon.getResourceString(this, "notcreate", m_jardir.getAbsolutePath()) );
     }
 
     /**
@@ -168,7 +168,7 @@ public class CConfiguration
         }
 
         String l_config = m_dir + File.separator + s_ConfigFilename;
-        CLogger.info( CCommon.getResouceString( this, "read", l_config ) );
+        CLogger.info( CCommon.getResourceString(this, "read", l_config) );
 
         // read main configuration
         try (
@@ -184,47 +184,47 @@ public class CConfiguration
 
         // check the configuration values and set it
         if ( l_tmp == null )
-            CLogger.warn( CCommon.getResouceString( this, "default" ) );
+            CLogger.warn( CCommon.getResourceString(this, "default") );
         else
         {
             if ( l_tmp.ViewPoint == null )
             {
-                CLogger.warn( CCommon.getResouceString( this, "viewpointdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "viewpointdefault") );
                 l_tmp.ViewPoint = m_data.ViewPoint;
             }
             if ( l_tmp.WindowHeight < 100 )
             {
-                CLogger.warn( CCommon.getResouceString( this, "heightdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "heightdefault") );
                 l_tmp.WindowHeight = m_data.WindowHeight;
             }
             if ( l_tmp.WindowWidth < 100 )
             {
-                CLogger.warn( CCommon.getResouceString( this, "widthdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "widthdefault") );
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
             if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
             {
-                CLogger.warn( CCommon.getResouceString( this, "routingdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "routingdefault") );
                 l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
             }
             if ( l_tmp.CellSampling < 1 )
             {
-                CLogger.warn( CCommon.getResouceString( this, "cellsamplingdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "cellsamplingdefault") );
                 l_tmp.CellSampling = m_data.CellSampling;
             }
             if ( l_tmp.ThreadSleepTime < 0 )
             {
-                CLogger.warn( CCommon.getResouceString( this, "threadsleepdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "threadsleepdefault") );
                 l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
             }
             if ( l_tmp.RoutingMap == null )
             {
-                CLogger.warn( CCommon.getResouceString( this, "routingmapdefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "routingmapdefault") );
                 l_tmp.RoutingMap = m_data.RoutingMap;
             }
             if ( l_tmp.Database == null )
             {
-                CLogger.warn( CCommon.getResouceString( this, "databasedefault" ) );
+                CLogger.warn( CCommon.getResourceString(this, "databasedefault") );
                 l_tmp.Database = m_data.Database;
             }
 

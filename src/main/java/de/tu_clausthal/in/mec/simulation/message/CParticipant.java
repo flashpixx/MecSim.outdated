@@ -51,7 +51,7 @@ public class CParticipant implements IParticipant
     public CParticipant( final IReceiver p_owner )
     {
         if ( p_owner == null )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "ownernull" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "ownernull") );
 
         m_owner = p_owner;
         CSimulation.getInstance().getMessageSystem().register( this.getReceiverPath(), this );

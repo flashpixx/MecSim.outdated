@@ -87,14 +87,14 @@ public class CMainLoop implements Runnable
         if ( p_object instanceof IReturnSteppable )
             return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
 
-        throw new IllegalArgumentException( CCommon.getResouceString( CMainLoop.class, "notsteppable" ) );
+        throw new IllegalArgumentException( CCommon.getResourceString(CMainLoop.class, "notsteppable") );
     }
 
 
     @Override
     public void run()
     {
-        CLogger.info( CCommon.getResouceString( this, "start" ) );
+        CLogger.info( CCommon.getResourceString(this, "start") );
 
         final Collection<Callable<Object>> l_tasks = new LinkedList<>();
 
@@ -157,7 +157,7 @@ public class CMainLoop implements Runnable
         }
 
         m_pause = true;
-        CLogger.info( CCommon.getResouceString( this, "stop" ) );
+        CLogger.info( CCommon.getResourceString(this, "stop") );
     }
 
 
@@ -203,7 +203,7 @@ public class CMainLoop implements Runnable
     public void resume( final int p_steps )
     {
         if ( p_steps < 1 )
-            throw new IllegalArgumentException( CCommon.getResouceString( this, "stepnumber" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString(this, "stepnumber") );
 
         m_shutdownstep = m_simulationcount + p_steps;
         m_pause = false;
@@ -215,9 +215,9 @@ public class CMainLoop implements Runnable
     public void reset()
     {
         if ( !m_pause )
-            throw new IllegalStateException( CCommon.getResouceString( this, "pause" ) );
+            throw new IllegalStateException( CCommon.getResourceString(this, "pause") );
 
-        CLogger.info( CCommon.getResouceString( this, "reset" ) );
+        CLogger.info( CCommon.getResourceString(this, "reset") );
 
         try
         {

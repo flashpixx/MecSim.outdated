@@ -30,7 +30,6 @@ import bibliothek.gui.dock.common.location.TreeLocationRoot;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,7 +71,7 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
-        this.setTitle( "TU-Clausthal - MecSim " + CCommon.getResourceString(this, "title") );
+        this.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         this.setLayout( new BorderLayout() );
 
         this.setSize( CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() );
@@ -169,16 +168,16 @@ public class CFrame extends JFrame
         TreeLocationRoot l_position = null;
         switch ( p_position )
         {
-            case SOUTH:
+            case BOTTOM:
                 l_position = CLocation.base().normalSouth( p_size );
                 break;
-            case NORTH:
+            case TOP:
                 l_position = CLocation.base().normalNorth( p_size );
                 break;
-            case EAST:
+            case RIGHT:
                 l_position = CLocation.base().normalEast( p_size );
                 break;
-            case WEST:
+            case LEFT:
                 l_position = CLocation.base().normalWest( p_size );
                 break;
             default:
@@ -257,7 +256,7 @@ public class CFrame extends JFrame
      */
     public enum Position
     {
-        SOUTH, NORTH, EAST, WEST
+        BOTTOM, TOP, RIGHT, LEFT
     }
 
 }

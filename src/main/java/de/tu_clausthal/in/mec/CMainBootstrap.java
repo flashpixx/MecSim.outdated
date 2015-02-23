@@ -25,11 +25,10 @@ package de.tu_clausthal.in.mec;
 
 
 /**
- * bootstrap for the Java main call -
- * checking of the correct installed JRE
+ * bootstrap for the Java main call - checking of the correct installed JRE
  *
- * @warning the class must be compiled with a lower target version of the JRE,
- * the Maven build script uses different profiles to do this
+ * @warning the class must be compiled with a lower target version of the JRE, the Maven build script uses different
+ * profiles to do this
  */
 public class CMainBootstrap
 {

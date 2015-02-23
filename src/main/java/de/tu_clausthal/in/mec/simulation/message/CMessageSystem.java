@@ -25,8 +25,8 @@ package de.tu_clausthal.in.mec.simulation.message;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CNode;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.common.CTreeNode;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -46,7 +46,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
-    protected CNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CNode( this.toString() );
+    protected CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
 
 
     /**
@@ -63,7 +63,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        final CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
         if ( l_node.isDataNull() )
             l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
         l_node.getData().getLeft().add( p_receiver );
@@ -86,7 +86,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        final CNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
         l_node.getData().getLeft().remove( p_receiver );
 
         CLogger.info( CCommon.getResourceString(this, "unregistered", p_receiver, p_path) );

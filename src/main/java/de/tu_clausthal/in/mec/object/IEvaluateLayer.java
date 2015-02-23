@@ -46,7 +46,7 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     /**
      * list of data items
      */
-    protected Queue<T> m_data = new ConcurrentLinkedQueue<>();
+    protected final Queue<T> m_data = new ConcurrentLinkedQueue<>();
     /**
      * flag for activity
      */

@@ -45,6 +45,15 @@ import java.util.Calendar;
  */
 public class CMain
 {
+    /**
+     * gigabyte multiplier
+     */
+    private static final long c_gb = 1024 * 1024 * 1024;
+    /**
+     * needed memory in gigabyte
+     */
+    private static final float c_neededmemory = 2.5f;
+
 
     /**
      * main program
@@ -109,6 +118,8 @@ public class CMain
 
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
+        CLogger.out( CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gb ), Runtime.getRuntime().maxMemory() / c_gb < c_neededmemory );
+
         if ( !l_cli.hasOption( "nogui" ) )
             CSimulation.getInstance().setUI( new CFrame() );
         else

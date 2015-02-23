@@ -248,7 +248,7 @@ public class CReflection
         /**
          * ctor
          *
-         * @param p_field field of the getter / setter
+         * @param p_field  field of the getter / setter
          * @param p_getter getter handle or null
          * @param p_setter setter handle or null
          */

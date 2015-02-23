@@ -39,6 +39,6 @@ public interface IAction<N, T>
      * @param p_cellid cell id of the set action
      * @param p_object object that is set
      */
-    void actionPerformed( CEdge<N, T> p_edge, int p_cellid, N p_object );
+    void actionPerformed( final CEdge<N, T> p_edge, final int p_cellid, final N p_object );
 
 }

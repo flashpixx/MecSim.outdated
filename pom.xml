@@ -70,6 +70,7 @@
 
         <!-- will be set outside (build parameter) -->
         <build.number></build.number>
+        <build.commit></build.commit>
     </properties>
 
 
@@ -229,8 +230,6 @@
     </dependencies>
 
 
-
-
     <!-- main build -->
     <build>
         <defaultGoal>package</defaultGoal>
@@ -348,10 +347,15 @@
                     </descriptorRefs>
                     <archive>
                         <manifestEntries>
-                            <Built-By>${project.organization.name} (${project.organization.url})</Built-By>
+                            <Project-Name>${project.name}</Project-Name>
+                            <Project-URL>${project.url}</Project-URL>
+                            <License>${project.licenses[0].name}</License>
+                            <License-URL>${project.licenses[0].url}</License-URL>
+                            <Built-By>${project.organization.name}</Built-By>
+                            <Built-By-URL>${project.organization.url}</Built-By-URL>
                             <Build-Version>${project.version}</Build-Version>
                             <Build-Number>${build.number}</Build-Number>
-                            <Project-URL>${project.url}</Project-URL>
+                            <Build-Commit>${build.commit}</Build-Commit>
                         </manifestEntries>
                         <manifest>
                             <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>

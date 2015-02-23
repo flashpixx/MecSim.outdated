@@ -65,12 +65,13 @@ public class CConfigurationDialog extends JDialog
      */
     public CConfigurationDialog( final Frame p_frame )
     {
+        super( p_frame );
         if ( p_frame != null )
             this.setLocationRelativeTo( p_frame );
 
         this.setAlwaysOnTop( true );
         this.setResizable( false );
-        this.setModalityType( ModalityType.APPLICATION_MODAL );
+        this.setModalityType( ModalityType.TOOLKIT_MODAL );
 
         // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
         // public properties instead

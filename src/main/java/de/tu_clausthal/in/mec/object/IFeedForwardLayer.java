@@ -23,6 +23,9 @@
 
 package de.tu_clausthal.in.mec.object;
 
+
+import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
+import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISteppable;
 import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -38,20 +41,26 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 
 /**
- * multilayer to create a collection for elements
+ * layer with connected elements - elements are return-stepable and the element queue will be processed until all
+ * elements are finished, it corresponds to a feed-forward structure
  *
- * @tparam T object type of the layer
+ * @note there exists no cycle check, so detection of infinity loops must be manually
  */
-public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
+public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IReturnSteppable<?> & IReturnSteppableTarget<T> & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
 {
+
     /**
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
     /**
-     * list of data items
+     * list unprocessing data items
      */
-    protected final Queue<T> m_data = new ConcurrentLinkedDeque<>();
+    protected final Queue<T> m_processingdata = new ConcurrentLinkedDeque<>();
+    /**
+     * list of finished data
+     */
+    protected final Queue<T> m_finisheddata = new ConcurrentLinkedDeque<>();
     /**
      * flag for visibility
      */
@@ -128,48 +137,74 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      */
     public void afterStepObject( final int p_currentstep, final T p_object )
     {
+        // push data to the queue
+        if ( p_object.isFinish() )
+            m_finisheddata.add( p_object );
+        else
+            m_processingdata.add( p_object );
     }
+
+    /**
+     * method is run, before all objects run
+     *
+     * @param p_currentstep step number
+     */
+    public void beforeStepAllObject( final int p_currentstep )
+    {
+        m_processingdata.addAll( m_finisheddata );
+        m_finisheddata.clear();
+    }
+
+    /**
+     * method is run, after all objects are finished
+     *
+     * @param p_currentstep step number
+     */
+    public void afterStepAllObject( final int p_currentstep )
+    {
+    }
+
 
     @Override
     public int size()
     {
-        return m_data.size();
+        return m_processingdata.size();
     }
 
     @Override
     public boolean isEmpty()
     {
-        return m_data.isEmpty();
+        return m_processingdata.isEmpty();
     }
 
     @Override
     public boolean contains( final Object p_object )
     {
-        return m_data.contains( p_object );
+        return m_processingdata.contains( p_object );
     }
 
     @Override
     public Iterator<T> iterator()
     {
-        return m_data.iterator();
+        return m_processingdata.iterator();
     }
 
     @Override
     public Object[] toArray()
     {
-        return m_data.toArray();
+        return m_processingdata.toArray();
     }
 
     @Override
     public <S> S[] toArray( final S[] p_value )
     {
-        return m_data.toArray( p_value );
+        return m_processingdata.toArray( p_value );
     }
 
     @Override
     public boolean add( final T p_value )
     {
-        final boolean l_return = m_data.add( p_value );
+        final boolean l_return = m_processingdata.add( p_value );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -184,7 +219,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public boolean remove( final Object p_object )
     {
-        final boolean l_result = m_data.remove( p_object );
+        final boolean l_result = m_processingdata.remove( p_object );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -199,7 +234,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
-            if ( !m_data.contains( l_item ) )
+            if ( !m_processingdata.contains( l_item ) )
                 return false;
 
         try
@@ -215,7 +250,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public boolean addAll( final Collection<? extends T> p_collection )
     {
-        final boolean l_return = m_data.addAll( p_collection );
+        final boolean l_return = m_processingdata.addAll( p_collection );
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -232,7 +267,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         for ( Object l_item : p_collection )
         {
-            if ( m_data.remove( l_item ) )
+            if ( m_processingdata.remove( l_item ) )
                 continue;
 
             return false;
@@ -251,13 +286,13 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public boolean retainAll( final Collection<?> p_collection )
     {
-        return m_data.retainAll( p_collection );
+        return m_processingdata.retainAll( p_collection );
     }
 
     @Override
     public void clear()
     {
-        m_data.clear();
+        m_processingdata.clear();
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -276,7 +311,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public void release()
     {
-        for ( ISteppable l_item : m_data )
+        for ( ISteppable l_item : m_processingdata )
             l_item.release();
     }
 
@@ -290,6 +325,13 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( T l_item : this )
             l_item.paint( p_graphic, p_viewer, p_width, p_height );
+    }
+
+    public static interface IFinish
+    {
+
+        public boolean isFinish();
+
     }
 
 }

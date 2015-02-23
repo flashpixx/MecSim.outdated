@@ -10,6 +10,7 @@ target/
 !src/main/documentation/**/*.doxyfile
 !src/main/documentation/**/*.vsdx
 
+!src/main/resources/**/*.css
 !src/main/resources/**/*.xml
 !src/main/resources/**/*.png
 !src/main/resources/**/*.properties

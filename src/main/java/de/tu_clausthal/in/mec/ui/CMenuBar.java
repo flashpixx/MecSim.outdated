@@ -112,8 +112,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         m_items.addItem( "File",
                          CCommon.getResourceString( this, "File" ),
-                         new String[]{"Help", "Preferences", null, "Load", "Save", null, "Screenshot"},
+                         new String[]{"About", null, "Help", "Preferences", null, "Load", "Save", null, "Screenshot"},
                          new String[]{
+                                      CCommon.getResourceString(this, "About" ),
+                                      null,
                                       CCommon.getResourceString(this, "Help"),
                                       CCommon.getResourceString(this, "Preferences"),
                                       null,
@@ -314,6 +316,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 m_help.setVisible( true );
                 return;
             }
+            if ( "File/About".equals( l_actionpath.toString() ) )
+            {
+                this.about();
+                return;
+            }
 
             if ( "Simulation/Start".equals( l_actionpath.toString() ) )
             {
@@ -461,6 +468,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         l_dialog.setVisible( true );
     }
 
+    private void about()
+    {
+        final CAboutDialog l_about = new CAboutDialog( CSimulation.getInstance().getUI() );
+        l_about.setVisible( true );
+    }
 
 
     /**

@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
+import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
@@ -53,22 +54,22 @@ public class CMainLoop implements Runnable
     /**
      * thread-pool for handling all objects
      */
-    private ExecutorService m_pool = Executors.newWorkStealingPool();
+    protected ExecutorService m_pool = Executors.newWorkStealingPool();
 
     /**
      * simulation counter
      */
-    private int m_simulationcount = 0;
+    protected int m_simulationcount = 0;
 
     /**
      * boolean to pause/resume the thread
      */
-    private boolean m_pause = true;
+    protected boolean m_pause = true;
 
     /**
      * number of threads for running *
      */
-    private int m_shutdownstep = Integer.MAX_VALUE;
+    protected int m_shutdownstep = Integer.MAX_VALUE;
 
 
     /**
@@ -91,12 +92,26 @@ public class CMainLoop implements Runnable
     }
 
 
+    /**
+     * invokes all defined data
+     *
+     * @param p_layer      layer
+     * @param p_tasksource invoking tasks
+     * @throws InterruptedException is throws on task error
+     */
+    protected void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
+    {
+        final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
+        for ( ISteppable l_object : p_tasksource )
+            l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
+        m_pool.invokeAll( l_tasklist );
+    }
+
+
     @Override
     public void run()
     {
         CLogger.info( CCommon.getResourceString(this, "start") );
-
-        final Collection<Callable<Object>> l_tasks = new LinkedList<>();
 
         // order of all layer - the order will be read only once
         // so the thread need not be startup on program initializing
@@ -119,8 +134,9 @@ public class CMainLoop implements Runnable
                 if ( m_simulationcount >= m_shutdownstep )
                     break;
 
-                // if thread is not paused perform objects
-                l_tasks.clear();
+
+                // run all layer
+                final Collection<Callable<Object>> l_tasks = new LinkedList<>();
                 l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
                 for ( ILayer l_layer : l_layerorder )
                     if ( l_layer.isActive() )
@@ -128,21 +144,32 @@ public class CMainLoop implements Runnable
                 m_pool.invokeAll( l_tasks );
 
 
-                l_tasks.clear();
+                // run all layer objects - only multi-, evaluate- & network layer can store other objects
                 for ( ILayer l_layer : l_layerorder )
                 {
                     if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
                         continue;
 
-                    // evaluate- & multilayer can creates tasks
                     if ( l_layer instanceof IMultiLayer )
-                        for ( Object l_object : ( (IMultiLayer) l_layer ) )
-                            l_tasks.add( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
-                    if ( l_layer instanceof IEvaluateLayer )
-                        for ( Object l_object : ( (IEvaluateLayer) l_layer ) )
-                            l_tasks.add( createTask( m_simulationcount, (ISteppable) l_object, l_layer ) );
+                    {
+                        this.invokeTasks( l_layer, (IMultiLayer) l_layer );
+                        continue;
+                    }
 
-                    m_pool.invokeAll( l_tasks );
+                    if ( l_layer instanceof IEvaluateLayer )
+                    {
+                        this.invokeTasks( l_layer, (IEvaluateLayer) l_layer );
+                        continue;
+                    }
+
+                    if ( l_layer instanceof IFeedForwardLayer )
+                    {
+                        ( (IFeedForwardLayer) l_layer ).beforeStepAllObject( m_shutdownstep );
+                        while ( !( (IFeedForwardLayer) l_layer ).isEmpty() )
+                            this.invokeTasks( l_layer, (IFeedForwardLayer) l_layer );
+                        ( (IFeedForwardLayer) l_layer ).afterStepAllObject( m_shutdownstep );
+                        continue;
+                    }
                 }
 
 

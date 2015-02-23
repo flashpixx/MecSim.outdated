@@ -425,24 +425,23 @@ public class CMenuStorage
      *
      * @author Thomas Hornoff (thomas.hornoff@gmail.com)
      *
-     * @param p_path parent path
-     * @param p_path_trans parent path translated to selected language
+     * @param p_path parent path including translation according to selected language -> <'path', 'translation'>
      * @param p_elements array with item names (null adds a seperator)
      * @param p_elements_trans array with items names according to selected language
      * @param p_listen action listener for the item
      */
-    public void addItem( final String p_path, final String p_path_trans, final String[] p_elements, final String[] p_elements_trans, final ActionListener p_listen )
+    public void addItem( final ImmutablePair<String, String> p_path, final String[] p_elements, final String[] p_elements_trans, final ActionListener p_listen )
     {
         final List l_elementsList = Arrays.asList(p_elements);
 
-        final CPath l_path = new CPath( p_path );
+        final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
         //get parent
         JMenu l_menu = null;
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path, p_path_trans );
+            l_menu = this.getOrCreatePath( l_path, p_path.getRight() );
 
         // add all elements
         for ( String l_name : p_elements )
@@ -455,7 +454,7 @@ public class CMenuStorage
             }
             else
             {
-                final CPath l_fullpath = new CPath( p_path, l_name );
+                final CPath l_fullpath = new CPath( p_path.getLeft(), l_name );
                 if ( m_pathobject.containsKey( l_fullpath ) )
                     continue;
 
@@ -474,7 +473,7 @@ public class CMenuStorage
     /**
      * adds a slider
      *
-     * @param p_path     path of the element
+     * @param p_path     path of the element including translation according to selected language -> <'path', 'translation'>
      * @param p_value    initialization value
      * @param p_labelmin label of the minimum (null removes the label)
      * @param p_min      minimum value
@@ -482,12 +481,10 @@ public class CMenuStorage
      * @param p_max      maximum value
      * @param p_listen   change listener
      *
-     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
-     * @param p_label_trans label according to selected language
      */
-    public void addSlider( final String p_path, final String p_label_trans, final int p_value, final String p_labelmin, final int p_min, final String p_labelmax, final int p_max, final ChangeListener p_listen )
+    public void addSlider( final ImmutablePair<String, String> p_path, final int p_value, final String p_labelmin, final int p_min, final String p_labelmax, final int p_max, final ChangeListener p_listen )
     {
-        CPath l_path = new CPath( p_path );
+        CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
@@ -495,7 +492,7 @@ public class CMenuStorage
         JMenu l_menu = null;
         final String l_label = l_path.removeSuffix();
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path, p_label_trans );
+            l_menu = this.getOrCreatePath( l_path, p_path.getRight() );
 
         // create menu entry
         final JSlider l_slider = new JSlider( p_min, p_max, p_value );
@@ -506,8 +503,7 @@ public class CMenuStorage
             final Hashtable<Integer, JLabel> l_sliderlabel = new Hashtable<>();
             l_sliderlabel.put( l_slider.getMinimum(), new JLabel( p_labelmin ) );
             l_sliderlabel.put( l_slider.getMaximum(), new JLabel( p_labelmax ) );
-            //l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( l_label ) );
-            l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( p_label_trans ) );
+            l_sliderlabel.put( ( l_slider.getMaximum() - l_slider.getMinimum() ) / 2, new JLabel( p_path.getRight() ) );
 
             l_slider.setLabelTable( l_sliderlabel );
             l_slider.setPaintLabels( true );
@@ -516,7 +512,7 @@ public class CMenuStorage
         if ( l_menu != null )
             l_menu.add( l_slider );
 
-        l_path = new CPath( p_path );
+        l_path = new CPath( p_path.getLeft() );
         m_pathobject.put( l_path, l_slider );
         m_objectpath.put( l_slider, l_path );
     }
@@ -524,49 +520,47 @@ public class CMenuStorage
     /**
      * adds single radio items
      *
-     * @param p_path     parent path
-     * @param p_elements array with item names (null adds a seperator)
+     * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
+     * @param p_elements array with item names (null adds a separator)
      * @param p_listen   action listener for the item
      */
-    public void addRadioItems( final String p_path, final String p_label_trans, final String[] p_elements, final ActionListener p_listen )
+    public void addRadioItems( final ImmutablePair<String, String> p_path, final String[] p_elements, final ActionListener p_listen )
     {
-        this.addRadioGroup( p_path, p_label_trans, p_elements, null, p_listen );
+        this.addRadioGroup( p_path, p_elements, null, p_listen );
     }
 
     /**
      * adds a radio group
      *
-     * @param p_path     parent path
+     * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
      *
-     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
-     * @param p_label_trans label according to selected language
      */
-    public void addRadioGroup( final String p_path, final String p_label_trans, final String[] p_elements, final ActionListener p_listen )
+    public void addRadioGroup( final ImmutablePair<String, String> p_path, final String[] p_elements, final ActionListener p_listen )
     {
-        this.addRadioGroup( p_path, p_label_trans, p_elements, new ButtonGroup(), p_listen );
+        this.addRadioGroup( p_path, p_elements, new ButtonGroup(), p_listen );
     }
 
 
     /**
      * adds a radio group
      *
-     * @param p_path     parent path
+     * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
      * @param p_elements array with item names (null adds a seperator)
      * @param p_group    button group or null
      * @param p_listen   action listener for the item
      */
-    private void addRadioGroup( final String p_path, final String p_label_trans, final String[] p_elements, final ButtonGroup p_group, final ActionListener p_listen )
+    private void addRadioGroup( final ImmutablePair<String, String> p_path, final String[] p_elements, final ButtonGroup p_group, final ActionListener p_listen )
     {
-        final CPath l_path = new CPath( p_path );
+        final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
             throw new IllegalArgumentException( "item exists and cannot be replaced" );
 
         // get parent
         JMenu l_menu = null;
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path, p_label_trans );
+            l_menu = this.getOrCreatePath( l_path, p_path.getRight() );
 
         // add all elements
         for ( String l_name : p_elements )
@@ -578,7 +572,7 @@ public class CMenuStorage
             }
             else
             {
-                final CPath l_fullpath = new CPath( p_path, l_name );
+                final CPath l_fullpath = new CPath( p_path.getLeft(), l_name );
                 if ( m_pathobject.containsKey( l_fullpath ) )
                     continue;
 

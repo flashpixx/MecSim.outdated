@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -110,28 +111,26 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     private void buildFileMenu()
     {
-        m_items.addItem( "File",
-                         CCommon.getResourceString( this, "File" ),
+        m_items.addItem( new ImmutablePair<>( "File", CCommon.getResourceString(this, "File") ),
                          new String[]{"About", null, "Help", "Preferences", null, "Load", "Save", null, "Screenshot"},
                          new String[]{
-                                      CCommon.getResourceString(this, "About" ),
-                                      null,
-                                      CCommon.getResourceString(this, "Help"),
-                                      CCommon.getResourceString(this, "Preferences"),
-                                      null,
-                                      CCommon.getResourceString(this, "Load"),
-                                      CCommon.getResourceString(this, "Save"),
-                                      null,
-                                      CCommon.getResourceString(this, "Screenshot")
-                                     }, 
+                             CCommon.getResourceString(this, "About"),
+                             null,
+                             CCommon.getResourceString(this, "Help"),
+                             CCommon.getResourceString(this, "Preferences"),
+                             null,
+                             CCommon.getResourceString(this, "Load"),
+                             CCommon.getResourceString(this, "Save"),
+                             null,
+                             CCommon.getResourceString(this, "Screenshot")
+                         },
                          this
                        );
     }
 
     private void buildSimulationMenu()
     {
-        m_items.addItem( "Simulation",
-                         CCommon.getResourceString( this, "Simulation" ),
+        m_items.addItem( new ImmutablePair<>("Simulation", CCommon.getResourceString( this, "Simulation" ) ),
                          new String[]{"Start", "Stop", null, "Reset", null},
                          new String[]{
                                       CCommon.getResourceString( this, "Start"),
@@ -148,8 +147,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     private void buildSimulationSpeedSlider()
     {
-        m_items.addSlider( "Simulation/Speed",
-                           CCommon.getResourceString( this, "Speed" ),
+        m_items.addSlider( new ImmutablePair<>( "Simulation/Speed", CCommon.getResourceString( this, "Speed" ) ),
                            150 - CConfiguration.getInstance().get().getThreadsleeptime(), 
                            CCommon.getResourceString( this, "slow" ),
                            0,
@@ -162,8 +160,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         final String[] l_activity = new String[ CSimulation.getInstance().getWorld().size() ];
         CSimulation.getInstance().getWorld().keySet().toArray( l_activity );
-        m_items.addRadioItems( "Layer/Activity",
-                               CCommon.getResourceString( this, "Activity" ),
+        m_items.addRadioItems( new ImmutablePair<>( "Layer/Activity", CCommon.getResourceString( this, "Activity" ) ),
                                l_activity,
                                this
                              );
@@ -173,8 +170,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             if ( l_item.getValue() instanceof IViewableLayer )
                 l_visibility.add( l_item.getKey() );
 
-        m_items.addRadioItems( "Layer/Visibility",
-                               CCommon.getResourceString( this, "Visibility" ),
+        m_items.addRadioItems( new ImmutablePair<>( "Layer/Visibility", CCommon.getResourceString( this, "Visibility" ) ),
                                CCommon.CollectionToArray( String[].class, l_visibility ),
                                this
                              );
@@ -183,8 +179,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void buildCarSourcesMenu()
     {
         final String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
-        m_items.addRadioGroup( "Car Sources",
-                               CCommon.getResourceString( this, "Car Sources" ),
+        m_items.addRadioGroup( new ImmutablePair<>( "Car Sources", CCommon.getResourceString( this, "Car Sources" ) ),
                                l_sources,
                                this
                              );
@@ -194,8 +189,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     private void buildGraphWeightsMenu()
     {
-        m_items.addRadioGroup( "Graph Weights", 
-                               CCommon.getResourceString( this, "Graph Weights" ),
+        m_items.addRadioGroup( new ImmutablePair<>( "Graph Weights", CCommon.getResourceString( this, "Graph Weights" ) ),
                                ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(),
                                this
                              );
@@ -203,8 +197,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     private void buildDrivingModelMenu()
     {
-        m_items.addRadioGroup( "Driving Model",
-                               CCommon.getResourceString( this, "Driving Model" ),
+        m_items.addRadioGroup( new ImmutablePair<>( "Driving Model", CCommon.getResourceString( this, "Driving Model" ) ),
                                ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(),
                                this
                              );

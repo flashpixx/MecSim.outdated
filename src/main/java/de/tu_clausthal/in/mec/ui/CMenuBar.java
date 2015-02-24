@@ -109,6 +109,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
     }
 
+    /**
+     * builds the 'File' menu according to selected language
+     */
     private void buildFileMenu()
     {
         m_items.addItem( new ImmutablePair<>( "File", CCommon.getResourceString(this, "File") ),
@@ -128,6 +131,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                        );
     }
 
+    /**
+     * builds the 'Simulation' menu according to selected language
+     */
     private void buildSimulationMenu()
     {
         m_items.addItem( new ImmutablePair<>("Simulation", CCommon.getResourceString( this, "Simulation" ) ),
@@ -145,6 +151,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         buildSimulationSpeedSlider();
     }
 
+    /**
+     * adds a speed slider to the 'Simulation' menu
+     */
     private void buildSimulationSpeedSlider()
     {
         m_items.addSlider( new ImmutablePair<>( "Simulation/Speed", CCommon.getResourceString( this, "Speed" ) ),
@@ -156,6 +165,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                          );
     }
 
+    /**
+     * builds the 'Layer' menu according to selected language
+     */
     private void buildLayerMenu()
     {
         final String[] l_activity = new String[ CSimulation.getInstance().getWorld().size() ];
@@ -176,6 +188,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                              );
     }
 
+    /**
+     * builds 'Car Sources' menu according to selected language
+     */
     private void buildCarSourcesMenu()
     {
         final String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
@@ -187,6 +202,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
     }
 
+    /**
+     * builds 'Graph Weights' menu according to selected language
+     */
     private void buildGraphWeightsMenu()
     {
         m_items.addRadioGroup( new ImmutablePair<>( "Graph Weights", CCommon.getResourceString( this, "Graph Weights" ) ),
@@ -195,6 +213,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                              );
     }
 
+    /**
+     * builds 'Driving Model' menu according to selected language
+     */
     private void buildDrivingModelMenu()
     {
         m_items.addRadioGroup( new ImmutablePair<>( "Driving Model", CCommon.getResourceString( this, "Driving Model" ) ),
@@ -247,7 +268,10 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         l_menu.add( "check syntax" );
 
         final JComponent l_root = m_items.removeItems( "MAS/Jason" );
-        m_items.addItem( "MAS/Jason", CCommon.CollectionToArray(String[].class, l_menu), this );
+        m_items.addItem( new ImmutablePair<>( "MAS/Jason", CCommon.getResourceString( this, "Jason" ) ),
+                         CCommon.CollectionToArray(String[].class, l_menu),
+                         this
+                       );
         if ( l_root != null )
             m_items.get( "MAS" ).remove( l_root );
     }

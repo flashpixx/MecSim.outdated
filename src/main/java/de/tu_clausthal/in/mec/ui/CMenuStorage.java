@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -62,48 +63,14 @@ public class CMenuStorage
 
     /**
      * creates a full path and returns the latest element
+     * according to selected language
      *
      * @param p_path full path (without item)
-     * @return menu object
-     */
-    protected JMenu getOrCreatePath( final CPath p_path )
-    {
-        JComponent l_parent = null;
-        for ( CPath l_item : p_path )
-        {
-            JComponent l_current = m_pathobject.get( l_item );
-
-            if ( l_current == null )
-            {
-                l_current = new JMenu( l_item.getSuffix() );
-                if ( l_parent != null )
-                    l_parent.add( l_current );
-
-                m_pathobject.put( l_item, l_current );
-                m_objectpath.put( l_current, l_item );
-            }
-
-            if ( !( l_current instanceof JMenu ) )
-                throw new IllegalStateException( "item on [" + l_item + "] is not a JMenu" );
-
-            l_parent = l_current;
-        }
-
-        return (JMenu) l_parent;
-    }
-
-    /**
-     * get of create path according to selected language
-     *
-     * @author Thomas Hornoff ( thomas.hornoff@gmail.com )
-     *
-     * @param p_path full path (without item)
-     * @param p_path_trans translated path according to selected language
+     * @param p_path_translation translated path according to selected language
      * 
      * @return menu object
      */
-    
-    protected JMenu getOrCreatePath( final CPath p_path, final String p_path_trans )
+    protected JMenu getOrCreatePath( final CPath p_path, final String p_path_translation )
     {
         JComponent l_parent = null;
         for (CPath l_item : p_path )
@@ -112,7 +79,7 @@ public class CMenuStorage
 
             if ( l_current == null )
             {
-                l_current = new JMenu( p_path_trans );
+                l_current = new JMenu( p_path_translation );
                 if ( l_parent != null )
                     l_parent.add( l_current );
 
@@ -121,7 +88,7 @@ public class CMenuStorage
             }
 
             if ( !( l_current instanceof JMenu ) )
-                throw new IllegalStateException( "item on [" + l_item + "] is not a JMenu" );
+                throw new IllegalStateException( CCommon.getResourceString( this, "notjmenu", l_item ) );
 
             l_parent = l_current;
         }
@@ -205,7 +172,7 @@ public class CMenuStorage
      */
     public Set<Map.Entry<CPath, JComponent>> entrySet( final String p_path )
     {
-        return this.entrySet( p_path, false );
+        return this.entrySet(p_path, false);
     }
 
 
@@ -273,27 +240,16 @@ public class CMenuStorage
 
     // --- add / remove menu elements ----------------------------------------------------------------------------------
 
-    /**
-     * adds a new menu
-     *
-     * @param p_path full path without item
-     */
-    public void addMenu( final String p_path )
-    {
-        this.getOrCreatePath( new CPath( p_path ) );
-    }
 
     /**
      * add a new menu according to selected language
      *
-     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
-     *
      * @param p_path full path without item
-     * @param p_path_trans translation of full path
+     * @param p_path_translation translation of full path
      */
-    public void addMenu( final String p_path, final String p_path_trans)
+    public void addMenu( final String p_path, final String p_path_translation)
     {
-        this.getOrCreatePath( new CPath( p_path ), p_path_trans );
+        this.getOrCreatePath( new CPath( p_path ), p_path_translation );
     }
 
 
@@ -349,29 +305,28 @@ public class CMenuStorage
     /**
      * adds a new menu item
      *
-     * @param p_path   full path
+     * @param p_path   full path including translation according to selected language -> <'path', 'translation'>
      * @param p_listen action listener for the item
      */
-    public void addItem( final String p_path, final ActionListener p_listen )
+    public void addItem( final ImmutablePair<String, String> p_path, final ActionListener p_listen )
     {
-        CPath l_path = new CPath( p_path );
+        CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
-            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists" ) );
 
         // get parent
         JMenu l_menu = null;
-        final String l_label = l_path.removeSuffix();
 
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path, p_path.getRight() );
 
         // create menu entry
-        final JMenuItem l_item = new JMenuItem( l_label );
+        final JMenuItem l_item = new JMenuItem( p_path.getRight() );
         l_item.addActionListener( p_listen );
         if ( l_menu != null )
             l_menu.add( l_item );
 
-        l_path = new CPath( p_path );
+        l_path = new CPath( p_path.getLeft() );
         m_pathobject.put( l_path, l_item );
         m_objectpath.put( l_item, l_path );
     }
@@ -380,20 +335,22 @@ public class CMenuStorage
     /**
      * adds a list of items
      *
-     * @param p_path     parent path
-     * @param p_elements array with item names (null adds a seperator)
+     * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
+     * @param p_elements array with item names (null adds a separator)
      * @param p_listen   action listener for the item
+     *
+     * TODO: find solution for p_elements and according translations
      */
-    public void addItem( final String p_path, final String[] p_elements, final ActionListener p_listen )
+    public void addItem( final ImmutablePair<String, String> p_path, final String[] p_elements, final ActionListener p_listen )
     {
-        final CPath l_path = new CPath( p_path );
+        final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
-            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists") );
 
         // get parent
         JMenu l_menu = null;
         if ( l_path.size() > 0 )
-            l_menu = this.getOrCreatePath( l_path );
+            l_menu = this.getOrCreatePath( l_path, p_path.getRight() );
 
         // add all elements
         for ( String l_name : p_elements )
@@ -405,7 +362,7 @@ public class CMenuStorage
             }
             else
             {
-                final CPath l_fullpath = new CPath( p_path, l_name );
+                final CPath l_fullpath = new CPath( p_path.getLeft(), l_name );
                 if ( m_pathobject.containsKey( l_fullpath ) )
                     continue;
 
@@ -423,8 +380,6 @@ public class CMenuStorage
     /**
      * adds a list of items according to selected language
      *
-     * @author Thomas Hornoff (thomas.hornoff@gmail.com)
-     *
      * @param p_path parent path including translation according to selected language -> <'path', 'translation'>
      * @param p_elements array with item names (null adds a seperator)
      * @param p_elements_trans array with items names according to selected language
@@ -436,7 +391,7 @@ public class CMenuStorage
 
         final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
-            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists" ) );
 
         //get parent
         JMenu l_menu = null;
@@ -486,7 +441,7 @@ public class CMenuStorage
     {
         CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
-            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists" ) );
 
         // get parent
         JMenu l_menu = null;
@@ -547,7 +502,7 @@ public class CMenuStorage
      * adds a radio group
      *
      * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
-     * @param p_elements array with item names (null adds a seperator)
+     * @param p_elements array with item names (null adds a separator)
      * @param p_group    button group or null
      * @param p_listen   action listener for the item
      */
@@ -555,7 +510,7 @@ public class CMenuStorage
     {
         final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
-            throw new IllegalArgumentException( "item exists and cannot be replaced" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists" ) );
 
         // get parent
         JMenu l_menu = null;

@@ -143,36 +143,38 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public int getMaximumSpeed()
+    public final int getMaximumSpeed()
     {
         return m_maxSpeed;
     }
 
     @Override
-    public int getCurrentSpeed()
+    public final int getCurrentSpeed()
     {
         return m_speed;
     }
 
     @Override
-    public void setCurrentSpeed( final int p_speed )
+    public final void setCurrentSpeed( final int p_speed )
     {
         m_speed = p_speed;
     }
 
     @Override
-    public double getLingerProbability()
+    public final double getLingerProbability()
     {
         return m_LingerProbability;
     }
 
     @Override
-    public void reroute() {
+    public final void reroute()
+    {
         this.reroute(m_EndPosition);
     }
 
     @Override
-    public void reroute(GeoPosition p_position) {
+    public final void reroute( final GeoPosition p_position )
+    {
         m_EndPosition = p_position;
 
         final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes(this.getGeoposition(), m_EndPosition, 1);
@@ -184,7 +186,7 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public GeoPosition getGeoposition()
+    public final GeoPosition getGeoposition()
     {
         final EdgeIteratorState l_edge = this.getEdge();
         if ( l_edge == null )
@@ -193,19 +195,19 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public boolean hasEndReached()
+    public final boolean hasEndReached()
     {
         return m_endReached;
     }
 
     @Override
-    public Map<Integer, ICar> getPredecessor()
+    public final Map<Integer, ICar> getPredecessor()
     {
         return this.getPredecessor( 1 );
     }
 
     @Override
-    public Map<Integer, ICar> getPredecessor( final int p_count )
+    public final Map<Integer, ICar> getPredecessor( final int p_count )
     {
         final Map<Integer, ICar> l_predecessordistance = new HashMap<>();
 
@@ -221,19 +223,19 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public EdgeIteratorState getEdge()
+    public final EdgeIteratorState getEdge()
     {
         return this.getEdge( m_routeindex );
     }
 
     @Override
-    public int getAcceleration()
+    public final int getAcceleration()
     {
         return m_acceleration;
     }
 
     @Override
-    public int getDeceleration()
+    public final int getDeceleration()
     {
         return m_deceleration;
     }
@@ -244,7 +246,7 @@ public class CDefaultCar extends IInspector implements ICar
      * @param p_index index
      * @return null or edge
      */
-    private EdgeIteratorState getEdge( final int p_index )
+    private final EdgeIteratorState getEdge( final int p_index )
     {
         if ( m_route == null )
             return null;
@@ -253,7 +255,7 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
         final GeoPosition l_position = this.getGeoposition();
         if ( l_position == null )
@@ -296,7 +298,7 @@ public class CDefaultCar extends IInspector implements ICar
      * @todo draw route (solid for driven way, dashed for driving way) *
      */
     @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         final GeoPosition l_position = this.getGeoposition();
         if ( l_position == null )
@@ -323,7 +325,7 @@ public class CDefaultCar extends IInspector implements ICar
 
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
 
         // if the car is at the end
@@ -375,7 +377,7 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }

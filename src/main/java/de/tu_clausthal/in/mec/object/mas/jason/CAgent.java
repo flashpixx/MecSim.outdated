@@ -181,7 +181,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return action set
      */
-    public Map<String, IAction> getActions()
+    public final Map<String, IAction> getActions()
     {
         return m_action;
     }
@@ -192,14 +192,14 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return belief set
      */
-    public Set<IBelief> getBelief()
+    public final Set<IBelief> getBelief()
     {
         return m_beliefs;
     }
 
 
     @Override
-    public void release()
+    public final void release()
     {
         m_agent.stopAg();
         m_participant.release();
@@ -208,32 +208,32 @@ public class CAgent<T> implements IVoidAgent
 
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return m_name;
     }
 
     @Override
-    public int getCycle()
+    public final int getCycle()
     {
         return m_cycle;
     }
 
     @Override
-    public String getSource()
+    public final String getSource()
     {
         return new File( m_agent.getASLSrc() ).getName();
     }
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
+    public final void step( final int p_currentstep, final ILayer p_layer )
     {
         m_architecture.cycle( p_currentstep );
     }
 
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }
@@ -245,14 +245,14 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public void receiveMessage( final Set<IMessage> p_messages )
+    public final void receiveMessage( final Set<IMessage> p_messages )
     {
         m_receivedmessages.clear();
         m_receivedmessages.addAll( p_messages );
     }
 
     @Override
-    public CPath getReceiverPath()
+    public final CPath getReceiverPath()
     {
         return CNames.getName( this, m_name );
     }
@@ -271,7 +271,7 @@ public class CAgent<T> implements IVoidAgent
     {
 
         @Override
-        public void act( final ActionExec p_action, final List<ActionExec> p_feedback )
+        public final void act( final ActionExec p_action, final List<ActionExec> p_feedback )
         {
             final IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
             if ( l_action != null )
@@ -290,26 +290,26 @@ public class CAgent<T> implements IVoidAgent
         }
 
         @Override
-        public boolean canSleep()
+        public final boolean canSleep()
         {
             return false;
         }
 
         @Override
-        public String getAgName()
+        public final String getAgName()
         {
             return m_name;
         }
 
         @Override
-        public void sendMsg( final Message p_message ) throws Exception
+        public final void sendMsg( final Message p_message ) throws Exception
         {
             p_message.setSender( getReceiverPath().toString() );
             m_participant.sendMessage( new CPath( p_message.getReceiver() ), new CMessage( p_message ) );
         }
 
         @Override
-        public void broadcast( final Message p_message ) throws Exception
+        public final void broadcast( final Message p_message ) throws Exception
         {
             CPath l_path = getReceiverPath();
             p_message.setSender( l_path.toString() );
@@ -326,7 +326,7 @@ public class CAgent<T> implements IVoidAgent
          *
          * @param p_currentstep current step
          */
-        public void cycle( final int p_currentstep )
+        public final void cycle( final int p_currentstep )
         {
             // add the simulationstep belief with the new number and remove the old one
             try
@@ -350,7 +350,7 @@ public class CAgent<T> implements IVoidAgent
         /**
          * updates all beliefs that are read from the message queue
          */
-        protected void updateMessageBeliefs()
+        protected final void updateMessageBeliefs()
         {
             for ( IMessage l_msg : m_receivedmessages )
                 try
@@ -390,7 +390,7 @@ public class CAgent<T> implements IVoidAgent
         /**
          * updates all beliefs, that will read from the bind objects
          */
-        protected void updateBindBeliefs()
+        protected final void updateBindBeliefs()
         {
             for ( IBelief l_item : m_beliefs )
             {

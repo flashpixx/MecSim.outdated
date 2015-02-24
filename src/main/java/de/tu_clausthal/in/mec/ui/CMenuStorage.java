@@ -381,13 +381,11 @@ public class CMenuStorage
      * adds a list of items according to selected language
      *
      * @param p_path parent path including translation according to selected language -> <'path', 'translation'>
-     * @param p_elements array with item names (null adds a seperator)
-     * @param p_elements_trans array with items names according to selected language
+     * @param p_elements ArrayList with item names (null adds a separator) including translations (inside ImmutablePairs)
      * @param p_listen action listener for the item
      */
-    public void addItem( final ImmutablePair<String, String> p_path, final String[] p_elements, final String[] p_elements_trans, final ActionListener p_listen )
+    public void addItem( final ImmutablePair<String, String> p_path, final LinkedList<ImmutablePair<String, String>> p_elements, final ActionListener p_listen )
     {
-        final List l_elementsList = Arrays.asList(p_elements);
 
         final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
@@ -399,21 +397,21 @@ public class CMenuStorage
             l_menu = this.getOrCreatePath( l_path, p_path.getRight() );
 
         // add all elements
-        for ( String l_name : p_elements )
+        for ( ImmutablePair<String, String> l_name : p_elements )
         {
 
-            if ( ( l_name == null ) || ( l_name.isEmpty() ) )
+            if ( ( l_name == null ) || ( l_name.getLeft().isEmpty() ) )
             {
                 if ( l_menu != null )
                     l_menu.addSeparator();
             }
             else
             {
-                final CPath l_fullpath = new CPath( p_path.getLeft(), l_name );
+                final CPath l_fullpath = new CPath( p_path.getLeft(), l_name.getLeft() );
                 if ( m_pathobject.containsKey( l_fullpath ) )
                     continue;
 
-                final JMenuItem l_item = new JMenuItem( p_elements_trans[ l_elementsList.indexOf( l_name ) ] );
+                final JMenuItem l_item = new JMenuItem( l_name.getRight() );
                 l_item.addActionListener( p_listen );
 
                 m_pathobject.put( l_fullpath, l_item );

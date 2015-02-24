@@ -48,16 +48,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
  * class for create the menubar
- *
- * @todo add multilanguage support
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
@@ -115,18 +110,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void buildFileMenu()
     {
         m_items.addItem( new ImmutablePair<>( "File", CCommon.getResourceString(this, "File") ),
-                         new String[]{"About", null, "Help", "Preferences", null, "Load", "Save", null, "Screenshot"},
-                         new String[]{
-                             CCommon.getResourceString(this, "About"),
-                             null,
-                             CCommon.getResourceString(this, "Help"),
-                             CCommon.getResourceString(this, "Preferences"),
-                             null,
-                             CCommon.getResourceString(this, "Load"),
-                             CCommon.getResourceString(this, "Save"),
-                             null,
-                             CCommon.getResourceString(this, "Screenshot")
-                         },
+                         new LinkedList<ImmutablePair<String,String>>() {{
+                             add( new ImmutablePair<>( "About", CCommon.getResourceString( CMenuBar.this, "About" ) ) );
+                             add( null );
+                             add( new ImmutablePair<>( "Help", CCommon.getResourceString( CMenuBar.this, "Help" ) ) );
+                             add( new ImmutablePair<>( "Preferences", CCommon.getResourceString( CMenuBar.this, "Preferences" ) ) );
+                             add( null );
+                             add( new ImmutablePair<>( "Load", CCommon.getResourceString( CMenuBar.this, "Load" ) ) );
+                             add( new ImmutablePair<>( "Save", CCommon.getResourceString( CMenuBar.this, "Save" ) ) );
+                             add( null );
+                             add( new ImmutablePair<>( "Screenshot", CCommon.getResourceString( CMenuBar.this, "Screenshot" ) ) );
+                         }},
                          this
                        );
     }
@@ -136,15 +130,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildSimulationMenu()
     {
-        m_items.addItem( new ImmutablePair<>("Simulation", CCommon.getResourceString( this, "Simulation" ) ),
-                         new String[]{"Start", "Stop", null, "Reset", null},
-                         new String[]{
-                                      CCommon.getResourceString( this, "Start"),
-                                      CCommon.getResourceString( this, "Stop" ),
-                                      null,
-                                      CCommon.getResourceString( this, "Reset" ),
-                                      null
-                                     },
+        m_items.addItem( new ImmutablePair<>("Simulation", CCommon.getResourceString( CMenuBar.this, "Simulation" ) ),
+                         new LinkedList<ImmutablePair<String,String>>() {{
+                             add( new ImmutablePair<>( "Start", CCommon.getResourceString( CMenuBar.this, "Start" ) ) );
+                             add( new ImmutablePair<>( "Stop", CCommon.getResourceString( CMenuBar.this, "Stop" ) ) );
+                             add( null );
+                             add( new ImmutablePair<>( "Reset", CCommon.getResourceString( CMenuBar.this, "Reset" ) ) );
+                             add( null );
+                         }},
                          this
                        );
 

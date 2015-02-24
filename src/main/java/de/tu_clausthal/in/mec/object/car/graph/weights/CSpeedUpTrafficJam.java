@@ -61,14 +61,14 @@ public class CSpeedUpTrafficJam implements Weighting
 
 
     @Override
-    public double getMinWeight( final double p_weight )
+    public final double getMinWeight( final double p_weight )
     {
         return 0;
     }
 
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         return p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() ) * m_graph.getEdge( p_edge ).getNumberOfObjects();
     }

@@ -412,7 +412,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return m_edgeid;
     }

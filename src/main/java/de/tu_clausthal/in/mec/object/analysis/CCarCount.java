@@ -75,13 +75,13 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
-    public int getCalculationIndex()
+    public final int getCalculationIndex()
     {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
+    public final void step( final int p_currentstep, final ILayer p_layer )
     {
         if ( !CSimulation.getInstance().hasUI() )
             return;
@@ -90,13 +90,13 @@ public class CCarCount extends IEvaluateLayer
     }
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }
 
     @Override
-    public void release()
+    public final void release()
     {
         if ( m_plotdata != null )
             m_plotdata.clear();

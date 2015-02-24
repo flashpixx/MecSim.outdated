@@ -54,14 +54,14 @@ public class CTrafficJam implements Weighting
 
 
     @Override
-    public double getMinWeight( final double p_weight )
+    public final double getMinWeight( final double p_weight )
     {
         return 0;
     }
 
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         return m_graph.getEdge( p_edge ).getNumberOfObjects();
     }

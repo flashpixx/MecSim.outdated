@@ -58,13 +58,13 @@ public class CSpeedUp implements Weighting
     }
 
     @Override
-    public double getMinWeight( final double p_weight )
+    public final double getMinWeight( final double p_weight )
     {
         return p_weight / m_maxSpeed;
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
         if ( l_speed == 0 )

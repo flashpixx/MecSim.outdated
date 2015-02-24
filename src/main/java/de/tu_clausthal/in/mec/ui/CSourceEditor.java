@@ -62,15 +62,15 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
     /**
      * map to store reference file, tab and editor
      */
-    protected Map<File, Pair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap<>();
+    protected final Map<File, Pair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap<>();
     /**
      * map with components (buttons), button name, file object
      */
-    protected Map<JComponent, Pair<String, File>> m_actionobject = new HashMap<>();
+    protected final Map<JComponent, Pair<String, File>> m_actionobject = new HashMap<>();
     /**
      * set of action listener that will call on editor action
      */
-    protected Set<ActionListener> m_listener = new HashSet<>();
+    protected final Set<ActionListener> m_listener = new HashSet<>();
 
 
     /**
@@ -78,7 +78,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      *
      * @param p_listener action listener
      */
-    public void addActionListener( final ActionListener p_listener )
+    public final void addActionListener( final ActionListener p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -88,7 +88,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      *
      * @param p_listener action listener
      */
-    public void removeActionListener( final ActionListener p_listener )
+    public final void removeActionListener( final ActionListener p_listener )
     {
         m_listener.remove( p_listener );
     }
@@ -99,7 +99,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      *
      * @param p_file input file
      */
-    public void open( final File p_file )
+    public final void open( final File p_file )
     {
         if ( m_tabs.containsKey( p_file ) )
             return;
@@ -151,7 +151,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * @param p_editor editor
      * @param p_file   input file
      */
-    protected void readFile( final RSyntaxTextArea p_editor, final File p_file ) throws IOException
+    protected final void readFile( final RSyntaxTextArea p_editor, final File p_file ) throws IOException
     {
         final BufferedReader l_reader = new BufferedReader( new FileReader( p_file ) );
         p_editor.read( l_reader, null );
@@ -164,7 +164,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * @param p_editor editor
      * @param p_file   output file
      */
-    protected void writeFile( final RSyntaxTextArea p_editor, final File p_file ) throws IOException
+    protected final void writeFile( final RSyntaxTextArea p_editor, final File p_file ) throws IOException
     {
         final FileWriter l_filewriter = new FileWriter( p_file );
         final BufferedWriter l_writer = new BufferedWriter( l_filewriter );
@@ -180,7 +180,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
      * @param p_tab  tab object
      * @param p_file file object
      */
-    protected void removeTabData( final JComponent p_tab, final File p_file )
+    protected final void removeTabData( final JComponent p_tab, final File p_file )
     {
         for ( int i = 0; i < p_tab.getComponentCount(); i++ )
             m_actionobject.remove( p_tab.getComponent( i ) );
@@ -191,7 +191,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
 
     @Override
-    public void actionPerformed( final ActionEvent p_event )
+    public final void actionPerformed( final ActionEvent p_event )
     {
         final Pair<String, File> l_item = m_actionobject.get( p_event.getSource() );
         if ( l_item == null )

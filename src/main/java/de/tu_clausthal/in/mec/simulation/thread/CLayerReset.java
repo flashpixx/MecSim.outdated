@@ -47,7 +47,7 @@ public class CLayerReset extends IRunnable<ILayer>
     /**
      * run method to perform the action on runnable and callable interface
      */
-    protected void perform()
+    protected final void perform()
     {
         try
         {

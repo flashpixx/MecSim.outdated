@@ -47,7 +47,7 @@ public class CConsole extends JPanel
     /**
      * output panel *
      */
-    protected JEditorPane m_output = new JEditorPane();
+    protected final JEditorPane m_output = new JEditorPane();
 
 
     /**
@@ -71,7 +71,7 @@ public class CConsole extends JPanel
     /**
      * clears all text *
      */
-    public void clear()
+    public final void clear()
     {
         m_output.setText( null );
     }
@@ -124,7 +124,7 @@ public class CConsole extends JPanel
         /**
          * flushes the stream *
          */
-        public void flush()
+        public final void flush()
         {
             final String l_message = toString();
             if ( l_message.length() == 0 ) return;

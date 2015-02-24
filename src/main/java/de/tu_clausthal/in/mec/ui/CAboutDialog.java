@@ -83,7 +83,7 @@ public class CAboutDialog extends JDialog
      *
      * @return panel
      */
-    protected JPanel getHeader()
+    protected final JPanel getHeader()
     {
         final JPanel l_panel = new JPanel();
         l_panel.setLayout( new GridBagLayout() );
@@ -109,7 +109,7 @@ public class CAboutDialog extends JDialog
      *
      * @return panel
      */
-    protected JPanel getBuildData()
+    protected final JPanel getBuildData()
     {
         final JPanel l_panel = new JPanel();
         l_panel.setLayout( new GridBagLayout() );
@@ -225,7 +225,7 @@ public class CAboutDialog extends JDialog
                 this.addMouseListener(
                         new MouseAdapter()
                         {
-                            public void mouseClicked( MouseEvent p_event )
+                            public void mouseClicked( final MouseEvent p_event )
                             {
                                 try
                                 {

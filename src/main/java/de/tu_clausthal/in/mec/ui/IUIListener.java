@@ -62,7 +62,7 @@ public abstract class IUIListener implements MouseListener
      * @param p_viewer viewer object
      * @return circle size
      */
-    protected int iconsize( final JXMapViewer p_viewer )
+    protected final int iconsize( final JXMapViewer p_viewer )
     {
         return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
     }
@@ -91,7 +91,7 @@ public abstract class IUIListener implements MouseListener
     }
 
     @Override
-    public void mousePressed( final MouseEvent p_event )
+    public final void mousePressed( final MouseEvent p_event )
     {
         if ( SwingUtilities.isLeftMouseButton( p_event ) )
             this.onClick( p_event, COSMViewer.getSimulationOSM() );

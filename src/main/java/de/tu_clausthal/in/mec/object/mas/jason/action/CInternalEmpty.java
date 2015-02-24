@@ -97,19 +97,19 @@ public class CInternalEmpty extends DefaultInternalAction
 
 
     @Override
-    public int getMinArgs()
+    public final int getMinArgs()
     {
         return m_minimumarguments;
     }
 
     @Override
-    public int getMaxArgs()
+    public final int getMaxArgs()
     {
         return m_maximumarguments;
     }
 
     @Override
-    public Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
+    public final Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
     {
         return m_result;
     }

@@ -43,7 +43,7 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
      *
      * @param p_object performing object
      */
-    public IRunnable( T p_object )
+    public IRunnable( final T p_object )
     {
         if ( p_object == null )
             throw new IllegalArgumentException( "object argument need not to be null" );
@@ -61,14 +61,14 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
 
 
     @Override
-    public Object call() throws Exception
+    public final Object call() throws Exception
     {
         this.perform();
         return null;
     }
 
     @Override
-    public void run()
+    public final void run()
     {
         this.perform();
     }

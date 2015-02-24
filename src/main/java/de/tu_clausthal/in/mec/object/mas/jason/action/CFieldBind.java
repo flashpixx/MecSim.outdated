@@ -94,7 +94,7 @@ public class CFieldBind extends IAction
      * @param p_name   name / annotation of the object
      * @param p_object object
      */
-    public void push( final String p_name, final Object p_object )
+    public final void push( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -107,7 +107,7 @@ public class CFieldBind extends IAction
      * @param p_object         object
      * @param p_forbiddennames set with forbidden names of the object fields
      */
-    public void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
+    public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
@@ -118,7 +118,7 @@ public class CFieldBind extends IAction
      *
      * @param p_name name
      */
-    public void remove( final String p_name )
+    public final void remove( final String p_name )
     {
         m_bind.remove( p_name );
     }
@@ -128,11 +128,11 @@ public class CFieldBind extends IAction
     /**
      * @todo handle term list
      */
-    public void act( final Agent p_agent, final Structure p_args )
+    public final void act( final Agent p_agent, final Structure p_args )
     {
 
         // check number of argument first
-        List<Term> l_args = p_args.getTerms();
+        final List<Term> l_args = p_args.getTerms();
         if ( l_args.size() < 3 )
             throw new IllegalArgumentException( CCommon.getResourceString(this, "argument") );
 

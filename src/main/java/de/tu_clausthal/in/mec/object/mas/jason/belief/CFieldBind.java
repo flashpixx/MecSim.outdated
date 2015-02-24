@@ -94,7 +94,7 @@ public class CFieldBind implements IBelief
      * @param p_name   name / annotation of the object
      * @param p_object object
      */
-    public void push( final String p_name, final Object p_object )
+    public final void push( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -106,7 +106,7 @@ public class CFieldBind implements IBelief
      * @param p_object         object
      * @param p_forbiddennames set with forbidden names of the object fields
      */
-    public void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
+    public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
     }
@@ -116,21 +116,21 @@ public class CFieldBind implements IBelief
      *
      * @param p_name name
      */
-    public void remove( final String p_name )
+    public final void remove( final String p_name )
     {
         m_bind.remove( p_name );
     }
 
 
     @Override
-    public Set<Literal> getLiterals()
+    public final Set<Literal> getLiterals()
     {
         return m_literals;
     }
 
 
     @Override
-    public void update()
+    public final void update()
     {
         // iterate over all binded objects
         for ( Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
@@ -159,7 +159,7 @@ public class CFieldBind implements IBelief
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_literals.clear();
     }

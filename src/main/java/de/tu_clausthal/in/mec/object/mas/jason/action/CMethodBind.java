@@ -81,7 +81,7 @@ public class CMethodBind extends IAction
      * @param p_name   name
      * @param p_object bind object
      */
-    public void push( final String p_name, final Object p_object )
+    public final void push( final String p_name, final Object p_object )
     {
         m_bind.put( p_name, new CReflection.CMethodCache( p_object ) );
     }
@@ -92,7 +92,7 @@ public class CMethodBind extends IAction
      *
      * @param p_name name
      */
-    public void remove( final String p_name )
+    public final void remove( final String p_name )
     {
         m_bind.remove( p_name );
     }
@@ -103,7 +103,7 @@ public class CMethodBind extends IAction
      * @param p_name name of the object
      * @return set with forbidden names
      */
-    public Set<String> getForbidden( final String p_name )
+    public final Set<String> getForbidden( final String p_name )
     {
         final CReflection.CMethodCache l_object = m_bind.get( p_name );
         if ( l_object == null )
@@ -117,7 +117,7 @@ public class CMethodBind extends IAction
     /**
      * @todo handle term list
      */
-    public void act( final Agent p_agent, final Structure p_args )
+    public final void act( final Agent p_agent, final Structure p_args )
     {
         // check number of argument first
         final List<Term> l_args = p_args.getTerms();
@@ -204,7 +204,7 @@ public class CMethodBind extends IAction
      * @param p_term Jason term
      * @return class object
      */
-    protected Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
+    protected final Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
         if ( "void".equalsIgnoreCase( l_classname ) )
@@ -259,7 +259,7 @@ public class CMethodBind extends IAction
      * @param p_list term list
      * @return class array
      */
-    protected Class<?>[] convertTermListToArray( final ListTerm p_list ) throws ClassNotFoundException
+    protected final Class<?>[] convertTermListToArray( final ListTerm p_list ) throws ClassNotFoundException
     {
         final Class<?>[] l_classes = new Class<?>[p_list.size()];
         for ( int i = 0; i < l_classes.length; i++ )
@@ -273,7 +273,7 @@ public class CMethodBind extends IAction
      * @param p_term term
      * @return class object array
      */
-    protected Class<?>[] convertTermListToArray( final Term p_term ) throws ClassNotFoundException
+    protected final Class<?>[] convertTermListToArray( final Term p_term ) throws ClassNotFoundException
     {
         final Class<?>[] l_classes = new Class<?>[1];
         l_classes[0] = this.convertTermToClass( p_term );

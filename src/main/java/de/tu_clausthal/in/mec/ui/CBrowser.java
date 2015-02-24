@@ -53,15 +53,14 @@ public class CBrowser extends JFXPanel
      * serialize version ID *
      */
     static final long serialVersionUID = 1L;
-
+    /**
+     * listener *
+     */
+    protected final Set<IActionListener> m_listener = new HashSet<>();
     /**
      * webkit view
      */
     protected WebView m_webview = null;
-    /**
-     * listener *
-     */
-    protected Set<IActionListener> m_listener = new HashSet<>();
 
     /**
      * ctor with instantiation a blank engine
@@ -95,7 +94,7 @@ public class CBrowser extends JFXPanel
      *
      * @param p_listener listen
      */
-    public void addContentActionListener( final IActionListener p_listener )
+    public final void addContentActionListener( final IActionListener p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -103,7 +102,7 @@ public class CBrowser extends JFXPanel
     /**
      * removes the browser content action listener
      */
-    public boolean removeContentActionListener( final IActionListener p_listener )
+    public final boolean removeContentActionListener( final IActionListener p_listener )
     {
         return m_listener.remove( p_listener );
     }
@@ -111,7 +110,7 @@ public class CBrowser extends JFXPanel
     /**
      * runs the initialization with listener
      */
-    protected void initialize()
+    protected final void initialize()
     {
         m_webview = new WebView();
         this.setScene( new Scene( m_webview ) );
@@ -132,7 +131,7 @@ public class CBrowser extends JFXPanel
     /**
      * create listener of href-click-event
      */
-    protected void createHrefClickListener()
+    protected final void createHrefClickListener()
     {
         EventListener l_listener = new EventListener()
         {
@@ -158,7 +157,7 @@ public class CBrowser extends JFXPanel
      *
      * @param p_url string with URL
      */
-    public void load( final String p_url )
+    public final void load( final String p_url )
     {
         Platform.runLater( () -> {
             m_webview.getEngine().load( p_url );
@@ -168,7 +167,7 @@ public class CBrowser extends JFXPanel
     /**
      * refresh the current URL
      */
-    public void reload()
+    public final void reload()
     {
         Platform.runLater( () -> {
             m_webview.getEngine().reload();
@@ -178,7 +177,7 @@ public class CBrowser extends JFXPanel
     /**
      * navigates one item back
      */
-    public void back()
+    public final void back()
     {
         if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 )
             return;
@@ -191,7 +190,7 @@ public class CBrowser extends JFXPanel
     /**
      * navigates on item forward
      */
-    public void forward()
+    public final void forward()
     {
         if ( m_webview.getEngine().getHistory().getCurrentIndex() >= m_webview.getEngine().getHistory().getEntries().size() - 1 )
             return;

@@ -40,7 +40,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
     /**
      * set with forbidden field names *
      */
-    protected Set<String> m_forbiddennames = new HashSet<>();
+    protected final Set<String> m_forbiddennames = new HashSet<>();
 
     /**
      * ctor *
@@ -54,13 +54,13 @@ public class CFieldFilter implements CReflection.IFieldFilter
      *
      * @param p_names set with forbidden field names
      */
-    public CFieldFilter( Set<String> p_names )
+    public CFieldFilter( final Set<String> p_names )
     {
         m_forbiddennames.addAll( p_names );
     }
 
     @Override
-    public boolean filter( Field p_field )
+    public final boolean filter( final Field p_field )
     {
         return !( ( m_forbiddennames.contains( p_field.getName() ) ) || ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface( p_field.getModifiers() ) ) ||
                 ( Modifier.isAbstract( p_field.getModifiers() ) ) || ( Modifier.isFinal( p_field.getModifiers() ) ) );

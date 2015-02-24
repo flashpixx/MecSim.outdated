@@ -110,7 +110,7 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     @Override
-    public void release()
+    public final void release()
     {
         super.release();
         if ( m_agent != null )
@@ -118,9 +118,9 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     @Override
-    public Map<String, Object> inspect()
+    public final Map<String, Object> inspect()
     {
-        Map<String, Object> l_map = super.inspect();
+        final Map<String, Object> l_map = super.inspect();
         if ( m_agent == null )
             return l_map;
 

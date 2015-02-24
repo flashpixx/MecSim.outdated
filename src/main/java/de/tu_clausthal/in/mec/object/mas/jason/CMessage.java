@@ -54,7 +54,7 @@ public class CMessage implements IMessage<Message>
      *
      * @param p_message Jason message
      */
-    public CMessage( Message p_message )
+    public CMessage( final Message p_message )
     {
         if ( p_message == null )
             throw new IllegalArgumentException( "message data need not to be null" );
@@ -63,25 +63,25 @@ public class CMessage implements IMessage<Message>
     }
 
     @Override
-    public Message getData()
+    public final Message getData()
     {
         return m_data;
     }
 
     @Override
-    public String getTitle()
+    public final String getTitle()
     {
         return this.getClass().getName();
     }
 
     @Override
-    public CPath getSource()
+    public final CPath getSource()
     {
         return new CPath( m_data.getSender() );
     }
 
     @Override
-    public int ttl()
+    public final int ttl()
     {
         return m_ttl--;
     }

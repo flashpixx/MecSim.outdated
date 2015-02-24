@@ -154,7 +154,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      *
      * @param p_frame frame object set Jason mindinspector
      */
-    public void setFrame( final CFrame p_frame )
+    public final void setFrame( final CFrame p_frame )
     {
         if ( m_mindinspector != null )
             throw new IllegalStateException( CCommon.getResourceString(IEnvironment.class, "frame") );
@@ -168,7 +168,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     }
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
+    public final void step( final int p_currentstep, final ILayer p_layer )
     {
         super.step( p_currentstep, p_layer );
 
@@ -178,7 +178,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     }
 
     @Override
-    public void release()
+    public final void release()
     {
         for ( IAgent l_agent : m_data )
             l_agent.release();

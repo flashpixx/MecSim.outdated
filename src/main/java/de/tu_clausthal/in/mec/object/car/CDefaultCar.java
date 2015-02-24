@@ -272,6 +272,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public void release()
     {
+        super.release();
         final CEdge l_edge = m_graph.getEdge( this.getEdge() );
         if ( l_edge != null )
             l_edge.removeObject( this );

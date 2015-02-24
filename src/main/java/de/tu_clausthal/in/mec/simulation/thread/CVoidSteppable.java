@@ -52,7 +52,7 @@ public class CVoidSteppable extends IRunnable<IVoidSteppable>
      * @param p_object    void-steppable object
      * @param p_layer     layer of the object or null
      */
-    public CVoidSteppable( int p_iteration, IVoidSteppable p_object, ILayer p_layer )
+    public CVoidSteppable( final int p_iteration, final IVoidSteppable p_object, final ILayer p_layer )
     {
         super( p_object );
         m_layer = p_layer;
@@ -63,7 +63,7 @@ public class CVoidSteppable extends IRunnable<IVoidSteppable>
     /**
      * run method to perform the action on runnable and callable interface
      */
-    protected void perform()
+    protected final void perform()
     {
         try
         {

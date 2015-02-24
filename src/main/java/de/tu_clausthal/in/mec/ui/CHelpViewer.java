@@ -74,11 +74,11 @@ public class CHelpViewer extends JDialog implements ActionListener
     /**
      * components
      */
-    protected Map<JComponent, String> m_components = new HashMap<>();
+    protected final Map<JComponent, String> m_components = new HashMap<>();
     /**
      * browser
      */
-    protected CHelpBrowser m_browser = new CHelpBrowser( "index.md" );
+    protected final CHelpBrowser m_browser = new CHelpBrowser( "index.md" );
 
 
     /**
@@ -132,7 +132,7 @@ public class CHelpViewer extends JDialog implements ActionListener
      *
      * @return language code
      */
-    protected String getLanguage()
+    protected final String getLanguage()
     {
         return CConfiguration.getInstance().get().getLanguage() == null ? s_defaultlanguage : CConfiguration.getInstance().get().getLanguage();
     }
@@ -143,7 +143,7 @@ public class CHelpViewer extends JDialog implements ActionListener
      * @param p_file file name
      * @return full path
      */
-    protected URL getFileURL( final String p_file )
+    protected final URL getFileURL( final String p_file )
     {
         return this.getClass().getClassLoader().getResource( "documentation" + File.separatorChar + this.getLanguage() + File.separator + p_file );
     }
@@ -153,7 +153,7 @@ public class CHelpViewer extends JDialog implements ActionListener
      *
      * @param p_file filename * @return full path
      */
-    protected URL getDocumentationURL( final String p_file )
+    protected final URL getDocumentationURL( final String p_file )
     {
         return this.getClass().getClassLoader().getResource( "documentation" + File.separator + p_file );
     }
@@ -164,14 +164,14 @@ public class CHelpViewer extends JDialog implements ActionListener
      *
      * @return CSS URL
      */
-    protected URL getCSSURL()
+    protected final URL getCSSURL()
     {
         return getDocumentationURL( "layout.css" );
     }
 
 
     @Override
-    public void actionPerformed( final ActionEvent p_event )
+    public final void actionPerformed( final ActionEvent p_event )
     {
         final String l_item = m_components.get( p_event.getSource() );
         if ( l_item == null )
@@ -203,7 +203,7 @@ public class CHelpViewer extends JDialog implements ActionListener
     protected class CLinkRenderer extends LinkRenderer
     {
         @Override
-        public Rendering render( final ExpLinkNode p_node, final String p_text )
+        public final Rendering render( final ExpLinkNode p_node, final String p_text )
         {
             // check path for developer documentation (null value must be checked)
             if ( p_node.url.startsWith( "developer" ) )
@@ -217,7 +217,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         }
 
         @Override
-        public Rendering render( final ExpImageNode p_node, final String p_text )
+        public final Rendering render( final ExpImageNode p_node, final String p_text )
         {
             try
             {
@@ -231,7 +231,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         }
 
         @Override
-        public Rendering render( final WikiLinkNode p_node )
+        public final Rendering render( final WikiLinkNode p_node )
         {
             try
             {
@@ -270,11 +270,11 @@ public class CHelpViewer extends JDialog implements ActionListener
         /**
          * markdown processor *
          */
-        protected PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
+        protected final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
         /**
          * link renderer
          */
-        protected LinkRenderer m_renderer = new CLinkRenderer();
+        protected final LinkRenderer m_renderer = new CLinkRenderer();
         /**
          * home source *
          */
@@ -298,7 +298,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         /**
          * read the start page *
          */
-        public void home()
+        public final void home()
         {
             this.processMarkdown( m_webview.getEngine(), m_home );
         }
@@ -309,7 +309,7 @@ public class CHelpViewer extends JDialog implements ActionListener
          * @param p_engine web engine
          * @param p_source path of the markdown file
          */
-        protected void processMarkdown( final WebEngine p_engine, final String p_source )
+        protected final void processMarkdown( final WebEngine p_engine, final String p_source )
         {
             Platform.runLater( () -> {
                 try (
@@ -333,7 +333,7 @@ public class CHelpViewer extends JDialog implements ActionListener
          * @param p_input HTML snipplet
          * @return full HTML document
          */
-        protected String createFullHTML( final String p_input )
+        protected final String createFullHTML( final String p_input )
         {
             return "<?xml version=\"1.0\" ?>" +
                     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
@@ -351,7 +351,7 @@ public class CHelpViewer extends JDialog implements ActionListener
         {
 
             @Override
-            public void onHrefClick( final WebEngine p_web, final Element p_element )
+            public final void onHrefClick( final WebEngine p_web, final Element p_element )
             {
                 try
                 {

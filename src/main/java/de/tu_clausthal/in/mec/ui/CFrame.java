@@ -145,7 +145,7 @@ public class CFrame extends JFrame
      * @param p_name  dockname
      * @param p_panel component
      */
-    public void addWidget( final String p_name, final Component p_panel )
+    public final void addWidget( final String p_name, final Component p_panel )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException(CCommon.getResourceString( this, "namepanelempty" ) );
@@ -161,7 +161,7 @@ public class CFrame extends JFrame
      * @param p_position position of the widget on the frame
      * @param p_size     size of the widget
      */
-    public void addWidget( final String p_name, final Component p_panel, final Position p_position, final double p_size )
+    public final void addWidget( final String p_name, final Component p_panel, final Position p_position, final double p_size )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "namepanelempty" ) );
@@ -192,7 +192,7 @@ public class CFrame extends JFrame
      * @param p_name name of the widget
      * @return null or component
      */
-    public Component getWidget( final String p_name )
+    public final Component getWidget( final String p_name )
     {
         return m_widgets.get( p_name );
     }
@@ -203,7 +203,7 @@ public class CFrame extends JFrame
      * @param p_name name of the widget
      * @return boolean existence
      */
-    public boolean containsWidget( String p_name )
+    public final boolean containsWidget( final String p_name )
     {
         return m_widgets.containsKey( p_name );
     }
@@ -214,7 +214,7 @@ public class CFrame extends JFrame
      * @param p_name name of the widget
      * @return component
      */
-    public Component removeWidget( final String p_name )
+    public final Component removeWidget( final String p_name )
     {
         final Component l_component = m_widgets.remove( p_name );
         if ( l_component != null )
@@ -227,7 +227,7 @@ public class CFrame extends JFrame
      *
      * @return widget collection
      */
-    public Collection<Component> getWidgetsComponent()
+    public final Collection<Component> getWidgetsComponent()
     {
         return m_widgets.values();
     }
@@ -237,7 +237,7 @@ public class CFrame extends JFrame
      *
      * @return name set
      */
-    public Set<String> getWidgetNames()
+    public final Set<String> getWidgetNames()
     {
         return m_widgets.keySet();
     }
@@ -247,7 +247,7 @@ public class CFrame extends JFrame
      *
      * @return widget entry set
      */
-    public Set<Map.Entry<String, Component>> getWidgetEntrySet()
+    public final Set<Map.Entry<String, Component>> getWidgetEntrySet()
     {
         return m_widgets.entrySet();
     }

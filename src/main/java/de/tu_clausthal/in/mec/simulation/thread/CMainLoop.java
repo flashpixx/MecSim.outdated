@@ -99,7 +99,7 @@ public class CMainLoop implements Runnable
      * @param p_tasksource invoking tasks
      * @throws InterruptedException is throws on task error
      */
-    protected void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
+    protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
     {
         final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
         for ( ISteppable l_object : p_tasksource )
@@ -109,7 +109,7 @@ public class CMainLoop implements Runnable
 
 
     @Override
-    public void run()
+    public final void run()
     {
         CLogger.info( CCommon.getResourceString(this, "start") );
 
@@ -191,7 +191,7 @@ public class CMainLoop implements Runnable
     /**
      * thread is shut down
      */
-    public void stop()
+    public final void stop()
     {
         Thread.currentThread().interrupt();
     }
@@ -201,7 +201,7 @@ public class CMainLoop implements Runnable
      *
      * @return boolean for pause
      */
-    public boolean isPaused()
+    public final boolean isPaused()
     {
         return m_pause;
     }
@@ -209,7 +209,7 @@ public class CMainLoop implements Runnable
     /**
      * sets pause state
      */
-    public void pause()
+    public final void pause()
     {
         m_pause = true;
     }
@@ -217,7 +217,7 @@ public class CMainLoop implements Runnable
     /**
      * resume state
      */
-    public void resume()
+    public final void resume()
     {
         m_pause = false;
     }
@@ -227,7 +227,7 @@ public class CMainLoop implements Runnable
      *
      * @param p_steps number of steps which are run
      */
-    public void resume( final int p_steps )
+    public final void resume( final int p_steps )
     {
         if ( p_steps < 1 )
             throw new IllegalArgumentException( CCommon.getResourceString(this, "stepnumber") );
@@ -239,7 +239,7 @@ public class CMainLoop implements Runnable
     /**
      * resets the thread
      */
-    public void reset()
+    public final void reset()
     {
         if ( !m_pause )
             throw new IllegalStateException( CCommon.getResourceString(this, "pause") );

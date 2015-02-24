@@ -109,7 +109,7 @@ public class COSMViewer extends JXMapViewer
      *
      * @return painter
      */
-    public CompoundPainter<?> getCompoundPainter()
+    public final CompoundPainter<?> getCompoundPainter()
     {
         return m_painter;
     }

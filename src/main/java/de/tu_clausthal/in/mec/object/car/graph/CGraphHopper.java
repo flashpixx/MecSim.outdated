@@ -123,7 +123,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_end   end geoposition
      * @return list of list of edges
      */
-    public List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
     {
         return this.getRoutes( p_start, p_end, Integer.MAX_VALUE );
     }
@@ -137,7 +137,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_maxroutes max. number of paths
      * @return list of list of edges
      */
-    public List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final int p_maxroutes )
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final int p_maxroutes )
     {
         // calculate routes
         final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
@@ -185,7 +185,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_position geo position
      * @return ID of the edge
      */
-    public int getClosestEdge( final GeoPosition p_position )
+    public final int getClosestEdge( final GeoPosition p_position )
     {
         final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestEdge().getEdge();
@@ -198,7 +198,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_edge edge ID
      * @return speed
      */
-    public double getEdgeSpeed( final EdgeIteratorState p_edge )
+    public final double getEdgeSpeed( final EdgeIteratorState p_edge )
     {
         if ( p_edge == null )
             return Double.POSITIVE_INFINITY;
@@ -213,7 +213,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_edgeid edge ID
      * @return iterator
      */
-    public EdgeIteratorState getEdgeIterator( final int p_edgeid )
+    public final EdgeIteratorState getEdgeIterator( final int p_edgeid )
     {
         return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
     }
@@ -225,7 +225,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_position geo position
      * @return ID of the node
      */
-    public int getClosestNode( final GeoPosition p_position )
+    public final int getClosestNode( final GeoPosition p_position )
     {
         final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestNode();
@@ -238,7 +238,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_route edge list
      * @return list with pair of edge and cell position
      */
-    public ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( final List<EdgeIteratorState> p_route )
+    public final ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( final List<EdgeIteratorState> p_route )
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
 
@@ -253,7 +253,7 @@ public class CGraphHopper extends GraphHopper
     /**
      * clears all edges
      */
-    public synchronized void clear()
+    public final synchronized void clear()
     {
         for ( Map.Entry<Integer, CEdge<ICar, Object>> l_item : m_edgecell.entrySet() )
             l_item.getValue().clear();
@@ -264,7 +264,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return number of cars on the graph
      */
-    public synchronized int getNumberOfObjects()
+    public final synchronized int getNumberOfObjects()
     {
         int l_count = 0;
         for ( CEdge l_item : m_edgecell.values() )
@@ -278,7 +278,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @note listener object will be set at the edge instantiation process
      */
-    public synchronized void addEdgeListener( final IAction<ICar, Object> p_listener )
+    public final synchronized void addEdgeListener( final IAction<ICar, Object> p_listener )
     {
         m_edgelister.add( p_listener );
     }
@@ -290,7 +290,7 @@ public class CGraphHopper extends GraphHopper
      * @return linkage object
      * @note listener object will be set at the edge instantiation process
      */
-    public synchronized CEdge getEdge( final EdgeIteratorState p_edgestate )
+    public final synchronized CEdge getEdge( final EdgeIteratorState p_edgestate )
     {
         CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
         if ( l_edge == null )
@@ -309,7 +309,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return download file with full path
      */
-    private File downloadOSMData()
+    private final File downloadOSMData()
     {
         try
         {
@@ -337,14 +337,14 @@ public class CGraphHopper extends GraphHopper
      *
      * @return string list
      */
-    public String[] getWeightingList()
+    public final String[] getWeightingList()
     {
         return new String[]{"Default", "TrafficJam + SpeedUp", "SpeedUp", "TrafficJam"};
     }
 
     @Override
     // TODO: discuss translation of menu labels of these menu items
-    public Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
+    public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
     {
         if ( "TrafficJam + SpeedUp".equalsIgnoreCase( p_weighting ) )
             return new CSpeedUpTrafficJam( this, p_encoder );

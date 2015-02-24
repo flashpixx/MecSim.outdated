@@ -68,11 +68,11 @@ public class CConfiguration
     /**
      * name of the configuration file
      */
-    private static final String s_ConfigFilename = "config.json";
+    private static final String c_ConfigFilename = "config.json";
     /**
      * singleton instance variable
      */
-    private static final CConfiguration s_instance = new CConfiguration();
+    private static final CConfiguration c_instance = new CConfiguration();
     /**
      * property that stores the configuration data
      */
@@ -123,7 +123,7 @@ public class CConfiguration
      */
     public static CConfiguration getInstance()
     {
-        return s_instance;
+        return c_instance;
     }
 
 
@@ -154,7 +154,7 @@ public class CConfiguration
 
 
         try (
-                Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + s_ConfigFilename ), "UTF-8" );
+                Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + c_ConfigFilename ), "UTF-8" );
         )
         {
             new Gson().toJson( m_data, l_writer );
@@ -197,7 +197,7 @@ public class CConfiguration
             CLogger.error( l_exception.getMessage() );
         }
 
-        String l_config = m_dir + File.separator + s_ConfigFilename;
+        String l_config = m_dir + File.separator + c_ConfigFilename;
         CLogger.info( CCommon.getResourceString(this, "read", l_config) );
 
         // read main configuration
@@ -307,7 +307,7 @@ public class CConfiguration
      * @param p_varargs path components after the MAS dir
      * @return path to config dir
      */
-    public File getConfigDir( String... p_varargs )
+    public File getConfigDir( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
             return m_dir;
@@ -320,7 +320,7 @@ public class CConfiguration
      *
      * @param p_dir directory
      */
-    public void setConfigDir( File p_dir )
+    public void setConfigDir( final File p_dir )
     {
         m_dir = p_dir;
     }
@@ -331,7 +331,7 @@ public class CConfiguration
      * @param p_varargs path components after the MAS dir
      * @return path to mas files
      */
-    public File getMASDir( String... p_varargs )
+    public File getMASDir( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
             return m_masdir;
@@ -705,18 +705,18 @@ public class CConfiguration
         public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader, final boolean p_reload ) throws IllegalAccessException, InstantiationException, IOException
         {
             InputStream l_stream = null;
-            String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
+            final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
 
             if ( !p_reload )
                 l_stream = p_loader.getResourceAsStream( l_resource );
             else
             {
 
-                URL l_url = p_loader.getResource( l_resource );
+                final URL l_url = p_loader.getResource( l_resource );
                 if ( l_url == null )
                     return null;
 
-                URLConnection l_connection = l_url.openConnection();
+                final URLConnection l_connection = l_url.openConnection();
                 if ( l_connection == null )
                     return null;
 

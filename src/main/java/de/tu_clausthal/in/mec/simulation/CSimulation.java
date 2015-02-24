@@ -51,7 +51,7 @@ public class CSimulation
     /**
      * singleton instance
      */
-    private static final CSimulation s_instance = new CSimulation();
+    private static final CSimulation c_instance = new CSimulation();
     /**
      * main loop
      */
@@ -90,7 +90,7 @@ public class CSimulation
      */
     public static CSimulation getInstance()
     {
-        return s_instance;
+        return c_instance;
     }
 
 

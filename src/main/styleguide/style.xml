@@ -170,7 +170,9 @@
 
         <module name="IllegalThrows"/>
 
-        <module name="IllegalToken"/>
+        <module name="IllegalToken">
+            <property name="tokens" value="LITERAL_NATIVE"/>
+        </module>
 
         <!-- <module name="IllegalTokenText/> -->
 
@@ -227,11 +229,11 @@
         </module>
 
         <module name="LocalFinalVariableName">
-            <property name="format" value="^l_[a-zA-Z0-9]{1,}$"/>
+            <property name="format" value="^l_[a-zA-Z0-9]{2,}$"/>
         </module>
 
         <module name="LocalVariableName">
-            <property name="format" value="^l_[a-zA-Z0-9]{1,}$"/>
+            <property name="format" value="^l_[a-zA-Z0-9]{2,}$|i|j"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
         </module>
 

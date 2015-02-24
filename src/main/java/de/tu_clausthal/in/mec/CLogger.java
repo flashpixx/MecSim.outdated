@@ -41,7 +41,7 @@ public class CLogger
     /**
      * stack index of traces
      */
-    private static final int s_client_code_stack_index;
+    private static final int c_stackindex;
 
     /** initialization **/
     static
@@ -49,13 +49,13 @@ public class CLogger
 
         // stack trace difference between JDK 1.5 and 1.6
         int i = 0;
-        for ( StackTraceElement ste : Thread.currentThread().getStackTrace() )
+        for ( StackTraceElement l_trace : Thread.currentThread().getStackTrace() )
         {
             i++;
-            if ( ste.getClassName().equals( CLogger.class.getName() ) )
+            if ( l_trace.getClassName().equals( CLogger.class.getName() ) )
                 break;
         }
-        s_client_code_stack_index = i;
+        c_stackindex = i;
     }
 
     /**
@@ -69,7 +69,7 @@ public class CLogger
      * @param p_level    log level
      * @param p_filename p_filename
      */
-    public static void create( Level p_level, String p_filename )
+    public static void create( final Level p_level, final String p_filename )
     {
         s_level = p_level;
         Configurator.defaultConfig().writer( p_level == Level.OFF ? null : new FileWriter( p_filename ) ).level( p_level ).activate();
@@ -80,19 +80,19 @@ public class CLogger
     /**
      * pad / cut string of a define length
      *
-     * @param p_in     input string
-     * @param p_Filler fill character
-     * @param p_len    max string length
+     * @param p_input     input string
+     * @param p_filler fill character
+     * @param p_length    max string length
      * @return modified string
      */
-    private static String padCut( String p_in, char p_Filler, int p_len )
+    private static String padCut( final String p_input, final char p_filler, final int p_length )
     {
-        if ( p_len < 1 )
-            return p_in;
-        if ( p_in.length() < p_len )
-            return p_in + StringUtils.repeat( p_Filler, p_len - p_in.length() );
+        if ( p_length < 1 )
+            return p_input;
+        if ( p_input.length() < p_length )
+            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
 
-        return p_in.substring( 0, p_len );
+        return p_input.substring( 0, p_length );
     }
 
 
@@ -102,26 +102,26 @@ public class CLogger
      * @param p_status status name
      * @param p_add    additional log data
      */
-    private static String createLogData( Level p_status, Object p_add )
+    private static String createLogData( final Level p_status, final Object p_add )
     {
-        String l_SEP = StringUtils.repeat( " ", 5 );
-        StringBuffer l_Str = new StringBuffer();
+        final String l_sep = StringUtils.repeat( " ", 5 );
+        final StringBuffer l_str = new StringBuffer();
 
-        l_Str.append( l_SEP ).
+        l_str.append( l_sep ).
                 append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
-                append( l_SEP ).
+                append( l_sep ).
                 append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
-                append( l_SEP );
+                append( l_sep );
 
         // on the main method we must redefine the index (invoker does not exist)
         if ( Thread.currentThread().getStackTrace().length < 6 )
-            l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
+            l_str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
         else
-            l_Str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
+            l_str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
 
-        l_Str.append( l_SEP ).
+        l_str.append( l_sep ).
                 append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
-                append( l_SEP ).
+                append( l_sep ).
                 append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
 
 
@@ -141,11 +141,11 @@ public class CLogger
 
         if ( !l_add.isEmpty() )
         {
-            l_Str.append( l_SEP ).
+            l_str.append( l_sep ).
                     append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ) );
         }
 
-        return l_Str.toString();
+        return l_str.toString();
     }
 
 
@@ -162,7 +162,7 @@ public class CLogger
      *
      * @param p_write boolean on true message is written
      */
-    public static void warn( boolean p_write )
+    public static void warn( final boolean p_write )
     {
         warn( null, p_write );
     }
@@ -172,7 +172,7 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void warn( Object p_data )
+    public static void warn( final Object p_data )
     {
         warn( p_data, true );
     }
@@ -183,7 +183,7 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void warn( Object p_data, boolean p_write )
+    public static void warn( final Object p_data, final boolean p_write )
     {
         if ( p_write )
             Logger.warn( createLogData( Level.WARNING, p_data ) );
@@ -203,7 +203,7 @@ public class CLogger
      *
      * @param p_write boolean on true message is written
      */
-    public static void error( boolean p_write )
+    public static void error( final boolean p_write )
     {
         error( null, p_write );
     }
@@ -213,7 +213,7 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void error( Object p_data )
+    public static void error( final Object p_data )
     {
         error( p_data, true );
     }
@@ -224,7 +224,7 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void error( Object p_data, boolean p_write )
+    public static void error( final Object p_data, final boolean p_write )
     {
         if ( p_write )
             Logger.error( createLogData( Level.ERROR, p_data ) );
@@ -244,7 +244,7 @@ public class CLogger
      *
      * @param p_write boolean on true message is written
      */
-    public static void info( boolean p_write )
+    public static void info( final boolean p_write )
     {
         info( null, p_write );
     }
@@ -255,7 +255,7 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void info( Object p_data )
+    public static void info( final Object p_data )
     {
         info( p_data, true );
     }
@@ -266,7 +266,7 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void info( Object p_data, boolean p_write )
+    public static void info( final Object p_data, final boolean p_write )
     {
         if ( p_write )
             Logger.info( createLogData( Level.INFO, p_data ) );
@@ -286,7 +286,7 @@ public class CLogger
      *
      * @param p_write boolean on true message is written
      */
-    public static void debug( boolean p_write )
+    public static void debug( final boolean p_write )
     {
         debug( null, p_write );
     }
@@ -296,7 +296,7 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void debug( Object p_data )
+    public static void debug( final Object p_data )
     {
         debug( p_data, true );
     }
@@ -307,7 +307,7 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void debug( Object p_data, boolean p_write )
+    public static void debug( final Object p_data, final boolean p_write )
     {
         if ( p_write )
             Logger.debug( createLogData( Level.DEBUG, p_data ) );
@@ -327,7 +327,7 @@ public class CLogger
      *
      * @param p_write boolean on true message is written
      */
-    public static void out( boolean p_write )
+    public static void out( final boolean p_write )
     {
         out( null, p_write );
     }
@@ -338,7 +338,7 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void out( Object p_data )
+    public static void out( final Object p_data )
     {
         out( p_data, true );
     }
@@ -349,7 +349,7 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void out( Object p_data, boolean p_write )
+    public static void out( final Object p_data, final boolean p_write )
     {
         if ( !p_write )
             return;
@@ -366,9 +366,9 @@ public class CLogger
      *
      * @return method name
      */
-    private static String getCurrentMethodName( int offset )
+    private static String getCurrentMethodName( final int p_offset )
     {
-        return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getMethodName();
+        return Thread.currentThread().getStackTrace()[c_stackindex + p_offset].getMethodName();
     }
 
 
@@ -377,9 +377,9 @@ public class CLogger
      *
      * @return class name
      */
-    private static String getCurrentClassName( int offset )
+    private static String getCurrentClassName( final int p_offset )
     {
-        return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getClassName();
+        return Thread.currentThread().getStackTrace()[c_stackindex + p_offset].getClassName();
     }
 
 
@@ -388,9 +388,9 @@ public class CLogger
      *
      * @return number
      */
-    private static int getCurrentLineNumber( int offset )
+    private static int getCurrentLineNumber( final int p_offset )
     {
-        return Thread.currentThread().getStackTrace()[s_client_code_stack_index + offset].getLineNumber();
+        return Thread.currentThread().getStackTrace()[c_stackindex + p_offset].getLineNumber();
     }
 
 
@@ -399,9 +399,9 @@ public class CLogger
      *
      * @return method name
      */
-    private static String getInvokingMethodName( int offset )
+    private static String getInvokingMethodName( final int p_offset )
     {
-        return getCurrentMethodName( offset + 1 );
+        return getCurrentMethodName( p_offset + 1 );
     }
 
 
@@ -410,9 +410,9 @@ public class CLogger
      *
      * @return class name
      */
-    private static String getInvokingClassName( int offset )
+    private static String getInvokingClassName( final int p_offset )
     {
-        return getCurrentClassName( offset + 1 );
+        return getCurrentClassName( p_offset + 1 );
     }
 
 
@@ -421,12 +421,12 @@ public class CLogger
      *
      * @return FQN method name
      */
-    private static String getCurrentMethodNameFqn( int offset )
+    private static String getCurrentMethodNameFqn( final int p_offset )
     {
-        String currentClassName = getCurrentClassName( offset + 1 );
-        String currentMethodName = getCurrentMethodName( offset + 1 );
+        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
+        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
 
-        return currentClassName + "." + currentMethodName;
+        return l_currentClassName + "." + l_currentMethodName;
     }
 
 
@@ -435,12 +435,12 @@ public class CLogger
      *
      * @return FQN method name
      */
-    private static String getInvokingMethodNameFqn( int offset )
+    private static String getInvokingMethodNameFqn( final int p_offset )
     {
-        String invokingClassName = getInvokingClassName( offset + 1 );
-        String invokingMethodName = getInvokingMethodName( offset + 1 );
+        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
+        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
 
-        return invokingClassName + "." + invokingMethodName;
+        return l_invokingClassName + "." + l_invokingMethodName;
     }
 
 }

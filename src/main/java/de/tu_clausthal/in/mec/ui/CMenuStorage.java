@@ -33,7 +33,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -66,11 +65,11 @@ public class CMenuStorage
      * according to selected language
      *
      * @param p_path full path (without item)
-     * @param p_path_translation translated path according to selected language
+     * @param p_pathtranslation translated path according to selected language
      * 
      * @return menu object
      */
-    protected JMenu getOrCreatePath( final CPath p_path, final String p_path_translation )
+    protected JMenu getOrCreatePath( final CPath p_path, final String p_pathtranslation )
     {
         JComponent l_parent = null;
         for (CPath l_item : p_path )
@@ -79,7 +78,7 @@ public class CMenuStorage
 
             if ( l_current == null )
             {
-                l_current = new JMenu( p_path_translation );
+                l_current = new JMenu( p_pathtranslation );
                 if ( l_parent != null )
                     l_parent.add( l_current );
 
@@ -245,11 +244,11 @@ public class CMenuStorage
      * add a new menu according to selected language
      *
      * @param p_path full path without item
-     * @param p_path_translation translation of full path
+     * @param p_pathtranslation translation of full path
      */
-    public void addMenu( final String p_path, final String p_path_translation)
+    public void addMenu( final String p_path, final String p_pathtranslation )
     {
-        this.getOrCreatePath( new CPath( p_path ), p_path_translation );
+        this.getOrCreatePath( new CPath( p_path ), p_pathtranslation );
     }
 
 

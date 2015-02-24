@@ -229,11 +229,11 @@
         </module>
 
         <module name="LocalFinalVariableName">
-            <property name="format" value="^l_[a-zA-Z0-9]{2,}$"/>
+            <property name="format" value="^l_[a-zA-Z0-9]{1,}$"/>
         </module>
 
         <module name="LocalVariableName">
-            <property name="format" value="^l_[a-zA-Z0-9]{2,}$|i|j"/>
+            <property name="format" value="^l_[a-zA-Z0-9]{1,}$|i|j"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
         </module>
 

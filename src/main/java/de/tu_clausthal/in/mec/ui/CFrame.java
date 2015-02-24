@@ -30,6 +30,7 @@ import bibliothek.gui.dock.common.location.TreeLocationRoot;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -147,7 +148,7 @@ public class CFrame extends JFrame
     public void addWidget( final String p_name, final Component p_panel )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( "name or panel are empty" );
+            throw new IllegalArgumentException(CCommon.getResourceString( this, "namepanelempty" ) );
 
         this.createDockable( p_name, p_panel, CLocation.base().minimalSouth() );
     }
@@ -163,7 +164,7 @@ public class CFrame extends JFrame
     public void addWidget( final String p_name, final Component p_panel, final Position p_position, final double p_size )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( "name or panel are empty" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "namepanelempty" ) );
 
         TreeLocationRoot l_position = null;
         switch ( p_position )

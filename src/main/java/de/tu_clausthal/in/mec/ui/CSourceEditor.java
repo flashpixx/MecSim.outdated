@@ -140,7 +140,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
-            throw new IllegalStateException( "error on file [" + p_file + "] reading" );
+            throw new IllegalStateException( CCommon.getResourceString( this, "readerror", p_file ) );
         }
     }
 

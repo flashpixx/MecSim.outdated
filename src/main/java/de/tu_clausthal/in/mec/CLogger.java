@@ -47,7 +47,7 @@ public class CLogger
     static
     {
 
-        // strack trace difference between JDK 1.5 and 1.6
+        // stack trace difference between JDK 1.5 and 1.6
         int i = 0;
         for ( StackTraceElement ste : Thread.currentThread().getStackTrace() )
         {

@@ -370,7 +370,7 @@ public class CConfiguration
          */
         private int Zoom = 4;
         /**
-         * thread sleep time in miliseconds
+         * thread sleep time in milliseconds
          */
         private int ThreadSleepTime = 25;
         /**

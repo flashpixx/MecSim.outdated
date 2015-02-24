@@ -156,7 +156,7 @@ public class CAboutDialog extends JDialog
 
 
     /**
-     * create a label with clickable hypelink
+     * create a label with clickable hyperlink
      */
     protected class CLinkLabel extends JLabel
     {

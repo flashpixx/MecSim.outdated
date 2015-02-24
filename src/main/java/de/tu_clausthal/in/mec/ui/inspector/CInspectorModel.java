@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.ui.inspector;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -106,7 +108,7 @@ public class CInspectorModel implements TableModel
             default:
         }
 
-        throw new IllegalArgumentException( "illegal position" );
+        throw new IllegalArgumentException( CCommon.getResourceString( this, "position" ) );
     }
 
     @Override
@@ -121,7 +123,7 @@ public class CInspectorModel implements TableModel
             default:
         }
 
-        throw new IllegalArgumentException( "illegal position" );
+        throw new IllegalArgumentException( CCommon.getResourceString( this, "position" ) );
     }
 
     @Override
@@ -145,7 +147,7 @@ public class CInspectorModel implements TableModel
             default:
         }
 
-        throw new IllegalArgumentException( "illegal position" );
+        throw new IllegalArgumentException( CCommon.getResourceString( this, "position" ) );
     }
 
     @Override

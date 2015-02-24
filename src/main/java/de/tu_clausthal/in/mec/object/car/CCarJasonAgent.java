@@ -57,7 +57,7 @@ public class CCarJasonAgent extends CDefaultCar
      * @param p_asl           agent ASL file
      * @param p_StartPosition start positions (position of the source)
      */
-    public CCarJasonAgent( String p_asl, GeoPosition p_StartPosition )
+    public CCarJasonAgent( final String p_asl, final GeoPosition p_StartPosition )
     {
         super( p_StartPosition );
 
@@ -67,34 +67,36 @@ public class CCarJasonAgent extends CDefaultCar
             m_agent = new CAgent<>( p_asl );
 
             // set forbidden elements for methods and properties
-            Set<String> l_forbidden = new HashSet<>();
-            l_forbidden.add( "m_agent" );
-            l_forbidden.add( "m_route" );
-            l_forbidden.add( "m_graph" );
-            l_forbidden.add( "m_inspect" );
-            l_forbidden.add( "m_random" );
-            l_forbidden.add( "m_endReached" );
-            l_forbidden.add( "m_routeindex" );
-            l_forbidden.add( "m_EndPosition" );
-            l_forbidden.add( "m_StartPosition" );
-            l_forbidden.add( "release" );
-            l_forbidden.add( "paint" );
-            l_forbidden.add( "step" );
-            l_forbidden.add( "inspect" );
-            l_forbidden.add( "onClick" );
+            final Set<String> l_forbidden = new HashSet()
+            {{
+                    add( "m_agent" );
+                    add( "m_route" );
+                    add( "m_graph" );
+                    add( "m_inspect" );
+                    add( "m_random" );
+                    add( "m_endReached" );
+                    add( "m_routeindex" );
+                    add( "m_EndPosition" );
+                    add( "m_StartPosition" );
+                    add( "release" );
+                    add( "paint" );
+                    add( "step" );
+                    add( "inspect" );
+                    add( "onClick" );
+                }};
 
             // add the belief bind to the agent
-            de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", this, l_forbidden );
+            final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", this, l_forbidden );
             m_agent.getBelief().add( l_belief );
 
             // add the method bind to the agent
-            CMethodBind l_method = new CMethodBind( "self", this );
+            final CMethodBind l_method = new CMethodBind( "self", this );
             l_method.getForbidden( "self" ).addAll( l_forbidden );
             m_agent.getActions().put( "invoke", l_method );
 
-            // add the pushback bind to the agent
-            de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_pusback = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", this, l_forbidden );
-            m_agent.getActions().put( "set", l_pusback );
+            // add the set bind to the agent
+            final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", this, l_forbidden );
+            m_agent.getActions().put( "set", l_set );
 
 
             // add agent to layer

@@ -63,16 +63,16 @@ public class CNagelSchreckenberg implements IDriveModel
     {
 
         //check maximum speed on the current edge and modify speed
-        int l_maxspeed = Math.min( p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed( p_car.getEdge() ) );
+        final int l_maxspeed = Math.min( p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed( p_car.getEdge() ) );
 
         // increment speed
         p_car.setCurrentSpeed( Math.min( l_maxspeed, p_car.getCurrentSpeed() + p_car.getAcceleration() ) );
 
         // check collision with the predecessor car
-        Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
+        final Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
         if ( ( l_predecessor != null ) && ( l_predecessor.size() > 0 ) )
         {
-            Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
+            final Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
             if ( l_item.getKey().intValue() < p_car.getCurrentSpeed() )
                 p_car.setCurrentSpeed( Math.max( 0, l_item.getKey().intValue() - 1 ) );
         }

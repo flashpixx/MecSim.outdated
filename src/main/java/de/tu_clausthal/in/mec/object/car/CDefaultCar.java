@@ -167,14 +167,19 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     @Override
-    public void reroute()
-    {
-        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
-        if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-        {
-            if ( m_routeindex < m_route.size() - 1 )
-                m_route.subList( m_routeindex + 1, m_route.size() ).clear();
-            m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
+    public void reroute() {
+        this.reroute(m_EndPosition);
+    }
+
+    @Override
+    public void reroute(GeoPosition p_position) {
+        m_EndPosition = p_position;
+
+        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes(this.getGeoposition(), m_EndPosition, 1);
+        if ((l_route != null) && (l_route.size() > 0)) {
+            if (m_routeindex < m_route.size() - 1)
+                m_route.subList(m_routeindex + 1, m_route.size()).clear();
+            m_route.addAll(m_graph.getRouteCells(l_route.get(0)));
         }
     }
 

@@ -95,25 +95,25 @@ public class CMessage<T> implements IMessage<T>
 
 
     @Override
-    public T getData()
+    public final T getData()
     {
         return m_data;
     }
 
     @Override
-    public String getTitle()
+    public final String getTitle()
     {
         return m_title;
     }
 
     @Override
-    public CPath getSource()
+    public final CPath getSource()
     {
         return m_source;
     }
 
     @Override
-    public int ttl()
+    public final int ttl()
     {
         return m_ttl--;
     }

@@ -60,25 +60,25 @@ public class CParticipant implements IParticipant
     /**
      * release *
      */
-    public void release()
+    public final void release()
     {
         CSimulation.getInstance().getMessageSystem().unregister( m_owner.getReceiverPath(), this );
     }
 
     @Override
-    public void sendMessage( final CPath p_path, final IMessage p_message )
+    public final void sendMessage( final CPath p_path, final IMessage p_message )
     {
         CSimulation.getInstance().getMessageSystem().pushMessage( p_path, p_message );
     }
 
     @Override
-    public void receiveMessage( final Set<IMessage> p_messages )
+    public final void receiveMessage( final Set<IMessage> p_messages )
     {
         m_owner.receiveMessage( p_messages );
     }
 
     @Override
-    public CPath getReceiverPath()
+    public final CPath getReceiverPath()
     {
         return m_owner.getReceiverPath();
     }

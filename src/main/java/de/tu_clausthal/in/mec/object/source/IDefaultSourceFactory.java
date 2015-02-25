@@ -94,7 +94,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     }
 
     @Override
-    public Map<String, Object> inspect()
+    public final Map<String, Object> inspect()
     {
         final Map<String, Object> l_map = super.inspect();
         l_map.put( "geoposition", m_position );
@@ -102,7 +102,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     }
 
     @Override
-    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
         if ( m_position == null )
             return;
@@ -145,14 +145,14 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
 
 
     @Override
-    public Collection<IReturnSteppableTarget<ICar>> getTargets()
+    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
     {
         return m_target;
     }
 
 
     @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         if ( m_image == null )
             return;
@@ -192,7 +192,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
 
 
     @Override
-    public GeoPosition getPosition()
+    public final GeoPosition getPosition()
     {
         return m_position;
     }

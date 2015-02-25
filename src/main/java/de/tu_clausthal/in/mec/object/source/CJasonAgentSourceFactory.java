@@ -121,7 +121,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 
 
     @Override
-    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
+    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )
@@ -135,7 +135,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
 
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }

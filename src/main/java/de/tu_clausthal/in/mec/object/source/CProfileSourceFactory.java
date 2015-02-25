@@ -75,7 +75,7 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
      *
      * @param p_profile profile
      */
-    protected void checkSetProfile( final int[] p_profile )
+    protected final void checkSetProfile( final int[] p_profile )
     {
         if ( p_profile == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
@@ -89,7 +89,7 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
 
 
     @Override
-    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
+    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
     {
         final Collection<ICar> l_sources = new HashSet<>();
         for ( int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++ )
@@ -99,7 +99,7 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
 
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }

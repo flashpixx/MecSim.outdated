@@ -67,7 +67,7 @@ public class CNormSourceFactory extends CDefaultSourceFactory
 
 
     @Override
-    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
+    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )

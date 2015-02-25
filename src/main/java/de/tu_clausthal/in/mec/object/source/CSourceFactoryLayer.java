@@ -43,7 +43,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      *
      * @return source names
      */
-    public String[] getSourceNamesList()
+    public final String[] getSourceNamesList()
     {
         return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
     }
@@ -58,7 +58,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      * @return source object
      * @todo add profile source
      */
-    public ISourceFactory getSource( final String p_name, final GeoPosition p_position, final Object... p_varargs )
+    public final ISourceFactory getSource( final String p_name, final GeoPosition p_position, final Object... p_varargs )
     {
         if ( "Default".equals( p_name ) )
             return new CDefaultSourceFactory( p_position );
@@ -73,7 +73,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
     }
 
     @Override
-    public int getCalculationIndex()
+    public final int getCalculationIndex()
     {
         return 2;
     }

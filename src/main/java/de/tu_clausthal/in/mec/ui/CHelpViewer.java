@@ -57,8 +57,8 @@ import java.util.Map;
  * help window
  *
  * @note help files are stored in Markdown syntax within the "help" directory for each language an own directory, links
- * with @code [[<Name>]] @endcode create a link to Wikipedia (with equal language), links with
- * @code ![<description>](<image file>)} @endcode create images to the file within the language help directory, links
+ * with @code [[>Name<]] @endcode create a link to Wikipedia (with equal language), links with
+ * @code ![>description<](<image file>)} @endcode create images to the file within the language help directory, links
  * without http prefix creates a link to a markdown file with equal name within the help directory
  */
 public class CHelpViewer extends JDialog implements ActionListener

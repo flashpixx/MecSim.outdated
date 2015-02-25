@@ -69,7 +69,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
      *
      * @return returns a list of layer
      */
-    public List<ILayer> getOrderedLayer()
+    public final List<ILayer> getOrderedLayer()
     {
 
         final MultiMap<Integer, ILayer> l_order = new MultiValueMap<>();
@@ -89,31 +89,31 @@ public class CWorld implements Map<String, ILayer>, Serializable
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_layer.size();
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_layer.isEmpty();
     }
 
     @Override
-    public boolean containsKey( final Object p_key )
+    public final boolean containsKey( final Object p_key )
     {
         return m_layer.containsKey( p_key );
     }
 
     @Override
-    public boolean containsValue( final Object p_value )
+    public final boolean containsValue( final Object p_value )
     {
         return m_layer.containsValue( p_value );
     }
 
     @Override
-    public ILayer get( final Object p_key )
+    public final ILayer get( final Object p_key )
     {
         final ILayer l_layer = m_layer.get( p_key );
         CLogger.warn(CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
@@ -121,43 +121,43 @@ public class CWorld implements Map<String, ILayer>, Serializable
     }
 
     @Override
-    public ILayer put( final String p_key, final ILayer p_value )
+    public final ILayer put( final String p_key, final ILayer p_value )
     {
         return m_layer.put( p_key, p_value );
     }
 
     @Override
-    public ILayer remove( final Object p_key )
+    public final ILayer remove( final Object p_key )
     {
         return m_layer.remove( p_key );
     }
 
     @Override
-    public void putAll( final Map<? extends String, ? extends ILayer> p_value )
+    public final void putAll( final Map<? extends String, ? extends ILayer> p_value )
     {
         m_layer.putAll( p_value );
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_layer.clear();
     }
 
     @Override
-    public Set<String> keySet()
+    public final Set<String> keySet()
     {
         return m_layer.keySet();
     }
 
     @Override
-    public Collection<ILayer> values()
+    public final Collection<ILayer> values()
     {
         return m_layer.values();
     }
 
     @Override
-    public Set<Entry<String, ILayer>> entrySet()
+    public final Set<Entry<String, ILayer>> entrySet()
     {
         return m_layer.entrySet();
     }

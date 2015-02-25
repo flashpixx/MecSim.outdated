@@ -55,7 +55,7 @@ public class CMessageSystem implements IVoidSteppable
      * @param p_path     path of the receiver
      * @param p_receiver participant
      */
-    public synchronized void register( final CPath p_path, final IParticipant p_receiver )
+    public final synchronized void register( final CPath p_path, final IParticipant p_receiver )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
         {
@@ -78,7 +78,7 @@ public class CMessageSystem implements IVoidSteppable
      * @param p_path     path of the receiver
      * @param p_receiver participant
      */
-    public synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
+    public final synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathexist( p_path ) ) )
         {
@@ -99,7 +99,7 @@ public class CMessageSystem implements IVoidSteppable
      * @param p_path    receiver
      * @param p_message message
      */
-    public synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
+    public final synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
     {
         if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
             return;
@@ -135,7 +135,7 @@ public class CMessageSystem implements IVoidSteppable
 
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData( false ) )
         {
@@ -156,7 +156,7 @@ public class CMessageSystem implements IVoidSteppable
 
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }

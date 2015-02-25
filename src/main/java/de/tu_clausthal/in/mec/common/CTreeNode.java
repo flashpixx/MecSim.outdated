@@ -65,7 +65,7 @@ public class CTreeNode<T>
     public CTreeNode( String p_id )
     {
         if ( ( p_id == null ) || ( p_id.isEmpty() ) )
-            throw new IllegalArgumentException( "ID need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "idnotnull" ) );
 
         m_id = p_id;
     }
@@ -80,7 +80,7 @@ public class CTreeNode<T>
     public CTreeNode( String p_id, CTreeNode<T> p_parent )
     {
         if ( ( p_id == null ) || ( p_id.isEmpty() ) )
-            throw new IllegalArgumentException( "ID need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "idnotnull" ) );
 
         m_id = p_id;
         m_parent = p_parent;

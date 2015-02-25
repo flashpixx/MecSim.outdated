@@ -37,9 +37,9 @@ import java.util.List;
 public class CPath implements Iterable<CPath>
 {
     /**
-     * seperator of the path elements *
+     * separator of the path elements *
      */
-    protected String m_seperator = "/";
+    protected String m_separator = "/";
 
     /**
      * list with path parts *
@@ -54,7 +54,7 @@ public class CPath implements Iterable<CPath>
      */
     public CPath( final CPath p_path )
     {
-        m_seperator = p_path.m_seperator;
+        m_separator = p_path.m_separator;
         m_path.addAll( p_path.m_path );
     }
 
@@ -66,14 +66,14 @@ public class CPath implements Iterable<CPath>
     public CPath( final String... p_varargs )
     {
         if ( ( p_varargs != null ) && ( p_varargs.length > 0 ) )
-            this.initialize( StringUtils.join( p_varargs, m_seperator ) );
+            this.initialize( StringUtils.join( p_varargs, m_separator) );
     }
 
 
     /**
      * creates a path object from different items
      *
-     * @param p_varargs list of strings (first element is the seperator)
+     * @param p_varargs list of strings (first element is the separator)
      * @return path object
      */
     public static CPath createPath( final String... p_varargs )
@@ -142,26 +142,26 @@ public class CPath implements Iterable<CPath>
 
 
     /**
-     * returns the seperator
+     * returns the separator
      *
-     * @return seperator
+     * @return separator
      */
-    public String getSeperator()
+    public String getSeparator()
     {
-        return m_seperator;
+        return m_separator;
     }
 
     /**
-     * sets the seperator
+     * sets the separator
      *
-     * @param p_seperator seperator
+     * @param p_separator separator
      */
-    public void setSeperator( final String p_seperator )
+    public void setSeparator(final String p_separator)
     {
-        if ( ( p_seperator == null ) || ( p_seperator.isEmpty() ) )
-            throw new IllegalArgumentException( "seperator need not to be empty" );
+        if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "separatornotempty" ) );
 
-        m_seperator = p_seperator;
+        m_separator = p_separator;
     }
 
     /**
@@ -171,12 +171,12 @@ public class CPath implements Iterable<CPath>
      */
     private void initialize( final String p_fqn )
     {
-        for ( String l_item : p_fqn.split( m_seperator ) )
+        for ( String l_item : p_fqn.split(m_separator) )
             if ( !l_item.isEmpty() )
                 m_path.add( l_item );
 
         if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( "path is empty" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
 
     /**
@@ -186,7 +186,7 @@ public class CPath implements Iterable<CPath>
      */
     public String getPath()
     {
-        return StringUtils.join( m_path, m_seperator );
+        return StringUtils.join( m_path, m_separator);
     }
 
     /**
@@ -210,7 +210,7 @@ public class CPath implements Iterable<CPath>
     public CPath getSubPath( final int p_fromIndex, final int p_toIndex )
     {
         final CPath l_path = new CPath();
-        l_path.m_seperator = m_seperator;
+        l_path.m_separator = m_separator;
         l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex ) );
         return l_path;
     }

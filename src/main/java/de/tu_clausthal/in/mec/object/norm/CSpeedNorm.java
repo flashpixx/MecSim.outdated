@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.norm;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 
 
@@ -158,7 +159,7 @@ public class CSpeedNorm implements INorm<INormObject>
         public CNormResultSpeed( boolean p_match, double p_weight )
         {
             if ( ( p_weight < 0 ) || ( p_weight > 1 ) )
-                throw new IllegalArgumentException( "weight must be in [0,1]" );
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "weight" ) );
 
             m_match = p_match;
             m_weight = p_weight;

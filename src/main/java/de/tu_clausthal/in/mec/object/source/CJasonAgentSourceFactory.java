@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.source;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
 import de.tu_clausthal.in.mec.object.car.ICar;
@@ -63,7 +64,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red, p_mean, p_distmean );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file must not be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
         m_asl = p_asl;
     }
 
@@ -82,7 +83,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red, p_mean, p_distmean, p_number );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file must not be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
         m_asl = p_asl;
     }
 
@@ -99,7 +100,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red, p_number );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file must not be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
         m_asl = p_asl;
     }
 
@@ -114,7 +115,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         super( p_position, Color.red );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( "ASL file must not be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
         m_asl = p_asl;
     }
 

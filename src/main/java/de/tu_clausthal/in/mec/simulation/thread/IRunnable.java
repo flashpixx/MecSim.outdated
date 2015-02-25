@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.simulation.thread;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+
 import java.util.concurrent.Callable;
 
 
@@ -46,7 +48,7 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
     public IRunnable( final T p_object )
     {
         if ( p_object == null )
-            throw new IllegalArgumentException( "object argument need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
 
         m_object = p_object;
     }

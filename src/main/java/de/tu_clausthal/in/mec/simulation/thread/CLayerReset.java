@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.simulation.thread;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 
 
@@ -55,7 +56,7 @@ public class CLayerReset extends IRunnable<ILayer>
         }
         catch ( Exception l_exception )
         {
-            CLogger.error( "object [" + m_object.toString() + "] throws: " + l_exception.toString() );
+            CLogger.error(CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
         }
     }
 

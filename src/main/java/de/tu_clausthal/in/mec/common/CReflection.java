@@ -255,7 +255,7 @@ public class CReflection
         public CGetSet( Field p_field, MethodHandle p_getter, MethodHandle p_setter )
         {
             if ( p_field == null )
-                throw new IllegalArgumentException( "field parameter need not be null" );
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldnotnull" ) );
 
             m_field = p_field;
             m_getter = p_getter;

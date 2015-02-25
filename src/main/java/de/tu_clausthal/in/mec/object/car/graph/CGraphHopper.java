@@ -148,21 +148,21 @@ public class CGraphHopper extends GraphHopper
         {
             for ( Throwable l_msg : l_result.getErrors() )
                 CLogger.error( l_msg.getMessage() );
-            throw new IllegalArgumentException( "graph error" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "grapherror" ) );
         }
 
 
-        // get all pathes
+        // get all paths
         final List<Path> l_routes = this.getPaths( l_request, l_result );
         if ( l_routes.size() == 0 )
             return null;
 
         // create edge list with routes
-        final List<List<EdgeIteratorState>> l_pathes = new ArrayList<>();
+        final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
         for ( Path l_path : l_routes )
         {
-            if ( l_pathes.size() >= p_maxroutes )
-                return l_pathes;
+            if ( l_paths.size() >= p_maxroutes )
+                return l_paths;
 
             // we must delete the first and last element, because the items are "virtual"
             final List<EdgeIteratorState> l_edgelist = l_path.calcEdges();
@@ -172,10 +172,10 @@ public class CGraphHopper extends GraphHopper
             l_edgelist.remove( 0 );
             l_edgelist.remove( l_edgelist.size() - 1 );
 
-            l_pathes.add( l_edgelist );
+            l_paths.add( l_edgelist );
         }
 
-        return l_pathes;
+        return l_paths;
     }
 
 

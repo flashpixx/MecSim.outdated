@@ -23,7 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
-import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.common.*;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.simulation.message.IMessage;
 import jason.asSemantics.Message;
 
@@ -57,7 +58,7 @@ public class CMessage implements IMessage<Message>
     public CMessage( final Message p_message )
     {
         if ( p_message == null )
-            throw new IllegalArgumentException( "message data need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
 
         m_data = p_message;
     }

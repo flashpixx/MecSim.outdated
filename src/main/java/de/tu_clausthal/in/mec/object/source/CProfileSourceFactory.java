@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
@@ -77,11 +78,11 @@ public class CProfileSourceFactory extends IDefaultSourceFactory
     protected void checkSetProfile( final int[] p_profile )
     {
         if ( p_profile == null )
-            throw new IllegalArgumentException( "profile need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
 
         for ( int i = 0; i < p_profile.length; i++ )
             if ( p_profile[i] < 0 )
-                throw new IllegalArgumentException( "profile index [" + i + "] is less than zero" );
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "lesszero", i ) );
 
         m_profile = p_profile;
     }

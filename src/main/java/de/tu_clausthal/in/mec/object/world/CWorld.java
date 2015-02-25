@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.world;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import org.apache.commons.collections4.MultiMap;
 import org.apache.commons.collections4.map.MultiValueMap;
@@ -115,7 +116,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     public ILayer get( final Object p_key )
     {
         final ILayer l_layer = m_layer.get( p_key );
-        CLogger.warn( "layer [" + l_layer.toString() + "] not exists", l_layer == null );
+        CLogger.warn(CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
         return l_layer;
     }
 

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
@@ -147,7 +148,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
         m_NumberCarsInStep = p_number;
 
         if ( p_number < 1 )
-            throw new IllegalArgumentException( "number must be greater than zero" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "greaterzero" ) );
     }
 
 
@@ -164,7 +165,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
         m_NumberCarsInStep = p_number;
 
         if ( p_number < 1 )
-            throw new IllegalArgumentException( "number must be greater than zero" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "greaterzero" ) );
     }
 
 

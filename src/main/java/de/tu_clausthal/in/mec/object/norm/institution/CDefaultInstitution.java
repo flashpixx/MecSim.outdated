@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.norm.institution;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.norm.CDefaultNormCollection;
 import de.tu_clausthal.in.mec.object.norm.INorm;
 import de.tu_clausthal.in.mec.object.norm.INormCollection;
@@ -85,7 +86,7 @@ public class CDefaultInstitution implements IInstitution<INormObject>
     public CDefaultInstitution( final String p_name )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( "name need not to be empty" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notempty" ) );
         m_name = p_name;
         //CSimulationData.getInstance().getCarInstitutionQueue().add(this);
     }

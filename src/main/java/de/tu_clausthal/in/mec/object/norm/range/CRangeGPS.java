@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.norm.range;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
@@ -80,11 +81,11 @@ public class CRangeGPS extends IInspector implements IRange<INormObject>
     public CRangeGPS( IInstitution<INormObject> p_institution, GeoPosition p_upperleft, GeoPosition p_lowerright )
     {
         if ( ( p_lowerright == null ) || ( p_upperleft == null ) )
-            throw new IllegalArgumentException( "parameter need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "paramnotnull" ) );
         if ( ( p_upperleft.getLongitude() > p_lowerright.getLongitude() ) || ( p_upperleft.getLatitude() < p_lowerright.getLatitude() ) )
-            throw new IllegalArgumentException( "geoposition are not in the correct order, first argument is the upper-left " );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "geoposition" ) );
         if ( p_institution == null )
-            throw new IllegalArgumentException( "institution need not to be null" );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "institutionnotnull" ) );
 
         m_upperleft = p_upperleft;
         m_lowerright = p_lowerright;

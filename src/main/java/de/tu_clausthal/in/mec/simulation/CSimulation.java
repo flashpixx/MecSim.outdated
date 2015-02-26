@@ -263,7 +263,7 @@ public class CSimulation
             l_output.writeObject( m_world );
             l_output.writeObject( l_osmpainter );
 
-            CLogger.info( CCommon.getResourceString( this, "store" ) );
+            CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
         }
         catch ( Exception l_exception )
         {
@@ -315,7 +315,7 @@ public class CSimulation
             // reset all layer
             this.reset();
 
-            CLogger.info( CCommon.getResourceString( this, "load" ) );
+            CLogger.info( CCommon.getResourceString( this, "load", p_input ) );
         }
         catch ( Exception l_exception )
         {

@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
@@ -36,6 +37,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,7 +62,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
-    protected CBrowser m_mindinspector = null;
+    protected transient CBrowser m_mindinspector = null;
 
     /**
      * ctor of Jason structure
@@ -184,4 +186,19 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
             l_agent.release();
         m_data.clear();
     }
+
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException            throws exception on reading
+     * @throws ClassNotFoundException throws on deserialization
+     */
+    private final void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+        this.setFrame( CSimulation.getInstance().getUI() );
+    }
+
 }

@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.simulation;
 
-import com.google.gson.Gson;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -36,11 +35,11 @@ import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -239,7 +238,7 @@ public class CSimulation
     /**
      * stores the simulation in an output stream
      *
-     * @param p_output output stream
+     * @param p_output output file
      * @throws IOException throws the exception on file writing
      * @todo store MAS agent files also within the file (name and file content are needed)
      */
@@ -254,25 +253,36 @@ public class CSimulation
             if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
                 l_osmpainter.add( l_item.getKey() );
 
-        // store data (layers, OSM painter layers)
-        Writer l_writer = new OutputStreamWriter( new FileOutputStream( p_output ), "UTF-8" );
-        new Gson().toJson( new CStorage( m_world, l_osmpainter ), l_writer );
-        l_writer.close();
 
-        CLogger.info( CCommon.getResourceString(this, "store") );
+        // store data (layers, OSM painter layers)
+        try (
+                FileOutputStream l_stream = new FileOutputStream( p_output );
+                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
+        )
+        {
+            l_output.writeObject( m_world );
+            l_output.writeObject( l_osmpainter );
+
+            CLogger.info( CCommon.getResourceString( this, "store" ) );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+            throw new IOException( l_exception.getMessage() );
+        }
     }
 
 
     /**
      * loads the simulation from an input stream
      *
-     * @param p_stream input stream
+     * @param p_input input file
      * @throws IOException            throws the exception on file reading error
      * @throws ClassNotFoundException throws the exception on deserialization
      * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
      * equal overwrite the file, otherwise rename existing file and create a new one with the store content
      */
-    public void load( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    public void load( final File p_input ) throws IOException, ClassNotFoundException
     {
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResourceString(this, "running") );
@@ -286,20 +296,32 @@ public class CSimulation
                 m_ui.removeWidget( l_item.getKey() );
             }
 
-        // clear and load world
-        m_world.clear();
-        m_world = (CWorld) p_stream.readObject();
 
-        // restore OSM painter layers
-        if ( this.hasUI() )
-            for ( String l_item : (ArrayList<String>) p_stream.readObject() )
-                COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
+        try (
+                FileInputStream l_stream = new FileInputStream( p_input );
+                ObjectInputStream l_input = new ObjectInputStream( l_stream );
+        )
+        {
 
+            // clear and load world
+            m_world.clear();
+            m_world = (CWorld) l_input.readObject();
 
-        // reset all layer
-        this.reset();
+            // restore OSM painter layers
+            if ( this.hasUI() )
+                for ( String l_item : (ArrayList<String>) l_input.readObject() )
+                    COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
 
-        CLogger.info( CCommon.getResourceString(this, "load") );
+            // reset all layer
+            this.reset();
+
+            CLogger.info( CCommon.getResourceString( this, "load" ) );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+            throw new IOException( l_exception.getMessage() );
+        }
     }
 
 

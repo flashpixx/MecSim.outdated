@@ -34,8 +34,6 @@ import org.apache.commons.cli.Options;
 import org.pmw.tinylog.Level;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -129,12 +127,7 @@ public class CMain
                 if ( ( !l_cli.hasOption( "step" ) ) )
                     throw new IllegalAccessException( CCommon.getResourceString(CMain.class, "stepnotset") );
 
-                FileInputStream l_stream = new FileInputStream( l_cli.getOptionValue( "nogui" ) );
-                ObjectInputStream l_input = new ObjectInputStream( l_stream );
-                CSimulation.getInstance().load( l_input );
-                l_input.close();
-                l_stream.close();
-
+                CSimulation.getInstance().load( new File( l_cli.getOptionValue( "nogui" ) ) );
                 CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "step" ) ) );
 
             }

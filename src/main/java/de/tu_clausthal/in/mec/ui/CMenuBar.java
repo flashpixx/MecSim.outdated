@@ -43,9 +43,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -498,13 +496,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         try
         {
-            CSimulation.getInstance().store( CCommon.addFileExtension( l_store, ".mecsim" ) );
+            CSimulation.getInstance().store( l_store );
         }
         catch ( Exception l_exception )
         {
-            CLogger.error( l_exception.getMessage() );
             throw new IOException( CCommon.getResourceString( this, "serialization" ) );
         }
+
 
     }
 
@@ -518,12 +516,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( l_load == null )
             return;
 
-        try (
-                FileInputStream l_stream = new FileInputStream( l_load );
-                ObjectInputStream l_input = new ObjectInputStream( l_stream );
-        )
+        try
         {
-            CSimulation.getInstance().load( l_input );
+            CSimulation.getInstance().load( l_load );
         }
         catch ( Exception l_exception )
         {

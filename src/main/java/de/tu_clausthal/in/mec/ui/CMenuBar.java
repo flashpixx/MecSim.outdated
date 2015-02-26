@@ -496,7 +496,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         try
         {
-            CSimulation.getInstance().store( l_store );
+            CSimulation.getInstance().store( CCommon.addFileExtension( l_store, ".mecsim" ) );
         }
         catch ( Exception l_exception )
         {

@@ -111,15 +111,9 @@ public class CLogger
                 append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
                 append( l_sep ).
                 append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
-                append( l_sep );
-
-        // on the main method we must redefine the index (invoker does not exist)
-        if ( Thread.currentThread().getStackTrace().length < 6 )
-            l_str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
-        else
-            l_str.append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) );
-
-        l_str.append( l_sep ).
+                append( l_sep ).
+                append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) ).
+                append( l_sep ).
                 append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
                 append( l_sep ).
                 append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
@@ -368,7 +362,7 @@ public class CLogger
      */
     private static String getCurrentMethodName( final int p_offset )
     {
-        return Thread.currentThread().getStackTrace()[c_stackindex + p_offset].getMethodName();
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
     }
 
 
@@ -379,7 +373,7 @@ public class CLogger
      */
     private static String getCurrentClassName( final int p_offset )
     {
-        return Thread.currentThread().getStackTrace()[c_stackindex + p_offset].getClassName();
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
     }
 
 
@@ -390,7 +384,7 @@ public class CLogger
      */
     private static int getCurrentLineNumber( final int p_offset )
     {
-        return Thread.currentThread().getStackTrace()[c_stackindex + p_offset].getLineNumber();
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
     }
 
 

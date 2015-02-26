@@ -28,12 +28,15 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -156,6 +159,10 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
     private final void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
+
+        // read the ASL file from the stream
+        m_asl = (String) p_stream.readObject();
+        final String l_data = (String) p_stream.readObject();
     }
 
 
@@ -164,11 +171,14 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      *
      * @param p_stream stream
      * @throws IOException throws the exception on loading data
-     * @todo store MAS agent files also within the file (name and file content are needed)
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
         p_stream.defaultWriteObject();
+
+        // write the ASL file to the stream
+        p_stream.writeObject( m_asl );
+        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_asl ).toString() ) ) ) );
     }
 
 }

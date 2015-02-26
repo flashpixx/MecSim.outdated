@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.simulation;
 
+import com.google.gson.Gson;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -34,9 +35,12 @@ import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -235,11 +239,11 @@ public class CSimulation
     /**
      * stores the simulation in an output stream
      *
-     * @param p_stream output stream
+     * @param p_output output stream
      * @throws IOException throws the exception on file writing
      * @todo store MAS agent files also within the file (name and file content are needed)
      */
-    public void store( final ObjectOutputStream p_stream ) throws IOException
+    public void store( final File p_output ) throws IOException
     {
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResourceString(this, "running") );
@@ -251,9 +255,9 @@ public class CSimulation
                 l_osmpainter.add( l_item.getKey() );
 
         // store data (layers, OSM painter layers)
-        p_stream.writeObject( m_world );
-        p_stream.writeObject( l_osmpainter );
-
+        Writer l_writer = new OutputStreamWriter( new FileOutputStream( p_output ), "UTF-8" );
+        new Gson().toJson( new CStorage( m_world, l_osmpainter ), l_writer );
+        l_writer.close();
 
         CLogger.info( CCommon.getResourceString(this, "store") );
     }
@@ -296,6 +300,21 @@ public class CSimulation
         this.reset();
 
         CLogger.info( CCommon.getResourceString(this, "load") );
+    }
+
+
+    protected static class CStorage
+    {
+        public CWorld m_world = null;
+
+        public List<String> m_painter = null;
+
+        public CStorage( CWorld p_world, List<String> p_painter )
+        {
+            m_world = p_world;
+            m_painter = p_painter;
+        }
+
     }
 
 }

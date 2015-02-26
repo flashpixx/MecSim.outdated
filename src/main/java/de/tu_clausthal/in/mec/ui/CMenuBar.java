@@ -44,11 +44,13 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -494,12 +496,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         if ( l_store == null )
             return;
 
-        try (
-                FileOutputStream l_stream = new FileOutputStream( CCommon.addFileExtension( l_store, ".mecsim" ) );
-                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
-        )
+        try
         {
-            CSimulation.getInstance().store( l_output );
+            CSimulation.getInstance().store( CCommon.addFileExtension( l_store, ".mecsim" ) );
         }
         catch ( Exception l_exception )
         {

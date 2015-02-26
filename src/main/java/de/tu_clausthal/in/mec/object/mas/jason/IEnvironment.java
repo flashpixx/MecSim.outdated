@@ -92,11 +92,11 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     public static File createAgentFile( final String p_agentname ) throws IOException
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString(IEnvironment.class, "aslempty") );
+            throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
         final File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
         if ( l_asl.exists() )
-            throw new IllegalStateException( CCommon.getResourceString(IEnvironment.class, "aslexist") );
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "aslexist" ) );
 
         l_asl.createNewFile();
         return l_asl;
@@ -113,7 +113,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     public static File getAgentFile( final String p_agentname )
     {
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString(IEnvironment.class, "aslempty") );
+            throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
         return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
     }
@@ -130,7 +130,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 
-        return CCommon.CollectionToArray(String[].class, l_list);
+        return CCommon.CollectionToArray( String[].class, l_list );
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         }
         catch ( Exception l_exception )
         {
-            throw new IllegalStateException( CCommon.getResourceString(IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage()) );
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
         }
     }
 
@@ -159,7 +159,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     public final void setFrame( final CFrame p_frame )
     {
         if ( m_mindinspector != null )
-            throw new IllegalStateException( CCommon.getResourceString(IEnvironment.class, "frame") );
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "frame" ) );
 
         // register web mindinspector (DoS threat)
         if ( ( p_frame != null ) && ( !p_frame.containsWidget( "Jason Mindinspector" ) ) )

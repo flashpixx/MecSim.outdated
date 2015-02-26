@@ -80,9 +80,9 @@ public class CLogger
     /**
      * pad / cut string of a define length
      *
-     * @param p_input     input string
+     * @param p_input  input string
      * @param p_filler fill character
-     * @param p_length    max string length
+     * @param p_length max string length
      * @return modified string
      */
     private static String padCut( final String p_input, final char p_filler, final int p_length )

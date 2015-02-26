@@ -31,6 +31,9 @@ import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -139,4 +142,33 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
     {
         return null;
     }
+
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws java.io.IOException    throws exception on reading
+     * @throws ClassNotFoundException throws on deserialization
+     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
+     * equal overwrite the file, otherwise rename existing file and create a new one with the store content
+     */
+    private final void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+    }
+
+
+    /**
+     * write call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws the exception on loading data
+     * @todo store MAS agent files also within the file (name and file content are needed)
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
+    }
+
 }

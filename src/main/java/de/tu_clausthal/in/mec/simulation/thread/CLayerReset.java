@@ -56,7 +56,7 @@ public class CLayerReset extends IRunnable<ILayer>
         }
         catch ( Exception l_exception )
         {
-            CLogger.error(CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
+            CLogger.error( CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
         }
     }
 

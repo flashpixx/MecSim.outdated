@@ -109,20 +109,21 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildFileMenu()
     {
-        m_items.addItem( new ImmutablePair<>( "File", CCommon.getResourceString(this, "File") ),
-                         new LinkedList<ImmutablePair<String,String>>() {{
-                             add( new ImmutablePair<>( "About", CCommon.getResourceString( CMenuBar.this, "About" ) ) );
-                             add( null );
-                             add( new ImmutablePair<>( "Help", CCommon.getResourceString( CMenuBar.this, "Help" ) ) );
-                             add( new ImmutablePair<>( "Preferences", CCommon.getResourceString( CMenuBar.this, "Preferences" ) ) );
-                             add( null );
-                             add( new ImmutablePair<>( "Load", CCommon.getResourceString( CMenuBar.this, "Load" ) ) );
-                             add( new ImmutablePair<>( "Save", CCommon.getResourceString( CMenuBar.this, "Save" ) ) );
-                             add( null );
-                             add( new ImmutablePair<>( "Screenshot", CCommon.getResourceString( CMenuBar.this, "Screenshot" ) ) );
-                         }},
-                         this
-                       );
+        m_items.addItem( new ImmutablePair<>( "File", CCommon.getResourceString( this, "File" ) ),
+                new LinkedList<ImmutablePair<String, String>>()
+                {{
+                        add( new ImmutablePair<>( "About", CCommon.getResourceString( CMenuBar.this, "About" ) ) );
+                        add( null );
+                        add( new ImmutablePair<>( "Help", CCommon.getResourceString( CMenuBar.this, "Help" ) ) );
+                        add( new ImmutablePair<>( "Preferences", CCommon.getResourceString( CMenuBar.this, "Preferences" ) ) );
+                        add( null );
+                        add( new ImmutablePair<>( "Load", CCommon.getResourceString( CMenuBar.this, "Load" ) ) );
+                        add( new ImmutablePair<>( "Save", CCommon.getResourceString( CMenuBar.this, "Save" ) ) );
+                        add( null );
+                        add( new ImmutablePair<>( "Screenshot", CCommon.getResourceString( CMenuBar.this, "Screenshot" ) ) );
+                    }},
+                this
+        );
     }
 
     /**
@@ -130,16 +131,17 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildSimulationMenu()
     {
-        m_items.addItem( new ImmutablePair<>("Simulation", CCommon.getResourceString( CMenuBar.this, "Simulation" ) ),
-                         new LinkedList<ImmutablePair<String,String>>() {{
-                             add( new ImmutablePair<>( "Start", CCommon.getResourceString( CMenuBar.this, "Start" ) ) );
-                             add( new ImmutablePair<>( "Stop", CCommon.getResourceString( CMenuBar.this, "Stop" ) ) );
-                             add( null );
-                             add( new ImmutablePair<>( "Reset", CCommon.getResourceString( CMenuBar.this, "Reset" ) ) );
-                             add( null );
-                         }},
-                         this
-                       );
+        m_items.addItem( new ImmutablePair<>( "Simulation", CCommon.getResourceString( CMenuBar.this, "Simulation" ) ),
+                new LinkedList<ImmutablePair<String, String>>()
+                {{
+                        add( new ImmutablePair<>( "Start", CCommon.getResourceString( CMenuBar.this, "Start" ) ) );
+                        add( new ImmutablePair<>( "Stop", CCommon.getResourceString( CMenuBar.this, "Stop" ) ) );
+                        add( null );
+                        add( new ImmutablePair<>( "Reset", CCommon.getResourceString( CMenuBar.this, "Reset" ) ) );
+                        add( null );
+                    }},
+                this
+        );
 
         buildSimulationSpeedSlider();
     }
@@ -150,12 +152,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void buildSimulationSpeedSlider()
     {
         m_items.addSlider( new ImmutablePair<>( "Simulation/Speed", CCommon.getResourceString( this, "Speed" ) ),
-                           150 - CConfiguration.getInstance().get().getThreadsleeptime(), 
-                           CCommon.getResourceString( this, "slow" ),
-                           0,
-                           CCommon.getResourceString( this, "fast" ),
-                           150, this
-                         );
+                150 - CConfiguration.getInstance().get().getThreadsleeptime(),
+                CCommon.getResourceString( this, "slow" ),
+                0,
+                CCommon.getResourceString( this, "fast" ),
+                150, this
+        );
     }
 
     /**
@@ -163,12 +165,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildLayerMenu()
     {
-        final String[] l_activity = new String[ CSimulation.getInstance().getWorld().size() ];
+        final String[] l_activity = new String[CSimulation.getInstance().getWorld().size()];
         CSimulation.getInstance().getWorld().keySet().toArray( l_activity );
         m_items.addRadioItems( new ImmutablePair<>( "Layer/Activity", CCommon.getResourceString( this, "Activity" ) ),
-                               l_activity,
-                               this
-                             );
+                l_activity,
+                this
+        );
 
         final List<String> l_visibility = new ArrayList<>();
         for ( Map.Entry<String, ILayer> l_item : CSimulation.getInstance().getWorld().entrySet() )
@@ -176,9 +178,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 l_visibility.add( l_item.getKey() );
 
         m_items.addRadioItems( new ImmutablePair<>( "Layer/Visibility", CCommon.getResourceString( this, "Visibility" ) ),
-                               CCommon.CollectionToArray( String[].class, l_visibility ),
-                               this
-                             );
+                CCommon.CollectionToArray( String[].class, l_visibility ),
+                this
+        );
     }
 
     /**
@@ -188,9 +190,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
         final String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
         m_items.addRadioGroup( new ImmutablePair<>( "Car Sources", CCommon.getResourceString( this, "Car Sources" ) ),
-                               l_sources,
-                               this
-                             );
+                l_sources,
+                this
+        );
 
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
     }
@@ -201,9 +203,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void buildGraphWeightsMenu()
     {
         m_items.addRadioGroup( new ImmutablePair<>( "Graph Weights", CCommon.getResourceString( this, "Graph Weights" ) ),
-                               ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(),
-                               this
-                             );
+                ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(),
+                this
+        );
     }
 
     /**
@@ -212,9 +214,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void buildDrivingModelMenu()
     {
         m_items.addRadioGroup( new ImmutablePair<>( "Driving Model", CCommon.getResourceString( this, "Driving Model" ) ),
-                               ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(),
-                               this
-                             );
+                ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(),
+                this
+        );
     }
 
 
@@ -262,9 +264,9 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         final JComponent l_root = m_items.removeItems( "MAS/Jason" );
         m_items.addItem( new ImmutablePair<>( "MAS/Jason", CCommon.getResourceString( this, "Jason" ) ),
-                         CCommon.CollectionToArray(String[].class, l_menu),
-                         this
-                       );
+                CCommon.CollectionToArray( String[].class, l_menu ),
+                this
+        );
         if ( l_root != null )
             m_items.get( "MAS" ).remove( l_root );
     }
@@ -276,7 +278,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     private void throwSimulationRunningException()
     {
         if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString(this, "running") );
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
     }
 
 
@@ -351,7 +353,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         }
         catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
 
 
@@ -367,7 +369,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
                 catch ( Exception l_exception )
                 {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
                 }
                 return;
             }
@@ -392,7 +394,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
                 catch ( Exception l_exception )
                 {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
                 }
                 return;
             }
@@ -409,7 +411,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 }
                 catch ( Exception l_exception )
                 {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
+                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
                 }
                 return;
             }
@@ -420,7 +422,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             if ( "MAS/Jason/new agent".equals( l_actionpath.toString() ) )
             {
-                final String l_name = CCommonUI.openTextInputDialog( CCommon.getResourceString(this, "jasoncreatetitle"), CCommon.getResourceString(this, "jasoncreatedescription") );
+                final String l_name = CCommonUI.openTextInputDialog( CCommon.getResourceString( this, "jasoncreatetitle" ), CCommon.getResourceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
                     ( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
                 this.refreshDynamicItems();
@@ -444,7 +446,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         }
         catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
 
     }
@@ -502,7 +504,6 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             throw new IOException( CCommon.getResourceString( this, "serialization" ) );
         }
-
 
     }
 

@@ -61,18 +61,16 @@ public class CMenuStorage
 
 
     /**
-     * creates a full path and returns the latest element
-     * according to selected language
+     * creates a full path and returns the latest element according to selected language
      *
-     * @param p_path full path (without item)
+     * @param p_path            full path (without item)
      * @param p_pathtranslation translated path according to selected language
-     * 
      * @return menu object
      */
     protected JMenu getOrCreatePath( final CPath p_path, final String p_pathtranslation )
     {
         JComponent l_parent = null;
-        for (CPath l_item : p_path )
+        for ( CPath l_item : p_path )
         {
             JComponent l_current = m_pathobject.get( l_item );
 
@@ -171,7 +169,7 @@ public class CMenuStorage
      */
     public Set<Map.Entry<CPath, JComponent>> entrySet( final String p_path )
     {
-        return this.entrySet(p_path, false);
+        return this.entrySet( p_path, false );
     }
 
 
@@ -243,7 +241,7 @@ public class CMenuStorage
     /**
      * add a new menu according to selected language
      *
-     * @param p_path full path without item
+     * @param p_path            full path without item
      * @param p_pathtranslation translation of full path
      */
     public void addMenu( final String p_path, final String p_pathtranslation )
@@ -338,13 +336,13 @@ public class CMenuStorage
      * @param p_elements array with item names (null adds a separator)
      * @param p_listen   action listener for the item
      *
-     * TODO: find solution for p_elements and according translations
+     *                   TODO: find solution for p_elements and according translations
      */
     public void addItem( final ImmutablePair<String, String> p_path, final String[] p_elements, final ActionListener p_listen )
     {
         final CPath l_path = new CPath( p_path.getLeft() );
         if ( m_pathobject.containsKey( l_path ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists") );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "item exists" ) );
 
         // get parent
         JMenu l_menu = null;
@@ -379,9 +377,10 @@ public class CMenuStorage
     /**
      * adds a list of items according to selected language
      *
-     * @param p_path parent path including translation according to selected language -> <'path', 'translation'>
-     * @param p_elements ArrayList with item names (null adds a separator) including translations (inside ImmutablePairs)
-     * @param p_listen action listener for the item
+     * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
+     * @param p_elements ArrayList with item names (null adds a separator) including translations (inside
+     *                   ImmutablePairs)
+     * @param p_listen   action listener for the item
      */
     public void addItem( final ImmutablePair<String, String> p_path, final LinkedList<ImmutablePair<String, String>> p_elements, final ActionListener p_listen )
     {
@@ -425,14 +424,14 @@ public class CMenuStorage
     /**
      * adds a slider
      *
-     * @param p_path     path of the element including translation according to selected language -> <'path', 'translation'>
+     * @param p_path     path of the element including translation according to selected language -> <'path',
+     *                   'translation'>
      * @param p_value    initialization value
      * @param p_labelmin label of the minimum (null removes the label)
      * @param p_min      minimum value
      * @param p_labelmax label of the maximum (null removes the label)
      * @param p_max      maximum value
      * @param p_listen   change listener
-     *
      */
     public void addSlider( final ImmutablePair<String, String> p_path, final int p_value, final String p_labelmin, final int p_min, final String p_labelmax, final int p_max, final ChangeListener p_listen )
     {
@@ -487,7 +486,6 @@ public class CMenuStorage
      * @param p_path     parent path including translation according to selected language -> <'path', 'translation'>
      * @param p_elements array with item names (null adds a seperator)
      * @param p_listen   action listener for the item
-     *
      */
     public void addRadioGroup( final ImmutablePair<String, String> p_path, final String[] p_elements, final ActionListener p_listen )
     {

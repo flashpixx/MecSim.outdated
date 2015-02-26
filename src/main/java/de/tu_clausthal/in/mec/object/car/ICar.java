@@ -79,7 +79,7 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      *
      * @param p_position new end position
      */
-    public void reroute(GeoPosition p_position);
+    public void reroute( GeoPosition p_position );
 
     /**
      * returns the current geo position of the car

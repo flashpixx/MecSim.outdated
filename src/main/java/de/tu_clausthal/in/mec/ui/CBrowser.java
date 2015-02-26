@@ -81,7 +81,7 @@ public class CBrowser extends JFXPanel
     public CBrowser( final String p_url )
     {
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString(this, "urlempty") );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "urlempty" ) );
 
         Platform.runLater( () -> {
             this.initialize();

@@ -71,7 +71,7 @@ public class CCarCount extends IEvaluateLayer
      */
     private void initialize( final CFrame p_frame )
     {
-        p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( CCommon.getResourceString(this, "charttitle"), CCommon.getResourceString(this, "xaxis"), CCommon.getResourceString(this, "yaxis"), m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
+        p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( CCommon.getResourceString( this, "charttitle" ), CCommon.getResourceString( this, "xaxis" ), CCommon.getResourceString( this, "yaxis" ), m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
 
     @Override

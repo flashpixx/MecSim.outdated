@@ -148,7 +148,7 @@ public class CFrame extends JFrame
     public final void addWidget( final String p_name, final Component p_panel )
     {
         if ( ( p_name == null ) || ( p_panel == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException(CCommon.getResourceString( this, "namepanelempty" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "namepanelempty" ) );
 
         this.createDockable( p_name, p_panel, CLocation.base().minimalSouth() );
     }

@@ -66,7 +66,7 @@ public class CPath implements Iterable<CPath>
     public CPath( final String... p_varargs )
     {
         if ( ( p_varargs != null ) && ( p_varargs.length > 0 ) )
-            this.initialize( StringUtils.join( p_varargs, m_separator) );
+            this.initialize( StringUtils.join( p_varargs, m_separator ) );
     }
 
 
@@ -79,7 +79,7 @@ public class CPath implements Iterable<CPath>
     public static CPath createPath( final String... p_varargs )
     {
         if ( p_varargs.length < 2 )
-            throw new IllegalArgumentException( CCommon.getResourceString(CPath.class, "createpath") );
+            throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
     }
@@ -156,7 +156,7 @@ public class CPath implements Iterable<CPath>
      *
      * @param p_separator separator
      */
-    public void setSeparator(final String p_separator)
+    public void setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "separatornotempty" ) );
@@ -171,7 +171,7 @@ public class CPath implements Iterable<CPath>
      */
     private void initialize( final String p_fqn )
     {
-        for ( String l_item : p_fqn.split(m_separator) )
+        for ( String l_item : p_fqn.split( m_separator ) )
             if ( !l_item.isEmpty() )
                 m_path.add( l_item );
 
@@ -186,7 +186,7 @@ public class CPath implements Iterable<CPath>
      */
     public String getPath()
     {
-        return StringUtils.join( m_path, m_separator);
+        return StringUtils.join( m_path, m_separator );
     }
 
     /**
@@ -267,7 +267,7 @@ public class CPath implements Iterable<CPath>
             @Override
             public CPath next()
             {
-                return new CPath( CCommon.CollectionToArray(String[].class, m_path.subList(0, ++m_index)) );
+                return new CPath( CCommon.CollectionToArray( String[].class, m_path.subList( 0, ++m_index ) ) );
             }
         };
     }

@@ -85,9 +85,9 @@ public class CGraphHopper extends GraphHopper
 
     /**
      * private ctor do add different weights for routing
-     * @see https://github.com/graphhopper/graphhopper/issues/111
      *
      * @param p_weights weight name
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
     public CGraphHopper( final String p_weights )
     {
@@ -112,7 +112,7 @@ public class CGraphHopper extends GraphHopper
             l_osm.delete();
         }
 
-        CLogger.out( CCommon.getResourceString(this, "loaded") );
+        CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
 
 
@@ -316,7 +316,7 @@ public class CGraphHopper extends GraphHopper
             final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
             final URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
 
-            CLogger.out( CCommon.getResourceString(this, "download", l_url, l_output) );
+            CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
 
             final ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
             final FileOutputStream l_stream = new FileOutputStream( l_output );

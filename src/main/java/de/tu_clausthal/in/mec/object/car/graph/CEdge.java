@@ -338,7 +338,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final void setObject( final N p_object, final int p_position ) throws IllegalAccessException
     {
         if ( !this.isEmpty( p_position ) )
-            throw new IllegalAccessException( CCommon.getResourceString(this, "emptyposition") );
+            throw new IllegalAccessException( CCommon.getResourceString( this, "emptyposition" ) );
 
         // if the object exists on the edge, it will be moved
         synchronized ( m_cells )

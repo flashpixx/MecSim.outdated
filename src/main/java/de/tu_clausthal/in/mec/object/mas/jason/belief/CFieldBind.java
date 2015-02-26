@@ -150,11 +150,11 @@ public class CFieldBind implements IBelief
                 }
                 catch ( Exception l_exception )
                 {
-                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString(this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage()) );
+                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage() ) );
                 }
                 catch ( Throwable l_throwable )
                 {
-                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString(this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage()) );
+                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage() ) );
                 }
     }
 

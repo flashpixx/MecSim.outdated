@@ -28,7 +28,6 @@ import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.StringUtils;
 
-
 import java.util.Collection;
 
 

@@ -105,7 +105,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             return;
 
         if ( ( !p_file.exists() ) || ( !p_file.canRead() ) || ( !p_file.canWrite() ) )
-            throw new IllegalStateException( CCommon.getResourceString(this, "readwrite", p_file) );
+            throw new IllegalStateException( CCommon.getResourceString( this, "readwrite", p_file ) );
 
         try
         {
@@ -126,7 +126,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
 
             for ( String[] l_item : new String[][]{{"save", "sourceeditor_save.png"}, {"delete", "sourceeditor_delete.png"}, {"reload", "sourceeditor_reload.png"}, {"close", "sourceeditor_close.png"}} )
             {
-                final JButton l_button = new JButton( CCommon.getResourceString(this, l_item[0]), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
+                final JButton l_button = new JButton( CCommon.getResourceString( this, l_item[0] ), new ImageIcon( ImageIO.read( this.getClass().getResource( "/images/" + l_item[1] ) ) ) );
                 l_button.addActionListener( this );
                 l_toolbar.add( l_button );
 
@@ -216,7 +216,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
             if ( "delete".equalsIgnoreCase( l_item.getLeft() ) )
             {
                 if ( !l_item.getRight().delete() )
-                    throw new IllegalStateException( CCommon.getResourceString(this, "filedelete", l_item.getRight().getName()) );
+                    throw new IllegalStateException( CCommon.getResourceString( this, "filedelete", l_item.getRight().getName() ) );
 
                 this.removeTabData( m_tabs.get( l_item.getRight() ).getLeft(), l_item.getRight() );
             }
@@ -225,7 +225,7 @@ public class CSourceEditor extends JTabbedPane implements ActionListener
         catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
 
         for ( ActionListener l_action : m_listener )

@@ -29,9 +29,11 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
+import org.apache.commons.io.FileUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -163,6 +165,26 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         // read the ASL file from the stream
         m_asl = (String) p_stream.readObject();
         final String l_data = (String) p_stream.readObject();
+        final File l_output = IEnvironment.getAgentFile( m_asl );
+
+        try
+        {
+
+            // check hashs are unequal
+            if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_data, "MD5" ) ) )
+            {
+                if ( l_output.exists() )
+                {
+
+                }
+
+                FileUtils.write( l_output, l_data );
+            }
+
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
 

@@ -27,6 +27,9 @@ import de.tu_clausthal.in.mec.CConfiguration;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.text.MessageFormat;
 import java.util.Collection;
 
@@ -103,6 +106,61 @@ public class CCommon
         if ( !l_file.getAbsolutePath().endsWith( p_suffix ) )
             l_file = new File( l_file + p_suffix );
         return l_file;
+    }
+
+
+    /**
+     * returns the hash of a string
+     *
+     * @param p_string input string
+     * @param p_hash   hash algorithm
+     * @return hexadecimal hash value
+     */
+    public static String getHash( final String p_string, final String p_hash )
+    {
+        try
+        {
+            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( p_string.getBytes() ) );
+        }
+        catch ( Exception l_exception )
+        {
+        }
+
+        return null;
+    }
+
+
+    /**
+     * @param p_file input file
+     * @param p_hash hash algorithm
+     * @return hexadecimal hash value
+     */
+    public static String getHash( final File p_file, final String p_hash )
+    {
+        try
+        {
+            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
+        }
+        catch ( Exception l_exception )
+        {
+        }
+
+        return null;
+    }
+
+    /**
+     * returns a string with hexadecimal bytes
+     *
+     * @param p_bytes input bytes
+     * @return hexadecimal string
+     */
+    protected static String getBytes2Hex( byte[] p_bytes )
+    {
+        StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
+        for ( byte l_byte : p_bytes )
+            l_str.append( String.format( "%02x", l_byte & 0xff ) );
+
+        return l_str.toString();
     }
 
 }

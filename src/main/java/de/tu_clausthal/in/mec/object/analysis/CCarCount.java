@@ -35,7 +35,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
 import java.util.Map;
 
 
@@ -118,17 +117,6 @@ public class CCarCount extends IEvaluateLayer
     {
         p_stream.defaultReadObject();
 
-        this.initialize( CSimulation.getInstance().getUI() );
-    }
-
-
-    /**
-     * default initialization on object deserialization
-     *
-     * @throws ObjectStreamException throws exception on read error
-     */
-    private void readObjectNoData() throws ObjectStreamException
-    {
         this.initialize( CSimulation.getInstance().getUI() );
     }
 

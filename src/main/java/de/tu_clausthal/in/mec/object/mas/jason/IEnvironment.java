@@ -38,7 +38,6 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -199,17 +198,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
     {
         p_stream.defaultReadObject();
 
-        this.setFrame( CSimulation.getInstance().getUI() );
-    }
-
-
-    /**
-     * default instantiation of the mind inspector on object deserialization
-     *
-     * @throws java.io.ObjectStreamException throws exception on read error
-     */
-    private void readObjectNoData() throws ObjectStreamException
-    {
         this.setFrame( CSimulation.getInstance().getUI() );
     }
 

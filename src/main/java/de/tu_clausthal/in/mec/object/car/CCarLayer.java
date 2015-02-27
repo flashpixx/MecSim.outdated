@@ -33,7 +33,6 @@ import de.tu_clausthal.in.mec.ui.COSMViewer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -203,17 +202,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     {
         p_stream.defaultReadObject();
 
-        m_graph = new CGraphHopper( m_weight );
-    }
-
-
-    /**
-     * default instantiation of the graph on object deserialization
-     *
-     * @throws ObjectStreamException throws exception on read error
-     */
-    private void readObjectNoData() throws ObjectStreamException
-    {
         m_graph = new CGraphHopper( m_weight );
     }
 

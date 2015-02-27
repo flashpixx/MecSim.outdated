@@ -71,7 +71,10 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     /**
      * map with targets
      */
-    protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet<>();
+    protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
+    {{
+            add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
+        }};
 
     /**
      * waypoint color
@@ -90,7 +93,6 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
         m_position = p_position;
         m_color = p_color;
         this.setImage();
-        m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
     }
 
     @Override
@@ -172,6 +174,8 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
+
+        //m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
 
         m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
         this.setImage();

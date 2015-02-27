@@ -191,9 +191,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
 
 
     /**
-     * default read instantiate the graph
+     * default instantiation of the graph on object deserialization
      *
-     * @throws ObjectStreamException
+     * @throws ObjectStreamException throws exception on read error
      */
     private void readObjectNoData() throws ObjectStreamException
     {

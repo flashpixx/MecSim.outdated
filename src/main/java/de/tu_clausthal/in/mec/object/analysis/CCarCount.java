@@ -33,8 +33,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.ObjectStreamException;
 import java.util.Map;
 
 
@@ -71,6 +70,9 @@ public class CCarCount extends IEvaluateLayer
      */
     private void initialize( final CFrame p_frame )
     {
+        if ( p_frame == null )
+            return;
+
         p_frame.addWidget( "Count Cars", new ChartPanel( ChartFactory.createLineChart( CCommon.getResourceString( this, "charttitle" ), CCommon.getResourceString( this, "xaxis" ), CCommon.getResourceString( this, "yaxis" ), m_plotdata, PlotOrientation.VERTICAL, false, false, false ) ) );
     }
 
@@ -102,18 +104,15 @@ public class CCarCount extends IEvaluateLayer
             m_plotdata.clear();
     }
 
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException            throws exception on reading
-     * @throws ClassNotFoundException throws on deserialization
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
 
-        if ( CSimulation.getInstance().hasUI() )
-            this.initialize( CSimulation.getInstance().getUI() );
+    /**
+     * default initialization on object deserialization
+     *
+     * @throws ObjectStreamException throws exception on read error
+     */
+    private void readObjectNoData() throws ObjectStreamException
+    {
+        this.initialize( CSimulation.getInstance().getUI() );
     }
+
 }

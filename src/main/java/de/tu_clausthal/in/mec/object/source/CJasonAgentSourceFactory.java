@@ -196,11 +196,11 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
-        p_stream.defaultWriteObject();
-
         // write the ASL file to the stream
         p_stream.writeObject( m_asl );
         p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_asl ).toString() ) ) ) );
+
+        p_stream.defaultWriteObject();
     }
 
 }

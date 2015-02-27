@@ -171,9 +171,10 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
-        p_stream.defaultReadObject();
         m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
         this.setImage();
+
+        p_stream.defaultReadObject();
     }
 
 
@@ -185,9 +186,9 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
-        p_stream.defaultWriteObject();
         p_stream.writeDouble( m_position.getLatitude() );
         p_stream.writeDouble( m_position.getLongitude() );
+        p_stream.defaultWriteObject();
     }
 
 

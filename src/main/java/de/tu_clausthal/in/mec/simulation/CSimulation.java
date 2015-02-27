@@ -40,7 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -247,7 +247,7 @@ public class CSimulation
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
         // read all painter object and store the list
-        final List<String> l_osmpainter = new ArrayList<>();
+        final List<String> l_osmpainter = new LinkedList<>();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
                 l_osmpainter.add( l_item.getKey() );
@@ -301,12 +301,11 @@ public class CSimulation
         {
 
             // clear and load world
-            m_world.clear();
             m_world = (CWorld) l_input.readObject();
 
             // restore OSM painter layers
             if ( this.hasUI() )
-                for ( String l_item : (ArrayList<String>) l_input.readObject() )
+                for ( String l_item : (LinkedList<String>) l_input.readObject() )
                     COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
 
             // reset all layer

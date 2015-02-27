@@ -75,7 +75,6 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     {{
             add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
         }};
-
     /**
      * waypoint color
      */

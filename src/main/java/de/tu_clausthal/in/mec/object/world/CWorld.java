@@ -31,10 +31,10 @@ import org.apache.commons.collections4.MultiMap;
 import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,7 +67,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     /**
      * creates a list with the layer objects depends on the ordering value
      *
-     * @return returns a list of layer
+     * @return list of layer
      */
     public final List<ILayer> getOrderedLayer()
     {
@@ -81,12 +81,13 @@ public class CWorld implements Map<String, ILayer>, Serializable
         Arrays.sort( l_sortkeys );
 
         // build the list of the layer
-        final ArrayList<ILayer> l_list = new ArrayList<>();
+        final List<ILayer> l_list = new LinkedList<>();
         for ( Object l_key : l_sortkeys )
             l_list.addAll( (Collection<ILayer>) l_order.get( l_key ) );
 
         return l_list;
     }
+
 
     @Override
     public final int size()

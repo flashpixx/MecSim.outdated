@@ -195,7 +195,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      * @throws IOException            throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
      */
-    private final void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
         this.setFrame( CSimulation.getInstance().getUI() );

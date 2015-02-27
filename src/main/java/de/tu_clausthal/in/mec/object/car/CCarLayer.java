@@ -31,8 +31,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.ObjectStreamException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -190,16 +189,14 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         super.addAll( p_data );
     }
 
+
     /**
-     * read call of serialize interface
+     * default read instantiate the graph
      *
-     * @param p_stream stream
-     * @throws IOException            throws exception on reading
-     * @throws ClassNotFoundException throws on deserialization
+     * @throws ObjectStreamException
      */
-    private final void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObjectNoData() throws ObjectStreamException
     {
-        p_stream.defaultReadObject();
         m_graph = new CGraphHopper( m_weight );
     }
 

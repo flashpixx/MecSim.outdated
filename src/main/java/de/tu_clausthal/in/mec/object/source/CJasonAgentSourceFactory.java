@@ -158,7 +158,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
      * equal overwrite the file, otherwise rename existing file and create a new one with the store content
      */
-    private final void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 

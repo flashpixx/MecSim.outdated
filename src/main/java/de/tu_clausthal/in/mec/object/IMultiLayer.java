@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.object;
 
+import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.simulation.ISteppable;
 import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -42,7 +44,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @tparam T object type of the layer
  */
-public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
+public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer, ISerializable
 {
     /**
      * serialize version ID *
@@ -290,6 +292,21 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( T l_item : this )
             l_item.paint( p_graphic, p_viewer, p_width, p_height );
+    }
+
+
+    @Override
+    public void onDeserializationInitialization()
+    {
+        if ( CSimulation.getInstance().hasUI() )
+            COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) this );
+    }
+
+    @Override
+    public void onDeserializationComplete()
+    {
+        if ( CSimulation.getInstance().hasUI() )
+            COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) this );
     }
 
 }

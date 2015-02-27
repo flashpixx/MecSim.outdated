@@ -27,21 +27,20 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Map;
 
 
 /**
  * car count statistic
  */
-public class CCarCount extends IEvaluateLayer
+public class CCarCount extends IEvaluateLayer implements ISerializable
 {
     /**
      * serialize version ID *
@@ -106,18 +105,22 @@ public class CCarCount extends IEvaluateLayer
     }
 
 
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    @Override
+    public boolean add( Object o )
     {
-        p_stream.defaultReadObject();
-
-        this.initialize( CSimulation.getInstance().getUI() );
+        return false;
     }
 
+    @Override
+    public void onDeserializationInitialization()
+    {
+        if ( CSimulation.getInstance().hasUI() )
+            CSimulation.getInstance().getUI().removeWidget( "Count Cars" );
+    }
+
+    @Override
+    public void onDeserializationComplete()
+    {
+        this.initialize( CSimulation.getInstance().getUI() );
+    }
 }

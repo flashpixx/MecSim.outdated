@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
+import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
@@ -44,7 +45,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -53,7 +53,7 @@ import java.util.Map;
 /**
  * class with default source implementation
  */
-public abstract class IDefaultSourceFactory extends IInspector implements ISourceFactory, Serializable
+public abstract class IDefaultSourceFactory extends IInspector implements ISourceFactory, ISerializable
 {
     /**
      * serialize version ID *
@@ -175,8 +175,6 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     {
         p_stream.defaultReadObject();
 
-        //m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
-
         m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
         this.setImage();
     }
@@ -196,6 +194,18 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
         p_stream.writeDouble( m_position.getLongitude() );
     }
 
+    @Override
+    public void onDeserializationInitialization()
+    {
+
+    }
+
+    @Override
+    public void onDeserializationComplete()
+    {
+        m_target = new HashSet<>();
+        m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
+    }
 
     @Override
     public final GeoPosition getPosition()

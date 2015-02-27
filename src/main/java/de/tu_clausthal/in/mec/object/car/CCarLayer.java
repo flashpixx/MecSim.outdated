@@ -29,7 +29,9 @@ import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
+import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.jxmapviewer.painter.Painter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -43,7 +45,7 @@ import java.util.Map;
 /**
  * defines the layer for cars
  */
-public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>
+public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
 {
     /**
      * serialize version ID *
@@ -185,11 +187,24 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
+    public void onDeserializationInitialization()
+    {
+        if ( CSimulation.getInstance().hasUI() )
+            COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) this );
+    }
+
+    @Override
+    public void onDeserializationComplete()
+    {
+        if ( CSimulation.getInstance().hasUI() )
+            COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) this );
+    }
+
+    @Override
     public final void push( final Collection<ICar> p_data )
     {
         super.addAll( p_data );
     }
-
 
     /**
      * read call of serialize interface
@@ -204,5 +219,4 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
 
         m_graph = new CGraphHopper( m_weight );
     }
-
 }

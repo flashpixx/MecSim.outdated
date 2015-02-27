@@ -26,13 +26,14 @@ package de.tu_clausthal.in.mec.simulation;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.IEvaluateLayer;
+import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
 import de.tu_clausthal.in.mec.ui.CFrame;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import org.jxmapviewer.painter.Painter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,9 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 
 /**
@@ -246,21 +245,13 @@ public class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
-        // read all painter object and store the list
-        final List<String> l_osmpainter = new LinkedList<>();
-        for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
-            if ( COSMViewer.getSimulationOSM().getCompoundPainter().getPainters().contains( l_item.getValue() ) )
-                l_osmpainter.add( l_item.getKey() );
 
-
-        // store data (layers, OSM painter layers)
         try (
                 FileOutputStream l_stream = new FileOutputStream( p_output );
                 ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
         )
         {
             l_output.writeObject( m_world );
-            l_output.writeObject( l_osmpainter );
 
             CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
         }
@@ -284,34 +275,42 @@ public class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
-        if ( this.hasUI() )
-            for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
-            {
-                // check if layer is a JXMapViewer Painter
-                if ( l_item.getValue() instanceof Painter )
-                    COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) l_item.getValue() );
-                m_ui.removeWidget( l_item.getKey() );
-            }
-
-
         try (
                 FileInputStream l_stream = new FileInputStream( p_input );
                 ObjectInputStream l_input = new ObjectInputStream( l_stream );
         )
         {
 
-            // clear and load world
+            for ( ILayer l_layer : m_world.values() )
+            {
+                if ( l_layer instanceof ISerializable )
+                    ( (ISerializable) l_layer ).onDeserializationInitialization();
+
+                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
+                    for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
+                        if ( l_item instanceof ISerializable )
+                            ( (ISerializable) l_item ).onDeserializationInitialization();
+            }
+
+            m_world.clear();
             m_world = (CWorld) l_input.readObject();
 
-            // restore OSM painter layers
-            if ( this.hasUI() )
-                for ( String l_item : (LinkedList<String>) l_input.readObject() )
-                    COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) m_world.get( l_item ) );
+            for ( ILayer l_layer : m_world.values() )
+            {
+                if ( l_layer instanceof ISerializable )
+                    ( (ISerializable) l_layer ).onDeserializationComplete();
+
+                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
+                    for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
+                        if ( l_item instanceof ISerializable )
+                            ( (ISerializable) l_item ).onDeserializationComplete();
+            }
 
             // reset all layer
             this.reset();
 
             CLogger.info( CCommon.getResourceString( this, "load", p_input ) );
+
         }
         catch ( Exception l_exception )
         {

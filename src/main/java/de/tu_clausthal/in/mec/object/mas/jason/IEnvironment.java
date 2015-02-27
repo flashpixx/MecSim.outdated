@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import jason.architecture.AgArch;
@@ -52,7 +53,7 @@ import java.util.List;
  * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/
  */
-public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
+public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
     /**
      * serialize version ID *
@@ -158,15 +159,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
      */
     public final void setFrame( final CFrame p_frame )
     {
-        if ( m_mindinspector != null )
-            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "frame" ) );
+        if ( ( p_frame == null ) || ( m_mindinspector != null ) )
+            return;
 
         // register web mindinspector (DoS threat)
-        if ( ( p_frame != null ) && ( !p_frame.containsWidget( "Jason Mindinspector" ) ) )
-        {
-            m_mindinspector = new CBrowser();
-            p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
-        }
+        m_mindinspector = new CBrowser();
+        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
     }
 
     @Override
@@ -187,6 +185,19 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
         m_data.clear();
     }
 
+    @Override
+    public void onDeserializationInitialization()
+    {
+        if ( CSimulation.getInstance().hasUI() )
+            CSimulation.getInstance().getUI().removeWidget( "Jason Mindinspector" );
+    }
+
+    @Override
+    public void onDeserializationComplete()
+    {
+        this.setFrame( CSimulation.getInstance().getUI() );
+    }
+
     /**
      * read call of serialize interface
      *
@@ -200,5 +211,4 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 
         this.setFrame( CSimulation.getInstance().getUI() );
     }
-
 }

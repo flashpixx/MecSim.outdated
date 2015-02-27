@@ -153,7 +153,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws java.io.IOException    throws exception on reading
+     * @throws IOException    throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
      * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
      * equal overwrite the file, otherwise rename existing file and create a new one with the store content
@@ -196,11 +196,11 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
+        p_stream.defaultWriteObject();
+
         // write the ASL file to the stream
         p_stream.writeObject( m_asl );
         p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_asl ).toString() ) ) ) );
-
-        p_stream.defaultWriteObject();
     }
 
 }

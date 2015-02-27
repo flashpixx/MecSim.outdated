@@ -37,6 +37,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectStreamException;
 import java.util.LinkedList;
 import java.util.List;
@@ -186,6 +187,21 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
             l_agent.release();
         m_data.clear();
     }
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException            throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        this.setFrame( CSimulation.getInstance().getUI() );
+    }
+
 
     /**
      * default instantiation of the mind inspector on object deserialization

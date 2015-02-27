@@ -33,6 +33,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectStreamException;
 import java.util.Map;
 
@@ -106,13 +108,27 @@ public class CCarCount extends IEvaluateLayer
 
 
     /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException            throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        this.initialize( CSimulation.getInstance().getUI() );
+    }
+
+
+    /**
      * default initialization on object deserialization
      *
      * @throws ObjectStreamException throws exception on read error
      */
     private void readObjectNoData() throws ObjectStreamException
     {
-        //System.out.println(this);
         this.initialize( CSimulation.getInstance().getUI() );
     }
 

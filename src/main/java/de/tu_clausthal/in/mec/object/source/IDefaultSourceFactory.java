@@ -169,6 +169,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      * @param p_stream stream
      * @throws IOException            throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
+     * @bug target layer does not exist at deserialization
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {

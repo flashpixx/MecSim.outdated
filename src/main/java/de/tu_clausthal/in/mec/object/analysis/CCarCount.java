@@ -112,7 +112,7 @@ public class CCarCount extends IEvaluateLayer
      */
     private void readObjectNoData() throws ObjectStreamException
     {
-        System.out.println(this);
+        //System.out.println(this);
         this.initialize( CSimulation.getInstance().getUI() );
     }
 

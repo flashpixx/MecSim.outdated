@@ -23,9 +23,14 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CConfiguration;
+
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
@@ -57,6 +62,7 @@ public class CConsole extends JPanel
     {
         super( new BorderLayout() );
         m_output.setEditable( false );
+        m_output.getDocument().addDocumentListener( new CLineLimit() );
 
         final JScrollPane l_scroll = new JScrollPane( m_output );
         l_scroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
@@ -78,9 +84,50 @@ public class CConsole extends JPanel
 
 
     /**
+     * line limit document listener *
+     */
+    protected class CLineLimit implements DocumentListener
+    {
+
+        @Override
+        public void insertUpdate( DocumentEvent p_document )
+        {
+            SwingUtilities.invokeLater( new Runnable()
+            {
+                public void run()
+                {
+                    final int l_max = CConfiguration.getInstance().get().getConsole().getLinenumber() + 1;
+                    final Document l_document = p_document.getDocument();
+                    final Element l_root = l_document.getDefaultRootElement();
+
+                    while ( l_root.getElementCount() > l_max )
+                        try
+                        {
+                            l_document.remove( 0, l_root.getElement( 0 ).getEndOffset() );
+                        }
+                        catch ( BadLocationException l_exception )
+                        {
+                        }
+                }
+            } );
+        }
+
+        @Override
+        public void removeUpdate( DocumentEvent p_document )
+        {
+
+        }
+
+        @Override
+        public void changedUpdate( DocumentEvent p_document )
+        {
+
+        }
+    }
+
+
+    /**
      * inner class to replace default output stream writer
-     *
-     * @todo add line limit - https://tips4java.wordpress.com/2008/11/08/message-console/
      */
     protected class CConsoleOutputStream extends ByteArrayOutputStream
     {
@@ -93,7 +140,7 @@ public class CConsole extends JPanel
         /**
          * buffer of the content *
          */
-        private StringBuffer m_buffer = new StringBuffer( 120 );
+        private StringBuffer m_buffer = new StringBuffer( CConfiguration.getInstance().get().getConsole().getLinebuffer() );
         /**
          * first line flag - to remove a blank line at the begin *
          */

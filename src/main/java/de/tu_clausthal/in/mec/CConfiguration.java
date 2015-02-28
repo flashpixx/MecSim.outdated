@@ -258,6 +258,11 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "databasedefault" ) );
                 l_tmp.Database = m_data.Database;
             }
+            if ( l_tmp.Console == null )
+            {
+                CLogger.warn( CCommon.getResourceString( this, "consoledefault" ) );
+                l_tmp.Console = m_data.Console;
+            }
 
             m_data = l_tmp;
         }
@@ -399,6 +404,10 @@ public class CConfiguration
          * database driver (optional)
          */
         private DatabaseDriver Database = new DatabaseDriver();
+        /**
+         * console definition
+         */
+        private ConsoleData Console = new ConsoleData();
 
 
         @UiSection("General")
@@ -427,7 +436,8 @@ public class CConfiguration
 
         public void setCellsampling( int p_value )
         {
-            CellSampling = p_value;
+            CellSampling = Math.max( p_value, 1 );
+            ;
         }
 
 
@@ -460,8 +470,22 @@ public class CConfiguration
         }
 
 
-        @UiSection("Analysis Database")
+        @UiSection("Console")
         @UiComesAfter("routingmap")
+        @UiLabel("")
+        public ConsoleData getConsole()
+        {
+            return Console;
+        }
+
+        public void setConsole( ConsoleData p_value )
+        {
+            Console = p_value;
+        }
+
+
+        @UiSection("Analysis Database")
+        @UiComesAfter("console")
         @UiLabel("")
         public DatabaseDriver getDatabase()
         {
@@ -528,6 +552,44 @@ public class CConfiguration
             WindowHeight = p_value;
         }
 
+        /**
+         * class of the console configuration
+         */
+        public class ConsoleData
+        {
+            /**
+             * maximum char number on each line *
+             */
+            private int LineBuffer = 120;
+            /**
+             * maximum line numbers *
+             */
+            private int LineNumber = 120;
+
+
+            @UiLabel("Number of character at each line")
+            public int getLinebuffer()
+            {
+                return LineBuffer;
+            }
+
+            public void setLinebuffer( int p_value )
+            {
+                LineBuffer = Math.max( p_value, 1 );
+            }
+
+
+            @UiLabel("Number Lines")
+            public int getLinenumber()
+            {
+                return LineNumber;
+            }
+
+            public void setLinenumber( int p_value )
+            {
+                LineNumber = Math.max( p_value, 1 );
+            }
+        }
 
         /**
          * class of the routing map

@@ -297,7 +297,7 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
     /**
-     * @todo draw route (solid for driven way, dashed for driving way) *
+     * @todo draw route (solid for driven way, dashed for driving way)
      */
     @Override
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )

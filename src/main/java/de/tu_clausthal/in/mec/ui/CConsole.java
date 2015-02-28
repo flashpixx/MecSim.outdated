@@ -90,7 +90,7 @@ public class CConsole extends JPanel
     {
 
         @Override
-        public void insertUpdate( DocumentEvent p_document )
+        public final void insertUpdate( final DocumentEvent p_document )
         {
             SwingUtilities.invokeLater( new Runnable()
             {
@@ -113,13 +113,13 @@ public class CConsole extends JPanel
         }
 
         @Override
-        public void removeUpdate( DocumentEvent p_document )
+        public final void removeUpdate( final DocumentEvent p_document )
         {
 
         }
 
         @Override
-        public void changedUpdate( DocumentEvent p_document )
+        public final void changedUpdate( final DocumentEvent p_document )
         {
 
         }

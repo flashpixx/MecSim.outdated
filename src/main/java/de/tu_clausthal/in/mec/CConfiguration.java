@@ -46,6 +46,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -531,8 +532,12 @@ public class CConfiguration
         /**
          * class of the routing map
          */
-        public class RoutingMap
+        public class RoutingMap implements Serializable
         {
+            /**
+             * serialize version ID *
+             */
+            static final long serialVersionUID = 1L;
             /**
              * download URL
              */

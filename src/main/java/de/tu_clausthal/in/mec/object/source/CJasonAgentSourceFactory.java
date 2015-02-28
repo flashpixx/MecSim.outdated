@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -155,32 +156,30 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * @param p_stream stream
      * @throws IOException    throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
-     * @todo on restore MAS agent content existing file should overwrite, if the hash of the file and stored content are
-     * equal overwrite the file, otherwise rename existing file and create a new one with the store content
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 
         // read the ASL file from the stream
-        m_asl = (String) p_stream.readObject();
-        final String l_data = (String) p_stream.readObject();
-        final File l_output = IEnvironment.getAgentFile( m_asl );
+        final String l_aslname = m_asl;
+        final String l_asldata = (String) p_stream.readObject();
+        File l_output = IEnvironment.getAgentFile( l_aslname );
 
         try
         {
-
-            // check hashs are unequal
-            if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_data, "MD5" ) ) )
-            {
-                if ( l_output.exists() )
+            if ( !l_output.exists() )
+                FileUtils.write( l_output, l_asldata );
+            else if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_asldata, "MD5" ) ) )
                 {
-
+                    l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
+                    for ( int i = 1; l_output.exists(); i++ )
+                    {
+                        m_asl = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
+                        l_output = IEnvironment.getAgentFile( m_asl );
+                    }
+                    FileUtils.write( l_output, l_asldata );
                 }
-
-                FileUtils.write( l_output, l_data );
-            }
-
         }
         catch ( Exception l_exception )
         {
@@ -199,7 +198,6 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( m_asl );
         p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_asl ).toString() ) ) ) );
     }
 

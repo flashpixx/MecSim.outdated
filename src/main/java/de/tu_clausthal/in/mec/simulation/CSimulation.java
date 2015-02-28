@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.simulation;
 
 import de.tu_clausthal.in.mec.CBootstrap;
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
@@ -251,6 +252,7 @@ public class CSimulation
                 ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
         )
         {
+            l_output.writeObject( CConfiguration.getInstance().get().getRoutingmap() );
             l_output.writeObject( m_world );
 
             CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
@@ -292,6 +294,7 @@ public class CSimulation
                             ( (ISerializable) l_item ).onDeserializationInitialization();
             }
 
+            CConfiguration.getInstance().get().setRoutingmap( (CConfiguration.Data.RoutingMap) l_input.readObject() );
             m_world.clear();
             m_world = (CWorld) l_input.readObject();
 

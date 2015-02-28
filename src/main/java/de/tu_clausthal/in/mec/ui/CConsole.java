@@ -64,8 +64,8 @@ public class CConsole extends JPanel
         this.add( l_scroll, BorderLayout.CENTER );
 
         // redirect default streams
-        System.setOut( new PrintStream( new ConsoleOutputStream( m_output.getDocument(), Color.black ), true ) );
-        System.setErr( new PrintStream( new ConsoleOutputStream( m_output.getDocument(), Color.red ), true ) );
+        System.setOut( new PrintStream( new CConsoleOutputStream( m_output.getDocument(), Color.black ), true ) );
+        System.setErr( new PrintStream( new CConsoleOutputStream( m_output.getDocument(), Color.red ), true ) );
     }
 
     /**
@@ -80,9 +80,9 @@ public class CConsole extends JPanel
     /**
      * inner class to replace default output stream writer
      *
-     * @todo add line limit
+     * @todo add line limit - https://tips4java.wordpress.com/2008/11/08/message-console/
      */
-    protected class ConsoleOutputStream extends ByteArrayOutputStream
+    protected class CConsoleOutputStream extends ByteArrayOutputStream
     {
         /* system default end-of-line separator **/
         private final String m_eol = System.getProperty( "line.separator" );
@@ -110,7 +110,7 @@ public class CConsole extends JPanel
          * @param p_document  document, which should be written
          * @param p_textcolor color of the text
          */
-        public ConsoleOutputStream( final Document p_document, final Color p_textcolor )
+        public CConsoleOutputStream( final Document p_document, final Color p_textcolor )
         {
             m_document = p_document;
 

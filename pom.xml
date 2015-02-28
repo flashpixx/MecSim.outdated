@@ -93,31 +93,31 @@
         <dependency>
             <groupId>org.metawidget.modules</groupId>
             <artifactId>metawidget-core</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.metawidget.modules.swing</groupId>
             <artifactId>metawidget-swing</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.metawidget.modules</groupId>
             <artifactId>metawidget-annotation</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.metawidget.modules.swing</groupId>
             <artifactId>metawidget-beansbinding</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.metawidget.modules</groupId>
             <artifactId>metawidget-oval</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

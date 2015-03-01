@@ -64,13 +64,13 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     protected boolean m_active = true;
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_active )
+    public final void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -82,7 +82,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean isVisible()
+    public final boolean isVisible()
     {
         try
         {
@@ -95,7 +95,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public void setVisible( final boolean p_visible )
+    public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
         try
@@ -133,43 +133,43 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_data.size();
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_data.isEmpty();
     }
 
     @Override
-    public boolean contains( final Object p_object )
+    public final boolean contains( final Object p_object )
     {
         return m_data.contains( p_object );
     }
 
     @Override
-    public Iterator<T> iterator()
+    public final Iterator<T> iterator()
     {
         return m_data.iterator();
     }
 
     @Override
-    public Object[] toArray()
+    public final Object[] toArray()
     {
         return m_data.toArray();
     }
 
     @Override
-    public <S> S[] toArray( final S[] p_value )
+    public final <S> S[] toArray( final S[] p_value )
     {
         return m_data.toArray( p_value );
     }
 
     @Override
-    public boolean add( final T p_value )
+    public final boolean add( final T p_value )
     {
         final boolean l_return = m_data.add( p_value );
         try
@@ -184,7 +184,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean remove( final Object p_object )
+    public final boolean remove( final Object p_object )
     {
         final boolean l_result = m_data.remove( p_object );
         try
@@ -198,7 +198,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean containsAll( final Collection<?> p_collection )
+    public final boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
             if ( !m_data.contains( l_item ) )
@@ -215,7 +215,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean addAll( final Collection<? extends T> p_collection )
+    public final boolean addAll( final Collection<? extends T> p_collection )
     {
         final boolean l_return = m_data.addAll( p_collection );
         try
@@ -230,7 +230,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean removeAll( final Collection<?> p_collection )
+    public final boolean removeAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
         {
@@ -251,13 +251,13 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public boolean retainAll( final Collection<?> p_collection )
+    public final boolean retainAll( final Collection<?> p_collection )
     {
         return m_data.retainAll( p_collection );
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_data.clear();
         try

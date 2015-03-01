@@ -187,14 +187,14 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public void onDeserializationInitialization()
+    public final void onDeserializationInitialization()
     {
         if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) this );
     }
 
     @Override
-    public void onDeserializationComplete()
+    public final void onDeserializationComplete()
     {
         if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) this );

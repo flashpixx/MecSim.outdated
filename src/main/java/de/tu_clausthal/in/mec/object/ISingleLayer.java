@@ -47,13 +47,13 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     protected boolean m_active = true;
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_active )
+    public final void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -65,13 +65,13 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
-    public boolean isVisible()
+    public final boolean isVisible()
     {
         return m_visible;
     }
 
     @Override
-    public void setVisible( final boolean p_visible )
+    public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
     }

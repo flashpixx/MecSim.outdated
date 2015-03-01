@@ -53,13 +53,13 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     protected boolean m_active = true;
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_active )
+    public final void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -76,79 +76,79 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_data.size();
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_data.isEmpty();
     }
 
     @Override
-    public boolean contains( final Object p_object )
+    public final boolean contains( final Object p_object )
     {
         return m_data.contains( p_object );
     }
 
     @Override
-    public Iterator<T> iterator()
+    public final Iterator<T> iterator()
     {
         return m_data.iterator();
     }
 
     @Override
-    public Object[] toArray()
+    public final Object[] toArray()
     {
         return m_data.toArray();
     }
 
     @Override
-    public <S> S[] toArray( final S[] p_value )
+    public final <S> S[] toArray( final S[] p_value )
     {
         return m_data.toArray( p_value );
     }
 
     @Override
-    public boolean add( final T p_value )
+    public final boolean add( final T p_value )
     {
         return m_data.add( p_value );
     }
 
     @Override
-    public boolean remove( final Object p_object )
+    public final boolean remove( final Object p_object )
     {
         return m_data.remove( p_object );
     }
 
     @Override
-    public boolean containsAll( final Collection<?> p_collection )
+    public final boolean containsAll( final Collection<?> p_collection )
     {
         return m_data.containsAll( p_collection );
     }
 
     @Override
-    public boolean addAll( final Collection<? extends T> p_collection )
+    public final boolean addAll( final Collection<? extends T> p_collection )
     {
         return m_data.addAll( p_collection );
     }
 
     @Override
-    public boolean removeAll( final Collection<?> p_collection )
+    public final boolean removeAll( final Collection<?> p_collection )
     {
         return m_data.removeAll( p_collection );
     }
 
     @Override
-    public boolean retainAll( final Collection<?> p_collection )
+    public final boolean retainAll( final Collection<?> p_collection )
     {
         return m_data.retainAll( p_collection );
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_data.clear();
     }

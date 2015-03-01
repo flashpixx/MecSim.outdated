@@ -327,9 +327,17 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
             l_item.paint( p_graphic, p_viewer, p_width, p_height );
     }
 
+
+    /**
+     * interface for finishing *
+     */
     public static interface IFinish
     {
 
+        /** method to detect finish
+         *
+         * @return finish flag
+         */
         public boolean isFinish();
 
     }

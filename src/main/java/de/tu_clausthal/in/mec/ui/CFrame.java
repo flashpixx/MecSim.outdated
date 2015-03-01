@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.COperatingSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,6 +69,7 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
+        COperatingSystem.setFrameProperties( this );
         this.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         this.setLayout( new BorderLayout() );
 

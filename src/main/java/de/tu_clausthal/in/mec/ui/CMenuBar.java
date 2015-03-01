@@ -53,8 +53,6 @@ import java.util.Map;
 
 /**
  * class for create the menubar
- *
- * @todo add OSX specific menubar http://www.oracle.com/technetwork/java/javatomac2-138389.html / http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {

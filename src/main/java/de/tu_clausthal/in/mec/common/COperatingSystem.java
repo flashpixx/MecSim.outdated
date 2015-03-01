@@ -21,43 +21,80 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec;
+package de.tu_clausthal.in.mec.common;
 
 
-import de.tu_clausthal.in.mec.common.COperatingSystem;
+//import com.apple.eawt.Application;
+//import com.apple.eawt.FullScreenUtilities;
+
+import java.awt.*;
 
 
 /**
- * bootstrap for the Java main call - checking of the correct installed JRE
+ * OS specific support
  *
- * @warning the class must be compiled with a lower target version of the JRE, the Maven build script uses different
- * profiles to do this
+ * @see http://moomoohk.github.io/snippets/java_osx.html
+ * @see http://www.oracle.com/technetwork/java/javatomac2-138389.html
+ * @see http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
  */
-public class CMainBootstrap
+public class COperatingSystem
 {
-    static
+
+    /**
+     * Mac OS X check
+     *
+     * @return true on OSX
+     */
+    public static boolean isOSX()
     {
-        COperatingSystem.setSystemProperties();
+        return System.getProperty( "os.name" ).startsWith( "Mac OS X" );
     }
 
 
     /**
-     * main bootstrap program
+     * Windows check
      *
-     * @param p_args commandline arguments
+     * @return true on Windows
      */
-    public static void main( String[] p_args )
+    public static boolean isWindows()
     {
+        return false;
+    }
 
-        // check JRE properties (version must be checked numerical)
-        if ( !( ( "Oracle Corporation".equalsIgnoreCase( System.getProperty( "java.vendor" ) ) ) && ( Float.parseFloat( System.getProperty( "java.specification.version" ) ) >= 1.8f ) ) )
+
+    /**
+     * Linux check
+     *
+     * @return true on Linux
+     */
+    public static boolean isLinux()
+    {
+        return false;
+    }
+
+
+    /**
+     * set the system properties depends on the OS
+     */
+    public static void setSystemProperties()
+    {
+        if ( isOSX() )
+            System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+    }
+
+
+    /**
+     * sets the frame properties depends on the OS
+     *
+     * @param p_frame main frame
+     */
+    public static void setFrameProperties( Frame p_frame )
+    {
+        if ( isOSX() )
         {
-            System.err.println( "JRE from Oracle Corporation (http://www.java.com/) version 1.8 or newer must be installed to run the program" );
-            System.exit( -1 );
+            //FullScreenUtilities.setWindowCanFullScreen( p_frame, true );
+            //Application.getApplication().requestToggleFullScreen( p_frame );
         }
-
-        // call main
-        CMain.main( p_args );
     }
 
 }

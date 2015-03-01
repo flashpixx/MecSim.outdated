@@ -89,7 +89,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public boolean isVisible()
+    public final boolean isVisible()
     {
         try
         {
@@ -102,7 +102,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public void setVisible( final boolean p_visible )
+    public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
         try
@@ -166,43 +166,43 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
 
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_processingdata.size();
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_processingdata.isEmpty();
     }
 
     @Override
-    public boolean contains( final Object p_object )
+    public final boolean contains( final Object p_object )
     {
         return m_processingdata.contains( p_object );
     }
 
     @Override
-    public Iterator<T> iterator()
+    public final Iterator<T> iterator()
     {
         return m_processingdata.iterator();
     }
 
     @Override
-    public Object[] toArray()
+    public final Object[] toArray()
     {
         return m_processingdata.toArray();
     }
 
     @Override
-    public <S> S[] toArray( final S[] p_value )
+    public final <S> S[] toArray( final S[] p_value )
     {
         return m_processingdata.toArray( p_value );
     }
 
     @Override
-    public boolean add( final T p_value )
+    public final boolean add( final T p_value )
     {
         final boolean l_return = m_processingdata.add( p_value );
         try
@@ -217,7 +217,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public boolean remove( final Object p_object )
+    public final boolean remove( final Object p_object )
     {
         final boolean l_result = m_processingdata.remove( p_object );
         try
@@ -231,7 +231,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public boolean containsAll( final Collection<?> p_collection )
+    public final boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
             if ( !m_processingdata.contains( l_item ) )
@@ -248,7 +248,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public boolean addAll( final Collection<? extends T> p_collection )
+    public final boolean addAll( final Collection<? extends T> p_collection )
     {
         final boolean l_return = m_processingdata.addAll( p_collection );
         try
@@ -263,7 +263,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public boolean removeAll( final Collection<?> p_collection )
+    public final boolean removeAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
         {
@@ -284,13 +284,13 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public boolean retainAll( final Collection<?> p_collection )
+    public final boolean retainAll( final Collection<?> p_collection )
     {
         return m_processingdata.retainAll( p_collection );
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_processingdata.clear();
         try

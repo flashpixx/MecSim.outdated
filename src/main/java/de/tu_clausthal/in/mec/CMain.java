@@ -118,6 +118,12 @@ public class CMain
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
         CLogger.out( CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gb ), Runtime.getRuntime().maxMemory() / c_gb < c_neededmemory );
 
+        // check OS specific options
+        if ( System.getProperty( "os.name" ).contains( "Mac" ) )
+            System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+
+
+        // run application
         if ( !l_cli.hasOption( "nogui" ) )
             CSimulation.getInstance().setUI( new CFrame() );
         else

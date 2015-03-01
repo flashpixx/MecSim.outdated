@@ -516,7 +516,7 @@ public class CConfiguration
 
         public void setZoom( int p_value )
         {
-            Zoom = p_value;
+            Zoom = Math.max( p_value, 1 );
         }
 
         @UiHidden
@@ -527,7 +527,7 @@ public class CConfiguration
 
         public void setThreadsleeptime( int p_value )
         {
-            ThreadSleepTime = p_value;
+            ThreadSleepTime = Math.max( p_value, 0 );
         }
 
         @UiHidden
@@ -538,7 +538,7 @@ public class CConfiguration
 
         public void setWindowwidth( int p_value )
         {
-            WindowWidth = p_value;
+            WindowWidth = Math.max( p_value, 150 );
         }
 
         @UiHidden
@@ -549,7 +549,7 @@ public class CConfiguration
 
         public void setWindowheight( int p_value )
         {
-            WindowHeight = p_value;
+            WindowHeight = Math.max( p_value, 150 );
         }
 
         /**

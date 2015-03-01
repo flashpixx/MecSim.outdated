@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object;
 
 
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISteppable;
@@ -91,13 +92,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public final boolean isVisible()
     {
-        try
-        {
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return m_visible;
     }
 
@@ -105,13 +102,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     @Override
@@ -205,13 +198,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final boolean add( final T p_value )
     {
         final boolean l_return = m_processingdata.add( p_value );
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
 
         return l_return;
     }
@@ -220,13 +209,10 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final boolean remove( final Object p_object )
     {
         final boolean l_result = m_processingdata.remove( p_object );
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return l_result;
     }
 
@@ -237,13 +223,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
             if ( !m_processingdata.contains( l_item ) )
                 return false;
 
-        try
-        {
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return true;
     }
 
@@ -251,13 +233,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final boolean addAll( final Collection<? extends T> p_collection )
     {
         final boolean l_return = m_processingdata.addAll( p_collection );
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
 
         return l_return;
     }
@@ -273,13 +251,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
             return false;
         }
 
-        try
-        {
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return true;
     }
 
@@ -293,13 +267,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final void clear()
     {
         m_processingdata.clear();
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     @Override

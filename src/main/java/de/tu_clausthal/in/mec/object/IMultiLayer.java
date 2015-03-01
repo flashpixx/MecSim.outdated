@@ -84,13 +84,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public final boolean isVisible()
     {
-        try
-        {
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return m_visible;
     }
 
@@ -98,13 +94,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     @Override
@@ -172,13 +164,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean add( final T p_value )
     {
         final boolean l_return = m_data.add( p_value );
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
 
         return l_return;
     }
@@ -187,13 +175,10 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean remove( final Object p_object )
     {
         final boolean l_result = m_data.remove( p_object );
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return l_result;
     }
 
@@ -204,13 +189,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
             if ( !m_data.contains( l_item ) )
                 return false;
 
-        try
-        {
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return true;
     }
 
@@ -218,13 +199,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean addAll( final Collection<? extends T> p_collection )
     {
         final boolean l_return = m_data.addAll( p_collection );
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
 
         return l_return;
     }
@@ -240,13 +217,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
             return false;
         }
 
-        try
-        {
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+
         return true;
     }
 
@@ -260,13 +233,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final void clear()
     {
         m_data.clear();
-        try
-        {
+
+        if ( CSimulation.getInstance().hasUI() )
             COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     @Override

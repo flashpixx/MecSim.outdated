@@ -27,6 +27,8 @@ package de.tu_clausthal.in.mec.common;
 //import com.apple.eawt.Application;
 //import com.apple.eawt.FullScreenUtilities;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.awt.*;
 
 
@@ -39,6 +41,26 @@ import java.awt.*;
  */
 public class COperatingSystem
 {
+    /**
+     * OS minor version *
+     */
+    private static int m_minor = 0;
+    /**
+     * OS major version *
+     */
+    private static int m_major = 0;
+
+    static
+    {
+        final String[] l_parts = StringUtils.split( System.getProperty( "os.version" ), "." );
+
+        if ( l_parts.length > 0 )
+            m_major = Integer.parseInt( l_parts[0] );
+        if ( l_parts.length > 1 )
+            m_minor = Integer.parseInt( l_parts[1] );
+    }
+
+
 
     /**
      * Mac OS X check
@@ -58,7 +80,7 @@ public class COperatingSystem
      */
     public static boolean isWindows()
     {
-        return false;
+        return System.getProperty( "os.name" ).startsWith( "Windows" );
     }
 
 
@@ -69,7 +91,7 @@ public class COperatingSystem
      */
     public static boolean isLinux()
     {
-        return false;
+        return System.getProperty( "os.name" ).startsWith( "Linux" );
     }
 
 
@@ -95,6 +117,27 @@ public class COperatingSystem
             //FullScreenUtilities.setWindowCanFullScreen( p_frame, true );
             //Application.getApplication().requestToggleFullScreen( p_frame );
         }
+    }
+
+
+    /**
+     * returns the OS minor version
+     *
+     * @return version
+     */
+    public static int getMinorVersion()
+    {
+        return m_minor;
+    }
+
+    /**
+     * returns the OS major version
+     *
+     * @return version
+     */
+    public static int getMajorVersion()
+    {
+        return m_major;
     }
 
 }

@@ -49,7 +49,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     /**
      * list of data items
      */

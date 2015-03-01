@@ -50,10 +50,6 @@ import java.util.Set;
 public class CBrowser extends JFXPanel
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * listener *
      */
     protected final Set<IActionListener> m_listener = new HashSet<>();

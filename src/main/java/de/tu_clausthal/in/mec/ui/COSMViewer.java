@@ -46,11 +46,6 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 public class COSMViewer extends JXMapViewer
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-
-    /**
      * compounend painter
      */
     private CompoundPainter m_painter = new CompoundPainter<>();

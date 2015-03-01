@@ -36,10 +36,6 @@ import java.util.Map;
 public class CDefaultNormCollection<INormCar> implements INormCollection<INormCar>
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * map with norms
      */
     private HashSet<INorm<INormCar>> m_norms = new HashSet<>();

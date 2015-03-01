@@ -57,10 +57,6 @@ import java.util.Map;
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * menu item storage
      */
     protected CMenuStorage m_items = new CMenuStorage();

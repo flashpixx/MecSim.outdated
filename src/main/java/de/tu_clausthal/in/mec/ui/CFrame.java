@@ -50,10 +50,6 @@ import java.util.Set;
 public class CFrame extends JFrame
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * control of the dock component
      */
     private CControl m_control = new CControl( this );

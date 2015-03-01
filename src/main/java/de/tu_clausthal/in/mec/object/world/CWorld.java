@@ -48,8 +48,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1L;
     /**
      * map with layer
      */

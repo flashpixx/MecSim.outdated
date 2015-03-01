@@ -45,10 +45,6 @@ import java.util.Iterator;
 public class CDefaultInstitution implements IInstitution<INormObject>
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * name of the institution
      */
     String m_name = "Default Institution";

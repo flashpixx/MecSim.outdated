@@ -58,8 +58,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1L;
     /**
      * position of the source within the map
      */
@@ -194,13 +193,13 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
     }
 
     @Override
-    public void onDeserializationInitialization()
+    public final void onDeserializationInitialization()
     {
 
     }
 
     @Override
-    public void onDeserializationComplete()
+    public final void onDeserializationComplete()
     {
         m_target = new HashSet<>();
         m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );

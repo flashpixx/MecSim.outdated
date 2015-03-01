@@ -58,8 +58,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1L;
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
@@ -186,14 +185,14 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     }
 
     @Override
-    public void onDeserializationInitialization()
+    public final void onDeserializationInitialization()
     {
         if ( CSimulation.getInstance().hasUI() )
             CSimulation.getInstance().getUI().removeWidget( "Jason Mindinspector" );
     }
 
     @Override
-    public void onDeserializationComplete()
+    public final void onDeserializationComplete()
     {
         this.setFrame( CSimulation.getInstance().getUI() );
     }

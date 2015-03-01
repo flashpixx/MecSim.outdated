@@ -56,10 +56,6 @@ import java.util.Set;
 public class CSourceEditor extends JTabbedPane implements ActionListener
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * map to store reference file, tab and editor
      */
     protected final Map<File, Pair<JComponent, RSyntaxTextArea>> m_tabs = new HashMap<>();

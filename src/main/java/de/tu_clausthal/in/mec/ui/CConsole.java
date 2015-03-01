@@ -46,10 +46,6 @@ import java.io.PrintStream;
 public class CConsole extends JPanel
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * output panel *
      */
     protected final JEditorPane m_output = new JEditorPane();

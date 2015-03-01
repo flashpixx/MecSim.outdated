@@ -64,10 +64,6 @@ import java.util.Map;
 public class CHelpViewer extends JDialog implements ActionListener
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * default language - safe structure because configuration can push a null value *
      */
     protected static String s_defaultlanguage = "en";
@@ -263,10 +259,6 @@ public class CHelpViewer extends JDialog implements ActionListener
      */
     protected class CHelpBrowser extends CBrowser
     {
-        /**
-         * serialize version ID *
-         */
-        static final long serialVersionUID = 1L;
         /**
          * markdown processor *
          */

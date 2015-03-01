@@ -40,7 +40,7 @@ public class CNagelSchreckenberg implements IDriveModel
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     /**
      * defines the minimal speed *
      */

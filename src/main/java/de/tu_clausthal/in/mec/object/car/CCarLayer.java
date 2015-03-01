@@ -50,7 +50,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     /**
      * driving model list
      */

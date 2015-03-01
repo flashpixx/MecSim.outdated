@@ -35,11 +35,6 @@ import java.util.Set;
 public class CUnionRangeCollection<T> implements IRangeCollection<T>
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-
-    /**
      * list of ranges
      */
     private Set<IRange<T>> m_ranges = new HashSet<>();

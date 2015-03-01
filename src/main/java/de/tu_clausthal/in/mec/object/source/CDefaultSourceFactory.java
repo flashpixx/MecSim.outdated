@@ -47,8 +47,7 @@ public class CDefaultSourceFactory extends IDefaultSourceFactory
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1L;
     /**
      * mean value of the distribution
      */

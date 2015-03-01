@@ -33,10 +33,6 @@ import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 public class CSpeedNorm implements INorm<INormObject>
 {
     /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
-    /**
      * tolerance value in [0,1]
      */
     private double m_tolerance = 0.1;

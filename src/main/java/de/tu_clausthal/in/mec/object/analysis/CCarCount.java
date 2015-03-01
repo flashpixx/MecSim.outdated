@@ -45,7 +45,7 @@ public class CCarCount extends IEvaluateLayer implements ISerializable
     /**
      * serialize version ID *
      */
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     /**
      * data push
      */

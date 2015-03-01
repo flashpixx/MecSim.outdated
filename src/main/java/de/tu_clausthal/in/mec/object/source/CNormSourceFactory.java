@@ -42,6 +42,7 @@ public class CNormSourceFactory extends CDefaultSourceFactory
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
+
     /**
      * ctor push the position
      *

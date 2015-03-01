@@ -154,7 +154,7 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException    throws exception on reading
+     * @throws IOException            throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
@@ -171,15 +171,15 @@ public class CJasonAgentSourceFactory extends CDefaultSourceFactory
             if ( !l_output.exists() )
                 FileUtils.write( l_output, l_asldata );
             else if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_asldata, "MD5" ) ) )
+            {
+                l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
+                for ( int i = 1; l_output.exists(); i++ )
                 {
-                    l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
-                    for ( int i = 1; l_output.exists(); i++ )
-                    {
-                        m_asl = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
-                        l_output = IEnvironment.getAgentFile( m_asl );
-                    }
-                    FileUtils.write( l_output, l_asldata );
+                    m_asl = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
+                    l_output = IEnvironment.getAgentFile( m_asl );
                 }
+                FileUtils.write( l_output, l_asldata );
+            }
         }
         catch ( Exception l_exception )
         {

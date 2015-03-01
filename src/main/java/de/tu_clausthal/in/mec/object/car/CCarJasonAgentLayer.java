@@ -37,6 +37,7 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
+
     /**
      * ctor of Jason structure
      */

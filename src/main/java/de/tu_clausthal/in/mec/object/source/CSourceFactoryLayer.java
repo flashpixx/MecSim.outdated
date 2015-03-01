@@ -37,6 +37,7 @@ public class CSourceFactoryLayer extends IMultiLayer<ISourceFactory>
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
+
     /**
      * returns a list of source names
      *

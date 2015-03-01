@@ -304,7 +304,8 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public static interface IFinish
     {
 
-        /** method to detect finish
+        /**
+         * method to detect finish
          *
          * @return finish flag
          */

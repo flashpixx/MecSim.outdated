@@ -74,8 +74,8 @@ public class CTreeNode<T>
     /**
      * ctor
      *
-     * @param p_identifier     name of the node
-     * @param p_parent parent node
+     * @param p_identifier name of the node
+     * @param p_parent     parent node
      */
     public CTreeNode( final String p_identifier, final CTreeNode<T> p_parent )
     {

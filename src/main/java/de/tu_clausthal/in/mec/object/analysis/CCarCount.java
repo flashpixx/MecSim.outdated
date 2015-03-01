@@ -106,7 +106,7 @@ public class CCarCount extends IEvaluateLayer implements ISerializable
 
 
     @Override
-    public boolean add( Object o )
+    public boolean add( Object p_object )
     {
         return false;
     }

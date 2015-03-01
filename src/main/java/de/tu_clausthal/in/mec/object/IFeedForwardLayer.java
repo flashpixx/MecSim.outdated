@@ -72,13 +72,13 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     protected boolean m_active = true;
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_active )
+    public final void setActive( final boolean p_active )
     {
         m_active = p_active;
     }

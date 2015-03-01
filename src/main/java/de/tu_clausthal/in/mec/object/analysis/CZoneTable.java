@@ -69,7 +69,7 @@ public class CZoneTable<T, S>
      * @param p_zonename unique zone name
      * @param p_data     zone dat
      */
-    public void put( final String p_zonename, final S p_data )
+    public final void put( final String p_zonename, final S p_data )
     {
         m_zones.put( p_zonename, new ImmutablePair<S, Integer>( p_data, new Integer( 0 ) ) );
     }
@@ -79,7 +79,7 @@ public class CZoneTable<T, S>
      *
      * @param p_zonename zone name
      */
-    public void remove( final String p_zonename )
+    public final void remove( final String p_zonename )
     {
         m_zones.remove( p_zonename );
     }
@@ -87,7 +87,7 @@ public class CZoneTable<T, S>
     /**
      * removes all zones *
      */
-    public void clear()
+    public final void clear()
     {
         m_zones.clear();
     }
@@ -95,7 +95,7 @@ public class CZoneTable<T, S>
     /**
      * resets all zones *
      */
-    public void reset()
+    public final void reset()
     {
         for ( Pair<S, Integer> l_item : m_zones.values() )
             l_item.getRight().valueOf( 0 );
@@ -106,7 +106,7 @@ public class CZoneTable<T, S>
      *
      * @param p_data data values
      */
-    public void count( final T p_data )
+    public final void count( final T p_data )
     {
         for ( Pair<S, Integer> l_item : m_zones.values() )
             if ( m_validation.validate( p_data, l_item.getLeft() ) )
@@ -121,7 +121,7 @@ public class CZoneTable<T, S>
      *
      * @return zonename with count values
      */
-    public Map<String, Integer> getTable()
+    public final Map<String, Integer> getTable()
     {
         final Map<String, Integer> l_table = new HashMap<>();
         for ( Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )

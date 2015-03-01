@@ -567,18 +567,6 @@ public class CConfiguration
             private int LineNumber = 120;
 
 
-            @UiLabel("Number of character at each line")
-            public int getLinebuffer()
-            {
-                return LineBuffer;
-            }
-
-            public void setLinebuffer( int p_value )
-            {
-                LineBuffer = Math.max( p_value, 1 );
-            }
-
-
             @UiLabel("Number Lines")
             public int getLinenumber()
             {
@@ -588,6 +576,18 @@ public class CConfiguration
             public void setLinenumber( int p_value )
             {
                 LineNumber = Math.max( p_value, 1 );
+            }
+
+            @UiLabel("Character Line Buffer")
+            @UiComesAfter("linenumber")
+            public int getLinebuffer()
+            {
+                return LineBuffer;
+            }
+
+            public void setLinebuffer( int p_value )
+            {
+                LineBuffer = Math.max( p_value, 1 );
             }
         }
 

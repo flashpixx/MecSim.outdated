@@ -23,53 +23,56 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
-import com.graphhopper.routing.util.FlagEncoder;
+
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
- * class to create edge weights of the speed information on an edge
- *
- * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
+ * weight class for forbidden edges
  */
-public class CSpeedUp implements Weighting
+public class CForbiddenEdges implements Weighting
 {
-
     /**
-     * flag encoder for edge data
+     * list with edges *
      */
-    protected FlagEncoder m_encoder = null;
-    /**
-     * max speed value *
-     */
-    protected double m_maxSpeed = 1;
+    protected final Set<EdgeIteratorState> m_forbidden = new HashSet<>();
 
 
     /**
-     * ctor
+     * adds a new edge
      *
-     * @param p_encoder encoder
+     * @param p_edge edge
      */
-    public CSpeedUp( final FlagEncoder p_encoder )
+    public final void setEdge( final EdgeIteratorState p_edge )
     {
-        this.m_encoder = p_encoder;
-        this.m_maxSpeed = p_encoder.getMaxSpeed();
+        m_forbidden.add( p_edge );
     }
 
-    @Override
-    public final double getMinWeight( final double p_weight )
+
+    /**
+     * removes an edge
+     *
+     * @param p_edge edge
+     */
+    public final void removeEdge( final EdgeIteratorState p_edge )
     {
-        return p_weight / m_maxSpeed;
+        m_forbidden.remove( p_edge );
+    }
+
+
+    @Override
+    public final double getMinWeight( double p_weight )
+    {
+        return 0;
     }
 
     @Override
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
-        if ( l_speed == 0 )
-            return Double.POSITIVE_INFINITY;
-        return p_edge.getDistance() / l_speed;
+        return m_forbidden.contains( p_edge ) ? Double.POSITIVE_INFINITY : 0;
     }
-
 }

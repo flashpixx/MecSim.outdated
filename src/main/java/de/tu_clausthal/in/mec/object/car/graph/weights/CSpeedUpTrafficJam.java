@@ -40,11 +40,11 @@ public class CSpeedUpTrafficJam implements Weighting
     /**
      * flag encoder for edge data
      */
-    private FlagEncoder m_encoder = null;
+    protected FlagEncoder m_encoder = null;
     /**
      * graph instance *
      */
-    private CGraphHopper m_graph = null;
+    protected CGraphHopper m_graph = null;
 
 
     /**

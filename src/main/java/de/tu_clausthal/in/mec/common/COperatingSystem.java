@@ -23,10 +23,6 @@
 
 package de.tu_clausthal.in.mec.common;
 
-
-//import com.apple.eawt.Application;
-//import com.apple.eawt.FullScreenUtilities;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -108,14 +104,29 @@ public class COperatingSystem
     /**
      * sets the frame properties depends on the OS
      *
+     * @note independed with reflection api to avoid compiler errors on other OS
+     *
      * @param p_frame main frame
      */
     public static void setFrameProperties( Frame p_frame )
     {
-        if ( isOSX() )
+        if ( ( isOSX() ) && ( getMajorVersion() >= 10 ) && ( getMinorVersion() >= 7 ) )
         {
-            //FullScreenUtilities.setWindowCanFullScreen( p_frame, true );
-            //Application.getApplication().requestToggleFullScreen( p_frame );
+            try
+            {
+                //FullScreenUtilities.setWindowCanFullScreen( p_frame, true );
+                CReflection.getClassMethod( Class.forName( "com.apple.eawt.FullScreenUtilities" ), "setWindowCanFullScreen", new Class<?>[]{Window.class, Boolean.TYPE} ).getHandle().invoke( p_frame, true );
+
+                //Application.getApplication().requestToggleFullScreen( p_frame );
+                CReflection.getClassMethod( Class.forName( "com.apple.eawt.Application" ), "requestToggleFullScreen", new Class<?>[]{Window.class} ).getHandle().invoke( p_frame );
+
+            }
+            catch ( ClassNotFoundException | IllegalAccessException l_exception )
+            {
+            }
+            catch ( Throwable throwable )
+            {
+            }
         }
     }
 

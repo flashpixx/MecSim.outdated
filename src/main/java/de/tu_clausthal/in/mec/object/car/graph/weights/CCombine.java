@@ -54,10 +54,9 @@ public class CCombine implements Weighting, Map<String, Weighting>
     @Override
     public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        double l_max = Double.NEGATIVE_INFINITY;
-
+        double l_max = 0;
         for ( Weighting l_item : m_weights.values() )
-            l_max = Math.max( l_max, l_item.calcWeight( p_edge, p_reverse ) );
+            l_max += l_item.calcWeight( p_edge, p_reverse );
 
         return l_max;
     }

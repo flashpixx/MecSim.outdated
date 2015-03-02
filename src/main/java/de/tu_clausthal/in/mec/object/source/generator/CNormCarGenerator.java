@@ -21,86 +21,48 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.source.generator;
 
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.car.CDefaultCar;
+import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
+import de.tu_clausthal.in.mec.object.car.CNormCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
-
-/**
- * source which generates cars with a profile
- *
- * @todo not complete
- */
-public class CProfileSourceFactory extends CSource
+public class CNormCarGenerator extends CDefaultCarGenerator
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * waypoint color
-     */
-    protected Color m_color = Color.GREEN;
-    /**
-     * profile with car values
-     */
-    protected int[] m_profile = null;
 
-
-    /**
-     * ctor to create a new profile source
-     *
-     * @param p_position geoposition
-     * @param p_profile  profile definition
-     */
-    public CProfileSourceFactory( final GeoPosition p_position, final int[] p_profile )
+    public CNormCarGenerator(GeoPosition p_position)
     {
-        super( p_position);
-        this.checkSetProfile( p_profile );
+        super(p_position);
     }
-
-
-    /**
-     * check the profile definition
-     *
-     * @param p_profile profile
-     */
-    protected final void checkSetProfile( final int[] p_profile )
-    {
-        if ( p_profile == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
-
-        for ( int i = 0; i < p_profile.length; i++ )
-            if ( p_profile[i] < 0 )
-                throw new IllegalArgumentException( CCommon.getResourceString( this, "lesszero", i ) );
-
-        m_profile = p_profile;
-    }
-
 
     @Override
-    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
+    public String getName()
+    {
+        return "Norm Car Generator";
+    }
+
+    @Override
+    public Color getColor()
+    {
+        return Color.YELLOW;
+    }
+
+    @Override
+    public Collection<ICar> generate()
     {
         final Collection<ICar> l_sources = new HashSet<>();
-        for ( int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++ )
-            l_sources.add( new CDefaultCar( m_position ) );
+        if ( m_random.sample() < m_mean )
+            return l_sources;
+
+        for ( int i = 0; i < m_NumberCarsInStep; i++ )
+            l_sources.add( new CNormCar(m_position));
+
         return l_sources;
-    }
-
-
-    @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
     }
 
 }

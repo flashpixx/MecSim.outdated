@@ -24,11 +24,13 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.io.Serializable;
 
 
@@ -45,4 +47,31 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      */
     public GeoPosition getPosition();
 
+    /**
+     * Method to get the actual Color of this Source
+     * @return
+     */
+    public Color getColor();
+
+    /**
+     * Method to set the Color of this Source
+     * @param p_color
+     */
+    public void setColor(Color p_color);
+
+    /**
+     * Method to get the Generator of an Source (null if there is no Generator)
+     * @return
+     */
+    public IGenerator getGenerator();
+
+    /**
+     * Method to set a Generator in a Source
+     */
+    public void setGenerator(IGenerator p_generator);
+
+    /**
+     * Method to remove the Generator (Set m_generator to null)
+     */
+    public void removeGenerator();
 }

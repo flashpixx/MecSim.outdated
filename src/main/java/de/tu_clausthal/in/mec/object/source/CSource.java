@@ -24,8 +24,10 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
@@ -53,7 +55,7 @@ import java.util.Map;
 /**
  * class with default source implementation
  */
-public abstract class CSource extends IInspector implements ISource, ISerializable
+public class CSource extends IInspector implements ISource, ISerializable
 {
     /**
      * serialize version ID *
@@ -68,28 +70,30 @@ public abstract class CSource extends IInspector implements ISource, ISerializab
      */
     protected transient BufferedImage m_image = null;
     /**
+     * waypoint color
+     */
+    protected Color m_color = Color.BLACK;
+    /**
+     * Member Variable which may hold a Generator
+     */
+    protected IGenerator m_generator = null;
+    /**
      * map with targets
      */
     protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
             add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
         }};
-    /**
-     * waypoint color
-     */
-    protected Color m_color = null;
 
 
     /**
      * ctor that sets the geo position of the source
      *
      * @param p_position geo position object
-     * @param p_color    color of the source
      */
-    public CSource(final GeoPosition p_position, final Color p_color)
+    public CSource(final GeoPosition p_position)
     {
         m_position = p_position;
-        m_color = p_color;
         this.setImage();
     }
 
@@ -99,6 +103,12 @@ public abstract class CSource extends IInspector implements ISource, ISerializab
         final Map<String, Object> l_map = super.inspect();
         l_map.put( "geoposition", m_position );
         return l_map;
+    }
+
+    @Override
+    public Map<String, Object> analyse()
+    {
+        return null;
     }
 
     @Override
@@ -112,6 +122,86 @@ public abstract class CSource extends IInspector implements ISource, ISerializab
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
             ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
+    }
+
+    @Override
+    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
+    {
+        return m_target;
+    }
+
+    @Override
+    public final void onDeserializationInitialization()
+    {
+
+    }
+
+    @Override
+    public final void onDeserializationComplete()
+    {
+        m_target = new HashSet<>();
+        m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
+    }
+
+    @Override
+    public final GeoPosition getPosition()
+    {
+        return m_position;
+    }
+
+    @Override
+    public Color getColor() {
+        return m_color;
+    }
+
+    @Override
+    public void setColor(Color p_color) {
+        if(p_color==null)
+        {
+            this.m_color = Color.BLACK;
+        }
+        this.m_color = p_color;
+        this.setImage();
+
+        try{
+            COSMViewer.getSimulationOSM().repaint();
+        } catch ( Exception l_exception ) {
+        }
+    }
+
+    @Override
+    public IGenerator getGenerator()
+    {
+        return m_generator;
+    }
+
+    @Override
+    public void setGenerator(IGenerator p_generator)
+    {
+        this.m_generator = p_generator;
+        this.setColor(p_generator.getColor());
+    }
+
+    @Override
+    public void removeGenerator() {
+        this.m_generator=null;
+        this.setColor(Color.BLACK);
+    }
+
+    @Override
+    public Collection<ICar> step(int p_currentstep, ILayer p_layer) throws Exception
+    {
+        return this.m_generator.generate();
+    }
+
+    @Override
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        if ( m_image == null )
+            return;
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
     }
 
     /**
@@ -143,25 +233,6 @@ public abstract class CSource extends IInspector implements ISource, ISerializab
         }
     }
 
-
-    @Override
-    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
-    {
-        return m_target;
-    }
-
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        if ( m_image == null )
-            return;
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
-    }
-
-
     /**
      * read call of serialize interface
      *
@@ -177,7 +248,6 @@ public abstract class CSource extends IInspector implements ISource, ISerializab
         this.setImage();
     }
 
-
     /**
      * write call of serialize interface
      *
@@ -190,25 +260,6 @@ public abstract class CSource extends IInspector implements ISource, ISerializab
 
         p_stream.writeDouble( m_position.getLatitude() );
         p_stream.writeDouble( m_position.getLongitude() );
-    }
-
-    @Override
-    public final void onDeserializationInitialization()
-    {
-
-    }
-
-    @Override
-    public final void onDeserializationComplete()
-    {
-        m_target = new HashSet<>();
-        m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
-    }
-
-    @Override
-    public final GeoPosition getPosition()
-    {
-        return m_position;
     }
 
 }

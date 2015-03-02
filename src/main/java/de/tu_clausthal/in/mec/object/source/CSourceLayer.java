@@ -25,7 +25,12 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
+import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
+import de.tu_clausthal.in.mec.object.source.generator.CNormCarGenerator;
 import org.jxmapviewer.viewer.GeoPosition;
+
+import java.awt.*;
 
 
 /**
@@ -74,13 +79,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to select a Source
-     * @param p_source
+     * Method to create a Source
+     * @param p_geoPosition
      */
-    public void setSelectedSource(ISource p_source)
+    public void createSource(GeoPosition p_geoPosition)
     {
-        CLogger.out("Source selected");
-        m_selectedSource = p_source;
+        CLogger.out("Source created");
+        this.add(new CSource(p_geoPosition));
     }
 
     /**
@@ -99,16 +104,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to create a Source
-     * @param p_geoPosition
-     */
-    public void createSource(GeoPosition p_geoPosition)
-    {
-        CLogger.out("Source created");
-        this.add(new CDefaultSourceFactory(p_geoPosition));
-    }
-
-    /**
      * Method to set a specifig Generator in a Source (Or remove it)
      * @param p_source
      * @param p_selectedGenerator
@@ -116,21 +111,21 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void getOrSetGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
     {
-        /**
-        if(p_source.getGenerator == null){
+
+        if(p_source.getGenerator() == null){
             CLogger.out("Generator was set");
 
             if(p_selectedGenerator.equals("Default"))
-                p_source.setGenerator(new CDefaultCarGenerator());
+                p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
             if(p_selectedGenerator.equals("Jason Agent"))
-                p_source.setGenerator(new CJasonCarGenerator(p_aslname));
+                p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
             if(p_selectedGenerator.equals("Norm"))
-                p_source.setGenerator(new CNormCarGenerator());
+                p_source.setGenerator(new CNormCarGenerator(p_source.getPosition()));
 
         }else{
             CLogger.out("Generator was removed");
         }
-         */
+
     }
 
     /**
@@ -150,6 +145,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void removeDestination()
     {
         CLogger.out("Destination removed");
+    }
+
+    /**
+     * Method to select a Source
+     * @param p_source
+     */
+    public void setSelectedSource(ISource p_source)
+    {
+        CLogger.out("Source selected");
+        if(m_selectedSource!=null){
+            m_selectedSource.setColor(m_selectedSource.getGenerator()==null ? Color.BLACK : m_selectedSource.getGenerator().getColor());
+        }
+        if(p_source != null){
+            p_source.setColor(Color.WHITE);
+        }
+        m_selectedSource=p_source;
     }
 
     /**

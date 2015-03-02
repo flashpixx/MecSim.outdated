@@ -23,13 +23,15 @@
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
-import java.util.Collection;
+import de.tu_clausthal.in.mec.object.car.ICar;
 
+import java.awt.*;
+import java.util.Collection;
 
 /**
  * generator interface to define different object generator
  */
-public interface IGenerator<T>
+public interface IGenerator
 {
 
     /**
@@ -38,8 +40,14 @@ public interface IGenerator<T>
     public String getName();
 
     /**
+     * Method which defines the Color of the Source in which a special Generator was placed
+     * @return
+     */
+    public Color getColor();
+
+    /**
      * generate objects
      */
-    Collection<T> generate( int p_number );
+    Collection<ICar> generate();
 
 }

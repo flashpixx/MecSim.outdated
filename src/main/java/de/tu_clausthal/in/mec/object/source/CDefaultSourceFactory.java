@@ -108,7 +108,7 @@ public class CDefaultSourceFactory extends CSource
      */
     protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color )
     {
-        super( p_position, p_color );
+        super( p_position);
     }
 
 
@@ -122,7 +122,7 @@ public class CDefaultSourceFactory extends CSource
      */
     protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color, final double p_mean, final double p_distmean )
     {
-        super( p_position, p_color );
+        super( p_position);
 
         m_mean = p_mean;
         m_random = new ExponentialDistribution( p_distmean );
@@ -140,7 +140,7 @@ public class CDefaultSourceFactory extends CSource
      */
     protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color, final double p_mean, final double p_distmean, final int p_number )
     {
-        super( p_position, p_color );
+        super( p_position);
 
         m_mean = p_mean;
         m_random = new ExponentialDistribution( p_distmean );
@@ -160,7 +160,7 @@ public class CDefaultSourceFactory extends CSource
      */
     protected CDefaultSourceFactory( final GeoPosition p_position, final Color p_color, final int p_number )
     {
-        super( p_position, p_color );
+        super( p_position);
         m_NumberCarsInStep = p_number;
 
         if ( p_number < 1 )

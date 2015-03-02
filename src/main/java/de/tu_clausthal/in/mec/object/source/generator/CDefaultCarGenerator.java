@@ -21,86 +21,70 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.source.generator;
 
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
-
-/**
- * source which generates cars with a profile
- *
- * @todo not complete
- */
-public class CProfileSourceFactory extends CSource
+public class CDefaultCarGenerator implements  IGenerator
 {
+
     /**
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
     /**
-     * waypoint color
+     *Position of this Generator
      */
-    protected Color m_color = Color.GREEN;
+    protected GeoPosition m_position = null;
     /**
-     * profile with car values
+     * mean value of the distribution
      */
-    protected int[] m_profile = null;
+    protected double m_mean = 4;
+    /**
+     * random interface
+     */
+    protected ExponentialDistribution m_random = new ExponentialDistribution( 3 );
+    /**
+     * integer values how many cars are generated in a step
+     */
+    protected int m_NumberCarsInStep = 1;
 
 
-    /**
-     * ctor to create a new profile source
-     *
-     * @param p_position geoposition
-     * @param p_profile  profile definition
-     */
-    public CProfileSourceFactory( final GeoPosition p_position, final int[] p_profile )
+    public CDefaultCarGenerator(GeoPosition p_position)
     {
-        super( p_position);
-        this.checkSetProfile( p_profile );
+        this.m_position = p_position;
     }
-
-
-    /**
-     * check the profile definition
-     *
-     * @param p_profile profile
-     */
-    protected final void checkSetProfile( final int[] p_profile )
-    {
-        if ( p_profile == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
-
-        for ( int i = 0; i < p_profile.length; i++ )
-            if ( p_profile[i] < 0 )
-                throw new IllegalArgumentException( CCommon.getResourceString( this, "lesszero", i ) );
-
-        m_profile = p_profile;
-    }
-
 
     @Override
-    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer )
+    public String getName()
+    {
+        return "Default Car Generator";
+    }
+
+    @Override
+    public Color getColor()
+    {
+        return Color.CYAN;
+    }
+
+    @Override
+    public Collection<ICar> generate()
     {
         final Collection<ICar> l_sources = new HashSet<>();
-        for ( int i = 0; i < m_profile[p_currentstep % m_profile.length]; i++ )
+        if ( m_random.sample() < m_mean )
+            return l_sources;
+
+        for ( int i = 0; i < m_NumberCarsInStep; i++ )
             l_sources.add( new CDefaultCar( m_position ) );
+
         return l_sources;
-    }
-
-
-    @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
     }
 
 }

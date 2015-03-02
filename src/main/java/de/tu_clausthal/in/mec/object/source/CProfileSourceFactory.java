@@ -40,7 +40,7 @@ import java.util.Map;
  *
  * @todo not complete
  */
-public class CProfileSourceFactory extends IDefaultSourceFactory
+public class CProfileSourceFactory extends CSource
 {
     /**
      * serialize version ID *

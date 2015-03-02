@@ -42,7 +42,7 @@ import java.util.Map;
  *
  * @todo set mean & number of cars value with ctor
  */
-public class CDefaultSourceFactory extends IDefaultSourceFactory
+public class CDefaultSourceFactory extends CSource
 {
     /**
      * serialize version ID *

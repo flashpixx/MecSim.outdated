@@ -29,8 +29,8 @@ import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.norm.INormObject;
 import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
-import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
-import de.tu_clausthal.in.mec.object.source.ISourceFactory;
+import de.tu_clausthal.in.mec.object.source.CSourceLayer;
+import de.tu_clausthal.in.mec.object.source.ISource;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -64,11 +64,11 @@ class COSMMouseListener extends MouseAdapter
 
             // left single-click
             if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 1 ) ){
-                final CSourceFactoryLayer l_sourcelayer = ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().get("Sources"));
+                final CSourceLayer l_sourcelayer = ((CSourceLayer) CSimulation.getInstance().getWorld().get("Sources"));
                 final Point2D l_mousePosition = this.getMousePosition(p_event, l_viewer);
 
                 //Check for Sources in Range
-                for ( ISourceFactory l_source : l_sourcelayer ){
+                for ( ISource l_source : l_sourcelayer ){
                     if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
                         CLogger.out("Source selected");
                         //l_sourcelayer.setSelectedSource(l_source);
@@ -84,7 +84,7 @@ class COSMMouseListener extends MouseAdapter
                     throw new IllegalStateException( CCommon.getResourceString(this, "running") );
 
                 //Get some Data
-                final CSourceFactoryLayer l_sourcelayer = ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().get("Sources"));
+                final CSourceLayer l_sourcelayer = ((CSourceLayer) CSimulation.getInstance().getWorld().get("Sources"));
                 final CCarJasonAgentLayer l_jasonlayer = ((CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get("Jason Car Agents"));
                 final Point2D l_mousePosition = this.getMousePosition(p_event, l_viewer);
                 final GeoPosition l_geoPosition = this.getMouseGeoPosition(p_event, l_viewer);
@@ -95,7 +95,7 @@ class COSMMouseListener extends MouseAdapter
                 if(!l_keyListener.isAnyKeyPressed()){
 
                     //Check for Sources in Range
-                    for ( ISourceFactory l_source : l_sourcelayer ){
+                    for ( ISource l_source : l_sourcelayer ){
                         if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
                             CLogger.out("Source removed");
                             //l_sourcelayer.removeSource(l_source);
@@ -120,9 +120,9 @@ class COSMMouseListener extends MouseAdapter
                 if(l_keyListener.isStrgPressed() && l_keyListener.getKeyPressedCount()<2){
 
                     //Check for Sources in Range
-                    for ( ISourceFactory l_source : l_sourcelayer ){
+                    for ( ISource l_source : l_sourcelayer ){
                         if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
-                            final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                            final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
                             CLogger.out("Get or Set Generator");
                             //l_sourcelayer.getOrSetGenerator(l_source, l_selectedGenerator, l_aslname);
                             return ;

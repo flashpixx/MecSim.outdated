@@ -53,7 +53,7 @@ import java.util.Map;
 /**
  * class with default source implementation
  */
-public abstract class IDefaultSourceFactory extends IInspector implements ISourceFactory, ISerializable
+public abstract class CSource extends IInspector implements ISource, ISerializable
 {
     /**
      * serialize version ID *
@@ -86,7 +86,7 @@ public abstract class IDefaultSourceFactory extends IInspector implements ISourc
      * @param p_position geo position object
      * @param p_color    color of the source
      */
-    public IDefaultSourceFactory( final GeoPosition p_position, final Color p_color )
+    public CSource(final GeoPosition p_position, final Color p_color)
     {
         m_position = p_position;
         m_color = p_color;

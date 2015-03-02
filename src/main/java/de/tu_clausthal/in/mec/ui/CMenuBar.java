@@ -31,7 +31,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import de.tu_clausthal.in.mec.object.source.CSourceFactoryLayer;
+import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -184,7 +184,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildCarSourcesMenu()
     {
-        final String[] l_sources = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
+        final String[] l_sources = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
         m_items.addRadioGroup( new ImmutablePair<>( "Car Sources", CCommon.getResourceString( this, "Car Sources" ) ),
                 l_sources,
                 this

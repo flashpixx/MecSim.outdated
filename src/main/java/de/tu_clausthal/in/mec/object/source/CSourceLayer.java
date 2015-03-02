@@ -23,26 +23,68 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import org.jxmapviewer.painter.Painter;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.IMultiLayer;
 import org.jxmapviewer.viewer.GeoPosition;
-
-import java.io.Serializable;
 
 
 /**
- * factory interface of car source - defines a source
+ * layer with all sources
  */
-public interface ISourceFactory extends IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
+public class CSourceLayer extends IMultiLayer<ISource>
 {
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
-     * returns the position of the source
+     * returns a list of source names
      *
-     * @return geoposition of the source
+     * @return source names
      */
-    public GeoPosition getPosition();
+    public final String[] getSourceNamesList()
+    {
+        return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
+    }
+
+
+    /**
+     * creates a source
+     *
+     * @param p_name     name of the source type
+     * @param p_position geo position of the source
+     * @param p_varargs  optional arguments of the sources
+     * @return source object
+     * @todo add profile source
+     */
+    public final ISource getSource( final String p_name, final GeoPosition p_position, final Object... p_varargs )
+    {
+        if ( "Default".equals( p_name ) )
+            return new CDefaultSourceFactory( p_position );
+        if ( "Norm".equals( p_name ) )
+            return new CNormSourceFactory( p_position );
+        if ( ( "Jason Agent".equals( p_name ) ) && ( p_varargs != null ) && ( p_varargs.length > 0 ) )
+            return new CJasonAgentSourceFactory( (String) p_varargs[0], p_position );
+        //if ("Profile".equals( p_name ))
+        //    return new CProfileSourceFactory( p_position );
+
+        throw new IllegalArgumentException( CCommon.getResourceString( this, "nosource" ) );
+    }
+
+    @Override
+    public final int getCalculationIndex()
+    {
+        return 2;
+    }
+
+    /**
+     * release overwrite, because all sources will be removed of the reset is called
+     */
+    @Override
+    public void release()
+    {
+
+    }
 
 }

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -38,40 +39,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private static final long serialVersionUID = 1L;
 
-    /**
-     * returns a list of source names
-     *
-     * @return source names
-     */
-    public final String[] getSourceNamesList()
-    {
-        return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
-    }
-
-
-    /**
-     * creates a source
-     *
-     * @param p_name     name of the source type
-     * @param p_position geo position of the source
-     * @param p_varargs  optional arguments of the sources
-     * @return source object
-     * @todo add profile source
-     */
-    public final ISource getSource( final String p_name, final GeoPosition p_position, final Object... p_varargs )
-    {
-        if ( "Default".equals( p_name ) )
-            return new CDefaultSourceFactory( p_position );
-        if ( "Norm".equals( p_name ) )
-            return new CNormSourceFactory( p_position );
-        if ( ( "Jason Agent".equals( p_name ) ) && ( p_varargs != null ) && ( p_varargs.length > 0 ) )
-            return new CJasonAgentSourceFactory( (String) p_varargs[0], p_position );
-        //if ("Profile".equals( p_name ))
-        //    return new CProfileSourceFactory( p_position );
-
-        throw new IllegalArgumentException( CCommon.getResourceString( this, "nosource" ) );
-    }
-
     @Override
     public final int getCalculationIndex()
     {
@@ -85,6 +52,74 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void release()
     {
 
+    }
+
+    /**
+     * returns a list of source names
+     *
+     * @return source names
+     */
+    public final String[] getSourceNamesList()
+    {
+        return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
+    }
+
+    /**
+     * Method to select a Source
+     * @param l_source
+     */
+    public void setSelectedSource(ISource l_source)
+    {
+        CLogger.out("Source selected");
+    }
+
+    /**
+     * Method to remove a Source
+     * @param l_source
+     */
+    public void removeSource(ISource l_source)
+    {
+        CLogger.out("Source removed");
+        l_source.release();
+        this.remove(l_source);
+    }
+
+    /**
+     * Method to create a Source
+     * @param l_geoPosition
+     */
+    public void createSource(GeoPosition l_geoPosition)
+    {
+        CLogger.out("Source created");
+        this.add(new CDefaultSourceFactory(l_geoPosition));
+    }
+
+    /**
+     * Method to set a specifig Generator in a Source (Or remove it)
+     * @param l_source
+     * @param l_selectedGenerator
+     * @param l_aslname
+     */
+    public void getOrSetGenerator(ISource l_source, String l_selectedGenerator, String l_aslname)
+    {
+        CLogger.out("Get or Set Generator");
+    }
+
+    /**
+     * Method to create a Destination
+     * @param l_geoPosition
+     */
+    public void createDestination(GeoPosition l_geoPosition)
+    {
+        CLogger.out("Destination removed");
+    }
+
+    /**
+     * Method to remove a Destination
+     */
+    public void removeDestination()
+    {
+        CLogger.out("Destination removed");
     }
 
 }

@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
@@ -70,8 +69,7 @@ class COSMMouseListener extends MouseAdapter
                 //Check for Sources in Range
                 for ( ISource l_source : l_sourcelayer ){
                     if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
-                        CLogger.out("Source selected");
-                        //l_sourcelayer.setSelectedSource(l_source);
+                        l_sourcelayer.setSelectedSource(l_source);
                         return ;
                     }
                 }
@@ -97,23 +95,11 @@ class COSMMouseListener extends MouseAdapter
                     //Check for Sources in Range
                     for ( ISource l_source : l_sourcelayer ){
                         if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
-                            CLogger.out("Source removed");
-                            //l_sourcelayer.removeSource(l_source);
-                            l_source.release();
-                            l_sourcelayer.remove( l_source );
+                            l_sourcelayer.removeSource(l_source);
                             return ;
                         }
                     }
-                    CLogger.out("Source created");
-                    //l_sourcelayer.createSource(l_geoPosition);
-                    final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
-                    l_sourcelayer.add(
-                            l_sourcelayer.getSource(
-                                    l_selectedGenerator,
-                                    l_geoPosition,
-                                    l_aslname
-                            )
-                    );
+                    l_sourcelayer.createSource(l_geoPosition);
                 }
 
                 //Strg Key is pressed (Place or Remove Generator)
@@ -123,8 +109,7 @@ class COSMMouseListener extends MouseAdapter
                     for ( ISource l_source : l_sourcelayer ){
                         if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
                             final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
-                            CLogger.out("Get or Set Generator");
-                            //l_sourcelayer.getOrSetGenerator(l_source, l_selectedGenerator, l_aslname);
+                            l_sourcelayer.getOrSetGenerator(l_source, l_selectedGenerator, l_aslname);
                             return ;
                         }
                     }
@@ -134,12 +119,10 @@ class COSMMouseListener extends MouseAdapter
                 if(l_keyListener.isShiftPressed() && l_keyListener.getKeyPressedCount()<2){
 
                     //Check for Destinations in Range
-                    CLogger.out("Destination removed");
-                    //l_sourcelayer.removeDestination();
+                    l_sourcelayer.removeDestination();
 
                     //If not add Destination
-                    CLogger.out("Destination created");
-                    //l_sourcelayer.createDestination(l_geoPosition);
+                    l_sourcelayer.createDestination(l_geoPosition);
                 }
 
             }

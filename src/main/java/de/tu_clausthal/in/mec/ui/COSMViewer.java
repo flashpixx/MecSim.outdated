@@ -53,6 +53,10 @@ public class COSMViewer extends JXMapViewer
      * mouse listener
      */
     private COSMMouseListener m_mouse = new COSMMouseListener();
+    /**
+     * Key Listener
+     */
+    private COSMKeyListener m_keylistener = new COSMKeyListener();
 
 
     /**
@@ -79,11 +83,10 @@ public class COSMViewer extends JXMapViewer
         this.addMouseMotionListener( m_mouse );
         this.addMouseListener( new PanMouseInputListener( this ) );
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
-        this.addKeyListener( new PanKeyListener( this ) );
+        this.addKeyListener( m_keylistener );
 
         CBootstrap.afterOSMViewerInit( this );
     }
-
 
     /**
      * static method to get the OSM viewer from the current UI widget
@@ -98,7 +101,6 @@ public class COSMViewer extends JXMapViewer
         return (COSMViewer) CSimulation.getInstance().getUI().getWidget( "OSM" );
     }
 
-
     /**
      * returns the compounend painter
      *
@@ -107,6 +109,14 @@ public class COSMViewer extends JXMapViewer
     public final CompoundPainter<?> getCompoundPainter()
     {
         return m_painter;
+    }
+
+    /**
+     * Getter Key Listener
+     */
+    public COSMKeyListener getKeyListener()
+    {
+        return m_keylistener;
     }
 
 }

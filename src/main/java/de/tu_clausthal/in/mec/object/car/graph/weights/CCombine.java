@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
+import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
@@ -37,7 +38,34 @@ import java.util.Set;
  */
 public class CCombine implements Weighting, Map<String, Weighting>
 {
+    /**
+     * map with weights *
+     */
     protected final Map<String, Weighting> m_weights = new HashMap<>();
+    /**
+     * flag encoder for edge data
+     */
+    private FlagEncoder m_encoder = null;
+
+
+    /**
+     * ctor
+     */
+    public CCombine( final FlagEncoder p_flagencoder )
+    {
+        m_encoder = p_flagencoder;
+    }
+
+
+    /**
+     * returns the flag encoder
+     *
+     * @return flag encoder
+     */
+    public FlagEncoder getFlagEncoder()
+    {
+        return m_encoder;
+    }
 
 
     @Override

@@ -110,7 +110,7 @@ public class COperatingSystem
      */
     public static void setFrameProperties( Frame p_frame )
     {
-        if ( isOSX() )
+        if ( ( isOSX() ) && ( getMajorVersion() >= 10 ) && ( getMinorVersion() >= 7 ) )
         {
             try
             {

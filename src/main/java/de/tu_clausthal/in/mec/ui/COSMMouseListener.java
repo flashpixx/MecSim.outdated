@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
@@ -39,7 +40,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
-
 /**
  * mouse listener for JxViewer
  */
@@ -55,58 +55,100 @@ class COSMMouseListener extends MouseAdapter
      */
     private boolean m_drag = false;
 
+
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
-
-        try
-        {
-            // get source definition
+        try {
             final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
 
+            // left single-click
+            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 1 ) ){
+                final CSourceFactoryLayer l_sourcelayer = ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().get("Sources"));
+                final Point2D l_mousePosition = this.getMousePosition(p_event, l_viewer);
+
+                //Check for Sources in Range
+                for ( ISourceFactory l_source : l_sourcelayer ){
+                    if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
+                        CLogger.out("Source selected");
+                        //l_sourcelayer.setSelectedSource(l_source);
+                        return ;
+                    }
+                }
+            }
 
             // left double-click
-            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
-            {
+            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) ) {
+
                 if ( CSimulation.getInstance().isRunning() )
-                    throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+                    throw new IllegalStateException( CCommon.getResourceString(this, "running") );
 
-                // remove source (check source position and remove the source that is within the range)
-                final CSourceFactoryLayer l_sourcelayer = ( (CSourceFactoryLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
-                for ( ISourceFactory l_source : l_sourcelayer )
-                    if ( this.inRange( this.getMousePosition( p_event, l_viewer ), l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
-                    {
-                        l_source.release();
-                        l_sourcelayer.remove( l_source );
-                        return;
+                //Get some Data
+                final CSourceFactoryLayer l_sourcelayer = ((CSourceFactoryLayer) CSimulation.getInstance().getWorld().get("Sources"));
+                final CCarJasonAgentLayer l_jasonlayer = ((CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get("Jason Car Agents"));
+                final Point2D l_mousePosition = this.getMousePosition(p_event, l_viewer);
+                final GeoPosition l_geoPosition = this.getMouseGeoPosition(p_event, l_viewer);
+                final String l_selectedGenerator = ((CMenuBar) CSimulation.getInstance().getUI().getJMenuBar()).getSelectedSourceName();
+                final COSMKeyListener l_keyListener = l_viewer.getKeyListener();
+
+                //If no Shortcut is pressed (Place or Remove Source)
+                if(!l_keyListener.isAnyKeyPressed()){
+
+                    //Check for Sources in Range
+                    for ( ISourceFactory l_source : l_sourcelayer ){
+                        if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
+                            CLogger.out("Source removed");
+                            //l_sourcelayer.removeSource(l_source);
+                            l_source.release();
+                            l_sourcelayer.remove( l_source );
+                            return ;
+                        }
                     }
-
-                // source adding (if no source is removed, add a new one)
-                final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
-
-                final String l_sourcename = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
-                final String l_aslname = l_sourcename.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
-
-                try
-                {
+                    CLogger.out("Source created");
+                    //l_sourcelayer.createSource(l_geoPosition);
+                    final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
                     l_sourcelayer.add(
                             l_sourcelayer.getSource(
-                                    l_sourcename,
-                                    this.getMouseGeoPosition( p_event, l_viewer ),
+                                    l_selectedGenerator,
+                                    l_geoPosition,
                                     l_aslname
                             )
                     );
                 }
-                catch ( Exception l_exception )
-                {
-                }
-            }
 
+                //Strg Key is pressed (Place or Remove Generator)
+                if(l_keyListener.isStrgPressed() && l_keyListener.getKeyPressedCount()<2){
+
+                    //Check for Sources in Range
+                    for ( ISourceFactory l_source : l_sourcelayer ){
+                        if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
+                            final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                            CLogger.out("Get or Set Generator");
+                            //l_sourcelayer.getOrSetGenerator(l_source, l_selectedGenerator, l_aslname);
+                            return ;
+                        }
+                    }
+                }
+
+                //Shift Key is pressed (Place or Remove  Destination)
+                if(l_keyListener.isShiftPressed() && l_keyListener.getKeyPressedCount()<2){
+
+                    //Check for Destinations in Range
+                    CLogger.out("Destination removed");
+                    //l_sourcelayer.removeDestination();
+
+                    //If not add Destination
+                    CLogger.out("Destination created");
+                    //l_sourcelayer.createDestination(l_geoPosition);
+                }
+
+            }
         }
         catch ( Exception l_exception )
         {
-            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
+            JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString(this, "warning"), JOptionPane.CANCEL_OPTION );
         }
+
     }
 
     @Override
@@ -175,7 +217,6 @@ class COSMMouseListener extends MouseAdapter
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
-
     /**
      * returns the 2D position of a mouse position
      *
@@ -204,7 +245,6 @@ class COSMMouseListener extends MouseAdapter
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }
-
 
     /**
      * returns the selected institution

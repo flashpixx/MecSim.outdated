@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -39,6 +38,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Member Variable to save a Source which was selected (null if no Source is selected)
+     */
+    private static ISource m_selectedSource = null;
+
+
+    /**
+     * Define the Calculation Index (When this Layer should be executes)
+     * @return
+     */
     @Override
     public final int getCalculationIndex()
     {
@@ -66,52 +75,73 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Method to select a Source
-     * @param l_source
+     * @param p_source
      */
-    public void setSelectedSource(ISource l_source)
+    public void setSelectedSource(ISource p_source)
     {
         CLogger.out("Source selected");
+        m_selectedSource = p_source;
     }
 
     /**
      * Method to remove a Source
-     * @param l_source
+     * @param p_source
      */
-    public void removeSource(ISource l_source)
+    public void removeSource(ISource p_source)
     {
         CLogger.out("Source removed");
-        l_source.release();
-        this.remove(l_source);
+        if(isSelectedSource(p_source)){
+            m_selectedSource=null;
+        }
+
+        p_source.release();
+        this.remove(p_source);
     }
 
     /**
      * Method to create a Source
-     * @param l_geoPosition
+     * @param p_geoPosition
      */
-    public void createSource(GeoPosition l_geoPosition)
+    public void createSource(GeoPosition p_geoPosition)
     {
         CLogger.out("Source created");
-        this.add(new CDefaultSourceFactory(l_geoPosition));
+        this.add(new CDefaultSourceFactory(p_geoPosition));
     }
 
     /**
      * Method to set a specifig Generator in a Source (Or remove it)
-     * @param l_source
-     * @param l_selectedGenerator
-     * @param l_aslname
+     * @param p_source
+     * @param p_selectedGenerator
+     * @param p_aslname
      */
-    public void getOrSetGenerator(ISource l_source, String l_selectedGenerator, String l_aslname)
+    public void getOrSetGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
     {
-        CLogger.out("Get or Set Generator");
+        /**
+        if(p_source.getGenerator == null){
+            CLogger.out("Generator was set");
+
+            if(p_selectedGenerator.equals("Default"))
+                p_source.setGenerator(new CDefaultCarGenerator());
+            if(p_selectedGenerator.equals("Jason Agent"))
+                p_source.setGenerator(new CJasonCarGenerator(p_aslname));
+            if(p_selectedGenerator.equals("Norm"))
+                p_source.setGenerator(new CNormCarGenerator());
+
+        }else{
+            CLogger.out("Generator was removed");
+        }
+         */
     }
 
     /**
      * Method to create a Destination
-     * @param l_geoPosition
+     * @param p_geoPosition
      */
-    public void createDestination(GeoPosition l_geoPosition)
+    public void createDestination(GeoPosition p_geoPosition)
     {
-        CLogger.out("Destination removed");
+        if(this.m_selectedSource != null){
+            CLogger.out("Destination removed");
+        }
     }
 
     /**
@@ -120,6 +150,27 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void removeDestination()
     {
         CLogger.out("Destination removed");
+    }
+
+    /**
+     * Getter for the selected Source
+     */
+    public ISource getSelectedSource()
+    {
+        return m_selectedSource;
+    }
+
+    /**
+     * Check if the Source is selected
+     * @param p_source
+     * @return
+     */
+    public boolean isSelectedSource(ISource p_source)
+    {
+        if(p_source != null)
+            return p_source.equals(m_selectedSource);
+
+        return false;
     }
 
 }

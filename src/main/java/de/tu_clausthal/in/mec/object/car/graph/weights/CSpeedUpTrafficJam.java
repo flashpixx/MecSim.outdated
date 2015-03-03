@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
  * class to create edge weights of the current traffic occurrence and speed ost
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
+ * @deprecated
  */
 public class CSpeedUpTrafficJam implements Weighting
 {

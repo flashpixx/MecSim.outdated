@@ -33,6 +33,8 @@ import java.util.Set;
 
 /**
  * weight class for forbidden edges
+ *
+ * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
 public class CForbiddenEdges implements Weighting
 {

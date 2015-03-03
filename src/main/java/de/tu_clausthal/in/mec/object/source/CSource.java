@@ -73,6 +73,9 @@ public class CSource extends IInspector implements ISource, ISerializable
      * waypoint color
      */
     protected Color m_color = Color.BLACK;
+
+    protected int m_lastZoom=0;
+
     /**
      * Member Variable which may hold a Generator
      */
@@ -101,7 +104,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     public final Map<String, Object> inspect()
     {
         final Map<String, Object> l_map = super.inspect();
-        l_map.put( "geoposition", m_position );
+        l_map.put("geoposition", m_position);
         return l_map;
     }
 
@@ -200,6 +203,19 @@ public class CSource extends IInspector implements ISource, ISerializable
         if ( m_image == null )
             return;
 
+        if(p_viewer.getZoom() != m_lastZoom){
+            int l_newWidth;
+            int l_newHeight;
+            if(p_viewer.getZoom() < 6){
+                l_newWidth=20;
+                l_newHeight=34;
+            }else{
+                l_newWidth= (20/12) * (17 - p_viewer.getZoom() +1);
+                l_newHeight= (34/12) * (17 - p_viewer.getZoom() +1);
+            }
+            this.setImage(l_newWidth, l_newHeight);
+        }
+
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
     }
@@ -231,6 +247,56 @@ public class CSource extends IInspector implements ISource, ISerializable
         {
             CLogger.warn( l_exception );
         }
+    }
+
+    /**
+     * creates the image
+     */
+    private void setImage(int p_width, int p_height)
+    {
+        if ( m_color == null )
+            return;
+
+        try
+        {
+            BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
+            l_image = this.getScaledImage(l_image, p_width, p_height);
+
+            // modify blue value to the color of the waypoint
+            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
+            for ( int i = 0; i < l_image.getHeight(); i++ )
+                for ( int j = 0; j < l_image.getWidth(); j++ )
+                {
+                    final Color l_color = new Color( l_image.getRGB( j, i ) );
+                    if ( l_color.getBlue() > 0 )
+                        m_image.setRGB( j, i, m_color.getRGB() );
+                }
+
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.warn( l_exception );
+        }
+    }
+
+    private BufferedImage getScaledImage(BufferedImage src, int w, int h){
+        int finalw = w;
+        int finalh = h;
+        double factor = 1.0d;
+        if(src.getWidth() > src.getHeight()){
+            factor = ((double)src.getHeight()/(double)src.getWidth());
+            finalh = (int)(finalw * factor);
+        }else{
+            factor = ((double)src.getWidth()/(double)src.getHeight());
+            finalw = (int)(finalh * factor);
+        }
+
+        BufferedImage resizedImg = new BufferedImage(finalw, finalh, BufferedImage.TRANSLUCENT);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(src, 0, 0, finalw, finalh, null);
+        g2.dispose();
+        return resizedImg;
     }
 
     /**

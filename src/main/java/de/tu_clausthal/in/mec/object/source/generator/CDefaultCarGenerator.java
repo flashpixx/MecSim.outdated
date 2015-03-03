@@ -29,6 +29,9 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -42,19 +45,21 @@ public class CDefaultCarGenerator implements  IGenerator
     /**
      *Position of this Generator
      */
-    protected GeoPosition m_position = null;
+    protected transient GeoPosition m_position = null;
+
+    //Will be refactored in a few commits  (changed to a config class)
     /**
      * mean value of the distribution
      */
-    protected double m_mean = 4;
+    protected transient double m_mean = 4;
     /**
      * random interface
      */
-    protected ExponentialDistribution m_random = new ExponentialDistribution( 3 );
+    protected transient ExponentialDistribution m_random = new ExponentialDistribution( 3 );
     /**
      * integer values how many cars are generated in a step
      */
-    protected int m_NumberCarsInStep = 1;
+    protected transient int m_NumberCarsInStep = 1;
 
 
     public CDefaultCarGenerator(GeoPosition p_position)
@@ -85,6 +90,39 @@ public class CDefaultCarGenerator implements  IGenerator
             l_sources.add( new CDefaultCar( m_position ) );
 
         return l_sources;
+    }
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws java.io.IOException            throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
+
+        //Will be refactored in a few commits (changed to a config class)
+        m_mean = 4;
+        m_random = new ExponentialDistribution( 3 );
+        m_NumberCarsInStep = 1;
+    }
+
+    /**
+     * write call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws the exception on loading data
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
+
+        p_stream.writeDouble( m_position.getLatitude() );
+        p_stream.writeDouble( m_position.getLongitude() );
     }
 
 }

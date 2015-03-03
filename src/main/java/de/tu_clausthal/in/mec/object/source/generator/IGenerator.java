@@ -26,12 +26,13 @@ package de.tu_clausthal.in.mec.object.source.generator;
 import de.tu_clausthal.in.mec.object.car.ICar;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * generator interface to define different object generator
  */
-public interface IGenerator
+public interface IGenerator extends Serializable
 {
 
     /**

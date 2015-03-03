@@ -73,9 +73,10 @@ public class CSource extends IInspector implements ISource, ISerializable
      * waypoint color
      */
     protected Color m_color = Color.BLACK;
-
+    /**
+     * Member Variable to save the last Zoom (If the Zoom changed the image need to be resized)
+     */
     protected int m_lastZoom=0;
-
     /**
      * Member Variable which may hold a Generator
      */
@@ -203,6 +204,7 @@ public class CSource extends IInspector implements ISource, ISerializable
         if ( m_image == null )
             return;
 
+        //If the Zoom changed Calculate the new Image and Scale
         if(p_viewer.getZoom() != m_lastZoom){
             int l_newWidth;
             int l_newHeight;
@@ -279,24 +281,20 @@ public class CSource extends IInspector implements ISource, ISerializable
         }
     }
 
-    private BufferedImage getScaledImage(BufferedImage src, int w, int h){
-        int finalw = w;
-        int finalh = h;
-        double factor = 1.0d;
-        if(src.getWidth() > src.getHeight()){
-            factor = ((double)src.getHeight()/(double)src.getWidth());
-            finalh = (int)(finalw * factor);
-        }else{
-            factor = ((double)src.getWidth()/(double)src.getHeight());
-            finalw = (int)(finalh * factor);
-        }
-
-        BufferedImage resizedImg = new BufferedImage(finalw, finalh, BufferedImage.TRANSLUCENT);
-        Graphics2D g2 = resizedImg.createGraphics();
+    /**
+     * Method to Scale a Buffered Image
+     * @param p_src
+     * @param p_width
+     * @param p_height
+     * @return
+     */
+    private BufferedImage getScaledImage(BufferedImage p_src, int p_width, int p_height){
+        BufferedImage l_newImage = new BufferedImage(p_width, p_height, BufferedImage.TRANSLUCENT);
+        Graphics2D g2 = l_newImage.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(src, 0, 0, finalw, finalh, null);
+        g2.drawImage(p_src, 0, 0, p_width, p_height, null);
         g2.dispose();
-        return resizedImg;
+        return l_newImage;
     }
 
     /**

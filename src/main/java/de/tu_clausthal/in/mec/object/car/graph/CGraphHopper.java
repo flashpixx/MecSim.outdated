@@ -82,10 +82,19 @@ public class CGraphHopper extends GraphHopper
 
     /**
      * ctor
-     *
-     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
     public CGraphHopper()
+    {
+        this( "CAR" );
+    }
+
+
+    /**
+     * ctor
+     *
+     * param p_encoding flag encoder name see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     */
+    public CGraphHopper( final String p_encoding )
     {
         // set the default weight
         this.setCHShortcuts( "default" );
@@ -102,74 +111,7 @@ public class CGraphHopper extends GraphHopper
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
             this.setOSMFile( l_osm.getAbsolutePath() );
-            this.setEncodingManager( new EncodingManager( "CAR" ) );
-            this.importOrLoad();
-
-            l_osm.delete();
-        }
-
-        CLogger.out( CCommon.getResourceString( this, "loaded" ) );
-    }
-
-
-    /** ctor
-     *
-     * param p_encoding flag encoder name
-     * see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
-     *
-    public CGraphHopper( final String p_encoding )
-    {
-    // set the default weight
-    this.setCHShortcuts( "default" );
-
-    // define graph location (use configuration)
-    final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
-    CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
-
-    // convert OSM or load the graph
-    if ( !this.load( l_graphlocation.getAbsolutePath() ) )
-    {
-    CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-    final File l_osm = this.downloadOSMData();
-
-    this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
-    this.setOSMFile( l_osm.getAbsolutePath() );
-    this.setEncodingManager( new EncodingManager( p_encoding ) );
-    this.importOrLoad();
-
-    l_osm.delete();
-    }
-
-    CLogger.out( CCommon.getResourceString( this, "loaded" ) );
-    }
-     */
-
-
-    /**
-     * private ctor do add different weights for routing
-     *
-     * @param p_weights weight name
-     * @see https://github.com/graphhopper/graphhopper/issues/111
-     * @deprecated
-     */
-    public CGraphHopper( final String p_weights )
-    {
-        if ( ( p_weights != null ) && ( !p_weights.isEmpty() ) )
-            this.setCHShortcuts( p_weights );
-
-        // define graph location (use configuration)
-        final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
-        CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
-
-        // convert OSM or load the graph
-        if ( !this.load( l_graphlocation.getAbsolutePath() ) )
-        {
-            CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-            final File l_osm = this.downloadOSMData();
-
-            this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
-            this.setOSMFile( l_osm.getAbsolutePath() );
-            this.setEncodingManager( new EncodingManager( "CAR" ) );
+            this.setEncodingManager( new EncodingManager( p_encoding ) );
             this.importOrLoad();
 
             l_osm.delete();
@@ -403,7 +345,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final String[] getWeightingList()
     {
-        return new String[]{"Default", "TrafficJam + SpeedUp", "SpeedUp", "TrafficJam"};
+        return new String[]{"Default", "Forbidden Edge", "Speed Up", "Traffic Jam"};
     }
 
 
@@ -411,6 +353,7 @@ public class CGraphHopper extends GraphHopper
      * enable a weighing
      *
      * @param p_weight weightning name
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
     public final void enableWeight( final String p_weight )
     {
@@ -420,13 +363,16 @@ public class CGraphHopper extends GraphHopper
         switch ( p_weight )
         {
             case "TrafficJam":
-                m_weight.put( "TrafficJam", new CTrafficJam( this ) );
+                m_weight.put( "Traffic Jam", new CTrafficJam( this ) );
                 break;
             case "SpeedUp":
-                m_weight.put( "SpeedUp", new CSpeedUp( m_weight.getFlagEncoder() ) );
+                m_weight.put( "Speed Up", new CSpeedUp( m_weight.getFlagEncoder() ) );
                 break;
             case "ForbiddenEdge":
-                m_weight.put( "ForbiddenEdge", new CForbiddenEdges() );
+                m_weight.put( "Forbidden Edge", new CForbiddenEdges() );
+                break;
+            case "Default":
+                m_weight.put( "Default", super.createWeighting( "Default", m_weight.getFlagEncoder() ) );
                 break;
             default:
         }
@@ -440,6 +386,15 @@ public class CGraphHopper extends GraphHopper
     public final void disableWeight( final String p_weight )
     {
         m_weight.remove( p_weight );
+    }
+
+
+    /**
+     * disable all weights *
+     */
+    public final void disableWeight()
+    {
+        m_weight.clear();
     }
 
 

@@ -35,6 +35,7 @@ import org.jxmapviewer.painter.Painter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -71,10 +72,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * graph
      */
     protected transient CGraphHopper m_graph = new CGraphHopper();
-    /**
-     * weight name
-     */
-    protected String m_weight = m_graph.getWeightingList()[0];
+
 
     /**
      * returns the graph of the layer
@@ -87,24 +85,43 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
-     * returns the current graph weight
+     * returns this list of all weights
      *
      * @return weight name
      */
-    public final String getGraphWeight()
+    public final String[] getGraphWeight()
     {
-        return m_weight;
+        return m_graph.getWeightingList();
     }
 
     /**
-     * sets the graph with a weight
+     * returns this list of all weights
+     *
+     * @return weight name
+     */
+    public final String[] getActiveGraphWeight()
+    {
+        return m_graph.getActiveWeights();
+    }
+
+    /**
+     * enable the graph weight
      *
      * @param p_weight weight name
      */
-    public final void setGraphWeight( final String p_weight )
+    public final void enableGraphWeight( final String p_weight )
     {
-        m_weight = p_weight;
-        m_graph = new CGraphHopper( p_weight );
+        m_graph.enableWeight( p_weight );
+    }
+
+    /**
+     * enable the graph weight
+     *
+     * @param p_weight weight name
+     */
+    public final void disableGraphWeight( final String p_weight )
+    {
+        m_graph.disableWeight( p_weight );
     }
 
     /**
@@ -206,6 +223,21 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         super.addAll( p_data );
     }
 
+
+    /**
+     * write call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws the exception on loading data
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
+
+        // write active graph weights
+        p_stream.writeObject( m_graph.getActiveWeights() );
+    }
+
     /**
      * read call of serialize interface
      *
@@ -217,6 +249,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     {
         p_stream.defaultReadObject();
 
-        m_graph = new CGraphHopper( m_weight );
+        m_graph = new CGraphHopper();
+        m_graph.disableWeight();
+        for ( String l_weight : (String[]) p_stream.readObject() )
+            m_graph.enableWeight( l_weight );
     }
 }

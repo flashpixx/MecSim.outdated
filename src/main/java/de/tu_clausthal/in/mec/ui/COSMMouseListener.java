@@ -54,6 +54,7 @@ class COSMMouseListener extends MouseAdapter
      */
     private boolean m_drag = false;
 
+    private boolean m_doubleClick = false;
 
     @Override
     public void mouseClicked( final MouseEvent p_event )
@@ -63,6 +64,9 @@ class COSMMouseListener extends MouseAdapter
 
             // left single-click
             if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 1 ) ){
+
+                Thread.sleep(200);
+
                 final CSourceLayer l_sourcelayer = ((CSourceLayer) CSimulation.getInstance().getWorld().get("Sources"));
                 final Point2D l_mousePosition = this.getMousePosition(p_event, l_viewer);
 
@@ -80,6 +84,8 @@ class COSMMouseListener extends MouseAdapter
 
                 if ( CSimulation.getInstance().isRunning() )
                     throw new IllegalStateException( CCommon.getResourceString(this, "running") );
+
+                m_doubleClick=true;
 
                 //Get some Data
                 final CSourceLayer l_sourcelayer = ((CSourceLayer) CSimulation.getInstance().getWorld().get("Sources"));
@@ -125,6 +131,7 @@ class COSMMouseListener extends MouseAdapter
                     l_sourcelayer.createDestination(l_geoPosition);
                 }
 
+                m_doubleClick = false;
             }
         }
         catch ( Exception l_exception )

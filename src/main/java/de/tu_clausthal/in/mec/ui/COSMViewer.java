@@ -112,6 +112,15 @@ public class COSMViewer extends JXMapViewer
     }
 
     /**
+     * Getter Mouse Listener
+     * @return
+     */
+    public COSMMouseListener getMouseListener()
+    {
+        return this.m_mouse;
+    }
+
+    /**
      * Getter Key Listener
      */
     public COSMKeyListener getKeyListener()

@@ -111,6 +111,40 @@ public class CGraphHopper extends GraphHopper
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
 
+
+    /** ctor
+     *
+     * @param p_encoding flag encoder name
+     * @see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     *
+    public CGraphHopper( final String p_encoding )
+    {
+    // set the default weight
+    this.setCHShortcuts( "default" );
+
+    // define graph location (use configuration)
+    final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
+    CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
+
+    // convert OSM or load the graph
+    if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+    {
+    CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
+    final File l_osm = this.downloadOSMData();
+
+    this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
+    this.setOSMFile( l_osm.getAbsolutePath() );
+    this.setEncodingManager( new EncodingManager( p_encoding ) );
+    this.importOrLoad();
+
+    l_osm.delete();
+    }
+
+    CLogger.out( CCommon.getResourceString( this, "loaded" ) );
+    }
+     */
+
+
     /**
      * private ctor do add different weights for routing
      *

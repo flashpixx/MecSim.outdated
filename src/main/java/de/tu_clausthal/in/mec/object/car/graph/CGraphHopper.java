@@ -424,8 +424,10 @@ public class CGraphHopper extends GraphHopper
                 break;
             case "SpeedUp":
                 m_weight.put( "SpeedUp", new CSpeedUp( m_weight.getFlagEncoder() ) );
+                break;
             case "ForbiddenEdge":
                 m_weight.put( "ForbiddenEdge", new CForbiddenEdges() );
+                break;
             default:
         }
     }

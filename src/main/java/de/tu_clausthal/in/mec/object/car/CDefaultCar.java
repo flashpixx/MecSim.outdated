@@ -189,10 +189,11 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public final GeoPosition getGeoposition()
     {
-        final EdgeIteratorState l_edge = this.getEdge();
-        if ( l_edge == null )
+        final EdgeIteratorState l_edgeid = this.getEdge();
+        if ( l_edgeid == null )
             return null;
-        return m_graph.getEdge( l_edge ).getGeoposition( this );
+
+        return m_graph.getEdge( l_edgeid ).getGeoposition( this );
     }
 
     @Override

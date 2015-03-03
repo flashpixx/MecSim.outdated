@@ -114,8 +114,8 @@ public class CGraphHopper extends GraphHopper
 
     /** ctor
      *
-     * @param p_encoding flag encoder name
-     * @see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     * param p_encoding flag encoder name
+     * see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      *
     public CGraphHopper( final String p_encoding )
     {

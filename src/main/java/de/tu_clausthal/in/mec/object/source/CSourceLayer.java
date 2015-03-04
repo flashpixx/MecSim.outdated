@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
@@ -83,7 +84,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void createSource(GeoPosition p_geoPosition)
     {
-        CLogger.out("Source created");
+        CLogger.out(CCommon.getResourceString(this, "sourcecreated"));
         this.add(new CSource(p_geoPosition));
     }
 
@@ -93,7 +94,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void removeSource(ISource p_source)
     {
-        CLogger.out("Source removed");
+        CLogger.out(CCommon.getResourceString(this, "sourceremoved"));
         if(isSelectedSource(p_source)){
             m_selectedSource=null;
         }
@@ -112,7 +113,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     {
 
         if(p_source.getGenerator() == null){
-            CLogger.out("Generator was set");
+            CLogger.out(CCommon.getResourceString(this, "generatorcreated"));
 
             if(p_selectedGenerator.equals("Default"))
                 p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
@@ -120,7 +121,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
                 p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
 
         }else{
-            CLogger.out("Generator was removed");
+            CLogger.out(CCommon.getResourceString(this, "generatorremoved"));
         }
 
     }
@@ -132,7 +133,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void createDestination(GeoPosition p_geoPosition)
     {
         if(this.m_selectedSource != null){
-            CLogger.out("Destination removed");
+            CLogger.out(CCommon.getResourceString(this, "destinationcreated"));
         }
     }
 
@@ -141,7 +142,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void removeDestination()
     {
-        CLogger.out("Destination removed");
+        CLogger.out(CCommon.getResourceString(this, "destinationremoved"));
     }
 
     /**
@@ -150,7 +151,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void setSelectedSource(ISource p_source)
     {
-        CLogger.out("Source selected");
+        CLogger.out(CCommon.getResourceString(this, "sourceselected"));
         if(m_selectedSource!=null){
             m_selectedSource.setColor(m_selectedSource.getGenerator()==null ? Color.BLACK : m_selectedSource.getGenerator().getColor());
         }

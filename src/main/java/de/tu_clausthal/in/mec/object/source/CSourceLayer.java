@@ -27,7 +27,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
-import de.tu_clausthal.in.mec.object.source.generator.CNormCarGenerator;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -75,7 +74,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final String[] getSourceNamesList()
     {
-        return new String[]{"Default", "Norm", "Jason Agent", "Profile"};
+        return new String[]{"Default", "Jason Agent"};
     }
 
     /**
@@ -119,8 +118,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
                 p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
             if(p_selectedGenerator.equals("Jason Agent"))
                 p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
-            if(p_selectedGenerator.equals("Norm"))
-                p_source.setGenerator(new CNormCarGenerator(p_source.getPosition()));
 
         }else{
             CLogger.out("Generator was removed");

@@ -53,7 +53,9 @@ class COSMMouseListener extends MouseAdapter
      * flag to detect dragging
      */
     private boolean m_drag = false;
-
+    /**
+     * Flag for double click
+     */
     private boolean m_doubleClick = false;
 
     @Override

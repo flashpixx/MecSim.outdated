@@ -68,6 +68,17 @@ public abstract class IUIListener implements MouseListener
     }
 
     /**
+     * returns the normalized zoom level
+     *
+     * @param p_viewer viewer object
+     * @return value in [0,1] with scale of the current zoom level
+     */
+    protected final double iconscale( final JXMapViewer p_viewer )
+    {
+        return iconsize( p_viewer ) / (double) ( c_maxzoom - c_miniconsize );
+    }
+
+    /**
      * click method which is called by a click on the object
      *
      * @param p_event  mouse event

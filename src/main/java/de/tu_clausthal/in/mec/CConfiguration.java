@@ -604,6 +604,10 @@ public class CConfiguration
              * download URL
              */
             private String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
+            /**
+             * flag for reimport
+             */
+            private boolean reimport = false;
 
             /**
              * name of the map
@@ -624,6 +628,7 @@ public class CConfiguration
 
 
             @UiLabel("Download URL of the OpenStreetMap PBF file")
+            @UiComesAfter("name")
             public String getUrl()
             {
                 return url;
@@ -632,6 +637,19 @@ public class CConfiguration
             public void setUrl( String p_value )
             {
                 url = p_value;
+            }
+
+
+            @UiLabel("Reimport graph data")
+            @UiComesAfter("url")
+            public boolean getReimport()
+            {
+                return reimport;
+            }
+
+            public void setReimport( boolean p_value )
+            {
+                reimport = p_value;
             }
         }
 

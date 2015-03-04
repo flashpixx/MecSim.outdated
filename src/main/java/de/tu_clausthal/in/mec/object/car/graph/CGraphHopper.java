@@ -41,12 +41,14 @@ import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -94,6 +96,17 @@ public class CGraphHopper extends GraphHopper
         final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
         CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
 
+        // remove graph data
+        if ( ( CConfiguration.getInstance().get().getRoutingmap().getReimport() ) && ( l_graphlocation.exists() ) )
+            try
+            {
+                FileUtils.deleteDirectory( l_graphlocation );
+            }
+            catch ( IOException l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
@@ -108,6 +121,7 @@ public class CGraphHopper extends GraphHopper
             l_osm.delete();
         }
 
+        CConfiguration.getInstance().get().getRoutingmap().setReimport( false );
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
 

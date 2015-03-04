@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.car;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -64,7 +65,7 @@ public class CCarJasonAgent extends CDefaultCar
         try
         {
 
-            m_agent = new CAgent<>( p_asl );
+            m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_asl );
 
             // set forbidden elements for methods and properties
             final Set<String> l_forbidden = new HashSet()

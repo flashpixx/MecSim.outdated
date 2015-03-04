@@ -37,8 +37,9 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUpTrafficJam;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -73,21 +74,83 @@ public class CGraphHopper extends GraphHopper
      * set with listerner of the edges
      */
     protected final Set<IAction<ICar, Object>> m_edgelister = new HashSet<>();
+    /**
+     * default weight
+     */
+    protected CCombine m_weight = null;
 
 
     /**
-     * private ctor of the singleton structure
+     * ctor
+     *
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
     public CGraphHopper()
     {
-        this( null );
+        // set the default weight
+        this.setCHShortcuts( "default" );
+
+        // define graph location (use configuration)
+        final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
+        CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
+
+        // convert OSM or load the graph
+        if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+        {
+            CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
+            final File l_osm = this.downloadOSMData();
+
+            this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
+            this.setOSMFile( l_osm.getAbsolutePath() );
+            this.setEncodingManager( new EncodingManager( "CAR" ) );
+            this.importOrLoad();
+
+            l_osm.delete();
+        }
+
+        CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
+
+
+    /** ctor
+     *
+     * param p_encoding flag encoder name
+     * see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     *
+    public CGraphHopper( final String p_encoding )
+    {
+    // set the default weight
+    this.setCHShortcuts( "default" );
+
+    // define graph location (use configuration)
+    final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
+    CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
+
+    // convert OSM or load the graph
+    if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+    {
+    CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
+    final File l_osm = this.downloadOSMData();
+
+    this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
+    this.setOSMFile( l_osm.getAbsolutePath() );
+    this.setEncodingManager( new EncodingManager( p_encoding ) );
+    this.importOrLoad();
+
+    l_osm.delete();
+    }
+
+    CLogger.out( CCommon.getResourceString( this, "loaded" ) );
+    }
+     */
+
 
     /**
      * private ctor do add different weights for routing
      *
      * @param p_weights weight name
      * @see https://github.com/graphhopper/graphhopper/issues/111
+     * @deprecated
      */
     public CGraphHopper( final String p_weights )
     {
@@ -336,26 +399,82 @@ public class CGraphHopper extends GraphHopper
      * returns a string list with weightening names
      *
      * @return string list
+     * @bug must be updated (remove default & trafficjam + speedup, add forbidden edges
      */
     public final String[] getWeightingList()
     {
         return new String[]{"Default", "TrafficJam + SpeedUp", "SpeedUp", "TrafficJam"};
     }
 
+
+    /**
+     * enable a weighing
+     *
+     * @param p_weight weightning name
+     */
+    public final void enableWeight( final String p_weight )
+    {
+        if ( m_weight.containsKey( p_weight ) )
+            return;
+
+        switch ( p_weight )
+        {
+            case "TrafficJam":
+                m_weight.put( "TrafficJam", new CTrafficJam( this ) );
+                break;
+            case "SpeedUp":
+                m_weight.put( "SpeedUp", new CSpeedUp( m_weight.getFlagEncoder() ) );
+                break;
+            case "ForbiddenEdge":
+                m_weight.put( "ForbiddenEdge", new CForbiddenEdges() );
+                break;
+            default:
+        }
+    }
+
+    /**
+     * disables a weight
+     *
+     * @param p_weight weight name
+     */
+    public final void disableWeight( final String p_weight )
+    {
+        m_weight.remove( p_weight );
+    }
+
+
+    /**
+     * returns a list of the active weights
+     *
+     * @return String list
+     */
+    public String[] getActiveWeights()
+    {
+        return CCommon.CollectionToArray( String[].class, m_weight.keySet() );
+    }
+
+
+    /**
+     * returns the weight object
+     *
+     * @return weight object or null
+     */
+    public Weighting getWeight( final String p_weight )
+    {
+        return m_weight.get( p_weight );
+    }
+
+
     @Override
-    // TODO: discuss translation of menu labels of these menu items
     public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
     {
-        if ( "TrafficJam + SpeedUp".equalsIgnoreCase( p_weighting ) )
-            return new CSpeedUpTrafficJam( this, p_encoder );
-
-        if ( "SpeedUp".equalsIgnoreCase( p_weighting ) )
-            return new CSpeedUp( p_encoder );
-
-        if ( "TrafficJam".equalsIgnoreCase( p_weighting ) )
-            return new CTrafficJam( this );
-
-        return super.createWeighting( p_weighting, p_encoder );
+        // method creates on the first call the combined-weight object and returns this every time (like a singleton)
+        if ( m_weight == null )
+        {
+            m_weight = new CCombine( p_encoder );
+            m_weight.put( "Default", super.createWeighting( p_weighting, p_encoder ) );
+        }
+        return m_weight;
     }
 
 }

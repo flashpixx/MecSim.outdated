@@ -39,7 +39,7 @@ public class CTrafficJam implements Weighting
     /**
      * graph instance
      */
-    private CGraphHopper m_graph = null;
+    protected CGraphHopper m_graph = null;
 
 
     /**

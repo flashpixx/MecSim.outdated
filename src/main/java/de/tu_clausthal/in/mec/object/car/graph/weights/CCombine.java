@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
+import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
@@ -37,11 +38,38 @@ import java.util.Set;
  */
 public class CCombine implements Weighting, Map<String, Weighting>
 {
+    /**
+     * map with weights *
+     */
     protected final Map<String, Weighting> m_weights = new HashMap<>();
+    /**
+     * flag encoder for edge data
+     */
+    protected FlagEncoder m_encoder = null;
+
+
+    /**
+     * ctor
+     */
+    public CCombine( final FlagEncoder p_flagencoder )
+    {
+        m_encoder = p_flagencoder;
+    }
+
+
+    /**
+     * returns the flag encoder
+     *
+     * @return flag encoder
+     */
+    public final FlagEncoder getFlagEncoder()
+    {
+        return m_encoder;
+    }
 
 
     @Override
-    public double getMinWeight( final double p_weight )
+    public final double getMinWeight( final double p_weight )
     {
         double l_min = Double.POSITIVE_INFINITY;
 
@@ -52,7 +80,7 @@ public class CCombine implements Weighting, Map<String, Weighting>
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         double l_max = 0;
         for ( Weighting l_item : m_weights.values() )
@@ -62,73 +90,73 @@ public class CCombine implements Weighting, Map<String, Weighting>
     }
 
     @Override
-    public int size()
+    public final int size()
     {
         return m_weights.size();
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_weights.isEmpty();
     }
 
     @Override
-    public boolean containsKey( Object p_key )
+    public final boolean containsKey( Object p_key )
     {
         return m_weights.containsKey( p_key );
     }
 
     @Override
-    public boolean containsValue( Object p_value )
+    public final boolean containsValue( Object p_value )
     {
         return m_weights.containsValue( p_value );
     }
 
     @Override
-    public Weighting get( Object p_key )
+    public final Weighting get( Object p_key )
     {
         return m_weights.get( p_key );
     }
 
     @Override
-    public Weighting put( String p_key, Weighting p_value )
+    public final Weighting put( String p_key, Weighting p_value )
     {
         return m_weights.put( p_key, p_value );
     }
 
     @Override
-    public Weighting remove( Object p_key )
+    public final Weighting remove( Object p_key )
     {
         return m_weights.remove( p_key );
     }
 
     @Override
-    public void putAll( Map<? extends String, ? extends Weighting> p_map )
+    public final void putAll( Map<? extends String, ? extends Weighting> p_map )
     {
         m_weights.putAll( p_map );
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_weights.clear();
     }
 
     @Override
-    public Set<String> keySet()
+    public final Set<String> keySet()
     {
         return m_weights.keySet();
     }
 
     @Override
-    public Collection<Weighting> values()
+    public final Collection<Weighting> values()
     {
         return m_weights.values();
     }
 
     @Override
-    public Set<Entry<String, Weighting>> entrySet()
+    public final Set<Entry<String, Weighting>> entrySet()
     {
         return m_weights.entrySet();
     }

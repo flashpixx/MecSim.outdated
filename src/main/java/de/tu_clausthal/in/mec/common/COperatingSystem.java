@@ -25,15 +25,12 @@ package de.tu_clausthal.in.mec.common;
 
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
 import java.awt.*;
 
 
 /**
  * OS specific support
- *
- * @see http://moomoohk.github.io/snippets/java_osx.html
- * @see http://www.oracle.com/technetwork/java/javatomac2-138389.html
- * @see http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
  */
 public class COperatingSystem
 {
@@ -93,11 +90,15 @@ public class COperatingSystem
 
     /**
      * set the system properties depends on the OS
+     *
+     * @see http://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
      */
     public static void setSystemProperties()
     {
         if ( isOSX() )
             System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+        if ( isWindows() )
+            System.setProperty( "swing.defaultlaf", "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
     }
 
 
@@ -105,8 +106,11 @@ public class COperatingSystem
      * sets the frame properties depends on the OS
      *
      * @note independed with reflection api to avoid compiler errors on other OS
-     *
      * @param p_frame main frame
+     *
+     * @see http://moomoohk.github.io/snippets/java_osx.html
+     * @see http://www.oracle.com/technetwork/java/javatomac2-138389.html
+     * @see http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
      */
     public static void setFrameProperties( Frame p_frame )
     {

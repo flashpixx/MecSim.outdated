@@ -206,15 +206,12 @@ public class CSource extends IInspector implements ISource, ISerializable
 
         //If the Zoom changed Calculate the new Image and Scale
         if(p_viewer.getZoom() != m_lastZoom){
-            int l_newWidth;
-            int l_newHeight;
-            if(p_viewer.getZoom() < 6){
-                l_newWidth=20;
-                l_newHeight=34;
-            }else{
-                l_newWidth= (20/12) * (17 - p_viewer.getZoom() +1);
-                l_newHeight= (34/12) * (17 - p_viewer.getZoom() +1);
-            }
+            int l_newWidth = 20;
+            int l_newHeight = 34;
+
+            l_newHeight = (int) (l_newHeight * this.iconscale(p_viewer));
+            l_newWidth = (int) (l_newWidth * this.iconscale(p_viewer));
+
             this.setImage(l_newWidth, l_newHeight);
         }
 
@@ -252,7 +249,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     /**
-     * creates the image
+     * creates the image with a specific scale
      */
     private void setImage(int p_width, int p_height)
     {

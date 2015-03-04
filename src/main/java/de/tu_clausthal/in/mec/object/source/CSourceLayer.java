@@ -82,10 +82,17 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * Method to create a Source
      * @param p_geoPosition
      */
-    public void createSource(GeoPosition p_geoPosition)
+    public void createSource(GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname)
     {
         CLogger.out(CCommon.getResourceString(this, "sourcecreated"));
-        this.add(new CSource(p_geoPosition));
+        ISource l_newSource = new CSource(p_geoPosition);
+        this.add(l_newSource);
+
+        //Set Default Generator (Selected Generator)
+        if((p_defaultGenerator == null) || (p_defaultGenerator.contains("Jason") && p_aslname == null))
+            return;
+
+        this.setGenerator(l_newSource, p_defaultGenerator, p_aslname);
     }
 
     /**
@@ -104,26 +111,29 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to set a specifig Generator in a Source (Or remove it)
+     * Method to create a Generator from a specific Source
      * @param p_source
      * @param p_selectedGenerator
      * @param p_aslname
      */
-    public void getOrSetGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
+    public void setGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
     {
+        CLogger.out(CCommon.getResourceString(this, "generatorcreated"));
 
-        if(p_source.getGenerator() == null){
-            CLogger.out(CCommon.getResourceString(this, "generatorcreated"));
+        if(p_selectedGenerator.equals("Default"))
+            p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
+        if(p_selectedGenerator.equals("Jason Agent"))
+            p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
+    }
 
-            if(p_selectedGenerator.equals("Default"))
-                p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
-            if(p_selectedGenerator.equals("Jason Agent"))
-                p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
-
-        }else{
-            CLogger.out(CCommon.getResourceString(this, "generatorremoved"));
-        }
-
+    /**
+     * Method to remove a Generator from a specific Source
+     * @param p_source
+     */
+    public void removeGenerator(ISource p_source)
+    {
+        CLogger.out(CCommon.getResourceString(this, "generatorremoved"));
+        p_source.removeGenerator();
     }
 
     /**

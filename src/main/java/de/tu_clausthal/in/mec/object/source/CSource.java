@@ -76,7 +76,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * Member Variable to save the last Zoom (If the Zoom changed the image need to be resized)
      */
-    protected int m_lastZoom=0;
+    protected int m_lastZoom = 0;
     /**
      * Member Variable which may hold a Generator
      */
@@ -95,7 +95,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      *
      * @param p_position geo position object
      */
-    public CSource(final GeoPosition p_position)
+    public CSource( final GeoPosition p_position )
     {
         m_position = p_position;
         this.setImage();
@@ -105,7 +105,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     public final Map<String, Object> inspect()
     {
         final Map<String, Object> l_map = super.inspect();
-        l_map.put("geoposition", m_position);
+        l_map.put( "geoposition", m_position );
         return l_map;
     }
 
@@ -154,22 +154,25 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public Color getColor() {
+    public Color getColor()
+    {
         return m_color;
     }
 
     @Override
-    public void setColor(Color p_color) {
-        if(p_color==null)
-        {
+    public void setColor( Color p_color )
+    {
+        if ( p_color == null )
             this.m_color = Color.BLACK;
-        }
+
         this.m_color = p_color;
         this.setImage();
 
-        try{
+        try
+        {
             COSMViewer.getSimulationOSM().repaint();
-        } catch ( Exception l_exception ) {
+        } catch ( Exception l_exception )
+        {
         }
     }
 
@@ -180,20 +183,21 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public void setGenerator(IGenerator p_generator)
+    public void setGenerator( IGenerator p_generator )
     {
         this.m_generator = p_generator;
-        this.setColor(p_generator.getColor());
+        this.setColor( p_generator.getColor() );
     }
 
     @Override
-    public void removeGenerator() {
-        this.m_generator=null;
-        this.setColor(Color.BLACK);
+    public void removeGenerator()
+    {
+        this.m_generator = null;
+        this.setColor( Color.BLACK );
     }
 
     @Override
-    public Collection<ICar> step(int p_currentstep, ILayer p_layer) throws Exception
+    public Collection<ICar> step( int p_currentstep, ILayer p_layer ) throws Exception
     {
         return this.m_generator.generate();
     }
@@ -205,14 +209,15 @@ public class CSource extends IInspector implements ISource, ISerializable
             return;
 
         //If the Zoom changed Calculate the new Image and Scale
-        if(p_viewer.getZoom() != m_lastZoom){
+        if ( p_viewer.getZoom() != m_lastZoom )
+        {
             int l_newWidth = 20;
             int l_newHeight = 34;
 
-            l_newHeight = (int) (l_newHeight * this.iconscale(p_viewer));
-            l_newWidth = (int) (l_newWidth * this.iconscale(p_viewer));
+            l_newHeight = (int) ( l_newHeight * this.iconscale( p_viewer ) );
+            l_newWidth = (int) ( l_newWidth * this.iconscale( p_viewer ) );
 
-            this.setImage(l_newWidth, l_newHeight);
+            this.setImage( l_newWidth, l_newHeight );
         }
 
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
@@ -251,7 +256,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * creates the image with a specific scale
      */
-    private void setImage(int p_width, int p_height)
+    private void setImage( int p_width, int p_height )
     {
         if ( m_color == null )
             return;
@@ -259,7 +264,7 @@ public class CSource extends IInspector implements ISource, ISerializable
         try
         {
             BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-            l_image = this.getScaledImage(l_image, p_width, p_height);
+            l_image = this.getScaledImage( l_image, p_width, p_height );
 
             // modify blue value to the color of the waypoint
             m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
@@ -285,12 +290,13 @@ public class CSource extends IInspector implements ISource, ISerializable
      * @param p_height
      * @return
      */
-    private BufferedImage getScaledImage(BufferedImage p_src, int p_width, int p_height){
-        BufferedImage l_newImage = new BufferedImage(p_width, p_height, BufferedImage.TRANSLUCENT);
-        Graphics2D g2 = l_newImage.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(p_src, 0, 0, p_width, p_height, null);
-        g2.dispose();
+    private BufferedImage getScaledImage( BufferedImage p_src, int p_width, int p_height )
+    {
+        BufferedImage l_newImage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
+        Graphics2D l_graphics = l_newImage.createGraphics();
+        l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
+        l_graphics.drawImage( p_src, 0, 0, p_width, p_height, null );
+        l_graphics.dispose();
         return l_newImage;
     }
 

@@ -57,7 +57,7 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * Method to set the Color of this Source
      * @param p_color
      */
-    public void setColor(Color p_color);
+    public void setColor( Color p_color );
 
     /**
      * Method to get the Generator of an Source (null if there is no Generator)
@@ -68,7 +68,7 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
     /**
      * Method to set a Generator in a Source
      */
-    public void setGenerator(IGenerator p_generator);
+    public void setGenerator( IGenerator p_generator );
 
     /**
      * Method to remove the Generator (Set m_generator to null)

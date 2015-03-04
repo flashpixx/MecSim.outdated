@@ -35,6 +35,9 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * Class to generate a Default Car
+ */
 public class CDefaultCarGenerator implements  IGenerator
 {
 
@@ -62,7 +65,7 @@ public class CDefaultCarGenerator implements  IGenerator
     protected transient int m_NumberCarsInStep = 1;
 
 
-    public CDefaultCarGenerator(GeoPosition p_position)
+    public CDefaultCarGenerator( GeoPosition p_position )
     {
         this.m_position = p_position;
     }

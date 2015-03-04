@@ -42,41 +42,52 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * Class to Generate Jason Cars
+ */
 public class CJasonCarGenerator extends  CDefaultCarGenerator
 {
+    /**
+     * Name of the ASL File
+     */
     private String m_aslName = null;
 
-    public CJasonCarGenerator(GeoPosition p_position, String p_aslName)
+    /**
+     * CTOR
+     * @param p_position
+     * @param p_aslName
+     */
+    public CJasonCarGenerator( final GeoPosition p_position, final String p_aslName )
     {
-        super(p_position);
+        super( p_position );
 
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString(this, "aslnotnull") );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
         this.m_aslName = p_aslName;
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "Default Car Generator";
     }
 
     @Override
-    public Color getColor()
+    public final Color getColor()
     {
         return Color.RED;
     }
 
     @Override
-    public Collection<ICar> generate()
+    public final Collection<ICar> generate()
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( m_random.sample() < m_mean )
             return l_sources;
 
         for ( int i = 0; i < m_NumberCarsInStep; i++ )
-            l_sources.add( new CCarJasonAgent(m_aslName, m_position));
+            l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
 
         return l_sources;
     }
@@ -95,15 +106,15 @@ public class CJasonCarGenerator extends  CDefaultCarGenerator
         // read the ASL file from the stream
         final String l_aslname = m_aslName;
         final String l_asldata = (String) p_stream.readObject();
-        File l_output = IEnvironment.getAgentFile(l_aslname);
+        File l_output = IEnvironment.getAgentFile( l_aslname );
 
         try
         {
             if ( !l_output.exists() )
-                FileUtils.write(l_output, l_asldata);
+                FileUtils.write( l_output, l_asldata );
             else if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_asldata, "MD5" ) ) )
             {
-                l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName(l_aslname) + "_0" );
+                l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
                 for ( int i = 1; l_output.exists(); i++ )
                 {
                     m_aslName = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
@@ -117,7 +128,6 @@ public class CJasonCarGenerator extends  CDefaultCarGenerator
         }
     }
 
-
     /**
      * write call of serialize interface
      *
@@ -129,7 +139,7 @@ public class CJasonCarGenerator extends  CDefaultCarGenerator
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes(Paths.get(IEnvironment.getAgentFile(m_aslName).toString())) ) );
+        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslName ).toString() ) ) ) );
     }
 
 }

@@ -81,33 +81,36 @@ public class CSourceLayer extends IMultiLayer<ISource>
     /**
      * Method to create a Source
      * @param p_geoPosition
+     * @param p_defaultGenerator
+     * @param p_aslname
      */
-    public void createSource(GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname)
+    public void createSource( GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname )
     {
-        CLogger.out(CCommon.getResourceString(this, "sourcecreated"));
-        ISource l_newSource = new CSource(p_geoPosition);
-        this.add(l_newSource);
+        CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
+        ISource l_newSource = new CSource( p_geoPosition );
+        this.add( l_newSource );
 
         //Set Default Generator (Selected Generator)
-        if((p_defaultGenerator == null) || (p_defaultGenerator.contains("Jason") && p_aslname == null))
+        if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
             return;
 
-        this.setGenerator(l_newSource, p_defaultGenerator, p_aslname);
+        this.setGenerator( l_newSource, p_defaultGenerator, p_aslname );
     }
 
     /**
-     * Method to remove a Source
+     * Method to Remove a Source
      * @param p_source
      */
-    public void removeSource(ISource p_source)
+    public void removeSource( ISource p_source )
     {
-        CLogger.out(CCommon.getResourceString(this, "sourceremoved"));
-        if(isSelectedSource(p_source)){
-            m_selectedSource=null;
+        CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
+        if ( this.isSelectedSource( p_source ) )
+        {
+            m_selectedSource = null;
         }
 
         p_source.release();
-        this.remove(p_source);
+        this.remove( p_source );
     }
 
     /**
@@ -116,23 +119,23 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * @param p_selectedGenerator
      * @param p_aslname
      */
-    public void setGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
+    public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
     {
-        CLogger.out(CCommon.getResourceString(this, "generatorcreated"));
+        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
 
-        if(p_selectedGenerator.equals("Default"))
-            p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
-        if(p_selectedGenerator.equals("Jason Agent"))
-            p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
+        if ( p_selectedGenerator.equals( "Default" ) )
+            p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
+        if ( p_selectedGenerator.equals( "Jason Agent" ) )
+            p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
     }
 
     /**
      * Method to remove a Generator from a specific Source
      * @param p_source
      */
-    public void removeGenerator(ISource p_source)
+    public void removeGenerator( ISource p_source )
     {
-        CLogger.out(CCommon.getResourceString(this, "generatorremoved"));
+        CLogger.out( CCommon.getResourceString( this, "generatorremoved" ) );
         p_source.removeGenerator();
     }
 
@@ -140,11 +143,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * Method to create a Destination
      * @param p_geoPosition
      */
-    public void createDestination(GeoPosition p_geoPosition)
+    public void createDestination( GeoPosition p_geoPosition )
     {
-        if(this.m_selectedSource != null){
-            CLogger.out(CCommon.getResourceString(this, "destinationcreated"));
-        }
+        if ( this.m_selectedSource != null )
+            CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
     }
 
     /**
@@ -152,23 +154,25 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void removeDestination()
     {
-        CLogger.out(CCommon.getResourceString(this, "destinationremoved"));
+        CLogger.out( CCommon.getResourceString( this, "destinationremoved" ) );
     }
 
     /**
      * Method to select a Source
      * @param p_source
      */
-    public void setSelectedSource(ISource p_source)
+    public void setSelectedSource( ISource p_source )
     {
-        CLogger.out(CCommon.getResourceString(this, "sourceselected"));
-        if(m_selectedSource!=null){
-            m_selectedSource.setColor(m_selectedSource.getGenerator()==null ? Color.BLACK : m_selectedSource.getGenerator().getColor());
+        CLogger.out( CCommon.getResourceString( this, "sourceselected" ) );
+        if ( m_selectedSource != null )
+        {
+            m_selectedSource.setColor( m_selectedSource.getGenerator() == null ? Color.BLACK : m_selectedSource.getGenerator().getColor() );
         }
-        if(p_source != null){
-            p_source.setColor(Color.WHITE);
+        if ( p_source != null )
+        {
+            p_source.setColor( Color.WHITE );
         }
-        m_selectedSource=p_source;
+        m_selectedSource = p_source;
     }
 
     /**
@@ -180,14 +184,14 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Check if the Source is selected
+     * Check if SOurce is selected
      * @param p_source
      * @return
      */
-    public boolean isSelectedSource(ISource p_source)
+    public boolean isSelectedSource( ISource p_source )
     {
-        if(p_source != null)
-            return p_source.equals(m_selectedSource);
+        if ( p_source != null )
+            return p_source.equals( m_selectedSource );
 
         return false;
     }

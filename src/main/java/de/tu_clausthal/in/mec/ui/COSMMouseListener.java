@@ -26,8 +26,6 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
-import de.tu_clausthal.in.mec.object.norm.INormObject;
-import de.tu_clausthal.in.mec.object.norm.institution.IInstitution;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.source.ISource;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
@@ -50,13 +48,10 @@ class COSMMouseListener extends MouseAdapter
      */
     private static final int c_rangesize = 10;
     /**
-     * flag to detect dragging
-     */
-    private boolean m_drag = false;
-    /**
      * Flag for double click
      */
     private boolean m_doubleClick = false;
+
 
     @Override
     public void mouseClicked( final MouseEvent p_event )
@@ -151,59 +146,6 @@ class COSMMouseListener extends MouseAdapter
 
     }
 
-    @Override
-    public void mousePressed( final MouseEvent p_event )
-    {
-        /*
-        if ( ( SwingUtilities.isLeftMouseButton( e ) ) && ( !m_drag ) )
-            return;
-
-        // create painter on the first action, because in the ctor the OSM Viewer is not fully instantiate
-        // and would create an exception, so we do the initialization process here
-        if ( m_rectangle == null )
-        {
-            m_rectangle = new CRectanglePainter();
-            COSMViewer.getInstance().getCompoundPainter().addPainter( m_rectangle );
-        }
-
-        m_drag = true;
-        m_rectangle.from( e.getPoint() );
-        */
-    }
-
-    @Override
-    public void mouseReleased( final MouseEvent p_event )
-    {
-        /*
-        if ( !m_drag )
-            return;
-
-        m_drag = false;
-        m_rectangle.to( e.getPoint() );
-
-        IInstitution<INormObject> l_institution = this.getSelectedInstitution();
-        if ( ( m_rectangle.getRectangle() == null ) || ( l_institution == null ) )
-        {
-            m_rectangle.clear();
-            return;
-        }
-
-        // add range to the institution
-        l_institution.getRange().add( new CRangeGPS( l_institution, ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getFrom() ), ( (JXMapViewer) e.getSource() ).convertPointToGeoPosition( m_rectangle.getTo() ) ) );
-        m_rectangle.clear();
-        */
-    }
-
-    @Override
-    public void mouseDragged( final MouseEvent p_event )
-    {
-        /*
-        if ( !m_drag )
-            return;
-        m_rectangle.to( e.getPoint() );
-        */
-    }
-
     /**
      * returns the geoposition of a mouse position
      *
@@ -244,24 +186,6 @@ class COSMMouseListener extends MouseAdapter
             return false;
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
-    }
-
-    /**
-     * returns the selected institution
-     *
-     * @return institution
-     */
-    private IInstitution<INormObject> getSelectedInstitution()
-    {
-/*
-        if ( ( m_popup.getInstitutionSelection() == null ) || ( m_popup.getInstitutionSelection().isEmpty() ) )
-            return null;
-
-        for (IInstitution<INormObject> l_item : CSimulationData.getInstance().getCarInstitutionQueue().getAll())
-            if (l_item.getName().equals(m_popup.getInstitutionSelection()))
-                return l_item;
-*/
-        return null;
     }
 
 }

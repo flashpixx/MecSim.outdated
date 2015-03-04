@@ -102,7 +102,9 @@ class COSMMouseListener extends MouseAdapter
                             return ;
                         }
                     }
-                    l_sourcelayer.createSource(l_geoPosition);
+
+                    final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
+                    l_sourcelayer.createSource(l_geoPosition, l_selectedGenerator, l_aslname);
                 }
 
                 //Strg Key is pressed (Place or Remove Generator)
@@ -111,8 +113,14 @@ class COSMMouseListener extends MouseAdapter
                     //Check for Sources in Range
                     for ( ISource l_source : l_sourcelayer ){
                         if (this.inRange(l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_source.getPosition(), l_viewer.getZoom()), c_rangesize)){
-                            final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
-                            l_sourcelayer.getOrSetGenerator(l_source, l_selectedGenerator, l_aslname);
+
+                            if(l_source.getGenerator() == null){
+                                final String l_aslname = l_selectedGenerator.contains("Jason") ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString(this, "chooseasl"), CCommon.getResourceString(this, "chooseasldescription") ) : null;
+                                l_sourcelayer.setGenerator(l_source, l_selectedGenerator, l_aslname);
+                            }else{
+                                l_sourcelayer.removeGenerator(l_source);
+                            }
+
                             return ;
                         }
                     }

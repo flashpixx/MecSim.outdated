@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
@@ -81,10 +82,17 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * Method to create a Source
      * @param p_geoPosition
      */
-    public void createSource(GeoPosition p_geoPosition)
+    public void createSource(GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname)
     {
-        CLogger.out("Source created");
-        this.add(new CSource(p_geoPosition));
+        CLogger.out(CCommon.getResourceString(this, "sourcecreated"));
+        ISource l_newSource = new CSource(p_geoPosition);
+        this.add(l_newSource);
+
+        //Set Default Generator (Selected Generator)
+        if((p_defaultGenerator == null) || (p_defaultGenerator.contains("Jason") && p_aslname == null))
+            return;
+
+        this.setGenerator(l_newSource, p_defaultGenerator, p_aslname);
     }
 
     /**
@@ -93,7 +101,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void removeSource(ISource p_source)
     {
-        CLogger.out("Source removed");
+        CLogger.out(CCommon.getResourceString(this, "sourceremoved"));
         if(isSelectedSource(p_source)){
             m_selectedSource=null;
         }
@@ -103,26 +111,29 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to set a specifig Generator in a Source (Or remove it)
+     * Method to create a Generator from a specific Source
      * @param p_source
      * @param p_selectedGenerator
      * @param p_aslname
      */
-    public void getOrSetGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
+    public void setGenerator(ISource p_source, String p_selectedGenerator, String p_aslname)
     {
+        CLogger.out(CCommon.getResourceString(this, "generatorcreated"));
 
-        if(p_source.getGenerator() == null){
-            CLogger.out("Generator was set");
+        if(p_selectedGenerator.equals("Default"))
+            p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
+        if(p_selectedGenerator.equals("Jason Agent"))
+            p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
+    }
 
-            if(p_selectedGenerator.equals("Default"))
-                p_source.setGenerator(new CDefaultCarGenerator(p_source.getPosition()));
-            if(p_selectedGenerator.equals("Jason Agent"))
-                p_source.setGenerator(new CJasonCarGenerator(p_source.getPosition(), p_aslname));
-
-        }else{
-            CLogger.out("Generator was removed");
-        }
-
+    /**
+     * Method to remove a Generator from a specific Source
+     * @param p_source
+     */
+    public void removeGenerator(ISource p_source)
+    {
+        CLogger.out(CCommon.getResourceString(this, "generatorremoved"));
+        p_source.removeGenerator();
     }
 
     /**
@@ -132,7 +143,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void createDestination(GeoPosition p_geoPosition)
     {
         if(this.m_selectedSource != null){
-            CLogger.out("Destination removed");
+            CLogger.out(CCommon.getResourceString(this, "destinationcreated"));
         }
     }
 
@@ -141,7 +152,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void removeDestination()
     {
-        CLogger.out("Destination removed");
+        CLogger.out(CCommon.getResourceString(this, "destinationremoved"));
     }
 
     /**
@@ -150,7 +161,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void setSelectedSource(ISource p_source)
     {
-        CLogger.out("Source selected");
+        CLogger.out(CCommon.getResourceString(this, "sourceselected"));
         if(m_selectedSource!=null){
             m_selectedSource.setColor(m_selectedSource.getGenerator()==null ? Color.BLACK : m_selectedSource.getGenerator().getColor());
         }

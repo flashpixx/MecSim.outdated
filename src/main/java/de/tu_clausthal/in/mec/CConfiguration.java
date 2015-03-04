@@ -214,7 +214,7 @@ public class CConfiguration
         }
 
         // check the configuration values and set it
-        if ( l_tmp == null )
+        if ( ( l_tmp == null ) || ( l_tmp.getRestconfig() ) )
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
         {
@@ -362,11 +362,18 @@ public class CConfiguration
      */
     public class Data
     {
-
         /**
          * cell size for sampling
          */
         public int CellSampling = 2;
+        /**
+         * flag to reset the configuration
+         */
+        private boolean resetconfig = false;
+        /**
+         * flag to reset the UI
+         */
+        private boolean resetui = false;
         /**
          * geo position object of the start viewpoint
          */
@@ -425,8 +432,34 @@ public class CConfiguration
         }
 
 
-        @UiSection("Traffic Graph")
+        @UiLabel("Reset configuration")
         @UiComesAfter("language")
+        public boolean getRestconfig()
+        {
+            return resetconfig;
+        }
+
+        public void setRestconfig( boolean p_value )
+        {
+            resetconfig = p_value;
+        }
+
+
+        @UiLabel("Reset UI configuration")
+        @UiComesAfter("restconfig")
+        public boolean getResetui()
+        {
+            return resetui;
+        }
+
+        public void setResetui( boolean p_value )
+        {
+            resetui = p_value;
+        }
+
+
+        @UiSection("Traffic Graph")
+        @UiComesAfter("resetui")
         @UiLabel("Cell Size (in metre)")
         @Min(1)
         public int getCellsampling()

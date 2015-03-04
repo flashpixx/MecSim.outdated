@@ -38,15 +38,40 @@ import java.util.Set;
 
 
 /**
- * eventmanager class
+ * message handler class
  */
 public class CMessageSystem implements IVoidSteppable
 {
-
+    /**
+     * event listener *
+     */
+    protected final Set<IActionListener> m_listener = new HashSet<>();
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
     protected CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
+
+
+    /**
+     * adds a listener
+     *
+     * @param p_listener listener
+     */
+    public void addActionListener( IActionListener p_listener )
+    {
+        m_listener.add( p_listener );
+    }
+
+
+    /**
+     * removes a listener
+     *
+     * @param p_listener listener
+     */
+    public void removeListener( IActionListener p_listener )
+    {
+        m_listener.remove( p_listener );
+    }
 
 
     /**
@@ -69,6 +94,9 @@ public class CMessageSystem implements IVoidSteppable
         l_node.getData().getLeft().add( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );
+
+        for ( IActionListener l_item : m_listener )
+            l_item.onRegister( p_path, p_receiver );
     }
 
 
@@ -90,6 +118,9 @@ public class CMessageSystem implements IVoidSteppable
         l_node.getData().getLeft().remove( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "unregistered", p_receiver, p_path ) );
+
+        for ( IActionListener l_item : m_listener )
+            l_item.onUnregister( p_path, p_receiver );
     }
 
 
@@ -164,6 +195,31 @@ public class CMessageSystem implements IVoidSteppable
     @Override
     public void release()
     {
+
+    }
+
+
+    /**
+     * observer interface *
+     */
+    public interface IActionListener
+    {
+
+        /**
+         * is called on register
+         *
+         * @param p_path     path of the object
+         * @param p_receiver receiver
+         */
+        public void onRegister( final CPath p_path, final IParticipant p_receiver );
+
+        /**
+         * is called on unregister
+         *
+         * @param p_path     path of the object
+         * @param p_receiver receiver
+         */
+        public void onUnregister( final CPath p_path, final IParticipant p_receiver );
 
     }
 }

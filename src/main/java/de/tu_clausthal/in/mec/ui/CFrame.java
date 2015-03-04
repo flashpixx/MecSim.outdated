@@ -69,6 +69,12 @@ public class CFrame extends JFrame
     public CFrame()
     {
         super();
+
+        if ( CConfiguration.getInstance().get().getResetui() )
+            m_configfile.delete();
+        CConfiguration.getInstance().get().setResetui( false );
+
+
         COperatingSystem.setFrameProperties( this );
         this.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         this.setLayout( new BorderLayout() );

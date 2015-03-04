@@ -312,13 +312,12 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public final void broadcast( final Message p_message ) throws Exception
         {
-            CPath l_path = getReceiverPath();
-            p_message.setSender( l_path.toString() );
+            final CPath l_path = new CPath( m_namepath );
+            if ( m_namepath.size() > 0 )
+                l_path.removeSuffix();
 
-            if ( l_path.size() > 0 )
-                l_path = l_path.getSubPath( 0, l_path.size() - 1 );
+            p_message.setSender( m_namepath.toString() );
             p_message.setReceiver( l_path.toString() );
-
             m_participant.sendMessage( l_path, new CMessage( p_message ) );
         }
 

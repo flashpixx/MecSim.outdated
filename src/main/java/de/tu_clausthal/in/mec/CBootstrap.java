@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CParticipantTree;
 import de.tu_clausthal.in.mec.ui.CSourceEditor;
 import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 
@@ -69,6 +70,7 @@ public class CBootstrap
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.LEFT, 0.8 );
         p_frame.addWidget( "Editor", new CSourceEditor() );
         p_frame.addWidget( "Console", new CConsole() );
+        p_frame.addWidget( "Message Participant", new CParticipantTree() );
     }
 
 

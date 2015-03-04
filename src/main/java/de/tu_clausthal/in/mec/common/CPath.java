@@ -189,6 +189,20 @@ public class CPath implements Iterable<CPath>
         return StringUtils.join( m_path, m_separator );
     }
 
+
+    /**
+     * returns the full path as string with an individual separator
+     *
+     * @param p_separator separator
+     * @return string path
+     */
+    public String getPath( final String p_separator )
+    {
+        return StringUtils.join( m_path, p_separator );
+    }
+
+
+
     /**
      * returns the last part of the path
      *

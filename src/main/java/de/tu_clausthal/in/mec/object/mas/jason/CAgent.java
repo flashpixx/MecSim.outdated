@@ -32,7 +32,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
-import de.tu_clausthal.in.mec.simulation.message.CNames;
 import de.tu_clausthal.in.mec.simulation.message.CParticipant;
 import de.tu_clausthal.in.mec.simulation.message.IMessage;
 import jason.JasonException;
@@ -85,7 +84,7 @@ public class CAgent<T> implements IVoidAgent
      */
     protected int m_cycle = 0;
     /**
-     * set with actions of this implementation *
+     * set with actions of this implementation
      */
     protected Map<String, IAction> m_action = new HashMap<>();
     /**
@@ -93,9 +92,9 @@ public class CAgent<T> implements IVoidAgent
      */
     protected Set<IBelief> m_beliefs = new HashSet<>();
     /**
-     * name of the agent *
+     * name of the agent
      */
-    protected String m_name = null;
+    protected CPath m_namepath = null;
     /**
      * participant object *
      */
@@ -109,29 +108,29 @@ public class CAgent<T> implements IVoidAgent
     /**
      * ctor
      *
-     * @param p_name name of the agent
+     * @param p_namepath name of the agent (full path)
      * @param p_asl  agent ASL file
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final String p_name, final String p_asl ) throws JasonException
+    public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
     {
-        this( p_name, p_asl, null );
+        this( p_namepath, p_asl, null );
     }
 
 
     /**
      * ctor
      *
-     * @param p_name name of the agent
+     * @param p_namepath name of the agent (full path)
      * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final String p_name, final String p_asl, final T p_bind ) throws JasonException
+    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
-        m_name = p_name;
-        if ( ( m_name == null ) || ( m_name.isEmpty() ) )
-            m_name = this.getClass().getSimpleName() + "@" + this.hashCode();
+        m_namepath = p_namepath;
+        if ( ( m_namepath == null ) || ( m_namepath.isEmpty() ) )
+            m_namepath = new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() );
 
         if ( p_bind != null )
         {
@@ -207,10 +206,10 @@ public class CAgent<T> implements IVoidAgent
     }
 
 
-    @Override
+    //@Override
     public final String getName()
     {
-        return m_name;
+        return m_namepath.getPath();
     }
 
     @Override
@@ -254,7 +253,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final CPath getReceiverPath()
     {
-        return CNames.getName( this, m_name );
+        return m_namepath;
     }
 
 
@@ -298,7 +297,7 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public final String getAgName()
         {
-            return m_name;
+            return m_namepath.getPath( "_" );
         }
 
         @Override

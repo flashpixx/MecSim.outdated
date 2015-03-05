@@ -31,21 +31,30 @@ import de.tu_clausthal.in.mec.simulation.message.IParticipant;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 
 /**
  * tree of all message participants
  */
-public class CParticipantTree extends JPanel implements CMessageSystem.IActionListener
+public class CParticipantTree extends JScrollPane implements CMessageSystem.IActionListener
 {
 
-    protected final JTree m_root = new JTree( new DefaultMutableTreeNode( "Message Participant" ) );
+    protected final DefaultMutableTreeNode m_root = new DefaultMutableTreeNode( "Message Participant" );
+
+    protected final JTree m_tree = new JTree( m_root );
+
+    protected final TreeModel m_model = new DefaultTreeModel( m_root );
+
 
 
     public CParticipantTree()
     {
+        super( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+        this.add( m_tree );
+
         CSimulation.getInstance().getMessageSystem().addActionListener( this );
-        this.add( m_root );
     }
 
 

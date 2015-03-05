@@ -198,7 +198,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildGraphWeightsMenu()
     {
-        m_items.addRadioGroup( new ImmutablePair<>( "Graph Weights", CCommon.getResourceString( this, "Graph Weights" ) ),
+        m_items.addRadioItems( new ImmutablePair<>( "Graph Weights", CCommon.getResourceString( this, "Graph Weights" ) ),
                 ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(),
                 this
         );
@@ -400,15 +400,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             if ( l_actionpath.equals( l_item.getKey() ) )
             {
-                try
-                {
-                    this.throwSimulationRunningException();
-                    ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).setGraphWeight( l_item.getKey().getSuffix() );
-                }
-                catch ( Exception l_exception )
-                {
-                    JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
-                }
+                ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).enableDisableGraphWeight( l_item.getKey().getSuffix() );
                 return;
             }
 

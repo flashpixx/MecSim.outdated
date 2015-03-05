@@ -362,13 +362,13 @@ public class CGraphHopper extends GraphHopper
 
         switch ( p_weight )
         {
-            case "TrafficJam":
+            case "Traffic Jam":
                 m_weight.put( "Traffic Jam", new CTrafficJam( this ) );
                 break;
-            case "SpeedUp":
+            case "Speed Up":
                 m_weight.put( "Speed Up", new CSpeedUp( m_weight.getFlagEncoder() ) );
                 break;
-            case "ForbiddenEdge":
+            case "Forbidden Edge":
                 m_weight.put( "Forbidden Edge", new CForbiddenEdges() );
                 break;
             case "Default":
@@ -376,6 +376,7 @@ public class CGraphHopper extends GraphHopper
                 break;
             default:
         }
+
     }
 
     /**
@@ -406,6 +407,18 @@ public class CGraphHopper extends GraphHopper
     public String[] getActiveWeights()
     {
         return CCommon.CollectionToArray( String[].class, m_weight.keySet() );
+    }
+
+
+    /**
+     * checks if a wieght is active
+     *
+     * @param p_weight weight name
+     * @return bool flag if weight is active
+     */
+    public boolean isActiveWeight( final String p_weight )
+    {
+        return m_weight.containsKey( p_weight );
     }
 
 

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.car;
 
+import com.graphhopper.routing.util.Weighting;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
@@ -95,34 +96,40 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
-     * returns this list of all weights
+     * checks if a weight is active
      *
-     * @return weight name
+     * @param p_weight weight name
+     * @return bool active flag
      */
-    public final String[] getActiveGraphWeight()
+    public final boolean isActiveWeight( final String p_weight )
     {
-        return m_graph.getActiveWeights();
+        return m_graph.isActiveWeight( p_weight );
     }
 
     /**
-     * enable the graph weight
+     * enable / disable weight
      *
      * @param p_weight weight name
      */
-    public final void enableGraphWeight( final String p_weight )
+    public final void enableDisableGraphWeight( final String p_weight )
     {
-        m_graph.enableWeight( p_weight );
+        if ( this.isActiveWeight( p_weight ) )
+            m_graph.disableWeight( p_weight );
+        else
+            m_graph.enableWeight( p_weight );
     }
 
-    /**
-     * enable the graph weight
+
+    /** returns a graph weight
      *
      * @param p_weight weight name
+     * @return weight object or null
      */
-    public final void disableGraphWeight( final String p_weight )
+    public final Weighting getGraphWeight( final String p_weight )
     {
-        m_graph.disableWeight( p_weight );
+        return m_graph.getWeight( p_weight );
     }
+
 
     /**
      * sets the drive model

@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
-import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
@@ -33,13 +32,16 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CTrafficJam implements Weighting
+public class CTrafficJam implements IWeighting
 {
-
     /**
      * graph instance
      */
     protected CGraphHopper m_graph = null;
+    /**
+     * active flag *
+     */
+    private boolean m_active = false;
 
 
     /**
@@ -66,4 +68,15 @@ public class CTrafficJam implements Weighting
         return m_graph.getEdge( p_edge ).getNumberOfObjects();
     }
 
+    @Override
+    public boolean isActive()
+    {
+        return m_active;
+    }
+
+    @Override
+    public void setActive( final boolean p_value )
+    {
+        m_active = p_value;
+    }
 }

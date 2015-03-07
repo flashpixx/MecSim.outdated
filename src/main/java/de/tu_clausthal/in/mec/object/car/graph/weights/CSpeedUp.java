@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 import com.graphhopper.routing.util.FlagEncoder;
-import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
 
@@ -33,9 +32,8 @@ import com.graphhopper.util.EdgeIteratorState;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CSpeedUp implements Weighting
+public class CSpeedUp implements IWeighting
 {
-
     /**
      * flag encoder for edge data
      */
@@ -44,6 +42,10 @@ public class CSpeedUp implements Weighting
      * max speed value *
      */
     protected double m_maxSpeed = 1;
+    /**
+     * active flag *
+     */
+    private boolean m_active = false;
 
 
     /**
@@ -72,4 +74,15 @@ public class CSpeedUp implements Weighting
         return p_edge.getDistance() / l_speed;
     }
 
+    @Override
+    public boolean isActive()
+    {
+        return m_active;
+    }
+
+    @Override
+    public void setActive( final boolean p_value )
+    {
+        m_active = p_value;
+    }
 }

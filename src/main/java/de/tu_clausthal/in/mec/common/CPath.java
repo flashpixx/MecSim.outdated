@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.common;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -92,6 +93,15 @@ public class CPath implements Iterable<CPath>
     public boolean isEmpty()
     {
         return m_path.isEmpty();
+    }
+
+
+    /**
+     * reverse path
+     */
+    public void reverse()
+    {
+        Collections.reverse( m_path );
     }
 
 
@@ -249,7 +259,7 @@ public class CPath implements Iterable<CPath>
      * @param p_index index position
      * @return element
      */
-    public String getIndex( final int p_index )
+    public String get( final int p_index )
     {
         return m_path.get( p_index );
     }

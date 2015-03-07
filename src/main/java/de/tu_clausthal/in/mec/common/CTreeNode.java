@@ -167,7 +167,7 @@ public class CTreeNode<T>
         for ( CPath l_item : p_path )
             l_sub = new CTreeNode<T>( l_item.getSuffix(), l_sub );
 
-        m_childs.put( p_path.getIndex( 0 ), l_sub );
+        m_childs.put( p_path.get( 0 ), l_sub );
     }
 
 

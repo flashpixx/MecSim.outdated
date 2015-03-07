@@ -21,15 +21,31 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.mas.common;
+package de.tu_clausthal.in.mec.object.car.graph.weights;
+
+
+import com.graphhopper.routing.util.Weighting;
 
 
 /**
- * Weka wrapper for encapsuling machine learning algorithms for agents
- *
- * @see http://www.cs.waikato.ac.nz/~ml/weka/
+ * weighting interface to encapsulate GraphHopper weights with additional information
  */
-public class CWeka
+public interface IWeighting extends Weighting
 {
+
+    /**
+     * get the current active state
+     *
+     * @return bool activity flag
+     */
+    public boolean isActive();
+
+
+    /**
+     * set activity flag
+     *
+     * @param p_value bool activity flag
+     */
+    public void setActive( boolean p_value );
 
 }

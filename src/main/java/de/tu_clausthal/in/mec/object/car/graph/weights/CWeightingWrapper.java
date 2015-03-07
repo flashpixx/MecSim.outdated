@@ -21,48 +21,74 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.ui;
+package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 
-import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
-import de.tu_clausthal.in.mec.simulation.message.IMessage;
-import de.tu_clausthal.in.mec.simulation.message.IParticipant;
-import prefuse.Display;
-import prefuse.Visualization;
+import com.graphhopper.routing.util.Weighting;
+import com.graphhopper.util.EdgeIteratorState;
 
 
 /**
- * graph of all message participants
- *
- * @see https://github.com/prefuse/Prefuse
+ * wrapper class to encapsulate a GraphHipper weighting object with the IWeighting interface
  */
-public class CParticipantTree extends Display implements CMessageSystem.IActionListener
+public class CWeightingWrapper<T extends Weighting> implements IWeighting
 {
 
-    public CParticipantTree()
+    /**
+     * active flag *
+     */
+    private boolean m_active = false;
+    /**
+     * GraphHopper weight object *
+     */
+    private T m_weight = null;
+
+
+    /**
+     * ctor
+     *
+     * @param p_weight weight object
+     */
+    public CWeightingWrapper( final T p_weight )
     {
-        super( new Visualization() );
-        CSimulation.getInstance().getMessageSystem().addActionListener( this );
+        m_weight = p_weight;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_weight weight object
+     * @param p_active active flag
+     */
+    public CWeightingWrapper( final T p_weight, final boolean p_active )
+    {
+        m_weight = p_weight;
+        m_active = p_active;
     }
 
 
     @Override
-    public final void onRegister( final CPath p_path, final IParticipant p_receiver )
+    public boolean isActive()
     {
-
+        return m_active;
     }
 
     @Override
-    public final void onUnregister( final CPath p_path, final IParticipant p_receiver )
+    public void setActive( final boolean p_value )
     {
-
+        m_active = p_value;
     }
 
     @Override
-    public void onPushMessage( final CPath p_path, final IMessage<?> p_message )
+    public double getMinWeight( final double p_weight )
     {
+        return m_weight.getMinWeight( p_weight );
+    }
 
+    @Override
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    {
+        return m_weight.calcWeight( p_edge, p_reverse );
     }
 }

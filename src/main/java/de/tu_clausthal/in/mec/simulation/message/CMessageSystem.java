@@ -162,6 +162,9 @@ public class CMessageSystem implements IVoidSteppable
 
             l_item.getRight().add( p_message );
         }
+
+        for ( IActionListener l_item : m_listener )
+            l_item.onPushMessage( p_path, p_message );
     }
 
 
@@ -220,6 +223,11 @@ public class CMessageSystem implements IVoidSteppable
          * @param p_receiver receiver
          */
         public void onUnregister( final CPath p_path, final IParticipant p_receiver );
+
+        /**
+         * is called on a message push
+         */
+        public void onPushMessage( final CPath p_path, final IMessage<?> p_message );
 
     }
 }

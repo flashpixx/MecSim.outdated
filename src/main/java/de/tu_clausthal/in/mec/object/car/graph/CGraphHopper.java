@@ -41,19 +41,20 @@ import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
-import org.apache.commons.io.FileUtils;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CWeightingWrapper;
+import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -347,7 +348,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final String[] getWeightingList()
     {
-        return new String[]{"Default", "Forbidden Edge", "Speed Up", "Traffic Jam"};
+        return CCommon.CollectionToArray( String[].class, m_weight.keySet() );
     }
 
 
@@ -362,23 +363,7 @@ public class CGraphHopper extends GraphHopper
         if ( m_weight.containsKey( p_weight ) )
             return;
 
-        switch ( p_weight )
-        {
-            case "Traffic Jam":
-                m_weight.put( "Traffic Jam", new CTrafficJam( this ) );
-                break;
-            case "Speed Up":
-                m_weight.put( "Speed Up", new CSpeedUp( m_weight.getFlagEncoder() ) );
-                break;
-            case "Forbidden Edge":
-                m_weight.put( "Forbidden Edge", new CForbiddenEdges() );
-                break;
-            case "Default":
-                m_weight.put( "Default", super.createWeighting( "Default", m_weight.getFlagEncoder() ) );
-                break;
-            default:
-        }
-
+        m_weight.get( p_weight ).setActive( true );
     }
 
     /**
@@ -388,7 +373,10 @@ public class CGraphHopper extends GraphHopper
      */
     public final void disableWeight( final String p_weight )
     {
-        m_weight.remove( p_weight );
+        if ( m_weight.containsKey( p_weight ) )
+            return;
+
+        m_weight.get( p_weight ).setActive( false );
     }
 
 
@@ -397,7 +385,8 @@ public class CGraphHopper extends GraphHopper
      */
     public final void disableWeight()
     {
-        m_weight.clear();
+        for ( IWeighting l_item : m_weight.values() )
+            l_item.setActive( false );
     }
 
 
@@ -408,19 +397,24 @@ public class CGraphHopper extends GraphHopper
      */
     public String[] getActiveWeights()
     {
-        return CCommon.CollectionToArray( String[].class, m_weight.keySet() );
+        final List<String> l_active = new LinkedList<>();
+        for ( Map.Entry<String, IWeighting> l_item : m_weight.entrySet() )
+            if ( l_item.getValue().isActive() )
+                l_active.add( l_item.getKey() );
+
+        return CCommon.CollectionToArray( String[].class, l_active );
     }
 
 
     /**
-     * checks if a wieght is active
+     * checks if a weight is active
      *
      * @param p_weight weight name
      * @return bool flag if weight is active
      */
     public boolean isActiveWeight( final String p_weight )
     {
-        return m_weight.containsKey( p_weight );
+        return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
     }
 
 
@@ -429,7 +423,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return weight object or null
      */
-    public Weighting getWeight( final String p_weight )
+    public IWeighting getWeight( final String p_weight )
     {
         return m_weight.get( p_weight );
     }
@@ -438,12 +432,18 @@ public class CGraphHopper extends GraphHopper
     @Override
     public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
     {
-        // method creates on the first call the combined-weight object and returns this every time (like a singleton)
+        // method creates on the first call all weights and store it within the
+        // combined-weight object and returns it like a singleton
         if ( m_weight == null )
         {
-            m_weight = new CCombine( p_encoder );
-            m_weight.put( "Default", super.createWeighting( p_weighting, p_encoder ) );
+            m_weight = new CCombine();
+
+            m_weight.put( "Default", new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
+            m_weight.put( "Traffic Jam", new CTrafficJam( this ) );
+            m_weight.put( "Speed Up", new CSpeedUp( p_encoder ) );
+            m_weight.put( "Forbidden Edge", new CForbiddenEdges() );
         }
+
         return m_weight;
     }
 

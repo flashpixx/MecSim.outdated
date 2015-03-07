@@ -91,6 +91,20 @@
 
         <!-- UI components -->
         <dependency>
+            <groupId>org.prefuse</groupId>
+            <artifactId>prefuse</artifactId>
+            <version>beta-20071021</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>com.github.monkeysintown</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>3.1.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        -->
+        <dependency>
             <groupId>org.metawidget.modules</groupId>
             <artifactId>metawidget-core</artifactId>
             <version>4.1</version>
@@ -165,12 +179,14 @@
 
 
         <!-- algorithms & data structure components -->
+        <!--
         <dependency>
             <groupId>nz.ac.waikato.cms.weka</groupId>
             <artifactId>weka-stable</artifactId>
             <version>3.6.12</version>
             <scope>compile</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

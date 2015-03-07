@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 
-import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
 import java.util.HashSet;
@@ -36,13 +35,17 @@ import java.util.Set;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CForbiddenEdges implements Weighting
+public class CForbiddenEdges implements IWeighting
 {
+
     /**
      * list with edges *
      */
     protected final Set<EdgeIteratorState> m_forbidden = new HashSet<>();
-
+    /**
+     * active flag *
+     */
+    private boolean m_active = false;
 
     /**
      * adds a new edge
@@ -76,5 +79,17 @@ public class CForbiddenEdges implements Weighting
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         return m_forbidden.contains( p_edge ) ? Double.POSITIVE_INFINITY : 0;
+    }
+
+    @Override
+    public boolean isActive()
+    {
+        return m_active;
+    }
+
+    @Override
+    public void setActive( final boolean p_value )
+    {
+        m_active = p_value;
     }
 }

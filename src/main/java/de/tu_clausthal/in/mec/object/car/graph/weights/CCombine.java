@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
-import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
@@ -36,36 +35,13 @@ import java.util.Set;
 /**
  * combination weight, to use different weights in combination
  */
-public class CCombine implements Weighting, Map<String, Weighting>
+public class CCombine implements Weighting, Map<String, IWeighting>
 {
     /**
      * map with weights *
      */
-    protected final Map<String, Weighting> m_weights = new HashMap<>();
-    /**
-     * flag encoder for edge data
-     */
-    protected FlagEncoder m_encoder = null;
+    protected final Map<String, IWeighting> m_weights = new HashMap<>();
 
-
-    /**
-     * ctor
-     */
-    public CCombine( final FlagEncoder p_flagencoder )
-    {
-        m_encoder = p_flagencoder;
-    }
-
-
-    /**
-     * returns the flag encoder
-     *
-     * @return flag encoder
-     */
-    public final FlagEncoder getFlagEncoder()
-    {
-        return m_encoder;
-    }
 
 
     @Override
@@ -75,9 +51,9 @@ public class CCombine implements Weighting, Map<String, Weighting>
             return 0;
 
         double l_min = Double.POSITIVE_INFINITY;
-
-        for ( Weighting l_item : m_weights.values() )
-            l_min = Math.min( l_min, l_item.getMinWeight( p_weight ) );
+        for ( IWeighting l_item : m_weights.values() )
+            if ( l_item.isActive() )
+                l_min = Math.min( l_min, l_item.getMinWeight( p_weight ) );
 
         return l_min;
     }
@@ -89,8 +65,9 @@ public class CCombine implements Weighting, Map<String, Weighting>
             return 0;
 
         double l_max = 0;
-        for ( Weighting l_item : m_weights.values() )
-            l_max += l_item.calcWeight( p_edge, p_reverse );
+        for ( IWeighting l_item : m_weights.values() )
+            if ( l_item.isActive() )
+                l_max += l_item.calcWeight( p_edge, p_reverse );
 
         return l_max;
     }
@@ -120,25 +97,25 @@ public class CCombine implements Weighting, Map<String, Weighting>
     }
 
     @Override
-    public final Weighting get( Object p_key )
+    public final IWeighting get( Object p_key )
     {
         return m_weights.get( p_key );
     }
 
     @Override
-    public final Weighting put( String p_key, Weighting p_value )
+    public final IWeighting put( String p_key, IWeighting p_value )
     {
         return m_weights.put( p_key, p_value );
     }
 
     @Override
-    public final Weighting remove( Object p_key )
+    public final IWeighting remove( Object p_key )
     {
         return m_weights.remove( p_key );
     }
 
     @Override
-    public final void putAll( Map<? extends String, ? extends Weighting> p_map )
+    public final void putAll( Map<? extends String, ? extends IWeighting> p_map )
     {
         m_weights.putAll( p_map );
     }
@@ -156,13 +133,13 @@ public class CCombine implements Weighting, Map<String, Weighting>
     }
 
     @Override
-    public final Collection<Weighting> values()
+    public final Collection<IWeighting> values()
     {
         return m_weights.values();
     }
 
     @Override
-    public final Set<Entry<String, Weighting>> entrySet()
+    public final Set<Entry<String, IWeighting>> entrySet()
     {
         return m_weights.entrySet();
     }

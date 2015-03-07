@@ -29,6 +29,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+
 /**
  * generator interface to define different object generator
  */
@@ -42,7 +43,6 @@ public interface IGenerator extends Serializable
 
     /**
      * Method which defines the Color of the Source in which a special Generator was placed
-     * @return
      */
     public Color getColor();
 

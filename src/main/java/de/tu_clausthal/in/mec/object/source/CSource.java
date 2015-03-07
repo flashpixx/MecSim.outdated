@@ -129,12 +129,6 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
-    {
-        return m_target;
-    }
-
-    @Override
     public final void onDeserializationInitialization()
     {
 
@@ -171,7 +165,8 @@ public class CSource extends IInspector implements ISource, ISerializable
         try
         {
             COSMViewer.getSimulationOSM().repaint();
-        } catch ( Exception l_exception )
+        }
+        catch ( Exception l_exception )
         {
         }
     }
@@ -200,6 +195,12 @@ public class CSource extends IInspector implements ISource, ISerializable
     public Collection<ICar> step( int p_currentstep, ILayer p_layer ) throws Exception
     {
         return this.m_generator.generate();
+    }
+
+    @Override
+    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
+    {
+        return m_target;
     }
 
     @Override
@@ -285,10 +286,6 @@ public class CSource extends IInspector implements ISource, ISerializable
 
     /**
      * Method to Scale a Buffered Image
-     * @param p_src
-     * @param p_width
-     * @param p_height
-     * @return
      */
     private BufferedImage getScaledImage( BufferedImage p_src, int p_width, int p_height )
     {

@@ -120,7 +120,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
 
-    /** returns a graph weight
+    /**
+     * returns a graph weight
      *
      * @param p_weight weight name
      * @return weight object or null

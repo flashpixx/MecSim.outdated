@@ -43,7 +43,6 @@ public class CCombine implements Weighting, Map<String, IWeighting>
     protected final Map<String, IWeighting> m_weights = new HashMap<>();
 
 
-
     @Override
     public final double getMinWeight( final double p_weight )
     {

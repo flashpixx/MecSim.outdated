@@ -49,19 +49,16 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
 
     /**
      * Method to get the actual Color of this Source
-     * @return
      */
     public Color getColor();
 
     /**
      * Method to set the Color of this Source
-     * @param p_color
      */
     public void setColor( Color p_color );
 
     /**
      * Method to get the Generator of an Source (null if there is no Generator)
-     * @return
      */
     public IGenerator getGenerator();
 

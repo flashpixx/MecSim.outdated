@@ -51,7 +51,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Define the Calculation Index (When this Layer should be executes)
-     * @return
      */
     @Override
     public final int getCalculationIndex()
@@ -80,9 +79,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Method to create a Source
-     * @param p_geoPosition
-     * @param p_defaultGenerator
-     * @param p_aslname
      */
     public void createSource( GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname )
     {
@@ -99,7 +95,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Method to Remove a Source
-     * @param p_source
      */
     public void removeSource( ISource p_source )
     {
@@ -115,9 +110,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Method to create a Generator from a specific Source
-     * @param p_source
-     * @param p_selectedGenerator
-     * @param p_aslname
      */
     public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
     {
@@ -131,7 +123,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Method to remove a Generator from a specific Source
-     * @param p_source
      */
     public void removeGenerator( ISource p_source )
     {
@@ -141,7 +132,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Method to create a Destination
-     * @param p_geoPosition
      */
     public void createDestination( GeoPosition p_geoPosition )
     {
@@ -158,8 +148,15 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
+     * Getter for the selected Source
+     */
+    public ISource getSelectedSource()
+    {
+        return m_selectedSource;
+    }
+
+    /**
      * Method to select a Source
-     * @param p_source
      */
     public void setSelectedSource( ISource p_source )
     {
@@ -176,17 +173,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Getter for the selected Source
-     */
-    public ISource getSelectedSource()
-    {
-        return m_selectedSource;
-    }
-
-    /**
      * Check if SOurce is selected
-     * @param p_source
-     * @return
      */
     public boolean isSelectedSource( ISource p_source )
     {

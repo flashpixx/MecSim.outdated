@@ -35,10 +35,11 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 /**
  * Class to generate a Default Car
  */
-public class CDefaultCarGenerator implements  IGenerator
+public class CDefaultCarGenerator implements IGenerator
 {
 
     /**
@@ -46,7 +47,7 @@ public class CDefaultCarGenerator implements  IGenerator
      */
     private static final long serialVersionUID = 1L;
     /**
-     *Position of this Generator
+     * Position of this Generator
      */
     protected transient GeoPosition m_position = null;
 
@@ -99,7 +100,7 @@ public class CDefaultCarGenerator implements  IGenerator
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws java.io.IOException            throws exception on loading the data
+     * @throws java.io.IOException    throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

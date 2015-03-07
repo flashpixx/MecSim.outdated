@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.common;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.*;
 import java.awt.*;
 
 
@@ -52,7 +51,6 @@ public class COperatingSystem
         if ( l_parts.length > 1 )
             m_minor = Integer.parseInt( l_parts[1] );
     }
-
 
 
     /**
@@ -105,9 +103,8 @@ public class COperatingSystem
     /**
      * sets the frame properties depends on the OS
      *
-     * @note independed with reflection api to avoid compiler errors on other OS
      * @param p_frame main frame
-     *
+     * @note independed with reflection api to avoid compiler errors on other OS
      * @see http://moomoohk.github.io/snippets/java_osx.html
      * @see http://www.oracle.com/technetwork/java/javatomac2-138389.html
      * @see http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html

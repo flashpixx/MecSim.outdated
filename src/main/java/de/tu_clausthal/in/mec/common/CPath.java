@@ -212,7 +212,6 @@ public class CPath implements Iterable<CPath>
     }
 
 
-
     /**
      * returns the last part of the path
      *

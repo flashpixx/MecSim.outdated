@@ -28,11 +28,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
+
 /**
  * key listener for JxViewer
  */
-public class COSMKeyListener implements KeyListener{
+public class COSMKeyListener implements KeyListener
+{
 
+    /**
+     * Variable which define the Offset for navigating threw the Map
+     */
+    private static final int m_OFFSET = 10;
     /**
      * Variable which indicates if the STRG Key is pressed
      */
@@ -45,38 +51,34 @@ public class COSMKeyListener implements KeyListener{
      * Variable which indicates if the Alt Key is pressed
      */
     private boolean m_altPressed = false;
-    /**
-     * Variable which define the Offset for navigating threw the Map
-     */
-    private static final int m_OFFSET = 10;
+
     /**
      * Number of Keys which are pressed
-     * @param p_event
      */
 
 
     @Override
-    public void keyTyped(KeyEvent p_event)
+    public void keyTyped( KeyEvent p_event )
     {
 
     }
 
     @Override
-    public void keyPressed(KeyEvent p_event)
+    public void keyPressed( KeyEvent p_event )
     {
         //Set Shift/Alt/STRG Status if the specific Key is pressed
-        if(p_event.getKeyCode() == KeyEvent.VK_SHIFT)
+        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT )
             m_shiftPressed = true;
-        if(p_event.getKeyCode() == KeyEvent.VK_ALT)
+        if ( p_event.getKeyCode() == KeyEvent.VK_ALT )
             m_altPressed = true;
-        if(p_event.getKeyCode() == KeyEvent.VK_CONTROL)
+        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL )
             m_strgPressed = true;
 
         //Check if Arrows are Pressed and Repaint the Map
         int delta_x = 0;
         int delta_y = 0;
 
-        switch (p_event.getKeyCode())
+        switch ( p_event.getKeyCode() )
         {
             case KeyEvent.VK_LEFT:
                 delta_x = -m_OFFSET;
@@ -92,34 +94,33 @@ public class COSMKeyListener implements KeyListener{
                 break;
         }
 
-        if (delta_x != 0 || delta_y != 0)
+        if ( delta_x != 0 || delta_y != 0 )
         {
             final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
             Rectangle bounds = l_viewer.getViewportBounds();
             double x = bounds.getCenterX() + delta_x;
             double y = bounds.getCenterY() + delta_y;
-            l_viewer.setCenter(new Point2D.Double(x, y));
+            l_viewer.setCenter( new Point2D.Double( x, y ) );
             l_viewer.repaint();
         }
 
     }
 
     @Override
-    public void keyReleased(KeyEvent p_event)
+    public void keyReleased( KeyEvent p_event )
     {
         //Update the Key Pressed Status
-        if(p_event.getKeyCode() == KeyEvent.VK_SHIFT)
+        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT )
             m_shiftPressed = false;
-        if(p_event.getKeyCode() == KeyEvent.VK_ALT)
+        if ( p_event.getKeyCode() == KeyEvent.VK_ALT )
             m_altPressed = false;
-        if(p_event.getKeyCode() == KeyEvent.VK_CONTROL)
+        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL )
             m_strgPressed = false;
 
     }
 
     /**
      * Get Strg Pressed Status
-     * @return
      */
     public boolean isStrgPressed()
     {
@@ -128,7 +129,6 @@ public class COSMKeyListener implements KeyListener{
 
     /**
      * Get ShiftPressed Status
-     * @return
      */
     public boolean isShiftPressed()
     {
@@ -137,7 +137,6 @@ public class COSMKeyListener implements KeyListener{
 
     /**
      * Get AltPressed Status
-     * @return
      */
     public boolean isAltPressed()
     {
@@ -146,25 +145,24 @@ public class COSMKeyListener implements KeyListener{
 
     /**
      * Get Key Pressed Status
-     * @return
      */
-    public boolean isAnyKeyPressed() {
+    public boolean isAnyKeyPressed()
+    {
         return m_shiftPressed || m_strgPressed || m_altPressed;
     }
 
     /**
      * Get the Number of Keys which are pressed
-     * @return
      */
     public int getKeyPressedCount()
     {
         int l_keyPressedCount = 0;
 
-        if(m_altPressed)
+        if ( m_altPressed )
             l_keyPressedCount++;
-        if(m_shiftPressed)
+        if ( m_shiftPressed )
             l_keyPressedCount++;
-        if(m_strgPressed)
+        if ( m_strgPressed )
             l_keyPressedCount++;
 
 

@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.source.generator;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
-import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.io.FileUtils;
@@ -42,10 +41,11 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 /**
  * Class to Generate Jason Cars
  */
-public class CJasonCarGenerator extends  CDefaultCarGenerator
+public class CJasonCarGenerator extends CDefaultCarGenerator
 {
     /**
      * Name of the ASL File
@@ -54,8 +54,6 @@ public class CJasonCarGenerator extends  CDefaultCarGenerator
 
     /**
      * CTOR
-     * @param p_position
-     * @param p_aslName
      */
     public CJasonCarGenerator( final GeoPosition p_position, final String p_aslName )
     {
@@ -96,7 +94,7 @@ public class CJasonCarGenerator extends  CDefaultCarGenerator
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws java.io.IOException            throws exception on reading
+     * @throws java.io.IOException    throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

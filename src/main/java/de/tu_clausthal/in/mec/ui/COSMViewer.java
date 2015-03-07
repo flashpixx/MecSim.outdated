@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -113,7 +112,6 @@ public class COSMViewer extends JXMapViewer
 
     /**
      * Getter Mouse Listener
-     * @return
      */
     public COSMMouseListener getMouseListener()
     {

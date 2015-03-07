@@ -115,13 +115,13 @@ public class CAgent<T> implements IVoidAgent
     {
         this( null, p_asl, null );
     }
-    
+
 
     /**
      * ctor
      *
      * @param p_namepath name of the agent (full path)
-     * @param p_asl  agent ASL file
+     * @param p_asl      agent ASL file
      * @throws JasonException throws an Jason exception
      */
     public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
@@ -134,8 +134,8 @@ public class CAgent<T> implements IVoidAgent
      * ctor
      *
      * @param p_namepath name of the agent (full path)
-     * @param p_asl  agent ASL file
-     * @param p_bind object that should be bind with the agent
+     * @param p_asl      agent ASL file
+     * @param p_bind     object that should be bind with the agent
      * @throws JasonException throws an Jason exception
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException

@@ -142,12 +142,12 @@ public class CTreeNode<T>
     protected final CTreeNode<T> traverseto( final CTreeNode<T> p_node, final CPath p_path, final int p_index )
     {
         if ( p_index < p_path.size() )
-            if ( m_childs.containsKey( p_path.get( p_index ) ) )
-                return this.traverseto( m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
+            if ( p_node.m_childs.containsKey( p_path.get( p_index ) ) )
+                return p_node.traverseto( p_node.m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
             else
-                return this.traverseto( new CTreeNode<T>( p_path.get( p_index ), p_node ), p_path, p_index + 1 );
+                return p_node.traverseto( new CTreeNode<T>( p_path.get( p_index ), p_node ), p_path, p_index + 1 );
 
-        return this;
+        return p_node;
     }
 
 
@@ -352,15 +352,10 @@ public class CTreeNode<T>
      */
     protected CTreeNode<T> getChildNode( final CTreeNode<T> p_node, final CPath p_path, final int p_index )
     {
-        if ( p_index >= p_path.size() )
-            return this;
+        if ( ( p_node == null ) || ( p_index >= p_path.size() ) )
+            return p_node;
 
-        System.out.println( "--> " + p_path.get( p_index ) );
-
-        if ( m_childs.containsKey( p_path.get( p_index ) ) )
-            return this.getChildNode( m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
-
-        return null;
+        return p_node.getChildNode( p_node.m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
     }
 
 

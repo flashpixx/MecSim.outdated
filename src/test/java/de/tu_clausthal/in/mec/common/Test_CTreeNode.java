@@ -27,6 +27,8 @@ package de.tu_clausthal.in.mec.common;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -59,6 +61,8 @@ public class Test_CTreeNode
         l_root.traverseto( new CPath( "sub/subsub" ) );
 
         assertTrue( l_root.pathexist( new CPath( "sub/subsub" ) ) );
+        assertNotNull( l_root.getChildNode( new CPath( "sub/subsub" ) ) );
+        assertNull( l_root.getChildNode( new CPath( "subx/subsub" ) ) );
     }
 
 }

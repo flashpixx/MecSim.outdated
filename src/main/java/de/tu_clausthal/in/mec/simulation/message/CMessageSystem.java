@@ -227,7 +227,7 @@ public class CMessageSystem implements IVoidSteppable
         /**
          * is called on a message push
          */
-        public void onPushMessage( final CPath p_path, final IMessage<?> p_message );
+        public void onPushMessage( final CPath p_pathreceiver, final IMessage<?> p_message );
 
     }
 }

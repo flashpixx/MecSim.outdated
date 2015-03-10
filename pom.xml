@@ -90,12 +90,6 @@
     <dependencies>
 
         <!-- UI components -->
-        <dependency>
-            <groupId>org.prefuse</groupId>
-            <artifactId>prefuse</artifactId>
-            <version>beta-20071021</version>
-            <scope>compile</scope>
-        </dependency>
         <!--
         <dependency>
             <groupId>com.github.monkeysintown</groupId>

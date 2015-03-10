@@ -23,56 +23,42 @@
 
 package de.tu_clausthal.in.mec.common;
 
-import org.apache.commons.lang3.StringUtils;
+
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
 /**
- * test for CPath class
+ * test for CTreeNode class
  */
-public class Test_CPath
+public class Test_CTreeNode
 {
 
-
     /**
-     * test-case empty path
+     * test-case for root node
      */
     @Test
     public void testEmpty()
     {
-        final CPath l_path = new CPath();
+        final CTreeNode<String> l_node = new CTreeNode<>( "root" );
 
-        assertTrue( l_path.isEmpty() );
-        assertEquals( l_path.size(), 0 );
+        assertTrue( l_node.isDataNull() );
+        assertFalse( l_node.hasParent() );
     }
 
 
     /**
-     * test-case check path iterator
+     * test-case for path-node traversing
      */
     @Test
-    public void testIterator()
+    public void testPathNodeTraversing()
     {
-        final ArrayList<String> l_part = new ArrayList()
-        {{
-                add( "a" );
-                add( "b" );
-                add( "c" );
-            }};
-        final String l_fullpath = StringUtils.join( l_part, "/" );
+        final CTreeNode<String> l_root = new CTreeNode<>( "root" );
+        l_root.traverseto( new CPath( "sub/subsub" ) );
 
-
-        final CPath l_path = new CPath( l_fullpath );
-        assertEquals( l_part.size(), l_path.size() );
-        assertEquals( l_path, l_fullpath );
-
-        for ( int i = 0; i < l_part.size(); i++ )
-            assertEquals( l_part.get( i ), l_path.get( i ) );
+        assertTrue( l_root.pathexist( new CPath( "sub/subsub" ) ) );
     }
 
 }

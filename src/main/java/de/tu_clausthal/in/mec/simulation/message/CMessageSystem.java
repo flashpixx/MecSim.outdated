@@ -114,7 +114,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path, false );
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
         l_node.getData().getLeft().remove( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "unregistered", p_receiver, p_path ) );

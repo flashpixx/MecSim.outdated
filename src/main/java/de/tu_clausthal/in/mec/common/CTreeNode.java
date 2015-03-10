@@ -35,6 +35,7 @@ import java.util.Set;
 
 /**
  * tree structure
+ * @todo fix incompelete unit test
  */
 public class CTreeNode<T>
 {
@@ -89,6 +90,16 @@ public class CTreeNode<T>
 
 
     /**
+     * check if a parent exists
+     *
+     * @return bool for parent exists
+     */
+    public final boolean hasParent()
+    {
+        return m_parent != null;
+    }
+
+    /**
      * checks the existing of a path
      *
      * @param p_path path
@@ -112,35 +123,31 @@ public class CTreeNode<T>
     /**
      * returns the node
      *
-     * @param p_path path of the node under the current
+     * @param p_path path of the node
      * @return node
      */
     public final CTreeNode<T> traverseto( final CPath p_path )
     {
-        return this.traverseto( p_path, true );
+        return this.traverseto( this, p_path, 0 );
     }
 
     /**
      * returns the node
      *
-     * @param p_path   path of the node under the current
-     * @param p_create creates non-existing nodes
+     * @param p_node current node
+     * @param p_path path
+     * @param p_index current path index
      * @return node
      */
-    public final CTreeNode<T> traverseto( final CPath p_path, final boolean p_create )
+    protected final CTreeNode<T> traverseto( final CTreeNode<T> p_node, final CPath p_path, final int p_index )
     {
-        CTreeNode<T> l_node = this;
-        for ( CPath l_item : p_path )
-        {
-            if ( !l_node.m_childs.containsKey( l_item.getSuffix() ) )
-                if ( !p_create )
-                    return l_node;
-                else
-                    l_node.m_childs.put( l_item.getSuffix(), new CTreeNode<>( l_item.getSuffix() ) );
+        if ( p_index < p_path.size() )
+            if ( m_childs.containsKey( p_path.get( p_index ) ) )
+                return this.traverseto( m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
+            else
+                return this.traverseto( new CTreeNode<T>( p_path.get( p_index ), p_node ), p_path, p_index + 1 );
 
-            l_node = l_node.m_childs.get( l_item.getSuffix() );
-        }
-        return l_node;
+        return this;
     }
 
 
@@ -159,27 +166,26 @@ public class CTreeNode<T>
     /**
      * adds all childs of the path to the current node
      *
-     * @param p_path path
+     * @param p_name name of the child
      */
-    public final void addChilds( final CPath p_path )
+    public final CTreeNode<T> addChild( final String p_name )
     {
-        CTreeNode<T> l_sub = null;
-        for ( CPath l_item : p_path )
-            l_sub = new CTreeNode<T>( l_item.getSuffix(), l_sub );
+        if ( m_childs.containsKey( p_name ) )
+            return m_childs.get( p_name );
 
-        m_childs.put( p_path.get( 0 ), l_sub );
+        return new CTreeNode<T>( p_name, this );
     }
 
 
     /**
      * adds a list of path to the current node
      *
-     * @param p_path collections of path
+     * @param p_names collections of names
      */
-    public final void addChilds( final Collection<CPath> p_path )
+    public final void addChild( final Collection<String> p_names )
     {
-        for ( CPath l_path : p_path )
-            this.addChilds( l_path );
+        for ( String l_item : p_names )
+            this.addChild( l_item );
     }
 
     /**
@@ -298,10 +304,9 @@ public class CTreeNode<T>
         final Set<CPath> l_list = new HashSet<>();
 
         final CPath l_path = p_withroot ? new CPath( m_id ) : new CPath();
-        this.getSubTreeRecursive( l_path, this, l_list );
+        this.getSubTree( l_path, this, l_list );
 
         return l_list;
-
     }
 
     /**
@@ -311,7 +316,7 @@ public class CTreeNode<T>
      * @param p_node start node
      * @param p_set  return set
      */
-    protected final void getSubTreeRecursive( final CPath p_path, final CTreeNode<T> p_node, final Set<CPath> p_set )
+    protected final void getSubTree( final CPath p_path, final CTreeNode<T> p_node, final Set<CPath> p_set )
     {
         if ( !p_path.isEmpty() )
             p_set.add( p_path );
@@ -320,9 +325,44 @@ public class CTreeNode<T>
         {
             final CPath l_path = new CPath( p_path );
             l_path.pushback( l_item.getKey() );
-            l_item.getValue().getSubTreeRecursive( l_path, l_item.getValue(), p_set );
+            l_item.getValue().getSubTree( l_path, l_item.getValue(), p_set );
         }
     }
+
+
+    /**
+     * returns the node which is stored under the path
+     *
+     * @param p_path path
+     * @return node or null
+     */
+    public CTreeNode<T> getChildNode( final CPath p_path )
+    {
+        return this.getChildNode( this, p_path, 0 );
+    }
+
+
+    /**
+     * traversing for a node access
+     *
+     * @param p_node  node
+     * @param p_path  path
+     * @param p_index current index
+     * @return node or null
+     */
+    protected CTreeNode<T> getChildNode( final CTreeNode<T> p_node, final CPath p_path, final int p_index )
+    {
+        if ( p_index >= p_path.size() )
+            return this;
+
+        System.out.println( "--> " + p_path.get( p_index ) );
+
+        if ( m_childs.containsKey( p_path.get( p_index ) ) )
+            return this.getChildNode( m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
+
+        return null;
+    }
+
 
 
     /**
@@ -346,10 +386,24 @@ public class CTreeNode<T>
     {
         final CPath l_path = new CPath( p_node.m_id );
 
-        if ( p_node.m_parent != null )
+        if ( p_node.hasParent())
             l_path.pushfront( this.traverseUpToRoot( p_node.m_parent ) );
 
         return l_path;
+    }
+
+
+    /**
+     * in-order traversing
+     *
+     * @return tree structure
+     */
+    public String toString()
+    {
+        String l_return = this.getFQN().toString();
+        for ( CTreeNode<T> l_item : m_childs.values() )
+            l_return += "\n" + l_item;
+        return l_return;
     }
 
 }

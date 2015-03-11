@@ -27,11 +27,12 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import fi.iki.elonen.NanoHTTPD;
-import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLConnection;
 
 
 /**
@@ -81,7 +82,7 @@ public class CWebUI extends JPanel
          * @param p_uri URI
          * @return file or null
          */
-        protected File getRootFile( final String p_uri )
+        protected final File getRootFile( final String p_uri )
         {
             try
             {
@@ -89,29 +90,35 @@ public class CWebUI extends JPanel
             }
             catch ( NullPointerException l_exception )
             {
-
+                CLogger.error( l_exception );
             }
             return null;
         }
 
 
         @Override
-        public Response serve( IHTTPSession p_session )
+        public final Response serve( final IHTTPSession p_session )
         {
-            try
-            {
-                final File l_file = p_session.getUri().equals( "/" ) ? this.getRootFile( "index.htm" ) : this.getRootFile( p_session.getUri() );
-                if ( l_file != null )
-                    return new Response( FileUtils.readFileToString(l_file) );
-            }
-            catch ( IOException l_exception )
-            {
-                CLogger.error( l_exception );
-            }
+            // check default document
+            final File l_file = p_session.getUri().equals( "/" ) ? this.getRootFile( "index.htm" ) : this.getRootFile( p_session.getUri() );
+            if ( l_file != null )
+                try (
+                        // file data is read by an input stream
+                        FileInputStream l_stream = new FileInputStream( l_file );
+                )
+                {
+                    // mime-type is read by the file extension
+                    return new Response( Response.Status.OK, URLConnection.guessContentTypeFromName( l_file.getName() ), new FileInputStream( l_file ) );
+                }
+                catch ( IOException l_exception )
+                {
+                    CLogger.error( l_exception );
+                    return new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
+                }
 
-            return super.serve( p_session );
+
+            return new Response( Response.Status.NOT_FOUND, "text/plain", "ERROR 404\nfile [ " + p_session.getUri() + " ] not found" );
         }
     }
-
 
 }

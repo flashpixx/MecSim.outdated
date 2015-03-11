@@ -218,6 +218,11 @@ public class CConfiguration
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
         {
+            if (l_tmp.UIBindPort < 1)
+            {
+                CLogger.warn( CCommon.getResourceString( this, "uibindportdefault" ) );
+                l_tmp.UIBindPort = m_data.UIBindPort;
+            }
             if ( l_tmp.ViewPoint == null )
             {
                 CLogger.warn( CCommon.getResourceString( this, "viewpointdefault" ) );
@@ -363,9 +368,13 @@ public class CConfiguration
     public class Data
     {
         /**
+         * bind port of the web UI
+         */
+        private int UIBindPort = 9876;
+        /**
          * cell size for sampling
          */
-        public int CellSampling = 2;
+        private int CellSampling = 2;
         /**
          * flag to reset the configuration
          */
@@ -432,8 +441,22 @@ public class CConfiguration
         }
 
 
-        @UiLabel("Reset configuration")
+        @UiLabel("UI Bind Port")
         @UiComesAfter("language")
+        @Min(1024)
+        public int getUibindport()
+        {
+            return UIBindPort;
+        }
+
+        public void setUibindport( int p_value )
+        {
+            UIBindPort = Math.max(1024, Math.abs( p_value ));
+        }
+
+
+        @UiLabel("Reset configuration")
+        @UiComesAfter("uibindport")
         public boolean getRestconfig()
         {
             return resetconfig;

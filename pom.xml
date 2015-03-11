@@ -90,14 +90,6 @@
     <dependencies>
 
         <!-- UI components -->
-        <!--
-        <dependency>
-            <groupId>com.github.monkeysintown</groupId>
-            <artifactId>jgraphx</artifactId>
-            <version>3.1.2.1</version>
-            <scope>compile</scope>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.metawidget.modules</groupId>
             <artifactId>metawidget-core</artifactId>
@@ -147,21 +139,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jxmapviewer</groupId>
             <artifactId>jxmapviewer2</artifactId>
             <version>2.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fifesoft</groupId>
-            <artifactId>rsyntaxtextarea</artifactId>
-            <version>r239</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -244,6 +224,12 @@
         </dependency>
 
         <!-- addons -->
+        <dependency>
+            <groupId>com.nanohttpd</groupId>
+            <artifactId>nanohttpd-webserver</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

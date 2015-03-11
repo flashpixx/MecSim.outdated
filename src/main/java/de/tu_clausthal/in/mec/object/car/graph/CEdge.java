@@ -102,7 +102,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     protected final void sampling( final EdgeIteratorState p_edgestate )
     {
         final ArrayList<N> l_initlist = new ArrayList<>();
-        for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().CellSampling ); i++ )
+        for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().getCellsampling()); i++ )
             l_initlist.add( null );
         m_cells = (N[]) l_initlist.toArray();
         m_additionalinformation = (T[]) l_initlist.toArray();

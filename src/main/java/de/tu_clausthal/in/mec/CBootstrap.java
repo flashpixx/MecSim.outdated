@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.analysis.CCarCount;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
@@ -34,8 +33,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.CSourceEditor;
-import de.tu_clausthal.in.mec.ui.inspector.CInspector;
+import de.tu_clausthal.in.mec.ui.CWebUI;
 
 
 /**
@@ -61,12 +59,11 @@ public class CBootstrap
      */
     public static void afterFrameInit( final CFrame p_frame )
     {
-        //CSimulation.getInstance().getWorld().put( "Count Cars", new CCarCount( p_frame ) );
-
         ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
 
         //p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.RIGHT, 0.2 );
-        p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.LEFT, 0.8 );
+        p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.BOTTOM, 0.7 );
+        p_frame.addWidget( "Main", new CWebUI(), CFrame.Position.TOP, 0.3);
         //p_frame.addWidget( "Editor", new CSourceEditor() );
         //p_frame.addWidget( "Console", new CConsole() );
     }

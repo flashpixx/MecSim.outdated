@@ -141,7 +141,7 @@ public class CHelpViewer extends JDialog implements ActionListener
      */
     protected final URL getFileURL( final String p_file )
     {
-        return this.getClass().getClassLoader().getResource( "documentation" + File.separatorChar + this.getLanguage() + File.separator + p_file );
+        return this.getClass().getClassLoader().getResource( "documentation" + File.separator + this.getLanguage() + File.separator + p_file );
     }
 
     /**

@@ -32,7 +32,6 @@ import org.apache.commons.io.FileUtils;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 
 /**
@@ -40,24 +39,29 @@ import java.net.URL;
  */
 public class CWebUI extends JPanel
 {
-
+    /**
+     * HTTP server to handle websockets *
+     */
     protected CServer m_server = new CServer();
+    /** browser component for viewing **/
     protected CBrowser m_browser = new CBrowser( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
 
 
-
+    /** ctor - adds the browser **/
     public CWebUI()
     {
         this.add( m_browser );
     }
 
 
-
+    /** private class for the HTTP server **/
     private class CServer extends NanoHTTPD
     {
-        protected final File c_home = new File( this.getClass().getClassLoader().getResource( "ui" + File.separator + "index.htm" ).getPath() );
 
 
+        /** ctor - starts the HTTP server
+         * @note webservice is bind only to "localhost" with the configuration port
+         */
         public CServer()
         {
             super( "localhost", CConfiguration.getInstance().get().getUibindport() );
@@ -71,13 +75,34 @@ public class CWebUI extends JPanel
             }
         }
 
+        /**
+         * gets a file from the root directory
+         *
+         * @param p_uri URI
+         * @return file or null
+         */
+        protected File getRootFile( final String p_uri )
+        {
+            try
+            {
+                return new File( this.getClass().getClassLoader().getResource( "ui" + ( p_uri.startsWith( "/" ) ? p_uri : File.separator + p_uri ) ).getPath() );
+            }
+            catch ( NullPointerException l_exception )
+            {
+
+            }
+            return null;
+        }
+
 
         @Override
         public Response serve( IHTTPSession p_session )
         {
             try
             {
-                return new Response( FileUtils.readFileToString( c_home ) );
+                final File l_file = p_session.getUri().equals( "/" ) ? this.getRootFile( "index.htm" ) : this.getRootFile( p_session.getUri() );
+                if ( l_file != null )
+                    return new Response( FileUtils.readFileToString(l_file) );
             }
             catch ( IOException l_exception )
             {

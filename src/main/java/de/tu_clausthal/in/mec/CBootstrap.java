@@ -61,14 +61,14 @@ public class CBootstrap
      */
     public static void afterFrameInit( final CFrame p_frame )
     {
-        CSimulation.getInstance().getWorld().put( "Count Cars", new CCarCount( p_frame ) );
+        //CSimulation.getInstance().getWorld().put( "Count Cars", new CCarCount( p_frame ) );
 
         ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
 
-        p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.RIGHT, 0.2 );
+        //p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.RIGHT, 0.2 );
         p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.LEFT, 0.8 );
-        p_frame.addWidget( "Editor", new CSourceEditor() );
-        p_frame.addWidget( "Console", new CConsole() );
+        //p_frame.addWidget( "Editor", new CSourceEditor() );
+        //p_frame.addWidget( "Console", new CConsole() );
     }
 
 

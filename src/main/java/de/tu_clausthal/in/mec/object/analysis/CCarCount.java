@@ -39,6 +39,7 @@ import java.util.Map;
 
 /**
  * car count statistic
+ * @deprecated
  */
 public class CCarCount extends IEvaluateLayer implements ISerializable
 {

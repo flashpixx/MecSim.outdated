@@ -36,6 +36,7 @@ import java.util.Set;
 
 /**
  * table model to use the inspect object call
+ * @deprecated
  */
 public class CInspectorModel implements TableModel
 {

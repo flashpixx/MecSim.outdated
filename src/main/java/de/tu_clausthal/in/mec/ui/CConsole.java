@@ -42,6 +42,7 @@ import java.io.PrintStream;
  * text console to show log messages within the UI
  *
  * @note log messages can be written with System.out or System.err
+ * @deprecated must changed to Json structure
  */
 public class CConsole extends JPanel
 {

@@ -53,6 +53,7 @@ import java.util.Map;
 
 /**
  * class for create the menubar
+ * @deprecated
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {

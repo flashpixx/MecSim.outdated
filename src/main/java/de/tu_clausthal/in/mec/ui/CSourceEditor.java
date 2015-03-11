@@ -52,6 +52,7 @@ import java.util.Set;
  *
  * @see http://docs.oracle.com/javase/tutorial/uiswing/components/tabbedpane.html
  * @see https://github.com/bobbylight/RSyntaxTextArea
+ * @deprecated
  */
 public class CSourceEditor extends JTabbedPane implements ActionListener
 {

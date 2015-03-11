@@ -88,7 +88,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
         if ( l_node.isDataNull() )
             l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
         l_node.getData().getLeft().add( p_receiver );
@@ -108,13 +108,13 @@ public class CMessageSystem implements IVoidSteppable
      */
     public final synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
     {
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathexist( p_path ) ) )
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathExist( p_path ) ) )
         {
             CLogger.error( CCommon.getResourceString( this, "unregister", p_receiver, p_path ) );
             return;
         }
 
-        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.traverseto( p_path );
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
         l_node.getData().getLeft().remove( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "unregistered", p_receiver, p_path ) );
@@ -135,7 +135,7 @@ public class CMessageSystem implements IVoidSteppable
         if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
             return;
 
-        if ( !m_root.pathexist( p_path ) )
+        if ( !m_root.pathExist( p_path ) )
         {
             CLogger.error( CCommon.getResourceString( this, "messagefail", p_message.getData(), p_path ) );
             return;
@@ -154,7 +154,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.traverseto( p_path ).getSubData() )
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_path ).getTreeData() )
         {
             // if item equal null skip
             if ( l_item == null )
@@ -171,7 +171,7 @@ public class CMessageSystem implements IVoidSteppable
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getSubData( false ) )
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getTreeData( false ) )
         {
             // data element within the tree can be used null values, so this items will be skipped
             // the item is also skipped, if there does not exists messages

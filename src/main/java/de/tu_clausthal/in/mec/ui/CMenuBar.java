@@ -68,7 +68,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * help dialog
      */
-    protected CHelpViewer m_help = new CHelpViewer( CSimulation.getInstance().getUI() );
+    //protected CHelpViewer m_help = new CHelpViewer( CSimulation.getInstance().getUI() );
 
 
     /**
@@ -322,7 +322,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             }
             if ( "File/Help".equals( l_actionpath.toString() ) )
             {
-                m_help.setVisible( true );
+                //m_help.setVisible( true );
                 return;
             }
             if ( "File/About".equals( l_actionpath.toString() ) )

@@ -73,14 +73,16 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     }
 
     @Override
-    public final Collection<ICar> generate()
+    public final Collection<ICar> generate(int p_currentStep)
     {
         final Collection<ICar> l_sources = new HashSet<>();
 
-        int l_numberOfCars = m_settings .getSample();
+        if(p_currentStep % m_restriction == 0){
+            int l_numberOfCars = m_settings .getSample();
 
-        for ( int i = 0; i < l_numberOfCars; i++ )
-            l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
+            for ( int i = 0; i < l_numberOfCars; i++ )
+                l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
+        }
 
         return l_sources;
     }

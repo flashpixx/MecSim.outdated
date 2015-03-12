@@ -44,7 +44,7 @@ public interface IGenerator extends Serializable
     /**
      * generate objects
      */
-    Collection<ICar> generate();
+    Collection<ICar> generate(int p_currentStep);
 
     /**
      * Getter for the Generator-Settings

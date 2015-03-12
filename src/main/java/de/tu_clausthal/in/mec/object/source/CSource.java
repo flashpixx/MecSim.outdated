@@ -194,7 +194,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        return this.m_generator.generate();
+        return this.m_generator.generate(p_currentstep);
     }
 
     @Override

@@ -54,6 +54,10 @@ public class CDefaultCarGenerator implements IGenerator
      * Member Variable which handles the Settings of a Generator
      */
     protected CGeneratorSettings m_settings = new CGeneratorSettings();
+    /**
+     * Generating Cars in every Step is to much so here is a restriction variable
+     */
+    protected final int m_restriction = 15;
 
 
     /**
@@ -72,14 +76,16 @@ public class CDefaultCarGenerator implements IGenerator
     }
 
     @Override
-    public Collection<ICar> generate()
+    public Collection<ICar> generate(int p_currentStep)
     {
         final Collection<ICar> l_sources = new HashSet<>();
 
-        int l_numberOfCars = m_settings.getSample();
+        if(p_currentStep % m_restriction == 0) {
+            int l_numberOfCars = m_settings.getSample();
 
-        for ( int i = 0; i < l_numberOfCars; i++ )
-            l_sources.add( new CDefaultCar( m_position ) );
+            for (int i = 0; i < l_numberOfCars; i++)
+                l_sources.add(new CDefaultCar(m_position));
+            }
 
         return l_sources;
     }

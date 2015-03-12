@@ -66,6 +66,10 @@ public class CDefaultCarGenerator implements IGenerator
     protected transient int m_NumberCarsInStep = 1;
 
 
+    /**
+     * CTOR
+     * @param p_position
+     */
     public CDefaultCarGenerator( GeoPosition p_position )
     {
         this.m_position = p_position;

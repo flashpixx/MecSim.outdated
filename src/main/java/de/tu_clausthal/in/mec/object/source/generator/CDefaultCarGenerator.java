@@ -50,20 +50,10 @@ public class CDefaultCarGenerator implements IGenerator
      * Position of this Generator
      */
     protected transient GeoPosition m_position = null;
-
-    //Will be refactored in a few commits  (changed to a config class)
     /**
-     * mean value of the distribution
+     * Member Variable which handles the Settings of a Generator
      */
-    protected transient double m_mean = 4;
-    /**
-     * random interface
-     */
-    protected transient ExponentialDistribution m_random = new ExponentialDistribution( 3 );
-    /**
-     * integer values how many cars are generated in a step
-     */
-    protected transient int m_NumberCarsInStep = 1;
+    protected CGeneratorSettings m_settings = new CGeneratorSettings();
 
 
     /**
@@ -76,12 +66,6 @@ public class CDefaultCarGenerator implements IGenerator
     }
 
     @Override
-    public String getName()
-    {
-        return "Default Car Generator";
-    }
-
-    @Override
     public Color getColor()
     {
         return Color.CYAN;
@@ -91,13 +75,18 @@ public class CDefaultCarGenerator implements IGenerator
     public Collection<ICar> generate()
     {
         final Collection<ICar> l_sources = new HashSet<>();
-        if ( m_random.sample() < m_mean )
-            return l_sources;
 
-        for ( int i = 0; i < m_NumberCarsInStep; i++ )
+        int l_numberOfCars = m_settings.getSample();
+
+        for ( int i = 0; i < l_numberOfCars; i++ )
             l_sources.add( new CDefaultCar( m_position ) );
 
         return l_sources;
+    }
+
+    @Override
+    public CGeneratorSettings getSettings() {
+        return m_settings;
     }
 
     /**
@@ -112,11 +101,6 @@ public class CDefaultCarGenerator implements IGenerator
         p_stream.defaultReadObject();
 
         m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
-
-        //Will be refactored in a few commits (changed to a config class)
-        m_mean = 4;
-        m_random = new ExponentialDistribution( 3 );
-        m_NumberCarsInStep = 1;
     }
 
     /**

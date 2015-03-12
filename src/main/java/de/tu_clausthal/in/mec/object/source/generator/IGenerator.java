@@ -37,11 +37,6 @@ public interface IGenerator extends Serializable
 {
 
     /**
-     * generator name
-     */
-    public String getName();
-
-    /**
      * Method which defines the Color of the Source in which a special Generator was placed
      */
     public Color getColor();
@@ -50,5 +45,10 @@ public interface IGenerator extends Serializable
      * generate objects
      */
     Collection<ICar> generate();
+
+    /**
+     * Getter for the Generator-Settings
+     */
+    public CGeneratorSettings getSettings();
 
 }

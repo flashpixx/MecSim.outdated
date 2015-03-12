@@ -52,6 +52,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
      */
     private String m_aslName = null;
 
+
     /**
      * CTOR
      */
@@ -66,12 +67,6 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     }
 
     @Override
-    public final String getName()
-    {
-        return "Default Car Generator";
-    }
-
-    @Override
     public final Color getColor()
     {
         return Color.RED;
@@ -81,10 +76,10 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     public final Collection<ICar> generate()
     {
         final Collection<ICar> l_sources = new HashSet<>();
-        if ( m_random.sample() < m_mean )
-            return l_sources;
 
-        for ( int i = 0; i < m_NumberCarsInStep; i++ )
+        int l_numberOfCars = m_settings .getSample();
+
+        for ( int i = 0; i < l_numberOfCars; i++ )
             l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
 
         return l_sources;

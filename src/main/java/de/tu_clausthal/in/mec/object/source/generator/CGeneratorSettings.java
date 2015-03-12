@@ -33,11 +33,8 @@ public class CGeneratorSettings {
     /**
      * Member Variable which holds the specific Distribution which defines how many Cars should be processed
      */
-    private AbstractRealDistribution m_distribution = new ExponentialDistribution(3);
-    /**
-     * Member Variable to restrict the Number of Cars which should be generated
-     */
-    private double m_default = 4;
+    private AbstractRealDistribution m_distribution = new UniformRealDistribution(0, 10);
+
 
     /**
      * Set a Constant Distribution

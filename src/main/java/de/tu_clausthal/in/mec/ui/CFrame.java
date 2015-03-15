@@ -134,13 +134,12 @@ public class CFrame extends JFrame
     private void createDockable( final String p_title, final Component p_panel, final CLocation p_location )
     {
         final DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
-        l_dock.setTitleText( p_title );
-        l_dock.setCloseable( false );
-        l_dock.add( p_panel );
-        l_dock.setLocation( p_location );
-        m_control.addDockable( l_dock );
-        l_dock.setVisible( true );
         m_widgets.put( p_title, p_panel );
+        m_control.addDockable( l_dock );
+        l_dock.setLocation( p_location );
+        l_dock.setVisible( true );
+        l_dock.setCloseable( false );
+        l_dock.setTitleText( p_title );
     }
 
     /**

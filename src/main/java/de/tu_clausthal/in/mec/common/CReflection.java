@@ -51,7 +51,7 @@ public class CReflection
      * @param p_field fieldname
      * @return getter / setter handle object
      */
-    public static CGetSet getClassField( Class<?> p_class, String p_field ) throws IllegalArgumentException
+    public static CGetSet getClassField( final Class<?> p_class, final String p_field ) throws IllegalArgumentException
     {
         Field l_field = null;
         for ( Class<?> l_class = p_class; ( l_field == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
@@ -87,10 +87,11 @@ public class CReflection
      * @param p_class class
      * @return map with field name and getter / setter handle
      */
-    public static Map<String, CGetSet> getClassFields( Class<?> p_class )
+    public static Map<String, CGetSet> getClassFields( final Class<?> p_class )
     {
         return getClassFields( p_class, null );
     }
+
 
     /**
      * returns filtered fields of a class and the super classes
@@ -99,7 +100,7 @@ public class CReflection
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
      */
-    public static Map<String, CGetSet> getClassFields( Class<?> p_class, IFieldFilter p_filter )
+    public static Map<String, CGetSet> getClassFields( final Class<?> p_class, final IFieldFilter p_filter )
     {
         Map<String, CGetSet> l_fields = new HashMap<>();
         for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
@@ -121,6 +122,7 @@ public class CReflection
         return l_fields;
     }
 
+
     /**
      * returns a void-method from a class
      *
@@ -128,10 +130,11 @@ public class CReflection
      * @param p_method methodname
      * @return method
      */
-    public static CMethod getClassMethod( Class<?> p_class, String p_method ) throws IllegalArgumentException, IllegalAccessException
+    public static CMethod getClassMethod( final Class<?> p_class, final String p_method ) throws IllegalArgumentException, IllegalAccessException
     {
         return getClassMethod( p_class, p_method, null );
     }
+
 
     /**
      * returns a void-method from a class
@@ -142,7 +145,7 @@ public class CReflection
      *                    Integer.TYPE};
      * @return method
      */
-    public static CMethod getClassMethod( Class<?> p_class, String p_method, Class<?>[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
+    public static CMethod getClassMethod( final Class<?> p_class, final String p_method, final Class<?>[] p_parameter ) throws IllegalArgumentException, IllegalAccessException
     {
         Method l_method = null;
         for ( Class<?> l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )
@@ -161,6 +164,37 @@ public class CReflection
         return new CMethod( l_method );
     }
 
+
+    /**
+     * returns filtered methods of a class and the super classes
+     *
+     * @param p_class  class
+     * @param p_filter filtering object
+     * @return map with method name
+     */
+    public static Map<String, CMethod> getClassMethods( final Class<?> p_class, final IMethodFilter p_filter )
+    {
+        Map<String, CMethod> l_methods = new HashMap<>();
+        for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
+            for ( Method l_method : l_class.getMethods() )
+            {
+                l_method.setAccessible( true );
+                if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) )
+                    continue;
+
+                try
+                {
+                    l_methods.put( l_method.getName(), new CMethod( l_method ) );
+                }
+                catch ( IllegalAccessException l_exception )
+                {
+                    CLogger.error( l_exception );
+                }
+            }
+        return l_methods;
+    }
+
+
     /**
      * interface of field filtering
      */
@@ -174,6 +208,22 @@ public class CReflection
          * @return true field will be added, false field will be ignored
          */
         public boolean filter( Field p_field );
+    }
+
+
+    /**
+     * interface of method filtering
+     */
+    public interface IMethodFilter
+    {
+
+        /**
+         * filter method
+         *
+         * @param p_method method object
+         * @return true field will be added, false method will be ignored
+         */
+        public boolean filter( Method p_method );
     }
 
 
@@ -224,6 +274,7 @@ public class CReflection
         }
 
     }
+
 
     /**
      * structure for getter and setter method handles

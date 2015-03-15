@@ -26,7 +26,10 @@ package de.tu_clausthal.in.mec.ui;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
+import bibliothek.gui.dock.common.event.CDockableStateListener;
+import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.location.TreeLocationRoot;
+import bibliothek.gui.dock.common.mode.ExtendedMode;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
@@ -141,6 +144,22 @@ public class CFrame extends JFrame
         m_control.addDockable( l_dock );
         l_dock.setVisible( true );
         m_widgets.put( p_title, p_panel );
+
+        l_dock.addCDockableStateListener( new CDockableStateListener()
+        {
+            @Override
+            public void visibilityChanged( CDockable cDockable )
+            {
+
+            }
+
+            @Override
+            public void extendedModeChanged( CDockable cDockable, ExtendedMode extendedMode )
+            {
+                System.out.println();
+            }
+        } );
+
     }
 
     /**

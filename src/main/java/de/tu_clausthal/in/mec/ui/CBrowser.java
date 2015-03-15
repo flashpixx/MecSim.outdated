@@ -38,6 +38,8 @@ import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,7 +49,7 @@ import java.util.Set;
  *
  * @see http://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
  */
-public class CBrowser extends JFXPanel
+public class CBrowser extends JFXPanel implements ComponentListener
 {
     /**
      * listener *
@@ -194,6 +196,30 @@ public class CBrowser extends JFXPanel
         Platform.runLater( () -> {
             m_webview.getEngine().getHistory().go( +1 );
         } );
+    }
+
+    @Override
+    public void componentResized( ComponentEvent e )
+    {
+        System.out.println( "blub" );
+    }
+
+    @Override
+    public void componentMoved( ComponentEvent e )
+    {
+
+    }
+
+    @Override
+    public void componentShown( ComponentEvent e )
+    {
+
+    }
+
+    @Override
+    public void componentHidden( ComponentEvent e )
+    {
+
     }
 
     /**

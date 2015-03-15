@@ -26,13 +26,17 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -46,6 +50,10 @@ public class CWebUI extends JPanel
     protected CServer m_server = new CServer();
     /** browser component for viewing **/
     protected CBrowser m_browser = new CBrowser( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
+    /**
+     * list with binded object *
+     */
+    protected Map<Object, Map<String, CReflection.CMethod>> m_bind = new HashMap<>();
 
 
     /** ctor - adds the browser **/
@@ -53,6 +61,32 @@ public class CWebUI extends JPanel
     {
         this.add( m_browser );
     }
+
+
+    /**
+     * register an object for the UI
+     *
+     * @param p_object object, all methods with the name "ui_" are registered
+     */
+    public void addActionObject( final Object p_object )
+    {
+        for ( Object l_item : m_bind.keySet() )
+            if ( l_item.getClass().equals( p_object.getClass() ) )
+                throw new IllegalArgumentException();
+
+        final Map<String, CReflection.CMethod> l_methods = CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
+        {
+            @Override
+            public boolean filter( final Method p_method )
+            {
+                return p_method.getName().startsWith( "ui_" );
+            }
+        } );
+
+
+
+    }
+
 
 
     /** private class for the HTTP server **/

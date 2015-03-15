@@ -78,12 +78,10 @@ public class CFrame extends JFrame
         COperatingSystem.setFrameProperties( this );
         this.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         this.setLayout( new BorderLayout() );
-
         this.setSize( CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() );
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         this.addWindowListener( new WindowAdapter()
         {
-
             @Override
             public void windowClosing( final WindowEvent p_event )
             {
@@ -105,7 +103,6 @@ public class CFrame extends JFrame
                 m_control.destroy();
             }
         } );
-
         this.add( m_control.getContentArea() );
 
         // UI loading can be run after the dock structure is full initialized
@@ -133,14 +130,13 @@ public class CFrame extends JFrame
      */
     private void createDockable( final String p_title, final Component p_panel, final CLocation p_location )
     {
-        final DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_title );
+        final DefaultSingleCDockable l_dock = new DefaultSingleCDockable( p_title, p_panel );
         m_widgets.put( p_title, p_panel );
         m_control.addDockable( l_dock );
         l_dock.setLocation( p_location );
         l_dock.setVisible( true );
         l_dock.setCloseable( false );
         l_dock.setTitleText( p_title );
-        l_dock.add( p_panel );
     }
 
     /**

@@ -140,6 +140,7 @@ public class CFrame extends JFrame
         l_dock.setVisible( true );
         l_dock.setCloseable( false );
         l_dock.setTitleText( p_title );
+        l_dock.add( p_panel );
     }
 
     /**

@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
+import de.tu_clausthal.in.mec.object.source.target.CAtomTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -52,9 +53,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
     private static ISource m_selectedSource = null;
 
     /**
-     * List of all Destinations which might be set in some Target Objects for special Sourcess
+     * List of all Targets
      */
-    private Vector<GeoPosition> m_destinations = new Vector<>();
+    private Vector<CAtomTarget> m_sourceTargets = new Vector<>();
 
 
     /**
@@ -76,8 +77,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Override paint Method from Multilayer to paint Destinations
-     * Save Destinations in an own Layer is an Alternative (but maybe there is no further need for an own Layer)
+     * Override paint Method from Multilayer to paint Targets
+     * It is possible to save Targets in an own Layer, but this might be not necessary because Targets do not need
+     * to be triggered and so on
      * @param p_graphic
      * @param p_viewer
      * @param p_width
@@ -95,13 +97,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
         for ( ISource l_source : this )
             l_source.paint( p_graphic, p_viewer, p_width, p_height );
 
-        //Paint Destinations
-        for ( GeoPosition l_destinations : m_destinations){
-            final int l_zoom = Math.max(15 - p_viewer.getZoom(), 3);
-            final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_destinations, p_viewer.getZoom() );
-            p_graphic.setColor( Color.BLACK );
-            p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
-        }
+        //Paint Targets
+        for ( CAtomTarget l_target : m_sourceTargets)
+            l_target.paint(p_graphic, p_viewer, p_width, p_height);
+
     }
 
     /**
@@ -152,7 +151,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     {
         CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
 
-        if ( p_selectedGenerator.equals( "Default" ) )
+        if (p_selectedGenerator.equals( "Default" ) )
             p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
         if ( p_selectedGenerator.equals( "Jason Agent" ) )
             p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
@@ -168,26 +167,44 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to create a Destination
+     * Method to create a Target
      */
-    public void createDestination( GeoPosition p_geoPosition )
+    public void createTarget( GeoPosition p_geoPosition )
     {
         CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
 
-        this.m_destinations.add(p_geoPosition);
-        if ( this.m_selectedSource != null ){
+        this.m_sourceTargets.add(new CAtomTarget(p_geoPosition));
+        if ( this.m_selectedSource != null){
 
         }
         this.repaintOSM();
     }
 
     /**
-     * Method to remove a Destination
+     * Directly remove a Target
+     * @param p_target
      */
-    public void removeDestination(GeoPosition p_position)
+    public void removeTarget( CAtomTarget p_target)
+    {
+        if(p_target == null)
+            return;
+
+        this.m_sourceTargets.remove(p_target);
+        this.repaintOSM();
+    }
+
+    /**
+     * Method to remove a Target
+     */
+    public void removeTarget(GeoPosition p_position)
     {
         CLogger.out( CCommon.getResourceString( this, "destinationremoved" ) );
-        this.m_destinations.remove(p_position);
+        CAtomTarget l_deletedTarget = this.getTargetByPosition(p_position);
+
+        if(l_deletedTarget == null)
+            return;
+
+        this.m_sourceTargets.remove(l_deletedTarget);
         this.repaintOSM();
     }
 
@@ -228,15 +245,31 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Getter for all Destinations
+     * Getter for all Targets
      * @return
      */
-    public Vector<GeoPosition> getDestinations(){
-        return this.m_destinations;
+    public Vector<CAtomTarget> getTargets(){
+        return this.m_sourceTargets;
     }
 
     /**
-     * After a Destination was created, OSM need to be repainted
+     * Getter for the TargetList by Position
+     * @param p_position
+     * @return
+     */
+    public CAtomTarget getTargetByPosition(GeoPosition p_position)
+    {
+        for(CAtomTarget l_target : m_sourceTargets){
+            if(l_target.getPosition().equals(p_position)){
+                return l_target;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * After a Target was created, OSM need to be repainted
      */
     public void repaintOSM()
     {

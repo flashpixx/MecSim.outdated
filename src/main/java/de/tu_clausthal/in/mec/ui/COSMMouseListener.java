@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.source.ISource;
+import de.tu_clausthal.in.mec.object.source.target.CAtomTarget;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -145,18 +146,18 @@ class COSMMouseListener extends MouseAdapter
                 if ( l_keyListener.isShiftPressed() && l_keyListener.getKeyPressedCount() < 2 )
                 {
 
-                    for(GeoPosition l_destination : l_sourcelayer.getDestinations())
+                    for(CAtomTarget l_target : l_sourcelayer.getTargets())
                     {
                         //Check for Destinations in Range and remove it
-                        if( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_destination, l_viewer.getZoom()), c_rangesize) )
+                        if( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_target.getPosition(), l_viewer.getZoom()), c_rangesize) )
                         {
-                            l_sourcelayer.removeDestination(l_destination);
+                            l_sourcelayer.removeTarget(l_target);
                             return;
                         }
                     }
 
                     //If not add Destination
-                    l_sourcelayer.createDestination( l_geoPosition );
+                    l_sourcelayer.createTarget(l_geoPosition);
                 }
 
                 m_doubleClick = false;

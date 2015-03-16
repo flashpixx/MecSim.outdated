@@ -60,6 +60,7 @@ import java.util.Map;
  * with @code [[>Name<]] @endcode create a link to Wikipedia (with equal language), links with
  * @code ![>description<](<image file>)} @endcode create images to the file within the language help directory, links
  * without http prefix creates a link to a markdown file with equal name within the help directory
+ * @deprecated
  */
 public class CHelpViewer extends JDialog implements ActionListener
 {

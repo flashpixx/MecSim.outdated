@@ -24,9 +24,6 @@
 package de.tu_clausthal.in.mec;
 
 
-import de.tu_clausthal.in.mec.common.COperatingSystem;
-
-
 /**
  * bootstrap for the Java main call - checking of the correct installed JRE
  *
@@ -35,11 +32,6 @@ import de.tu_clausthal.in.mec.common.COperatingSystem;
  */
 public class CMainBootstrap
 {
-    static
-    {
-        COperatingSystem.setSystemProperties();
-    }
-
 
     /**
      * main bootstrap program

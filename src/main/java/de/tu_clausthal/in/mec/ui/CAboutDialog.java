@@ -39,6 +39,7 @@ import java.net.URISyntaxException;
 
 /**
  * about dialog to show current version data
+ * @deprecated 
  */
 public class CAboutDialog extends JDialog
 {

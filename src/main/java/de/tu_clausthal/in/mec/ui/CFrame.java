@@ -27,11 +27,9 @@ import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.location.TreeLocationRoot;
-import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.COperatingSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +74,7 @@ public class CFrame extends JFrame
         CConfiguration.getInstance().get().setResetui( false );
 
 
-        COperatingSystem.setFrameProperties( this );
+        //COperatingSystem.setFrameProperties( this );
         this.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         this.setLayout( new BorderLayout() );
         this.setSize( CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() );
@@ -109,7 +107,7 @@ public class CFrame extends JFrame
         // UI loading can be run after the dock structure is full initialized
         try
         {
-            CBootstrap.afterFrameInit( this );
+            //CBootstrap.afterFrameInit( this );
             m_control.readXML( m_configfile );
         }
         catch ( Exception l_execption )

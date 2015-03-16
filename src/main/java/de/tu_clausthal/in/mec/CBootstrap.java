@@ -32,7 +32,6 @@ import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CConsole;
-import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CWebUI;
@@ -60,7 +59,7 @@ public class CBootstrap
      *
      * @param p_frame frame
      * @deprecated
-     */
+     *
     public static void afterFrameInit( final CFrame p_frame )
     {
         // ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
@@ -71,6 +70,7 @@ public class CBootstrap
         //p_frame.addWidget( "Editor", new CSourceEditor() );
         //p_frame.addWidget( "Console", new CConsole() );
     }
+     */
 
     public static void afterStageInit( final TabPane p_root )
     {

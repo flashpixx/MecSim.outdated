@@ -25,8 +25,6 @@ package de.tu_clausthal.in.mec.common;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.*;
-
 
 /**
  * OS specific support
@@ -84,55 +82,6 @@ public class COperatingSystem
     {
         return System.getProperty( "os.name" ).startsWith( "Linux" );
     }
-
-
-    /**
-     * set the system properties depends on the OS
-     *
-     * @see http://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-     * @bug check definitions
-     */
-    public static void setSystemProperties()
-    {
-        if ( isOSX() )
-            System.setProperty( "apple.laf.useScreenMenuBar", "true" );
-        if ( isWindows() )
-            System.setProperty( "swing.defaultlaf", "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
-    }
-
-
-    /**
-     * sets the frame properties depends on the OS
-     *
-     * @param p_frame main frame
-     * @note independed with reflection api to avoid compiler errors on other OS
-     * @see http://moomoohk.github.io/snippets/java_osx.html
-     * @see http://www.oracle.com/technetwork/java/javatomac2-138389.html
-     * @see http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
-     * @deprecated
-     */
-    public static void setFrameProperties( Frame p_frame )
-    {
-        if ( ( isOSX() ) && ( getMajorVersion() >= 10 ) && ( getMinorVersion() >= 7 ) )
-        {
-            try
-            {
-                //FullScreenUtilities.setWindowCanFullScreen( p_frame, true );
-                CReflection.getClassMethod( Class.forName( "com.apple.eawt.FullScreenUtilities" ), "setWindowCanFullScreen", new Class<?>[]{Window.class, Boolean.TYPE} ).getHandle().invoke( p_frame, true );
-
-                //Application.getApplication().requestToggleFullScreen( p_frame );
-                CReflection.getClassMethod( Class.forName( "com.apple.eawt.Application" ), "requestToggleFullScreen", new Class<?>[]{Window.class} ).getHandle().invoke( p_frame );
-
-            }
-            catch ( ClassNotFoundException | IllegalAccessException l_exception )
-            {
-            }
-            catch ( Throwable throwable )
-            {
-            }
-        }
-    }
-
 
     /**
      * returns the OS minor version

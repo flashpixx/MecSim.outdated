@@ -142,13 +142,13 @@ class COSMMouseListener extends MouseAdapter
                     }
                 }
 
-                //Shift Key is pressed (Place or Remove  Destination)
+                //Shift Key is pressed (Place or Remove  Target)
                 if ( l_keyListener.isShiftPressed() && l_keyListener.getKeyPressedCount() < 2 )
                 {
 
                     for(CAtomTarget l_target : l_sourcelayer.getTargets())
                     {
-                        //Check for Destinations in Range and remove it
+                        //Check for Target in Range and remove it
                         if( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_target.getPosition(), l_viewer.getZoom()), c_rangesize) )
                         {
                             l_sourcelayer.removeTarget(l_target);
@@ -156,7 +156,7 @@ class COSMMouseListener extends MouseAdapter
                         }
                     }
 
-                    //If not add Destination
+                    //If not add Target
                     l_sourcelayer.createTarget(l_geoPosition);
                 }
 

@@ -171,7 +171,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void createTarget( GeoPosition p_geoPosition )
     {
-        CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
+        CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
 
         this.m_sourceTargets.add(new CAtomTarget(p_geoPosition));
         if ( this.m_selectedSource != null){
@@ -198,7 +198,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void removeTarget(GeoPosition p_position)
     {
-        CLogger.out( CCommon.getResourceString( this, "destinationremoved" ) );
+        CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
         CAtomTarget l_deletedTarget = this.getTargetByPosition(p_position);
 
         if(l_deletedTarget == null)

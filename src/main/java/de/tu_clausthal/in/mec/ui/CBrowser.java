@@ -25,21 +25,11 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.events.Event;
-import org.w3c.dom.events.EventListener;
-import org.w3c.dom.events.EventTarget;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -49,10 +39,6 @@ import java.util.Set;
  */
 public class CBrowser extends JFXPanel
 {
-    /**
-     * listener *
-     */
-    protected final Set<IActionListener> m_listener = new HashSet<>();
     /**
      * webkit view
      */
@@ -64,7 +50,8 @@ public class CBrowser extends JFXPanel
     public CBrowser()
     {
         Platform.runLater( () -> {
-            this.initialize();
+            m_webview = new WebView();
+            this.setScene( new Scene( m_webview ) );
         } );
     }
 
@@ -76,11 +63,11 @@ public class CBrowser extends JFXPanel
      */
     public CBrowser( final String p_url )
     {
+        this();
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "urlempty" ) );
 
         Platform.runLater( () -> {
-            this.initialize();
             m_webview.getEngine().load( p_url );
         } );
     }
@@ -89,64 +76,20 @@ public class CBrowser extends JFXPanel
      * adds a action listener to the browser content
      *
      * @param p_listener listen
+     * @deprecated
      */
     public final void addContentActionListener( final IActionListener p_listener )
     {
-        m_listener.add( p_listener );
     }
 
     /**
      * removes the browser content action listener
+     * @deprecated
      */
     public final boolean removeContentActionListener( final IActionListener p_listener )
     {
-        return m_listener.remove( p_listener );
+        return true;
     }
-
-    /**
-     * runs the initialization with listener
-     */
-    protected final void initialize()
-    {
-        m_webview = new WebView();
-        this.setScene( new Scene( m_webview ) );
-
-        m_webview.getEngine().getLoadWorker().stateProperty().addListener( new ChangeListener<Worker.State>()
-        {
-            @Override
-            public void changed( final ObservableValue<? extends Worker.State> p_value, final Worker.State p_oldstate, final Worker.State p_newstate )
-            {
-                if ( p_newstate != Worker.State.SUCCEEDED )
-                    return;
-
-                createHrefClickListener();
-            }
-        } );
-    }
-
-    /**
-     * create listener of href-click-event
-     */
-    protected final void createHrefClickListener()
-    {
-        EventListener l_listener = new EventListener()
-        {
-            @Override
-            public void handleEvent( final Event p_event )
-            {
-                if ( !"click".equalsIgnoreCase( p_event.getType() ) )
-                    return;
-
-                for ( IActionListener l_item : m_listener )
-                    l_item.onHrefClick( m_webview.getEngine(), (Element) p_event.getTarget() );
-            }
-        };
-
-        final NodeList l_nodes = m_webview.getEngine().getDocument().getElementsByTagName( "a" );
-        for ( int i = 0; i < l_nodes.getLength(); i++ )
-            ( (EventTarget) l_nodes.item( i ) ).addEventListener( "click", l_listener, false );
-    }
-
 
     /**
      * loads a URL on the browser
@@ -198,6 +141,7 @@ public class CBrowser extends JFXPanel
 
     /**
      * content action listener *
+     * @deprecated
      */
     public static interface IActionListener
     {

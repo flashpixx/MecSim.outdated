@@ -178,14 +178,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         if ( this.m_selectedSource != null ){
 
         }
-        CLogger.out(m_destinations.size());
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+        this.repaintOSM();
     }
 
     /**
@@ -195,14 +188,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     {
         CLogger.out( CCommon.getResourceString( this, "destinationremoved" ) );
         this.m_destinations.remove(p_position);
-        CLogger.out(m_destinations.size());
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+        this.repaintOSM();
     }
 
     /**
@@ -241,8 +227,26 @@ public class CSourceLayer extends IMultiLayer<ISource>
         return false;
     }
 
+    /**
+     * Getter for all Destinations
+     * @return
+     */
     public Vector<GeoPosition> getDestinations(){
         return this.m_destinations;
+    }
+
+    /**
+     * After a Destination was created, OSM need to be repainted
+     */
+    public void repaintOSM()
+    {
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
 }

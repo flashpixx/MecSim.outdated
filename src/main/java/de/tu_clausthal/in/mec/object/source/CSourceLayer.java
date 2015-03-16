@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.util.Vector;
 
 
 /**
@@ -47,6 +48,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * Member Variable to save a Source which was selected (null if no Source is selected)
      */
     private static ISource m_selectedSource = null;
+
+    /**
+     * List of all Destinations which might be set in some Target Objects for special Sourcess
+     */
+    private Vector<GeoPosition> m_destinations = new Vector<>();
 
 
     /**
@@ -135,16 +141,23 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void createDestination( GeoPosition p_geoPosition )
     {
-        if ( this.m_selectedSource != null )
-            CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
+        CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
+
+        this.m_destinations.add(p_geoPosition);
+        if ( this.m_selectedSource != null ){
+
+        }
+        CLogger.out(m_destinations.size());
     }
 
     /**
      * Method to remove a Destination
      */
-    public void removeDestination()
+    public void removeDestination(GeoPosition p_position)
     {
         CLogger.out( CCommon.getResourceString( this, "destinationremoved" ) );
+        this.m_destinations.remove(p_position);
+        CLogger.out(m_destinations.size());
     }
 
     /**
@@ -181,6 +194,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
             return p_source.equals( m_selectedSource );
 
         return false;
+    }
+
+    public Vector<GeoPosition> getDestinations(){
+        return this.m_destinations;
     }
 
 }

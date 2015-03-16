@@ -145,8 +145,15 @@ class COSMMouseListener extends MouseAdapter
                 if ( l_keyListener.isShiftPressed() && l_keyListener.getKeyPressedCount() < 2 )
                 {
 
-                    //Check for Destinations in Range
-                    l_sourcelayer.removeDestination();
+                    for(GeoPosition l_destination : l_sourcelayer.getDestinations())
+                    {
+                        //Check for Destinations in Range and remove it
+                        if( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_destination, l_viewer.getZoom()), c_rangesize) )
+                        {
+                            l_sourcelayer.removeDestination(l_destination);
+                            return;
+                        }
+                    }
 
                     //If not add Destination
                     l_sourcelayer.createDestination( l_geoPosition );

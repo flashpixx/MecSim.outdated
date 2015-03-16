@@ -28,9 +28,11 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Vector;
 
 
@@ -71,6 +73,35 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void release()
     {
 
+    }
+
+    /**
+     * Override paint Method from Multilayer to paint Destinations
+     * Save Destinations in an own Layer is an Alternative (but maybe there is no further need for an own Layer)
+     * @param p_graphic
+     * @param p_viewer
+     * @param p_width
+     * @param p_height
+     */
+    @Override
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        //Paint Sources
+        if ( !m_visible )
+            return;
+
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
+        for ( ISource l_source : this )
+            l_source.paint( p_graphic, p_viewer, p_width, p_height );
+
+        //Paint Destinations
+        for ( GeoPosition l_destinations : m_destinations){
+            final int l_zoom = Math.max(15 - p_viewer.getZoom(), 3);
+            final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_destinations, p_viewer.getZoom() );
+            p_graphic.setColor( Color.BLACK );
+            p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
+        }
     }
 
     /**
@@ -148,6 +179,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
         }
         CLogger.out(m_destinations.size());
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
     /**
@@ -158,6 +196,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
         CLogger.out( CCommon.getResourceString( this, "destinationremoved" ) );
         this.m_destinations.remove(p_position);
         CLogger.out(m_destinations.size());
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
     /**

@@ -24,9 +24,8 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.w3c.dom.Element;
@@ -37,22 +36,22 @@ import org.w3c.dom.Element;
  *
  * @see http://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
  */
-public class CBrowser extends JFXPanel
+public class CBrowser extends GridPane
 {
     /**
      * webkit view
      */
-    protected WebView m_webview = null;
+    protected final WebView m_webview = new WebView();
 
     /**
      * ctor with instantiation a blank engine
      */
     public CBrowser()
     {
-        Platform.runLater( () -> {
-            m_webview = new WebView();
-            this.setScene( new Scene( m_webview ) );
-        } );
+        super();
+        setHgrow( m_webview, Priority.ALWAYS );
+        setVgrow( m_webview, Priority.ALWAYS );
+        this.getChildren().add( m_webview );
     }
 
 
@@ -67,9 +66,7 @@ public class CBrowser extends JFXPanel
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "urlempty" ) );
 
-        Platform.runLater( () -> {
-            m_webview.getEngine().load( p_url );
-        } );
+        m_webview.getEngine().load( p_url );
     }
 
     /**
@@ -98,9 +95,7 @@ public class CBrowser extends JFXPanel
      */
     public final void load( final String p_url )
     {
-        Platform.runLater( () -> {
-            m_webview.getEngine().load( p_url );
-        } );
+        m_webview.getEngine().load( p_url );
     }
 
     /**
@@ -108,9 +103,7 @@ public class CBrowser extends JFXPanel
      */
     public final void reload()
     {
-        Platform.runLater( () -> {
-            m_webview.getEngine().reload();
-        } );
+        m_webview.getEngine().reload();
     }
 
     /**
@@ -121,9 +114,7 @@ public class CBrowser extends JFXPanel
         if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 )
             return;
 
-        Platform.runLater( () -> {
-            m_webview.getEngine().getHistory().go( -1 );
-        } );
+        m_webview.getEngine().getHistory().go( -1 );
     }
 
     /**
@@ -134,9 +125,7 @@ public class CBrowser extends JFXPanel
         if ( m_webview.getEngine().getHistory().getCurrentIndex() >= m_webview.getEngine().getHistory().getEntries().size() - 1 )
             return;
 
-        Platform.runLater( () -> {
-            m_webview.getEngine().getHistory().go( +1 );
-        } );
+        m_webview.getEngine().getHistory().go( +1 );
     }
 
     /**

@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,14 +41,12 @@ import java.util.Map;
 /**
  * server class of the UI
  */
-public class CWebUI extends JPanel
+public class CWebUI extends CBrowser
 {
     /**
      * HTTP server to handle websockets *
      */
     protected CServer m_server = new CServer();
-    /** browser component for viewing **/
-    protected CBrowser m_browser = new CBrowser( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     /**
      * list with binded object *
      */
@@ -59,7 +56,8 @@ public class CWebUI extends JPanel
     /** ctor - adds the browser **/
     public CWebUI()
     {
-        this.add( m_browser );
+        super();
+        this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     }
 
 

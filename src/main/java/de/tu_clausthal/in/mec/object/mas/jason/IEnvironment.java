@@ -163,7 +163,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
 
         // register web mindinspector (DoS threat)
         m_mindinspector = new CBrowser();
-        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
+        //p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
     }
 
     @Override

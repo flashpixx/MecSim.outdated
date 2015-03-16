@@ -90,6 +90,7 @@ public class COperatingSystem
      * set the system properties depends on the OS
      *
      * @see http://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+     * @bug check definitions
      */
     public static void setSystemProperties()
     {
@@ -108,6 +109,7 @@ public class COperatingSystem
      * @see http://moomoohk.github.io/snippets/java_osx.html
      * @see http://www.oracle.com/technetwork/java/javatomac2-138389.html
      * @see http://www.oracle.com/technetwork/articles/javase/javatomac-140486.html
+     * @deprecated
      */
     public static void setFrameProperties( Frame p_frame )
     {

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec;
 
+import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
@@ -33,7 +34,9 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CWebUI;
+import javafx.scene.control.TabPane;
 
 
 /**
@@ -56,16 +59,23 @@ public class CBootstrap
      * is called after the frame is initialize and before the UI configuration is load
      *
      * @param p_frame frame
+     * @deprecated
      */
     public static void afterFrameInit( final CFrame p_frame )
     {
-        ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
+        // ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
 
         //p_frame.addWidget( "Inspector", new CInspector(), CFrame.Position.RIGHT, 0.2 );
-        p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.BOTTOM, 0.7 );
-        p_frame.addWidget( "Main", new CWebUI(), CFrame.Position.TOP, 0.3);
+        //p_frame.addWidget( "OSM", new COSMViewer(), CFrame.Position.BOTTOM, 0.7 );
+        //p_frame.addWidget( "Main", new CWebUI(), CFrame.Position.TOP, 0.3);
         //p_frame.addWidget( "Editor", new CSourceEditor() );
         //p_frame.addWidget( "Console", new CConsole() );
+    }
+
+    public static void afterStageInit( final TabPane p_root )
+    {
+        p_root.getTabs().add( CCommonUI.createTab( "Main", new CWebUI() ) );
+        p_root.getTabs().add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
     }
 
 
@@ -142,11 +152,7 @@ public class CBootstrap
 
             final COSMViewer l_osm = COSMViewer.getSimulationOSM();
             if ( l_osm != null )
-            {
-                l_osm.setZoom( CConfiguration.getInstance().get().getZoom() );
-                l_osm.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
-                l_osm.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
-            }
+                l_osm.reset();
 
             ( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).clear();
         }

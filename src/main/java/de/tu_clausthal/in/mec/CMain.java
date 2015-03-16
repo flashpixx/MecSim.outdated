@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.ui.CUI;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -122,7 +122,8 @@ public class CMain
 
         // run application
         if ( !l_cli.hasOption( "nogui" ) )
-            CSimulation.getInstance().setUI( new CFrame() );
+            CUI.main( null );
+            //CSimulation.getInstance().setUI( new CFrame() );
         else
         {
             try

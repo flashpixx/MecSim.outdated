@@ -84,6 +84,8 @@ public class COSMViewer extends JXMapViewer
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
         this.addKeyListener( m_keylistener );
 
+        this.reset();
+
         CBootstrap.afterOSMViewerInit( this );
     }
 
@@ -98,6 +100,16 @@ public class COSMViewer extends JXMapViewer
             return null;
 
         return (COSMViewer) CSimulation.getInstance().getUI().getWidget( "OSM" );
+    }
+
+    /**
+     * resets the view *
+     */
+    public void reset()
+    {
+        this.setZoom( CConfiguration.getInstance().get().getZoom() );
+        this.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
+        this.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
     }
 
     /**

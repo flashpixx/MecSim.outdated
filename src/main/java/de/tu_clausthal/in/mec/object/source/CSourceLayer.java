@@ -29,13 +29,13 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
 import de.tu_clausthal.in.mec.object.source.target.CAtomTarget;
+import de.tu_clausthal.in.mec.object.source.target.CChoiceTarget;
+import de.tu_clausthal.in.mec.object.source.target.IComplexTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.Vector;
-
 
 /**
  * layer with all sources
@@ -88,10 +88,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
     @Override
     public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        //Paint Sources
         if ( !m_visible )
             return;
 
+        //Paint Sources
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( ISource l_source : this )
@@ -125,8 +125,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
         //Set Default Generator (Selected Generator)
         if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
             return;
-
         this.setGenerator( l_newSource, p_defaultGenerator, p_aslname );
+
+        //Set Default Target (CChoise Target)
+        IComplexTarget l_target = new CChoiceTarget();
+        l_newSource.setComplexTarget(l_target);
     }
 
     /**
@@ -136,76 +139,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
     {
         CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
         if ( this.isSelectedSource( p_source ) )
-        {
             m_selectedSource = null;
-        }
 
         p_source.release();
         this.remove( p_source );
-    }
-
-    /**
-     * Method to create a Generator from a specific Source
-     */
-    public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
-    {
-        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
-
-        if (p_selectedGenerator.equals( "Default" ) )
-            p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
-        if ( p_selectedGenerator.equals( "Jason Agent" ) )
-            p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
-    }
-
-    /**
-     * Method to remove a Generator from a specific Source
-     */
-    public void removeGenerator( ISource p_source )
-    {
-        CLogger.out( CCommon.getResourceString( this, "generatorremoved" ) );
-        p_source.removeGenerator();
-    }
-
-    /**
-     * Method to create a Target
-     */
-    public void createTarget( GeoPosition p_geoPosition )
-    {
-        CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
-
-        this.m_sourceTargets.add(new CAtomTarget(p_geoPosition));
-        if ( this.m_selectedSource != null){
-
-        }
-        this.repaintOSM();
-    }
-
-    /**
-     * Directly remove a Target
-     * @param p_target
-     */
-    public void removeTarget( CAtomTarget p_target)
-    {
-        if(p_target == null)
-            return;
-
-        this.m_sourceTargets.remove(p_target);
-        this.repaintOSM();
-    }
-
-    /**
-     * Method to remove a Target
-     */
-    public void removeTarget(GeoPosition p_position)
-    {
-        CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
-        CAtomTarget l_deletedTarget = this.getTargetByPosition(p_position);
-
-        if(l_deletedTarget == null)
-            return;
-
-        this.m_sourceTargets.remove(l_deletedTarget);
-        this.repaintOSM();
     }
 
     /**
@@ -242,6 +179,66 @@ public class CSourceLayer extends IMultiLayer<ISource>
             return p_source.equals( m_selectedSource );
 
         return false;
+    }
+
+    /**
+     * Method to create a Generator from a specific Source
+     */
+    public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
+    {
+        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
+
+        if (p_selectedGenerator.equals( "Default" ) )
+            p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
+        if ( p_selectedGenerator.equals( "Jason Agent" ) )
+            p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
+    }
+
+    /**
+     * Method to remove a Generator from a specific Source
+     */
+    public void removeGenerator( ISource p_source )
+    {
+        CLogger.out( CCommon.getResourceString( this, "generatorremoved" ) );
+        p_source.removeGenerator();
+    }
+
+    /**
+     * Method to create a Target
+     */
+    public void createTarget( GeoPosition p_geoPosition )
+    {
+        CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
+
+        if(p_geoPosition == null)
+            return;
+
+        CAtomTarget l_newTarget = new CAtomTarget(p_geoPosition);
+        this.m_sourceTargets.add(l_newTarget);
+
+        if ( this.m_selectedSource != null)
+            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget);
+
+        this.repaintOSM();
+    }
+
+    /**
+     * Directly remove a Target
+     * @param p_target
+     */
+    public void removeTarget( CAtomTarget p_target)
+    {
+        CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
+
+        if(p_target == null)
+            return;
+
+        this.m_sourceTargets.remove(p_target);
+
+        for(ISource l_source :  this)
+            l_source.getComplexTarget().removeTarget(p_target);
+
+        this.repaintOSM();
     }
 
     /**

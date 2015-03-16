@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.source.target.IComplexTarget;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
@@ -71,4 +72,17 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * Method to remove the Generator (Set m_generator to null)
      */
     public void removeGenerator();
+
+    /**
+     * Getter for the TargetManager of this Source
+     * @return
+     */
+    public IComplexTarget getComplexTarget();
+
+    /**
+     * Set a new TargetManager for this Source
+     * @param p_complexTarget
+     */
+    public void setComplexTarget(IComplexTarget p_complexTarget);
+
 }

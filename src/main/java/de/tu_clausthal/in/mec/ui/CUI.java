@@ -29,7 +29,9 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -63,13 +65,28 @@ public class CUI extends Application
             {
                 CConfiguration.getInstance().get().setWindowwidth( (int) ( (Stage) p_event.getSource() ).getWidth() );
                 CConfiguration.getInstance().get().setWindowheight( (int) ( (Stage) p_event.getSource() ).getHeight() );
+
+                CConfiguration.getInstance().write();
             }
         } );
 
 
-        final TabPane l_root = new TabPane();
-        CBootstrap.afterStageInit( l_root );
+        // border pane for with menu
+        final BorderPane l_root = new BorderPane();
 
+
+        final MenuBar l_menubar = new MenuBar();
+        l_menubar.getMenus().addAll();
+        l_menubar.setUseSystemMenuBar( true );
+        l_root.setTop( l_menubar );
+
+
+        // tab pane for content
+        final TabPane l_tabs = new TabPane();
+        l_root.setCenter( l_tabs );
+        CBootstrap.afterStageInit( l_tabs );
+
+        // set stage
         p_stage.setScene( new Scene( l_root ) );
         p_stage.sizeToScene();
         p_stage.show();

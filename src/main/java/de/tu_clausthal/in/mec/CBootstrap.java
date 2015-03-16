@@ -32,9 +32,9 @@ import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CConsole;
+import de.tu_clausthal.in.mec.ui.CMenuViewer;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-import de.tu_clausthal.in.mec.ui.CWebUI;
 import javafx.scene.control.TabPane;
 
 
@@ -57,10 +57,9 @@ public class CBootstrap
     /**
      * is called after the frame is initialize and before the UI configuration is load
      *
-     * @param p_frame frame
      * @deprecated
-     *
-    public static void afterFrameInit( final CFrame p_frame )
+     */
+    public static void afterFrameInit()
     {
         // ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).setFrame( p_frame );
 
@@ -70,11 +69,16 @@ public class CBootstrap
         //p_frame.addWidget( "Editor", new CSourceEditor() );
         //p_frame.addWidget( "Console", new CConsole() );
     }
-     */
 
+
+    /*
+     * is called after the frame is initialize and before the UI configuration is load
+     *
+     * @param p_root root pane
+     */
     public static void afterStageInit( final TabPane p_root )
     {
-        p_root.getTabs().add( CCommonUI.createTab( "Main", new CWebUI() ) );
+        p_root.getTabs().add( CCommonUI.createTab( "Main", new CMenuViewer() ) );
         p_root.getTabs().add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
     }
 

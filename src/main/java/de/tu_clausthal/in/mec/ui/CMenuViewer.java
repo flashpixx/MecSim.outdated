@@ -30,9 +30,9 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * server class of the UI
  */
-public class CWebUI extends CBrowser
+public class CMenuViewer extends CBrowser
 {
     /**
      * HTTP server to handle websockets *
@@ -54,7 +54,7 @@ public class CWebUI extends CBrowser
 
 
     /** ctor - adds the browser **/
-    public CWebUI()
+    public CMenuViewer()
     {
         super();
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
@@ -112,13 +112,13 @@ public class CWebUI extends CBrowser
          * gets a file from the root directory
          *
          * @param p_uri URI
-         * @return file or null
+         * @return URL or null
          */
-        protected final File getRootFile( final String p_uri )
+        protected final URL getRootFile( final String p_uri )
         {
             try
             {
-                return new File( this.getClass().getClassLoader().getResource( "ui" + ( p_uri.startsWith( "/" ) ? p_uri : File.separator + p_uri ) ).getPath() );
+                return this.getClass().getClassLoader().getResource( "ui" + ( p_uri.startsWith( "/" ) ? p_uri : File.separator + p_uri ) );
             }
             catch ( NullPointerException l_exception )
             {
@@ -132,15 +132,13 @@ public class CWebUI extends CBrowser
         public final Response serve( final IHTTPSession p_session )
         {
             // check default document
-            final File l_file = p_session.getUri().equals( "/" ) ? this.getRootFile( "index.htm" ) : this.getRootFile( p_session.getUri() );
-            if ( l_file != null )
-                try (
-                        // file data is read by an input stream
-                        FileInputStream l_stream = new FileInputStream( l_file );
-                )
+            final URL l_url = p_session.getUri().equals( "/" ) ? this.getRootFile( "index.htm" ) : this.getRootFile( p_session.getUri() );
+
+            if ( l_url != null )
+                try
                 {
                     // mime-type is read by the file extension
-                    return new Response( Response.Status.OK, URLConnection.guessContentTypeFromName( l_file.getName() ), new FileInputStream( l_file ) );
+                    return new Response( Response.Status.OK, URLConnection.guessContentTypeFromName( l_url.getFile() ), l_url.openStream() );
                 }
                 catch ( IOException l_exception )
                 {

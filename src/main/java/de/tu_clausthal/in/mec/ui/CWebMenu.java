@@ -137,7 +137,7 @@ public class CWebMenu extends CBrowser
         {
             try
             {
-                return this.getClass().getClassLoader().getResource( "ui" + ( p_uri.startsWith( "/" ) ? p_uri : File.separator + p_uri ) );
+                return this.getClass().getClassLoader().getResource( "web" + ( p_uri.startsWith( "/" ) ? p_uri : File.separator + p_uri ) );
             }
             catch ( NullPointerException l_exception )
             {
@@ -158,7 +158,7 @@ public class CWebMenu extends CBrowser
                 {
                     // if the file a markdown file, the renderer is called
                     if ( l_url.getPath().endsWith( ".md" ) )
-                        return new Response( Response.Status.OK, "application/xhtml+xml", createFullHTML( l_url, null ) );
+                        return new Response( Response.Status.OK, "application/xhtml+xml", getHTMLfromMarkdown( l_url, null ) );
 
                     // mime-type is read by the file extension
                     return new Response( Response.Status.OK, URLConnection.guessContentTypeFromName( l_url.getFile() ), l_url.openStream() );
@@ -180,7 +180,7 @@ public class CWebMenu extends CBrowser
          * @param p_input HTML snipplet
          * @return full HTML document
          */
-        protected final String createFullHTML( final URL p_input, final URL p_css ) throws IOException
+        protected final String getHTMLfromMarkdown( final URL p_input, final URL p_css ) throws IOException
         {
             return "<?xml version=\"1.0\" ?>" +
                     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +

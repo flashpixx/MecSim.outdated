@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.IComplexTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.CComplexTarget;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
@@ -85,7 +85,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * Target Manager of this Source
      */
-    protected IComplexTarget m_complexTarget;
+    protected CComplexTarget m_complexTarget;
 
     /**
      * map with targets
@@ -198,12 +198,12 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public IComplexTarget getComplexTarget() {
+    public CComplexTarget getComplexTarget() {
         return m_complexTarget;
     }
 
     @Override
-    public void setComplexTarget(IComplexTarget p_complexTarget) {
+    public void setComplexTarget(CComplexTarget p_complexTarget) {
         this.m_complexTarget = p_complexTarget;
     }
 

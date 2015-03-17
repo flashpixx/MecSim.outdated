@@ -30,11 +30,13 @@ import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
 import de.tu_clausthal.in.mec.object.source.target.CAtomTarget;
 import de.tu_clausthal.in.mec.object.source.target.CChoiceTarget;
+import de.tu_clausthal.in.mec.object.source.target.CSetTarget;
 import de.tu_clausthal.in.mec.object.source.target.IComplexTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.Vector;
 
 /**
@@ -128,8 +130,17 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.setGenerator( l_newSource, p_defaultGenerator, p_aslname );
 
         //Set Default Target (CChoise Target)
-        IComplexTarget l_target = new CChoiceTarget();
-        l_newSource.setComplexTarget(l_target);
+        CChoiceTarget l_choiceTarget = new CChoiceTarget();
+        CSetTarget l_setTarget = new CSetTarget();
+
+        l_newSource.setComplexTarget(l_setTarget);
+
+        //Testing
+        Random l_random = new Random();
+        for(int i = 0; i<10; i++)
+            l_setTarget.addTarget(new CAtomTarget(p_geoPosition), l_random.nextDouble());
+
+        l_setTarget.printProbabilities();
     }
 
     /**
@@ -217,7 +228,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.m_sourceTargets.add(l_newTarget);
 
         if ( this.m_selectedSource != null)
-            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget);
+            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, 1.0);
 
         this.repaintOSM();
     }

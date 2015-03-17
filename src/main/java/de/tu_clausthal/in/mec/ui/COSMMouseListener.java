@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.source.ISource;
-import de.tu_clausthal.in.mec.object.source.target.CAtomTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.CAtomTarget;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 

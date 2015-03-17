@@ -65,6 +65,7 @@ public class CChoiceTarget implements  IComplexTarget{
         for ( Map.Entry<CAtomTarget, Double> l_entry  : this.m_probabilityMap.entrySet() )
         {
             l_cumulate = l_cumulate + l_entry.getValue();
+            //CLogger.out("Entry:           " + l_entry.getValue() + " Random:           " + l_random + " Cumulate:           " + l_cumulate);
             if(l_cumulate >= l_random) {
                 l_targetList.add(l_entry.getKey());
                 return l_targetList;
@@ -114,6 +115,18 @@ public class CChoiceTarget implements  IComplexTarget{
             CLogger.out("Target: " + l_entry.getKey() + "Probability: " + l_entry.getValue());
         }
         CLogger.out("Sum of all Probabilities: " + l_sum);
+    }
+
+    /**
+     * Prints a TargetList
+     */
+    @Override
+    public void printTargetList() {
+        Queue<CAtomTarget> l_targets = this.getTargetList();
+
+        for(int i=0; i<l_targets.size(); i++){
+            CLogger.out(l_targets.poll());
+        }
     }
 
     /**

@@ -56,4 +56,9 @@ public interface IComplexTarget {
      */
     public void printProbabilities();
 
+    /**
+     * This Method prints the Target List
+     */
+    public void printTargetList();
+
 }

@@ -122,25 +122,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
     {
         CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
         ISource l_newSource = new CSource( p_geoPosition );
-        this.add( l_newSource );
+        this.add(l_newSource);
 
         //Set Default Generator (Selected Generator)
         if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
             return;
         this.setGenerator( l_newSource, p_defaultGenerator, p_aslname );
 
-        //Set Default Target (CChoise Target)
-        CChoiceTarget l_choiceTarget = new CChoiceTarget();
-        CSetTarget l_setTarget = new CSetTarget();
-
-        l_newSource.setComplexTarget(l_setTarget);
-
-        //Testing
-        Random l_random = new Random();
-        for(int i = 0; i<10; i++)
-            l_setTarget.addTarget(new CAtomTarget(p_geoPosition), l_random.nextDouble());
-
-        l_setTarget.printProbabilities();
+        //Set Default Target (CChoice Target)
+        IComplexTarget l_choiceTarget = new CChoiceTarget();
+        l_newSource.setComplexTarget(l_choiceTarget);
     }
 
     /**
@@ -227,8 +218,14 @@ public class CSourceLayer extends IMultiLayer<ISource>
         CAtomTarget l_newTarget = new CAtomTarget(p_geoPosition);
         this.m_sourceTargets.add(l_newTarget);
 
+        //Testing
+        Random l_random = new Random();
         if ( this.m_selectedSource != null)
-            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, 1.0);
+            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, l_random.nextDouble());
+
+        //this.m_selectedSource.getComplexTarget().printProbabilities();
+        //this.m_selectedSource.getComplexTarget().getTargetList().size();
+        //this.m_selectedSource.getComplexTarget().printTargetList();
 
         this.repaintOSM();
     }

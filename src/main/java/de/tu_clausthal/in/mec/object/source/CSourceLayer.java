@@ -217,20 +217,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.m_sourceTargets.add(l_newTarget);
 
         //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
-        if ( this.m_selectedSource != null)
-            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, 1.0);
-
-        /**
         //Testing
         Random l_random = new Random();
         if ( this.m_selectedSource != null)
             this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, l_random.nextDouble());
 
-        this.m_selectedSource.getComplexTarget().printProbabilities();
-        this.m_selectedSource.getComplexTarget().printWeights();
-        this.m_selectedSource.getComplexTarget().printTargetList();
-        CLogger.out(this.m_selectedSource.getComplexTarget().getMultiTarget().size());
-        */
+        //this.m_selectedSource.getComplexTarget().printProbabilities();
+        //this.m_selectedSource.getComplexTarget().printWeights();
+        //this.m_selectedSource.getComplexTarget().printTargetList();
+        //CLogger.out(this.m_selectedSource.getComplexTarget().getMultiTarget().size());
+        //this.m_selectedSource.getComplexTarget().getSequenceTarget(1);
 
         this.repaintOSM();
     }

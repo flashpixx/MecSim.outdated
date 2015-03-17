@@ -25,7 +25,9 @@ package de.tu_clausthal.in.mec.object.source.sourceTarget;
 
 import de.tu_clausthal.in.mec.CLogger;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A ComplexTarget is a Collection of Atom Targets. Which can
@@ -160,7 +162,7 @@ public class CComplexTarget {
         for ( Map.Entry<CAtomTarget, Double> l_entry  : this.m_probabilityMap.entrySet() )
         {
             l_cumulate = l_cumulate + l_entry.getValue();
-            CLogger.out("Random:          " + l_random + "          Cumulate:          " + l_cumulate + "          Probability:          " + l_entry.getValue() + l_entry.getKey());
+            //CLogger.out("Random:          " + l_random + "          Cumulate:          " + l_cumulate + "          Probability:          " + l_entry.getValue() + l_entry.getKey());
             if(l_cumulate >= l_random) {
                 return l_entry.getKey();
             }
@@ -193,6 +195,47 @@ public class CComplexTarget {
                 l_targetList.add(l_target);
         }
         return l_targetList;
+    }
+
+    /**
+     * This Method returns a List of AtomTargets which are ordered by their weight (Rising)
+     * @param p_sequenceLength
+     * @return
+     */
+    public Queue<CAtomTarget> getSequenceTarget(int p_sequenceLength){
+        Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
+
+        Map<CAtomTarget, Double> l_sortedMap = Collections.synchronizedMap(this.sortByValue(this.m_weightingMap));
+
+        for ( Map.Entry<CAtomTarget, Double> l_entry  : l_sortedMap.entrySet() )
+        {
+            l_targetList.add(l_entry.getKey());
+        }
+
+        return l_targetList;
+    }
+
+    /**
+     * Method to sort the Weighting Map
+     * @param p_unsortMap
+     * @return
+     */
+    public static Map sortByValue(Map p_unsortMap) {
+        List list = new CopyOnWriteArrayList(p_unsortMap.entrySet());
+
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o2)).getValue())
+                        .compareTo(((Map.Entry) (o1)).getValue());
+            }
+        });
+
+        Map sortedMap = Collections.synchronizedMap(new LinkedHashMap());
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
     }
 
 }

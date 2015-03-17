@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pegdown.Extensions;
 import org.pegdown.LinkRenderer;
@@ -133,11 +134,12 @@ public class CWebMenu extends CBrowser
          * @param p_uri URI
          * @return URL or null
          */
-        protected final URL getRootFile( final String p_uri )
+        protected final URL getRoot( final String p_uri )
         {
+            final String[] l_parts = p_uri.split( "/" );
             try
             {
-                return this.getClass().getClassLoader().getResource( "web" + ( p_uri.startsWith( "/" ) ? p_uri : File.separator + p_uri ) );
+                return this.getClass().getClassLoader().getResource( StringUtils.join( ArrayUtils.addAll( new String[]{"web", "root"}, l_parts ), File.separator ) );
             }
             catch ( NullPointerException l_exception )
             {
@@ -151,7 +153,7 @@ public class CWebMenu extends CBrowser
         public final Response serve( final IHTTPSession p_session )
         {
             // check default document
-            final URL l_url = p_session.getUri().equals( "/" ) ? this.getRootFile( "index.htm" ) : this.getRootFile( p_session.getUri() );
+            final URL l_url = p_session.getUri().equals( "/" ) ? this.getRoot( "index.htm" ) : this.getRoot( p_session.getUri() );
 
             if ( l_url != null )
                 try
@@ -208,7 +210,7 @@ public class CWebMenu extends CBrowser
             }
             catch ( MalformedURLException l_exception )
             {
-                return super.render( new ExpImageNode( p_node.title, m_server.getRootFile( p_node.url ).toString(), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+                return super.render( new ExpImageNode( p_node.title, m_server.getRoot( p_node.url ).toString(), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
             }
             return super.render( p_node, p_text );
         }

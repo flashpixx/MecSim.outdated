@@ -357,7 +357,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>src/main/resources/web/devel_doc</directory>
+                            <directory>src/main/resources/web/documentation/developer</directory>
                         </fileset>
                     </filesets>
                 </configuration>

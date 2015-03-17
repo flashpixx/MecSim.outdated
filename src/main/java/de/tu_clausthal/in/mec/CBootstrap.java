@@ -34,7 +34,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-import de.tu_clausthal.in.mec.ui.CWebMenu;
+import de.tu_clausthal.in.mec.ui.web.CWorkspace;
 import javafx.scene.control.TabPane;
 
 
@@ -78,7 +78,7 @@ public class CBootstrap
      */
     public static void afterStageInit( final TabPane p_root )
     {
-        p_root.getTabs().add( CCommonUI.createTab( "Main", new CWebMenu() ) );
+        p_root.getTabs().add( CCommonUI.createTab( "Main", new CWorkspace() ) );
         p_root.getTabs().add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
     }
 

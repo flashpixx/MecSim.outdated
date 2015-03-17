@@ -432,7 +432,7 @@ public class CConfiguration
         @NotEmpty
         public String getLanguage()
         {
-            return Language;
+            return ( Language == null ) ? "en" : Language;
         }
 
         public void setLanguage( String p_value )

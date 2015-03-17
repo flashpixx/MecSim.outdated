@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.target.IComplexTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.IComplexTarget;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;

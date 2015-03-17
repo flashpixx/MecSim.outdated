@@ -28,10 +28,10 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
-import de.tu_clausthal.in.mec.object.source.target.CAtomTarget;
-import de.tu_clausthal.in.mec.object.source.target.CChoiceTarget;
-import de.tu_clausthal.in.mec.object.source.target.CSetTarget;
-import de.tu_clausthal.in.mec.object.source.target.IComplexTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.CAtomTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.CChoiceTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.CSetTarget;
+import de.tu_clausthal.in.mec.object.source.sourceTarget.IComplexTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 

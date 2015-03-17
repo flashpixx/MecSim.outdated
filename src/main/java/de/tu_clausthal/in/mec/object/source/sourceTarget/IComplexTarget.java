@@ -21,68 +21,39 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.source.sourceTarget;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.IComplexTarget;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.GeoPosition;
-
-import java.awt.*;
-import java.io.Serializable;
-
+import java.util.Queue;
 
 /**
- * factory interface of car source - defines a source
+ * Interface which defines the Structure of every ComplexTarget
+ * ComplexTarget is a Collection of AtomTargets
+ * which might be assembled in some different Ways
  */
-public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
-{
+public interface IComplexTarget {
 
     /**
-     * returns the position of the source
-     *
-     * @return geoposition of the source
-     */
-    public GeoPosition getPosition();
-
-    /**
-     * Method to get the actual Color of this Source
-     */
-    public Color getColor();
-
-    /**
-     * Method to set the Color of this Source
-     */
-    public void setColor( Color p_color );
-
-    /**
-     * Method to get the Generator of an Source (null if there is no Generator)
-     */
-    public IGenerator getGenerator();
-
-    /**
-     * Method to set a Generator in a Source
-     */
-    public void setGenerator( IGenerator p_generator );
-
-    /**
-     * Method to remove the Generator (Set m_generator to null)
-     */
-    public void removeGenerator();
-
-    /**
-     * Getter for the TargetManager of this Source
+     * Generic Method to get a List of Atom Target.
+     * How this List gets assembled will be defined in every special ComplexType
      * @return
      */
-    public IComplexTarget getComplexTarget();
+    public Queue<CAtomTarget> getTargetList();
 
     /**
-     * Set a new TargetManager for this Source
-     * @param p_complexTarget
+     * Generic Method for adding an AtomTarget to a ComplexTarget
+     * @param p_target
      */
-    public void setComplexTarget(IComplexTarget p_complexTarget);
+    public void addTarget(CAtomTarget p_target, double p_weight);
+
+    /**
+     * Generic Method for removing an AtomTarget from a ComplexTarget
+     * @param p_target
+     */
+    public void removeTarget(CAtomTarget p_target);
+
+    /**
+     * Generic Method to show the Probabilities of the ComplexTarget
+     */
+    public void printProbabilities();
 
 }

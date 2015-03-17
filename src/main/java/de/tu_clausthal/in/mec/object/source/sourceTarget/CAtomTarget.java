@@ -20,69 +20,57 @@
  * ######################################################################################
  * @endcond
  **/
+//test
+package de.tu_clausthal.in.mec.object.source.sourceTarget;
 
-package de.tu_clausthal.in.mec.object.source;
-
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.IComplexTarget;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import javax.swing.*;
 import java.awt.*;
-import java.io.Serializable;
-
+import java.awt.geom.Point2D;
 
 /**
- * factory interface of car source - defines a source
+ * Most Basic Target for Sources
  */
-public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
-{
+public class CAtomTarget implements Painter<COSMViewer> {
 
     /**
-     * returns the position of the source
-     *
-     * @return geoposition of the source
+     * Position of the Target Objekt
      */
-    public GeoPosition getPosition();
+    private GeoPosition m_position;
+
 
     /**
-     * Method to get the actual Color of this Source
+     * CTOR
+     * @param p_position
      */
-    public Color getColor();
+    public CAtomTarget(GeoPosition p_position){
+        m_position = p_position;
+    }
 
     /**
-     * Method to set the Color of this Source
-     */
-    public void setColor( Color p_color );
-
-    /**
-     * Method to get the Generator of an Source (null if there is no Generator)
-     */
-    public IGenerator getGenerator();
-
-    /**
-     * Method to set a Generator in a Source
-     */
-    public void setGenerator( IGenerator p_generator );
-
-    /**
-     * Method to remove the Generator (Set m_generator to null)
-     */
-    public void removeGenerator();
-
-    /**
-     * Getter for the TargetManager of this Source
+     * Get the Position of the Target
      * @return
      */
-    public IComplexTarget getComplexTarget();
+    public GeoPosition getPosition(){
+        return m_position;
+    }
 
     /**
-     * Set a new TargetManager for this Source
-     * @param p_complexTarget
+     * Set a specific Position for this Target
+     * @param p_position
      */
-    public void setComplexTarget(IComplexTarget p_complexTarget);
+    public void setPosition(GeoPosition p_position){
+        this.m_position = p_position;
+    }
+
+    @Override
+    public void paint(final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height ) {
+        final int l_zoom = Math.max(15 - p_viewer.getZoom(), 3);
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( this.getPosition(), p_viewer.getZoom() );
+        p_graphic.setColor( Color.RED );
+        p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
+    }
 
 }

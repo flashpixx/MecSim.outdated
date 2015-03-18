@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import java.net.MalformedURLException;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -107,7 +107,7 @@ public class CVirtualLocation
         /**
          * virtual-location-directory *
          */
-        private String m_directory = "";
+        private File m_directory = null;
         /**
          * index file *
          */
@@ -120,7 +120,7 @@ public class CVirtualLocation
          * @param p_directory base directory of the physical directory
          * @param p_index     index file
          */
-        public CLocation( final String p_directory, final String p_index )
+        public CLocation( final File p_directory, final String p_index )
         {
             m_index = p_index;
             m_directory = p_directory;
@@ -133,7 +133,7 @@ public class CVirtualLocation
          * @param p_index     index file
          * @param p_uri       regular expression of the URI
          */
-        public CLocation( final String p_directory, final String p_index, final String p_uri )
+        public CLocation( final File p_directory, final String p_index, final String p_uri )
         {
             this( p_directory, p_index );
             m_uri = Pattern.compile( p_uri );
@@ -158,9 +158,9 @@ public class CVirtualLocation
          * @param p_uri input URI
          * @return file path
          */
-        public String getFile( final String p_uri ) throws MalformedURLException
+        public File getFile( final String p_uri )
         {
-            return m_directory + "/" + m_uri.matcher( p_uri ).replaceAll( "" );
+            return new File( m_directory, m_uri.matcher( p_uri ).replaceAll( "" ) );
         }
 
 
@@ -169,9 +169,9 @@ public class CVirtualLocation
          *
          * @return root file
          */
-        public String getRoot() throws MalformedURLException
+        public File getRoot()
         {
-            return m_directory + "/" + m_index;
+            return new File( m_directory, m_index );
         }
 
 

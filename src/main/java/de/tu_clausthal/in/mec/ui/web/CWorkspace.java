@@ -27,6 +27,8 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 
+import java.io.File;
+
 
 /**
  * main workspace
@@ -36,7 +38,7 @@ public class CWorkspace extends CBrowser
     /**
      * HTTP server to handle websockets *
      */
-    protected CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualLocation.CLocation( "root", "index.htm" ) );
+    protected CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualLocation.CLocation( new File( this.getClass().getClassLoader().getResource( "web/root" ).getFile() ), "index.htm" ) );
 
 
     /**
@@ -45,9 +47,9 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super();
-        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( "documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc*" ) );
-        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( "documentation/developer", "index.htm", "/develdoc*" ) );
-        //m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( "<mecsim>/www",                                                   "index.htm",    "/local*" ) );
+        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc*" ) );
+        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( new File( this.getClass().getClassLoader().getResource( "web/documentation/developer" ).getFile() ), "index.htm", "/develdoc*" ) );
+        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local*" ) );
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     }

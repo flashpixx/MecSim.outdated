@@ -67,6 +67,8 @@ public class CServer extends NanoHTTPD
      * ctor - starts the HTTP server
      *
      * @note webservice is bind only to "localhost" with the configuration port
+     * @param p_host bind hostname
+     * @param p_port bind port
      * @param p_default default location
      */
     public CServer( final String p_host, final int p_port, final CVirtualLocation.CLocation p_default )
@@ -173,9 +175,9 @@ public class CServer extends NanoHTTPD
     {
         final String[] l_parts = p_uri.split( "/" );
         if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
-            return this.getClass().getClassLoader().getResource( "web/" + p_host.getRoot() );
+            return p_host.getRoot().toURI().toURL();
 
-        return this.getClass().getClassLoader().getResource( "web/" + p_host.getFile( p_uri ) );
+        return p_host.getFile( p_uri ).toURI().toURL();
     }
 
 }

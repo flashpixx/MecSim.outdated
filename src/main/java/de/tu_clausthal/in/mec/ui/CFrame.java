@@ -56,7 +56,7 @@ public class CFrame extends JFrame
     /**
      * config file of the dockables
      */
-    private File m_configfile = CConfiguration.getInstance().getConfigDir( "ui.xml" );
+    private File m_configfile = CConfiguration.getInstance().getLocation( "root", "ui.xml" );
     /**
      * map with widgets
      */

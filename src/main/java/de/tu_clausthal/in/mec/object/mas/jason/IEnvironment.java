@@ -94,7 +94,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        final File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
+        final File l_asl = CConfiguration.getInstance().getLocation( "mas", p_agentname + ".asl" );
         if ( l_asl.exists() )
             throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "aslexist" ) );
 
@@ -115,7 +115,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
+        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
     }
 
     /**
@@ -127,7 +127,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     public static String[] getAgentFiles()
     {
         final List<String> l_list = new LinkedList<>();
-        for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
+        for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 
         return CCommon.CollectionToArray( String[].class, l_list );

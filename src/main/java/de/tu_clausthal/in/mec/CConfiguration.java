@@ -74,22 +74,14 @@ public class CConfiguration
      * singleton instance variable
      */
     private static final CConfiguration c_instance = new CConfiguration();
+    private final Map<String, File> m_location = new HashMap()
+    {{
+            put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
+        }};
     /**
      * property that stores the configuration data
      */
     private Data m_data = new Data();
-    /**
-     * directory of the configuration file
-     */
-    private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
-    /**
-     * directory of the agent (MAS) files
-     */
-    private File m_masdir = new File( m_dir + File.separator + "mas" );
-    /**
-     * directory of external Jar files
-     */
-    private File m_jardir = new File( m_dir + File.separator + "jar" );
     /**
      * UTF-8 property reader
      */
@@ -113,8 +105,9 @@ public class CConfiguration
         }
         catch ( IOException l_exception )
         {
-            ;
         }
+
+        this.setDefaultDirectories();
     }
 
     /**
@@ -127,6 +120,18 @@ public class CConfiguration
         return c_instance;
     }
 
+    /**
+     * returns a path relative to the root directory
+     * @param p_dir directories
+     * @return full file
+     */
+    private File getBasePath( final String... p_dir )
+    {
+        if ( !m_location.containsKey( "root" ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
+
+        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
+    }
 
     /**
      * reads the manifest data
@@ -136,6 +141,22 @@ public class CConfiguration
     public Map<String, String> getManifest()
     {
         return m_manifest;
+    }
+
+
+    /**
+     * returns the location of a directory
+     *
+     * @param p_name    name of the location
+     * @param p_varargs path components after the directory
+     * @return full directory
+     */
+    public File getLocation( final String p_name, final String... p_varargs )
+    {
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            return m_location.get( p_name );
+
+        return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
 
 
@@ -155,7 +176,7 @@ public class CConfiguration
 
 
         try (
-                Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + c_ConfigFilename ), "UTF-8" );
+                Writer l_writer = new OutputStreamWriter( new FileOutputStream( this.getLocation( "root", c_ConfigFilename ) ), "UTF-8" );
         )
         {
             new Gson().toJson( m_data, l_writer );
@@ -166,19 +187,24 @@ public class CConfiguration
         }
     }
 
+
+    /**
+     * creates the default directories relative to the root dir
+     */
+    private void setDefaultDirectories()
+    {
+        for ( String l_item : new String[]{"mas", "jar", "www"} )
+            m_location.put( l_item, this.getBasePath( l_item ) );
+    }
+
     /**
      * creates the configuration directories
      */
     private void createDirectories() throws IOException
     {
-        if ( !m_dir.exists() && !m_dir.mkdirs() )
-            throw new IOException( CCommon.getResourceString( this, "notcreate", m_dir.getAbsolutePath() ) );
-
-        if ( !m_masdir.exists() && !m_masdir.mkdirs() )
-            throw new IOException( CCommon.getResourceString( this, "notcreate", m_masdir.getAbsolutePath() ) );
-
-        if ( !m_jardir.exists() && !m_jardir.mkdirs() )
-            throw new IOException( CCommon.getResourceString( this, "notcreate", m_jardir.getAbsolutePath() ) );
+        for ( File l_dir : m_location.values() )
+            if ( !l_dir.exists() && !l_dir.mkdirs() )
+                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
     }
 
     /**
@@ -198,7 +224,7 @@ public class CConfiguration
             CLogger.error( l_exception.getMessage() );
         }
 
-        String l_config = m_dir + File.separator + c_ConfigFilename;
+        final File l_config = this.getLocation( "root", c_ConfigFilename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
 
         // read main configuration
@@ -276,8 +302,8 @@ public class CConfiguration
         try
         {
             URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            for ( String l_jar : m_jardir.list( new WildcardFileFilter( "*.jar" ) ) )
-                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, new File( m_jardir + File.separator + l_jar ).toURI().toURL() );
+            for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
+                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, new File( m_location.get( "jar" ) + File.separator + l_jar ).toURI().toURL() );
         }
         catch ( Exception l_exception )
         {
@@ -313,42 +339,24 @@ public class CConfiguration
 
 
     /**
-     * returns the config dir
-     *
-     * @param p_varargs path components after the MAS dir
-     * @return path to config dir
-     */
-    public File getConfigDir( final String... p_varargs )
-    {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_dir;
-
-        return new File( m_dir + File.separator + StringUtils.join( p_varargs, File.separator ) );
-    }
-
-    /**
      * sets the config dir
      *
      * @param p_dir directory
      */
     public void setConfigDir( final File p_dir )
     {
-        m_dir = p_dir;
+        m_location.put( "root", p_dir );
+        this.setDefaultDirectories();
+        try
+        {
+            this.createDirectories();
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
     }
 
-    /**
-     * returns the path for MAS files
-     *
-     * @param p_varargs path components after the MAS dir
-     * @return path to mas files
-     */
-    public File getMASDir( final String... p_varargs )
-    {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_masdir;
-
-        return new File( m_masdir + File.separator + StringUtils.join( p_varargs, File.separator ) );
-    }
 
     /**
      * returns the configuration data

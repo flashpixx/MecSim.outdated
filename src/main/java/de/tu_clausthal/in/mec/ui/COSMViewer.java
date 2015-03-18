@@ -69,7 +69,7 @@ public class COSMViewer extends JXMapViewer
         final DefaultTileFactory l_tileFactory = new DefaultTileFactory( l_info );
         l_tileFactory.setThreadPoolSize( Runtime.getRuntime().availableProcessors() );
 
-        LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false );
+        LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getLocation( "root" ), false );
         this.setTileFactory( l_tileFactory );
         this.setZoom( CConfiguration.getInstance().get().getZoom() );
         this.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );

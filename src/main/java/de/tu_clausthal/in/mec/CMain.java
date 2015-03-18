@@ -106,7 +106,7 @@ public class CMain
 
 
         // read the configuration directory (default ~/.mecsim)
-        File l_defaultconfig = CConfiguration.getInstance().getConfigDir();
+        File l_defaultconfig = CConfiguration.getInstance().getLocation( "root" );
         if ( l_cli.hasOption( "configuration" ) )
             l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
 

@@ -32,6 +32,7 @@ import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -66,7 +67,6 @@ public class CServer extends NanoHTTPD
     /**
      * ctor - starts the HTTP server
      *
-     * @note webservice is bind only to "localhost" with the configuration port
      * @param p_host bind hostname
      * @param p_port bind port
      * @param p_default default location
@@ -90,25 +90,30 @@ public class CServer extends NanoHTTPD
     @Override
     public final Response serve( final IHTTPSession p_session )
     {
+        Response l_response;
         try
         {
-            // mime-type will be read of the file-extension
-            final CVirtualLocation.CLocation l_host = m_vlocation.get( p_session.getUri() );
-            final URL l_url = this.getFileURL( l_host, p_session.getUri() );
+            // mime-type will be read by the file-extension
+            final CVirtualLocation.CLocation l_location = m_vlocation.get( p_session.getUri() );
+            final URL l_url = this.getFileURL( l_location, p_session.getUri() );
             final String l_mimetype = URLConnection.guessContentTypeFromName( l_url.getFile() );
+            final String l_encoding = new InputStreamReader( l_url.openStream() ).getEncoding();
 
-            // create response for markdown file
+
             if ( l_url.getPath().endsWith( ".md" ) )
-                return new Response( Response.Status.OK, "application/xhtml+xml", getHTMLfromMarkdown( l_host, p_session.getUri() ) );
+                l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", getHTMLfromMarkdown( l_location, p_session.getUri() ) );
+            else
+                l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + l_encoding, l_url.openStream() );
 
-            // repsonse otherwise
-            return new Response( Response.Status.OK, l_mimetype, l_url.openStream() );
         }
-        catch ( Exception l_exception )
+        catch ( IOException l_exception )
         {
             CLogger.error( l_exception );
-            return new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
+            l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
         }
+
+        l_response.addHeader( "Expires", "-1" );
+        return l_response;
     }
 
 
@@ -121,7 +126,6 @@ public class CServer extends NanoHTTPD
     {
         return m_vlocation;
     }
-
 
 
     /**
@@ -148,18 +152,18 @@ public class CServer extends NanoHTTPD
     /**
      * creates a full HTML document from a markdown document
      *
-     * @param p_host vhost configuration
+     * @param p_location virtual location configuration
      * @param p_uri  URI part
      * @return full HTML document
      */
-    protected final String getHTMLfromMarkdown( final CVirtualLocation.CLocation p_host, final String p_uri ) throws IOException
+    protected final String getHTMLfromMarkdown( final CVirtualLocation.CLocation p_location, final String p_uri ) throws IOException
     {
         return "<?xml version=\"1.0\" ?>" +
                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
-                //( p_host.hasCSS() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + p_host.getCSS() + "\"></head>" ) +
+                //( p_location.hasCSS() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + p_location.getCSS() + "\"></head>" ) +
                 "<body>" +
-                m_markdown.markdownToHtml( IOUtils.toString( getFileURL( p_host, p_uri ) ).toCharArray(), m_renderer ) +
+                m_markdown.markdownToHtml( IOUtils.toString( getFileURL( p_location, p_uri ) ).toCharArray(), m_renderer ) +
                 "</body></html>";
     }
 
@@ -167,17 +171,17 @@ public class CServer extends NanoHTTPD
     /**
      * returns the URL relative to the resource-root directory
      *
-     * @param p_host name-based virtual host
+     * @param p_location name-based virtual location
      * @param p_uri  input URL
      * @return full URL to the file
      */
-    protected URL getFileURL( final CVirtualLocation.CLocation p_host, final String p_uri ) throws MalformedURLException
+    protected URL getFileURL( final CVirtualLocation.CLocation p_location, final String p_uri ) throws MalformedURLException
     {
         final String[] l_parts = p_uri.split( "/" );
         if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
-            return p_host.getRoot().toURI().toURL();
+            return p_location.getRoot().toURI().toURL();
 
-        return p_host.getFile( p_uri ).toURI().toURL();
+        return p_location.getFile( p_uri ).toURI().toURL();
     }
 
 }

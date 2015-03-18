@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.ui.web;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 
 /**
@@ -103,7 +102,7 @@ public class CVirtualLocation
         /**
          * URI pattern *
          */
-        private Pattern m_uri = Pattern.compile( "/*" );
+        private String m_uri = "/";
         /**
          * virtual-location-directory *
          */
@@ -136,7 +135,7 @@ public class CVirtualLocation
         public CLocation( final File p_directory, final String p_index, final String p_uri )
         {
             this( p_directory, p_index );
-            m_uri = Pattern.compile( p_uri );
+            m_uri = p_uri;
         }
 
 
@@ -148,7 +147,7 @@ public class CVirtualLocation
          */
         public boolean match( final String p_uri )
         {
-            return m_uri.matcher( p_uri ).find();
+            return p_uri.startsWith( m_uri );
         }
 
 
@@ -160,7 +159,7 @@ public class CVirtualLocation
          */
         public File getFile( final String p_uri )
         {
-            return new File( m_directory, m_uri.matcher( p_uri ).replaceAll( "" ) );
+            return new File( m_directory, p_uri.replace( m_uri, "" ) );
         }
 
 

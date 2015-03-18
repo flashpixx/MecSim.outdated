@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 
@@ -40,7 +40,7 @@ public class CVirtualLocation
     /**
      * list with additional name-based location *
      */
-    protected final Set<IVirtualLocation> m_locations = new HashSet<>();
+    protected final Set<IVirtualLocation> m_locations = new LinkedHashSet<>();
 
 
     /**

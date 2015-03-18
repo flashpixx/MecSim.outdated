@@ -160,7 +160,7 @@ public class CServer extends NanoHTTPD
         return "<?xml version=\"1.0\" ?>" +
                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
-                //( p_location.hasCSS() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + p_location.getCSS() + "\"></head>" ) +
+                "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"/userdoc/layout.css\"/></head>" +
                 "<body>" +
                 m_markdown.markdownToHtml( IOUtils.toString( p_location.getFile( p_uri ) ).toCharArray(), m_renderer ) +
                 "</body></html>";

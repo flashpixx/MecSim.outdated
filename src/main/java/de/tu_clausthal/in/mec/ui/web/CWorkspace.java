@@ -47,8 +47,8 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super();
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc" ) );
         m_server.getVirtualLocation().getLocations().add( new CVirtualFile( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/layout.css" ).getFile() ), "/userdoc/layout.css" ) );
+        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc" ) );
 
         m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/developer" ).getFile() ), "index.htm", "/develdoc" ) );
 

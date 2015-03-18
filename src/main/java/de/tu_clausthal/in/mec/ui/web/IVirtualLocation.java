@@ -23,88 +23,31 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import java.io.File;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
 
 /**
- * definition of virtual location *
+ * interface of locations
  */
-public class CDirectory implements ILocation
+public interface IVirtualLocation
 {
 
     /**
-     * URI pattern *
-     */
-    private String m_uri = "/";
-    /**
-     * virtual-location-directory *
-     */
-    private File m_directory = null;
-    /**
-     * index file *
-     */
-    private String m_index = "";
-
-
-    /**
-     * ctor
+     * checks an URI if it matches the named-based location
      *
-     * @param p_directory base directory of the physical directory
-     * @param p_index     index file
+     * @param p_uri input URI
+     * @return machting boolean
      */
-    public CDirectory( final File p_directory, final String p_index )
-    {
-        m_index = p_index;
-        m_directory = p_directory;
-    }
+    public boolean match( final String p_uri );
 
     /**
-     * ctor
+     * returns the path of the directory with the input file or root file
      *
-     * @param p_directory base directory of the physical directory
-     * @param p_index     index file
-     * @param p_uri       regular expression of the URI
+     * @param p_uri input URI
+     * @return file path
      */
-    public CDirectory( final File p_directory, final String p_index, final String p_uri )
-    {
-        this( p_directory, p_index );
-        m_uri = p_uri;
-    }
+    public URL getFile( final String p_uri ) throws MalformedURLException;
 
-
-    @Override
-    public boolean match( final String p_uri )
-    {
-        return p_uri.startsWith( m_uri );
-    }
-
-
-    @Override
-    public URL getFile( final String p_uri ) throws MalformedURLException
-    {
-        final String[] l_parts = p_uri.split( "/" );
-        if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
-            return new File( m_directory, m_index ).toURI().toURL();
-
-        return new File( m_directory, p_uri.replace( m_uri, "" ) ).toURI().toURL();
-    }
-
-
-    @Override
-    public final int hashCode()
-    {
-        return m_uri.hashCode();
-    }
-
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        if ( p_object instanceof CVirtualLocation )
-            return this.hashCode() == p_object.hashCode();
-
-        return false;
-    }
 }

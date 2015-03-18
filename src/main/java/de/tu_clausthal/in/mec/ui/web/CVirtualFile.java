@@ -24,38 +24,64 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 
-import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.ui.CBrowser;
-
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
- * main workspace
+ * virtual file with full path
  */
-public class CWorkspace extends CBrowser
+public class CVirtualFile implements IVirtualLocation
 {
     /**
-     * HTTP server to handle websockets *
+     * file *
      */
-    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/root" ).getFile() ), "index.htm" ) );
+    private final File m_file;
+    /**
+     * url match *
+     */
+    private final String m_uri;
 
 
     /**
-     * ctor - adds the browser *
+     * ctor
+     *
+     * @param p_file file
+     * @param p_uri  regular expression of the URI
      */
-    public CWorkspace()
+    public CVirtualFile( final File p_file, final String p_uri )
     {
-        super();
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc" ) );
-        m_server.getVirtualLocation().getLocations().add( new CVirtualFile( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/layout.css" ).getFile() ), "/userdoc/layout.css" ) );
+        m_file = p_file;
+        m_uri = p_uri;
 
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/developer" ).getFile() ), "index.htm", "/develdoc" ) );
-
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local" ) );
-
-
-        this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     }
 
+    @Override
+    public boolean match( String p_uri )
+    {
+        return p_uri.equals( m_uri );
+    }
+
+    @Override
+    public URL getFile( String p_uri ) throws MalformedURLException
+    {
+        return m_file.toURI().toURL();
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_uri.hashCode();
+    }
+
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        if ( p_object instanceof CVirtualLocation )
+            return this.hashCode() == p_object.hashCode();
+
+        return false;
+    }
 }

@@ -70,7 +70,7 @@ public class CServer extends NanoHTTPD
      * @param p_port bind port
      * @param p_default default location
      */
-    public CServer( final String p_host, final int p_port, final CDirectory p_default )
+    public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {
         super( p_host, p_port );
         m_virtuallocation = new CVirtualLocation( p_default );
@@ -93,7 +93,7 @@ public class CServer extends NanoHTTPD
         try
         {
             // mime-type will be read by the file-extension
-            final ILocation l_location = m_virtuallocation.get( p_session.getUri() );
+            final IVirtualLocation l_location = m_virtuallocation.get( p_session.getUri() );
             final URL l_url = l_location.getFile( p_session.getUri() );
             final String l_mimetype = URLConnection.guessContentTypeFromName( l_url.getFile() );
             final String l_encoding = new InputStreamReader( l_url.openStream() ).getEncoding();
@@ -155,7 +155,7 @@ public class CServer extends NanoHTTPD
      * @param p_uri  URI part
      * @return full HTML document
      */
-    protected final String getHTMLfromMarkdown( final ILocation p_location, final String p_uri ) throws IOException
+    protected final String getHTMLfromMarkdown( final IVirtualLocation p_location, final String p_uri ) throws IOException
     {
         return "<?xml version=\"1.0\" ?>" +
                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +

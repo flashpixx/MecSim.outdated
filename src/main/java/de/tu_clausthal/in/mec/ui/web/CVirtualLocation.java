@@ -36,11 +36,11 @@ public class CVirtualLocation
     /**
      * default name-based host *
      */
-    protected final CDirectory m_defaultlocation;
+    protected final CVirtualDirectory m_defaultlocation;
     /**
      * list with additional name-based location *
      */
-    protected final Set<ILocation> m_locations = new HashSet<>();
+    protected final Set<IVirtualLocation> m_locations = new HashSet<>();
 
 
     /**
@@ -48,7 +48,7 @@ public class CVirtualLocation
      *
      * @param p_defaultlocation default / fallback location
      */
-    public CVirtualLocation( final CDirectory p_defaultlocation )
+    public CVirtualLocation( final CVirtualDirectory p_defaultlocation )
     {
         m_defaultlocation = p_defaultlocation;
     }
@@ -57,7 +57,7 @@ public class CVirtualLocation
     /**
      * returns the location set
      */
-    public final Set<ILocation> getLocations()
+    public final Set<IVirtualLocation> getLocations()
     {
         return m_locations;
     }
@@ -69,9 +69,9 @@ public class CVirtualLocation
      * @param p_uri URI
      * @return name-based location or default location
      */
-    public ILocation get( final String p_uri )
+    public IVirtualLocation get( final String p_uri )
     {
-        for ( ILocation l_item : m_locations )
+        for ( IVirtualLocation l_item : m_locations )
             if ( l_item.match( p_uri ) )
                 return l_item;
 

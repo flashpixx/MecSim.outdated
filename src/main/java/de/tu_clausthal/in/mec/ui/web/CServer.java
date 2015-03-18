@@ -58,20 +58,21 @@ public class CServer extends NanoHTTPD
      */
     protected final Map<Object, Map<String, CReflection.CMethod>> m_bind = new HashMap<>();
     /**
-     * virtual-hosts
+     * virtual-locations
      */
-    protected CVirtualHost m_vhost = null;
+    protected CVirtualLocation m_vlocation = null;
 
 
     /**
      * ctor - starts the HTTP server
      *
      * @note webservice is bind only to "localhost" with the configuration port
+     * @param p_default default location
      */
-    public CServer( final String p_host, final int p_port, final CVirtualHost.CName p_default )
+    public CServer( final String p_host, final int p_port, final CVirtualLocation.CLocation p_default )
     {
         super( p_host, p_port );
-        m_vhost = new CVirtualHost( p_default );
+        m_vlocation = new CVirtualLocation( p_default );
 
         try
         {
@@ -90,7 +91,7 @@ public class CServer extends NanoHTTPD
         try
         {
             // mime-type will be read of the file-extension
-            final CVirtualHost.CName l_host = m_vhost.get( p_session.getUri() );
+            final CVirtualLocation.CLocation l_host = m_vlocation.get( p_session.getUri() );
             final URL l_url = this.getFileURL( l_host, p_session.getUri() );
             final String l_mimetype = URLConnection.guessContentTypeFromName( l_url.getFile() );
 
@@ -107,6 +108,18 @@ public class CServer extends NanoHTTPD
             return new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
         }
     }
+
+
+    /**
+     * returns the virtual-location object
+     *
+     * @return location
+     */
+    public CVirtualLocation getVirtualLocation()
+    {
+        return m_vlocation;
+    }
+
 
 
     /**
@@ -137,7 +150,7 @@ public class CServer extends NanoHTTPD
      * @param p_uri  URI part
      * @return full HTML document
      */
-    protected final String getHTMLfromMarkdown( final CVirtualHost.CName p_host, final String p_uri ) throws IOException
+    protected final String getHTMLfromMarkdown( final CVirtualLocation.CLocation p_host, final String p_uri ) throws IOException
     {
         return "<?xml version=\"1.0\" ?>" +
                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
@@ -156,7 +169,7 @@ public class CServer extends NanoHTTPD
      * @param p_uri  input URL
      * @return full URL to the file
      */
-    protected URL getFileURL( final CVirtualHost.CName p_host, final String p_uri ) throws MalformedURLException
+    protected URL getFileURL( final CVirtualLocation.CLocation p_host, final String p_uri ) throws MalformedURLException
     {
         final String[] l_parts = p_uri.split( "/" );
         if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )

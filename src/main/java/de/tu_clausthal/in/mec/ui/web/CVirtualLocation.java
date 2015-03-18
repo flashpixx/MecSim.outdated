@@ -30,63 +30,63 @@ import java.util.regex.Pattern;
 
 
 /**
- * class for name-based virtual-hosts
+ * class for name-based location
  */
-public class CVirtualHost
+public class CVirtualLocation
 {
 
     /**
      * default name-based host *
      */
-    protected CName m_default = null;
+    protected CLocation m_default = null;
     /**
-     * list with additional name-based hosts *
+     * list with additional name-based location *
      */
-    protected Set<CName> m_names = new HashSet<>();
+    protected Set<CLocation> m_names = new HashSet<>();
 
 
     /**
      * ctor
      *
-     * @param p_default default / fallback host
+     * @param p_default default / fallback location
      */
-    public CVirtualHost( final CName p_default )
+    public CVirtualLocation( final CLocation p_default )
     {
         m_default = p_default;
     }
 
     /**
-     * adds a new name-based host
+     * adds a new name-based location
      *
      * @param p_name name object
      */
-    public void add( final CName p_name )
+    public void add( final CLocation p_name )
     {
         m_names.add( p_name );
     }
 
 
     /**
-     * removes a name-based host
+     * removes a name-based hlocation
      *
      * @param p_name name object
      * @return boolean for correct remove
      */
-    public boolean remove( final CName p_name )
+    public boolean remove( final CLocation p_name )
     {
         return m_names.remove( p_name );
     }
 
 
     /**
-     * gets the name-based host matched by the URI
+     * gets the name-based location matched by the URI
      *
      * @param p_uri URI
-     * @return name-based host or default host
+     * @return name-based location or default location
      */
-    public CName get( final String p_uri )
+    public CLocation get( final String p_uri )
     {
-        for ( CName l_item : m_names )
+        for ( CLocation l_item : m_names )
             if ( l_item.match( p_uri ) )
                 return l_item;
 
@@ -95,9 +95,9 @@ public class CVirtualHost
 
 
     /**
-     * definition of virtual-host *
+     * definition of virtual location *
      */
-    static public class CName
+    static public class CLocation
     {
 
         /**
@@ -105,7 +105,7 @@ public class CVirtualHost
          */
         private Pattern m_uri = Pattern.compile( "/*" );
         /**
-         * vhost-directory *
+         * virtual-location-directory *
          */
         private String m_directory = "";
         /**
@@ -117,10 +117,10 @@ public class CVirtualHost
         /**
          * ctor
          *
-         * @param p_directory base directory of the host
+         * @param p_directory base directory of the physical directory
          * @param p_index     index file
          */
-        public CName( final String p_directory, final String p_index )
+        public CLocation( final String p_directory, final String p_index )
         {
             m_index = p_index;
             m_directory = p_directory;
@@ -129,11 +129,11 @@ public class CVirtualHost
         /**
          * ctor
          *
-         * @param p_directory base directory of the host
+         * @param p_directory base directory of the physical directory
          * @param p_index     index file
          * @param p_uri       regular expression of the URI
          */
-        public CName( final String p_directory, final String p_index, final String p_uri )
+        public CLocation( final String p_directory, final String p_index, final String p_uri )
         {
             this( p_directory, p_index );
             m_uri = Pattern.compile( p_uri );
@@ -141,7 +141,7 @@ public class CVirtualHost
 
 
         /**
-         * checks an URI if it matches the named-based host
+         * checks an URI if it matches the named-based location
          *
          * @param p_uri input URI
          * @return machting boolean
@@ -185,7 +185,7 @@ public class CVirtualHost
         @Override
         public final boolean equals( final Object p_object )
         {
-            if ( p_object instanceof CVirtualHost )
+            if ( p_object instanceof CVirtualLocation )
                 return this.hashCode() == p_object.hashCode();
 
             return false;

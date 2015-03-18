@@ -36,7 +36,7 @@ public class CWorkspace extends CBrowser
     /**
      * HTTP server to handle websockets *
      */
-    protected CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualHost.CName( "root", "index.htm" ) );
+    protected CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualLocation.CLocation( "root", "index.htm" ) );
 
 
     /**
@@ -45,6 +45,10 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super();
+        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( "documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc*" ) );
+        m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( "documentation/developer", "index.htm", "/develdoc*" ) );
+        //m_server.getVirtualLocation().add( new CVirtualLocation.CLocation( "<mecsim>/www",                                                   "index.htm",    "/local*" ) );
+
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     }
 

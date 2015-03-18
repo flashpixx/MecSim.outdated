@@ -33,7 +33,6 @@ import org.pegdown.PegDownProcessor;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -61,7 +60,7 @@ public class CServer extends NanoHTTPD
     /**
      * virtual-locations
      */
-    protected CVirtualLocation m_vlocation = null;
+    protected final CVirtualLocation m_virtuallocation;
 
 
     /**
@@ -71,10 +70,10 @@ public class CServer extends NanoHTTPD
      * @param p_port bind port
      * @param p_default default location
      */
-    public CServer( final String p_host, final int p_port, final CVirtualLocation.CLocation p_default )
+    public CServer( final String p_host, final int p_port, final CDirectory p_default )
     {
         super( p_host, p_port );
-        m_vlocation = new CVirtualLocation( p_default );
+        m_virtuallocation = new CVirtualLocation( p_default );
 
         try
         {
@@ -94,8 +93,8 @@ public class CServer extends NanoHTTPD
         try
         {
             // mime-type will be read by the file-extension
-            final CVirtualLocation.CLocation l_location = m_vlocation.get( p_session.getUri() );
-            final URL l_url = this.getFileURL( l_location, p_session.getUri() );
+            final ILocation l_location = m_virtuallocation.get( p_session.getUri() );
+            final URL l_url = l_location.getFile( p_session.getUri() );
             final String l_mimetype = URLConnection.guessContentTypeFromName( l_url.getFile() );
             final String l_encoding = new InputStreamReader( l_url.openStream() ).getEncoding();
 
@@ -124,7 +123,7 @@ public class CServer extends NanoHTTPD
      */
     public CVirtualLocation getVirtualLocation()
     {
-        return m_vlocation;
+        return m_virtuallocation;
     }
 
 
@@ -156,32 +155,15 @@ public class CServer extends NanoHTTPD
      * @param p_uri  URI part
      * @return full HTML document
      */
-    protected final String getHTMLfromMarkdown( final CVirtualLocation.CLocation p_location, final String p_uri ) throws IOException
+    protected final String getHTMLfromMarkdown( final ILocation p_location, final String p_uri ) throws IOException
     {
         return "<?xml version=\"1.0\" ?>" +
                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
                 //( p_location.hasCSS() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + p_location.getCSS() + "\"></head>" ) +
                 "<body>" +
-                m_markdown.markdownToHtml( IOUtils.toString( getFileURL( p_location, p_uri ) ).toCharArray(), m_renderer ) +
+                m_markdown.markdownToHtml( IOUtils.toString( p_location.getFile( p_uri ) ).toCharArray(), m_renderer ) +
                 "</body></html>";
-    }
-
-
-    /**
-     * returns the URL relative to the resource-root directory
-     *
-     * @param p_location name-based virtual location
-     * @param p_uri  input URL
-     * @return full URL to the file
-     */
-    protected URL getFileURL( final CVirtualLocation.CLocation p_location, final String p_uri ) throws MalformedURLException
-    {
-        final String[] l_parts = p_uri.split( "/" );
-        if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
-            return p_location.getRoot().toURI().toURL();
-
-        return p_location.getFile( p_uri ).toURI().toURL();
     }
 
 }

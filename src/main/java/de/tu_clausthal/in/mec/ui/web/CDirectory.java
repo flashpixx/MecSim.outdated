@@ -23,59 +23,88 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
- * class for name-based location
+ * definition of virtual location *
  */
-public class CVirtualLocation
+public class CDirectory implements ILocation
 {
 
     /**
-     * default name-based host *
+     * URI pattern *
      */
-    protected final CDirectory m_defaultlocation;
+    private String m_uri = "/";
     /**
-     * list with additional name-based location *
+     * virtual-location-directory *
      */
-    protected final Set<ILocation> m_locations = new HashSet<>();
+    private File m_directory = null;
+    /**
+     * index file *
+     */
+    private String m_index = "";
 
 
     /**
      * ctor
      *
-     * @param p_defaultlocation default / fallback location
+     * @param p_directory base directory of the physical directory
+     * @param p_index     index file
      */
-    public CVirtualLocation( final CDirectory p_defaultlocation )
+    public CDirectory( final File p_directory, final String p_index )
     {
-        m_defaultlocation = p_defaultlocation;
+        m_index = p_index;
+        m_directory = p_directory;
     }
 
-
     /**
-     * returns the location set
-     */
-    public final Set<ILocation> getLocations()
-    {
-        return m_locations;
-    }
-
-
-    /**
-     * gets the name-based location matched by the URI
+     * ctor
      *
-     * @param p_uri URI
-     * @return name-based location or default location
+     * @param p_directory base directory of the physical directory
+     * @param p_index     index file
+     * @param p_uri       regular expression of the URI
      */
-    public ILocation get( final String p_uri )
+    public CDirectory( final File p_directory, final String p_index, final String p_uri )
     {
-        for ( ILocation l_item : m_locations )
-            if ( l_item.match( p_uri ) )
-                return l_item;
-
-        return m_defaultlocation;
+        this( p_directory, p_index );
+        m_uri = p_uri;
     }
 
+
+    @Override
+    public boolean match( final String p_uri )
+    {
+        return p_uri.startsWith( m_uri );
+    }
+
+
+    @Override
+    public URL getFile( final String p_uri ) throws MalformedURLException
+    {
+        final String[] l_parts = p_uri.split( "/" );
+        if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
+            return new File( m_directory, m_index ).toURI().toURL();
+
+        return new File( m_directory, p_uri.replace( m_uri, "" ) ).toURI().toURL();
+    }
+
+
+    @Override
+    public final int hashCode()
+    {
+        return m_uri.hashCode();
+    }
+
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        if ( p_object instanceof CVirtualLocation )
+            return this.hashCode() == p_object.hashCode();
+
+        return false;
+    }
 }

@@ -23,59 +23,31 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import java.util.HashSet;
-import java.util.Set;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
- * class for name-based location
+ * interface of locations
  */
-public class CVirtualLocation
+public interface ILocation
 {
 
     /**
-     * default name-based host *
-     */
-    protected final CDirectory m_defaultlocation;
-    /**
-     * list with additional name-based location *
-     */
-    protected final Set<ILocation> m_locations = new HashSet<>();
-
-
-    /**
-     * ctor
+     * checks an URI if it matches the named-based location
      *
-     * @param p_defaultlocation default / fallback location
+     * @param p_uri input URI
+     * @return machting boolean
      */
-    public CVirtualLocation( final CDirectory p_defaultlocation )
-    {
-        m_defaultlocation = p_defaultlocation;
-    }
-
+    public boolean match( final String p_uri );
 
     /**
-     * returns the location set
-     */
-    public final Set<ILocation> getLocations()
-    {
-        return m_locations;
-    }
-
-
-    /**
-     * gets the name-based location matched by the URI
+     * returns the path of the directory with the input file or root file
      *
-     * @param p_uri URI
-     * @return name-based location or default location
+     * @param p_uri input URI
+     * @return file path
      */
-    public ILocation get( final String p_uri )
-    {
-        for ( ILocation l_item : m_locations )
-            if ( l_item.match( p_uri ) )
-                return l_item;
-
-        return m_defaultlocation;
-    }
+    public URL getFile( final String p_uri ) throws MalformedURLException;
 
 }

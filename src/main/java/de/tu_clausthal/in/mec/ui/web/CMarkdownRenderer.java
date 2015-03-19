@@ -45,10 +45,6 @@ import java.net.URLEncoder;
 public class CMarkdownRenderer extends LinkRenderer
 {
     /**
-     * string with base URI *
-     */
-    protected final String m_baseuri;
-    /**
      * string with optional CSS URI *
      */
     protected final String m_cssuri;
@@ -60,28 +56,16 @@ public class CMarkdownRenderer extends LinkRenderer
      */
     public CMarkdownRenderer()
     {
-        this( "", "" );
+        this( "" );
     }
 
     /**
      * ctor
      *
-     * @param p_baseuri base URI
-     */
-    public CMarkdownRenderer( final String p_baseuri )
-    {
-        this( p_baseuri, "" );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_baseuri base URI
      * @param p_cssuri  CSS URI
      */
-    public CMarkdownRenderer( final String p_baseuri, final String p_cssuri )
+    public CMarkdownRenderer( final String p_cssuri )
     {
-        m_baseuri = p_baseuri;
         m_cssuri = p_cssuri;
     }
 
@@ -89,7 +73,7 @@ public class CMarkdownRenderer extends LinkRenderer
     @Override
     public final Rendering render( final ExpLinkNode p_node, final String p_text )
     {
-        return super.render( new ExpLinkNode( p_text, m_baseuri + "/" + p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+        return super.render( new ExpLinkNode( p_text, p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
     }
 
     @Override
@@ -101,7 +85,7 @@ public class CMarkdownRenderer extends LinkRenderer
         }
         catch ( MalformedURLException l_exception )
         {
-            return super.render( new ExpImageNode( p_node.title, m_baseuri + "/" + p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+            return super.render( new ExpImageNode( p_node.title, p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
         }
 
         return super.render( p_node, p_text );

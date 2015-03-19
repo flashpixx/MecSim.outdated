@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 
 import java.io.File;
@@ -48,13 +49,18 @@ public class CWorkspace extends CBrowser
     {
         super();
 
+        try
+        {
+            this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
 
-        this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
-
-        this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc", new CMarkdownRenderer( "/userdoc", "/userdoc/layout.css" ) );
-        this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local", null );
-        this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc", null );
-
+            this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc/", new CMarkdownRenderer( "/userdoc/layout.css" ) );
+            this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/", null );
+            this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/", null );
+        }
+        catch ( IllegalArgumentException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     }

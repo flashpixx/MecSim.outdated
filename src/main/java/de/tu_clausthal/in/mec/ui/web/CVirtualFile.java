@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -52,9 +54,15 @@ public class CVirtualFile implements IVirtualLocation
      */
     public CVirtualFile( final File p_file, final String p_uri )
     {
+        if ( ( p_file == null ) || ( !p_file.exists() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "filenotexists", p_file ) );
+        if ( !p_file.isFile() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotfile", p_file ) );
+        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( p_uri.endsWith( "/" ) ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempy", p_uri ) );
+
         m_file = p_file;
         m_uri = p_uri;
-
     }
 
     @Override

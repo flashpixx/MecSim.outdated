@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,6 +61,13 @@ public class CVirtualDirectory implements IVirtualLocation
      */
     public CVirtualDirectory( final File p_directory, final String p_index )
     {
+        if ( ( p_index == null ) || ( p_index.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
+        if ( ( p_directory == null ) || ( !p_directory.exists() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
+        if ( !p_directory.isDirectory() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotdirectory", p_directory ) );
+
         m_index = p_index;
         m_directory = p_directory;
         m_markdown = null;
@@ -73,6 +82,15 @@ public class CVirtualDirectory implements IVirtualLocation
      */
     public CVirtualDirectory( final File p_directory, final String p_index, final String p_uri )
     {
+        if ( ( p_index == null ) || ( p_index.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
+        if ( ( p_directory == null ) || ( !p_directory.exists() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
+        if ( !p_directory.isDirectory() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotdirectory", p_directory ) );
+        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
+
         m_index = p_index;
         m_directory = p_directory;
         m_uri = p_uri;
@@ -90,6 +108,15 @@ public class CVirtualDirectory implements IVirtualLocation
      */
     public CVirtualDirectory( final File p_directory, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
+        if ( ( p_index == null ) || ( p_index.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
+        if ( ( p_directory == null ) || ( !p_directory.exists() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
+        if ( !p_directory.isDirectory() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotdirectory", p_directory ) );
+        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
+
         m_index = p_index;
         m_directory = p_directory;
         m_uri = p_uri;

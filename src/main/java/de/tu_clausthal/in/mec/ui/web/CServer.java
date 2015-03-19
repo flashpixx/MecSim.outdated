@@ -56,6 +56,10 @@ public class CServer extends NanoHTTPD
      * virtual-locations
      */
     protected final CVirtualLocation m_virtuallocation;
+    /**
+     * bind URI - used for referer *
+     */
+    protected String m_binduri;
 
 
     /**
@@ -68,6 +72,7 @@ public class CServer extends NanoHTTPD
     public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {
         super( p_host, p_port );
+        m_binduri = p_port != 80 ? "http://" + p_host + ":" + p_port : "http://" + p_host;
         m_virtuallocation = new CVirtualLocation( p_default );
 
         try
@@ -84,6 +89,22 @@ public class CServer extends NanoHTTPD
     @Override
     public final Response serve( final IHTTPSession p_session )
     {
+/*
+        System.out.println(p_session.getUri());
+        for( Map.Entry<String, String> x : p_session.getHeaders().entrySet() )
+            System.out.println(x.getKey() + "        " + x.getValue() );
+        System.out.println("----------------------------------------------");
+*/
+
+        final String l_uri;
+        if ( p_session.getHeaders().containsKey( "referer" ) )
+            l_uri = p_session.getHeaders().get( "referer" ).replace( m_binduri, "" ) + p_session.getUri();
+        else
+            l_uri = p_session.getUri();
+
+
+        System.out.println( l_uri + "     " + p_session.getUri() + "          " + p_session.getHeaders().get("referer"));
+
         Response l_response;
         try
         {

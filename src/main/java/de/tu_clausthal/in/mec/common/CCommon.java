@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.common;
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -39,6 +40,28 @@ import java.util.Collection;
  */
 public class CCommon
 {
+
+    /**
+     * returns a file from a resource e.g. Jar file
+     *
+     * @param p_file file relative to the CMain
+     * @return file object or null on error
+     */
+    public static File getResource( final String p_file )
+    {
+        try
+        {
+            return new File( CCommon.class.getClassLoader().getResource( p_file ).getFile() );
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( CCommon.getResourceString( CCommon.class, "sourcenotfound", p_file ) );
+        }
+
+        return null;
+    }
+
+
 
     /**
      * remove from a string the system package name

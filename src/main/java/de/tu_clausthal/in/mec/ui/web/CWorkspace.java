@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.ui.CBrowser;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class CWorkspace extends CBrowser
     /**
      * HTTP server to handle websockets *
      */
-    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/root" ).getFile() ), "index.htm" ) );
+    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualDirectory( CCommon.getResource( "web/root" ), "index.htm" ) );
 
 
     /**
@@ -48,21 +49,56 @@ public class CWorkspace extends CBrowser
     {
         super();
 
-        // because on developer structure the Doxygen build-in documentation cannot exists, run it with try-catch to avoid null-pointer-exceptions
-        try
-        {
-            m_server.getVirtualLocation().getLocations().add( new CVirtualFile( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/layout.css" ).getFile() ), "/userdoc/layout.css" ) );
-            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc" ) );
 
-            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local" ) );
+        this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
 
-            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/developer" ).getFile() ), "index.htm", "/develdoc" ) );
-        }
-        catch ( NullPointerException l_exception )
-        {
-        }
+        this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc" );
+        this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local" );
+        this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc" );
+
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
+    }
+
+
+    /**
+     * adds a new virtual file to the server
+     *
+     * @param p_source relative source path
+     * @param p_uri    URI
+     */
+    protected final void addVirtualFile( final String p_source, final String p_uri )
+    {
+        final File l_file = CCommon.getResource( p_source );
+        if ( l_file != null )
+            m_server.getVirtualLocation().getLocations().add( new CVirtualFile( l_file, p_uri ) );
+    }
+
+
+    /**
+     * adds a new virtual directory to the server
+     *
+     * @param p_source relative source path
+     * @param p_index  index file
+     * @param p_uri    URI
+     */
+    protected void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
+    {
+        this.addVirtualDirectory( CCommon.getResource( p_source ), p_index, p_uri );
+    }
+
+
+    /**
+     * adds a new virtual directory to the server
+     *
+     * @param p_source source file object
+     * @param p_index  index file
+     * @param p_uri    URI
+     */
+    protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    {
+        if ( p_source != null )
+            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( p_source, p_index, p_uri ) );
     }
 
 }

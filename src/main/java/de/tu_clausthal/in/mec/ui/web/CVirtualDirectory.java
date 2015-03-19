@@ -35,6 +35,10 @@ public class CVirtualDirectory implements IVirtualLocation
 {
 
     /**
+     * markdown renderer
+     */
+    private final CMarkdownRenderer m_markdown;
+    /**
      * URI pattern *
      */
     private String m_uri = "/";
@@ -47,7 +51,6 @@ public class CVirtualDirectory implements IVirtualLocation
      */
     private String m_index = "";
 
-
     /**
      * ctor
      *
@@ -58,6 +61,7 @@ public class CVirtualDirectory implements IVirtualLocation
     {
         m_index = p_index;
         m_directory = p_directory;
+        m_markdown = null;
     }
 
     /**
@@ -69,8 +73,27 @@ public class CVirtualDirectory implements IVirtualLocation
      */
     public CVirtualDirectory( final File p_directory, final String p_index, final String p_uri )
     {
-        this( p_directory, p_index );
+        m_index = p_index;
+        m_directory = p_directory;
         m_uri = p_uri;
+        m_markdown = null;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_directory base directory of the physical directory
+     * @param p_index     index file
+     * @param p_uri       regular expression of the URI
+     * @param p_markdown  markdown renderer
+     */
+    public CVirtualDirectory( final File p_directory, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
+    {
+        m_index = p_index;
+        m_directory = p_directory;
+        m_uri = p_uri;
+        m_markdown = p_markdown;
     }
 
 
@@ -89,6 +112,12 @@ public class CVirtualDirectory implements IVirtualLocation
             return new File( m_directory, m_index ).toURI().toURL();
 
         return new File( m_directory, p_uri.replace( m_uri, "" ) ).toURI().toURL();
+    }
+
+    @Override
+    public CMarkdownRenderer getMarkDownRenderer()
+    {
+        return m_markdown;
     }
 
 

@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.ui.web;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.ui.CBrowser;
 
 import java.io.File;
 
@@ -52,9 +51,9 @@ public class CWorkspace extends CBrowser
 
         this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
 
-        this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc" );
-        this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local" );
-        this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc" );
+        this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc", new CMarkdownRenderer( "/userdoc", "/userdoc/layout.css" ) );
+        this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local", null );
+        this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc", null );
 
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
@@ -81,10 +80,11 @@ public class CWorkspace extends CBrowser
      * @param p_source relative source path
      * @param p_index  index file
      * @param p_uri    URI
+     * @param p_markdown markdown renderer
      */
-    protected void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
+    protected void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
-        this.addVirtualDirectory( CCommon.getResource( p_source ), p_index, p_uri );
+        this.addVirtualDirectory( CCommon.getResource( p_source ), p_index, p_uri, p_markdown );
     }
 
 
@@ -94,11 +94,12 @@ public class CWorkspace extends CBrowser
      * @param p_source source file object
      * @param p_index  index file
      * @param p_uri    URI
+     * @param p_markdown markdown renderer
      */
-    protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         if ( p_source != null )
-            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( p_source, p_index, p_uri ) );
+            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( p_source, p_index, p_uri, p_markdown ) );
     }
 
 }

@@ -1,7 +1,7 @@
 # Help
 
- * [GUI Specification](gui)
- * [Functionality](function)
- * [Vehicle Sources](sources)
- * [Agents with Jason](jason)
- * [Developer Documentation](developer/index.htm)
+ * [GUI Specification](gui.md)
+ * [Functionality](function.md)
+ * [Vehicle Sources](sources.md)
+ * [Agents with Jason](jason.md)
+ 

@@ -26,13 +26,10 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
-import org.apache.commons.io.IOUtils;
 import org.pegdown.Extensions;
-import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -49,10 +46,6 @@ public class CServer extends NanoHTTPD
      * markdown processor *
      */
     protected final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
-    /**
-     * link renderer
-     */
-    protected final LinkRenderer m_renderer = new CMarkdownLinkRenderer();
     /**
      * list with binded object *
      */
@@ -94,16 +87,15 @@ public class CServer extends NanoHTTPD
         {
             // mime-type will be read by the file-extension
             final IVirtualLocation l_location = m_virtuallocation.get( p_session.getUri() );
-            final URL l_url = l_location.getFile( p_session.getUri() );
-            final String l_mimetype = URLConnection.guessContentTypeFromName( l_url.getFile() );
-            final String l_encoding = new InputStreamReader( l_url.openStream() ).getEncoding();
+            final URL l_physicalfile = l_location.getFile( p_session.getUri() );
+            final String l_mimetype = URLConnection.guessContentTypeFromName( l_physicalfile.getFile() );
+            //final String l_encoding = new InputStreamReader( l_url.openStream() ).getEncoding();
 
 
-            if ( l_url.getPath().endsWith( ".md" ) )
-                l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", getHTMLfromMarkdown( l_location, p_session.getUri() ) );
+            if ( ( l_physicalfile.getPath().endsWith( ".md" ) ) && ( l_location.getMarkDownRenderer() != null ) )
+                l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", l_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
             else
-                l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + l_encoding, l_url.openStream() );
-
+                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
         }
         catch ( IOException l_exception )
         {
@@ -111,6 +103,7 @@ public class CServer extends NanoHTTPD
             l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
         }
 
+        l_response.addHeader( "Location", p_session.getUri() );
         l_response.addHeader( "Expires", "-1" );
         return l_response;
     }
@@ -147,23 +140,5 @@ public class CServer extends NanoHTTPD
      } );
      }
      */
-
-    /**
-     * creates a full HTML document from a markdown document
-     *
-     * @param p_location virtual location configuration
-     * @param p_uri  URI part
-     * @return full HTML document
-     */
-    protected final String getHTMLfromMarkdown( final IVirtualLocation p_location, final String p_uri ) throws IOException
-    {
-        return "<?xml version=\"1.0\" ?>" +
-                "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
-                "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
-                "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"/userdoc/layout.css\"/></head>" +
-                "<body>" +
-                m_markdown.markdownToHtml( IOUtils.toString( p_location.getFile( p_uri ) ).toCharArray(), m_renderer ) +
-                "</body></html>";
-    }
 
 }

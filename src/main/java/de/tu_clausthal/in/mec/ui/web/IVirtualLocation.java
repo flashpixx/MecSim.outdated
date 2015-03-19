@@ -50,4 +50,10 @@ public interface IVirtualLocation
      */
     public URL getFile( final String p_uri ) throws MalformedURLException;
 
+
+    /**
+     * returns an markdown renderer or nul
+     */
+    public CMarkdownRenderer getMarkDownRenderer();
+
 }

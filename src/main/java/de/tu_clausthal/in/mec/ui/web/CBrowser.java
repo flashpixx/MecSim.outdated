@@ -21,7 +21,7 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.ui;
+package de.tu_clausthal.in.mec.ui.web;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.scene.layout.GridPane;

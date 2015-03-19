@@ -1,7 +1,7 @@
 # Hilfe
 
- * [GUI Beschreibung](gui)
- * [Funktionalität](funktion)
- * [Fahrzeugquellen](quellen)
- * [Agenten mit Jason](jason)
- * [Entwickler Dokumentation](developer/index.htm)
+ * [GUI Beschreibung](gui.md)
+ * [Funktionalität](funktion.md)
+ * [Fahrzeugquellen](quellen.md)
+ * [Agenten mit Jason](jason.md)
+

@@ -29,37 +29,83 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.pegdown.LinkRenderer;
 import org.pegdown.PegDownProcessor;
+import org.pegdown.ast.ExpImageNode;
 import org.pegdown.ast.ExpLinkNode;
 import org.pegdown.ast.WikiLinkNode;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 
 
 /**
  * interface of the link and layout HTML rednerer
  */
-public abstract class IMarkdownRenderer extends LinkRenderer
+public class CMarkdownRenderer extends LinkRenderer
 {
+    /**
+     * string with base URI *
+     */
+    protected final String m_baseuri;
+    /**
+     * string with optional CSS URI *
+     */
+    protected final String m_cssuri;
+
 
     /**
-     * creates a full HTML document from a markdown document
+     * ctor
      *
-     * @param p_location virtual location configuration
-     * @param p_uri      URI part
-     * @return full HTML document
      */
-    protected final String getHTMLfromMarkdown( final PegDownProcessor p_processor, final IVirtualLocation p_location, final String p_uri ) throws IOException
+    public CMarkdownRenderer()
     {
-        return "<?xml version=\"1.0\" ?>" +
-                "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" +
-                "<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
-                "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"/userdoc/layout.css\"/></head>" +
-                "<body>" +
-                p_processor.markdownToHtml( IOUtils.toString( p_location.getFile( p_uri ) ).toCharArray(), this ) +
-                "</body></html>";
+        this( "", "" );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_baseuri base URI
+     */
+    public CMarkdownRenderer( final String p_baseuri )
+    {
+        this( p_baseuri, "" );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_baseuri base URI
+     * @param p_cssuri  CSS URI
+     */
+    public CMarkdownRenderer( final String p_baseuri, final String p_cssuri )
+    {
+        m_baseuri = p_baseuri;
+        m_cssuri = p_cssuri;
+    }
+
+
+    @Override
+    public final Rendering render( final ExpLinkNode p_node, final String p_text )
+    {
+        return super.render( new ExpLinkNode( p_text, m_baseuri + "/" + p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+    }
+
+    @Override
+    public final Rendering render( final ExpImageNode p_node, final String p_text )
+    {
+        try
+        {
+            new URL( p_node.url );
+        }
+        catch ( MalformedURLException l_exception )
+        {
+            return super.render( new ExpImageNode( p_node.title, m_baseuri + "/" + p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+        }
+
+        return super.render( p_node, p_text );
+    }
 
     @Override
     public final Rendering render( final WikiLinkNode p_node )
@@ -85,6 +131,23 @@ public abstract class IMarkdownRenderer extends LinkRenderer
         }
 
         return super.render( p_node );
+    }
+
+    /**
+     * creates a full HTML document from a markdown document
+     *
+     * @param p_file URL of the file
+     * @return full HTML document
+     */
+    protected final String getHTML( final PegDownProcessor p_processor, final URL p_file ) throws IOException
+    {
+        return "<?xml version=\"1.0\" ?>\n" +
+                "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
+                "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
+                ( m_cssuri.isEmpty() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + m_cssuri + "\"/></head>\n" ) +
+                "<body>\n" +
+                p_processor.markdownToHtml( IOUtils.toString( p_file ).toCharArray(), this ) +
+                "\n</body></html>";
     }
 
 }

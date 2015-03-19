@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import org.apache.commons.io.IOUtils;

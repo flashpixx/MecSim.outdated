@@ -70,6 +70,12 @@ public class CVirtualFile implements IVirtualLocation
     }
 
     @Override
+    public CMarkdownRenderer getMarkDownRenderer()
+    {
+        return null;
+    }
+
+    @Override
     public final int hashCode()
     {
         return m_uri.hashCode();

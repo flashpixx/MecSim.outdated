@@ -47,13 +47,20 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super();
-        m_server.getVirtualLocation().getLocations().add( new CVirtualFile( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/layout.css" ).getFile() ), "/userdoc/layout.css" ) );
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc" ) );
 
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/developer" ).getFile() ), "index.htm", "/develdoc" ) );
+        // because on developer structure the Doxygen build-in documentation cannot exists, run it with try-catch to avoid null-pointer-exceptions
+        try
+        {
+            m_server.getVirtualLocation().getLocations().add( new CVirtualFile( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/layout.css" ).getFile() ), "/userdoc/layout.css" ) );
+            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage() ).getFile() ), "index.md", "/userdoc" ) );
 
-        m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local" ) );
+            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local" ) );
 
+            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( new File( this.getClass().getClassLoader().getResource( "web/documentation/developer" ).getFile() ), "index.htm", "/develdoc" ) );
+        }
+        catch ( NullPointerException l_exception )
+        {
+        }
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
     }

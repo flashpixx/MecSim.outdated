@@ -42,6 +42,7 @@ import javafx.scene.web.WebView;
  * create a plain browser component to show any URL
  *
  * @see http://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
+ * @see http://dammsebastian.blogspot.de/2012/06/javafx-20-layout-panes-gridpane.html
  */
 public class CBrowser extends GridPane
 {

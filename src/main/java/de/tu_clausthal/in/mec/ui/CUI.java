@@ -55,16 +55,13 @@ public class CUI extends Application
     public void start( final Stage p_stage ) throws Exception
     {
         p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
-        p_stage.setHeight( CConfiguration.getInstance().get().getWindowheight() );
-        p_stage.setWidth( CConfiguration.getInstance().get().getWindowwidth() );
-
 
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
         {
             public void handle( final WindowEvent p_event )
             {
-                CConfiguration.getInstance().get().setWindowwidth( (int) ( (Stage) p_event.getSource() ).getWidth() );
-                CConfiguration.getInstance().get().setWindowheight( (int) ( (Stage) p_event.getSource() ).getHeight() );
+                CConfiguration.getInstance().get().setWindowwidth( (int) ( (Stage) p_event.getSource() ).getScene().getWidth() );
+                CConfiguration.getInstance().get().setWindowheight( (int) ( (Stage) p_event.getSource() ).getScene().getHeight() );
 
                 CConfiguration.getInstance().write();
             }
@@ -87,7 +84,7 @@ public class CUI extends Application
         CBootstrap.afterStageInit( l_tabs );
 
         // set stage
-        p_stage.setScene( new Scene( l_root ) );
+        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() ) );
         p_stage.sizeToScene();
         p_stage.show();
     }

@@ -26,9 +26,7 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.w3c.dom.Element;
 
 
 /**
@@ -69,24 +67,6 @@ public class CBrowser extends GridPane
         m_webview.getEngine().load( p_url );
     }
 
-    /**
-     * adds a action listener to the browser content
-     *
-     * @param p_listener listen
-     * @deprecated
-     */
-    public final void addContentActionListener( final IActionListener p_listener )
-    {
-    }
-
-    /**
-     * removes the browser content action listener
-     * @deprecated
-     */
-    public final boolean removeContentActionListener( final IActionListener p_listener )
-    {
-        return true;
-    }
 
     /**
      * loads a URL on the browser
@@ -126,23 +106,6 @@ public class CBrowser extends GridPane
             return;
 
         m_webview.getEngine().getHistory().go( +1 );
-    }
-
-    /**
-     * content action listener *
-     * @deprecated
-     */
-    public static interface IActionListener
-    {
-
-        /**
-         * click on a href tag
-         *
-         * @param p_web     engine
-         * @param p_element full html element
-         */
-        public void onHrefClick( WebEngine p_web, Element p_element );
-
     }
 
 }

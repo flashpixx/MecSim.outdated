@@ -52,9 +52,10 @@ public class CWorkspace extends CBrowser
         try
         {
             this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
-
             this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
+
             this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/", null );
+
             this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/", null );
         }
         catch ( IllegalArgumentException l_exception )

@@ -84,7 +84,6 @@ public class CServer extends NanoHTTPD
     @Override
     public final Response serve( final IHTTPSession p_session )
     {
-
         Response l_response;
         try
         {

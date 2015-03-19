@@ -37,7 +37,6 @@ import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.ExpImageNode;
 import org.pegdown.ast.ExpLinkNode;
 import org.pegdown.ast.WikiLinkNode;
-import org.w3c.dom.Element;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -285,7 +284,7 @@ public class CHelpViewer extends JDialog implements ActionListener
 
             m_home = p_resource;
 
-            this.addContentActionListener( new CTagListener() );
+            //this.addContentActionListener( new CTagListener() );
             this.home();
         }
 
@@ -336,41 +335,5 @@ public class CHelpViewer extends JDialog implements ActionListener
                     p_input +
                     "</body></html>";
         }
-
-
-        /**
-         * action listener to read markdown files from the Jar help directory
-         */
-        protected class CTagListener implements CBrowser.IActionListener
-        {
-
-            @Override
-            public final void onHrefClick( final WebEngine p_web, final Element p_element )
-            {
-                try
-                {
-                    new URL( p_element.getAttribute( "href" ) );
-                    return;
-                }
-                catch ( MalformedURLException l_exception )
-                {
-                }
-
-                String l_file = p_element.getAttribute( "href" );
-
-                // on internal links the href can be null, so ignore it
-                if ( l_file == null )
-                    return;
-
-                // otherwise check markdown extension and call the markdown processor
-                if ( !l_file.endsWith( ".md" ) )
-                    l_file += ".md";
-
-                processMarkdown( p_web, l_file );
-            }
-
-        }
-
     }
-
 }

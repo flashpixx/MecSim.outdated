@@ -35,7 +35,6 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
-
 /**
  * Class to generate a Default Car
  */

@@ -33,33 +33,34 @@ import java.awt.geom.Point2D;
 /**
  * Most Basic Target for Sources
  */
-public class CAtomTarget implements Painter<COSMViewer> {
+public class CAtomTarget implements Painter<COSMViewer>
+{
 
     /**
-     * Position of the Target Objekt
+     * position of this Target
      */
     private GeoPosition m_position;
 
 
     /**
      * CTOR
-     * @param p_position
+     * @param p_position position
      */
     public CAtomTarget(GeoPosition p_position){
         m_position = p_position;
     }
 
     /**
-     * Get the Position of the Target
-     * @return
+     * return the position of this Target
+     * @return position of the Target
      */
     public GeoPosition getPosition(){
         return m_position;
     }
 
     /**
-     * Set a specific Position for this Target
-     * @param p_position
+     * set a new position for this Target
+     * @param p_position new position of this Target
      */
     public void setPosition(GeoPosition p_position){
         this.m_position = p_position;

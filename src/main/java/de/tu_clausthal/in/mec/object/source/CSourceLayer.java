@@ -42,6 +42,7 @@ import java.util.Vector;
  */
 public class CSourceLayer extends IMultiLayer<ISource>
 {
+
     /**
      * serialize version ID *
      */
@@ -53,7 +54,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     private static ISource m_selectedSource = null;
 
     /**
-     * List of all Targets
+     * List of all Atom Targets
      */
     private Vector<CAtomTarget> m_sourceTargets = new Vector<>();
 
@@ -114,7 +115,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to create a Source
+     * creates a new source
+     * @param p_geoPosition position of the Source
+     * @param p_defaultGenerator default Generator for this Source
+     * @param p_aslname ASL Programm for the Generator
      */
     public void createSource( GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname )
     {
@@ -133,7 +137,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to Remove a Source
+     * removes a source
+     * @param p_source source which should be removed
      */
     public void removeSource( ISource p_source )
     {
@@ -142,11 +147,12 @@ public class CSourceLayer extends IMultiLayer<ISource>
             m_selectedSource = null;
 
         p_source.release();
-        this.remove( p_source );
+        this.remove(p_source);
     }
 
     /**
-     * Getter for the selected Source
+     * return the selected source
+     * @return selected Source or null (if no source is selected)
      */
     public ISource getSelectedSource()
     {
@@ -154,7 +160,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to select a Source
+     * set the selected Source
+     * @param p_source source which should be selected
      */
     public void setSelectedSource( ISource p_source )
     {
@@ -171,7 +178,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Check if SOurce is selected
+     * checker if a source is selected
+     * @param p_source source which should be checked
+     * @return true if the source is selected otherwise false
      */
     public boolean isSelectedSource( ISource p_source )
     {
@@ -182,7 +191,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to create a Generator from a specific Source
+     * set a generator object for a source
+     * @param p_source source where the generator should be placed
+     * @param p_selectedGenerator new generator
+     * @param p_aslname ASL Programm for the Generator
      */
     public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
     {
@@ -195,7 +207,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to remove a Generator from a specific Source
+     * removes the generator object for a source
+     * @param p_source source where the generator should be removed
      */
     public void removeGenerator( ISource p_source )
     {
@@ -204,7 +217,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Method to create a Target
+     * creates a new Atom Target
+     * if a Source is selected, the Atom Target will be passed
+     * in the Complex Target of this Source
+     * @param p_geoPosition position of the Atom Target
      */
     public void createTarget( GeoPosition p_geoPosition )
     {
@@ -217,23 +233,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.m_sourceTargets.add(l_newTarget);
 
         //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
-        //Testing
         Random l_random = new Random();
         if ( this.m_selectedSource != null)
             this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, l_random.nextDouble());
-
-        //this.m_selectedSource.getComplexTarget().printProbabilities();
-        //this.m_selectedSource.getComplexTarget().printWeights();
-        //this.m_selectedSource.getComplexTarget().printTargetList();
-        //CLogger.out(this.m_selectedSource.getComplexTarget().getMultiTarget().size());
-        //this.m_selectedSource.getComplexTarget().getSequenceTarget(1);
 
         this.repaintOSM();
     }
 
     /**
-     * Directly remove a Target
-     * @param p_target
+     * removes an Atom Target from the sourcelayer and all Complex Targets
+     * @param p_target Atom Target which should be removed
      */
     public void removeTarget( CAtomTarget p_target)
     {
@@ -251,31 +260,15 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * Getter for all Targets
-     * @return
+     * return the full list of Atom Targets
+     * @return all Atom Targets
      */
     public Vector<CAtomTarget> getTargets(){
         return this.m_sourceTargets;
     }
 
     /**
-     * Getter for the TargetList by Position
-     * @param p_position
-     * @return
-     */
-    public CAtomTarget getTargetByPosition(GeoPosition p_position)
-    {
-        for(CAtomTarget l_target : m_sourceTargets){
-            if(l_target.getPosition().equals(p_position)){
-                return l_target;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * After a Target was created, OSM need to be repainted
+     * after a target was created, OSM need to be repainted
      */
     public void repaintOSM()
     {

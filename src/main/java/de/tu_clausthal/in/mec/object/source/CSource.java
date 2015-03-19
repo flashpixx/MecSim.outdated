@@ -52,12 +52,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-
 /**
  * class with default source implementation
  */
 public class CSource extends IInspector implements ISource, ISerializable
 {
+
     /**
      * serialize version ID *
      */
@@ -83,7 +83,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     protected IGenerator m_generator = null;
     /**
-     * Target Manager of this Source
+     * ComplexTarget of this Source
      */
     protected CComplexTarget m_complexTarget;
 
@@ -271,7 +271,9 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     /**
-     * creates the image with a specific scale
+     * creates an image with a specific scale
+     * @param p_width image width
+     * @param p_height image height
      */
     private void setImage( int p_width, int p_height )
     {
@@ -301,7 +303,11 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     /**
-     * Method to Scale a Buffered Image
+     * Method to scale a Buffered Image
+     * @param p_src Image which should be scaled
+     * @param p_width new Width
+     * @param p_height new Height
+     * @return new Image
      */
     private BufferedImage getScaledImage( BufferedImage p_src, int p_width, int p_height )
     {

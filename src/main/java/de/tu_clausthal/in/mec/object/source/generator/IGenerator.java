@@ -29,7 +29,6 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.Collection;
 
-
 /**
  * generator interface to define different object generator
  */
@@ -37,17 +36,21 @@ public interface IGenerator extends Serializable
 {
 
     /**
-     * Method which defines the Color of the Source in which a special Generator was placed
+     * method which defines the Color of a Source when a Generator was placed
+     * @return Color of the Generator
      */
     public Color getColor();
 
     /**
-     * generate objects
+     * method to generate a collection of cars
+     * @param p_currentStep
+     * @return collection of cars
      */
     Collection<ICar> generate(int p_currentStep);
 
     /**
-     * Getter for the Generator-Settings
+     * method to get the settings object
+     * @return settings object
      */
     public CGeneratorSettings getSettings();
 

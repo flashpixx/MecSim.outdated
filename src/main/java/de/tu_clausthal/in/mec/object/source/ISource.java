@@ -34,7 +34,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.awt.*;
 import java.io.Serializable;
 
-
 /**
  * factory interface of car source - defines a source
  */
@@ -48,40 +47,45 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      */
     public GeoPosition getPosition();
 
+
     /**
-     * Method to get the actual Color of this Source
+     * returns the Color of the source
+     * @return color of the source
      */
     public Color getColor();
 
     /**
-     * Method to set the Color of this Source
+     * set a new Color for this source
+     * @param p_color new Color
      */
     public void setColor( Color p_color );
 
     /**
-     * Method to get the Generator of an Source (null if there is no Generator)
+     * return the Generator of the source
+     * @return Generator Object of this Source
      */
     public IGenerator getGenerator();
 
     /**
-     * Method to set a Generator in a Source
+     * set a new Generator for this source
+     * @param p_generator new Generator
      */
     public void setGenerator( IGenerator p_generator );
 
     /**
-     * Method to remove the Generator (Set m_generator to null)
+     * Method to Remove the Generator
      */
     public void removeGenerator();
 
     /**
-     * Getter for the TargetManager of this Source
-     * @return
+     * return the ComplexTarget of the source
+     * @return ComplexTarget of the source
      */
     public CComplexTarget getComplexTarget();
 
     /**
-     * Set a new TargetManager for this Source
-     * @param p_complexTarget
+     * set a new ComplexTarget for this source
+     * @param p_complexTarget new ComplexTarget
      */
     public void setComplexTarget(CComplexTarget p_complexTarget);
 

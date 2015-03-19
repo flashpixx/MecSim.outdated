@@ -23,19 +23,17 @@
 
 package de.tu_clausthal.in.mec.object.source.sourceTarget;
 
-import de.tu_clausthal.in.mec.CLogger;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * A ComplexTarget is a Collection of Atom Targets. Which can
- * be equipped with a relative Probability.
- * Of Cause it is possible to set Absolute double Probabilities like 0.24
- * This Class also provides some Methods to get a List of AtomTarget over their Probabilities.
+ * A ComplexTarget is a Collection of Atom Targets.
+ * Which can be equipped with a relative Probability.
+ * This Class also provides some Methods to get a Collection of AtomTarget over their Probabilities.
  */
-public class CComplexTarget {
+public class CComplexTarget
+{
 
     /**
      * Map with AtomTarget and relative Probability
@@ -56,18 +54,18 @@ public class CComplexTarget {
 
 
     /**
-     * Add Method with a Default weight of 1
-     * @param p_target
+     * adds a atom Target to this complex Target with default weight of 1
+     * @param p_target atom target which should be added
      */
     public void addTarget(CAtomTarget p_target){
         this.addTarget(p_target, 1);
     }
 
     /**
-     * Add a AtomTarget to the Weighting Map an Re-Calculate the relative Probabilities
-     * If the AtomTarget already exist it will update the new weight
-     * @param p_target
-     * @param p_weight
+     * Adds a atom Target to this complex Target with special absolute weight.
+     * If the Atom Target already exist the weight will be updated.
+     * @param p_target atom target which should be added
+     * @param p_weight weight of this atom target
      */
     public void addTarget(CAtomTarget p_target, double p_weight) {
 
@@ -85,8 +83,8 @@ public class CComplexTarget {
     }
 
     /**
-     * Remove a AtomTarget from Weight and Probability Map and Re-Calculate the relative Probabilities
-     * @param p_target
+     * removes the Atom Target from this Complex Target
+     * @param p_target Atom Target which should be removed
      */
     public void removeTarget(CAtomTarget p_target) {
 
@@ -100,7 +98,7 @@ public class CComplexTarget {
     }
 
     /**
-     * Calculate relative Probabilities
+     * Calculate relative Probabilities for every Atom Target
      */
     public void calculateNewDistribution(){
 
@@ -113,47 +111,8 @@ public class CComplexTarget {
     }
 
     /**
-     * Print the Probabilities
-     */
-    public void printProbabilities() {
-        double l_sum = 0;
-        CLogger.out("Probabilities of the ComplexTarget: " + this);
-        for ( Map.Entry<CAtomTarget, Double> l_entry  : this.m_probabilityMap.entrySet() )
-        {
-            l_sum += l_entry.getValue();
-            CLogger.out("Target: " + l_entry.getKey() + "Probability: " + l_entry.getValue());
-        }
-        CLogger.out("Sum of all Probabilities: " + l_sum);
-    }
-
-    /**
-     * Print the Weights
-     */
-    public void printWeights() {
-        double l_sum = 0;
-        CLogger.out("Weighting of the ComplexTarget: " + this);
-        for ( Map.Entry<CAtomTarget, Double> l_entry  : this.m_weightingMap.entrySet() )
-        {
-            l_sum += l_entry.getValue();
-            CLogger.out("Target: " + l_entry.getKey() + "Weight: " + l_entry.getValue());
-        }
-        CLogger.out("Sum of all Weights: " + l_sum);
-    }
-
-    /**
-     * Generates a MultiTargets and Prints it out
-     * Length of the MultiTarget is defined by the size of the Probability Map
-     */
-    public void printTargetList() {
-        Queue<CAtomTarget> l_targets = this.getMultiTarget(this.m_probabilityMap.size());
-
-        for(CAtomTarget l_target: l_targets)
-            CLogger.out(l_target);
-    }
-
-    /**
      * This Methods returns exactly one AtomTarget threw their specific Probability
-     * @return
+     * @return a single Atom Target
      */
     public CAtomTarget getSingleTarget(){
         double l_random = m_random.nextDouble();
@@ -173,8 +132,8 @@ public class CComplexTarget {
 
     /**
      * This Methods returns a List of AtomTargets threw their specific relative Probability
-     * The Length of the Route is defined by the Number of AtomTargets in this ComplexTarget
-     * @return
+     * The Length of the List has a Default Value of the Size of all AtomTargets
+     * @return a list of Atom Targets
      */
     public Queue<CAtomTarget> getMultiTarget() {
         return this.getMultiTarget(m_probabilityMap.size());
@@ -182,9 +141,9 @@ public class CComplexTarget {
 
     /**
      * This Methods returns a List of AtomTarget threw their specific relative Probability
-     * The Length of the Route can be passed in over Arguments
-     * @param p_targetLength
-     * @return
+     * The Length of the List can be passed in over Arguments
+     * @param p_targetLength  Length of List of Atom Targets
+     * @return a list of Atom Targets
      */
     public Queue<CAtomTarget> getMultiTarget(int p_targetLength) {
         Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
@@ -199,8 +158,18 @@ public class CComplexTarget {
 
     /**
      * This Method returns a List of AtomTargets which are ordered by their weight (Rising)
+     * The Length of the List has a Default Value of the Size of all AtomTargets
+     * @return a sequence of Atom Targets
+     */
+    public Queue<CAtomTarget> getSequenceTarget(){
+        return this.getSequenceTarget(this.m_weightingMap.size());
+    }
+
+    /**
+     * This Method returns a List of AtomTargets which are ordered by their weight (Rising)
+     * The Length of the List can be passed in over Arguments
      * @param p_sequenceLength
-     * @return
+     * @return a sequence of Atom Targets
      */
     public Queue<CAtomTarget> getSequenceTarget(int p_sequenceLength){
         Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
@@ -218,7 +187,7 @@ public class CComplexTarget {
     /**
      * Method to sort the Weighting Map
      * @param p_unsortMap
-     * @return
+     * @return sorted Weight Map
      */
     public static Map sortByValue(Map p_unsortMap) {
         List list = new CopyOnWriteArrayList(p_unsortMap.entrySet());

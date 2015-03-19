@@ -41,12 +41,12 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 
-
 /**
  * Class to Generate Jason Cars
  */
 public class CJasonCarGenerator extends CDefaultCarGenerator
 {
+
     /**
      * Name of the ASL File
      */

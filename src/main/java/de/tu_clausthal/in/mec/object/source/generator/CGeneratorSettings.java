@@ -28,7 +28,8 @@ import org.apache.commons.math3.distribution.*;
 /**
  * Class which handles the Settings for the Generator
  */
-public class CGeneratorSettings {
+public class CGeneratorSettings
+{
 
     /**
      * Member Variable which holds the specific Distribution which defines how many Cars should be processed
@@ -37,35 +38,35 @@ public class CGeneratorSettings {
 
 
     /**
-     * Set a Constant Distribution
-     * @param p_const
+     * Set a Constant Distribution for generating Cars
+     * @param p_const constant value of how many cars should be processed
      */
     public void setConstant(double p_const){
         m_distribution = new ConstantRealDistribution(p_const);
     }
 
     /**
-     * Set a Uniform Distribution
-     * @param p_lowerBound
-     * @param p_upperBound
+     * Set a Uniform Distribution for generating Cars
+     * @param p_lowerBound lower bound of uniform distribution
+     * @param p_upperBound upper bound of uniform distribution
      */
     public void setUniform(double p_lowerBound, double p_upperBound){
         m_distribution = new UniformRealDistribution(p_lowerBound, p_upperBound);
     }
 
     /**
-     * Set a Normal Distribution
-     * @param p_mean
-     * @param p_deviation
+     * Set a Normal Distribution for generating Cars
+     * @param p_mean mean of Normal distribution
+     * @param p_deviation deviation of Normal distribution
      */
     public void setNormal(double p_mean, double p_deviation){
         m_distribution = new NormalDistribution(p_mean, p_deviation);
     }
 
     /**
-     * Set a Exponential Distribution
-     * @param p_mean
-     * @param p_deviation
+     * Set a Exponential Distribution for generating Cars
+     * @param p_mean mean of Exponential distribution
+     * @param p_deviation deviation of Exponential distribution
      */
     public void setExpo(double p_mean, double p_deviation){
         m_distribution = new ExponentialDistribution(p_mean, p_deviation);
@@ -73,7 +74,7 @@ public class CGeneratorSettings {
 
     /**
      * Get the Number of Cars which should be generated
-     * @return
+     * @return number of how man cars should be processed
      */
     public int getSample(){
         double l_value = m_distribution.sample();

@@ -26,10 +26,12 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
+import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -89,13 +91,25 @@ public class CServer extends NanoHTTPD
             final IVirtualLocation l_location = m_virtuallocation.get( p_session.getUri() );
             final URL l_physicalfile = l_location.getFile( p_session.getUri() );
             final String l_mimetype = URLConnection.guessContentTypeFromName( l_physicalfile.getFile() );
-            //final String l_encoding = new InputStreamReader( l_url.openStream() ).getEncoding();
 
+            switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+            {
+                case "htm":
+                case "html":
+                    l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader( l_physicalfile.openStream() ).getEncoding() ), l_physicalfile.openStream() );
+                    break;
 
-            if ( ( l_physicalfile.getPath().endsWith( ".md" ) ) && ( l_location.getMarkDownRenderer() != null ) )
-                l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", l_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
-            else
-                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                case "md":
+                    if ( l_location.getMarkDownRenderer() != null )
+                        l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", l_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
+                    else
+                        l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                    break;
+
+                default:
+                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+            }
+
         }
         catch ( IOException l_exception )
         {

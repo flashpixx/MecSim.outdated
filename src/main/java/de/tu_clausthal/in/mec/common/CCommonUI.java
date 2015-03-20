@@ -56,9 +56,6 @@ public class CCommonUI
     }
 
 
-
-
-
     /**
      * creates a filesave dialog, which stores the current path
      *

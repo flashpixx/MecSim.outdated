@@ -173,8 +173,8 @@ public class CTreeNode<T>
     /**
      * returns the node
      *
-     * @param p_node current node
-     * @param p_path path
+     * @param p_node  current node
+     * @param p_path  path
      * @param p_index current path index
      * @return node
      */

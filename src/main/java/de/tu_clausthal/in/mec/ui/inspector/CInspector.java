@@ -29,6 +29,7 @@ import javax.swing.*;
 
 /**
  * inspector class to create a visual view of an object
+ *
  * @deprecated
  */
 public class CInspector extends JTable

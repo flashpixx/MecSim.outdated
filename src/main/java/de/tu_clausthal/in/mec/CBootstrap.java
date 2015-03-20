@@ -31,9 +31,9 @@ import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
 import javafx.scene.control.TabPane;
 
@@ -80,6 +80,17 @@ public class CBootstrap
     {
         p_root.getTabs().add( CCommonUI.createTab( "Main", new CWorkspace() ) );
         p_root.getTabs().add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
+    }
+
+
+    /**
+     * is called after the webserver is started
+     *
+     * @param p_server webserver
+     */
+    public static void afterServerInit( final CServer p_server )
+    {
+
     }
 
 
@@ -146,6 +157,7 @@ public class CBootstrap
      * is called on simulation reset
      *
      * @param p_simulation simulation object
+     * @bug update for JavaFX
      */
     public static void onSimulationReset( final CSimulation p_simulation )
     {
@@ -158,7 +170,7 @@ public class CBootstrap
             if ( l_osm != null )
                 l_osm.reset();
 
-            ( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).clear();
+            //( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).clear();
         }
 
     }

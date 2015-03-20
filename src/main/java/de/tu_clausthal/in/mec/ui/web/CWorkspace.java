@@ -84,9 +84,9 @@ public class CWorkspace extends CBrowser
     /**
      * adds a new virtual directory to the server
      *
-     * @param p_source relative source path
-     * @param p_index  index file
-     * @param p_uri    URI
+     * @param p_source   relative source path
+     * @param p_index    index file
+     * @param p_uri      URI
      * @param p_markdown markdown renderer
      */
     protected void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
@@ -98,9 +98,9 @@ public class CWorkspace extends CBrowser
     /**
      * adds a new virtual directory to the server
      *
-     * @param p_source source file object
-     * @param p_index  index file
-     * @param p_uri    URI
+     * @param p_source   source file object
+     * @param p_index    index file
+     * @param p_uri      URI
      * @param p_markdown markdown renderer
      */
     protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )

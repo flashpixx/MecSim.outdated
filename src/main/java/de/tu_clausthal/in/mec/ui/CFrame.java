@@ -45,6 +45,7 @@ import java.util.Set;
 
 /**
  * create the main frame of the simulation dockable component @see http://dock.javaforge.com/
+ *
  * @deprecated
  */
 public class CFrame extends JFrame

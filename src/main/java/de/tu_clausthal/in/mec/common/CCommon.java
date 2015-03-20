@@ -62,7 +62,6 @@ public class CCommon
     }
 
 
-
     /**
      * remove from a string the system package name
      *

@@ -123,7 +123,6 @@ public class CMain
         // run application
         if ( !l_cli.hasOption( "nogui" ) )
             CUI.main( null );
-            //CSimulation.getInstance().setUI( new CFrame() );
         else
         {
             try

@@ -53,6 +53,7 @@ import java.util.Map;
 
 /**
  * class for create the menubar
+ *
  * @deprecated
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
@@ -414,7 +415,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 final String l_name = CCommonUI.openTextInputDialog( CCommon.getResourceString( this, "jasoncreatetitle" ), CCommon.getResourceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
                     //( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
-                this.refreshDynamicItems();
+                    this.refreshDynamicItems();
                 return;
             }
 

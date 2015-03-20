@@ -122,6 +122,7 @@ public class CConfiguration
 
     /**
      * returns a path relative to the root directory
+     *
      * @param p_dir directories
      * @return full file
      */
@@ -244,7 +245,7 @@ public class CConfiguration
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
         {
-            if (l_tmp.UIBindPort < 1)
+            if ( l_tmp.UIBindPort < 1 )
             {
                 CLogger.warn( CCommon.getResourceString( this, "uibindportdefault" ) );
                 l_tmp.UIBindPort = m_data.UIBindPort;
@@ -459,7 +460,7 @@ public class CConfiguration
 
         public void setUibindport( int p_value )
         {
-            UIBindPort = Math.max(1024, Math.abs( p_value ));
+            UIBindPort = Math.max( 1024, Math.abs( p_value ) );
         }
 
 

@@ -52,7 +52,6 @@ public class CMarkdownRenderer extends LinkRenderer
 
     /**
      * ctor
-     *
      */
     public CMarkdownRenderer()
     {
@@ -62,7 +61,7 @@ public class CMarkdownRenderer extends LinkRenderer
     /**
      * ctor
      *
-     * @param p_cssuri  CSS URI
+     * @param p_cssuri CSS URI
      */
     public CMarkdownRenderer( final String p_cssuri )
     {

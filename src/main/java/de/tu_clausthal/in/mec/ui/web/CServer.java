@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
+import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
@@ -34,7 +35,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -49,10 +49,6 @@ public class CServer extends NanoHTTPD
      */
     protected final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
-     * list with binded object *
-     */
-    protected final Map<Object, Map<String, CReflection.CMethod>> m_bind = new HashMap<>();
-    /**
      * virtual-locations
      */
     protected final CVirtualLocation m_virtuallocation;
@@ -61,8 +57,8 @@ public class CServer extends NanoHTTPD
     /**
      * ctor - starts the HTTP server
      *
-     * @param p_host bind hostname
-     * @param p_port bind port
+     * @param p_host    bind hostname
+     * @param p_port    bind port
      * @param p_default default location
      */
     public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
@@ -78,6 +74,8 @@ public class CServer extends NanoHTTPD
         {
             CLogger.error( l_exception );
         }
+
+        CBootstrap.afterServerInit( this );
     }
 
 
@@ -138,21 +136,17 @@ public class CServer extends NanoHTTPD
      * register an object for the UI
      *
      * param p_object object, all methods with the name "ui_" are registered
-     *
-     public void addActionObject( final Object p_object )
-     {
-     for ( Object l_item : m_bind.keySet() )
-     if ( l_item.getClass().equals( p_object.getClass() ) )
-     throw new IllegalArgumentException();
-
-     final Map<String, CReflection.CMethod> l_methods = CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
-     {
-     Override public boolean filter( final java.lang.reflect.Method p_method )
-     {
-     return p_method.getName().startsWith( "ui_" );
-     }
-     } );
-     }
      */
+    public void addActionObject( final Object p_object )
+    {
+        final Map<String, CReflection.CMethod> l_methods = CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
+        {
+            @Override
+            public boolean filter( final java.lang.reflect.Method p_method )
+            {
+                return p_method.getName().startsWith( "ui_static_" ) || p_method.getName().startsWith( "ui_dynamic_" );
+            }
+        } );
+    }
 
 }

@@ -63,6 +63,7 @@ public class CBrowser extends GridPane
 
     /**
      * ctor with instantiation a blank engine
+     * @param p_menu menu settings
      */
     public CBrowser( final EMenu p_menu )
     {
@@ -82,6 +83,7 @@ public class CBrowser extends GridPane
     /**
      * ctor with instantiation the engine
      *
+     * @param p_menu menu settings
      * @param p_url string with URL
      */
     public CBrowser( final EMenu p_menu, final String p_url )
@@ -96,6 +98,7 @@ public class CBrowser extends GridPane
     /**
      * sets the mennubar
      *
+     * @param p_menu menu settings
      * @param p_menu menu options
      * @return column number
      */

@@ -63,10 +63,8 @@ public class CVirtualDirectory implements IVirtualLocation
     {
         if ( ( p_index == null ) || ( p_index.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
-        if ( ( p_directory == null ) || ( !p_directory.exists() ) )
+        if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
-        if ( !p_directory.isDirectory() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotdirectory", p_directory ) );
 
         m_index = p_index;
         m_directory = p_directory;
@@ -84,10 +82,8 @@ public class CVirtualDirectory implements IVirtualLocation
     {
         if ( ( p_index == null ) || ( p_index.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
-        if ( ( p_directory == null ) || ( !p_directory.exists() ) )
+        if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
-        if ( !p_directory.isDirectory() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotdirectory", p_directory ) );
         if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
@@ -110,10 +106,8 @@ public class CVirtualDirectory implements IVirtualLocation
     {
         if ( ( p_index == null ) || ( p_index.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
-        if ( ( p_directory == null ) || ( !p_directory.exists() ) )
+        if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
-        if ( !p_directory.isDirectory() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnotdirectory", p_directory ) );
         if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
@@ -136,9 +130,9 @@ public class CVirtualDirectory implements IVirtualLocation
     {
         final String[] l_parts = p_uri.split( "/" );
         if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
-            return new File( m_directory, m_index ).toURI().toURL();
+            return new File( m_directory, m_index ).toURI().normalize().toURL();
 
-        return new File( m_directory, p_uri.replace( m_uri, "" ) ).toURI().toURL();
+        return new File( m_directory, p_uri.replace( m_uri, "" ) ).toURI().normalize().toURL();
     }
 
     @Override

@@ -119,6 +119,7 @@ public class CMarkdownRenderer extends LinkRenderer
     /**
      * creates a full HTML document from a markdown document
      *
+     * @param p_processor markdown processor
      * @param p_file URL of the file
      * @return full HTML document
      */

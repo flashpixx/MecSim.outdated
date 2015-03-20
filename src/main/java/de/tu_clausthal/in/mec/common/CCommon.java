@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -45,11 +46,11 @@ public class CCommon
      * returns a file from a resource e.g. Jar file
      *
      * @param p_file file
-     * @return file object or null on error
+     * @return URL of file or null
      */
-    public static File getResource( final File p_file )
+    public static URL getResource( final String p_file )
     {
-        return getResource( p_file.toString() );
+        return getResource( new File( p_file ) );
     }
 
     /**
@@ -57,13 +58,16 @@ public class CCommon
      *
      * @note the Jar path is removed if exists
      * @param p_file file relative to the CMain
-     * @return file object or null on error
+     * @return URL of file or null
      */
-    public static File getResource( final String p_file )
+    public static URL getResource( final File p_file )
     {
         try
         {
-            return new File( CCommon.class.getClassLoader().getResource( p_file.replace( CCommon.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "" ) ).getFile() );
+            if ( p_file.exists() )
+                return p_file.toURI().toURL();
+
+            return CCommon.class.getClassLoader().getResource( p_file.toString().replace( CCommon.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "" ) );
         }
         catch ( Exception l_exception )
         {

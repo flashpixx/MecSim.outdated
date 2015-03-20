@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 
 import java.io.File;
+import java.net.URL;
 
 
 /**
@@ -75,9 +76,9 @@ public class CWorkspace extends CBrowser
      */
     protected final void addVirtualFile( final String p_source, final String p_uri )
     {
-        final File l_file = CCommon.getResource( p_source );
-        if ( l_file != null )
-            m_server.getVirtualLocation().getLocations().add( new CVirtualFile( l_file, p_uri ) );
+        final URL l_url = CCommon.getResource( p_source );
+        if ( l_url != null )
+            m_server.getVirtualLocation().getLocations().add( new CVirtualFile( l_url, p_uri ) );
     }
 
 
@@ -91,7 +92,7 @@ public class CWorkspace extends CBrowser
      */
     protected void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
-        this.addVirtualDirectory( CCommon.getResource( p_source ), p_index, p_uri, p_markdown );
+        this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
     }
 
 
@@ -106,7 +107,7 @@ public class CWorkspace extends CBrowser
     protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         if ( p_source != null )
-            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( p_source, p_index, p_uri, p_markdown ) );
+            m_server.getVirtualLocation().getLocations().add( new CVirtualDirectory( CCommon.getResource( p_source ), p_index, p_uri, p_markdown ) );
     }
 
 }

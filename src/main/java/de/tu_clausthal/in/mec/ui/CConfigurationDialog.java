@@ -41,6 +41,7 @@ import java.awt.*;
 
 /**
  * preference class to visualize the configuration - create a modal window
+ * @deprecated
  */
 public class CConfigurationDialog extends JDialog
 {

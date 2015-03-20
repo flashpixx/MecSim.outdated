@@ -26,6 +26,9 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
+import eu.medsea.mimeutil.MimeType;
+import eu.medsea.mimeutil.MimeUtil;
+import eu.medsea.mimeutil.MimeUtil2;
 import fi.iki.elonen.NanoHTTPD;
 import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
@@ -34,7 +37,6 @@ import org.pegdown.PegDownProcessor;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Map;
 
 
@@ -66,6 +68,9 @@ public class CServer extends NanoHTTPD
         super( p_host, p_port );
         m_virtuallocation = new CVirtualLocation( p_default );
 
+        for ( String l_detector : new String[]{"eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector", "eu.medsea.mimeutil.detector.OpendesktopMimeDetector", "eu.medsea.mimeutil.detector.WindowsRegistryMimeDetector"} )
+            MimeUtil.registerMimeDetector( l_detector );
+
         try
         {
             this.start();
@@ -88,7 +93,7 @@ public class CServer extends NanoHTTPD
             // mime-type will be read by the file-extension
             final IVirtualLocation l_location = m_virtuallocation.get( p_session.getUri() );
             final URL l_physicalfile = l_location.getFile( p_session.getUri() );
-            final String l_mimetype = URLConnection.guessContentTypeFromName( l_physicalfile.getFile() );
+            final String l_mimetype = this.getMimeType( l_physicalfile );
 
             switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
             {
@@ -129,6 +134,22 @@ public class CServer extends NanoHTTPD
     public CVirtualLocation getVirtualLocation()
     {
         return m_virtuallocation;
+    }
+
+
+    /**
+     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
+     */
+    private String getMimeType( final URL p_url )
+    {
+        for ( Object l_item : MimeUtil.getMimeTypes( p_url ) )
+        {
+            final MimeType l_type = (MimeType) l_item;
+            if ( !l_type.toString().startsWith( "application/" ) )
+                return l_type.toString();
+        }
+
+        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
     }
 
 

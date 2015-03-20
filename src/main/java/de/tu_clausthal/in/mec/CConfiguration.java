@@ -306,7 +306,7 @@ public class CConfiguration
         {
             URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
-                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, new File( m_location.get( "jar" ) + File.separator + l_jar ).toURI().toURL() );
+                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, CCommon.getResource( m_location.get( "jar" ) + File.separator + l_jar ) );
         }
         catch ( Exception l_exception )
         {

@@ -46,7 +46,7 @@ public class CVirtualDirectory implements IVirtualLocation
     /**
      * virtual-location-directory *
      */
-    private URL m_directory = null;
+    private String m_directory = null;
     /**
      * index file *
      */
@@ -66,7 +66,7 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
 
         m_index = p_index;
-        m_directory = p_directory;
+        m_directory = p_directory.toString();
         m_markdown = null;
     }
 
@@ -87,7 +87,7 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_index = p_index;
-        m_directory = p_directory;
+        m_directory = p_directory.toString();
         m_uri = p_uri;
         m_markdown = null;
     }
@@ -111,7 +111,7 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_index = p_index;
-        m_directory = p_directory;
+        m_directory = p_directory.toString();
         m_uri = p_uri;
         m_markdown = p_markdown;
     }
@@ -127,12 +127,11 @@ public class CVirtualDirectory implements IVirtualLocation
     @Override
     public URL getFile( final String p_uri ) throws MalformedURLException
     {
-        final String[] l_parts = p_uri.split( "/" );
-        if ( ( l_parts.length == 0 ) || ( !l_parts[l_parts.length - 1].contains( "." ) ) )
-            return new URL( m_directory.toString() + "/" + m_index );
+        // URL concatination must be run with string manually, because otherwise last URL element can be removed
+        if ( p_uri.equals( m_uri ) )
+            return new URL( m_directory + "/" + m_index );
 
-
-        return new URL( m_directory.toString() + "/" + p_uri.replace( m_uri, "" ) );
+        return new URL( m_directory + "/" + p_uri.replace( m_uri, "" ) );
     }
 
     @Override

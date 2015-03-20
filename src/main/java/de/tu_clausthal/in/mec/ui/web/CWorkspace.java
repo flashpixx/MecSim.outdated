@@ -47,7 +47,7 @@ public class CWorkspace extends CBrowser
      */
     public CWorkspace()
     {
-        super( EMenu.Full );
+        super( EMenu.BackForward );
 
         try
         {

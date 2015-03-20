@@ -32,8 +32,8 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.web.WebView;
 
@@ -67,14 +67,16 @@ public class CBrowser extends GridPane
     public CBrowser( final EMenu p_menu )
     {
         super();
-        this.setMenuBar( p_menu );
+
+        GridPane.setConstraints( m_webview, 0, 1, this.setMenuBar( p_menu ), 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS );
         this.getChildren().add( m_webview );
 
-        GridPane.setConstraints( m_webview, 0, 1, 2, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS );
+        /*
         this.getColumnConstraints().addAll(
                 new ColumnConstraints( 100, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true ),
                 new ColumnConstraints( 40, 40, 40, Priority.NEVER, HPos.CENTER, true )
         );
+        */
     }
 
     /**
@@ -95,41 +97,43 @@ public class CBrowser extends GridPane
      * sets the mennubar
      *
      * @param p_menu menu options
+     * @return column number
      */
-    private void setMenuBar( final EMenu p_menu )
+    private int setMenuBar( final EMenu p_menu )
     {
-        if ( p_menu == EMenu.None )
-            return;
-
         this.setVgap( 5 );
         this.setHgap( 5 );
 
+        final int l_return;
         switch ( p_menu )
         {
             case BackForward:
-                this.setBackForward();
+                l_return = this.setBackForward( 0 );
                 break;
 
             case URL:
-                this.setURLMenu();
+                l_return = this.setURLMenu( 0 );
                 break;
 
             case Full:
-                this.setURLMenu();
-                this.setBackForward();
+                l_return = this.setBackForward( this.setURLMenu( 0 ) );
                 break;
 
             default:
+                l_return = 1;
         }
+
+        return l_return;
     }
 
     /**
      * create the URL input box
+     * @param p_column start column index
+     * @return number of elements
      */
-    private void setURLMenu()
+    private int setURLMenu( final int p_column )
     {
         final TextField l_url = new TextField();
-        l_url.setMaxHeight( Double.MAX_VALUE );
 
         m_webview.getEngine().locationProperty().addListener( new ChangeListener<String>()
         {
@@ -156,17 +160,20 @@ public class CBrowser extends GridPane
         l_url.setOnAction( l_buttonaction );
 
 
-        GridPane.setConstraints( l_url, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
-        GridPane.setConstraints( l_button, 1, 0 );
+        GridPane.setConstraints( l_url, p_column, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
+        GridPane.setConstraints( l_button, p_column + 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.SOMETIMES );
 
-        this.getChildren().add( l_url );
-        this.getChildren().add( l_button );
+        this.getChildren().addAll( l_url, l_button );
+
+        return p_column + 2;
     }
 
     /**
      * creates the back- and forward button
+     * @param p_column number of columns
+     * @return number of elements
      */
-    private void setBackForward()
+    private int setBackForward( final int p_column )
     {
         final Button l_backbutton = new Button( CCommon.getResourceString( CBrowser.class, "back" ) );
         l_backbutton.setOnAction( new EventHandler<ActionEvent>()
@@ -193,11 +200,20 @@ public class CBrowser extends GridPane
         } );
 
 
-        GridPane.setConstraints( l_backbutton, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
-        GridPane.setConstraints( l_forwardbutton, 1, 0 );
+        if ( p_column == 0 )
+        {
+            final HBox l_box = new HBox();
+            GridPane.setConstraints( l_box, p_column, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
+            this.getChildren().add( l_box );
+        }
 
-        this.getChildren().add( l_backbutton );
-        this.getChildren().add( l_forwardbutton );
+        GridPane.setConstraints( l_backbutton, p_column + 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.SOMETIMES );
+        GridPane.setConstraints( l_forwardbutton, p_column + 2, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.SOMETIMES );
+
+        this.getChildren().addAll( l_backbutton, l_forwardbutton );
+
+
+        return p_column + 3;
     }
 
     /**

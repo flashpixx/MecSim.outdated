@@ -90,7 +90,7 @@ public class CBootstrap
      */
     public static void afterServerInit( final CServer p_server )
     {
-        p_server.addObject( CSimulation.getInstance() );
+        p_server.register( CSimulation.getInstance() );
     }
 
 

@@ -185,7 +185,7 @@ public class CServer extends NanoHTTPD
      *
      * param p_object object, all methods with the name "ui_" are registered
      */
-    public void addObject( final Object p_object )
+    public void register( final Object p_object )
     {
         for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
         {

@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
-import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
@@ -63,23 +62,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      */
     protected transient CBrowser m_mindinspector = null;
 
-    /**
-     * ctor of Jason structure
-     */
-    public IEnvironment()
-    {
-        this( null );
-    }
-
-    /**
-     * ctor of Jason structure
-     *
-     * @param p_frame frame object set Jason mindinspector
-     */
-    public IEnvironment( final CFrame p_frame )
-    {
-        this.setFrame( p_frame );
-    }
 
     /**
      * creates an agent filename on an agent name
@@ -150,20 +132,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         }
     }
 
-    /**
-     * set the frame - if not exists
-     *
-     * @param p_frame frame object set Jason mindinspector
-     */
-    public final void setFrame( final CFrame p_frame )
-    {
-        if ( ( p_frame == null ) || ( m_mindinspector != null ) )
-            return;
-
-        // register web mindinspector (DoS threat)
-        m_mindinspector = new CBrowser();
-        //p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
-    }
 
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )

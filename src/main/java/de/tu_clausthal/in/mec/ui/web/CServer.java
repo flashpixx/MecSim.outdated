@@ -169,7 +169,11 @@ public class CServer extends NanoHTTPD
                 return ( p_method.getName().toLowerCase().startsWith( "web_static_" ) || p_method.getName().toLowerCase().startsWith( "web_dynamic_" ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
             }
         } ).entrySet() )
-            m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" ) ) );
+        {
+            final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" );
+            if ( !l_methodname.isEmpty() )
+                m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
+        }
 
     }
 

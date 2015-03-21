@@ -27,13 +27,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CCommonUI;
-import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -44,11 +38,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -58,10 +47,7 @@ import java.util.Map;
  */
 public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 {
-    /**
-     * menu item storage
-     */
-    protected CMenuStorage m_items = new CMenuStorage();
+
     /**
      * current directory for file dialogs
      */
@@ -89,8 +75,8 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         this.refreshDynamicItems();
 
         // get main menus to define order in the UI
-        for ( String l_root : new String[]{"File", "Simulation", "Layer", "Car Sources", "Graph Weights", "Driving Model", "MAS"} )
-            this.add( m_items.get( l_root ) );
+        //for ( String l_root : new String[]{"File", "Simulation", "Layer", "Car Sources", "Graph Weights", "Driving Model", "MAS"} )
+        //    this.add( m_items.get( l_root ) );
 
 /*
         String[] l_institution = {"Create Institution", "Delete Institution"};
@@ -107,6 +93,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildFileMenu()
     {
+        /*
         m_items.addItem( new ImmutablePair<>( "File", CCommon.getResourceString( this, "File" ) ),
                 new LinkedList<ImmutablePair<String, String>>()
                 {{
@@ -122,6 +109,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                     }},
                 this
         );
+        */
     }
 
     /**
@@ -129,6 +117,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildSimulationMenu()
     {
+        /*
         m_items.addItem( new ImmutablePair<>( "Simulation", CCommon.getResourceString( CMenuBar.this, "Simulation" ) ),
                 new LinkedList<ImmutablePair<String, String>>()
                 {{
@@ -140,7 +129,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                     }},
                 this
         );
-
+*/
         buildSimulationSpeedSlider();
     }
 
@@ -149,6 +138,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildSimulationSpeedSlider()
     {
+        /*
         m_items.addSlider( new ImmutablePair<>( "Simulation/Speed", CCommon.getResourceString( this, "Speed" ) ),
                 150 - CConfiguration.getInstance().get().getThreadsleeptime(),
                 CCommon.getResourceString( this, "slow" ),
@@ -156,6 +146,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 CCommon.getResourceString( this, "fast" ),
                 150, this
         );
+        */
     }
 
     /**
@@ -163,6 +154,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildLayerMenu()
     {
+        /*
         final String[] l_activity = new String[CSimulation.getInstance().getWorld().size()];
         CSimulation.getInstance().getWorld().keySet().toArray( l_activity );
         m_items.addRadioItems( new ImmutablePair<>( "Layer/Activity", CCommon.getResourceString( this, "Activity" ) ),
@@ -179,6 +171,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
                 CCommon.CollectionToArray( String[].class, l_visibility ),
                 this
         );
+        */
     }
 
     /**
@@ -186,6 +179,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildCarSourcesMenu()
     {
+        /*
         final String[] l_sources = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) ).getSourceNamesList();
         m_items.addRadioGroup( new ImmutablePair<>( "Car Sources", CCommon.getResourceString( this, "Car Sources" ) ),
                 l_sources,
@@ -193,6 +187,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         );
 
         ( (JRadioButtonMenuItem) m_items.get( "Car Sources/" + l_sources[0] ) ).setSelected( true );
+        */
     }
 
     /**
@@ -200,10 +195,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildGraphWeightsMenu()
     {
+        /*
         m_items.addRadioItems( new ImmutablePair<>( "Graph Weights", CCommon.getResourceString( this, "Graph Weights" ) ),
                 ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph().getWeightingList(),
                 this
         );
+        */
     }
 
     /**
@@ -211,10 +208,12 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void buildDrivingModelMenu()
     {
+        /*
         m_items.addRadioGroup( new ImmutablePair<>( "Driving Model", CCommon.getResourceString( this, "Driving Model" ) ),
                 ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getDrivingModelList(),
                 this
         );
+        */
     }
 
 
@@ -232,6 +231,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void refreshDynamicItems()
     {
+        /*
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Layer/Activity" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( CSimulation.getInstance().getWorld().get( l_item.getKey().getSuffix() ).isActive() );
 
@@ -245,7 +245,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Graph Weights" ) )
             ( (JRadioButtonMenuItem) l_item.getValue() ).setSelected( ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraphWeight().equals( l_item.getKey().getSuffix() ) );
 
-
+        */
         this.updateJasonMenu();
     }
 
@@ -255,6 +255,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void updateJasonMenu()
     {
+        /*
         final List<String> l_menu = new ArrayList<>( Arrays.asList( IEnvironment.getAgentFiles() ) );
         l_menu.add( null );
         l_menu.add( "new agent" );
@@ -267,6 +268,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         );
         if ( l_root != null )
             m_items.get( "MAS" ).remove( l_root );
+            */
     }
 
 
@@ -286,6 +288,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
 
         // refresh menubar reference within the editor window and refresh the data
         //( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).addActionListener( this );
+        /*
         final CPath l_actionpath = m_items.get( (JComponent) p_event.getSource() );
         this.refreshDynamicItems();
 
@@ -438,7 +441,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
-
+        */
     }
 
 
@@ -451,10 +454,11 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     public String getSelectedSourceName()
     {
+        /*
         for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "Car Sources" ) )
             if ( ( (JRadioButtonMenuItem) ( l_item.getValue() ) ).isSelected() )
                 return l_item.getKey().getSuffix();
-
+        */
         return null;
     }
 

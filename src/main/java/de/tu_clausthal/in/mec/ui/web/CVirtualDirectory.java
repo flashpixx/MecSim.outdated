@@ -132,7 +132,8 @@ public class CVirtualDirectory implements IVirtualLocation
         if ( p_session.getUri().equals( m_uri ) )
             return new URL( m_directory + "/" + m_index );
 
-        return new URL( m_directory + "/" + p_session.getUri().replace( m_uri, "" ) );
+        // special call on root-location (/) to avoid path error
+        return new URL( m_directory + "/" + ( m_uri.equals( "/" ) ? p_session.getUri() : p_session.getUri().replace( m_uri, "" ) ) );
     }
 
     @Override

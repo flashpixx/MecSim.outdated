@@ -108,35 +108,11 @@ public class CServer extends NanoHTTPD
             // get location
             final IVirtualLocation l_location = m_virtuallocation.get( p_session );
 
-            // if it a method-location found
             if ( l_location instanceof CVirtualMethod )
-                // http://stackoverflow.com/questions/14944419/gson-to-hashmap
-                // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
-                l_response = new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( l_location.get( p_session ), m_jsontype ) );
+                l_response = this.getVirtualMethod( l_location, p_session );
             else
-            {
-                // otherwise use a physical structure
-                final URL l_physicalfile = l_location.get( p_session );
-                final String l_mimetype = this.getMimeType( l_physicalfile );
+                l_response = this.getVirtualDirFile( l_location, p_session );
 
-                switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
-                {
-                    case "htm":
-                    case "html":
-                        l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader( l_physicalfile.openStream() ).getEncoding() ), l_physicalfile.openStream() );
-                        break;
-
-                    case "md":
-                        if ( l_location.getMarkDownRenderer() != null )
-                            l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", l_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
-                        else
-                            l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-                        break;
-
-                    default:
-                        l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-                }
-            }
         }
         catch ( Throwable l_throwable )
         {
@@ -194,6 +170,58 @@ public class CServer extends NanoHTTPD
         } ).entrySet() )
             m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" ) ) );
 
+    }
+
+
+    /**
+     * generates HTTP response of method calls
+     *
+     * @param p_location location object
+     * @param p_session  session object
+     * @return response
+     * @throws Throwable on error
+     */
+    protected final Response getVirtualMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        // http://stackoverflow.com/questions/14944419/gson-to-hashmap
+        // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
+        return new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( p_location.get( p_session ), m_jsontype ) );
+    }
+
+
+    /**
+     * generates HTTP response of file & directory calls
+     *
+     * @param p_location location object
+     * @param p_session  session object
+     * @return response
+     * @throws Throwable on error
+     */
+    protected final Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        final Response l_response;
+        final URL l_physicalfile = p_location.get( p_session );
+        final String l_mimetype = this.getMimeType( l_physicalfile );
+
+        switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+        {
+            case "htm":
+            case "html":
+                l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader( l_physicalfile.openStream() ).getEncoding() ), l_physicalfile.openStream() );
+                break;
+
+            case "md":
+                if ( p_location.getMarkDownRenderer() != null )
+                    l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
+                else
+                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                break;
+
+            default:
+                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+        }
+
+        return l_response;
     }
 
 }

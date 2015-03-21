@@ -71,8 +71,22 @@ public class CVirtualMethod implements IVirtualLocation
     @Override
     public Map<Object, Object> get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
-        final Object l_return = m_method.invoke( m_object, null );
-        return ( l_return instanceof Map ) ? (Map) l_return : new HashMap<>();
+        try
+        {
+            final Object l_return = m_method.invoke( m_object, null );
+
+            return ( l_return instanceof Map ) ? (Map) l_return : new HashMap()
+            {{
+                    put( "data", l_return );
+                }};
+        }
+        catch ( Throwable l_throwable )
+        {
+            return new HashMap()
+            {{
+                    put( "error", l_throwable.getMessage() );
+                }};
+        }
     }
 
     @Override

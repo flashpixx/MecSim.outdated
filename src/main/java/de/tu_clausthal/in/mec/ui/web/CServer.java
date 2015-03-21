@@ -114,7 +114,7 @@ public class CServer extends NanoHTTPD
             if ( l_method != null )
                 // http://stackoverflow.com/questions/14944419/gson-to-hashmap
                 // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
-                return new Response( Response.Status.OK, "application/json", m_json.toJson( l_method.get( p_session ), m_jsontype ) );
+                return new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( l_method.get( p_session ), m_jsontype ) );
 
 
             // try to find static content
@@ -140,12 +140,6 @@ public class CServer extends NanoHTTPD
                 default:
                     l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
             }
-
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception );
-            l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
         }
         catch ( Throwable l_throwable )
         {

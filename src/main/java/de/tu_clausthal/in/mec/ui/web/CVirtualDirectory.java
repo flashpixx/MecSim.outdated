@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -91,6 +92,8 @@ public class CVirtualDirectory implements IVirtualLocation
         m_directory = p_directory.toString();
         m_uri = p_uri;
         m_markdown = null;
+
+        CLogger.info( p_uri );
     }
 
 

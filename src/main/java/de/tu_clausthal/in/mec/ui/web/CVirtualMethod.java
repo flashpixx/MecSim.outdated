@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -64,6 +65,8 @@ public class CVirtualMethod implements IVirtualLocation
         m_object = p_object;
         m_method = p_method.getHandle();
         m_uri = p_uri;
+
+        CLogger.info( p_uri );
     }
 
     @Override

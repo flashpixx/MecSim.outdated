@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -60,6 +61,8 @@ public class CVirtualFile implements IVirtualLocation
 
         m_file = p_file;
         m_uri = p_uri;
+
+        CLogger.info( p_uri );
     }
 
     @Override

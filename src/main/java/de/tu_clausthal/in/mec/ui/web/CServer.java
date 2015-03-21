@@ -36,6 +36,7 @@ import org.pegdown.PegDownProcessor;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Map;
 
@@ -51,7 +52,11 @@ public class CServer extends NanoHTTPD
      */
     protected final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
-     * virtual-locations
+     * virtual-locations for dynamic object content
+     */
+    protected final CVirtualLocation m_virtualmethod = new CVirtualLocation();
+    /**
+     * virtual-locations for static content
      */
     protected final CVirtualLocation m_virtuallocation;
 
@@ -90,9 +95,19 @@ public class CServer extends NanoHTTPD
         Response l_response;
         try
         {
+            // try to find dynamic content first
+            final IVirtualLocation l_method = m_virtualmethod.get( p_session );
+            if ( l_method != null )
+            {
+                Map<String, Object> l_data = l_method.get( p_session );
+                //System.out.println(l_data);
+                return new Response( Response.Status.OK, "text/plain", "" );
+            }
+
+            // try to find static content
             // mime-type will be read by the file-extension
-            final IVirtualLocation l_location = m_virtuallocation.get( p_session.getUri() );
-            final URL l_physicalfile = l_location.getFile( p_session.getUri() );
+            final IVirtualLocation l_location = m_virtuallocation.get( p_session );
+            final URL l_physicalfile = l_location.get( p_session );
             final String l_mimetype = this.getMimeType( l_physicalfile );
 
             switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
@@ -114,7 +129,7 @@ public class CServer extends NanoHTTPD
             }
 
         }
-        catch ( IOException l_exception )
+        catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
             l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
@@ -158,16 +173,18 @@ public class CServer extends NanoHTTPD
      *
      * param p_object object, all methods with the name "ui_" are registered
      */
-    public void addActionObject( final Object p_object )
+    public void addObject( final Object p_object )
     {
-        final Map<String, CReflection.CMethod> l_methods = CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
+        for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
         {
             @Override
             public boolean filter( final java.lang.reflect.Method p_method )
             {
-                return p_method.getName().startsWith( "ui_static_" ) || p_method.getName().startsWith( "ui_dynamic_" );
+                return ( p_method.getName().toLowerCase().startsWith( "web_static_" ) || p_method.getName().toLowerCase().startsWith( "web_dynamic_" ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
             }
-        } );
+        } ).entrySet() )
+            m_virtualmethod.getLocations().add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" ) ) );
+
     }
 
 }

@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
+import java.util.Map;
 
 
 /**
@@ -322,4 +323,15 @@ public class CSimulation
         }
     }
 
+
+    private void web_static_start( final Map<String, Object> p_data )
+    {
+        this.start();
+    }
+
+
+    private void web_static_stop( final Map<String, Object> p_data )
+    {
+        this.stop();
+    }
 }

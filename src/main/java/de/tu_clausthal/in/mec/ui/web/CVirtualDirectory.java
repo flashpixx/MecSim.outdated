@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import fi.iki.elonen.NanoHTTPD;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -125,13 +126,13 @@ public class CVirtualDirectory implements IVirtualLocation
 
 
     @Override
-    public URL getFile( final String p_uri ) throws MalformedURLException
+    public URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException
     {
         // URL concatination must be run with string manually, because otherwise last URL element can be removed
-        if ( p_uri.equals( m_uri ) )
+        if ( p_session.getUri().equals( m_uri ) )
             return new URL( m_directory + "/" + m_index );
 
-        return new URL( m_directory + "/" + p_uri.replace( m_uri, "" ) );
+        return new URL( m_directory + "/" + p_session.getUri().replace( m_uri, "" ) );
     }
 
     @Override

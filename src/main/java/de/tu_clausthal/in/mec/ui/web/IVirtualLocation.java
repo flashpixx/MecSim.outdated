@@ -24,8 +24,7 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import fi.iki.elonen.NanoHTTPD;
 
 
 /**
@@ -43,12 +42,12 @@ public interface IVirtualLocation
     public boolean match( final String p_uri );
 
     /**
-     * returns the path of the directory with the input file or root file
+     * gets the source of the file
      *
-     * @param p_uri input URI
-     * @return file path
+     * @param p_session HTTP session
+     * @return any return data
      */
-    public URL getFile( final String p_uri ) throws MalformedURLException;
+    public <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Exception;
 
 
     /**

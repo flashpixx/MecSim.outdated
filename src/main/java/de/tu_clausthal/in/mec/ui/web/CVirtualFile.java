@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import fi.iki.elonen.NanoHTTPD;
 
 import java.net.URL;
 
@@ -68,7 +69,7 @@ public class CVirtualFile implements IVirtualLocation
     }
 
     @Override
-    public URL getFile( String p_uri )
+    public URL get( final NanoHTTPD.IHTTPSession p_session )
     {
         return m_file;
     }

@@ -176,7 +176,7 @@ public class CReflection
     {
         Map<String, CMethod> l_methods = new HashMap<>();
         for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
-            for ( Method l_method : l_class.getMethods() )
+            for ( Method l_method : l_class.getDeclaredMethods() )
             {
                 l_method.setAccessible( true );
                 if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) )

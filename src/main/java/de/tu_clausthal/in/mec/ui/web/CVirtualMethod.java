@@ -23,70 +23,68 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
+
+import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.invoke.MethodHandle;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * class for name-based location
+ *
  */
-public class CVirtualLocation
+public class CVirtualMethod implements IVirtualLocation
 {
-
-    /**
-     * default name-based host *
-     */
-    protected final CVirtualDirectory m_defaultlocation;
-    /**
-     * list with additional name-based location *
-     */
-    protected final Set<IVirtualLocation> m_locations = new HashSet<>();
+    private final MethodHandle m_method;
+    private final Object m_object;
+    private final String m_uri;
 
 
-    /**
-     * ctor
-     *
-     */
-    public CVirtualLocation()
+    public CVirtualMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
-        m_defaultlocation = null;
+        m_object = p_object;
+        m_method = p_method.getHandle();
+        m_uri = p_uri;
     }
 
-    /**
-     * ctor
-     *
-     * @param p_defaultlocation default / fallback location
-     */
-    public CVirtualLocation( final CVirtualDirectory p_defaultlocation )
+    @Override
+    public boolean match( final String p_uri )
     {
-        m_defaultlocation = p_defaultlocation;
+        return m_uri.equals( p_uri );
+    }
+
+    @Override
+    public Map<String, Object> get( final NanoHTTPD.IHTTPSession p_session )
+    {
+        return new HashMap()
+        {{
+                put( "uri", m_uri );
+                put( "object", m_object );
+            }};
+    }
+
+    @Override
+    public CMarkdownRenderer getMarkDownRenderer()
+    {
+        return null;
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_uri.hashCode();
     }
 
 
-    /**
-     * returns the location set
-     */
-    public final Set<IVirtualLocation> getLocations()
+    @Override
+    public final boolean equals( final Object p_object )
     {
-        return m_locations;
-    }
+        if ( p_object instanceof CVirtualLocation )
+            return this.hashCode() == p_object.hashCode();
 
-
-    /**
-     * gets the name-based location matched by the URI
-     *
-     * @param p_session HTTP session
-     * @return name-based location or default location or null
-     */
-    public IVirtualLocation get( final NanoHTTPD.IHTTPSession p_session )
-    {
-        for ( IVirtualLocation l_item : m_locations )
-            if ( l_item.match( p_session.getUri() ) )
-                return l_item;
-
-        return m_defaultlocation;
+        return false;
     }
 
 }

@@ -31,7 +31,7 @@ import java.net.URL;
 
 
 /**
- * definition of virtual location *
+ * definition of virtual directory locations
  */
 public class CVirtualDirectory implements IVirtualLocation
 {
@@ -133,7 +133,7 @@ public class CVirtualDirectory implements IVirtualLocation
             return new URL( m_directory + "/" + m_index );
 
         // special call on root-location (/) to avoid path error
-        return new URL( m_directory + "/" + ( m_uri.equals( "/" ) ? p_session.getUri() : p_session.getUri().replace( m_uri, "" ) ) );
+        return new URL( m_directory + ( m_uri.equals( "/" ) ? p_session.getUri() : "/" + p_session.getUri().replace( m_uri, "" ) ) );
     }
 
     @Override

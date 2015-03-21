@@ -40,7 +40,7 @@ import java.net.URLEncoder;
 
 
 /**
- * interface of the link and layout HTML rednerer
+ * class of the link and layout markdown renderer
  */
 public class CMarkdownRenderer extends LinkRenderer
 {

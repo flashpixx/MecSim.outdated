@@ -46,7 +46,7 @@ import java.util.Map;
 
 
 /**
- * class for the HTTP server *
+ * class of the HTTP server *
  */
 public class CServer extends NanoHTTPD
 {
@@ -157,6 +157,7 @@ public class CServer extends NanoHTTPD
      * register an object for the UI
      *
      * param p_object object, all methods with the name "ui_" are registered
+     * @bug incomplete
      */
     public void register( final Object p_object )
     {
@@ -183,6 +184,8 @@ public class CServer extends NanoHTTPD
      */
     protected final Response getVirtualMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
+        CLogger.info( p_session.getUri() );
+
         // http://stackoverflow.com/questions/14944419/gson-to-hashmap
         // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
         return new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( p_location.get( p_session ), m_jsontype ) );
@@ -202,6 +205,7 @@ public class CServer extends NanoHTTPD
         final Response l_response;
         final URL l_physicalfile = p_location.get( p_session );
         final String l_mimetype = this.getMimeType( l_physicalfile );
+        CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
 
         switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
         {

@@ -30,7 +30,7 @@ import java.util.Map;
 
 
 /**
- * class for name-based location
+ * class for the global name-based location collection
  */
 public class CVirtualLocation
 {
@@ -78,7 +78,7 @@ public class CVirtualLocation
             return m_locations.get( p_session.getUri().hashCode() );
 
 
-        // otherwise check
+        // otherwise check each match
         for ( IVirtualLocation l_item : m_locations.values() )
             if ( l_item.match( p_session.getUri() ) )
                 return l_item;

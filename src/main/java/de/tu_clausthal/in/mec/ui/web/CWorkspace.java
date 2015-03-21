@@ -33,7 +33,7 @@ import java.net.URL;
 
 
 /**
- * main workspace of the web-menu structure
+ * main workspace of the web-menu structure (browser & server structure)
  */
 public class CWorkspace extends CBrowser
 {

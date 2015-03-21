@@ -47,7 +47,6 @@ public class CVirtualLocation
 
     /**
      * ctor
-     *
      */
     public CVirtualLocation()
     {

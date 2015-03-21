@@ -120,7 +120,7 @@ public class CMarkdownRenderer extends LinkRenderer
      * creates a full HTML document from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file URL of the file
+     * @param p_file      URL of the file
      * @return full HTML document
      */
     protected final String getHTML( final PegDownProcessor p_processor, final URL p_file ) throws IOException

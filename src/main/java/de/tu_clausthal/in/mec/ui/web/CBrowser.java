@@ -63,6 +63,7 @@ public class CBrowser extends GridPane
 
     /**
      * ctor with instantiation a blank engine
+     *
      * @param p_menu menu settings
      */
     public CBrowser( final EMenu p_menu )
@@ -84,7 +85,7 @@ public class CBrowser extends GridPane
      * ctor with instantiation the engine
      *
      * @param p_menu menu settings
-     * @param p_url string with URL
+     * @param p_url  string with URL
      */
     public CBrowser( final EMenu p_menu, final String p_url )
     {
@@ -131,6 +132,7 @@ public class CBrowser extends GridPane
 
     /**
      * create the URL input box
+     *
      * @param p_column start column index
      * @return number of elements
      */
@@ -173,6 +175,7 @@ public class CBrowser extends GridPane
 
     /**
      * creates the back- and forward button
+     *
      * @param p_column number of columns
      * @return number of elements
      */

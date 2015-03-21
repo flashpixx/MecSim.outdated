@@ -40,6 +40,7 @@ import org.pegdown.PegDownProcessor;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Map;
 
@@ -66,6 +67,12 @@ public class CServer extends NanoHTTPD
      * Json module
      */
     protected final Gson m_json = new GsonBuilder().create();
+    /**
+     * Json type mapping
+     */
+    protected final Type m_jsontype = new TypeToken<Map<Object, Object>>()
+    {
+    }.getType();
 
 
     /**
@@ -107,9 +114,7 @@ public class CServer extends NanoHTTPD
             if ( l_method != null )
                 // http://stackoverflow.com/questions/14944419/gson-to-hashmap
                 // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
-                return new Response( Response.Status.OK, "application/json", m_json.toJson( l_method.get( p_session ), new TypeToken<Map<Object, Object>>()
-                {
-                }.getType() ) );
+                return new Response( Response.Status.OK, "application/json", m_json.toJson( l_method.get( p_session ), m_jsontype ) );
 
 
             // try to find static content

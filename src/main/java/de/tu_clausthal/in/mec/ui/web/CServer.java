@@ -56,11 +56,7 @@ public class CServer extends NanoHTTPD
      */
     protected final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
-     * virtual-locations for dynamic object content
-     */
-    protected final CVirtualLocation m_virtualmethod = new CVirtualLocation();
-    /**
-     * virtual-locations for static content
+     * virtual-locations
      */
     protected final CVirtualLocation m_virtuallocation;
     /**
@@ -109,36 +105,37 @@ public class CServer extends NanoHTTPD
         Response l_response;
         try
         {
-            // try to find dynamic content first
-            final IVirtualLocation l_method = m_virtualmethod.get( p_session );
-            if ( l_method != null )
+            // get location
+            final IVirtualLocation l_location = m_virtuallocation.get( p_session );
+
+            // if it a method-location found
+            if ( l_location instanceof CVirtualMethod )
                 // http://stackoverflow.com/questions/14944419/gson-to-hashmap
                 // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
-                return new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( l_method.get( p_session ), m_jsontype ) );
-
-
-            // try to find static content
-            // mime-type will be read by the file-extension
-            final IVirtualLocation l_location = m_virtuallocation.get( p_session );
-            final URL l_physicalfile = l_location.get( p_session );
-            final String l_mimetype = this.getMimeType( l_physicalfile );
-
-            switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+                l_response = new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( l_location.get( p_session ), m_jsontype ) );
+            else
             {
-                case "htm":
-                case "html":
-                    l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader( l_physicalfile.openStream() ).getEncoding() ), l_physicalfile.openStream() );
-                    break;
+                // otherwise use a physical structure
+                final URL l_physicalfile = l_location.get( p_session );
+                final String l_mimetype = this.getMimeType( l_physicalfile );
 
-                case "md":
-                    if ( l_location.getMarkDownRenderer() != null )
-                        l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", l_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
-                    else
+                switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+                {
+                    case "htm":
+                    case "html":
+                        l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader( l_physicalfile.openStream() ).getEncoding() ), l_physicalfile.openStream() );
+                        break;
+
+                    case "md":
+                        if ( l_location.getMarkDownRenderer() != null )
+                            l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", l_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
+                        else
+                            l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                        break;
+
+                    default:
                         l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-                    break;
-
-                default:
-                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                }
             }
         }
         catch ( Throwable l_throwable )
@@ -195,7 +192,7 @@ public class CServer extends NanoHTTPD
                 return ( p_method.getName().toLowerCase().startsWith( "web_static_" ) || p_method.getName().toLowerCase().startsWith( "web_dynamic_" ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
             }
         } ).entrySet() )
-            m_virtualmethod.getLocations().add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" ) ) );
+            m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" ) ) );
 
     }
 

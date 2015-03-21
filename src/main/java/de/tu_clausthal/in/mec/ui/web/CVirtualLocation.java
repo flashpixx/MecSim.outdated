@@ -25,8 +25,8 @@ package de.tu_clausthal.in.mec.ui.web;
 
 import fi.iki.elonen.NanoHTTPD;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -42,16 +42,8 @@ public class CVirtualLocation
     /**
      * list with additional name-based location *
      */
-    protected final Set<IVirtualLocation> m_locations = new HashSet<>();
+    protected final Map<Integer, IVirtualLocation> m_locations = new HashMap<>();
 
-
-    /**
-     * ctor
-     */
-    public CVirtualLocation()
-    {
-        m_defaultlocation = null;
-    }
 
     /**
      * ctor
@@ -65,11 +57,11 @@ public class CVirtualLocation
 
 
     /**
-     * returns the location set
+     * adds a new location
      */
-    public final Set<IVirtualLocation> getLocations()
+    public final void add( final IVirtualLocation p_location )
     {
-        return m_locations;
+        m_locations.put( p_location.hashCode(), p_location );
     }
 
 
@@ -81,7 +73,13 @@ public class CVirtualLocation
      */
     public IVirtualLocation get( final NanoHTTPD.IHTTPSession p_session )
     {
-        for ( IVirtualLocation l_item : m_locations )
+        // try to find an exact match
+        if ( m_locations.containsKey( p_session.getUri().hashCode() ) )
+            return m_locations.get( p_session.getUri().hashCode() );
+
+
+        // otherwise check
+        for ( IVirtualLocation l_item : m_locations.values() )
             if ( l_item.match( p_session.getUri() ) )
                 return l_item;
 

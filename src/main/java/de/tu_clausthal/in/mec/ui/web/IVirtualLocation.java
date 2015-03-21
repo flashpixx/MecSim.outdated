@@ -47,7 +47,7 @@ public interface IVirtualLocation
      * @param p_session HTTP session
      * @return any return data
      */
-    public <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Exception;
+    public <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable;
 
 
     /**

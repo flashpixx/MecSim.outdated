@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -329,9 +330,14 @@ public class CSimulation
      *
      * @param p_data input data
      */
-    private void web_static_start( final Map<String, Object> p_data )
+    private Map<String, String> web_static_start( final Map<String, Object> p_data )
     {
         this.start();
+
+        return new HashMap()
+        {{
+                put( "name", "simulation is started" );
+            }};
     }
 
 

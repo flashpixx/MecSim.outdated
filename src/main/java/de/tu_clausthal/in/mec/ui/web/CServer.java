@@ -147,6 +147,11 @@ public class CServer extends NanoHTTPD
             CLogger.error( l_exception );
             l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_exception );
         }
+        catch ( Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+            l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_throwable );
+        }
 
         l_response.addHeader( "Location", p_session.getUri() );
         l_response.addHeader( "Expires", "-1" );

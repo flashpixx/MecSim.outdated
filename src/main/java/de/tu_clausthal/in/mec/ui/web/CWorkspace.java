@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 
 import java.io.File;
 import java.net.URL;
@@ -65,6 +66,7 @@ public class CWorkspace extends CBrowser
         }
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
+        CSimulation.getInstance().setUI( m_server );
     }
 
 

@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.CFrame;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
@@ -184,22 +183,29 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         m_data.clear();
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onDeserializationInitialization()
     {
-        if ( CSimulation.getInstance().hasUI() )
-            CSimulation.getInstance().getUI().removeWidget( "Jason Mindinspector" );
+        //if ( CSimulation.getInstance().hasUI() )
+        //    CSimulation.getInstance().getUI().removeWidget( "Jason Mindinspector" );
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onDeserializationComplete()
     {
-        this.setFrame( CSimulation.getInstance().getUI() );
+        //this.setFrame( CSimulation.getInstance().getUI() );
     }
 
     /**
      * read call of serialize interface
      *
+     * @bug UI frame
      * @param p_stream stream
      * @throws IOException            throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
@@ -208,6 +214,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     {
         p_stream.defaultReadObject();
 
-        this.setFrame( CSimulation.getInstance().getUI() );
+        //this.setFrame( CSimulation.getInstance().getUI() );
     }
 }

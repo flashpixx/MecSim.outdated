@@ -466,14 +466,14 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void preferences()
     {
-        final CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
-        l_dialog.setVisible( true );
+        //final CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
+        //l_dialog.setVisible( true );
     }
 
     private void about()
     {
-        final CAboutDialog l_about = new CAboutDialog( CSimulation.getInstance().getUI() );
-        l_about.setVisible( true );
+        //final CAboutDialog l_about = new CAboutDialog( CSimulation.getInstance().getUI() );
+        //l_about.setVisible( true );
     }
 
 

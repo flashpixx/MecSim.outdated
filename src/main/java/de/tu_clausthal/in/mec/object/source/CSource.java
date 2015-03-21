@@ -32,7 +32,6 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
@@ -115,6 +114,9 @@ public class CSource extends IInspector implements ISource, ISerializable
         return null;
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
@@ -124,8 +126,8 @@ public class CSource extends IInspector implements ISource, ISerializable
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ), this.iconsize( p_viewer ) );
 
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
+        //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+        //    ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override

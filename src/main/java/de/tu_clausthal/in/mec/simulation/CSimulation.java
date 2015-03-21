@@ -34,7 +34,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.ui.web.CServer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,11 +73,10 @@ public class CSimulation
      * object of the thread loop *
      */
     private Thread m_mainloopthread = null;
-
     /**
-     * frame object
+     * HTTP server
      */
-    private CFrame m_ui = null;
+    private CServer m_ui = null;
 
 
     /**
@@ -127,25 +126,25 @@ public class CSimulation
     }
 
     /**
-     * returns the UI frame
+     * returns the HTTP server
      *
-     * @return null or frame
+     * @return null or server
      */
-    public CFrame getUI()
+    public CServer getUI()
     {
         return m_ui;
     }
 
     /**
-     * sets the UI frame
+     * sets the HTTP server
      *
-     * @param p_frame frame object
+     * @param p_server HTTP object
      */
-    public void setUI( final CFrame p_frame )
+    public void setUI( final CServer p_server )
     {
         if ( m_ui != null )
-            throw new IllegalStateException( CCommon.getResourceString( this, "uiframeset" ) );
-        m_ui = p_frame;
+            throw new IllegalStateException( CCommon.getResourceString( this, "uiserver" ) );
+        m_ui = p_server;
     }
 
     /**

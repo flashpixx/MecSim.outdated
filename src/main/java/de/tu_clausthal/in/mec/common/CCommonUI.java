@@ -24,10 +24,8 @@
 package de.tu_clausthal.in.mec.common;
 
 
-import de.tu_clausthal.in.mec.simulation.CSimulation;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -60,35 +58,44 @@ public class CCommonUI
      * creates a filesave dialog, which stores the current path
      *
      * @return File or null
+     * @bug UI frame
      */
     public static File openFileSaveDialog( File p_defaultfilepath, String[][] p_fileextensions )
     {
+        /*
         JFileChooser l_filedialog = initFileDialog( p_defaultfilepath, p_fileextensions );
         if ( l_filedialog.showSaveDialog( CSimulation.getInstance().getUI() ) != JFileChooser.APPROVE_OPTION )
             return null;
         p_defaultfilepath = l_filedialog.getCurrentDirectory();
 
         return l_filedialog.getSelectedFile();
+        */
+        return null;
     }
 
 
     /**
      * create input text dialog
      *
+     * @bug UI frame
      * @param p_title       title
      * @param p_description description text
      * @return string with content or null
      */
     public static String openTextInputDialog( String p_title, String... p_description )
     {
+        /*
         return JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
                 p_title, JOptionPane.PLAIN_MESSAGE );
+        */
+        return null;
     }
 
 
     /**
      * select input dialog
      *
+     * @bug UI frame
      * @param p_values      selected values
      * @param p_title       title
      * @param p_description description text
@@ -96,23 +103,30 @@ public class CCommonUI
      */
     public static String openGroupSelectDialog( String[] p_values, String p_title, String... p_description )
     {
+        /*
         return (String) JOptionPane.showInputDialog( CSimulation.getInstance().getUI(), StringUtils.join( p_description, "\n" ),
                 p_title, JOptionPane.PLAIN_MESSAGE, null, p_values, p_values[0] );
+        */
+        return null;
     }
 
     /**
      * creates a fileload dialog, which stores the current path
      *
+     * @bug UI frame
      * @return File or null
      */
     public static File openFileLoadDialog( File p_defaultfilepath, String[][] p_fileextensions )
     {
+        /*
         JFileChooser l_filedialog = initFileDialog( p_defaultfilepath, p_fileextensions );
         if ( l_filedialog.showOpenDialog( CSimulation.getInstance().getUI() ) != JFileChooser.APPROVE_OPTION )
             return null;
         p_defaultfilepath = l_filedialog.getCurrentDirectory();
 
         return l_filedialog.getSelectedFile();
+        */
+        return null;
     }
 
     /**

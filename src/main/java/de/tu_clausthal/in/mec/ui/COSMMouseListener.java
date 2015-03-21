@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.source.ISource;
@@ -54,6 +53,9 @@ class COSMMouseListener extends MouseAdapter
     private boolean m_doubleClick = false;
 
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
@@ -95,7 +97,7 @@ class COSMMouseListener extends MouseAdapter
                 final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
                 final Point2D l_mousePosition = this.getMousePosition( p_event, l_viewer );
                 final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
-                final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
+                //final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
                 final COSMKeyListener l_keyListener = l_viewer.getKeyListener();
 
                 //If no Shortcut is pressed (Place or Remove Source)
@@ -112,8 +114,8 @@ class COSMMouseListener extends MouseAdapter
                         }
                     }
 
-                    final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
-                    l_sourcelayer.createSource( l_geoPosition, l_selectedGenerator, l_aslname );
+                    //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                    //l_sourcelayer.createSource( l_geoPosition, l_selectedGenerator, l_aslname );
                 }
 
                 //Strg Key is pressed (Place or Remove Generator)
@@ -128,8 +130,8 @@ class COSMMouseListener extends MouseAdapter
 
                             if ( l_source.getGenerator() == null )
                             {
-                                final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
-                                l_sourcelayer.setGenerator( l_source, l_selectedGenerator, l_aslname );
+                                //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                                //l_sourcelayer.setGenerator( l_source, l_selectedGenerator, l_aslname );
                             }
                             else
                             {

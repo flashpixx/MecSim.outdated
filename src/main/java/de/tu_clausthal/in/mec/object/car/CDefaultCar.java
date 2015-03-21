@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.JXMapViewer;
@@ -256,6 +255,9 @@ public class CDefaultCar extends IInspector implements ICar
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
@@ -267,8 +269,8 @@ public class CDefaultCar extends IInspector implements ICar
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom );
 
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
+        //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+        //    ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override

@@ -74,7 +74,7 @@ public class CVirtualMethod implements IVirtualLocation
         return new HashMap()
         {{
                 put( "uri", m_uri );
-                put( "object", m_object );
+                put( "object", m_object.toString() );
             }};
     }
 

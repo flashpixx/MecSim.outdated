@@ -56,9 +56,9 @@ public class CCommon
     /**
      * returns a file from a resource e.g. Jar file
      *
-     * @note the Jar path is removed if exists
      * @param p_file file relative to the CMain
      * @return URL of file or null
+     * @note the Jar path is removed if exists
      */
     public static URL getResource( final File p_file )
     {

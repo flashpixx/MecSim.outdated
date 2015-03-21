@@ -433,6 +433,7 @@ public class CConfiguration
         private DatabaseDriver Database = new DatabaseDriver();
         /**
          * console definition
+         *
          * @deprecated
          */
         private ConsoleData Console = new ConsoleData();
@@ -622,6 +623,7 @@ public class CConfiguration
 
         /**
          * class of the console configuration
+         *
          * @deprecated
          */
         public class ConsoleData

@@ -343,6 +343,7 @@ public class CSimulation
 
     /**
      * UI method to stop the simulation
+     *
      * @param p_data input data
      */
     private void web_static_stop( final Map<String, Object> p_data )

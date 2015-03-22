@@ -157,6 +157,7 @@ public class CServer extends NanoHTTPD
      * register an object for the UI
      *
      * param p_object object, all methods with the name "ui_" are registered
+     *
      * @bug incomplete
      */
     public void register( final Object p_object )

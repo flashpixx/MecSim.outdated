@@ -55,7 +55,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     /**
      * help dialog
      */
-    //protected CHelpViewer m_help = new CHelpViewer( CSimulation.getInstance().getUI() );
+    //protected CHelpViewer m_help = new CHelpViewer( CSimulation.getInstance().getUIServer() );
 
 
     /**
@@ -287,7 +287,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     {
 
         // refresh menubar reference within the editor window and refresh the data
-        //( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).addActionListener( this );
+        //( (CSourceEditor) CSimulation.getInstance().getUIServer().getWidget( "Editor" ) ).addActionListener( this );
         /*
         final CPath l_actionpath = m_items.get( (JComponent) p_event.getSource() );
         this.refreshDynamicItems();
@@ -417,7 +417,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             {
                 final String l_name = CCommonUI.openTextInputDialog( CCommon.getResourceString( this, "jasoncreatetitle" ), CCommon.getResourceString( this, "jasoncreatedescription" ) );
                 if ( ( l_name != null ) && ( !l_name.isEmpty() ) )
-                    //( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
+                    //( (CSourceEditor) CSimulation.getInstance().getUIServer().getWidget( "Editor" ) ).open( IEnvironment.createAgentFile( l_name ) );
                     this.refreshDynamicItems();
                 return;
             }
@@ -433,7 +433,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
             for ( Map.Entry<CPath, JComponent> l_item : m_items.entrySet( "MAS/Jason" ) )
                 if ( ( !"MAS/Jason/check syntax".equals( l_item.getKey().toString() ) ) && ( !"MAS/Jason/new agent".equals( l_item.getKey().toString() ) ) )
                 {
-                    //( (CSourceEditor) CSimulation.getInstance().getUI().getWidget( "Editor" ) ).open( IEnvironment.getAgentFile( ( (JMenuItem) l_item.getValue() ).getText() ) );
+                    //( (CSourceEditor) CSimulation.getInstance().getUIServer().getWidget( "Editor" ) ).open( IEnvironment.getAgentFile( ( (JMenuItem) l_item.getValue() ).getText() ) );
                     return;
                 }
         }
@@ -470,13 +470,13 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
      */
     private void preferences()
     {
-        //final CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUI() );
+        //final CConfigurationDialog l_dialog = new CConfigurationDialog( CSimulation.getInstance().getUIServer() );
         //l_dialog.setVisible( true );
     }
 
     private void about()
     {
-        //final CAboutDialog l_about = new CAboutDialog( CSimulation.getInstance().getUI() );
+        //final CAboutDialog l_about = new CAboutDialog( CSimulation.getInstance().getUIServer() );
         //l_about.setVisible( true );
     }
 

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import javafx.embed.swing.SwingNode;
 
 import javax.swing.*;
@@ -34,13 +35,23 @@ import javax.swing.*;
  */
 public class CSwingWrapper<T extends JComponent> extends SwingNode
 {
+    /**
+     * swing component *
+     */
+    private final T m_component;
 
+
+    /**
+     * ctor
+     *
+     * @param p_component component
+     */
     public CSwingWrapper( final T p_component )
     {
         if ( p_component == null )
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnull" ) );
 
-
+        m_component = p_component;
         SwingUtilities.invokeLater( new Runnable()
         {
 
@@ -51,6 +62,17 @@ public class CSwingWrapper<T extends JComponent> extends SwingNode
             }
 
         } );
+    }
+
+
+    /**
+     * returns the component
+     *
+     * @return component
+     */
+    public final T getComponent()
+    {
+        return m_component;
     }
 
 }

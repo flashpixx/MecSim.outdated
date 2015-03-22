@@ -158,7 +158,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     public final void onDeserializationInitialization()
     {
         //if ( CSimulation.getInstance().hasUI() )
-        //    CSimulation.getInstance().getUI().removeWidget( "Jason Mindinspector" );
+        //    CSimulation.getInstance().getUIServer().removeWidget( "Jason Mindinspector" );
     }
 
     /**
@@ -167,21 +167,21 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     @Override
     public final void onDeserializationComplete()
     {
-        //this.setFrame( CSimulation.getInstance().getUI() );
+        //this.setFrame( CSimulation.getInstance().getUIServer() );
     }
 
     /**
      * read call of serialize interface
      *
-     * @bug UI frame
      * @param p_stream stream
      * @throws IOException            throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
+     * @bug UI frame
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 
-        //this.setFrame( CSimulation.getInstance().getUI() );
+        //this.setFrame( CSimulation.getInstance().getUIServer() );
     }
 }

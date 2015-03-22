@@ -130,7 +130,7 @@ public class CSimulation
      *
      * @return null or server
      */
-    public CServer getUI()
+    public CServer getUIServer()
     {
         return m_ui;
     }

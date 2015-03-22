@@ -155,7 +155,7 @@ public class CBootstrap
             if ( l_osm != null )
                 l_osm.reset();
 
-            //( (CConsole) CSimulation.getInstance().getUI().getWidget( "Console" ) ).clear();
+            //( (CConsole) CSimulation.getInstance().getUIServer().getWidget( "Console" ) ).clear();
         }
 
     }

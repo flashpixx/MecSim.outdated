@@ -97,7 +97,7 @@ class COSMMouseListener extends MouseAdapter
                 final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
                 final Point2D l_mousePosition = this.getMousePosition( p_event, l_viewer );
                 final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
-                //final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
+                //final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUIServer().getJMenuBar() ).getSelectedSourceName();
                 final COSMKeyListener l_keyListener = l_viewer.getKeyListener();
 
                 //If no Shortcut is pressed (Place or Remove Source)

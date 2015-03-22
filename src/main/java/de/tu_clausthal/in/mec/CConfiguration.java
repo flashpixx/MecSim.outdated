@@ -110,6 +110,7 @@ public class CConfiguration
         this.setDefaultDirectories();
     }
 
+
     /**
      * singleton get instance method
      *
@@ -119,6 +120,29 @@ public class CConfiguration
     {
         return c_instance;
     }
+
+
+    /**
+     * reads the manifest data
+     *
+     * @return map with string key and value
+     */
+    public Map<String, String> getManifest()
+    {
+        return m_manifest;
+    }
+
+
+    /**
+     * returns the configuration data
+     *
+     * @return returns the configuration data
+     */
+    public Data get()
+    {
+        return m_data;
+    }
+
 
     /**
      * returns a path relative to the root directory
@@ -132,16 +156,6 @@ public class CConfiguration
             throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
 
         return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
-    }
-
-    /**
-     * reads the manifest data
-     *
-     * @return map with string key and value
-     */
-    public Map<String, String> getManifest()
-    {
-        return m_manifest;
     }
 
 
@@ -158,6 +172,69 @@ public class CConfiguration
             return m_location.get( p_name );
 
         return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
+    }
+
+
+    /**
+     * creates the default directories relative to the root dir
+     */
+    private void setDefaultDirectories()
+    {
+        for ( String l_item : new String[]{"mas", "jar", "www"} )
+            m_location.put( l_item, this.getBasePath( l_item ) );
+    }
+
+
+    /**
+     * creates the configuration directories
+     */
+    private void createDirectories() throws IOException
+    {
+        for ( File l_dir : m_location.values() )
+            if ( !l_dir.exists() && !l_dir.mkdirs() )
+                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
+    }
+
+
+    /**
+     * returns the property bundle
+     *
+     * @return resource bundle
+     */
+    public ResourceBundle getResourceBundle()
+    {
+        if ( m_data.Language != null )
+            switch ( m_data.Language )
+            {
+                case "en":
+                    Locale.setDefault( Locale.ENGLISH );
+                    break;
+                case "de":
+                    Locale.setDefault( Locale.GERMANY );
+                    break;
+            }
+
+        return ResourceBundle.getBundle( "language.locals", m_reader );
+    }
+
+
+    /**
+     * sets the config dir
+     *
+     * @param p_dir directory
+     */
+    public void setConfigDir( final File p_dir )
+    {
+        m_location.put( "root", p_dir );
+        this.setDefaultDirectories();
+        try
+        {
+            this.createDirectories();
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
     }
 
 
@@ -188,25 +265,6 @@ public class CConfiguration
         }
     }
 
-
-    /**
-     * creates the default directories relative to the root dir
-     */
-    private void setDefaultDirectories()
-    {
-        for ( String l_item : new String[]{"mas", "jar", "www"} )
-            m_location.put( l_item, this.getBasePath( l_item ) );
-    }
-
-    /**
-     * creates the configuration directories
-     */
-    private void createDirectories() throws IOException
-    {
-        for ( File l_dir : m_location.values() )
-            if ( !l_dir.exists() && !l_dir.mkdirs() )
-                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
-    }
 
     /**
      * reads the configuration within the directory
@@ -318,58 +376,6 @@ public class CConfiguration
         }
     }
 
-
-    /**
-     * returns the property bundle
-     *
-     * @return resource bundle
-     */
-    public ResourceBundle getResourceBundle()
-    {
-        if ( m_data.Language != null )
-            switch ( m_data.Language )
-            {
-                case "en":
-                    Locale.setDefault( Locale.ENGLISH );
-                    break;
-                case "de":
-                    Locale.setDefault( Locale.GERMANY );
-                    break;
-            }
-
-        return ResourceBundle.getBundle( "language.locals", m_reader );
-    }
-
-
-    /**
-     * sets the config dir
-     *
-     * @param p_dir directory
-     */
-    public void setConfigDir( final File p_dir )
-    {
-        m_location.put( "root", p_dir );
-        this.setDefaultDirectories();
-        try
-        {
-            this.createDirectories();
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
-    }
-
-
-    /**
-     * returns the configuration data
-     *
-     * @return returns the configuration data
-     */
-    public Data get()
-    {
-        return m_data;
-    }
 
     /**
      * class for storing the configuration

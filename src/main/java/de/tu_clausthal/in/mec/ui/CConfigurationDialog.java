@@ -23,7 +23,10 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CConfiguration;
+import javax.swing.*;
+import java.awt.*;
+
+/*
 import org.jdesktop.beansbinding.AutoBinding;
 import org.metawidget.inspector.annotation.MetawidgetAnnotationInspector;
 import org.metawidget.inspector.composite.CompositeInspector;
@@ -34,9 +37,7 @@ import org.metawidget.inspector.propertytype.PropertyTypeInspector;
 import org.metawidget.swing.SwingMetawidget;
 import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessor;
 import org.metawidget.swing.widgetprocessor.binding.beansbinding.BeansBindingProcessorConfig;
-
-import javax.swing.*;
-import java.awt.*;
+*/
 
 
 /**
@@ -69,7 +70,7 @@ public class CConfigurationDialog extends JDialog
         this.setAlwaysOnTop( true );
         this.setResizable( false );
         this.setModalityType( ModalityType.TOOLKIT_MODAL );
-
+/*
         // MetaWidget create a full UI of the object, be we do not use a getter / setter method, we are using
         // public properties instead
         final SwingMetawidget l_widget = new SwingMetawidget();
@@ -101,6 +102,7 @@ public class CConfigurationDialog extends JDialog
         this.setLayout( new FlowLayout() );
         this.add( l_widget );
         this.pack();
+        */
     }
 
 }

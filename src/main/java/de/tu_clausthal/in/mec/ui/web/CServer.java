@@ -123,6 +123,8 @@ public class CServer extends NanoHTTPD
 
         l_response.addHeader( "Location", p_session.getUri() );
         l_response.addHeader( "Expires", "-1" );
+
+        // is needed for ajax request
         l_response.addHeader( "Access-Control-Allow-Origin", "*" );
         l_response.addHeader( "Access-Control-Max-Age", "3628800" );
         l_response.addHeader( "Access-Control-Allow-Methods", "GET, POST, OPTIONS" );

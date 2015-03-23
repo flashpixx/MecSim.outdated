@@ -48,7 +48,7 @@ public class CCommon
      * @param p_input         unchecked value
      * @param p_default       default value
      * @param p_allowedvalues allowed values
-     * @param <T>             value type
+     * @tparam T              value type
      * @return checked value
      */
     public static <T> T getCheckedValue( final T p_input, final T p_default, final T[] p_allowedvalues )

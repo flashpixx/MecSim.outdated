@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
@@ -164,13 +165,8 @@ public class CSource extends IInspector implements ISource, ISerializable
         this.m_color = p_color;
         this.setImage();
 
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( final Exception l_exception )
-        {
-        }
+        if ( CSimulation.getInstance().hasUI() )
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
     }
 
     @Override

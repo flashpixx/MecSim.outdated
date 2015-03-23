@@ -369,7 +369,7 @@ public class CConfiguration
     }
 
     /**
-     * get configuration definition
+     * UI method to read configuration
      *
      * @return data
      */
@@ -402,7 +402,7 @@ public class CConfiguration
 
 
     /**
-     * set UI definition
+     * UI method to set data
      *
      * @param p_data   input data
      * @param p_header header data - configuration changeable only from localhost

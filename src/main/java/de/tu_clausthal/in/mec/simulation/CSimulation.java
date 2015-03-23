@@ -340,4 +340,13 @@ public class CSimulation
         this.stop();
     }
 
+
+    /**
+     * UI method to reset the simulation
+     */
+    private void web_static_reset()
+    {
+        this.reset();
+    }
+
 }

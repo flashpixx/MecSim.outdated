@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISteppable;
 import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
 
@@ -93,7 +94,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final boolean isVisible()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
 
         return m_visible;
     }
@@ -104,7 +105,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
         m_visible = p_visible;
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
     }
 
     @Override
@@ -200,7 +201,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
         final boolean l_return = m_processingdata.add( p_value );
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
 
         return l_return;
     }
@@ -211,7 +212,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
         final boolean l_result = m_processingdata.remove( p_object );
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
 
         return l_result;
     }
@@ -224,7 +225,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
                 return false;
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
 
         return true;
     }
@@ -235,7 +236,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
         final boolean l_return = m_processingdata.addAll( p_collection );
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
 
         return l_return;
     }
@@ -252,7 +253,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
         }
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
 
         return true;
     }
@@ -269,7 +270,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
         m_processingdata.clear();
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
     }
 
     @Override

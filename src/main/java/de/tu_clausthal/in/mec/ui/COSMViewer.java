@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -89,20 +88,6 @@ public class COSMViewer extends JXMapViewer
         CBootstrap.afterOSMViewerInit( this );
     }
 
-    /**
-     * static method to get the OSM viewer from the current UI widget
-     *
-     * @return OSM Viewer
-     * @bug UI frame
-     */
-    public static COSMViewer getSimulationOSM()
-    {
-        if ( !CSimulation.getInstance().hasUI() )
-            return null;
-
-        //return (COSMViewer) CSimulation.getInstance().getUIServer().getWidget( "OSM" );
-        return null;
-    }
 
     /**
      * resets the view *

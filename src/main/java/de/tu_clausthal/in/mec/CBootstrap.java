@@ -109,21 +109,11 @@ public class CBootstrap
      * is called on simulation reset
      *
      * @param p_simulation simulation object
-     * @bug update for JavaFX
      */
     public static void onSimulationReset( final CSimulation p_simulation )
     {
-
-        // clear UI elements
-        if ( CSimulation.getInstance().hasUI() )
-        {
-
-            final COSMViewer l_osm = COSMViewer.getSimulationOSM();
-            if ( l_osm != null )
-                l_osm.reset();
-
-            //( (CConsole) CSimulation.getInstance().getUIServer().getWidget( "Console" ) ).clear();
-        }
+        if ( p_simulation.hasUI() )
+            p_simulation.getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().reset();
 
     }
 

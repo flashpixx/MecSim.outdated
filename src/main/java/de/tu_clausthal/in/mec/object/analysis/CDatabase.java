@@ -61,10 +61,10 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
             return;
 
         m_datasource = new BasicDataSource();
-        m_datasource.setDriverClassName( CConfiguration.getInstance().get().getDatabase().getDriver() );
-        m_datasource.setUrl( CConfiguration.getInstance().get().getDatabase().getServer() );
-        m_datasource.setUsername( CConfiguration.getInstance().get().getDatabase().getUsername() );
-        m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().getPassword() );
+        m_datasource.setDriverClassName( CConfiguration.getInstance().get().getDatabase().Driver );
+        m_datasource.setUrl( CConfiguration.getInstance().get().getDatabase().URL );
+        m_datasource.setUsername( CConfiguration.getInstance().get().getDatabase().Username );
+        m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().Password );
 
         this.createTableIfNotExists( "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)", new String[]{"add primary key (step,zonegroup,zone)"} );
     }
@@ -79,7 +79,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     protected void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
     {
-        final String l_table = CConfiguration.getInstance().get().getDatabase().getTableprefix() == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().getTableprefix() + p_tablename;
+        final String l_table = CConfiguration.getInstance().get().getDatabase().TablePrefix == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().TablePrefix + p_tablename;
 
         try (
                 final Connection l_connect = m_datasource.getConnection();

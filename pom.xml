@@ -108,50 +108,6 @@
 
         <!-- UI components -->
         <dependency>
-            <groupId>org.metawidget.modules</groupId>
-            <artifactId>metawidget-annotation</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.oval</groupId>
-            <artifactId>oval</artifactId>
-            <version>1.84</version>
-            <scope>compile</scope>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>org.metawidget.modules</groupId>
-            <artifactId>metawidget-core</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules.swing</groupId>
-            <artifactId>metawidget-swing</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules.swing</groupId>
-            <artifactId>metawidget-beansbinding</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules</groupId>
-            <artifactId>metawidget-oval</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.cloudfarming.client</groupId>
-            <artifactId>lib-beansbinding</artifactId>
-            <version>1.2.2-NB80</version>
-            <scope>compile</scope>
-        </dependency>
-        -->
-        <dependency>
             <groupId>org.jxmapviewer</groupId>
             <artifactId>jxmapviewer2</artifactId>
             <version>2.0</version>

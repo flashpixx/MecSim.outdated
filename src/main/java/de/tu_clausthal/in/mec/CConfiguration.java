@@ -29,11 +29,6 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.metawidget.inspector.annotation.UiComesAfter;
-import org.metawidget.inspector.annotation.UiHidden;
-import org.metawidget.inspector.annotation.UiLabel;
-import org.metawidget.inspector.annotation.UiMasked;
-import org.metawidget.inspector.annotation.UiSection;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -345,8 +340,6 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "databasedefault" ) );
                 l_tmp.Database = m_data.Database;
             }
-
-            // @deprecated
             if ( l_tmp.Console == null )
             {
                 CLogger.warn( CCommon.getResourceString( this, "consoledefault" ) );
@@ -387,8 +380,20 @@ public class CConfiguration
         l_map.put( "threadsleeptime", m_data.ThreadSleepTime );
         l_map.put( "routingalgorithm", m_data.RoutingAlgorithm );
         l_map.put( "language", m_data.Language );
-        l_map.put( "consolelinebuffer", m_data.getConsole().LineBuffer );
-        l_map.put( "consolelinenumber", m_data.getConsole().LineNumber );
+
+        l_map.put( "console_linebuffer", m_data.getConsole().LineBuffer );
+        l_map.put( "console_linenumber", m_data.getConsole().LineNumber );
+
+        l_map.put( "routingmap_name", m_data.RoutingMap.Name );
+        l_map.put( "routingmap_url", m_data.RoutingMap.URL );
+        l_map.put( "routingmap_reimport", m_data.RoutingMap.Reimport );
+
+        l_map.put( "database_active", m_data.Database.Active );
+        l_map.put( "database_driver", m_data.Database.Driver );
+        l_map.put( "database_url", m_data.Database.URL );
+        l_map.put( "database_tableprefix", m_data.Database.TablePrefix );
+        l_map.put( "database_username", m_data.Database.Username );
+        l_map.put( "database_password", m_data.Database.Password );
 
         return l_map;
     }
@@ -397,11 +402,33 @@ public class CConfiguration
     /**
      * set UI definition
      *
-     * @param p_data input data
+     * @param p_data   input data
      * @param p_header header data - configuration changeable only from localhost
      */
     private void web_static_set( final Map<String, String> p_data, final Map<String, String> p_header )
     {
+        if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
+
+        m_data.CellSampling = Math.max( 1, Integer.parseInt( p_data.get( "cellsampling" ) ) );
+        m_data.ResetConfig = Boolean.parseBoolean( p_data.get( "resetconfig" ) );
+        m_data.ThreadSleepTime = Math.max( 0, Integer.parseInt( p_data.get( "threadsleeptime" ) ) );
+        m_data.RoutingAlgorithm = CCommon.getCheckedValue( p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
+        m_data.Language = CCommon.getCheckedValue( p_data.get( "language" ), "en", new String[]{"en", "de"} );
+
+        m_data.getConsole().LineBuffer = Math.max( 1, Integer.parseInt( p_data.get( "console_linebuffer" ) ) );
+        m_data.getConsole().LineNumber = Math.max( 1, Integer.parseInt( p_data.get( "console_linenumber" ) ) );
+
+        m_data.RoutingMap.Name = p_data.get( "routingmap_name" );
+        m_data.RoutingMap.URL = p_data.get( "routingmap_url" );
+        m_data.RoutingMap.Reimport = Boolean.parseBoolean( p_data.get( "routingmap_reimport" ) );
+
+        m_data.Database.Active = Boolean.parseBoolean( p_data.get( "database_active" ) );
+        m_data.Database.Driver = p_data.get( "database_driver" );
+        m_data.Database.URL = p_data.get( "database_url" );
+        m_data.Database.TablePrefix = p_data.get( "database_tableprefix" );
+        m_data.Database.Username = p_data.get( "database_username" );
+        m_data.Database.Password = p_data.get( "database_password" );
     }
 
 
@@ -475,18 +502,14 @@ public class CConfiguration
             return Console;
         }
 
-
-        @UiSection("Analysis Database")
-        @UiComesAfter("console")
-        @UiLabel("")
+        /**
+         * returns database driver
+         *
+         * @return driver object
+         */
         public DatabaseDriver getDatabase()
         {
             return Database;
-        }
-
-        public void setDatabase( DatabaseDriver p_value )
-        {
-            Database = p_value;
         }
 
 
@@ -505,6 +528,7 @@ public class CConfiguration
             public int LineNumber = 120;
         }
 
+
         /**
          * class of the routing map
          */
@@ -517,54 +541,15 @@ public class CConfiguration
             /**
              * download URL
              */
-            private String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
+            public String URL = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
             /**
              * flag for reimport
              */
-            private boolean reimport = false;
-
+            public boolean Reimport = false;
             /**
              * name of the map
              */
-            private String name = "europe/germany/lowersaxony";
-
-
-            @UiLabel("Unique name of the OpenStreetMap data")
-            public String getName()
-            {
-                return name;
-            }
-
-            public void setName( String p_value )
-            {
-                name = p_value;
-            }
-
-
-            @UiLabel("Download URL of the OpenStreetMap PBF file")
-            @UiComesAfter("name")
-            public String getUrl()
-            {
-                return url;
-            }
-
-            public void setUrl( String p_value )
-            {
-                url = p_value;
-            }
-
-
-            @UiLabel("Reimport graph data")
-            @UiComesAfter("url")
-            public boolean getReimport()
-            {
-                return reimport;
-            }
-
-            public void setReimport( boolean p_value )
-            {
-                reimport = p_value;
-            }
+            public String Name = "europe/germany/lowersaxony";
         }
 
 
@@ -576,117 +561,36 @@ public class CConfiguration
             /**
              * enable / disable without removing settings *
              */
-            private boolean active = false;
+            public boolean Active = false;
             /**
              * driver *
              */
-            private String driver = null;
-
+            public String Driver = null;
             /**
              * server url *
              */
-            private String server = null;
-
+            public String URL = null;
             /**
              * login user name *
              */
-            private String username = null;
-
+            public String Username = null;
             /**
              * login password *
              */
-            private String password = null;
+            public String Password = null;
             /**
              * table prefix
              */
-            private String tableprefix = null;
-
-
-            @UiLabel("Enable")
-            public boolean isActive()
-            {
-                return active;
-            }
-
-            public void setActive( boolean p_value )
-            {
-                active = p_value;
-            }
-
-            @UiLabel("Database Driver")
-            @UiComesAfter("active")
-            public String getDriver()
-            {
-                return driver;
-            }
-
-            public void setDriver( String p_value )
-            {
-                driver = p_value;
-            }
-
-
-            @UiLabel("Server URL")
-            @UiComesAfter("driver")
-            public String getServer()
-            {
-                return server;
-            }
-
-            public void setServer( String p_value )
-            {
-                server = p_value;
-            }
-
-
-            @UiLabel("Login Username")
-            @UiComesAfter("server")
-            public String getUsername()
-            {
-                return username;
-            }
-
-            public void setUsername( String p_value )
-            {
-                username = p_value;
-            }
-
-
-            @UiLabel("Login Password")
-            @UiComesAfter("username")
-            @UiMasked
-            public String getPassword()
-            {
-                return password;
-            }
-
-            public void setPassword( String p_value )
-            {
-                password = p_value;
-            }
-
-
-            @UiLabel("Table Prefix")
-            @UiComesAfter("password")
-            public String getTableprefix()
-            {
-                return tableprefix;
-            }
-
-            public void setTableprefix( String p_value )
-            {
-                tableprefix = p_value;
-            }
+            public String TablePrefix = null;
 
             /**
              * checks if the server can connect
              *
              * @return boolean flag
              */
-            @UiHidden
             public boolean isConnectable()
             {
-                return ( active ) && ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );
+                return ( Active ) && ( Driver != null ) && ( !Driver.isEmpty() ) && ( URL != null ) && ( !URL.isEmpty() );
             }
         }
 

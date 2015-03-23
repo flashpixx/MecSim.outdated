@@ -43,6 +43,28 @@ public class CCommon
 {
 
     /**
+     * checks a value and returns the checkd value or the default value
+     *
+     * @param p_input         unchecked value
+     * @param p_default       default value
+     * @param p_allowedvalues allowed values
+     * @param <T>             value type
+     * @return checked value
+     */
+    public static <T> T getCheckedValue( final T p_input, final T p_default, final T[] p_allowedvalues )
+    {
+        if ( p_input == null )
+            return p_default;
+
+        for ( T l_item : p_allowedvalues )
+            if ( p_input.equals( l_item ) )
+                return l_item;
+
+        return p_default;
+    }
+
+
+    /**
      * returns a file from a resource e.g. Jar file
      *
      * @param p_file file

@@ -129,6 +129,7 @@ public class CUI extends Application
      * @return node or null
      * @tparam T node type
      */
+    @SuppressWarnings("unchecked")
     public <T extends Node> T getTab( final String p_name )
     {
         for ( Tab l_tab : m_tabs.getTabs() )

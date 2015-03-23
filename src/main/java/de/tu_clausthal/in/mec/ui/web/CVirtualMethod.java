@@ -82,6 +82,7 @@ public class CVirtualMethod implements IVirtualLocation
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Map<Object, Object> get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
         // parse data - must be called otherwise an time-out exception is thrown
@@ -91,23 +92,23 @@ public class CVirtualMethod implements IVirtualLocation
         try
         {
             // invoke method
-            final Object l_return;
+            final Map<Object, Object> l_return;
             switch ( m_arguments )
             {
                 case 0:
-                    l_return = m_method.invoke( m_object );
+                    l_return = (Map) m_method.invoke( m_object );
                     break;
                 case 1:
-                    l_return = m_method.invoke( m_object, p_session.getParms() );
+                    l_return = (Map) m_method.invoke( m_object, p_session.getParms() );
                     break;
                 case 2:
-                    l_return = m_method.invoke( m_object, p_session.getParms(), p_session.getHeaders() );
+                    l_return = (Map) m_method.invoke( m_object, p_session.getParms(), p_session.getHeaders() );
                     break;
                 default:
                     throw new IllegalArgumentException( CCommon.getResourceString( this, "argumentnumber", m_arguments ) );
             }
 
-            return ( l_return instanceof Map ) ? (Map) l_return : new HashMap()
+            return ( l_return instanceof Map ) ? l_return : new HashMap<Object, Object>()
             {{
                     put( "data", l_return );
                 }};
@@ -115,7 +116,7 @@ public class CVirtualMethod implements IVirtualLocation
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-            return new HashMap()
+            return new HashMap<Object, Object>()
             {{
                     put( "error", l_throwable.getMessage() );
                 }};

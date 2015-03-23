@@ -66,7 +66,7 @@ public class CConfiguration
      * singleton instance variable
      */
     private static final CConfiguration c_instance = new CConfiguration();
-    private final Map<String, File> m_location = new HashMap()
+    private final Map<String, File> m_location = new HashMap<String, File>()
     {{
             put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
         }};

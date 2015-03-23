@@ -42,6 +42,7 @@ import javafx.stage.WindowEvent;
  * @see http://stackoverflow.com/questions/17673292/internal-frames-in-javafx
  * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
+ * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
  */
 public class CUI extends Application
 {
@@ -60,8 +61,8 @@ public class CUI extends Application
         {
             public void handle( final WindowEvent p_event )
             {
-                CConfiguration.getInstance().get().setWindowwidth( (int) ( (Stage) p_event.getSource() ).getScene().getWidth() );
-                CConfiguration.getInstance().get().setWindowheight( (int) ( (Stage) p_event.getSource() ).getScene().getHeight() );
+                CConfiguration.getInstance().get().WindowWidth = (int) ( (Stage) p_event.getSource() ).getScene().getWidth();
+                CConfiguration.getInstance().get().WindowHeight = (int) ( (Stage) p_event.getSource() ).getScene().getHeight();
 
                 CConfiguration.getInstance().write();
             }
@@ -73,7 +74,6 @@ public class CUI extends Application
 
 
         final MenuBar l_menubar = new MenuBar();
-        l_menubar.getMenus().addAll();
         l_menubar.setUseSystemMenuBar( true );
         l_root.setTop( l_menubar );
 
@@ -84,7 +84,7 @@ public class CUI extends Application
         CBootstrap.afterStageInit( l_tabs );
 
         // set stage
-        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().getWindowwidth(), CConfiguration.getInstance().get().getWindowheight() ) );
+        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight ) );
         p_stage.sizeToScene();
         p_stage.show();
     }

@@ -41,7 +41,7 @@ public class CWorkspace extends CBrowser
     /**
      * HTTP server to handle websockets *
      */
-    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().getUibindport(), new CVirtualDirectory( CCommon.getResource( "web/root" ), "index.htm" ) );
+    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().UIBindPort, new CVirtualDirectory( CCommon.getResource( "web/root" ), "index.htm" ) );
 
 
     /**
@@ -54,7 +54,7 @@ public class CWorkspace extends CBrowser
         try
         {
             this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
-            this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().getLanguage(), "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
+            this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().Language, "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
 
             this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/", null );
 
@@ -65,7 +65,7 @@ public class CWorkspace extends CBrowser
             CLogger.error( l_exception );
         }
 
-        this.load( "http://localhost:" + CConfiguration.getInstance().get().getUibindport() );
+        this.load( "http://localhost:" + CConfiguration.getInstance().get().UIBindPort );
         CSimulation.getInstance().setUI( m_server );
     }
 

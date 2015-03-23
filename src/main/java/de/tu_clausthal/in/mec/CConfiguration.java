@@ -26,15 +26,12 @@ package de.tu_clausthal.in.mec;
 import com.google.gson.Gson;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
-import net.sf.oval.constraint.Min;
-import net.sf.oval.constraint.NotEmpty;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.metawidget.inspector.annotation.UiComesAfter;
 import org.metawidget.inspector.annotation.UiHidden;
 import org.metawidget.inspector.annotation.UiLabel;
-import org.metawidget.inspector.annotation.UiLookup;
 import org.metawidget.inspector.annotation.UiMasked;
 import org.metawidget.inspector.annotation.UiSection;
 
@@ -299,7 +296,7 @@ public class CConfiguration
         }
 
         // check the configuration values and set it
-        if ( ( l_tmp == null ) || ( l_tmp.getRestconfig() ) )
+        if ( ( l_tmp == null ) || ( l_tmp.ResetConfig ) )
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
         {
@@ -376,186 +373,106 @@ public class CConfiguration
         }
     }
 
+    /**
+     * get configuration definition
+     *
+     * @return data
+     */
+    private Map<String, Object> web_static_get()
+    {
+        final Map<String, Object> l_map = new HashMap<>();
+
+        l_map.put( "cellsampling", m_data.CellSampling );
+        l_map.put( "resetconfig", m_data.ResetConfig );
+        l_map.put( "threadsleeptime", m_data.ThreadSleepTime );
+        l_map.put( "routingalgorithm", m_data.RoutingAlgorithm );
+        l_map.put( "language", m_data.Language );
+        l_map.put( "consolelinebuffer", m_data.getConsole().LineBuffer );
+        l_map.put( "consolelinenumber", m_data.getConsole().LineNumber );
+
+        return l_map;
+    }
+
+
+    /**
+     * set UI definition
+     *
+     * @param p_data input data
+     * @param p_header header data - configuration changeable only from localhost
+     */
+    private void web_static_set( final Map<String, String> p_data, final Map<String, String> p_header )
+    {
+    }
+
 
     /**
      * class for storing the configuration
-     *
-     * @see http://metawidget.sourceforge.net/doc/reference/en/html/ch04s03.html
      */
     public class Data
     {
         /**
          * bind port of the web UI
          */
-        private int UIBindPort = 9876;
+        public int UIBindPort = 9876;
         /**
          * cell size for sampling
          */
-        private int CellSampling = 2;
+        public int CellSampling = 2;
         /**
          * flag to reset the configuration
          */
-        private boolean resetconfig = false;
-        /**
-         * flag to reset the UI
-         */
-        private boolean resetui = false;
+        public boolean ResetConfig = false;
         /**
          * geo position object of the start viewpoint
          */
-        private GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
+        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
         /**
          * zoom level of the viewpoint on the start point
          */
-        private int Zoom = 4;
+        public int Zoom = 4;
         /**
          * thread sleep time in milliseconds
          */
-        private int ThreadSleepTime = 25;
+        public int ThreadSleepTime = 25;
         /**
          * window width
          */
-        private int WindowWidth = 1684;
+        public int WindowWidth = 1684;
         /**
          * window height
          */
-        private int WindowHeight = 1024;
+        public int WindowHeight = 1024;
         /**
          * geo map for graph
          */
-        private RoutingMap RoutingMap = new RoutingMap();
+        public RoutingMap RoutingMap = new RoutingMap();
         /**
          * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
          * algorithm)
          */
-        private String RoutingAlgorithm = "astarbi";
+        public String RoutingAlgorithm = "astarbi";
         /**
          * language code
          */
-        private String Language = null;
+        public String Language = null;
         /**
          * database driver (optional)
          */
         private DatabaseDriver Database = new DatabaseDriver();
         /**
          * console definition
-         *
-         * @deprecated
          */
         private ConsoleData Console = new ConsoleData();
 
 
-        @UiSection("General")
-        @UiLabel("UI language")
-        @UiLookup({"en", "de"})
-        @NotEmpty
-        public String getLanguage()
-        {
-            return ( Language == null ) ? "en" : Language;
-        }
-
-        public void setLanguage( String p_value )
-        {
-            Language = p_value;
-        }
-
-
-        @UiLabel("UI Bind Port")
-        @UiComesAfter("language")
-        @Min(1024)
-        public int getUibindport()
-        {
-            return UIBindPort;
-        }
-
-        public void setUibindport( int p_value )
-        {
-            UIBindPort = Math.max( 1024, Math.abs( p_value ) );
-        }
-
-
-        @UiLabel("Reset configuration")
-        @UiComesAfter("uibindport")
-        public boolean getRestconfig()
-        {
-            return resetconfig;
-        }
-
-        public void setRestconfig( boolean p_value )
-        {
-            resetconfig = p_value;
-        }
-
-
-        @UiLabel("Reset UI configuration")
-        @UiComesAfter("restconfig")
-        public boolean getResetui()
-        {
-            return resetui;
-        }
-
-        public void setResetui( boolean p_value )
-        {
-            resetui = p_value;
-        }
-
-
-        @UiSection("Traffic Graph")
-        @UiComesAfter("resetui")
-        @UiLabel("Cell Size (in metre)")
-        @Min(1)
-        public int getCellsampling()
-        {
-            return CellSampling;
-        }
-
-        public void setCellsampling( int p_value )
-        {
-            CellSampling = Math.max( p_value, 1 );
-            ;
-        }
-
-
-        @UiComesAfter("cellsampling")
-        @UiLabel("Routing algorithm")
-        @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})
-        @NotEmpty
-        public String getRoutingalgorithm()
-        {
-            return RoutingAlgorithm;
-        }
-
-        public void setRoutingalgorithm( String p_value )
-        {
-            RoutingAlgorithm = p_value;
-        }
-
-
-        @UiSection("Openstreetmap")
-        @UiComesAfter("routingalgorithm")
-        @UiLabel("")
-        public RoutingMap getRoutingmap()
-        {
-            return RoutingMap;
-        }
-
-        public void setRoutingmap( RoutingMap p_value )
-        {
-            RoutingMap = p_value;
-        }
-
-
-        @UiSection("Console")
-        @UiComesAfter("routingmap")
-        @UiLabel("")
+        /**
+         * returns the console data
+         *
+         * @return console data object
+         */
         public ConsoleData getConsole()
         {
             return Console;
-        }
-
-        public void setConsole( ConsoleData p_value )
-        {
-            Console = p_value;
         }
 
 
@@ -572,100 +489,20 @@ public class CConfiguration
             Database = p_value;
         }
 
-        @UiHidden
-        public GeoPosition getViewpoint()
-        {
-            return ViewPoint;
-        }
-
-        public void setViewpoint( GeoPosition p_value )
-        {
-            ViewPoint = p_value;
-        }
-
-        @UiHidden
-        public int getZoom()
-        {
-            return Zoom;
-        }
-
-        public void setZoom( int p_value )
-        {
-            Zoom = Math.max( p_value, 1 );
-        }
-
-        @UiHidden
-        public int getThreadsleeptime()
-        {
-            return ThreadSleepTime;
-        }
-
-        public void setThreadsleeptime( int p_value )
-        {
-            ThreadSleepTime = Math.max( p_value, 0 );
-        }
-
-        @UiHidden
-        public int getWindowwidth()
-        {
-            return WindowWidth;
-        }
-
-        public void setWindowwidth( int p_value )
-        {
-            WindowWidth = Math.max( p_value, 150 );
-        }
-
-        @UiHidden
-        public int getWindowheight()
-        {
-            return WindowHeight;
-        }
-
-        public void setWindowheight( int p_value )
-        {
-            WindowHeight = Math.max( p_value, 150 );
-        }
 
         /**
          * class of the console configuration
-         *
-         * @deprecated
          */
         public class ConsoleData
         {
             /**
              * maximum char number on each line *
              */
-            private int LineBuffer = 120;
+            public int LineBuffer = 120;
             /**
              * maximum line numbers *
              */
-            private int LineNumber = 120;
-
-
-            @UiLabel("Number Lines")
-            public int getLinenumber()
-            {
-                return LineNumber;
-            }
-
-            public void setLinenumber( int p_value )
-            {
-                LineNumber = Math.max( p_value, 1 );
-            }
-
-            @UiLabel("Character Line Buffer")
-            @UiComesAfter("linenumber")
-            public int getLinebuffer()
-            {
-                return LineBuffer;
-            }
-
-            public void setLinebuffer( int p_value )
-            {
-                LineBuffer = Math.max( p_value, 1 );
-            }
+            public int LineNumber = 120;
         }
 
         /**

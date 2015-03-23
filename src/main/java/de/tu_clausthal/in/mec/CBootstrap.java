@@ -76,6 +76,7 @@ public class CBootstrap
     {
         p_server.register( CSimulation.getInstance() );
         p_server.register( new CAbout() );
+        p_server.register( CConfiguration.getInstance() );
     }
 
 

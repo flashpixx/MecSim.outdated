@@ -125,11 +125,10 @@ public class CServer extends NanoHTTPD
         l_response.addHeader( "Expires", "-1" );
 
         // is needed for ajax request
+        // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
         l_response.addHeader( "Access-Control-Allow-Origin", "*" );
-        l_response.addHeader( "Access-Control-Max-Age", "3628800" );
-        l_response.addHeader( "Access-Control-Allow-Methods", "GET, POST, OPTIONS" );
-        l_response.addHeader( "Access-Control-Allow-Headers", "X-Requested-With" );
-        l_response.addHeader( "Access-Control-Allow-Headers", "Authorization" );
+        l_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE" );
+        l_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept,Authorization" );
 
         return l_response;
     }
@@ -182,7 +181,7 @@ public class CServer extends NanoHTTPD
         {
             final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" );
             if ( !l_methodname.isEmpty() )
-                m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/core/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
+                m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/object/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
         }
 
     }

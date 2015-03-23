@@ -93,7 +93,7 @@ public class CConsole extends JPanel
             {
                 public void run()
                 {
-                    final int l_max = CConfiguration.getInstance().get().getConsole().getLinenumber() + 1;
+                    final int l_max = CConfiguration.getInstance().get().getConsole().LineNumber + 1;
                     final Document l_document = p_document.getDocument();
                     final Element l_root = l_document.getDefaultRootElement();
 
@@ -137,7 +137,7 @@ public class CConsole extends JPanel
         /**
          * buffer of the content *
          */
-        private StringBuffer m_buffer = new StringBuffer( CConfiguration.getInstance().get().getConsole().getLinebuffer() );
+        private StringBuffer m_buffer = new StringBuffer( CConfiguration.getInstance().get().getConsole().LineBuffer );
         /**
          * first line flag - to remove a blank line at the begin *
          */

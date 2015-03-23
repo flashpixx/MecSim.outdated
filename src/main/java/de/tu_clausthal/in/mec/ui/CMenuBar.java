@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CCommonUI;
@@ -220,7 +219,7 @@ public class CMenuBar extends JMenuBar implements ActionListener, ChangeListener
     @Override
     public void stateChanged( final ChangeEvent p_event )
     {
-        CConfiguration.getInstance().get().setThreadsleeptime( ( (JSlider) p_event.getSource() ).getMaximum() - ( (JSlider) p_event.getSource() ).getValue() );
+        //CConfiguration.getInstance().get().setThreadsleeptime( ( (JSlider) p_event.getSource() ).getMaximum() - ( (JSlider) p_event.getSource() ).getValue() );
     }
 
 

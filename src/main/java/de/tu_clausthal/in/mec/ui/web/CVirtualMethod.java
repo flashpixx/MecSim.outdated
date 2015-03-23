@@ -84,6 +84,10 @@ public class CVirtualMethod implements IVirtualLocation
     @Override
     public Map<Object, Object> get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
+        // parse data - must be called otherwise an time-out exception is thrown
+        if ( NanoHTTPD.Method.PUT.equals( p_session.getMethod() ) || NanoHTTPD.Method.POST.equals( p_session.getMethod() ) )
+            p_session.parseBody( null );
+
         try
         {
             // invoke method

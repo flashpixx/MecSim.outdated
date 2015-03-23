@@ -71,10 +71,9 @@ public class CAbout
     /**
      * access to the data
      *
-     * @param p_data input data
      * @return map with about data
      */
-    private Map<String, String> web_static_get( final Map<String, String> p_data )
+    private Map<String, String> web_static_get()
     {
         return m_data;
     }

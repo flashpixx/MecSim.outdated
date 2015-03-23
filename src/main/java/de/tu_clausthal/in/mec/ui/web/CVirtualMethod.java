@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -44,9 +45,13 @@ public class CVirtualMethod implements IVirtualLocation
      */
     private final MethodHandle m_method;
     /**
-     * object to call *
+     * object
      */
     private final Object m_object;
+    /**
+     * number of method arguments
+     */
+    private final int m_arguments;
     /**
      * URI *
      */
@@ -62,9 +67,10 @@ public class CVirtualMethod implements IVirtualLocation
      */
     public CVirtualMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
-        m_object = p_object;
-        m_method = p_method.getHandle();
         m_uri = p_uri;
+        m_method = p_method.getHandle();
+        m_object = p_object;
+        m_arguments = p_method.getMethod().getParameterCount();
 
         CLogger.info( p_uri );
     }
@@ -81,7 +87,22 @@ public class CVirtualMethod implements IVirtualLocation
         try
         {
             // invoke method
-            final Object l_return = m_method.invoke( m_object, p_session.getParms() );
+            final Object l_return;
+            switch ( m_arguments )
+            {
+                case 0:
+                    l_return = m_method.invoke( m_object );
+                    break;
+                case 1:
+                    l_return = m_method.invoke( m_object, p_session.getParms() );
+                    break;
+                case 2:
+                    l_return = m_method.invoke( m_object, p_session.getParms(), p_session.getHeaders() );
+                    break;
+                default:
+                    throw new IllegalArgumentException( CCommon.getResourceString( this, "argumentnumber", m_arguments ) );
+            }
+
             return ( l_return instanceof Map ) ? (Map) l_return : new HashMap()
             {{
                     put( "data", l_return );
@@ -89,6 +110,7 @@ public class CVirtualMethod implements IVirtualLocation
         }
         catch ( Throwable l_throwable )
         {
+            CLogger.error( l_throwable );
             return new HashMap()
             {{
                     put( "error", l_throwable.getMessage() );

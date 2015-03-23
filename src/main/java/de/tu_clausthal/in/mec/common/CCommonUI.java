@@ -47,6 +47,7 @@ public class CCommonUI
     public static Tab createTab( final String p_name, final Node p_node )
     {
         final Tab l_tab = new Tab();
+        l_tab.setId( p_name );
         l_tab.setText( p_name );
         l_tab.setContent( p_node );
         l_tab.setClosable( false );
@@ -153,6 +154,7 @@ public class CCommonUI
 
     /**
      * file filter class to create a filter list
+     *
      * @deprecated
      */
     protected static class UIFileFilter extends FileFilter

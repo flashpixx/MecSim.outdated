@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
+import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 
 import java.io.File;
@@ -43,8 +44,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -72,11 +71,15 @@ public class CSimulation
     /**
      * object of the thread loop *
      */
-    private Thread m_mainloopthread = null;
+    private Thread m_mainloopthread;
     /**
      * HTTP server
      */
-    private CServer m_ui = null;
+    private CServer m_webserver;
+    /**
+     * UI
+     */
+    private CUI m_ui;
 
 
     /**
@@ -130,22 +133,21 @@ public class CSimulation
      *
      * @return null or server
      */
-    public CServer getUIServer()
+    public CServer getWebServer()
+    {
+        return m_webserver;
+    }
+
+    /**
+     * returns the UI
+     *
+     * @return UI
+     */
+    public CUI getUI()
     {
         return m_ui;
     }
 
-    /**
-     * sets the HTTP server
-     *
-     * @param p_server HTTP object
-     */
-    public void setUI( final CServer p_server )
-    {
-        if ( m_ui != null )
-            throw new IllegalStateException( CCommon.getResourceString( this, "uiserver" ) );
-        m_ui = p_server;
-    }
 
     /**
      * returns a boolean for existing UI
@@ -154,7 +156,7 @@ public class CSimulation
      */
     public boolean hasUI()
     {
-        return m_ui != null;
+        return ( m_ui != null ) && ( m_webserver != null );
     }
 
 
@@ -183,7 +185,6 @@ public class CSimulation
         this.threadStartUp();
 
         CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
-        CBootstrap.beforeSimulationStarts( this );
 
         // run thread and wait until thread is finished
         m_mainloop.resume( p_steps );
@@ -202,7 +203,6 @@ public class CSimulation
         this.threadStartUp();
 
         CLogger.info( CCommon.getResourceString( this, "start" ) );
-        CBootstrap.beforeSimulationStarts( this );
 
         m_mainloop.resume();
     }
@@ -217,7 +217,6 @@ public class CSimulation
             throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
 
         m_mainloop.pause();
-        CBootstrap.afterSimulationStops( this );
         CLogger.info( CCommon.getResourceString( this, "stop" ) );
     }
 
@@ -326,27 +325,19 @@ public class CSimulation
 
     /**
      * UI method to start the simulation
-     *
-     * @param p_data input data
      */
-    private Map<String, String> web_static_start( final Map<String, Object> p_data )
+    private void web_static_start()
     {
         this.start();
-
-        return new HashMap()
-        {{
-                put( "name", "simulation is started" );
-            }};
     }
 
 
     /**
      * UI method to stop the simulation
-     *
-     * @param p_data input data
      */
-    private void web_static_stop( final Map<String, Object> p_data )
+    private void web_static_stop()
     {
         this.stop();
     }
+
 }

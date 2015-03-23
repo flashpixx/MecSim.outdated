@@ -26,10 +26,15 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -46,11 +51,17 @@ import javafx.stage.WindowEvent;
  */
 public class CUI extends Application
 {
+    /**
+     * tab list *
+     */
+    private final TabPane m_tabs = new TabPane();
+
 
     public static void main( final String[] p_args )
     {
         launch( p_args );
     }
+
 
     @Override
     public void start( final Stage p_stage ) throws Exception
@@ -79,14 +90,52 @@ public class CUI extends Application
 
 
         // tab pane for content
-        final TabPane l_tabs = new TabPane();
-        l_root.setCenter( l_tabs );
-        CBootstrap.afterStageInit( l_tabs );
+        l_root.setCenter( m_tabs );
+        CBootstrap.afterStageInit( this );
 
         // set stage
         p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight ) );
         p_stage.sizeToScene();
         p_stage.show();
+
+
+        // set via reflection the UI
+        try
+        {
+            if ( CSimulation.getInstance().getUI() == null )
+                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_ui" ).getSetter().invoke( CSimulation.getInstance(), this );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
+    }
+
+
+    /**
+     * adds a ne tab to the UI
+     *
+     * @param p_tab tab
+     */
+    public void add( final Tab... p_tab )
+    {
+        m_tabs.getTabs().addAll( p_tab );
+    }
+
+    /**
+     * returns a tab / node
+     *
+     * @param p_name name of the tab
+     * @return node or null
+     * @tparam T node type
+     */
+    public <T extends Node> T getTab( final String p_name )
+    {
+        for ( Tab l_tab : m_tabs.getTabs() )
+            if ( l_tab.getId().equals( p_name ) )
+                return (T) l_tab.getContent();
+
+        return null;
     }
 
 }

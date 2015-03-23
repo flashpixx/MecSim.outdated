@@ -29,14 +29,13 @@ import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
-import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAbout;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
-import javafx.scene.control.TabPane;
 
 
 /**
@@ -58,12 +57,12 @@ public class CBootstrap
     /*
      * is called after the frame is initialize and before the UI configuration is load
      *
-     * @param p_root root pane
+     * @param UI
      */
-    public static void afterStageInit( final TabPane p_root )
+    public static void afterStageInit( final CUI p_ui )
     {
-        p_root.getTabs().add( CCommonUI.createTab( "Main", new CWorkspace() ) );
-        p_root.getTabs().add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
+        p_ui.add( CCommonUI.createTab( "Main", new CWorkspace() ) );
+        p_ui.add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
     }
 
 
@@ -103,39 +102,6 @@ public class CBootstrap
         p_simulation.getWorld().put( "Sources", new CSourceLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
-    }
-
-
-    /**
-     * is called after the world is initialize
-     *
-     * @param p_world world
-     */
-    public static void afterWorldInit( final CWorld p_world )
-    {
-
-    }
-
-
-    /**
-     * is called before the simulation is run
-     *
-     * @param p_simulation simulation object
-     */
-    public static void beforeSimulationStarts( final CSimulation p_simulation )
-    {
-
-    }
-
-
-    /**
-     * is called after the simulation is finished
-     *
-     * @param p_simulation simiulation object
-     */
-    public static void afterSimulationStops( final CSimulation p_simulation )
-    {
-
     }
 
 

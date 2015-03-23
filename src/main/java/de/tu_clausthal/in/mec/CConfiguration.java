@@ -260,6 +260,7 @@ public class CConfiguration
 
     /**
      * reads the configuration within the directory
+     *
      * @todo check default values and base initialization
      */
     public void read()

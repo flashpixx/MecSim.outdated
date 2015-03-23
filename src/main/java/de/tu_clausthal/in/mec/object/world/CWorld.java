@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.world;
 
-import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
@@ -53,14 +52,6 @@ public class CWorld implements Map<String, ILayer>, Serializable
      * map with layer
      */
     protected final Map<String, ILayer> m_layer = new HashMap<>();
-
-    /**
-     * ctor
-     */
-    public CWorld()
-    {
-        CBootstrap.afterWorldInit( this );
-    }
 
 
     /**

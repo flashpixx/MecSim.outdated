@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
 import java.io.File;
@@ -61,7 +62,18 @@ public class CWorkspace extends CBrowser
 
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().UIBindPort );
-        CSimulation.getInstance().setUI( m_server );
+
+
+        // set via reflection the server
+        try
+        {
+            if ( CSimulation.getInstance().getWebServer() == null )
+                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_webserver" ).getSetter().invoke( CSimulation.getInstance(), this );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
     }
 
 

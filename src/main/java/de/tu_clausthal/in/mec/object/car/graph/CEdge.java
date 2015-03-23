@@ -123,7 +123,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
                 m_cellgeoposition[i] = new GeoPosition( l_list.getX( 0 ) + i * l_increment, l_function.value( l_list.getX( 0 ) + i * l_increment ) );
 
         }
-        catch ( NonMonotonicSequenceException l_exception )
+        catch ( final NonMonotonicSequenceException l_exception )
         {
 
             final double l_xincrement = ( l_list.getX( l_list.size() - 1 ) - l_list.getX( 0 ) ) / m_cells.length;

@@ -134,7 +134,7 @@ public class CMain
                 CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "step" ) ) );
 
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
                 CLogger.error( l_exception );
                 CLogger.out( CCommon.getResourceString( CMain.class, "loadingerror" ) );

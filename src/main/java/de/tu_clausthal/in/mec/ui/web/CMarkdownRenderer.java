@@ -82,7 +82,7 @@ public class CMarkdownRenderer extends LinkRenderer
         {
             new URL( p_node.url );
         }
-        catch ( MalformedURLException l_exception )
+        catch ( final MalformedURLException l_exception )
         {
             return super.render( new ExpImageNode( p_node.title, p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
         }
@@ -109,7 +109,7 @@ public class CMarkdownRenderer extends LinkRenderer
                 return super.render( new ExpLinkNode( l_parts[2], "http://" + l_parts[0].trim() + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[1].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[2] );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
         }
 

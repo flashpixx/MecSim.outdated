@@ -126,7 +126,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         {
             Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
         }

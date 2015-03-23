@@ -86,7 +86,7 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
                 ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }

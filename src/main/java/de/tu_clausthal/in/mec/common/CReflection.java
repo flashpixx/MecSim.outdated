@@ -59,7 +59,7 @@ public class CReflection
             {
                 l_field = l_class.getDeclaredField( p_field );
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
             }
 
@@ -72,7 +72,7 @@ public class CReflection
         {
             l_struct = new CGetSet( l_field, MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) );
         }
-        catch ( IllegalAccessException l_exception )
+        catch ( final IllegalAccessException l_exception )
         {
             CLogger.error( l_exception );
         }
@@ -114,7 +114,7 @@ public class CReflection
                 {
                     l_fields.put( l_field.getName(), new CGetSet( l_field, MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) ) );
                 }
-                catch ( IllegalAccessException l_exception )
+                catch ( final IllegalAccessException l_exception )
                 {
                     CLogger.error( l_exception );
                 }
@@ -153,7 +153,7 @@ public class CReflection
             {
                 l_method = l_class.getDeclaredMethod( p_method, p_parameter );
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
             }
 
@@ -186,7 +186,7 @@ public class CReflection
                 {
                     l_methods.put( l_method.getName(), new CMethod( l_method ) );
                 }
-                catch ( IllegalAccessException l_exception )
+                catch ( final IllegalAccessException l_exception )
                 {
                     CLogger.error( l_exception );
                 }

@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * OS specific support
+ * @deprecated
  */
 public class COperatingSystem
 {

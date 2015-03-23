@@ -91,7 +91,7 @@ public class CServer extends NanoHTTPD
         {
             this.start();
         }
-        catch ( IOException l_exception )
+        catch ( final IOException l_exception )
         {
             CLogger.error( l_exception );
         }
@@ -115,7 +115,7 @@ public class CServer extends NanoHTTPD
                 l_response = this.getVirtualDirFile( l_location, p_session );
 
         }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
             l_response = new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable );

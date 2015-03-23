@@ -187,11 +187,11 @@ public class CMethodBind extends IAction
             }
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             throw new IllegalArgumentException( l_exception.getMessage() );
         }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             throw new IllegalArgumentException( l_throwable.getMessage() );
         }
@@ -244,7 +244,7 @@ public class CMethodBind extends IAction
             }
 
         }
-        catch ( ClassNotFoundException l_exception )
+        catch ( final ClassNotFoundException l_exception )
         {
             throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "classnotfound", l_classname ) );
         }

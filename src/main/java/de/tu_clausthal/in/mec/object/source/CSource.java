@@ -168,7 +168,7 @@ public class CSource extends IInspector implements ISource, ISerializable
         {
             COSMViewer.getSimulationOSM().repaint();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
         }
     }
@@ -250,7 +250,7 @@ public class CSource extends IInspector implements ISource, ISerializable
                 }
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.warn( l_exception );
         }
@@ -280,7 +280,7 @@ public class CSource extends IInspector implements ISource, ISerializable
                 }
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.warn( l_exception );
         }

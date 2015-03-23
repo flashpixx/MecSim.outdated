@@ -95,7 +95,7 @@ public class CConfiguration
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
                 m_manifest.put( l_item.getKey().toString(), l_item.getValue().toString() );
         }
-        catch ( IOException l_exception )
+        catch ( final IOException l_exception )
         {
         }
 
@@ -223,7 +223,7 @@ public class CConfiguration
         {
             this.createDirectories();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -239,7 +239,7 @@ public class CConfiguration
         {
             this.createDirectories();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -251,7 +251,7 @@ public class CConfiguration
         {
             new Gson().toJson( m_data, l_writer );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }
@@ -271,7 +271,7 @@ public class CConfiguration
         {
             this.createDirectories();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -286,7 +286,7 @@ public class CConfiguration
         {
             l_tmp = new Gson().fromJson( l_reader, Data.class );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -357,11 +357,11 @@ public class CConfiguration
             for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
                 CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, CCommon.getResourceURL( m_location.get( "jar" ) + File.separator + l_jar ) );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
         }
@@ -633,7 +633,7 @@ public class CConfiguration
                 return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
 
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
             }
             finally

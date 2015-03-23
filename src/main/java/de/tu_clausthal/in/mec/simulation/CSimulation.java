@@ -258,7 +258,7 @@ public class CSimulation
 
             CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
             throw new IOException( l_exception.getMessage() );
@@ -316,7 +316,7 @@ public class CSimulation
             CLogger.info( CCommon.getResourceString( this, "load", p_input ) );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
             throw new IOException( l_exception.getMessage() );

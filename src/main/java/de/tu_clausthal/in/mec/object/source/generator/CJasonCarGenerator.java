@@ -121,7 +121,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
                 FileUtils.write( l_output, l_asldata );
             }
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
         }
     }

@@ -135,7 +135,7 @@ public class CDefaultCar extends IInspector implements ICar
                 }
 
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
             }
 
@@ -358,7 +358,7 @@ public class CDefaultCar extends IInspector implements ICar
                 m_graph.getEdge( m_route.get( l_speed ).getLeft() ).setObject( this, m_route.get( l_speed ).getRight().intValue() );
                 m_routeindex += l_speed;
             }
-            catch ( IllegalAccessException l_ex )
+            catch ( final IllegalAccessException l_exception )
             {
             }
 
@@ -372,7 +372,7 @@ public class CDefaultCar extends IInspector implements ICar
                 m_graph.getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
                 m_routeindex += l_speed;
             }
-            catch ( IllegalAccessException l_ex )
+            catch ( final IllegalAccessException l_exception )
             {
                 m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
             }

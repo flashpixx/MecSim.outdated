@@ -281,7 +281,7 @@ public class CAgent<T> implements IVoidAgent
                     l_action.act( m_agent, p_action.getActionTerm() );
                     p_action.setResult( true );
                 }
-                catch ( Exception l_exception )
+                catch ( final Exception l_exception )
                 {
                     p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
                     p_action.setResult( false );
@@ -334,7 +334,7 @@ public class CAgent<T> implements IVoidAgent
                 m_agent.addBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
                 m_agent.delBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
             }
 
@@ -382,7 +382,7 @@ public class CAgent<T> implements IVoidAgent
                     m_agent.addBel( l_literal );
 
                 }
-                catch ( Exception l_exception )
+                catch ( final Exception l_exception )
                 {
                 }
         }
@@ -400,7 +400,7 @@ public class CAgent<T> implements IVoidAgent
                     {
                         m_agent.delBel( l_literal );
                     }
-                    catch ( Exception l_exception )
+                    catch ( final Exception l_exception )
                     {
                     }
 
@@ -415,7 +415,7 @@ public class CAgent<T> implements IVoidAgent
                     {
                         m_agent.addBel( l_literal );
                     }
-                    catch ( Exception l_exception )
+                    catch ( final Exception l_exception )
                     {
                     }
             }
@@ -464,7 +464,7 @@ public class CAgent<T> implements IVoidAgent
 
                 CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, l_action );
             }
-            catch ( Throwable l_throwable )
+            catch ( final Throwable l_throwable )
             {
                 CLogger.error( l_throwable );
             }

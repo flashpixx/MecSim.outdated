@@ -176,7 +176,7 @@ public class CMainLoop implements Runnable
                 m_simulationcount++;
                 Thread.sleep( CConfiguration.getInstance().get().ThreadSleepTime );
             }
-            catch ( InterruptedException l_exception )
+            catch ( final InterruptedException l_exception )
             {
                 Thread.currentThread().interrupt();
                 return;
@@ -254,7 +254,7 @@ public class CMainLoop implements Runnable
                 l_tasks.add( new CLayerReset( l_layer ) );
             m_pool.invokeAll( l_tasks );
         }
-        catch ( InterruptedException l_exception )
+        catch ( final InterruptedException l_exception )
         {
         }
 

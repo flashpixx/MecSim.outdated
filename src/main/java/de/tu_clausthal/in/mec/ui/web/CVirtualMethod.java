@@ -112,7 +112,7 @@ public class CVirtualMethod implements IVirtualLocation
                     put( "data", l_return );
                 }};
         }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
             return new HashMap()

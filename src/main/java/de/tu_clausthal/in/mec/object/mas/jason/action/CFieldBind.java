@@ -159,7 +159,7 @@ public class CFieldBind extends IAction
                 l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
 
         }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
         }

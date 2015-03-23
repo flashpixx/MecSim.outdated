@@ -332,7 +332,7 @@ public class CGraphHopper extends GraphHopper
 
             return l_output;
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }

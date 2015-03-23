@@ -157,7 +157,7 @@ class COSMMouseListener extends MouseAdapter
                 m_doubleClick = false;
             }
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }

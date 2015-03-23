@@ -91,7 +91,7 @@ public class CCommon
 
             return CCommon.class.getClassLoader().getResource( p_file.toString().replace( CCommon.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "" ) );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( CCommon.getResourceString( CCommon.class, "sourcenotfound", p_file ) );
         }
@@ -182,7 +182,7 @@ public class CCommon
         {
             return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( p_string.getBytes() ) );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
         }
 
@@ -201,7 +201,7 @@ public class CCommon
         {
             return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
         }
 

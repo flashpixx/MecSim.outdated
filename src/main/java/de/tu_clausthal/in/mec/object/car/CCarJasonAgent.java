@@ -104,7 +104,7 @@ public class CCarJasonAgent extends CDefaultCar
             ( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).add( m_agent );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }

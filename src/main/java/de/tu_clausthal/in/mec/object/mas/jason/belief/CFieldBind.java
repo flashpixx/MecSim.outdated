@@ -148,11 +148,11 @@ public class CFieldBind implements IBelief
                     m_literals.add( l_literal );
 
                 }
-                catch ( Exception l_exception )
+                catch ( final Exception l_exception )
                 {
                     CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage() ) );
                 }
-                catch ( Throwable l_throwable )
+                catch ( final Throwable l_throwable )
                 {
                     CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage() ) );
                 }

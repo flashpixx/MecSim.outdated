@@ -58,7 +58,7 @@ public class CCommonUI
      * creates a filesave dialog, which stores the current path
      *
      * @return File or null
-     * @bug UI frame
+     * @deprecated
      */
     public static File openFileSaveDialog( File p_defaultfilepath, String[][] p_fileextensions )
     {
@@ -80,7 +80,7 @@ public class CCommonUI
      * @param p_title       title
      * @param p_description description text
      * @return string with content or null
-     * @bug UI frame
+     * @deprecated
      */
     public static String openTextInputDialog( String p_title, String... p_description )
     {
@@ -99,7 +99,7 @@ public class CCommonUI
      * @param p_title       title
      * @param p_description description text
      * @return selected value
-     * @bug UI frame
+     * @deprecated
      */
     public static String openGroupSelectDialog( String[] p_values, String p_title, String... p_description )
     {
@@ -114,7 +114,7 @@ public class CCommonUI
      * creates a fileload dialog, which stores the current path
      *
      * @return File or null
-     * @bug UI frame
+     * @deprecated
      */
     public static File openFileLoadDialog( File p_defaultfilepath, String[][] p_fileextensions )
     {
@@ -135,6 +135,7 @@ public class CCommonUI
      * @param p_defaultfilepath changes / gets the default file path
      * @param p_fileextensions  arra with extension and description
      * @return filechooser
+     * @deprecated
      */
     protected static JFileChooser initFileDialog( File p_defaultfilepath, String[][] p_fileextensions )
     {
@@ -152,6 +153,7 @@ public class CCommonUI
 
     /**
      * file filter class to create a filter list
+     * @deprecated
      */
     protected static class UIFileFilter extends FileFilter
     {

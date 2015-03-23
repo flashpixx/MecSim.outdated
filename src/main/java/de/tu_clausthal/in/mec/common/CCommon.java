@@ -43,6 +43,16 @@ public class CCommon
 {
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CCommon()
+    {
+    }
+
+    ;
+
+
+    /**
      * checks a value and returns the checkd value or the default value
      *
      * @param p_input         unchecked value
@@ -61,6 +71,19 @@ public class CCommon
                 return l_item;
 
         return p_default;
+    }
+
+
+    /**
+     * returns a default value of an empty string
+     *
+     * @param p_input   input value
+     * @param p_default default value
+     * @return string
+     */
+    public static String getNonEmptyValue( final String p_input, final String p_default )
+    {
+        return ( ( p_input == null ) || ( p_input.isEmpty() ) ) ? p_default : p_input;
     }
 
 

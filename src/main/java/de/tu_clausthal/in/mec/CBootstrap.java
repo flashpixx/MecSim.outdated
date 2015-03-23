@@ -45,6 +45,15 @@ public class CBootstrap
 {
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CBootstrap()
+    {
+    }
+
+    ;
+
+    /**
      * is called after configuration is loaded
      *
      * @param p_configuration configuration

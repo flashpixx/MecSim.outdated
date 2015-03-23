@@ -39,6 +39,15 @@ public class CCommonUI
 {
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CCommonUI()
+    {
+    }
+
+    ;
+
+    /**
      * create a tab for the UI
      *
      * @param p_name tab name

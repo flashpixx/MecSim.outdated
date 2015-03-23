@@ -421,8 +421,8 @@ public class CConfiguration
         m_data.getConsole().LineBuffer = Math.max( 1, Integer.parseInt( p_data.get( "console_linebuffer" ) ) );
         m_data.getConsole().LineNumber = Math.max( 1, Integer.parseInt( p_data.get( "console_linenumber" ) ) );
 
-        m_data.RoutingMap.Name = p_data.get( "routingmap_name" );
-        m_data.RoutingMap.URL = p_data.get( "routingmap_url" );
+        m_data.RoutingMap.Name = CCommon.getNonEmptyValue( p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
+        m_data.RoutingMap.URL = CCommon.getNonEmptyValue( p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
         m_data.RoutingMap.Reimport = Boolean.parseBoolean( p_data.get( "routingmap_reimport" ) );
 
         m_data.Database.Active = Boolean.parseBoolean( p_data.get( "database_active" ) );

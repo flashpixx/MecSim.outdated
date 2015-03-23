@@ -248,12 +248,12 @@
                             <source>1.8</source>
                             <target>1.8</target>
                             <excludes>
-                                <exclude>**/CMainBootstrap.java</exclude>
+                                <exclude>**/CBoot.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>bootstrap-compile</id>
+                        <id>boot-compile</id>
                         <goals>
                             <goal>compile</goal>
                         </goals>
@@ -261,7 +261,7 @@
                             <source>1.2</source>
                             <target>1.2</target>
                             <includes>
-                                <include>**/CMainBootstrap.java</include>
+                                <include>**/CBoot.java</include>
                             </includes>
                         </configuration>
                     </execution>
@@ -337,7 +337,7 @@
                             <Build-Commit>${build.commit}</Build-Commit>
                         </manifestEntries>
                         <manifest>
-                            <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>
+                            <mainClass>de.tu_clausthal.in.mec.CBoot</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

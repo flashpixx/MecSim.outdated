@@ -45,6 +45,15 @@ public class CReflection
 {
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CReflection()
+    {
+    }
+
+    ;
+
+    /**
      * get a class field of the class or super classes and returns getter / setter handles
      *
      * @param p_class class

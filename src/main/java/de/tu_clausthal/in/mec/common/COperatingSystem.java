@@ -54,6 +54,15 @@ public class COperatingSystem
 
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private COperatingSystem()
+    {
+    }
+
+    ;
+
+    /**
      * Mac OS X check
      *
      * @return true on OSX

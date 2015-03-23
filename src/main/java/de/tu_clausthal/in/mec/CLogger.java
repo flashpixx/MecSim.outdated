@@ -64,6 +64,15 @@ public class CLogger
     private static Level s_level = Level.OFF;
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CLogger()
+    {
+    }
+
+    ;
+
+    /**
      * creates the logger with properties
      *
      * @param p_level    log level

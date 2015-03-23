@@ -18,7 +18,16 @@
      **/
     $.post(
         "object/cconfiguration/set",
-        { foo : "bar", "foo_number" : 2, "bar_bool" : true }
+        { type : "post", foo : "bar", "foo_number" : 2, "bar_bool" : true }
+    );
+
+
+    /**
+     * get request example
+     **/
+    $.get(
+        "object/cconfiguration/set",
+        { type : "get", bar : "foo", "foo_number" : 3, "bar_bool" : false }
     );
 
 

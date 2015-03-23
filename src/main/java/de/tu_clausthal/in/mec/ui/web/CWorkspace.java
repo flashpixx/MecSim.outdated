@@ -41,7 +41,7 @@ public class CWorkspace extends CBrowser
     /**
      * HTTP server to handle websockets *
      */
-    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().UIBindPort, new CVirtualDirectory( CCommon.getResource( "web/root" ), "index.htm" ) );
+    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().UIBindPort, new CVirtualDirectory( CCommon.getResourceURL( "web/root" ), "index.htm" ) );
 
 
     /**
@@ -51,19 +51,14 @@ public class CWorkspace extends CBrowser
     {
         super( EMenu.BackForward );
 
-        try
-        {
-            this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
-            this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().Language, "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
 
-            this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/", null );
+        this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
+        this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().Language, "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
 
-            this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/", null );
-        }
-        catch ( IllegalArgumentException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
+        this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/", null );
+
+        this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/", null );
+
 
         this.load( "http://localhost:" + CConfiguration.getInstance().get().UIBindPort );
         CSimulation.getInstance().setUI( m_server );
@@ -78,9 +73,16 @@ public class CWorkspace extends CBrowser
      */
     protected final void addVirtualFile( final String p_source, final String p_uri )
     {
-        final URL l_url = CCommon.getResource( p_source );
-        if ( l_url != null )
-            m_server.getVirtualLocation().add( new CVirtualFile( l_url, p_uri ) );
+        try
+        {
+            final URL l_url = CCommon.getResourceURL( p_source );
+            if ( l_url != null )
+                m_server.getVirtualLocation().add( new CVirtualFile( l_url, p_uri ) );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
 
@@ -108,8 +110,15 @@ public class CWorkspace extends CBrowser
      */
     protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
-        if ( p_source != null )
-            m_server.getVirtualLocation().add( new CVirtualDirectory( CCommon.getResource( p_source ), p_index, p_uri, p_markdown ) );
+        try
+        {
+            if ( p_source != null )
+                m_server.getVirtualLocation().add( new CVirtualDirectory( CCommon.getResourceURL( p_source ), p_index, p_uri, p_markdown ) );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
 }

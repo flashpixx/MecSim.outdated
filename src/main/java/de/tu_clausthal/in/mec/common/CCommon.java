@@ -70,9 +70,9 @@ public class CCommon
      * @param p_file file
      * @return URL of file or null
      */
-    public static URL getResource( final String p_file )
+    public static URL getResourceURL( final String p_file )
     {
-        return getResource( new File( p_file ) );
+        return getResourceURL( new File( p_file ) );
     }
 
     /**
@@ -82,7 +82,7 @@ public class CCommon
      * @return URL of file or null
      * @note the Jar path is removed if exists
      */
-    public static URL getResource( final File p_file )
+    public static URL getResourceURL( final File p_file )
     {
         try
         {

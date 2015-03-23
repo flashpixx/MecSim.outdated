@@ -74,11 +74,10 @@ public class CAbout
      * @param p_data input data
      * @return map with about data
      */
-    private Map<String, String> web_static_get( final Map<String, Object> p_data )
+    private Map<String, String> web_static_get( final Map<String, String> p_data )
     {
         return m_data;
     }
-
 
     /**
      * returns an empty string if the input is null

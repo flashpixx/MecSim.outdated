@@ -80,8 +80,8 @@ public class CVirtualMethod implements IVirtualLocation
     {
         try
         {
-            final Object l_return = m_method.invoke( m_object, null );
-
+            // invoke method
+            final Object l_return = m_method.invoke( m_object, p_session.getParms() );
             return ( l_return instanceof Map ) ? (Map) l_return : new HashMap()
             {{
                     put( "data", l_return );

@@ -77,6 +77,7 @@ public class CServer extends NanoHTTPD
      * @param p_host    bind hostname
      * @param p_port    bind port
      * @param p_default default location
+     * @todo application/x-javascript extension mimetype
      */
     public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {
@@ -117,11 +118,17 @@ public class CServer extends NanoHTTPD
         catch ( Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-            l_response = new Response( Response.Status.INTERNAL_ERROR, "text/plain", "ERROR 500\n" + l_throwable );
+            l_response = new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable );
         }
 
         l_response.addHeader( "Location", p_session.getUri() );
         l_response.addHeader( "Expires", "-1" );
+        l_response.addHeader( "Access-Control-Allow-Origin", "*" );
+        l_response.addHeader( "Access-Control-Max-Age", "3628800" );
+        l_response.addHeader( "Access-Control-Allow-Methods", "GET, POST, OPTIONS" );
+        l_response.addHeader( "Access-Control-Allow-Headers", "X-Requested-With" );
+        l_response.addHeader( "Access-Control-Allow-Headers", "Authorization" );
+
         return l_response;
     }
 

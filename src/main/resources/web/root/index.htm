@@ -1,35 +1,96 @@
 <?xml version="1.0" ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>MecSim - Traffic Simulation</title>
 
-    <script type="text/javascript" src="jscss/jquery-2.1.3.min.js"></script>
-    <script type="text/javascript" src="jscss/jquery-ui-1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="jscss/d3/d3-3.5.5.js"></script>
-    <script type="text/javascript" src="jscss/main.js"></script>
+    <head>
+        <title>MecSim - Traffic Simulation</title>
 
-    <link href="jscss/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet"/>
-    <link href="jscss/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel="stylesheet"/>
-    <link href="jscss/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel="stylesheet"/>
-    <link href="jscss/layout.css" rel="stylesheet"/>
-</head>
+        <!-- jQuery https://jquery.com/ ------------------------------------------------------------------------------->
+        <script type="text/javascript" src="jscss/jquery-2.1.3.min.js"></script>
+        <!------------------------------------------------------------------------------------------------------------->
 
+        <!-- jQuery-UI https://jqueryui.com/ -------------------------------------------------------------------------->
+        <script type="text/javascript" src="jscss/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+        <link href="jscss/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet"/>
+        <link href="jscss/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel="stylesheet"/>
+        <link href="jscss/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel="stylesheet"/>
+        <!------------------------------------------------------------------------------------------------------------->
 
-<body>
+        <!-- D3.js http://d3js.org/ ----------------------------------------------------------------------------------->
+        <script type="text/javascript" src="jscss/d3/d3-3.5.5.js"></script>
+        <!------------------------------------------------------------------------------------------------------------->
 
-<nav>
-    <ul>
-        <li><a href="index.htm">MecSim</a></li>
-        <li><a href="template/local.htm" class="template">Local</a></li>
-        <li><a href="template/about.htm" class="template">About</a></li>
-        <li><a href="template/configuration.htm" class="template">Configuration</a></li>
-        <li><a href="template/userdoc.htm" class="template">User Dokumentation</a></li>
-        <li><a href="template/develdoc.htm" class="template">Developer Dokumentation</a></li>
-    </ul>
-</nav>
+        <!-- jqWidgets  http://www.jqwidgets.com/ --------------------------------------------------------------------->
+        <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxcore.js"></script>
+        <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxbuttons.js"></script>
+        <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxsplitter.js"></script>
+        <link href="jscss/jqwidgets-3.7.1/jqx.base.css" rel="stylesheet"/>
+        <!------------------------------------------------------------------------------------------------------------->
 
-<section id="content"/>
+        <!-- MecSim: OUR STUFF ---------------------------------------------------------------------------------------->
+        <script type="text/javascript" src="jscss/main.js"></script>
+        <link href="jscss/layout.css" rel="stylesheet"/>
+        <!------------------------------------------------------------------------------------------------------------->
 
-</body>
+    </head>
+
+    <body>
+
+        <div id="jqxSplitter">
+            <div id="mecsim_menu">
+
+                <div id="mecsim_accordion" class="accordion">
+                    <h3>Simulation Configuration</h3>
+                    <div>
+                        <p>
+                            <button id="mecsim_start_button">Start Simulation</button>
+                            <button id="mecsim_stop_button">Stop Simulation</button>
+                        </p>
+                    </div>
+                    <h3>MecSim</h3>
+                    <div>
+                        <p>
+                            <a href="index.htm">MecSim</a>
+                        </p>
+                    </div>
+                    <h3>Local</h3>
+                    <div>
+                        <p>
+                            <a href="template/local.htm" class="template">Local</a>
+                        </p>
+                    </div>
+                    <h3>About</h3>
+                    <div>
+                        <p>
+                            <a href="template/about.htm" class="template">About</a>
+                        </p>
+                    </div>
+                    <h3>Configuration</h3>
+                    <div>
+                        <p>
+                            <a href="template/configuration.htm" class="template">Configuration</a>
+                        </p>
+                    </div>
+                    <h3>User Dokumentation</h3>
+                    <div>
+                        <p>
+                            <a href="template/userdoc.htm" class="template">User Dokumentation</a>
+                        </p>
+                    </div>
+                    <h3>Developer Dokumentation</h3>
+                    <div>
+                        <p>
+                            <a href="template/develdoc.htm" class="template">Developer Dokumentation</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div id="mecsim_content">
+                Foobar
+            </div>
+        </div>
+
+    </body>
+
 </html>

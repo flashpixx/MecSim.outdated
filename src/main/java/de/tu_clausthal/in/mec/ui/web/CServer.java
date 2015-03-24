@@ -183,7 +183,7 @@ public class CServer extends NanoHTTPD
         {
             final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" );
             if ( !l_methodname.isEmpty() )
-                m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/object/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
+                m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
         }
 
     }

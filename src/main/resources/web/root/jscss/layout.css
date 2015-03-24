@@ -1,73 +1,15 @@
-html
-{
-    height: 100%;
-}
-
-body
-{
-	background-color: white;
-	color: black;
-    margin: 0;
-    font: 13px sans-serif;
-    display: flex;
-}
-
-iframe
+html, body
 {
     height: 100%;
     width: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    font: 13px sans-serif;
 }
 
-nav
+.accordion
 {
     background-color: #2f3a48;
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-    border-collapse: collapse;
-    border: none;
-}
-
-nav ul
-{
-    font-weight: bold;
-    display: table-row;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-}
-
-
-nav ul li
-{
-    padding-lef: 1.5em;
-    padding-right: 1.5em;
-    display: table-cell;
-    margin: 0;
-    height: 30px;
-    text-align: center;
-    vertical-align: middle;
-}
-
-nav ul li:hover
-{
-    background-color: #aaa;
-}
-
-nav ul li a, nav ul li a:hover, nav ul li a:visited
-{
-    color: white;
-    text-decoration: none;
-}
-
-nav ul li.active
-{
-    background-color: #51637b;
-}
-
-#content
-{
-    padding: 0;
-    margin: 0;
-    height: 97vh;
+    color: #2f3a48;
 }

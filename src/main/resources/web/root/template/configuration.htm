@@ -3,7 +3,7 @@
     /**
      * build table with configuration data
      **/
-    $.getJSON( "object/cconfiguration/get", function( p_data ) {
+    $.getJSON( "cconfiguration/get", function( p_data ) {
         var items = [];
         $.each( p_data, function( p_key, p_value ) {
             items.push("<li>" + p_key + " => " + p_value + "</li>");
@@ -21,7 +21,7 @@
      * post request example
      **
     $.post(
-        "object/cconfiguration/set",
+        "cconfiguration/set",
         { type : "post", foo : "bar", "foo_number" : 2, "bar_bool" : true }
     );
 
@@ -30,7 +30,7 @@
      * get request example
      **
     $.get(
-        "object/cconfiguration/set",
+        "cconfiguration/set",
         { type : "get", bar : "foo", "foo_number" : 3, "bar_bool" : false }
     );
     **/

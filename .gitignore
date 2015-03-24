@@ -1,6 +1,5 @@
-target/
-
 *.*
+
 !.gitignore
 !*.md
 !*.java
@@ -22,4 +21,5 @@ target/
 !src/main/styleguide/*.header
 !src/main/styleguide/*.md
 
+target/**
 src/main/resources/web/documentation/developer/**

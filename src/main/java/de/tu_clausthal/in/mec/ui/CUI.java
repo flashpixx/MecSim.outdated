@@ -41,6 +41,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 
+
 /**
  * JavaFX application
  *
@@ -48,7 +49,7 @@ import javafx.stage.WindowEvent;
  * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
  * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
- * @todo create docking structure https://gist.github.com/jewelsea/9579047
+ * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/ / https://community.oracle.com/thread/2417144
  */
 public class CUI extends Application
 {
@@ -56,8 +57,6 @@ public class CUI extends Application
      * tab list *
      */
     private final TabPane m_tabs = new TabPane();
-
-
 
     public static void main( final String[] p_args )
     {
@@ -68,8 +67,9 @@ public class CUI extends Application
     @Override
     public void start( final Stage p_stage ) throws Exception
     {
-        p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
+        this.setUserAgentStylesheet( null );
 
+        p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
         {
             public void handle( final WindowEvent p_event )
@@ -81,15 +81,12 @@ public class CUI extends Application
             }
         } );
 
-
         // border pane for with menu
         final BorderPane l_root = new BorderPane();
-
 
         final MenuBar l_menubar = new MenuBar();
         l_menubar.setUseSystemMenuBar( true );
         l_root.setTop( l_menubar );
-
 
         // tab pane for content
         l_root.setCenter( m_tabs );
@@ -99,7 +96,6 @@ public class CUI extends Application
         p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight ) );
         p_stage.sizeToScene();
         p_stage.show();
-
 
 
         // set via reflection the UI
@@ -149,9 +145,11 @@ public class CUI extends Application
         public CDockable( final Node p_node )
         {
             final BorderPane l_pane = new BorderPane();
+            l_pane.setPrefSize(200, 200);
+            l_pane.setStyle("-fx-background-color: lightgrey; -fx-border-width: 1; -fx-border-color: black");
             l_pane.setTop( this.getTitleBar() );
             l_pane.setCenter( p_node );
-            this.getContent().add( l_pane );
+            getContent().add( l_pane );
         }
 
 
@@ -186,4 +184,5 @@ public class CUI extends Application
         double x, y;
     }
 */
+
 }

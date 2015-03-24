@@ -33,7 +33,6 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.web.WebView;
 
@@ -182,6 +181,7 @@ public class CBrowser extends GridPane
     private int setBackForward( final int p_column )
     {
         final Button l_backbutton = new Button( CCommon.getResourceString( CBrowser.class, "back" ) );
+        l_backbutton.setMaxWidth( Double.MAX_VALUE );
         l_backbutton.setOnAction( new EventHandler<ActionEvent>()
         {
 
@@ -194,6 +194,7 @@ public class CBrowser extends GridPane
         } );
 
         final Button l_forwardbutton = new Button( CCommon.getResourceString( CBrowser.class, "forward" ) );
+        l_forwardbutton.setMaxWidth( Double.MAX_VALUE );
         l_forwardbutton.setOnAction( new EventHandler<ActionEvent>()
         {
 
@@ -206,15 +207,8 @@ public class CBrowser extends GridPane
         } );
 
 
-        if ( p_column == 0 )
-        {
-            final HBox l_box = new HBox();
-            GridPane.setConstraints( l_box, p_column, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
-            this.getChildren().add( l_box );
-        }
-
-        GridPane.setConstraints( l_backbutton, p_column + 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.SOMETIMES );
-        GridPane.setConstraints( l_forwardbutton, p_column + 2, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.SOMETIMES );
+        GridPane.setConstraints( l_backbutton, p_column, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
+        GridPane.setConstraints( l_forwardbutton, p_column + 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
 
         this.getChildren().addAll( l_backbutton, l_forwardbutton );
 

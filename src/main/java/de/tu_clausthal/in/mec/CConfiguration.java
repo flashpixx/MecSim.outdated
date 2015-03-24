@@ -293,7 +293,7 @@ public class CConfiguration
         }
 
         // check the configuration values and set it
-        if ( ( l_tmp == null ) || ( l_tmp.ResetConfig ) )
+        if ( ( l_tmp == null ) || ( l_tmp.ResetConfig ) || ( l_tmp.Version < m_data.Version ) )
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
         {
@@ -441,6 +441,10 @@ public class CConfiguration
      */
     public class Data
     {
+        /**
+         * configuration version *
+         */
+        public int Version = 1;
         /**
          * bind port of the web UI
          */

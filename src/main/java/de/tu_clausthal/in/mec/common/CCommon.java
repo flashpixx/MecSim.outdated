@@ -49,7 +49,17 @@ public class CCommon
     {
     }
 
-    ;
+
+    /**
+     * remove from a string the system package name
+     *
+     * @param p_package package / class path
+     * @return path without main package name
+     */
+    public static String removePackageName( String p_package )
+    {
+        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+    }
 
 
     /**
@@ -120,18 +130,6 @@ public class CCommon
         }
 
         return null;
-    }
-
-
-    /**
-     * remove from a string the system package name
-     *
-     * @param p_package package / class path
-     * @return path without main package name
-     */
-    public static String removePackageName( String p_package )
-    {
-        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
     }
 
 

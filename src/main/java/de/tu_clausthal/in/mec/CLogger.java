@@ -70,7 +70,6 @@ public class CLogger
     {
     }
 
-    ;
 
     /**
      * creates the logger with properties

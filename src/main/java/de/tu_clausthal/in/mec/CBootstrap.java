@@ -51,7 +51,6 @@ public class CBootstrap
     {
     }
 
-    ;
 
     /**
      * is called after configuration is loaded

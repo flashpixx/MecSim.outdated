@@ -10,28 +10,36 @@
         });
         $("<ul/>", { html: items.join("")}).appendTo("#content");
 
+        $( "#routingalgorithm" ).selectmenu();
     });
+
+
+
 
 
     /**
      * post request example
-     **/
+     **
     $.post(
         "object/cconfiguration/set",
         { type : "post", foo : "bar", "foo_number" : 2, "bar_bool" : true }
     );
 
 
-    /**
+    **
      * get request example
-     **/
+     **
     $.get(
         "object/cconfiguration/set",
         { type : "get", bar : "foo", "foo_number" : 3, "bar_bool" : false }
     );
-
-
-
+    **/
 
 
 </script>
+
+
+<div class="ui-widget">
+    <label for="routingalgorithm"/>
+    <input id="routingalgorithm"/>
+</div>

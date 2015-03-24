@@ -40,8 +40,6 @@ public class CBoot
     {
     }
 
-    ;
-
 
     /**
      * main bootstrap program

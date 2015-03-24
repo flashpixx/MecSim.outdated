@@ -60,7 +60,6 @@ public class COperatingSystem
     {
     }
 
-    ;
 
     /**
      * Mac OS X check

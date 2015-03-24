@@ -381,7 +381,9 @@ public class CConfiguration
         l_map.put( "resetconfig", m_data.ResetConfig );
         l_map.put( "threadsleeptime", m_data.ThreadSleepTime );
         l_map.put( "routingalgorithm", m_data.RoutingAlgorithm );
+        l_map.put( "routingalgorithm_allowed", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
         l_map.put( "language", m_data.Language );
+        l_map.put( "language_allowed", new String[]{"de", "en"} );
 
         l_map.put( "console_linebuffer", m_data.getConsole().LineBuffer );
         l_map.put( "console_linenumber", m_data.getConsole().LineNumber );

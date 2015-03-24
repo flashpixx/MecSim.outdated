@@ -45,7 +45,6 @@ public class CCommonUI
     {
     }
 
-    ;
 
     /**
      * create a tab for the UI

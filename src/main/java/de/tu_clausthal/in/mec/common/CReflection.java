@@ -51,7 +51,6 @@ public class CReflection
     {
     }
 
-    ;
 
     /**
      * get a class field of the class or super classes and returns getter / setter handles

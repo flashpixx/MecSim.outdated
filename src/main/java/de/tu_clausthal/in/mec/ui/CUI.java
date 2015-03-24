@@ -33,10 +33,13 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -97,6 +100,7 @@ public class CUI extends Application
         p_stage.sizeToScene();
         p_stage.show();
 
+        //new CDockable( new Button( "test" ) ).show( p_stage );
 
         // set via reflection the UI
         try
@@ -138,14 +142,21 @@ public class CUI extends Application
         return null;
     }
 
-/*
+    private static class CDeltaPosition
+    {
+        double x, y;
+    }
+
+    /**
+     * class to create from a tab a dockable
+     */
     private class CDockable extends Popup
     {
 
         public CDockable( final Node p_node )
         {
             final BorderPane l_pane = new BorderPane();
-            l_pane.setPrefSize(200, 200);
+            l_pane.setPrefSize( 200, 200 );
             l_pane.setStyle("-fx-background-color: lightgrey; -fx-border-width: 1; -fx-border-color: black");
             l_pane.setTop( this.getTitleBar() );
             l_pane.setCenter( p_node );
@@ -178,11 +189,5 @@ public class CUI extends Application
         }
 
     }
-
-    private static class CDeltaPosition
-    {
-        double x, y;
-    }
-*/
 
 }

@@ -28,6 +28,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil;
@@ -37,6 +38,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
@@ -241,4 +243,86 @@ public class CServer extends NanoHTTPD
         return l_response;
     }
 
+
+    /**
+     * adds a new virtual file to the server with existance checking
+     *
+     * @param p_source relative source path
+     * @param p_uri    URI
+     */
+    public final void addVirtualFile( final String p_source, final String p_uri )
+    {
+        try
+        {
+            final URL l_url = CCommon.getResourceURL( p_source );
+            if ( l_url != null )
+                m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
+
+
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source relative source path
+     * @param p_index  index file
+     * @param p_uri    URI
+     */
+    public void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
+    {
+        this.addVirtualDirectory( p_source, p_index, p_uri, null );
+    }
+
+
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source   relative source path
+     * @param p_index    index file
+     * @param p_uri      URI
+     * @param p_markdown markdown renderer
+     */
+    public void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
+    {
+        this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
+    }
+
+
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source source file object
+     * @param p_index  index file
+     * @param p_uri    URI
+     */
+    public void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    {
+        this.addVirtualDirectory( p_source, p_index, p_uri, null );
+    }
+
+
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source   source file object
+     * @param p_index    index file
+     * @param p_uri      URI
+     * @param p_markdown markdown renderer
+     */
+    public void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
+    {
+        try
+        {
+            if ( p_source != null )
+                m_virtuallocation.add( new CVirtualDirectory( CCommon.getResourceURL( p_source ), p_index, p_uri, p_markdown ) );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
 }

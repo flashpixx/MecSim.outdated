@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.ui.CAbout;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CUI;
+import de.tu_clausthal.in.mec.ui.web.CMarkdownRenderer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
 
@@ -81,6 +82,16 @@ public class CBootstrap
      */
     public static void afterServerInit( final CServer p_server )
     {
+        // register default locations
+        p_server.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
+        p_server.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().Language, "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
+
+        p_server.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/" );
+
+        p_server.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/" );
+
+
+        // register objects
         p_server.register( CSimulation.getInstance() );
         p_server.register( new CAbout() );
         p_server.register( CConfiguration.getInstance() );

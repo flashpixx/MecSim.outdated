@@ -30,9 +30,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 
-import java.io.File;
-import java.net.URL;
-
 
 /**
  * main workspace of the web-menu structure (browser & server structure)
@@ -51,18 +48,7 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super( EMenu.BackForward );
-
-
-        this.addVirtualFile( "web/documentation/user/layout.css", "/userdoc/layout.css" );
-        this.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().Language, "index.md", "/userdoc/", new CMarkdownRenderer( "layout.css" ) );
-
-        this.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/", null );
-
-        this.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/", null );
-
-
         this.load( "http://localhost:" + CConfiguration.getInstance().get().UIBindPort );
-
 
         // set via reflection the server
         try
@@ -73,63 +59,6 @@ public class CWorkspace extends CBrowser
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-        }
-    }
-
-
-    /**
-     * adds a new virtual file to the server
-     *
-     * @param p_source relative source path
-     * @param p_uri    URI
-     */
-    protected final void addVirtualFile( final String p_source, final String p_uri )
-    {
-        try
-        {
-            final URL l_url = CCommon.getResourceURL( p_source );
-            if ( l_url != null )
-                m_server.getVirtualLocation().add( new CVirtualFile( l_url, p_uri ) );
-        }
-        catch ( final IllegalArgumentException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-    }
-
-
-    /**
-     * adds a new virtual directory to the server
-     *
-     * @param p_source   relative source path
-     * @param p_index    index file
-     * @param p_uri      URI
-     * @param p_markdown markdown renderer
-     */
-    protected void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
-    {
-        this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
-    }
-
-
-    /**
-     * adds a new virtual directory to the server
-     *
-     * @param p_source   source file object
-     * @param p_index    index file
-     * @param p_uri      URI
-     * @param p_markdown markdown renderer
-     */
-    protected void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
-    {
-        try
-        {
-            if ( p_source != null )
-                m_server.getVirtualLocation().add( new CVirtualDirectory( CCommon.getResourceURL( p_source ), p_index, p_uri, p_markdown ) );
-        }
-        catch ( final IllegalArgumentException l_exception )
-        {
-            CLogger.error( l_exception );
         }
     }
 

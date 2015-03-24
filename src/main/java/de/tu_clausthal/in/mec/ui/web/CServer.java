@@ -129,8 +129,8 @@ public class CServer extends NanoHTTPD
         // is needed for ajax request
         // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
         l_response.addHeader( "Access-Control-Allow-Origin", "*" );
-        l_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE" );
-        l_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept,Authorization" );
+        l_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT" );
+        //l_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept,Authorization" );
 
         return l_response;
     }
@@ -231,7 +231,7 @@ public class CServer extends NanoHTTPD
 
             case "md":
                 if ( p_location.getMarkDownRenderer() != null )
-                    l_response = new Response( Response.Status.OK, "application/xhtml+xml; charset=utf-8", p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
+                    l_response = new Response( Response.Status.OK, "text/html; charset=utf-8", p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
                 else
                     l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
                 break;

@@ -66,7 +66,6 @@ public class CMain
      * main program
      *
      * @param p_args commandline arguments
-     * @todo create docking structure https://gist.github.com/jewelsea/9579047
      */
     public static void main( String[] p_args )
     {

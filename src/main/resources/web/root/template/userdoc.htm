@@ -1,1 +1,8 @@
-<iframe class="template" src="/userdoc/" seamless/>
+<script type="text/javascript">
+
+    $.get("/userdoc/", function( p_result ) {
+        $("#content").append( p_result );
+    });
+
+
+</script>

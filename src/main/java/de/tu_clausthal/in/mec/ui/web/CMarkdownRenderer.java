@@ -48,6 +48,15 @@ public class CMarkdownRenderer extends LinkRenderer
      * string with optional CSS URI *
      */
     protected final String m_cssuri;
+    /**
+     * string with base URI
+     */
+    protected final String m_baseuri;
+    /**
+     * rendering enum
+     */
+    protected final EHTMLType m_htmltype;
+
 
 
     /**
@@ -55,24 +64,56 @@ public class CMarkdownRenderer extends LinkRenderer
      */
     public CMarkdownRenderer()
     {
-        this( "" );
+        this( EHTMLType.Fragment, "", "" );
     }
 
     /**
      * ctor
      *
+     * @param p_htmltype type of the HTML result
+     */
+    public CMarkdownRenderer( final EHTMLType p_htmltype )
+    {
+        this( p_htmltype, "", "" );
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_htmltype type of the HTML result
+     * @param p_baseuri  base URI
+     */
+    public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri )
+    {
+        this( p_htmltype, p_baseuri, "" );
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_htmltype type of the HTML result
+     * @param p_baseuri base URI
      * @param p_cssuri CSS URI
      */
-    public CMarkdownRenderer( final String p_cssuri )
+    public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri, final String p_cssuri )
     {
+        m_htmltype = p_htmltype;
+        m_baseuri = p_baseuri;
         m_cssuri = p_cssuri;
     }
 
 
+    private String getURL( final String p_url )
+    {
+        return ( ( p_url == null ) || ( p_url.isEmpty() ) ) ? p_url : m_baseuri + p_url;
+    }
+
     @Override
     public final Rendering render( final ExpLinkNode p_node, final String p_text )
     {
-        return super.render( new ExpLinkNode( p_text, p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+        return super.render( new ExpLinkNode( p_text, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
     }
 
     @Override
@@ -84,7 +125,7 @@ public class CMarkdownRenderer extends LinkRenderer
         }
         catch ( final MalformedURLException l_exception )
         {
-            return super.render( new ExpImageNode( p_node.title, p_node.url, ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+            return super.render( new ExpImageNode( p_node.title, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
         }
 
         return super.render( p_node, p_text );
@@ -116,6 +157,29 @@ public class CMarkdownRenderer extends LinkRenderer
         return super.render( p_node );
     }
 
+
+    /**
+     * creates HTML content from a markdown document
+     *
+     * @param p_processor markdown processor
+     * @param p_file      URL of the file
+     * @return HTML content
+     */
+    public final String getHTML( final PegDownProcessor p_processor, final URL p_file ) throws IOException
+    {
+        switch ( m_htmltype )
+        {
+            case Document:
+                return this.getHTMLDocument( p_processor, p_file );
+            case Fragment:
+                return this.getHTMLFragment( p_processor, p_file );
+            default:
+        }
+
+        return null;
+    }
+
+
     /**
      * creates a full HTML document from a markdown document
      *
@@ -123,15 +187,35 @@ public class CMarkdownRenderer extends LinkRenderer
      * @param p_file      URL of the file
      * @return full HTML document
      */
-    protected final String getHTML( final PegDownProcessor p_processor, final URL p_file ) throws IOException
+    private String getHTMLDocument( final PegDownProcessor p_processor, final URL p_file ) throws IOException
     {
         return "<?xml version=\"1.0\" ?>\n" +
                 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
                 ( m_cssuri.isEmpty() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + m_cssuri + "\"/></head>\n" ) +
-                "<body>\n" +
-                p_processor.markdownToHtml( IOUtils.toString( p_file ).toCharArray(), this ) +
-                "\n</body></html>";
+                "<body>\n" + this.getHTMLFragment( p_processor, p_file ) + "\n</body></html>";
+    }
+
+
+    /**
+     * creates a HTML fragment from a markdown document
+     *
+     * @param p_processor markdown processor
+     * @param p_file      URL of the file
+     * @return HTML fragment
+     */
+    private String getHTMLFragment( final PegDownProcessor p_processor, final URL p_file ) throws IOException
+    {
+        return p_processor.markdownToHtml( IOUtils.toString( p_file ).toCharArray(), this );
+    }
+
+
+    /**
+     * enum to define return type of the HTML document *
+     */
+    public enum EHTMLType
+    {
+        Fragment, Document
     }
 
 }

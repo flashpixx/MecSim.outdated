@@ -48,6 +48,7 @@ import javafx.stage.WindowEvent;
  * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
  * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
+ * @todo create docking structure https://gist.github.com/jewelsea/9579047
  */
 public class CUI extends Application
 {
@@ -55,6 +56,7 @@ public class CUI extends Application
      * tab list *
      */
     private final TabPane m_tabs = new TabPane();
+
 
 
     public static void main( final String[] p_args )
@@ -99,6 +101,7 @@ public class CUI extends Application
         p_stage.show();
 
 
+
         // set via reflection the UI
         try
         {
@@ -113,7 +116,7 @@ public class CUI extends Application
 
 
     /**
-     * adds a ne tab to the UI
+     * adds a new tab to the UI
      *
      * @param p_tab tab
      */
@@ -139,4 +142,48 @@ public class CUI extends Application
         return null;
     }
 
+/*
+    private class CDockable extends Popup
+    {
+
+        public CDockable( final Node p_node )
+        {
+            final BorderPane l_pane = new BorderPane();
+            l_pane.setTop( this.getTitleBar() );
+            l_pane.setCenter( p_node );
+            this.getContent().add( l_pane );
+        }
+
+
+        private Node getTitleBar() {
+            BorderPane pane = new BorderPane();
+            pane.setStyle("-fx-padding: 5");
+
+            final CDeltaPosition l_position = new CDeltaPosition();
+            pane.setOnMousePressed( mouseEvent -> {
+                l_position.x = getX() - mouseEvent.getScreenX();
+                l_position.y = getY() - mouseEvent.getScreenY();
+            });
+            pane.setOnMouseDragged(mouseEvent -> {
+                setX(mouseEvent.getScreenX() + l_position.x);
+                setY(mouseEvent.getScreenY() + l_position.y);
+            });
+
+            Label title = new Label("My Dialog");
+            pane.setLeft(title);
+
+            Button closeButton = new Button("X");
+            closeButton.setOnAction(actionEvent -> hide());
+            pane.setRight(closeButton);
+
+            return pane;
+        }
+
+    }
+
+    private static class CDeltaPosition
+    {
+        double x, y;
+    }
+*/
 }

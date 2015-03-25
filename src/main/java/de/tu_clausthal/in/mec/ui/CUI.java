@@ -51,12 +51,13 @@ import java.util.Map;
 /**
  * JavaFX application
  *
+ * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
+ * / https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
  * @see http://stackoverflow.com/questions/17673292/internal-frames-in-javafx
  * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
  * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
- * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/ / https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
  */
 public class CUI extends Application
 {
@@ -90,6 +91,10 @@ public class CUI extends Application
             p_event.consume();
         }
     };
+    /**
+     * popup close event
+     */
+
 
 
     /** main-wrapper method
@@ -201,6 +206,9 @@ public class CUI extends Application
 
         l_popover.setDetached( true );
         l_popover.setDetachedTitle( p_title );
+        l_popover.setHideOnEscape( true );
+        l_popover.setAutoFix( true );
+
 
         return l_popover;
     }

@@ -51,19 +51,9 @@ public class CSwingWrapper<T extends JComponent> extends SwingNode
         if ( p_component == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "isnull" ) );
 
+        this.setContent( p_component );
         m_component = p_component;
-        SwingUtilities.invokeLater( new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                CSwingWrapper.this.setContent( p_component );
-            }
-
-        } );
     }
-
 
     /**
      * returns the component

@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -42,7 +43,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -60,8 +65,40 @@ public class CUI extends Application
     /**
      * tab list *
      */
-    private final TabPane m_tabs = new TabPane();
+    private final TabPane m_tabpane = new TabPane();
+    /**
+     * map with nodes (of tab content) and pair of dockables and tab
+     */
+    private final Map<Node, Pair<CDockable, Tab>> m_widget = new HashMap<>();
+    /**
+     * map with name and content
+     */
+    private final Map<String, Node> m_content = new HashMap<>();
+    /**
+     * main stage *
+     */
+    private Stage m_stage;
+    /**
+     * tab close event
+     */
+    private final EventHandler<Event> m_tabcloseevent = new EventHandler<Event>()
+    {
+        @Override
+        public void handle( final Event p_event )
+        {
+            final Tab l_tab = ( (Tab) p_event.getSource() );
+            m_tabpane.getTabs().remove( l_tab );
 
+            m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
+            p_event.consume();
+        }
+    };
+
+
+    /** main-wrapper method
+     *
+     * @param p_args start arguments
+     */
     public static void main( final String[] p_args )
     {
         launch( p_args );
@@ -71,7 +108,23 @@ public class CUI extends Application
     @Override
     public void start( final Stage p_stage ) throws Exception
     {
+        // set via reflection the UI
+        try
+        {
+            if ( CSimulation.getInstance().getUI() == null )
+                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_ui" ).getSetter().invoke( CSimulation.getInstance(), this );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
+
+
+
         this.setUserAgentStylesheet( null );
+        if ( m_stage == null )
+            m_stage = p_stage;
+
 
         p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
@@ -92,45 +145,47 @@ public class CUI extends Application
         l_menubar.setUseSystemMenuBar( true );
         l_root.setTop( l_menubar );
 
-        // tab pane for content
-        l_root.setCenter( m_tabs );
-        CBootstrap.afterStageInit( this );
-
-        // set stage
+        // create tab pane for content and scene
+        l_root.setCenter( m_tabpane );
         p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().WindowWidth, CConfiguration.getInstance().get().WindowHeight ) );
         p_stage.sizeToScene();
         p_stage.show();
 
-        //new CDockable( new Button( "test" ) ).show( p_stage );
-
-        // set via reflection the UI
-        try
-        {
-            if ( CSimulation.getInstance().getUI() == null )
-                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_ui" ).getSetter().invoke( CSimulation.getInstance(), this );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
+        CBootstrap.afterStageInit( this );
     }
 
 
     /**
      * adds a new tab to the UI
      *
-     * @param p_name name of the node
+     * @param p_title name of the node
      * @param p_node node
      */
-    public void add( final String p_name, final Node p_node )
+    public void add( final String p_title, final Node p_node )
+    {
+        if ( ( m_widget.containsKey( p_node ) ) || ( m_content.containsKey( p_title ) ) )
+            return;
+
+        m_content.put( p_title, p_node );
+        m_widget.put( p_node, new ImmutablePair<>( new CDockable( p_title, p_node ), this.addTab( p_title, p_node ) ) );
+    }
+
+    /**
+     * creates a new tab
+     *
+     * @param p_title title
+     * @param p_node  node
+     */
+    private Tab addTab( final String p_title, final Node p_node )
     {
         final Tab l_tab = new Tab();
-        l_tab.setId( p_name );
-        l_tab.setText( p_name );
+        l_tab.setId( p_title );
+        l_tab.setText( p_title );
         l_tab.setContent( p_node );
-        l_tab.setClosable( false );
-
-        m_tabs.getTabs().add( l_tab );
+        l_tab.setClosable( true );
+        l_tab.setOnCloseRequest( m_tabcloseevent );
+        m_tabpane.getTabs().add( l_tab );
+        return l_tab;
     }
 
     /**
@@ -143,11 +198,7 @@ public class CUI extends Application
     @SuppressWarnings("unchecked")
     public <T extends Node> T getTab( final String p_name )
     {
-        for ( Tab l_tab : m_tabs.getTabs() )
-            if ( l_tab.getId().equals( p_name ) )
-                return (T) l_tab.getContent();
-
-        return null;
+        return (T) m_content.get( p_name );
     }
 
     private static class CDeltaPosition
@@ -161,39 +212,38 @@ public class CUI extends Application
     private class CDockable extends Popup
     {
 
-        public CDockable( final Node p_node )
+        public CDockable( final String p_title, final Node p_node )
         {
             final BorderPane l_pane = new BorderPane();
-            l_pane.setPrefSize( 200, 200 );
-            l_pane.setStyle("-fx-background-color: lightgrey; -fx-border-width: 1; -fx-border-color: black");
-            l_pane.setTop( this.getTitleBar() );
+            l_pane.setPrefSize( 800, 800 );
+            l_pane.setStyle( "-fx-background-color: lightgrey; -fx-border-width: 1; -fx-border-color: black" );
+            l_pane.setTop( this.getTitleBar( p_title ) );
             l_pane.setCenter( p_node );
-            getContent().add( l_pane );
+            this.getContent().add( l_pane );
         }
 
 
-        private Node getTitleBar() {
-            BorderPane pane = new BorderPane();
-            pane.setStyle("-fx-padding: 5");
+        private Node getTitleBar( final String p_title )
+        {
+            final BorderPane l_pane = new BorderPane();
+            l_pane.setStyle( "-fx-padding: 5" );
 
             final CDeltaPosition l_position = new CDeltaPosition();
-            pane.setOnMousePressed( mouseEvent -> {
+            l_pane.setOnMousePressed( mouseEvent -> {
                 l_position.x = getX() - mouseEvent.getScreenX();
                 l_position.y = getY() - mouseEvent.getScreenY();
-            });
-            pane.setOnMouseDragged(mouseEvent -> {
-                setX(mouseEvent.getScreenX() + l_position.x);
-                setY(mouseEvent.getScreenY() + l_position.y);
-            });
+            } );
+            l_pane.setOnMouseDragged( mouseEvent -> {
+                setX( mouseEvent.getScreenX() + l_position.x );
+                setY( mouseEvent.getScreenY() + l_position.y );
+            } );
 
-            Label title = new Label("My Dialog");
-            pane.setLeft(title);
+            l_pane.setLeft( new Label( p_title ) );
+            final Button l_close = new Button( "X" );
+            l_pane.setRight( l_close );
+            l_close.setOnAction( actionEvent -> hide() );
 
-            Button closeButton = new Button("X");
-            closeButton.setOnAction(actionEvent -> hide());
-            pane.setRight(closeButton);
-
-            return pane;
+            return l_pane;
         }
 
     }

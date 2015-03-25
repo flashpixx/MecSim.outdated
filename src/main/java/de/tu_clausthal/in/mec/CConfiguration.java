@@ -443,6 +443,7 @@ public class CConfiguration
     {
         /**
          * configuration version *
+         * @todo can be changed to Jar version - must be tested first
          */
         public int Version = 1;
         /**

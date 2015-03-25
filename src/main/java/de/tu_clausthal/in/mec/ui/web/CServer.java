@@ -112,8 +112,8 @@ public class CServer extends NanoHTTPD
             // get location
             final IVirtualLocation l_location = m_virtuallocation.get( p_session );
 
-            if ( l_location instanceof CVirtualMethod )
-                l_response = this.getVirtualMethod( l_location, p_session );
+            if ( l_location instanceof CVirtualStaticMethod )
+                l_response = this.getVirtualStaticMethod( l_location, p_session );
             else
                 l_response = this.getVirtualDirFile( l_location, p_session );
 
@@ -131,7 +131,7 @@ public class CServer extends NanoHTTPD
         // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
         l_response.addHeader( "Access-Control-Allow-Origin", "*" );
         l_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT" );
-        //l_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept,Authorization" );
+        l_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept" );
 
         return l_response;
     }
@@ -184,21 +184,21 @@ public class CServer extends NanoHTTPD
         {
             final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" );
             if ( !l_methodname.isEmpty() )
-                m_virtuallocation.add( new CVirtualMethod( p_object, l_method.getValue(), "/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
+                m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), "/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
         }
 
     }
 
 
     /**
-     * generates HTTP response of method calls
+     * generates HTTP response of a static method calls
      *
      * @param p_location location object
      * @param p_session  session object
      * @return response
      * @throws Throwable on error
      */
-    protected final Response getVirtualMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    protected final Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         CLogger.info( p_session.getUri() );
 
@@ -232,7 +232,7 @@ public class CServer extends NanoHTTPD
 
             case "md":
                 if ( p_location.getMarkDownRenderer() != null )
-                    l_response = new Response( Response.Status.OK, "text/html; charset=utf-8", p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
+                    l_response = new Response( Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
                 else
                     l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
                 break;

@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec;
 
-import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
@@ -70,8 +69,8 @@ public class CBootstrap
      */
     public static void afterStageInit( final CUI p_ui )
     {
-        p_ui.add( CCommonUI.createTab( "Main", new CWorkspace() ) );
-        p_ui.add( CCommonUI.createTab( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) ) );
+        p_ui.add( "Main", new CWorkspace() );
+        p_ui.add( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) );
     }
 
 

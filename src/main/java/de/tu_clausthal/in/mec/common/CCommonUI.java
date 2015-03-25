@@ -24,9 +24,6 @@
 package de.tu_clausthal.in.mec.common;
 
 
-import javafx.scene.Node;
-import javafx.scene.control.Tab;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -43,23 +40,6 @@ public class CCommonUI
      */
     private CCommonUI()
     {
-    }
-
-
-    /**
-     * create a tab for the UI
-     *
-     * @param p_name tab name
-     * @param p_node node content
-     */
-    public static Tab createTab( final String p_name, final Node p_node )
-    {
-        final Tab l_tab = new Tab();
-        l_tab.setId( p_name );
-        l_tab.setText( p_name );
-        l_tab.setContent( p_node );
-        l_tab.setClosable( false );
-        return l_tab;
     }
 
 

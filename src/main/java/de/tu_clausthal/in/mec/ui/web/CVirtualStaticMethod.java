@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * class to call object methods with an URL access
  */
-public class CVirtualMethod implements IVirtualLocation
+public class CVirtualStaticMethod implements IVirtualLocation
 {
 
     /**
@@ -65,7 +65,7 @@ public class CVirtualMethod implements IVirtualLocation
      * @param p_method method
      * @param p_uri    calling URI
      */
-    public CVirtualMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
+    public CVirtualStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
         m_uri = p_uri;
         m_method = p_method.getHandle();

@@ -119,11 +119,18 @@ public class CUI extends Application
     /**
      * adds a new tab to the UI
      *
-     * @param p_tab tab
+     * @param p_name name of the node
+     * @param p_node node
      */
-    public void add( final Tab... p_tab )
+    public void add( final String p_name, final Node p_node )
     {
-        m_tabs.getTabs().addAll( p_tab );
+        final Tab l_tab = new Tab();
+        l_tab.setId( p_name );
+        l_tab.setText( p_name );
+        l_tab.setContent( p_node );
+        l_tab.setClosable( false );
+
+        m_tabs.getTabs().add( l_tab );
     }
 
     /**

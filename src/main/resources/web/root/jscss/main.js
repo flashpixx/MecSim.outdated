@@ -14,16 +14,16 @@ $(document).ready(function(){
 
 
     $( "#mecsim_start_button" ).click(function() {
-        $(this).css('color','red');
-
         $.post(
-            "simulation/csimulation/start"
+            "csimulation/start"
         );
     });
 
 
     $( "#mecsim_stop_button" ).click(function() {
-        $(this).css('color','red');
+        $.post(
+            "csimulation/stop"
+        );
     });
 
 

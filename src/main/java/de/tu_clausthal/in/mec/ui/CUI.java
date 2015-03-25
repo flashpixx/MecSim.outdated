@@ -34,17 +34,15 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.controlsfx.control.PopOver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +56,7 @@ import java.util.Map;
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
  * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
- * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/ / https://community.oracle.com/thread/2417144
+ * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/ / https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
  */
 public class CUI extends Application
 {
@@ -69,7 +67,7 @@ public class CUI extends Application
     /**
      * map with nodes (of tab content) and pair of dockables and tab
      */
-    private final Map<Node, Pair<CDockable, Tab>> m_widget = new HashMap<>();
+    private final Map<Node, Pair<PopOver, Tab>> m_widget = new HashMap<>();
     /**
      * map with name and content
      */
@@ -88,7 +86,6 @@ public class CUI extends Application
         {
             final Tab l_tab = ( (Tab) p_event.getSource() );
             m_tabpane.getTabs().remove( l_tab );
-
             m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
             p_event.consume();
         }
@@ -167,7 +164,7 @@ public class CUI extends Application
             return;
 
         m_content.put( p_title, p_node );
-        m_widget.put( p_node, new ImmutablePair<>( new CDockable( p_title, p_node ), this.addTab( p_title, p_node ) ) );
+        m_widget.put( p_node, new ImmutablePair<>( new PopOver( p_node ), this.addTab( p_title, p_node ) ) );
     }
 
     /**
@@ -183,7 +180,7 @@ public class CUI extends Application
         l_tab.setText( p_title );
         l_tab.setContent( p_node );
         l_tab.setClosable( true );
-        l_tab.setOnCloseRequest( m_tabcloseevent );
+        l_tab.setOnClosed( m_tabcloseevent );
         m_tabpane.getTabs().add( l_tab );
         return l_tab;
     }
@@ -199,53 +196,6 @@ public class CUI extends Application
     public <T extends Node> T getTab( final String p_name )
     {
         return (T) m_content.get( p_name );
-    }
-
-    private static class CDeltaPosition
-    {
-        double x, y;
-    }
-
-    /**
-     * class to create from a tab a dockable
-     */
-    private class CDockable extends Popup
-    {
-
-        public CDockable( final String p_title, final Node p_node )
-        {
-            final BorderPane l_pane = new BorderPane();
-            l_pane.setPrefSize( 800, 800 );
-            l_pane.setStyle( "-fx-background-color: lightgrey; -fx-border-width: 1; -fx-border-color: black" );
-            l_pane.setTop( this.getTitleBar( p_title ) );
-            l_pane.setCenter( p_node );
-            this.getContent().add( l_pane );
-        }
-
-
-        private Node getTitleBar( final String p_title )
-        {
-            final BorderPane l_pane = new BorderPane();
-            l_pane.setStyle( "-fx-padding: 5" );
-
-            final CDeltaPosition l_position = new CDeltaPosition();
-            l_pane.setOnMousePressed( mouseEvent -> {
-                l_position.x = getX() - mouseEvent.getScreenX();
-                l_position.y = getY() - mouseEvent.getScreenY();
-            } );
-            l_pane.setOnMouseDragged( mouseEvent -> {
-                setX( mouseEvent.getScreenX() + l_position.x );
-                setY( mouseEvent.getScreenY() + l_position.y );
-            } );
-
-            l_pane.setLeft( new Label( p_title ) );
-            final Button l_close = new Button( "X" );
-            l_pane.setRight( l_close );
-            l_close.setOnAction( actionEvent -> hide() );
-
-            return l_pane;
-        }
-
     }
 
 }

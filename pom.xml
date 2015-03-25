@@ -78,18 +78,6 @@
     <repositories>
 
         <repository>
-            <id>netbeans</id>
-            <name>NetBeans Maven Repository for NetBeans modules</name>
-            <url>http://bits.netbeans.org/nexus/content/groups/netbeans</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
             <id>sonatype-oss</id>
             <name>Sonatype OSS Maven Repository for Snapshots</name>
             <url>https://oss.sonatype.org/content/groups/public</url>
@@ -107,6 +95,12 @@
     <dependencies>
 
         <!-- UI components -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.20.8</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.jxmapviewer</groupId>
             <artifactId>jxmapviewer2</artifactId>

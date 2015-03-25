@@ -164,26 +164,47 @@ public class CUI extends Application
             return;
 
         m_content.put( p_title, p_node );
-        m_widget.put( p_node, new ImmutablePair<>( new PopOver( p_node ), this.addTab( p_title, p_node ) ) );
+        m_widget.put( p_node, new ImmutablePair<>( this.createPopOver( p_title, p_node ), this.createTab( p_title, p_node ) ) );
     }
 
     /**
-     * creates a new tab
+     * creates a new tab - adds the tab to the global tab pane
      *
      * @param p_title title
      * @param p_node  node
+     * @return tab
      */
-    private Tab addTab( final String p_title, final Node p_node )
+    private Tab createTab( final String p_title, final Node p_node )
     {
         final Tab l_tab = new Tab();
+
         l_tab.setId( p_title );
         l_tab.setText( p_title );
         l_tab.setContent( p_node );
         l_tab.setClosable( true );
         l_tab.setOnClosed( m_tabcloseevent );
         m_tabpane.getTabs().add( l_tab );
+
         return l_tab;
     }
+
+    /**
+     * creates a new pop window
+     *
+     * @param p_title title
+     * @param p_node  node
+     * @return popup
+     */
+    private PopOver createPopOver( final String p_title, final Node p_node )
+    {
+        final PopOver l_popover = new PopOver( p_node );
+
+        l_popover.setDetached( true );
+        l_popover.setDetachedTitle( p_title );
+
+        return l_popover;
+    }
+
 
     /**
      * returns a tab / node

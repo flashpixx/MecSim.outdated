@@ -8,7 +8,7 @@
         $.each( p_data, function( p_key, p_value ) {
             items.push("<li>" + p_key + " => " + p_value + "</li>");
         });
-        $("<ul/>", { html: items.join("")}).appendTo("#content");
+        $("<ul/>", { html: items.join("")}).appendTo("#mecsim_content");
 
         $( "#routingalgorithm" ).selectmenu();
     });

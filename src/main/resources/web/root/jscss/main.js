@@ -6,7 +6,7 @@ $(document).ready(function(){
     **/
     $("a.template").click(function( p_event ){
         p_event.preventDefault();
-        $("#content").load( this.href );
+        $("#mecsim_content").load( this.href );
     });
 
 

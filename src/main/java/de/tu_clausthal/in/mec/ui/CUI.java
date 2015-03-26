@@ -78,22 +78,22 @@ public class CUI extends Application
      */
     private Stage m_stage;
     /**
-     * tab close event
+     * tab close handler
      */
     private final EventHandler<Event> m_tabcloseevent = new EventHandler<Event>()
     {
         @Override
         public void handle( final Event p_event )
         {
-            final Tab l_tab = ( (Tab) p_event.getSource() );
-            m_tabpane.getTabs().remove( l_tab );
-            m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
             p_event.consume();
+
+            final Tab l_tab = (Tab) p_event.getSource();
+            if ( !m_widget.containsKey( l_tab.getContent() ) )
+                return;
+
+            m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
         }
     };
-    /**
-     * popup close event
-     */
 
 
 
@@ -127,10 +127,10 @@ public class CUI extends Application
         if ( m_stage == null )
             m_stage = p_stage;
 
-
         p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
         {
+            @Override
             public void handle( final WindowEvent p_event )
             {
                 CConfiguration.getInstance().get().WindowWidth = (int) ( (Stage) p_event.getSource() ).getScene().getWidth();

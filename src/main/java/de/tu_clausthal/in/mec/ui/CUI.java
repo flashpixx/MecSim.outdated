@@ -133,8 +133,8 @@ public class CUI extends Application
             @Override
             public void handle( final WindowEvent p_event )
             {
-                CConfiguration.getInstance().get().WindowWidth = (int) ( (Stage) p_event.getSource() ).getScene().getWidth();
-                CConfiguration.getInstance().get().WindowHeight = (int) ( (Stage) p_event.getSource() ).getScene().getHeight();
+                CConfiguration.getInstance().get().WindowWidth = ( (Stage) p_event.getSource() ).getScene().getWidth();
+                CConfiguration.getInstance().get().WindowHeight = ( (Stage) p_event.getSource() ).getScene().getHeight();
 
                 CConfiguration.getInstance().write();
             }

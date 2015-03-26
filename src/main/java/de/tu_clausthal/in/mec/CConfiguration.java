@@ -473,11 +473,11 @@ public class CConfiguration
         /**
          * window width
          */
-        public int WindowWidth = 1684;
+        public double WindowWidth = 1684;
         /**
          * window height
          */
-        public int WindowHeight = 1024;
+        public double WindowHeight = 1024;
         /**
          * geo map for graph
          */

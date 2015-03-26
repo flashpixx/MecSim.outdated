@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph;
 
@@ -151,8 +144,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
         // convert point list to arrays and beware static increase
         for ( int i = 1; i < p_input.size() - 1; i++ )
-            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) &&
-                    ( Math.abs( l_y.get( l_y.size() - 1 ) - p_input.getLongitude( i ) ) >= p_epsilon ) )
+            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs( l_y.get( l_y.size() - 1 ) - p_input.getLongitude( i ) ) >= p_epsilon ) )
             {
                 l_x.add( p_input.getLatitude( i ) );
                 l_y.add( p_input.getLongitude( i ) );
@@ -219,8 +211,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final GeoPosition getGeoposition( final N p_object )
     {
         final Integer l_position = m_objects.get( p_object );
-        if ( l_position == null )
-            return null;
+        if ( l_position == null ) return null;
 
         return m_cellgeoposition[l_position.intValue()];
     }
@@ -343,8 +334,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         // if the object exists on the edge, it will be moved
         synchronized ( m_cells )
         {
-            if ( m_objects.containsKey( p_object ) )
-                m_cells[m_objects.get( p_object )] = null;
+            if ( m_objects.containsKey( p_object ) ) m_cells[m_objects.get( p_object )] = null;
 
             m_cells[p_position] = p_object;
         }
@@ -363,8 +353,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     public final void removeObject( final N p_object )
     {
-        if ( !m_objects.containsKey( p_object ) )
-            return;
+        if ( !m_objects.containsKey( p_object ) ) return;
 
         synchronized ( m_cells )
         {
@@ -403,10 +392,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
     @Override
     public final int compareTo( final CEdge p_edgelink )
     {
-        if ( m_edgeid > p_edgelink.m_edgeid )
-            return 1;
-        if ( m_edgeid < p_edgelink.m_edgeid )
-            return -1;
+        if ( m_edgeid > p_edgelink.m_edgeid ) return 1;
+        if ( m_edgeid < p_edgelink.m_edgeid ) return -1;
 
         return 0;
     }
@@ -420,8 +407,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof CEdge )
-            return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof CEdge ) return this.hashCode() == p_object.hashCode();
 
         return false;
     }

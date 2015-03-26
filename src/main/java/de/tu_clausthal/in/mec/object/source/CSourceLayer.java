@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source;
 
@@ -87,8 +80,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.add( l_newSource );
 
         //Set Default Generator (Selected Generator)
-        if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
-            return;
+        if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) ) return;
 
         this.setGenerator( l_newSource, p_defaultGenerator, p_aslname );
     }
@@ -135,8 +127,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public void createDestination( GeoPosition p_geoPosition )
     {
-        if ( this.m_selectedSource != null )
-            CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
+        if ( this.m_selectedSource != null ) CLogger.out( CCommon.getResourceString( this, "destinationcreated" ) );
     }
 
     /**
@@ -177,8 +168,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public boolean isSelectedSource( ISource p_source )
     {
-        if ( p_source != null )
-            return p_source.equals( m_selectedSource );
+        if ( p_source != null ) return p_source.equals( m_selectedSource );
 
         return false;
     }

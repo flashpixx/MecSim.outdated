@@ -1,25 +1,20 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * @cond ###################################################################################### # GPL License
+ * # #
+ * # # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free
+ * software: you can redistribute it and/or modify               # # it under the terms of the GNU General Public
+ * License as                            # # published by the Free Software Foundation, either version 3 of the
+ * # # License, or (at your option) any later version.                                    # #
+ * # # This program is distributed in the hope that it
+ * will be useful,                    # # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * # # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public
+ * License for more details.                                       # #
+ * # # You should have received a copy of the GNU General Public License
+ * # # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.simulation.thread;
 
@@ -80,7 +75,7 @@ public class CMainLoop implements Runnable
      * @param p_layer     layer
      * @return runnable object
      */
-    private static Callable createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
+    private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
     {
         if ( p_object instanceof IVoidSteppable )
             return new CVoidSteppable( p_iteration, (IVoidSteppable) p_object, p_layer );
@@ -109,6 +104,7 @@ public class CMainLoop implements Runnable
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public final void run()
     {
         CLogger.info( CCommon.getResourceString( this, "start" ) );
@@ -131,24 +127,21 @@ public class CMainLoop implements Runnable
                 }
 
                 // shutdown
-                if ( m_simulationcount >= m_shutdownstep )
-                    break;
+                if ( m_simulationcount >= m_shutdownstep ) break;
 
 
                 // run all layer
                 final Collection<Callable<Object>> l_tasks = new LinkedList<>();
                 l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
                 for ( ILayer l_layer : l_layerorder )
-                    if ( l_layer.isActive() )
-                        l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+                    if ( l_layer.isActive() ) l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
                 m_pool.invokeAll( l_tasks );
 
 
                 // run all layer objects - only multi-, evaluate- & network layer can store other objects
                 for ( ILayer l_layer : l_layerorder )
                 {
-                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
-                        continue;
+                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) ) continue;
 
                     if ( l_layer instanceof IMultiLayer )
                     {
@@ -229,8 +222,7 @@ public class CMainLoop implements Runnable
      */
     public final void resume( final int p_steps )
     {
-        if ( p_steps < 1 )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "stepnumber" ) );
+        if ( p_steps < 1 ) throw new IllegalArgumentException( CCommon.getResourceString( this, "stepnumber" ) );
 
         m_shutdownstep = m_simulationcount + p_steps;
         m_pause = false;
@@ -241,8 +233,7 @@ public class CMainLoop implements Runnable
      */
     public final void reset()
     {
-        if ( !m_pause )
-            throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
+        if ( !m_pause ) throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
 
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
 

@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
@@ -275,17 +268,16 @@ public class CAgent<T> implements IVoidAgent
         public final void act( final ActionExec p_action, final List<ActionExec> p_feedback )
         {
             final IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
-            if ( l_action != null )
-                try
-                {
-                    l_action.act( m_agent, p_action.getActionTerm() );
-                    p_action.setResult( true );
-                }
-                catch ( final Exception l_exception )
-                {
-                    p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
-                    p_action.setResult( false );
-                }
+            if ( l_action != null ) try
+            {
+                l_action.act( m_agent, p_action.getActionTerm() );
+                p_action.setResult( true );
+            }
+            catch ( final Exception l_exception )
+            {
+                p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
+                p_action.setResult( false );
+            }
 
             p_feedback.add( p_action );
         }
@@ -313,8 +305,7 @@ public class CAgent<T> implements IVoidAgent
         public final void broadcast( final Message p_message ) throws Exception
         {
             final CPath l_path = new CPath( m_namepath );
-            if ( m_namepath.size() > 0 )
-                l_path.removeSuffix();
+            if ( m_namepath.size() > 0 ) l_path.removeSuffix();
 
             p_message.setSender( m_namepath.toString() );
             p_message.setReceiver( l_path.toString() );
@@ -363,10 +354,8 @@ public class CAgent<T> implements IVoidAgent
                         final Literal l_literal = (Literal) l_jmsg.getPropCont();
                         l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getSender() ) ) );
 
-                        if ( l_jmsg.isTell() )
-                            m_agent.addBel( l_literal );
-                        if ( l_jmsg.isUnTell() )
-                            m_agent.delBel( l_literal );
+                        if ( l_jmsg.isTell() ) m_agent.addBel( l_literal );
+                        if ( l_jmsg.isUnTell() ) m_agent.delBel( l_literal );
                         if ( l_jmsg.isKnownPerformative() )
                         {
                             l_literal.addAnnot( BeliefBase.TPercept );

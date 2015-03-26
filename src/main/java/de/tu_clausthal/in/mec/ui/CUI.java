@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui;
 
@@ -84,8 +77,7 @@ public class CUI extends Application
             p_event.consume();
 
             final Node l_node = ( (PopOver) p_event.getSource() ).getContentNode();
-            if ( !m_widget.containsKey( l_node ) )
-                return;
+            if ( !m_widget.containsKey( l_node ) ) return;
 
             m_tabpane.getTabs().add( m_widget.get( l_node ).getValue() );
         }
@@ -105,14 +97,14 @@ public class CUI extends Application
             p_event.consume();
 
             final Tab l_tab = (Tab) p_event.getSource();
-            if ( !m_widget.containsKey( l_tab.getContent() ) )
-                return;
+            if ( !m_widget.containsKey( l_tab.getContent() ) ) return;
 
             m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
         }
     };
 
-    /** main-wrapper method
+    /**
+     * main-wrapper method
      *
      * @param p_args start arguments
      */
@@ -137,10 +129,8 @@ public class CUI extends Application
         }
 
 
-
         this.setUserAgentStylesheet( null );
-        if ( m_stage == null )
-            m_stage = p_stage;
+        if ( m_stage == null ) m_stage = p_stage;
 
         p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
@@ -176,12 +166,11 @@ public class CUI extends Application
      * adds a new tab to the UI
      *
      * @param p_title name of the node
-     * @param p_node node
+     * @param p_node  node
      */
     public void add( final String p_title, final Node p_node )
     {
-        if ( ( m_widget.containsKey( p_node ) ) || ( m_content.containsKey( p_title ) ) )
-            return;
+        if ( ( m_widget.containsKey( p_node ) ) || ( m_content.containsKey( p_title ) ) ) return;
 
         m_content.put( p_title, p_node );
         m_widget.put( p_node, new ImmutablePair<>( this.createPopOver( p_title, p_node ), this.createTab( p_title, p_node ) ) );

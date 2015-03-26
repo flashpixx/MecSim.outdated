@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -50,6 +43,7 @@ import java.util.Map;
 
 /**
  * class of the HTTP server *
+ *
  * @todo add http://www.html5rocks.com/de/tutorials/websockets/basics/
  */
 public class CServer extends NanoHTTPD
@@ -71,8 +65,7 @@ public class CServer extends NanoHTTPD
      * Json type mapping
      */
     protected final Type m_jsontype = new TypeToken<Map<Object, Object>>()
-    {
-    }.getType();
+    {}.getType();
 
 
     /**
@@ -115,8 +108,7 @@ public class CServer extends NanoHTTPD
 
             if ( l_location instanceof CVirtualStaticMethod )
                 l_response = this.getVirtualStaticMethod( l_location, p_session );
-            else
-                l_response = this.getVirtualDirFile( l_location, p_session );
+            else l_response = this.getVirtualDirFile( l_location, p_session );
 
         }
         catch ( final Throwable l_throwable )
@@ -157,8 +149,7 @@ public class CServer extends NanoHTTPD
         for ( Object l_item : MimeUtil.getMimeTypes( p_url ) )
         {
             final MimeType l_type = (MimeType) l_item;
-            if ( !l_type.toString().startsWith( "application/" ) )
-                return l_type.toString();
+            if ( !l_type.toString().startsWith( "application/" ) ) return l_type.toString();
         }
 
         return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
@@ -168,11 +159,11 @@ public class CServer extends NanoHTTPD
     /**
      * register an object for the UI
      *
-     * @note a class / object need to implemente methods with the prefix "web_static_" or "web_dynamic_", which is bind
-     * to the server with the URL part "/classname/[basepart/]methodname" (without prefix). The methods "String web_uribase"
-     * returns the basepart of the URI
      * @param p_object object, all methods with the name "ui_" are registered
-     *
+     * @note a class / object need to implemente methods with the prefix "web_static_" or "web_dynamic_", which is bind
+     * to the server with the URL part "/classname/[basepart/]methodname" (without prefix). The methods "String
+     * web_uribase"
+     * returns the basepart of the URI
      * @bug incomplete
      */
     public void register( final Object p_object )
@@ -185,15 +176,12 @@ public class CServer extends NanoHTTPD
         try
         {
             final Object l_data = CReflection.getClassMethod( p_object.getClass(), "web_uribase" ).getMethod().invoke( p_object );
-            if ( l_data instanceof String )
-                l_uribase = l_data.toString().toLowerCase();
+            if ( l_data instanceof String ) l_uribase = l_data.toString().toLowerCase();
 
             if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
             {
-                if ( l_uribase.startsWith( "/" ) )
-                    l_uribase = l_uribase.substring( 1 );
-                if ( !l_uribase.endsWith( "/" ) )
-                    l_uribase += "/";
+                if ( l_uribase.startsWith( "/" ) ) l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( "/" ) ) l_uribase += "/";
             }
         }
         catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
@@ -217,8 +205,7 @@ public class CServer extends NanoHTTPD
             if ( l_methodname.contains( "web_static_" ) )
             {
                 final String l_urimethod = l_methodname.replace( "web_static_", "" );
-                if ( l_urimethod.isEmpty() )
-                    continue;
+                if ( l_urimethod.isEmpty() ) continue;
 
                 m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), l_uriclass + l_uribase + l_urimethod ) );
             }
@@ -271,8 +258,7 @@ public class CServer extends NanoHTTPD
             case "md":
                 if ( p_location.getMarkDownRenderer() != null )
                     l_response = new Response( Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
-                else
-                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                else l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
                 break;
 
             default:
@@ -294,8 +280,7 @@ public class CServer extends NanoHTTPD
         try
         {
             final URL l_url = CCommon.getResourceURL( p_source );
-            if ( l_url != null )
-                m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
+            if ( l_url != null ) m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
         }
         catch ( final IllegalArgumentException l_exception )
         {

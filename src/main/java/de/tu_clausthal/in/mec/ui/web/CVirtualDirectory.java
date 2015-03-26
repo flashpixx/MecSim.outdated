@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -132,8 +125,7 @@ public class CVirtualDirectory implements IVirtualLocation
     public URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException
     {
         // URL concatination must be run with string manually, because otherwise last URL element can be removed
-        if ( p_session.getUri().equals( m_uri ) )
-            return new URL( m_directory + "/" + m_index );
+        if ( p_session.getUri().equals( m_uri ) ) return new URL( m_directory + "/" + m_index );
 
         // special call on root-location (/) to avoid path error
         return new URL( m_directory + ( m_uri.equals( "/" ) ? p_session.getUri() : "/" + p_session.getUri().replace( m_uri, "" ) ) );
@@ -156,8 +148,7 @@ public class CVirtualDirectory implements IVirtualLocation
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof CVirtualLocation )
-            return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof CVirtualLocation ) return this.hashCode() == p_object.hashCode();
 
         return false;
     }

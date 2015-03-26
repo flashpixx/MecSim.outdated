@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.mas.jason.action;
 
@@ -106,8 +99,7 @@ public class CMethodBind extends IAction
     public final Set<String> getForbidden( final String p_name )
     {
         final CReflection.CMethodCache l_object = m_bind.get( p_name );
-        if ( l_object == null )
-            return null;
+        if ( l_object == null ) return null;
 
         return l_object.getForbidden();
     }
@@ -116,8 +108,7 @@ public class CMethodBind extends IAction
     @Override
     /**
      * @todo handle term list
-     */
-    public final void act( final Agent p_agent, final Structure p_args )
+     */ public final void act( final Agent p_agent, final Structure p_args )
     {
         // check number of argument first
         final List<Term> l_args = p_args.getTerms();
@@ -169,8 +160,7 @@ public class CMethodBind extends IAction
             for ( int i = 0; i < l_argumentdata.size(); i++ )
                 if ( l_argumentdata.get( i ).isNumeric() )
                     l_argumentinvokedata.add( CCommon.convertNumber( l_argumenttype[i], ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
-                else
-                    l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
+                else l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
 
 
             // invoke and cast return data
@@ -207,8 +197,7 @@ public class CMethodBind extends IAction
     protected final Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
-        if ( "void".equalsIgnoreCase( l_classname ) )
-            return void.class;
+        if ( "void".equalsIgnoreCase( l_classname ) ) return void.class;
 
         Class<?> l_class = null;
         try
@@ -238,8 +227,7 @@ public class CMethodBind extends IAction
 
                     // object types
                 default:
-                    if ( !l_classname.contains( "." ) )
-                        l_classname = "java.lang." + l_classname;
+                    if ( !l_classname.contains( "." ) ) l_classname = "java.lang." + l_classname;
                     l_class = Class.forName( l_classname );
             }
 

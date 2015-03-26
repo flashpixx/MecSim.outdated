@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.common;
 
@@ -73,12 +66,10 @@ public class CCommon
      */
     public static <T> T getCheckedValue( final T p_input, final T p_default, final T[] p_allowedvalues )
     {
-        if ( p_input == null )
-            return p_default;
+        if ( p_input == null ) return p_default;
 
         for ( T l_item : p_allowedvalues )
-            if ( p_input.equals( l_item ) )
-                return l_item;
+            if ( p_input.equals( l_item ) ) return l_item;
 
         return p_default;
     }
@@ -119,8 +110,7 @@ public class CCommon
     {
         try
         {
-            if ( p_file.exists() )
-                return p_file.toURI().toURL();
+            if ( p_file.exists() ) return p_file.toURI().toURL();
 
             return CCommon.class.getClassLoader().getResource( p_file.toString().replace( CCommon.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "" ) );
         }
@@ -184,8 +174,7 @@ public class CCommon
     public static File addFileExtension( File p_file, String p_suffix )
     {
         File l_file = p_file;
-        if ( !l_file.getAbsolutePath().endsWith( p_suffix ) )
-            l_file = new File( l_file + p_suffix );
+        if ( !l_file.getAbsolutePath().endsWith( p_suffix ) ) l_file = new File( l_file + p_suffix );
         return l_file;
     }
 

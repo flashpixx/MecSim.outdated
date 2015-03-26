@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.common;
 
@@ -182,11 +175,9 @@ public class CPath implements Iterable<CPath>
     private void initialize( final String p_fqn )
     {
         for ( String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() )
-                m_path.add( l_item );
+            if ( !l_item.isEmpty() ) m_path.add( l_item );
 
-        if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
+        if ( m_path.size() == 0 ) throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
 
     /**
@@ -247,8 +238,7 @@ public class CPath implements Iterable<CPath>
     public String removeSuffix()
     {
         final String l_suffix = this.getSuffix();
-        if ( m_path.size() > 0 )
-            m_path.remove( m_path.size() - 1 );
+        if ( m_path.size() > 0 ) m_path.remove( m_path.size() - 1 );
         return l_suffix;
     }
 

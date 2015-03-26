@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.simulation.message;
 
@@ -89,8 +82,7 @@ public class CMessageSystem implements IVoidSteppable
         }
 
         final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
-        if ( l_node.isDataNull() )
-            l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
+        if ( l_node.isDataNull() ) l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
         l_node.getData().getLeft().add( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );
@@ -132,8 +124,7 @@ public class CMessageSystem implements IVoidSteppable
      */
     public final synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
     {
-        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
-            return;
+        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) ) return;
 
         if ( !m_root.pathExist( p_path ) )
         {
@@ -157,8 +148,7 @@ public class CMessageSystem implements IVoidSteppable
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_path ).getTreeData() )
         {
             // if item equal null skip
-            if ( l_item == null )
-                continue;
+            if ( l_item == null ) continue;
 
             l_item.getRight().add( p_message );
         }
@@ -175,8 +165,7 @@ public class CMessageSystem implements IVoidSteppable
         {
             // data element within the tree can be used null values, so this items will be skipped
             // the item is also skipped, if there does not exists messages
-            if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) )
-                continue;
+            if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) ) continue;
 
 
             for ( IParticipant l_receiver : l_item.getLeft() )

@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.common;
 
@@ -115,8 +108,7 @@ public class CReflection
             for ( Field l_field : l_class.getDeclaredFields() )
             {
                 l_field.setAccessible( true );
-                if ( ( p_filter != null ) && ( !p_filter.filter( l_field ) ) )
-                    continue;
+                if ( ( p_filter != null ) && ( !p_filter.filter( l_field ) ) ) continue;
 
                 try
                 {
@@ -187,8 +179,7 @@ public class CReflection
             for ( Method l_method : l_class.getDeclaredMethods() )
             {
                 l_method.setAccessible( true );
-                if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) )
-                    continue;
+                if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) ) continue;
 
                 try
                 {
@@ -450,8 +441,7 @@ public class CReflection
         public CMethod get( String p_methodname, Class<?>[] p_arguments ) throws IllegalAccessException
         {
             Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
-            if ( m_cache.containsKey( l_method ) )
-                return m_cache.get( l_method );
+            if ( m_cache.containsKey( l_method ) ) return m_cache.get( l_method );
 
             if ( m_forbidden.contains( p_methodname ) )
                 throw new IllegalAccessException( CCommon.getResourceString( this, "access", p_methodname ) );

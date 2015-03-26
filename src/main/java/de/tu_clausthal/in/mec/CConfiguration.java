@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
@@ -57,7 +50,6 @@ import java.util.jar.Manifest;
  */
 public class CConfiguration
 {
-
     /**
      * name of the configuration file
      */
@@ -160,8 +152,7 @@ public class CConfiguration
      */
     public File getLocation( final String p_name, final String... p_varargs )
     {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_location.get( p_name );
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) ) return m_location.get( p_name );
 
         return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
@@ -195,16 +186,15 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        if ( m_data.Language != null )
-            switch ( m_data.Language )
-            {
-                case "en":
-                    Locale.setDefault( Locale.ENGLISH );
-                    break;
-                case "de":
-                    Locale.setDefault( Locale.GERMANY );
-                    break;
-            }
+        if ( m_data.Language != null ) switch ( m_data.Language )
+        {
+            case "en":
+                Locale.setDefault( Locale.ENGLISH );
+                break;
+            case "de":
+                Locale.setDefault( Locale.GERMANY );
+                break;
+        }
 
         return ResourceBundle.getBundle( "language.locals", m_reader );
     }
@@ -443,6 +433,7 @@ public class CConfiguration
     {
         /**
          * configuration version *
+         *
          * @todo can be changed to Jar version - must be tested first
          */
         public int Version = 1;
@@ -619,18 +610,15 @@ public class CConfiguration
             InputStream l_stream = null;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
 
-            if ( !p_reload )
-                l_stream = p_loader.getResourceAsStream( l_resource );
+            if ( !p_reload ) l_stream = p_loader.getResourceAsStream( l_resource );
             else
             {
 
                 final URL l_url = p_loader.getResource( l_resource );
-                if ( l_url == null )
-                    return null;
+                if ( l_url == null ) return null;
 
                 final URLConnection l_connection = l_url.openConnection();
-                if ( l_connection == null )
-                    return null;
+                if ( l_connection == null ) return null;
 
                 l_connection.setUseCaches( false );
                 l_stream = l_connection.getInputStream();

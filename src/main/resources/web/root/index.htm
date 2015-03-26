@@ -2,101 +2,110 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-    <head>
-        <title>MecSim - Traffic Simulation</title>
+<head>
+    <title>MecSim - Traffic Simulation</title>
 
-        <!-- jQuery https://jquery.com/ ------------------------------------------------------------------------------->
-        <script type="text/javascript" src="jscss/jquery-2.1.3.min.js"></script>
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- jQuery https://jquery.com/ ------------------------------------------------------------------------------->
+    <script type="text/javascript" src="jscss/jquery-2.1.3.min.js"></script>
+    <!------------------------------------------------------------------------------------------------------------->
 
-        <!-- jQuery-UI https://jqueryui.com/ -------------------------------------------------------------------------->
-        <script type="text/javascript" src="jscss/jquery-ui-1.11.4/jquery-ui.min.js"></script>
-        <link href="jscss/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet"/>
+    <!-- jQuery-UI https://jqueryui.com/ -------------------------------------------------------------------------->
+    <script type="text/javascript" src="jscss/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+    <link href="jscss/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet"/>
 
-        <link href="jscss/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel="stylesheet"/>
-        <link href="jscss/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel="stylesheet"/>
-        <!------------------------------------------------------------------------------------------------------------->
+    <link href="jscss/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel="stylesheet"/>
+    <link href="jscss/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel="stylesheet"/>
+    <!------------------------------------------------------------------------------------------------------------->
 
-        <!-- D3.js http://d3js.org/ ----------------------------------------------------------------------------------->
-        <script type="text/javascript" src="jscss/d3/d3-3.5.5.js"></script>
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- D3.js http://d3js.org/ ----------------------------------------------------------------------------------->
+    <script type="text/javascript" src="jscss/d3/d3-3.5.5.js"></script>
+    <!------------------------------------------------------------------------------------------------------------->
 
-        <!-- jqWidgets  http://www.jqwidgets.com/ --------------------------------------------------------------------->
-        <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxcore.js"></script>
-        <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxbuttons.js"></script>
-        <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxsplitter.js"></script>
-        <link href="jscss/jqwidgets-3.7.1/jqx.base.css" rel="stylesheet"/>
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- jqWidgets  http://www.jqwidgets.com/ --------------------------------------------------------------------->
+    <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxcore.js"></script>
+    <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jscss/jqwidgets-3.7.1/jqxsplitter.js"></script>
+    <link href="jscss/jqwidgets-3.7.1/jqx.base.css" rel="stylesheet"/>
+    <!------------------------------------------------------------------------------------------------------------->
 
-        <!-- MecSim: OUR STUFF ---------------------------------------------------------------------------------------->
-        <script type="text/javascript" src="jscss/main.js"></script>
-        <link href="jscss/layout.css" rel="stylesheet"/>
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- MecSim: OUR STUFF ---------------------------------------------------------------------------------------->
+    <script type="text/javascript" src="jscss/main.js"></script>
+    <link href="jscss/layout.css" rel="stylesheet"/>
+    <!------------------------------------------------------------------------------------------------------------->
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <div id="jqxSplitter">
-            <div id="mecsim_menu">
+<div id="jqxSplitter">
+    <div id="mecsim_menu">
 
-                <div id="mecsim_accordion" class="accordion">
-                    <h3>About</h3>
-                    <div>
-                        <p>
-                            <a href="template/about.htm" class="template">About</a>
-                        </p>
-                    </div>
-                    <h3>Simulation Configuration</h3>
-                    <div>
-                        <button id="mecsim_start_button">Start Simulation</button>
-                        <button id="mecsim_stop_button">Stop Simulation</button>
-                    </div>
-                    <h3>MecSim</h3>
-                    <div>
-                        <p>
-                            <a href="index.htm" class="template">MecSim Home</a>
-                        </p>
-                    </div>
-                    <h3>Local</h3>
-                    <div>
-                        <p>
-                            <a href="template/local.htm" class="template">Local</a>
-                        </p>
-                    </div>
-                    <h3>Configuration</h3>
-                    <div>
-                        <p>
-                            <a href="template/configuration.htm" class="template">Configuration</a>
-                        </p>
-                    </div>
-                    <h3>User Dokumentation</h3>
-                    <div>
-                        <p>
-                            <a href="template/userdoc.htm" class="template">User Dokumentation</a>
-                        </p>
-                    </div>
-                    <h3>Developer Dokumentation</h3>
-                    <div>
-                        <p>
-                            <a href="template/develdoc.htm" class="template">Developer Dokumentation</a>
-                        </p>
-                    </div>
-                </div>
-                
-                <div id="mecsim_tuc_logo_small">
-                    <img class="align_center"src="img/Logo_TUC_de_Web_klein.gif" alt="TUC Logo small">
-                </div>
+        <div id="mecsim_accordion" class="accordion">
+            <h3>About</h3>
 
-            </div>
-            <div id="mecsim_content">
-                <img id="mecsim_big_tuc_logo" class="align_center"src="img/Logo_TUC_de_CMYK.svg" alt="TUC Logo big">
+            <div>
                 <p>
-                    <h1 class="text_align_center">MecSim</h1>
+                    <a href="template/about.htm" class="template">About</a>
+                </p>
+            </div>
+            <h3>Simulation Configuration</h3>
+
+            <div>
+                <button id="mecsim_start_button">Start Simulation</button>
+                <button id="mecsim_stop_button">Stop Simulation</button>
+            </div>
+            <h3>MecSim</h3>
+
+            <div>
+                <p>
+                    <a href="index.htm" class="template">MecSim Home</a>
+                </p>
+            </div>
+            <h3>Local</h3>
+
+            <div>
+                <p>
+                    <a href="template/local.htm" class="template">Local</a>
+                </p>
+            </div>
+            <h3>Configuration</h3>
+
+            <div>
+                <p>
+                    <a href="template/configuration.htm" class="template">Configuration</a>
+                </p>
+            </div>
+            <h3>User Dokumentation</h3>
+
+            <div>
+                <p>
+                    <a href="template/userdoc.htm" class="template">User Dokumentation</a>
+                </p>
+            </div>
+            <h3>Developer Dokumentation</h3>
+
+            <div>
+                <p>
+                    <a href="template/develdoc.htm" class="template">Developer Dokumentation</a>
                 </p>
             </div>
         </div>
 
-    </body>
+        <div id="mecsim_tuc_logo_small">
+            <img class="align_center" src="img/Logo_TUC_de_Web_klein.gif" alt="TUC Logo small">
+        </div>
+
+    </div>
+    <div id="mecsim_content">
+        <img id="mecsim_big_tuc_logo" class="align_center" src="img/Logo_TUC_de_CMYK.svg" alt="TUC Logo big">
+
+        <p>
+
+        <h1 class="text_align_center">MecSim</h1>
+        </p>
+    </div>
+</div>
+
+</body>
 
 </html>

@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object;
 
@@ -132,10 +125,8 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public void afterStepObject( final int p_currentstep, final T p_object )
     {
         // push data to the queue
-        if ( p_object.isFinish() )
-            m_finisheddata.add( p_object );
-        else
-            m_processingdata.add( p_object );
+        if ( p_object.isFinish() ) m_finisheddata.add( p_object );
+        else m_processingdata.add( p_object );
     }
 
     /**
@@ -221,8 +212,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
-            if ( !m_processingdata.contains( l_item ) )
-                return false;
+            if ( !m_processingdata.contains( l_item ) ) return false;
 
         if ( CSimulation.getInstance().hasUI() )
             CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
@@ -246,8 +236,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     {
         for ( Object l_item : p_collection )
         {
-            if ( m_processingdata.remove( l_item ) )
-                continue;
+            if ( m_processingdata.remove( l_item ) ) continue;
 
             return false;
         }
@@ -289,8 +278,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( !m_visible )
-            return;
+        if ( !m_visible ) return;
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );

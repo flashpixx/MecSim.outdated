@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
@@ -42,6 +35,10 @@ public class CLogger
      * stack index of traces
      */
     private static final int c_stackindex;
+    /**
+     * defines the global log level
+     */
+    private static Level s_level = Level.OFF;
 
     /** initialization **/
     static
@@ -52,16 +49,10 @@ public class CLogger
         for ( StackTraceElement l_trace : Thread.currentThread().getStackTrace() )
         {
             i++;
-            if ( l_trace.getClassName().equals( CLogger.class.getName() ) )
-                break;
+            if ( l_trace.getClassName().equals( CLogger.class.getName() ) ) break;
         }
         c_stackindex = i;
     }
-
-    /**
-     * defines the global log level
-     */
-    private static Level s_level = Level.OFF;
 
     /**
      * private ctor - avoid instantiation
@@ -95,10 +86,8 @@ public class CLogger
      */
     private static String padCut( final String p_input, final char p_filler, final int p_length )
     {
-        if ( p_length < 1 )
-            return p_input;
-        if ( p_input.length() < p_length )
-            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
+        if ( p_length < 1 ) return p_input;
+        if ( p_input.length() < p_length ) return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
 
         return p_input.substring( 0, p_length );
     }
@@ -137,8 +126,7 @@ public class CLogger
                     l_add += l_item + "   ";
                 l_add += "]";
             }
-            else
-                l_add = p_add.toString();
+            else l_add = p_add.toString();
         }
 
         if ( !l_add.isEmpty() )
@@ -187,8 +175,7 @@ public class CLogger
      */
     public static void warn( final Object p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.warn( createLogData( Level.WARNING, p_data ) );
+        if ( p_write ) Logger.warn( createLogData( Level.WARNING, p_data ) );
     }
 
 
@@ -228,8 +215,7 @@ public class CLogger
      */
     public static void error( final Object p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.error( createLogData( Level.ERROR, p_data ) );
+        if ( p_write ) Logger.error( createLogData( Level.ERROR, p_data ) );
     }
 
 
@@ -270,8 +256,7 @@ public class CLogger
      */
     public static void info( final Object p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.info( createLogData( Level.INFO, p_data ) );
+        if ( p_write ) Logger.info( createLogData( Level.INFO, p_data ) );
     }
 
 
@@ -311,8 +296,7 @@ public class CLogger
      */
     public static void debug( final Object p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        if ( p_write ) Logger.debug( createLogData( Level.DEBUG, p_data ) );
     }
 
 
@@ -353,13 +337,10 @@ public class CLogger
      */
     public static void out( final Object p_data, final boolean p_write )
     {
-        if ( !p_write )
-            return;
+        if ( !p_write ) return;
 
-        if ( s_level == Level.OFF )
-            System.out.println( p_data );
-        else
-            Logger.info( createLogData( Level.INFO, p_data ) );
+        if ( s_level == Level.OFF ) System.out.println( p_data );
+        else Logger.info( createLogData( Level.INFO, p_data ) );
     }
 
 

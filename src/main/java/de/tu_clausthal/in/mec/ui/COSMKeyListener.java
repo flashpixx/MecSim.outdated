@@ -1,25 +1,18 @@
 /**
- * @cond
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
+ * @cond ###################################################################################### # GPL License # # # #
+ * This file is part of the TUC Wirtschaftsinformatik - MecSim                        # # Copyright (c) 2014-15,
+ * Philipp
+ * Kraus (philipp.kraus@tu-clausthal.de)               # # This program is free software: you can redistribute it
+ * and/or
+ * modify               # # it under the terms of the GNU General Public License as                            # #
+ * published by the Free Software Foundation, either version 3 of the # # License, or (at your option) any later
+ * version.                                    # # # # This program is distributed in the hope that it will be useful,
+ * # # but WITHOUT ANY WARRANTY; without even the implied warranty of # # MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the                      # # GNU General Public License for more details.
+ * # # # # You should have received a copy of the GNU General Public License # # along with
+ * this program. If not, see http://www.gnu.org/licenses/                  # ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui;
 
@@ -67,12 +60,9 @@ public class COSMKeyListener implements KeyListener
     public void keyPressed( KeyEvent p_event )
     {
         //Set Shift/Alt/STRG Status if the specific Key is pressed
-        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT )
-            m_shiftPressed = true;
-        if ( p_event.getKeyCode() == KeyEvent.VK_ALT )
-            m_altPressed = true;
-        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL )
-            m_strgPressed = true;
+        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT ) m_shiftPressed = true;
+        if ( p_event.getKeyCode() == KeyEvent.VK_ALT ) m_altPressed = true;
+        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL ) m_strgPressed = true;
 
         //Check if Arrows are Pressed and Repaint the Map
         int delta_x = 0;
@@ -110,12 +100,9 @@ public class COSMKeyListener implements KeyListener
     public void keyReleased( KeyEvent p_event )
     {
         //Update the Key Pressed Status
-        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT )
-            m_shiftPressed = false;
-        if ( p_event.getKeyCode() == KeyEvent.VK_ALT )
-            m_altPressed = false;
-        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL )
-            m_strgPressed = false;
+        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT ) m_shiftPressed = false;
+        if ( p_event.getKeyCode() == KeyEvent.VK_ALT ) m_altPressed = false;
+        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL ) m_strgPressed = false;
 
     }
 
@@ -158,12 +145,9 @@ public class COSMKeyListener implements KeyListener
     {
         int l_keyPressedCount = 0;
 
-        if ( m_altPressed )
-            l_keyPressedCount++;
-        if ( m_shiftPressed )
-            l_keyPressedCount++;
-        if ( m_strgPressed )
-            l_keyPressedCount++;
+        if ( m_altPressed ) l_keyPressedCount++;
+        if ( m_shiftPressed ) l_keyPressedCount++;
+        if ( m_strgPressed ) l_keyPressedCount++;
 
 
         return l_keyPressedCount;

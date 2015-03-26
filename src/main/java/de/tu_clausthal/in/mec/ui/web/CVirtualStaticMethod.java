@@ -67,7 +67,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     public CVirtualStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
-        m_uri = p_uri;
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
         m_method = p_method.getHandle();
         m_object = p_object;
         m_arguments = p_method.getMethod().getParameterCount();

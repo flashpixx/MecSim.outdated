@@ -90,7 +90,7 @@ public class CVirtualDirectory implements IVirtualLocation
 
         m_index = p_index;
         m_directory = p_directory.toString();
-        m_uri = p_uri;
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
         m_markdown = null;
 
         CLogger.info( p_uri );
@@ -116,7 +116,7 @@ public class CVirtualDirectory implements IVirtualLocation
 
         m_index = p_index;
         m_directory = p_directory.toString();
-        m_uri = p_uri;
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
         m_markdown = p_markdown;
     }
 

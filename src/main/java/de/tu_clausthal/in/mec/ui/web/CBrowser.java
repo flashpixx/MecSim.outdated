@@ -91,7 +91,7 @@ public class CBrowser extends GridPane
         this( p_menu );
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CBrowser.class, "urlempty" ) );
-
+        System.out.println( "blub" );
         m_webview.getEngine().load( p_url );
     }
 

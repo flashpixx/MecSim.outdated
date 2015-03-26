@@ -60,7 +60,7 @@ public class CVirtualFile implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "fileisnull", p_uri ) );
 
         m_file = p_file;
-        m_uri = p_uri;
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
 
         CLogger.info( p_uri );
     }

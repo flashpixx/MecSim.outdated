@@ -69,7 +69,7 @@ public class CAbout
 
 
     /**
-     * access to the data
+     * UI method  to get access to the data
      *
      * @return map with about data
      */

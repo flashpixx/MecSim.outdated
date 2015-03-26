@@ -41,6 +41,7 @@ import org.pegdown.PegDownProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -167,12 +168,39 @@ public class CServer extends NanoHTTPD
     /**
      * register an object for the UI
      *
-     * param p_object object, all methods with the name "ui_" are registered
+     * @note a class / object need to implemente methods with the prefix "web_static_" or "web_dynamic_", which is bind
+     * to the server with the URL part "/classname/[basepart/]methodname" (without prefix). The methods "String web_uribase"
+     * returns the basepart of the URI
+     * @param p_object object, all methods with the name "ui_" are registered
      *
      * @bug incomplete
      */
     public void register( final Object p_object )
     {
+        // URI begin
+        final String l_uriclass = "/" + p_object.getClass().getSimpleName().toLowerCase() + "/";
+
+        // try to read basepart
+        String l_uribase = "";
+        try
+        {
+            final Object l_data = CReflection.getClassMethod( p_object.getClass(), "web_uribase" ).getMethod().invoke( p_object );
+            if ( l_data instanceof String )
+                l_uribase = l_data.toString().toLowerCase();
+
+            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
+            {
+                if ( l_uribase.startsWith( "/" ) )
+                    l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( "/" ) )
+                    l_uribase += "/";
+            }
+        }
+        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
+        {
+        }
+
+        // get methods
         for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
         {
             @Override
@@ -182,9 +210,19 @@ public class CServer extends NanoHTTPD
             }
         } ).entrySet() )
         {
-            final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase().replace( "web_static_", "" );
-            if ( !l_methodname.isEmpty() )
-                m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), "/" + p_object.getClass().getSimpleName().toLowerCase() + "/" + l_methodname ) );
+
+            // try to bind a method
+            final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase();
+
+            if ( l_methodname.contains( "web_static_" ) )
+            {
+                final String l_urimethod = l_methodname.replace( "web_static_", "" );
+                if ( l_urimethod.isEmpty() )
+                    continue;
+
+                m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), l_uriclass + l_uribase + l_urimethod ) );
+            }
+
         }
 
     }

@@ -54,7 +54,7 @@ public class CWorkspace extends CBrowser
         try
         {
             if ( CSimulation.getInstance().getWebServer() == null )
-                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_webserver" ).getSetter().invoke( CSimulation.getInstance(), this );
+                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_webserver" ).getSetter().invoke( CSimulation.getInstance(), m_server );
         }
         catch ( final Throwable l_throwable )
         {

@@ -74,6 +74,23 @@ public class CUI extends Application
      */
     private final Map<String, Node> m_content = new HashMap<>();
     /**
+     * hidden event handler
+     */
+    private final EventHandler<WindowEvent> m_popuphiddenevent = new EventHandler<WindowEvent>()
+    {
+        @Override
+        public void handle( final WindowEvent p_event )
+        {
+            p_event.consume();
+
+            final Node l_node = ( (PopOver) p_event.getSource() ).getContentNode();
+            if ( !m_widget.containsKey( l_node ) )
+                return;
+
+            m_tabpane.getTabs().add( m_widget.get( l_node ).getValue() );
+        }
+    };
+    /**
      * main stage *
      */
     private Stage m_stage;
@@ -94,8 +111,6 @@ public class CUI extends Application
             m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
         }
     };
-
-
 
     /** main-wrapper method
      *
@@ -208,6 +223,7 @@ public class CUI extends Application
         l_popover.setDetachedTitle( p_title );
         l_popover.setHideOnEscape( true );
         l_popover.setAutoFix( true );
+        l_popover.setOnHidden( m_popuphiddenevent );
 
 
         return l_popover;

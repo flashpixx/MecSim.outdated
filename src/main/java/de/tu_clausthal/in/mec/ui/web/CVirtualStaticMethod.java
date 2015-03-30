@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec.ui.web;
 
 
+import com.github.drapostolos.typeparser.TypeParser;
+import com.github.drapostolos.typeparser.TypeParserException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -54,6 +56,10 @@ public class CVirtualStaticMethod implements IVirtualLocation
     protected static final Type s_jsonobjecttype = new TypeToken<Map<Object, Object>>()
     {
     }.getType();
+    /**
+     * type parser
+     */
+    protected static final TypeParser s_parser = TypeParser.newBuilder().build();
     /**
      * method handle *
      */
@@ -157,32 +163,56 @@ public class CVirtualStaticMethod implements IVirtualLocation
     private Map<String, Object> convertMap( final Map<String, String> p_input )
     {
         final Map<String, Object> l_return = new HashMap<>();
-
         for ( Map.Entry<String, String> l_item : p_input.entrySet() )
             this.splitKeyValues( l_item.getKey().replace( "]", "" ).split( "\\[" ), 0, l_item.getValue(), l_return );
-
-        System.out.println( l_return );
-
         return l_return;
     }
 
+    /**
+     * split the map into value- and map-types
+     *
+     * @param p_key      array with key (separater is "[")
+     * @param p_keyindex current index of the key
+     * @param p_value    value
+     * @param p_map      return map
+     */
     private void splitKeyValues( final String[] p_key, final int p_keyindex, final String p_value, final Map<String, Object> p_map )
     {
-        System.out.println( p_key[p_keyindex] );
         if ( p_key.length == p_keyindex + 1 )
         {
-            System.out.println( "-> value" );
-            p_map.put( p_key[p_keyindex], p_value );
+
+            p_map.put( p_key[p_keyindex], this.convertValue( p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class} ) );
+            return;
         }
 
         if ( !p_map.containsKey( p_key[p_keyindex] ) )
-        {
-            System.out.println( "-> map" );
             p_map.put( p_key[p_keyindex], new HashMap<>() );
-        }
 
         this.splitKeyValues( p_key, p_keyindex + 1, p_value, (Map) p_map.get( p_key[p_keyindex] ) );
     }
+
+
+    /**
+     * converts a value into class
+     *
+     * @param p_value string input class
+     * @param p_types type classes
+     * @return converted type
+     */
+    private Object convertValue( final String p_value, final Class[] p_types )
+    {
+        for ( Class l_class : p_types )
+            try
+            {
+                return s_parser.parseType( p_value, l_class );
+            }
+            catch ( final TypeParserException l_exception )
+            {
+            }
+
+        return p_value;
+    }
+
 
     @Override
     public final int hashCode()

@@ -9,8 +9,13 @@ $(document).ready(function(){
         $("#mecsim_content").load( this.href );
     });
 
-    $( "#mecsim_accordion" ).accordion();
+    // reload default page
+    $("a.mecsim_home").button().click(function( p_event ){
+        p_event.preventDefault();
+        location.reload();
+    });
 
+    $( "#mecsim_accordion" ).accordion();
 
     $( "#mecsim_start_button" ).button().click(function() {
         $.post(

@@ -409,32 +409,34 @@ public class CConfiguration
      * @param p_header header data - configuration changeable only from localhost
      * @bug incomplete
      */
-    private void web_static_set( final Map<String, String> p_data, final Map<String, String> p_header )
+    private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )
     {
+        System.out.println( p_data );
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
-        m_data.CellSampling = Math.max( 1, Integer.parseInt( p_data.get( "cellsampling" ) ) );
-        m_data.ResetConfig = Boolean.parseBoolean( p_data.get( "resetconfig" ) );
-        m_data.ThreadSleepTime = Math.max( 0, Integer.parseInt( p_data.get( "threadsleeptime" ) ) );
-        m_data.RoutingAlgorithm = CCommon.getCheckedValue( p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
-        m_data.Language = CCommon.getCheckedValue( p_data.get( "language" ), "en", new String[]{"en", "de"} );
+        m_data.CellSampling = Math.max( 1, Integer.parseInt( (String) p_data.get( "cellsampling" ) ) );
+        m_data.ResetConfig = Boolean.parseBoolean( (String) p_data.get( "resetconfig" ) );
+        m_data.ThreadSleepTime = Math.max( 0, Integer.parseInt( (String) p_data.get( "threadsleeptime" ) ) );
+        m_data.RoutingAlgorithm = CCommon.getCheckedValue( (String) p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
+        m_data.Language = CCommon.getCheckedValue( (String) p_data.get( "language" ), "en", new String[]{"en", "de"} );
 
-        m_data.Console.LineBuffer = Math.max( 1, Integer.parseInt( p_data.get( "console_linebuffer" ) ) );
-        m_data.Console.LineNumber = Math.max( 1, Integer.parseInt( p_data.get( "console_linenumber" ) ) );
+        m_data.Console.LineBuffer = Math.max( 1, Integer.parseInt( (String) p_data.get( "console_linebuffer" ) ) );
+        m_data.Console.LineNumber = Math.max( 1, Integer.parseInt( (String) p_data.get( "console_linenumber" ) ) );
+
 
         //m_data.UIConfiguration         = p_data.get( "ui" );
 
-        m_data.RoutingMap.Name = CCommon.getNonEmptyValue( p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
-        m_data.RoutingMap.URL = CCommon.getNonEmptyValue( p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
-        m_data.RoutingMap.Reimport = Boolean.parseBoolean( p_data.get( "routingmap_reimport" ) );
+        m_data.RoutingMap.Name = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
+        m_data.RoutingMap.URL = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
+        m_data.RoutingMap.Reimport = Boolean.parseBoolean( (String) p_data.get( "routingmap_reimport" ) );
 
-        m_data.Database.Active = Boolean.parseBoolean( p_data.get( "database_active" ) );
-        m_data.Database.Driver = p_data.get( "database_driver" );
-        m_data.Database.URL = p_data.get( "database_url" );
-        m_data.Database.TablePrefix = p_data.get( "database_tableprefix" );
-        m_data.Database.Username = p_data.get( "database_username" );
-        m_data.Database.Password = p_data.get( "database_password" );
+        m_data.Database.Active = Boolean.parseBoolean( (String) p_data.get( "database_active" ) );
+        m_data.Database.Driver = (String) p_data.get( "database_driver" );
+        m_data.Database.URL = (String) p_data.get( "database_url" );
+        m_data.Database.TablePrefix = (String) p_data.get( "database_tableprefix" );
+        m_data.Database.Username = (String) p_data.get( "database_username" );
+        m_data.Database.Password = (String) p_data.get( "database_password" );
     }
 
 

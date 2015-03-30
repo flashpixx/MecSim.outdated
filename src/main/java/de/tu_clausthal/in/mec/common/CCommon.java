@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.common;
 
+import com.github.drapostolos.typeparser.TypeParser;
+import com.github.drapostolos.typeparser.TypeParserException;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 
@@ -34,6 +36,8 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -59,6 +63,52 @@ public class CCommon
     public static String removePackageName( String p_package )
     {
         return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+    }
+
+
+    /**
+     * creates a map from parameters
+     *
+     * @param p_objects list with pairs of string and object
+     * @return map with data
+     */
+    public static Map<String, Object> getMap( final Object... p_objects )
+    {
+        if ( p_objects.length % 2 != 0 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CCommon.class, "argumentsnoteven" ) );
+
+        String l_name = null;
+        final Map<String, Object> l_return = new HashMap<>();
+
+        for ( int i = 0; i < p_objects.length; ++i )
+            if ( i % 2 == 0 ) l_name = (String) p_objects[i];
+            else l_return.put( l_name, p_objects[i] );
+
+
+        return l_return;
+    }
+
+
+    /**
+     * converts a value into class
+     *
+     * @param p_value string input class
+     * @param p_types type classes
+     * @return converted type
+     * @para, p_parser type parser
+     */
+    public static Object convertValue( final String p_value, final Class[] p_types, final TypeParser p_parser )
+    {
+        for ( Class l_class : p_types )
+            try
+            {
+                return p_parser.parseType( p_value, l_class );
+            }
+            catch ( final TypeParserException l_exception )
+            {
+            }
+
+        return p_value;
     }
 
 

@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import com.github.drapostolos.typeparser.TypeParser;
-import com.github.drapostolos.typeparser.TypeParserException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -181,7 +180,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
         if ( p_key.length == p_keyindex + 1 )
         {
 
-            p_map.put( p_key[p_keyindex], this.convertValue( p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class} ) );
+            p_map.put( p_key[p_keyindex], CCommon.convertValue( p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class}, s_parser ) );
             return;
         }
 
@@ -191,27 +190,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
         this.splitKeyValues( p_key, p_keyindex + 1, p_value, (Map) p_map.get( p_key[p_keyindex] ) );
     }
 
-
-    /**
-     * converts a value into class
-     *
-     * @param p_value string input class
-     * @param p_types type classes
-     * @return converted type
-     */
-    private Object convertValue( final String p_value, final Class[] p_types )
-    {
-        for ( Class l_class : p_types )
-            try
-            {
-                return s_parser.parseType( p_value, l_class );
-            }
-            catch ( final TypeParserException l_exception )
-            {
-            }
-
-        return p_value;
-    }
 
 
     @Override

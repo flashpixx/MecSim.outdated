@@ -411,21 +411,19 @@ public class CConfiguration
      */
     private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )
     {
-        System.out.println( p_data );
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
-        m_data.CellSampling = Math.max( 1, Integer.parseInt( (String) p_data.get( "cellsampling" ) ) );
-        m_data.ResetConfig = Boolean.parseBoolean( (String) p_data.get( "resetconfig" ) );
-        m_data.ThreadSleepTime = Math.max( 0, Integer.parseInt( (String) p_data.get( "threadsleeptime" ) ) );
+        m_data.CellSampling = Math.max( 1, (Integer) p_data.get( "cellsampling" ) );
+        m_data.ResetConfig = (Boolean) p_data.get( "resetconfig" );
+        m_data.ThreadSleepTime = Math.max( 0, (Integer) p_data.get( "threadsleeptime" ) );
         m_data.RoutingAlgorithm = CCommon.getCheckedValue( (String) p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
         m_data.Language = CCommon.getCheckedValue( (String) p_data.get( "language" ), "en", new String[]{"en", "de"} );
 
-        m_data.Console.LineBuffer = Math.max( 1, Integer.parseInt( (String) p_data.get( "console_linebuffer" ) ) );
-        m_data.Console.LineNumber = Math.max( 1, Integer.parseInt( (String) p_data.get( "console_linenumber" ) ) );
+        m_data.Console.LineBuffer = Math.max( 1, (Integer) p_data.get( "console_linebuffer" ) );
+        m_data.Console.LineNumber = Math.max( 1, (Integer) p_data.get( "console_linenumber" ) );
 
-
-        //m_data.UIConfiguration         = p_data.get( "ui" );
+        m_data.UIConfiguration = (Map) p_data.get( "ui" );
 
         m_data.RoutingMap.Name = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
         m_data.RoutingMap.URL = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
@@ -456,25 +454,23 @@ public class CConfiguration
          */
         public int UIBindPort = 9876;
         /**
-         * cell size for sampling
-         */
-        public int CellSampling = 2;
-        /**
          * flag to reset the configuration
          */
         public boolean ResetConfig = false;
         /**
-         * geo position object of the start viewpoint
-         */
-        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
-        /**
-         * zoom level of the viewpoint on the start point
-         */
-        public int Zoom = 4;
-        /**
          * thread sleep time in milliseconds
          */
         public int ThreadSleepTime = 25;
+        /**
+         * language code
+         */
+        public String Language = "en";
+
+
+        /**
+         * geo position object of the start viewpoint
+         */
+        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
         /**
          * window width
          */
@@ -484,6 +480,16 @@ public class CConfiguration
          */
         public double WindowHeight = 1024;
         /**
+         * zoom level of the viewpoint on the start point
+         */
+        public int Zoom = 4;
+
+
+        /**
+         * cell size for sampling
+         */
+        public int CellSampling = 2;
+        /**
          * geo map for graph
          */
         public RoutingMap RoutingMap = new RoutingMap();
@@ -492,10 +498,8 @@ public class CConfiguration
          * algorithm)
          */
         public String RoutingAlgorithm = "astarbi";
-        /**
-         * language code
-         */
-        public String Language = "en";
+
+
         /**
          * database driver (optional)
          */

@@ -69,6 +69,55 @@ public class CConfiguration
     {{
             put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
         }};
+    private final ConfigurationMap m_datanew = new ConfigurationMap()
+    {{
+
+            // console data
+            put( "console", new ConfigurationMap()
+            {{
+                    put( "LineBuffer", 120 );
+                    put( "LineNumber", 120 );
+                }} );
+
+
+            // ui data
+            put( "ui", new ConfigurationMap()
+            {{
+                    put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                    put( "windowheight", 1024.0 );
+                    put( "windowwidth", 1280.0 );
+                    put( "zoom", 4 );
+                }} );
+
+
+            // main simulation data
+            put( "simulation", new ConfigurationMap()
+            {{
+                    put( "threadsleeptime", 25 );
+
+                    put( "traffic", new ConfigurationMap()
+                    {{
+                            put( "reimport", false );
+                            put( "cellsampling", 2 );
+                            put( "routingalgorithm", "astarbi" );
+                            put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                            put( "mapname", "europe/germany/lowersaxony" );
+                        }} );
+                }} );
+
+
+            // database data
+            put( "database", new ConfigurationMap()
+            {{
+                    put( "active", false );
+                    put( "driver", null );
+                    put( "url", null );
+                    put( "tableprefix", null );
+                    put( "username", null );
+                    put( "password", null );
+                }} );
+
+        }};
     /**
      * property that stores the configuration data
      */
@@ -449,9 +498,10 @@ public class CConfiguration
 
     public static class ConfigurationMap extends HashMap<String, Object>
     {
+
         public <T> T getTypedValue( final String p_key )
         {
-            return (T) this.get( p_key );
+            return (T) this.get( p_key.trim().toLowerCase() );
         }
 
         @Override

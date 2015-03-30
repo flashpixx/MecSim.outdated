@@ -246,6 +246,10 @@ public class CConfiguration
                 Writer l_writer = new OutputStreamWriter( new FileOutputStream( this.getLocation( "root", c_ConfigFilename ) ), "UTF-8" );
         )
         {
+            // http://sohu.io/questions/975042/gson-handles-case-when-synchronized-hashmap-as-class-member
+            //final GsonBuilder l_builder = new GsonBuilder();
+            //l_builder.enableComplexMapKeySerialization();
+            //l_builder.create().toJson( m_data, l_writer );
             new Gson().toJson( m_data, l_writer );
         }
         catch ( final Exception l_exception )
@@ -290,6 +294,7 @@ public class CConfiguration
         }
 
         // check the configuration values and set it
+        /*
         if ( ( l_tmp == null ) || ( l_tmp.ResetConfig ) || ( l_tmp.Version < m_data.Version ) )
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
@@ -299,6 +304,7 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "uibindportdefault" ) );
                 l_tmp.UIBindPort = m_data.UIBindPort;
             }
+
             if ( l_tmp.ViewPoint == null )
             {
                 CLogger.warn( CCommon.getResourceString( this, "viewpointdefault" ) );
@@ -314,6 +320,7 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "widthdefault" ) );
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
+
             if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
             {
                 CLogger.warn( CCommon.getResourceString( this, "routingdefault" ) );
@@ -339,6 +346,7 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "databasedefault" ) );
                 l_tmp.Database = m_data.Database;
             }
+            /*
             if ( l_tmp.Console == null )
             {
                 CLogger.warn( CCommon.getResourceString( this, "consoledefault" ) );
@@ -346,7 +354,9 @@ public class CConfiguration
             }
 
             m_data = l_tmp;
+
         }
+        */
 
         // append all Jar files to the classpath of the system class loader
         try
@@ -385,9 +395,9 @@ public class CConfiguration
         l_map.put( "routingmap_reimport", m_data.RoutingMap.Reimport );
 
 
-        l_map.put( "ui", m_data.UIConfiguration );
+        l_map.put( "ui", m_data.ui );
 
-        l_map.put( "console", CCommon.getMap( "linebuffer", m_data.Console.LineBuffer, "linenumber", m_data.Console.LineNumber ) );
+        l_map.put( "console", m_data.console );
 
         l_map.put( "language", CCommon.getMap( "current", m_data.Language, "allow", new String[]{"de", "en"} ) );
 
@@ -409,16 +419,20 @@ public class CConfiguration
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
+        m_data.ui.putAll( (Map) p_data.get( "ui" ) );
+        m_data.console.putAll( (Map) p_data.get( "console" ) );
+
+
+
+
         m_data.CellSampling = Math.max( 1, (Integer) p_data.get( "cellsampling" ) );
         m_data.ResetConfig = (Boolean) p_data.get( "resetconfig" );
         m_data.ThreadSleepTime = Math.max( 0, (Integer) p_data.get( "threadsleeptime" ) );
         m_data.RoutingAlgorithm = CCommon.getCheckedValue( (String) p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
         m_data.Language = CCommon.getCheckedValue( (String) p_data.get( "language" ), "en", new String[]{"en", "de"} );
 
-        m_data.Console.LineBuffer = Math.max( 1, (Integer) p_data.get( "console_linebuffer" ) );
-        m_data.Console.LineNumber = Math.max( 1, (Integer) p_data.get( "console_linenumber" ) );
-
-        m_data.UIConfiguration = (Map) p_data.get( "ui" );
+        //m_data.Console.LineBuffer = Math.max( 1, (Integer) p_data.get( "console_linebuffer" ) );
+        //m_data.Console.LineNumber = Math.max( 1, (Integer) p_data.get( "console_linenumber" ) );
 
         m_data.RoutingMap.Name = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
         m_data.RoutingMap.URL = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
@@ -433,11 +447,50 @@ public class CConfiguration
     }
 
 
+    public static class ConfigurationMap extends HashMap<String, Object>
+    {
+        public <T> T getTypedValue( final String p_key )
+        {
+            return (T) this.get( p_key );
+        }
+
+        @Override
+        public Object remove( final Object p_key )
+        {
+            return this.get( p_key );
+        }
+
+        @Override
+        public void clear()
+        {
+        }
+
+    }
+
+
     /**
      * class for storing the configuration
      */
     public class Data
     {
+        /**
+         * console definition
+         */
+        public final ConfigurationMap console = new ConfigurationMap()
+        {{
+                put( "LineBuffer", 120 );
+                put( "LineNumber", 120 );
+            }};
+        /**
+         * UI config
+         */
+        public final ConfigurationMap ui = new ConfigurationMap()
+        {{
+                put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                put( "windowheight", 1024.0 );
+                put( "windowwidth", 1280.0 );
+                put( "zoom", 4 );
+            }};
         /**
          * configuration version *
          *
@@ -464,21 +517,21 @@ public class CConfiguration
 
         /**
          * geo position object of the start viewpoint
-         */
+         *
         public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
-        /**
+         **
          * window width
-         */
+         *
         public double WindowWidth = 1684;
-        /**
+         **
          * window height
-         */
+         *
         public double WindowHeight = 1024;
-        /**
+         **
          * zoom level of the viewpoint on the start point
-         */
+         *
         public int Zoom = 4;
-
+         **/
 
         /**
          * cell size for sampling
@@ -499,25 +552,8 @@ public class CConfiguration
          * database driver (optional)
          */
         private DatabaseDriver Database = new DatabaseDriver();
-        /**
-         * console definition
-         */
-        private ConsoleData Console = new ConsoleData();
-        /**
-         * UI config
-         */
-        private Map<String, String> UIConfiguration = new HashMap<>();
 
 
-        /**
-         * returns the console data
-         *
-         * @return console data object
-         */
-        public ConsoleData getConsole()
-        {
-            return Console;
-        }
 
         /**
          * returns database driver
@@ -529,21 +565,6 @@ public class CConfiguration
             return Database;
         }
 
-
-        /**
-         * class of the console configuration
-         */
-        public class ConsoleData
-        {
-            /**
-             * maximum char number on each line *
-             */
-            public int LineBuffer = 120;
-            /**
-             * maximum line numbers *
-             */
-            public int LineNumber = 120;
-        }
 
 
         /**

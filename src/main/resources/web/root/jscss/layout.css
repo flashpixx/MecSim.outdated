@@ -8,6 +8,22 @@ html, body
     font:     13px sans-serif;
 }
 
+select
+{
+    width: 100px;
+}
+
+.fixed_width_button
+{
+    width: 50%;
+    top: 10%;
+}
+
+.align-center-div
+{
+    text-align: center;
+}
+
 iframe
 {
     width: 100%;

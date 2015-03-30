@@ -377,26 +377,21 @@ public class CConfiguration
         l_map.put( "cellsampling", m_data.CellSampling );
         l_map.put( "resetconfig", m_data.ResetConfig );
         l_map.put( "threadsleeptime", m_data.ThreadSleepTime );
+
         l_map.put( "routingalgorithm", m_data.RoutingAlgorithm );
         l_map.put( "routingalgorithm_allowed", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
-        l_map.put( "language", m_data.Language );
-        l_map.put( "language_allowed", new String[]{"de", "en"} );
-
-        l_map.put( "console_linebuffer", m_data.Console.LineBuffer );
-        l_map.put( "console_linenumber", m_data.Console.LineNumber );
-
-        l_map.put( "ui", m_data.UIConfiguration );
-
         l_map.put( "routingmap_name", m_data.RoutingMap.Name );
         l_map.put( "routingmap_url", m_data.RoutingMap.URL );
         l_map.put( "routingmap_reimport", m_data.RoutingMap.Reimport );
 
-        l_map.put( "database_active", m_data.Database.Active );
-        l_map.put( "database_driver", m_data.Database.Driver );
-        l_map.put( "database_url", m_data.Database.URL );
-        l_map.put( "database_tableprefix", m_data.Database.TablePrefix );
-        l_map.put( "database_username", m_data.Database.Username );
-        l_map.put( "database_password", m_data.Database.Password );
+
+        l_map.put( "ui", m_data.UIConfiguration );
+
+        l_map.put( "console", CCommon.getMap( "linebuffer", m_data.Console.LineBuffer, "linenumber", m_data.Console.LineNumber ) );
+
+        l_map.put( "language", CCommon.getMap( "current", m_data.Language, "allow", new String[]{"de", "en"} ) );
+
+        l_map.put( "database", CCommon.getMap( "active", m_data.Database.Active, "driver", m_data.Database.Driver, "url", m_data.Database.URL, "prefix", m_data.Database.TablePrefix, "username", m_data.Database.Username, "password", m_data.Database.Password ) );
 
         return l_map;
     }

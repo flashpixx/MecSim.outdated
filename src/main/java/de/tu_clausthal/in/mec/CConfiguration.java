@@ -71,6 +71,17 @@ public class CConfiguration
         }};
     private final ConfigurationMap m_datanew = new ConfigurationMap()
     {{
+            put( "version", 1 );
+            put( "reset", false );
+
+
+            // language data
+            put( "language", new ConfigurationMap()
+            {{
+                    put( "current", "en" );
+                    put( "allow", new String[]{"en", "de"} );
+                }} );
+
 
             // console data
             put( "console", new ConfigurationMap()
@@ -86,6 +97,7 @@ public class CConfiguration
                     put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
                     put( "windowheight", 1024.0 );
                     put( "windowwidth", 1280.0 );
+                    put( "bindport", 9876 );
                     put( "zoom", 4 );
                 }} );
 
@@ -97,11 +109,18 @@ public class CConfiguration
 
                     put( "traffic", new ConfigurationMap()
                     {{
-                            put( "reimport", false );
                             put( "cellsampling", 2 );
-                            put( "routingalgorithm", "astarbi" );
-                            put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
-                            put( "mapname", "europe/germany/lowersaxony" );
+                            put( "routing", new ConfigurationMap()
+                            {{
+                                    put( "algorithm", "astarbi" );
+                                    put( "allow", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
+                                }} );
+                            put( "map", new ConfigurationMap()
+                            {{
+                                    put( "reimport", false );
+                                    put( "mapname", "europe/germany/lowersaxony" );
+                                    put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                }} );
                         }} );
                 }} );
 
@@ -431,28 +450,7 @@ public class CConfiguration
      */
     private Map<String, Object> web_static_get()
     {
-        final Map<String, Object> l_map = new HashMap<>();
-
-        l_map.put( "cellsampling", m_data.CellSampling );
-        l_map.put( "resetconfig", m_data.ResetConfig );
-        l_map.put( "threadsleeptime", m_data.ThreadSleepTime );
-
-        l_map.put( "routingalgorithm", m_data.RoutingAlgorithm );
-        l_map.put( "routingalgorithm_allowed", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
-        l_map.put( "routingmap_name", m_data.RoutingMap.Name );
-        l_map.put( "routingmap_url", m_data.RoutingMap.URL );
-        l_map.put( "routingmap_reimport", m_data.RoutingMap.Reimport );
-
-
-        l_map.put( "ui", m_data.ui );
-
-        l_map.put( "console", m_data.console );
-
-        l_map.put( "language", CCommon.getMap( "current", m_data.Language, "allow", new String[]{"de", "en"} ) );
-
-        l_map.put( "database", CCommon.getMap( "active", m_data.Database.Active, "driver", m_data.Database.Driver, "url", m_data.Database.URL, "prefix", m_data.Database.TablePrefix, "username", m_data.Database.Username, "password", m_data.Database.Password ) );
-
-        return l_map;
+        return m_datanew;
     }
 
 

@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec;
 
-import com.google.gson.Gson;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.CReflection;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -65,18 +65,24 @@ public class CConfiguration
      * singleton instance variable
      */
     private static final CConfiguration c_instance = new CConfiguration();
+    /**
+     * location map
+     */
     private final Map<String, File> m_location = new HashMap<String, File>()
     {{
             put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
         }};
-    private final ConfigurationMap m_datanew = new ConfigurationMap()
+    /**
+     * configuration map
+     */
+    private final CNameHashMap.CImmutable m_datanew = new CNameHashMap.CImmutable()
     {{
-            put( "version", 1 );
             put( "reset", false );
+            put( "version", 1 );
 
 
             // language data
-            put( "language", new ConfigurationMap()
+            put( "language", new CNameHashMap.CImmutable()
             {{
                     put( "current", "en" );
                     put( "allow", new String[]{"en", "de"} );
@@ -84,7 +90,7 @@ public class CConfiguration
 
 
             // console data
-            put( "console", new ConfigurationMap()
+            put( "console", new CNameHashMap.CImmutable()
             {{
                     put( "LineBuffer", 120 );
                     put( "LineNumber", 120 );
@@ -92,7 +98,7 @@ public class CConfiguration
 
 
             // ui data
-            put( "ui", new ConfigurationMap()
+            put( "ui", new CNameHashMap.CImmutable()
             {{
                     put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
                     put( "windowheight", 1024.0 );
@@ -103,22 +109,22 @@ public class CConfiguration
 
 
             // main simulation data
-            put( "simulation", new ConfigurationMap()
+            put( "simulation", new CNameHashMap.CImmutable()
             {{
                     put( "threadsleeptime", 25 );
 
-                    put( "traffic", new ConfigurationMap()
+                    put( "traffic", new CNameHashMap.CImmutable()
                     {{
                             put( "cellsampling", 2 );
-                            put( "routing", new ConfigurationMap()
+                            put( "routing", new CNameHashMap.CImmutable()
                             {{
                                     put( "algorithm", "astarbi" );
                                     put( "allow", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
                                 }} );
-                            put( "map", new ConfigurationMap()
+                            put( "map", new CNameHashMap.CImmutable()
                             {{
                                     put( "reimport", false );
-                                    put( "mapname", "europe/germany/lowersaxony" );
+                                    put( "name", "europe/germany/lowersaxony" );
                                     put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
                                 }} );
                         }} );
@@ -126,7 +132,7 @@ public class CConfiguration
 
 
             // database data
-            put( "database", new ConfigurationMap()
+            put( "database", new CNameHashMap.CImmutable()
             {{
                     put( "active", false );
                     put( "driver", null );
@@ -135,6 +141,10 @@ public class CConfiguration
                     put( "username", null );
                     put( "password", null );
                 }} );
+
+
+            // manifest data
+            put( "manifest", new CNameHashMap.CImmutable() );
 
         }};
     /**
@@ -160,7 +170,10 @@ public class CConfiguration
         {
             Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
+            {
                 m_manifest.put( l_item.getKey().toString(), l_item.getValue().toString() );
+                ( (Map) m_datanew.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
+            }
         }
         catch ( final IOException l_exception )
         {
@@ -318,7 +331,7 @@ public class CConfiguration
             //final GsonBuilder l_builder = new GsonBuilder();
             //l_builder.enableComplexMapKeySerialization();
             //l_builder.create().toJson( m_data, l_writer );
-            new Gson().toJson( m_data, l_writer );
+            //new Gson().toJson( m_data, l_writer );
         }
         catch ( final Exception l_exception )
         {
@@ -354,7 +367,7 @@ public class CConfiguration
                 Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
         )
         {
-            l_tmp = new Gson().fromJson( l_reader, Data.class );
+            //l_tmp = new Gson().fromJson( l_reader, Data.class );
         }
         catch ( final Exception l_exception )
         {
@@ -448,7 +461,7 @@ public class CConfiguration
      *
      * @return data
      */
-    private Map<String, Object> web_static_get()
+    private CNameHashMap.CImmutable web_static_get()
     {
         return m_datanew;
     }
@@ -494,28 +507,6 @@ public class CConfiguration
     }
 
 
-    public static class ConfigurationMap extends HashMap<String, Object>
-    {
-
-        public <T> T getTypedValue( final String p_key )
-        {
-            return (T) this.get( p_key.trim().toLowerCase() );
-        }
-
-        @Override
-        public Object remove( final Object p_key )
-        {
-            return this.get( p_key );
-        }
-
-        @Override
-        public void clear()
-        {
-        }
-
-    }
-
-
     /**
      * class for storing the configuration
      */
@@ -524,7 +515,7 @@ public class CConfiguration
         /**
          * console definition
          */
-        public final ConfigurationMap console = new ConfigurationMap()
+        public final CNameHashMap.CImmutable console = new CNameHashMap.CImmutable()
         {{
                 put( "LineBuffer", 120 );
                 put( "LineNumber", 120 );
@@ -532,7 +523,7 @@ public class CConfiguration
         /**
          * UI config
          */
-        public final ConfigurationMap ui = new ConfigurationMap()
+        public final CNameHashMap.CImmutable ui = new CNameHashMap.CImmutable()
         {{
                 put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
                 put( "windowheight", 1024.0 );

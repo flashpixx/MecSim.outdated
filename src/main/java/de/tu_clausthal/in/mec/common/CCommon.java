@@ -23,12 +23,15 @@
 
 package de.tu_clausthal.in.mec.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.drapostolos.typeparser.TypeParser;
 import com.github.drapostolos.typeparser.TypeParserException;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.file.Files;
@@ -53,6 +56,26 @@ public class CCommon
     {
     }
 
+
+    /**
+     * returns the global Json builder object
+     *
+     * @return Json object
+     */
+    public static String toJson( final Object p_data )
+    {
+        try (
+                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
+        )
+        {
+            new ObjectMapper().writer().writeValue( l_stream, p_data );
+            return l_stream.toString();
+        }
+        catch ( IOException e )
+        {
+        }
+        return null;
+    }
 
     /**
      * remove from a string the system package name

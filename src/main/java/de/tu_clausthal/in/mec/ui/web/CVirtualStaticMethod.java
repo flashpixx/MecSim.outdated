@@ -25,16 +25,12 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import com.github.drapostolos.typeparser.TypeParser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,16 +42,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
 {
 
     /**
-     * Json module
-     */
-    protected static final Gson s_json = new GsonBuilder().create();
-    /**
-     * Json object type mapping
-     */
-    protected static final Type s_jsonobjecttype = new TypeToken<Map<Object, Object>>()
-    {
-    }.getType();
-    /**
      * type parser
      */
     protected static final TypeParser s_parser = TypeParser.newBuilder().build();
@@ -63,6 +49,10 @@ public class CVirtualStaticMethod implements IVirtualLocation
      * method handle *
      */
     private final MethodHandle m_method;
+    /**
+     * return-type of the method
+     */
+    private final Class<?> m_methodreturntype;
     /**
      * object
      */
@@ -88,6 +78,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
     {
         m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
         m_method = p_method.getHandle();
+        m_methodreturntype = p_method.getMethod().getReturnType();
         m_object = p_object;
         m_arguments = p_method.getMethod().getParameterCount();
 
@@ -108,43 +99,35 @@ public class CVirtualStaticMethod implements IVirtualLocation
         if ( NanoHTTPD.Method.PUT.equals( p_session.getMethod() ) || NanoHTTPD.Method.POST.equals( p_session.getMethod() ) )
             p_session.parseBody( null );
 
-        Map<Object, Object> l_return;
         try
         {
             // invoke method
-            final Object l_returnvalue;
+            final Object l_return;
             switch ( m_arguments )
             {
                 case 0:
-                    l_returnvalue = m_method.invoke( m_object );
+                    l_return = m_method.invoke( m_object );
                     break;
                 case 1:
-                    l_returnvalue = m_method.invoke( m_object, this.convertMap( p_session.getParms() ) );
+                    l_return = m_method.invoke( m_object, this.convertMap( p_session.getParms() ) );
                     break;
                 case 2:
-                    l_returnvalue = m_method.invoke( m_object, this.convertMap( p_session.getParms() ), p_session.getHeaders() );
+                    l_return = m_method.invoke( m_object, this.convertMap( p_session.getParms() ), p_session.getHeaders() );
                     break;
                 default:
                     throw new IllegalArgumentException( CCommon.getResourceString( this, "argumentnumber", m_arguments ) );
             }
 
-            l_return = ( l_returnvalue instanceof Map ) ? (Map) l_returnvalue : new HashMap<Object, Object>()
-            {{
-                    put( "data", l_returnvalue );
-                }};
+            return l_return == null ? "{}" : CCommon.toJson( l_return );
         }
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-            l_return = new HashMap<Object, Object>()
+            return CCommon.toJson( new HashMap<String, String>()
             {{
                     put( "error", l_throwable.getMessage() );
-                }};
+                }} );
         }
-
-        // http://stackoverflow.com/questions/14944419/gson-to-hashmap
-        // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
-        return s_json.toJson( l_return, s_jsonobjecttype );
     }
 
     @Override

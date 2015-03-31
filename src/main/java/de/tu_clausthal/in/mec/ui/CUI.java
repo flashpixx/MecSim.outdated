@@ -145,8 +145,8 @@ public class CUI extends Application
             @Override
             public void handle( final WindowEvent p_event )
             {
-                CConfiguration.getInstance().get().ui.put( "windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth() );
-                CConfiguration.getInstance().get().ui.put( "windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight() );
+                CConfiguration.getInstance().get().setTraverse( "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth() );
+                CConfiguration.getInstance().get().setTraverse( "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight() );
 
                 CConfiguration.getInstance().write();
             }
@@ -161,7 +161,7 @@ public class CUI extends Application
 
         // create tab pane for content and scene
         l_root.setCenter( m_tabpane );
-        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().ui.<Double>getTypedValue( "windowwidth" ), CConfiguration.getInstance().get().ui.<Double>getTypedValue( "windowheight" ) ) );
+        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ), CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) );
         p_stage.sizeToScene();
         p_stage.show();
 

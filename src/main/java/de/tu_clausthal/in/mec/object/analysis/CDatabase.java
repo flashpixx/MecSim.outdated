@@ -24,15 +24,11 @@
 package de.tu_clausthal.in.mec.object.analysis;
 
 
-import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.Map;
 
 
@@ -54,9 +50,11 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
 
     /**
      * ctor - context initialization
+     * @bug incomplete
      */
     public CDatabase()
     {
+        /*
         if ( !CConfiguration.getInstance().get().getDatabase().isConnectable() ) return;
 
         m_datasource = new BasicDataSource();
@@ -66,6 +64,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().Password );
 
         this.createTableIfNotExists( "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)", new String[]{"add primary key (step,zonegroup,zone)"} );
+        */
     }
 
     /**
@@ -75,9 +74,11 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      * @param p_createsql  create sql without "create >tablename<"
      * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
      * @todo check database independence
+     * @bug incomplete
      */
     protected void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
     {
+        /*
         final String l_table = CConfiguration.getInstance().get().getDatabase().TablePrefix == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().TablePrefix + p_tablename;
 
         try (
@@ -97,6 +98,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         {
             CLogger.error( l_exception );
         }
+        */
     }
 
     @Override

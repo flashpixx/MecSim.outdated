@@ -172,7 +172,7 @@ public class CMainLoop implements Runnable
 
 
                 m_simulationcount++;
-                Thread.sleep( CConfiguration.getInstance().get().ThreadSleepTime );
+                Thread.sleep( CConfiguration.getInstance().get().<Integer>getTraverse( "simulation/threadsleeptime" ) );
             }
             catch ( final InterruptedException l_exception )
             {

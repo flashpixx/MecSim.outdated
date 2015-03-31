@@ -26,20 +26,18 @@ package de.tu_clausthal.in.mec;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.CReflection;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Serializable;
-import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -170,10 +168,7 @@ public class CConfiguration
         {
             Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
-            {
-                m_manifest.put( l_item.getKey().toString(), l_item.getValue().toString() );
                 ( (Map) m_datanew.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
-            }
         }
         catch ( final IOException l_exception )
         {
@@ -315,25 +310,12 @@ public class CConfiguration
     {
         try
         {
+
             this.createDirectories();
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
+            FileUtils.writeStringToFile( this.getLocation( "root", c_ConfigFilename ), CCommon.toJson( m_datanew ) );
 
-
-        try (
-                Writer l_writer = new OutputStreamWriter( new FileOutputStream( this.getLocation( "root", c_ConfigFilename ) ), "UTF-8" );
-        )
-        {
-            // http://sohu.io/questions/975042/gson-handles-case-when-synchronized-hashmap-as-class-member
-            //final GsonBuilder l_builder = new GsonBuilder();
-            //l_builder.enableComplexMapKeySerialization();
-            //l_builder.create().toJson( m_data, l_writer );
-            //new Gson().toJson( m_data, l_writer );
         }
-        catch ( final Exception l_exception )
+        catch ( final IOException l_exception )
         {
             CLogger.error( l_exception );
         }

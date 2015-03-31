@@ -23,9 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -43,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Map;
 
@@ -64,16 +60,7 @@ public class CServer extends NanoHTTPD
      * virtual-locations
      */
     protected final CVirtualLocation m_virtuallocation;
-    /**
-     * Json module
-     */
-    protected final Gson m_json = new GsonBuilder().create();
-    /**
-     * Json type mapping
-     */
-    protected final Type m_jsontype = new TypeToken<Map<Object, Object>>()
-    {
-    }.getType();
+
 
 
     /**
@@ -234,10 +221,7 @@ public class CServer extends NanoHTTPD
     protected final Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         CLogger.info( p_session.getUri() );
-
-        // http://stackoverflow.com/questions/14944419/gson-to-hashmap
-        // http://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
-        return new Response( Response.Status.OK, "application/json; charset=utf-8", m_json.toJson( p_location.get( p_session ), m_jsontype ) );
+        return new Response( Response.Status.OK, "application/json; charset=utf-8", p_location.<String>get( p_session ) );
     }
 
 
@@ -252,7 +236,7 @@ public class CServer extends NanoHTTPD
     protected final Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         final Response l_response;
-        final URL l_physicalfile = p_location.get( p_session );
+        final URL l_physicalfile = p_location.<URL>get( p_session );
         final String l_mimetype = this.getMimeType( l_physicalfile );
         CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
 

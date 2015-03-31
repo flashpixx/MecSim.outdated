@@ -31,6 +31,7 @@ import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
@@ -70,9 +71,9 @@ public class COSMViewer extends JXMapViewer
 
         LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getLocation( "root" ), false );
         this.setTileFactory( l_tileFactory );
-        this.setZoom( CConfiguration.getInstance().get().Zoom );
-        this.setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
-        this.setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
+        this.setZoom( CConfiguration.getInstance().get().ui.<Integer>getTypedValue( "zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
 
         this.setOverlayPainter( m_painter );
 
@@ -94,9 +95,9 @@ public class COSMViewer extends JXMapViewer
      */
     public void reset()
     {
-        this.setZoom( CConfiguration.getInstance().get().Zoom );
-        this.setCenterPosition( CConfiguration.getInstance().get().ViewPoint );
-        this.setAddressLocation( CConfiguration.getInstance().get().ViewPoint );
+        this.setZoom( CConfiguration.getInstance().get().ui.<Integer>getTypedValue( "zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
     }
 
     /**

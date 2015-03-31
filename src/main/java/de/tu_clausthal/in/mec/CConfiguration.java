@@ -69,6 +69,74 @@ public class CConfiguration
     {{
             put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
         }};
+    private final ConfigurationMap m_datanew = new ConfigurationMap()
+    {{
+            put( "version", 1 );
+            put( "reset", false );
+
+
+            // language data
+            put( "language", new ConfigurationMap()
+            {{
+                    put( "current", "en" );
+                    put( "allow", new String[]{"en", "de"} );
+                }} );
+
+
+            // console data
+            put( "console", new ConfigurationMap()
+            {{
+                    put( "LineBuffer", 120 );
+                    put( "LineNumber", 120 );
+                }} );
+
+
+            // ui data
+            put( "ui", new ConfigurationMap()
+            {{
+                    put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                    put( "windowheight", 1024.0 );
+                    put( "windowwidth", 1280.0 );
+                    put( "bindport", 9876 );
+                    put( "zoom", 4 );
+                }} );
+
+
+            // main simulation data
+            put( "simulation", new ConfigurationMap()
+            {{
+                    put( "threadsleeptime", 25 );
+
+                    put( "traffic", new ConfigurationMap()
+                    {{
+                            put( "cellsampling", 2 );
+                            put( "routing", new ConfigurationMap()
+                            {{
+                                    put( "algorithm", "astarbi" );
+                                    put( "allow", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
+                                }} );
+                            put( "map", new ConfigurationMap()
+                            {{
+                                    put( "reimport", false );
+                                    put( "mapname", "europe/germany/lowersaxony" );
+                                    put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                }} );
+                        }} );
+                }} );
+
+
+            // database data
+            put( "database", new ConfigurationMap()
+            {{
+                    put( "active", false );
+                    put( "driver", null );
+                    put( "url", null );
+                    put( "tableprefix", null );
+                    put( "username", null );
+                    put( "password", null );
+                }} );
+
+        }};
     /**
      * property that stores the configuration data
      */
@@ -246,6 +314,10 @@ public class CConfiguration
                 Writer l_writer = new OutputStreamWriter( new FileOutputStream( this.getLocation( "root", c_ConfigFilename ) ), "UTF-8" );
         )
         {
+            // http://sohu.io/questions/975042/gson-handles-case-when-synchronized-hashmap-as-class-member
+            //final GsonBuilder l_builder = new GsonBuilder();
+            //l_builder.enableComplexMapKeySerialization();
+            //l_builder.create().toJson( m_data, l_writer );
             new Gson().toJson( m_data, l_writer );
         }
         catch ( final Exception l_exception )
@@ -290,6 +362,7 @@ public class CConfiguration
         }
 
         // check the configuration values and set it
+        /*
         if ( ( l_tmp == null ) || ( l_tmp.ResetConfig ) || ( l_tmp.Version < m_data.Version ) )
             CLogger.warn( CCommon.getResourceString( this, "default" ) );
         else
@@ -299,6 +372,7 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "uibindportdefault" ) );
                 l_tmp.UIBindPort = m_data.UIBindPort;
             }
+
             if ( l_tmp.ViewPoint == null )
             {
                 CLogger.warn( CCommon.getResourceString( this, "viewpointdefault" ) );
@@ -314,6 +388,7 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "widthdefault" ) );
                 l_tmp.WindowWidth = m_data.WindowWidth;
             }
+
             if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
             {
                 CLogger.warn( CCommon.getResourceString( this, "routingdefault" ) );
@@ -339,6 +414,7 @@ public class CConfiguration
                 CLogger.warn( CCommon.getResourceString( this, "databasedefault" ) );
                 l_tmp.Database = m_data.Database;
             }
+            /*
             if ( l_tmp.Console == null )
             {
                 CLogger.warn( CCommon.getResourceString( this, "consoledefault" ) );
@@ -346,7 +422,9 @@ public class CConfiguration
             }
 
             m_data = l_tmp;
+
         }
+        */
 
         // append all Jar files to the classpath of the system class loader
         try
@@ -372,33 +450,7 @@ public class CConfiguration
      */
     private Map<String, Object> web_static_get()
     {
-        final Map<String, Object> l_map = new HashMap<>();
-
-        l_map.put( "cellsampling", m_data.CellSampling );
-        l_map.put( "resetconfig", m_data.ResetConfig );
-        l_map.put( "threadsleeptime", m_data.ThreadSleepTime );
-        l_map.put( "routingalgorithm", m_data.RoutingAlgorithm );
-        l_map.put( "routingalgorithm_allowed", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
-        l_map.put( "language", m_data.Language );
-        l_map.put( "language_allowed", new String[]{"de", "en"} );
-
-        l_map.put( "console_linebuffer", m_data.Console.LineBuffer );
-        l_map.put( "console_linenumber", m_data.Console.LineNumber );
-
-        l_map.put( "ui", m_data.UIConfiguration );
-
-        l_map.put( "routingmap_name", m_data.RoutingMap.Name );
-        l_map.put( "routingmap_url", m_data.RoutingMap.URL );
-        l_map.put( "routingmap_reimport", m_data.RoutingMap.Reimport );
-
-        l_map.put( "database_active", m_data.Database.Active );
-        l_map.put( "database_driver", m_data.Database.Driver );
-        l_map.put( "database_url", m_data.Database.URL );
-        l_map.put( "database_tableprefix", m_data.Database.TablePrefix );
-        l_map.put( "database_username", m_data.Database.Username );
-        l_map.put( "database_password", m_data.Database.Password );
-
-        return l_map;
+        return m_datanew;
     }
 
 
@@ -409,32 +461,58 @@ public class CConfiguration
      * @param p_header header data - configuration changeable only from localhost
      * @bug incomplete
      */
-    private void web_static_set( final Map<String, String> p_data, final Map<String, String> p_header )
+    private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )
     {
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
-        m_data.CellSampling = Math.max( 1, Integer.parseInt( p_data.get( "cellsampling" ) ) );
-        m_data.ResetConfig = Boolean.parseBoolean( p_data.get( "resetconfig" ) );
-        m_data.ThreadSleepTime = Math.max( 0, Integer.parseInt( p_data.get( "threadsleeptime" ) ) );
-        m_data.RoutingAlgorithm = CCommon.getCheckedValue( p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
-        m_data.Language = CCommon.getCheckedValue( p_data.get( "language" ), "en", new String[]{"en", "de"} );
+        m_data.ui.putAll( (Map) p_data.get( "ui" ) );
+        m_data.console.putAll( (Map) p_data.get( "console" ) );
 
-        m_data.Console.LineBuffer = Math.max( 1, Integer.parseInt( p_data.get( "console_linebuffer" ) ) );
-        m_data.Console.LineNumber = Math.max( 1, Integer.parseInt( p_data.get( "console_linenumber" ) ) );
 
-        //m_data.UIConfiguration         = p_data.get( "ui" );
 
-        m_data.RoutingMap.Name = CCommon.getNonEmptyValue( p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
-        m_data.RoutingMap.URL = CCommon.getNonEmptyValue( p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
-        m_data.RoutingMap.Reimport = Boolean.parseBoolean( p_data.get( "routingmap_reimport" ) );
 
-        m_data.Database.Active = Boolean.parseBoolean( p_data.get( "database_active" ) );
-        m_data.Database.Driver = p_data.get( "database_driver" );
-        m_data.Database.URL = p_data.get( "database_url" );
-        m_data.Database.TablePrefix = p_data.get( "database_tableprefix" );
-        m_data.Database.Username = p_data.get( "database_username" );
-        m_data.Database.Password = p_data.get( "database_password" );
+        m_data.CellSampling = Math.max( 1, (Integer) p_data.get( "cellsampling" ) );
+        m_data.ResetConfig = (Boolean) p_data.get( "resetconfig" );
+        m_data.ThreadSleepTime = Math.max( 0, (Integer) p_data.get( "threadsleeptime" ) );
+        m_data.RoutingAlgorithm = CCommon.getCheckedValue( (String) p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
+        m_data.Language = CCommon.getCheckedValue( (String) p_data.get( "language" ), "en", new String[]{"en", "de"} );
+
+        //m_data.Console.LineBuffer = Math.max( 1, (Integer) p_data.get( "console_linebuffer" ) );
+        //m_data.Console.LineNumber = Math.max( 1, (Integer) p_data.get( "console_linenumber" ) );
+
+        m_data.RoutingMap.Name = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
+        m_data.RoutingMap.URL = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
+        m_data.RoutingMap.Reimport = Boolean.parseBoolean( (String) p_data.get( "routingmap_reimport" ) );
+
+        m_data.Database.Active = Boolean.parseBoolean( (String) p_data.get( "database_active" ) );
+        m_data.Database.Driver = (String) p_data.get( "database_driver" );
+        m_data.Database.URL = (String) p_data.get( "database_url" );
+        m_data.Database.TablePrefix = (String) p_data.get( "database_tableprefix" );
+        m_data.Database.Username = (String) p_data.get( "database_username" );
+        m_data.Database.Password = (String) p_data.get( "database_password" );
+    }
+
+
+    public static class ConfigurationMap extends HashMap<String, Object>
+    {
+
+        public <T> T getTypedValue( final String p_key )
+        {
+            return (T) this.get( p_key.trim().toLowerCase() );
+        }
+
+        @Override
+        public Object remove( final Object p_key )
+        {
+            return this.get( p_key );
+        }
+
+        @Override
+        public void clear()
+        {
+        }
+
     }
 
 
@@ -443,6 +521,24 @@ public class CConfiguration
      */
     public class Data
     {
+        /**
+         * console definition
+         */
+        public final ConfigurationMap console = new ConfigurationMap()
+        {{
+                put( "LineBuffer", 120 );
+                put( "LineNumber", 120 );
+            }};
+        /**
+         * UI config
+         */
+        public final ConfigurationMap ui = new ConfigurationMap()
+        {{
+                put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                put( "windowheight", 1024.0 );
+                put( "windowwidth", 1280.0 );
+                put( "zoom", 4 );
+            }};
         /**
          * configuration version *
          *
@@ -454,33 +550,41 @@ public class CConfiguration
          */
         public int UIBindPort = 9876;
         /**
-         * cell size for sampling
-         */
-        public int CellSampling = 2;
-        /**
          * flag to reset the configuration
          */
         public boolean ResetConfig = false;
-        /**
-         * geo position object of the start viewpoint
-         */
-        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
-        /**
-         * zoom level of the viewpoint on the start point
-         */
-        public int Zoom = 4;
         /**
          * thread sleep time in milliseconds
          */
         public int ThreadSleepTime = 25;
         /**
-         * window width
+         * language code
          */
-        public double WindowWidth = 1684;
+        public String Language = "en";
+
+
         /**
+         * geo position object of the start viewpoint
+         *
+        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
+         **
+         * window width
+         *
+        public double WindowWidth = 1684;
+         **
          * window height
-         */
+         *
         public double WindowHeight = 1024;
+         **
+         * zoom level of the viewpoint on the start point
+         *
+        public int Zoom = 4;
+         **/
+
+        /**
+         * cell size for sampling
+         */
+        public int CellSampling = 2;
         /**
          * geo map for graph
          */
@@ -490,33 +594,14 @@ public class CConfiguration
          * algorithm)
          */
         public String RoutingAlgorithm = "astarbi";
-        /**
-         * language code
-         */
-        public String Language = "en";
+
+
         /**
          * database driver (optional)
          */
         private DatabaseDriver Database = new DatabaseDriver();
-        /**
-         * console definition
-         */
-        private ConsoleData Console = new ConsoleData();
-        /**
-         * UI config
-         */
-        private Map<String, String> UIConfiguration = new HashMap<>();
 
 
-        /**
-         * returns the console data
-         *
-         * @return console data object
-         */
-        public ConsoleData getConsole()
-        {
-            return Console;
-        }
 
         /**
          * returns database driver
@@ -528,21 +613,6 @@ public class CConfiguration
             return Database;
         }
 
-
-        /**
-         * class of the console configuration
-         */
-        public class ConsoleData
-        {
-            /**
-             * maximum char number on each line *
-             */
-            public int LineBuffer = 120;
-            /**
-             * maximum line numbers *
-             */
-            public int LineNumber = 120;
-        }
 
 
         /**

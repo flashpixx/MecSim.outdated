@@ -38,7 +38,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
@@ -80,7 +82,11 @@ public class CConfiguration
             put( "language", new CNameHashMap.CImmutable()
             {{
                     put( "current", "en" );
-                    put( "allow", new String[]{"en", "de"} );
+                    put( "allow", new ArrayList<String>()
+                    {{
+                            add( "en" );
+                            add( "de" );
+                        }} );
                 }} );
 
 
@@ -114,7 +120,14 @@ public class CConfiguration
                             put( "routing", new CNameHashMap.CImmutable()
                             {{
                                     put( "algorithm", "astarbi" );
-                                    put( "allow", new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
+                                    put( "allow", new ArrayList<String>()
+                                    {{
+                                            add( "astar" );
+                                            add( "astarbi" );
+                                            add( "dijkstra" );
+                                            add( "dijkstrabi" );
+                                            add( "dijkstraOneToMany" );
+                                        }} );
                                 }} );
                             put( "map", new CNameHashMap.CImmutable()
                             {{
@@ -303,28 +316,23 @@ public class CConfiguration
      */
     public void read()
     {
-
-        // create the configuration directory
-        try
-        {
-            this.createDirectories();
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
-
         final File l_config = this.getLocation( "root", c_filename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
 
-        // read main configuration remove manifest
+        // read main configuration - remove manifest item & convert geoposition
         try
         {
-            final Map<String, Object> l_data = CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) );
-            //l_data.remove( "manifest" );
+            this.createDirectories();
+            final CNameHashMap l_data = new CNameHashMap();
+            l_data.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
+
+
+            l_data.remove( "manifest" );
+
+            final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) l_data.get( "ui" ) ).get( "geoposition" ) );
+            l_data.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
+
             //m_configuration.putAll( l_data );
-            //System.out.println(l_data);
-            //System.out.println(m_configuration);
         }
         catch ( final IOException l_exception )
         {
@@ -337,10 +345,6 @@ public class CConfiguration
             URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
                 CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, CCommon.getResourceURL( m_location.get( "jar" ) + File.separator + l_jar ) );
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception );
         }
         catch ( final Throwable l_throwable )
         {

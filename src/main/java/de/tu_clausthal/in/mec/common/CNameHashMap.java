@@ -54,9 +54,12 @@ public class CNameHashMap extends HashMap<String, Object>
                 ( (CNameHashMap) l_return ).setTraverse( p_path.getSubPath( 1 ), p_value );
                 return;
             }
-
-            throw new IllegalStateException( CCommon.getResourceString( this, "notfound", p_path ) );
+            if ( !( l_return instanceof Map ) )
+                throw new IllegalStateException( CCommon.getResourceString( this, "notfound", p_path ) );
         }
+
+        if ( !this.containsKey( p_path.get( 0 ) ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "notfound", p_path ) );
 
         this.put( p_path.get( 0 ), p_value );
     }

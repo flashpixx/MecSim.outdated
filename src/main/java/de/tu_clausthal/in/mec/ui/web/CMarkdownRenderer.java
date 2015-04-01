@@ -137,9 +137,9 @@ public class CMarkdownRenderer extends LinkRenderer
 
             final String[] l_parts = StringUtils.split( p_node.getText(), "|" );
             if ( l_parts.length == 1 )
-                return super.render( new ExpLinkNode( l_parts[0], "http://" + CConfiguration.getInstance().get().Language + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[0].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[0] );
+                return super.render( new ExpLinkNode( l_parts[0], "http://" + CConfiguration.getInstance().getNew().<String>getTraverse( "language/current" ) + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[0].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[0] );
             if ( l_parts.length == 2 )
-                return super.render( new ExpLinkNode( l_parts[1], "http://" + CConfiguration.getInstance().get().Language + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[0].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[1] );
+                return super.render( new ExpLinkNode( l_parts[1], "http://" + CConfiguration.getInstance().getNew().<String>getTraverse( "language/current" ) + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[0].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[1] );
             if ( l_parts.length == 3 )
                 return super.render( new ExpLinkNode( l_parts[2], "http://" + l_parts[0].trim() + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[1].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[2] );
 

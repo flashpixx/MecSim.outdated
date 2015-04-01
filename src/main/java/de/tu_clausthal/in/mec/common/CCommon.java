@@ -118,7 +118,7 @@ public class CCommon
      * @param p_value string input class
      * @param p_types type classes
      * @return converted type
-     * @para, p_parser type parser
+     * @param p_parser type parser
      */
     public static Object convertValue( final String p_value, final Class[] p_types, final TypeParser p_parser )
     {

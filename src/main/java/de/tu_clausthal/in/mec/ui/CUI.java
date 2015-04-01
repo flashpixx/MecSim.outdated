@@ -139,7 +139,7 @@ public class CUI extends Application
         this.setUserAgentStylesheet( null );
         if ( m_stage == null ) m_stage = p_stage;
 
-        p_stage.setTitle( CConfiguration.getInstance().getManifest().get( "Project-Name" ) );
+        p_stage.setTitle( CConfiguration.getInstance().getNew().<String>getTraverse( "manifest/project-name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
         {
             @Override

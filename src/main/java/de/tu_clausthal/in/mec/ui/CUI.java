@@ -145,6 +145,8 @@ public class CUI extends Application
             @Override
             public void handle( final WindowEvent p_event )
             {
+                CBootstrap.beforeStageShutdown( CUI.this );
+
                 CConfiguration.getInstance().getNew().setTraverse( "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth() );
                 CConfiguration.getInstance().getNew().setTraverse( "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight() );
 

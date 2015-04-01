@@ -71,9 +71,9 @@ public class COSMViewer extends JXMapViewer
 
         LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getLocation( "root" ), false );
         this.setTileFactory( l_tileFactory );
-        this.setZoom( CConfiguration.getInstance().get().ui.<Integer>getTypedValue( "zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
+        this.setZoom( CConfiguration.getInstance().getNew().<Integer>getTraverse( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().getNew().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().getNew().<GeoPosition>getTraverse( "ui/geoposition" ) );
 
         this.setOverlayPainter( m_painter );
 
@@ -84,7 +84,7 @@ public class COSMViewer extends JXMapViewer
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
         this.addKeyListener( m_keylistener );
 
-        this.reset();
+        this.resetConfiguration();
 
         CBootstrap.afterOSMViewerInit( this );
     }
@@ -93,12 +93,22 @@ public class COSMViewer extends JXMapViewer
     /**
      * resets the view *
      */
-    public void reset()
+    public void resetConfiguration()
     {
-        this.setZoom( CConfiguration.getInstance().get().ui.<Integer>getTypedValue( "zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
+        this.setZoom( CConfiguration.getInstance().getNew().<Integer>getTraverse( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().getNew().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().getNew().<GeoPosition>getTraverse( "ui/geoposition" ) );
     }
+
+    /**
+     * stores the current configuration
+     */
+    public void setConfiguration()
+    {
+        CConfiguration.getInstance().getNew().<Integer>setTraverse( "ui/zoom", this.getZoom() );
+        CConfiguration.getInstance().getNew().<GeoPosition>setTraverse( "ui/geoposition", this.getCenterPosition() );
+    }
+
 
     /**
      * returns the compounend painter

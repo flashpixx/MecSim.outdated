@@ -62,6 +62,17 @@ public class CBootstrap
     }
 
 
+    /**
+     * is called at UI shutdown
+     *
+     * @param p_ui
+     */
+    public static void beforeStageShutdown( final CUI p_ui )
+    {
+        p_ui.<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().setConfiguration();
+    }
+
+
     /*
      * is called after the frame is initialize and before the UI configuration is load
      *
@@ -133,7 +144,7 @@ public class CBootstrap
     public static void onSimulationReset( final CSimulation p_simulation )
     {
         if ( p_simulation.hasUI() )
-            p_simulation.getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().reset();
+            p_simulation.getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().resetConfiguration();
 
     }
 

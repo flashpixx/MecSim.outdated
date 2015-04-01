@@ -60,10 +60,10 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         if ( !this.isConnectable() ) return;
 
         m_datasource = new BasicDataSource();
-        m_datasource.setDriverClassName( CConfiguration.getInstance().getNew().<String>getTraverse( "database/driver" ) );
-        m_datasource.setUrl( CConfiguration.getInstance().getNew().<String>getTraverse( "database/url" ) );
-        m_datasource.setUsername( CConfiguration.getInstance().getNew().<String>getTraverse( "database/username" ) );
-        m_datasource.setPassword( CConfiguration.getInstance().getNew().<String>getTraverse( "database/password" ) );
+        m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>getTraverse( "database/driver" ) );
+        m_datasource.setUrl( CConfiguration.getInstance().get().<String>getTraverse( "database/url" ) );
+        m_datasource.setUsername( CConfiguration.getInstance().get().<String>getTraverse( "database/username" ) );
+        m_datasource.setPassword( CConfiguration.getInstance().get().<String>getTraverse( "database/password" ) );
 
         this.createTableIfNotExists( "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)", new String[]{"add primary key (step,zonegroup,zone)"} );
     }
@@ -78,7 +78,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     protected void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
     {
-        final String l_table = CConfiguration.getInstance().getNew().<String>getTraverse( "database/tableprefix" ) == null ? p_tablename : CConfiguration.getInstance().getNew().<String>getTraverse( "database/tableprefix" ) + p_tablename;
+        final String l_table = CConfiguration.getInstance().get().<String>getTraverse( "database/tableprefix" ) == null ? p_tablename : CConfiguration.getInstance().get().<String>getTraverse( "database/tableprefix" ) + p_tablename;
 
         try (
                 final Connection l_connect = m_datasource.getConnection();
@@ -106,10 +106,10 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     private boolean isConnectable()
     {
-        final String l_driver = CConfiguration.getInstance().getNew().<String>getTraverse( "database/driver" );
-        final String l_url = CConfiguration.getInstance().getNew().<String>getTraverse( "database/url" );
+        final String l_driver = CConfiguration.getInstance().get().<String>getTraverse( "database/driver" );
+        final String l_url = CConfiguration.getInstance().get().<String>getTraverse( "database/url" );
 
-        return CConfiguration.getInstance().getNew().<Boolean>getTraverse( "database/active" ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
+        return CConfiguration.getInstance().get().<Boolean>getTraverse( "database/active" ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
     }
 
 

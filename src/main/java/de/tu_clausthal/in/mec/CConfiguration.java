@@ -57,7 +57,7 @@ public class CConfiguration
     /**
      * name of the configuration file
      */
-    private static final String c_ConfigFilename = "config.json";
+    private static final String c_filename = "config.json";
     /**
      * singleton instance variable
      */
@@ -72,7 +72,7 @@ public class CConfiguration
     /**
      * configuration map
      */
-    private final CNameHashMap.CImmutable m_datanew = new CNameHashMap.CImmutable()
+    private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
     {{
             put( "reset", false );
             put( "version", 1 );
@@ -159,7 +159,7 @@ public class CConfiguration
         {
             final Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
-                ( (Map) m_datanew.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
+                ( (Map) m_configuration.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
         }
         catch ( final IOException l_exception )
         {
@@ -238,7 +238,7 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        switch ( m_datanew.<String>getTraverse( "language/current" ) )
+        switch ( m_configuration.<String>getTraverse( "language/current" ) )
         {
             case "en":
                 Locale.setDefault( Locale.ENGLISH );
@@ -281,7 +281,7 @@ public class CConfiguration
         {
 
             this.createDirectories();
-            FileUtils.writeStringToFile( this.getLocation( "root", c_ConfigFilename ), CCommon.toJson( m_datanew ) );
+            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( m_configuration ) );
 
         }
         catch ( final IOException l_exception )
@@ -296,9 +296,9 @@ public class CConfiguration
      *
      * @return configuration map
      */
-    public CNameHashMap.CImmutable getNew()
+    public CNameHashMap.CImmutable get()
     {
-        return m_datanew;
+        return m_configuration;
     }
 
 
@@ -320,7 +320,7 @@ public class CConfiguration
             CLogger.error( l_exception.getMessage() );
         }
 
-        final File l_config = this.getLocation( "root", c_ConfigFilename );
+        final File l_config = this.getLocation( "root", c_filename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
 
         // read main configuration
@@ -424,7 +424,7 @@ public class CConfiguration
      */
     private CNameHashMap.CImmutable web_static_get()
     {
-        return m_datanew;
+        return m_configuration;
     }
 
 

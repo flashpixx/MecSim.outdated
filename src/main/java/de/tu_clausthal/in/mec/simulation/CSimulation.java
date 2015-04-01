@@ -247,7 +247,7 @@ public class CSimulation
                 ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
         )
         {
-            //l_output.writeObject( CConfiguration.getInstance().getNew().RoutingMap );
+            //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
             l_output.writeObject( m_world );
 
             CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
@@ -288,7 +288,7 @@ public class CSimulation
                             ( (ISerializable) l_item ).onDeserializationInitialization();
             }
 
-            //CConfiguration.getInstance().getNew().RoutingMap = (CConfiguration.Data.RoutingMap) l_input.readObject();
+            //CConfiguration.getInstance().get().RoutingMap = (CConfiguration.Data.RoutingMap) l_input.readObject();
             m_world.clear();
             m_world = (CWorld) l_input.readObject();
 

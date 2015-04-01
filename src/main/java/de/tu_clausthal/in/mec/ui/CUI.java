@@ -139,7 +139,7 @@ public class CUI extends Application
         this.setUserAgentStylesheet( null );
         if ( m_stage == null ) m_stage = p_stage;
 
-        p_stage.setTitle( CConfiguration.getInstance().getNew().<String>getTraverse( "manifest/project-name" ) );
+        p_stage.setTitle( CConfiguration.getInstance().get().<String>getTraverse( "manifest/project-name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
         {
             @Override
@@ -147,8 +147,8 @@ public class CUI extends Application
             {
                 CBootstrap.beforeStageShutdown( CUI.this );
 
-                CConfiguration.getInstance().getNew().setTraverse( "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth() );
-                CConfiguration.getInstance().getNew().setTraverse( "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight() );
+                CConfiguration.getInstance().get().setTraverse( "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth() );
+                CConfiguration.getInstance().get().setTraverse( "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight() );
 
                 CConfiguration.getInstance().write();
             }
@@ -163,7 +163,7 @@ public class CUI extends Application
 
         // create tab pane for content and scene
         l_root.setCenter( m_tabpane );
-        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().getNew().<Double>getTraverse( "ui/windowwidth" ), CConfiguration.getInstance().getNew().<Double>getTraverse( "ui/windowheight" ) ) );
+        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ), CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) );
         p_stage.sizeToScene();
         p_stage.show();
 

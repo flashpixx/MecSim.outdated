@@ -95,8 +95,7 @@ public class CGraphHopper extends GraphHopper
     /**
      * ctor
      *
-     * @param p_encoding flag encoder name see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
-     * @todo add reimport
+     * param p_encoding flag encoder name see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      */
     public CGraphHopper( final String p_encoding )
     {
@@ -104,7 +103,7 @@ public class CGraphHopper extends GraphHopper
         this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
-        final File l_graphlocation = CConfiguration.getInstance().getLocation( "root", "graphs", CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/routing/map/name" ).replace( '/', '_' ) );
+        final File l_graphlocation = CConfiguration.getInstance().getLocation( "root", "graphs", CConfiguration.getInstance().get().RoutingMap.Name.replace( '/', '_' ) );
         CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
 
         // convert OSM or load the graph
@@ -150,7 +149,7 @@ public class CGraphHopper extends GraphHopper
     {
         // calculate routes
         final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
-        l_request.setAlgorithm( CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/routing/algorithm" ) );
+        l_request.setAlgorithm( CConfiguration.getInstance().get().RoutingAlgorithm );
 
         final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
@@ -319,7 +318,7 @@ public class CGraphHopper extends GraphHopper
         try
         {
             final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            final URL l_url = new URL( CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/routing/map/url" ) );
+            final URL l_url = new URL( CConfiguration.getInstance().get().RoutingMap.URL );
 
             CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
 

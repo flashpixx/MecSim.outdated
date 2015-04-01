@@ -205,9 +205,9 @@ public class CConfiguration
      *
      * @return returns the configuration data
      */
-    public CNameHashMap.CImmutable get()
+    public Data get()
     {
-        return m_datanew;
+        return m_data;
     }
 
 

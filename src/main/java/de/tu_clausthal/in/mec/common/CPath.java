@@ -236,17 +236,6 @@ public class CPath implements Iterable<CPath>
         return l_path;
     }
 
-    /**
-     * creates a path of the start index until the end
-     *
-     * @param p_fromIndex start index
-     * @return path
-     */
-    public CPath getSubPath( final int p_fromIndex )
-    {
-        return this.getSubPath( p_fromIndex, this.size() );
-    }
-
 
     /**
      * remove the suffix from the path

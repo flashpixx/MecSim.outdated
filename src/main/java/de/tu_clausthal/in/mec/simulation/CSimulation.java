@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.simulation;
 
 import de.tu_clausthal.in.mec.CBootstrap;
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
@@ -235,7 +236,6 @@ public class CSimulation
      *
      * @param p_output output file
      * @throws IOException throws the exception on file writing
-     * @bug routingmap fails
      */
     public void store( final File p_output ) throws IOException
     {
@@ -247,7 +247,7 @@ public class CSimulation
                 ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
         )
         {
-            //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
+            l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
             l_output.writeObject( m_world );
 
             CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
@@ -266,7 +266,6 @@ public class CSimulation
      * @param p_input input file
      * @throws IOException            throws the exception on file reading error
      * @throws ClassNotFoundException throws the exception on deserialization
-     * @bug routingmap fails
      */
     public void load( final File p_input ) throws IOException, ClassNotFoundException
     {
@@ -288,7 +287,7 @@ public class CSimulation
                             ( (ISerializable) l_item ).onDeserializationInitialization();
             }
 
-            //CConfiguration.getInstance().get().RoutingMap = (CConfiguration.Data.RoutingMap) l_input.readObject();
+            CConfiguration.getInstance().get().RoutingMap = (CConfiguration.Data.RoutingMap) l_input.readObject();
             m_world.clear();
             m_world = (CWorld) l_input.readObject();
 

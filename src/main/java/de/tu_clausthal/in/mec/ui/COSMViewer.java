@@ -71,9 +71,9 @@ public class COSMViewer extends JXMapViewer
 
         LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getLocation( "root" ), false );
         this.setTileFactory( l_tileFactory );
-        this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setZoom( CConfiguration.getInstance().get().ui.<Integer>getTypedValue( "zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
 
         this.setOverlayPainter( m_painter );
 
@@ -95,9 +95,9 @@ public class COSMViewer extends JXMapViewer
      */
     public void reset()
     {
-        this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setZoom( CConfiguration.getInstance().get().ui.<Integer>getTypedValue( "zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().ui.<GeoPosition>getTypedValue( "geoposition" ) );
     }
 
     /**

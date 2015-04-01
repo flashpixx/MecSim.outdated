@@ -58,6 +58,18 @@ public class CCommon
 
 
     /**
+     * remove from a string the system package name
+     *
+     * @param p_package package / class path
+     * @return path without main package name
+     */
+    public static String removePackageName( String p_package )
+    {
+        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+    }
+
+
+    /**
      * convert any object data into Json
      *
      * @return Json object
@@ -85,29 +97,29 @@ public class CCommon
      */
     public static Map<String, Object> fromJson( final String p_data )
     {
-        final Map<String, Object> l_data = new HashMap<>();
+        return fromJson( p_data, Map.class );
+    }
 
+
+    /**
+     * converts a Json string into any class object
+     *
+     * @param p_data  string data
+     * @param p_class class type
+     * @return deserialized type
+     * @tparam T type parameter
+     */
+    public static <T> T fromJson( final String p_data, final Class<T> p_class )
+    {
         try
         {
-            l_data.putAll( new ObjectMapper().readValue( p_data, Map.class ) );
+            return new ObjectMapper().readValue( p_data, p_class );
         }
         catch ( IOException e )
         {
         }
 
-        return l_data;
-    }
-
-
-    /**
-     * remove from a string the system package name
-     *
-     * @param p_package package / class path
-     * @return path without main package name
-     */
-    public static String removePackageName( String p_package )
-    {
-        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+        return null;
     }
 
 

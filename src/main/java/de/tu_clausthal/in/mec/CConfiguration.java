@@ -319,20 +319,26 @@ public class CConfiguration
         final File l_config = this.getLocation( "root", c_filename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
 
-        // read main configuration - remove manifest item & convert geoposition
         try
         {
+            // read Json
             this.createDirectories();
             final CNameHashMap l_data = new CNameHashMap();
             l_data.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
 
-
+            // convert read data
             l_data.remove( "manifest" );
-
             final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) l_data.get( "ui" ) ).get( "geoposition" ) );
             l_data.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
 
-            //m_configuration.putAll( l_data );
+            // set data into configuration
+            if ( !l_data.<Boolean>getTypedValue( "reset" ) )
+            {
+                //m_configuration.put( "console", l_data.get( "console" ) );
+                //m_configuration.put( "ui", l_data.get( "ui" ) );
+            }
+
+
         }
         catch ( final IOException l_exception )
         {

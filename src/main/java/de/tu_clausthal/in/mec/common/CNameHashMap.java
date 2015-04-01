@@ -50,9 +50,12 @@ public class CNameHashMap extends HashMap<String, Object>
         {
             final Object l_return = this.get( p_path.get( 0 ) );
             if ( l_return instanceof CNameHashMap )
+            {
                 ( (CNameHashMap) l_return ).setTraverse( p_path.getSubPath( 1 ), p_value );
+                return;
+            }
 
-            throw new IllegalStateException();
+            throw new IllegalStateException( CCommon.getResourceString( this, "notfound", p_path ) );
         }
 
         this.put( p_path.get( 0 ), p_value );

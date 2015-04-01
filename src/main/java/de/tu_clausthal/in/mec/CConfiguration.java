@@ -323,6 +323,17 @@ public class CConfiguration
 
 
     /**
+     * returns the data items of the configuration
+     *
+     * @return configuration map
+     */
+    public CNameHashMap.CImmutable getNew()
+    {
+        return m_datanew;
+    }
+
+
+    /**
      * reads the configuration within the directory
      *
      * @todo check default values and base initialization

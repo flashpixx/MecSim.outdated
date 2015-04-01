@@ -32,11 +32,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -302,8 +300,6 @@ public class CConfiguration
 
     /**
      * reads the configuration within the directory
-     *
-     * @todo check default values and base initialization
      */
     public void read()
     {
@@ -321,82 +317,19 @@ public class CConfiguration
         final File l_config = this.getLocation( "root", c_filename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
 
-        // read main configuration
-        try (
-                Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
-        )
+        // read main configuration remove manifest
+        try
         {
-            //l_tmp = new Gson().fromJson( l_reader, Data.class );
+            final Map<String, Object> l_data = CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) );
+            //l_data.remove( "manifest" );
+            //m_configuration.putAll( l_data );
+            //System.out.println(l_data);
+            //System.out.println(m_configuration);
         }
-        catch ( final Exception l_exception )
+        catch ( final IOException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
-
-        // check the configuration values and set it
-        /*
-        if ( ( l_tmp == null ) || ( l_tmp.ResetConfig ) || ( l_tmp.Version < m_data.Version ) )
-            CLogger.warn( CCommon.getResourceString( this, "default" ) );
-        else
-        {
-            if ( l_tmp.UIBindPort < 1 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "uibindportdefault" ) );
-                l_tmp.UIBindPort = m_data.UIBindPort;
-            }
-
-            if ( l_tmp.ViewPoint == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "viewpointdefault" ) );
-                l_tmp.ViewPoint = m_data.ViewPoint;
-            }
-            if ( l_tmp.WindowHeight < 100 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "heightdefault" ) );
-                l_tmp.WindowHeight = m_data.WindowHeight;
-            }
-            if ( l_tmp.WindowWidth < 100 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "widthdefault" ) );
-                l_tmp.WindowWidth = m_data.WindowWidth;
-            }
-
-            if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "routingdefault" ) );
-                l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
-            }
-            if ( l_tmp.CellSampling < 1 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "cellsamplingdefault" ) );
-                l_tmp.CellSampling = m_data.CellSampling;
-            }
-            if ( l_tmp.ThreadSleepTime < 0 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "threadsleepdefault" ) );
-                l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
-            }
-            if ( l_tmp.RoutingMap == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "routingmapdefault" ) );
-                l_tmp.RoutingMap = m_data.RoutingMap;
-            }
-            if ( l_tmp.Database == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "databasedefault" ) );
-                l_tmp.Database = m_data.Database;
-            }
-            /*
-            if ( l_tmp.Console == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "consoledefault" ) );
-                l_tmp.Console = m_data.Console;
-            }
-
-            m_data = l_tmp;
-
-        }
-        */
 
         // append all Jar files to the classpath of the system class loader
         try

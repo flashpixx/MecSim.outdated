@@ -58,7 +58,7 @@ public class CCommon
 
 
     /**
-     * returns the global Json builder object
+     * convert any object data into Json
      *
      * @return Json object
      */
@@ -76,6 +76,28 @@ public class CCommon
         }
         return null;
     }
+
+
+    /**
+     * converts a Json string data into a raw map
+     *
+     * @return raw map data
+     */
+    public static Map<String, Object> fromJson( final String p_data )
+    {
+        final Map<String, Object> l_data = new HashMap<>();
+
+        try
+        {
+            l_data.putAll( new ObjectMapper().readValue( p_data, Map.class ) );
+        }
+        catch ( IOException e )
+        {
+        }
+
+        return l_data;
+    }
+
 
     /**
      * remove from a string the system package name

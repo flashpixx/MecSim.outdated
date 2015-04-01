@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.Serializable;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -146,17 +145,9 @@ public class CConfiguration
 
         }};
     /**
-     * property that stores the configuration data
-     */
-    private Data m_data = new Data();
-    /**
      * UTF-8 property reader
      */
     private ResourceBundle.Control m_reader = new UTF8Control();
-    /**
-     * manifest data
-     */
-    private Map<String, String> m_manifest = new HashMap<>();
 
 
     /**
@@ -166,7 +157,7 @@ public class CConfiguration
     {
         try
         {
-            Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
+            final Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
                 ( (Map) m_datanew.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
         }
@@ -186,28 +177,6 @@ public class CConfiguration
     public static CConfiguration getInstance()
     {
         return c_instance;
-    }
-
-
-    /**
-     * reads the manifest data
-     *
-     * @return map with string key and value
-     */
-    public Map<String, String> getManifest()
-    {
-        return m_manifest;
-    }
-
-
-    /**
-     * returns the configuration data
-     *
-     * @return returns the configuration data
-     */
-    public Data get()
-    {
-        return m_data;
     }
 
 
@@ -269,7 +238,7 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        if ( m_data.Language != null ) switch ( m_data.Language )
+        switch ( m_datanew.<String>getTraverse( "language/current" ) )
         {
             case "en":
                 Locale.setDefault( Locale.ENGLISH );
@@ -342,7 +311,6 @@ public class CConfiguration
     {
 
         // create the configuration directory
-        Data l_tmp = null;
         try
         {
             this.createDirectories();
@@ -471,194 +439,6 @@ public class CConfiguration
     {
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
-
-        m_data.ui.putAll( (Map) p_data.get( "ui" ) );
-        m_data.console.putAll( (Map) p_data.get( "console" ) );
-
-
-        m_data.CellSampling = Math.max( 1, (Integer) p_data.get( "cellsampling" ) );
-        m_data.ResetConfig = (Boolean) p_data.get( "resetconfig" );
-        m_data.ThreadSleepTime = Math.max( 0, (Integer) p_data.get( "threadsleeptime" ) );
-        m_data.RoutingAlgorithm = CCommon.getCheckedValue( (String) p_data.get( "routingalgorithm" ), m_data.RoutingAlgorithm, new String[]{"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"} );
-        m_data.Language = CCommon.getCheckedValue( (String) p_data.get( "language" ), "en", new String[]{"en", "de"} );
-
-        //m_data.Console.LineBuffer = Math.max( 1, (Integer) p_data.get( "console_linebuffer" ) );
-        //m_data.Console.LineNumber = Math.max( 1, (Integer) p_data.get( "console_linenumber" ) );
-
-        m_data.RoutingMap.Name = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_name" ), m_data.RoutingMap.Name );
-        m_data.RoutingMap.URL = CCommon.getNonEmptyValue( (String) p_data.get( "routingmap_url" ), m_data.RoutingMap.URL );
-        m_data.RoutingMap.Reimport = Boolean.parseBoolean( (String) p_data.get( "routingmap_reimport" ) );
-
-        m_data.Database.Active = Boolean.parseBoolean( (String) p_data.get( "database_active" ) );
-        m_data.Database.Driver = (String) p_data.get( "database_driver" );
-        m_data.Database.URL = (String) p_data.get( "database_url" );
-        m_data.Database.TablePrefix = (String) p_data.get( "database_tableprefix" );
-        m_data.Database.Username = (String) p_data.get( "database_username" );
-        m_data.Database.Password = (String) p_data.get( "database_password" );
-    }
-
-
-    /**
-     * class for storing the configuration
-     */
-    public class Data
-    {
-        /**
-         * console definition
-         */
-        public final CNameHashMap.CImmutable console = new CNameHashMap.CImmutable()
-        {{
-                put( "LineBuffer", 120 );
-                put( "LineNumber", 120 );
-            }};
-        /**
-         * UI config
-         */
-        public final CNameHashMap.CImmutable ui = new CNameHashMap.CImmutable()
-        {{
-                put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
-                put( "windowheight", 1024.0 );
-                put( "windowwidth", 1280.0 );
-                put( "zoom", 4 );
-            }};
-        /**
-         * configuration version *
-         *
-         * @todo can be changed to Jar version - must be tested first
-         */
-        public int Version = 1;
-        /**
-         * bind port of the web UI
-         */
-        public int UIBindPort = 9876;
-        /**
-         * flag to reset the configuration
-         */
-        public boolean ResetConfig = false;
-        /**
-         * thread sleep time in milliseconds
-         */
-        public int ThreadSleepTime = 25;
-        /**
-         * language code
-         */
-        public String Language = "en";
-
-
-        /**
-         * geo position object of the start viewpoint
-         *
-         public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
-         **
-         * window width
-         *
-         public double WindowWidth = 1684;
-         **
-         * window height
-         *
-         public double WindowHeight = 1024;
-         **
-         * zoom level of the viewpoint on the start point
-         *
-         public int Zoom = 4;
-         **/
-
-        /**
-         * cell size for sampling
-         */
-        public int CellSampling = 2;
-        /**
-         * geo map for graph
-         */
-        public RoutingMap RoutingMap = new RoutingMap();
-        /**
-         * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
-         * algorithm)
-         */
-        public String RoutingAlgorithm = "astarbi";
-
-
-        /**
-         * database driver (optional)
-         */
-        private DatabaseDriver Database = new DatabaseDriver();
-
-
-        /**
-         * returns database driver
-         *
-         * @return driver object
-         */
-        public DatabaseDriver getDatabase()
-        {
-            return Database;
-        }
-
-
-        /**
-         * class of the routing map
-         */
-        public class RoutingMap implements Serializable
-        {
-            /**
-             * serialize version ID *
-             */
-            private static final long serialVersionUID = 1L;
-            /**
-             * download URL
-             */
-            public String URL = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
-            /**
-             * flag for reimport
-             */
-            public boolean Reimport = false;
-            /**
-             * name of the map
-             */
-            public String Name = "europe/germany/lowersaxony";
-        }
-
-
-        /**
-         * class of the database driver
-         */
-        public class DatabaseDriver
-        {
-            /**
-             * enable / disable without removing settings *
-             */
-            public boolean Active = false;
-            /**
-             * driver *
-             */
-            public String Driver = null;
-            /**
-             * server url *
-             */
-            public String URL = null;
-            /**
-             * login user name *
-             */
-            public String Username = null;
-            /**
-             * login password *
-             */
-            public String Password = null;
-            /**
-             * table prefix
-             */
-            public String TablePrefix = null;
-
-            /**
-             * checks if the server can connect
-             *
-             * @return boolean flag
-             */
-            public boolean isConnectable()
-            {
-                return ( Active ) && ( Driver != null ) && ( !Driver.isEmpty() ) && ( URL != null ) && ( !URL.isEmpty() );
-            }
-        }
 
     }
 

@@ -48,7 +48,7 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super( EMenu.BackForward );
-        this.load( "http://localhost:" + CConfiguration.getInstance().get().UIBindPort );
+        this.load( "http://localhost:" + CConfiguration.getInstance().getNew().<Integer>getTraverse( "ui/bindport" ) );
 
         // set via reflection the server
         try

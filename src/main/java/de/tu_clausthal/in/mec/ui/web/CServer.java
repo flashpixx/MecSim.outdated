@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
-import eu.medsea.mimeutil.MimeUtil;
 import eu.medsea.mimeutil.MimeUtil2;
 import fi.iki.elonen.NanoHTTPD;
 import org.apache.commons.io.FilenameUtils;
@@ -41,6 +40,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -60,6 +60,10 @@ public class CServer extends NanoHTTPD
      * virtual-locations
      */
     protected final CVirtualLocation m_virtuallocation;
+    /**
+     * mimetype detector
+     */
+    protected final MimeUtil2 m_mimetype = new MimeUtil2();
 
 
     /**
@@ -75,8 +79,8 @@ public class CServer extends NanoHTTPD
         super( p_host, p_port );
         m_virtuallocation = new CVirtualLocation( p_default );
 
-        for ( String l_detector : new String[]{"eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector", "eu.medsea.mimeutil.detector.OpendesktopMimeDetector", "eu.medsea.mimeutil.detector.WindowsRegistryMimeDetector"} )
-            MimeUtil.registerMimeDetector( l_detector );
+        for ( String l_detector : new String[]{"eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector", "eu.medsea.mimeutil.detector.TextMimeDetector"} )
+            m_mimetype.registerMimeDetector( l_detector );
 
         try
         {
@@ -140,12 +144,15 @@ public class CServer extends NanoHTTPD
      */
     private String getMimeType( final URL p_url )
     {
-        for ( Object l_item : MimeUtil.getMimeTypes( p_url ) )
+        final Collection l_types = m_mimetype.getMimeTypes( p_url );
+        if ( l_types.size() == 1 )
+            return l_types.iterator().next().toString();
+
+        for ( Object l_item : l_types )
         {
             final MimeType l_type = (MimeType) l_item;
             if ( !l_type.toString().startsWith( "application/" ) ) return l_type.toString();
         }
-
         return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
     }
 

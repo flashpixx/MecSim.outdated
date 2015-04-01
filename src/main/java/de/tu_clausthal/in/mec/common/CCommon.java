@@ -115,10 +115,10 @@ public class CCommon
     /**
      * converts a value into class
      *
-     * @param p_value string input class
-     * @param p_types type classes
-     * @return converted type
+     * @param p_value  string input class
+     * @param p_types  type classes
      * @param p_parser type parser
+     * @return converted type
      */
     public static Object convertValue( final String p_value, final Class[] p_types, final TypeParser p_parser )
     {

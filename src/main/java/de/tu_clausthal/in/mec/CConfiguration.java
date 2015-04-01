@@ -181,17 +181,13 @@ public class CConfiguration
 
 
     /**
-     * returns a path relative to the root directory
+     * returns the data items of the configuration
      *
-     * @param p_dir directories
-     * @return full file
+     * @return configuration map
      */
-    private File getBasePath( final String... p_dir )
+    public CNameHashMap.CImmutable get()
     {
-        if ( !m_location.containsKey( "root" ) )
-            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
-
-        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
+        return m_configuration;
     }
 
 
@@ -207,6 +203,21 @@ public class CConfiguration
         if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) ) return m_location.get( p_name );
 
         return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
+    }
+
+
+    /**
+     * returns a path relative to the root directory
+     *
+     * @param p_dir directories
+     * @return full file
+     */
+    private File getBasePath( final String... p_dir )
+    {
+        if ( !m_location.containsKey( "root" ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
+
+        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
     }
 
 
@@ -279,26 +290,13 @@ public class CConfiguration
     {
         try
         {
-
             this.createDirectories();
             FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( m_configuration ) );
-
         }
         catch ( final IOException l_exception )
         {
             CLogger.error( l_exception );
         }
-    }
-
-
-    /**
-     * returns the data items of the configuration
-     *
-     * @return configuration map
-     */
-    public CNameHashMap.CImmutable get()
-    {
-        return m_configuration;
     }
 
 

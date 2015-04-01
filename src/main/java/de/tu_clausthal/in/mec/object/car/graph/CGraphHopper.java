@@ -129,7 +129,6 @@ public class CGraphHopper extends GraphHopper
     }
 
 
-
     /**
      * creates a list of list of edge between two geopositions
      *

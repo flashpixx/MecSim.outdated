@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
@@ -114,13 +114,13 @@ public class CLogger
         l_str.append( l_sep ).
                 append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
                 append( l_sep ).
-                append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
-                append( l_sep ).
-                append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) ).
-                append( l_sep ).
-                append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
-                append( l_sep ).
-                append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
+                     append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
 
 
         String l_add = "";

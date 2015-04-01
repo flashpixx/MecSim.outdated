@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -172,7 +172,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
 
         this.splitKeyValues( p_key, p_keyindex + 1, p_value, (Map) p_map.get( p_key[p_keyindex] ) );
     }
-
 
 
     @Override

@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -60,7 +60,6 @@ public class CServer extends NanoHTTPD
      * virtual-locations
      */
     protected final CVirtualLocation m_virtuallocation;
-
 
 
     /**

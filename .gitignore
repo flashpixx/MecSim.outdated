@@ -17,9 +17,9 @@
 !src/main/resources/**/*.png
 !src/main/resources/**/*.properties
 
-!src/main/styleguide/*.xml
+!src/main/styleguide/**/*.xml
 !src/main/styleguide/*.header
-!src/main/styleguide/*.md
+!src/main/styleguide/**/*.md
 
 target/**
 src/main/resources/web/documentation/developer/**

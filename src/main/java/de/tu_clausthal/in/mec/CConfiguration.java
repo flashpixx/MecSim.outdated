@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
@@ -465,8 +465,6 @@ public class CConfiguration
         m_data.console.putAll( (Map) p_data.get( "console" ) );
 
 
-
-
         m_data.CellSampling = Math.max( 1, (Integer) p_data.get( "cellsampling" ) );
         m_data.ResetConfig = (Boolean) p_data.get( "resetconfig" );
         m_data.ThreadSleepTime = Math.max( 0, (Integer) p_data.get( "threadsleeptime" ) );
@@ -539,19 +537,19 @@ public class CConfiguration
         /**
          * geo position object of the start viewpoint
          *
-        public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
+         public GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
          **
          * window width
          *
-        public double WindowWidth = 1684;
+         public double WindowWidth = 1684;
          **
          * window height
          *
-        public double WindowHeight = 1024;
+         public double WindowHeight = 1024;
          **
          * zoom level of the viewpoint on the start point
          *
-        public int Zoom = 4;
+         public int Zoom = 4;
          **/
 
         /**
@@ -575,7 +573,6 @@ public class CConfiguration
         private DatabaseDriver Database = new DatabaseDriver();
 
 
-
         /**
          * returns database driver
          *
@@ -585,7 +582,6 @@ public class CConfiguration
         {
             return Database;
         }
-
 
 
         /**

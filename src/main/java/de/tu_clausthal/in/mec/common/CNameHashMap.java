@@ -43,8 +43,8 @@ public class CNameHashMap extends HashMap<String, Object>
          * get a type-cast value of the object
          *
          * @param p_key key
-         * @tparam T type
          * @return null or casted value
+         * @tparam T type
          */
         public <T> T getTypedValue( final String p_key )
         {

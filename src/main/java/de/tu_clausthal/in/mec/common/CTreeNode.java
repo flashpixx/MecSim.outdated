@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.common;
 
@@ -299,16 +299,6 @@ public class CTreeNode<T>
     }
 
     /**
-     * sets the data to the current node
-     *
-     * @param p_data data
-     */
-    public final void setData( final T p_data )
-    {
-        m_data = p_data;
-    }
-
-    /**
      * adds a collection of pair with path and data
      *
      * @param p_data collection of pair with path and data
@@ -317,6 +307,16 @@ public class CTreeNode<T>
     {
         for ( Pair<CPath, T> l_item : p_data )
             this.getNode( l_item.getKey() ).setData( l_item.getValue() );
+    }
+
+    /**
+     * sets the data to the current node
+     *
+     * @param p_data data
+     */
+    public final void setData( final T p_data )
+    {
+        m_data = p_data;
     }
 
     /**

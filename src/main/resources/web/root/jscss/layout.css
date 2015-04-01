@@ -6,6 +6,7 @@ html, body
     padding:  0px;
     overflow: hidden;
     font:     13px sans-serif;
+    background-color: white;
 }
 
 select
@@ -33,12 +34,12 @@ iframe
 #mecsim_menu
 {
     height: 100%;
-    background-color: #ecf0f1;
+    /*background-color: #ecf0f1;*/
 }
 
 #mecsim_content
 {
-    background-color: #ecf0f1;
+    /*background-color: #ecf0f1;*/
 }
 
 .ui-accordion-content
@@ -49,6 +50,7 @@ iframe
 #mecsim_accordion
 {
     height: 96%;
+    color: red;
 }
 
 #mecsim_tuc_logo_small

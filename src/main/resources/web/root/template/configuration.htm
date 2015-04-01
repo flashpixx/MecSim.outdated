@@ -4,59 +4,6 @@
      * build table with configuration data
      **/
     $.getJSON( "cconfiguration/get", function( p_data ) {
-        var items = [];
-        console.log(p_data);
-        $.each( p_data, function( p_key, p_value ) {
-            switch (p_key)
-            {
-                case "cellsampling":
-                    alert("1");
-                    break;
-                case "routingalgorithm_allowed":
-                    items.push("<label for='routingalgorithm_allowed'>Allowed routing algorithms: </label><select name='allowed routingalgorithm' id='routingalgorithm_allowed'><option>1</option><option selected='selected'>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select>");
-                    break;
-                case "threadsleeptime":
-                    alert("3");
-                    break;
-                case "resetconfig":
-                    alert("4");
-                    break;
-                case "console_linebuffer":
-                    alert("5");
-                    break;
-                case "language":
-                    alert("6");
-                    break;
-                case "database_active":
-                    alert("7");
-                    break;
-                case "routingmap_reimport":
-                    alert("8");
-                    break;
-                case "routingmap_url":
-                    alert("9");
-                    break;
-                case "language_allowed":
-                    alert("10");
-                    break;
-                case "console_linenumber":
-                    alert("11");
-                    break;
-                case "routingmap_name":
-                    alert("12");
-                    break;
-                case "routingalgorithm":
-                    alert("13");
-                    break;
-
-                default:
-                    console.log("default value in switch case. Some input values are missing.");
-                    break;
-
-            }
-            items.push("<li>" + p_key + " => " + p_value + "</li>");
-        });
-        $("<ul/>", { html: items.join("")}).appendTo("#mecsim_content");
 
         //$( "#routingalgorithm" ).selectmenu();
         $( "#routingalgorithm_allowed" ).selectmenu();

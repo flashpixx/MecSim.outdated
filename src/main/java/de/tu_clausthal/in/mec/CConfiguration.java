@@ -331,20 +331,7 @@ public class CConfiguration
             final CNameHashMap l_input = new CNameHashMap();
             l_input.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
 
-            // convert read data
-            final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) l_input.get( "ui" ) ).get( "geoposition" ) );
-            l_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
-
-            // check allow values
-            l_input.setTraverse( "ui/current", CCommon.getCheckedValue( l_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse( "ui/current" ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" ) ) );
-            l_input.setTraverse( "simulation/traffic/routing/algorithm", CCommon.getCheckedValue( l_input.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<ArrayList<String>>getTraverse( "simulation/traffic/routing/allow" ) ) );
-
-            // set data into configuration
-            if ( !l_input.<Boolean>getTypedValue( "reset" ) )
-                for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
-                    if ( l_input.containsKey( l_key ) )
-                        m_configuration.put( l_key, l_input.get( l_key ) );
-
+            this.setConfiguration( l_input );
         }
         catch ( final IOException | NullPointerException l_exception )
         {
@@ -362,6 +349,29 @@ public class CConfiguration
         {
             CLogger.error( l_throwable );
         }
+    }
+
+
+    /**
+     * sets the configuration values with semantic check
+     *
+     * @param p_input input map
+     */
+    private void setConfiguration( final CNameHashMap p_input )
+    {
+        // convert read data
+        final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) p_input.get( "ui" ) ).get( "geoposition" ) );
+        p_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
+
+        // check allow values
+        p_input.setTraverse( "ui/current", CCommon.getCheckedValue( p_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse( "ui/current" ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" ) ) );
+        p_input.setTraverse( "simulation/traffic/routing/algorithm", CCommon.getCheckedValue( p_input.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<ArrayList<String>>getTraverse( "simulation/traffic/routing/allow" ) ) );
+
+        // set data into configuration
+        if ( !p_input.<Boolean>getTypedValue( "reset" ) )
+            for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
+                if ( p_input.containsKey( l_key ) )
+                    m_configuration.put( l_key, p_input.get( l_key ) );
     }
 
     /**
@@ -388,12 +398,7 @@ public class CConfiguration
 
         try
         {
-
-            final CNameHashMap.CImmutable l_input = new CNameHashMap.CImmutable( p_data );
-            for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
-                if ( l_input.containsKey( l_key ) )
-                    m_configuration.put( l_key, l_input.get( l_key ) );
-
+            this.setConfiguration( new CNameHashMap.CImmutable( p_data ) );
         }
         catch ( final Exception l_exception )
         {

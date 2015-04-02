@@ -169,9 +169,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void warn( final Object p_data )
+    public static <T> T warn( final T p_data )
     {
         warn( p_data, true );
+        return p_data;
     }
 
     /**
@@ -180,9 +181,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void warn( final Object p_data, final boolean p_write )
+    public static <T> T warn( final T p_data, final boolean p_write )
     {
         if ( p_write ) Logger.warn( createLogData( Level.WARNING, p_data ) );
+        return p_data;
     }
 
 
@@ -209,9 +211,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void error( final Object p_data )
+    public static <T> T error( final T p_data )
     {
         error( p_data, true );
+        return p_data;
     }
 
     /**
@@ -220,9 +223,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void error( final Object p_data, final boolean p_write )
+    public static <T> T error( final T p_data, final boolean p_write )
     {
         if ( p_write ) Logger.error( createLogData( Level.ERROR, p_data ) );
+        return p_data;
     }
 
 
@@ -250,9 +254,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void info( final Object p_data )
+    public static <T> T info( final T p_data )
     {
         info( p_data, true );
+        return p_data;
     }
 
     /**
@@ -261,9 +266,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void info( final Object p_data, final boolean p_write )
+    public static <T> T info( final T p_data, final boolean p_write )
     {
         if ( p_write ) Logger.info( createLogData( Level.INFO, p_data ) );
+        return p_data;
     }
 
 
@@ -290,9 +296,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void debug( final Object p_data )
+    public static <T> T debug( final T p_data )
     {
         debug( p_data, true );
+        return p_data;
     }
 
     /**
@@ -301,9 +308,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void debug( final Object p_data, final boolean p_write )
+    public static <T> T debug( final T p_data, final boolean p_write )
     {
         if ( p_write ) Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        return p_data;
     }
 
 
@@ -331,9 +339,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void out( final Object p_data )
+    public static <T> T out( final T p_data )
     {
         out( p_data, true );
+        return p_data;
     }
 
     /**
@@ -342,12 +351,13 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void out( final Object p_data, final boolean p_write )
+    public static <T> T out( final T p_data, final boolean p_write )
     {
-        if ( !p_write ) return;
+        if ( !p_write ) return p_data;
 
         if ( s_level == Level.OFF ) System.out.println( p_data );
         else Logger.info( createLogData( Level.INFO, p_data ) );
+        return p_data;
     }
 
 

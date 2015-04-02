@@ -38,6 +38,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -163,7 +164,7 @@ public class CUI extends Application
 
         // create tab pane for content and scene
         l_root.setCenter( m_tabpane );
-        p_stage.setScene( new Scene( l_root, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ), CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) );
+        p_stage.setScene( new Scene( l_root, Math.min( Screen.getPrimary().getVisualBounds().getWidth() * 0.98, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ) ), Math.min( Screen.getPrimary().getVisualBounds().getHeight() * 0.98, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) ) );
         p_stage.sizeToScene();
         p_stage.show();
 

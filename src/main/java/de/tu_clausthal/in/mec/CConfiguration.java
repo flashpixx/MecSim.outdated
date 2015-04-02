@@ -302,7 +302,12 @@ public class CConfiguration
         try
         {
             this.createDirectories();
-            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( m_configuration ) );
+
+            // remove manifest from config
+            final Map<String, Object> l_output = m_configuration.toHashMap();
+            l_output.remove( "manifest" );
+
+            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( l_output ) );
         }
         catch ( final IOException l_exception )
         {
@@ -323,21 +328,20 @@ public class CConfiguration
         {
             // read Json
             this.createDirectories();
-            final CNameHashMap l_data = new CNameHashMap();
-            l_data.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
+            final CNameHashMap l_input = new CNameHashMap();
+            l_input.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
 
             // convert read data
-            l_data.remove( "manifest" );
-            final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) l_data.get( "ui" ) ).get( "geoposition" ) );
-            l_data.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
+            final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) l_input.get( "ui" ) ).get( "geoposition" ) );
+            l_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
 
             // set data into configuration
-            if ( !l_data.<Boolean>getTypedValue( "reset" ) )
-            {
-                //m_configuration.put( "console", l_data.get( "console" ) );
-                //m_configuration.put( "ui", l_data.get( "ui" ) );
-            }
+            if ( !l_input.<Boolean>getTypedValue( "reset" ) )
+                for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
+                    if ( l_input.containsKey( l_key ) )
+                        m_configuration.put( l_key, l_input.get( l_key ) );
 
+            // check allow values
 
         }
         catch ( final IOException | NullPointerException l_exception )

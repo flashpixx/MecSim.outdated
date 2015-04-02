@@ -162,9 +162,9 @@ public class CUI extends Application
         l_menubar.setUseSystemMenuBar( true );
         l_root.setTop( l_menubar );
 
-        // create tab pane for content and scene
+        // create tab pane for content and scene (screen size depends on the configuration or the current screen size)
         l_root.setCenter( m_tabpane );
-        p_stage.setScene( new Scene( l_root, Math.min( Screen.getPrimary().getVisualBounds().getWidth() * 0.98, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ) ), Math.min( Screen.getPrimary().getVisualBounds().getHeight() * 0.98, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) ) );
+        p_stage.setScene( new Scene( l_root, Math.min( Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ) ), Math.min( Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) ) );
         p_stage.sizeToScene();
         p_stage.show();
 

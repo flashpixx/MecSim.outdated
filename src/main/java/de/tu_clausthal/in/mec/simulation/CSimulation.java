@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
 import de.tu_clausthal.in.mec.ui.CUI;
+import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 
 import java.io.File;
@@ -43,6 +44,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -316,7 +319,7 @@ public class CSimulation
 
 
     /**
-     * UI method to start the simulation
+     * UI method - start the simulation
      */
     private void web_static_start()
     {
@@ -325,7 +328,7 @@ public class CSimulation
 
 
     /**
-     * UI method to stop the simulation
+     * UI method - stop the simulation
      */
     private void web_static_stop()
     {
@@ -334,11 +337,90 @@ public class CSimulation
 
 
     /**
-     * UI method to reset the simulation
+     * UI method - reset the simulation
      */
     private void web_static_reset()
     {
         this.reset();
     }
 
+
+    /**
+     * UI method - returns a list with available layers
+     *
+     * @return
+     */
+    private Map<String, Map<String, Object>> web_static_listlayer()
+    {
+        final Map<String, Map<String, Object>> l_return = new HashMap<>();
+        for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
+            l_return.put( l_item.getKey(), new HashMap()
+            {{
+                    put( "active", l_item.getValue().isActive() );
+                    put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
+                }} );
+
+
+        return l_return;
+    }
+
+
+    /**
+     * UI method - enables a layer
+     */
+    private void web_static_enablelayer( final Map<String, Object> p_data )
+    {
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( true );
+    }
+
+
+    /**
+     * UI method - disables a layer
+     */
+    private void web_static_disablelayer( final Map<String, Object> p_data )
+    {
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( false );
+    }
+
+
+    /**
+     * UI method - view a layer
+     */
+    private void web_static_showlayer( final Map<String, Object> p_data )
+    {
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( true );
+    }
+
+
+    /**
+     * UI method - hide a layer
+     */
+    private void web_static_hidelayer( final Map<String, Object> p_data )
+    {
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( false );
+    }
+
+
+    /**
+     * UI method - gets the layer name from the map
+     *
+     * @param p_data input data
+     * @return layer name
+     */
+    private String getLayerName( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "name" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
+
+        final String l_name = (String) p_data.get( "name" );
+
+        if ( !m_world.containsKey( l_name ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_name ) );
+
+        return l_name;
+    }
 }

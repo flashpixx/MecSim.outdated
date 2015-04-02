@@ -65,7 +65,7 @@ public class CAgentEnvironment
     }
 
     /**
-     * returns URI base
+     * UI method - returns URI base
      *
      * @return base name
      */
@@ -91,7 +91,7 @@ public class CAgentEnvironment
     }
 
     /**
-     * delete an agent
+     * UI method - delete an agent
      *
      * @param p_data input data
      */
@@ -108,7 +108,7 @@ public class CAgentEnvironment
     }
 
     /**
-     * reads the file content of an agent
+     * UI method - reads the file content of an agent
      *
      * @param p_data input data
      * @return file content
@@ -132,7 +132,7 @@ public class CAgentEnvironment
     }
 
     /**
-     * writes the content to the agent file
+     * UI method - writes the content to the agent file
      *
      * @param p_data input data
      */
@@ -152,11 +152,11 @@ public class CAgentEnvironment
     }
 
     /**
-     * returns a list of all agents
+     * UI method - returns a list of all agents
      *
      * @return agent list
      */
-    private Map<String, List<String>> web_static_getAgents()
+    private Map<String, List<String>> web_static_list()
     {
         switch ( m_type )
         {
@@ -171,11 +171,11 @@ public class CAgentEnvironment
     }
 
     /**
-     * checks the syntax of an agent
+     * UI method - checks the syntax of an agent
      *
      * @param p_data input data
      */
-    private void web_static_checkSyntax( final Map<String, Object> p_data )
+    private void web_static_check( final Map<String, Object> p_data )
     {
         switch ( m_type )
         {
@@ -188,7 +188,7 @@ public class CAgentEnvironment
     }
 
     /**
-     * gets the agent name from the map
+     * UI method - gets the agent name from the map
      *
      * @param p_data input data
      * @return agent name

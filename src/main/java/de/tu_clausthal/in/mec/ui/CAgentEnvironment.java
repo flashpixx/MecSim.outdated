@@ -118,10 +118,11 @@ public class CAgentEnvironment
         switch ( m_type )
         {
             case Jason:
+                final String l_agent = this.getAgentName( p_data );
                 return new HashMap<String, String>()
                 {{
-                        put( "name", (String) p_data.get( "name" ) );
-                        put( "data", FileUtils.readFileToString( IEnvironment.getAgentFile( CAgentEnvironment.this.getAgentName( p_data ) ) ) );
+                        put( "name", l_agent );
+                        put( "data", FileUtils.readFileToString( IEnvironment.getAgentFile( l_agent ) ) );
                     }};
 
             default:
@@ -135,10 +136,19 @@ public class CAgentEnvironment
      *
      * @param p_data input data
      */
-    private void web_static_write( final Map<String, Object> p_data )
+    private void web_static_write( final Map<String, Object> p_data ) throws IOException
     {
         if ( !p_data.containsKey( "data" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentdata" ) );
+
+        switch ( m_type )
+        {
+            case Jason:
+                FileUtils.writeStringToFile( IEnvironment.getAgentFile( this.getAgentName( p_data ) ), (String) p_data.get( "data" ) );
+                break;
+
+            default:
+        }
     }
 
     /**

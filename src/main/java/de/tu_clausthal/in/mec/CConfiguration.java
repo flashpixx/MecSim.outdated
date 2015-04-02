@@ -331,7 +331,8 @@ public class CConfiguration
             final CNameHashMap l_input = new CNameHashMap();
             l_input.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
 
-            this.setConfiguration( l_input );
+            if ( !l_input.<Boolean>getTypedValue( "reset" ) )
+                this.setConfiguration( l_input );
         }
         catch ( final IOException | NullPointerException l_exception )
         {
@@ -368,10 +369,9 @@ public class CConfiguration
         p_input.setTraverse( "simulation/traffic/routing/algorithm", CCommon.getCheckedValue( p_input.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<ArrayList<String>>getTraverse( "simulation/traffic/routing/allow" ) ) );
 
         // set data into configuration
-        if ( !p_input.<Boolean>getTypedValue( "reset" ) )
-            for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
-                if ( p_input.containsKey( l_key ) )
-                    m_configuration.put( l_key, p_input.get( l_key ) );
+        for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
+            if ( p_input.containsKey( l_key ) )
+                m_configuration.put( l_key, p_input.get( l_key ) );
     }
 
     /**

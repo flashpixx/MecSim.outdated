@@ -340,7 +340,7 @@ public class CConfiguration
 
 
         }
-        catch ( final IOException l_exception )
+        catch ( final IOException | NullPointerException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }

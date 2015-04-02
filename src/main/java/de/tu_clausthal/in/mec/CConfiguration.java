@@ -335,13 +335,15 @@ public class CConfiguration
             final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) l_input.get( "ui" ) ).get( "geoposition" ) );
             l_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
 
+            // check allow values
+            l_input.setTraverse( "ui/current", CCommon.getCheckedValue( l_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse( "ui/current" ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" ) ) );
+            l_input.setTraverse( "simulation/traffic/routing/algorithm", CCommon.getCheckedValue( l_input.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<ArrayList<String>>getTraverse( "simulation/traffic/routing/allow" ) ) );
+
             // set data into configuration
             if ( !l_input.<Boolean>getTypedValue( "reset" ) )
                 for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
                     if ( l_input.containsKey( l_key ) )
                         m_configuration.put( l_key, l_input.get( l_key ) );
-
-            // check allow values
 
         }
         catch ( final IOException | NullPointerException l_exception )

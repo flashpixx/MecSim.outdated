@@ -178,7 +178,7 @@ public class CCommon
      * @return checked value
      * @tparam T              value type
      */
-    public static <T> T getCheckedValue( final T p_input, final T p_default, final T[] p_allowedvalues )
+    public static <T> T getCheckedValue( final T p_input, final T p_default, final Collection<T> p_allowedvalues )
     {
         if ( p_input == null ) return p_default;
 

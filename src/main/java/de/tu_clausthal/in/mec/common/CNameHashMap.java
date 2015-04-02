@@ -35,6 +35,27 @@ public class CNameHashMap extends HashMap<String, Object>
 {
 
     /**
+     * ctor
+     */
+    public CNameHashMap()
+    {
+        super();
+    }
+
+    /**
+     * creates a plain name-hash-map from a map of maps
+     *
+     * @param p_data map
+     */
+    public CNameHashMap( final Map<String, Object> p_data )
+    {
+        super();
+        for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
+            this.put( l_item.getKey(), ( l_item.getValue() instanceof Map ) ? new CNameHashMap( (Map) l_item.getValue() ) : l_item.getValue() );
+    }
+
+
+    /**
      * traverse and sets the value
      *
      * @param p_path  path
@@ -129,6 +150,26 @@ public class CNameHashMap extends HashMap<String, Object>
      */
     public static class CImmutable extends CNameHashMap
     {
+
+        /**
+         * ctor
+         */
+        public CImmutable()
+        {
+            super();
+        }
+
+        /**
+         * creates a plain name-hash-map from a map of maps
+         *
+         * @param p_data map
+         */
+        public CImmutable( final Map<String, Object> p_data )
+        {
+            super();
+            for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
+                this.put( l_item.getKey(), ( l_item.getValue() instanceof Map ) ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
+        }
 
         @Override
         public Object remove( final Object p_key )

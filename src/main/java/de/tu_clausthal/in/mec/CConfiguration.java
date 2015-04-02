@@ -374,13 +374,25 @@ public class CConfiguration
      *
      * @param p_data   input data
      * @param p_header header data - configuration changeable only from localhost
-     * @bug incomplete
      */
     private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )
     {
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
+        try
+        {
+
+            final CNameHashMap.CImmutable l_input = new CNameHashMap.CImmutable( p_data );
+            for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
+                if ( l_input.containsKey( l_key ) )
+                    m_configuration.put( l_key, l_input.get( l_key ) );
+
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
 

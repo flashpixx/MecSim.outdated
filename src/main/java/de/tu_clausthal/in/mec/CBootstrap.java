@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CUI;
@@ -104,6 +105,7 @@ public class CBootstrap
         //p_server.register( CConsole.getOutput( "output" ) );
         p_server.register( CSimulation.getInstance() );
         p_server.register( CConfiguration.getInstance() );
+        p_server.register( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
     }
 
 

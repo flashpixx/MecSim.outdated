@@ -1,0 +1,25 @@
+<script type = "text/javascript" >
+
+    var g_editor = CodeMirror(function(elt) {
+        source.parentNode.replaceChild(elt, source);
+    }, {
+         value: source.value,
+         lineNumbers: true,
+    });
+
+    $.post(
+        "cagentenvironment/jason/read",
+        { "name" : "agent.asl" },
+        function( px_data ) {
+            g_editor.setValue( px_data.source );
+        }
+    );
+
+
+
+
+</script >
+
+<form>
+    <textarea id="source" />
+</form>

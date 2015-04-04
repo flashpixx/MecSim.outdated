@@ -122,7 +122,7 @@ public class CAgentEnvironment
                 return new HashMap<String, String>()
                 {{
                         put( "name", l_agent );
-                        put( "data", FileUtils.readFileToString( IEnvironment.getAgentFile( l_agent ) ) );
+                        put( "source", FileUtils.readFileToString( IEnvironment.getAgentFile( l_agent ) ) );
                     }};
 
             default:
@@ -138,7 +138,7 @@ public class CAgentEnvironment
      */
     private void web_static_write( final Map<String, Object> p_data ) throws IOException
     {
-        if ( !p_data.containsKey( "data" ) )
+        if ( !p_data.containsKey( "source" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentdata" ) );
 
         switch ( m_type )

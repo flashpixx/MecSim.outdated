@@ -41,6 +41,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 
 /**
@@ -262,7 +263,7 @@ public class CCommon
      */
     public static String getResourceString( Object p_object, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_object.getClass().getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+        return getResourceString( p_object.getClass(), p_label, p_parameter );
     }
 
     /**
@@ -275,7 +276,19 @@ public class CCommon
      */
     public static String getResourceString( Class<?> p_class, String p_label, Object... p_parameter )
     {
-        return MessageFormat.format( CConfiguration.getInstance().getResourceBundle().getString( removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" ) ), p_parameter );
+        final String l_label = removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" );
+        final String l_string;
+        try
+        {
+            l_string = CConfiguration.getInstance().getResourceBundle().getString( l_label );
+        }
+        catch ( final MissingResourceException l_exception )
+        {
+            CLogger.error( l_exception );
+            return "";
+        }
+
+        return MessageFormat.format( l_string, p_parameter );
     }
 
     /**

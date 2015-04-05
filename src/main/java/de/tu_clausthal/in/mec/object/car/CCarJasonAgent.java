@@ -101,7 +101,7 @@ public class CCarJasonAgent extends CDefaultCar
 
 
             // add agent to layer
-            ( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).add( m_agent );
+            CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( m_agent );
 
         }
         catch ( final Exception l_exception )

@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.CTrafficEnvironment;
 import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.web.CMarkdownRenderer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
@@ -69,7 +70,7 @@ public class CBootstrap
      */
     public static void beforeStageShutdown( final CUI p_ui )
     {
-        p_ui.<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().setConfiguration();
+        p_ui.<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().setConfiguration();
     }
 
 
@@ -106,6 +107,7 @@ public class CBootstrap
         p_server.register( CSimulation.getInstance() );
         p_server.register( CConfiguration.getInstance() );
         p_server.register( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
+        p_server.register( new CTrafficEnvironment() );
     }
 
 
@@ -116,8 +118,8 @@ public class CBootstrap
      */
     public static void afterOSMViewerInit( final COSMViewer p_viewer )
     {
-        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
-        p_viewer.getCompoundPainter().addPainter( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
+        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Sources" ) );
+        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Cars" ) );
     }
 
 
@@ -143,7 +145,7 @@ public class CBootstrap
     public static void onSimulationReset( final CSimulation p_simulation )
     {
         if ( p_simulation.hasUI() )
-            p_simulation.getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().resetConfiguration();
+            p_simulation.getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().resetConfiguration();
 
     }
 

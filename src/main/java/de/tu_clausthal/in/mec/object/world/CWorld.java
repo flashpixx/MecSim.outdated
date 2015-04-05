@@ -104,7 +104,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     }
 
     @Override
-    public final ILayer get( final Object p_key )
+    public ILayer get( final Object p_key )
     {
         final ILayer l_layer = m_layer.get( p_key );
         CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
@@ -151,5 +151,20 @@ public class CWorld implements Map<String, ILayer>, Serializable
     public final Set<Entry<String, ILayer>> entrySet()
     {
         return m_layer.entrySet();
+    }
+
+    /**
+     * returns a type-casted object
+     *
+     * @param p_key key
+     * @return casted value
+     * @tparam T value type
+     */
+    @SuppressWarnings("unchecked")
+    public final <T extends ILayer> T getTyped( final Object p_key )
+    {
+        final ILayer l_layer = m_layer.get( p_key );
+        CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
+        return (T) l_layer;
     }
 }

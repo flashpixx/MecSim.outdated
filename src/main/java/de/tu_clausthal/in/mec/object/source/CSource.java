@@ -86,7 +86,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
+            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
 
@@ -164,7 +164,7 @@ public class CSource extends IInspector implements ISource, ISerializable
         this.setImage();
 
         if ( CSimulation.getInstance().hasUI() )
-            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTab( "OSM" ).getComponent().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
     @Override

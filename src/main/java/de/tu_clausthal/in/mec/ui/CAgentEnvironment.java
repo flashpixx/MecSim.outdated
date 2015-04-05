@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
+import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
@@ -97,6 +98,9 @@ public class CAgentEnvironment
      */
     private void web_static_delete( final Map<String, Object> p_data )
     {
+        if ( CSimulation.getInstance().isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+
         switch ( m_type )
         {
             case Jason:
@@ -138,6 +142,8 @@ public class CAgentEnvironment
      */
     private void web_static_write( final Map<String, Object> p_data ) throws IOException
     {
+        if ( CSimulation.getInstance().isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
         if ( !p_data.containsKey( "source" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentdata" ) );
 

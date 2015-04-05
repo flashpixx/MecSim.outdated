@@ -237,7 +237,7 @@ public class CUI extends Application
      * @tparam T node type
      */
     @SuppressWarnings("unchecked")
-    public <T extends Node> T getTab( final String p_name )
+    public <T extends Node> T getTyped( final String p_name )
     {
         return (T) m_content.get( p_name );
     }

@@ -85,22 +85,14 @@ public class CTrafficEnvironment
      *
      * @param p_data input data
      */
-    public void web_static_enablegraphweight( final Map<String, Object> p_data )
+    public void web_static_enabledisablegraphweight( final Map<String, Object> p_data )
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-    }
+        if ( !p_data.containsKey( "name" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "noweightname" ) );
 
-
-    /**
-     * UI method - disable graph weight
-     *
-     * @param p_data input data
-     */
-    public void web_static_disablegraphweight( final Map<String, Object> p_data )
-    {
-        if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).enableDisableGraphWeight( (String) p_data.get( "name" ) );
     }
 
 }

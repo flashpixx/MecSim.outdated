@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,12 +57,12 @@ public class Test_CLanguageLabels
     private final Pattern m_class = Pattern.compile( ".*class\\s+.*(implements|extends)?" );
 
     /**
-     * test-case all resource strings (source -> label)
+     * test-case all resource strings
      */
     @Test
     public void testResourceString()
     {
-        // create source java path
+        // --- check  source -> label definition
         final String[] l_input = CCommon.getResourceURL().toString().split( File.separator );
         String[] l_search = new String[l_input.length + 1];
         System.arraycopy( l_input, 0, l_search, 0, l_search.length - 3 );
@@ -82,7 +83,16 @@ public class Test_CLanguageLabels
         catch ( final Throwable l_throwable )
         {
             fail( l_throwable.getMessage() );
+            return;
         }
+
+
+        // --- check label -> property definition
+        final Set<String> l_labels = new HashSet( Collections.list( CConfiguration.getInstance().getResourceBundle().getKeys() ) );
+        l_labels.removeAll( m_labels );
+        if ( !l_labels.isEmpty() )
+            fail( "the following keys are unused: " + StringUtils.join( l_labels, ", " ) );
+
     }
 
 
@@ -128,9 +138,6 @@ public class Test_CLanguageLabels
             // check class parameter
             if ( !l_parameter[0].equals( "this" ) )
                 l_subclassname = l_parameter[0].contains( "." ) ? l_parameter[0] : l_package + "." + l_parameter[0];
-
-
-            //System.out.println("----> " + l_package + "    " + l_subclassname + "     " + l_parameter[0] + "      " + l_parameter[1]);
 
             // check label and add label to the set
             this.checkLabel( l_subclassname, l_parameter[1] );

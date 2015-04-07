@@ -64,7 +64,7 @@ public class CCommon
      * @param p_package package / class path
      * @return path without main package name
      */
-    public static String removePackageName( String p_package )
+    public static String removePackageName( final String p_package )
     {
         return p_package.replace( "de.tu_clausthal.in.mec.", "" );
     }
@@ -204,6 +204,16 @@ public class CCommon
 
 
     /**
+     * returns root path of the resource
+     *
+     * @return URL of file or null
+     */
+    public static URL getResourceURL()
+    {
+        return CCommon.class.getClassLoader().getResource( "" );
+    }
+
+    /**
      * returns a file from a resource e.g. Jar file
      *
      * @param p_file file
@@ -239,21 +249,6 @@ public class CCommon
 
 
     /**
-     * converts any collection type into a typed array
-     *
-     * @param p_class      class array
-     * @param p_collection collection
-     * @return typed array
-     * @tparam T collection / array type
-     */
-    public static <T> T[] CollectionToArray( Class<T[]> p_class, Collection<T> p_collection )
-    {
-        T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
-        p_collection.toArray( l_return );
-        return l_return;
-    }
-
-    /**
      * returns a string of the resource file
      *
      * @param p_object    object for label
@@ -261,7 +256,7 @@ public class CCommon
      * @param p_parameter object array with substitutions
      * @return resource string
      */
-    public static String getResourceString( Object p_object, String p_label, Object... p_parameter )
+    public static String getResourceString( final Object p_object, final String p_label, final Object... p_parameter )
     {
         return getResourceString( p_object.getClass(), p_label, p_parameter );
     }
@@ -274,7 +269,7 @@ public class CCommon
      * @param p_parameter object array with substitutions
      * @return resource string
      */
-    public static String getResourceString( Class<?> p_class, String p_label, Object... p_parameter )
+    public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
     {
         final String l_label = removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" );
         final String l_string;
@@ -291,6 +286,23 @@ public class CCommon
         return MessageFormat.format( l_string, p_parameter );
     }
 
+
+    /**
+     * converts any collection type into a typed array
+     *
+     * @param p_class      class array
+     * @param p_collection collection
+     * @return typed array
+     * @tparam T collection / array type
+     */
+    public static <T> T[] CollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
+    {
+        T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
+        p_collection.toArray( l_return );
+        return l_return;
+    }
+
+
     /**
      * adds a file extension if necessary
      *
@@ -298,11 +310,9 @@ public class CCommon
      * @param p_suffix suffix
      * @return file with extension
      */
-    public static File addFileExtension( File p_file, String p_suffix )
+    public static File addFileExtension( final File p_file, final String p_suffix )
     {
-        File l_file = p_file;
-        if ( !l_file.getAbsolutePath().endsWith( p_suffix ) ) l_file = new File( l_file + p_suffix );
-        return l_file;
+        return ( p_file.getAbsolutePath().endsWith( p_suffix ) ) ? p_file : new File( p_file + p_suffix );
     }
 
 
@@ -351,7 +361,7 @@ public class CCommon
      * @param p_bytes input bytes
      * @return hexadecimal string
      */
-    protected static String getBytes2Hex( byte[] p_bytes )
+    private static String getBytes2Hex( final byte[] p_bytes )
     {
         StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
         for ( byte l_byte : p_bytes )

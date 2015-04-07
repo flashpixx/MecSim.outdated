@@ -342,7 +342,7 @@ public class CConfiguration
         // append all Jar files to the classpath of the system class loader
         try
         {
-            URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            final URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
                 CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, CCommon.getResourceURL( m_location.get( "jar" ) + File.separator + l_jar ) );
         }

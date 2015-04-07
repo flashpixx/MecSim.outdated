@@ -249,6 +249,18 @@ public class CCommon
 
 
     /**
+     * returns the label of a class and string to get access to the resource
+     *
+     * @param p_class     class for static calls
+     * @param p_label     label name of the object
+     * @return label name
+     */
+    public static String getResourceStringLabel( final Class<?> p_class, final String p_label )
+    {
+        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace( " ", "" );
+    }
+
+    /**
      * returns a string of the resource file
      *
      * @param p_object    object for label
@@ -271,19 +283,17 @@ public class CCommon
      */
     public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
     {
-        final String l_label = removePackageName( p_class.getCanonicalName().toLowerCase() ) + "." + p_label.toLowerCase().replace( " ", "" );
-        final String l_string;
         try
         {
-            l_string = CConfiguration.getInstance().getResourceBundle().getString( l_label );
+            final String l_string = CConfiguration.getInstance().getResourceBundle().getString( getResourceStringLabel( p_class, p_label ) );
+            return MessageFormat.format( l_string, p_parameter );
         }
         catch ( final MissingResourceException l_exception )
         {
             CLogger.error( l_exception );
-            return "";
         }
 
-        return MessageFormat.format( l_string, p_parameter );
+        return "";
     }
 
 

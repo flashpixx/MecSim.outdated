@@ -55,7 +55,7 @@ public class CVirtualFile implements IVirtualLocation
     public CVirtualFile( final URL p_file, final String p_uri )
     {
         if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( p_uri.endsWith( "/" ) ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempy", p_uri ) );
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
         if ( p_file == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "fileisnull", p_uri ) );
 

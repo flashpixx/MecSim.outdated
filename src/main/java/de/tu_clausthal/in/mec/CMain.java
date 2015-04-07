@@ -75,6 +75,7 @@ public class CMain
         l_clioptions.addOption( "help", false, CCommon.getResourceString( CMain.class, "help" ) );
         l_clioptions.addOption( "configuration", true, CCommon.getResourceString( CMain.class, "config" ) );
         l_clioptions.addOption( "nogui", true, CCommon.getResourceString( CMain.class, "nogui" ) );
+        l_clioptions.addOption( "uibindport", true, CCommon.getResourceString( CMain.class, "uibindport" ) );
         l_clioptions.addOption( "step", true, CCommon.getResourceString( CMain.class, "step" ) );
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
@@ -124,6 +125,12 @@ public class CMain
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
         CLogger.out( CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gb ), Runtime.getRuntime().maxMemory() / c_gb < c_neededmemory );
+        try
+        {
+            if ( ( l_cli.hasOption( "uibindport" ) ) )
+                CConfiguration.getInstance().get().setTraverse( "ui/bindport", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
+        }
+        catch ( final NumberFormatException l_exception ) {}
 
 
         // run application

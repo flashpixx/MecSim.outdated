@@ -49,13 +49,17 @@ iframe
 
 #mecsim_accordion
 {
-    height: 96%;
+    height: 90%;
     color: red;
 }
 
 #mecsim_tuc_logo_small
 {
-    height: 4%;
+    position: absolute;
+    min-height 24px:
+    height: 10%;
+    bottom: 4px;
+    position: relative;
 }
 
 #mecsim_big_tuc_logo

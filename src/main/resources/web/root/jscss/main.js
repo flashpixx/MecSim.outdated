@@ -17,6 +17,11 @@ $(document).ready(function(){
         $("#mecsim_content").load( this.href );
     });
 
+    $("a.template_button").button().click(function( p_event ){
+            p_event.preventDefault();
+            $("#mecsim_content").load( this.href );
+    });
+
     // reload default page
     $("a.mecsim_home").button().click(function( p_event ){
         p_event.preventDefault();
@@ -56,6 +61,9 @@ $(document).ready(function(){
         );
     });
 
+    $("#mecsim_load_asl").button();
+    $("#mecsim_delete_asl").button();
+
 
     $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });
 
@@ -63,7 +71,7 @@ $(document).ready(function(){
     $("#root_menu").menu();
     $("#simulation_menu").menu();
     $("#help_menu").menu();
-
+    $("#mecsim_agent_files").selectmenu();
 
 
 });

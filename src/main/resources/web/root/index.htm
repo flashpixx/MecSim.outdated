@@ -54,6 +54,9 @@
                     <li >
                         <a class = "template" >Preferences</a >
                     </li >
+                    <li>
+                        <a href = "template/configuration.htm" class = "template" >Configuration</a >
+                    </li>
                     <li >
                         <a class = "template" >Load</a >
                     </li >
@@ -63,6 +66,9 @@
                     <li >
                         <a class = "template" >Screenshot</a >
                     </li >
+                    <li>
+                        <a href = "template/local.htm" class = "template" >Local</a >
+                    </li>
                 </ul >
 
             </div >
@@ -85,28 +91,21 @@
 
             </div >
 
-            <h3 >Local</h3 >
-
-            <div class = "align-center-div" >
-                <p >
-                    <a href = "template/local.htm" class = "template" >Local</a >
-                </p >
-            </div >
-
-            <h3 >Configuration</h3 >
-
-            <div class = "align-center-div" >
-                <p >
-                    <a href = "template/configuration.htm" class = "template" >Configuration</a >
-                </p >
-            </div >
-
             <h3 >Editor</h3 >
 
             <div class = "align-center-div" >
-                <p >
-                    <a id = "mecsim_editor" href = "template/editor.htm" class = "template" >Editor</a >
-                </p >
+                <!-- TODO: load all existing asl files into select menu -->
+                <label for="mecsim_agent_files">Select a file</label>
+                <select name="agentfiles" id="mecsim_agent_files">
+                    <option value="agent.asl">agent</option>
+                    <option value="foo.asl" selected="selected">foo</option>
+                </select>
+                <br/>
+                <a id = "mecsim_editor" href = "template/editor.htm" class = "template_button fixed_width_button" >Load</a >
+                <!-- TODO: delete option -->
+                <button id="mecsim_delete_asl" class="fixed_width_button">Delete</button>
+                <!-- TODO: create new asl file option -->
+
             </div >
 
             <h3 >Getting Help</h3 >

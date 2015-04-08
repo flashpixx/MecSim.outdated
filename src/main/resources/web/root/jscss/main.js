@@ -64,9 +64,10 @@ $(document).ready(function(){
 
     $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });
 
+    // activating menus
     $("#root_menu").menu();
-
     $("#simulation_menu").menu();
+    $("#help_menu").menu();
 
 
 

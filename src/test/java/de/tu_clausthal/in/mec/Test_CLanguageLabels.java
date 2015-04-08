@@ -34,7 +34,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,7 +87,7 @@ public class Test_CLanguageLabels
 
 
         // --- check label -> property definition
-        final Set<String> l_labels = new HashSet( Collections.list( CConfiguration.getInstance().getResourceBundle().getKeys() ) );
+        final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle().keySet();
         l_labels.removeAll( m_labels );
         if ( !l_labels.isEmpty() )
             fail( "the following keys are unused: " + StringUtils.join( l_labels, ", " ) );

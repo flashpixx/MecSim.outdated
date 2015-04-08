@@ -8,6 +8,8 @@ $(document).ready(function(){
                                              .text(p_data.agents[i]));
 
         }
+            $("#mecsim_agent_files option:first").attr('selected', true);
+            $('#mecsim_agent_files').selectmenu('refresh', true);
     });
 
     // TODO: add button text according to selected language

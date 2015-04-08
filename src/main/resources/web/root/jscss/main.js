@@ -40,6 +40,11 @@ $(document).ready(function(){
         ).fail( function( p_data ) { console.log(p_data); } );
     });
 
+    $( "#mecsim_reset_button" ).click(function() {
+        $.post(
+            "csimulation/reset"
+        ).fail( function( p_data ) { console.log(p_data); } );
+    });
 
 
     $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });

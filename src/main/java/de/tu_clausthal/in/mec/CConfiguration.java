@@ -260,7 +260,7 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        return getResourceBundle(null);
+        return getResourceBundle( null );
     }
 
 

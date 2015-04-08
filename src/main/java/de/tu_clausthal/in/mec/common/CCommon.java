@@ -251,8 +251,8 @@ public class CCommon
     /**
      * returns the label of a class and string to get access to the resource
      *
-     * @param p_class     class for static calls
-     * @param p_label     label name of the object
+     * @param p_class class for static calls
+     * @param p_label label name of the object
      * @return label name
      */
     public static String getResourceStringLabel( final Class<?> p_class, final String p_label )

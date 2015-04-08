@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- */
+ **/
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -36,6 +36,7 @@ import java.net.URL;
  */
 public class CVirtualFile implements IVirtualLocation
 {
+    private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
     /**
      * file *
      */
@@ -60,25 +61,25 @@ public class CVirtualFile implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "fileisnull", p_uri ) );
 
         m_file = p_file;
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
 
         CLogger.info( p_uri );
     }
 
     @Override
-    public boolean match( String p_uri )
+    public final boolean match( final String p_uri )
     {
         return p_uri.equals( m_uri );
     }
 
     @Override
-    public URL get( final NanoHTTPD.IHTTPSession p_session )
+    public final URL get( final NanoHTTPD.IHTTPSession p_session )
     {
         return m_file;
     }
 
     @Override
-    public CMarkdownRenderer getMarkDownRenderer()
+    public final CMarkdownRenderer getMarkDownRenderer()
     {
         return null;
     }

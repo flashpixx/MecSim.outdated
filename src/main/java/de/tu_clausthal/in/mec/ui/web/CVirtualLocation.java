@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- */
+ **/
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -38,11 +38,11 @@ public class CVirtualLocation
     /**
      * default name-based host *
      */
-    protected final CVirtualDirectory m_defaultlocation;
+    private final CVirtualDirectory m_defaultlocation;
     /**
      * list with additional name-based location *
      */
-    protected final Map<Integer, IVirtualLocation> m_locations = new HashMap<>();
+    private final Map<Integer, IVirtualLocation> m_locations = new HashMap<>();
 
 
     /**
@@ -71,7 +71,7 @@ public class CVirtualLocation
      * @param p_session HTTP session
      * @return name-based location or default location or null
      */
-    public IVirtualLocation get( final NanoHTTPD.IHTTPSession p_session )
+    public final IVirtualLocation get( final NanoHTTPD.IHTTPSession p_session )
     {
         // try to find an exact match
         if ( m_locations.containsKey( p_session.getUri().hashCode() ) )

@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- */
+ **/
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -36,7 +36,7 @@ import java.net.URL;
  */
 public class CVirtualDirectory implements IVirtualLocation
 {
-
+    private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
     /**
      * markdown renderer
      */
@@ -44,11 +44,11 @@ public class CVirtualDirectory implements IVirtualLocation
     /**
      * URI pattern *
      */
-    private String m_uri = "/";
+    private final String m_uri;
     /**
      * virtual-location-directory *
      */
-    private String m_directory = null;
+    private final String m_directory;
     /**
      * index file *
      */
@@ -67,6 +67,7 @@ public class CVirtualDirectory implements IVirtualLocation
         if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
 
+        m_uri = "/";
         m_index = p_index;
         m_directory = p_directory.toString();
         m_markdown = null;
@@ -90,7 +91,7 @@ public class CVirtualDirectory implements IVirtualLocation
 
         m_index = p_index;
         m_directory = p_directory.toString();
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = null;
 
         CLogger.info( p_uri );
@@ -116,30 +117,30 @@ public class CVirtualDirectory implements IVirtualLocation
 
         m_index = p_index;
         m_directory = p_directory.toString();
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = p_markdown;
     }
 
 
     @Override
-    public boolean match( final String p_uri )
+    public final boolean match( final String p_uri )
     {
         return p_uri.startsWith( m_uri );
     }
 
 
     @Override
-    public URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException
+    public final URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException
     {
         // URL concatination must be run with string manually, because otherwise last URL element can be removed
         if ( p_session.getUri().equals( m_uri ) ) return new URL( m_directory + "/" + m_index );
 
         // special call on root-location (/) to avoid path error
-        return new URL( m_directory + ( m_uri.equals( "/" ) ? p_session.getUri() : "/" + p_session.getUri().replace( m_uri, "" ) ) );
+        return new URL( m_directory + ( "/".equals( m_uri ) ? p_session.getUri() : "/" + p_session.getUri().replace( m_uri, "" ) ) );
     }
 
     @Override
-    public CMarkdownRenderer getMarkDownRenderer()
+    public final CMarkdownRenderer getMarkDownRenderer()
     {
         return m_markdown;
     }

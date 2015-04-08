@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- */
+ **/
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -37,9 +37,13 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 public class CWorkspace extends CBrowser
 {
     /**
+     * path of the configuration value
+     */
+    private static final String c_configpath = "ui/bindport";
+    /**
      * HTTP server to handle websockets *
      */
-    protected final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( "ui/bindport" ), new CVirtualDirectory( CCommon.getResourceURL( "web/root" ), "index.htm" ) );
+    private final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath ), new CVirtualDirectory( CCommon.getResourceURL( "web/root" ), "index.htm" ) );
 
 
     /**
@@ -48,7 +52,7 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super( EMenu.BackForward );
-        this.load( "http://localhost:" + CConfiguration.getInstance().get().<Integer>getTraverse( "ui/bindport" ) );
+        this.load( "http://localhost:" + CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath ) );
 
         // set via reflection the server
         try

@@ -31,15 +31,35 @@ $(document).ready(function(){
     $( "#mecsim_start_button" ).click(function() {
         $.post(
             "csimulation/start"
-        ).fail( function( p_data ) { console.log(p_data); } );
+        ).fail( function( p_data )
+                {
+                    console.log(p_data);
+                    $("#mecsim_start_error_text").text(p_data.responseJSON.error);
+                    $("#mecsim_start_error").dialog();
+                } );
     });
 
     $( "#mecsim_stop_button" ).click(function() {
         $.post(
             "csimulation/stop"
-        ).fail( function( p_data ) { console.log(p_data); } );
+        ).fail( function( p_data )
+                {
+                    console.log(p_data);
+                    $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
+                    $("#mecsim_stop_error").dialog();
+                } );
     });
 
+    $( "#mecsim_reset_button" ).click(function() {
+        $.post(
+            "csimulation/reset"
+        ).fail( function( p_data )
+                {
+                    console.log(p_data);
+                    $("#mecsim_restart_error_text").text(p_data.responseJSON.error);
+                    $("#mecsim_restart_error").dialog();
+                } );
+    });
 
 
     $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });
@@ -47,6 +67,7 @@ $(document).ready(function(){
     $("#root_menu").menu();
 
     $("#simulation_menu").menu();
+
 
 
 });

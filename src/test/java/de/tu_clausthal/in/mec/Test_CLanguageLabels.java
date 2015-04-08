@@ -27,9 +27,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,19 +59,11 @@ public class Test_CLanguageLabels
     @Test
     public void testResourceString()
     {
-        // --- check  source -> label definition
-        final String[] l_input = CCommon.getResourceURL().toString().split( File.separator );
-        String[] l_search = new String[l_input.length + 1];
-        System.arraycopy( l_input, 0, l_search, 0, l_search.length - 3 );
-        l_search[l_search.length - 3] = "src";
-        l_search[l_search.length - 2] = "main";
-        l_search[l_search.length - 1] = "java";
-
+        // --- check source -> label definition
         try
         {
-
             final List<Path> l_files = new ArrayList<>();
-            Files.walk( Paths.get( new URL( StringUtils.join( l_search, File.separator ) ).getPath() ) ).filter( Files::isRegularFile ).forEach( path -> l_files.add( path ) );
+            Files.walk( Paths.get( CCommon.URLConcat( CCommon.getResourceURL(), "../../src/main/java" ).getPath() ) ).filter( Files::isRegularFile ).forEach( path -> l_files.add( path ) );
 
             for ( Path l_item : l_files )
                 this.checkFile( l_item );

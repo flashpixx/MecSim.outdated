@@ -33,6 +33,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -245,6 +248,22 @@ public class CCommon
         }
 
         return null;
+    }
+
+
+    /**
+     * concats an URL with a path
+     *
+     * @param p_base   base URL
+     * @param p_string additional path
+     * @return new URL
+     * @throws URISyntaxException    thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    public static URL URLConcat( final URL p_base, final String p_string ) throws URISyntaxException, MalformedURLException
+    {
+        final URI l_uri = p_base.toURI();
+        return l_uri.resolve( l_uri.getPath() + p_string ).toURL();
     }
 
 

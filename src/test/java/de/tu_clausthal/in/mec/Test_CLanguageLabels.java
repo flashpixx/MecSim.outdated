@@ -61,8 +61,8 @@ public class Test_CLanguageLabels
     @Test
     public void testResourceString()
     {
-        // --- check  source -> label definition
-        final String[] l_input = CCommon.getResourceURL().toString().split( File.separator );
+        // --- check source -> label definition
+        final String[] l_input = CCommon.getResourceURL().toString().split( "/" );
         String[] l_search = new String[l_input.length + 1];
         System.arraycopy( l_input, 0, l_search, 0, l_search.length - 3 );
         l_search[l_search.length - 3] = "src";
@@ -73,7 +73,7 @@ public class Test_CLanguageLabels
         {
 
             final List<Path> l_files = new ArrayList<>();
-            Files.walk( Paths.get( new URL( StringUtils.join( l_search, File.separator ) ).getPath() ) ).filter( Files::isRegularFile ).forEach( path -> l_files.add( path ) );
+            Files.walk( Paths.get( new URL( StringUtils.join( l_search, "/" ) ).getPath() ) ).filter( Files::isRegularFile ).forEach( path -> l_files.add( path ) );
 
             for ( Path l_item : l_files )
                 this.checkFile( l_item );

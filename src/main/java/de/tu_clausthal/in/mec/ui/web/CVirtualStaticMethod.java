@@ -93,7 +93,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
 
     @Override
     @SuppressWarnings("unchecked")
-    public String get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
+    public NanoHTTPD.Response get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
         // parse data - must be called otherwise an time-out exception is thrown
         if ( NanoHTTPD.Method.PUT.equals( p_session.getMethod() ) || NanoHTTPD.Method.POST.equals( p_session.getMethod() ) )
@@ -118,15 +118,15 @@ public class CVirtualStaticMethod implements IVirtualLocation
                     throw new IllegalArgumentException( CCommon.getResourceString( this, "argumentnumber", m_arguments ) );
             }
 
-            return l_return == null ? "{}" : CCommon.toJson( l_return );
+            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.OK, "application/json; charset=utf-8", l_return == null ? "{}" : CCommon.toJson( l_return ) );
         }
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-            return CCommon.toJson( new HashMap<String, String>()
+            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json; charset=utf-8", CCommon.toJson( new HashMap<String, String>()
             {{
                     put( "error", l_throwable.getMessage() );
-                }} );
+                }} ) );
         }
     }
 

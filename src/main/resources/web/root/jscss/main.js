@@ -31,13 +31,13 @@ $(document).ready(function(){
     $( "#mecsim_start_button" ).button().click(function() {
         $.post(
             "csimulation/start"
-        );
+        ).fail( function( p_data ) { console.log(p_data); } );
     });
 
     $( "#mecsim_stop_button" ).button().click(function() {
         $.post(
             "csimulation/stop"
-        );
+        ).fail( function( p_data ) { console.log(p_data); } );
     });
 
     $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });

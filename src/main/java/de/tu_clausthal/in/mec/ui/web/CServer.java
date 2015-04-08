@@ -227,7 +227,7 @@ public class CServer extends NanoHTTPD
     protected final Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         CLogger.info( p_session.getUri() );
-        return new Response( Response.Status.OK, "application/json; charset=utf-8", p_location.<String>get( p_session ) );
+        return p_location.<Response>get( p_session );
     }
 
 

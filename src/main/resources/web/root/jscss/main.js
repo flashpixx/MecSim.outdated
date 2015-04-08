@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    // load existing asl files
+    $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
+        for(var i in p_data.agents){
+            $("#mecsim_agent_files").append( $("<option></option>")
+                                             .attr("value",p_data.agents[i])
+                                             .text(p_data.agents[i]));
+
+        }
+    });
+
     // TODO: add button text according to selected language
     /*$('#mecsim_user_documentation').text(function() {
         $.post(

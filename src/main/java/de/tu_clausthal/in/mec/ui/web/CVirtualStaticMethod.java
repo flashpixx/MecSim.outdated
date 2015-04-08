@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- */
+ **/
 
 package de.tu_clausthal.in.mec.ui.web;
 
@@ -40,11 +40,18 @@ import java.util.Map;
  */
 public class CVirtualStaticMethod implements IVirtualLocation
 {
-
+    /**
+     * URI reg expression for filter
+     */
+    private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
+    /**
+     * mime type
+     */
+    private static final String c_mimetype = "application/json; charset=utf-8";
     /**
      * type parser
      */
-    protected static final TypeParser s_parser = TypeParser.newBuilder().build();
+    private static final TypeParser c_parser = TypeParser.newBuilder().build();
     /**
      * method handle *
      */
@@ -76,7 +83,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     public CVirtualStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" ) : "/" + p_uri.replaceAll( "[^a-zA-Z0-9_/]+", "" );
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_uriallowchars, "" ) : "/" + p_uri.replaceAll( c_uriallowchars, "" );
         m_method = p_method.getHandle();
         m_methodreturntype = p_method.getMethod().getReturnType();
         m_object = p_object;
@@ -86,14 +93,14 @@ public class CVirtualStaticMethod implements IVirtualLocation
     }
 
     @Override
-    public boolean match( final String p_uri )
+    public final boolean match( final String p_uri )
     {
         return m_uri.equals( p_uri );
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public NanoHTTPD.Response get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
+    public final NanoHTTPD.Response get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
         // parse data - must be called otherwise an time-out exception is thrown
         if ( NanoHTTPD.Method.PUT.equals( p_session.getMethod() ) || NanoHTTPD.Method.POST.equals( p_session.getMethod() ) )
@@ -118,17 +125,17 @@ public class CVirtualStaticMethod implements IVirtualLocation
                     throw new IllegalArgumentException( CCommon.getResourceString( this, "argumentnumber", m_arguments ) );
             }
 
-            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.OK, "application/json; charset=utf-8", l_return == null ? "{}" : CCommon.toJson( l_return ) );
+            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.OK, c_mimetype, l_return == null ? "{}" : CCommon.toJson( l_return ) );
         }
-        catch ( final Throwable l_throwable )
+        catch ( final Exception l_exception )
         {
-            CLogger.error( l_throwable );
-            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json; charset=utf-8", CCommon.toJson( CCommon.getMap( "error", l_throwable.getMessage() ) ) );
+            CLogger.error( l_exception );
+            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.INTERNAL_ERROR, c_mimetype, CCommon.toJson( CCommon.getMap( "error", l_exception.getMessage() ) ) );
         }
     }
 
     @Override
-    public CMarkdownRenderer getMarkDownRenderer()
+    public final CMarkdownRenderer getMarkDownRenderer()
     {
         return null;
     }
@@ -159,8 +166,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
     {
         if ( p_key.length == p_keyindex + 1 )
         {
-
-            p_map.put( p_key[p_keyindex], CCommon.convertValue( p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class}, s_parser ) );
+            p_map.put( p_key[p_keyindex], CCommon.convertValue( p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class}, c_parser ) );
             return;
         }
 

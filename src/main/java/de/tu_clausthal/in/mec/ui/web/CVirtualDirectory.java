@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import fi.iki.elonen.NanoHTTPD;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 
@@ -48,7 +49,7 @@ public class CVirtualDirectory implements IVirtualLocation
     /**
      * virtual-location-directory *
      */
-    private final String m_directory;
+    private final URL m_directory;
     /**
      * index file *
      */
@@ -69,7 +70,7 @@ public class CVirtualDirectory implements IVirtualLocation
 
         m_uri = "/";
         m_index = p_index;
-        m_directory = p_directory.toString();
+        m_directory = p_directory;
         m_markdown = null;
     }
 
@@ -90,7 +91,7 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_index = p_index;
-        m_directory = p_directory.toString();
+        m_directory = p_directory;
         m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = null;
 
@@ -116,7 +117,7 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_index = p_index;
-        m_directory = p_directory.toString();
+        m_directory = p_directory;
         m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = p_markdown;
     }
@@ -130,13 +131,13 @@ public class CVirtualDirectory implements IVirtualLocation
 
 
     @Override
-    public final URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException
+    public final URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException, URISyntaxException
     {
         // URL concatination must be run with string manually, because otherwise last URL element can be removed
         if ( p_session.getUri().equals( m_uri ) ) return new URL( m_directory + "/" + m_index );
 
         // special call on root-location (/) to avoid path error
-        return new URL( m_directory + ( "/".equals( m_uri ) ? p_session.getUri() : "/" + p_session.getUri().replace( m_uri, "" ) ) );
+        return CCommon.URLConcat( m_directory, p_session.getUri() );
     }
 
     @Override

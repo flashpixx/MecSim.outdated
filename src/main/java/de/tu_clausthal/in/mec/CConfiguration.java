@@ -256,13 +256,24 @@ public class CConfiguration
     /**
      * returns the property bundle
      *
+     * @return resource bundle
+     */
+    public ResourceBundle getResourceBundle()
+    {
+        return getResourceBundle(null);
+    }
+
+
+    /**
+     * returns the property bundle
+     *
      * @param p_language language code
      * @return resource bundle
      */
-    public ResourceBundle getResourceBundle( final String... p_language )
+    public ResourceBundle getResourceBundle( final String p_language )
     {
         final Locale l_locale;
-        switch ( p_language == null || p_language.length == 0 ? m_configuration.<String>getTraverse( "language/current" ) : p_language[0] )
+        switch ( p_language == null || p_language.isEmpty() ? m_configuration.<String>getTraverse( "language/current" ) : p_language )
         {
             case "de":
                 l_locale = Locale.GERMANY;

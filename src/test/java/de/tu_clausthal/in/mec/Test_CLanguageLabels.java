@@ -87,11 +87,16 @@ public class Test_CLanguageLabels
 
 
         // --- check label -> property definition
-        final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle().keySet();
-        l_labels.removeAll( m_labels );
-        if ( !l_labels.isEmpty() )
-            fail( "the following keys are unused: " + StringUtils.join( l_labels, ", " ) );
-
+        for ( String l_language : CConfiguration.getInstance().get().<List<String>>getTraverse( "language/allow" ) )
+        {
+            final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle( l_language ).keySet();
+            l_labels.removeAll( m_labels );
+            if ( !l_labels.isEmpty() )
+            {
+                fail( String.format( "the following keys in language [%s] are unused: %s", l_language, StringUtils.join( l_labels, ", " ) ) );
+                return;
+            }
+        }
     }
 
 
@@ -191,7 +196,6 @@ public class Test_CLanguageLabels
             l_return[0] = l_split[0].replace( "CCommon.getResourceString", "" ).replace( "(", "" ).replace( ".class", "" ).trim();
             l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).trim().toLowerCase();
             return l_return;
-
         }
 
         return null;
@@ -219,17 +223,18 @@ public class Test_CLanguageLabels
         }
 
         // check resource
-        try
-        {
-            final String l_label = CCommon.getResourceString( l_class, p_label );
-            if ( ( l_label == null ) || ( l_label.isEmpty() ) )
-                throw new IllegalStateException();
-        }
-        catch ( final IllegalStateException l_exception )
-        {
-            fail( String.format( "label [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), p_classname ) );
-            return;
-        }
+        for ( String l_language : CConfiguration.getInstance().get().<List<String>>getTraverse( "language/allow" ) )
+            try
+            {
+                final String l_label = CCommon.getResourceString( l_language, l_class, p_label );
+                if ( ( l_label == null ) || ( l_label.isEmpty() ) )
+                    throw new IllegalStateException();
+            }
+            catch ( final IllegalStateException l_exception )
+            {
+                fail( String.format( "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language, p_classname ) );
+                return;
+            }
 
         m_labels.add( CCommon.getResourceStringLabel( l_class, p_label ) );
     }

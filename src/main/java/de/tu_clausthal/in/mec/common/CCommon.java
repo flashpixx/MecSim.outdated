@@ -260,8 +260,9 @@ public class CCommon
         return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace( " ", "" );
     }
 
+
     /**
-     * returns a string of the resource file
+     * returns a default string of the resource file
      *
      * @param p_object    object for label
      * @param p_label     label name of the object
@@ -270,11 +271,25 @@ public class CCommon
      */
     public static String getResourceString( final Object p_object, final String p_label, final Object... p_parameter )
     {
-        return getResourceString( p_object.getClass(), p_label, p_parameter );
+        return getResourceString( null, p_object.getClass(), p_label, p_parameter );
     }
 
     /**
      * returns a string of the resource file
+     *
+     * @param p_language  language code / empty for default
+     * @param p_object    object for label
+     * @param p_label     label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final String p_language, final Object p_object, final String p_label, final Object... p_parameter )
+    {
+        return getResourceString( p_language, p_object.getClass(), p_label, p_parameter );
+    }
+
+    /**
+     * returns a default string of the resource file
      *
      * @param p_class     class for static calls
      * @param p_label     label name of the object
@@ -283,9 +298,23 @@ public class CCommon
      */
     public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
     {
+        return getResourceString( null, p_class, p_label, p_parameter );
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_language  language code / empty for default
+     * @param p_class     class for static calls
+     * @param p_label     label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final String p_language, final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
         try
         {
-            final String l_string = CConfiguration.getInstance().getResourceBundle().getString( getResourceStringLabel( p_class, p_label ) );
+            final String l_string = CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) );
             return MessageFormat.format( l_string, p_parameter );
         }
         catch ( final MissingResourceException l_exception )

@@ -123,10 +123,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json; charset=utf-8", CCommon.toJson( new HashMap<String, String>()
-            {{
-                    put( "error", l_throwable.getMessage() );
-                }} ) );
+            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json; charset=utf-8", CCommon.toJson( CCommon.getMap( "error", l_throwable.getMessage() ) ) );
         }
     }
 

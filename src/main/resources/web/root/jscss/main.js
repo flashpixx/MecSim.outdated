@@ -53,12 +53,7 @@ $(document).ready(function(){
     $( "#mecsim_reset_button" ).click(function() {
         $.post(
             "csimulation/reset"
-        ).fail( function( p_data )
-                {
-                    console.log(p_data);
-                    $("#mecsim_restart_error_text").text(p_data.responseJSON.error);
-                    $("#mecsim_restart_error").dialog();
-                } );
+        );
     });
 
 

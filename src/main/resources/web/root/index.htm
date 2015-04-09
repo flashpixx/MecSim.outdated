@@ -129,32 +129,22 @@
 
     </div >
     <div id = "mecsim_content" >
-
         <script type = "text/javascript" >
-
-    $.getJSON( "cconfiguration/get", function( p_data ) {
-
-        $("#mecsim_content").append(
-            "<table>" +
-            "<thead><tr><th><a href=\"" + p_data.manifest["project-url"] + "\">" + p_data.manifest["project-name"] + "</a></th></tr></thead>" +
-            "<tbody>" +
-            "<tr><td colspan=\"2\">&nbsp;</td></tr>" +
-            "<tr><th>License</th><td><a href=\"" + p_data.manifest["license-url"] + "\">" + p_data.manifest["license"] + "</a></td>" +
-            "<tr><td colspan=\"2\">&nbsp;</td></tr>" +
-            "<tr><th>Buildversion</th><td>" + p_data.manifest["build-version"] + "</td>" +
-            "<tr><th>Buildnumber</th><td>" + p_data.manifest["build-number"] + "</td>" +
-            "<tr><th>Buildcommit</th><td>" + p_data.manifest["build-commit"] + "</td>" +
-            "</tbody>" +
-            "</table>"
-        );
-
-    });
-
-
-
+            $.getJSON( "cconfiguration/get", function( p_data ) {
+                $("#mecsim_content").append(
+                    "<div id=\"about\">" +
+                    "<div class=\"table\">" +
+                    "<div class=\"row\">  <div class=\"cell text_align_center\"><a href=\"" + p_data.manifest["project-url"] + "\">" + p_data.manifest["project-name"] + "</a></div>  </div>" +
+                    "<br/>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">License</div></div>       <div class=\"cell\"><a href=\"" + p_data.manifest["license-url"] + "\">" + p_data.manifest["license"] + "</a></div></div>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildversion</div></div>  <div class=\"cell\">" + p_data.manifest["build-version"] + "</div></div>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildnumber</div></div>   <div class=\"cell\">" + p_data.manifest["build-number"] + "</a></div></div>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildcommit</div></div>   <div class=\"cell\">" + p_data.manifest["build-commit"] + "</a></div></div>" +
+                    "</div>" +
+                    "</div>"
+                );
+            });
         </script >
-
-
     </div >
 </div >
 

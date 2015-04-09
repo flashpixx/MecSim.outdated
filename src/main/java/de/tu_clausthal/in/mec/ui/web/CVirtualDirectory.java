@@ -53,7 +53,7 @@ public class CVirtualDirectory implements IVirtualLocation
     /**
      * index file *
      */
-    private String m_index = "";
+    private final String m_index;
 
     /**
      * ctor
@@ -69,8 +69,8 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
 
         m_uri = "/";
-        m_index = p_index;
         m_directory = p_directory;
+        m_index = p_index.startsWith( "/" ) ? p_index : "/" + p_index;
         m_markdown = null;
     }
 
@@ -90,8 +90,8 @@ public class CVirtualDirectory implements IVirtualLocation
         if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
-        m_index = p_index;
         m_directory = p_directory;
+        m_index = p_index.startsWith( "/" ) ? p_index : "/" + p_index;
         m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = null;
 
@@ -116,8 +116,8 @@ public class CVirtualDirectory implements IVirtualLocation
         if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
-        m_index = p_index;
         m_directory = p_directory;
+        m_index = p_index.startsWith( "/" ) ? p_index : "/" + p_index;
         m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = p_markdown;
     }
@@ -134,10 +134,10 @@ public class CVirtualDirectory implements IVirtualLocation
     public final URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException, URISyntaxException
     {
         // URL concatination must be run with string manually, because otherwise last URL element can be removed
-        if ( p_session.getUri().equals( m_uri ) ) return new URL( m_directory + "/" + m_index );
+        if ( p_session.getUri().equals( m_uri ) ) return CCommon.URLConcat( m_directory, m_index );
 
         // special call on root-location (/) to avoid path error
-        return CCommon.URLConcat( m_directory, p_session.getUri() );
+        return CCommon.URLConcat( m_directory, p_session.getUri().replaceFirst( m_uri, "/" ) );
     }
 
     @Override

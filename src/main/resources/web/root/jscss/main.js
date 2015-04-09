@@ -1,7 +1,13 @@
 $(document).ready(function(){
 
+    var form, dialog;
+
     // load existing asl files
-    $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
+    load_asl_files();
+    function load_asl_files()
+    {
+        $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
+        $("#mecsim_agent_files").empty();
         for(var i in p_data.agents){
             $("#mecsim_agent_files").append( $("<option></option>")
                                              .attr("value",p_data.agents[i])
@@ -10,20 +16,42 @@ $(document).ready(function(){
         }
             $("#mecsim_agent_files option:first").attr('selected', true);
             $('#mecsim_agent_files').selectmenu('refresh', true);
-    });
+        });
+    }
 
     // form to create new asl file
     dialog = $("#mecsim_create_asl_form").dialog({
-        autoOpen: false
+        autoOpen: false,
+        buttons: {
+                "Create": create_new_asl,
+                Cancel: function() {
+                  dialog.dialog( "close" );
+                }
+              }
     });
 
     // create new asl file TODO: has to be completed
     $("#mecsim_new_asl").click(function() {
         dialog.dialog("open");
-        /*$.post(
-            "cagentenvironment/jason/create"
-        )*/
     });
+
+    function create_new_asl(){
+        if( $("#new_asl").val() )
+        {
+            $.post(
+                "cagentenvironment/jason/create",
+                { "name" : $("#new_asl").val() }
+            ).done(function() {
+                load_asl_files();
+                dialog.dialog("close");
+            });
+        }
+        else
+        {
+            alert("Please enter a file name");
+        }
+
+    }
 
     // TODO: add button text according to selected language
     /*$('#mecsim_user_documentation').text(function() {

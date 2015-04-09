@@ -16,13 +16,18 @@
         function( px_data ) {
             g_editor.setValue( px_data.source );
         }
-    );
+    )
 
-
-
-
-
-
+    // save asl file
+    // TODO: data field -> right?
+    $("#mecsim_save_asl").click(function(){
+    $.post(
+            "cagentenvironment/jason/write",
+            { "name" : $("#mecsim_agent_files").val(),
+              "source" : g_editor.getValue(),
+              "data" : g_editor.getValue()}
+        );
+    });
 </script >
 
 <form >

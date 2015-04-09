@@ -96,7 +96,7 @@ public class CLogger
         if ( p_length < 1 ) return p_input;
         if ( p_input.length() < p_length ) return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
 
-        return p_input.substring(0, p_length);
+        return p_input.substring( 0, p_length );
     }
 
 
@@ -114,7 +114,8 @@ public class CLogger
         {
             getInvokingMethodNameFqn( 4 );
             l_invokerindex = 4;
-        } catch ( final ArrayIndexOutOfBoundsException l_exception )
+        }
+        catch ( final ArrayIndexOutOfBoundsException l_exception )
         {
             l_invokerindex = 3;
         }

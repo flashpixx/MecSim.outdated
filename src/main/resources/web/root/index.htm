@@ -54,9 +54,9 @@
                     <li >
                         <a class = "template" >Preferences</a >
                     </li >
-                    <li>
+                    <li >
                         <a href = "template/configuration.htm" class = "template" >Configuration</a >
-                    </li>
+                    </li >
                     <li >
                         <a class = "template" >Load</a >
                     </li >
@@ -66,9 +66,9 @@
                     <li >
                         <a class = "template" >Screenshot</a >
                     </li >
-                    <li>
+                    <li >
                         <a href = "template/local.htm" class = "template" >Local</a >
-                    </li>
+                    </li >
                 </ul >
 
             </div >
@@ -77,17 +77,17 @@
 
             <div class = "align-center-div" >
 
-                <ul id="simulation_menu">
-                    <li>
-                        <a id="mecsim_start_button" >Start Simulation</a >
-                    </li>
-                    <li>
-                        <a id="mecsim_stop_button" >Stop Simulation</a >
-                    </li>
-                    <li>
-                        <a id="mecsim_reset_button" >Reset Simulation</a >
-                    </li>
-                </ul>
+                <ul id = "simulation_menu" >
+                    <li >
+                        <a id = "mecsim_start_button" >Start Simulation</a >
+                    </li >
+                    <li >
+                        <a id = "mecsim_stop_button" >Stop Simulation</a >
+                    </li >
+                    <li >
+                        <a id = "mecsim_reset_button" >Reset Simulation</a >
+                    </li >
+                </ul >
 
             </div >
 
@@ -95,13 +95,14 @@
 
             <div class = "align-center-div" >
 
-                <label for="mecsim_agent_files">Select a file</label>
-                <select name="agentfiles" id="mecsim_agent_files"></select>
-                <br/>
-                <a id = "mecsim_editor" href = "template/editor.htm" class = "template_button fixed_width_button" >Load</a >
-                <button id="mecsim_delete_asl" class="fixed_width_button">Delete</button>
-                <button id="mecsim_new_asl" class="fixed_width_button">New</button>
-                <button id="mecsim_save_asl" class="fixed_width_button">Save</button>
+                <label for = "mecsim_agent_files" >Select a file</label >
+                <select name = "agentfiles" id = "mecsim_agent_files" ></select >
+                <br />
+                <a id = "mecsim_editor" href = "template/editor.htm"
+                   class = "template_button fixed_width_button" >Load</a >
+                <button id = "mecsim_delete_asl" class = "fixed_width_button" >Delete</button >
+                <button id = "mecsim_new_asl" class = "fixed_width_button" >New</button >
+                <button id = "mecsim_save_asl" class = "fixed_width_button" >Save</button >
 
             </div >
 
@@ -109,18 +110,18 @@
 
             <div class = "align-center-div" >
 
-                <ul id="help_menu">
-                    <li>
+                <ul id = "help_menu" >
+                    <li >
                         <a class = "template" >Help</a >
-                    </li>
-                    <li>
+                    </li >
+                    <li >
                         <a id = "mecsim_user_documentation" href = "template/userdoc.htm" class = "template" >User
                             Dokumentation</a >
-                    </li>
-                    <li>
+                    </li >
+                    <li >
                         <a href = "template/develdoc.htm" class = "template" >Developer Dokumentation</a >
-                    </li>
-                </ul>
+                    </li >
+                </ul >
 
             </div >
 
@@ -128,46 +129,37 @@
 
     </div >
     <div id = "mecsim_content" >
-
-        <p >
-
-        <h1 class = "text_align_center" >MecSim</h1 >
-        </p>
-        <br/>
-        <p>
-            <a class="text_align_center" href = "template/about.htm">About</a >
-        </p>
     </div >
 </div >
 
 <!-- start and stop error messages -->
-<div id="mecsim_stop_error">
-    <div class="dialog-error">
-        <p id="mecsim_stop_error_text">
-            <span class="ui-icon ui-icon-alert"></span>
-        </p>
-    </div>
-</div>
+<div id = "mecsim_stop_error" >
+    <div class = "dialog-error" >
+        <p id = "mecsim_stop_error_text" >
+            <span class = "ui-icon ui-icon-alert" ></span >
+        </p >
+    </div >
+</div >
 
-<div id="mecsim_start_error">
-    <div class="dialog-error">
-        <p id="mecsim_start_error_text">
-            <span class="ui-icon ui-icon-alert"></span>
-        </p>
-    </div>
-</div>
+<div id = "mecsim_start_error" >
+    <div class = "dialog-error" >
+        <p id = "mecsim_start_error_text" >
+            <span class = "ui-icon ui-icon-alert" ></span >
+        </p >
+    </div >
+</div >
 <!-- ************************************ -->
 
 <!-- form to create new asl file -->
-<div id="mecsim_create_asl_form" title="Create new agent">
+<div id = "mecsim_create_asl_form" title = "Create new agent" >
 
-  <form>
-    <fieldset>
-      <label for="new_asl">Enter asl file name:</label>
-      <input type="text" name="create_new_asl" id="new_asl">
-    </fieldset>
-  </form>
-</div>
+    <form >
+        <fieldset >
+            <label for = "new_asl" >Enter asl file name:</label >
+            <input type = "text" name = "create_new_asl" id = "new_asl" >
+        </fieldset >
+    </form >
+</div >
 <!-- *********************************** -->
 </body >
 

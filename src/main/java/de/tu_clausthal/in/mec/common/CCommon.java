@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.drapostolos.typeparser.TypeParser;
 import com.github.drapostolos.typeparser.TypeParserException;
-import com.sun.javafx.fxml.builder.URLBuilder;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 
@@ -35,7 +34,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -239,7 +237,7 @@ public class CCommon
         try
         {
             if ( p_file.exists() ) return p_file.toURI().normalize().toURL();
-            return CCommon.class.getClassLoader().getResource( p_file.toString().replace(File.separator, "/") ).toURI().normalize().toURL() ;
+            return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
         }
         catch ( final Exception l_exception )
         {

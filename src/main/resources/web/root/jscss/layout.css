@@ -71,14 +71,12 @@ iframe
 
 #mecsim_content
 {
-    z-index: 0;
     /*background-color: #ecf0f1;*/
 }
 
 #mecsim_content::before
 {
     position: absolute;
-    z-index: -1;
     content: "";
     top: 0;
     bottom: 0;

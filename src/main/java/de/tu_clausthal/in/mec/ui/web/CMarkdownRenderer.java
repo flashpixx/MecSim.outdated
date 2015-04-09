@@ -34,6 +34,7 @@ import org.pegdown.ast.ExpLinkNode;
 import org.pegdown.ast.WikiLinkNode;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -107,20 +108,17 @@ public class CMarkdownRenderer extends LinkRenderer
     @Override
     public final Rendering render( final ExpLinkNode p_node, final String p_text )
     {
-        return super.render( new ExpLinkNode( p_text, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+        if ( !this.isURL( p_node.url ) )
+            return super.render( new ExpLinkNode( p_text, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+
+        return super.render( p_node, p_text );
     }
 
     @Override
     public final Rendering render( final ExpImageNode p_node, final String p_text )
     {
-        try
-        {
-            new URL( p_node.url );
-        }
-        catch ( final MalformedURLException l_exception )
-        {
+        if ( !this.isURL( p_node.url ) )
             return super.render( new ExpImageNode( p_node.title, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
-        }
 
         return super.render( p_node, p_text );
     }
@@ -137,11 +135,11 @@ public class CMarkdownRenderer extends LinkRenderer
 
             final String[] l_parts = StringUtils.split( p_node.getText(), "|" );
             if ( l_parts.length == 1 )
-                return super.render( new ExpLinkNode( l_parts[0], "http://" + CConfiguration.getInstance().get().<String>getTraverse( "language/current" ) + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[0].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[0] );
+                return super.render( new ExpLinkNode( l_parts[0], this.getWikipediaLink( CConfiguration.getInstance().get().<String>getTraverse( "language/current" ).trim(), l_parts[0].trim() ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[0] );
             if ( l_parts.length == 2 )
-                return super.render( new ExpLinkNode( l_parts[1], "http://" + CConfiguration.getInstance().get().<String>getTraverse( "language/current" ) + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[0].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[1] );
+                return super.render( new ExpLinkNode( l_parts[1], this.getWikipediaLink( CConfiguration.getInstance().get().<String>getTraverse( "language/current" ).trim(), l_parts[0].trim() ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[1] );
             if ( l_parts.length == 3 )
-                return super.render( new ExpLinkNode( l_parts[2], "http://" + l_parts[0].trim() + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( l_parts[1].trim(), "UTF-8" ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[2] );
+                return super.render( new ExpLinkNode( l_parts[2], this.getWikipediaLink( l_parts[0].trim(), l_parts[1].trim() ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[2] );
 
         }
         catch ( final Exception l_exception )
@@ -233,6 +231,38 @@ public class CMarkdownRenderer extends LinkRenderer
         return p_processor.markdownToHtml( IOUtils.toString( p_file ).toCharArray(), this );
     }
 
+
+    /**
+     * checks if a string is an URL
+     *
+     * @param p_url string with URL
+     * @return boolean for URL existance
+     */
+    private boolean isURL( final String p_url )
+    {
+        try
+        {
+            new URL( p_url );
+        }
+        catch ( final MalformedURLException l_exception )
+        {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * create Wikipedia link
+     *
+     * @param p_language language prefix
+     * @param p_search   search content
+     * @return full URL
+     */
+    private String getWikipediaLink( final String p_language, final String p_search ) throws UnsupportedEncodingException
+    {
+        return "http://" + p_language + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( p_search, "UTF-8" );
+    }
 
     /**
      * enum to define return type of the HTML document *

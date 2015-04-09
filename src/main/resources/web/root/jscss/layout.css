@@ -64,35 +64,34 @@ iframe
 {
     height: 100%;
     /*background-color: #ecf0f1;*/
+    background-image: url(../img/Logo_TUC_de_Web_klein.gif);
+    background-position: 50% 97%;
+    background-repeat:no-repeat;
 }
 
 #mecsim_content
 {
+    z-index: 0;
     /*background-color: #ecf0f1;*/
+}
+
+#mecsim_content::before
+{
+    position: absolute;
+    z-index: -1;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0.5;
+    background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center;
 }
 
 #mecsim_accordion
 {
     height: 90%;
     color: red;
-}
-
-#mecsim_tuc_logo_small
-{
-    position: absolute;
-    min-height 24px:
-    height: 10%;
-    bottom: 4px;
-    position: relative;
-}
-
-#mecsim_big_tuc_logo
-{
-    width: auto;
-    height: auto;
-    max-width: 700px;
-    max-height: 500px;
-    margin-top: 20%;
 }
 
 #mecsim_editor

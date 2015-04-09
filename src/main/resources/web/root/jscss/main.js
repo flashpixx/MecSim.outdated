@@ -12,6 +12,19 @@ $(document).ready(function(){
             $('#mecsim_agent_files').selectmenu('refresh', true);
     });
 
+    // form to create new asl file
+    dialog = $("#mecsim_create_asl_form").dialog({
+        autoOpen: false
+    });
+
+    // create new asl file TODO: has to be completed
+    $("#mecsim_new_asl").click(function() {
+        dialog.dialog("open");
+        /*$.post(
+            "cagentenvironment/jason/create"
+        )*/
+    });
+
     // TODO: add button text according to selected language
     /*$('#mecsim_user_documentation').text(function() {
         $.post(
@@ -84,6 +97,7 @@ $(document).ready(function(){
     $("#simulation_menu").menu();
     $("#help_menu").menu();
     $("#mecsim_agent_files").selectmenu();
+    $("#mecsim_new_asl").button();
 
 
 });

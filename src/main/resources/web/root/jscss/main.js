@@ -2,6 +2,15 @@ $(document).ready(function(){
 
     var form, dialog;
 
+    // apply selected language to text elements
+    // TODO: i18n
+    /*$("#mecsim_preferences").append(
+        $.post(
+            "cinternationalization/translate",
+            { "name" : "preferences" }
+        )
+    );*/
+
     // load existing asl files
     load_asl_files();
     function load_asl_files()
@@ -139,5 +148,16 @@ $(document).ready(function(){
     $("#mecsim_agent_files").selectmenu();
     $("#mecsim_new_asl").button();
 
+
+        $( "#mecsim_speed_slider" ).slider({
+          range: "min",
+          value: 1,
+          min: 0,
+          max: 10,
+          slide: function( event, ui ) {
+            $( "#speed" ).val( ui.value );
+          }
+        });
+        $( "#speed" ).val( $( "#mecsim_speed_slider" ).slider( "value" ) );
 
 });

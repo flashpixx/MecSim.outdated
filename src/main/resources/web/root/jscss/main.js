@@ -52,6 +52,8 @@ $(document).ready(function(){
 
     }
 
+
+
     // delete asl file
     $("#mecsim_delete_asl").click(function(){
         $.post(
@@ -125,6 +127,7 @@ $(document).ready(function(){
 
     $("#mecsim_load_asl").button();
     $("#mecsim_delete_asl").button();
+    $("#mecsim_save_asl").button();
 
 
     $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });

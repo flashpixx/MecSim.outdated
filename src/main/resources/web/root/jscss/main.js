@@ -30,7 +30,6 @@ $(document).ready(function(){
               }
     });
 
-    // create new asl file TODO: has to be completed
     $("#mecsim_new_asl").click(function() {
         dialog.dialog("open");
     });
@@ -52,6 +51,16 @@ $(document).ready(function(){
         }
 
     }
+
+    // delete asl file
+    $("#mecsim_delete_asl").click(function(){
+        $.post(
+            "cagentenvironment/jason/delete",
+            { "name" : $("#mecsim_agent_files").val() }
+        ).done(function() {
+            load_asl_files();
+        });
+    });
 
     // TODO: add button text according to selected language
     /*$('#mecsim_user_documentation').text(function() {

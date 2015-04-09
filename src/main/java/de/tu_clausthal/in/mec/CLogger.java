@@ -96,7 +96,7 @@ public class CLogger
         if ( p_length < 1 ) return p_input;
         if ( p_input.length() < p_length ) return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
 
-        return p_input.substring( 0, p_length );
+        return p_input.substring(0, p_length);
     }
 
 
@@ -108,6 +108,17 @@ public class CLogger
      */
     private static String createLogData( final Level p_status, final Object p_add )
     {
+        // get invoker position (index depends on static main function)
+        int l_invokerindex;
+        try
+        {
+            getInvokingMethodNameFqn( 4 );
+            l_invokerindex = 4;
+        } catch ( final ArrayIndexOutOfBoundsException l_exception )
+        {
+            l_invokerindex = 3;
+        }
+
         final String l_sep = StringUtils.repeat( " ", 5 );
         final StringBuffer l_str = new StringBuffer();
 
@@ -116,7 +127,7 @@ public class CLogger
                 append( l_sep ).
                      append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
                      append( l_sep ).
-                     append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) ).
+                     append( padCut( "invoker [" + getInvokingMethodNameFqn( l_invokerindex ) + "]", ' ', 100 ) ).
                      append( l_sep ).
                      append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
                      append( l_sep ).

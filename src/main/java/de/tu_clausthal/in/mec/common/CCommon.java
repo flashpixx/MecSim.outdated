@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.drapostolos.typeparser.TypeParser;
 import com.github.drapostolos.typeparser.TypeParserException;
+import com.sun.javafx.fxml.builder.URLBuilder;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 
@@ -232,15 +233,13 @@ public class CCommon
      *
      * @param p_file file relative to the CMain
      * @return URL of file or null
-     * @note the Jar path is removed if exists
      */
     public static URL getResourceURL( final File p_file )
     {
         try
         {
-            if ( p_file.exists() ) return p_file.toURI().toURL();
-
-            return CCommon.class.getClassLoader().getResource( p_file.toString().replace( CCommon.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "" ) );
+            if ( p_file.exists() ) return p_file.toURI().normalize().toURL();
+            return CCommon.class.getClassLoader().getResource( p_file.toString().replace(File.separator, "/") ).toURI().normalize().toURL() ;
         }
         catch ( final Exception l_exception )
         {
@@ -260,10 +259,9 @@ public class CCommon
      * @throws URISyntaxException    thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
-    public static URL URLConcat( final URL p_base, final String p_string ) throws URISyntaxException, MalformedURLException
+    public static URL URLConcat( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
     {
-        final URI l_uri = p_base.toURI();
-        return l_uri.resolve( l_uri.getPath() + p_string ).toURL();
+        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
     }
 
 

@@ -300,7 +300,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * Method to scale a Buffered Image
      *
-     * @param p_source    Image which should be scaled
+     * @param p_source Image which should be scaled
      * @param p_width  new Width
      * @param p_height new Height
      * @return new Image

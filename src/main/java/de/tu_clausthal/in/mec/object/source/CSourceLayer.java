@@ -51,6 +51,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Member Variable to save a Source which was selected (null if no Source is selected)
+     *
      * @bug why static - should be a member
      */
     private static ISource s_selectedSource = null;

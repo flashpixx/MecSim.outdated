@@ -39,15 +39,15 @@ public class CInternalEmpty extends DefaultInternalAction
     /**
      * default result value *
      */
-    protected boolean m_result = true;
+    private final boolean m_result;
     /**
      * minimum number of arguments *
      */
-    protected int m_minimumarguments = super.getMinArgs();
+    private final int m_minimumarguments;
     /**
      * maximum number of arguments *
      */
-    protected int m_maximumarguments = super.getMaxArgs();
+    private final int m_maximumarguments;
 
 
     /**
@@ -55,6 +55,9 @@ public class CInternalEmpty extends DefaultInternalAction
      */
     public CInternalEmpty()
     {
+        m_minimumarguments = super.getMinArgs();
+        m_maximumarguments = super.getMaxArgs();
+        m_result = true;
     }
 
 

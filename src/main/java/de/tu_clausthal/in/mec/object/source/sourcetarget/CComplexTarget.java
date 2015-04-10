@@ -62,6 +62,7 @@ public class CComplexTarget
 
     /**
      * Method to sort the Weighting Map
+     *
      * @param p_unsortmap
      * @return sorted Weight Map
      */
@@ -89,6 +90,7 @@ public class CComplexTarget
 
     /**
      * adds a atom Target to this complex Target with default weight of 1
+     *
      * @param p_target atom target which should be added
      */
     public final void addTarget( final CAtomTarget p_target )
@@ -99,6 +101,7 @@ public class CComplexTarget
     /**
      * Adds a atom Target to this complex Target with special absolute weight.
      * If the Atom Target already exist the weight will be updated.
+     *
      * @param p_target atom target which should be added
      * @param p_weight weight of this atom target
      */
@@ -121,9 +124,10 @@ public class CComplexTarget
 
     /**
      * removes the Atom Target from this Complex Target
+     *
      * @param p_target Atom Target which should be removed
      */
-    public void removeTarget( final CAtomTarget p_target )
+    public final void removeTarget( final CAtomTarget p_target )
     {
 
         if ( !( this.m_weightingMap.containsKey( p_target ) ) )
@@ -138,7 +142,7 @@ public class CComplexTarget
     /**
      * Calculate relative Probabilities for every Atom Target
      */
-    public void calculateNewDistribution()
+    public final void calculateNewDistribution()
     {
 
         for ( Map.Entry<CAtomTarget, Double> l_entry : this.m_weightingMap.entrySet() )
@@ -151,9 +155,10 @@ public class CComplexTarget
 
     /**
      * This Methods returns exactly one AtomTarget threw their specific Probability
+     *
      * @return a single Atom Target
      */
-    public CAtomTarget getSingleTarget()
+    public final CAtomTarget getSingleTarget()
     {
         final double l_random = m_random.nextDouble();
         double l_cumulate = 0;
@@ -171,9 +176,10 @@ public class CComplexTarget
     /**
      * This Methods returns a List of AtomTargets threw their specific relative Probability
      * The Length of the List has a Default Value of the Size of all AtomTargets
+     *
      * @return a list of Atom Targets
      */
-    public Queue<CAtomTarget> getMultiTarget()
+    public final Queue<CAtomTarget> getMultiTarget()
     {
         return this.getMultiTarget( m_probabilityMap.size() );
     }
@@ -181,10 +187,11 @@ public class CComplexTarget
     /**
      * This Methods returns a List of AtomTarget threw their specific relative Probability
      * The Length of the List can be passed in over Arguments
-     * @param p_targetLength  Length of List of Atom Targets
+     *
+     * @param p_targetLength Length of List of Atom Targets
      * @return a list of Atom Targets
      */
-    public Queue<CAtomTarget> getMultiTarget( final int p_targetLength )
+    public final Queue<CAtomTarget> getMultiTarget( final int p_targetLength )
     {
         final Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
         for ( int i = 0; i < p_targetLength; i++ )
@@ -196,9 +203,10 @@ public class CComplexTarget
     /**
      * This Method returns a List of AtomTargets which are ordered by their weight (Rising)
      * The Length of the List has a Default Value of the Size of all AtomTargets
+     *
      * @return a sequence of Atom Targets
      */
-    public Queue<CAtomTarget> getSequenceTarget()
+    public final Queue<CAtomTarget> getSequenceTarget()
     {
         return this.getSequenceTarget( this.m_weightingMap.size() );
     }
@@ -206,10 +214,11 @@ public class CComplexTarget
     /**
      * This Method returns a List of AtomTargets which are ordered by their weight (Rising)
      * The Length of the List can be passed in over Arguments
+     *
      * @param p_sequenceLength
      * @return a sequence of Atom Targets
      */
-    public Queue<CAtomTarget> getSequenceTarget( final int p_sequenceLength )
+    public final Queue<CAtomTarget> getSequenceTarget( final int p_sequenceLength )
     {
         final Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
         final Map<CAtomTarget, Double> l_sortedMap = Collections.synchronizedMap( this.sortByValue( this.m_weightingMap ) );

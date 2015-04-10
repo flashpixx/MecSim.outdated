@@ -73,36 +73,36 @@ public class CAgent<T> implements IVoidAgent
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
-    protected CJasonArchitecture m_architecture = null;
+    private final CJasonArchitecture m_architecture;
     /**
      * Jason agent object
      */
-    protected Agent m_agent = null;
+    private final Agent m_agent;
+    /**
+     * set with actions of this implementation
+     */
+    private final Map<String, IAction> m_action = new HashMap<>();
+    /**
+     * set with belief binds
+     */
+    private final Set<IBelief> m_beliefs = new HashSet<>();
+    /**
+     * set with received messages
+     */
+    private final Set<IMessage> m_receivedmessages = new HashSet<>();
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
      */
-    protected int m_cycle = 0;
-    /**
-     * set with actions of this implementation
-     */
-    protected Map<String, IAction> m_action = new HashMap<>();
-    /**
-     * set with belief binds
-     */
-    protected Set<IBelief> m_beliefs = new HashSet<>();
+    private int m_cycle;
     /**
      * name of the agent
      */
-    protected CPath m_namepath = null;
+    private CPath m_namepath;
     /**
      * participant object *
      */
-    protected CParticipant m_participant = null;
-    /**
-     * set with received messages
-     */
-    protected Set<IMessage> m_receivedmessages = new HashSet<>();
+    private CParticipant m_participant;
 
 
     /**

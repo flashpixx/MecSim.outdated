@@ -45,6 +45,7 @@ public class CAtomTarget implements Painter<COSMViewer>
 
     /**
      * CTOR
+     *
      * @param p_position position
      */
     public CAtomTarget( final GeoPosition p_position )
@@ -54,6 +55,7 @@ public class CAtomTarget implements Painter<COSMViewer>
 
     /**
      * return the position of this Target
+     *
      * @return position of the Target
      */
     public final GeoPosition getPosition()
@@ -63,6 +65,7 @@ public class CAtomTarget implements Painter<COSMViewer>
 
     /**
      * set a new position for this Target
+     *
      * @param p_position new position of this Target
      */
     public final void setPosition( final GeoPosition p_position )

@@ -55,31 +55,31 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * map with object-2-position in forward direction
      */
-    protected final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
+    private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
     /**
      * set with listener
      */
-    protected final Set<IAction<N, T>> m_listener = new HashSet<>();
+    private final Set<IAction<N, T>> m_listener = new HashSet<>();
     /**
      * edge ID
      */
-    protected int m_edgeid = 0;
+    private final int m_edgeid;
     /**
      * length of the edge (distance)
      */
-    protected double m_edgelength = 0;
+    private final double m_edgelength;
     /**
      * array with cells of the forward direction
      */
-    protected N[] m_cells = null;
+    private final N[] m_cells;
     /**
      * array with geopositions of the cell
      */
-    protected GeoPosition[] m_cellgeoposition = null;
+    private final GeoPosition[] m_cellgeoposition;
     /**
      * array with additional information
      */
-    protected T[] m_additionalinformation = null;
+    private final T[] m_additionalinformation;
 
 
     /**
@@ -91,16 +91,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
     {
         m_edgeid = p_edgestate.getEdge();
         m_edgelength = p_edgestate.getDistance();
-        this.sampling( p_edgestate );
-    }
 
-    /**
-     * creates the sampling of an edge
-     *
-     * @param p_edgestate edge state
-     */
-    protected final void sampling( final EdgeIteratorState p_edgestate )
-    {
+
         final ArrayList<N> l_initlist = new ArrayList<>();
         for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().<Integer>getTraverse( "simulation/traffic/cellsampling" ) ); i++ )
             l_initlist.add( null );
@@ -141,7 +133,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_epsilon epsilon value of the monotonic increase
      * @return point list array
      */
-    protected final PointListArray filterPointList( final PointList p_input, final double p_epsilon )
+    private final PointListArray filterPointList( final PointList p_input, final double p_epsilon )
     {
         final ArrayList<Double> l_x = new ArrayList<>();
         final ArrayList<Double> l_y = new ArrayList<>();

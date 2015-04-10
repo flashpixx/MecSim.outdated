@@ -51,7 +51,7 @@ public class CFieldBind extends IAction
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
      */
-    protected Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
+    private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
 
 
     /**

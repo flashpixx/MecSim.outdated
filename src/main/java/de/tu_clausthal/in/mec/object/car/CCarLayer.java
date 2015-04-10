@@ -196,7 +196,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public final Map<String, Object> analyse()
+    public Map<String, Object> analyse()
     {
         m_analyse.put( "car count", this.getGraph().getNumberOfObjects() );
         return m_analyse;

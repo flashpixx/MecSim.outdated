@@ -52,7 +52,7 @@ public class CMethodBind extends IAction
     /**
      * bind object *
      */
-    protected final Map<String, CReflection.CMethodCache<Object>> m_bind = new HashMap<>();
+    private final Map<String, CReflection.CMethodCache<Object>> m_bind = new HashMap<>();
 
 
     /**

@@ -73,15 +73,15 @@ public class CGraphHopper extends GraphHopper
     /**
      * map with edge-cell connection
      */
-    protected final Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap<>();
+    private final Map<Integer, CEdge<ICar, Object>> m_edgecell = new ConcurrentHashMap<>();
     /**
      * set with listerner of the edges
      */
-    protected final Set<IAction<ICar, Object>> m_edgelister = new HashSet<>();
+    private final Set<IAction<ICar, Object>> m_edgelister = new HashSet<>();
     /**
      * default weight
      */
-    protected CCombine m_weight = null;
+    private CCombine m_weight;
 
 
     /**

@@ -49,11 +49,11 @@ public class CFieldBind implements IBelief
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
      */
-    protected final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
+    private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
     /**
      * set with literals
      */
-    protected final Set<Literal> m_literals = new HashSet<>();
+    private final Set<Literal> m_literals = new HashSet<>();
 
 
     /**

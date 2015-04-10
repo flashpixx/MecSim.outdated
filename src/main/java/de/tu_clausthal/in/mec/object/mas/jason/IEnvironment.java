@@ -111,7 +111,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 
-        return CCommon.CollectionToArray( String[].class, l_list );
+        return CCommon.convertCollectionToArray( String[].class, l_list );
     }
 
     /**

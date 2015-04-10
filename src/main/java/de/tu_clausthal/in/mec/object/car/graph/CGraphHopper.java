@@ -349,7 +349,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final String[] getWeightingList()
     {
-        return CCommon.CollectionToArray( String[].class, m_weight.keySet() );
+        return CCommon.convertCollectionToArray( String[].class, m_weight.keySet() );
     }
 
 
@@ -400,7 +400,7 @@ public class CGraphHopper extends GraphHopper
         for ( Map.Entry<String, IWeighting> l_item : m_weight.entrySet() )
             if ( l_item.getValue().isActive() ) l_active.add( l_item.getKey() );
 
-        return CCommon.CollectionToArray( String[].class, l_active );
+        return CCommon.convertCollectionToArray( String[].class, l_active );
     }
 
 

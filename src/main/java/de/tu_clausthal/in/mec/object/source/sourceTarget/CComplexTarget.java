@@ -78,13 +78,13 @@ public class CComplexTarget
             }
         } );
 
-        Map sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
+        final Map l_sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
         for ( Iterator it = list.iterator(); it.hasNext(); )
         {
             Map.Entry entry = (Map.Entry) it.next();
-            sortedMap.put( entry.getKey(), entry.getValue() );
+            l_sortedMap.put( entry.getKey(), entry.getValue() );
         }
-        return sortedMap;
+        return l_sortedMap;
     }
 
     /**

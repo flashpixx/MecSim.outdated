@@ -51,8 +51,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Member Variable to save a Source which was selected (null if no Source is selected)
+     * @bug why static ?
      */
-    private static ISource m_selectedSource = null;
+    private static ISource s_selectedSource = null;
 
     /**
      * List of all Atom Targets

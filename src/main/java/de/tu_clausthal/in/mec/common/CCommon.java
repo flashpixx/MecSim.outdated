@@ -86,8 +86,9 @@ public class CCommon
             new ObjectMapper().writer().writeValue( l_stream, p_data );
             return l_stream.toString();
         }
-        catch ( IOException e )
+        catch ( final IOException l_exception )
         {
+            CLogger.error( l_exception );
         }
         return null;
     }
@@ -118,8 +119,9 @@ public class CCommon
         {
             return new ObjectMapper().readValue( p_data, p_class );
         }
-        catch ( IOException e )
+        catch ( final IOException l_exception )
         {
+            CLogger.error( l_exception );
         }
 
         return null;
@@ -257,7 +259,7 @@ public class CCommon
      * @throws URISyntaxException    thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
-    public static URL URLConcat( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
     {
         return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
     }
@@ -349,7 +351,7 @@ public class CCommon
      * @return typed array
      * @tparam T collection / array type
      */
-    public static <T> T[] CollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
+    public static <T> T[] convertCollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
     {
         T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
         p_collection.toArray( l_return );

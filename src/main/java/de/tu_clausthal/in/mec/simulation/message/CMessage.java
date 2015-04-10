@@ -37,15 +37,15 @@ public class CMessage<T> implements IMessage<T>
     /**
      * title of the message
      */
-    protected String m_title = null;
+    private final String m_title;
     /**
      * data of the message
      */
-    protected T m_data = null;
+    private final T m_data;
     /**
      * source of the message
      */
-    protected CPath m_source = null;
+    private final CPath m_source;
     /**
      * time-to-live value *
      */
@@ -67,6 +67,7 @@ public class CMessage<T> implements IMessage<T>
 
         m_source = p_source;
         m_title = p_title;
+        m_data = null;
     }
 
     /**

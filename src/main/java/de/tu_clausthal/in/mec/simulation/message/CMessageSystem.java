@@ -45,11 +45,11 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * event listener *
      */
-    protected final Set<IActionListener> m_listener = new HashSet<>();
+    private final Set<IActionListener> m_listener = new HashSet<>();
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
-    protected final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
+    private final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
 
 
     /**

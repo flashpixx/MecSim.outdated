@@ -54,22 +54,22 @@ public class CMainLoop implements Runnable
     /**
      * thread-pool for handling all objects
      */
-    protected ExecutorService m_pool = Executors.newWorkStealingPool();
+    private ExecutorService m_pool = Executors.newWorkStealingPool();
 
     /**
      * simulation counter
      */
-    protected int m_simulationcount = 0;
+    private int m_simulationcount = 0;
 
     /**
      * boolean to pause/resume the thread
      */
-    protected boolean m_pause = true;
+    private boolean m_pause = true;
 
     /**
      * number of threads for running *
      */
-    protected int m_shutdownstep = Integer.MAX_VALUE;
+    private int m_shutdownstep = Integer.MAX_VALUE;
 
 
     /**

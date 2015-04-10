@@ -40,7 +40,7 @@ public class CParticipant implements IParticipant
     /**
      * owner object *
      */
-    protected IReceiver m_owner = null;
+    private final IReceiver m_owner;
 
 
     /**

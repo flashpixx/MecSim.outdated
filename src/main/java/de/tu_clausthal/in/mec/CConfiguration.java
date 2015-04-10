@@ -370,6 +370,7 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
+     * @todo check version
      */
     private void setConfiguration( final CNameHashMap p_input )
     {

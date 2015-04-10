@@ -67,22 +67,22 @@ $(document).ready(function(){
             $.post(
                 "csimulation/start"
             ).fail( function( p_data )
-                    {
-                        console.log(p_data);
-                        $("#mecsim_start_error_text").text(p_data.responseJSON.error);
-                        $("#mecsim_start_error").dialog();
-                    } );
+                {
+                    console.log(p_data);
+                    $("#mecsim_start_error_text").text(p_data.responseJSON.error);
+                    $("#mecsim_start_error").dialog();
+                } );
         });
 
         $( "#mecsim_stop_button" ).click(function() {
             $.post(
                 "csimulation/stop"
             ).fail( function( p_data )
-                    {
-                        console.log(p_data);
-                        $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
-                        $("#mecsim_stop_error").dialog();
-                    } );
+                {
+                    console.log(p_data);
+                    $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
+                    $("#mecsim_stop_error").dialog();
+                } );
         });
 
         $( "#mecsim_reset_button" ).click(function() {
@@ -138,11 +138,11 @@ $(document).ready(function(){
         dialog = $("#mecsim_create_asl_form").dialog({
             autoOpen: false,
             buttons: {
-                    "Create": create_new_asl,
+                "Create": create_new_asl,
                     Cancel: function() {
                       dialog.dialog( "close" );
                     }
-                  }
+                }
         });
 
         $("#mecsim_new_asl").click(function() {
@@ -166,8 +166,6 @@ $(document).ready(function(){
             }
 
         }
-
-
 
         // delete asl file
         $("#mecsim_delete_asl").click(function(){

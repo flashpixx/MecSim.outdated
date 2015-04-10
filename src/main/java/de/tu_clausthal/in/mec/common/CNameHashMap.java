@@ -89,7 +89,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @tparam T type
      * @bug exception
      */
-    public <T> void setTraverse( final CPath p_path, final T p_value )
+    public final <T> void setTraverse( final CPath p_path, final T p_value )
     {
         setTraverse( p_path, 0, p_value, this );
     }
@@ -101,7 +101,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @param p_value value
      * @tparam T type
      */
-    public <T> void setTraverse( final String p_path, final T p_value )
+    public final <T> void setTraverse( final String p_path, final T p_value )
     {
         this.setTraverse( new CPath( p_path ), p_value );
     }
@@ -114,7 +114,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @return object
      * @tparam T type
      */
-    public <T> T getTraverse( final CPath p_path )
+    public final <T> T getTraverse( final CPath p_path )
     {
         if ( p_path.isEmpty() ) return null;
 
@@ -134,7 +134,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @return object
      * @tparam T type
      */
-    public <T> T getTraverse( final String p_path )
+    public final <T> T getTraverse( final String p_path )
     {
         return this.<T>getTraverse( new CPath( p_path ) );
     }
@@ -147,7 +147,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @return null or casted value
      * @tparam T type
      */
-    public <T> T getTypedValue( final String p_key )
+    public final <T> T getTypedValue( final String p_key )
     {
         return (T) this.get( p_key );
     }
@@ -186,7 +186,7 @@ public class CNameHashMap extends HashMap<String, Object>
          *
          * @return default map
          */
-        public Map<String, Object> toHashMap()
+        public final Map<String, Object> toHashMap()
         {
             final Map<String, Object> l_return = new HashMap<>();
             for ( Map.Entry<String, Object> l_item : this.entrySet() )
@@ -197,20 +197,20 @@ public class CNameHashMap extends HashMap<String, Object>
 
 
         @Override
-        public Object put( final String p_key, final Object p_value )
+        public final Object put( final String p_key, final Object p_value )
         {
             return super.put( p_key, p_value instanceof Map ? new CImmutable( (Map) p_value ) : p_value );
         }
 
         @Override
-        public void putAll( final Map<? extends String, ?> p_map )
+        public final void putAll( final Map<? extends String, ?> p_map )
         {
             for ( Map.Entry<? extends String, ?> l_item : p_map.entrySet() )
                 this.put( l_item.getKey(), l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
         }
 
         @Override
-        public Object remove( final Object p_key )
+        public final Object remove( final Object p_key )
         {
             return this.get( p_key );
         }

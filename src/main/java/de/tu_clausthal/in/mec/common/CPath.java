@@ -90,7 +90,7 @@ public class CPath implements Iterable<CPath>
      *
      * @return empty flag
      */
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_path.isEmpty();
     }
@@ -99,7 +99,7 @@ public class CPath implements Iterable<CPath>
     /**
      * reverse path
      */
-    public void reverse()
+    public final void reverse()
     {
         Collections.reverse( m_path );
     }
@@ -110,7 +110,7 @@ public class CPath implements Iterable<CPath>
      *
      * @param p_path path
      */
-    public void pushback( final CPath p_path )
+    public final void pushback( final CPath p_path )
     {
         m_path.addAll( p_path.m_path );
     }
@@ -121,7 +121,7 @@ public class CPath implements Iterable<CPath>
      *
      * @param p_path string path
      */
-    public void pushback( final String p_path )
+    public final void pushback( final String p_path )
     {
         this.pushback( new CPath( p_path ) );
     }
@@ -132,7 +132,7 @@ public class CPath implements Iterable<CPath>
      *
      * @param p_path path
      */
-    public void pushfront( final CPath p_path )
+    public final void pushfront( final CPath p_path )
     {
         final ArrayList<String> l_path = new ArrayList<>( p_path.m_path );
         l_path.addAll( m_path );
@@ -145,7 +145,7 @@ public class CPath implements Iterable<CPath>
      *
      * @param p_path string path
      */
-    public void pushfront( final String p_path )
+    public final void pushfront( final String p_path )
     {
         this.pushfront( new CPath( p_path ) );
     }
@@ -156,7 +156,7 @@ public class CPath implements Iterable<CPath>
      *
      * @return separator
      */
-    public String getSeparator()
+    public final String getSeparator()
     {
         return m_separator;
     }
@@ -166,7 +166,7 @@ public class CPath implements Iterable<CPath>
      *
      * @param p_separator separator
      */
-    public void setSeparator( final String p_separator )
+    public final void setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "separatornotempty" ) );
@@ -192,7 +192,7 @@ public class CPath implements Iterable<CPath>
      *
      * @return string path
      */
-    public String getPath()
+    public final String getPath()
     {
         return StringUtils.join( m_path, m_separator );
     }
@@ -204,7 +204,7 @@ public class CPath implements Iterable<CPath>
      * @param p_separator separator
      * @return string path
      */
-    public String getPath( final String p_separator )
+    public final String getPath( final String p_separator )
     {
         return StringUtils.join( m_path, p_separator );
     }
@@ -215,7 +215,7 @@ public class CPath implements Iterable<CPath>
      *
      * @return string
      */
-    public String getSuffix()
+    public final String getSuffix()
     {
         return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
     }
@@ -228,7 +228,7 @@ public class CPath implements Iterable<CPath>
      * @param p_toIndex   end index (exclusive)
      * @return path
      */
-    public CPath getSubPath( final int p_fromIndex, final int p_toIndex )
+    public final CPath getSubPath( final int p_fromIndex, final int p_toIndex )
     {
         final CPath l_path = new CPath();
         l_path.m_separator = m_separator;
@@ -242,7 +242,7 @@ public class CPath implements Iterable<CPath>
      * @param p_fromIndex start index
      * @return path
      */
-    public CPath getSubPath( final int p_fromIndex )
+    public final CPath getSubPath( final int p_fromIndex )
     {
         return this.getSubPath( p_fromIndex, this.size() );
     }
@@ -253,7 +253,7 @@ public class CPath implements Iterable<CPath>
      *
      * @return last item of the path
      */
-    public String removeSuffix()
+    public final String removeSuffix()
     {
         final String l_suffix = this.getSuffix();
         if ( m_path.size() > 0 ) m_path.remove( m_path.size() - 1 );
@@ -266,7 +266,7 @@ public class CPath implements Iterable<CPath>
      * @param p_index index position
      * @return element
      */
-    public String get( final int p_index )
+    public final String get( final int p_index )
     {
         return m_path.get( p_index );
     }
@@ -277,13 +277,13 @@ public class CPath implements Iterable<CPath>
      *
      * @return size
      */
-    public int size()
+    public final int size()
     {
         return m_path.size();
     }
 
     @Override
-    public Iterator<CPath> iterator()
+    public final Iterator<CPath> iterator()
     {
         return new Iterator<CPath>()
         {
@@ -304,7 +304,7 @@ public class CPath implements Iterable<CPath>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return this.getPath().hashCode();
     }
@@ -320,7 +320,7 @@ public class CPath implements Iterable<CPath>
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return this.getPath();
     }

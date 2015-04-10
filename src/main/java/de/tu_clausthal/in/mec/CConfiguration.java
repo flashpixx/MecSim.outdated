@@ -429,7 +429,7 @@ public class CConfiguration
     protected class UTF8Control extends ResourceBundle.Control
     {
 
-        public ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader, final boolean p_reload ) throws IllegalAccessException, InstantiationException, IOException
+        public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader, final boolean p_reload ) throws IllegalAccessException, InstantiationException, IOException
         {
             InputStream l_stream = null;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );

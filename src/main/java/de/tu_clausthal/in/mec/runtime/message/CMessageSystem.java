@@ -57,7 +57,7 @@ public class CMessageSystem implements IVoidSteppable
      *
      * @param p_listener listener
      */
-    public void addActionListener( final IActionListener p_listener )
+    public final void addActionListener( final IActionListener p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -68,7 +68,7 @@ public class CMessageSystem implements IVoidSteppable
      *
      * @param p_listener listener
      */
-    public void removeListener( final IActionListener p_listener )
+    public final void removeListener( final IActionListener p_listener )
     {
         m_listener.remove( p_listener );
     }

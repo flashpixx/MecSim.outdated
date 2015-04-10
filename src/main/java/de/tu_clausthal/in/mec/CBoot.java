@@ -46,7 +46,7 @@ public class CBoot
      *
      * @param p_args commandline arguments
      */
-    public static void main( String[] p_args )
+    public static void main( final String[] p_args )
     {
 
         // check JRE properties (version must be checked numerical)

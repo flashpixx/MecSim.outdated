@@ -67,11 +67,11 @@ public class CMain
      *
      * @param p_args commandline arguments
      */
-    public static void main( String[] p_args )
+    public static void main( final String[] p_args )
     {
 
         // --- define CLI options --------------------------------------------------------------------------------------
-        Options l_clioptions = new Options();
+        final Options l_clioptions = new Options();
         l_clioptions.addOption( "help", false, CCommon.getResourceString( CMain.class, "help" ) );
         l_clioptions.addOption( "configuration", true, CCommon.getResourceString( CMain.class, "config" ) );
         l_clioptions.addOption( "nogui", true, CCommon.getResourceString( CMain.class, "nogui" ) );
@@ -80,7 +80,7 @@ public class CMain
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
 
-        CommandLineParser l_parser = new BasicParser();
+        final CommandLineParser l_parser = new BasicParser();
         CommandLine l_cli = null;
         try
         {
@@ -96,7 +96,7 @@ public class CMain
         // --- process CLI arguments and push configuration ------------------------------------------------------------
         if ( l_cli.hasOption( "help" ) )
         {
-            HelpFormatter l_formatter = new HelpFormatter();
+            final HelpFormatter l_formatter = new HelpFormatter();
             l_formatter.printHelp( ( new java.io.File( CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getName() ), l_clioptions );
             System.exit( 0 );
         }

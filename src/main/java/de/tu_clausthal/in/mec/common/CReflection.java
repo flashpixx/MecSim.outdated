@@ -110,7 +110,7 @@ public class CReflection
      */
     public static Map<String, CGetSet> getClassFields( final Class<?> p_class, final IFieldFilter p_filter )
     {
-        Map<String, CGetSet> l_fields = new HashMap<>();
+        final Map<String, CGetSet> l_fields = new HashMap<>();
         for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
             for ( Field l_field : l_class.getDeclaredFields() )
             {
@@ -181,7 +181,7 @@ public class CReflection
      */
     public static Map<String, CMethod> getClassMethods( final Class<?> p_class, final IMethodFilter p_filter )
     {
-        Map<String, CMethod> l_methods = new HashMap<>();
+        final Map<String, CMethod> l_methods = new HashMap<>();
         for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
             for ( Method l_method : l_class.getDeclaredMethods() )
             {
@@ -241,11 +241,11 @@ public class CReflection
         /**
          * method object *
          */
-        protected Method m_method = null;
+        private final Method m_method;
         /**
          * method handle *
          */
-        protected MethodHandle m_handle = null;
+        private final MethodHandle m_handle;
 
 
         /**
@@ -253,7 +253,7 @@ public class CReflection
          *
          * @param p_method method object
          */
-        public CMethod( Method p_method ) throws IllegalAccessException
+        public CMethod( final Method p_method ) throws IllegalAccessException
         {
             m_method = p_method;
             m_handle = MethodHandles.lookup().unreflect( m_method );
@@ -264,7 +264,7 @@ public class CReflection
          *
          * @return method object
          */
-        public Method getMethod()
+        public final Method getMethod()
         {
             return m_method;
         }
@@ -274,7 +274,7 @@ public class CReflection
          *
          * @return handle object
          */
-        public MethodHandle getHandle()
+        public final MethodHandle getHandle()
         {
             return m_handle;
         }
@@ -291,15 +291,15 @@ public class CReflection
         /**
          * getter method handle *
          */
-        protected MethodHandle m_getter = null;
+        private final MethodHandle m_getter;
         /**
          * setter method handle *
          */
-        protected MethodHandle m_setter = null;
+        private final MethodHandle m_setter;
         /**
          * field of the property
          */
-        protected Field m_field = null;
+        private final Field m_field;
 
 
         /**
@@ -309,7 +309,7 @@ public class CReflection
          * @param p_getter getter handle or null
          * @param p_setter setter handle or null
          */
-        public CGetSet( Field p_field, MethodHandle p_getter, MethodHandle p_setter )
+        public CGetSet( final Field p_field, final MethodHandle p_getter, final MethodHandle p_setter )
         {
             if ( p_field == null )
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldnotnull" ) );
@@ -325,7 +325,7 @@ public class CReflection
          *
          * @return field
          */
-        public Field getField()
+        public final Field getField()
         {
             return m_field;
         }
@@ -335,7 +335,7 @@ public class CReflection
          *
          * @return handle
          */
-        public MethodHandle getGetter()
+        public final MethodHandle getGetter()
         {
             return m_getter;
         }
@@ -345,7 +345,7 @@ public class CReflection
          *
          * @return handle
          */
-        public MethodHandle getSetter()
+        public final MethodHandle getSetter()
         {
             return m_setter;
         }
@@ -355,7 +355,7 @@ public class CReflection
          *
          * @return bool flag
          */
-        public boolean hasGetter()
+        public final boolean hasGetter()
         {
             return m_getter != null;
         }
@@ -366,7 +366,7 @@ public class CReflection
          *
          * @return bool flag
          */
-        public boolean hasSetter()
+        public final boolean hasSetter()
         {
             return m_setter != null;
         }
@@ -399,7 +399,7 @@ public class CReflection
          *
          * @param p_bind bind object
          */
-        public CMethodCache( T p_bind )
+        public CMethodCache( final T p_bind )
         {
             m_object = p_bind;
         }
@@ -409,7 +409,7 @@ public class CReflection
          *
          * @return bind object
          */
-        public T getObject()
+        public final T getObject()
         {
             return m_object;
         }
@@ -420,7 +420,7 @@ public class CReflection
          *
          * @return set with names
          */
-        public Set<String> getForbidden()
+        public final Set<String> getForbidden()
         {
             return m_forbidden;
         }
@@ -432,7 +432,7 @@ public class CReflection
          * @param p_methodname method name
          * @return handle
          */
-        public CMethod get( String p_methodname ) throws IllegalAccessException
+        public final CMethod get( final String p_methodname ) throws IllegalAccessException
         {
             return get( p_methodname, null );
         }
@@ -445,15 +445,15 @@ public class CReflection
          * @param p_arguments  method arguments
          * @return handle
          */
-        public CMethod get( String p_methodname, Class<?>[] p_arguments ) throws IllegalAccessException
+        public final CMethod get( final String p_methodname, final Class<?>[] p_arguments ) throws IllegalAccessException
         {
-            Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
+            final Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
             if ( m_cache.containsKey( l_method ) ) return m_cache.get( l_method );
 
             if ( m_forbidden.contains( p_methodname ) )
                 throw new IllegalAccessException( CCommon.getResourceString( this, "access", p_methodname ) );
 
-            CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+            final CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
             m_cache.put( l_method, l_handle );
             return l_handle;
         }

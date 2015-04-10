@@ -353,7 +353,7 @@ public class CCommon
      */
     public static <T> T[] convertCollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
     {
-        T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
+        final T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
         p_collection.toArray( l_return );
         return l_return;
     }
@@ -419,7 +419,7 @@ public class CCommon
      */
     private static String getBytes2Hex( final byte[] p_bytes )
     {
-        StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
+        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
         for ( byte l_byte : p_bytes )
             l_str.append( String.format( "%02x", l_byte & 0xff ) );
 

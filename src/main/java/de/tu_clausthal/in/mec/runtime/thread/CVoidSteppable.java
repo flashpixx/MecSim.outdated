@@ -21,31 +21,68 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.message;
+package de.tu_clausthal.in.mec.runtime.thread;
 
-import de.tu_clausthal.in.mec.common.CPath;
-
-import java.util.Set;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 
 /**
- * message receiver interface for defining an object which can handle the message of a participant object
+ * wrapper class to process a void-steppable item
  */
-public interface IReceiver
+public class CVoidSteppable extends IRunnable<IVoidSteppable>
 {
 
     /**
-     * receives all messages, each message is unique
-     *
-     * @param p_messages set of messages
+     * layer object
      */
-    public void receiveMessage( final Set<IMessage> p_messages );
+    private final ILayer m_layer;
+    /**
+     * iteration value
+     */
+    private final int m_iteration;
+
 
     /**
-     * returns the path of the object
+     * ctor
      *
-     * @return path
+     * @param p_iteration current iteration value
+     * @param p_object    void-steppable object
+     * @param p_layer     layer of the object or null
      */
-    public CPath getReceiverPath();
+    public CVoidSteppable( final int p_iteration, final IVoidSteppable p_object, final ILayer p_layer )
+    {
+        super( p_object );
+        m_layer = p_layer;
+        m_iteration = p_iteration;
+    }
+
+
+    /**
+     * run method to perform the action on runnable and callable interface
+     */
+    protected final void perform()
+    {
+        try
+        {
+
+            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
+                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
+
+
+            m_object.step( m_iteration, m_layer );
+
+
+            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
+                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
+
+        }
+        catch ( Exception l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
 
 }

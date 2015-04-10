@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;

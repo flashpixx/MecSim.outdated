@@ -21,48 +21,43 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.message;
+package de.tu_clausthal.in.mec.runtime.thread;
 
-import de.tu_clausthal.in.mec.common.CPath;
-
-import java.io.Serializable;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 
 /**
- * message interface to define a event message
- *
- * @tparam T type of the message data
+ * wrapper class to reset a layer
  */
-public interface IMessage<T> extends Serializable
+public class CLayerReset extends IRunnable<ILayer>
 {
 
     /**
-     * the data of the message
+     * ctor for setting the object
      *
-     * @return data
+     * @param p_object performing object
      */
-    public T getData();
+    public CLayerReset( final ILayer p_object )
+    {
+        super( p_object );
+    }
 
 
     /**
-     * a name if the message
-     *
-     * @return name
+     * run method to perform the action on runnable and callable interface
      */
-    public String getTitle();
-
-
-    /**
-     * returns the source of the message
-     */
-    public CPath getSource();
-
-
-    /**
-     * decrements the time-to-live value and returns the decrement value and on zero the message is discarded
-     *
-     * @return current value
-     */
-    public int ttl();
+    protected final void perform()
+    {
+        try
+        {
+            m_object.release();
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
+        }
+    }
 
 }

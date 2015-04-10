@@ -21,7 +21,7 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation;
+package de.tu_clausthal.in.mec.runtime;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
@@ -31,8 +31,8 @@ import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
-import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
-import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
+import de.tu_clausthal.in.mec.runtime.message.CMessageSystem;
+import de.tu_clausthal.in.mec.runtime.thread.CMainLoop;
 import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import de.tu_clausthal.in.mec.ui.web.CServer;

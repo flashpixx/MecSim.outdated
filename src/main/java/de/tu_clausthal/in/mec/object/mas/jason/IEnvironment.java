@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.simulation.ISerializable;
+import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;

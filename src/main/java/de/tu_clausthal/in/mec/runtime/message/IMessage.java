@@ -21,28 +21,48 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation;
+package de.tu_clausthal.in.mec.runtime.message;
 
-import java.util.Map;
+import de.tu_clausthal.in.mec.common.CPath;
+
+import java.io.Serializable;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * message interface to define a event message
+ *
+ * @tparam T type of the message data
  */
-public interface ISteppable
+public interface IMessage<T> extends Serializable
 {
 
     /**
-     * method for analyse object
+     * the data of the message
      *
-     * @return map with string for names and data to analyse or null for nothing
+     * @return data
      */
-    Map<String, Object> analyse();
+    public T getData();
 
 
     /**
-     * release function to remove object *
+     * a name if the message
+     *
+     * @return name
      */
-    public void release();
+    public String getTitle();
+
+
+    /**
+     * returns the source of the message
+     */
+    public CPath getSource();
+
+
+    /**
+     * decrements the time-to-live value and returns the decrement value and on zero the message is discarded
+     *
+     * @return current value
+     */
+    public int ttl();
 
 }

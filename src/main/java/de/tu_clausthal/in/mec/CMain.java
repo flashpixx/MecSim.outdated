@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CUI;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;

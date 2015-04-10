@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas;
 
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
 
 
 /**

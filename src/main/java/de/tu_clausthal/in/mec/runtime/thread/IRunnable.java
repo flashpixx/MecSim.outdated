@@ -21,7 +21,7 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.thread;
+package de.tu_clausthal.in.mec.runtime.thread;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 

@@ -21,68 +21,25 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.thread;
+package de.tu_clausthal.in.mec.runtime;
 
-import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+
+import java.io.Serializable;
 
 
 /**
- * wrapper class to process a void-steppable item
+ * serialization interface to run actions
  */
-public class CVoidSteppable extends IRunnable<IVoidSteppable>
+public interface ISerializable extends Serializable
 {
 
     /**
-     * layer object
+     * method is called before data is deserialized *
      */
-    private final ILayer m_layer;
-    /**
-     * iteration value
-     */
-    private final int m_iteration;
-
+    public void onDeserializationInitialization();
 
     /**
-     * ctor
-     *
-     * @param p_iteration current iteration value
-     * @param p_object    void-steppable object
-     * @param p_layer     layer of the object or null
+     * method is called after all data is deserialized *
      */
-    public CVoidSteppable( final int p_iteration, final IVoidSteppable p_object, final ILayer p_layer )
-    {
-        super( p_object );
-        m_layer = p_layer;
-        m_iteration = p_iteration;
-    }
-
-
-    /**
-     * run method to perform the action on runnable and callable interface
-     */
-    protected final void perform()
-    {
-        try
-        {
-
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
-
-
-            m_object.step( m_iteration, m_layer );
-
-
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
-
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-    }
-
+    public void onDeserializationComplete();
 }

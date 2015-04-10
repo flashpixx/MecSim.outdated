@@ -21,13 +21,13 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.thread;
+package de.tu_clausthal.in.mec.runtime.thread;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 
 import java.util.Collection;
 

@@ -26,7 +26,7 @@ package de.tu_clausthal.in.mec.object.source;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;

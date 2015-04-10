@@ -21,25 +21,31 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation;
+package de.tu_clausthal.in.mec.runtime.message;
 
+import de.tu_clausthal.in.mec.common.CPath;
 
-import java.io.Serializable;
+import java.util.Set;
 
 
 /**
- * serialization interface to run actions
+ * message receiver interface for defining an object which can handle the message of a participant object
  */
-public interface ISerializable extends Serializable
+public interface IReceiver
 {
 
     /**
-     * method is called before data is deserialized *
+     * receives all messages, each message is unique
+     *
+     * @param p_messages set of messages
      */
-    public void onDeserializationInitialization();
+    public void receiveMessage( final Set<IMessage> p_messages );
 
     /**
-     * method is called after all data is deserialized *
+     * returns the path of the object
+     *
+     * @return path
      */
-    public void onDeserializationComplete();
+    public CPath getReceiverPath();
+
 }

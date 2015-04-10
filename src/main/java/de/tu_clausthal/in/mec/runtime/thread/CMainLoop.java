@@ -21,7 +21,7 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.thread;
+package de.tu_clausthal.in.mec.runtime.thread;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
@@ -31,10 +31,10 @@ import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
-import de.tu_clausthal.in.mec.simulation.ISteppable;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
+import de.tu_clausthal.in.mec.runtime.ISteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 import java.util.Collection;
 import java.util.LinkedList;

@@ -21,23 +21,23 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.message;
+package de.tu_clausthal.in.mec.runtime;
 
-import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 
 /**
- * interface of a participant of the event system
+ * interface of void-step method
  */
-public interface IParticipant extends IReceiver
+public interface IVoidSteppable extends ISteppable
 {
 
     /**
-     * sends a message
+     * step method
      *
-     * @param p_path    message receiver path
-     * @param p_message input message
+     * @param p_currentstep current step value
+     * @param p_layer       layer on which is the object push or null
      */
-    public void sendMessage( final CPath p_path, final IMessage p_message );
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception;
 
 }

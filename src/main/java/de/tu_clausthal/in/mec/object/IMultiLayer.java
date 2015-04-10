@@ -23,10 +23,10 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.simulation.ISerializable;
-import de.tu_clausthal.in.mec.simulation.ISteppable;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.ISerializable;
+import de.tu_clausthal.in.mec.runtime.ISteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;

@@ -21,61 +21,34 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.message;
+package de.tu_clausthal.in.mec.runtime;
 
+import de.tu_clausthal.in.mec.object.ILayer;
 
-import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
+import java.util.Collection;
 
 
 /**
- * create a global message name structure
+ * interface for a step call with a return argument
  */
-public class CNames
+public interface IReturnSteppable<T> extends ISteppable
 {
 
     /**
-     * creates a full name
+     * step method with return argument
      *
-     * @param p_object object
-     * @return fqn path
+     * @param p_currentstep current step value
+     * @param p_layer       layer on which is the object push or null
+     * @return collection with step values
      */
-    public static CPath getName( final Object p_object )
-    {
-        return getName( p_object, p_object.toString() );
-    }
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception;
 
 
     /**
-     * creates a full name
+     * returns the object which gets the data
      *
-     * @param p_object object
-     * @param p_name   name
-     * @return fqn path
+     * @return objects which gets the data
      */
-    public static CPath getName( final Object p_object, final String p_name )
-    {
-        final CPath l_path = getGroup( p_object );
-        l_path.pushback( p_name );
-        return l_path;
-    }
-
-
-    /**
-     * creates the group path
-     *
-     * @param p_object object
-     * @return group path
-     */
-    protected static CPath getGroup( final Object p_object )
-    {
-
-        if ( p_object instanceof CAgent ) return new CPath( "agent" );
-
-        if ( p_object instanceof ICar ) return new CPath( "car" );
-
-        return new CPath( "unkown" );
-    }
+    public Collection<IReturnSteppableTarget<T>> getTargets();
 
 }

@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.ISteppable;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.ISteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 import java.util.Collection;
 import java.util.Iterator;

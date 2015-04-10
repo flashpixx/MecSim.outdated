@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;

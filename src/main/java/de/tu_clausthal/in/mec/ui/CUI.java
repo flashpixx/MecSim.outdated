@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;

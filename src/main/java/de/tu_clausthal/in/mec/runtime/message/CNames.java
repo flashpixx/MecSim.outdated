@@ -21,43 +21,61 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.thread;
+package de.tu_clausthal.in.mec.runtime.message;
 
-import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
+
+import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 
 
 /**
- * wrapper class to reset a layer
+ * create a global message name structure
  */
-public class CLayerReset extends IRunnable<ILayer>
+public class CNames
 {
 
     /**
-     * ctor for setting the object
+     * creates a full name
      *
-     * @param p_object performing object
+     * @param p_object object
+     * @return fqn path
      */
-    public CLayerReset( final ILayer p_object )
+    public static CPath getName( final Object p_object )
     {
-        super( p_object );
+        return getName( p_object, p_object.toString() );
     }
 
 
     /**
-     * run method to perform the action on runnable and callable interface
+     * creates a full name
+     *
+     * @param p_object object
+     * @param p_name   name
+     * @return fqn path
      */
-    protected final void perform()
+    public static CPath getName( final Object p_object, final String p_name )
     {
-        try
-        {
-            m_object.release();
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
-        }
+        final CPath l_path = getGroup( p_object );
+        l_path.pushback( p_name );
+        return l_path;
+    }
+
+
+    /**
+     * creates the group path
+     *
+     * @param p_object object
+     * @return group path
+     */
+    protected static CPath getGroup( final Object p_object )
+    {
+
+        if ( p_object instanceof CAgent ) return new CPath( "agent" );
+
+        if ( p_object instanceof ICar ) return new CPath( "car" );
+
+        return new CPath( "unkown" );
     }
 
 }

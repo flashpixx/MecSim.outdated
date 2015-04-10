@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;

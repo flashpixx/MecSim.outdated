@@ -21,64 +21,28 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation.message;
+package de.tu_clausthal.in.mec.runtime;
 
-
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
-
-import java.util.Set;
+import java.util.Map;
 
 
 /**
- * participant class for event messager
+ * interface for all objects which are triggered by the simulation worker
  */
-public class CParticipant implements IParticipant
+public interface ISteppable
 {
 
     /**
-     * owner object *
-     */
-    private final IReceiver m_owner;
-
-
-    /**
-     * ctor to register an object *
+     * method for analyse object
      *
-     * @param p_owner owner of the message
+     * @return map with string for names and data to analyse or null for nothing
      */
-    public CParticipant( final IReceiver p_owner )
-    {
-        if ( p_owner == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "ownernull" ) );
+    Map<String, Object> analyse();
 
-        m_owner = p_owner;
-        CSimulation.getInstance().getMessageSystem().register( this.getReceiverPath(), this );
-    }
 
     /**
-     * release *
+     * release function to remove object *
      */
-    public final void release()
-    {
-        CSimulation.getInstance().getMessageSystem().unregister( m_owner.getReceiverPath(), this );
-    }
+    public void release();
 
-    @Override
-    public final void sendMessage( final CPath p_path, final IMessage p_message )
-    {
-        CSimulation.getInstance().getMessageSystem().pushMessage( p_path, p_message );
-    }
-
-    @Override
-    public final void receiveMessage( final Set<IMessage> p_messages )
-    {
-        m_owner.receiveMessage( p_messages );
-    }
-
-    @Override
-    public final CPath getReceiverPath()
-    {
-        return m_owner.getReceiverPath();
-    }
 }

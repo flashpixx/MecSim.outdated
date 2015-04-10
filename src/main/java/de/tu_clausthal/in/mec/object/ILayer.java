@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.simulation.ISteppable;
+import de.tu_clausthal.in.mec.runtime.ISteppable;
 
 import java.io.Serializable;
 

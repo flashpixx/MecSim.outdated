@@ -21,24 +21,23 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation;
+package de.tu_clausthal.in.mec.runtime.message;
 
-import java.util.Collection;
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
- * interface of the target of a return steppable argument
- *
- * @tparam T parameter of target object
+ * interface of a participant of the event system
  */
-public interface IReturnSteppableTarget<T>
+public interface IParticipant extends IReceiver
 {
 
     /**
-     * sets the data of a return steppable call
+     * sends a message
      *
-     * @param p_data collection with data
+     * @param p_path    message receiver path
+     * @param p_message input message
      */
-    public void push( final Collection<T> p_data );
+    public void sendMessage( final CPath p_path, final IMessage p_message );
 
 }

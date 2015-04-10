@@ -21,34 +21,64 @@
  * @endcond
  **/
 
-package de.tu_clausthal.in.mec.simulation;
+package de.tu_clausthal.in.mec.runtime.message;
 
-import de.tu_clausthal.in.mec.object.ILayer;
 
-import java.util.Collection;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+
+import java.util.Set;
 
 
 /**
- * interface for a step call with a return argument
+ * participant class for event messager
  */
-public interface IReturnSteppable<T> extends ISteppable
+public class CParticipant implements IParticipant
 {
 
     /**
-     * step method with return argument
-     *
-     * @param p_currentstep current step value
-     * @param p_layer       layer on which is the object push or null
-     * @return collection with step values
+     * owner object *
      */
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception;
+    private final IReceiver m_owner;
 
 
     /**
-     * returns the object which gets the data
+     * ctor to register an object *
      *
-     * @return objects which gets the data
+     * @param p_owner owner of the message
      */
-    public Collection<IReturnSteppableTarget<T>> getTargets();
+    public CParticipant( final IReceiver p_owner )
+    {
+        if ( p_owner == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "ownernull" ) );
 
+        m_owner = p_owner;
+        CSimulation.getInstance().getMessageSystem().register( this.getReceiverPath(), this );
+    }
+
+    /**
+     * release *
+     */
+    public final void release()
+    {
+        CSimulation.getInstance().getMessageSystem().unregister( m_owner.getReceiverPath(), this );
+    }
+
+    @Override
+    public final void sendMessage( final CPath p_path, final IMessage p_message )
+    {
+        CSimulation.getInstance().getMessageSystem().pushMessage( p_path, p_message );
+    }
+
+    @Override
+    public final void receiveMessage( final Set<IMessage> p_messages )
+    {
+        m_owner.receiveMessage( p_messages );
+    }
+
+    @Override
+    public final CPath getReceiverPath()
+    {
+        return m_owner.getReceiverPath();
+    }
 }

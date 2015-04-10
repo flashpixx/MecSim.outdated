@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas;
 
-import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 
 /**

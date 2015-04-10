@@ -49,7 +49,7 @@ public interface IGenerator extends Serializable
      * @param p_currentStep
      * @return collection of cars
      */
-    Collection<ICar> generate( int p_currentStep );
+    Collection<ICar> generate( final int p_currentStep );
 
     /**
      * method to get the settings object

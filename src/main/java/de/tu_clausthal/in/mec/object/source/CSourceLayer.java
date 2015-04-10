@@ -119,14 +119,14 @@ public class CSourceLayer extends IMultiLayer<ISource>
     /**
      * creates a new source
      *
-     * @param p_geoPosition      position of the Source
+     * @param p_geoposition      position of the Source
      * @param p_defaultGenerator default Generator for this Source
      * @param p_aslname          ASL Programm for the Generator
      */
-    public void createSource( GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname )
+    public void createSource( final GeoPosition p_geoposition, final String p_defaultGenerator, final String p_aslname )
     {
         CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
-        ISource l_newSource = new CSource( p_geoPosition );
+        ISource l_newSource = new CSource( p_geoposition );
         this.add( l_newSource );
 
         //Set Default Generator (Selected Generator)
@@ -144,7 +144,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source which should be removed
      */
-    public void removeSource( ISource p_source )
+    public void removeSource( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
         if ( this.isSelectedSource( p_source ) )
@@ -169,7 +169,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source which should be selected
      */
-    public void setSelectedSource( ISource p_source )
+    public void setSelectedSource( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "sourceselected" ) );
         if ( m_selectedSource != null )
@@ -201,16 +201,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * set a generator object for a source
      *
      * @param p_source            source where the generator should be placed
-     * @param p_selectedGenerator new generator
+     * @param p_selectedgenerator new generator
      * @param p_aslname           ASL Programm for the Generator
      */
-    public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
+    public void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
     {
         CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
 
-        if ( p_selectedGenerator.equals( "Default" ) )
+        if ( p_selectedgenerator.equals( "Default" ) )
             p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
-        if ( p_selectedGenerator.equals( "Jason Agent" ) )
+        if ( p_selectedgenerator.equals( "Jason Agent" ) )
             p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
     }
 
@@ -219,7 +219,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source where the generator should be removed
      */
-    public void removeGenerator( ISource p_source )
+    public void removeGenerator( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "generatorremoved" ) );
         p_source.removeGenerator();
@@ -230,16 +230,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * if a Source is selected, the Atom Target will be passed
      * in the Complex Target of this Source
      *
-     * @param p_geoPosition position of the Atom Target
+     * @param p_geoposition position of the Atom Target
      */
-    public void createTarget( GeoPosition p_geoPosition )
+    public void createTarget( final GeoPosition p_geoposition )
     {
         CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
 
-        if ( p_geoPosition == null )
+        if ( p_geoposition == null )
             return;
 
-        CAtomTarget l_newTarget = new CAtomTarget( p_geoPosition );
+        CAtomTarget l_newTarget = new CAtomTarget( p_geoposition );
         this.m_sourceTargets.add( l_newTarget );
 
         //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
@@ -255,7 +255,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_target Atom Target which should be removed
      */
-    public void removeTarget( CAtomTarget p_target )
+    public void removeTarget( final CAtomTarget p_target )
     {
         CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
 

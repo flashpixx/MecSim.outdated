@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- */
+ **/
 
 package de.tu_clausthal.in.mec.object.source;
 
@@ -163,7 +163,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public void setColor( Color p_color )
+    public void setColor( final Color p_color )
     {
         if ( p_color == null ) this.m_color = Color.BLACK;
 
@@ -181,7 +181,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public void setGenerator( IGenerator p_generator )
+    public void setGenerator( final IGenerator p_generator )
     {
         this.m_generator = p_generator;
         this.setColor( p_generator.getColor() );
@@ -201,13 +201,13 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public void setComplexTarget( CComplexTarget p_complexTarget )
+    public void setComplexTarget( final CComplexTarget p_complexTarget )
     {
         this.m_complexTarget = p_complexTarget;
     }
 
     @Override
-    public Collection<ICar> step( int p_currentstep, ILayer p_layer ) throws Exception
+    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         return this.m_generator.generate( p_currentstep );
     }
@@ -272,7 +272,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      * @param p_width  image width
      * @param p_height image height
      */
-    private void setImage( int p_width, int p_height )
+    private void setImage( final int p_width, final int p_height )
     {
         if ( m_color == null ) return;
 
@@ -300,17 +300,17 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * Method to scale a Buffered Image
      *
-     * @param p_src    Image which should be scaled
+     * @param p_source    Image which should be scaled
      * @param p_width  new Width
      * @param p_height new Height
      * @return new Image
      */
-    private BufferedImage getScaledImage( BufferedImage p_src, int p_width, int p_height )
+    private BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
     {
         BufferedImage l_newImage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
         Graphics2D l_graphics = l_newImage.createGraphics();
         l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
-        l_graphics.drawImage( p_src, 0, 0, p_width, p_height, null );
+        l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
         l_graphics.dispose();
         return l_newImage;
     }

@@ -74,7 +74,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     }
 
     @Override
-    public final Collection<ICar> generate( int p_currentStep )
+    public final Collection<ICar> generate( final int p_currentStep )
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( p_currentStep % m_restriction == 0 )

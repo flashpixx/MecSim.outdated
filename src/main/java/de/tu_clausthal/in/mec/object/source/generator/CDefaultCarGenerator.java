@@ -64,7 +64,7 @@ public class CDefaultCarGenerator implements IGenerator
      *
      * @param p_position
      */
-    public CDefaultCarGenerator( GeoPosition p_position )
+    public CDefaultCarGenerator( final GeoPosition p_position )
     {
         this.m_position = p_position;
     }
@@ -76,7 +76,7 @@ public class CDefaultCarGenerator implements IGenerator
     }
 
     @Override
-    public Collection<ICar> generate( int p_currentStep )
+    public Collection<ICar> generate( final int p_currentStep )
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( p_currentStep % m_restriction == 0 )

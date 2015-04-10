@@ -45,7 +45,7 @@ public class CGeneratorSettings
      * Set a Constant Distribution for generating Cars
      * @param p_const constant value of how many cars should be processed
      */
-    public void setConstant( double p_const )
+    public void setConstant( final double p_const )
     {
         m_distribution = new ConstantRealDistribution( p_const );
     }
@@ -55,7 +55,7 @@ public class CGeneratorSettings
      * @param p_lowerBound lower bound of uniform distribution
      * @param p_upperBound upper bound of uniform distribution
      */
-    public void setUniform( double p_lowerBound, double p_upperBound )
+    public void setUniform( final double p_lowerBound, final double p_upperBound )
     {
         m_distribution = new UniformRealDistribution( p_lowerBound, p_upperBound );
     }
@@ -65,7 +65,7 @@ public class CGeneratorSettings
      * @param p_mean mean of Normal distribution
      * @param p_deviation deviation of Normal distribution
      */
-    public void setNormal( double p_mean, double p_deviation )
+    public void setNormal( final double p_mean, final double p_deviation )
     {
         m_distribution = new NormalDistribution( p_mean, p_deviation );
     }
@@ -75,7 +75,7 @@ public class CGeneratorSettings
      * @param p_mean mean of Exponential distribution
      * @param p_deviation deviation of Exponential distribution
      */
-    public void setExpo( double p_mean, double p_deviation )
+    public void setExpo( final double p_mean, final double p_deviation )
     {
         m_distribution = new ExponentialDistribution( p_mean, p_deviation );
     }

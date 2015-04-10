@@ -45,35 +45,35 @@ public class CComplexTarget
     /**
      * Map with AtomTarget and relative Probability
      */
-    private Map<CAtomTarget, Double> m_probabilityMap = Collections.synchronizedMap( new LinkedHashMap<>() );
+    private final Map<CAtomTarget, Double> m_probabilityMap = Collections.synchronizedMap( new LinkedHashMap<>() );
     /**
      * Map with AtomTarget and absolute Weight
      */
-    private Map<CAtomTarget, Double> m_weightingMap = Collections.synchronizedMap( new LinkedHashMap<>() );
+    private final Map<CAtomTarget, Double> m_weightingMap = Collections.synchronizedMap( new LinkedHashMap<>() );
+    /**
+     * Object to get Random Number (Uniform Distributed)
+     */
+    private final Random m_random = new Random();
     /**
      * Sum of all absolute weights (for calculating the relative Probability)
      */
     private double m_sum = 0;
-    /**
-     * Object to get Random Number (Uniform Distributed)
-     */
-    private Random m_random = new Random();
 
     /**
      * Method to sort the Weighting Map
-     * @param p_unsortMap
+     * @param p_unsortmap
      * @return sorted Weight Map
      */
-    public static Map sortByValue( Map p_unsortMap )
+    public static Map sortByValue( final Map p_unsortmap )
     {
-        List list = new CopyOnWriteArrayList( p_unsortMap.entrySet() );
+        List list = new CopyOnWriteArrayList( p_unsortmap.entrySet() );
 
         Collections.sort( list, new Comparator()
         {
-            public int compare( Object o1, Object o2 )
+            public int compare( final Object p_object1, final Object p_object2 )
             {
-                return ( (Comparable) ( (Map.Entry) ( o2 ) ).getValue() )
-                        .compareTo( ( (Map.Entry) ( o1 ) ).getValue() );
+                return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() )
+                        .compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
             }
         } );
 
@@ -90,7 +90,7 @@ public class CComplexTarget
      * adds a atom Target to this complex Target with default weight of 1
      * @param p_target atom target which should be added
      */
-    public void addTarget( CAtomTarget p_target )
+    public void addTarget( final CAtomTarget p_target )
     {
         this.addTarget( p_target, 1 );
     }
@@ -101,7 +101,7 @@ public class CComplexTarget
      * @param p_target atom target which should be added
      * @param p_weight weight of this atom target
      */
-    public void addTarget( CAtomTarget p_target, double p_weight )
+    public void addTarget( final CAtomTarget p_target, final double p_weight )
     {
 
         //If a Target already Exist only the weight need to be updated
@@ -122,7 +122,7 @@ public class CComplexTarget
      * removes the Atom Target from this Complex Target
      * @param p_target Atom Target which should be removed
      */
-    public void removeTarget( CAtomTarget p_target )
+    public void removeTarget( final CAtomTarget p_target )
     {
 
         if ( !( this.m_weightingMap.containsKey( p_target ) ) )
@@ -142,8 +142,8 @@ public class CComplexTarget
 
         for ( Map.Entry<CAtomTarget, Double> l_entry : this.m_weightingMap.entrySet() )
         {
-            CAtomTarget l_target = l_entry.getKey();
-            double l_weight = l_entry.getValue();
+            final CAtomTarget l_target = l_entry.getKey();
+            final double l_weight = l_entry.getValue();
             this.m_probabilityMap.put( l_target, l_weight / this.m_sum );
         }
     }
@@ -154,7 +154,7 @@ public class CComplexTarget
      */
     public CAtomTarget getSingleTarget()
     {
-        double l_random = m_random.nextDouble();
+        final double l_random = m_random.nextDouble();
         double l_cumulate = 0;
 
         for ( Map.Entry<CAtomTarget, Double> l_entry : this.m_probabilityMap.entrySet() )
@@ -186,9 +186,9 @@ public class CComplexTarget
      * @param p_targetLength  Length of List of Atom Targets
      * @return a list of Atom Targets
      */
-    public Queue<CAtomTarget> getMultiTarget( int p_targetLength )
+    public Queue<CAtomTarget> getMultiTarget( final int p_targetLength )
     {
-        Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
+        final Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
 
         for ( int i = 0; i < p_targetLength; i++ )
         {
@@ -217,9 +217,9 @@ public class CComplexTarget
      */
     public Queue<CAtomTarget> getSequenceTarget( int p_sequenceLength )
     {
-        Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
+        final Queue<CAtomTarget> l_targetList = new ConcurrentLinkedQueue<>();
 
-        Map<CAtomTarget, Double> l_sortedMap = Collections.synchronizedMap( this.sortByValue( this.m_weightingMap ) );
+        final Map<CAtomTarget, Double> l_sortedMap = Collections.synchronizedMap( this.sortByValue( this.m_weightingMap ) );
 
         for ( Map.Entry<CAtomTarget, Double> l_entry : l_sortedMap.entrySet() )
         {

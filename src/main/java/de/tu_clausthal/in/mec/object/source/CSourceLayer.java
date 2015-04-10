@@ -149,7 +149,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     {
         CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
         if ( this.isSelectedSource( p_source ) )
-            m_selectedSource = null;
+            s_selectedSource = null;
 
         p_source.release();
         this.remove( p_source );
@@ -162,7 +162,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public ISource getSelectedSource()
     {
-        return m_selectedSource;
+        return s_selectedSource;
     }
 
     /**
@@ -173,15 +173,15 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public void setSelectedSource( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "sourceselected" ) );
-        if ( m_selectedSource != null )
+        if ( s_selectedSource != null )
         {
-            m_selectedSource.setColor( m_selectedSource.getGenerator() == null ? Color.BLACK : m_selectedSource.getGenerator().getColor() );
+            s_selectedSource.setColor( s_selectedSource.getGenerator() == null ? Color.BLACK : s_selectedSource.getGenerator().getColor() );
         }
         if ( p_source != null )
         {
             p_source.setColor( Color.WHITE );
         }
-        m_selectedSource = p_source;
+        s_selectedSource = p_source;
     }
 
     /**
@@ -193,7 +193,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public boolean isSelectedSource( final ISource p_source )
     {
         if ( p_source != null )
-            return p_source.equals( m_selectedSource );
+            return p_source.equals( s_selectedSource );
 
         return false;
     }
@@ -245,8 +245,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
         //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
         Random l_random = new Random();
-        if ( this.m_selectedSource != null )
-            this.m_selectedSource.getComplexTarget().addTarget( l_newTarget, l_random.nextDouble() );
+        if ( this.s_selectedSource != null )
+            this.s_selectedSource.getComplexTarget().addTarget( l_newTarget, l_random.nextDouble() );
 
         this.repaintOSM();
     }
@@ -296,7 +296,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         catch ( Exception l_exception )
         {
         }
-        m_selectedSource = p_source;
+        s_selectedSource = p_source;
         */
     }
 

@@ -81,8 +81,8 @@ public class CComplexTarget
         final Map l_sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
         for ( Iterator it = list.iterator(); it.hasNext(); )
         {
-            Map.Entry entry = (Map.Entry) it.next();
-            l_sortedMap.put( entry.getKey(), entry.getValue() );
+            Map.Entry l_entry = (Map.Entry) it.next();
+            l_sortedMap.put( l_entry.getKey(), l_entry.getValue() );
         }
         return l_sortedMap;
     }

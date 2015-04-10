@@ -38,7 +38,7 @@ public class COSMKeyListener implements KeyListener
     /**
      * Variable which define the Offset for navigating threw the Map
      */
-    private static final int m_OFFSET = 10;
+    private static final int c_offset = 10;
     /**
      * Variable which indicates if the STRG Key is pressed
      */
@@ -71,32 +71,30 @@ public class COSMKeyListener implements KeyListener
         if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL ) m_strgPressed = true;
 
         //Check if Arrows are Pressed and Repaint the Map
-        int delta_x = 0;
-        int delta_y = 0;
+        int l_delta_x = 0;
+        int l_delta_y = 0;
 
         switch ( p_event.getKeyCode() )
         {
             case KeyEvent.VK_LEFT:
-                delta_x = -m_OFFSET;
+                l_delta_x = -c_offset;
                 break;
             case KeyEvent.VK_RIGHT:
-                delta_x = m_OFFSET;
+                l_delta_x = c_offset;
                 break;
             case KeyEvent.VK_UP:
-                delta_y = -m_OFFSET;
+                l_delta_y = -c_offset;
                 break;
             case KeyEvent.VK_DOWN:
-                delta_y = m_OFFSET;
+                l_delta_y = c_offset;
                 break;
         }
 
-        if ( delta_x != 0 || delta_y != 0 )
+        if ( l_delta_x != 0 || l_delta_y != 0 )
         {
             final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
-            final Rectangle bounds = l_viewer.getViewportBounds();
-            final double x = bounds.getCenterX() + delta_x;
-            final double y = bounds.getCenterY() + delta_y;
-            l_viewer.setCenter( new Point2D.Double( x, y ) );
+            final Rectangle l_bounds = l_viewer.getViewportBounds();
+            l_viewer.setCenter( new Point2D.Double( l_bounds.getCenterX() + l_delta_x, l_bounds.getCenterY() + l_delta_y ) );
             l_viewer.repaint();
         }
 

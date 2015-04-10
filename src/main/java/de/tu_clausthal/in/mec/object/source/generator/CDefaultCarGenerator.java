@@ -56,7 +56,7 @@ public class CDefaultCarGenerator implements IGenerator
     /**
      * Position of this Generator
      */
-    protected transient GeoPosition m_position = null;
+    protected transient GeoPosition m_position;
 
 
     /**
@@ -66,7 +66,7 @@ public class CDefaultCarGenerator implements IGenerator
      */
     public CDefaultCarGenerator( final GeoPosition p_position )
     {
-        this.m_position = p_position;
+        m_position = p_position;
     }
 
     @Override
@@ -80,18 +80,14 @@ public class CDefaultCarGenerator implements IGenerator
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( p_currentStep % m_restriction == 0 )
-        {
-            int l_numberOfCars = m_settings.getSample();
-
-            for ( int i = 0; i < l_numberOfCars; i++ )
+            for ( int i = 0; i < m_settings.getSample(); i++ )
                 l_sources.add( new CDefaultCar( m_position ) );
-        }
 
         return l_sources;
     }
 
     @Override
-    public CGeneratorSettings getSettings()
+    public final CGeneratorSettings getSettings()
     {
         return m_settings;
     }

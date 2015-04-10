@@ -56,7 +56,7 @@ public class CAtomTarget implements Painter<COSMViewer>
      * return the position of this Target
      * @return position of the Target
      */
-    public GeoPosition getPosition()
+    public final GeoPosition getPosition()
     {
         return m_position;
     }
@@ -65,13 +65,13 @@ public class CAtomTarget implements Painter<COSMViewer>
      * set a new position for this Target
      * @param p_position new position of this Target
      */
-    public void setPosition( final GeoPosition p_position )
+    public final void setPosition( final GeoPosition p_position )
     {
         this.m_position = p_position;
     }
 
     @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         final int l_zoom = Math.max( 15 - p_viewer.getZoom(), 3 );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( this.getPosition(), p_viewer.getZoom() );

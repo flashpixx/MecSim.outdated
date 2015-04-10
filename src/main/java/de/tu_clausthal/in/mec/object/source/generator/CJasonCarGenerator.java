@@ -51,7 +51,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     /**
      * Name of the ASL File
      */
-    private String m_aslName = null;
+    private String m_aslName;
 
 
     /**
@@ -78,12 +78,8 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     {
         final Collection<ICar> l_sources = new HashSet<>();
         if ( p_currentStep % m_restriction == 0 )
-        {
-            int l_numberOfCars = m_settings.getSample();
-
-            for ( int i = 0; i < l_numberOfCars; i++ )
+            for ( int i = 0; i < m_settings.getSample(); i++ )
                 l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
-        }
 
         return l_sources;
     }

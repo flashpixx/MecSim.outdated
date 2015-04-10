@@ -93,7 +93,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * resets the view *
      */
-    public void resetConfiguration()
+    public final void resetConfiguration()
     {
         this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
         this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
@@ -103,7 +103,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * stores the current configuration
      */
-    public void setConfiguration()
+    public final void setConfiguration()
     {
         CConfiguration.getInstance().get().<Integer>setTraverse( "ui/zoom", this.getZoom() );
         CConfiguration.getInstance().get().<GeoPosition>setTraverse( "ui/geoposition", this.getCenterPosition() );
@@ -123,7 +123,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * Getter Mouse Listener
      */
-    public COSMMouseListener getMouseListener()
+    public final COSMMouseListener getMouseListener()
     {
         return this.m_mouse;
     }
@@ -131,7 +131,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * Getter Key Listener
      */
-    public COSMKeyListener getKeyListener()
+    public final COSMKeyListener getKeyListener()
     {
         return m_keylistener;
     }

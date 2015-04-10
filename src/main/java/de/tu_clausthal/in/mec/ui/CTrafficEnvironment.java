@@ -42,7 +42,7 @@ public class CTrafficEnvironment
      *
      * @return list wir driving models
      */
-    public Map<String, Object> web_static_listdrivemodel()
+    private final Map<String, Object> web_static_listdrivemodel()
     {
         return new HashMap()
         {{
@@ -56,7 +56,7 @@ public class CTrafficEnvironment
      *
      * @param p_data input data
      */
-    public void web_static_setdrivemodel( final Map<String, Object> p_data )
+    private final void web_static_setdrivemodel( final Map<String, Object> p_data )
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
@@ -68,7 +68,7 @@ public class CTrafficEnvironment
      *
      * @return graphweight list
      */
-    public Map<String, Object> web_static_listgraphweight()
+    private final Map<String, Object> web_static_listgraphweight()
     {
         final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
         final Map<String, Object> l_return = new HashMap<>();
@@ -85,7 +85,7 @@ public class CTrafficEnvironment
      *
      * @param p_data input data
      */
-    public void web_static_enabledisablegraphweight( final Map<String, Object> p_data )
+    private final void web_static_enabledisablegraphweight( final Map<String, Object> p_data )
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );

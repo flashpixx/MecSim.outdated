@@ -123,7 +123,7 @@ public class CUI extends Application
 
 
     @Override
-    public void start( final Stage p_stage ) throws Exception
+    public final void start( final Stage p_stage ) throws Exception
     {
         // set via reflection the UI
         try
@@ -178,7 +178,7 @@ public class CUI extends Application
      * @param p_title name of the node
      * @param p_node  node
      */
-    public void add( final String p_title, final Node p_node )
+    public final void add( final String p_title, final Node p_node )
     {
         if ( ( m_widget.containsKey( p_node ) ) || ( m_content.containsKey( p_title ) ) ) return;
 
@@ -224,7 +224,6 @@ public class CUI extends Application
         l_popover.setAutoFix( true );
         l_popover.setOnHidden( m_popuphiddenevent );
 
-
         return l_popover;
     }
 
@@ -237,7 +236,7 @@ public class CUI extends Application
      * @tparam T node type
      */
     @SuppressWarnings("unchecked")
-    public <T extends Node> T getTyped( final String p_name )
+    public final <T extends Node> T getTyped( final String p_name )
     {
         return (T) m_content.get( p_name );
     }

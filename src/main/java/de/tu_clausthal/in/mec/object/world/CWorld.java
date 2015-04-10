@@ -104,7 +104,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     }
 
     @Override
-    public ILayer get( final Object p_key )
+    public final ILayer get( final Object p_key )
     {
         final ILayer l_layer = m_layer.get( p_key );
         CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );

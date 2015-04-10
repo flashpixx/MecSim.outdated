@@ -49,7 +49,7 @@ public class CBrowser extends GridPane
     /**
      * webkit view
      */
-    protected final WebView m_webview = new WebView();
+    private final WebView m_webview = new WebView();
 
     /**
      * ctor with instantiation a blank engine

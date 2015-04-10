@@ -70,7 +70,7 @@ public class CAgentEnvironment
      *
      * @return base name
      */
-    private String web_uribase()
+    private final String web_uribase()
     {
         return m_baseuri;
     }
@@ -80,7 +80,7 @@ public class CAgentEnvironment
      *
      * @param p_data input data
      */
-    private void web_static_create( final Map<String, Object> p_data ) throws IOException
+    private final void web_static_create( final Map<String, Object> p_data ) throws IOException
     {
         switch ( m_type )
         {
@@ -96,7 +96,7 @@ public class CAgentEnvironment
      *
      * @param p_data input data
      */
-    private void web_static_delete( final Map<String, Object> p_data )
+    private final void web_static_delete( final Map<String, Object> p_data )
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
@@ -117,17 +117,13 @@ public class CAgentEnvironment
      * @param p_data input data
      * @return file content
      */
-    private Map<String, String> web_static_read( final Map<String, Object> p_data ) throws IOException
+    private final Map<String, Object> web_static_read( final Map<String, Object> p_data ) throws IOException
     {
         switch ( m_type )
         {
             case Jason:
                 final String l_agent = this.getAgentName( p_data );
-                return new HashMap<String, String>()
-                {{
-                        put( "name", l_agent );
-                        put( "source", FileUtils.readFileToString( IEnvironment.getAgentFile( l_agent ) ) );
-                    }};
+                return CCommon.getMap( "name", l_agent, "source", FileUtils.readFileToString( IEnvironment.getAgentFile( l_agent ) ) );
 
             default:
         }
@@ -140,7 +136,7 @@ public class CAgentEnvironment
      *
      * @param p_data input data
      */
-    private void web_static_write( final Map<String, Object> p_data ) throws IOException
+    private final void web_static_write( final Map<String, Object> p_data ) throws IOException
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
@@ -162,7 +158,7 @@ public class CAgentEnvironment
      *
      * @return agent list
      */
-    private Map<String, List<String>> web_static_list()
+    private final Map<String, List<String>> web_static_list()
     {
         switch ( m_type )
         {
@@ -181,7 +177,7 @@ public class CAgentEnvironment
      *
      * @param p_data input data
      */
-    private void web_static_check( final Map<String, Object> p_data )
+    private final void web_static_check( final Map<String, Object> p_data )
     {
         switch ( m_type )
         {
@@ -199,7 +195,7 @@ public class CAgentEnvironment
      * @param p_data input data
      * @return agent name
      */
-    private String getAgentName( final Map<String, Object> p_data )
+    private final String getAgentName( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "name" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );

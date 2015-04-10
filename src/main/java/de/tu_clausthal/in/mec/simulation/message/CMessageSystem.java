@@ -49,7 +49,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
-    protected CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
+    protected final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
 
 
     /**
@@ -57,7 +57,7 @@ public class CMessageSystem implements IVoidSteppable
      *
      * @param p_listener listener
      */
-    public void addActionListener( IActionListener p_listener )
+    public void addActionListener( final IActionListener p_listener )
     {
         m_listener.add( p_listener );
     }
@@ -68,7 +68,7 @@ public class CMessageSystem implements IVoidSteppable
      *
      * @param p_listener listener
      */
-    public void removeListener( IActionListener p_listener )
+    public void removeListener( final IActionListener p_listener )
     {
         m_listener.remove( p_listener );
     }
@@ -174,13 +174,11 @@ public class CMessageSystem implements IVoidSteppable
             // the item is also skipped, if there does not exists messages
             if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) ) continue;
 
-
             for ( IParticipant l_receiver : l_item.getLeft() )
                 l_receiver.receiveMessage( l_item.getRight() );
 
             // clear all messages, that are received
             l_item.getRight().clear();
-
         }
     }
 
@@ -192,7 +190,7 @@ public class CMessageSystem implements IVoidSteppable
     }
 
     @Override
-    public void release()
+    public final void release()
     {
 
     }

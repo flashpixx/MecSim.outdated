@@ -58,13 +58,12 @@ public class COSMKeyListener implements KeyListener
 
 
     @Override
-    public void keyTyped( KeyEvent p_event )
+    public final void keyTyped( final KeyEvent p_event )
     {
-
     }
 
     @Override
-    public void keyPressed( KeyEvent p_event )
+    public final void keyPressed( final KeyEvent p_event )
     {
         //Set Shift/Alt/STRG Status if the specific Key is pressed
         if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT ) m_shiftPressed = true;
@@ -94,9 +93,9 @@ public class COSMKeyListener implements KeyListener
         if ( delta_x != 0 || delta_y != 0 )
         {
             final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
-            Rectangle bounds = l_viewer.getViewportBounds();
-            double x = bounds.getCenterX() + delta_x;
-            double y = bounds.getCenterY() + delta_y;
+            final Rectangle bounds = l_viewer.getViewportBounds();
+            final double x = bounds.getCenterX() + delta_x;
+            final double y = bounds.getCenterY() + delta_y;
             l_viewer.setCenter( new Point2D.Double( x, y ) );
             l_viewer.repaint();
         }
@@ -104,7 +103,7 @@ public class COSMKeyListener implements KeyListener
     }
 
     @Override
-    public void keyReleased( KeyEvent p_event )
+    public final void keyReleased( final KeyEvent p_event )
     {
         //Update the Key Pressed Status
         if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT ) m_shiftPressed = false;
@@ -116,7 +115,7 @@ public class COSMKeyListener implements KeyListener
     /**
      * Get Strg Pressed Status
      */
-    public boolean isStrgPressed()
+    public final boolean isStrgPressed()
     {
         return m_strgPressed;
     }
@@ -124,7 +123,7 @@ public class COSMKeyListener implements KeyListener
     /**
      * Get ShiftPressed Status
      */
-    public boolean isShiftPressed()
+    public final boolean isShiftPressed()
     {
         return m_shiftPressed;
     }
@@ -132,7 +131,7 @@ public class COSMKeyListener implements KeyListener
     /**
      * Get AltPressed Status
      */
-    public boolean isAltPressed()
+    public final boolean isAltPressed()
     {
         return m_altPressed;
     }
@@ -140,7 +139,7 @@ public class COSMKeyListener implements KeyListener
     /**
      * Get Key Pressed Status
      */
-    public boolean isAnyKeyPressed()
+    public final boolean isAnyKeyPressed()
     {
         return m_shiftPressed || m_strgPressed || m_altPressed;
     }
@@ -148,14 +147,13 @@ public class COSMKeyListener implements KeyListener
     /**
      * Get the Number of Keys which are pressed
      */
-    public int getKeyPressedCount()
+    public final int getKeyPressedCount()
     {
         int l_keyPressedCount = 0;
 
         if ( m_altPressed ) l_keyPressedCount++;
         if ( m_shiftPressed ) l_keyPressedCount++;
         if ( m_strgPressed ) l_keyPressedCount++;
-
 
         return l_keyPressedCount;
     }

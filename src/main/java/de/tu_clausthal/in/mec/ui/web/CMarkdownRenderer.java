@@ -48,15 +48,15 @@ public class CMarkdownRenderer extends LinkRenderer
     /**
      * string with optional CSS URI *
      */
-    protected final String m_cssuri;
+    private final String m_cssuri;
     /**
      * string with base URI
      */
-    protected final String m_baseuri;
+    private final String m_baseuri;
     /**
      * rendering enum
      */
-    protected final EHTMLType m_htmltype;
+    private final EHTMLType m_htmltype;
 
 
     /**

@@ -55,15 +55,15 @@ public class CServer extends NanoHTTPD
     /**
      * markdown processor *
      */
-    protected final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
+    private final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
      * virtual-locations
      */
-    protected final CVirtualLocation m_virtuallocation;
+    private final CVirtualLocation m_virtuallocation;
     /**
      * mimetype detector
      */
-    protected final MimeUtil2 m_mimetype = new MimeUtil2();
+    private final MimeUtil2 m_mimetype = new MimeUtil2();
 
 
     /**
@@ -133,7 +133,7 @@ public class CServer extends NanoHTTPD
      *
      * @return location
      */
-    public CVirtualLocation getVirtualLocation()
+    public final CVirtualLocation getVirtualLocation()
     {
         return m_virtuallocation;
     }
@@ -167,7 +167,7 @@ public class CServer extends NanoHTTPD
      * returns the basepart of the URI
      * @bug incomplete
      */
-    public void register( final Object p_object )
+    public final void register( final Object p_object )
     {
         // URI begin
         final String l_uriclass = "/" + p_object.getClass().getSimpleName().toLowerCase() + "/";
@@ -294,7 +294,7 @@ public class CServer extends NanoHTTPD
      * @param p_index  index file
      * @param p_uri    URI
      */
-    public void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
+    public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
     {
         this.addVirtualDirectory( p_source, p_index, p_uri, null );
     }
@@ -308,7 +308,7 @@ public class CServer extends NanoHTTPD
      * @param p_uri      URI
      * @param p_markdown markdown renderer
      */
-    public void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
+    public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
     }
@@ -321,7 +321,7 @@ public class CServer extends NanoHTTPD
      * @param p_index  index file
      * @param p_uri    URI
      */
-    public void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
     {
         this.addVirtualDirectory( p_source, p_index, p_uri, null );
     }
@@ -335,7 +335,7 @@ public class CServer extends NanoHTTPD
      * @param p_uri      URI
      * @param p_markdown markdown renderer
      */
-    public void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
+    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         try
         {

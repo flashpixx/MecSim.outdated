@@ -40,7 +40,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
     /**
      * set with forbidden field names *
      */
-    protected final Set<String> m_forbiddennames = new HashSet<>();
+    private final Set<String> m_forbiddennames = new HashSet<>();
 
     /**
      * ctor *

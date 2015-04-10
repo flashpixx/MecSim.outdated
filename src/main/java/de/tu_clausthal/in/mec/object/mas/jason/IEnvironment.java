@@ -60,7 +60,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
-    protected transient CBrowser m_mindinspector = null;
+    private transient CBrowser m_mindinspector = null;
 
 
     /**

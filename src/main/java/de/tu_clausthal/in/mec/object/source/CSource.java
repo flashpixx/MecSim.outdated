@@ -66,32 +66,32 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * position of the source within the map
      */
-    protected transient GeoPosition m_position = null;
+    private transient GeoPosition m_position = null;
     /**
      * image of the waypoint
      */
-    protected transient BufferedImage m_image = null;
+    private transient BufferedImage m_image = null;
     /**
      * waypoint color
      */
-    protected Color m_color = Color.BLACK;
+    private Color m_color = Color.BLACK;
     /**
      * Member Variable to save the last Zoom (If the Zoom changed the image need to be resized)
      */
-    protected int m_lastZoom = 0;
+    private int m_lastZoom = 0;
     /**
      * Member Variable which may hold a Generator
      */
-    protected IGenerator m_generator = null;
+    private IGenerator m_generator = null;
     /**
      * ComplexTarget of this Source
      */
-    protected CComplexTarget m_complexTarget;
+    private CComplexTarget m_complexTarget;
 
     /**
      * map with targets
      */
-    protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
+    private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
             add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};

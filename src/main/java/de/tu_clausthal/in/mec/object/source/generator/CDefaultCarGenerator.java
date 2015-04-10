@@ -50,13 +50,13 @@ public class CDefaultCarGenerator implements IGenerator
      */
     protected final int m_restriction = 15;
     /**
+     * Member Variable which handles the Settings of a Generator
+     */
+    protected final CGeneratorSettings m_settings = new CGeneratorSettings();
+    /**
      * Position of this Generator
      */
     protected transient GeoPosition m_position = null;
-    /**
-     * Member Variable which handles the Settings of a Generator
-     */
-    protected CGeneratorSettings m_settings = new CGeneratorSettings();
 
 
     /**

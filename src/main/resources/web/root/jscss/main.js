@@ -1,6 +1,26 @@
 $(document).ready(function(){
 
+    // global variables
     var form, dialog;
+
+    /* ACCORDION-FILE-CONTENT ************************************************************/
+    /*************************************************************************************/
+
+    /* ACCORDION-SIMULATION-CONTENT ******************************************************/
+    /*************************************************************************************/
+
+    /* ACCORDION-SOURCE-CONTENT **********************************************************/
+    /*************************************************************************************/
+
+    /* ACCORDION-EDITOR-CONTENT **********************************************************/
+    /*************************************************************************************/
+
+    /* ACCORDION-STATISTICS-CONTENT ******************************************************/
+    /*************************************************************************************/
+
+    /* ACCORDION-GETTING-HELP-CONTENT ************************************************************/
+    /*************************************************************************************/
+
 
     // apply selected language to text elements
     // TODO: i18n
@@ -18,10 +38,10 @@ $(document).ready(function(){
         $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
         $("#mecsim_agent_files").empty();
         for(var i in p_data.agents){
-            $("#mecsim_agent_files").append( $("<option></option>")
-                                             .attr("value",p_data.agents[i])
-                                             .text(p_data.agents[i]));
-
+            $("#mecsim_agent_files")
+                .append( $("<option></option>")
+                .attr("value",p_data.agents[i])
+                .text(p_data.agents[i]));
         }
             $("#mecsim_agent_files option:first").attr('selected', true);
             $('#mecsim_agent_files').selectmenu('refresh', true);

@@ -167,17 +167,20 @@ public class CGraphHopper extends GraphHopper
 
         // get all paths
         final List<Path> l_routes = this.getPaths( l_request, l_result );
-        if ( l_routes.size() == 0 ) return null;
+        if ( l_routes.size() == 0 )
+            return null;
 
         // create edge list with routes
         final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
         for ( Path l_path : l_routes )
         {
-            if ( l_paths.size() >= p_maxroutes ) return l_paths;
+            if ( l_paths.size() >= p_maxroutes )
+                return l_paths;
 
             // we must delete the first and last element, because the items are "virtual"
             final List<EdgeIteratorState> l_edgelist = l_path.calcEdges();
-            if ( l_edgelist.size() < 3 ) continue;
+            if ( l_edgelist.size() < 3 )
+                continue;
 
             l_edgelist.remove( 0 );
             l_edgelist.remove( l_edgelist.size() - 1 );
@@ -210,7 +213,8 @@ public class CGraphHopper extends GraphHopper
      */
     public final double getEdgeSpeed( final EdgeIteratorState p_edge )
     {
-        if ( p_edge == null ) return Double.POSITIVE_INFINITY;
+        if ( p_edge == null )
+            return Double.POSITIVE_INFINITY;
 
         return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
     }
@@ -361,7 +365,8 @@ public class CGraphHopper extends GraphHopper
      */
     public final void enableWeight( final String p_weight )
     {
-        if ( m_weight.containsKey( p_weight ) ) return;
+        if ( m_weight.containsKey( p_weight ) )
+            return;
 
         m_weight.get( p_weight ).setActive( true );
     }
@@ -373,7 +378,8 @@ public class CGraphHopper extends GraphHopper
      */
     public final void disableWeight( final String p_weight )
     {
-        if ( m_weight.containsKey( p_weight ) ) return;
+        if ( m_weight.containsKey( p_weight ) )
+            return;
 
         m_weight.get( p_weight ).setActive( false );
     }
@@ -398,7 +404,8 @@ public class CGraphHopper extends GraphHopper
     {
         final List<String> l_active = new LinkedList<>();
         for ( Map.Entry<String, IWeighting> l_item : m_weight.entrySet() )
-            if ( l_item.getValue().isActive() ) l_active.add( l_item.getKey() );
+            if ( l_item.getValue().isActive() )
+                l_active.add( l_item.getKey() );
 
         return CCommon.convertCollectionToArray( String[].class, l_active );
     }

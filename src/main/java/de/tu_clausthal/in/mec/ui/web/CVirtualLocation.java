@@ -80,7 +80,8 @@ public class CVirtualLocation
 
         // otherwise check each match
         for ( IVirtualLocation l_item : m_locations.values() )
-            if ( l_item.match( p_session.getUri() ) ) return l_item;
+            if ( l_item.match( p_session.getUri() ) )
+                return l_item;
 
         return m_defaultlocation;
     }

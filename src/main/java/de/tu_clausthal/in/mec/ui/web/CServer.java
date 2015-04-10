@@ -106,7 +106,8 @@ public class CServer extends NanoHTTPD
 
             if ( l_location instanceof CVirtualStaticMethod )
                 l_response = this.getVirtualStaticMethod( l_location, p_session );
-            else l_response = this.getVirtualDirFile( l_location, p_session );
+            else
+                l_response = this.getVirtualDirFile( l_location, p_session );
 
         }
         catch ( final Throwable l_throwable )
@@ -151,7 +152,8 @@ public class CServer extends NanoHTTPD
         for ( Object l_item : l_types )
         {
             final MimeType l_type = (MimeType) l_item;
-            if ( !l_type.toString().startsWith( "application/" ) ) return l_type.toString();
+            if ( !l_type.toString().startsWith( "application/" ) )
+                return l_type.toString();
         }
         return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
     }
@@ -177,12 +179,15 @@ public class CServer extends NanoHTTPD
         try
         {
             final Object l_data = CReflection.getClassMethod( p_object.getClass(), "web_uribase" ).getMethod().invoke( p_object );
-            if ( l_data instanceof String ) l_uribase = l_data.toString().toLowerCase();
+            if ( l_data instanceof String )
+                l_uribase = l_data.toString().toLowerCase();
 
             if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
             {
-                if ( l_uribase.startsWith( "/" ) ) l_uribase = l_uribase.substring( 1 );
-                if ( !l_uribase.endsWith( "/" ) ) l_uribase += "/";
+                if ( l_uribase.startsWith( "/" ) )
+                    l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( "/" ) )
+                    l_uribase += "/";
             }
         }
         catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
@@ -206,7 +211,8 @@ public class CServer extends NanoHTTPD
             if ( l_methodname.contains( "web_static_" ) )
             {
                 final String l_urimethod = l_methodname.replace( "web_static_", "" );
-                if ( l_urimethod.isEmpty() ) continue;
+                if ( l_urimethod.isEmpty() )
+                    continue;
 
                 m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), l_uriclass + l_uribase + l_urimethod ) );
             }
@@ -256,7 +262,8 @@ public class CServer extends NanoHTTPD
             case "md":
                 if ( p_location.getMarkDownRenderer() != null )
                     l_response = new Response( Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
-                else l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                else
+                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
                 break;
 
             default:
@@ -278,7 +285,8 @@ public class CServer extends NanoHTTPD
         try
         {
             final URL l_url = CCommon.getResourceURL( p_source );
-            if ( l_url != null ) m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
+            if ( l_url != null )
+                m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
         }
         catch ( final IllegalArgumentException l_exception )
         {

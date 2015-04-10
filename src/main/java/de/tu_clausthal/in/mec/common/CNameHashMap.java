@@ -65,7 +65,8 @@ public class CNameHashMap extends HashMap<String, Object>
      */
     private static <T> void setTraverse( final CPath p_path, final int p_currentindex, final T p_value, final Map<String, Object> p_map )
     {
-        if ( p_currentindex >= p_path.size() ) return;
+        if ( p_currentindex >= p_path.size() )
+            return;
 
         // check if last element
         if ( p_currentindex == p_path.size() - 1 )
@@ -116,12 +117,14 @@ public class CNameHashMap extends HashMap<String, Object>
      */
     public final <T> T getTraverse( final CPath p_path )
     {
-        if ( p_path.isEmpty() ) return null;
+        if ( p_path.isEmpty() )
+            return null;
 
         final Object l_return = this.get( p_path.get( 0 ) );
         if ( l_return instanceof CNameHashMap )
             return ( (CNameHashMap) l_return ).getTraverse( p_path.getSubPath( 1 ) );
-        if ( l_return instanceof Map ) return (T) ( (Map) l_return ).get( p_path.get( 0 ) );
+        if ( l_return instanceof Map )
+            return (T) ( (Map) l_return ).get( p_path.get( 0 ) );
 
         return (T) l_return;
     }

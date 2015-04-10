@@ -211,7 +211,8 @@ public class CConfiguration
      */
     public File getLocation( final String p_name, final String... p_varargs )
     {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) ) return m_location.get( p_name );
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            return m_location.get( p_name );
 
         return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
@@ -434,15 +435,18 @@ public class CConfiguration
             InputStream l_stream = null;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
 
-            if ( !p_reload ) l_stream = p_loader.getResourceAsStream( l_resource );
+            if ( !p_reload )
+                l_stream = p_loader.getResourceAsStream( l_resource );
             else
             {
 
                 final URL l_url = p_loader.getResource( l_resource );
-                if ( l_url == null ) return null;
+                if ( l_url == null )
+                    return null;
 
                 final URLConnection l_connection = l_url.openConnection();
-                if ( l_connection == null ) return null;
+                if ( l_connection == null )
+                    return null;
 
                 l_connection.setUseCaches( false );
                 l_stream = l_connection.getInputStream();

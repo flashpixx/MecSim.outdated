@@ -128,7 +128,8 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
-        if ( m_position == null ) return;
+        if ( m_position == null )
+            return;
 
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ), this.iconsize( p_viewer ) );
@@ -165,7 +166,8 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public final void setColor( final Color p_color )
     {
-        if ( p_color == null ) this.m_color = Color.BLACK;
+        if ( p_color == null )
+            this.m_color = Color.BLACK;
 
         this.m_color = p_color;
         this.setImage();
@@ -221,7 +223,8 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( m_image == null ) return;
+        if ( m_image == null )
+            return;
 
         //If the Zoom changed Calculate the new Image and Scale
         if ( p_viewer.getZoom() != m_lastZoom )
@@ -244,7 +247,8 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     private void setImage()
     {
-        if ( m_color == null ) return;
+        if ( m_color == null )
+            return;
 
         try
         {
@@ -256,7 +260,8 @@ public class CSource extends IInspector implements ISource, ISerializable
                 for ( int j = 0; j < l_image.getWidth(); j++ )
                 {
                     final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 ) m_image.setRGB( j, i, m_color.getRGB() );
+                    if ( l_color.getBlue() > 0 )
+                        m_image.setRGB( j, i, m_color.getRGB() );
                 }
 
         }
@@ -274,7 +279,8 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     private void setImage( final int p_width, final int p_height )
     {
-        if ( m_color == null ) return;
+        if ( m_color == null )
+            return;
 
         try
         {
@@ -287,7 +293,8 @@ public class CSource extends IInspector implements ISource, ISerializable
                 for ( int j = 0; j < l_image.getWidth(); j++ )
                 {
                     final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 ) m_image.setRGB( j, i, m_color.getRGB() );
+                    if ( l_color.getBlue() > 0 )
+                        m_image.setRGB( j, i, m_color.getRGB() );
                 }
 
         }

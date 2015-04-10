@@ -36,7 +36,6 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
 
     /**
      * object reference
-     *
      */
     protected final T m_object;
 
@@ -48,7 +47,8 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
      */
     public IRunnable( final T p_object )
     {
-        if ( p_object == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
+        if ( p_object == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
 
         m_object = p_object;
     }

@@ -66,9 +66,12 @@ public class COSMKeyListener implements KeyListener
     public final void keyPressed( final KeyEvent p_event )
     {
         //Set Shift/Alt/STRG Status if the specific Key is pressed
-        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT ) m_shiftPressed = true;
-        if ( p_event.getKeyCode() == KeyEvent.VK_ALT ) m_altPressed = true;
-        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL ) m_strgPressed = true;
+        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT )
+            m_shiftPressed = true;
+        if ( p_event.getKeyCode() == KeyEvent.VK_ALT )
+            m_altPressed = true;
+        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL )
+            m_strgPressed = true;
 
         //Check if Arrows are Pressed and Repaint the Map
         int l_delta_x = 0;
@@ -105,9 +108,12 @@ public class COSMKeyListener implements KeyListener
     public final void keyReleased( final KeyEvent p_event )
     {
         //Update the Key Pressed Status
-        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT ) m_shiftPressed = false;
-        if ( p_event.getKeyCode() == KeyEvent.VK_ALT ) m_altPressed = false;
-        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL ) m_strgPressed = false;
+        if ( p_event.getKeyCode() == KeyEvent.VK_SHIFT )
+            m_shiftPressed = false;
+        if ( p_event.getKeyCode() == KeyEvent.VK_ALT )
+            m_altPressed = false;
+        if ( p_event.getKeyCode() == KeyEvent.VK_CONTROL )
+            m_strgPressed = false;
 
     }
 
@@ -160,9 +166,12 @@ public class COSMKeyListener implements KeyListener
     {
         int l_keyPressedCount = 0;
 
-        if ( m_altPressed ) l_keyPressedCount++;
-        if ( m_shiftPressed ) l_keyPressedCount++;
-        if ( m_strgPressed ) l_keyPressedCount++;
+        if ( m_altPressed )
+            l_keyPressedCount++;
+        if ( m_shiftPressed )
+            l_keyPressedCount++;
+        if ( m_strgPressed )
+            l_keyPressedCount++;
 
         return l_keyPressedCount;
     }

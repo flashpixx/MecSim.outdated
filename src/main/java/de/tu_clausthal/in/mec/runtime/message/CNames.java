@@ -71,9 +71,11 @@ public class CNames
     protected static CPath getGroup( final Object p_object )
     {
 
-        if ( p_object instanceof CAgent ) return new CPath( "agent" );
+        if ( p_object instanceof CAgent )
+            return new CPath( "agent" );
 
-        if ( p_object instanceof ICar ) return new CPath( "car" );
+        if ( p_object instanceof ICar )
+            return new CPath( "car" );
 
         return new CPath( "unkown" );
     }

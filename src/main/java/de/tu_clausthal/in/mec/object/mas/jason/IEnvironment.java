@@ -139,7 +139,8 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         super.step( p_currentstep, p_layer );
 
         // mindinspector needs to load if there exists agents
-        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) ) m_mindinspector.load( "http://localhost:3272" );
+        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
+            m_mindinspector.load( "http://localhost:3272" );
     }
 
     @Override

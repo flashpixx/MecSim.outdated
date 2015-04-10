@@ -160,7 +160,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
      * @return casted value
      * @tparam T value type
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public final <T extends ILayer> T getTyped( final Object p_key )
     {
         final ILayer l_layer = m_layer.get( p_key );

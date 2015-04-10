@@ -132,7 +132,8 @@ public class CFieldBind extends IAction
 
         // check number of argument first
         final List<Term> l_args = p_args.getTerms();
-        if ( l_args.size() < 3 ) throw new IllegalArgumentException( CCommon.getResourceString( this, "argument" ) );
+        if ( l_args.size() < 3 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "argument" ) );
 
         // first argument is the object name - try to get object
         final String l_objectname = l_args.get( 0 ).toString();
@@ -153,7 +154,8 @@ public class CFieldBind extends IAction
             // set value with the setter handle (for numeric types we need an explicit type cast, because Jason returns only double values)
             if ( l_args.get( 2 ).isNumeric() )
                 l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertNumber( l_handle.getField().getType(), ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
-            else l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
+            else
+                l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
 
         }
         catch ( final Throwable l_throwable )

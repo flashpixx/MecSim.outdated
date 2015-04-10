@@ -112,7 +112,7 @@ public class CMainLoop implements Runnable
      * @todo check speed of thread-sleep-time with caching
      */
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public final void run()
     {
         CLogger.info( CCommon.getResourceString( this, "start" ) );
@@ -135,21 +135,24 @@ public class CMainLoop implements Runnable
                 }
 
                 // shutdown
-                if ( m_simulationcount >= m_shutdownstep ) break;
+                if ( m_simulationcount >= m_shutdownstep )
+                    break;
 
 
                 // run all layer
                 final Collection<Callable<Object>> l_tasks = new LinkedList<>();
                 l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
                 for ( ILayer l_layer : l_layerorder )
-                    if ( l_layer.isActive() ) l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+                    if ( l_layer.isActive() )
+                        l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
                 m_pool.invokeAll( l_tasks );
 
 
                 // run all layer objects - only multi-, evaluate- & network layer can store other objects
                 for ( ILayer l_layer : l_layerorder )
                 {
-                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) ) continue;
+                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
+                        continue;
 
                     if ( l_layer instanceof IMultiLayer )
                     {
@@ -230,7 +233,8 @@ public class CMainLoop implements Runnable
      */
     public final void resume( final int p_steps )
     {
-        if ( p_steps < 1 ) throw new IllegalArgumentException( CCommon.getResourceString( this, "stepnumber" ) );
+        if ( p_steps < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "stepnumber" ) );
 
         m_shutdownstep = m_simulationcount + p_steps;
         m_pause = false;
@@ -241,7 +245,8 @@ public class CMainLoop implements Runnable
      */
     public final void reset()
     {
-        if ( !m_pause ) throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
+        if ( !m_pause )
+            throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
 
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
 

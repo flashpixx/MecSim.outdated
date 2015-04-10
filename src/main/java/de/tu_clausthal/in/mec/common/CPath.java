@@ -182,9 +182,11 @@ public class CPath implements Iterable<CPath>
     private void initialize( final String p_fqn )
     {
         for ( String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() ) m_path.add( l_item );
+            if ( !l_item.isEmpty() )
+                m_path.add( l_item );
 
-        if ( m_path.size() == 0 ) throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
+        if ( m_path.size() == 0 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
 
     /**
@@ -256,7 +258,8 @@ public class CPath implements Iterable<CPath>
     public final String removeSuffix()
     {
         final String l_suffix = this.getSuffix();
-        if ( m_path.size() > 0 ) m_path.remove( m_path.size() - 1 );
+        if ( m_path.size() > 0 )
+            m_path.remove( m_path.size() - 1 );
         return l_suffix;
     }
 

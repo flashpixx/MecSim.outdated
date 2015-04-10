@@ -57,7 +57,8 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     public CDatabase()
     {
-        if ( !this.isConnectable() ) return;
+        if ( !this.isConnectable() )
+            return;
 
         m_datasource = new BasicDataSource();
         m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>getTraverse( "database/driver" ) );

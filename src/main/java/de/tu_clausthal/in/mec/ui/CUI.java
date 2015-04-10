@@ -52,13 +52,13 @@ import java.util.Map;
 /**
  * JavaFX application
  *
+ * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
+ * / https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
  * @see http://stackoverflow.com/questions/17673292/internal-frames-in-javafx
  * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
  * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
- * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
- * / https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
  */
 public class CUI extends Application
 {
@@ -85,7 +85,8 @@ public class CUI extends Application
             p_event.consume();
 
             final Node l_node = ( (PopOver) p_event.getSource() ).getContentNode();
-            if ( !m_widget.containsKey( l_node ) ) return;
+            if ( !m_widget.containsKey( l_node ) )
+                return;
 
             m_tabpane.getTabs().add( m_widget.get( l_node ).getValue() );
         }
@@ -105,7 +106,8 @@ public class CUI extends Application
             p_event.consume();
 
             final Tab l_tab = (Tab) p_event.getSource();
-            if ( !m_widget.containsKey( l_tab.getContent() ) ) return;
+            if ( !m_widget.containsKey( l_tab.getContent() ) )
+                return;
 
             m_widget.get( l_tab.getContent() ).getKey().show( m_stage );
         }
@@ -138,7 +140,8 @@ public class CUI extends Application
 
 
         this.setUserAgentStylesheet( null );
-        if ( m_stage == null ) m_stage = p_stage;
+        if ( m_stage == null )
+            m_stage = p_stage;
 
         p_stage.setTitle( CConfiguration.getInstance().get().<String>getTraverse( "manifest/project-name" ) );
         p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
@@ -180,7 +183,8 @@ public class CUI extends Application
      */
     public final void add( final String p_title, final Node p_node )
     {
-        if ( ( m_widget.containsKey( p_node ) ) || ( m_content.containsKey( p_title ) ) ) return;
+        if ( ( m_widget.containsKey( p_node ) ) || ( m_content.containsKey( p_title ) ) )
+            return;
 
         m_content.put( p_title, p_node );
         m_widget.put( p_node, new ImmutablePair<>( this.createPopOver( p_title, p_node ), this.createTab( p_title, p_node ) ) );
@@ -235,7 +239,7 @@ public class CUI extends Application
      * @return node or null
      * @tparam T node type
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public final <T extends Node> T getTyped( final String p_name )
     {
         return (T) m_content.get( p_name );

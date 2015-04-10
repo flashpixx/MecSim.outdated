@@ -50,7 +50,8 @@ public class CSwingWrapper<T extends JComponent> extends SwingNode
      */
     public CSwingWrapper( final T p_component )
     {
-        if ( p_component == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "isnull" ) );
+        if ( p_component == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "isnull" ) );
 
         m_component = p_component;
         this.setContent( p_component );

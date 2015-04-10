@@ -187,7 +187,8 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
-            if ( !m_data.contains( l_item ) ) return false;
+            if ( !m_data.contains( l_item ) )
+                return false;
 
         if ( CSimulation.getInstance().hasUI() )
             CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
@@ -211,7 +212,8 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         for ( Object l_item : p_collection )
         {
-            if ( m_data.remove( l_item ) ) continue;
+            if ( m_data.remove( l_item ) )
+                continue;
 
             return false;
         }
@@ -253,7 +255,8 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( !m_visible ) return;
+        if ( !m_visible )
+            return;
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );

@@ -102,7 +102,8 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
 
         try
         {
-            if ( !l_output.exists() ) FileUtils.write( l_output, l_asldata );
+            if ( !l_output.exists() )
+                FileUtils.write( l_output, l_asldata );
             else if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_asldata, "MD5" ) ) )
             {
                 l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );

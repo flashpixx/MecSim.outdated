@@ -272,7 +272,7 @@ public class CMarkdownRenderer extends LinkRenderer
 
         /** value of a HTML fragment * */
         Fragment,
-        /** value of a full HTML document **/
+        /** value of a full HTML document * */
         Document
     }
 

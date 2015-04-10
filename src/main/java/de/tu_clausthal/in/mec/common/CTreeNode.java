@@ -136,7 +136,8 @@ public class CTreeNode<T>
 
         for ( CPath l_item : p_path )
         {
-            if ( !l_node.m_childs.containsKey( l_item.getSuffix() ) ) return false;
+            if ( !l_node.m_childs.containsKey( l_item.getSuffix() ) )
+                return false;
 
             l_node = l_node.m_childs.get( l_item.getSuffix() );
         }
@@ -179,9 +180,11 @@ public class CTreeNode<T>
      */
     protected final CTreeNode<T> getNode( final CTreeNode<T> p_node, final CPath p_path, final int p_index )
     {
-        if ( p_index < p_path.size() ) if ( p_node.m_childs.containsKey( p_path.get( p_index ) ) )
-            return p_node.getNode( p_node.m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
-        else return p_node.getNode( new CTreeNode<T>( p_path.get( p_index ), p_node ), p_path, p_index + 1 );
+        if ( p_index < p_path.size() )
+            if ( p_node.m_childs.containsKey( p_path.get( p_index ) ) )
+                return p_node.getNode( p_node.m_childs.get( p_path.get( p_index ) ), p_path, p_index + 1 );
+            else
+                return p_node.getNode( new CTreeNode<T>( p_path.get( p_index ), p_node ), p_path, p_index + 1 );
 
         return p_node;
     }
@@ -206,7 +209,8 @@ public class CTreeNode<T>
      */
     public final CTreeNode<T> addChild( final String p_name )
     {
-        if ( m_childs.containsKey( p_name ) ) return m_childs.get( p_name );
+        if ( m_childs.containsKey( p_name ) )
+            return m_childs.get( p_name );
 
         return new CTreeNode<T>( p_name, this );
     }
@@ -268,7 +272,8 @@ public class CTreeNode<T>
     {
         final List<T> l_list = new LinkedList<>();
 
-        if ( p_withroot ) l_list.add( m_data );
+        if ( p_withroot )
+            l_list.add( m_data );
 
         for ( CTreeNode<T> l_child : m_childs.values() )
             l_list.addAll( l_child.getTreeData( true ) );
@@ -299,16 +304,6 @@ public class CTreeNode<T>
     }
 
     /**
-     * sets the data to the current node
-     *
-     * @param p_data data
-     */
-    public final void setData( final T p_data )
-    {
-        m_data = p_data;
-    }
-
-    /**
      * adds a collection of pair with path and data
      *
      * @param p_data collection of pair with path and data
@@ -317,6 +312,16 @@ public class CTreeNode<T>
     {
         for ( Pair<CPath, T> l_item : p_data )
             this.getNode( l_item.getKey() ).setData( l_item.getValue() );
+    }
+
+    /**
+     * sets the data to the current node
+     *
+     * @param p_data data
+     */
+    public final void setData( final T p_data )
+    {
+        m_data = p_data;
     }
 
     /**
@@ -340,7 +345,8 @@ public class CTreeNode<T>
     {
         final CPath l_path = new CPath( p_node.m_id );
 
-        if ( p_node.hasParent() ) l_path.pushfront( this.getFQN( p_node.m_parent ) );
+        if ( p_node.hasParent() )
+            l_path.pushfront( this.getFQN( p_node.m_parent ) );
 
         return l_path;
     }
@@ -383,7 +389,8 @@ public class CTreeNode<T>
      */
     protected final void getTree( final CPath p_path, final CTreeNode<T> p_node, final Set<CPath> p_set )
     {
-        if ( !p_path.isEmpty() ) p_set.add( p_path );
+        if ( !p_path.isEmpty() )
+            p_set.add( p_path );
 
         for ( Map.Entry<String, CTreeNode<T>> l_item : m_childs.entrySet() )
         {

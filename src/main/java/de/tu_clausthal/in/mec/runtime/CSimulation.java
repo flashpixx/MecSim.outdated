@@ -167,7 +167,8 @@ public class CSimulation
      */
     private void threadStartUp()
     {
-        if ( m_mainloopthread != null ) return;
+        if ( m_mainloopthread != null )
+            return;
 
         m_mainloopthread = new Thread( m_mainloop );
         m_mainloopthread.start();
@@ -181,7 +182,8 @@ public class CSimulation
      */
     public void start( final int p_steps ) throws InterruptedException
     {
-        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
         this.threadStartUp();
 
         CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
@@ -198,7 +200,8 @@ public class CSimulation
      */
     public void start()
     {
-        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
         this.threadStartUp();
 
         CLogger.info( CCommon.getResourceString( this, "start" ) );
@@ -212,7 +215,8 @@ public class CSimulation
      */
     public void stop()
     {
-        if ( !this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
+        if ( !this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
 
         m_mainloop.pause();
         CLogger.info( CCommon.getResourceString( this, "stop" ) );
@@ -242,7 +246,8 @@ public class CSimulation
      */
     public void store( final File p_output ) throws IOException
     {
-        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
 
         try (
@@ -273,7 +278,8 @@ public class CSimulation
      */
     public void load( final File p_input ) throws IOException, ClassNotFoundException
     {
-        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
         try (
                 FileInputStream l_stream = new FileInputStream( p_input );
@@ -283,7 +289,8 @@ public class CSimulation
 
             for ( ILayer l_layer : m_world.values() )
             {
-                if ( l_layer instanceof ISerializable ) ( (ISerializable) l_layer ).onDeserializationInitialization();
+                if ( l_layer instanceof ISerializable )
+                    ( (ISerializable) l_layer ).onDeserializationInitialization();
 
                 if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
                     for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
@@ -297,11 +304,13 @@ public class CSimulation
 
             for ( ILayer l_layer : m_world.values() )
             {
-                if ( l_layer instanceof ISerializable ) ( (ISerializable) l_layer ).onDeserializationComplete();
+                if ( l_layer instanceof ISerializable )
+                    ( (ISerializable) l_layer ).onDeserializationComplete();
 
                 if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
                     for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
-                        if ( l_item instanceof ISerializable ) ( (ISerializable) l_item ).onDeserializationComplete();
+                        if ( l_item instanceof ISerializable )
+                            ( (ISerializable) l_item ).onDeserializationComplete();
             }
 
             // reset all layer

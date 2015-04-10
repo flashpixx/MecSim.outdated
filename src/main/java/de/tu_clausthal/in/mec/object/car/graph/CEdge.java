@@ -210,7 +210,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final GeoPosition getGeoposition( final N p_object )
     {
         final Integer l_position = m_objects.get( p_object );
-        if ( l_position == null ) return null;
+        if ( l_position == null )
+            return null;
 
         return m_cellgeoposition[l_position.intValue()];
     }
@@ -333,7 +334,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
         // if the object exists on the edge, it will be moved
         synchronized ( m_cells )
         {
-            if ( m_objects.containsKey( p_object ) ) m_cells[m_objects.get( p_object )] = null;
+            if ( m_objects.containsKey( p_object ) )
+                m_cells[m_objects.get( p_object )] = null;
 
             m_cells[p_position] = p_object;
         }
@@ -352,7 +354,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     public final void removeObject( final N p_object )
     {
-        if ( !m_objects.containsKey( p_object ) ) return;
+        if ( !m_objects.containsKey( p_object ) )
+            return;
 
         synchronized ( m_cells )
         {
@@ -391,8 +394,10 @@ public class CEdge<N, T> implements Comparable<CEdge>
     @Override
     public final int compareTo( final CEdge p_edgelink )
     {
-        if ( m_edgeid > p_edgelink.m_edgeid ) return 1;
-        if ( m_edgeid < p_edgelink.m_edgeid ) return -1;
+        if ( m_edgeid > p_edgelink.m_edgeid )
+            return 1;
+        if ( m_edgeid < p_edgelink.m_edgeid )
+            return -1;
 
         return 0;
     }
@@ -406,7 +411,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof CEdge ) return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof CEdge )
+            return this.hashCode() == p_object.hashCode();
 
         return false;
     }

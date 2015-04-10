@@ -58,7 +58,8 @@ public class CCommon
 
 
         // null value into atom
-        if ( p_data == null ) return ASSyntax.createLiteral( l_name, ASSyntax.createString( null ) );
+        if ( p_data == null )
+            return ASSyntax.createLiteral( l_name, ASSyntax.createString( null ) );
 
         // number value into number
         if ( p_data instanceof Number )
@@ -84,7 +85,8 @@ public class CCommon
     {
         if ( ( p_class.equals( Byte.class ) ) || ( p_class.equals( Byte.TYPE ) ) )
             return new Byte( p_value.byteValue() );
-        if ( ( p_class.equals( Double.class ) ) || ( p_class.equals( Double.TYPE ) ) ) return p_value;
+        if ( ( p_class.equals( Double.class ) ) || ( p_class.equals( Double.TYPE ) ) )
+            return p_value;
         if ( ( p_class.equals( Float.class ) ) || ( p_class.equals( Float.TYPE ) ) )
             return new Float( p_value.floatValue() );
         if ( ( p_class.equals( Integer.class ) ) || ( p_class.equals( Integer.TYPE ) ) )

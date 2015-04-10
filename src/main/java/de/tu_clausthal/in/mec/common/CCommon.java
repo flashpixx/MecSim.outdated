@@ -143,8 +143,10 @@ public class CCommon
         final Map<String, Object> l_return = new HashMap<>();
 
         for ( int i = 0; i < p_objects.length; ++i )
-            if ( i % 2 == 0 ) l_name = (String) p_objects[i];
-            else l_return.put( l_name, p_objects[i] );
+            if ( i % 2 == 0 )
+                l_name = (String) p_objects[i];
+            else
+                l_return.put( l_name, p_objects[i] );
 
 
         return l_return;
@@ -185,10 +187,12 @@ public class CCommon
      */
     public static <T> T getCheckedValue( final T p_input, final T p_default, final Collection<T> p_allowedvalues )
     {
-        if ( p_input == null ) return p_default;
+        if ( p_input == null )
+            return p_default;
 
         for ( T l_item : p_allowedvalues )
-            if ( p_input.equals( l_item ) ) return l_item;
+            if ( p_input.equals( l_item ) )
+                return l_item;
 
         return p_default;
     }
@@ -238,7 +242,8 @@ public class CCommon
     {
         try
         {
-            if ( p_file.exists() ) return p_file.toURI().normalize().toURL();
+            if ( p_file.exists() )
+                return p_file.toURI().normalize().toURL();
             return CCommon.class.getClassLoader().getResource( p_file.toString().replace( File.separator, "/" ) ).toURI().normalize().toURL();
         }
         catch ( final Exception l_exception )

@@ -65,10 +65,12 @@ public class CInspectorModel implements TableModel
     {
         m_names.clear();
         m_values.clear();
-        if ( p_object == null ) return;
+        if ( p_object == null )
+            return;
 
         final Map<String, Object> l_data = p_object.inspect();
-        if ( ( l_data == null ) || ( l_data.isEmpty() ) ) return;
+        if ( ( l_data == null ) || ( l_data.isEmpty() ) )
+            return;
 
         for ( Map.Entry<String, Object> l_item : l_data.entrySet() )
         {
@@ -84,7 +86,8 @@ public class CInspectorModel implements TableModel
     @Override
     public final int getRowCount()
     {
-        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) ) return 0;
+        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) )
+            return 0;
 
         return m_names.size();
     }

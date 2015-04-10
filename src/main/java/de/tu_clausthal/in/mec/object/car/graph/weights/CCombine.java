@@ -46,11 +46,13 @@ public class CCombine implements Weighting, Map<String, IWeighting>
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        if ( m_weights.isEmpty() ) return 0;
+        if ( m_weights.isEmpty() )
+            return 0;
 
         double l_min = Double.POSITIVE_INFINITY;
         for ( IWeighting l_item : m_weights.values() )
-            if ( l_item.isActive() ) l_min = Math.min( l_min, l_item.getMinWeight( p_weight ) );
+            if ( l_item.isActive() )
+                l_min = Math.min( l_min, l_item.getMinWeight( p_weight ) );
 
         return l_min;
     }
@@ -58,11 +60,13 @@ public class CCombine implements Weighting, Map<String, IWeighting>
     @Override
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        if ( m_weights.isEmpty() ) return 0;
+        if ( m_weights.isEmpty() )
+            return 0;
 
         double l_max = 0;
         for ( IWeighting l_item : m_weights.values() )
-            if ( l_item.isActive() ) l_max += l_item.calcWeight( p_edge, p_reverse );
+            if ( l_item.isActive() )
+                l_max += l_item.calcWeight( p_edge, p_reverse );
 
         return l_max;
     }

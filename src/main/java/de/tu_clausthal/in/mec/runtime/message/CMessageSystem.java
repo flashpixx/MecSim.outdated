@@ -89,7 +89,8 @@ public class CMessageSystem implements IVoidSteppable
         }
 
         final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
-        if ( l_node.isDataNull() ) l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
+        if ( l_node.isDataNull() )
+            l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
         l_node.getData().getLeft().add( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );
@@ -131,7 +132,8 @@ public class CMessageSystem implements IVoidSteppable
      */
     public final synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
     {
-        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) ) return;
+        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
+            return;
 
         if ( !m_root.pathExist( p_path ) )
         {
@@ -155,7 +157,8 @@ public class CMessageSystem implements IVoidSteppable
         for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_path ).getTreeData() )
         {
             // if item equal null skip
-            if ( l_item == null ) continue;
+            if ( l_item == null )
+                continue;
 
             l_item.getRight().add( p_message );
         }
@@ -172,7 +175,8 @@ public class CMessageSystem implements IVoidSteppable
         {
             // data element within the tree can be used null values, so this items will be skipped
             // the item is also skipped, if there does not exists messages
-            if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) ) continue;
+            if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) )
+                continue;
 
             for ( IParticipant l_receiver : l_item.getLeft() )
                 l_receiver.receiveMessage( l_item.getRight() );

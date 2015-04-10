@@ -56,7 +56,8 @@ public class CLogger
         for ( StackTraceElement l_trace : Thread.currentThread().getStackTrace() )
         {
             i++;
-            if ( l_trace.getClassName().equals( CLogger.class.getName() ) ) break;
+            if ( l_trace.getClassName().equals( CLogger.class.getName() ) )
+                break;
         }
         c_stackindex = i;
     }
@@ -93,8 +94,10 @@ public class CLogger
      */
     private static String padCut( final String p_input, final char p_filler, final int p_length )
     {
-        if ( p_length < 1 ) return p_input;
-        if ( p_input.length() < p_length ) return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
+        if ( p_length < 1 )
+            return p_input;
+        if ( p_input.length() < p_length )
+            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
 
         return p_input.substring( 0, p_length );
     }
@@ -145,7 +148,8 @@ public class CLogger
                     l_add += l_item + "   ";
                 l_add += "]";
             }
-            else l_add = p_add.toString();
+            else
+                l_add = p_add.toString();
         }
 
         if ( !l_add.isEmpty() )
@@ -195,7 +199,8 @@ public class CLogger
      */
     public static <T> T warn( final T p_data, final boolean p_write )
     {
-        if ( p_write ) Logger.warn( createLogData( Level.WARNING, p_data ) );
+        if ( p_write )
+            Logger.warn( createLogData( Level.WARNING, p_data ) );
         return p_data;
     }
 
@@ -237,7 +242,8 @@ public class CLogger
      */
     public static <T> T error( final T p_data, final boolean p_write )
     {
-        if ( p_write ) Logger.error( createLogData( Level.ERROR, p_data ) );
+        if ( p_write )
+            Logger.error( createLogData( Level.ERROR, p_data ) );
         return p_data;
     }
 
@@ -280,7 +286,8 @@ public class CLogger
      */
     public static <T> T info( final T p_data, final boolean p_write )
     {
-        if ( p_write ) Logger.info( createLogData( Level.INFO, p_data ) );
+        if ( p_write )
+            Logger.info( createLogData( Level.INFO, p_data ) );
         return p_data;
     }
 
@@ -322,7 +329,8 @@ public class CLogger
      */
     public static <T> T debug( final T p_data, final boolean p_write )
     {
-        if ( p_write ) Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        if ( p_write )
+            Logger.debug( createLogData( Level.DEBUG, p_data ) );
         return p_data;
     }
 
@@ -365,10 +373,13 @@ public class CLogger
      */
     public static <T> T out( final T p_data, final boolean p_write )
     {
-        if ( !p_write ) return p_data;
+        if ( !p_write )
+            return p_data;
 
-        if ( s_level == Level.OFF ) System.out.println( p_data );
-        else Logger.info( createLogData( Level.INFO, p_data ) );
+        if ( s_level == Level.OFF )
+            System.out.println( p_data );
+        else
+            Logger.info( createLogData( Level.INFO, p_data ) );
         return p_data;
     }
 

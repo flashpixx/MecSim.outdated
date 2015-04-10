@@ -69,7 +69,8 @@ public class CSpeedUp implements IWeighting
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
-        if ( l_speed == 0 ) return Double.POSITIVE_INFINITY;
+        if ( l_speed == 0 )
+            return Double.POSITIVE_INFINITY;
         return p_edge.getDistance() / l_speed;
     }
 

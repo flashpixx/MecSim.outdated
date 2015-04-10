@@ -53,7 +53,8 @@ public class CMessage implements IMessage<Message>
      */
     public CMessage( final Message p_message )
     {
-        if ( p_message == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
+        if ( p_message == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
 
         m_data = p_message;
     }

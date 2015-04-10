@@ -132,8 +132,10 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public void afterStepObject( final int p_currentstep, final T p_object )
     {
         // push data to the queue
-        if ( p_object.isFinish() ) m_finisheddata.add( p_object );
-        else m_processingdata.add( p_object );
+        if ( p_object.isFinish() )
+            m_finisheddata.add( p_object );
+        else
+            m_processingdata.add( p_object );
     }
 
     /**
@@ -219,7 +221,8 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     public final boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
-            if ( !m_processingdata.contains( l_item ) ) return false;
+            if ( !m_processingdata.contains( l_item ) )
+                return false;
 
         if ( CSimulation.getInstance().hasUI() )
             CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
@@ -243,7 +246,8 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     {
         for ( Object l_item : p_collection )
         {
-            if ( m_processingdata.remove( l_item ) ) continue;
+            if ( m_processingdata.remove( l_item ) )
+                continue;
 
             return false;
         }
@@ -285,7 +289,8 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( !m_visible ) return;
+        if ( !m_visible )
+            return;
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );

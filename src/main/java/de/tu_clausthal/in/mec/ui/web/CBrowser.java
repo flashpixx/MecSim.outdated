@@ -232,7 +232,8 @@ public class CBrowser extends GridPane
      */
     public final void back()
     {
-        if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 ) return;
+        if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 )
+            return;
 
         m_webview.getEngine().getHistory().go( -1 );
     }
@@ -265,11 +266,11 @@ public class CBrowser extends GridPane
     {
         /** value of no-menu * */
         None,
-        /** value of menu with back-forward-button **/
+        /** value of menu with back-forward-button * */
         BackForward,
-        /** value of menu with URL-menu **/
+        /** value of menu with URL-menu * */
         URL,
-        /** value of menu with all option **/
+        /** value of menu with all option * */
         Full
     }
 

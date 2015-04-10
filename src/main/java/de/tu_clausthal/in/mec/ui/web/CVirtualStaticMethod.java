@@ -99,7 +99,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public final NanoHTTPD.Response get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
         // parse data - must be called otherwise an time-out exception is thrown
@@ -187,7 +187,8 @@ public class CVirtualStaticMethod implements IVirtualLocation
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof CVirtualLocation ) return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof CVirtualLocation )
+            return this.hashCode() == p_object.hashCode();
 
         return false;
     }

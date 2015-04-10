@@ -68,19 +68,18 @@ public class CComplexTarget
      */
     public static Map sortByValue( final Map p_unsortmap )
     {
-        final List list = new CopyOnWriteArrayList( p_unsortmap.entrySet() );
+        final List l_list = new CopyOnWriteArrayList( p_unsortmap.entrySet() );
 
-        Collections.sort( list, new Comparator()
+        Collections.sort( l_list, new Comparator()
         {
             public int compare( final Object p_object1, final Object p_object2 )
             {
-                return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() )
-                        .compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
+                return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() ).compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
             }
         } );
 
         final Map l_sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
-        for ( Iterator l_iterator = list.iterator(); l_iterator.hasNext(); )
+        for ( Iterator l_iterator = l_list.iterator(); l_iterator.hasNext(); )
         {
             final Map.Entry l_entry = (Map.Entry) l_iterator.next();
             l_sortedMap.put( l_entry.getKey(), l_entry.getValue() );

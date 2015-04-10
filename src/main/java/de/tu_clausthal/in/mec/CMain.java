@@ -104,7 +104,8 @@ public class CMain
 
         // create logger instance
         String l_logfile = "mecsim-" + ( new SimpleDateFormat( "yyyy-dd-MM-HH-mm" ) ).format( Calendar.getInstance().getTime() ) + ".txt";
-        if ( l_cli.hasOption( "logfile" ) ) l_logfile = l_cli.getOptionValue( "logfile" );
+        if ( l_cli.hasOption( "logfile" ) )
+            l_logfile = l_cli.getOptionValue( "logfile" );
 
         Level l_loglevel = Level.OFF;
         if ( l_cli.hasOption( "loglevel" ) )
@@ -115,7 +116,8 @@ public class CMain
 
         // read the configuration directory (default ~/.mecsim)
         File l_defaultconfig = CConfiguration.getInstance().getLocation( "root" );
-        if ( l_cli.hasOption( "configuration" ) ) l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
+        if ( l_cli.hasOption( "configuration" ) )
+            l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
 
         CConfiguration.getInstance().setConfigDir( l_defaultconfig );
         CConfiguration.getInstance().read();
@@ -134,7 +136,8 @@ public class CMain
 
 
         // run application
-        if ( !l_cli.hasOption( "nogui" ) ) CUI.main( null );
+        if ( !l_cli.hasOption( "nogui" ) )
+            CUI.main( null );
         else
         {
             try

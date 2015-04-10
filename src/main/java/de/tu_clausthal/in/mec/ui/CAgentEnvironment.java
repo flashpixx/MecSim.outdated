@@ -164,7 +164,9 @@ public class CAgentEnvironment
         {
             case Jason:
                 return new HashMap<String, List<String>>()
-                {{ put( "agents", Arrays.asList( IEnvironment.getAgentFiles() ) ); }};
+                {{
+                        put( "agents", Arrays.asList( IEnvironment.getAgentFiles() ) );
+                    }};
 
             default:
         }

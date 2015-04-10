@@ -115,7 +115,8 @@ public class CReflection
             for ( Field l_field : l_class.getDeclaredFields() )
             {
                 l_field.setAccessible( true );
-                if ( ( p_filter != null ) && ( !p_filter.filter( l_field ) ) ) continue;
+                if ( ( p_filter != null ) && ( !p_filter.filter( l_field ) ) )
+                    continue;
 
                 try
                 {
@@ -186,7 +187,8 @@ public class CReflection
             for ( Method l_method : l_class.getDeclaredMethods() )
             {
                 l_method.setAccessible( true );
-                if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) ) continue;
+                if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) )
+                    continue;
 
                 try
                 {
@@ -448,7 +450,8 @@ public class CReflection
         public final CMethod get( final String p_methodname, final Class<?>[] p_arguments ) throws IllegalAccessException
         {
             final Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
-            if ( m_cache.containsKey( l_method ) ) return m_cache.get( l_method );
+            if ( m_cache.containsKey( l_method ) )
+                return m_cache.get( l_method );
 
             if ( m_forbidden.contains( p_methodname ) )
                 throw new IllegalAccessException( CCommon.getResourceString( this, "access", p_methodname ) );

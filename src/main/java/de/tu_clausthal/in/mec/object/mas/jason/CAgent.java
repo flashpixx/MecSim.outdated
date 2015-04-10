@@ -275,16 +275,17 @@ public class CAgent<T> implements IVoidAgent
         public final void act( final ActionExec p_action, final List<ActionExec> p_feedback )
         {
             final IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
-            if ( l_action != null ) try
-            {
-                l_action.act( m_agent, p_action.getActionTerm() );
-                p_action.setResult( true );
-            }
-            catch ( final Exception l_exception )
-            {
-                p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
-                p_action.setResult( false );
-            }
+            if ( l_action != null )
+                try
+                {
+                    l_action.act( m_agent, p_action.getActionTerm() );
+                    p_action.setResult( true );
+                }
+                catch ( final Exception l_exception )
+                {
+                    p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
+                    p_action.setResult( false );
+                }
 
             p_feedback.add( p_action );
         }
@@ -312,7 +313,8 @@ public class CAgent<T> implements IVoidAgent
         public final void broadcast( final Message p_message ) throws Exception
         {
             final CPath l_path = new CPath( m_namepath );
-            if ( m_namepath.size() > 0 ) l_path.removeSuffix();
+            if ( m_namepath.size() > 0 )
+                l_path.removeSuffix();
 
             p_message.setSender( m_namepath.toString() );
             p_message.setReceiver( l_path.toString() );
@@ -361,8 +363,10 @@ public class CAgent<T> implements IVoidAgent
                         final Literal l_literal = (Literal) l_jmsg.getPropCont();
                         l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getSender() ) ) );
 
-                        if ( l_jmsg.isTell() ) m_agent.addBel( l_literal );
-                        if ( l_jmsg.isUnTell() ) m_agent.delBel( l_literal );
+                        if ( l_jmsg.isTell() )
+                            m_agent.addBel( l_literal );
+                        if ( l_jmsg.isUnTell() )
+                            m_agent.delBel( l_literal );
                         if ( l_jmsg.isKnownPerformative() )
                         {
                             l_literal.addAnnot( BeliefBase.TPercept );

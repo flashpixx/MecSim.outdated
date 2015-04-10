@@ -114,8 +114,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     public final void enableDisableGraphWeight( final String p_weight )
     {
-        if ( this.isActiveWeight( p_weight ) ) m_graph.disableWeight( p_weight );
-        else m_graph.enableWeight( p_weight );
+        if ( this.isActiveWeight( p_weight ) )
+            m_graph.disableWeight( p_weight );
+        else
+            m_graph.enableWeight( p_weight );
     }
 
 
@@ -139,7 +141,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final void setDriveModel( final String p_model )
     {
         for ( IDriveModel l_model : s_drivemodellist )
-            if ( p_model.equals( l_model.getName() ) ) m_drivemodel = l_model;
+            if ( p_model.equals( l_model.getName() ) )
+                m_drivemodel = l_model;
     }
 
 

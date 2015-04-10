@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
@@ -35,13 +35,13 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
 {
 
     /**
+     * GraphHopper weight object *
+     */
+    private final T m_weight;
+    /**
      * active flag *
      */
     private boolean m_active = false;
-    /**
-     * GraphHopper weight object *
-     */
-    private T m_weight = null;
 
 
     /**
@@ -69,25 +69,25 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
 
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_value )
+    public final void setActive( final boolean p_value )
     {
         m_active = p_value;
     }
 
     @Override
-    public double getMinWeight( final double p_weight )
+    public final double getMinWeight( final double p_weight )
     {
         return m_weight.getMinWeight( p_weight );
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         return m_weight.calcWeight( p_edge, p_reverse );
     }

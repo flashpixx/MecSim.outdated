@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph;
 
@@ -394,7 +394,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return String list
      */
-    public String[] getActiveWeights()
+    public final String[] getActiveWeights()
     {
         final List<String> l_active = new LinkedList<>();
         for ( Map.Entry<String, IWeighting> l_item : m_weight.entrySet() )
@@ -410,7 +410,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_weight weight name
      * @return bool flag if weight is active
      */
-    public boolean isActiveWeight( final String p_weight )
+    public final boolean isActiveWeight( final String p_weight )
     {
         return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
     }
@@ -421,7 +421,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return weight object or null
      */
-    public IWeighting getWeight( final String p_weight )
+    public final IWeighting getWeight( final String p_weight )
     {
         return m_weight.get( p_weight );
     }

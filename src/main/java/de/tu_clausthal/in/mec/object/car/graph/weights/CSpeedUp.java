@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
@@ -37,11 +37,11 @@ public class CSpeedUp implements IWeighting
     /**
      * flag encoder for edge data
      */
-    protected FlagEncoder m_encoder = null;
+    private final FlagEncoder m_encoder;
     /**
      * max speed value *
      */
-    protected double m_maxSpeed = 1;
+    private final double m_maxSpeed;
     /**
      * active flag *
      */
@@ -74,13 +74,13 @@ public class CSpeedUp implements IWeighting
     }
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_value )
+    public final void setActive( final boolean p_value )
     {
         m_active = p_value;
     }

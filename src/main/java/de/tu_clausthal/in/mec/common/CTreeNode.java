@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.common;
 
@@ -399,7 +399,7 @@ public class CTreeNode<T>
      *
      * @return tree structure
      */
-    public String toString()
+    public final String toString()
     {
         String l_return = this.getFQN() + "   [" + m_data + "]";
         for ( CTreeNode<T> l_item : m_childs.values() )

@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
@@ -37,7 +37,7 @@ public class CTrafficJam implements IWeighting
     /**
      * graph instance
      */
-    protected CGraphHopper m_graph = null;
+    private final CGraphHopper m_graph;
     /**
      * active flag *
      */
@@ -69,13 +69,13 @@ public class CTrafficJam implements IWeighting
     }
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_value )
+    public final void setActive( final boolean p_value )
     {
         m_active = p_value;
     }

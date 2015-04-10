@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source;
 
@@ -117,7 +117,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public Map<String, Object> analyse()
+    public final Map<String, Object> analyse()
     {
         return null;
     }
@@ -157,13 +157,13 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public Color getColor()
+    public final Color getColor()
     {
         return m_color;
     }
 
     @Override
-    public void setColor( final Color p_color )
+    public final void setColor( final Color p_color )
     {
         if ( p_color == null ) this.m_color = Color.BLACK;
 
@@ -175,39 +175,39 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public IGenerator getGenerator()
+    public final IGenerator getGenerator()
     {
         return m_generator;
     }
 
     @Override
-    public void setGenerator( final IGenerator p_generator )
+    public final void setGenerator( final IGenerator p_generator )
     {
         this.m_generator = p_generator;
         this.setColor( p_generator.getColor() );
     }
 
     @Override
-    public void removeGenerator()
+    public final void removeGenerator()
     {
         this.m_generator = null;
         this.setColor( Color.BLACK );
     }
 
     @Override
-    public CComplexTarget getComplexTarget()
+    public final CComplexTarget getComplexTarget()
     {
         return m_complexTarget;
     }
 
     @Override
-    public void setComplexTarget( final CComplexTarget p_complexTarget )
+    public final void setComplexTarget( final CComplexTarget p_complexTarget )
     {
         this.m_complexTarget = p_complexTarget;
     }
 
     @Override
-    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         return this.m_generator.generate( p_currentstep );
     }
@@ -307,12 +307,12 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     private BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
     {
-        BufferedImage l_newImage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
-        Graphics2D l_graphics = l_newImage.createGraphics();
+        final BufferedImage l_newimage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
+        final Graphics2D l_graphics = l_newimage.createGraphics();
         l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
         l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
         l_graphics.dispose();
-        return l_newImage;
+        return l_newimage;
     }
 
     /**

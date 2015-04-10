@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.analysis;
 
@@ -76,7 +76,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
      * @todo check database independence
      */
-    protected void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
+    private void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
     {
         final String l_table = CConfiguration.getInstance().get().<String>getTraverse( "database/tableprefix" ) == null ? p_tablename : CConfiguration.getInstance().get().<String>getTraverse( "database/tableprefix" ) + p_tablename;
 
@@ -114,7 +114,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
 
 
     @Override
-    public int getCalculationIndex()
+    public final int getCalculationIndex()
     {
         return Integer.MAX_VALUE;
     }
@@ -127,20 +127,19 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     {
 
         @Override
-        public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+        public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
         }
 
         @Override
-        public Map<String, Object> analyse()
+        public final Map<String, Object> analyse()
         {
             return null;
         }
 
         @Override
-        public void release()
+        public final void release()
         {
-
         }
     }
 

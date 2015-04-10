@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
@@ -41,7 +41,7 @@ public class CForbiddenEdges implements IWeighting
     /**
      * list with edges *
      */
-    protected final Set<EdgeIteratorState> m_forbidden = new HashSet<>();
+    private final Set<EdgeIteratorState> m_forbidden = new HashSet<>();
     /**
      * active flag *
      */
@@ -70,7 +70,7 @@ public class CForbiddenEdges implements IWeighting
 
 
     @Override
-    public final double getMinWeight( double p_weight )
+    public final double getMinWeight( final double p_weight )
     {
         return 0;
     }
@@ -82,13 +82,13 @@ public class CForbiddenEdges implements IWeighting
     }
 
     @Override
-    public boolean isActive()
+    public final boolean isActive()
     {
         return m_active;
     }
 
     @Override
-    public void setActive( final boolean p_value )
+    public final void setActive( final boolean p_value )
     {
         m_active = p_value;
     }

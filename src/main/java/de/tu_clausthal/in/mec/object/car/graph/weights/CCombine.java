@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
@@ -40,7 +40,7 @@ public class CCombine implements Weighting, Map<String, IWeighting>
     /**
      * map with weights *
      */
-    protected final Map<String, IWeighting> m_weights = new HashMap<>();
+    private final Map<String, IWeighting> m_weights = new HashMap<>();
 
 
     @Override
@@ -80,37 +80,37 @@ public class CCombine implements Weighting, Map<String, IWeighting>
     }
 
     @Override
-    public final boolean containsKey( Object p_key )
+    public final boolean containsKey( final Object p_key )
     {
         return m_weights.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsValue( Object p_value )
+    public final boolean containsValue( final Object p_value )
     {
         return m_weights.containsValue( p_value );
     }
 
     @Override
-    public final IWeighting get( Object p_key )
+    public final IWeighting get( final Object p_key )
     {
         return m_weights.get( p_key );
     }
 
     @Override
-    public final IWeighting put( String p_key, IWeighting p_value )
+    public final IWeighting put( final String p_key, final IWeighting p_value )
     {
         return m_weights.put( p_key, p_value );
     }
 
     @Override
-    public final IWeighting remove( Object p_key )
+    public final IWeighting remove( final Object p_key )
     {
         return m_weights.remove( p_key );
     }
 
     @Override
-    public final void putAll( Map<? extends String, ? extends IWeighting> p_map )
+    public final void putAll( final Map<? extends String, ? extends IWeighting> p_map )
     {
         m_weights.putAll( p_map );
     }

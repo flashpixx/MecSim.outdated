@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source;
 
@@ -51,7 +51,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * Member Variable to save a Source which was selected (null if no Source is selected)
-     * @bug why static ?
+     * @bug why static - should be a member
      */
     private static ISource s_selectedSource = null;
 
@@ -61,36 +61,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
     private Vector<CAtomTarget> m_sourceTargets = new Vector<>();
 
 
-    /**
-     * Define the Calculation Index (When this Layer should be executes)
-     */
     @Override
     public final int getCalculationIndex()
     {
         return 2;
     }
 
-    /**
-     * release overwrite, because all sources will be removed of the reset is called
-     */
+
     @Override
-    public void release()
+    public final void release()
     {
 
     }
 
-    /**
-     * Override paint Method from Multilayer to paint Targets
-     * It is possible to save Targets in an own Layer, but this might be not necessary because Targets do not need
-     * to be triggered and so on
-     *
-     * @param p_graphic
-     * @param p_viewer
-     * @param p_width
-     * @param p_height
-     */
+
     @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         if ( !m_visible )
             return;
@@ -124,20 +110,20 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * @param p_defaultGenerator default Generator for this Source
      * @param p_aslname          ASL Programm for the Generator
      */
-    public void createSource( final GeoPosition p_geoposition, final String p_defaultGenerator, final String p_aslname )
+    public final void createSource( final GeoPosition p_geoposition, final String p_defaultGenerator, final String p_aslname )
     {
         CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
-        ISource l_newSource = new CSource( p_geoposition );
-        this.add( l_newSource );
+        final ISource l_newsource = new CSource( p_geoposition );
+        this.add( l_newsource );
 
         //Set Default Generator (Selected Generator)
         if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
             return;
-        this.setGenerator( l_newSource, p_defaultGenerator, p_aslname );
+        this.setGenerator( l_newsource, p_defaultGenerator, p_aslname );
 
         //Set Default Target (CChoice Target)
-        CComplexTarget l_complexTarget = new CComplexTarget();
-        l_newSource.setComplexTarget( l_complexTarget );
+        final CComplexTarget l_complexTarget = new CComplexTarget();
+        l_newsource.setComplexTarget( l_complexTarget );
     }
 
     /**
@@ -145,7 +131,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source which should be removed
      */
-    public void removeSource( final ISource p_source )
+    public final void removeSource( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
         if ( this.isSelectedSource( p_source ) )
@@ -160,7 +146,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @return selected Source or null (if no source is selected)
      */
-    public ISource getSelectedSource()
+    public final ISource getSelectedSource()
     {
         return s_selectedSource;
     }
@@ -170,7 +156,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source which should be selected
      */
-    public void setSelectedSource( final ISource p_source )
+    public final void setSelectedSource( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "sourceselected" ) );
         if ( s_selectedSource != null )
@@ -190,7 +176,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * @param p_source source which should be checked
      * @return true if the source is selected otherwise false
      */
-    public boolean isSelectedSource( final ISource p_source )
+    public final boolean isSelectedSource( final ISource p_source )
     {
         if ( p_source != null )
             return p_source.equals( s_selectedSource );
@@ -205,7 +191,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * @param p_selectedgenerator new generator
      * @param p_aslname           ASL Programm for the Generator
      */
-    public void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
+    public final void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
     {
         CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
 
@@ -220,7 +206,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source where the generator should be removed
      */
-    public void removeGenerator( final ISource p_source )
+    public final void removeGenerator( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "generatorremoved" ) );
         p_source.removeGenerator();
@@ -232,21 +218,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * in the Complex Target of this Source
      *
      * @param p_geoposition position of the Atom Target
+     * @todo random can be stored with a member var
      */
-    public void createTarget( final GeoPosition p_geoposition )
+    public final void createTarget( final GeoPosition p_geoposition )
     {
         CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
 
         if ( p_geoposition == null )
             return;
 
-        CAtomTarget l_newTarget = new CAtomTarget( p_geoposition );
-        this.m_sourceTargets.add( l_newTarget );
+        final CAtomTarget l_newtarget = new CAtomTarget( p_geoposition );
+        this.m_sourceTargets.add( l_newtarget );
 
         //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
-        Random l_random = new Random();
+        final Random l_random = new Random();
         if ( this.s_selectedSource != null )
-            this.s_selectedSource.getComplexTarget().addTarget( l_newTarget, l_random.nextDouble() );
+            this.s_selectedSource.getComplexTarget().addTarget( l_newtarget, l_random.nextDouble() );
 
         this.repaintOSM();
     }
@@ -256,7 +243,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_target Atom Target which should be removed
      */
-    public void removeTarget( final CAtomTarget p_target )
+    public final void removeTarget( final CAtomTarget p_target )
     {
         CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
 
@@ -276,7 +263,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @return all Atom Targets
      */
-    public Vector<CAtomTarget> getTargets()
+    public final Vector<CAtomTarget> getTargets()
     {
         return this.m_sourceTargets;
     }
@@ -286,7 +273,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @bug must be fixed
      */
-    public void repaintOSM()
+    private final void repaintOSM()
     {
         /*
         try

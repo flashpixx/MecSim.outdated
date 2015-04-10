@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph;
 
@@ -102,7 +102,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     protected final void sampling( final EdgeIteratorState p_edgestate )
     {
         final ArrayList<N> l_initlist = new ArrayList<>();
-        for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().CellSampling ); i++ )
+        for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().<Integer>getTraverse( "simulation/traffic/cellsampling" ) ); i++ )
             l_initlist.add( null );
         m_cells = (N[]) l_initlist.toArray();
         m_additionalinformation = (T[]) l_initlist.toArray();
@@ -123,7 +123,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
                 m_cellgeoposition[i] = new GeoPosition( l_list.getX( 0 ) + i * l_increment, l_function.value( l_list.getX( 0 ) + i * l_increment ) );
 
         }
-        catch ( NonMonotonicSequenceException l_exception )
+        catch ( final NonMonotonicSequenceException l_exception )
         {
 
             final double l_xincrement = ( l_list.getX( l_list.size() - 1 ) - l_list.getX( 0 ) ) / m_cells.length;
@@ -151,8 +151,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
         // convert point list to arrays and beware static increase
         for ( int i = 1; i < p_input.size() - 1; i++ )
-            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) &&
-                    ( Math.abs( l_y.get( l_y.size() - 1 ) - p_input.getLongitude( i ) ) >= p_epsilon ) )
+            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs( l_y.get( l_y.size() - 1 ) - p_input.getLongitude( i ) ) >= p_epsilon ) )
             {
                 l_x.add( p_input.getLatitude( i ) );
                 l_y.add( p_input.getLongitude( i ) );
@@ -219,8 +218,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final GeoPosition getGeoposition( final N p_object )
     {
         final Integer l_position = m_objects.get( p_object );
-        if ( l_position == null )
-            return null;
+        if ( l_position == null ) return null;
 
         return m_cellgeoposition[l_position.intValue()];
     }
@@ -343,8 +341,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         // if the object exists on the edge, it will be moved
         synchronized ( m_cells )
         {
-            if ( m_objects.containsKey( p_object ) )
-                m_cells[m_objects.get( p_object )] = null;
+            if ( m_objects.containsKey( p_object ) ) m_cells[m_objects.get( p_object )] = null;
 
             m_cells[p_position] = p_object;
         }
@@ -363,8 +360,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     public final void removeObject( final N p_object )
     {
-        if ( !m_objects.containsKey( p_object ) )
-            return;
+        if ( !m_objects.containsKey( p_object ) ) return;
 
         synchronized ( m_cells )
         {
@@ -403,10 +399,8 @@ public class CEdge<N, T> implements Comparable<CEdge>
     @Override
     public final int compareTo( final CEdge p_edgelink )
     {
-        if ( m_edgeid > p_edgelink.m_edgeid )
-            return 1;
-        if ( m_edgeid < p_edgelink.m_edgeid )
-            return -1;
+        if ( m_edgeid > p_edgelink.m_edgeid ) return 1;
+        if ( m_edgeid < p_edgelink.m_edgeid ) return -1;
 
         return 0;
     }
@@ -420,8 +414,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( p_object instanceof CEdge )
-            return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof CEdge ) return this.hashCode() == p_object.hashCode();
 
         return false;
     }

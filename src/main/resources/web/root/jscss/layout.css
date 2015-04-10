@@ -1,0 +1,127 @@
+
+/******************************** element definitions *****************************************************************/
+
+html, body
+{
+    height:   100%;
+    width:    100%;
+    margin:   0px;
+    padding:  0px;
+    overflow: hidden;
+    font:     13px sans-serif;
+    background-color: white;
+}
+
+select
+{
+    width: 100px;
+}
+
+iframe
+{
+    width: 100%;
+    height: 100%;
+}
+
+/******************************** class definitions *******************************************************************/
+
+.fixed_width_button
+{
+    width: 30%;
+    top: 10%;
+}
+
+.align-center-div
+{
+    text-align: center;
+}
+
+.ui-accordion-content
+{
+    height: 40%;
+}
+
+.align_center
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.text_align_center
+{
+    text-align: center;
+    font-size: 40px;
+    color: #808080;
+    font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
+}
+
+.table {
+    position: relative;
+    margin: 0 auto;
+    display: table;
+}
+.header {
+    display: table-header-group;
+    font-weight: bold;
+}
+.rowGroup {
+    display: table-row-group;
+}
+.row {
+    display: table-row;
+}
+.cell {
+    display: table-cell;
+}
+
+/******************************* id definitions ***********************************************************************/
+
+#about
+{
+    padding-top: 15%;
+}
+
+#about .cell
+{
+    width: 75%;
+}
+
+#mecsim_menu
+{
+    height: 100%;
+    /*background-color: #ecf0f1;*/
+    background-image: url(../img/Logo_TUC_de_Web_klein.gif);
+    background-position: 50% 97%;
+    background-repeat: no-repeat;
+}
+
+#mecsim_content
+{
+    /*background-color: #ecf0f1;*/
+}
+
+#mecsim_content::before
+{
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0.5;
+    background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center;
+}
+
+#mecsim_accordion
+{
+    height: 90%;
+    color: red;
+}
+
+#mecsim_editor
+{
+    collapsible: false;
+}

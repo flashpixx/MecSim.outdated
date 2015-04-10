@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object;
 
@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.simulation.ISteppable;
 import de.tu_clausthal.in.mec.simulation.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
 
@@ -85,7 +86,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean isVisible()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
 
         return m_visible;
     }
@@ -96,7 +97,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         m_visible = p_visible;
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
     @Override
@@ -166,7 +167,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         final boolean l_return = m_data.add( p_value );
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
 
         return l_return;
     }
@@ -177,7 +178,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         final boolean l_result = m_data.remove( p_object );
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
 
         return l_result;
     }
@@ -186,11 +187,10 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean containsAll( final Collection<?> p_collection )
     {
         for ( Object l_item : p_collection )
-            if ( !m_data.contains( l_item ) )
-                return false;
+            if ( !m_data.contains( l_item ) ) return false;
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
 
         return true;
     }
@@ -201,7 +201,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         final boolean l_return = m_data.addAll( p_collection );
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
 
         return l_return;
     }
@@ -211,14 +211,13 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         for ( Object l_item : p_collection )
         {
-            if ( m_data.remove( l_item ) )
-                continue;
+            if ( m_data.remove( l_item ) ) continue;
 
             return false;
         }
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
 
         return true;
     }
@@ -235,7 +234,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         m_data.clear();
 
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
     @Override
@@ -254,8 +253,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( !m_visible )
-            return;
+        if ( !m_visible ) return;
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
@@ -268,14 +266,14 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public void onDeserializationInitialization()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) this );
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().removePainter( (Painter) this );
     }
 
     @Override
     public void onDeserializationComplete()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) this );
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter( (Painter) this );
     }
 
 }

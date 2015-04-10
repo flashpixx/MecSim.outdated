@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.simulation.message;
 
@@ -50,8 +50,7 @@ public class CParticipant implements IParticipant
      */
     public CParticipant( final IReceiver p_owner )
     {
-        if ( p_owner == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "ownernull" ) );
+        if ( p_owner == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "ownernull" ) );
 
         m_owner = p_owner;
         CSimulation.getInstance().getMessageSystem().register( this.getReceiverPath(), this );

@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,203 +19,85 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CConfiguration;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 
 /**
- * text console to show log messages within the UI
+ * stream to create stream access
  *
  * @note log messages can be written with System.out or System.err
  */
-public class CConsole extends JPanel
+public class CConsole extends ByteArrayOutputStream
 {
+
     /**
-     * output panel *
+     * base URI *
      */
-    protected final JEditorPane m_output = new JEditorPane();
+    private final String m_baseuri;
 
 
     /**
-     * ctor, that redirects the default console output streams
+     * ctor
      */
-    public CConsole()
+    private CConsole( final String p_baseuri )
     {
-        super( new BorderLayout() );
-        m_output.setEditable( false );
-        m_output.getDocument().addDocumentListener( new CLineLimit() );
-
-        final JScrollPane l_scroll = new JScrollPane( m_output );
-        l_scroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
-        l_scroll.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
-        this.add( l_scroll, BorderLayout.CENTER );
-
-        // redirect default streams
-        System.setOut( new PrintStream( new CConsoleOutputStream( m_output.getDocument(), Color.black ), true ) );
-        System.setErr( new PrintStream( new CConsoleOutputStream( m_output.getDocument(), Color.red ), true ) );
+        m_baseuri = p_baseuri;
     }
 
     /**
-     * clears all text *
+     * factor method to set output stream
+     *
+     * @param p_baseuri base uri
+     * @return console stream
      */
-    public final void clear()
+    public static CConsole getOutput( final String p_baseuri )
     {
-        m_output.setText( null );
+        final CConsole l_stream = new CConsole( p_baseuri );
+        System.setOut( new PrintStream( l_stream, true ) );
+        return l_stream;
     }
 
-
     /**
-     * line limit document listener *
+     * factor method to set error stream
+     *
+     * @param p_baseuri base uri
+     * @return console stream
      */
-    protected class CLineLimit implements DocumentListener
+    public static CConsole getError( final String p_baseuri )
     {
-
-        @Override
-        public final void insertUpdate( final DocumentEvent p_document )
-        {
-            SwingUtilities.invokeLater( new Runnable()
-            {
-                public void run()
-                {
-                    final int l_max = CConfiguration.getInstance().get().getConsole().getLinenumber() + 1;
-                    final Document l_document = p_document.getDocument();
-                    final Element l_root = l_document.getDefaultRootElement();
-
-                    while ( l_root.getElementCount() > l_max )
-                        try
-                        {
-                            l_document.remove( 0, l_root.getElement( 0 ).getEndOffset() );
-                        }
-                        catch ( BadLocationException l_exception )
-                        {
-                        }
-                }
-            } );
-        }
-
-        @Override
-        public final void removeUpdate( final DocumentEvent p_document )
-        {
-
-        }
-
-        @Override
-        public final void changedUpdate( final DocumentEvent p_document )
-        {
-
-        }
+        final CConsole l_stream = new CConsole( p_baseuri );
+        System.setErr( new PrintStream( l_stream, true ) );
+        return l_stream;
     }
 
+    /**
+     * UI method to define the base URI
+     *
+     * @return base URI
+     */
+    private String web_uribase()
+    {
+        return m_baseuri;
+    }
 
     /**
-     * inner class to replace default output stream writer
+     * UI method for testing
      */
-    protected class CConsoleOutputStream extends ByteArrayOutputStream
+    private void web_dynamic_get()
     {
-        /* system default end-of-line separator **/
-        private final String m_eol = System.getProperty( "line.separator" );
-        /**
-         * format attributes *
-         */
-        private SimpleAttributeSet m_attributes;
-        /**
-         * buffer of the content *
-         */
-        private StringBuffer m_buffer = new StringBuffer( CConfiguration.getInstance().get().getConsole().getLinebuffer() );
-        /**
-         * first line flag - to remove a blank line at the begin *
-         */
-        private boolean m_isFirstLine = true;
-        /**
-         * reference to the document *
-         */
-        private Document m_document = null;
 
+    }
 
-        /**
-         * ctor
-         *
-         * @param p_document  document, which should be written
-         * @param p_textcolor color of the text
-         */
-        public CConsoleOutputStream( final Document p_document, final Color p_textcolor )
-        {
-            m_document = p_document;
-
-            if ( p_textcolor != null )
-            {
-                m_attributes = new SimpleAttributeSet();
-                StyleConstants.setForeground( m_attributes, p_textcolor );
-            }
-        }
-
-        /**
-         * flushes the stream *
-         */
-        public final void flush()
-        {
-            final String l_message = toString();
-            if ( l_message.length() == 0 ) return;
-
-            this.append( l_message );
-            reset();
-        }
-
-        /**
-         * append a message to the stream
-         *
-         * @param p_message string
-         */
-        private void append( final String p_message )
-        {
-            if ( m_document.getLength() == 0 )
-                m_buffer.setLength( 0 );
-
-            if ( m_eol.equals( p_message ) )
-                m_buffer.append( p_message );
-            else
-            {
-                m_buffer.append( p_message );
-                this.clear();
-            }
-
-        }
-
-        /**
-         * clears the document *
-         */
-        private void clear()
-        {
-            if ( ( m_isFirstLine ) && ( m_document.getLength() != 0 ) )
-                m_buffer.insert( 0, m_eol );
-
-            m_isFirstLine = false;
-            try
-            {
-                m_document.insertString( m_document.getLength(), m_buffer.toString(), m_attributes );
-                m_output.setCaretPosition( m_document.getLength() );
-            }
-            catch ( BadLocationException l_exception )
-            {
-            }
-
-            m_buffer.setLength( 0 );
-        }
+    @Override
+    public void flush() throws IOException
+    {
+        // do web call
     }
 
 }

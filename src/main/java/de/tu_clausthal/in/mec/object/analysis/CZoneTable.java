@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.analysis;
 
@@ -57,8 +57,7 @@ public class CZoneTable<T, S>
      */
     public CZoneTable( final CValidation<T, S> p_validate )
     {
-        if ( p_validate == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "validation" ) );
+        if ( p_validate == null ) throw new IllegalArgumentException( CCommon.getResourceString( this, "validation" ) );
 
         m_validation = p_validate;
     }

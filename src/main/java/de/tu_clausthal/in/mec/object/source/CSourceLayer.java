@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source;
 
@@ -28,14 +28,15 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.CAtomTarget;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.CComplexTarget;
+import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
+import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.util.Random;
 import java.util.Vector;
+
 
 /**
  * layer with all sources
@@ -81,6 +82,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * Override paint Method from Multilayer to paint Targets
      * It is possible to save Targets in an own Layer, but this might be not necessary because Targets do not need
      * to be triggered and so on
+     *
      * @param p_graphic
      * @param p_viewer
      * @param p_width
@@ -99,8 +101,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
             l_source.paint( p_graphic, p_viewer, p_width, p_height );
 
         //Paint Targets
-        for ( CAtomTarget l_target : m_sourceTargets)
-            l_target.paint(p_graphic, p_viewer, p_width, p_height);
+        for ( CAtomTarget l_target : m_sourceTargets )
+            l_target.paint( p_graphic, p_viewer, p_width, p_height );
 
     }
 
@@ -116,15 +118,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * creates a new source
-     * @param p_geoPosition position of the Source
+     *
+     * @param p_geoPosition      position of the Source
      * @param p_defaultGenerator default Generator for this Source
-     * @param p_aslname ASL Programm for the Generator
+     * @param p_aslname          ASL Programm for the Generator
      */
     public void createSource( GeoPosition p_geoPosition, String p_defaultGenerator, String p_aslname )
     {
         CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
         ISource l_newSource = new CSource( p_geoPosition );
-        this.add(l_newSource);
+        this.add( l_newSource );
 
         //Set Default Generator (Selected Generator)
         if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
@@ -133,11 +136,12 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
         //Set Default Target (CChoice Target)
         CComplexTarget l_complexTarget = new CComplexTarget();
-        l_newSource.setComplexTarget(l_complexTarget);
+        l_newSource.setComplexTarget( l_complexTarget );
     }
 
     /**
      * removes a source
+     *
      * @param p_source source which should be removed
      */
     public void removeSource( ISource p_source )
@@ -147,11 +151,12 @@ public class CSourceLayer extends IMultiLayer<ISource>
             m_selectedSource = null;
 
         p_source.release();
-        this.remove(p_source);
+        this.remove( p_source );
     }
 
     /**
      * return the selected source
+     *
      * @return selected Source or null (if no source is selected)
      */
     public ISource getSelectedSource()
@@ -161,6 +166,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * set the selected Source
+     *
      * @param p_source source which should be selected
      */
     public void setSelectedSource( ISource p_source )
@@ -179,10 +185,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * checker if a source is selected
+     *
      * @param p_source source which should be checked
      * @return true if the source is selected otherwise false
      */
-    public boolean isSelectedSource( ISource p_source )
+    public boolean isSelectedSource( final ISource p_source )
     {
         if ( p_source != null )
             return p_source.equals( m_selectedSource );
@@ -192,15 +199,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * set a generator object for a source
-     * @param p_source source where the generator should be placed
+     *
+     * @param p_source            source where the generator should be placed
      * @param p_selectedGenerator new generator
-     * @param p_aslname ASL Programm for the Generator
+     * @param p_aslname           ASL Programm for the Generator
      */
     public void setGenerator( ISource p_source, String p_selectedGenerator, String p_aslname )
     {
         CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
 
-        if (p_selectedGenerator.equals( "Default" ) )
+        if ( p_selectedGenerator.equals( "Default" ) )
             p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
         if ( p_selectedGenerator.equals( "Jason Agent" ) )
             p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
@@ -208,6 +216,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * removes the generator object for a source
+     *
      * @param p_source source where the generator should be removed
      */
     public void removeGenerator( ISource p_source )
@@ -220,58 +229,65 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * creates a new Atom Target
      * if a Source is selected, the Atom Target will be passed
      * in the Complex Target of this Source
+     *
      * @param p_geoPosition position of the Atom Target
      */
     public void createTarget( GeoPosition p_geoPosition )
     {
         CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
 
-        if(p_geoPosition == null)
+        if ( p_geoPosition == null )
             return;
 
-        CAtomTarget l_newTarget = new CAtomTarget(p_geoPosition);
-        this.m_sourceTargets.add(l_newTarget);
+        CAtomTarget l_newTarget = new CAtomTarget( p_geoPosition );
+        this.m_sourceTargets.add( l_newTarget );
 
         //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
         Random l_random = new Random();
-        if ( this.m_selectedSource != null)
-            this.m_selectedSource.getComplexTarget().addTarget(l_newTarget, l_random.nextDouble());
+        if ( this.m_selectedSource != null )
+            this.m_selectedSource.getComplexTarget().addTarget( l_newTarget, l_random.nextDouble() );
 
         this.repaintOSM();
     }
 
     /**
      * removes an Atom Target from the sourcelayer and all Complex Targets
+     *
      * @param p_target Atom Target which should be removed
      */
-    public void removeTarget( CAtomTarget p_target)
+    public void removeTarget( CAtomTarget p_target )
     {
         CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
 
-        if(p_target == null)
+        if ( p_target == null )
             return;
 
-        this.m_sourceTargets.remove(p_target);
+        this.m_sourceTargets.remove( p_target );
 
-        for(ISource l_source :  this)
-            l_source.getComplexTarget().removeTarget(p_target);
+        for ( ISource l_source : this )
+            l_source.getComplexTarget().removeTarget( p_target );
 
         this.repaintOSM();
     }
 
     /**
      * return the full list of Atom Targets
+     *
      * @return all Atom Targets
      */
-    public Vector<CAtomTarget> getTargets(){
+    public Vector<CAtomTarget> getTargets()
+    {
         return this.m_sourceTargets;
     }
 
     /**
      * after a target was created, OSM need to be repainted
+     *
+     * @bug must be fixed
      */
     public void repaintOSM()
     {
+        /*
         try
         {
             COSMViewer.getSimulationOSM().repaint();
@@ -279,6 +295,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
         catch ( Exception l_exception )
         {
         }
+        m_selectedSource = p_source;
+        */
     }
 
 }

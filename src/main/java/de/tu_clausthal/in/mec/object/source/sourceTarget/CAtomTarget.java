@@ -1,6 +1,5 @@
 /**
- * @cond
- * ######################################################################################
+ * @cond ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
  * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
@@ -19,9 +18,9 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 //test
-package de.tu_clausthal.in.mec.object.source.sourceTarget;
+package de.tu_clausthal.in.mec.object.source.sourcetarget;
 
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -29,6 +28,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+
 
 /**
  * Most Basic Target for Sources
@@ -46,7 +46,8 @@ public class CAtomTarget implements Painter<COSMViewer>
      * CTOR
      * @param p_position position
      */
-    public CAtomTarget(GeoPosition p_position){
+    public CAtomTarget( GeoPosition p_position )
+    {
         m_position = p_position;
     }
 
@@ -54,7 +55,8 @@ public class CAtomTarget implements Painter<COSMViewer>
      * return the position of this Target
      * @return position of the Target
      */
-    public GeoPosition getPosition(){
+    public GeoPosition getPosition()
+    {
         return m_position;
     }
 
@@ -62,13 +64,15 @@ public class CAtomTarget implements Painter<COSMViewer>
      * set a new position for this Target
      * @param p_position new position of this Target
      */
-    public void setPosition(GeoPosition p_position){
+    public void setPosition( GeoPosition p_position )
+    {
         this.m_position = p_position;
     }
 
     @Override
-    public void paint(final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height ) {
-        final int l_zoom = Math.max(15 - p_viewer.getZoom(), 3);
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        final int l_zoom = Math.max( 15 - p_viewer.getZoom(), 3 );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( this.getPosition(), p_viewer.getZoom() );
         p_graphic.setColor( Color.RED );
         p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );

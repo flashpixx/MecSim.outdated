@@ -1,5 +1,5 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.tu_clausthal.in.mec</groupId>
@@ -76,80 +76,29 @@
 
     <!-- non-default repositories -->
     <repositories>
+
         <repository>
-            <id>netbeans</id>
-            <name>Repository hosting NetBeans modules</name>
-            <url>http://bits.netbeans.org/nexus/content/groups/netbeans</url>
+            <id>sonatype-oss</id>
+            <name>Sonatype OSS Maven Repository for Snapshots</name>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
+
     </repositories>
 
 
     <dependencies>
 
         <!-- UI components -->
-        <!--
         <dependency>
-            <groupId>com.github.monkeysintown</groupId>
-            <artifactId>jgraphx</artifactId>
-            <version>3.1.2.1</version>
-            <scope>compile</scope>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.metawidget.modules</groupId>
-            <artifactId>metawidget-core</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules.swing</groupId>
-            <artifactId>metawidget-swing</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules</groupId>
-            <artifactId>metawidget-annotation</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules.swing</groupId>
-            <artifactId>metawidget-beansbinding</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.metawidget.modules</groupId>
-            <artifactId>metawidget-oval</artifactId>
-            <version>4.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.oval</groupId>
-            <artifactId>oval</artifactId>
-            <version>1.84</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.cloudfarming.client</groupId>
-            <artifactId>lib-beansbinding</artifactId>
-            <version>1.2.2-NB80</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.dockingframes</groupId>
-            <artifactId>docking-frames-common</artifactId>
-            <version>1.1.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.20.8</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -159,28 +108,26 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.fifesoft</groupId>
-            <artifactId>rsyntaxtextarea</artifactId>
-            <version>r239</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.pegdown</groupId>
             <artifactId>pegdown</artifactId>
-            <version>1.4.2</version>
+            <version>1.5.0</version>
             <scope>compile</scope>
         </dependency>
 
 
         <!-- algorithms & data structure components -->
-        <!--
         <dependency>
-            <groupId>nz.ac.waikato.cms.weka</groupId>
-            <artifactId>weka-stable</artifactId>
-            <version>3.6.12</version>
+            <groupId>com.github.drapostolos</groupId>
+            <artifactId>type-parser</artifactId>
+            <version>0.5.0</version>
             <scope>compile</scope>
         </dependency>
-        -->
+        <dependency>
+            <groupId>eu.medsea.mimeutil</groupId>
+            <artifactId>mime-util</artifactId>
+            <version>2.1.3</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -224,15 +171,16 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.3.1</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.5.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.graphhopper</groupId>
             <artifactId>graphhopper</artifactId>
             <version>0.3</version>
+            <!-- <version>0.4.0</version> -->
         </dependency>
 
         <!-- agent frameworks -->
@@ -244,6 +192,12 @@
         </dependency>
 
         <!-- addons -->
+        <dependency>
+            <groupId>com.nanohttpd</groupId>
+            <artifactId>nanohttpd-webserver</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -294,12 +248,12 @@
                             <source>1.8</source>
                             <target>1.8</target>
                             <excludes>
-                                <exclude>**/CMainBootstrap.java</exclude>
+                                <exclude>**/CBoot.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>bootstrap-compile</id>
+                        <id>boot-compile</id>
                         <goals>
                             <goal>compile</goal>
                         </goals>
@@ -307,7 +261,7 @@
                             <source>1.2</source>
                             <target>1.2</target>
                             <includes>
-                                <include>**/CMainBootstrap.java</include>
+                                <include>**/CBoot.java</include>
                             </includes>
                         </configuration>
                     </execution>
@@ -353,7 +307,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>src/main/resources/documentation/developer</directory>
+                            <directory>src/main/resources/web/documentation/developer</directory>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -383,7 +337,7 @@
                             <Build-Commit>${build.commit}</Build-Commit>
                         </manifestEntries>
                         <manifest>
-                            <mainClass>de.tu_clausthal.in.mec.CMainBootstrap</mainClass>
+                            <mainClass>de.tu_clausthal.in.mec.CBoot</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car;
 
@@ -101,10 +101,10 @@ public class CCarJasonAgent extends CDefaultCar
 
 
             // add agent to layer
-            ( (IMultiLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) ).add( m_agent );
+            CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( m_agent );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }
@@ -114,16 +114,14 @@ public class CCarJasonAgent extends CDefaultCar
     public final void release()
     {
         super.release();
-        if ( m_agent != null )
-            m_agent.release();
+        if ( m_agent != null ) m_agent.release();
     }
 
     @Override
     public final Map<String, Object> inspect()
     {
         final Map<String, Object> l_map = super.inspect();
-        if ( m_agent == null )
-            return l_map;
+        if ( m_agent == null ) return l_map;
 
         l_map.put( CCommon.getResourceString( this, "asl" ), m_agent.getSource() );
         l_map.put( CCommon.getResourceString( this, "cycle" ), m_agent.getCycle() );

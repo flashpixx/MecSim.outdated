@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.mas.jason.action;
 
@@ -106,8 +106,7 @@ public class CMethodBind extends IAction
     public final Set<String> getForbidden( final String p_name )
     {
         final CReflection.CMethodCache l_object = m_bind.get( p_name );
-        if ( l_object == null )
-            return null;
+        if ( l_object == null ) return null;
 
         return l_object.getForbidden();
     }
@@ -116,8 +115,7 @@ public class CMethodBind extends IAction
     @Override
     /**
      * @todo handle term list
-     */
-    public final void act( final Agent p_agent, final Structure p_args )
+     */ public final void act( final Agent p_agent, final Structure p_args )
     {
         // check number of argument first
         final List<Term> l_args = p_args.getTerms();
@@ -169,8 +167,7 @@ public class CMethodBind extends IAction
             for ( int i = 0; i < l_argumentdata.size(); i++ )
                 if ( l_argumentdata.get( i ).isNumeric() )
                     l_argumentinvokedata.add( CCommon.convertNumber( l_argumenttype[i], ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
-                else
-                    l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
+                else l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
 
 
             // invoke and cast return data
@@ -187,11 +184,11 @@ public class CMethodBind extends IAction
             }
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             throw new IllegalArgumentException( l_exception.getMessage() );
         }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             throw new IllegalArgumentException( l_throwable.getMessage() );
         }
@@ -207,8 +204,7 @@ public class CMethodBind extends IAction
     protected final Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
     {
         String l_classname = p_term.toString();
-        if ( "void".equalsIgnoreCase( l_classname ) )
-            return void.class;
+        if ( "void".equalsIgnoreCase( l_classname ) ) return void.class;
 
         Class<?> l_class = null;
         try
@@ -238,13 +234,12 @@ public class CMethodBind extends IAction
 
                     // object types
                 default:
-                    if ( !l_classname.contains( "." ) )
-                        l_classname = "java.lang." + l_classname;
+                    if ( !l_classname.contains( "." ) ) l_classname = "java.lang." + l_classname;
                     l_class = Class.forName( l_classname );
             }
 
         }
-        catch ( ClassNotFoundException l_exception )
+        catch ( final ClassNotFoundException l_exception )
         {
             throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "classnotfound", l_classname ) );
         }

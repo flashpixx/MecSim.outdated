@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,13 +19,13 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.CComplexTarget;
+import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.jxmapviewer.painter.Painter;
@@ -33,6 +33,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.io.Serializable;
+
 
 /**
  * factory interface of car source - defines a source
@@ -50,24 +51,28 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
 
     /**
      * returns the Color of the source
+     *
      * @return color of the source
      */
     public Color getColor();
 
     /**
      * set a new Color for this source
+     *
      * @param p_color new Color
      */
     public void setColor( Color p_color );
 
     /**
      * return the Generator of the source
+     *
      * @return Generator Object of this Source
      */
     public IGenerator getGenerator();
 
     /**
      * set a new Generator for this source
+     *
      * @param p_generator new Generator
      */
     public void setGenerator( IGenerator p_generator );
@@ -79,14 +84,16 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
 
     /**
      * return the ComplexTarget of the source
+     *
      * @return ComplexTarget of the source
      */
     public CComplexTarget getComplexTarget();
 
     /**
      * set a new ComplexTarget for this source
+     *
      * @param p_complexTarget new ComplexTarget
      */
-    public void setComplexTarget(CComplexTarget p_complexTarget);
+    public void setComplexTarget( CComplexTarget p_complexTarget );
 
 }

@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source;
 
@@ -28,12 +28,12 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.CComplexTarget;
+import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.inspector.CInspector;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
@@ -51,6 +51,7 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+
 
 /**
  * class with default source implementation
@@ -92,7 +93,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     protected transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
+            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
 
@@ -121,17 +122,19 @@ public class CSource extends IInspector implements ISource, ISerializable
         return null;
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
-        if ( m_position == null )
-            return;
+        if ( m_position == null ) return;
 
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ), this.iconsize( p_viewer ) );
 
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
+        //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+        //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override
@@ -162,19 +165,13 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public void setColor( Color p_color )
     {
-        if ( p_color == null )
-            this.m_color = Color.BLACK;
+        if ( p_color == null ) this.m_color = Color.BLACK;
 
         this.m_color = p_color;
         this.setImage();
 
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
+        if ( CSimulation.getInstance().hasUI() )
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
     @Override
@@ -198,19 +195,21 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public CComplexTarget getComplexTarget() {
+    public CComplexTarget getComplexTarget()
+    {
         return m_complexTarget;
     }
 
     @Override
-    public void setComplexTarget(CComplexTarget p_complexTarget) {
+    public void setComplexTarget( CComplexTarget p_complexTarget )
+    {
         this.m_complexTarget = p_complexTarget;
     }
 
     @Override
     public Collection<ICar> step( int p_currentstep, ILayer p_layer ) throws Exception
     {
-        return this.m_generator.generate(p_currentstep);
+        return this.m_generator.generate( p_currentstep );
     }
 
     @Override
@@ -222,8 +221,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( m_image == null )
-            return;
+        if ( m_image == null ) return;
 
         //If the Zoom changed Calculate the new Image and Scale
         if ( p_viewer.getZoom() != m_lastZoom )
@@ -246,8 +244,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     private void setImage()
     {
-        if ( m_color == null )
-            return;
+        if ( m_color == null ) return;
 
         try
         {
@@ -259,12 +256,11 @@ public class CSource extends IInspector implements ISource, ISerializable
                 for ( int j = 0; j < l_image.getWidth(); j++ )
                 {
                     final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
+                    if ( l_color.getBlue() > 0 ) m_image.setRGB( j, i, m_color.getRGB() );
                 }
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.warn( l_exception );
         }
@@ -272,13 +268,13 @@ public class CSource extends IInspector implements ISource, ISerializable
 
     /**
      * creates an image with a specific scale
-     * @param p_width image width
+     *
+     * @param p_width  image width
      * @param p_height image height
      */
     private void setImage( int p_width, int p_height )
     {
-        if ( m_color == null )
-            return;
+        if ( m_color == null ) return;
 
         try
         {
@@ -291,12 +287,11 @@ public class CSource extends IInspector implements ISource, ISerializable
                 for ( int j = 0; j < l_image.getWidth(); j++ )
                 {
                     final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
+                    if ( l_color.getBlue() > 0 ) m_image.setRGB( j, i, m_color.getRGB() );
                 }
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.warn( l_exception );
         }
@@ -304,8 +299,9 @@ public class CSource extends IInspector implements ISource, ISerializable
 
     /**
      * Method to scale a Buffered Image
-     * @param p_src Image which should be scaled
-     * @param p_width new Width
+     *
+     * @param p_src    Image which should be scaled
+     * @param p_width  new Width
      * @param p_height new Height
      * @return new Image
      */

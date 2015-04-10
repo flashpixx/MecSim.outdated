@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.simulation.thread;
 
@@ -54,7 +54,7 @@ public class CLayerReset extends IRunnable<ILayer>
         {
             m_object.release();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
         }

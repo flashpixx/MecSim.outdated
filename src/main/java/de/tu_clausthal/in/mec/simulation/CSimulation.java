@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,12 +19,11 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.simulation;
 
 import de.tu_clausthal.in.mec.CBootstrap;
-import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
@@ -34,7 +33,9 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.simulation.message.CMessageSystem;
 import de.tu_clausthal.in.mec.simulation.thread.CMainLoop;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.ui.CUI;
+import de.tu_clausthal.in.mec.ui.IViewableLayer;
+import de.tu_clausthal.in.mec.ui.web.CServer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,6 +44,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -70,12 +73,15 @@ public class CSimulation
     /**
      * object of the thread loop *
      */
-    private Thread m_mainloopthread = null;
-
+    private Thread m_mainloopthread;
     /**
-     * frame object
+     * HTTP server
      */
-    private CFrame m_ui = null;
+    private CServer m_webserver;
+    /**
+     * UI
+     */
+    private CUI m_ui;
 
 
     /**
@@ -125,26 +131,25 @@ public class CSimulation
     }
 
     /**
-     * returns the UI frame
+     * returns the HTTP server
      *
-     * @return null or frame
+     * @return null or server
      */
-    public CFrame getUI()
+    public CServer getWebServer()
+    {
+        return m_webserver;
+    }
+
+    /**
+     * returns the UI
+     *
+     * @return UI
+     */
+    public CUI getUI()
     {
         return m_ui;
     }
 
-    /**
-     * sets the UI frame
-     *
-     * @param p_frame frame object
-     */
-    public void setUI( final CFrame p_frame )
-    {
-        if ( m_ui != null )
-            throw new IllegalStateException( CCommon.getResourceString( this, "uiframeset" ) );
-        m_ui = p_frame;
-    }
 
     /**
      * returns a boolean for existing UI
@@ -153,7 +158,7 @@ public class CSimulation
      */
     public boolean hasUI()
     {
-        return m_ui != null;
+        return ( m_ui != null ) && ( m_webserver != null );
     }
 
 
@@ -162,8 +167,7 @@ public class CSimulation
      */
     private void threadStartUp()
     {
-        if ( m_mainloopthread != null )
-            return;
+        if ( m_mainloopthread != null ) return;
 
         m_mainloopthread = new Thread( m_mainloop );
         m_mainloopthread.start();
@@ -177,12 +181,10 @@ public class CSimulation
      */
     public void start( final int p_steps ) throws InterruptedException
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
         this.threadStartUp();
 
         CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
-        CBootstrap.beforeSimulationStarts( this );
 
         // run thread and wait until thread is finished
         m_mainloop.resume( p_steps );
@@ -196,12 +198,10 @@ public class CSimulation
      */
     public void start()
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
         this.threadStartUp();
 
         CLogger.info( CCommon.getResourceString( this, "start" ) );
-        CBootstrap.beforeSimulationStarts( this );
 
         m_mainloop.resume();
     }
@@ -212,11 +212,9 @@ public class CSimulation
      */
     public void stop()
     {
-        if ( !this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
+        if ( !this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
 
         m_mainloop.pause();
-        CBootstrap.afterSimulationStops( this );
         CLogger.info( CCommon.getResourceString( this, "stop" ) );
     }
 
@@ -240,11 +238,11 @@ public class CSimulation
      *
      * @param p_output output file
      * @throws IOException throws the exception on file writing
+     * @bug incomplete routing map
      */
     public void store( final File p_output ) throws IOException
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
 
         try (
@@ -252,12 +250,12 @@ public class CSimulation
                 ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
         )
         {
-            l_output.writeObject( CConfiguration.getInstance().get().getRoutingmap() );
+            //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
             l_output.writeObject( m_world );
 
             CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
             throw new IOException( l_exception.getMessage() );
@@ -271,11 +269,11 @@ public class CSimulation
      * @param p_input input file
      * @throws IOException            throws the exception on file reading error
      * @throws ClassNotFoundException throws the exception on deserialization
+     * @bug incomplete routingmap
      */
     public void load( final File p_input ) throws IOException, ClassNotFoundException
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( this.isRunning() ) throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
         try (
                 FileInputStream l_stream = new FileInputStream( p_input );
@@ -285,8 +283,7 @@ public class CSimulation
 
             for ( ILayer l_layer : m_world.values() )
             {
-                if ( l_layer instanceof ISerializable )
-                    ( (ISerializable) l_layer ).onDeserializationInitialization();
+                if ( l_layer instanceof ISerializable ) ( (ISerializable) l_layer ).onDeserializationInitialization();
 
                 if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
                     for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
@@ -294,19 +291,17 @@ public class CSimulation
                             ( (ISerializable) l_item ).onDeserializationInitialization();
             }
 
-            CConfiguration.getInstance().get().setRoutingmap( (CConfiguration.Data.RoutingMap) l_input.readObject() );
+            //CConfiguration.getInstance().get().RoutingMap = (CConfiguration.Data.RoutingMap) l_input.readObject();
             m_world.clear();
             m_world = (CWorld) l_input.readObject();
 
             for ( ILayer l_layer : m_world.values() )
             {
-                if ( l_layer instanceof ISerializable )
-                    ( (ISerializable) l_layer ).onDeserializationComplete();
+                if ( l_layer instanceof ISerializable ) ( (ISerializable) l_layer ).onDeserializationComplete();
 
                 if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
                     for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
-                        if ( l_item instanceof ISerializable )
-                            ( (ISerializable) l_item ).onDeserializationComplete();
+                        if ( l_item instanceof ISerializable ) ( (ISerializable) l_item ).onDeserializationComplete();
             }
 
             // reset all layer
@@ -315,11 +310,117 @@ public class CSimulation
             CLogger.info( CCommon.getResourceString( this, "load", p_input ) );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
             throw new IOException( l_exception.getMessage() );
         }
     }
 
+
+    /**
+     * UI method - start the simulation
+     */
+    private void web_static_start()
+    {
+        this.start();
+    }
+
+
+    /**
+     * UI method - stop the simulation
+     */
+    private void web_static_stop()
+    {
+        this.stop();
+    }
+
+
+    /**
+     * UI method - reset the simulation
+     */
+    private void web_static_reset()
+    {
+        this.reset();
+    }
+
+
+    /**
+     * UI method - returns a list with available layers
+     *
+     * @return
+     */
+    private Map<String, Map<String, Object>> web_static_listlayer()
+    {
+        final Map<String, Map<String, Object>> l_return = new HashMap<>();
+        for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
+            l_return.put( l_item.getKey(), new HashMap()
+            {{
+                    put( "active", l_item.getValue().isActive() );
+                    put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
+                }} );
+
+
+        return l_return;
+    }
+
+
+    /**
+     * UI method - enables a layer
+     */
+    private void web_static_enablelayer( final Map<String, Object> p_data )
+    {
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( true );
+    }
+
+
+    /**
+     * UI method - disables a layer
+     */
+    private void web_static_disablelayer( final Map<String, Object> p_data )
+    {
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( false );
+    }
+
+
+    /**
+     * UI method - view a layer
+     */
+    private void web_static_showlayer( final Map<String, Object> p_data )
+    {
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( true );
+    }
+
+
+    /**
+     * UI method - hide a layer
+     */
+    private void web_static_hidelayer( final Map<String, Object> p_data )
+    {
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( false );
+    }
+
+
+    /**
+     * UI method - gets the layer name from the map
+     *
+     * @param p_data input data
+     * @return layer name
+     */
+    private String getLayerName( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "name" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
+
+        final String l_name = (String) p_data.get( "name" );
+
+        if ( !m_world.containsKey( l_name ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_name ) );
+
+        return l_name;
+    }
 }

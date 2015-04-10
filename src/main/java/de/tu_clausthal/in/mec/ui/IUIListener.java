@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui;
 
@@ -53,7 +53,7 @@ public abstract class IUIListener implements MouseListener
     public IUIListener()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().addMouseListener( this );
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().addMouseListener( this );
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class IUIListener implements MouseListener
      */
     public void release()
     {
-        COSMViewer.getSimulationOSM().removeMouseListener( this );
+        CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().removeMouseListener( this );
     }
 
     @Override
@@ -105,7 +105,7 @@ public abstract class IUIListener implements MouseListener
     public final void mousePressed( final MouseEvent p_event )
     {
         if ( SwingUtilities.isLeftMouseButton( p_event ) )
-            this.onClick( p_event, COSMViewer.getSimulationOSM() );
+            this.onClick( p_event, CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
     }
 
     @Override

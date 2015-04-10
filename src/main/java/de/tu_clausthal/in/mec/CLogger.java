@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
@@ -42,6 +42,10 @@ public class CLogger
      * stack index of traces
      */
     private static final int c_stackindex;
+    /**
+     * defines the global log level
+     */
+    private static Level s_level = Level.OFF;
 
     /** initialization **/
     static
@@ -52,16 +56,18 @@ public class CLogger
         for ( StackTraceElement l_trace : Thread.currentThread().getStackTrace() )
         {
             i++;
-            if ( l_trace.getClassName().equals( CLogger.class.getName() ) )
-                break;
+            if ( l_trace.getClassName().equals( CLogger.class.getName() ) ) break;
         }
         c_stackindex = i;
     }
 
     /**
-     * defines the global log level
+     * private ctor - avoid instantiation
      */
-    private static Level s_level = Level.OFF;
+    private CLogger()
+    {
+    }
+
 
     /**
      * creates the logger with properties
@@ -87,10 +93,8 @@ public class CLogger
      */
     private static String padCut( final String p_input, final char p_filler, final int p_length )
     {
-        if ( p_length < 1 )
-            return p_input;
-        if ( p_input.length() < p_length )
-            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
+        if ( p_length < 1 ) return p_input;
+        if ( p_input.length() < p_length ) return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
 
         return p_input.substring( 0, p_length );
     }
@@ -104,19 +108,31 @@ public class CLogger
      */
     private static String createLogData( final Level p_status, final Object p_add )
     {
+        // get invoker position (index depends on static main function)
+        int l_invokerindex;
+        try
+        {
+            getInvokingMethodNameFqn( 4 );
+            l_invokerindex = 4;
+        }
+        catch ( final ArrayIndexOutOfBoundsException l_exception )
+        {
+            l_invokerindex = 3;
+        }
+
         final String l_sep = StringUtils.repeat( " ", 5 );
         final StringBuffer l_str = new StringBuffer();
 
         l_str.append( l_sep ).
                 append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
-                append( l_sep ).
-                append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
-                append( l_sep ).
-                append( padCut( "invoker [" + getInvokingMethodNameFqn( 4 ) + "]", ' ', 100 ) ).
-                append( l_sep ).
-                append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
-                append( l_sep ).
-                append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
+                     append( l_sep ).
+                     append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "invoker [" + getInvokingMethodNameFqn( l_invokerindex ) + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
 
 
         String l_add = "";
@@ -129,8 +145,7 @@ public class CLogger
                     l_add += l_item + "   ";
                 l_add += "]";
             }
-            else
-                l_add = p_add.toString();
+            else l_add = p_add.toString();
         }
 
         if ( !l_add.isEmpty() )
@@ -166,9 +181,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void warn( final Object p_data )
+    public static <T> T warn( final T p_data )
     {
         warn( p_data, true );
+        return p_data;
     }
 
     /**
@@ -177,10 +193,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void warn( final Object p_data, final boolean p_write )
+    public static <T> T warn( final T p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.warn( createLogData( Level.WARNING, p_data ) );
+        if ( p_write ) Logger.warn( createLogData( Level.WARNING, p_data ) );
+        return p_data;
     }
 
 
@@ -207,9 +223,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void error( final Object p_data )
+    public static <T> T error( final T p_data )
     {
         error( p_data, true );
+        return p_data;
     }
 
     /**
@@ -218,10 +235,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void error( final Object p_data, final boolean p_write )
+    public static <T> T error( final T p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.error( createLogData( Level.ERROR, p_data ) );
+        if ( p_write ) Logger.error( createLogData( Level.ERROR, p_data ) );
+        return p_data;
     }
 
 
@@ -249,9 +266,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void info( final Object p_data )
+    public static <T> T info( final T p_data )
     {
         info( p_data, true );
+        return p_data;
     }
 
     /**
@@ -260,10 +278,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void info( final Object p_data, final boolean p_write )
+    public static <T> T info( final T p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.info( createLogData( Level.INFO, p_data ) );
+        if ( p_write ) Logger.info( createLogData( Level.INFO, p_data ) );
+        return p_data;
     }
 
 
@@ -290,9 +308,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void debug( final Object p_data )
+    public static <T> T debug( final T p_data )
     {
         debug( p_data, true );
+        return p_data;
     }
 
     /**
@@ -301,10 +320,10 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void debug( final Object p_data, final boolean p_write )
+    public static <T> T debug( final T p_data, final boolean p_write )
     {
-        if ( p_write )
-            Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        if ( p_write ) Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        return p_data;
     }
 
 
@@ -332,9 +351,10 @@ public class CLogger
      *
      * @param p_data log data
      */
-    public static void out( final Object p_data )
+    public static <T> T out( final T p_data )
     {
         out( p_data, true );
+        return p_data;
     }
 
     /**
@@ -343,15 +363,13 @@ public class CLogger
      * @param p_data  log data
      * @param p_write boolean on true message is written
      */
-    public static void out( final Object p_data, final boolean p_write )
+    public static <T> T out( final T p_data, final boolean p_write )
     {
-        if ( !p_write )
-            return;
+        if ( !p_write ) return p_data;
 
-        if ( s_level == Level.OFF )
-            System.out.println( p_data );
-        else
-            Logger.info( createLogData( Level.INFO, p_data ) );
+        if ( s_level == Level.OFF ) System.out.println( p_data );
+        else Logger.info( createLogData( Level.INFO, p_data ) );
+        return p_data;
     }
 
 

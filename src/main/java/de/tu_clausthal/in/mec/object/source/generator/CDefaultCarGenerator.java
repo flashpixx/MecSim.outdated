@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,13 +19,12 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
 import de.tu_clausthal.in.mec.object.car.CDefaultCar;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -34,6 +33,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
+
 
 /**
  * Class to generate a Default Car
@@ -46,6 +46,10 @@ public class CDefaultCarGenerator implements IGenerator
      */
     private static final long serialVersionUID = 1L;
     /**
+     * Generating Cars in every Step is to much so here is a restriction variable
+     */
+    protected final int m_restriction = 15;
+    /**
      * Position of this Generator
      */
     protected transient GeoPosition m_position = null;
@@ -53,14 +57,11 @@ public class CDefaultCarGenerator implements IGenerator
      * Member Variable which handles the Settings of a Generator
      */
     protected CGeneratorSettings m_settings = new CGeneratorSettings();
-    /**
-     * Generating Cars in every Step is to much so here is a restriction variable
-     */
-    protected final int m_restriction = 15;
 
 
     /**
      * CTOR
+     *
      * @param p_position
      */
     public CDefaultCarGenerator( GeoPosition p_position )
@@ -75,22 +76,23 @@ public class CDefaultCarGenerator implements IGenerator
     }
 
     @Override
-    public Collection<ICar> generate(int p_currentStep)
+    public Collection<ICar> generate( int p_currentStep )
     {
         final Collection<ICar> l_sources = new HashSet<>();
-
-        if(p_currentStep % m_restriction == 0) {
+        if ( p_currentStep % m_restriction == 0 )
+        {
             int l_numberOfCars = m_settings.getSample();
 
-            for (int i = 0; i < l_numberOfCars; i++)
-                l_sources.add(new CDefaultCar(m_position));
-            }
+            for ( int i = 0; i < l_numberOfCars; i++ )
+                l_sources.add( new CDefaultCar( m_position ) );
+        }
 
         return l_sources;
     }
 
     @Override
-    public CGeneratorSettings getSettings() {
+    public CGeneratorSettings getSettings()
+    {
         return m_settings;
     }
 

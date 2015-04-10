@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car;
 
@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import org.jxmapviewer.painter.Painter;
 
 import java.io.IOException;
@@ -113,10 +114,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     public final void enableDisableGraphWeight( final String p_weight )
     {
-        if ( this.isActiveWeight( p_weight ) )
-            m_graph.disableWeight( p_weight );
-        else
-            m_graph.enableWeight( p_weight );
+        if ( this.isActiveWeight( p_weight ) ) m_graph.disableWeight( p_weight );
+        else m_graph.enableWeight( p_weight );
     }
 
 
@@ -140,8 +139,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final void setDriveModel( final String p_model )
     {
         for ( IDriveModel l_model : s_drivemodellist )
-            if ( p_model.equals( l_model.getName() ) )
-                m_drivemodel = l_model;
+            if ( p_model.equals( l_model.getName() ) ) m_drivemodel = l_model;
     }
 
 
@@ -194,7 +192,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
 
         // repaint the OSM viewer (supress flickering)
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
     @Override
@@ -215,14 +213,14 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final void onDeserializationInitialization()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().getCompoundPainter().removePainter( (Painter) this );
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().removePainter( (Painter) this );
     }
 
     @Override
     public final void onDeserializationComplete()
     {
         if ( CSimulation.getInstance().hasUI() )
-            COSMViewer.getSimulationOSM().getCompoundPainter().addPainter( (Painter) this );
+            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter( (Painter) this );
     }
 
     @Override

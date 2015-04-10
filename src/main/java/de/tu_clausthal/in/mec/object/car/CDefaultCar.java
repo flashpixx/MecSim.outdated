@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car;
 
@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.inspector.CInspector;
 import de.tu_clausthal.in.mec.ui.inspector.IInspector;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.JXMapViewer;
@@ -100,7 +99,7 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * reference to the graph
      */
-    protected CGraphHopper m_graph = ( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) ).getGraph();
+    protected CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
 
     /**
@@ -115,30 +114,28 @@ public class CDefaultCar extends IInspector implements ICar
 
         m_StartPosition = p_StartPosition;
         m_LingerProbability = m_random.nextDouble();
-        while ( m_speed < 50 )
-            m_speed = m_random.nextInt( m_maxSpeed );
+        while ( m_speed < 50 ) m_speed = m_random.nextInt( m_maxSpeed );
         m_acceleration = m_random.nextInt( 40 ) + 20;
         m_deceleration = m_random.nextInt( 40 ) + 20;
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position
-        while ( true )
-            try
+        while ( true ) try
+        {
+
+            m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
+            final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
+
+            if ( ( l_route != null ) && ( l_route.size() > 0 ) )
             {
-
-                m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
-                final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
-
-                if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-                {
-                    m_route = m_graph.getRouteCells( l_route.get( 0 ) );
-                    break;
-                }
-
+                m_route = m_graph.getRouteCells( l_route.get( 0 ) );
+                break;
             }
-            catch ( Exception l_exception )
-            {
-            }
+
+        }
+        catch ( final Exception l_exception )
+        {
+        }
 
     }
 
@@ -180,8 +177,7 @@ public class CDefaultCar extends IInspector implements ICar
         final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
         if ( ( l_route != null ) && ( l_route.size() > 0 ) )
         {
-            if ( m_routeindex < m_route.size() - 1 )
-                m_route.subList( m_routeindex + 1, m_route.size() ).clear();
+            if ( m_routeindex < m_route.size() - 1 ) m_route.subList( m_routeindex + 1, m_route.size() ).clear();
             m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
         }
     }
@@ -190,8 +186,7 @@ public class CDefaultCar extends IInspector implements ICar
     public final GeoPosition getGeoposition()
     {
         final EdgeIteratorState l_edgeid = this.getEdge();
-        if ( l_edgeid == null )
-            return null;
+        if ( l_edgeid == null ) return null;
 
         return m_graph.getEdge( l_edgeid ).getGeoposition( this );
     }
@@ -217,8 +212,7 @@ public class CDefaultCar extends IInspector implements ICar
         for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )
         {
             final ICar l_object = (ICar) m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
-            if ( l_object != null )
-                l_predecessordistance.put( i - m_routeindex, l_object );
+            if ( l_object != null ) l_predecessordistance.put( i - m_routeindex, l_object );
         }
 
         return l_predecessordistance;
@@ -250,25 +244,26 @@ public class CDefaultCar extends IInspector implements ICar
      */
     private final EdgeIteratorState getEdge( final int p_index )
     {
-        if ( m_route == null )
-            return null;
+        if ( m_route == null ) return null;
 
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
         final GeoPosition l_position = this.getGeoposition();
-        if ( l_position == null )
-            return;
+        if ( l_position == null ) return;
 
         final int l_zoom = this.iconsize( p_viewer );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom );
 
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            ( (CInspector) CSimulation.getInstance().getUI().getWidget( "Inspector" ) ).set( this );
+        //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+        //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );
     }
 
     @Override
@@ -276,8 +271,7 @@ public class CDefaultCar extends IInspector implements ICar
     {
         super.release();
         final CEdge l_edge = m_graph.getEdge( this.getEdge() );
-        if ( l_edge != null )
-            l_edge.removeObject( this );
+        if ( l_edge != null ) l_edge.removeObject( this );
     }
 
     @Override
@@ -304,24 +298,18 @@ public class CDefaultCar extends IInspector implements ICar
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         final GeoPosition l_position = this.getGeoposition();
-        if ( l_position == null )
-            return;
+        if ( l_position == null ) return;
 
         final int l_zoom = this.iconsize( p_viewer );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
 
         // speed limit color defined with http://wiki.openstreetmap.org/wiki/File:Speed_limit_Germany.png
         p_graphic.setColor( Color.DARK_GRAY );
-        if ( m_speed >= 50 )
-            p_graphic.setColor( Color.MAGENTA );
-        if ( m_speed >= 60 )
-            p_graphic.setColor( Color.PINK );
-        if ( m_speed >= 80 )
-            p_graphic.setColor( Color.BLUE );
-        if ( m_speed >= 100 )
-            p_graphic.setColor( Color.CYAN );
-        if ( m_speed >= 130 )
-            p_graphic.setColor( Color.RED );
+        if ( m_speed >= 50 ) p_graphic.setColor( Color.MAGENTA );
+        if ( m_speed >= 60 ) p_graphic.setColor( Color.PINK );
+        if ( m_speed >= 80 ) p_graphic.setColor( Color.BLUE );
+        if ( m_speed >= 100 ) p_graphic.setColor( Color.CYAN );
+        if ( m_speed >= 130 ) p_graphic.setColor( Color.RED );
 
         p_graphic.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
     }
@@ -332,8 +320,7 @@ public class CDefaultCar extends IInspector implements ICar
     {
 
         // if the car is at the end
-        if ( this.hasEndReached() )
-            return;
+        if ( this.hasEndReached() ) return;
 
         // if the car reaches the end
         int l_speed = this.getCurrentSpeed();
@@ -356,7 +343,7 @@ public class CDefaultCar extends IInspector implements ICar
                 m_graph.getEdge( m_route.get( l_speed ).getLeft() ).setObject( this, m_route.get( l_speed ).getRight().intValue() );
                 m_routeindex += l_speed;
             }
-            catch ( IllegalAccessException l_ex )
+            catch ( final IllegalAccessException l_exception )
             {
             }
 
@@ -370,7 +357,7 @@ public class CDefaultCar extends IInspector implements ICar
                 m_graph.getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
                 m_routeindex += l_speed;
             }
-            catch ( IllegalAccessException l_ex )
+            catch ( final IllegalAccessException l_exception )
             {
                 m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
             }

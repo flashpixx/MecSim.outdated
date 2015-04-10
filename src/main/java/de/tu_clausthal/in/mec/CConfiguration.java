@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,39 +19,28 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
-import com.google.gson.Gson;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.CReflection;
-import net.sf.oval.constraint.Min;
-import net.sf.oval.constraint.NotEmpty;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.jxmapviewer.viewer.GeoPosition;
-import org.metawidget.inspector.annotation.UiComesAfter;
-import org.metawidget.inspector.annotation.UiHidden;
-import org.metawidget.inspector.annotation.UiLabel;
-import org.metawidget.inspector.annotation.UiLookup;
-import org.metawidget.inspector.annotation.UiMasked;
-import org.metawidget.inspector.annotation.UiSection;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
@@ -65,39 +54,111 @@ import java.util.jar.Manifest;
  */
 public class CConfiguration
 {
-
     /**
      * name of the configuration file
      */
-    private static final String c_ConfigFilename = "config.json";
+    private static final String c_filename = "config.json";
     /**
      * singleton instance variable
      */
     private static final CConfiguration c_instance = new CConfiguration();
     /**
-     * property that stores the configuration data
+     * location map
      */
-    private Data m_data = new Data();
+    private final Map<String, File> m_location = new HashMap<String, File>()
+    {{
+            put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
+        }};
     /**
-     * directory of the configuration file
+     * configuration map
      */
-    private File m_dir = new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" );
-    /**
-     * directory of the agent (MAS) files
-     */
-    private File m_masdir = new File( m_dir + File.separator + "mas" );
-    /**
-     * directory of external Jar files
-     */
-    private File m_jardir = new File( m_dir + File.separator + "jar" );
+    private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
+    {{
+            put( "reset", false );
+            put( "version", 1 );
+
+
+            // language data
+            put( "language", new CNameHashMap.CImmutable()
+            {{
+                    put( "current", "en" );
+                    put( "allow", new ArrayList<String>()
+                    {{
+                            add( "en" );
+                            add( "de" );
+                        }} );
+                }} );
+
+
+            // console data
+            put( "console", new CNameHashMap.CImmutable()
+            {{
+                    put( "LineBuffer", 120 );
+                    put( "LineNumber", 120 );
+                }} );
+
+
+            // ui data
+            put( "ui", new CNameHashMap.CImmutable()
+            {{
+                    put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                    put( "windowheight", 1024.0 );
+                    put( "windowwidth", 1280.0 );
+                    put( "bindport", 9876 );
+                    put( "zoom", 4 );
+                }} );
+
+
+            // main simulation data
+            put( "simulation", new CNameHashMap.CImmutable()
+            {{
+                    put( "threadsleeptime", 25 );
+
+                    put( "traffic", new CNameHashMap.CImmutable()
+                    {{
+                            put( "cellsampling", 2 );
+                            put( "routing", new CNameHashMap.CImmutable()
+                            {{
+                                    put( "algorithm", "astarbi" );
+                                    put( "allow", new ArrayList<String>()
+                                    {{
+                                            add( "astar" );
+                                            add( "astarbi" );
+                                            add( "dijkstra" );
+                                            add( "dijkstrabi" );
+                                            add( "dijkstraOneToMany" );
+                                        }} );
+                                }} );
+                            put( "map", new CNameHashMap.CImmutable()
+                            {{
+                                    put( "reimport", false );
+                                    put( "name", "europe/germany/lowersaxony" );
+                                    put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                }} );
+                        }} );
+                }} );
+
+
+            // database data
+            put( "database", new CNameHashMap.CImmutable()
+            {{
+                    put( "active", false );
+                    put( "driver", null );
+                    put( "url", null );
+                    put( "tableprefix", null );
+                    put( "username", null );
+                    put( "password", null );
+                }} );
+
+
+            // manifest data
+            put( "manifest", new CNameHashMap.CImmutable() );
+
+        }};
     /**
      * UTF-8 property reader
      */
     private ResourceBundle.Control m_reader = new UTF8Control();
-    /**
-     * manifest data
-     */
-    private Map<String, String> m_manifest = new HashMap<>();
 
 
     /**
@@ -107,15 +168,17 @@ public class CConfiguration
     {
         try
         {
-            Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
+            final Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
-                m_manifest.put( l_item.getKey().toString(), l_item.getValue().toString() );
+                ( (Map) m_configuration.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
         }
-        catch ( IOException l_exception )
+        catch ( final IOException l_exception )
         {
-            ;
         }
+
+        this.setDefaultDirectories();
     }
+
 
     /**
      * singleton get instance method
@@ -129,13 +192,118 @@ public class CConfiguration
 
 
     /**
-     * reads the manifest data
+     * returns the data items of the configuration
      *
-     * @return map with string key and value
+     * @return configuration map
      */
-    public Map<String, String> getManifest()
+    public CNameHashMap.CImmutable get()
     {
-        return m_manifest;
+        return m_configuration;
+    }
+
+
+    /**
+     * returns the location of a directory
+     *
+     * @param p_name    name of the location
+     * @param p_varargs path components after the directory
+     * @return full directory
+     */
+    public File getLocation( final String p_name, final String... p_varargs )
+    {
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) ) return m_location.get( p_name );
+
+        return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
+    }
+
+
+    /**
+     * returns a path relative to the root directory
+     *
+     * @param p_dir directories
+     * @return full file
+     */
+    private File getBasePath( final String... p_dir )
+    {
+        if ( !m_location.containsKey( "root" ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
+
+        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
+    }
+
+
+    /**
+     * creates the default directories relative to the root dir
+     */
+    private void setDefaultDirectories()
+    {
+        for ( String l_item : new String[]{"mas", "jar", "www"} )
+            m_location.put( l_item, this.getBasePath( l_item ) );
+    }
+
+
+    /**
+     * creates the configuration directories
+     */
+    private void createDirectories() throws IOException
+    {
+        for ( File l_dir : m_location.values() )
+            if ( !l_dir.exists() && !l_dir.mkdirs() )
+                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
+    }
+
+
+    /**
+     * returns the property bundle
+     *
+     * @return resource bundle
+     */
+    public ResourceBundle getResourceBundle()
+    {
+        return getResourceBundle( null );
+    }
+
+
+    /**
+     * returns the property bundle
+     *
+     * @param p_language language code
+     * @return resource bundle
+     */
+    public ResourceBundle getResourceBundle( final String p_language )
+    {
+        final Locale l_locale;
+        switch ( p_language == null || p_language.isEmpty() ? m_configuration.<String>getTraverse( "language/current" ) : p_language )
+        {
+            case "de":
+                l_locale = Locale.GERMANY;
+                break;
+            default:
+                l_locale = Locale.ENGLISH;
+        }
+
+        Locale.setDefault( l_locale );
+        return ResourceBundle.getBundle( "language.locals", l_locale, m_reader );
+    }
+
+
+    /**
+     * sets the config dir
+     *
+     * @param p_dir directory
+     */
+    public void setConfigDir( final File p_dir )
+    {
+        m_location.put( "root", p_dir );
+        this.setDefaultDirectories();
+        try
+        {
+            this.createDirectories();
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
     }
 
 
@@ -147,138 +315,51 @@ public class CConfiguration
         try
         {
             this.createDirectories();
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
 
+            // remove manifest from config
+            final Map<String, Object> l_output = m_configuration.toHashMap();
+            l_output.remove( "manifest" );
 
-        try (
-                Writer l_writer = new OutputStreamWriter( new FileOutputStream( m_dir + File.separator + c_ConfigFilename ), "UTF-8" );
-        )
-        {
-            new Gson().toJson( m_data, l_writer );
+            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( l_output ) );
         }
-        catch ( Exception l_exception )
+        catch ( final IOException l_exception )
         {
             CLogger.error( l_exception );
         }
     }
 
-    /**
-     * creates the configuration directories
-     */
-    private void createDirectories() throws IOException
-    {
-        if ( !m_dir.exists() && !m_dir.mkdirs() )
-            throw new IOException( CCommon.getResourceString( this, "notcreate", m_dir.getAbsolutePath() ) );
-
-        if ( !m_masdir.exists() && !m_masdir.mkdirs() )
-            throw new IOException( CCommon.getResourceString( this, "notcreate", m_masdir.getAbsolutePath() ) );
-
-        if ( !m_jardir.exists() && !m_jardir.mkdirs() )
-            throw new IOException( CCommon.getResourceString( this, "notcreate", m_jardir.getAbsolutePath() ) );
-    }
 
     /**
      * reads the configuration within the directory
      */
     public void read()
     {
-
-        // create the configuration directory
-        Data l_tmp = null;
-        try
-        {
-            this.createDirectories();
-        }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
-
-        String l_config = m_dir + File.separator + c_ConfigFilename;
+        final File l_config = this.getLocation( "root", c_filename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
 
-        // read main configuration
-        try (
-                Reader l_reader = new InputStreamReader( new FileInputStream( l_config ), "UTF-8" );
-        )
+        try
         {
-            l_tmp = new Gson().fromJson( l_reader, Data.class );
+            // read Json
+            this.createDirectories();
+            final CNameHashMap l_input = new CNameHashMap();
+            l_input.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
+
+            if ( !l_input.<Boolean>getTypedValue( "reset" ) )
+                this.setConfiguration( l_input );
         }
-        catch ( Exception l_exception )
+        catch ( final IOException | NullPointerException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
-        }
-
-        // check the configuration values and set it
-        if ( ( l_tmp == null ) || ( l_tmp.getRestconfig() ) )
-            CLogger.warn( CCommon.getResourceString( this, "default" ) );
-        else
-        {
-            if ( l_tmp.ViewPoint == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "viewpointdefault" ) );
-                l_tmp.ViewPoint = m_data.ViewPoint;
-            }
-            if ( l_tmp.WindowHeight < 100 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "heightdefault" ) );
-                l_tmp.WindowHeight = m_data.WindowHeight;
-            }
-            if ( l_tmp.WindowWidth < 100 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "widthdefault" ) );
-                l_tmp.WindowWidth = m_data.WindowWidth;
-            }
-            if ( ( l_tmp.RoutingAlgorithm == null ) || ( l_tmp.RoutingAlgorithm.isEmpty() ) )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "routingdefault" ) );
-                l_tmp.RoutingAlgorithm = m_data.RoutingAlgorithm;
-            }
-            if ( l_tmp.CellSampling < 1 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "cellsamplingdefault" ) );
-                l_tmp.CellSampling = m_data.CellSampling;
-            }
-            if ( l_tmp.ThreadSleepTime < 0 )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "threadsleepdefault" ) );
-                l_tmp.ThreadSleepTime = m_data.ThreadSleepTime;
-            }
-            if ( l_tmp.RoutingMap == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "routingmapdefault" ) );
-                l_tmp.RoutingMap = m_data.RoutingMap;
-            }
-            if ( l_tmp.Database == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "databasedefault" ) );
-                l_tmp.Database = m_data.Database;
-            }
-            if ( l_tmp.Console == null )
-            {
-                CLogger.warn( CCommon.getResourceString( this, "consoledefault" ) );
-                l_tmp.Console = m_data.Console;
-            }
-
-            m_data = l_tmp;
         }
 
         // append all Jar files to the classpath of the system class loader
         try
         {
-            URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            for ( String l_jar : m_jardir.list( new WildcardFileFilter( "*.jar" ) ) )
-                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, new File( m_jardir + File.separator + l_jar ).toURI().toURL() );
+            final URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
+                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, CCommon.getResourceURL( m_location.get( "jar" ) + File.separator + l_jar ) );
         }
-        catch ( Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-        catch ( Throwable l_throwable )
+        catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
         }
@@ -286,529 +367,56 @@ public class CConfiguration
 
 
     /**
-     * returns the property bundle
+     * sets the configuration values with semantic check
      *
-     * @return resource bundle
+     * @param p_input input map
      */
-    public ResourceBundle getResourceBundle()
+    private void setConfiguration( final CNameHashMap p_input )
     {
-        if ( m_data.Language != null )
-            switch ( m_data.Language )
-            {
-                case "en":
-                    Locale.setDefault( Locale.ENGLISH );
-                    break;
-                case "de":
-                    Locale.setDefault( Locale.GERMANY );
-                    break;
-            }
+        // convert read data
+        final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) p_input.get( "ui" ) ).get( "geoposition" ) );
+        p_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
 
-        return ResourceBundle.getBundle( "language.locals", m_reader );
+        // check allow values
+        p_input.setTraverse( "ui/current", CCommon.getCheckedValue( p_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse( "ui/current" ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" ) ) );
+        p_input.setTraverse( "simulation/traffic/routing/algorithm", CCommon.getCheckedValue( p_input.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<ArrayList<String>>getTraverse( "simulation/traffic/routing/allow" ) ) );
+
+        // set data into configuration
+        for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
+            if ( p_input.containsKey( l_key ) )
+                m_configuration.put( l_key, p_input.get( l_key ) );
+    }
+
+    /**
+     * UI method - read configuration
+     *
+     * @return data
+     */
+    private CNameHashMap.CImmutable web_static_get()
+    {
+        return m_configuration;
     }
 
 
     /**
-     * returns the config dir
+     * UI method - set data
      *
-     * @param p_varargs path components after the MAS dir
-     * @return path to config dir
+     * @param p_data   input data
+     * @param p_header header data - configuration changeable only from localhost
      */
-    public File getConfigDir( final String... p_varargs )
+    private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )
     {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_dir;
+        if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
-        return new File( m_dir + File.separator + StringUtils.join( p_varargs, File.separator ) );
-    }
-
-    /**
-     * sets the config dir
-     *
-     * @param p_dir directory
-     */
-    public void setConfigDir( final File p_dir )
-    {
-        m_dir = p_dir;
-    }
-
-    /**
-     * returns the path for MAS files
-     *
-     * @param p_varargs path components after the MAS dir
-     * @return path to mas files
-     */
-    public File getMASDir( final String... p_varargs )
-    {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_masdir;
-
-        return new File( m_masdir + File.separator + StringUtils.join( p_varargs, File.separator ) );
-    }
-
-    /**
-     * returns the configuration data
-     *
-     * @return returns the configuration data
-     */
-    public Data get()
-    {
-        return m_data;
-    }
-
-    /**
-     * class for storing the configuration
-     *
-     * @see http://metawidget.sourceforge.net/doc/reference/en/html/ch04s03.html
-     */
-    public class Data
-    {
-        /**
-         * cell size for sampling
-         */
-        public int CellSampling = 2;
-        /**
-         * flag to reset the configuration
-         */
-        private boolean resetconfig = false;
-        /**
-         * flag to reset the UI
-         */
-        private boolean resetui = false;
-        /**
-         * geo position object of the start viewpoint
-         */
-        private GeoPosition ViewPoint = new GeoPosition( 51.8089, 10.3412 );
-        /**
-         * zoom level of the viewpoint on the start point
-         */
-        private int Zoom = 4;
-        /**
-         * thread sleep time in milliseconds
-         */
-        private int ThreadSleepTime = 25;
-        /**
-         * window width
-         */
-        private int WindowWidth = 1684;
-        /**
-         * window height
-         */
-        private int WindowHeight = 1024;
-        /**
-         * geo map for graph
-         */
-        private RoutingMap RoutingMap = new RoutingMap();
-        /**
-         * graph algorithm: astar & astarbi (A* algorithm), dijkstra, dijkstrabi, dijkstraOneToMany (Dijkstra
-         * algorithm)
-         */
-        private String RoutingAlgorithm = "astarbi";
-        /**
-         * language code
-         */
-        private String Language = null;
-        /**
-         * database driver (optional)
-         */
-        private DatabaseDriver Database = new DatabaseDriver();
-        /**
-         * console definition
-         */
-        private ConsoleData Console = new ConsoleData();
-
-
-        @UiSection("General")
-        @UiLabel("UI language")
-        @UiLookup({"en", "de"})
-        @NotEmpty
-        public String getLanguage()
+        try
         {
-            return Language;
+            this.setConfiguration( new CNameHashMap.CImmutable( p_data ) );
         }
-
-        public void setLanguage( String p_value )
+        catch ( final Exception l_exception )
         {
-            Language = p_value;
+            CLogger.error( l_exception );
         }
-
-
-        @UiLabel("Reset configuration")
-        @UiComesAfter("language")
-        public boolean getRestconfig()
-        {
-            return resetconfig;
-        }
-
-        public void setRestconfig( boolean p_value )
-        {
-            resetconfig = p_value;
-        }
-
-
-        @UiLabel("Reset UI configuration")
-        @UiComesAfter("restconfig")
-        public boolean getResetui()
-        {
-            return resetui;
-        }
-
-        public void setResetui( boolean p_value )
-        {
-            resetui = p_value;
-        }
-
-
-        @UiSection("Traffic Graph")
-        @UiComesAfter("resetui")
-        @UiLabel("Cell Size (in metre)")
-        @Min(1)
-        public int getCellsampling()
-        {
-            return CellSampling;
-        }
-
-        public void setCellsampling( int p_value )
-        {
-            CellSampling = Math.max( p_value, 1 );
-            ;
-        }
-
-
-        @UiComesAfter("cellsampling")
-        @UiLabel("Routing algorithm")
-        @UiLookup({"astar", "astarbi", "dijkstra", "dijkstrabi", "dijkstraOneToMany"})
-        @NotEmpty
-        public String getRoutingalgorithm()
-        {
-            return RoutingAlgorithm;
-        }
-
-        public void setRoutingalgorithm( String p_value )
-        {
-            RoutingAlgorithm = p_value;
-        }
-
-
-        @UiSection("Openstreetmap")
-        @UiComesAfter("routingalgorithm")
-        @UiLabel("")
-        public RoutingMap getRoutingmap()
-        {
-            return RoutingMap;
-        }
-
-        public void setRoutingmap( RoutingMap p_value )
-        {
-            RoutingMap = p_value;
-        }
-
-
-        @UiSection("Console")
-        @UiComesAfter("routingmap")
-        @UiLabel("")
-        public ConsoleData getConsole()
-        {
-            return Console;
-        }
-
-        public void setConsole( ConsoleData p_value )
-        {
-            Console = p_value;
-        }
-
-
-        @UiSection("Analysis Database")
-        @UiComesAfter("console")
-        @UiLabel("")
-        public DatabaseDriver getDatabase()
-        {
-            return Database;
-        }
-
-        public void setDatabase( DatabaseDriver p_value )
-        {
-            Database = p_value;
-        }
-
-        @UiHidden
-        public GeoPosition getViewpoint()
-        {
-            return ViewPoint;
-        }
-
-        public void setViewpoint( GeoPosition p_value )
-        {
-            ViewPoint = p_value;
-        }
-
-        @UiHidden
-        public int getZoom()
-        {
-            return Zoom;
-        }
-
-        public void setZoom( int p_value )
-        {
-            Zoom = Math.max( p_value, 1 );
-        }
-
-        @UiHidden
-        public int getThreadsleeptime()
-        {
-            return ThreadSleepTime;
-        }
-
-        public void setThreadsleeptime( int p_value )
-        {
-            ThreadSleepTime = Math.max( p_value, 0 );
-        }
-
-        @UiHidden
-        public int getWindowwidth()
-        {
-            return WindowWidth;
-        }
-
-        public void setWindowwidth( int p_value )
-        {
-            WindowWidth = Math.max( p_value, 150 );
-        }
-
-        @UiHidden
-        public int getWindowheight()
-        {
-            return WindowHeight;
-        }
-
-        public void setWindowheight( int p_value )
-        {
-            WindowHeight = Math.max( p_value, 150 );
-        }
-
-        /**
-         * class of the console configuration
-         */
-        public class ConsoleData
-        {
-            /**
-             * maximum char number on each line *
-             */
-            private int LineBuffer = 120;
-            /**
-             * maximum line numbers *
-             */
-            private int LineNumber = 120;
-
-
-            @UiLabel("Number Lines")
-            public int getLinenumber()
-            {
-                return LineNumber;
-            }
-
-            public void setLinenumber( int p_value )
-            {
-                LineNumber = Math.max( p_value, 1 );
-            }
-
-            @UiLabel("Character Line Buffer")
-            @UiComesAfter("linenumber")
-            public int getLinebuffer()
-            {
-                return LineBuffer;
-            }
-
-            public void setLinebuffer( int p_value )
-            {
-                LineBuffer = Math.max( p_value, 1 );
-            }
-        }
-
-        /**
-         * class of the routing map
-         */
-        public class RoutingMap implements Serializable
-        {
-            /**
-             * serialize version ID *
-             */
-            private static final long serialVersionUID = 1L;
-            /**
-             * download URL
-             */
-            private String url = "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf";
-            /**
-             * flag for reimport
-             */
-            private boolean reimport = false;
-
-            /**
-             * name of the map
-             */
-            private String name = "europe/germany/lowersaxony";
-
-
-            @UiLabel("Unique name of the OpenStreetMap data")
-            public String getName()
-            {
-                return name;
-            }
-
-            public void setName( String p_value )
-            {
-                name = p_value;
-            }
-
-
-            @UiLabel("Download URL of the OpenStreetMap PBF file")
-            @UiComesAfter("name")
-            public String getUrl()
-            {
-                return url;
-            }
-
-            public void setUrl( String p_value )
-            {
-                url = p_value;
-            }
-
-
-            @UiLabel("Reimport graph data")
-            @UiComesAfter("url")
-            public boolean getReimport()
-            {
-                return reimport;
-            }
-
-            public void setReimport( boolean p_value )
-            {
-                reimport = p_value;
-            }
-        }
-
-
-        /**
-         * class of the database driver
-         */
-        public class DatabaseDriver
-        {
-            /**
-             * enable / disable without removing settings *
-             */
-            private boolean active = false;
-            /**
-             * driver *
-             */
-            private String driver = null;
-
-            /**
-             * server url *
-             */
-            private String server = null;
-
-            /**
-             * login user name *
-             */
-            private String username = null;
-
-            /**
-             * login password *
-             */
-            private String password = null;
-            /**
-             * table prefix
-             */
-            private String tableprefix = null;
-
-
-            @UiLabel("Enable")
-            public boolean isActive()
-            {
-                return active;
-            }
-
-            public void setActive( boolean p_value )
-            {
-                active = p_value;
-            }
-
-            @UiLabel("Database Driver")
-            @UiComesAfter("active")
-            public String getDriver()
-            {
-                return driver;
-            }
-
-            public void setDriver( String p_value )
-            {
-                driver = p_value;
-            }
-
-
-            @UiLabel("Server URL")
-            @UiComesAfter("driver")
-            public String getServer()
-            {
-                return server;
-            }
-
-            public void setServer( String p_value )
-            {
-                server = p_value;
-            }
-
-
-            @UiLabel("Login Username")
-            @UiComesAfter("server")
-            public String getUsername()
-            {
-                return username;
-            }
-
-            public void setUsername( String p_value )
-            {
-                username = p_value;
-            }
-
-
-            @UiLabel("Login Password")
-            @UiComesAfter("username")
-            @UiMasked
-            public String getPassword()
-            {
-                return password;
-            }
-
-            public void setPassword( String p_value )
-            {
-                password = p_value;
-            }
-
-
-            @UiLabel("Table Prefix")
-            @UiComesAfter("password")
-            public String getTableprefix()
-            {
-                return tableprefix;
-            }
-
-            public void setTableprefix( String p_value )
-            {
-                tableprefix = p_value;
-            }
-
-            /**
-             * checks if the server can connect
-             *
-             * @return boolean flag
-             */
-            @UiHidden
-            public boolean isConnectable()
-            {
-                return ( active ) && ( driver != null ) && ( !driver.isEmpty() ) && ( server != null ) && ( !server.isEmpty() );
-            }
-        }
-
     }
 
 
@@ -825,18 +433,15 @@ public class CConfiguration
             InputStream l_stream = null;
             final String l_resource = this.toResourceName( this.toBundleName( p_basename, p_locale ), "properties" );
 
-            if ( !p_reload )
-                l_stream = p_loader.getResourceAsStream( l_resource );
+            if ( !p_reload ) l_stream = p_loader.getResourceAsStream( l_resource );
             else
             {
 
                 final URL l_url = p_loader.getResource( l_resource );
-                if ( l_url == null )
-                    return null;
+                if ( l_url == null ) return null;
 
                 final URLConnection l_connection = l_url.openConnection();
-                if ( l_connection == null )
-                    return null;
+                if ( l_connection == null ) return null;
 
                 l_connection.setUseCaches( false );
                 l_stream = l_connection.getInputStream();
@@ -847,7 +452,7 @@ public class CConfiguration
                 return new PropertyResourceBundle( new InputStreamReader( l_stream, "UTF-8" ) );
 
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
             }
             finally

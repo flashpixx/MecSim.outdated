@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
@@ -29,6 +29,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.Collection;
 
+
 /**
  * generator interface to define different object generator
  */
@@ -37,19 +38,22 @@ public interface IGenerator extends Serializable
 
     /**
      * method which defines the Color of a Source when a Generator was placed
+     *
      * @return Color of the Generator
      */
     public Color getColor();
 
     /**
      * method to generate a collection of cars
+     *
      * @param p_currentStep
      * @return collection of cars
      */
-    Collection<ICar> generate(int p_currentStep);
+    Collection<ICar> generate( int p_currentStep );
 
     /**
      * method to get the settings object
+     *
      * @return settings object
      */
     public CGeneratorSettings getSettings();

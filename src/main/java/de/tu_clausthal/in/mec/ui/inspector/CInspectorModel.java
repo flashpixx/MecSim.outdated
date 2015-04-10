@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui.inspector;
 
@@ -36,6 +36,8 @@ import java.util.Set;
 
 /**
  * table model to use the inspect object call
+ *
+ * @deprecated
  */
 public class CInspectorModel implements TableModel
 {
@@ -63,12 +65,10 @@ public class CInspectorModel implements TableModel
     {
         m_names.clear();
         m_values.clear();
-        if ( p_object == null )
-            return;
+        if ( p_object == null ) return;
 
         final Map<String, Object> l_data = p_object.inspect();
-        if ( ( l_data == null ) || ( l_data.isEmpty() ) )
-            return;
+        if ( ( l_data == null ) || ( l_data.isEmpty() ) ) return;
 
         for ( Map.Entry<String, Object> l_item : l_data.entrySet() )
         {
@@ -84,8 +84,7 @@ public class CInspectorModel implements TableModel
     @Override
     public final int getRowCount()
     {
-        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) )
-            return 0;
+        if ( ( m_values.isEmpty() ) || ( m_names.isEmpty() ) ) return 0;
 
         return m_names.size();
     }

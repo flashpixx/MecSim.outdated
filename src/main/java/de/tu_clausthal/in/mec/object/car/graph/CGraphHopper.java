@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car.graph;
 
@@ -43,6 +43,7 @@ import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CWeightingWrapper;
 import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -103,8 +104,12 @@ public class CGraphHopper extends GraphHopper
         this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
-        final File l_graphlocation = CConfiguration.getInstance().getConfigDir( "graphs", CConfiguration.getInstance().get().getRoutingmap().getName().replace( '/', '_' ) );
+        final File l_graphlocation = CConfiguration.getInstance().getLocation( "root", "graphs", CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/map/name" ).replace( '/', '_' ) );
         CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
+
+        // if reimported is set, delete graph directory
+        if ( CConfiguration.getInstance().get().<Boolean>getTraverse( "simulation/traffic/map/reimport" ) )
+            FileUtils.deleteQuietly( l_graphlocation );
 
         // convert OSM or load the graph
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
@@ -149,7 +154,7 @@ public class CGraphHopper extends GraphHopper
     {
         // calculate routes
         final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
-        l_request.setAlgorithm( CConfiguration.getInstance().get().getRoutingalgorithm() );
+        l_request.setAlgorithm( CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/routing/algorithm" ) );
 
         final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
@@ -162,20 +167,17 @@ public class CGraphHopper extends GraphHopper
 
         // get all paths
         final List<Path> l_routes = this.getPaths( l_request, l_result );
-        if ( l_routes.size() == 0 )
-            return null;
+        if ( l_routes.size() == 0 ) return null;
 
         // create edge list with routes
         final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
         for ( Path l_path : l_routes )
         {
-            if ( l_paths.size() >= p_maxroutes )
-                return l_paths;
+            if ( l_paths.size() >= p_maxroutes ) return l_paths;
 
             // we must delete the first and last element, because the items are "virtual"
             final List<EdgeIteratorState> l_edgelist = l_path.calcEdges();
-            if ( l_edgelist.size() < 3 )
-                continue;
+            if ( l_edgelist.size() < 3 ) continue;
 
             l_edgelist.remove( 0 );
             l_edgelist.remove( l_edgelist.size() - 1 );
@@ -208,8 +210,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final double getEdgeSpeed( final EdgeIteratorState p_edge )
     {
-        if ( p_edge == null )
-            return Double.POSITIVE_INFINITY;
+        if ( p_edge == null ) return Double.POSITIVE_INFINITY;
 
         return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
     }
@@ -322,7 +323,7 @@ public class CGraphHopper extends GraphHopper
         try
         {
             final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            final URL l_url = new URL( CConfiguration.getInstance().get().getRoutingmap().getUrl() );
+            final URL l_url = new URL( CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/map/url" ) );
 
             CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
 
@@ -332,7 +333,7 @@ public class CGraphHopper extends GraphHopper
 
             return l_output;
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -360,8 +361,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final void enableWeight( final String p_weight )
     {
-        if ( m_weight.containsKey( p_weight ) )
-            return;
+        if ( m_weight.containsKey( p_weight ) ) return;
 
         m_weight.get( p_weight ).setActive( true );
     }
@@ -373,8 +373,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final void disableWeight( final String p_weight )
     {
-        if ( m_weight.containsKey( p_weight ) )
-            return;
+        if ( m_weight.containsKey( p_weight ) ) return;
 
         m_weight.get( p_weight ).setActive( false );
     }
@@ -399,8 +398,7 @@ public class CGraphHopper extends GraphHopper
     {
         final List<String> l_active = new LinkedList<>();
         for ( Map.Entry<String, IWeighting> l_item : m_weight.entrySet() )
-            if ( l_item.getValue().isActive() )
-                l_active.add( l_item.getKey() );
+            if ( l_item.getValue().isActive() ) l_active.add( l_item.getKey() );
 
         return CCommon.CollectionToArray( String[].class, l_active );
     }

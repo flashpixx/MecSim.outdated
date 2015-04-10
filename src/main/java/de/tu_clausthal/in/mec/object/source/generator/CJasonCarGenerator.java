@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
@@ -40,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
+
 
 /**
  * Class to Generate Jason Cars
@@ -73,12 +74,12 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
     }
 
     @Override
-    public final Collection<ICar> generate(int p_currentStep)
+    public final Collection<ICar> generate( int p_currentStep )
     {
         final Collection<ICar> l_sources = new HashSet<>();
-
-        if(p_currentStep % m_restriction == 0){
-            int l_numberOfCars = m_settings .getSample();
+        if ( p_currentStep % m_restriction == 0 )
+        {
+            int l_numberOfCars = m_settings.getSample();
 
             for ( int i = 0; i < l_numberOfCars; i++ )
                 l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
@@ -105,8 +106,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
 
         try
         {
-            if ( !l_output.exists() )
-                FileUtils.write( l_output, l_asldata );
+            if ( !l_output.exists() ) FileUtils.write( l_output, l_asldata );
             else if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_asldata, "MD5" ) ) )
             {
                 l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
@@ -118,7 +118,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
                 FileUtils.write( l_output, l_asldata );
             }
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
         }
     }

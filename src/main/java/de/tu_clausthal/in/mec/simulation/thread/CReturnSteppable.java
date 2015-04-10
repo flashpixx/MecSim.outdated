@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.simulation.thread;
 
@@ -77,16 +77,15 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
 
             final Collection<?> l_data = m_object.step( m_iteration, m_layer );
             final Collection<IReturnSteppableTarget> l_targets = m_object.getTargets();
-            if ( ( l_data != null ) && ( l_targets != null ) )
-                for ( IReturnSteppableTarget l_target : l_targets )
-                    l_target.push( l_data );
+            if ( ( l_data != null ) && ( l_targets != null ) ) for ( IReturnSteppableTarget l_target : l_targets )
+                l_target.push( l_data );
 
 
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
 
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }

@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,19 +19,19 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
@@ -69,11 +69,11 @@ public class COSMViewer extends JXMapViewer
         final DefaultTileFactory l_tileFactory = new DefaultTileFactory( l_info );
         l_tileFactory.setThreadPoolSize( Runtime.getRuntime().availableProcessors() );
 
-        LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getConfigDir(), false );
+        LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getLocation( "root" ), false );
         this.setTileFactory( l_tileFactory );
-        this.setZoom( CConfiguration.getInstance().get().getZoom() );
-        this.setCenterPosition( CConfiguration.getInstance().get().getViewpoint() );
-        this.setAddressLocation( CConfiguration.getInstance().get().getViewpoint() );
+        this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
 
         this.setOverlayPainter( m_painter );
 
@@ -84,21 +84,31 @@ public class COSMViewer extends JXMapViewer
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
         this.addKeyListener( m_keylistener );
 
+        this.resetConfiguration();
+
         CBootstrap.afterOSMViewerInit( this );
     }
 
-    /**
-     * static method to get the OSM viewer from the current UI widget
-     *
-     * @return OSM Viewer
-     */
-    public static COSMViewer getSimulationOSM()
-    {
-        if ( !CSimulation.getInstance().hasUI() )
-            return null;
 
-        return (COSMViewer) CSimulation.getInstance().getUI().getWidget( "OSM" );
+    /**
+     * resets the view *
+     */
+    public void resetConfiguration()
+    {
+        this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
     }
+
+    /**
+     * stores the current configuration
+     */
+    public void setConfiguration()
+    {
+        CConfiguration.getInstance().get().<Integer>setTraverse( "ui/zoom", this.getZoom() );
+        CConfiguration.getInstance().get().<GeoPosition>setTraverse( "ui/geoposition", this.getCenterPosition() );
+    }
+
 
     /**
      * returns the compounend painter

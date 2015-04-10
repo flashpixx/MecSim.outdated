@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,13 +19,13 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.ui.CUI;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -55,6 +55,14 @@ public class CMain
 
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CMain()
+    {
+    }
+
+
+    /**
      * main program
      *
      * @param p_args commandline arguments
@@ -67,6 +75,7 @@ public class CMain
         l_clioptions.addOption( "help", false, CCommon.getResourceString( CMain.class, "help" ) );
         l_clioptions.addOption( "configuration", true, CCommon.getResourceString( CMain.class, "config" ) );
         l_clioptions.addOption( "nogui", true, CCommon.getResourceString( CMain.class, "nogui" ) );
+        l_clioptions.addOption( "uibindport", true, CCommon.getResourceString( CMain.class, "uibindport" ) );
         l_clioptions.addOption( "step", true, CCommon.getResourceString( CMain.class, "step" ) );
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
@@ -95,8 +104,7 @@ public class CMain
 
         // create logger instance
         String l_logfile = "mecsim-" + ( new SimpleDateFormat( "yyyy-dd-MM-HH-mm" ) ).format( Calendar.getInstance().getTime() ) + ".txt";
-        if ( l_cli.hasOption( "logfile" ) )
-            l_logfile = l_cli.getOptionValue( "logfile" );
+        if ( l_cli.hasOption( "logfile" ) ) l_logfile = l_cli.getOptionValue( "logfile" );
 
         Level l_loglevel = Level.OFF;
         if ( l_cli.hasOption( "loglevel" ) )
@@ -106,9 +114,8 @@ public class CMain
 
 
         // read the configuration directory (default ~/.mecsim)
-        File l_defaultconfig = CConfiguration.getInstance().getConfigDir();
-        if ( l_cli.hasOption( "configuration" ) )
-            l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
+        File l_defaultconfig = CConfiguration.getInstance().getLocation( "root" );
+        if ( l_cli.hasOption( "configuration" ) ) l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
 
         CConfiguration.getInstance().setConfigDir( l_defaultconfig );
         CConfiguration.getInstance().read();
@@ -118,11 +125,16 @@ public class CMain
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
         CLogger.out( CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gb ), Runtime.getRuntime().maxMemory() / c_gb < c_neededmemory );
+        try
+        {
+            if ( ( l_cli.hasOption( "uibindport" ) ) )
+                CConfiguration.getInstance().get().setTraverse( "ui/bindport", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
+        }
+        catch ( final NumberFormatException l_exception ) {}
 
 
         // run application
-        if ( !l_cli.hasOption( "nogui" ) )
-            CSimulation.getInstance().setUI( new CFrame() );
+        if ( !l_cli.hasOption( "nogui" ) ) CUI.main( null );
         else
         {
             try
@@ -134,7 +146,7 @@ public class CMain
                 CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "step" ) ) );
 
             }
-            catch ( Exception l_exception )
+            catch ( final Exception l_exception )
             {
                 CLogger.error( l_exception );
                 CLogger.out( CCommon.getResourceString( CMain.class, "loadingerror" ) );

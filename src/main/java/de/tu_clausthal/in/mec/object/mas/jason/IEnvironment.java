@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
@@ -28,10 +28,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.simulation.CSimulation;
 import de.tu_clausthal.in.mec.simulation.ISerializable;
-import de.tu_clausthal.in.mec.ui.CBrowser;
-import de.tu_clausthal.in.mec.ui.CFrame;
+import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -64,23 +62,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      */
     protected transient CBrowser m_mindinspector = null;
 
-    /**
-     * ctor of Jason structure
-     */
-    public IEnvironment()
-    {
-        this( null );
-    }
-
-    /**
-     * ctor of Jason structure
-     *
-     * @param p_frame frame object set Jason mindinspector
-     */
-    public IEnvironment( final CFrame p_frame )
-    {
-        this.setFrame( p_frame );
-    }
 
     /**
      * creates an agent filename on an agent name
@@ -94,7 +75,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        final File l_asl = CConfiguration.getInstance().getMASDir( p_agentname + ".asl" );
+        final File l_asl = CConfiguration.getInstance().getLocation( "mas", p_agentname + ".asl" );
         if ( l_asl.exists() )
             throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "aslexist" ) );
 
@@ -115,7 +96,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        return CConfiguration.getInstance().getMASDir( p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
+        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
     }
 
     /**
@@ -127,7 +108,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     public static String[] getAgentFiles()
     {
         final List<String> l_list = new LinkedList<>();
-        for ( String l_file : CConfiguration.getInstance().getMASDir().list( new WildcardFileFilter( "*.asl" ) ) )
+        for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*.asl" ) ) )
             l_list.add( new File( l_file ).getName() );
 
         return CCommon.CollectionToArray( String[].class, l_list );
@@ -145,26 +126,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         {
             Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
         }
     }
 
-    /**
-     * set the frame - if not exists
-     *
-     * @param p_frame frame object set Jason mindinspector
-     */
-    public final void setFrame( final CFrame p_frame )
-    {
-        if ( ( p_frame == null ) || ( m_mindinspector != null ) )
-            return;
-
-        // register web mindinspector (DoS threat)
-        m_mindinspector = new CBrowser();
-        p_frame.addWidget( "Jason Mindinspector", m_mindinspector );
-    }
 
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )
@@ -172,8 +139,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         super.step( p_currentstep, p_layer );
 
         // mindinspector needs to load if there exists agents
-        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
-            m_mindinspector.load( "http://localhost:3272" );
+        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) ) m_mindinspector.load( "http://localhost:3272" );
     }
 
     @Override
@@ -184,17 +150,23 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         m_data.clear();
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onDeserializationInitialization()
     {
-        if ( CSimulation.getInstance().hasUI() )
-            CSimulation.getInstance().getUI().removeWidget( "Jason Mindinspector" );
+        //if ( CSimulation.getInstance().hasUI() )
+        //    CSimulation.getInstance().getUIServer().removeWidget( "Jason Mindinspector" );
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public final void onDeserializationComplete()
     {
-        this.setFrame( CSimulation.getInstance().getUI() );
+        //this.setFrame( CSimulation.getInstance().getUIServer() );
     }
 
     /**
@@ -203,11 +175,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * @param p_stream stream
      * @throws IOException            throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
+     * @bug UI frame
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 
-        this.setFrame( CSimulation.getInstance().getUI() );
+        //this.setFrame( CSimulation.getInstance().getUIServer() );
     }
 }

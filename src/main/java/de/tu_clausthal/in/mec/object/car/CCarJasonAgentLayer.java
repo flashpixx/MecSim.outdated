@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,13 +19,12 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.car;
 
 
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import de.tu_clausthal.in.mec.ui.CFrame;
 
 
 /**
@@ -37,23 +36,5 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * ctor of Jason structure
-     */
-    public CCarJasonAgentLayer()
-    {
-        super();
-    }
-
-    /**
-     * ctor of Jason structure
-     *
-     * @param p_frame frame object set Jason mindinspector
-     */
-    public CCarJasonAgentLayer( final CFrame p_frame )
-    {
-        super( p_frame );
-    }
 
 }

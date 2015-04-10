@@ -1,0 +1,203 @@
+<?xml version="1.0" ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns = "http://www.w3.org/1999/xhtml" >
+
+<head >
+    <title >MecSim - Traffic Simulation</title >
+
+    <!-- jQuery https://jquery.com/ ------------------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/jquery-2.1.3.min.js" ></script >
+    <!------------------------------------------------------------------------------------------------------------->
+
+    <!-- jQuery-UI https://jqueryui.com/ -------------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/jquery-ui-1.11.4/jquery-ui.min.js" ></script >
+    <link href = "jscss/jquery-ui-1.11.4/jquery-ui.min.css" rel = "stylesheet" />
+
+    <link href = "jscss/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel = "stylesheet" />
+    <link href = "jscss/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel = "stylesheet" />
+    <!------------------------------------------------------------------------------------------------------------->
+
+    <!-- D3.js http://d3js.org/ ----------------------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/d3-3.5.5.min.js" ></script >
+    <!------------------------------------------------------------------------------------------------------------->
+
+    <!-- jqWidgets  http://www.jqwidgets.com/ --------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/jqwidgets-3.7.1/jqxcore.js" ></script >
+    <script type = "text/javascript" src = "jscss/jqwidgets-3.7.1/jqxbuttons.js" ></script >
+    <script type = "text/javascript" src = "jscss/jqwidgets-3.7.1/jqxsplitter.js" ></script >
+    <link href = "jscss/jqwidgets-3.7.1/jqx.base.css" rel = "stylesheet" />
+    <!------------------------------------------------------------------------------------------------------------->
+
+    <!-- Codemirror  hhttp://codemirror.net/ ---------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/codemirror-5.1/lib/codemirror.js" ></script >
+    <link href = "jscss/codemirror-5.1/lib/codemirror.css" rel = "stylesheet" />
+    <!------------------------------------------------------------------------------------------------------------->
+
+    <!-- MecSim: OUR STUFF ---------------------------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/main.js" ></script >
+    <link href = "jscss/layout.css" rel = "stylesheet" />
+    <!------------------------------------------------------------------------------------------------------------->
+
+</head >
+
+<body >
+
+<div id = "jqxSplitter" >
+    <div id = "mecsim_menu" >
+
+        <div id = "mecsim_accordion" class = "accordion" >
+
+            <h3 >File</h3 >
+
+            <div class = "align-center-div" >
+
+                <ul id = "root_menu" >
+                    <li >
+                        <a id = "mecsim_preferences" class = "template" >Preferences</a >
+                    </li >
+                    <li >
+                        <a href = "template/configuration.htm" class = "template" >Configuration</a >
+                    </li >
+                    <li >
+                        <a class = "template" >Load</a >
+                    </li >
+                    <li >
+                        <a class = "template" >Save</a >
+                    </li >
+                    <li >
+                        <a class = "template" >Screenshot</a >
+                    </li >
+                    <li >
+                        <a href = "template/local.htm" class = "template" >Local</a >
+                    </li >
+                </ul >
+
+            </div >
+
+            <h3 >Simulation</h3 >
+
+            <div class = "align-center-div" >
+
+                <ul id = "simulation_menu" >
+                    <li >
+                        <a id = "mecsim_start_button" >Start Simulation</a >
+                    </li >
+                    <li >
+                        <a id = "mecsim_stop_button" >Stop Simulation</a >
+                    </li >
+                    <li >
+                        <a id = "mecsim_reset_button" >Reset Simulation</a >
+                    </li >
+                </ul >
+                <br />
+
+                <p >
+                    <label for = "speed" >Speed:</label >
+                    <input type = "text" id = "speed" readonly style = "border:0;" >
+                </p >
+
+                <div id = "mecsim_speed_slider" ></div >
+
+            </div >
+
+            <h3 >Sources</h3 >
+
+            <div class = "align-center-div" >
+
+            </div >
+
+            <h3 >Editor</h3 >
+
+            <div class = "align-center-div" >
+
+                <label for = "mecsim_agent_files" >Select a file</label >
+                <select name = "agentfiles" id = "mecsim_agent_files" ></select >
+                <br />
+                <a id = "mecsim_editor" href = "template/editor.htm"
+                   class = "template_button fixed_width_button" >Load</a >
+                <button id = "mecsim_delete_asl" class = "fixed_width_button" >Delete</button >
+                <button id = "mecsim_new_asl" class = "fixed_width_button" >New</button >
+                <button id = "mecsim_save_asl" class = "fixed_width_button" >Save</button >
+
+            </div >
+
+            <h3 >Statistics</h3 >
+
+            <div class = "align-center-div" ></div >
+
+            <h3 >Getting Help</h3 >
+
+            <div class = "align-center-div" >
+
+                <ul id = "help_menu" >
+                    <li >
+                        <a class = "template" >Help</a >
+                    </li >
+                    <li >
+                        <a id = "mecsim_user_documentation" href = "template/userdoc.htm" class = "template" >User
+                            Dokumentation</a >
+                    </li >
+                    <li >
+                        <a href = "template/develdoc.htm" class = "template" >Developer Dokumentation</a >
+                    </li >
+                </ul >
+
+            </div >
+
+        </div >
+
+    </div >
+    <div id = "mecsim_content" >
+        <script type = "text/javascript" >
+            $.getJSON( "cconfiguration/get", function( p_data ) {
+                $("#mecsim_content").append(
+                    "<div id=\"about\">" +
+                    "<div class=\"table\">" +
+                    "<div class=\"row\">  <div class=\"cell text_align_center\"><a href=\"" + p_data.manifest["project-url"] + "\">" + p_data.manifest["project-name"] + "</a></div>  </div>" +
+                    "<br/>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">License</div></div>       <div class=\"cell\"><a href=\"" + p_data.manifest["license-url"] + "\">" + p_data.manifest["license"] + "</a></div></div>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildversion</div></div>  <div class=\"cell\">" + p_data.manifest["build-version"] + "</div></div>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildnumber</div></div>   <div class=\"cell\">" + p_data.manifest["build-number"] + "</a></div></div>" +
+                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildcommit</div></div>   <div class=\"cell\">" + p_data.manifest["build-commit"] + "</a></div></div>" +
+                    "</div>" +
+                    "</div>"
+                );
+            });
+
+
+
+        </script >
+    </div >
+</div >
+
+<!-- start and stop error messages -->
+<div id = "mecsim_stop_error" >
+    <div class = "dialog-error" >
+        <p id = "mecsim_stop_error_text" >
+            <span class = "ui-icon ui-icon-alert" ></span >
+        </p >
+    </div >
+</div >
+
+<div id = "mecsim_start_error" >
+    <div class = "dialog-error" >
+        <p id = "mecsim_start_error_text" >
+            <span class = "ui-icon ui-icon-alert" ></span >
+        </p >
+    </div >
+</div >
+<!-- ************************************ -->
+
+<!-- form to create new asl file -->
+<div id = "mecsim_create_asl_form" title = "Create new agent" >
+
+    <form >
+        <fieldset >
+            <label for = "new_asl" >Enter asl file name:</label >
+            <input type = "text" name = "create_new_asl" id = "new_asl" >
+        </fieldset >
+    </form >
+</div >
+<!-- *********************************** -->
+</body >
+
+</html >

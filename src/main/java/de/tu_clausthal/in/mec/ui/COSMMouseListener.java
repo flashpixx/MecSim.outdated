@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,16 +19,15 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CCommonUI;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.source.ISource;
-import de.tu_clausthal.in.mec.object.source.sourceTarget.CAtomTarget;
+import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
 import de.tu_clausthal.in.mec.simulation.CSimulation;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -55,6 +54,9 @@ class COSMMouseListener extends MouseAdapter
     private boolean m_doubleClick = false;
 
 
+    /**
+     * @bug UI frame
+     */
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
@@ -96,7 +98,7 @@ class COSMMouseListener extends MouseAdapter
                 final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
                 final Point2D l_mousePosition = this.getMousePosition( p_event, l_viewer );
                 final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
-                final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUI().getJMenuBar() ).getSelectedSourceName();
+                //final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUIServer().getJMenuBar() ).getSelectedSourceName();
                 final COSMKeyListener l_keyListener = l_viewer.getKeyListener();
 
                 //If no Shortcut is pressed (Place or Remove Source)
@@ -113,8 +115,8 @@ class COSMMouseListener extends MouseAdapter
                         }
                     }
 
-                    final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
-                    l_sourcelayer.createSource( l_geoPosition, l_selectedGenerator, l_aslname );
+                    //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                    //l_sourcelayer.createSource( l_geoPosition, l_selectedGenerator, l_aslname );
                 }
 
                 //Strg Key is pressed (Place or Remove Generator)
@@ -129,8 +131,8 @@ class COSMMouseListener extends MouseAdapter
 
                             if ( l_source.getGenerator() == null )
                             {
-                                final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
-                                l_sourcelayer.setGenerator( l_source, l_selectedGenerator, l_aslname );
+                                //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                                //l_sourcelayer.setGenerator( l_source, l_selectedGenerator, l_aslname );
                             }
                             else
                             {
@@ -146,24 +148,24 @@ class COSMMouseListener extends MouseAdapter
                 if ( l_keyListener.isShiftPressed() && l_keyListener.getKeyPressedCount() < 2 )
                 {
 
-                    for(CAtomTarget l_target : l_sourcelayer.getTargets())
+                    for ( CAtomTarget l_target : l_sourcelayer.getTargets() )
                     {
                         //Check for Target in Range and remove it
-                        if( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel(l_target.getPosition(), l_viewer.getZoom()), c_rangesize) )
+                        if ( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel( l_target.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
                         {
-                            l_sourcelayer.removeTarget(l_target);
+                            l_sourcelayer.removeTarget( l_target );
                             return;
                         }
                     }
 
                     //If not add Target
-                    l_sourcelayer.createTarget(l_geoPosition);
+                    l_sourcelayer.createTarget( l_geoPosition );
                 }
 
                 m_doubleClick = false;
             }
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
         }
@@ -206,8 +208,7 @@ class COSMMouseListener extends MouseAdapter
      */
     protected boolean inRange( final Point2D p_checkposition, final Point2D p_center, final int p_size )
     {
-        if ( ( p_checkposition == null ) || ( p_center == null ) )
-            return false;
+        if ( ( p_checkposition == null ) || ( p_center == null ) ) return false;
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }

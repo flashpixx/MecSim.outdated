@@ -1,5 +1,5 @@
 /**
- * @cond
+ * @cond LICENSE
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
@@ -19,7 +19,7 @@
  * # along with this program. If not, see http://www.gnu.org/licenses/                  #
  * ######################################################################################
  * @endcond
- **/
+ */
 
 package de.tu_clausthal.in.mec.object.analysis;
 
@@ -57,14 +57,13 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     public CDatabase()
     {
-        if ( !CConfiguration.getInstance().get().getDatabase().isConnectable() )
-            return;
+        if ( !this.isConnectable() ) return;
 
         m_datasource = new BasicDataSource();
-        m_datasource.setDriverClassName( CConfiguration.getInstance().get().getDatabase().getDriver() );
-        m_datasource.setUrl( CConfiguration.getInstance().get().getDatabase().getServer() );
-        m_datasource.setUsername( CConfiguration.getInstance().get().getDatabase().getUsername() );
-        m_datasource.setPassword( CConfiguration.getInstance().get().getDatabase().getPassword() );
+        m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>getTraverse( "database/driver" ) );
+        m_datasource.setUrl( CConfiguration.getInstance().get().<String>getTraverse( "database/url" ) );
+        m_datasource.setUsername( CConfiguration.getInstance().get().<String>getTraverse( "database/username" ) );
+        m_datasource.setPassword( CConfiguration.getInstance().get().<String>getTraverse( "database/password" ) );
 
         this.createTableIfNotExists( "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)", new String[]{"add primary key (step,zonegroup,zone)"} );
     }
@@ -79,7 +78,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     protected void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
     {
-        final String l_table = CConfiguration.getInstance().get().getDatabase().getTableprefix() == null ? p_tablename : CConfiguration.getInstance().get().getDatabase().getTableprefix() + p_tablename;
+        final String l_table = CConfiguration.getInstance().get().<String>getTraverse( "database/tableprefix" ) == null ? p_tablename : CConfiguration.getInstance().get().<String>getTraverse( "database/tableprefix" ) + p_tablename;
 
         try (
                 final Connection l_connect = m_datasource.getConnection();
@@ -94,11 +93,25 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
             }
             l_result.close();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }
     }
+
+    /**
+     * check if database is connectable
+     *
+     * @return boolean of connectivity
+     */
+    private boolean isConnectable()
+    {
+        final String l_driver = CConfiguration.getInstance().get().<String>getTraverse( "database/driver" );
+        final String l_url = CConfiguration.getInstance().get().<String>getTraverse( "database/url" );
+
+        return CConfiguration.getInstance().get().<Boolean>getTraverse( "database/active" ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
+    }
+
 
     @Override
     public int getCalculationIndex()

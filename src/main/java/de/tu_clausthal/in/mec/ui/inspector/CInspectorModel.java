@@ -45,15 +45,15 @@ public class CInspectorModel implements TableModel
     /**
      * array with names
      */
-    private ArrayList<String> m_names = new ArrayList<>();
+    private final ArrayList<String> m_names = new ArrayList<>();
     /**
      * array with object values
      */
-    private ArrayList<Object> m_values = new ArrayList<>();
+    private final ArrayList<Object> m_values = new ArrayList<>();
     /**
      * push for model listeners
      */
-    private Set<TableModelListener> m_listener = new HashSet<>();
+    private final Set<TableModelListener> m_listener = new HashSet<>();
 
 
     /**

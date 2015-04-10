@@ -36,6 +36,7 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
 
     /**
      * object reference
+     *
      */
     protected final T m_object;
 

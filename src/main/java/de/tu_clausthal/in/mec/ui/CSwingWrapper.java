@@ -37,6 +37,8 @@ public class CSwingWrapper<T extends JComponent> extends SwingNode
 {
     /**
      * swing component *
+     *
+     * @tparam T swing type
      */
     private final T m_component;
 

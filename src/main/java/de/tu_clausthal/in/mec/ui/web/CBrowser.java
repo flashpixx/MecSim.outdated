@@ -71,13 +71,6 @@ public class CBrowser extends GridPane
 
         GridPane.setConstraints( m_webview, 0, 1, this.setMenuBar( p_menu ), 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS );
         this.getChildren().add( m_webview );
-
-        /*
-        this.getColumnConstraints().addAll(
-                new ColumnConstraints( 100, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true ),
-                new ColumnConstraints( 40, 40, 40, Priority.NEVER, HPos.CENTER, true )
-        );
-        */
     }
 
     /**
@@ -270,9 +263,13 @@ public class CBrowser extends GridPane
      */
     public enum EMenu
     {
+        /** value of no-menu * */
         None,
+        /** value of menu with back-forward-button **/
         BackForward,
+        /** value of menu with URL-menu **/
         URL,
+        /** value of menu with all option **/
         Full
     }
 

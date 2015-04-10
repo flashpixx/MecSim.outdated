@@ -75,7 +75,7 @@ public abstract class IUIListener implements MouseListener
      */
     protected final double iconscale( final JXMapViewer p_viewer )
     {
-        return iconsize( p_viewer ) / (double) ( c_maxzoom - c_miniconsize );
+        return this.iconsize( p_viewer ) / (double) ( c_maxzoom - c_miniconsize );
     }
 
     /**

@@ -207,6 +207,7 @@ public class CAgentEnvironment
     /** MAS types * */
     public enum EType
     {
+        /** Jason value * */
         Jason
     }
 

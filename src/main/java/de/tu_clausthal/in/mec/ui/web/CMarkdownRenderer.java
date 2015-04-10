@@ -269,7 +269,10 @@ public class CMarkdownRenderer extends LinkRenderer
      */
     public enum EHTMLType
     {
+
+        /** value of a HTML fragment * */
         Fragment,
+        /** value of a full HTML document **/
         Document
     }
 

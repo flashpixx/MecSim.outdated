@@ -88,6 +88,7 @@ public class COSMKeyListener implements KeyListener
             case KeyEvent.VK_DOWN:
                 l_delta_y = c_offset;
                 break;
+            default:
         }
 
         if ( l_delta_x != 0 || l_delta_y != 0 )
@@ -112,6 +113,8 @@ public class COSMKeyListener implements KeyListener
 
     /**
      * Get Strg Pressed Status
+     *
+     * @return boolean of existance
      */
     public final boolean isStrgPressed()
     {
@@ -120,6 +123,8 @@ public class COSMKeyListener implements KeyListener
 
     /**
      * Get ShiftPressed Status
+     *
+     * @return boolean of existance
      */
     public final boolean isShiftPressed()
     {
@@ -128,6 +133,8 @@ public class COSMKeyListener implements KeyListener
 
     /**
      * Get AltPressed Status
+     *
+     * @return boolean of existance
      */
     public final boolean isAltPressed()
     {
@@ -136,6 +143,8 @@ public class COSMKeyListener implements KeyListener
 
     /**
      * Get Key Pressed Status
+     *
+     * @return boolean of existance
      */
     public final boolean isAnyKeyPressed()
     {
@@ -144,6 +153,8 @@ public class COSMKeyListener implements KeyListener
 
     /**
      * Get the Number of Keys which are pressed
+     *
+     * @return key number
      */
     public final int getKeyPressedCount()
     {

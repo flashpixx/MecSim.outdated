@@ -280,7 +280,7 @@ public class CGraphHopper extends GraphHopper
     public final synchronized int getNumberOfObjects()
     {
         int l_count = 0;
-        for ( CEdge l_item : m_edgecell.values() )
+        for ( CEdge<ICar, ?> l_item : m_edgecell.values() )
             l_count += l_item.getNumberOfObjects();
         return l_count;
     }
@@ -302,13 +302,14 @@ public class CGraphHopper extends GraphHopper
      * @param p_edgestate edge object
      * @return linkage object
      * @note listener object will be set at the edge instantiation process
+     * @todo check generic
      */
-    public final synchronized CEdge getEdge( final EdgeIteratorState p_edgestate )
+    public final synchronized CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
     {
         CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
         if ( l_edge == null )
         {
-            l_edge = new CEdge( p_edgestate );
+            l_edge = new CEdge<>( p_edgestate );
             l_edge.addListener( m_edgelister );
             m_edgecell.put( l_edge.getEdgeID(), l_edge );
         }

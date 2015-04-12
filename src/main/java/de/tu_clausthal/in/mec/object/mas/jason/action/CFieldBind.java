@@ -109,7 +109,15 @@ public class CFieldBind extends IAction
      */
     public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
+        m_bind.put(
+                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
+                        p_object, CReflection.getClassFields(
+                        p_object.getClass(), new CFieldFilter(
+                                p_forbiddennames
+                        )
+                )
+                )
+        );
     }
 
 
@@ -153,7 +161,13 @@ public class CFieldBind extends IAction
 
             // set value with the setter handle (for numeric types we need an explicit type cast, because Jason returns only double values)
             if ( l_args.get( 2 ).isNumeric() )
-                l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertNumber( l_handle.getField().getType(), ( (NumberTerm) l_args.get( 2 ) ).solve() ) );
+                l_handle.getSetter().invoke(
+                        l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertNumber(
+                                l_handle.getField().getType(), ( (NumberTerm) l_args.get(
+                                        2
+                                ) ).solve()
+                        )
+                );
             else
                 l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
 

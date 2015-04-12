@@ -79,76 +79,96 @@ public class CConfiguration
 
 
             // language data
-            put( "language", new CNameHashMap.CImmutable()
-            {{
-                    put( "current", "en" );
-                    put( "allow", new ArrayList<String>()
+            put(
+                    "language", new CNameHashMap.CImmutable()
                     {{
-                            add( "en" );
-                            add( "de" );
-                        }} );
-                }} );
+                            put( "current", "en" );
+                            put(
+                                    "allow", new ArrayList<String>()
+                                    {{
+                                            add( "en" );
+                                            add( "de" );
+                                        }}
+                            );
+                        }}
+            );
 
 
             // console data
-            put( "console", new CNameHashMap.CImmutable()
-            {{
-                    put( "LineBuffer", 120 );
-                    put( "LineNumber", 120 );
-                }} );
+            put(
+                    "console", new CNameHashMap.CImmutable()
+                    {{
+                            put( "LineBuffer", 120 );
+                            put( "LineNumber", 120 );
+                        }}
+            );
 
 
             // ui data
-            put( "ui", new CNameHashMap.CImmutable()
-            {{
-                    put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
-                    put( "windowheight", 1024.0 );
-                    put( "windowwidth", 1280.0 );
-                    put( "bindport", 9876 );
-                    put( "zoom", 4 );
-                }} );
+            put(
+                    "ui", new CNameHashMap.CImmutable()
+                    {{
+                            put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                            put( "windowheight", 1024.0 );
+                            put( "windowwidth", 1280.0 );
+                            put( "bindport", 9876 );
+                            put( "zoom", 4 );
+                        }}
+            );
 
 
             // main simulation data
-            put( "simulation", new CNameHashMap.CImmutable()
-            {{
-                    put( "threadsleeptime", 25 );
-
-                    put( "traffic", new CNameHashMap.CImmutable()
+            put(
+                    "simulation", new CNameHashMap.CImmutable()
                     {{
-                            put( "cellsampling", 2 );
-                            put( "routing", new CNameHashMap.CImmutable()
-                            {{
-                                    put( "algorithm", "astarbi" );
-                                    put( "allow", new ArrayList<String>()
+                            put( "threadsleeptime", 25 );
+
+                            put(
+                                    "traffic", new CNameHashMap.CImmutable()
                                     {{
-                                            add( "astar" );
-                                            add( "astarbi" );
-                                            add( "dijkstra" );
-                                            add( "dijkstrabi" );
-                                            add( "dijkstraOneToMany" );
-                                        }} );
-                                }} );
-                            put( "map", new CNameHashMap.CImmutable()
-                            {{
-                                    put( "reimport", false );
-                                    put( "name", "europe/germany/lowersaxony" );
-                                    put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
-                                }} );
-                        }} );
-                }} );
+                                            put( "cellsampling", 2 );
+                                            put(
+                                                    "routing", new CNameHashMap.CImmutable()
+                                                    {{
+                                                            put( "algorithm", "astarbi" );
+                                                            put(
+                                                                    "allow", new ArrayList<String>()
+                                                                    {{
+                                                                            add( "astar" );
+                                                                            add( "astarbi" );
+                                                                            add( "dijkstra" );
+                                                                            add( "dijkstrabi" );
+                                                                            add( "dijkstraOneToMany" );
+                                                                        }}
+                                                            );
+                                                        }}
+                                            );
+                                            put(
+                                                    "map", new CNameHashMap.CImmutable()
+                                                    {{
+                                                            put( "reimport", false );
+                                                            put( "name", "europe/germany/lowersaxony" );
+                                                            put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                                        }}
+                                            );
+                                        }}
+                            );
+                        }}
+            );
 
 
             // database data
-            put( "database", new CNameHashMap.CImmutable()
-            {{
-                    put( "active", false );
-                    put( "driver", null );
-                    put( "url", null );
-                    put( "tableprefix", null );
-                    put( "username", null );
-                    put( "password", null );
-                }} );
+            put(
+                    "database", new CNameHashMap.CImmutable()
+                    {{
+                            put( "active", false );
+                            put( "driver", null );
+                            put( "url", null );
+                            put( "tableprefix", null );
+                            put( "username", null );
+                            put( "password", null );
+                        }}
+            );
 
 
             // manifest data
@@ -358,7 +378,13 @@ public class CConfiguration
         {
             final URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
-                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke( l_classloader, CCommon.getResourceURL( m_location.get( "jar" ) + File.separator + l_jar ) );
+                CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke(
+                        l_classloader, CCommon.getResourceURL(
+                                m_location.get(
+                                        "jar"
+                                ) + File.separator + l_jar
+                        )
+                );
         }
         catch ( final Throwable l_throwable )
         {
@@ -380,8 +406,24 @@ public class CConfiguration
         p_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
 
         // check allow values
-        p_input.setTraverse( "ui/current", CCommon.getCheckedValue( p_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse( "ui/current" ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" ) ) );
-        p_input.setTraverse( "simulation/traffic/routing/algorithm", CCommon.getCheckedValue( p_input.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<String>getTraverse( "simulation/traffic/routing/algorithm" ), m_configuration.<ArrayList<String>>getTraverse( "simulation/traffic/routing/allow" ) ) );
+        p_input.setTraverse(
+                "ui/current", CCommon.getCheckedValue(
+                        p_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse(
+                                "ui/current"
+                        ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" )
+                )
+        );
+        p_input.setTraverse(
+                "simulation/traffic/routing/algorithm", CCommon.getCheckedValue(
+                        p_input.<String>getTraverse(
+                                "simulation/traffic/routing/algorithm"
+                        ), m_configuration.<String>getTraverse(
+                                "simulation/traffic/routing/algorithm"
+                        ), m_configuration.<ArrayList<String>>getTraverse(
+                                "simulation/traffic/routing/allow"
+                        )
+                )
+        );
 
         // set data into configuration
         for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )

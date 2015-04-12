@@ -87,7 +87,9 @@ public class CCarJasonAgent extends CDefaultCar
                 }};
 
             // add the belief bind to the agent
-            final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", this, l_forbidden );
+            final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
+                    "self", this, l_forbidden
+            );
             m_agent.getBelief().add( l_belief );
 
             // add the method bind to the agent
@@ -96,7 +98,9 @@ public class CCarJasonAgent extends CDefaultCar
             m_agent.getActions().put( "invoke", l_method );
 
             // add the set bind to the agent
-            final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", this, l_forbidden );
+            final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
+                    "self", this, l_forbidden
+            );
             m_agent.getActions().put( "set", l_set );
 
 

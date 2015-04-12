@@ -109,7 +109,12 @@ public class CMarkdownRenderer extends LinkRenderer
     public final Rendering render( final ExpLinkNode p_node, final String p_text )
     {
         if ( !this.isURL( p_node.url ) )
-            return super.render( new ExpLinkNode( p_text, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+            return super.render(
+                    new ExpLinkNode(
+                            p_text, this.getURL( p_node.url ),
+                            ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 )
+                    ), p_text
+            );
 
         return super.render( p_node, p_text );
     }
@@ -118,7 +123,12 @@ public class CMarkdownRenderer extends LinkRenderer
     public final Rendering render( final ExpImageNode p_node, final String p_text )
     {
         if ( !this.isURL( p_node.url ) )
-            return super.render( new ExpImageNode( p_node.title, this.getURL( p_node.url ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), p_text );
+            return super.render(
+                    new ExpImageNode(
+                            p_node.title, this.getURL( p_node.url ),
+                            ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 )
+                    ), p_text
+            );
 
         return super.render( p_node, p_text );
     }
@@ -135,11 +145,36 @@ public class CMarkdownRenderer extends LinkRenderer
 
             final String[] l_parts = StringUtils.split( p_node.getText(), "|" );
             if ( l_parts.length == 1 )
-                return super.render( new ExpLinkNode( l_parts[0], this.getWikipediaLink( CConfiguration.getInstance().get().<String>getTraverse( "language/current" ).trim(), l_parts[0].trim() ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[0] );
+                return super.render(
+                        new ExpLinkNode(
+                                l_parts[0], this.getWikipediaLink(
+                                CConfiguration.getInstance().get().<String>getTraverse(
+                                        "language/current"
+                                ).trim(), l_parts[0].trim()
+                        ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 )
+                        ), l_parts[0]
+                );
+
             if ( l_parts.length == 2 )
-                return super.render( new ExpLinkNode( l_parts[1], this.getWikipediaLink( CConfiguration.getInstance().get().<String>getTraverse( "language/current" ).trim(), l_parts[0].trim() ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[1] );
+                return super.render(
+                        new ExpLinkNode(
+                                l_parts[1], this.getWikipediaLink(
+                                CConfiguration.getInstance().get().<String>getTraverse(
+                                        "language/current"
+                                ).trim(), l_parts[0].trim()
+                        ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 )
+                        ), l_parts[1]
+                );
+
             if ( l_parts.length == 3 )
-                return super.render( new ExpLinkNode( l_parts[2], this.getWikipediaLink( l_parts[0].trim(), l_parts[1].trim() ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 ) ), l_parts[2] );
+                return super.render(
+                        new ExpLinkNode(
+                                l_parts[2], this.getWikipediaLink( l_parts[0].trim(), l_parts[1].trim() ),
+                                ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get(
+                                        0
+                                )
+                        ), l_parts[2]
+                );
 
         }
         catch ( final Exception l_exception )

@@ -363,11 +363,13 @@ public class CSimulation
     {
         final Map<String, Map<String, Object>> l_return = new HashMap<>();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
-            l_return.put( l_item.getKey(), new HashMap()
-            {{
-                    put( "active", l_item.getValue().isActive() );
-                    put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
-                }} );
+            l_return.put(
+                    l_item.getKey(), new HashMap()
+                    {{
+                            put( "active", l_item.getValue().isActive() );
+                            put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
+                        }}
+            );
 
 
         return l_return;

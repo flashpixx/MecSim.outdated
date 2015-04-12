@@ -130,7 +130,13 @@ public class CVirtualStaticMethod implements IVirtualLocation
         catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
-            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.INTERNAL_ERROR, c_mimetype, CCommon.toJson( CCommon.getMap( "error", l_exception.getMessage() ) ) );
+            return new NanoHTTPD.Response(
+                    NanoHTTPD.Response.Status.INTERNAL_ERROR, c_mimetype, CCommon.toJson(
+                    CCommon.getMap(
+                            "error", l_exception.getMessage()
+                    )
+            )
+            );
         }
     }
 
@@ -166,7 +172,12 @@ public class CVirtualStaticMethod implements IVirtualLocation
     {
         if ( p_key.length == p_keyindex + 1 )
         {
-            p_map.put( p_key[p_keyindex], CCommon.convertValue( p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class}, c_parser ) );
+            p_map.put(
+                    p_key[p_keyindex], CCommon.convertValue(
+                            p_value, new Class[]{Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class},
+                            c_parser
+                    )
+            );
             return;
         }
 

@@ -115,7 +115,10 @@ class COSMMouseListener extends MouseAdapter
                         }
                     }
 
-                    //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                    //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog(
+                    // l_jasonlayer.getAgentFiles(),
+                    // CCommon.getResourceString( this, "chooseasl" ),
+                    // CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
                     //l_sourcelayer.createSource( l_geoPosition, l_selectedGenerator, l_aslname );
                 }
 
@@ -131,7 +134,11 @@ class COSMMouseListener extends MouseAdapter
 
                             if ( l_source.getGenerator() == null )
                             {
-                                //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ? CCommonUI.openGroupSelectDialog( l_jasonlayer.getAgentFiles(), CCommon.getResourceString( this, "chooseasl" ), CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
+                                //final String l_aslname = l_selectedGenerator.contains( "Jason" ) ?
+                                // CCommonUI.openGroupSelectDialog(
+                                // l_jasonlayer.getAgentFiles(),
+                                // CCommon.getResourceString( this, "chooseasl" ),
+                                // CCommon.getResourceString( this, "chooseasldescription" ) ) : null;
                                 //l_sourcelayer.setGenerator( l_source, l_selectedGenerator, l_aslname );
                             }
                             else
@@ -211,7 +218,10 @@ class COSMMouseListener extends MouseAdapter
         if ( ( p_checkposition == null ) || ( p_center == null ) )
             return false;
 
-        return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) && ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
+        return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) &&
+                ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) &&
+                ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) &&
+                ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }
 
 }

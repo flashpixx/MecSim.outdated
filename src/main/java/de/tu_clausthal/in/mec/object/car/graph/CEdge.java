@@ -94,7 +94,12 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
 
         final ArrayList<N> l_initlist = new ArrayList<>();
-        for ( int i = 0; i < (int) Math.ceil( m_edgelength / CConfiguration.getInstance().get().<Integer>getTraverse( "simulation/traffic/cellsampling" ) ); i++ )
+        for ( int i = 0; i < (int) Math.ceil(
+                m_edgelength / CConfiguration.getInstance().get().<Integer>getTraverse(
+                        "simulation/traffic/cellsampling"
+                )
+        ); i++
+                )
             l_initlist.add( null );
         m_cells = (N[]) l_initlist.toArray();
         m_additionalinformation = (T[]) l_initlist.toArray();
@@ -143,7 +148,11 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
         // convert point list to arrays and beware static increase
         for ( int i = 1; i < p_input.size() - 1; i++ )
-            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs( l_y.get( l_y.size() - 1 ) - p_input.getLongitude( i ) ) >= p_epsilon ) )
+            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs(
+                    l_y.get(
+                            l_y.size() - 1
+                    ) - p_input.getLongitude( i )
+            ) >= p_epsilon ) )
             {
                 l_x.add( p_input.getLatitude( i ) );
                 l_y.add( p_input.getLongitude( i ) );

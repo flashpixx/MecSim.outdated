@@ -175,12 +175,18 @@ public class CMethodBind extends IAction
             // invoke and cast return data
             final String l_methodname = l_args.get( 1 ).toString();
             final CReflection.CMethod l_invoke = l_object.get( l_methodname, l_argumenttype );
-            final Object l_return = l_returntype.cast( ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke( l_argumentinvokedata.get( 0 ) ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata ) );
+            final Object l_return = l_returntype.cast(
+                    ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke(
+                            l_argumentinvokedata.get( 0 )
+                    ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata )
+            );
 
             // push return data into the agent
             if ( ( l_return != null ) && ( !void.class.equals( l_return.getClass() ) ) )
             {
-                final Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( ( l_returnname == null ) || ( l_returnname.isEmpty() ) ? l_methodname : l_returnname, l_return );
+                final Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                        ( l_returnname == null ) || ( l_returnname.isEmpty() ) ? l_methodname : l_returnname, l_return
+                );
                 l_literalreturn.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_objectname ) ) );
                 p_agent.addBel( l_literalreturn );
             }

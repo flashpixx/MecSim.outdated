@@ -108,7 +108,15 @@ public class CFieldBind implements IBelief
      */
     public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
-        m_bind.put( p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>( p_object, CReflection.getClassFields( p_object.getClass(), new CFieldFilter( p_forbiddennames ) ) ) );
+        m_bind.put(
+                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
+                        p_object, CReflection.getClassFields(
+                        p_object.getClass(), new CFieldFilter(
+                                p_forbiddennames
+                        )
+                )
+                )
+        );
     }
 
     /**
@@ -141,7 +149,11 @@ public class CFieldBind implements IBelief
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
-                    final Literal l_literal = CCommon.getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
+                    final Literal l_literal = CCommon.getLiteral(
+                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
+                                    l_item.getValue().getLeft()
+                            )
+                    );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
@@ -150,11 +162,19 @@ public class CFieldBind implements IBelief
                 }
                 catch ( final Exception l_exception )
                 {
-                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage() ) );
+                    CLogger.error(
+                            de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                                    this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage()
+                            )
+                    );
                 }
                 catch ( final Throwable l_throwable )
                 {
-                    CLogger.error( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage() ) );
+                    CLogger.error(
+                            de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                                    this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage()
+                            )
+                    );
                 }
     }
 

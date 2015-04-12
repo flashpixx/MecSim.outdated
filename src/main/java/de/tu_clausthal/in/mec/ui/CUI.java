@@ -52,8 +52,9 @@ import java.util.Map;
 /**
  * JavaFX application
  *
- * @todo create docking structure https://gist.github.com/jewelsea/9579047 / https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
- * / https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
+ * @todo create docking structure https://gist.github.com/jewelsea/9579047
+ * https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
+ * https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
  * @see http://stackoverflow.com/questions/17673292/internal-frames-in-javafx
  * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
  * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
@@ -144,19 +145,25 @@ public class CUI extends Application
             m_stage = p_stage;
 
         p_stage.setTitle( CConfiguration.getInstance().get().<String>getTraverse( "manifest/project-name" ) );
-        p_stage.setOnCloseRequest( new EventHandler<WindowEvent>()
-        {
-            @Override
-            public void handle( final WindowEvent p_event )
-            {
-                CBootstrap.beforeStageShutdown( CUI.this );
+        p_stage.setOnCloseRequest(
+                new EventHandler<WindowEvent>()
+                {
+                    @Override
+                    public void handle( final WindowEvent p_event )
+                    {
+                        CBootstrap.beforeStageShutdown( CUI.this );
 
-                CConfiguration.getInstance().get().setTraverse( "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth() );
-                CConfiguration.getInstance().get().setTraverse( "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight() );
+                        CConfiguration.getInstance().get().setTraverse(
+                                "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth()
+                        );
+                        CConfiguration.getInstance().get().setTraverse(
+                                "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight()
+                        );
 
-                CConfiguration.getInstance().write();
-            }
-        } );
+                        CConfiguration.getInstance().write();
+                    }
+                }
+        );
 
         // border pane for with menu
         final BorderPane l_root = new BorderPane();
@@ -167,7 +174,17 @@ public class CUI extends Application
 
         // create tab pane for content and scene (screen size depends on the configuration or the current screen size)
         l_root.setCenter( m_tabpane );
-        p_stage.setScene( new Scene( l_root, Math.min( Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" ) ), Math.min( Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowheight" ) ) ) );
+        p_stage.setScene(
+                new Scene(
+                        l_root, Math.min(
+                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" )
+                ), Math.min(
+                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse(
+                                "ui/windowheight"
+                        )
+                )
+                )
+        );
         p_stage.sizeToScene();
         p_stage.show();
 

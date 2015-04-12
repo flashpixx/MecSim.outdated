@@ -50,7 +50,11 @@ public class CBoot
     {
 
         // check JRE properties (version must be checked numerical)
-        if ( !( ( "Oracle Corporation".equalsIgnoreCase( System.getProperty( "java.vendor" ) ) ) && ( Float.parseFloat( System.getProperty( "java.specification.version" ) ) >= 1.8f ) ) )
+        if ( !( ( "Oracle Corporation".equalsIgnoreCase( System.getProperty( "java.vendor" ) ) ) && ( Float.parseFloat(
+                System.getProperty(
+                        "java.specification.version"
+                )
+        ) >= 1.8f ) ) )
         {
             System.err.println( "JRE from Oracle Corporation (http://www.java.com/) version 1.8 or newer must be installed to run the program" );
             System.exit( -1 );

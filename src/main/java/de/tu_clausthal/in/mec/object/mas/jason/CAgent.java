@@ -370,7 +370,13 @@ public class CAgent<T> implements IVoidAgent
                         if ( l_jmsg.isKnownPerformative() )
                         {
                             l_literal.addAnnot( BeliefBase.TPercept );
-                            this.getTS().getC().addEvent( new Event( new Trigger( Trigger.TEOperator.add, Trigger.TEType.belief, l_literal ), Intention.EmptyInt ) );
+                            this.getTS().getC().addEvent(
+                                    new Event(
+                                            new Trigger(
+                                                    Trigger.TEOperator.add, Trigger.TEType.belief, l_literal
+                                            ), Intention.EmptyInt
+                                    )
+                            );
                         }
 
                         continue;

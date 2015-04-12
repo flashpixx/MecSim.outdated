@@ -104,7 +104,11 @@ public class CGraphHopper extends GraphHopper
         this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
-        final File l_graphlocation = CConfiguration.getInstance().getLocation( "root", "graphs", CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/map/name" ).replace( '/', '_' ) );
+        final File l_graphlocation = CConfiguration.getInstance().getLocation(
+                "root", "graphs", CConfiguration.getInstance().get().<String>getTraverse(
+                        "simulation/traffic/map/name"
+                ).replace( '/', '_' )
+        );
         CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
 
         // if reimported is set, delete graph directory

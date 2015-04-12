@@ -70,13 +70,15 @@ public class CComplexTarget
     {
         final List l_list = new CopyOnWriteArrayList( p_unsortmap.entrySet() );
 
-        Collections.sort( l_list, new Comparator()
-        {
-            public int compare( final Object p_object1, final Object p_object2 )
-            {
-                return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() ).compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
-            }
-        } );
+        Collections.sort(
+                l_list, new Comparator()
+                {
+                    public int compare( final Object p_object1, final Object p_object2 )
+                    {
+                        return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() ).compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
+                    }
+                }
+        );
 
         final Map l_sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
         for ( Iterator l_iterator = l_list.iterator(); l_iterator.hasNext(); )

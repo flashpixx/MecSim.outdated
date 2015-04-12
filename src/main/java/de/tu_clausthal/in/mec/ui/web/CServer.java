@@ -195,14 +195,20 @@ public class CServer extends NanoHTTPD
         }
 
         // get methods
-        for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods( p_object.getClass(), new CReflection.IMethodFilter()
-        {
-            @Override
-            public boolean filter( final java.lang.reflect.Method p_method )
-            {
-                return ( p_method.getName().toLowerCase().startsWith( "web_static_" ) || p_method.getName().toLowerCase().startsWith( "web_dynamic_" ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
-            }
-        } ).entrySet() )
+        for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods(
+                p_object.getClass(), new CReflection.IMethodFilter()
+                {
+                    @Override
+                    public boolean filter( final java.lang.reflect.Method p_method )
+                    {
+                        return ( p_method.getName().toLowerCase().startsWith(
+                                "web_static_"
+                        ) || p_method.getName().toLowerCase().startsWith(
+                                "web_dynamic_"
+                        ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
+                    }
+                }
+        ).entrySet() )
         {
 
             // try to bind a method
@@ -256,12 +262,20 @@ public class CServer extends NanoHTTPD
         {
             case "htm":
             case "html":
-                l_response = new Response( Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader( l_physicalfile.openStream() ).getEncoding() ), l_physicalfile.openStream() );
+                l_response = new Response(
+                        Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
+                        l_physicalfile.openStream()
+                ).getEncoding() ), l_physicalfile.openStream()
+                );
                 break;
 
             case "md":
                 if ( p_location.getMarkDownRenderer() != null )
-                    l_response = new Response( Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML( m_markdown, l_physicalfile ) );
+                    l_response = new Response(
+                            Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
+                            m_markdown, l_physicalfile
+                    )
+                    );
                 else
                     l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
                 break;

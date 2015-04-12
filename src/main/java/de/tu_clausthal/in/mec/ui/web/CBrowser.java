@@ -132,14 +132,16 @@ public class CBrowser extends GridPane
     {
         final TextField l_url = new TextField();
 
-        m_webview.getEngine().locationProperty().addListener( new ChangeListener<String>()
-        {
-            @Override
-            public void changed( final ObservableValue<? extends String> p_observable, final String p_oldValue, final String p_newValue )
-            {
-                l_url.setText( p_newValue );
-            }
-        } );
+        m_webview.getEngine().locationProperty().addListener(
+                new ChangeListener<String>()
+                {
+                    @Override
+                    public void changed( final ObservableValue<? extends String> p_observable, final String p_oldValue, final String p_newValue )
+                    {
+                        l_url.setText( p_newValue );
+                    }
+                }
+        );
 
 
         final Button l_button = new Button( CCommon.getResourceString( CBrowser.class, "load" ) );
@@ -175,29 +177,33 @@ public class CBrowser extends GridPane
     {
         final Button l_backbutton = new Button( CCommon.getResourceString( CBrowser.class, "back" ) );
         l_backbutton.setMaxWidth( Double.MAX_VALUE );
-        l_backbutton.setOnAction( new EventHandler<ActionEvent>()
-        {
+        l_backbutton.setOnAction(
+                new EventHandler<ActionEvent>()
+                {
 
-            @Override
-            public void handle( final ActionEvent p_event )
-            {
-                CBrowser.this.back();
-            }
+                    @Override
+                    public void handle( final ActionEvent p_event )
+                    {
+                        CBrowser.this.back();
+                    }
 
-        } );
+                }
+        );
 
         final Button l_forwardbutton = new Button( CCommon.getResourceString( CBrowser.class, "forward" ) );
         l_forwardbutton.setMaxWidth( Double.MAX_VALUE );
-        l_forwardbutton.setOnAction( new EventHandler<ActionEvent>()
-        {
+        l_forwardbutton.setOnAction(
+                new EventHandler<ActionEvent>()
+                {
 
-            @Override
-            public void handle( final ActionEvent p_event )
-            {
-                CBrowser.this.forward();
-            }
+                    @Override
+                    public void handle( final ActionEvent p_event )
+                    {
+                        CBrowser.this.forward();
+                    }
 
-        } );
+                }
+        );
 
 
         GridPane.setConstraints( l_backbutton, p_column, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );

@@ -43,7 +43,11 @@ public class CWorkspace extends CBrowser
     /**
      * HTTP server to handle websockets *
      */
-    private final CServer m_server = new CServer( "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath ), new CVirtualDirectory( CCommon.getResourceURL( "web/root" ), "index.htm" ) );
+    private final CServer m_server = new CServer(
+            "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath ), new CVirtualDirectory(
+            CCommon.getResourceURL( "web/root" ), "index.htm"
+    )
+    );
 
 
     /**

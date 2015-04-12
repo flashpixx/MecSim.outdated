@@ -125,7 +125,9 @@ public class CDefaultCar extends IInspector implements ICar
             try
             {
 
-                m_EndPosition = new GeoPosition( m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1 );
+                m_EndPosition = new GeoPosition(
+                        m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1
+                );
                 final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
 
                 if ( ( l_route != null ) && ( l_route.size() > 0 ) )
@@ -267,7 +269,9 @@ public class CDefaultCar extends IInspector implements ICar
 
         final int l_zoom = this.iconsize( p_viewer );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
-        final Ellipse2D l_circle = new Ellipse2D.Double( l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom
+        );
 
         //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
         //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );

@@ -47,8 +47,11 @@ public class CCommon
     public static Literal getLiteral( final String p_name, final Object p_data )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( de.tu_clausthal.in.mec.object.mas.jason.CCommon.class, "namenotempty" ) );
-
+            throw new IllegalArgumentException(
+                    de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.class, "namenotempty"
+                    )
+            );
 
         // first char must be lower-case - split on spaces and create camel-case
         final String[] l_parts = p_name.split( " " );

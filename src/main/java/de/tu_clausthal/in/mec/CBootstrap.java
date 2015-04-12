@@ -94,7 +94,10 @@ public class CBootstrap
     public static void afterServerInit( final CServer p_server )
     {
         // register default locations
-        p_server.addVirtualDirectory( "web/documentation/user/" + CConfiguration.getInstance().get().<String>getTraverse( "language/current" ), "index.md", "/userdoc/", new CMarkdownRenderer( CMarkdownRenderer.EHTMLType.Fragment, "/userdoc/" ) );
+        p_server.addVirtualDirectory(
+                "web/documentation/user/" + CConfiguration.getInstance().get().<String>getTraverse( "language/current" ), "index.md", "/userdoc/",
+                new CMarkdownRenderer( CMarkdownRenderer.EHTMLType.Fragment, "/userdoc/" )
+        );
 
         p_server.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/" );
 

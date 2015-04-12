@@ -63,7 +63,9 @@ public class Test_CLanguageLabels
         try
         {
             final List<Path> l_files = new ArrayList<>();
-            Files.walk( Paths.get( CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI() ) ).filter( Files::isRegularFile ).forEach( path -> l_files.add( path ) );
+            Files.walk( Paths.get( CCommon.concatURL( CCommon.getResourceURL(), "../../src/main/java/" ).toURI() ) ).filter( Files::isRegularFile ).forEach(
+                    path -> l_files.add( path )
+            );
 
             for ( Path l_item : l_files )
                 this.checkFile( l_item );
@@ -222,7 +224,12 @@ public class Test_CLanguageLabels
             }
             catch ( final IllegalStateException l_exception )
             {
-                fail( String.format( "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language, p_classname ) );
+                fail(
+                        String.format(
+                                "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language,
+                                p_classname
+                        )
+                );
                 return;
             }
 

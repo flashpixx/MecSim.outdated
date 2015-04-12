@@ -279,7 +279,9 @@ public class CCommon
      */
     public static String getResourceStringLabel( final Class<?> p_class, final String p_label )
     {
-        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace( " ", "" );
+        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace(
+                " ", ""
+        );
     }
 
 

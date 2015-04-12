@@ -126,7 +126,10 @@ public class CMain
 
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
-        CLogger.out( CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gigabyte ), Runtime.getRuntime().maxMemory() / c_gigabyte < c_neededmemory );
+        CLogger.out(
+                CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gigabyte ),
+                Runtime.getRuntime().maxMemory() / c_gigabyte < c_neededmemory
+        );
         try
         {
             if ( ( l_cli.hasOption( "uibindport" ) ) )

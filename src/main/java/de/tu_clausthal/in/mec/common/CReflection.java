@@ -120,7 +120,11 @@ public class CReflection
 
                 try
                 {
-                    l_fields.put( l_field.getName(), new CGetSet( l_field, MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field ) ) );
+                    l_fields.put(
+                            l_field.getName(), new CGetSet(
+                                    l_field, MethodHandles.lookup().unreflectGetter( l_field ), MethodHandles.lookup().unreflectSetter( l_field )
+                            )
+                    );
                 }
                 catch ( final IllegalAccessException l_exception )
                 {

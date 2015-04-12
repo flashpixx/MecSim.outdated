@@ -112,7 +112,7 @@ iframe
     left: 0;
     right: 0;
     opacity: 0.5;
-    background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center;
+    /** TODO: Maybe Logo only on FrontPage ? background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center; **/
 }
 
 #mecsim_accordion
@@ -124,4 +124,136 @@ iframe
 #mecsim_editor
 {
     collapsible: false;
+}
+
+
+
+
+
+/** Temp Source Styles **/
+
+fieldset{
+  border: 0;
+}
+
+#mecsim_source_clustercontainer{
+  float: left;
+  width: 600px;
+  height: 640px;
+  padding: 0.5em;
+  margin: 10px;
+}
+
+#mecsim_source_generatorsettings{
+  float: left;
+  width: 482px;
+  height: 240px;
+  padding: 0.5em;
+  margin: 10px;
+}
+
+#mecsim_source_targetweighting{
+  float: left;
+  width: 482px;
+  height: 360px;
+  padding: 0.5em;
+  margin: 10px;
+}
+
+.ui-widget-content{
+  border: 1px solid #CACACA;
+}
+
+.ui-resizable-helper{
+  border: 1px dotted gray;
+}
+
+.ui-widget-header{
+  margin: 0;
+  color: black;
+  text-align: center;
+  font-weight:normal;
+  background: #CBCBCB;
+  border: 1px solid #CACACA;
+}
+
+#mecsim_source_selectSource{
+  margin: 5px;
+  width: 155px;
+  overflow:scroll;
+}
+
+#mecsim_source_selectDistribution{
+  margin: 5px;
+  width: 155px;
+}
+
+#mecsim_source_input1, #mecsim_source_input2{
+  width: 75px;
+  text-align: center;
+  margin-left: 25px;
+}
+
+#mecsim_source_weighting_paginate, #mecsim_source_weighting_length ,#mecsim_source_weighting_filter{
+  float: left;
+  margin: 10px;
+}
+
+#mecsim_source_weighting{
+  width: 60%;
+  float: left;
+  margin: 10px;
+  text-align: center;
+}
+
+#mecsim_source_weightinginput{
+  text-align: center;
+  width: 100%;
+}
+
+/** Cluster Style **/
+.node {
+  font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.node:hover{
+  opacity: 1;
+}
+
+.node-source {
+  fill: #2ca02c;
+}
+
+.node-target {
+  fill: #d62728;
+}
+
+.node-selected{
+  fill: #000000;
+}
+
+.node-trans{
+  opacity: 0.3;
+}
+
+.link {
+  stroke: steelblue;
+  stroke-opacity: 0.2;
+  fill: none;
+  pointer-events: none;
+}
+
+.link-thick{
+  stroke-opacity: 1;
+}
+
+.link-hidden{
+  stroke-opacity: 0;
 }

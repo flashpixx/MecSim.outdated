@@ -106,6 +106,14 @@ $(document).ready(function(){
 
 
     /* ACCORDION-SOURCE-CONTENT **********************************************************/
+    $("#ui-id-5").on("click", function(data){
+      $("#mecsim_content").load("template/source.htm", function(){
+        initLayout();
+        initClusterWidget();
+        initSettingsWidget();
+        initTargetWeighting();
+      });
+    })
     /*************************************************************************************/
 
 
@@ -130,7 +138,7 @@ $(document).ready(function(){
                     .text(p_data.agents[i]));
             }
                 $("#mecsim_agent_files option:first").attr('selected', true);
-                $('#mecsim_agent_files').selectmenu('refresh', true);
+                //$('#mecsim_agent_files').selectmenu('refresh', true);
             });
         }
 

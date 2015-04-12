@@ -63,10 +63,10 @@ public class CFieldFilter implements CReflection.IFieldFilter
     public final boolean filter( final Field p_field )
     {
         return !( ( m_forbiddennames.contains( p_field.getName() ) ) ||
-                ( Modifier.isStatic( p_field.getModifiers() ) ) ||
-                ( Modifier.isInterface( p_field.getModifiers() ) ) ||
-                ( Modifier.isAbstract( p_field.getModifiers() ) ) ||
-                ( Modifier.isFinal( p_field.getModifiers() ) ) );
+                  ( Modifier.isStatic( p_field.getModifiers() ) ) ||
+                  ( Modifier.isInterface( p_field.getModifiers() ) ) ||
+                  ( Modifier.isAbstract( p_field.getModifiers() ) ) ||
+                  ( Modifier.isFinal( p_field.getModifiers() ) ) );
     }
 
 }

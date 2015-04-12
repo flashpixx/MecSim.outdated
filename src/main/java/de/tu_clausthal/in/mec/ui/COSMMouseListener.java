@@ -219,9 +219,9 @@ class COSMMouseListener extends MouseAdapter
             return false;
 
         return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) &&
-                ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) &&
-                ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) &&
-                ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
+               ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) &&
+               ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) &&
+               ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
     }
 
 }

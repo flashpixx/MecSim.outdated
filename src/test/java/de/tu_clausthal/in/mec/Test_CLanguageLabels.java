@@ -128,7 +128,8 @@ public class Test_CLanguageLabels
             }
 
             final String[] l_parameter = this.getParameter( l_line );
-            if ( ( l_parameter == null ) || ( l_parameter[0] == null ) || ( l_parameter[0].isEmpty() ) || ( l_parameter[1] == null ) || ( l_parameter[1].isEmpty() ) )
+            if ( ( l_parameter == null ) || ( l_parameter[0] == null ) || ( l_parameter[0].isEmpty() ) || ( l_parameter[1] == null ) ||
+                 ( l_parameter[1].isEmpty() ) )
                 continue;
 
             // check class parameter

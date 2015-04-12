@@ -247,10 +247,10 @@ public class CMarkdownRenderer extends LinkRenderer
     private String getHTMLDocument( final PegDownProcessor p_processor, final URL p_file ) throws IOException
     {
         return "<?xml encoding=\"utf-8\"?>" +
-                "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
-                "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
-                ( m_cssuri.isEmpty() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + m_cssuri + "\"/></head>\n" ) +
-                "<body>\n" + this.getHTMLFragment( p_processor, p_file ) + "\n</body></html>";
+               "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
+               "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
+               ( m_cssuri.isEmpty() ? "" : "<head><link rel=\"stylesheet\" type=\"text/css\" href=\"" + m_cssuri + "\"/></head>\n" ) +
+               "<body>\n" + this.getHTMLFragment( p_processor, p_file ) + "\n</body></html>";
     }
 
 

@@ -39,6 +39,7 @@ import java.util.Set;
  *
  * @deprecated
  */
+@Deprecated
 public class CInspectorModel implements TableModel
 {
 

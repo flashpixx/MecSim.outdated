@@ -435,11 +435,11 @@ public class CEdge<N, T> implements Comparable<CEdge>
         /**
          * x values
          */
-        double[] m_xpoints = null;
+        private final double[] m_xpoints;
         /**
          * y values
          */
-        double[] m_ypoints = null;
+        private final double[] m_ypoints;
 
 
         /**

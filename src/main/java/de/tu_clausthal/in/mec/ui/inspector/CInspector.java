@@ -32,6 +32,7 @@ import javax.swing.*;
  *
  * @deprecated
  */
+@Deprecated
 public class CInspector extends JTable
 {
     /**

@@ -139,7 +139,19 @@ public class CUI extends Application
             CLogger.error( l_throwable );
         }
 
+        this.stageInitialization( p_stage );
+        this.stageLayoutInitialization( p_stage );
+        CBootstrap.afterStageInit( this );
+    }
 
+
+    /**
+     * state initialization
+     *
+     * @param p_stage main stage
+     */
+    private void stageInitialization( final Stage p_stage )
+    {
         this.setUserAgentStylesheet( null );
         if ( m_stage == null )
             m_stage = p_stage;
@@ -164,7 +176,16 @@ public class CUI extends Application
                     }
                 }
         );
+    }
 
+
+    /**
+     * stage layout initialization
+     *
+     * @param p_stage main stage
+     */
+    private void stageLayoutInitialization( final Stage p_stage )
+    {
         // border pane for with menu
         final BorderPane l_root = new BorderPane();
 
@@ -187,8 +208,6 @@ public class CUI extends Application
         );
         p_stage.sizeToScene();
         p_stage.show();
-
-        CBootstrap.afterStageInit( this );
     }
 
 

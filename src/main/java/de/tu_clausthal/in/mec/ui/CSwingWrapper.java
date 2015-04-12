@@ -32,6 +32,8 @@ import javax.swing.*;
 
 /**
  * JavaFX node wrapper for swing windows
+ *
+ * @tparam T swing type
  */
 public class CSwingWrapper<T extends JComponent> extends SwingNode
 {

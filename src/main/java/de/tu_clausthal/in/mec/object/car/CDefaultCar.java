@@ -55,51 +55,51 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * random interface
      */
-    protected Random m_random = new Random();
+    private Random m_random = new Random();
     /**
      * geo position of the start
      */
-    protected GeoPosition m_StartPosition = null;
+    private GeoPosition m_StartPosition = null;
     /**
      * geo position of the end
      */
-    protected GeoPosition m_EndPosition = null;
+    private GeoPosition m_EndPosition = null;
     /**
      * current speed
      */
-    protected int m_speed = 0;
+    private int m_speed = 0;
     /**
      * maximum speed definition
      */
-    protected int m_maxSpeed = 200;
+    private int m_maxSpeed = 200;
     /**
      * linger probability value
      */
-    protected double m_LingerProbability = 0;
+    private double m_LingerProbability = m_random.nextDouble();
     /**
      * cell structure of the route
      */
-    protected ArrayList<Pair<EdgeIteratorState, Integer>> m_route = null;
+    private ArrayList<Pair<EdgeIteratorState, Integer>> m_route = null;
     /**
      * current position on the route
      */
-    protected int m_routeindex = 0;
+    private int m_routeindex = 0;
     /**
      * boolean flag for end reached
      */
-    protected boolean m_endReached = false;
+    private boolean m_endReached = false;
     /**
      * individual acceleration
      */
-    protected int m_acceleration = 1;
+    private int m_acceleration = m_random.nextInt( 40 ) + 20;
     /**
      * individual deceleration *
      */
-    protected int m_deceleration = 1;
+    private int m_deceleration = m_random.nextInt( 40 ) + 20;
     /**
      * reference to the graph
      */
-    protected CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
+    private CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
 
     /**
@@ -113,11 +113,8 @@ public class CDefaultCar extends IInspector implements ICar
             throw new IllegalArgumentException( CCommon.getResourceString( this, "startnull" ) );
 
         m_StartPosition = p_StartPosition;
-        m_LingerProbability = m_random.nextDouble();
         while ( m_speed < 50 )
             m_speed = m_random.nextInt( m_maxSpeed );
-        m_acceleration = m_random.nextInt( 40 ) + 20;
-        m_deceleration = m_random.nextInt( 40 ) + 20;
 
         // we try to find a route within the geo data, so we get a random end position and try to calculate a
         // route between start and end position, so if an exception is cached, we create a new end position

@@ -55,7 +55,10 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
 
 
     /**
-     * CTOR
+     * ctor
+     *
+     * @param p_position geo position
+     * @param p_aslName ASL name
      */
     public CJasonCarGenerator( final GeoPosition p_position, final String p_aslName )
     {

@@ -59,7 +59,7 @@ public class CMainLoop implements Runnable
     /**
      * simulation counter
      */
-    private int m_simulationcount = 0;
+    private int m_simulationcount;
 
     /**
      * boolean to pause/resume the thread

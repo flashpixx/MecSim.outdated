@@ -53,9 +53,7 @@
         <div id = "mecsim_accordion" class = "accordion" >
 
             <h3 >File</h3 >
-
             <div class = "align-center-div" >
-
                 <ul id = "root_menu" >
                     <li >
                         <a id = "mecsim_preferences" class = "template" >Preferences</a >
@@ -76,11 +74,9 @@
                         <a href = "template/local.htm" class = "template" >Local</a >
                     </li >
                 </ul >
-
             </div >
 
             <h3 >Simulation</h3 >
-
             <div class = "align-center-div" >
 
                 <ul id = "simulation_menu" >
@@ -102,17 +98,18 @@
                 </p >
 
                 <div id = "mecsim_speed_slider" ></div >
-
             </div >
 
             <h3 >Sources</h3 >
-
             <div class = "align-center-div" >
-
+                <button id="mecsim_source_defaultCar">Default Car</button>
+                </p>
+                <button id="mecsim_source_defaultAgent">Default Agent Car</button>
+                </p>
+                <button id="mecsim_source_target">Target</button>
             </div >
 
             <h3 >Editor</h3 >
-
             <div class = "align-center-div" >
 
                 <label for = "mecsim_agent_files" >Select a file</label >
@@ -123,63 +120,24 @@
                 <button id = "mecsim_delete_asl" class = "fixed_width_button" >Delete</button >
                 <button id = "mecsim_new_asl" class = "fixed_width_button" >New</button >
                 <button id = "mecsim_save_asl" class = "fixed_width_button" >Save</button >
-
             </div >
 
             <h3 >Statistics</h3 >
-
             <div class = "align-center-div" ></div >
 
             <h3 >Getting Help</h3 >
-
             <div class = "align-center-div" >
-
-                <ul id = "help_menu" >
-                    <li >
-                        <a class = "template" >Help</a >
-                    </li >
-                    <li >
-                        <a id = "mecsim_user_documentation" href = "template/userdoc.htm" class = "template" >User
-                            Dokumentation</a >
-                    </li >
-                    <li >
-                        <a href = "template/develdoc.htm" class = "template" >Developer Dokumentation</a >
-                    </li >
-                </ul >
-
+                <button class="mecsim_global_accordeonbutton" id="mecsim_help_help">Help</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_help_userdoku">User Dokumentation</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_help_devdoku">Developer Dokumentation</button>
             </div >
 
         </div >
 
     </div >
     <div id = "mecsim_content" >
-        <script type = "text/javascript" >
-            $.getJSON( "cconfiguration/get", function( p_data ) {
-                $("#mecsim_content").append(
-                    "<div id=\"about\">" +
-                    "<div class=\"table\">" +
-                    "<div class=\"row\">  <div class=\"cell text_align_center\"><a href=\"" + p_data.manifest["project-url"] + "\">" + p_data.manifest["project-name"] + "</a></div>  </div>" +
-                    "<br/>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">License</div></div>       <div class=\"cell\"><a href=\"" + p_data.manifest["license-url"] + "\">" + p_data.manifest["license"] + "</a></div></div>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildversion</div></div>  <div class=\"cell\">" + p_data.manifest["build-version"] + "</div></div>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildnumber</div></div>   <div class=\"cell\">" + p_data.manifest["build-number"] + "</a></div></div>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildcommit</div></div>   <div class=\"cell\">" + p_data.manifest["build-commit"] + "</a></div></div>" +
-                    "</div>" +
-                    "</div>"
-                );
-            });
-
-
-
-
-
-
-
-
-
-
-
-        </script >
     </div >
 </div >
 
@@ -199,7 +157,6 @@
         </p >
     </div >
 </div >
-<!-- ************************************ -->
 
 <!-- form to create new asl file -->
 <div id = "mecsim_create_asl_form" title = "Create new agent" >
@@ -211,7 +168,7 @@
         </fieldset >
     </form >
 </div >
-<!-- *********************************** -->
+
 </body >
 
 </html >

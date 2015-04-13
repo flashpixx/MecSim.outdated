@@ -25,6 +25,11 @@ iframe
 
 /******************************** class definitions *******************************************************************/
 
+.mecsim_global_accordeonbutton{
+    width: 75%;
+    align: center;
+}
+
 .fixed_width_button
 {
     width: 30%;
@@ -131,10 +136,6 @@ iframe
 
 
 /** Temp Source Styles **/
-
-fieldset{
-  border: 0;
-}
 
 #mecsim_source_clustercontainer{
   float: left;
@@ -256,4 +257,8 @@ fieldset{
 
 .link-hidden{
   stroke-opacity: 0;
+}
+
+#mecsim_source_defaultCar, #mecsim_source_defaultAgent, #mecsim_source_target{
+    width: 200px;
 }

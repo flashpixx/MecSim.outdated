@@ -203,6 +203,7 @@ public class CPath implements Iterable<CPath>
     {
         return this.getSubPath( p_fromIndex, this.size() );
     }
+
     /**
      * creates a path of the indices
      *
@@ -219,16 +220,6 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
-     * returns the full path as string
-     *
-     * @return string path
-     */
-    public final String getPath()
-    {
-        return StringUtils.join( m_path, m_separator );
-    }
-
-    /**
      * returns the number of path elements
      *
      * @return size
@@ -237,7 +228,6 @@ public class CPath implements Iterable<CPath>
     {
         return m_path.size();
     }
-
     /**
      * remove the suffix from the path
      *
@@ -249,6 +239,16 @@ public class CPath implements Iterable<CPath>
         if ( m_path.size() > 0 )
             m_path.remove( m_path.size() - 1 );
         return l_suffix;
+    }
+
+    /**
+     * returns the full path as string
+     *
+     * @return string path
+     */
+    public final String getPath()
+    {
+        return StringUtils.join( m_path, m_separator );
     }
 
     /**

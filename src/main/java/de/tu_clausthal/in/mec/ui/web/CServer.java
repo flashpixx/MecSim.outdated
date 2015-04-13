@@ -51,9 +51,24 @@ import java.util.Map;
  */
 public class CServer extends NanoHTTPD
 {
-
     /**
-     * markdown processor *
+     * seperator
+     */
+    private static final String c_seperator = "/";
+    /**
+     * web-static prefix
+     */
+    private static final String c_webstatic = "web_static_";
+    /**
+     * web-dynamic prefix
+     */
+    private static final String c_webdynamic = "web_dynamic_";
+    /**
+     * web-uribase name
+     */
+    private static final String c_weburibase = "web_uribase";
+    /**
+     * markdown processor
      */
     private final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
@@ -230,27 +245,7 @@ public class CServer extends NanoHTTPD
     public final void register( final Object p_object )
     {
         // URI begin
-        final String l_uriclass = "/" + p_object.getClass().getSimpleName().toLowerCase() + "/";
-
-        // try to read basepart
-        String l_uribase = "";
-        try
-        {
-            final Object l_data = CReflection.getClassMethod( p_object.getClass(), "web_uribase" ).getMethod().invoke( p_object );
-            if ( l_data instanceof String )
-                l_uribase = l_data.toString().toLowerCase();
-
-            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
-            {
-                if ( l_uribase.startsWith( "/" ) )
-                    l_uribase = l_uribase.substring( 1 );
-                if ( !l_uribase.endsWith( "/" ) )
-                    l_uribase += "/";
-            }
-        }
-        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
-        {
-        }
+        final String l_uriclass = c_seperator + p_object.getClass().getSimpleName().toLowerCase() + c_seperator;
 
         // get methods
         for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods(
@@ -260,29 +255,66 @@ public class CServer extends NanoHTTPD
                     public boolean filter( final java.lang.reflect.Method p_method )
                     {
                         return ( p_method.getName().toLowerCase().startsWith(
-                                "web_static_"
+                                c_webstatic
                         ) || p_method.getName().toLowerCase().startsWith(
-                                "web_dynamic_"
+                                c_webdynamic
                         ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
                     }
                 }
         ).entrySet() )
         {
+            this.bindStaticMethod( p_object, l_method.getValue(), l_uriclass );
+        }
+    }
 
-            // try to bind a method
-            final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase();
+    /**
+     * static method binding
+     *
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
+     */
+    private void bindStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
+    {
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webstatic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webstatic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
 
-            if ( l_methodname.contains( "web_static_" ) )
+        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
+    }
+
+    /**
+     * returns URI base if exists
+     *
+     * @param p_object object
+     * @return empty string or URI
+     */
+    private String getURIBase( final Object p_object )
+    {
+        // try to read basepart
+        String l_uribase = "";
+        try
+        {
+            final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
+            if ( l_data instanceof String )
+                l_uribase = l_data.toString().toLowerCase();
+
+            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
             {
-                final String l_urimethod = l_methodname.replace( "web_static_", "" );
-                if ( l_urimethod.isEmpty() )
-                    continue;
-
-                m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), l_uriclass + l_uribase + l_urimethod ) );
+                if ( l_uribase.startsWith( c_seperator ) )
+                    l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( c_seperator ) )
+                    l_uribase += c_seperator;
             }
-
+        }
+        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
+        {
         }
 
+        return l_uribase;
     }
 
     /**

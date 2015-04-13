@@ -47,6 +47,7 @@ public class CNameHashMap extends HashMap<String, Object>
      *
      * @param p_data map
      */
+    @SuppressWarnings( "unchecked" )
     public CNameHashMap( final Map<String, Object> p_data )
     {
         super();
@@ -63,6 +64,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @param p_map          current map
      * @tparam T value type
      */
+    @SuppressWarnings( "unchecked" )
     private static <T> void setTraverse( final CPath p_path, final int p_currentindex, final T p_value, final Map<String, Object> p_map )
     {
         if ( p_currentindex >= p_path.size() )
@@ -115,6 +117,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @return object
      * @tparam T type
      */
+    @SuppressWarnings( "unchecked" )
     public final <T> T getTraverse( final CPath p_path )
     {
         if ( p_path.isEmpty() )
@@ -150,6 +153,7 @@ public class CNameHashMap extends HashMap<String, Object>
      * @return null or casted value
      * @tparam T type
      */
+    @SuppressWarnings( "unchecked" )
     public final <T> T getTypedValue( final String p_key )
     {
         return (T) this.get( p_key );
@@ -176,6 +180,7 @@ public class CNameHashMap extends HashMap<String, Object>
          *
          * @param p_data map
          */
+        @SuppressWarnings( "unchecked" )
         public CImmutable( final Map<? extends String, ?> p_data )
         {
             super();
@@ -200,12 +205,14 @@ public class CNameHashMap extends HashMap<String, Object>
 
 
         @Override
+        @SuppressWarnings( "unchecked" )
         public final Object put( final String p_key, final Object p_value )
         {
             return super.put( p_key, p_value instanceof Map ? new CImmutable( (Map) p_value ) : p_value );
         }
 
         @Override
+        @SuppressWarnings( "unchecked" )
         public final void putAll( final Map<? extends String, ?> p_map )
         {
             for ( Map.Entry<? extends String, ?> l_item : p_map.entrySet() )

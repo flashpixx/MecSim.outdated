@@ -46,6 +46,26 @@ import java.util.Set;
 public class CCarJasonAgent extends CDefaultCar
 {
 
+    /** list of forbidden names * */
+    private static final Set<String> c_forbidden = new HashSet()
+    {{
+            add( "m_agent" );
+            add( "m_route" );
+            add( "m_graph" );
+            add( "m_inspect" );
+            add( "m_random" );
+            add( "m_endReached" );
+            add( "m_routeindex" );
+            add( "m_EndPosition" );
+            add( "m_StartPosition" );
+            add( "release" );
+            add( "paint" );
+            add( "step" );
+            add( "inspect" );
+            add( "onClick" );
+        }};
+
+
     /**
      * agent object *
      */
@@ -67,39 +87,20 @@ public class CCarJasonAgent extends CDefaultCar
 
             m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_asl );
 
-            // set forbidden elements for methods and properties
-            final Set<String> l_forbidden = new HashSet()
-            {{
-                    add( "m_agent" );
-                    add( "m_route" );
-                    add( "m_graph" );
-                    add( "m_inspect" );
-                    add( "m_random" );
-                    add( "m_endReached" );
-                    add( "m_routeindex" );
-                    add( "m_EndPosition" );
-                    add( "m_StartPosition" );
-                    add( "release" );
-                    add( "paint" );
-                    add( "step" );
-                    add( "inspect" );
-                    add( "onClick" );
-                }};
-
             // add the belief bind to the agent
             final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
-                    "self", this, l_forbidden
+                    "self", this, c_forbidden
             );
             m_agent.getBelief().add( l_belief );
 
             // add the method bind to the agent
             final CMethodBind l_method = new CMethodBind( "self", this );
-            l_method.getForbidden( "self" ).addAll( l_forbidden );
+            l_method.getForbidden( "self" ).addAll( c_forbidden );
             m_agent.getActions().put( "invoke", l_method );
 
             // add the set bind to the agent
             final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
-                    "self", this, l_forbidden
+                    "self", this, c_forbidden
             );
             m_agent.getActions().put( "set", l_set );
 

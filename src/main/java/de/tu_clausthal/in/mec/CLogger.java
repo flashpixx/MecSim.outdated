@@ -184,6 +184,8 @@ public class CLogger
      * adds a warn message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T warn( final T p_data )
     {
@@ -196,6 +198,8 @@ public class CLogger
      *
      * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T warn( final T p_data, final boolean p_write )
     {
@@ -227,6 +231,8 @@ public class CLogger
      * adds a error message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T error( final T p_data )
     {
@@ -239,6 +245,8 @@ public class CLogger
      *
      * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T error( final T p_data, final boolean p_write )
     {
@@ -271,6 +279,8 @@ public class CLogger
      * adds an info message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T info( final T p_data )
     {
@@ -283,6 +293,8 @@ public class CLogger
      *
      * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T info( final T p_data, final boolean p_write )
     {
@@ -314,6 +326,8 @@ public class CLogger
      * adds a debug message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T debug( final T p_data )
     {
@@ -326,6 +340,8 @@ public class CLogger
      *
      * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T debug( final T p_data, final boolean p_write )
     {
@@ -358,6 +374,8 @@ public class CLogger
      * adds a output message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T out( final T p_data )
     {
@@ -370,6 +388,8 @@ public class CLogger
      *
      * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T out( final T p_data, final boolean p_write )
     {

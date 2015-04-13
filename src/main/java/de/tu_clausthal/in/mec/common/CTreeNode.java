@@ -207,6 +207,7 @@ public class CTreeNode<T>
      * adds all childs of the path to the current node
      *
      * @param p_name name of the child
+     * @return tree node
      */
     public final CTreeNode<T> addChild( final String p_name )
     {

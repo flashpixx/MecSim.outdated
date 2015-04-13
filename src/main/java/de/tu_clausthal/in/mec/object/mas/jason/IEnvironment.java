@@ -57,6 +57,8 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
+    /** agent file suffix * */
+    private static final String c_filesuffix = ".asl";
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
@@ -75,7 +77,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        final File l_asl = CConfiguration.getInstance().getLocation( "mas", p_agentname + ".asl" );
+        final File l_asl = CConfiguration.getInstance().getLocation( "mas", p_agentname + c_filesuffix );
         if ( l_asl.exists() )
             throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "aslexist" ) );
 
@@ -96,7 +98,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( ".asl" ) ? p_agentname : p_agentname + ".asl" );
+        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( c_filesuffix ) ? p_agentname : p_agentname + c_filesuffix );
     }
 
     /**
@@ -108,7 +110,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     public static String[] getAgentFiles()
     {
         final List<String> l_list = new LinkedList<>();
-        for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*.asl" ) ) )
+        for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
             l_list.add( new File( l_file ).getName() );
 
         return CCommon.convertCollectionToArray( String[].class, l_list );

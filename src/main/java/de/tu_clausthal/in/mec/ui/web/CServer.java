@@ -79,7 +79,10 @@ public class CServer extends NanoHTTPD
         super( p_host, p_port );
         m_virtuallocation = new CVirtualLocation( p_default );
 
-        for ( String l_detector : new String[]{"eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector", "eu.medsea.mimeutil.detector.TextMimeDetector"} )
+        for ( String l_detector : new String[]{
+                "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
+                "eu.medsea.mimeutil.detector.TextMimeDetector"
+        } )
             m_mimetype.registerMimeDetector( l_detector );
 
         try

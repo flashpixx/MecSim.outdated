@@ -91,7 +91,7 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * boolean flag for end reached
      */
-    private boolean m_endReached = false;
+    private boolean m_endReached;
     /**
      * individual acceleration
      */

@@ -42,15 +42,15 @@ public class COSMKeyListener implements KeyListener
     /**
      * Variable which indicates if the STRG Key is pressed
      */
-    private boolean m_strgPressed = false;
+    private boolean m_strgPressed;
     /**
      * Variable which indicates if the Shift Key is pressed
      */
-    private boolean m_shiftPressed = false;
+    private boolean m_shiftPressed;
     /**
      * Variable which indicates if the Alt Key is pressed
      */
-    private boolean m_altPressed = false;
+    private boolean m_altPressed;
 
     /**
      * Number of Keys which are pressed

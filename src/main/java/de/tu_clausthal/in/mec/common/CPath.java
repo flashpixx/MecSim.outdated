@@ -290,7 +290,7 @@ public class CPath implements Iterable<CPath>
     {
         return new Iterator<CPath>()
         {
-            private int m_index = 0;
+            private int m_index;
 
             @Override
             public boolean hasNext()

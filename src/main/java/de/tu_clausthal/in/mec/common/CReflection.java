@@ -441,7 +441,7 @@ public class CReflection
          */
         public final CMethod get( final String p_methodname ) throws IllegalAccessException
         {
-            return get( p_methodname, null );
+            return this.get( p_methodname, null );
         }
 
 

@@ -94,7 +94,7 @@ public class CNameHashMap extends HashMap<String, Object>
      */
     public final <T> void setTraverse( final CPath p_path, final T p_value )
     {
-        setTraverse( p_path, 0, p_value, this );
+        this.setTraverse( p_path, 0, p_value, this );
     }
 
     /**

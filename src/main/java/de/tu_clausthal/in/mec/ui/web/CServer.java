@@ -48,6 +48,7 @@ import java.util.Map;
  * class of the HTTP server *
  *
  * @todo add http://www.html5rocks.com/de/tutorials/websockets/basics/
+ * @todo https://github.com/NanoHttpd/nanohttpd/issues/74
  */
 public class CServer extends NanoHTTPD
 {

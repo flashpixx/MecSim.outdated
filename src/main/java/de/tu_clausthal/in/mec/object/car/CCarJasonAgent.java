@@ -46,7 +46,9 @@ import java.util.Set;
 public class CCarJasonAgent extends CDefaultCar
 {
 
-    /** list of forbidden names * */
+    /**
+     * list of forbidden names *
+     */
     private static final Set<String> c_forbidden = new HashSet()
     {{
             add( "m_agent" );
@@ -75,7 +77,7 @@ public class CCarJasonAgent extends CDefaultCar
     /**
      * ctor to create the initial values
      *
-     * @param p_asl           agent ASL file
+     * @param p_asl agent ASL file
      * @param p_StartPosition start positions (position of the source)
      */
     public CCarJasonAgent( final String p_asl, final GeoPosition p_StartPosition )

@@ -78,7 +78,7 @@ public class CTreeNode<T>
      * ctor
      *
      * @param p_identifier name of the node
-     * @param p_parent     parent node
+     * @param p_parent parent node
      */
     public CTreeNode( final String p_identifier, final CTreeNode<T> p_parent )
     {
@@ -174,8 +174,8 @@ public class CTreeNode<T>
     /**
      * returns the node
      *
-     * @param p_node  current node
-     * @param p_path  path
+     * @param p_node current node
+     * @param p_path path
      * @param p_index current path index
      * @return node
      */
@@ -387,7 +387,7 @@ public class CTreeNode<T>
      *
      * @param p_path start node path
      * @param p_node start node
-     * @param p_set  return set
+     * @param p_set return set
      */
     protected final void getTree( final CPath p_path, final CTreeNode<T> p_node, final Set<CPath> p_set )
     {

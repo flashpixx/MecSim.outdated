@@ -49,8 +49,8 @@ public class CVoidSteppable extends IRunnable<IVoidSteppable>
      * ctor
      *
      * @param p_iteration current iteration value
-     * @param p_object    void-steppable object
-     * @param p_layer     layer of the object or null
+     * @param p_object void-steppable object
+     * @param p_layer layer of the object or null
      */
     public CVoidSteppable( final int p_iteration, final IVoidSteppable p_object, final ILayer p_layer )
     {

@@ -135,7 +135,9 @@ public class CMain
             if ( ( l_cli.hasOption( "uibindport" ) ) )
                 CConfiguration.getInstance().get().setTraverse( "ui/bindport", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
         }
-        catch ( final NumberFormatException l_exception ) {}
+        catch ( final NumberFormatException l_exception )
+        {
+        }
 
 
         // run application

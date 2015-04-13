@@ -134,7 +134,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * filter point list to create a list of points which stores monoton increase points
      *
-     * @param p_input   input point list
+     * @param p_input input point list
      * @param p_epsilon epsilon value of the monotonic increase
      * @return point list array
      */
@@ -180,7 +180,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * sets an element into the additional array
      *
      * @param p_position position
-     * @param p_object   object
+     * @param p_object object
      */
     public final void setAdditionalInformation( final int p_position, final T p_object )
     {
@@ -331,7 +331,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * sets an object on the edge position
      *
-     * @param p_object   object
+     * @param p_object object
      * @param p_position position index
      * @throws IllegalAccessException throws exception on emptyness
      */

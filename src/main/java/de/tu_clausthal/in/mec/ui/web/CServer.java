@@ -69,8 +69,8 @@ public class CServer extends NanoHTTPD
     /**
      * ctor - starts the HTTP server
      *
-     * @param p_host    bind hostname
-     * @param p_port    bind port
+     * @param p_host bind hostname
+     * @param p_port bind port
      * @param p_default default location
      * @todo application/x-javascript extension mimetype
      */
@@ -235,7 +235,7 @@ public class CServer extends NanoHTTPD
      * generates HTTP response of a static method calls
      *
      * @param p_location location object
-     * @param p_session  session object
+     * @param p_session session object
      * @return response
      * @throws Throwable on error
      */
@@ -250,7 +250,7 @@ public class CServer extends NanoHTTPD
      * generates HTTP response of file & directory calls
      *
      * @param p_location location object
-     * @param p_session  session object
+     * @param p_session session object
      * @return response
      * @throws Throwable on error
      */
@@ -295,7 +295,7 @@ public class CServer extends NanoHTTPD
      * adds a new virtual file to the server with existance checking
      *
      * @param p_source relative source path
-     * @param p_uri    URI
+     * @param p_uri URI
      */
     public final void addVirtualFile( final String p_source, final String p_uri )
     {
@@ -316,8 +316,8 @@ public class CServer extends NanoHTTPD
      * adds a new virtual directory to the server with existance checking
      *
      * @param p_source relative source path
-     * @param p_index  index file
-     * @param p_uri    URI
+     * @param p_index index file
+     * @param p_uri URI
      */
     public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
     {
@@ -328,9 +328,9 @@ public class CServer extends NanoHTTPD
     /**
      * adds a new virtual directory to the server with existance checking
      *
-     * @param p_source   relative source path
-     * @param p_index    index file
-     * @param p_uri      URI
+     * @param p_source relative source path
+     * @param p_index index file
+     * @param p_uri URI
      * @param p_markdown markdown renderer
      */
     public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
@@ -343,8 +343,8 @@ public class CServer extends NanoHTTPD
      * adds a new virtual directory to the server with existance checking
      *
      * @param p_source source file object
-     * @param p_index  index file
-     * @param p_uri    URI
+     * @param p_index index file
+     * @param p_uri URI
      */
     public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
     {
@@ -355,9 +355,9 @@ public class CServer extends NanoHTTPD
     /**
      * adds a new virtual directory to the server with existance checking
      *
-     * @param p_source   source file object
-     * @param p_index    index file
-     * @param p_uri      URI
+     * @param p_source source file object
+     * @param p_index index file
+     * @param p_uri URI
      * @param p_markdown markdown renderer
      */
     public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )

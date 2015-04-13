@@ -279,7 +279,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * creates an image with a specific scale
      *
-     * @param p_width  image width
+     * @param p_width image width
      * @param p_height image height
      */
     private void setImage( final int p_width, final int p_height )
@@ -313,7 +313,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      * Method to scale a Buffered Image
      *
      * @param p_source Image which should be scaled
-     * @param p_width  new Width
+     * @param p_width new Width
      * @param p_height new Height
      * @return new Image
      */
@@ -331,7 +331,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
+     * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

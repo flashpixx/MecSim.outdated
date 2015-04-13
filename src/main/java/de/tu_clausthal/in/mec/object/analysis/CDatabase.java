@@ -74,8 +74,8 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     /**
      * creates the table structure
      *
-     * @param p_tablename  table name without prefix (will append automatically)
-     * @param p_createsql  create sql without "create >tablename<"
+     * @param p_tablename table name without prefix (will append automatically)
+     * @param p_createsql create sql without "create >tablename<"
      * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
      * @todo check database independence
      */

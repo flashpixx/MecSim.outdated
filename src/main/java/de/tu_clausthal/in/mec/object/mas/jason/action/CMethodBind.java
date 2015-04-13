@@ -66,7 +66,7 @@ public class CMethodBind extends IAction
     /**
      * ctor bind an object
      *
-     * @param p_name   name of the binding object
+     * @param p_name name of the binding object
      * @param p_object object
      */
     public CMethodBind( final String p_name, final Object p_object )
@@ -78,7 +78,7 @@ public class CMethodBind extends IAction
     /**
      * adds a new bind object
      *
-     * @param p_name   name
+     * @param p_name name
      * @param p_object bind object
      */
     public final void push( final String p_name, final Object p_object )

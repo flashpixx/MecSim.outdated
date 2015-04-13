@@ -104,7 +104,7 @@ public class CReflection
     /**
      * returns filtered fields of a class and the super classes
      *
-     * @param p_class  class
+     * @param p_class class
      * @param p_filter filtering object
      * @return map with field name and getter / setter handle
      */
@@ -138,7 +138,7 @@ public class CReflection
     /**
      * returns a void-method from a class
      *
-     * @param p_class  class
+     * @param p_class class
      * @param p_method methodname
      * @return method
      */
@@ -151,10 +151,10 @@ public class CReflection
     /**
      * returns a void-method from a class
      *
-     * @param p_class     class
-     * @param p_method    methodname
+     * @param p_class class
+     * @param p_method methodname
      * @param p_parameter array with type-classes to define method parameter e.g. new Class[]{Integer.TYPE,
-     *                    Integer.TYPE};
+     * Integer.TYPE};
      * @return method
      */
     public static CMethod getClassMethod( final Class<?> p_class, final String p_method, final Class<?>[] p_parameter ) throws IllegalArgumentException,
@@ -181,7 +181,7 @@ public class CReflection
     /**
      * returns filtered methods of a class and the super classes
      *
-     * @param p_class  class
+     * @param p_class class
      * @param p_filter filtering object
      * @return map with method name
      */
@@ -312,7 +312,7 @@ public class CReflection
         /**
          * ctor
          *
-         * @param p_field  field of the getter / setter
+         * @param p_field field of the getter / setter
          * @param p_getter getter handle or null
          * @param p_setter setter handle or null
          */
@@ -449,7 +449,7 @@ public class CReflection
          * get the method handle
          *
          * @param p_methodname method name
-         * @param p_arguments  method arguments
+         * @param p_arguments method arguments
          * @return handle
          */
         public final CMethod get( final String p_methodname, final Class<?>[] p_arguments ) throws IllegalAccessException

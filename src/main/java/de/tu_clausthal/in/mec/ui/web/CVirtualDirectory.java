@@ -66,7 +66,7 @@ public class CVirtualDirectory implements IVirtualLocation
      * ctor
      *
      * @param p_directory base directory of the physical directory
-     * @param p_index     index file
+     * @param p_index index file
      */
     public CVirtualDirectory( final URL p_directory, final String p_index )
     {
@@ -85,8 +85,8 @@ public class CVirtualDirectory implements IVirtualLocation
      * ctor
      *
      * @param p_directory base directory of the physical directory
-     * @param p_index     index file
-     * @param p_uri       regular expression of the URI
+     * @param p_index index file
+     * @param p_uri regular expression of the URI
      */
     public CVirtualDirectory( final URL p_directory, final String p_index, final String p_uri )
     {
@@ -110,9 +110,9 @@ public class CVirtualDirectory implements IVirtualLocation
      * ctor
      *
      * @param p_directory base directory of the physical directory
-     * @param p_index     index file
-     * @param p_uri       regular expression of the URI
-     * @param p_markdown  markdown renderer
+     * @param p_index index file
+     * @param p_uri regular expression of the URI
+     * @param p_markdown markdown renderer
      */
     public CVirtualDirectory( final URL p_directory, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {

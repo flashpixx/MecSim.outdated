@@ -73,7 +73,7 @@ public class CLogger
     /**
      * creates the logger with properties
      *
-     * @param p_level    log level
+     * @param p_level log level
      * @param p_filename p_filename
      */
     public static void create( final Level p_level, final String p_filename )
@@ -87,7 +87,7 @@ public class CLogger
     /**
      * pad / cut string of a define length
      *
-     * @param p_input  input string
+     * @param p_input input string
      * @param p_filler fill character
      * @param p_length max string length
      * @return modified string
@@ -107,7 +107,7 @@ public class CLogger
      * creates a full log item
      *
      * @param p_status status name
-     * @param p_add    additional log data
+     * @param p_add additional log data
      */
     private static String createLogData( final Level p_status, final Object p_add )
     {
@@ -196,7 +196,7 @@ public class CLogger
     /**
      * adds a warn message
      *
-     * @param p_data  log data
+     * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
      * @tparam input data type
@@ -243,7 +243,7 @@ public class CLogger
     /**
      * adds a error message
      *
-     * @param p_data  log data
+     * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
      * @tparam input data type
@@ -291,7 +291,7 @@ public class CLogger
     /**
      * adds an info message
      *
-     * @param p_data  log data
+     * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
      * @tparam input data type
@@ -338,7 +338,7 @@ public class CLogger
     /**
      * adds a debug message
      *
-     * @param p_data  log data
+     * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
      * @tparam input data type
@@ -386,7 +386,7 @@ public class CLogger
     /**
      * adds a output message
      *
-     * @param p_data  log data
+     * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
      * @tparam input data type

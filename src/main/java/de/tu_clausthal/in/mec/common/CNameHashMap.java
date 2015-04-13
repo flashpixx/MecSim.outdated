@@ -58,10 +58,10 @@ public class CNameHashMap extends HashMap<String, Object>
     /**
      * static traverse to set data
      *
-     * @param p_path         path
+     * @param p_path path
      * @param p_currentindex current path index
-     * @param p_value        value
-     * @param p_map          current map
+     * @param p_value value
+     * @param p_map current map
      * @tparam T value type
      */
     @SuppressWarnings( "unchecked" )
@@ -87,7 +87,7 @@ public class CNameHashMap extends HashMap<String, Object>
     /**
      * traverse and sets the value
      *
-     * @param p_path  path
+     * @param p_path path
      * @param p_value value
      * @tparam T type
      * @bug exception
@@ -100,7 +100,7 @@ public class CNameHashMap extends HashMap<String, Object>
     /**
      * traverse and sets the value
      *
-     * @param p_path  path
+     * @param p_path path
      * @param p_value value
      * @tparam T type
      */

@@ -107,9 +107,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
     /**
      * creates a new source
      *
-     * @param p_geoposition      position of the Source
+     * @param p_geoposition position of the Source
      * @param p_defaultGenerator default Generator for this Source
-     * @param p_aslname          ASL Programm for the Generator
+     * @param p_aslname ASL Programm for the Generator
      */
     public final void createSource( final GeoPosition p_geoposition, final String p_defaultGenerator, final String p_aslname )
     {
@@ -188,9 +188,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
     /**
      * set a generator object for a source
      *
-     * @param p_source            source where the generator should be placed
+     * @param p_source source where the generator should be placed
      * @param p_selectedgenerator new generator
-     * @param p_aslname           ASL Programm for the Generator
+     * @param p_aslname ASL Programm for the Generator
      */
     public final void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
     {

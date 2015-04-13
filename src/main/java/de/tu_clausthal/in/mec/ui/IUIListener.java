@@ -81,7 +81,7 @@ public abstract class IUIListener implements MouseListener
     /**
      * click method which is called by a click on the object
      *
-     * @param p_event  mouse event
+     * @param p_event mouse event
      * @param p_viewer viewer
      */
     public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )

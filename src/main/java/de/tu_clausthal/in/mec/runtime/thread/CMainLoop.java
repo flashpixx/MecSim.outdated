@@ -76,8 +76,8 @@ public class CMainLoop implements Runnable
      * returns a runnable object of the steppable input
      *
      * @param p_iteration iteration
-     * @param p_object    steppable object
-     * @param p_layer     layer
+     * @param p_object steppable object
+     * @param p_layer layer
      * @return runnable object
      */
     private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
@@ -95,7 +95,7 @@ public class CMainLoop implements Runnable
     /**
      * invokes all defined data
      *
-     * @param p_layer      layer
+     * @param p_layer layer
      * @param p_tasksource invoking tasks
      * @throws InterruptedException is throws on task error
      */

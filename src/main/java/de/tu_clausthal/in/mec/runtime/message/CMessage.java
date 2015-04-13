@@ -56,7 +56,7 @@ public class CMessage<T> implements IMessage<T>
      * ctor - creates a message with data and name
      *
      * @param p_source path of the source
-     * @param p_title  title of the message
+     * @param p_title title of the message
      */
     public CMessage( final CPath p_source, final String p_title )
     {
@@ -74,8 +74,8 @@ public class CMessage<T> implements IMessage<T>
      * ctor - creates a message with data and name
      *
      * @param p_source path of the source
-     * @param p_title  title of the message
-     * @param p_data   data of the message
+     * @param p_title title of the message
+     * @param p_data data of the message
      */
     public CMessage( final CPath p_source, final String p_title, final T p_data )
     {

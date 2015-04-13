@@ -84,7 +84,7 @@ public class CBrowser extends GridPane
      * ctor with instantiation the engine
      *
      * @param p_menu menu settings
-     * @param p_url  string with URL
+     * @param p_url string with URL
      */
     public CBrowser( final EMenu p_menu, final String p_url )
     {
@@ -278,13 +278,21 @@ public class CBrowser extends GridPane
      */
     public enum EMenu
     {
-        /** value of no-menu * */
+        /**
+         * value of no-menu *
+         */
         None,
-        /** value of menu with back-forward-button * */
+        /**
+         * value of menu with back-forward-button *
+         */
         BackForward,
-        /** value of menu with URL-menu * */
+        /**
+         * value of menu with URL-menu *
+         */
         URL,
-        /** value of menu with all option * */
+        /**
+         * value of menu with all option *
+         */
         Full
     }
 

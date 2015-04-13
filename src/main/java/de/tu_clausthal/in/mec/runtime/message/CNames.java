@@ -51,7 +51,7 @@ public class CNames
      * creates a full name
      *
      * @param p_object object
-     * @param p_name   name
+     * @param p_name name
      * @return fqn path
      */
     public static CPath getName( final Object p_object, final String p_name )

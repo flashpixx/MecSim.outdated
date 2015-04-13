@@ -215,7 +215,7 @@ public class CUI extends Application
      * adds a new tab to the UI
      *
      * @param p_title name of the node
-     * @param p_node  node
+     * @param p_node node
      */
     public final void add( final String p_title, final Node p_node )
     {
@@ -230,7 +230,7 @@ public class CUI extends Application
      * creates a new tab - adds the tab to the global tab pane
      *
      * @param p_title title
-     * @param p_node  node
+     * @param p_node node
      * @return tab
      */
     private Tab createTab( final String p_title, final Node p_node )
@@ -251,7 +251,7 @@ public class CUI extends Application
      * creates a new pop window
      *
      * @param p_title title
-     * @param p_node  node
+     * @param p_node node
      * @return popup
      */
     private PopOver createPopOver( final String p_title, final Node p_node )

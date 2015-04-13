@@ -182,7 +182,7 @@ class COSMMouseListener extends MouseAdapter
     /**
      * returns the geoposition of a mouse position
      *
-     * @param p_event  mouse event
+     * @param p_event mouse event
      * @param p_viewer OSM viewer
      * @return geoposition
      */
@@ -195,7 +195,7 @@ class COSMMouseListener extends MouseAdapter
     /**
      * returns the 2D position of a mouse position
      *
-     * @param p_event  mouse event
+     * @param p_event mouse event
      * @param p_viewer OSM viewer
      * @return point
      */
@@ -209,8 +209,8 @@ class COSMMouseListener extends MouseAdapter
      * checks if a point is in a box around another point
      *
      * @param p_checkposition point of the click
-     * @param p_center        point of the source
-     * @param p_size          rectangle size
+     * @param p_center point of the source
+     * @param p_size rectangle size
      * @return boolean on existence
      */
     protected boolean inRange( final Point2D p_checkposition, final Point2D p_center, final int p_size )

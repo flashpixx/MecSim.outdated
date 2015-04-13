@@ -272,7 +272,7 @@ public class CSimulation
      * loads the simulation from an input stream
      *
      * @param p_input input file
-     * @throws IOException            throws the exception on file reading error
+     * @throws IOException throws the exception on file reading error
      * @throws ClassNotFoundException throws the exception on deserialization
      * @bug incomplete routingmap
      */

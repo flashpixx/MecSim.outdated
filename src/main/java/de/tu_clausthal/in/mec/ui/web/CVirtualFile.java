@@ -45,7 +45,7 @@ public class CVirtualFile implements IVirtualLocation
      */
     private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
     /**
-     * file *
+     * file
      */
     private final URL m_file;
     /**
@@ -58,7 +58,7 @@ public class CVirtualFile implements IVirtualLocation
      * ctor
      *
      * @param p_file file
-     * @param p_uri  regular expression of the URI
+     * @param p_uri regular expression of the URI
      */
     public CVirtualFile( final URL p_file, final String p_uri )
     {

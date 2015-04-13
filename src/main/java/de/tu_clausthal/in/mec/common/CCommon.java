@@ -108,7 +108,7 @@ public class CCommon
     /**
      * converts a Json string into any class object
      *
-     * @param p_data  string data
+     * @param p_data string data
      * @param p_class class type
      * @return deserialized type
      * @tparam T type parameter
@@ -156,8 +156,8 @@ public class CCommon
     /**
      * converts a value into class
      *
-     * @param p_value  string input class
-     * @param p_types  type classes
+     * @param p_value string input class
+     * @param p_types type classes
      * @param p_parser type parser
      * @return converted type
      */
@@ -179,8 +179,8 @@ public class CCommon
     /**
      * checks a value and returns the checkd value or the default value
      *
-     * @param p_input         unchecked value
-     * @param p_default       default value
+     * @param p_input unchecked value
+     * @param p_default default value
      * @param p_allowedvalues allowed values
      * @return checked value
      * @tparam T              value type
@@ -201,7 +201,7 @@ public class CCommon
     /**
      * returns a default value of an empty string
      *
-     * @param p_input   input value
+     * @param p_input input value
      * @param p_default default value
      * @return string
      */
@@ -258,10 +258,10 @@ public class CCommon
     /**
      * concats an URL with a path
      *
-     * @param p_base   base URL
+     * @param p_base base URL
      * @param p_string additional path
      * @return new URL
-     * @throws URISyntaxException    thrown on syntax error
+     * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
     public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
@@ -288,8 +288,8 @@ public class CCommon
     /**
      * returns a default string of the resource file
      *
-     * @param p_object    object for label
-     * @param p_label     label name of the object
+     * @param p_object object for label
+     * @param p_label label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
@@ -301,9 +301,9 @@ public class CCommon
     /**
      * returns a string of the resource file
      *
-     * @param p_language  language code / empty for default
-     * @param p_object    object for label
-     * @param p_label     label name of the object
+     * @param p_language language code / empty for default
+     * @param p_object object for label
+     * @param p_label label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
@@ -315,8 +315,8 @@ public class CCommon
     /**
      * returns a default string of the resource file
      *
-     * @param p_class     class for static calls
-     * @param p_label     label name of the object
+     * @param p_class class for static calls
+     * @param p_label label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
@@ -328,9 +328,9 @@ public class CCommon
     /**
      * returns a string of the resource file
      *
-     * @param p_language  language code / empty for default
-     * @param p_class     class for static calls
-     * @param p_label     label name of the object
+     * @param p_language language code / empty for default
+     * @param p_class class for static calls
+     * @param p_label label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
@@ -352,7 +352,7 @@ public class CCommon
     /**
      * converts any collection type into a typed array
      *
-     * @param p_class      class array
+     * @param p_class class array
      * @param p_collection collection
      * @return typed array
      * @tparam T collection / array type
@@ -368,7 +368,7 @@ public class CCommon
     /**
      * adds a file extension if necessary
      *
-     * @param p_file   file object
+     * @param p_file file object
      * @param p_suffix suffix
      * @return file with extension
      */
@@ -382,7 +382,7 @@ public class CCommon
      * returns the hash of a string
      *
      * @param p_string input string
-     * @param p_hash   hash algorithm
+     * @param p_hash hash algorithm
      * @return hexadecimal hash value
      */
     public static String getHash( final String p_string, final String p_hash )

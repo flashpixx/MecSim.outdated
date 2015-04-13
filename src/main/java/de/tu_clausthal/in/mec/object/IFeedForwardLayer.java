@@ -117,7 +117,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      * method which is called before the object step method is called
      *
      * @param p_currentstep current step
-     * @param p_object      object
+     * @param p_object object
      */
     public void beforeStepObject( final int p_currentstep, final T p_object )
     {
@@ -127,7 +127,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      * method which is called after the object step method is called
      *
      * @param p_currentstep current step
-     * @param p_object      object
+     * @param p_object object
      */
     public void afterStepObject( final int p_currentstep, final T p_object )
     {

@@ -57,7 +57,9 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
-    /** agent file suffix * */
+    /**
+     * agent file suffix *
+     */
     private static final String c_filesuffix = ".asl";
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
@@ -176,7 +178,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
+     * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      * @bug UI frame
      */

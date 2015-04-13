@@ -64,8 +64,8 @@ public class CInternalEmpty extends DefaultInternalAction
     /**
      * ctor
      *
-     * @param p_min    minimum of arguments
-     * @param p_max    maximum of arguments
+     * @param p_min minimum of arguments
+     * @param p_max maximum of arguments
      * @param p_result result value
      */
     public CInternalEmpty( final int p_min, final int p_max, final boolean p_result )

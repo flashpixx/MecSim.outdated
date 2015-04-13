@@ -97,7 +97,7 @@ public class CGraphHopper extends GraphHopper
      * ctor
      *
      * @param p_encoding flag encoder name
-     *                   see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     * see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      */
     public CGraphHopper( final String p_encoding )
     {
@@ -138,7 +138,7 @@ public class CGraphHopper extends GraphHopper
      * creates a list of list of edge between two geopositions
      *
      * @param p_start start geoposition
-     * @param p_end   end geoposition
+     * @param p_end end geoposition
      * @return list of list of edges
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
@@ -150,8 +150,8 @@ public class CGraphHopper extends GraphHopper
     /**
      * creates a list of list of edge between two geopositions
      *
-     * @param p_start     start geoposition
-     * @param p_end       end geoposition
+     * @param p_start start geoposition
+     * @param p_end end geoposition
      * @param p_maxroutes max. number of paths
      * @return list of list of edges
      */

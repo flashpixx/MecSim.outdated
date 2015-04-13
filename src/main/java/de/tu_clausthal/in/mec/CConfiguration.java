@@ -225,7 +225,7 @@ public class CConfiguration
     /**
      * returns the location of a directory
      *
-     * @param p_name    name of the location
+     * @param p_name name of the location
      * @param p_varargs path components after the directory
      * @return full directory
      */
@@ -445,7 +445,7 @@ public class CConfiguration
     /**
      * UI method - set data
      *
-     * @param p_data   input data
+     * @param p_data input data
      * @param p_header header data - configuration changeable only from localhost
      */
     private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )

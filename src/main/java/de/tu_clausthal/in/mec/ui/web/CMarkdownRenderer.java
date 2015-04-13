@@ -82,7 +82,7 @@ public class CMarkdownRenderer extends LinkRenderer
      * ctor
      *
      * @param p_htmltype type of the HTML result
-     * @param p_baseuri  base URI
+     * @param p_baseuri base URI
      */
     public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri )
     {
@@ -94,8 +94,8 @@ public class CMarkdownRenderer extends LinkRenderer
      * ctor
      *
      * @param p_htmltype type of the HTML result
-     * @param p_baseuri  base URI
-     * @param p_cssuri   CSS URI
+     * @param p_baseuri base URI
+     * @param p_cssuri CSS URI
      */
     public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri, final String p_cssuri )
     {
@@ -219,7 +219,7 @@ public class CMarkdownRenderer extends LinkRenderer
      * creates HTML content from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file      URL of the file
+     * @param p_file URL of the file
      * @return HTML content
      */
     public final String getHTML( final PegDownProcessor p_processor, final URL p_file ) throws IOException
@@ -241,7 +241,7 @@ public class CMarkdownRenderer extends LinkRenderer
      * creates a full HTML document from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file      URL of the file
+     * @param p_file URL of the file
      * @return full HTML document
      */
     private String getHTMLDocument( final PegDownProcessor p_processor, final URL p_file ) throws IOException
@@ -258,7 +258,7 @@ public class CMarkdownRenderer extends LinkRenderer
      * creates a HTML fragment from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file      URL of the file
+     * @param p_file URL of the file
      * @return HTML fragment
      */
     private String getHTMLFragment( final PegDownProcessor p_processor, final URL p_file ) throws IOException
@@ -291,7 +291,7 @@ public class CMarkdownRenderer extends LinkRenderer
      * create Wikipedia link
      *
      * @param p_language language prefix
-     * @param p_search   search content
+     * @param p_search search content
      * @return full URL
      */
     private String getWikipediaLink( final String p_language, final String p_search ) throws UnsupportedEncodingException
@@ -305,9 +305,13 @@ public class CMarkdownRenderer extends LinkRenderer
     public enum EHTMLType
     {
 
-        /** value of a HTML fragment * */
+        /**
+         * value of a HTML fragment *
+         */
         Fragment,
-        /** value of a full HTML document * */
+        /**
+         * value of a full HTML document *
+         */
         Document
     }
 

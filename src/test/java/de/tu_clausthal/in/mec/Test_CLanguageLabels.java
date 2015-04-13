@@ -55,9 +55,13 @@ import static org.junit.Assert.fail;
  */
 public class Test_CLanguageLabels
 {
-    /** set with all labels * */
+    /**
+     * set with all labels *
+     */
     private final Set<String> m_labels = new HashSet<>();
-    /** reg expression to extract label data * */
+    /**
+     * reg expression to extract label data *
+     */
     private final Pattern m_language = Pattern.compile( "CCommon.getResourceString.+\\)" );
 
     /**
@@ -125,11 +129,17 @@ public class Test_CLanguageLabels
      */
     private class MyMethodVisitor extends VoidVisitorAdapter
     {
-        /** package name * */
+        /**
+         * package name *
+         */
         private String m_package = "";
-        /** outer class name * */
+        /**
+         * outer class name *
+         */
         private String m_outerclass = "";
-        /** inner class name * */
+        /**
+         * inner class name *
+         */
         private String m_innerclass = "";
 
         @Override
@@ -200,7 +210,7 @@ public class Test_CLanguageLabels
          * checks all languages
          *
          * @param p_classname full qualified class name
-         * @param p_label     label name
+         * @param p_label label name
          */
         private void checkLabel( final String p_classname, final String p_label )
         {

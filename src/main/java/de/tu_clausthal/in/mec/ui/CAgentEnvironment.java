@@ -42,9 +42,13 @@ import java.util.Map;
 public class CAgentEnvironment
 {
 
-    /** type of the MAS name * */
+    /**
+     * type of the MAS name *
+     */
     private final EType m_type;
-    /** base URI * */
+    /**
+     * base URI *
+     */
     private final String m_baseuri;
 
     /**
@@ -206,10 +210,14 @@ public class CAgentEnvironment
     }
 
 
-    /** MAS types * */
+    /**
+     * MAS types *
+     */
     public enum EType
     {
-        /** Jason value * */
+        /**
+         * Jason value *
+         */
         Jason
     }
 

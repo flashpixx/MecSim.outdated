@@ -49,7 +49,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     /**
      * datasource *
      */
-    protected BasicDataSource m_datasource = null;
+    private final BasicDataSource m_datasource = new BasicDataSource();
 
 
     /**
@@ -60,7 +60,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         if ( !this.isConnectable() )
             return;
 
-        m_datasource = new BasicDataSource();
         m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>getTraverse( "database/driver" ) );
         m_datasource.setUrl( CConfiguration.getInstance().get().<String>getTraverse( "database/url" ) );
         m_datasource.setUsername( CConfiguration.getInstance().get().<String>getTraverse( "database/username" ) );

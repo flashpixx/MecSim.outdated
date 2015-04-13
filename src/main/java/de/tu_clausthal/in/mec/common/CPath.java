@@ -40,7 +40,7 @@ public class CPath implements Iterable<CPath>
     /**
      * separator of the path elements *
      */
-    protected String m_separator = "/";
+    private String m_separator = "/";
 
     /**
      * list with path parts *

@@ -49,7 +49,7 @@ public class CCarJasonAgent extends CDefaultCar
     /**
      * agent object *
      */
-    protected CAgent<CDefaultCar> m_agent = null;
+    private CAgent<CDefaultCar> m_agent;
 
 
     /**

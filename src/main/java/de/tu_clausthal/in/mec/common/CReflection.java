@@ -390,15 +390,15 @@ public class CReflection
         /**
          * object reference *
          */
-        protected T m_object = null;
+        private final T m_object;
         /**
          * forbidden names *
          */
-        protected Set<String> m_forbidden = new HashSet<>();
+        private final Set<String> m_forbidden = new HashSet<>();
         /**
          * cache map *
          */
-        protected Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
+        private final Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
 
 
         /**

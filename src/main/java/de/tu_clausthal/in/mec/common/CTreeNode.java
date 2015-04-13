@@ -44,19 +44,19 @@ public class CTreeNode<T>
     /**
      * map with child names and nodes *
      */
-    protected Map<String, CTreeNode<T>> m_childs = new HashMap<>();
+    private final Map<String, CTreeNode<T>> m_childs = new HashMap<>();
     /**
      * reference to the parent node *
      */
-    protected CTreeNode<T> m_parent = null;
-    /**
-     * data of the node *
-     */
-    protected T m_data = null;
+    private final CTreeNode<T> m_parent;
     /**
      * ID / name of the node *
      */
-    protected String m_id = null;
+    private final String m_id;
+    /**
+     * data of the node *
+     */
+    private T m_data = null;
 
 
     /**
@@ -70,6 +70,7 @@ public class CTreeNode<T>
             throw new IllegalArgumentException( CCommon.getResourceString( this, "idnotnull" ) );
 
         m_id = p_identifier;
+        m_parent = null;
     }
 
 
@@ -304,6 +305,16 @@ public class CTreeNode<T>
     }
 
     /**
+     * sets the data to the current node
+     *
+     * @param p_data data
+     */
+    public final void setData( final T p_data )
+    {
+        m_data = p_data;
+    }
+
+    /**
      * adds a collection of pair with path and data
      *
      * @param p_data collection of pair with path and data
@@ -312,16 +323,6 @@ public class CTreeNode<T>
     {
         for ( Pair<CPath, T> l_item : p_data )
             this.getNode( l_item.getKey() ).setData( l_item.getValue() );
-    }
-
-    /**
-     * sets the data to the current node
-     *
-     * @param p_data data
-     */
-    public final void setData( final T p_data )
-    {
-        m_data = p_data;
     }
 
     /**

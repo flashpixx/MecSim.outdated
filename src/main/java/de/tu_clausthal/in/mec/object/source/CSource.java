@@ -66,11 +66,11 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * position of the source within the map
      */
-    private transient GeoPosition m_position = null;
+    private GeoPosition m_position;
     /**
      * image of the waypoint
      */
-    private transient BufferedImage m_image = null;
+    private transient BufferedImage m_image;
     /**
      * waypoint color
      */
@@ -82,7 +82,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * Member Variable which may hold a Generator
      */
-    private IGenerator m_generator = null;
+    private IGenerator m_generator;
     /**
      * ComplexTarget of this Source
      */

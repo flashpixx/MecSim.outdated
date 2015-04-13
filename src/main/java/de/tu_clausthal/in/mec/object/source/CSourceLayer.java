@@ -54,12 +54,12 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @bug why static - should be a member
      */
-    private static ISource s_selectedSource = null;
+    private static ISource s_selectedSource;
 
     /**
      * List of all Atom Targets
      */
-    private Vector<CAtomTarget> m_sourceTargets = new Vector<>();
+    private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
 
 
     @Override

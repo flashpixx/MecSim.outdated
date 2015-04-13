@@ -39,7 +39,7 @@ public class CMessage implements IMessage<Message>
      *
      * @note Jason message data
      */
-    private Message m_data = null;
+    private final Message m_data;
     /**
      * ttl of the message *
      */

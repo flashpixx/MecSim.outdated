@@ -108,6 +108,35 @@ public class CSource extends IInspector implements ISource, ISerializable
         this.setImage();
     }
 
+    /**
+     * creates the image
+     */
+    private void setImage()
+    {
+        if ( m_color == null )
+            return;
+
+        try
+        {
+            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
+
+            // modify blue value to the color of the waypoint
+            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
+            for ( int i = 0; i < l_image.getHeight(); i++ )
+                for ( int j = 0; j < l_image.getWidth(); j++ )
+                {
+                    final Color l_color = new Color( l_image.getRGB( j, i ) );
+                    if ( l_color.getBlue() > 0 )
+                        m_image.setRGB( j, i, m_color.getRGB() );
+                }
+
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.warn( l_exception );
+        }
+    }
+
     @Override
     public final Map<String, Object> inspect()
     {
@@ -245,35 +274,6 @@ public class CSource extends IInspector implements ISource, ISerializable
 
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
-    }
-
-    /**
-     * creates the image
-     */
-    private void setImage()
-    {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
     }
 
     /**

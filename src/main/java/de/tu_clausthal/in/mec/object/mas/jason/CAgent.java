@@ -122,19 +122,6 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_namepath name of the agent (full path)
      * @param p_asl agent ASL file
-     * @throws JasonException throws an Jason exception
-     */
-    public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
-    {
-        this( p_namepath, p_asl, null );
-    }
-
-
-    /**
-     * ctor
-     *
-     * @param p_namepath name of the agent (full path)
-     * @param p_asl agent ASL file
      * @param p_bind object that should be bind with the agent
      * @throws JasonException throws an Jason exception
      */
@@ -161,6 +148,19 @@ public class CAgent<T> implements IVoidAgent
 
         // initialize message system
         m_participant = new CParticipant( this );
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_namepath name of the agent (full path)
+     * @param p_asl agent ASL file
+     * @throws JasonException throws an Jason exception
+     */
+    public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
+    {
+        this( p_namepath, p_asl, null );
     }
 
 
@@ -348,6 +348,40 @@ public class CAgent<T> implements IVoidAgent
         }
 
         /**
+         * updates all beliefs, that will read from the bind objects
+         */
+        protected final void updateBindBeliefs()
+        {
+            for ( IBelief l_item : m_beliefs )
+            {
+                // remove old belief within the agent
+                for ( Literal l_literal : l_item.getLiterals() )
+                    try
+                    {
+                        m_agent.delBel( l_literal );
+                    }
+                    catch ( final Exception l_exception )
+                    {
+                    }
+
+                // clear belief storage and update the entries
+                l_item.clear();
+                l_item.update();
+
+
+                // set new belief into the agent
+                for ( Literal l_literal : l_item.getLiterals() )
+                    try
+                    {
+                        m_agent.addBel( l_literal );
+                    }
+                    catch ( final Exception l_exception )
+                    {
+                    }
+            }
+        }
+
+        /**
          * updates all beliefs that are read from the message queue
          */
         protected final void updateMessageBeliefs()
@@ -391,40 +425,6 @@ public class CAgent<T> implements IVoidAgent
                 catch ( final Exception l_exception )
                 {
                 }
-        }
-
-        /**
-         * updates all beliefs, that will read from the bind objects
-         */
-        protected final void updateBindBeliefs()
-        {
-            for ( IBelief l_item : m_beliefs )
-            {
-                // remove old belief within the agent
-                for ( Literal l_literal : l_item.getLiterals() )
-                    try
-                    {
-                        m_agent.delBel( l_literal );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                    }
-
-                // clear belief storage and update the entries
-                l_item.clear();
-                l_item.update();
-
-
-                // set new belief into the agent
-                for ( Literal l_literal : l_item.getLiterals() )
-                    try
-                    {
-                        m_agent.addBel( l_literal );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                    }
-            }
         }
 
     }

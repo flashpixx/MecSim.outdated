@@ -53,20 +53,19 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
         m_object = p_object;
     }
 
+    @Override
+    public final Object call() throws Exception
+    {
+        this.perform();
+        return null;
+    }
+
     /**
      * run method to perform the action on runnable and callable interface
      */
     protected void perform()
     {
 
-    }
-
-
-    @Override
-    public final Object call() throws Exception
-    {
-        this.perform();
-        return null;
     }
 
     @Override

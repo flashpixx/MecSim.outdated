@@ -199,44 +199,14 @@ public class CConfiguration
         this.setDefaultDirectories();
     }
 
-
     /**
-     * singleton get instance method
-     *
-     * @return configuration instance
+     * creates the default directories relative to the root dir
      */
-    public static CConfiguration getInstance()
+    private void setDefaultDirectories()
     {
-        return c_instance;
+        for ( String l_item : new String[]{"mas", "jar", "www"} )
+            m_location.put( l_item, this.getBasePath( l_item ) );
     }
-
-
-    /**
-     * returns the data items of the configuration
-     *
-     * @return configuration map
-     */
-    public CNameHashMap.CImmutable get()
-    {
-        return m_configuration;
-    }
-
-
-    /**
-     * returns the location of a directory
-     *
-     * @param p_name name of the location
-     * @param p_varargs path components after the directory
-     * @return full directory
-     */
-    public File getLocation( final String p_name, final String... p_varargs )
-    {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_location.get( p_name );
-
-        return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
-    }
-
 
     /**
      * returns a path relative to the root directory
@@ -252,27 +222,25 @@ public class CConfiguration
         return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
     }
 
-
     /**
-     * creates the default directories relative to the root dir
+     * singleton get instance method
+     *
+     * @return configuration instance
      */
-    private void setDefaultDirectories()
+    public static CConfiguration getInstance()
     {
-        for ( String l_item : new String[]{"mas", "jar", "www"} )
-            m_location.put( l_item, this.getBasePath( l_item ) );
+        return c_instance;
     }
 
-
     /**
-     * creates the configuration directories
+     * returns the data items of the configuration
+     *
+     * @return configuration map
      */
-    private void createDirectories() throws IOException
+    public CNameHashMap.CImmutable get()
     {
-        for ( File l_dir : m_location.values() )
-            if ( !l_dir.exists() && !l_dir.mkdirs() )
-                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
+        return m_configuration;
     }
-
 
     /**
      * returns the property bundle
@@ -283,7 +251,6 @@ public class CConfiguration
     {
         return getResourceBundle( null );
     }
-
 
     /**
      * returns the property bundle
@@ -307,7 +274,6 @@ public class CConfiguration
         return ResourceBundle.getBundle( "language.locals", l_locale, m_reader );
     }
 
-
     /**
      * sets the config dir
      *
@@ -327,6 +293,15 @@ public class CConfiguration
         }
     }
 
+    /**
+     * creates the configuration directories
+     */
+    private void createDirectories() throws IOException
+    {
+        for ( File l_dir : m_location.values() )
+            if ( !l_dir.exists() && !l_dir.mkdirs() )
+                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
+    }
 
     /**
      * write method of the configuration
@@ -349,6 +324,20 @@ public class CConfiguration
         }
     }
 
+    /**
+     * returns the location of a directory
+     *
+     * @param p_name name of the location
+     * @param p_varargs path components after the directory
+     * @return full directory
+     */
+    public File getLocation( final String p_name, final String... p_varargs )
+    {
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            return m_location.get( p_name );
+
+        return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
+    }
 
     /**
      * reads the configuration within the directory

@@ -57,17 +57,6 @@ public abstract class IUIListener implements MouseListener
     }
 
     /**
-     * returns the icon size
-     *
-     * @param p_viewer viewer object
-     * @return circle size
-     */
-    protected final int iconsize( final JXMapViewer p_viewer )
-    {
-        return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
-    }
-
-    /**
      * returns the normalized zoom level
      *
      * @param p_viewer viewer object
@@ -79,13 +68,14 @@ public abstract class IUIListener implements MouseListener
     }
 
     /**
-     * click method which is called by a click on the object
+     * returns the icon size
      *
-     * @param p_event mouse event
-     * @param p_viewer viewer
+     * @param p_viewer viewer object
+     * @return circle size
      */
-    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    protected final int iconsize( final JXMapViewer p_viewer )
     {
+        return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
     }
 
     /**
@@ -106,6 +96,16 @@ public abstract class IUIListener implements MouseListener
     {
         if ( SwingUtilities.isLeftMouseButton( p_event ) )
             this.onClick( p_event, CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
+    }
+
+    /**
+     * click method which is called by a click on the object
+     *
+     * @param p_event mouse event
+     * @param p_viewer viewer
+     */
+    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
     }
 
     @Override

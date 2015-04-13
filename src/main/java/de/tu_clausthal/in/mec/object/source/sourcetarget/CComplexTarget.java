@@ -61,35 +61,6 @@ public class CComplexTarget
     private double m_sum = 0;
 
     /**
-     * Method to sort the Weighting Map
-     *
-     * @param p_unsortmap
-     * @return sorted Weight Map
-     */
-    public static Map sortByValue( final Map p_unsortmap )
-    {
-        final List l_list = new CopyOnWriteArrayList( p_unsortmap.entrySet() );
-
-        Collections.sort(
-                l_list, new Comparator()
-                {
-                    public int compare( final Object p_object1, final Object p_object2 )
-                    {
-                        return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() ).compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
-                    }
-                }
-        );
-
-        final Map l_sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
-        for ( Iterator l_iterator = l_list.iterator(); l_iterator.hasNext(); )
-        {
-            final Map.Entry l_entry = (Map.Entry) l_iterator.next();
-            l_sortedMap.put( l_entry.getKey(), l_entry.getValue() );
-        }
-        return l_sortedMap;
-    }
-
-    /**
      * adds a atom Target to this complex Target with default weight of 1
      *
      * @param p_target atom target which should be added
@@ -124,23 +95,6 @@ public class CComplexTarget
     }
 
     /**
-     * removes the Atom Target from this Complex Target
-     *
-     * @param p_target Atom Target which should be removed
-     */
-    public final void removeTarget( final CAtomTarget p_target )
-    {
-
-        if ( !( this.m_weightingMap.containsKey( p_target ) ) )
-            return;
-
-        m_sum -= m_weightingMap.get( p_target );
-        m_probabilityMap.remove( p_target );
-        m_weightingMap.remove( p_target );
-        this.calculateNewDistribution();
-    }
-
-    /**
      * Calculate relative Probabilities for every Atom Target
      */
     public final void calculateNewDistribution()
@@ -155,23 +109,20 @@ public class CComplexTarget
     }
 
     /**
-     * This Methods returns exactly one AtomTarget threw their specific Probability
+     * removes the Atom Target from this Complex Target
      *
-     * @return a single Atom Target
+     * @param p_target Atom Target which should be removed
      */
-    public final CAtomTarget getSingleTarget()
+    public final void removeTarget( final CAtomTarget p_target )
     {
-        final double l_random = m_random.nextDouble();
-        double l_cumulate = 0;
 
-        for ( Map.Entry<CAtomTarget, Double> l_entry : this.m_probabilityMap.entrySet() )
-        {
-            l_cumulate += l_entry.getValue();
-            if ( l_cumulate >= l_random )
-                return l_entry.getKey();
-        }
+        if ( !( this.m_weightingMap.containsKey( p_target ) ) )
+            return;
 
-        return null;
+        m_sum -= m_weightingMap.get( p_target );
+        m_probabilityMap.remove( p_target );
+        m_weightingMap.remove( p_target );
+        this.calculateNewDistribution();
     }
 
     /**
@@ -199,6 +150,26 @@ public class CComplexTarget
             l_targetList.add( this.getSingleTarget() );
 
         return l_targetList;
+    }
+
+    /**
+     * This Methods returns exactly one AtomTarget threw their specific Probability
+     *
+     * @return a single Atom Target
+     */
+    public final CAtomTarget getSingleTarget()
+    {
+        final double l_random = m_random.nextDouble();
+        double l_cumulate = 0;
+
+        for ( Map.Entry<CAtomTarget, Double> l_entry : this.m_probabilityMap.entrySet() )
+        {
+            l_cumulate += l_entry.getValue();
+            if ( l_cumulate >= l_random )
+                return l_entry.getKey();
+        }
+
+        return null;
     }
 
     /**
@@ -230,6 +201,35 @@ public class CComplexTarget
         }
 
         return l_targetList;
+    }
+
+    /**
+     * Method to sort the Weighting Map
+     *
+     * @param p_unsortmap
+     * @return sorted Weight Map
+     */
+    public static Map sortByValue( final Map p_unsortmap )
+    {
+        final List l_list = new CopyOnWriteArrayList( p_unsortmap.entrySet() );
+
+        Collections.sort(
+                l_list, new Comparator()
+                {
+                    public int compare( final Object p_object1, final Object p_object2 )
+                    {
+                        return ( (Comparable) ( (Map.Entry) ( p_object2 ) ).getValue() ).compareTo( ( (Map.Entry) ( p_object1 ) ).getValue() );
+                    }
+                }
+        );
+
+        final Map l_sortedMap = Collections.synchronizedMap( new LinkedHashMap() );
+        for ( Iterator l_iterator = l_list.iterator(); l_iterator.hasNext(); )
+        {
+            final Map.Entry l_entry = (Map.Entry) l_iterator.next();
+            l_sortedMap.put( l_entry.getKey(), l_entry.getValue() );
+        }
+        return l_sortedMap;
     }
 
 }

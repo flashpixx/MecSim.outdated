@@ -131,17 +131,63 @@ public class CServer extends NanoHTTPD
         return l_response;
     }
 
-
     /**
-     * returns the virtual-location object
+     * generates HTTP response of a static method calls
      *
-     * @return location
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     * @throws Throwable on error
      */
-    public final CVirtualLocation getVirtualLocation()
+    protected final Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
-        return m_virtuallocation;
+        CLogger.info( p_session.getUri() );
+        return p_location.<Response>get( p_session );
     }
 
+    /**
+     * generates HTTP response of file & directory calls
+     *
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     * @throws Throwable on error
+     */
+    protected final Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        final Response l_response;
+        final URL l_physicalfile = p_location.<URL>get( p_session );
+        final String l_mimetype = this.getMimeType( l_physicalfile );
+        CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
+
+        switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+        {
+            case "htm":
+            case "html":
+                l_response = new Response(
+                        Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
+                        l_physicalfile.openStream()
+                ).getEncoding() ), l_physicalfile.openStream()
+                );
+                break;
+
+            case "md":
+                if ( p_location.getMarkDownRenderer() != null )
+                    l_response = new Response(
+                            Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
+                            m_markdown, l_physicalfile
+                    )
+                    );
+                else
+                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                break;
+
+            default:
+                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+        }
+
+        return l_response;
+    }
 
     /**
      * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
@@ -161,6 +207,15 @@ public class CServer extends NanoHTTPD
         return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
     }
 
+    /**
+     * returns the virtual-location object
+     *
+     * @return location
+     */
+    public final CVirtualLocation getVirtualLocation()
+    {
+        return m_virtuallocation;
+    }
 
     /**
      * register an object for the UI
@@ -230,67 +285,6 @@ public class CServer extends NanoHTTPD
 
     }
 
-
-    /**
-     * generates HTTP response of a static method calls
-     *
-     * @param p_location location object
-     * @param p_session session object
-     * @return response
-     * @throws Throwable on error
-     */
-    protected final Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
-    {
-        CLogger.info( p_session.getUri() );
-        return p_location.<Response>get( p_session );
-    }
-
-
-    /**
-     * generates HTTP response of file & directory calls
-     *
-     * @param p_location location object
-     * @param p_session session object
-     * @return response
-     * @throws Throwable on error
-     */
-    protected final Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
-    {
-        final Response l_response;
-        final URL l_physicalfile = p_location.<URL>get( p_session );
-        final String l_mimetype = this.getMimeType( l_physicalfile );
-        CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
-
-        switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
-        {
-            case "htm":
-            case "html":
-                l_response = new Response(
-                        Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
-                        l_physicalfile.openStream()
-                ).getEncoding() ), l_physicalfile.openStream()
-                );
-                break;
-
-            case "md":
-                if ( p_location.getMarkDownRenderer() != null )
-                    l_response = new Response(
-                            Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
-                            m_markdown, l_physicalfile
-                    )
-                    );
-                else
-                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-                break;
-
-            default:
-                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-        }
-
-        return l_response;
-    }
-
-
     /**
      * adds a new virtual file to the server with existance checking
      *
@@ -338,20 +332,6 @@ public class CServer extends NanoHTTPD
         this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
     }
 
-
-    /**
-     * adds a new virtual directory to the server with existance checking
-     *
-     * @param p_source source file object
-     * @param p_index index file
-     * @param p_uri URI
-     */
-    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
-    {
-        this.addVirtualDirectory( p_source, p_index, p_uri, null );
-    }
-
-
     /**
      * adds a new virtual directory to the server with existance checking
      *
@@ -371,5 +351,17 @@ public class CServer extends NanoHTTPD
         {
             CLogger.error( l_exception );
         }
+    }
+
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source source file object
+     * @param p_index index file
+     * @param p_uri URI
+     */
+    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    {
+        this.addVirtualDirectory( p_source, p_index, p_uri, null );
     }
 }

@@ -59,19 +59,6 @@ public class CCommon
     {
     }
 
-
-    /**
-     * remove from a string the system package name
-     *
-     * @param p_package package / class path
-     * @return path without main package name
-     */
-    public static String removePackageName( final String p_package )
-    {
-        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
-    }
-
-
     /**
      * convert any object data into Json
      *
@@ -93,7 +80,6 @@ public class CCommon
         return null;
     }
 
-
     /**
      * converts a Json string data into a raw map
      *
@@ -103,7 +89,6 @@ public class CCommon
     {
         return fromJson( p_data, Map.class );
     }
-
 
     /**
      * converts a Json string into any class object
@@ -126,7 +111,6 @@ public class CCommon
 
         return null;
     }
-
 
     /**
      * creates a map from parameters
@@ -152,6 +136,66 @@ public class CCommon
         return l_return;
     }
 
+    /**
+     * returns a default string of the resource file
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
+        return getResourceString( null, p_class, p_label, p_parameter );
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_language language code / empty for default
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final String p_language, final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
+        try
+        {
+            final String l_string = CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) );
+            return MessageFormat.format( l_string, p_parameter );
+        }
+        catch ( final MissingResourceException l_exception )
+        {
+        }
+
+        return "";
+    }
+
+    /**
+     * returns the label of a class and string to get access to the resource
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @return label name
+     */
+    public static String getResourceStringLabel( final Class<?> p_class, final String p_label )
+    {
+        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace(
+                " ", ""
+        );
+    }
+
+    /**
+     * remove from a string the system package name
+     *
+     * @param p_package package / class path
+     * @return path without main package name
+     */
+    public static String removePackageName( final String p_package )
+    {
+        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+    }
 
     /**
      * converts a value into class
@@ -175,7 +219,6 @@ public class CCommon
         return p_value;
     }
 
-
     /**
      * checks a value and returns the checkd value or the default value
      *
@@ -197,7 +240,6 @@ public class CCommon
         return p_default;
     }
 
-
     /**
      * returns a default value of an empty string
      *
@@ -209,7 +251,6 @@ public class CCommon
     {
         return ( ( p_input == null ) || ( p_input.isEmpty() ) ) ? p_default : p_input;
     }
-
 
     /**
      * returns root path of the resource
@@ -254,7 +295,6 @@ public class CCommon
         return null;
     }
 
-
     /**
      * concats an URL with a path
      *
@@ -268,22 +308,6 @@ public class CCommon
     {
         return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
     }
-
-
-    /**
-     * returns the label of a class and string to get access to the resource
-     *
-     * @param p_class class for static calls
-     * @param p_label label name of the object
-     * @return label name
-     */
-    public static String getResourceStringLabel( final Class<?> p_class, final String p_label )
-    {
-        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace(
-                " ", ""
-        );
-    }
-
 
     /**
      * returns a default string of the resource file
@@ -311,43 +335,6 @@ public class CCommon
     {
         return getResourceString( p_language, p_object.getClass(), p_label, p_parameter );
     }
-
-    /**
-     * returns a default string of the resource file
-     *
-     * @param p_class class for static calls
-     * @param p_label label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
-     */
-    public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
-    {
-        return getResourceString( null, p_class, p_label, p_parameter );
-    }
-
-    /**
-     * returns a string of the resource file
-     *
-     * @param p_language language code / empty for default
-     * @param p_class class for static calls
-     * @param p_label label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
-     */
-    public static String getResourceString( final String p_language, final Class<?> p_class, final String p_label, final Object... p_parameter )
-    {
-        try
-        {
-            final String l_string = CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) );
-            return MessageFormat.format( l_string, p_parameter );
-        }
-        catch ( final MissingResourceException l_exception )
-        {
-        }
-
-        return "";
-    }
-
 
     /**
      * converts any collection type into a typed array
@@ -398,6 +385,20 @@ public class CCommon
         return null;
     }
 
+    /**
+     * returns a string with hexadecimal bytes
+     *
+     * @param p_bytes input bytes
+     * @return hexadecimal string
+     */
+    private static String getBytes2Hex( final byte[] p_bytes )
+    {
+        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
+        for ( byte l_byte : p_bytes )
+            l_str.append( String.format( "%02x", l_byte & 0xff ) );
+
+        return l_str.toString();
+    }
 
     /**
      * @param p_file input file
@@ -415,21 +416,6 @@ public class CCommon
         }
 
         return null;
-    }
-
-    /**
-     * returns a string with hexadecimal bytes
-     *
-     * @param p_bytes input bytes
-     * @return hexadecimal string
-     */
-    private static String getBytes2Hex( final byte[] p_bytes )
-    {
-        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
-        for ( byte l_byte : p_bytes )
-            l_str.append( String.format( "%02x", l_byte & 0xff ) );
-
-        return l_str.toString();
     }
 
 }

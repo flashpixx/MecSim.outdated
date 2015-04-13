@@ -188,22 +188,6 @@ public class CNameHashMap extends HashMap<String, Object>
                 this.put( l_item.getKey(), l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
         }
 
-
-        /**
-         * converts the immutable map to a default hashmap
-         *
-         * @return default map
-         */
-        public final Map<String, Object> toHashMap()
-        {
-            final Map<String, Object> l_return = new HashMap<>();
-            for ( Map.Entry<String, Object> l_item : this.entrySet() )
-                l_return.put( l_item.getKey(), l_item.getValue() instanceof CImmutable ? ( (CImmutable) l_item.getValue() ).toHashMap() : l_item.getValue() );
-
-            return l_return;
-        }
-
-
         @Override
         @SuppressWarnings( "unchecked" )
         public final Object put( final String p_key, final Object p_value )
@@ -225,10 +209,23 @@ public class CNameHashMap extends HashMap<String, Object>
             return this.get( p_key );
         }
 
-
         @Override
         public void clear()
         {
+        }
+
+        /**
+         * converts the immutable map to a default hashmap
+         *
+         * @return default map
+         */
+        public final Map<String, Object> toHashMap()
+        {
+            final Map<String, Object> l_return = new HashMap<>();
+            for ( Map.Entry<String, Object> l_item : this.entrySet() )
+                l_return.put( l_item.getKey(), l_item.getValue() instanceof CImmutable ? ( (CImmutable) l_item.getValue() ).toHashMap() : l_item.getValue() );
+
+            return l_return;
         }
 
     }

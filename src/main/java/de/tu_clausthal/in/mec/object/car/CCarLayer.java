@@ -75,17 +75,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private transient CGraphHopper m_graph = new CGraphHopper();
 
-
-    /**
-     * returns the graph of the layer
-     *
-     * @return graph object
-     */
-    public final CGraphHopper getGraph()
-    {
-        return m_graph;
-    }
-
     /**
      * returns this list of all weights
      *
@@ -94,17 +83,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final String[] getGraphWeight()
     {
         return m_graph.getWeightingList();
-    }
-
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool active flag
-     */
-    public final boolean isActiveWeight( final String p_weight )
-    {
-        return m_graph.isActiveWeight( p_weight );
     }
 
     /**
@@ -120,6 +98,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
             m_graph.enableWeight( p_weight );
     }
 
+    /**
+     * checks if a weight is active
+     *
+     * @param p_weight weight name
+     * @return bool active flag
+     */
+    public final boolean isActiveWeight( final String p_weight )
+    {
+        return m_graph.isActiveWeight( p_weight );
+    }
 
     /**
      * returns a graph weight
@@ -132,7 +120,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         return m_graph.getWeight( p_weight );
     }
 
-
     /**
      * sets the drive model
      *
@@ -144,7 +131,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
             if ( p_model.equals( l_model.getName() ) )
                 m_drivemodel = l_model;
     }
-
 
     /**
      * returns the name of the driving model
@@ -203,6 +189,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     {
         m_analyse.put( "car count", this.getGraph().getNumberOfObjects() );
         return m_analyse;
+    }
+
+    /**
+     * returns the graph of the layer
+     *
+     * @return graph object
+     */
+    public final CGraphHopper getGraph()
+    {
+        return m_graph;
     }
 
     @Override

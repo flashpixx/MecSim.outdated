@@ -254,6 +254,15 @@ public class CDefaultCar extends IInspector implements ICar
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
+    @Override
+    public void release()
+    {
+        super.release();
+        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        if ( l_edge != null )
+            l_edge.removeObject( this );
+    }
+
     /**
      * @bug UI frame
      */
@@ -272,15 +281,6 @@ public class CDefaultCar extends IInspector implements ICar
 
         //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
         //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );
-    }
-
-    @Override
-    public void release()
-    {
-        super.release();
-        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
-        if ( l_edge != null )
-            l_edge.removeObject( this );
     }
 
     @Override

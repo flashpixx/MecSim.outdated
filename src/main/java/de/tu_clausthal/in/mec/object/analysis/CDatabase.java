@@ -72,6 +72,21 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     }
 
     /**
+     * check if database is connectable
+     *
+     * @return boolean of connectivity
+     */
+    private boolean isConnectable()
+    {
+        final String l_driver = CConfiguration.getInstance().get().<String>getTraverse( "database/driver" );
+        final String l_url = CConfiguration.getInstance().get().<String>getTraverse( "database/url" );
+
+        return CConfiguration.getInstance().get().<Boolean>getTraverse(
+                "database/active"
+        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
+    }
+
+    /**
      * creates the table structure
      *
      * @param p_tablename table name without prefix (will append automatically)
@@ -103,22 +118,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
             CLogger.error( l_exception );
         }
     }
-
-    /**
-     * check if database is connectable
-     *
-     * @return boolean of connectivity
-     */
-    private boolean isConnectable()
-    {
-        final String l_driver = CConfiguration.getInstance().get().<String>getTraverse( "database/driver" );
-        final String l_url = CConfiguration.getInstance().get().<String>getTraverse( "database/url" );
-
-        return CConfiguration.getInstance().get().<Boolean>getTraverse(
-                "database/active"
-        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
-    }
-
 
     @Override
     public final int getCalculationIndex()

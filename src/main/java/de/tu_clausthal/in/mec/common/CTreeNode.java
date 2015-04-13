@@ -202,6 +202,16 @@ public class CTreeNode<T>
         return m_childs.get( p_name );
     }
 
+    /**
+     * adds a list of path to the current node
+     *
+     * @param p_names collections of names
+     */
+    public final void addChild( final Collection<String> p_names )
+    {
+        for ( String l_item : p_names )
+            this.addChild( l_item );
+    }
 
     /**
      * adds all childs of the path to the current node
@@ -216,19 +226,6 @@ public class CTreeNode<T>
 
         return new CTreeNode<T>( p_name, this );
     }
-
-
-    /**
-     * adds a list of path to the current node
-     *
-     * @param p_names collections of names
-     */
-    public final void addChild( final Collection<String> p_names )
-    {
-        for ( String l_item : p_names )
-            this.addChild( l_item );
-    }
-
 
     /**
      * remove a child node
@@ -306,6 +303,16 @@ public class CTreeNode<T>
     }
 
     /**
+     * sets the data to the current node
+     *
+     * @param p_data data
+     */
+    public final void setData( final T p_data )
+    {
+        m_data = p_data;
+    }
+
+    /**
      * adds a collection of pair with path and data
      *
      * @param p_data collection of pair with path and data
@@ -314,16 +321,6 @@ public class CTreeNode<T>
     {
         for ( Pair<CPath, T> l_item : p_data )
             this.getNode( l_item.getKey() ).setData( l_item.getValue() );
-    }
-
-    /**
-     * sets the data to the current node
-     *
-     * @param p_data data
-     */
-    public final void setData( final T p_data )
-    {
-        m_data = p_data;
     }
 
     /**

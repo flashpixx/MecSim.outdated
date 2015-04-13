@@ -88,22 +88,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     }
 
     /**
-     * get from an agent name the storing file name
-     *
-     * @param p_agentname agent name
-     * @return existing file object
-     * @note must support a agent filename as file with extension and without extension
-     * @todo add ASL build-in files with the resource directory
-     */
-    public static File getAgentFile( final String p_agentname )
-    {
-        if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
-
-        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( c_filesuffix ) ? p_agentname : p_agentname + c_filesuffix );
-    }
-
-    /**
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
@@ -136,6 +120,21 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         }
     }
 
+    /**
+     * get from an agent name the storing file name
+     *
+     * @param p_agentname agent name
+     * @return existing file object
+     * @note must support a agent filename as file with extension and without extension
+     * @todo add ASL build-in files with the resource directory
+     */
+    public static File getAgentFile( final String p_agentname )
+    {
+        if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
+
+        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( c_filesuffix ) ? p_agentname : p_agentname + c_filesuffix );
+    }
 
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )

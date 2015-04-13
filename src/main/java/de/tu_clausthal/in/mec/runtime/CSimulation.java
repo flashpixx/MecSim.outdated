@@ -102,18 +102,6 @@ public class CSimulation
         return c_instance;
     }
 
-
-    /**
-     * checks the running state of the simulation
-     *
-     * @return state
-     */
-    public boolean isRunning()
-    {
-        return !m_mainloop.isPaused();
-    }
-
-
     /**
      * returns the simulation world
      */
@@ -150,7 +138,6 @@ public class CSimulation
         return m_ui;
     }
 
-
     /**
      * returns a boolean for existing UI
      *
@@ -159,19 +146,6 @@ public class CSimulation
     public boolean hasUI()
     {
         return ( m_ui != null ) && ( m_webserver != null );
-    }
-
-
-    /**
-     * starts the thread worker *
-     */
-    private void threadStartUp()
-    {
-        if ( m_mainloopthread != null )
-            return;
-
-        m_mainloopthread = new Thread( m_mainloop );
-        m_mainloopthread.start();
     }
 
     /**
@@ -196,46 +170,26 @@ public class CSimulation
     }
 
     /**
-     * runs the simulation of the current step
+     * checks the running state of the simulation
+     *
+     * @return state
      */
-    public void start()
+    public boolean isRunning()
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-        this.threadStartUp();
-
-        CLogger.info( CCommon.getResourceString( this, "start" ) );
-
-        m_mainloop.resume();
+        return !m_mainloop.isPaused();
     }
-
 
     /**
-     * stops the current simulation
+     * starts the thread worker *
      */
-    public void stop()
+    private void threadStartUp()
     {
-        if ( !this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
+        if ( m_mainloopthread != null )
+            return;
 
-        m_mainloop.pause();
-        CLogger.info( CCommon.getResourceString( this, "stop" ) );
+        m_mainloopthread = new Thread( m_mainloop );
+        m_mainloopthread.start();
     }
-
-
-    /**
-     * resets the simulation data
-     */
-    public void reset()
-    {
-        this.threadStartUp();
-        m_mainloop.pause();
-        m_mainloop.reset();
-
-        CBootstrap.onSimulationReset( this );
-        CLogger.info( CCommon.getResourceString( this, "reset" ) );
-    }
-
 
     /**
      * stores the simulation in an output stream
@@ -266,7 +220,6 @@ public class CSimulation
             throw new IOException( l_exception.getMessage() );
         }
     }
-
 
     /**
      * loads the simulation from an input stream
@@ -326,6 +279,18 @@ public class CSimulation
         }
     }
 
+    /**
+     * resets the simulation data
+     */
+    public void reset()
+    {
+        this.threadStartUp();
+        m_mainloop.pause();
+        m_mainloop.reset();
+
+        CBootstrap.onSimulationReset( this );
+        CLogger.info( CCommon.getResourceString( this, "reset" ) );
+    }
 
     /**
      * UI method - start the simulation
@@ -335,6 +300,19 @@ public class CSimulation
         this.start();
     }
 
+    /**
+     * runs the simulation of the current step
+     */
+    public void start()
+    {
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        this.threadStartUp();
+
+        CLogger.info( CCommon.getResourceString( this, "start" ) );
+
+        m_mainloop.resume();
+    }
 
     /**
      * UI method - stop the simulation
@@ -344,6 +322,17 @@ public class CSimulation
         this.stop();
     }
 
+    /**
+     * stops the current simulation
+     */
+    public void stop()
+    {
+        if ( !this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
+
+        m_mainloop.pause();
+        CLogger.info( CCommon.getResourceString( this, "stop" ) );
+    }
 
     /**
      * UI method - reset the simulation
@@ -384,38 +373,6 @@ public class CSimulation
         ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( true );
     }
 
-
-    /**
-     * UI method - disables a layer
-     */
-    private void web_static_disablelayer( final Map<String, Object> p_data )
-    {
-        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( false );
-    }
-
-
-    /**
-     * UI method - view a layer
-     */
-    private void web_static_showlayer( final Map<String, Object> p_data )
-    {
-        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
-        if ( l_layer instanceof IViewableLayer )
-            ( (IViewableLayer) l_layer ).setVisible( true );
-    }
-
-
-    /**
-     * UI method - hide a layer
-     */
-    private void web_static_hidelayer( final Map<String, Object> p_data )
-    {
-        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
-        if ( l_layer instanceof IViewableLayer )
-            ( (IViewableLayer) l_layer ).setVisible( false );
-    }
-
-
     /**
      * UI method - gets the layer name from the map
      *
@@ -433,5 +390,33 @@ public class CSimulation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_name ) );
 
         return l_name;
+    }
+
+    /**
+     * UI method - disables a layer
+     */
+    private void web_static_disablelayer( final Map<String, Object> p_data )
+    {
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( false );
+    }
+
+    /**
+     * UI method - view a layer
+     */
+    private void web_static_showlayer( final Map<String, Object> p_data )
+    {
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( true );
+    }
+
+    /**
+     * UI method - hide a layer
+     */
+    private void web_static_hidelayer( final Map<String, Object> p_data )
+    {
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( false );
     }
 }

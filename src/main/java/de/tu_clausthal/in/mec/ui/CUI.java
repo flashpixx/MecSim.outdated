@@ -227,27 +227,6 @@ public class CUI extends Application
     }
 
     /**
-     * creates a new tab - adds the tab to the global tab pane
-     *
-     * @param p_title title
-     * @param p_node node
-     * @return tab
-     */
-    private Tab createTab( final String p_title, final Node p_node )
-    {
-        final Tab l_tab = new Tab();
-
-        l_tab.setId( p_title );
-        l_tab.setText( p_title );
-        l_tab.setContent( p_node );
-        l_tab.setClosable( true );
-        l_tab.setOnClosed( m_tabcloseevent );
-        m_tabpane.getTabs().add( l_tab );
-
-        return l_tab;
-    }
-
-    /**
      * creates a new pop window
      *
      * @param p_title title
@@ -267,6 +246,26 @@ public class CUI extends Application
         return l_popover;
     }
 
+    /**
+     * creates a new tab - adds the tab to the global tab pane
+     *
+     * @param p_title title
+     * @param p_node node
+     * @return tab
+     */
+    private Tab createTab( final String p_title, final Node p_node )
+    {
+        final Tab l_tab = new Tab();
+
+        l_tab.setId( p_title );
+        l_tab.setText( p_title );
+        l_tab.setContent( p_node );
+        l_tab.setClosable( true );
+        l_tab.setOnClosed( m_tabcloseevent );
+        m_tabpane.getTabs().add( l_tab );
+
+        return l_tab;
+    }
 
     /**
      * returns a tab / node

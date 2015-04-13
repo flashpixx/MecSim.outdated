@@ -76,30 +76,6 @@ public class CFieldBind implements IBelief
     }
 
     /**
-     * ctor
-     *
-     * @param p_name name / annotation of the bind object
-     * @param p_object bind object
-     * @param p_forbiddennames set with forbidden field names of the object fields
-     */
-    public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
-    {
-        this.push( p_name, p_object, p_forbiddennames );
-    }
-
-
-    /**
-     * adds / binds an object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        this.push( p_name, p_object, null );
-    }
-
-    /**
      * adds a new bind object
      *
      * @param p_name name / annotation of the object
@@ -117,6 +93,30 @@ public class CFieldBind implements IBelief
                 )
                 )
         );
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_name name / annotation of the bind object
+     * @param p_object bind object
+     * @param p_forbiddennames set with forbidden field names of the object fields
+     */
+    public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
+    {
+        this.push( p_name, p_object, p_forbiddennames );
+    }
+
+    /**
+     * adds / binds an object
+     *
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     */
+    public final void push( final String p_name, final Object p_object )
+    {
+        this.push( p_name, p_object, null );
     }
 
     /**

@@ -96,6 +96,20 @@ public class CAgentEnvironment
     }
 
     /**
+     * UI method - gets the agent name from the map
+     *
+     * @param p_data input data
+     * @return agent name
+     */
+    private final String getAgentName( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "name" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );
+
+        return (String) p_data.get( "name" );
+    }
+
+    /**
      * UI method - delete an agent
      *
      * @param p_data input data
@@ -193,20 +207,6 @@ public class CAgentEnvironment
 
             default:
         }
-    }
-
-    /**
-     * UI method - gets the agent name from the map
-     *
-     * @param p_data input data
-     * @return agent name
-     */
-    private final String getAgentName( final Map<String, Object> p_data )
-    {
-        if ( !p_data.containsKey( "name" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );
-
-        return (String) p_data.get( "name" );
     }
 
 

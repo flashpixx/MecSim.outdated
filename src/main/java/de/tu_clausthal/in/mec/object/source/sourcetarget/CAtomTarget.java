@@ -53,6 +53,15 @@ public class CAtomTarget implements Painter<COSMViewer>
         m_position = p_position;
     }
 
+    @Override
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        final int l_zoom = Math.max( 15 - p_viewer.getZoom(), 3 );
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( this.getPosition(), p_viewer.getZoom() );
+        p_graphic.setColor( Color.RED );
+        p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
+    }
+
     /**
      * return the position of this Target
      *
@@ -71,15 +80,6 @@ public class CAtomTarget implements Painter<COSMViewer>
     public final void setPosition( final GeoPosition p_position )
     {
         this.m_position = p_position;
-    }
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        final int l_zoom = Math.max( 15 - p_viewer.getZoom(), 3 );
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( this.getPosition(), p_viewer.getZoom() );
-        p_graphic.setColor( Color.RED );
-        p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
     }
 
 }

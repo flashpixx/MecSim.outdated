@@ -128,6 +128,23 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
+     * set a generator object for a source
+     *
+     * @param p_source source where the generator should be placed
+     * @param p_selectedgenerator new generator
+     * @param p_aslname ASL Programm for the Generator
+     */
+    public final void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
+    {
+        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
+
+        if ( p_selectedgenerator.equals( "Default" ) )
+            p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
+        if ( p_selectedgenerator.equals( "Jason Agent" ) )
+            p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
+    }
+
+    /**
      * removes a source
      *
      * @param p_source source which should be removed
@@ -140,6 +157,20 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
         p_source.release();
         this.remove( p_source );
+    }
+
+    /**
+     * checker if a source is selected
+     *
+     * @param p_source source which should be checked
+     * @return true if the source is selected otherwise false
+     */
+    public final boolean isSelectedSource( final ISource p_source )
+    {
+        if ( p_source != null )
+            return p_source.equals( s_selectedSource );
+
+        return false;
     }
 
     /**
@@ -169,37 +200,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
             p_source.setColor( Color.WHITE );
         }
         s_selectedSource = p_source;
-    }
-
-    /**
-     * checker if a source is selected
-     *
-     * @param p_source source which should be checked
-     * @return true if the source is selected otherwise false
-     */
-    public final boolean isSelectedSource( final ISource p_source )
-    {
-        if ( p_source != null )
-            return p_source.equals( s_selectedSource );
-
-        return false;
-    }
-
-    /**
-     * set a generator object for a source
-     *
-     * @param p_source source where the generator should be placed
-     * @param p_selectedgenerator new generator
-     * @param p_aslname ASL Programm for the Generator
-     */
-    public final void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
-    {
-        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
-
-        if ( p_selectedgenerator.equals( "Default" ) )
-            p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
-        if ( p_selectedgenerator.equals( "Jason Agent" ) )
-            p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
     }
 
     /**
@@ -240,6 +240,25 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
+     * after a target was created, OSM need to be repainted
+     *
+     * @bug must be fixed
+     */
+    private final void repaintOSM()
+    {
+        /*
+        try
+        {
+            COSMViewer.getSimulationOSM().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
+        s_selectedSource = p_source;
+        */
+    }
+
+    /**
      * removes an Atom Target from the sourcelayer and all Complex Targets
      *
      * @param p_target Atom Target which should be removed
@@ -267,25 +286,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public final Vector<CAtomTarget> getTargets()
     {
         return this.m_sourceTargets;
-    }
-
-    /**
-     * after a target was created, OSM need to be repainted
-     *
-     * @bug must be fixed
-     */
-    private final void repaintOSM()
-    {
-        /*
-        try
-        {
-            COSMViewer.getSimulationOSM().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
-        s_selectedSource = p_source;
-        */
     }
 
 }

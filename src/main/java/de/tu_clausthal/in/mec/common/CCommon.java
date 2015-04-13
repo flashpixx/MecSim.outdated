@@ -343,7 +343,6 @@ public class CCommon
         }
         catch ( final MissingResourceException l_exception )
         {
-            CLogger.error( l_exception );
         }
 
         return "";

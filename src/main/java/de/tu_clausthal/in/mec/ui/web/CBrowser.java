@@ -45,7 +45,14 @@ import javafx.scene.web.WebView;
  */
 public class CBrowser extends GridPane
 {
-
+    /**
+     * http prefix
+     */
+    private static final String c_http = "http://";
+    /**
+     * https prefix
+     */
+    private static final String c_https = "https://";
     /**
      * webkit view
      */
@@ -84,7 +91,6 @@ public class CBrowser extends GridPane
         this( p_menu );
         if ( ( p_url == null ) || ( p_url.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CBrowser.class, "urlempty" ) );
-        System.out.println( "blub" );
         m_webview.getEngine().load( p_url );
     }
 
@@ -152,7 +158,9 @@ public class CBrowser extends GridPane
             @Override
             public void handle( final ActionEvent p_event )
             {
-                CBrowser.this.load( l_url.getText().startsWith( "http://" ) ? l_url.getText() : "http://" + l_url.getText() );
+                CBrowser.this.load(
+                        l_url.getText().startsWith( c_http ) || l_url.getText().startsWith( c_https ) ? l_url.getText() : c_http + l_url.getText()
+                );
             }
         };
         l_button.setOnAction( l_buttonaction );

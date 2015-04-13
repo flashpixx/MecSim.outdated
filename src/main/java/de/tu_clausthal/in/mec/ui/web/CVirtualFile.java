@@ -36,6 +36,13 @@ import java.net.URL;
  */
 public class CVirtualFile implements IVirtualLocation
 {
+    /**
+     * seperator
+     */
+    private static final String c_seperator = "/";
+    /**
+     * URI reg expression for filter
+     */
     private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
     /**
      * file *
@@ -61,7 +68,7 @@ public class CVirtualFile implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "fileisnull", p_uri ) );
 
         m_file = p_file;
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
+        m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_allowchar, "" ) : c_seperator + p_uri.replaceAll( c_allowchar, "" );
 
         CLogger.info( p_uri );
     }

@@ -41,6 +41,10 @@ import java.util.Map;
 public class CVirtualStaticMethod implements IVirtualLocation
 {
     /**
+     * seperator
+     */
+    private static final String c_seperator = "/";
+    /**
      * URI reg expression for filter
      */
     private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
@@ -83,7 +87,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     public CVirtualStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_uriallowchars, "" ) : "/" + p_uri.replaceAll( c_uriallowchars, "" );
+        m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_uriallowchars, "" ) : c_seperator + p_uri.replaceAll( c_uriallowchars, "" );
         m_method = p_method.getHandle();
         m_methodreturntype = p_method.getMethod().getReturnType();
         m_object = p_object;

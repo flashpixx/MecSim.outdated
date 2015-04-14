@@ -41,6 +41,10 @@ import java.lang.invoke.MethodHandle;
 public class CVirtualDynamicMethod implements IVirtualLocation
 {
     /**
+     * seperator
+     */
+    private static final String c_seperator = "/";
+    /**
      * URI reg expression for filter
      */
     private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
@@ -63,7 +67,7 @@ public class CVirtualDynamicMethod implements IVirtualLocation
      */
     public CVirtualDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_uriallowchars, "" ) : "/" + p_uri.replaceAll( c_uriallowchars, "" );
+        m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_uriallowchars, "" ) : c_seperator + p_uri.replaceAll( c_uriallowchars, "" );
         m_method = p_method.getHandle();
 
         CLogger.info( p_uri );

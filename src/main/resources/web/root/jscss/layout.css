@@ -100,11 +100,13 @@ iframe
 
 #mecsim_content
 {
+    z-index: 0;
     /*background-color: #ecf0f1;*/
 }
 
 #mecsim_content::before
 {
+    z-index: -1;
     position: absolute;
     content: "";
     top: 0;

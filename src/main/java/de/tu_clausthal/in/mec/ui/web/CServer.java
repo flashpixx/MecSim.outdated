@@ -92,7 +92,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @param p_host bind hostname
      * @param p_port bind port
      * @param p_default default location
-     * @todo application/x-javascript extension mimetype
      */
     public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {

@@ -90,7 +90,6 @@ public class CNameHashMap extends HashMap<String, Object>
      * @param p_path path
      * @param p_value value
      * @tparam T type
-     * @bug exception
      */
     public final <T> void setTraverse( final CPath p_path, final T p_value )
     {

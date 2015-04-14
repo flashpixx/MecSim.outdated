@@ -97,7 +97,7 @@ public class CGraphHopper extends GraphHopper
      * ctor
      *
      * @param p_encoding flag encoder name
-     * see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     * @see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      */
     public CGraphHopper( final String p_encoding )
     {
@@ -345,7 +345,6 @@ public class CGraphHopper extends GraphHopper
      * returns a string list with weightening names
      *
      * @return string list
-     * @bug must be updated (remove default & trafficjam + speedup, add forbidden edges
      */
     public final String[] getWeightingList()
     {

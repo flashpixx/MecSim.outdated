@@ -53,7 +53,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     private static final TypeParser c_parser = TypeParser.newBuilder().build();
     /**
-     * method handle *
+     * method handle
      */
     private final MethodHandle m_method;
     /**
@@ -69,7 +69,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     private final int m_arguments;
     /**
-     * URI *
+     * URI
      */
     private final String m_uri;
 

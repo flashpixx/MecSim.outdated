@@ -32,6 +32,7 @@ import eu.medsea.mimeutil.MimeUtil2;
 import fi.iki.elonen.IWebSocketFactory;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.WebSocket;
+import fi.iki.elonen.WebSocketResponseHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -79,6 +80,10 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * mimetype detector
      */
     private final MimeUtil2 m_mimetype = new MimeUtil2();
+    /**
+     * websocket handler
+     */
+    private final WebSocketResponseHandler m_websockethandler = new WebSocketResponseHandler( this );
 
 
     /**
@@ -117,6 +122,14 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     public final Response serve( final IHTTPSession p_session )
     {
         Response l_response;
+
+        // check if it is a websocket call
+        l_response = m_websockethandler.serve( p_session );
+        if ( l_response != null )
+            return l_response;
+
+
+        // no websocket
         try
         {
             // get location

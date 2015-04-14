@@ -29,7 +29,9 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil2;
+import fi.iki.elonen.IWebSocketFactory;
 import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.WebSocket;
 import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -46,12 +48,8 @@ import java.util.Map;
 
 /**
  * class of the HTTP server *
- *
- * @todo add http://www.html5rocks.com/de/tutorials/websockets/basics/
- * @todo https://github.com/NanoHttpd/nanohttpd/issues/74
- * @todo https://github.com/NanoHttpd/nanohttpd/blob/master/websocket/src/main/java/fi/iki/elonen/NanoWebSocketServer.java
  */
-public class CServer extends NanoHTTPD
+public class CServer extends NanoHTTPD implements IWebSocketFactory
 {
     /**
      * seperator
@@ -397,5 +395,11 @@ public class CServer extends NanoHTTPD
     public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
     {
         this.addVirtualDirectory( p_source, p_index, p_uri, null );
+    }
+
+    @Override
+    public WebSocket openWebSocket( final IHTTPSession p_ihttpSession )
+    {
+        return null;
     }
 }

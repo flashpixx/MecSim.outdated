@@ -35,7 +35,7 @@ public interface IAction<N, T>
     /**
      * action will performaned if an object is set on the edge
      *
-     * @param p_edge   edge object
+     * @param p_edge edge object
      * @param p_cellid cell id of the set action
      * @param p_object object that is set
      */

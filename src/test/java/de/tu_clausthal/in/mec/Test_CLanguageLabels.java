@@ -23,10 +23,17 @@
 
 package de.tu_clausthal.in.mec;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +45,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -46,12 +55,14 @@ import static org.junit.Assert.fail;
  */
 public class Test_CLanguageLabels
 {
-    /** set with all labels * */
+    /**
+     * set with all labels *
+     */
     private final Set<String> m_labels = new HashSet<>();
-    /** reg expression to extract label data * */
+    /**
+     * reg expression to extract label data *
+     */
     private final Pattern m_language = Pattern.compile( "CCommon.getResourceString.+\\)" );
-    /** regexpression to extract class name * */
-    private final Pattern m_class = Pattern.compile( ".*class\\s+.*(implements|extends)?" );
 
     /**
      * test-case all resource strings
@@ -71,9 +82,9 @@ public class Test_CLanguageLabels
                 this.checkFile( l_item );
 
         }
-        catch ( final Throwable l_throwable )
+        catch ( final Exception l_exception )
         {
-            fail( l_throwable.getMessage() );
+            fail( l_exception.getMessage() );
             return;
         }
 
@@ -83,11 +94,9 @@ public class Test_CLanguageLabels
         {
             final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle( l_language ).keySet();
             l_labels.removeAll( m_labels );
-            if ( !l_labels.isEmpty() )
-            {
-                fail( String.format( "the following keys in language [%s] are unused: %s", l_language, StringUtils.join( l_labels, ", " ) ) );
-                return;
-            }
+            assertTrue(
+                    String.format( "the following keys in language [%s] are unused:\n%s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
+            );
         }
     }
 
@@ -102,139 +111,140 @@ public class Test_CLanguageLabels
         if ( !p_file.toString().endsWith( ".java" ) )
             return;
 
-        String l_classname = "";
-        String l_subclassname = "";
-        String l_package = "";
-        for ( String l_line : Files.readAllLines( p_file ) )
+        try
+                (
+                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
+                )
         {
-            final String l_trimline = l_line.trim();
-            if ( ( l_trimline.startsWith( "//" ) ) || ( l_trimline.startsWith( "/*" ) ) || ( l_trimline.startsWith( "*" ) ) )
-                continue;
-
-            String l_help = this.getPackagename( l_line );
-            if ( ( l_package.isEmpty() ) && ( !l_help.isEmpty() ) )
-            {
-                l_package = this.getPackagename( l_line );
-                continue;
-            }
-
-            l_help = this.getClassname( l_line );
-            if ( !l_help.isEmpty() )
-            {
-                // outer & inner class
-                l_classname = l_classname.isEmpty() ? l_help : l_classname;
-                l_subclassname = l_package + "." + ( l_subclassname.isEmpty() ? l_classname : l_classname + "$" + l_help );
-                continue;
-            }
-
-            final String[] l_parameter = this.getParameter( l_line );
-            if ( ( l_parameter == null ) || ( l_parameter[0] == null ) || ( l_parameter[0].isEmpty() ) || ( l_parameter[1] == null ) ||
-                 ( l_parameter[1].isEmpty() ) )
-                continue;
-
-            // check class parameter
-            if ( !l_parameter[0].equals( "this" ) )
-                l_subclassname = l_parameter[0].contains( "." ) ? l_parameter[0] : l_package + "." + l_parameter[0];
-
-            // check label and add label to the set
-            this.checkLabel( l_subclassname, l_parameter[1] );
+            new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
+        }
+        catch ( final ParseException l_exception )
+        {
+            fail( l_exception.getMessage() );
         }
     }
 
-
     /**
-     * gets the package name of the file
-     *
-     * @param p_line input timmed line
-     * @return empty string or package name
+     * AST visitor class
      */
-    private String getPackagename( final String p_line )
+    private class MyMethodVisitor extends VoidVisitorAdapter
     {
-        if ( ( p_line.startsWith( "package" ) ) && ( p_line.endsWith( ";" ) ) )
-            return p_line.replace( ";", "" ).replace( "package", "" ).trim();
+        /**
+         * package name *
+         */
+        private String m_package = "";
+        /**
+         * outer class name *
+         */
+        private String m_outerclass = "";
+        /**
+         * inner class name *
+         */
+        private String m_innerclass = "";
 
-        return "";
-    }
-
-
-    /**
-     * gets the class name of the file
-     *
-     * @param p_line input timmed line
-     * @return empty string or class name
-     */
-    private String getClassname( final String p_line )
-    {
-        final Matcher l_matcher = m_class.matcher( p_line );
-        if ( ( l_matcher.find() ) && ( !p_line.endsWith( ";" ) ) && ( !p_line.contains( "." ) ) && ( !p_line.contains( "(" ) ) && ( !p_line.contains( ")" ) ) )
-            return l_matcher.group( 0 ).split( "class" )[1].trim().split( " " )[0].trim().split( "<" )[0].trim();
-
-        return "";
-    }
-
-
-    /**
-     * gets the class name and label name
-     *
-     * @param p_line input timmed line
-     * @return null or string array
-     */
-    private String[] getParameter( final String p_line )
-    {
-        final Matcher l_matcher = m_language.matcher( p_line );
-        if ( l_matcher.find() )
+        @Override
+        public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
         {
+            if ( m_outerclass.isEmpty() )
+            {
+                m_outerclass = p_class.getName();
+                m_innerclass = m_outerclass;
+            }
+            else
+                m_innerclass = m_outerclass + "$" + p_class.getName();
+
+            super.visit( p_class, p_arg );
+        }
+
+        @Override
+        public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
+        {
+            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_innerclass );
+            if ( l_label != null )
+                this.checkLabel( l_label[0], l_label[1] );
+            super.visit( p_methodcall, p_arg );
+        }
+
+        @Override
+        public void visit( final PackageDeclaration p_package, final Object p_arg )
+        {
+            m_package = p_package.getName().toStringWithoutComments();
+            super.visit( p_package, p_arg );
+        }
+
+
+        /**
+         * gets the class name and label name
+         *
+         * @param p_line input timmed line
+         * @return null or array with class & label name
+         */
+        private String[] getParameter( final String p_line, final String p_package, final String p_class )
+        {
+            final Matcher l_matcher = m_language.matcher( p_line );
+            if ( !l_matcher.find() )
+                return null;
+
             final String[] l_split = l_matcher.group( 0 ).split( "," );
             final String[] l_return = new String[2];
-            l_return[0] = l_split[0].replace( "CCommon.getResourceString", "" ).replace( "(", "" ).replace( ".class", "" ).trim();
-            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).trim().toLowerCase();
+
+            // class name
+            l_return[0] = l_split[0].replace( "CCommon.getResourceString", "" ).replace( "(", "" ).trim();
+            // label name
+            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
+
+            // setup class name
+            if ( "this".equals( l_return[0] ) )
+                l_return[0] = p_package + "." + p_class;
+            else if ( l_return[0].endsWith( ".class" ) )
+            {
+                l_return[0] = l_return[0].replace( ".class", "" );
+                if ( !l_return[0].contains( "." ) )
+                    l_return[0] = p_package + "." + l_return[0];
+            }
+
             return l_return;
         }
 
-        return null;
-    }
-
-
-    /**
-     * checks all languages
-     *
-     * @param p_classname
-     * @param p_label
-     */
-    private void checkLabel( final String p_classname, final String p_label )
-    {
-        // construct class object
-        final Class<?> l_class;
-        try
+        /**
+         * checks all languages
+         *
+         * @param p_classname full qualified class name
+         * @param p_label label name
+         */
+        private void checkLabel( final String p_classname, final String p_label )
         {
-            l_class = Class.forName( p_classname );
-        }
-        catch ( final ClassNotFoundException l_exception )
-        {
-            fail( String.format( "class [%s] not found", p_classname ) );
-            return;
-        }
-
-        // check resource
-        for ( String l_language : CConfiguration.getInstance().get().<List<String>>getTraverse( "language/allow" ) )
+            // construct class object
+            final Class<?> l_class;
             try
             {
-                final String l_label = CCommon.getResourceString( l_language, l_class, p_label );
-                if ( ( l_label == null ) || ( l_label.isEmpty() ) )
-                    throw new IllegalStateException();
+                l_class = Class.forName( p_classname );
             }
-            catch ( final IllegalStateException l_exception )
+            catch ( final ClassNotFoundException l_exception )
             {
-                fail(
-                        String.format(
-                                "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language,
-                                p_classname
-                        )
-                );
+                fail( String.format( "class [%s] not found", p_classname ) );
                 return;
             }
 
-        m_labels.add( CCommon.getResourceStringLabel( l_class, p_label ) );
+            // check resource
+            for ( String l_language : CConfiguration.getInstance().get().<List<String>>getTraverse( "language/allow" ) )
+                try
+                {
+                    final String l_label = CCommon.getResourceString( l_language, l_class, p_label );
+                    assertFalse(
+                            String.format(
+                                    "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language,
+                                    p_classname
+                            ), ( l_label == null ) || ( l_label.isEmpty() )
+                    );
+                }
+                catch ( final IllegalStateException l_exception )
+                {
+                    return;
+                }
+
+            m_labels.add( CCommon.getResourceStringLabel( l_class, p_label ) );
+        }
     }
 
 }

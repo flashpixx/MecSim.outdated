@@ -49,7 +49,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     /**
      * datasource *
      */
-    protected BasicDataSource m_datasource = null;
+    private final BasicDataSource m_datasource = new BasicDataSource();
 
 
     /**
@@ -60,7 +60,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         if ( !this.isConnectable() )
             return;
 
-        m_datasource = new BasicDataSource();
         m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>getTraverse( "database/driver" ) );
         m_datasource.setUrl( CConfiguration.getInstance().get().<String>getTraverse( "database/url" ) );
         m_datasource.setUsername( CConfiguration.getInstance().get().<String>getTraverse( "database/username" ) );
@@ -73,10 +72,25 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     }
 
     /**
+     * check if database is connectable
+     *
+     * @return boolean of connectivity
+     */
+    private boolean isConnectable()
+    {
+        final String l_driver = CConfiguration.getInstance().get().<String>getTraverse( "database/driver" );
+        final String l_url = CConfiguration.getInstance().get().<String>getTraverse( "database/url" );
+
+        return CConfiguration.getInstance().get().<Boolean>getTraverse(
+                "database/active"
+        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
+    }
+
+    /**
      * creates the table structure
      *
-     * @param p_tablename  table name without prefix (will append automatically)
-     * @param p_createsql  create sql without "create >tablename<"
+     * @param p_tablename table name without prefix (will append automatically)
+     * @param p_createsql create sql without "create >tablename<"
      * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
      * @todo check database independence
      */
@@ -104,22 +118,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
             CLogger.error( l_exception );
         }
     }
-
-    /**
-     * check if database is connectable
-     *
-     * @return boolean of connectivity
-     */
-    private boolean isConnectable()
-    {
-        final String l_driver = CConfiguration.getInstance().get().<String>getTraverse( "database/driver" );
-        final String l_url = CConfiguration.getInstance().get().<String>getTraverse( "database/url" );
-
-        return CConfiguration.getInstance().get().<Boolean>getTraverse(
-                "database/active"
-        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
-    }
-
 
     @Override
     public final int getCalculationIndex()

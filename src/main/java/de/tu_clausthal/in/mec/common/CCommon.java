@@ -59,19 +59,6 @@ public class CCommon
     {
     }
 
-
-    /**
-     * remove from a string the system package name
-     *
-     * @param p_package package / class path
-     * @return path without main package name
-     */
-    public static String removePackageName( final String p_package )
-    {
-        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
-    }
-
-
     /**
      * convert any object data into Json
      *
@@ -93,7 +80,6 @@ public class CCommon
         return null;
     }
 
-
     /**
      * converts a Json string data into a raw map
      *
@@ -104,11 +90,10 @@ public class CCommon
         return fromJson( p_data, Map.class );
     }
 
-
     /**
      * converts a Json string into any class object
      *
-     * @param p_data  string data
+     * @param p_data string data
      * @param p_class class type
      * @return deserialized type
      * @tparam T type parameter
@@ -126,7 +111,6 @@ public class CCommon
 
         return null;
     }
-
 
     /**
      * creates a map from parameters
@@ -152,12 +136,72 @@ public class CCommon
         return l_return;
     }
 
+    /**
+     * returns a default string of the resource file
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
+        return getResourceString( null, p_class, p_label, p_parameter );
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_language language code / empty for default
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final String p_language, final Class<?> p_class, final String p_label, final Object... p_parameter )
+    {
+        try
+        {
+            final String l_string = CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) );
+            return MessageFormat.format( l_string, p_parameter );
+        }
+        catch ( final MissingResourceException l_exception )
+        {
+        }
+
+        return "";
+    }
+
+    /**
+     * returns the label of a class and string to get access to the resource
+     *
+     * @param p_class class for static calls
+     * @param p_label label name of the object
+     * @return label name
+     */
+    public static String getResourceStringLabel( final Class<?> p_class, final String p_label )
+    {
+        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace(
+                " ", ""
+        );
+    }
+
+    /**
+     * remove from a string the system package name
+     *
+     * @param p_package package / class path
+     * @return path without main package name
+     */
+    public static String removePackageName( final String p_package )
+    {
+        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+    }
 
     /**
      * converts a value into class
      *
-     * @param p_value  string input class
-     * @param p_types  type classes
+     * @param p_value string input class
+     * @param p_types type classes
      * @param p_parser type parser
      * @return converted type
      */
@@ -175,12 +219,11 @@ public class CCommon
         return p_value;
     }
 
-
     /**
      * checks a value and returns the checkd value or the default value
      *
-     * @param p_input         unchecked value
-     * @param p_default       default value
+     * @param p_input unchecked value
+     * @param p_default default value
      * @param p_allowedvalues allowed values
      * @return checked value
      * @tparam T              value type
@@ -197,11 +240,10 @@ public class CCommon
         return p_default;
     }
 
-
     /**
      * returns a default value of an empty string
      *
-     * @param p_input   input value
+     * @param p_input input value
      * @param p_default default value
      * @return string
      */
@@ -209,7 +251,6 @@ public class CCommon
     {
         return ( ( p_input == null ) || ( p_input.isEmpty() ) ) ? p_default : p_input;
     }
-
 
     /**
      * returns root path of the resource
@@ -254,14 +295,13 @@ public class CCommon
         return null;
     }
 
-
     /**
      * concats an URL with a path
      *
-     * @param p_base   base URL
+     * @param p_base base URL
      * @param p_string additional path
      * @return new URL
-     * @throws URISyntaxException    thrown on syntax error
+     * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
     public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
@@ -269,27 +309,11 @@ public class CCommon
         return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
     }
 
-
-    /**
-     * returns the label of a class and string to get access to the resource
-     *
-     * @param p_class class for static calls
-     * @param p_label label name of the object
-     * @return label name
-     */
-    public static String getResourceStringLabel( final Class<?> p_class, final String p_label )
-    {
-        return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace(
-                " ", ""
-        );
-    }
-
-
     /**
      * returns a default string of the resource file
      *
-     * @param p_object    object for label
-     * @param p_label     label name of the object
+     * @param p_object object for label
+     * @param p_label label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
@@ -301,9 +325,9 @@ public class CCommon
     /**
      * returns a string of the resource file
      *
-     * @param p_language  language code / empty for default
-     * @param p_object    object for label
-     * @param p_label     label name of the object
+     * @param p_language language code / empty for default
+     * @param p_object object for label
+     * @param p_label label name of the object
      * @param p_parameter object array with substitutions
      * @return resource string
      */
@@ -313,47 +337,9 @@ public class CCommon
     }
 
     /**
-     * returns a default string of the resource file
-     *
-     * @param p_class     class for static calls
-     * @param p_label     label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
-     */
-    public static String getResourceString( final Class<?> p_class, final String p_label, final Object... p_parameter )
-    {
-        return getResourceString( null, p_class, p_label, p_parameter );
-    }
-
-    /**
-     * returns a string of the resource file
-     *
-     * @param p_language  language code / empty for default
-     * @param p_class     class for static calls
-     * @param p_label     label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
-     */
-    public static String getResourceString( final String p_language, final Class<?> p_class, final String p_label, final Object... p_parameter )
-    {
-        try
-        {
-            final String l_string = CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) );
-            return MessageFormat.format( l_string, p_parameter );
-        }
-        catch ( final MissingResourceException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-
-        return "";
-    }
-
-
-    /**
      * converts any collection type into a typed array
      *
-     * @param p_class      class array
+     * @param p_class class array
      * @param p_collection collection
      * @return typed array
      * @tparam T collection / array type
@@ -369,7 +355,7 @@ public class CCommon
     /**
      * adds a file extension if necessary
      *
-     * @param p_file   file object
+     * @param p_file file object
      * @param p_suffix suffix
      * @return file with extension
      */
@@ -383,7 +369,7 @@ public class CCommon
      * returns the hash of a string
      *
      * @param p_string input string
-     * @param p_hash   hash algorithm
+     * @param p_hash hash algorithm
      * @return hexadecimal hash value
      */
     public static String getHash( final String p_string, final String p_hash )
@@ -391,25 +377,6 @@ public class CCommon
         try
         {
             return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( p_string.getBytes() ) );
-        }
-        catch ( final Exception l_exception )
-        {
-        }
-
-        return null;
-    }
-
-
-    /**
-     * @param p_file input file
-     * @param p_hash hash algorithm
-     * @return hexadecimal hash value
-     */
-    public static String getHash( final File p_file, final String p_hash )
-    {
-        try
-        {
-            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
         }
         catch ( final Exception l_exception )
         {
@@ -431,6 +398,24 @@ public class CCommon
             l_str.append( String.format( "%02x", l_byte & 0xff ) );
 
         return l_str.toString();
+    }
+
+    /**
+     * @param p_file input file
+     * @param p_hash hash algorithm
+     * @return hexadecimal hash value
+     */
+    public static String getHash( final File p_file, final String p_hash )
+    {
+        try
+        {
+            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
+        }
+        catch ( final Exception l_exception )
+        {
+        }
+
+        return null;
     }
 
 }

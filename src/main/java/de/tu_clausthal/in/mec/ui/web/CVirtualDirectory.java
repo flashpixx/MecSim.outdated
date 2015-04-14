@@ -37,6 +37,13 @@ import java.net.URL;
  */
 public class CVirtualDirectory implements IVirtualLocation
 {
+    /**
+     * seperator
+     */
+    private static final String c_seperator = "/";
+    /**
+     * URI reg expression for filter
+     */
     private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
     /**
      * markdown renderer
@@ -59,7 +66,7 @@ public class CVirtualDirectory implements IVirtualLocation
      * ctor
      *
      * @param p_directory base directory of the physical directory
-     * @param p_index     index file
+     * @param p_index index file
      */
     public CVirtualDirectory( final URL p_directory, final String p_index )
     {
@@ -70,7 +77,7 @@ public class CVirtualDirectory implements IVirtualLocation
 
         m_uri = "/";
         m_directory = p_directory;
-        m_index = p_index.startsWith( "/" ) ? p_index : "/" + p_index;
+        m_index = p_index.startsWith( c_seperator ) ? p_index : c_seperator + p_index;
         m_markdown = null;
     }
 
@@ -78,8 +85,8 @@ public class CVirtualDirectory implements IVirtualLocation
      * ctor
      *
      * @param p_directory base directory of the physical directory
-     * @param p_index     index file
-     * @param p_uri       regular expression of the URI
+     * @param p_index index file
+     * @param p_uri regular expression of the URI
      */
     public CVirtualDirectory( final URL p_directory, final String p_index, final String p_uri )
     {
@@ -91,8 +98,8 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_directory = p_directory;
-        m_index = p_index.startsWith( "/" ) ? p_index : "/" + p_index;
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
+        m_index = p_index.startsWith( c_seperator ) ? p_index : c_seperator + p_index;
+        m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_allowchar, "" ) : c_seperator + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = null;
 
         CLogger.info( p_uri );
@@ -103,9 +110,9 @@ public class CVirtualDirectory implements IVirtualLocation
      * ctor
      *
      * @param p_directory base directory of the physical directory
-     * @param p_index     index file
-     * @param p_uri       regular expression of the URI
-     * @param p_markdown  markdown renderer
+     * @param p_index index file
+     * @param p_uri regular expression of the URI
+     * @param p_markdown markdown renderer
      */
     public CVirtualDirectory( final URL p_directory, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
@@ -117,8 +124,8 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_directory = p_directory;
-        m_index = p_index.startsWith( "/" ) ? p_index : "/" + p_index;
-        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_allowchar, "" ) : "/" + p_uri.replaceAll( c_allowchar, "" );
+        m_index = p_index.startsWith( c_seperator ) ? p_index : "/" + p_index;
+        m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_allowchar, "" ) : c_seperator + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = p_markdown;
     }
 
@@ -138,7 +145,7 @@ public class CVirtualDirectory implements IVirtualLocation
             return CCommon.concatURL( m_directory, m_index );
 
         // special call on root-location (/) to avoid path error
-        return CCommon.concatURL( m_directory, p_session.getUri().replaceFirst( m_uri, "/" ) );
+        return CCommon.concatURL( m_directory, p_session.getUri().replaceFirst( m_uri, c_seperator ) );
     }
 
     @Override

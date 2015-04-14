@@ -44,19 +44,19 @@ public class CTreeNode<T>
     /**
      * map with child names and nodes *
      */
-    protected Map<String, CTreeNode<T>> m_childs = new HashMap<>();
+    private final Map<String, CTreeNode<T>> m_childs = new HashMap<>();
     /**
      * reference to the parent node *
      */
-    protected CTreeNode<T> m_parent = null;
-    /**
-     * data of the node *
-     */
-    protected T m_data = null;
+    private final CTreeNode<T> m_parent;
     /**
      * ID / name of the node *
      */
-    protected String m_id = null;
+    private final String m_id;
+    /**
+     * data of the node *
+     */
+    private T m_data;
 
 
     /**
@@ -70,6 +70,7 @@ public class CTreeNode<T>
             throw new IllegalArgumentException( CCommon.getResourceString( this, "idnotnull" ) );
 
         m_id = p_identifier;
+        m_parent = null;
     }
 
 
@@ -77,7 +78,7 @@ public class CTreeNode<T>
      * ctor
      *
      * @param p_identifier name of the node
-     * @param p_parent     parent node
+     * @param p_parent parent node
      */
     public CTreeNode( final String p_identifier, final CTreeNode<T> p_parent )
     {
@@ -173,8 +174,8 @@ public class CTreeNode<T>
     /**
      * returns the node
      *
-     * @param p_node  current node
-     * @param p_path  path
+     * @param p_node current node
+     * @param p_path path
      * @param p_index current path index
      * @return node
      */
@@ -201,21 +202,6 @@ public class CTreeNode<T>
         return m_childs.get( p_name );
     }
 
-
-    /**
-     * adds all childs of the path to the current node
-     *
-     * @param p_name name of the child
-     */
-    public final CTreeNode<T> addChild( final String p_name )
-    {
-        if ( m_childs.containsKey( p_name ) )
-            return m_childs.get( p_name );
-
-        return new CTreeNode<T>( p_name, this );
-    }
-
-
     /**
      * adds a list of path to the current node
      *
@@ -227,6 +213,19 @@ public class CTreeNode<T>
             this.addChild( l_item );
     }
 
+    /**
+     * adds all childs of the path to the current node
+     *
+     * @param p_name name of the child
+     * @return tree node
+     */
+    public final CTreeNode<T> addChild( final String p_name )
+    {
+        if ( m_childs.containsKey( p_name ) )
+            return m_childs.get( p_name );
+
+        return new CTreeNode<T>( p_name, this );
+    }
 
     /**
      * remove a child node
@@ -304,6 +303,16 @@ public class CTreeNode<T>
     }
 
     /**
+     * sets the data to the current node
+     *
+     * @param p_data data
+     */
+    public final void setData( final T p_data )
+    {
+        m_data = p_data;
+    }
+
+    /**
      * adds a collection of pair with path and data
      *
      * @param p_data collection of pair with path and data
@@ -312,16 +321,6 @@ public class CTreeNode<T>
     {
         for ( Pair<CPath, T> l_item : p_data )
             this.getNode( l_item.getKey() ).setData( l_item.getValue() );
-    }
-
-    /**
-     * sets the data to the current node
-     *
-     * @param p_data data
-     */
-    public final void setData( final T p_data )
-    {
-        m_data = p_data;
     }
 
     /**
@@ -385,7 +384,7 @@ public class CTreeNode<T>
      *
      * @param p_path start node path
      * @param p_node start node
-     * @param p_set  return set
+     * @param p_set return set
      */
     protected final void getTree( final CPath p_path, final CTreeNode<T> p_node, final Set<CPath> p_set )
     {

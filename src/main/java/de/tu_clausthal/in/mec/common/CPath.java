@@ -40,7 +40,7 @@ public class CPath implements Iterable<CPath>
     /**
      * separator of the path elements *
      */
-    protected String m_separator = "/";
+    private String m_separator = "/";
 
     /**
      * list with path parts *
@@ -70,6 +70,20 @@ public class CPath implements Iterable<CPath>
             this.initialize( StringUtils.join( p_varargs, m_separator ) );
     }
 
+    /**
+     * splits the string data
+     *
+     * @param p_fqn full path
+     */
+    private void initialize( final String p_fqn )
+    {
+        for ( String l_item : p_fqn.split( m_separator ) )
+            if ( !l_item.isEmpty() )
+                m_path.add( l_item );
+
+        if ( m_path.size() == 0 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
+    }
 
     /**
      * creates a path object from different items
@@ -95,7 +109,6 @@ public class CPath implements Iterable<CPath>
         return m_path.isEmpty();
     }
 
-
     /**
      * reverse path
      */
@@ -103,18 +116,6 @@ public class CPath implements Iterable<CPath>
     {
         Collections.reverse( m_path );
     }
-
-
-    /**
-     * adds a path at the end
-     *
-     * @param p_path path
-     */
-    public final void pushback( final CPath p_path )
-    {
-        m_path.addAll( p_path.m_path );
-    }
-
 
     /**
      * adds a path at the end
@@ -126,6 +127,25 @@ public class CPath implements Iterable<CPath>
         this.pushback( new CPath( p_path ) );
     }
 
+    /**
+     * adds a path at the end
+     *
+     * @param p_path path
+     */
+    public final void pushback( final CPath p_path )
+    {
+        m_path.addAll( p_path.m_path );
+    }
+
+    /**
+     * adds a path at the front
+     *
+     * @param p_path string path
+     */
+    public final void pushfront( final String p_path )
+    {
+        this.pushfront( new CPath( p_path ) );
+    }
 
     /**
      * adds a path to the front of the path
@@ -138,18 +158,6 @@ public class CPath implements Iterable<CPath>
         l_path.addAll( m_path );
         m_path = l_path;
     }
-
-
-    /**
-     * adds a path at the front
-     *
-     * @param p_path string path
-     */
-    public final void pushfront( final String p_path )
-    {
-        this.pushfront( new CPath( p_path ) );
-    }
-
 
     /**
      * returns the separator
@@ -175,32 +183,6 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
-     * splits the string data
-     *
-     * @param p_fqn full path
-     */
-    private void initialize( final String p_fqn )
-    {
-        for ( String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() )
-                m_path.add( l_item );
-
-        if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
-    }
-
-    /**
-     * returns the full path as string
-     *
-     * @return string path
-     */
-    public final String getPath()
-    {
-        return StringUtils.join( m_path, m_separator );
-    }
-
-
-    /**
      * returns the full path as string with an individual separator
      *
      * @param p_separator separator
@@ -209,33 +191,6 @@ public class CPath implements Iterable<CPath>
     public final String getPath( final String p_separator )
     {
         return StringUtils.join( m_path, p_separator );
-    }
-
-
-    /**
-     * returns the last part of the path
-     *
-     * @return string
-     */
-    public final String getSuffix()
-    {
-        return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
-    }
-
-
-    /**
-     * creates a path of the indices
-     *
-     * @param p_fromIndex start index
-     * @param p_toIndex   end index (exclusive)
-     * @return path
-     */
-    public final CPath getSubPath( final int p_fromIndex, final int p_toIndex )
-    {
-        final CPath l_path = new CPath();
-        l_path.m_separator = m_separator;
-        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex ) );
-        return l_path;
     }
 
     /**
@@ -249,7 +204,30 @@ public class CPath implements Iterable<CPath>
         return this.getSubPath( p_fromIndex, this.size() );
     }
 
+    /**
+     * creates a path of the indices
+     *
+     * @param p_fromIndex start index
+     * @param p_toIndex end index (exclusive)
+     * @return path
+     */
+    public final CPath getSubPath( final int p_fromIndex, final int p_toIndex )
+    {
+        final CPath l_path = new CPath();
+        l_path.m_separator = m_separator;
+        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex ) );
+        return l_path;
+    }
 
+    /**
+     * returns the number of path elements
+     *
+     * @return size
+     */
+    public final int size()
+    {
+        return m_path.size();
+    }
     /**
      * remove the suffix from the path
      *
@@ -264,6 +242,26 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * returns the full path as string
+     *
+     * @return string path
+     */
+    public final String getPath()
+    {
+        return StringUtils.join( m_path, m_separator );
+    }
+
+    /**
+     * returns the last part of the path
+     *
+     * @return string
+     */
+    public final String getSuffix()
+    {
+        return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
+    }
+
+    /**
      * returns an part of the path
      *
      * @param p_index index position
@@ -274,23 +272,12 @@ public class CPath implements Iterable<CPath>
         return m_path.get( p_index );
     }
 
-
-    /**
-     * returns the number of path elements
-     *
-     * @return size
-     */
-    public final int size()
-    {
-        return m_path.size();
-    }
-
     @Override
     public final Iterator<CPath> iterator()
     {
         return new Iterator<CPath>()
         {
-            private int m_index = 0;
+            private int m_index;
 
             @Override
             public boolean hasNext()
@@ -305,6 +292,7 @@ public class CPath implements Iterable<CPath>
             }
         };
     }
+
 
     @Override
     public final int hashCode()

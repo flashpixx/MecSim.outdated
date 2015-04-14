@@ -64,15 +64,12 @@ public class CInternalEmpty extends DefaultInternalAction
     /**
      * ctor
      *
-     * @param p_min    minimum of arguments
-     * @param p_max    maximum of arguments
-     * @param p_result result value
+     * @param p_min minimum of arguments
+     * @param p_max maximum of arguments
      */
-    public CInternalEmpty( final int p_min, final int p_max, final boolean p_result )
+    public CInternalEmpty( final int p_min, final int p_max )
     {
-        m_minimumarguments = Math.abs( p_min );
-        m_maximumarguments = Math.abs( p_max );
-        m_result = p_result;
+        this( p_min, p_max, true );
     }
 
 
@@ -81,10 +78,13 @@ public class CInternalEmpty extends DefaultInternalAction
      *
      * @param p_min minimum of arguments
      * @param p_max maximum of arguments
+     * @param p_result result value
      */
-    public CInternalEmpty( final int p_min, final int p_max )
+    public CInternalEmpty( final int p_min, final int p_max, final boolean p_result )
     {
-        this( p_min, p_max, true );
+        m_minimumarguments = Math.abs( p_min );
+        m_maximumarguments = Math.abs( p_max );
+        m_result = p_result;
     }
 
 

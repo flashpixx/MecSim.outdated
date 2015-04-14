@@ -91,7 +91,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws java.io.IOException    throws exception on reading
+     * @throws java.io.IOException throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

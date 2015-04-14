@@ -52,13 +52,7 @@ import java.util.Map;
 /**
  * JavaFX application
  *
- * @todo create docking structure https://gist.github.com/jewelsea/9579047
- * https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
- * https://community.oracle.com/thread/2417144 / https://dlemmermann.wordpress.com/2013/11/19/a-popup-editor-for-javafx-8/
- * @see http://stackoverflow.com/questions/17673292/internal-frames-in-javafx
- * @see https://blog.idrsolutions.com/2014/03/create-stacked-menus-in-javafx/
- * @see https://blog.idrsolutions.com/2014/02/tutorial-create-border-glow-effect-javafx/
- * @see http://alvinalexander.com/java/java-mac-osx-about-preferences-quit-application-adapter
+ * @see https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
  */
 public class CUI extends Application
@@ -215,7 +209,7 @@ public class CUI extends Application
      * adds a new tab to the UI
      *
      * @param p_title name of the node
-     * @param p_node  node
+     * @param p_node node
      */
     public final void add( final String p_title, final Node p_node )
     {
@@ -227,31 +221,10 @@ public class CUI extends Application
     }
 
     /**
-     * creates a new tab - adds the tab to the global tab pane
-     *
-     * @param p_title title
-     * @param p_node  node
-     * @return tab
-     */
-    private Tab createTab( final String p_title, final Node p_node )
-    {
-        final Tab l_tab = new Tab();
-
-        l_tab.setId( p_title );
-        l_tab.setText( p_title );
-        l_tab.setContent( p_node );
-        l_tab.setClosable( true );
-        l_tab.setOnClosed( m_tabcloseevent );
-        m_tabpane.getTabs().add( l_tab );
-
-        return l_tab;
-    }
-
-    /**
      * creates a new pop window
      *
      * @param p_title title
-     * @param p_node  node
+     * @param p_node node
      * @return popup
      */
     private PopOver createPopOver( final String p_title, final Node p_node )
@@ -267,6 +240,26 @@ public class CUI extends Application
         return l_popover;
     }
 
+    /**
+     * creates a new tab - adds the tab to the global tab pane
+     *
+     * @param p_title title
+     * @param p_node node
+     * @return tab
+     */
+    private Tab createTab( final String p_title, final Node p_node )
+    {
+        final Tab l_tab = new Tab();
+
+        l_tab.setId( p_title );
+        l_tab.setText( p_title );
+        l_tab.setContent( p_node );
+        l_tab.setClosable( true );
+        l_tab.setOnClosed( m_tabcloseevent );
+        m_tabpane.getTabs().add( l_tab );
+
+        return l_tab;
+    }
 
     /**
      * returns a tab / node

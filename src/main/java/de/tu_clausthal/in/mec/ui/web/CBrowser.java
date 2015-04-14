@@ -45,7 +45,14 @@ import javafx.scene.web.WebView;
  */
 public class CBrowser extends GridPane
 {
-
+    /**
+     * http prefix
+     */
+    private static final String c_http = "http://";
+    /**
+     * https prefix
+     */
+    private static final String c_https = "https://";
     /**
      * webkit view
      */
@@ -71,21 +78,6 @@ public class CBrowser extends GridPane
 
         GridPane.setConstraints( m_webview, 0, 1, this.setMenuBar( p_menu ), 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS );
         this.getChildren().add( m_webview );
-    }
-
-    /**
-     * ctor with instantiation the engine
-     *
-     * @param p_menu menu settings
-     * @param p_url  string with URL
-     */
-    public CBrowser( final EMenu p_menu, final String p_url )
-    {
-        this( p_menu );
-        if ( ( p_url == null ) || ( p_url.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( CBrowser.class, "urlempty" ) );
-        System.out.println( "blub" );
-        m_webview.getEngine().load( p_url );
     }
 
     /**
@@ -120,51 +112,6 @@ public class CBrowser extends GridPane
         }
 
         return l_return;
-    }
-
-    /**
-     * create the URL input box
-     *
-     * @param p_column start column index
-     * @return number of elements
-     */
-    private int setURLMenu( final int p_column )
-    {
-        final TextField l_url = new TextField();
-
-        m_webview.getEngine().locationProperty().addListener(
-                new ChangeListener<String>()
-                {
-                    @Override
-                    public void changed( final ObservableValue<? extends String> p_observable, final String p_oldValue, final String p_newValue )
-                    {
-                        l_url.setText( p_newValue );
-                    }
-                }
-        );
-
-
-        final Button l_button = new Button( CCommon.getResourceString( CBrowser.class, "load" ) );
-        l_button.setDefaultButton( true );
-
-        final EventHandler<ActionEvent> l_buttonaction = new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle( final ActionEvent p_event )
-            {
-                CBrowser.this.load( l_url.getText().startsWith( "http://" ) ? l_url.getText() : "http://" + l_url.getText() );
-            }
-        };
-        l_button.setOnAction( l_buttonaction );
-        l_url.setOnAction( l_buttonaction );
-
-
-        GridPane.setConstraints( l_url, p_column, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
-        GridPane.setConstraints( l_button, p_column + 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.SOMETIMES );
-
-        this.getChildren().addAll( l_url, l_button );
-
-        return p_column + 2;
     }
 
     /**
@@ -216,21 +163,50 @@ public class CBrowser extends GridPane
     }
 
     /**
-     * loads a URL on the browser
+     * create the URL input box
      *
-     * @param p_url string with URL
+     * @param p_column start column index
+     * @return number of elements
      */
-    public final void load( final String p_url )
+    private int setURLMenu( final int p_column )
     {
-        m_webview.getEngine().load( p_url );
-    }
+        final TextField l_url = new TextField();
 
-    /**
-     * refresh the current URL
-     */
-    public final void reload()
-    {
-        m_webview.getEngine().reload();
+        m_webview.getEngine().locationProperty().addListener(
+                new ChangeListener<String>()
+                {
+                    @Override
+                    public void changed( final ObservableValue<? extends String> p_observable, final String p_oldValue, final String p_newValue )
+                    {
+                        l_url.setText( p_newValue );
+                    }
+                }
+        );
+
+
+        final Button l_button = new Button( CCommon.getResourceString( CBrowser.class, "load" ) );
+        l_button.setDefaultButton( true );
+
+        final EventHandler<ActionEvent> l_buttonaction = new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( final ActionEvent p_event )
+            {
+                CBrowser.this.load(
+                        l_url.getText().startsWith( c_http ) || l_url.getText().startsWith( c_https ) ? l_url.getText() : c_http + l_url.getText()
+                );
+            }
+        };
+        l_button.setOnAction( l_buttonaction );
+        l_url.setOnAction( l_buttonaction );
+
+
+        GridPane.setConstraints( l_url, p_column, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.SOMETIMES );
+        GridPane.setConstraints( l_button, p_column + 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.SOMETIMES );
+
+        this.getChildren().addAll( l_url, l_button );
+
+        return p_column + 2;
     }
 
     /**
@@ -256,6 +232,38 @@ public class CBrowser extends GridPane
     }
 
     /**
+     * loads a URL on the browser
+     *
+     * @param p_url string with URL
+     */
+    public final void load( final String p_url )
+    {
+        m_webview.getEngine().load( p_url );
+    }
+
+    /**
+     * ctor with instantiation the engine
+     *
+     * @param p_menu menu settings
+     * @param p_url string with URL
+     */
+    public CBrowser( final EMenu p_menu, final String p_url )
+    {
+        this( p_menu );
+        if ( ( p_url == null ) || ( p_url.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CBrowser.class, "urlempty" ) );
+        m_webview.getEngine().load( p_url );
+    }
+
+    /**
+     * refresh the current URL
+     */
+    public final void reload()
+    {
+        m_webview.getEngine().reload();
+    }
+
+    /**
      * returns the current URL
      *
      * @return string URL
@@ -270,13 +278,21 @@ public class CBrowser extends GridPane
      */
     public enum EMenu
     {
-        /** value of no-menu * */
+        /**
+         * value of no-menu *
+         */
         None,
-        /** value of menu with back-forward-button * */
+        /**
+         * value of menu with back-forward-button *
+         */
         BackForward,
-        /** value of menu with URL-menu * */
+        /**
+         * value of menu with URL-menu *
+         */
         URL,
-        /** value of menu with all option * */
+        /**
+         * value of menu with all option *
+         */
         Full
     }
 

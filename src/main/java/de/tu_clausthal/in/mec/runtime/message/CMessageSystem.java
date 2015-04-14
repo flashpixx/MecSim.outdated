@@ -77,7 +77,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * register a new participant
      *
-     * @param p_path     path of the receiver
+     * @param p_path path of the receiver
      * @param p_receiver participant
      */
     public final synchronized void register( final CPath p_path, final IParticipant p_receiver )
@@ -103,7 +103,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * unregister a participant
      *
-     * @param p_path     path of the receiver
+     * @param p_path path of the receiver
      * @param p_receiver participant
      */
     public final synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
@@ -127,7 +127,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * pushs a message to the queue
      *
-     * @param p_path    receiver
+     * @param p_path receiver
      * @param p_message message
      */
     public final synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
@@ -209,7 +209,7 @@ public class CMessageSystem implements IVoidSteppable
         /**
          * is called on register
          *
-         * @param p_path     path of the object
+         * @param p_path path of the object
          * @param p_receiver receiver
          */
         public void onRegister( final CPath p_path, final IParticipant p_receiver );
@@ -217,7 +217,7 @@ public class CMessageSystem implements IVoidSteppable
         /**
          * is called on unregister
          *
-         * @param p_path     path of the object
+         * @param p_path path of the object
          * @param p_receiver receiver
          */
         public void onUnregister( final CPath p_path, final IParticipant p_receiver );

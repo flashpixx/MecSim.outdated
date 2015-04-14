@@ -57,34 +57,23 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     /**
      * driving model list
      */
-    protected static IDriveModel[] s_drivemodellist = {new CNagelSchreckenberg()};
+    private static final IDriveModel[] s_drivemodellist = {new CNagelSchreckenberg()};
     /**
      * data structure - not serializable
      */
-    protected final transient List<ICar> m_data = new LinkedList<>();
+    private final transient List<ICar> m_data = new LinkedList<>();
     /**
      * map of analyse call
      */
-    protected final transient Map<String, Object> m_analyse = new HashMap<>();
+    private final transient Map<String, Object> m_analyse = new HashMap<>();
     /**
      * driving model
      */
-    protected IDriveModel m_drivemodel = s_drivemodellist[0];
+    private IDriveModel m_drivemodel = s_drivemodellist[0];
     /**
      * graph
      */
-    protected transient CGraphHopper m_graph = new CGraphHopper();
-
-
-    /**
-     * returns the graph of the layer
-     *
-     * @return graph object
-     */
-    public final CGraphHopper getGraph()
-    {
-        return m_graph;
-    }
+    private transient CGraphHopper m_graph = new CGraphHopper();
 
     /**
      * returns this list of all weights
@@ -94,17 +83,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final String[] getGraphWeight()
     {
         return m_graph.getWeightingList();
-    }
-
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool active flag
-     */
-    public final boolean isActiveWeight( final String p_weight )
-    {
-        return m_graph.isActiveWeight( p_weight );
     }
 
     /**
@@ -120,6 +98,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
             m_graph.enableWeight( p_weight );
     }
 
+    /**
+     * checks if a weight is active
+     *
+     * @param p_weight weight name
+     * @return bool active flag
+     */
+    public final boolean isActiveWeight( final String p_weight )
+    {
+        return m_graph.isActiveWeight( p_weight );
+    }
 
     /**
      * returns a graph weight
@@ -132,7 +120,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         return m_graph.getWeight( p_weight );
     }
 
-
     /**
      * sets the drive model
      *
@@ -144,7 +131,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
             if ( p_model.equals( l_model.getName() ) )
                 m_drivemodel = l_model;
     }
-
 
     /**
      * returns the name of the driving model
@@ -205,6 +191,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         return m_analyse;
     }
 
+    /**
+     * returns the graph of the layer
+     *
+     * @return graph object
+     */
+    public final CGraphHopper getGraph()
+    {
+        return m_graph;
+    }
+
     @Override
     public final void release()
     {
@@ -251,7 +247,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
+     * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

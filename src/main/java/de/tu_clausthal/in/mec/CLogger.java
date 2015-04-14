@@ -73,7 +73,7 @@ public class CLogger
     /**
      * creates the logger with properties
      *
-     * @param p_level    log level
+     * @param p_level log level
      * @param p_filename p_filename
      */
     public static void create( final Level p_level, final String p_filename )
@@ -83,31 +83,34 @@ public class CLogger
         Configurator.currentConfig().formatPattern( "{message}" ).activate();
     }
 
-
     /**
-     * pad / cut string of a define length
-     *
-     * @param p_input  input string
-     * @param p_filler fill character
-     * @param p_length max string length
-     * @return modified string
+     * adds a warn message
      */
-    private static String padCut( final String p_input, final char p_filler, final int p_length )
+    public static void warn()
     {
-        if ( p_length < 1 )
-            return p_input;
-        if ( p_input.length() < p_length )
-            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
-
-        return p_input.substring( 0, p_length );
+        warn( null, true );
     }
 
+    /**
+     * adds a warn message
+     *
+     * @param p_data log data
+     * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T warn( final T p_data, final boolean p_write )
+    {
+        if ( p_write )
+            Logger.warn( createLogData( Level.WARNING, p_data ) );
+        return p_data;
+    }
 
     /**
      * creates a full log item
      *
      * @param p_status status name
-     * @param p_add    additional log data
+     * @param p_add additional log data
      */
     private static String createLogData( final Level p_status, final Object p_add )
     {
@@ -161,13 +164,98 @@ public class CLogger
         return l_str.toString();
     }
 
+    /**
+     * gets the current invoker FQN method name
+     *
+     * @return FQN method name
+     */
+    private static String getInvokingMethodNameFqn( final int p_offset )
+    {
+        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
+        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
+
+        return l_invokingClassName + "." + l_invokingMethodName;
+    }
 
     /**
-     * adds a warn message
+     * pad / cut string of a define length
+     *
+     * @param p_input input string
+     * @param p_filler fill character
+     * @param p_length max string length
+     * @return modified string
      */
-    public static void warn()
+    private static String padCut( final String p_input, final char p_filler, final int p_length )
     {
-        warn( null, true );
+        if ( p_length < 1 )
+            return p_input;
+        if ( p_input.length() < p_length )
+            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
+
+        return p_input.substring( 0, p_length );
+    }
+
+    /**
+     * gets the current FQN method name
+     *
+     * @return FQN method name
+     */
+    private static String getCurrentMethodNameFqn( final int p_offset )
+    {
+        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
+        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
+
+        return l_currentClassName + "." + l_currentMethodName;
+    }
+
+    /**
+     * gets the current line number
+     *
+     * @return number
+     */
+    private static int getCurrentLineNumber( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
+    }
+
+    /**
+     * gets the current invoker class name
+     *
+     * @return class name
+     */
+    private static String getInvokingClassName( final int p_offset )
+    {
+        return getCurrentClassName( p_offset + 1 );
+    }
+
+    /**
+     * gets the current invoker method name
+     *
+     * @return method name
+     */
+    private static String getInvokingMethodName( final int p_offset )
+    {
+        return getCurrentMethodName( p_offset + 1 );
+    }
+
+    /**
+     * gets the current class name
+     *
+     * @return class name
+     */
+    private static String getCurrentClassName( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
+    }
+
+    /**
+     * gets the current method name
+     *
+     * @return method name
+     */
+    private static String getCurrentMethodName( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
     }
 
     /**
@@ -184,6 +272,8 @@ public class CLogger
      * adds a warn message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T warn( final T p_data )
     {
@@ -192,25 +282,26 @@ public class CLogger
     }
 
     /**
-     * adds a warn message
-     *
-     * @param p_data  log data
-     * @param p_write boolean on true message is written
-     */
-    public static <T> T warn( final T p_data, final boolean p_write )
-    {
-        if ( p_write )
-            Logger.warn( createLogData( Level.WARNING, p_data ) );
-        return p_data;
-    }
-
-
-    /**
      * adds a error message
      */
     public static void error()
     {
         error( null, true );
+    }
+
+    /**
+     * adds a error message
+     *
+     * @param p_data log data
+     * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T error( final T p_data, final boolean p_write )
+    {
+        if ( p_write )
+            Logger.error( createLogData( Level.ERROR, p_data ) );
+        return p_data;
     }
 
     /**
@@ -227,26 +318,14 @@ public class CLogger
      * adds a error message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T error( final T p_data )
     {
         error( p_data, true );
         return p_data;
     }
-
-    /**
-     * adds a error message
-     *
-     * @param p_data  log data
-     * @param p_write boolean on true message is written
-     */
-    public static <T> T error( final T p_data, final boolean p_write )
-    {
-        if ( p_write )
-            Logger.error( createLogData( Level.ERROR, p_data ) );
-        return p_data;
-    }
-
 
     /**
      * adds an info message
@@ -259,30 +338,10 @@ public class CLogger
     /**
      * adds an info message
      *
-     * @param p_write boolean on true message is written
-     */
-    public static void info( final boolean p_write )
-    {
-        info( null, p_write );
-    }
-
-
-    /**
-     * adds an info message
-     *
      * @param p_data log data
-     */
-    public static <T> T info( final T p_data )
-    {
-        info( p_data, true );
-        return p_data;
-    }
-
-    /**
-     * adds an info message
-     *
-     * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T info( final T p_data, final boolean p_write )
     {
@@ -291,6 +350,28 @@ public class CLogger
         return p_data;
     }
 
+    /**
+     * adds an info message
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void info( final boolean p_write )
+    {
+        info( null, p_write );
+    }
+
+    /**
+     * adds an info message
+     *
+     * @param p_data log data
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T info( final T p_data )
+    {
+        info( p_data, true );
+        return p_data;
+    }
 
     /**
      * adds a debug message
@@ -298,6 +379,21 @@ public class CLogger
     public static void debug()
     {
         debug( null, true );
+    }
+
+    /**
+     * adds a debug message
+     *
+     * @param p_data log data
+     * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T debug( final T p_data, final boolean p_write )
+    {
+        if ( p_write )
+            Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        return p_data;
     }
 
     /**
@@ -314,26 +410,14 @@ public class CLogger
      * adds a debug message
      *
      * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T debug( final T p_data )
     {
         debug( p_data, true );
         return p_data;
     }
-
-    /**
-     * adds a debug message
-     *
-     * @param p_data  log data
-     * @param p_write boolean on true message is written
-     */
-    public static <T> T debug( final T p_data, final boolean p_write )
-    {
-        if ( p_write )
-            Logger.debug( createLogData( Level.DEBUG, p_data ) );
-        return p_data;
-    }
-
 
     /**
      * adds a output message
@@ -346,30 +430,10 @@ public class CLogger
     /**
      * adds a output message
      *
-     * @param p_write boolean on true message is written
-     */
-    public static void out( final boolean p_write )
-    {
-        out( null, p_write );
-    }
-
-
-    /**
-     * adds a output message
-     *
      * @param p_data log data
-     */
-    public static <T> T out( final T p_data )
-    {
-        out( p_data, true );
-        return p_data;
-    }
-
-    /**
-     * adds a output message
-     *
-     * @param p_data  log data
      * @param p_write boolean on true message is written
+     * @return input data
+     * @tparam input data type
      */
     public static <T> T out( final T p_data, final boolean p_write )
     {
@@ -383,87 +447,27 @@ public class CLogger
         return p_data;
     }
 
-
     /**
-     * gets the current method name
+     * adds a output message
      *
-     * @return method name
+     * @param p_write boolean on true message is written
      */
-    private static String getCurrentMethodName( final int p_offset )
+    public static void out( final boolean p_write )
     {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
+        out( null, p_write );
     }
 
-
     /**
-     * gets the current class name
+     * adds a output message
      *
-     * @return class name
+     * @param p_data log data
+     * @return input data
+     * @tparam input data type
      */
-    private static String getCurrentClassName( final int p_offset )
+    public static <T> T out( final T p_data )
     {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
-    }
-
-
-    /**
-     * gets the current line number
-     *
-     * @return number
-     */
-    private static int getCurrentLineNumber( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
-    }
-
-
-    /**
-     * gets the current invoker method name
-     *
-     * @return method name
-     */
-    private static String getInvokingMethodName( final int p_offset )
-    {
-        return getCurrentMethodName( p_offset + 1 );
-    }
-
-
-    /**
-     * gets the current invoker class name
-     *
-     * @return class name
-     */
-    private static String getInvokingClassName( final int p_offset )
-    {
-        return getCurrentClassName( p_offset + 1 );
-    }
-
-
-    /**
-     * gets the current FQN method name
-     *
-     * @return FQN method name
-     */
-    private static String getCurrentMethodNameFqn( final int p_offset )
-    {
-        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
-        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
-
-        return l_currentClassName + "." + l_currentMethodName;
-    }
-
-
-    /**
-     * gets the current invoker FQN method name
-     *
-     * @return FQN method name
-     */
-    private static String getInvokingMethodNameFqn( final int p_offset )
-    {
-        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
-        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
-
-        return l_invokingClassName + "." + l_invokingMethodName;
+        out( p_data, true );
+        return p_data;
     }
 
 }

@@ -96,7 +96,7 @@ public class CDefaultCarGenerator implements IGenerator
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws java.io.IOException    throws exception on loading the data
+     * @throws java.io.IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

@@ -66,11 +66,11 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * position of the source within the map
      */
-    private transient GeoPosition m_position = null;
+    private GeoPosition m_position;
     /**
      * image of the waypoint
      */
-    private transient BufferedImage m_image = null;
+    private transient BufferedImage m_image;
     /**
      * waypoint color
      */
@@ -82,7 +82,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     /**
      * Member Variable which may hold a Generator
      */
-    private IGenerator m_generator = null;
+    private IGenerator m_generator;
     /**
      * ComplexTarget of this Source
      */
@@ -106,6 +106,35 @@ public class CSource extends IInspector implements ISource, ISerializable
     {
         m_position = p_position;
         this.setImage();
+    }
+
+    /**
+     * creates the image
+     */
+    private void setImage()
+    {
+        if ( m_color == null )
+            return;
+
+        try
+        {
+            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
+
+            // modify blue value to the color of the waypoint
+            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
+            for ( int i = 0; i < l_image.getHeight(); i++ )
+                for ( int j = 0; j < l_image.getWidth(); j++ )
+                {
+                    final Color l_color = new Color( l_image.getRGB( j, i ) );
+                    if ( l_color.getBlue() > 0 )
+                        m_image.setRGB( j, i, m_color.getRGB() );
+                }
+
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.warn( l_exception );
+        }
     }
 
     @Override
@@ -248,38 +277,9 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     /**
-     * creates the image
-     */
-    private void setImage()
-    {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
-    }
-
-    /**
      * creates an image with a specific scale
      *
-     * @param p_width  image width
+     * @param p_width image width
      * @param p_height image height
      */
     private void setImage( final int p_width, final int p_height )
@@ -313,7 +313,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      * Method to scale a Buffered Image
      *
      * @param p_source Image which should be scaled
-     * @param p_width  new Width
+     * @param p_width new Width
      * @param p_height new Height
      * @return new Image
      */
@@ -331,7 +331,7 @@ public class CSource extends IInspector implements ISource, ISerializable
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
+     * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException

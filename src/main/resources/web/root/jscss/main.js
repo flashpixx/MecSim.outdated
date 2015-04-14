@@ -100,6 +100,7 @@ $(document).ready(function(){
 
       //Load the Source-GUI
       $("#ui-id-5").on("click", function(data){
+        mecsim_global_content.empty();
         mecsim_global_content.load("template/source.htm", function(){
           initLayout();
           initClusterWidget();
@@ -260,7 +261,8 @@ $(document).ready(function(){
 
         $("#mecsim_help_userdoku").button().on("click", function(){
             //$.get("/userdoc/", function( p_result ) {
-            //    $("#mecsim_content").append( p_result );
+            //    mecsim_global_content.empty();
+            //    mecsim_global_content.append( p_result );
             //});
         });
 

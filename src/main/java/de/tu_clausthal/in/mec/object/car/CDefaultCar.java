@@ -55,19 +55,23 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * random interface
      */
-    private Random m_random = new Random();
+    private final Random m_random = new Random();
+    /**
+     * reference to the graph
+     */
+    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**
      * geo position of the start
      */
-    private GeoPosition m_StartPosition = null;
+    private GeoPosition m_StartPosition;
     /**
      * geo position of the end
      */
-    private GeoPosition m_EndPosition = null;
+    private GeoPosition m_EndPosition;
     /**
      * current speed
      */
-    private int m_speed = 0;
+    private int m_speed;
     /**
      * maximum speed definition
      */
@@ -79,15 +83,15 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * cell structure of the route
      */
-    private ArrayList<Pair<EdgeIteratorState, Integer>> m_route = null;
+    private ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
      * current position on the route
      */
-    private int m_routeindex = 0;
+    private int m_routeindex;
     /**
      * boolean flag for end reached
      */
-    private boolean m_endReached = false;
+    private boolean m_endReached;
     /**
      * individual acceleration
      */
@@ -96,10 +100,6 @@ public class CDefaultCar extends IInspector implements ICar
      * individual deceleration *
      */
     private int m_deceleration = m_random.nextInt( 40 ) + 20;
-    /**
-     * reference to the graph
-     */
-    private CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
 
     /**
@@ -254,6 +254,15 @@ public class CDefaultCar extends IInspector implements ICar
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
     }
 
+    @Override
+    public void release()
+    {
+        super.release();
+        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        if ( l_edge != null )
+            l_edge.removeObject( this );
+    }
+
     /**
      * @bug UI frame
      */
@@ -272,15 +281,6 @@ public class CDefaultCar extends IInspector implements ICar
 
         //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
         //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );
-    }
-
-    @Override
-    public void release()
-    {
-        super.release();
-        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
-        if ( l_edge != null )
-            l_edge.removeObject( this );
     }
 
     @Override

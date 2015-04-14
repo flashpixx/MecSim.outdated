@@ -71,6 +71,21 @@ public class CMarkdownRenderer extends LinkRenderer
      * ctor
      *
      * @param p_htmltype type of the HTML result
+     * @param p_baseuri base URI
+     * @param p_cssuri CSS URI
+     */
+    public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri, final String p_cssuri )
+    {
+        m_htmltype = p_htmltype;
+        m_baseuri = p_baseuri;
+        m_cssuri = p_cssuri;
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_htmltype type of the HTML result
      */
     public CMarkdownRenderer( final EHTMLType p_htmltype )
     {
@@ -82,28 +97,12 @@ public class CMarkdownRenderer extends LinkRenderer
      * ctor
      *
      * @param p_htmltype type of the HTML result
-     * @param p_baseuri  base URI
+     * @param p_baseuri base URI
      */
     public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri )
     {
         this( p_htmltype, p_baseuri, "" );
     }
-
-
-    /**
-     * ctor
-     *
-     * @param p_htmltype type of the HTML result
-     * @param p_baseuri  base URI
-     * @param p_cssuri   CSS URI
-     */
-    public CMarkdownRenderer( final EHTMLType p_htmltype, final String p_baseuri, final String p_cssuri )
-    {
-        m_htmltype = p_htmltype;
-        m_baseuri = p_baseuri;
-        m_cssuri = p_cssuri;
-    }
-
 
     @Override
     public final Rendering render( final ExpLinkNode p_node, final String p_text )
@@ -184,6 +183,47 @@ public class CMarkdownRenderer extends LinkRenderer
         return super.render( p_node );
     }
 
+    /**
+     * create Wikipedia link
+     *
+     * @param p_language language prefix
+     * @param p_search search content
+     * @return full URL
+     */
+    private String getWikipediaLink( final String p_language, final String p_search ) throws UnsupportedEncodingException
+    {
+        return "http://" + p_language + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( p_search, "UTF-8" );
+    }
+
+    /**
+     * checks if a string is an URL
+     *
+     * @param p_url string with URL
+     * @return boolean for URL existance
+     */
+    private boolean isURL( final String p_url )
+    {
+        try
+        {
+            new URL( p_url );
+        }
+        catch ( final MalformedURLException l_exception )
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * returns a URI with base URI
+     *
+     * @param p_url input URL
+     * @return URL with base URI
+     */
+    private String getURL( final String p_url )
+    {
+        return ( ( p_url == null ) || ( p_url.isEmpty() ) ) ? p_url : m_baseuri + p_url;
+    }
 
     /**
      * return mimetype
@@ -205,21 +245,10 @@ public class CMarkdownRenderer extends LinkRenderer
     }
 
     /**
-     * returns a URI with base URI
-     *
-     * @param p_url input URL
-     * @return URL with base URI
-     */
-    private String getURL( final String p_url )
-    {
-        return ( ( p_url == null ) || ( p_url.isEmpty() ) ) ? p_url : m_baseuri + p_url;
-    }
-
-    /**
      * creates HTML content from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file      URL of the file
+     * @param p_file URL of the file
      * @return HTML content
      */
     public final String getHTML( final PegDownProcessor p_processor, final URL p_file ) throws IOException
@@ -236,12 +265,11 @@ public class CMarkdownRenderer extends LinkRenderer
         return null;
     }
 
-
     /**
      * creates a full HTML document from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file      URL of the file
+     * @param p_file URL of the file
      * @return full HTML document
      */
     private String getHTMLDocument( final PegDownProcessor p_processor, final URL p_file ) throws IOException
@@ -253,50 +281,16 @@ public class CMarkdownRenderer extends LinkRenderer
                "<body>\n" + this.getHTMLFragment( p_processor, p_file ) + "\n</body></html>";
     }
 
-
     /**
      * creates a HTML fragment from a markdown document
      *
      * @param p_processor markdown processor
-     * @param p_file      URL of the file
+     * @param p_file URL of the file
      * @return HTML fragment
      */
     private String getHTMLFragment( final PegDownProcessor p_processor, final URL p_file ) throws IOException
     {
         return p_processor.markdownToHtml( IOUtils.toString( p_file ).toCharArray(), this );
-    }
-
-
-    /**
-     * checks if a string is an URL
-     *
-     * @param p_url string with URL
-     * @return boolean for URL existance
-     */
-    private boolean isURL( final String p_url )
-    {
-        try
-        {
-            new URL( p_url );
-        }
-        catch ( final MalformedURLException l_exception )
-        {
-            return false;
-        }
-        return true;
-    }
-
-
-    /**
-     * create Wikipedia link
-     *
-     * @param p_language language prefix
-     * @param p_search   search content
-     * @return full URL
-     */
-    private String getWikipediaLink( final String p_language, final String p_search ) throws UnsupportedEncodingException
-    {
-        return "http://" + p_language + ".wikipedia.org/w/index.php?title=" + URLEncoder.encode( p_search, "UTF-8" );
     }
 
     /**
@@ -305,9 +299,13 @@ public class CMarkdownRenderer extends LinkRenderer
     public enum EHTMLType
     {
 
-        /** value of a HTML fragment * */
+        /**
+         * value of a HTML fragment *
+         */
         Fragment,
-        /** value of a full HTML document * */
+        /**
+         * value of a full HTML document *
+         */
         Document
     }
 

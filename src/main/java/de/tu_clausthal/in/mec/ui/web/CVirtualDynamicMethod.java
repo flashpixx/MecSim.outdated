@@ -21,34 +21,69 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.car.drivemodel;
+package de.tu_clausthal.in.mec.ui.web;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CReflection;
+import fi.iki.elonen.NanoHTTPD;
 
-import java.io.Serializable;
+import java.lang.invoke.MethodHandle;
 
 
 /**
- * drive interface for driving models
+ * class to call methods continuously with websockets
+ *
+ * @see add http://www.html5rocks.com/de/tutorials/websockets/basics/
+ * @see https://github.com/NanoHttpd/nanohttpd/issues/74
+ * @see https://github.com/NanoHttpd/nanohttpd/blob/master/websocket/src/main/java/fi/iki/elonen/NanoWebSocketServer.java
  */
-public interface IDriveModel extends Serializable
+public class CVirtualDynamicMethod implements IVirtualLocation
 {
+    /**
+     * URI reg expression for filter
+     */
+    private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
+    /**
+     * method handle *
+     */
+    private final MethodHandle m_method;
+    /**
+     * URI *
+     */
+    private final String m_uri;
+
 
     /**
-     * returns the name of the model
+     * ctor
      *
-     * @return string with name
+     * @param p_object object
+     * @param p_method method
+     * @param p_uri calling URI
      */
-    public String getName();
+    public CVirtualDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
+    {
+        m_uri = p_uri.startsWith( "/" ) ? p_uri.replaceAll( c_uriallowchars, "" ) : "/" + p_uri.replaceAll( c_uriallowchars, "" );
+        m_method = p_method.getHandle();
 
-    /**
-     * updates car
-     *
-     * @param p_currentstep current step number
-     * @param p_graph graph object
-     * @param p_car car object
-     */
-    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car );
+        CLogger.info( p_uri );
+    }
 
+
+    @Override
+    public final boolean match( final String p_uri )
+    {
+        return m_uri.equals( p_uri );
+    }
+
+    @Override
+    public final <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
+    {
+        return null;
+    }
+
+    @Override
+    public final CMarkdownRenderer getMarkDownRenderer()
+    {
+        return null;
+    }
 }

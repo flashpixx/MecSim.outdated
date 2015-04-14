@@ -66,7 +66,7 @@ public class CGeneratorSettings
     /**
      * Set a Normal Distribution for generating Cars
      *
-     * @param p_mean      mean of Normal distribution
+     * @param p_mean mean of Normal distribution
      * @param p_deviation deviation of Normal distribution
      */
     public final void setNormal( final double p_mean, final double p_deviation )
@@ -77,7 +77,7 @@ public class CGeneratorSettings
     /**
      * Set a Exponential Distribution for generating Cars
      *
-     * @param p_mean      mean of Exponential distribution
+     * @param p_mean mean of Exponential distribution
      * @param p_deviation deviation of Exponential distribution
      */
     public final void setExpo( final double p_mean, final double p_deviation )

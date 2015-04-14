@@ -52,8 +52,8 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
      * ctor for setting the object
      *
      * @param p_iteration current iteration value
-     * @param p_object    return-steppable object
-     * @param p_layer     layer of the object or null
+     * @param p_object return-steppable object
+     * @param p_layer layer of the object or null
      */
     public CReturnSteppable( final int p_iteration, final IReturnSteppable p_object, final ILayer p_layer )
     {

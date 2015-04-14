@@ -42,9 +42,13 @@ import java.util.Map;
 public class CAgentEnvironment
 {
 
-    /** type of the MAS name * */
+    /**
+     * type of the MAS name *
+     */
     private final EType m_type;
-    /** base URI * */
+    /**
+     * base URI *
+     */
     private final String m_baseuri;
 
     /**
@@ -89,6 +93,20 @@ public class CAgentEnvironment
                 break;
             default:
         }
+    }
+
+    /**
+     * UI method - gets the agent name from the map
+     *
+     * @param p_data input data
+     * @return agent name
+     */
+    private final String getAgentName( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "name" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );
+
+        return (String) p_data.get( "name" );
     }
 
     /**
@@ -191,25 +209,15 @@ public class CAgentEnvironment
         }
     }
 
+
     /**
-     * UI method - gets the agent name from the map
-     *
-     * @param p_data input data
-     * @return agent name
+     * MAS types *
      */
-    private final String getAgentName( final Map<String, Object> p_data )
-    {
-        if ( !p_data.containsKey( "name" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );
-
-        return (String) p_data.get( "name" );
-    }
-
-
-    /** MAS types * */
     public enum EType
     {
-        /** Jason value * */
+        /**
+         * Jason value *
+         */
         Jason
     }
 

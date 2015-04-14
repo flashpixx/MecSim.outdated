@@ -134,7 +134,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * filter point list to create a list of points which stores monoton increase points
      *
-     * @param p_input   input point list
+     * @param p_input input point list
      * @param p_epsilon epsilon value of the monotonic increase
      * @return point list array
      */
@@ -180,7 +180,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * sets an element into the additional array
      *
      * @param p_position position
-     * @param p_object   object
+     * @param p_object object
      */
     public final void setAdditionalInformation( final int p_position, final T p_object )
     {
@@ -236,19 +236,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_objects.size();
     }
 
-
-    /**
-     * checks if a position is empty
-     *
-     * @param p_position position index
-     * @return empty for empty
-     */
-    public final boolean isEmpty( final int p_position )
-    {
-        return m_cells[p_position] == null;
-    }
-
-
     /**
      * check if the edge is empty
      *
@@ -258,7 +245,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
     {
         return m_objects.isEmpty();
     }
-
 
     /**
      * returns the position of an object
@@ -271,7 +257,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_objects.get( p_object );
     }
 
-
     /**
      * returns the object on the position
      *
@@ -282,7 +267,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
     {
         return m_cells[p_position];
     }
-
 
     /**
      * adds a set of edge listener
@@ -315,7 +299,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_listener.remove( p_listener );
     }
 
-
     /**
      * removes a collection of edge listener
      *
@@ -327,11 +310,10 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_listener.removeAll( p_listener );
     }
 
-
     /**
      * sets an object on the edge position
      *
-     * @param p_object   object
+     * @param p_object object
      * @param p_position position index
      * @throws IllegalAccessException throws exception on emptyness
      */
@@ -355,6 +337,16 @@ public class CEdge<N, T> implements Comparable<CEdge>
             l_action.actionPerformed( this, p_position, p_object );
     }
 
+    /**
+     * checks if a position is empty
+     *
+     * @param p_position position index
+     * @return empty for empty
+     */
+    public final boolean isEmpty( final int p_position )
+    {
+        return m_cells[p_position] == null;
+    }
 
     /**
      * removes an object of the edge
@@ -409,21 +401,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
             return -1;
 
         return 0;
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_edgeid;
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        if ( p_object instanceof CEdge )
-            return this.hashCode() == p_object.hashCode();
-
-        return false;
     }
 
     /**
@@ -520,6 +497,21 @@ public class CEdge<N, T> implements Comparable<CEdge>
             return m_xpoints.length;
         }
 
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_edgeid;
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        if ( p_object instanceof CEdge )
+            return this.hashCode() == p_object.hashCode();
+
+        return false;
     }
 
 }

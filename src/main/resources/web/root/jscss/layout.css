@@ -71,10 +71,12 @@ iframe
 }
 
 #mecsim_global_content{
+    z-index: 0;
     /*background-color: #ecf0f1;*/
 }
 
 #mecsim_global_content::before{
+    z-index: -1;
     position: absolute;
     content: "";
     top: 0;
@@ -151,9 +153,6 @@ iframe
   text-align: center;
   width: 100%;
 }
-
-
-
 
 
 /** Cluster Style TODO Rename**/

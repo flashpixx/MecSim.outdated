@@ -180,22 +180,9 @@ class COSMMouseListener extends MouseAdapter
     }
 
     /**
-     * returns the geoposition of a mouse position
-     *
-     * @param p_event  mouse event
-     * @param p_viewer OSM viewer
-     * @return geoposition
-     */
-    protected GeoPosition getMouseGeoPosition( final MouseEvent p_event, final COSMViewer p_viewer )
-    {
-        final Point2D l_position = this.getMousePosition( p_event, p_viewer );
-        return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
-    }
-
-    /**
      * returns the 2D position of a mouse position
      *
-     * @param p_event  mouse event
+     * @param p_event mouse event
      * @param p_viewer OSM viewer
      * @return point
      */
@@ -209,8 +196,8 @@ class COSMMouseListener extends MouseAdapter
      * checks if a point is in a box around another point
      *
      * @param p_checkposition point of the click
-     * @param p_center        point of the source
-     * @param p_size          rectangle size
+     * @param p_center point of the source
+     * @param p_size rectangle size
      * @return boolean on existence
      */
     protected boolean inRange( final Point2D p_checkposition, final Point2D p_center, final int p_size )
@@ -218,10 +205,21 @@ class COSMMouseListener extends MouseAdapter
         if ( ( p_checkposition == null ) || ( p_center == null ) )
             return false;
 
-        return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) &&
-               ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) &&
-               ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) &&
-               ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
+        return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) &&
+               ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
+    }
+
+    /**
+     * returns the geoposition of a mouse position
+     *
+     * @param p_event mouse event
+     * @param p_viewer OSM viewer
+     * @return geoposition
+     */
+    protected GeoPosition getMouseGeoPosition( final MouseEvent p_event, final COSMViewer p_viewer )
+    {
+        final Point2D l_position = this.getMousePosition( p_event, p_viewer );
+        return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
 }

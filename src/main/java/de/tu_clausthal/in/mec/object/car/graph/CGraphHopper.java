@@ -96,7 +96,8 @@ public class CGraphHopper extends GraphHopper
     /**
      * ctor
      *
-     * param p_encoding flag encoder name see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
+     * @param p_encoding flag encoder name
+     * @see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      */
     public CGraphHopper( final String p_encoding )
     {
@@ -132,12 +133,39 @@ public class CGraphHopper extends GraphHopper
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
 
+    /**
+     * downloads the OSM data
+     *
+     * @return download file with full path
+     */
+    private final File downloadOSMData()
+    {
+        try
+        {
+            final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
+            final URL l_url = new URL( CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/map/url" ) );
+
+            CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
+
+            final ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
+            final FileOutputStream l_stream = new FileOutputStream( l_output );
+            l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
+
+            return l_output;
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
+        return null;
+
+    }
 
     /**
      * creates a list of list of edge between two geopositions
      *
      * @param p_start start geoposition
-     * @param p_end   end geoposition
+     * @param p_end end geoposition
      * @return list of list of edges
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
@@ -145,12 +173,11 @@ public class CGraphHopper extends GraphHopper
         return this.getRoutes( p_start, p_end, Integer.MAX_VALUE );
     }
 
-
     /**
      * creates a list of list of edge between two geopositions
      *
-     * @param p_start     start geoposition
-     * @param p_end       end geoposition
+     * @param p_start start geoposition
+     * @param p_end end geoposition
      * @param p_maxroutes max. number of paths
      * @return list of list of edges
      */
@@ -195,7 +222,6 @@ public class CGraphHopper extends GraphHopper
         return l_paths;
     }
 
-
     /**
      * returns the closest edge(s) of a geo position
      *
@@ -207,7 +233,6 @@ public class CGraphHopper extends GraphHopper
         final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestEdge().getEdge();
     }
-
 
     /**
      * returns the max. speed of an edge
@@ -223,7 +248,6 @@ public class CGraphHopper extends GraphHopper
         return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
     }
 
-
     /**
      * returns an iterator state of an edge
      *
@@ -234,7 +258,6 @@ public class CGraphHopper extends GraphHopper
     {
         return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
     }
-
 
     /**
      * returns the ID of the closest node
@@ -247,7 +270,6 @@ public class CGraphHopper extends GraphHopper
         final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
         return l_result.getClosestNode();
     }
-
 
     /**
      * creates the full path of cells with the edge value
@@ -264,40 +286,6 @@ public class CGraphHopper extends GraphHopper
                 l_list.add( new ImmutablePair<>( l_edge, i ) );
 
         return l_list;
-    }
-
-
-    /**
-     * clears all edges
-     */
-    public final synchronized void clear()
-    {
-        for ( Map.Entry<Integer, CEdge<ICar, ?>> l_item : m_edgecell.entrySet() )
-            l_item.getValue().clear();
-    }
-
-    /**
-     * number of cars
-     *
-     * @return number of cars on the graph
-     */
-    public final synchronized int getNumberOfObjects()
-    {
-        int l_count = 0;
-        for ( CEdge<ICar, ?> l_item : m_edgecell.values() )
-            l_count += l_item.getNumberOfObjects();
-        return l_count;
-    }
-
-
-    /**
-     * adds an edge listener
-     *
-     * @note listener object will be set at the edge instantiation process
-     */
-    public final synchronized void addEdgeListener( final IAction<ICar, ?> p_listener )
-    {
-        m_edgelister.add( p_listener );
     }
 
     /**
@@ -321,40 +309,42 @@ public class CGraphHopper extends GraphHopper
         return l_edge;
     }
 
+    /**
+     * clears all edges
+     */
+    public final synchronized void clear()
+    {
+        for ( Map.Entry<Integer, CEdge<ICar, ?>> l_item : m_edgecell.entrySet() )
+            l_item.getValue().clear();
+    }
 
     /**
-     * downloads the OSM data
+     * number of cars
      *
-     * @return download file with full path
+     * @return number of cars on the graph
      */
-    private final File downloadOSMData()
+    public final synchronized int getNumberOfObjects()
     {
-        try
-        {
-            final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            final URL l_url = new URL( CConfiguration.getInstance().get().<String>getTraverse( "simulation/traffic/map/url" ) );
+        int l_count = 0;
+        for ( CEdge<ICar, ?> l_item : m_edgecell.values() )
+            l_count += l_item.getNumberOfObjects();
+        return l_count;
+    }
 
-            CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
-
-            final ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
-            final FileOutputStream l_stream = new FileOutputStream( l_output );
-            l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
-
-            return l_output;
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
-        return null;
-
+    /**
+     * adds an edge listener
+     *
+     * @note listener object will be set at the edge instantiation process
+     */
+    public final synchronized void addEdgeListener( final IAction<ICar, ?> p_listener )
+    {
+        m_edgelister.add( p_listener );
     }
 
     /**
      * returns a string list with weightening names
      *
      * @return string list
-     * @bug must be updated (remove default & trafficjam + speedup, add forbidden edges
      */
     public final String[] getWeightingList()
     {

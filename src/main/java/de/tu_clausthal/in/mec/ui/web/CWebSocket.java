@@ -21,34 +21,69 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.car.drivemodel;
+package de.tu_clausthal.in.mec.ui.web;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.common.CReflection;
+import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.WebSocket;
+import fi.iki.elonen.WebSocketFrame;
 
-import java.io.Serializable;
+import java.io.IOException;
+import java.lang.invoke.MethodHandle;
 
 
 /**
- * drive interface for driving models
+ * encapsulating class for websocket
  */
-public interface IDriveModel extends Serializable
+public class CWebSocket extends WebSocket
 {
+    /**
+     * object
+     */
+    private final Object m_object;
+    /**
+     * method handle
+     */
+    private final MethodHandle m_method;
+
 
     /**
-     * returns the name of the model
+     * ctor
      *
-     * @return string with name
+     * @param p_handshakeRequest
+     * @param p_object
+     * @param p_method
      */
-    public String getName();
+    public CWebSocket( final NanoHTTPD.IHTTPSession p_handshakeRequest, final Object p_object, final CReflection.CMethod p_method )
+    {
+        super( p_handshakeRequest );
 
-    /**
-     * updates car
-     *
-     * @param p_currentstep current step number
-     * @param p_graph graph object
-     * @param p_car car object
-     */
-    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car );
+        m_object = p_object;
+        m_method = p_method.getHandle();
+    }
 
+
+    @Override
+    protected void onPong( final WebSocketFrame p_webSocketFrame )
+    {
+
+    }
+
+    @Override
+    protected void onMessage( final WebSocketFrame p_webSocketFrame )
+    {
+
+    }
+
+    @Override
+    protected void onClose( final WebSocketFrame.CloseCode p_closeCode, final String s, final boolean b )
+    {
+
+    }
+
+    @Override
+    protected void onException( final IOException e )
+    {
+
+    }
 }

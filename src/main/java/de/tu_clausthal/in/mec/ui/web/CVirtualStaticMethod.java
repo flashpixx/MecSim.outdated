@@ -53,7 +53,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     private static final TypeParser c_parser = TypeParser.newBuilder().build();
     /**
-     * method handle *
+     * method handle
      */
     private final MethodHandle m_method;
     /**
@@ -69,7 +69,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     private final int m_arguments;
     /**
-     * URI *
+     * URI
      */
     private final String m_uri;
 
@@ -79,7 +79,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
      *
      * @param p_object object
      * @param p_method method
-     * @param p_uri    calling URI
+     * @param p_uri calling URI
      */
     public CVirtualStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
@@ -163,10 +163,10 @@ public class CVirtualStaticMethod implements IVirtualLocation
     /**
      * split the map into value- and map-types
      *
-     * @param p_key      array with key (separater is "[")
+     * @param p_key array with key (separater is "[")
      * @param p_keyindex current index of the key
-     * @param p_value    value
-     * @param p_map      return map
+     * @param p_value value
+     * @param p_map return map
      */
     private void splitKeyValues( final String[] p_key, final int p_keyindex, final String p_value, final Map<String, Object> p_map )
     {

@@ -29,7 +29,10 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil2;
+import fi.iki.elonen.IWebSocketFactory;
 import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.WebSocket;
+import fi.iki.elonen.WebSocketResponseHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -46,14 +49,27 @@ import java.util.Map;
 
 /**
  * class of the HTTP server *
- *
- * @todo add http://www.html5rocks.com/de/tutorials/websockets/basics/
  */
-public class CServer extends NanoHTTPD
+public class CServer extends NanoHTTPD implements IWebSocketFactory
 {
-
     /**
-     * markdown processor *
+     * seperator
+     */
+    private static final String c_seperator = "/";
+    /**
+     * web-static prefix
+     */
+    private static final String c_webstatic = "web_static_";
+    /**
+     * web-dynamic prefix
+     */
+    private static final String c_webdynamic = "web_dynamic_";
+    /**
+     * web-uribase name
+     */
+    private static final String c_weburibase = "web_uribase";
+    /**
+     * markdown processor
      */
     private final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
@@ -64,22 +80,28 @@ public class CServer extends NanoHTTPD
      * mimetype detector
      */
     private final MimeUtil2 m_mimetype = new MimeUtil2();
+    /**
+     * websocket handler
+     */
+    private final WebSocketResponseHandler m_websockethandler = new WebSocketResponseHandler( this );
 
 
     /**
      * ctor - starts the HTTP server
      *
-     * @param p_host    bind hostname
-     * @param p_port    bind port
+     * @param p_host bind hostname
+     * @param p_port bind port
      * @param p_default default location
-     * @todo application/x-javascript extension mimetype
      */
     public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {
         super( p_host, p_port );
         m_virtuallocation = new CVirtualLocation( p_default );
 
-        for ( String l_detector : new String[]{"eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector", "eu.medsea.mimeutil.detector.TextMimeDetector"} )
+        for ( String l_detector : new String[]{
+                "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
+                "eu.medsea.mimeutil.detector.TextMimeDetector"
+        } )
             m_mimetype.registerMimeDetector( l_detector );
 
         try
@@ -99,6 +121,14 @@ public class CServer extends NanoHTTPD
     public final Response serve( final IHTTPSession p_session )
     {
         Response l_response;
+
+        // check if it is a websocket call
+        l_response = m_websockethandler.serve( p_session );
+        if ( l_response != null )
+            return l_response;
+
+
+        // no websocket
         try
         {
             // get location
@@ -128,111 +158,11 @@ public class CServer extends NanoHTTPD
         return l_response;
     }
 
-
-    /**
-     * returns the virtual-location object
-     *
-     * @return location
-     */
-    public final CVirtualLocation getVirtualLocation()
-    {
-        return m_virtuallocation;
-    }
-
-
-    /**
-     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
-     */
-    private String getMimeType( final URL p_url )
-    {
-        final Collection l_types = m_mimetype.getMimeTypes( p_url );
-        if ( l_types.size() == 1 )
-            return l_types.iterator().next().toString();
-
-        for ( Object l_item : l_types )
-        {
-            final MimeType l_type = (MimeType) l_item;
-            if ( !l_type.toString().startsWith( "application/" ) )
-                return l_type.toString();
-        }
-        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
-    }
-
-
-    /**
-     * register an object for the UI
-     *
-     * @param p_object object, all methods with the name "ui_" are registered
-     * @note a class / object need to implemente methods with the prefix "web_static_" or "web_dynamic_", which is bind
-     * to the server with the URL part "/classname/[basepart/]methodname" (without prefix). The methods "String
-     * web_uribase"
-     * returns the basepart of the URI
-     * @bug incomplete
-     */
-    public final void register( final Object p_object )
-    {
-        // URI begin
-        final String l_uriclass = "/" + p_object.getClass().getSimpleName().toLowerCase() + "/";
-
-        // try to read basepart
-        String l_uribase = "";
-        try
-        {
-            final Object l_data = CReflection.getClassMethod( p_object.getClass(), "web_uribase" ).getMethod().invoke( p_object );
-            if ( l_data instanceof String )
-                l_uribase = l_data.toString().toLowerCase();
-
-            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
-            {
-                if ( l_uribase.startsWith( "/" ) )
-                    l_uribase = l_uribase.substring( 1 );
-                if ( !l_uribase.endsWith( "/" ) )
-                    l_uribase += "/";
-            }
-        }
-        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
-        {
-        }
-
-        // get methods
-        for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods(
-                p_object.getClass(), new CReflection.IMethodFilter()
-                {
-                    @Override
-                    public boolean filter( final java.lang.reflect.Method p_method )
-                    {
-                        return ( p_method.getName().toLowerCase().startsWith(
-                                "web_static_"
-                        ) || p_method.getName().toLowerCase().startsWith(
-                                "web_dynamic_"
-                        ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
-                    }
-                }
-        ).entrySet() )
-        {
-
-            // try to bind a method
-            final String l_methodname = l_method.getValue().getMethod().getName().toLowerCase();
-
-            if ( l_methodname.contains( "web_static_" ) )
-            {
-                final String l_urimethod = l_methodname.replace( "web_static_", "" );
-                if ( l_urimethod.isEmpty() )
-                    continue;
-
-                m_virtuallocation.add( new CVirtualStaticMethod( p_object, l_method.getValue(), l_uriclass + l_uribase + l_urimethod ) );
-            }
-
-        }
-
-    }
-
-
     /**
      * generates HTTP response of a static method calls
      *
      * @param p_location location object
-     * @param p_session  session object
+     * @param p_session session object
      * @return response
      * @throws Throwable on error
      */
@@ -242,12 +172,11 @@ public class CServer extends NanoHTTPD
         return p_location.<Response>get( p_session );
     }
 
-
     /**
      * generates HTTP response of file & directory calls
      *
      * @param p_location location object
-     * @param p_session  session object
+     * @param p_session session object
      * @return response
      * @throws Throwable on error
      */
@@ -287,12 +216,124 @@ public class CServer extends NanoHTTPD
         return l_response;
     }
 
+    /**
+     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
+     */
+    private String getMimeType( final URL p_url )
+    {
+        final Collection l_types = m_mimetype.getMimeTypes( p_url );
+        if ( l_types.size() == 1 )
+            return l_types.iterator().next().toString();
+
+        for ( Object l_item : l_types )
+        {
+            final MimeType l_type = (MimeType) l_item;
+            if ( !l_type.toString().startsWith( "application/" ) )
+                return l_type.toString();
+        }
+        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
+    }
+
+    /**
+     * returns the virtual-location object
+     *
+     * @return location
+     */
+    public final CVirtualLocation getVirtualLocation()
+    {
+        return m_virtuallocation;
+    }
+
+    /**
+     * register an object for the UI
+     *
+     * @param p_object object, all methods with the name "ui_" are registered
+     * @note a class / object need to implemente methods with the prefix "web_static_" or "web_dynamic_", which is bind
+     * to the server with the URL part "/classname/[basepart/]methodname" (without prefix). The methods "String
+     * web_uribase"
+     * returns the basepart of the URI
+     * @bug incomplete
+     */
+    public final void register( final Object p_object )
+    {
+        // URI begin
+        final String l_uriclass = c_seperator + p_object.getClass().getSimpleName().toLowerCase() + c_seperator;
+
+        // get methods
+        for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods(
+                p_object.getClass(), new CReflection.IMethodFilter()
+                {
+                    @Override
+                    public boolean filter( final java.lang.reflect.Method p_method )
+                    {
+                        return ( p_method.getName().toLowerCase().startsWith(
+                                c_webstatic
+                        ) || p_method.getName().toLowerCase().startsWith(
+                                c_webdynamic
+                        ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
+                    }
+                }
+        ).entrySet() )
+        {
+            this.bindStaticMethod( p_object, l_method.getValue(), l_uriclass );
+        }
+    }
+
+    /**
+     * static method binding
+     *
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
+     */
+    private void bindStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
+    {
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webstatic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webstatic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
+
+        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
+    }
+
+    /**
+     * returns URI base if exists
+     *
+     * @param p_object object
+     * @return empty string or URI
+     */
+    private String getURIBase( final Object p_object )
+    {
+        // try to read basepart
+        String l_uribase = "";
+        try
+        {
+            final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
+            if ( l_data instanceof String )
+                l_uribase = l_data.toString().toLowerCase();
+
+            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
+            {
+                if ( l_uribase.startsWith( c_seperator ) )
+                    l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( c_seperator ) )
+                    l_uribase += c_seperator;
+            }
+        }
+        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
+        {
+        }
+
+        return l_uribase;
+    }
 
     /**
      * adds a new virtual file to the server with existance checking
      *
      * @param p_source relative source path
-     * @param p_uri    URI
+     * @param p_uri URI
      */
     public final void addVirtualFile( final String p_source, final String p_uri )
     {
@@ -313,8 +354,8 @@ public class CServer extends NanoHTTPD
      * adds a new virtual directory to the server with existance checking
      *
      * @param p_source relative source path
-     * @param p_index  index file
-     * @param p_uri    URI
+     * @param p_index index file
+     * @param p_uri URI
      */
     public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
     {
@@ -325,9 +366,9 @@ public class CServer extends NanoHTTPD
     /**
      * adds a new virtual directory to the server with existance checking
      *
-     * @param p_source   relative source path
-     * @param p_index    index file
-     * @param p_uri      URI
+     * @param p_source relative source path
+     * @param p_index index file
+     * @param p_uri URI
      * @param p_markdown markdown renderer
      */
     public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
@@ -335,26 +376,12 @@ public class CServer extends NanoHTTPD
         this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
     }
 
-
     /**
      * adds a new virtual directory to the server with existance checking
      *
      * @param p_source source file object
-     * @param p_index  index file
-     * @param p_uri    URI
-     */
-    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
-    {
-        this.addVirtualDirectory( p_source, p_index, p_uri, null );
-    }
-
-
-    /**
-     * adds a new virtual directory to the server with existance checking
-     *
-     * @param p_source   source file object
-     * @param p_index    index file
-     * @param p_uri      URI
+     * @param p_index index file
+     * @param p_uri URI
      * @param p_markdown markdown renderer
      */
     public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
@@ -368,5 +395,23 @@ public class CServer extends NanoHTTPD
         {
             CLogger.error( l_exception );
         }
+    }
+
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source source file object
+     * @param p_index index file
+     * @param p_uri URI
+     */
+    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    {
+        this.addVirtualDirectory( p_source, p_index, p_uri, null );
+    }
+
+    @Override
+    public WebSocket openWebSocket( final IHTTPSession p_ihttpSession )
+    {
+        return null;
     }
 }

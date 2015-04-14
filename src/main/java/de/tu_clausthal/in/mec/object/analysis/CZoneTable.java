@@ -44,11 +44,11 @@ public class CZoneTable<T, S>
     /**
      * map with zone names and zone definition *
      */
-    protected final Map<String, Pair<S, Integer>> m_zones = new HashMap<>();
+    private final Map<String, Pair<S, Integer>> m_zones = new HashMap<>();
     /**
      * check object *
      */
-    protected CValidation<T, S> m_validation = null;
+    private final CValidation<T, S> m_validation;
 
     /**
      * ctor
@@ -67,7 +67,7 @@ public class CZoneTable<T, S>
      * adds a new zone with the elements
      *
      * @param p_zonename unique zone name
-     * @param p_data     zone dat
+     * @param p_data zone dat
      */
     public final void put( final String p_zonename, final S p_data )
     {

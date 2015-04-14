@@ -3,12 +3,13 @@
 
 html, body
 {
-    height:   100%;
-    width:    100%;
-    margin:   0px;
-    padding:  0px;
-    overflow: hidden;
-    font:     13px sans-serif;
+    height:    100%;
+    width:     100%;
+    margin:    0px;
+    padding:   0px;
+    overflow:  hidden;
+    font-size: 1em;
+    font-family: sans-serif;
     background-color: white;
 }
 
@@ -157,12 +158,8 @@ iframe
 
 /** Cluster Style TODO Rename**/
 .mecsim_source_node {
-  font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 75%;
   font-weight: bold;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
   user-select: none;
   cursor: default;
 }

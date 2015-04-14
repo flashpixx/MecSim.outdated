@@ -52,10 +52,6 @@ public class COSMViewer extends JXMapViewer
      * mouse listener
      */
     private COSMMouseListener m_mouse = new COSMMouseListener();
-    /**
-     * Key Listener
-     */
-    private COSMKeyListener m_keylistener = new COSMKeyListener();
 
 
     /**
@@ -82,7 +78,6 @@ public class COSMViewer extends JXMapViewer
         this.addMouseMotionListener( m_mouse );
         this.addMouseListener( new PanMouseInputListener( this ) );
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
-        this.addKeyListener( m_keylistener );
 
         this.resetConfiguration();
 
@@ -128,12 +123,5 @@ public class COSMViewer extends JXMapViewer
         return this.m_mouse;
     }
 
-    /**
-     * Getter Key Listener
-     */
-    public final COSMKeyListener getKeyListener()
-    {
-        return m_keylistener;
-    }
 
 }

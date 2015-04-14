@@ -64,25 +64,25 @@ public class CWebSocket extends WebSocket
 
 
     @Override
-    protected void onPong( final WebSocketFrame p_webSocketFrame )
+    protected void onPong( final WebSocketFrame p_frame )
     {
 
     }
 
     @Override
-    protected void onMessage( final WebSocketFrame p_webSocketFrame )
+    protected void onMessage( final WebSocketFrame p_frame )
     {
 
     }
 
     @Override
-    protected void onClose( final WebSocketFrame.CloseCode p_closeCode, final String s, final boolean b )
+    protected void onClose( final WebSocketFrame.CloseCode p_close, final String p_text, final boolean p_bool )
     {
 
     }
 
     @Override
-    protected void onException( final IOException e )
+    protected void onException( final IOException p_exception )
     {
 
     }

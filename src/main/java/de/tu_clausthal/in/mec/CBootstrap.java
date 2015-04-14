@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
+import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CTrafficEnvironment;
@@ -105,8 +106,8 @@ public class CBootstrap
 
 
         // registerObject objects
-        //p_server.registerObject( CConsole.getError( "error" ) );
-        //p_server.registerObject( CConsole.getOutput( "output" ) );
+        p_server.registerObject( CConsole.getError( "error" ) );
+        p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CConfiguration.getInstance() );
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );

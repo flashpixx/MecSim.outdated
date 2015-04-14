@@ -382,7 +382,7 @@ function generateData(){
     }
 
     //push the new node object to the result array
-    result.push({ name: names[i],
+    result.push({ name: names[i].trim(),
                   sourcemode: sourcemode,
                   lat: Math.random() * 180,
                   long: Math.random() * 90,

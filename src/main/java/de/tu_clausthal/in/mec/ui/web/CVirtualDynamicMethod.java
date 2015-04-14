@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.ui.web;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.WebSocket;
 
 import java.lang.invoke.MethodHandle;
 
@@ -76,7 +77,7 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     }
 
     @Override
-    public final <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
+    public final WebSocket get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
         return null;
     }

@@ -44,7 +44,7 @@ public class CParticipant implements IParticipant
 
 
     /**
-     * ctor to register an object *
+     * ctor to registerObject an object *
      *
      * @param p_owner owner of the message
      */

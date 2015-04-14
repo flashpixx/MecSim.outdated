@@ -48,7 +48,7 @@ public abstract class IUIListener implements MouseListener
 
 
     /**
-     * ctor to register component on the viewer
+     * ctor to registerObject component on the viewer
      */
     public IUIListener()
     {

@@ -75,7 +75,7 @@ public class CMessageSystem implements IVoidSteppable
 
 
     /**
-     * register a new participant
+     * registerObject a new participant
      *
      * @param p_path path of the receiver
      * @param p_receiver participant
@@ -84,7 +84,7 @@ public class CMessageSystem implements IVoidSteppable
     {
         if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
         {
-            CLogger.error( CCommon.getResourceString( this, "register", p_receiver, p_path ) );
+            CLogger.error( CCommon.getResourceString( this, "registerObject", p_receiver, p_path ) );
             return;
         }
 
@@ -207,7 +207,7 @@ public class CMessageSystem implements IVoidSteppable
     {
 
         /**
-         * is called on register
+         * is called on registerObject
          *
          * @param p_path path of the object
          * @param p_receiver receiver

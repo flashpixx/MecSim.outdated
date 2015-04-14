@@ -122,11 +122,16 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     {
         Response l_response;
 
-        // check if it is a websocket call
-        l_response = m_websockethandler.serve( p_session );
-        if ( l_response != null )
-            return l_response;
-
+        // try to get the websocket first - can be thrown a NPE if no websocket exists
+        try
+        {
+            l_response = m_websockethandler.serve( p_session );
+            if ( l_response != null )
+                return l_response;
+        }
+        catch ( final NullPointerException l_exception )
+        {
+        }
 
         // no websocket
         try
@@ -166,7 +171,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @return response
      * @throws Throwable on error
      */
-    protected final Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         CLogger.info( p_session.getUri() );
         return p_location.<Response>get( p_session );
@@ -180,7 +185,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @return response
      * @throws Throwable on error
      */
-    protected final Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         final Response l_response;
         final URL l_physicalfile = p_location.<URL>get( p_session );
@@ -234,6 +239,20 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
     }
 
+    @Override
+    public final WebSocket openWebSocket( final IHTTPSession p_session )
+    {
+        try
+        {
+            return m_virtuallocation.get( p_session ).<WebSocket>get( p_session );
+        }
+        catch ( final Throwable l_throwable )
+        {
+        }
+
+        return null;
+    }
+
     /**
      * returns the virtual-location object
      *
@@ -245,7 +264,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     }
 
     /**
-     * register an object for the UI
+     * registerObject an object for the UI
      *
      * @param p_object object, all methods with the name "ui_" are registered
      * @note a class / object need to implemente methods with the prefix "web_static_" or "web_dynamic_", which is bind
@@ -254,7 +273,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * returns the basepart of the URI
      * @bug incomplete
      */
-    public final void register( final Object p_object )
+    public final void registerObject( final Object p_object )
     {
         // URI begin
         final String l_uriclass = c_seperator + p_object.getClass().getSimpleName().toLowerCase() + c_seperator;
@@ -335,7 +354,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @param p_source relative source path
      * @param p_uri URI
      */
-    public final void addVirtualFile( final String p_source, final String p_uri )
+    public final void registerVirtualFile( final String p_source, final String p_uri )
     {
         try
         {
@@ -349,31 +368,16 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         }
     }
 
-
     /**
      * adds a new virtual directory to the server with existance checking
      *
-     * @param p_source relative source path
+     * @param p_source source file object
      * @param p_index index file
      * @param p_uri URI
      */
-    public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri )
+    public final void registerVirtualDirectory( final File p_source, final String p_index, final String p_uri )
     {
-        this.addVirtualDirectory( p_source, p_index, p_uri, null );
-    }
-
-
-    /**
-     * adds a new virtual directory to the server with existance checking
-     *
-     * @param p_source relative source path
-     * @param p_index index file
-     * @param p_uri URI
-     * @param p_markdown markdown renderer
-     */
-    public final void addVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
-    {
-        this.addVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
+        this.registerVirtualDirectory( p_source, p_index, p_uri, null );
     }
 
     /**
@@ -384,7 +388,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @param p_uri URI
      * @param p_markdown markdown renderer
      */
-    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
+    public final void registerVirtualDirectory( final File p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         try
         {
@@ -400,18 +404,26 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     /**
      * adds a new virtual directory to the server with existance checking
      *
-     * @param p_source source file object
+     * @param p_source relative source path
      * @param p_index index file
      * @param p_uri URI
      */
-    public final void addVirtualDirectory( final File p_source, final String p_index, final String p_uri )
+    public final void registerVirtualDirectory( final String p_source, final String p_index, final String p_uri )
     {
-        this.addVirtualDirectory( p_source, p_index, p_uri, null );
+        this.registerVirtualDirectory( p_source, p_index, p_uri, null );
     }
 
-    @Override
-    public WebSocket openWebSocket( final IHTTPSession p_ihttpSession )
+    /**
+     * adds a new virtual directory to the server with existance checking
+     *
+     * @param p_source relative source path
+     * @param p_index index file
+     * @param p_uri URI
+     * @param p_markdown markdown renderer
+     */
+    public final void registerVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
-        return null;
+        this.registerVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
     }
+
 }

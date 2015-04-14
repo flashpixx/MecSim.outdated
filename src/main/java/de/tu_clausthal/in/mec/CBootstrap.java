@@ -93,24 +93,24 @@ public class CBootstrap
      */
     public static void afterServerInit( final CServer p_server )
     {
-        // register default locations
-        p_server.addVirtualDirectory(
+        // registerObject default locations
+        p_server.registerVirtualDirectory(
                 "web/documentation/user/" + CConfiguration.getInstance().get().<String>getTraverse( "language/current" ), "index.md", "/userdoc/",
                 new CMarkdownRenderer( CMarkdownRenderer.EHTMLType.Fragment, "/userdoc/" )
         );
 
-        p_server.addVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/" );
+        p_server.registerVirtualDirectory( CConfiguration.getInstance().getLocation( "www" ), "index.htm", "/local/" );
 
-        p_server.addVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/" );
+        p_server.registerVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/" );
 
 
-        // register objects
-        //p_server.register( CConsole.getError( "error" ) );
-        //p_server.register( CConsole.getOutput( "output" ) );
-        p_server.register( CSimulation.getInstance() );
-        p_server.register( CConfiguration.getInstance() );
-        p_server.register( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
-        p_server.register( new CTrafficEnvironment() );
+        // registerObject objects
+        //p_server.registerObject( CConsole.getError( "error" ) );
+        //p_server.registerObject( CConsole.getOutput( "output" ) );
+        p_server.registerObject( CSimulation.getInstance() );
+        p_server.registerObject( CConfiguration.getInstance() );
+        p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
+        p_server.registerObject( new CTrafficEnvironment() );
     }
 
 

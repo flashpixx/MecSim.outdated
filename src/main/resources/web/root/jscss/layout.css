@@ -25,77 +25,44 @@ iframe
 
 /******************************** class definitions *******************************************************************/
 
+.ui-accordion-content{
+    height: 40%;
+}
+
+.ui-widget-content{
+  border: 1px solid #CACACA;
+}
+
+.ui-resizable-helper{
+  border: 1px dotted gray;
+}
+
+.ui-widget-header{
+  margin: 0;
+  color: black;
+  text-align: center;
+  font-weight:normal;
+  background: #CBCBCB;
+  border: 1px solid #CACACA;
+}
+
 .mecsim_global_accordeonbutton{
     width: 75%;
     align: center;
 }
 
-.fixed_width_button
-{
+.mecsim_global_sliderSubMenu{
+    text-align: center;
+}
+
+.mecsim_editor_fixed_width_button{
     width: 30%;
     top: 10%;
 }
 
-.align-center-div
-{
-    text-align: center;
-}
-
-.ui-accordion-content
-{
-    height: 40%;
-}
-
-.align_center
-{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-.text_align_center
-{
-    text-align: center;
-    font-size: 40px;
-    color: #808080;
-    font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
-}
-
-.table {
-    position: relative;
-    margin: 0 auto;
-    display: table;
-}
-.header {
-    display: table-header-group;
-    font-weight: bold;
-}
-.rowGroup {
-    display: table-row-group;
-}
-.row {
-    display: table-row;
-}
-.cell {
-    display: table-cell;
-}
-
 /******************************* id definitions ***********************************************************************/
 
-#about
-{
-    padding-top: 15%;
-}
-
-#about .cell
-{
-    width: 75%;
-}
-
-#mecsim_menu
-{
+#mecsim_global_menu{
     height: 100%;
     /*background-color: #ecf0f1;*/
     background-image: url(../img/Logo_TUC_de_Web_klein.gif);
@@ -103,13 +70,11 @@ iframe
     background-repeat: no-repeat;
 }
 
-#mecsim_content
-{
+#mecsim_global_content{
     /*background-color: #ecf0f1;*/
 }
 
-#mecsim_content::before
-{
+#mecsim_global_content::before{
     position: absolute;
     content: "";
     top: 0;
@@ -120,22 +85,14 @@ iframe
     /** TODO: Maybe Logo only on FrontPage ? background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center; **/
 }
 
-#mecsim_accordion
-{
+#mecsim_global_accordion{
     height: 90%;
     color: red;
 }
 
-#mecsim_editor
-{
+#mecsim_global_editor{
     collapsible: false;
 }
-
-
-
-
-
-/** Temp Source Styles **/
 
 #mecsim_source_clustercontainer{
   float: left;
@@ -159,23 +116,6 @@ iframe
   height: 360px;
   padding: 0.5em;
   margin: 10px;
-}
-
-.ui-widget-content{
-  border: 1px solid #CACACA;
-}
-
-.ui-resizable-helper{
-  border: 1px dotted gray;
-}
-
-.ui-widget-header{
-  margin: 0;
-  color: black;
-  text-align: center;
-  font-weight:normal;
-  background: #CBCBCB;
-  border: 1px solid #CACACA;
 }
 
 #mecsim_source_selectSource{
@@ -212,8 +152,12 @@ iframe
   width: 100%;
 }
 
-/** Cluster Style **/
-.node {
+
+
+
+
+/** Cluster Style TODO Rename**/
+.mecsim_source_node {
   font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: bold;
   -webkit-user-select: none;
@@ -224,41 +168,37 @@ iframe
   cursor: default;
 }
 
-.node:hover{
+.mecsim_source_node:hover{
   opacity: 1;
 }
 
-.node-source {
+.mecsim_source_node-source {
   fill: #2ca02c;
 }
 
-.node-target {
+.mecsim_source_node-target {
   fill: #d62728;
 }
 
-.node-selected{
+.mecsim_source_node-selected{
   fill: #000000;
 }
 
-.node-trans{
+.mecsim_source_node-trans{
   opacity: 0.3;
 }
 
-.link {
+.mecsim_source_link {
   stroke: steelblue;
   stroke-opacity: 0.2;
   fill: none;
   pointer-events: none;
 }
 
-.link-thick{
+.mecsim_source_link-thick{
   stroke-opacity: 1;
 }
 
-.link-hidden{
+.mecsim_source_link-hidden{
   stroke-opacity: 0;
-}
-
-#mecsim_source_defaultCar, #mecsim_source_defaultAgent, #mecsim_source_target{
-    width: 200px;
 }

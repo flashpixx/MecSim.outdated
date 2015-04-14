@@ -42,91 +42,73 @@
     <script type = "text/javascript" src = "jscss/main.js" ></script >
     <link href = "jscss/layout.css" rel = "stylesheet" />
     <!------------------------------------------------------------------------------------------------------------->
-
 </head >
 
 <body >
 
 <div id = "jqxSplitter" >
-    <div id = "mecsim_menu" >
+    <div id = "mecsim_global_menu" >
 
-        <div id = "mecsim_accordion" class = "accordion" >
+        <div id = "mecsim_global_accordion" class = "accordion" >
 
             <h3 >File</h3 >
-            <div class = "align-center-div" >
-                <ul id = "root_menu" >
-                    <li >
-                        <a id = "mecsim_preferences" class = "template" >Preferences</a >
-                    </li >
-                    <li >
-                        <a href = "template/configuration.htm" class = "template" >Configuration</a >
-                    </li >
-                    <li >
-                        <a class = "template" >Load</a >
-                    </li >
-                    <li >
-                        <a class = "template" >Save</a >
-                    </li >
-                    <li >
-                        <a class = "template" >Screenshot</a >
-                    </li >
-                    <li >
-                        <a href = "template/local.htm" class = "template" >Local</a >
-                    </li >
-                </ul >
+            <div class = "mecsim_global_sliderSubMenu" >
+                <button class="mecsim_global_accordeonbutton" id="mecsim_file_preferences">Preferences</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_file_config">User Configuration</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_file_local">Local</button>
             </div >
 
             <h3 >Simulation</h3 >
-            <div class = "align-center-div" >
+            <div class = "mecsim_global_sliderSubMenu" >
+                <button class="mecsim_global_accordeonbutton" id="mecsim_simulation_start">Start</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_simulation_stop">Stop</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_simulation_reset">Reset</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_simulation_load">Load</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_simulation_save">Save</button>
+                </p>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_simulation_local">Local</button>
 
-                <ul id = "simulation_menu" >
-                    <li >
-                        <a id = "mecsim_start_button" >Start Simulation</a >
-                    </li >
-                    <li >
-                        <a id = "mecsim_stop_button" >Stop Simulation</a >
-                    </li >
-                    <li >
-                        <a id = "mecsim_reset_button" >Reset Simulation</a >
-                    </li >
-                </ul >
-                <br />
-
-                <p >
-                    <label for = "speed" >Speed:</label >
-                    <input type = "text" id = "speed" readonly style = "border:0;" >
-                </p >
-
-                <div id = "mecsim_speed_slider" ></div >
+                <br/>
+                <p>
+                    <label for="speed">Speed: </label>
+                    <input type="text" id="speed" readonly style="border:0;">
+                </p>
+                <div id="mecsim_speed_slider"></div>
             </div >
 
             <h3 >Sources</h3 >
-            <div class = "align-center-div" >
-                <button id="mecsim_source_defaultCar">Default Car</button>
+            <div class = "mecsim_global_sliderSubMenu" >
+                <button class="mecsim_global_accordeonbutton" id="mecsim_source_defaultCar">Default Car</button>
                 </p>
-                <button id="mecsim_source_defaultAgent">Default Agent Car</button>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_source_defaultAgent">Default Agent Car</button>
                 </p>
-                <button id="mecsim_source_target">Target</button>
+                <button class="mecsim_global_accordeonbutton" id="mecsim_source_target">Target</button>
             </div >
 
             <h3 >Editor</h3 >
-            <div class = "align-center-div" >
+            <div class = "mecsim_global_sliderSubMenu" >
 
                 <label for = "mecsim_agent_files" >Select a file</label >
                 <select name = "agentfiles" id = "mecsim_agent_files" ></select >
                 <br />
                 <a id = "mecsim_editor" href = "template/editor.htm"
-                   class = "template_button fixed_width_button" >Load</a >
-                <button id = "mecsim_delete_asl" class = "fixed_width_button" >Delete</button >
-                <button id = "mecsim_new_asl" class = "fixed_width_button" >New</button >
-                <button id = "mecsim_save_asl" class = "fixed_width_button" >Save</button >
+                   class = "template_button mecsim_editor_fixed_width_button" >Load</a >
+                <button id = "mecsim_delete_asl" class = "mecsim_editor_fixed_width_button" >Delete</button >
+                <button id = "mecsim_new_asl" class = "mecsim_editor_fixed_width_button" >New</button >
+                <button id = "mecsim_save_asl" class = "mecsim_editor_fixed_width_button" >Save</button >
             </div >
 
             <h3 >Statistics</h3 >
-            <div class = "align-center-div" ></div >
+            <div class = "mecsim_global_sliderSubMenu" ></div >
 
             <h3 >Getting Help</h3 >
-            <div class = "align-center-div" >
+            <div class = "mecsim_global_sliderSubMenu" >
                 <button class="mecsim_global_accordeonbutton" id="mecsim_help_help">Help</button>
                 </p>
                 <button class="mecsim_global_accordeonbutton" id="mecsim_help_userdoku">User Dokumentation</button>
@@ -137,8 +119,8 @@
         </div >
 
     </div >
-    <div id = "mecsim_content" >
-    </div >
+
+    <div id = "mecsim_global_content" ></div >
 </div >
 
 <!-- start and stop error messages -->

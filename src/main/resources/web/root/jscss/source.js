@@ -66,8 +66,8 @@ function initClusterWidget(){
       .append("g")
       .attr("transform", "translate(" + radius + "," + radius + ")");
 
-  nodecontainer = svg.append("g").selectAll(".node");
-  linkcontainer = svg.append("g").selectAll(".link");
+  nodecontainer = svg.append("g").selectAll(".mecsim_source_node");
+  linkcontainer = svg.append("g").selectAll(".mecsim_source_link");
 
   //readFile("daten2.json", createCluster);
   createCluster(generateData());
@@ -137,7 +137,7 @@ function createCluster(input){
   //enter section
   nodecontainer.enter()
       .append("text")
-      .attr("class", function(node){ return node.sourcemode ? "node" + " node-source" : "node" + " node-target"})
+      .attr("class", function(node){ return node.sourcemode ? "mecsim_source_node" + " mecsim_source_node-source" : "mecsim_source_node" + " mecsim_source_node-target"})
       .attr("dx", function(node){ return node.x < 180 ? 0 : "-" + String(node.key).length*6 + "px";})
       .attr("dy", ".31em")
       .attr("transform", function(node) { return "rotate(" + (node.x - 90) + ")translate(" + (node.y + 8) + ",0)" + (node.x < 180 ? "" : "rotate(180)"); })
@@ -156,7 +156,7 @@ function createCluster(input){
   linkcontainer.enter()
       .append("path")
       .each(function(link) {link.source = link[0]; link.target = link[link.length - 1]; })
-      .attr("class", "link")
+      .attr("class", "mecsim_source_link")
       .attr("d", line);
 
   //exit section
@@ -206,10 +206,10 @@ function leftclick(nodeclicked){
 
     //save the new selected node and make it black
     selected=nodeclicked;
-    nodecontainer.classed("node-selected", function(node){ return node.name === nodeclicked.name });
+    nodecontainer.classed("mecsim_source_node-selected", function(node){ return node.name === nodeclicked.name });
 
     //all nodes which are not connected to the selected should be transparent
-    nodecontainer.classed("node-trans", function(node){
+    nodecontainer.classed("mecsim_source_node-trans", function(node){
       if(node === selected)
         return false;
 
@@ -228,17 +228,17 @@ function leftclick(nodeclicked){
     });
 
     //links should be thick if they are connected to the selected node
-    linkcontainer.classed("link-thick", function(link){ return link.source === selected || link.target === selected });
+    linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === selected || link.target === selected });
     //links should be hidden if they are not connected to the selected node
-    linkcontainer.classed("link-hidden", function(link){ return link.source !== selected && link.target !== selected});
+    linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== selected && link.target !== selected});
 
   }else{
     //if the selected node was de-selected remove all effekts
     selected=false;
-    nodecontainer.classed("node-selected", false);
-    nodecontainer.classed("node-trans", false);
-    linkcontainer.classed("link-thick", false);
-    linkcontainer.classed("link-hidden", false);
+    nodecontainer.classed("mecsim_source_node-selected", false);
+    nodecontainer.classed("mecsim_source_node-trans", false);
+    linkcontainer.classed("mecsim_source_link-thick", false);
+    linkcontainer.classed("mecsim_source_link-hidden", false);
   }
 }
 
@@ -275,11 +275,11 @@ function sort(comparator){
   links = linkWrapper(nodes);
 
   var transition = svg.transition().duration(2000);
-  transition.selectAll(".node")
+  transition.selectAll(".mecsim_source_node")
       .attr("transform", function(node) { return "rotate(" + (node.x - 90) + ")translate(" + (node.y + 8) + ",0)" + (node.x < 180 ? "" : "rotate(180)"); })
       .attr("dx", function(node){ return node.x < 180 ? 0 : "-" + String(node.key).length*6 + "px";})
 
-  transition.selectAll(".link")
+  transition.selectAll(".mecsim_source_link")
       .each(function(link) { link.source = link[0], link.target = link[link.length - 1]; })
       .attr("d", line);
 }
@@ -315,17 +315,17 @@ function sortByNameComp(a, b){
 function mouseovered(node) {
   if(selected === false){
     //if no node is selected make some hover-effekt (for every link which is connected to the hoverd-node)
-    linkcontainer.classed("link-thick", function(link){ return link.source === node || link.target === node; });
+    linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === node || link.target === node; });
   }else{
     //if a node is selected all links should be hidden (except the links which are connected to the hovered or selected node)
-    linkcontainer.classed("link-hidden", function(link){ return (link.source !== node && link.target !== node) && (link.source !== selected && link.target !== selected);});
+    linkcontainer.classed("mecsim_source_link-hidden", function(link){ return (link.source !== node && link.target !== node) && (link.source !== selected && link.target !== selected);});
   }
 }
 
 //method which should be triggered if the mouse hover-out from a node
 function mouseouted(node) {
   if(selected === false){
-    linkcontainer.classed("link-thick", false);
+    linkcontainer.classed("mecsim_source_link-thick", false);
   }else{
     //if a node is selected an the mouse hover out it is a good idea to save the hover-effekt
   }

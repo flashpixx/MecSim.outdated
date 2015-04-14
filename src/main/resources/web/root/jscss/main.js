@@ -1,95 +1,85 @@
 $(document).ready(function(){
 
-    // global variables
-    var form, dialog;
+    //Global Variables
+    var mecsim_global_menu = $("#mecsim_global_menu")
+    var mecsim_global_accordion = $( "#mecsim_global_accordion" )
+    var mecsim_global_content = $("#mecsim_global_content");
+    var form;
+    var dialog;
 
-    globalInit();
-    simulationContent(),
-    sourceContent();
-    editorContent();
-    statisticsContent();
-    helpContent();
+    //Global Stuff
+    layoutInit();
+    fileSlider();
+    simulationSlider(),
+    sourceSlider();
+    editorSlider();
+    statisticsSlider();
+    helpSlider();
 
     // global
-    function globalInit(){
+    function layoutInit(){
       $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });
 
-      // apply selected language to text elements
-      // TODO: i18n
-      /*$("#mecsim_preferences").append(
-          $.post(
-              "cinternationalization/translate",
-              { "name" : "preferences" }
-          )
-      );*/
+      mecsim_global_accordion.accordion({
+          active: false,
+          collapsible: true
+      });
 
-      // TODO: add button text according to selected language
-      /*$('#mecsim_user_documentation').text(function() {
-          $.post(
-              ""
-          );
-      });*/
-
-      /**
-       * call to set template links
-       * @see http://www.html5rocks.com/en/tutorials/webcomponents/imports/?redirect_from_locale=de
-      **/
-
+      //TODO Check if really needed ?
       $("a.template").click(function( p_event ){
           p_event.preventDefault();
           $("#mecsim_content").load( this.href );
       });
 
       $("a.template_button").button().click(function( p_event ){
-              p_event.preventDefault();
-              $("#mecsim_content").load( this.href );
-      });
-
-      // reload default page
-      $("a.mecsim_home").button().click(function( p_event ){
           p_event.preventDefault();
-          location.reload();
+          $("#mecsim_content").load( this.href );
       });
-
-      $( "#mecsim_accordion" ).accordion({
-          active: false,
-          collapsible: true
-      });
-
-
-      $("#root_menu").menu();
     }
 
-    // simulation content
-    function simulationContent(){
-        $("#simulation_menu").menu();
+    // file slider
+    function fileSlider(){
+        $("#mecsim_file_preferences").button().on("click", function(){
 
-        $( "#mecsim_start_button" ).click(function() {
-            $.post(
-                "csimulation/start"
-            ).fail( function( p_data )
-                {
-                    console.log(p_data);
-                    $("#mecsim_start_error_text").text(p_data.responseJSON.error);
-                    $("#mecsim_start_error").dialog();
-                } );
         });
 
-        $( "#mecsim_stop_button" ).click(function() {
-            $.post(
-                //TODO here a java method should be triggered to set the sourcelayer tool "cosmmouselistener/setTool"
-            ).fail( function( p_data )
-                {
-                    console.log(p_data);
-                    $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
-                    $("#mecsim_stop_error").dialog();
-                } );
+        $("#mecsim_file_config").button().on("click", function(){
+
         });
 
-        $( "#mecsim_reset_button" ).click(function() {
-            $.post(
-                "csimulation/reset"
-            );
+        $("#mecsim_file_local").button().on("click", function(){
+
+        });
+    }
+
+    // simulation slider
+    function simulationSlider(){
+        $("#mecsim_simulation_start").button().on("click", function(){
+
+        });
+
+        $("#mecsim_simulation_stop").button().on("click", function(){
+
+        });
+
+        $("#mecsim_simulation_reset").button().on("click", function(){
+
+        });
+
+        $("#mecsim_simulation_load").button().on("click", function(){
+
+        });
+
+        $("#mecsim_simulation_save").button().on("click", function(){
+
+        });
+
+        $("#mecsim_simulation_local").button().on("click", function(){
+
+        });
+
+        $("#mecsim_simulation_").button().on("click", function(){
+
         });
 
         $( "#mecsim_speed_slider" ).slider({
@@ -101,15 +91,16 @@ $(document).ready(function(){
                 $( "#speed" ).val( ui.value );
             }
         });
+
         $( "#speed" ).val( $( "#mecsim_speed_slider" ).slider( "value" ) );
     }
 
-    // source content
-    function sourceContent(){
+    // source slider
+    function sourceSlider(){
 
       //Load the Source-GUI
       $("#ui-id-5").on("click", function(data){
-        $("#mecsim_content").load("template/source.htm", function(){
+        mecsim_global_content.load("template/source.htm", function(){
           initLayout();
           initClusterWidget();
           initSettingsWidget();
@@ -141,6 +132,7 @@ $(document).ready(function(){
         }
       })
       .on("click", function(data){
+
       });
 
       //Listen to the Target Tool Button
@@ -150,11 +142,12 @@ $(document).ready(function(){
         }
       })
       .on("click", function(data){
+
       });
     }
 
-    // editor content
-    function editorContent(){
+    // editor slider
+    function editorSlider(){
       $("#mecsim_load_asl").button();
       $("#mecsim_delete_asl").button();
       $("#mecsim_save_asl").button();
@@ -254,29 +247,30 @@ $(document).ready(function(){
 
     }
 
-    // statistics content
-    function statisticsContent(){
+    // statistics slider
+    function statisticsSlider(){
         //TODO need to be implemented
     }
 
-    // help content
-    function helpContent(){
+    // help slider
+    function helpSlider(){
         $("#mecsim_help_help").button().on("click", function(){
-            
+
         });
 
         $("#mecsim_help_userdoku").button().on("click", function(){
-
+            //$.get("/userdoc/", function( p_result ) {
+            //    $("#mecsim_content").append( p_result );
+            //});
         });
 
         $("#mecsim_help_devdoku").button().on("click", function(){
-
+            //mecsim_global_content.load("template/develdoc.htm");
         });
     }
 
-    // moved configration stuff
-    function config(){
-        //TODO needed ?
+    // stuff from clean up (configuration.htm)
+    function test(){
         /**
         //build table with configuration data
         $.getJSON( "cconfiguration/get", function( p_data ) {
@@ -298,6 +292,5 @@ $(document).ready(function(){
         );
         **/
     }
-
 
 });

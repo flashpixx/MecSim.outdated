@@ -8,6 +8,8 @@ $(document).ready(function(){
     var dialog;
 
     //Global Stuff
+    //TODO not work on external include of main.js
+
     layoutInit();
     fileSlider();
     simulationSlider(),

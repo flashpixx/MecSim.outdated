@@ -89,7 +89,7 @@ public class CConsole extends ByteArrayOutputStream
     /**
      * UI method for testing
      */
-    private void web_dynamic_get()
+    private void web_dynamic_log()
     {
 
     }

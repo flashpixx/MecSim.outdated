@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui.web;
 
-import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.CLogger;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.WebSocket;
 import fi.iki.elonen.WebSocketFrame;
@@ -54,12 +54,12 @@ public class CWebSocket extends WebSocket
      * @param p_object
      * @param p_method
      */
-    public CWebSocket( final NanoHTTPD.IHTTPSession p_handshakeRequest, final Object p_object, final CReflection.CMethod p_method )
+    public CWebSocket( final NanoHTTPD.IHTTPSession p_handshakeRequest, final Object p_object, final MethodHandle p_method )
     {
         super( p_handshakeRequest );
 
         m_object = p_object;
-        m_method = p_method.getHandle();
+        m_method = p_method;
     }
 
 
@@ -76,7 +76,7 @@ public class CWebSocket extends WebSocket
     }
 
     @Override
-    protected void onClose( final WebSocketFrame.CloseCode p_close, final String p_text, final boolean p_bool )
+    protected void onClose( final WebSocketFrame.CloseCode p_close, final String p_reason, final boolean p_initbyremote )
     {
 
     }
@@ -84,6 +84,6 @@ public class CWebSocket extends WebSocket
     @Override
     protected void onException( final IOException p_exception )
     {
-
+        CLogger.error( p_exception );
     }
 }

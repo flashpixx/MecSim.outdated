@@ -34,7 +34,7 @@ import java.lang.invoke.MethodHandle;
 /**
  * class to call methods continuously with websockets
  *
- * @see add http://www.html5rocks.com/de/tutorials/websockets/basics/
+ * @see http://www.html5rocks.com/de/tutorials/websockets/basics/
  * @see https://github.com/NanoHttpd/nanohttpd/issues/74
  * @see https://github.com/NanoHttpd/nanohttpd/blob/master/websocket/src/main/java/fi/iki/elonen/NanoWebSocketServer.java
  */
@@ -48,6 +48,10 @@ public class CVirtualDynamicMethod implements IVirtualLocation
      * URI reg expression for filter
      */
     private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
+    /**
+     * object
+     */
+    private final Object m_object;
     /**
      * method handle *
      */
@@ -69,6 +73,7 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     {
         m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_uriallowchars, "" ) : c_seperator + p_uri.replaceAll( c_uriallowchars, "" );
         m_method = p_method.getHandle();
+        m_object = p_object;
 
         CLogger.info( p_uri );
     }
@@ -83,7 +88,7 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     @Override
     public final WebSocket get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
-        return null;
+        return new CWebSocket( p_session, m_object, m_method );
     }
 
     @Override

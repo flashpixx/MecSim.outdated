@@ -295,6 +295,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         ).entrySet() )
         {
             this.bindStaticMethod( p_object, l_method.getValue(), l_uriclass );
+            this.bindDynamicMethod( p_object, l_method.getValue(), l_uriclass );
         }
     }
 
@@ -316,6 +317,28 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
 
         m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
     }
+
+
+    /**
+     * dynamic method binding
+     *
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
+     */
+    private void bindDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
+    {
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webdynamic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webdynamic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
+
+        m_virtuallocation.add( new CVirtualDynamicMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
+    }
+
+
 
     /**
      * returns URI base if exists

@@ -53,11 +53,11 @@ public class CVirtualDynamicMethod implements IVirtualLocation
      */
     private final Object m_object;
     /**
-     * method handle *
+     * method handle
      */
     private final MethodHandle m_method;
     /**
-     * URI *
+     * URI
      */
     private final String m_uri;
 

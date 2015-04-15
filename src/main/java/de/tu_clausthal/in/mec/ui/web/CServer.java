@@ -29,11 +29,9 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil2;
-import fi.iki.elonen.IWebSocketFactory;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoWebSocketServer;
 import fi.iki.elonen.WebSocket;
-import fi.iki.elonen.WebSocketResponseHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -51,7 +49,7 @@ import java.util.Map;
 /**
  * class of websocket & http server
  */
-public class CServer implements IWebSocketFactory
+public class CServer
 {
     /**
      * seperator
@@ -73,10 +71,6 @@ public class CServer implements IWebSocketFactory
      * virtual-locations
      */
     private final CVirtualLocation m_virtuallocation;
-    /**
-     * websocket handler
-     */
-    private final WebSocketResponseHandler m_websockethandler = new WebSocketResponseHandler( this );
     /**
      * http server
      */
@@ -108,26 +102,6 @@ public class CServer implements IWebSocketFactory
     }
 
 
-
-
-
-
-    /*
-    @Override
-    public final WebSocket openWebSocket( final IHTTPSession p_session )
-    {
-        try
-        {
-            return m_virtuallocation.get( p_session ).<WebSocket>get( p_session );
-        }
-        catch ( final Throwable l_throwable )
-        {
-        }
-
-        return null;
-    }
-    */
-
     /**
      * returns the virtual-location object
      *
@@ -137,6 +111,7 @@ public class CServer implements IWebSocketFactory
     {
         return m_virtuallocation;
     }
+
 
     /**
      * registerObject an object for the UI
@@ -173,6 +148,7 @@ public class CServer implements IWebSocketFactory
             this.bindDynamicMethod( p_object, l_method.getValue(), l_uriclass );
         }
     }
+
 
     /**
      * static method binding
@@ -214,7 +190,6 @@ public class CServer implements IWebSocketFactory
     }
 
 
-
     /**
      * returns URI base if exists
      *
@@ -246,6 +221,7 @@ public class CServer implements IWebSocketFactory
         return l_uribase;
     }
 
+
     /**
      * adds a new virtual file to the server with existance checking
      *
@@ -266,6 +242,7 @@ public class CServer implements IWebSocketFactory
         }
     }
 
+
     /**
      * adds a new virtual directory to the server with existance checking
      *
@@ -277,6 +254,7 @@ public class CServer implements IWebSocketFactory
     {
         this.registerVirtualDirectory( p_source, p_index, p_uri, null );
     }
+
 
     /**
      * adds a new virtual directory to the server with existance checking
@@ -322,12 +300,6 @@ public class CServer implements IWebSocketFactory
     public final void registerVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         this.registerVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
-    }
-
-    @Override
-    public WebSocket openWebSocket( final NanoHTTPD.IHTTPSession p_ihttpSession )
-    {
-        return null;
     }
 
 

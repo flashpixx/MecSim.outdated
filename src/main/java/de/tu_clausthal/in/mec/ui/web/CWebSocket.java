@@ -66,6 +66,18 @@ public class CWebSocket extends WebSocket
         m_method = p_method;
     }
 
+    @Override
+    protected void handleWebsocketFrame( final WebSocketFrame p_frame ) throws IOException
+    {
+        super.handleWebsocketFrame( p_frame );
+    }
+
+    @Override
+    public synchronized void sendFrame( final WebSocketFrame p_frame ) throws IOException
+    {
+        super.sendFrame( p_frame );
+    }
+
 
     @Override
     protected void onPong( final WebSocketFrame p_frame )
@@ -75,6 +87,16 @@ public class CWebSocket extends WebSocket
     @Override
     protected void onMessage( final WebSocketFrame p_frame )
     {
+        p_frame.setUnmasked();
+
+        try
+        {
+            this.sendFrame( p_frame );
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
     @Override

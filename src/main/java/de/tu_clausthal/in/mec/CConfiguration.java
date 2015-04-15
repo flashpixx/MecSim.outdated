@@ -111,8 +111,14 @@ public class CConfiguration
                             put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
                             put( "windowheight", 1024.0 );
                             put( "windowwidth", 1280.0 );
-                            put( "bindport", 9876 );
                             put( "zoom", 4 );
+                            put(
+                                    "server", new CNameHashMap.CImmutable()
+                                    {{
+                                            put( "http", 9876 );
+                                            put( "websocket", 9877 );
+                                        }}
+                            );
                         }}
             );
 

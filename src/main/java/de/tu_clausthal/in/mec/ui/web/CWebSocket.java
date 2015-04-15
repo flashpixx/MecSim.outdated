@@ -72,6 +72,7 @@ public class CWebSocket extends WebSocket
     {
         try
         {
+            p_frame.setUnmasked();
             this.ping( p_frame.getBinaryPayload() );
         }
         catch ( final IOException l_exception )

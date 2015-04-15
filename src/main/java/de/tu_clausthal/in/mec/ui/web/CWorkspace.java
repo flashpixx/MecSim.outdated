@@ -39,12 +39,13 @@ public class CWorkspace extends CBrowser
     /**
      * path of the configuration value
      */
-    private static final String c_configpath = "ui/bindport";
+    private static final String c_configpath = "ui/server/";
     /**
      * HTTP server to handle websockets *
      */
     private final CServer m_server = new CServer(
-            "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath ), new CVirtualDirectory(
+            "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath + "http" ),
+            CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath + "websocket" ), new CVirtualDirectory(
             CCommon.getResourceURL( "web/root" ), "index.htm"
     )
     );
@@ -56,7 +57,7 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super( EMenu.BackForward );
-        this.load( "http://localhost:" + CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath ) );
+        this.load( "http://localhost:" + CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath + "http" ) );
 
         // set via reflection the server
         try

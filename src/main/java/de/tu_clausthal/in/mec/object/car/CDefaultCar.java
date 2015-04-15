@@ -330,6 +330,9 @@ public class CDefaultCar extends IInspector implements ICar
     }
 
 
+    /**
+     * @todo speed / cell iteration depends on cellsize - must be fixed
+     */
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {

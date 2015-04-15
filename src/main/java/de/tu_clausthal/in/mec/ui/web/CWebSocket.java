@@ -70,15 +70,6 @@ public class CWebSocket extends WebSocket
     @Override
     protected void onPong( final WebSocketFrame p_frame )
     {
-        try
-        {
-            p_frame.setUnmasked();
-            this.ping( p_frame.getBinaryPayload() );
-        }
-        catch ( final IOException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
     }
 
     @Override
@@ -89,7 +80,6 @@ public class CWebSocket extends WebSocket
     @Override
     protected void onClose( final WebSocketFrame.CloseCode p_close, final String p_reason, final boolean p_initbyremote )
     {
-
     }
 
     @Override

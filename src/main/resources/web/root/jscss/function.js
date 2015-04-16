@@ -8,38 +8,45 @@ String.prototype.endsWith = function(suffix) {
 };
 
 
-// --- jQuery --------------------------------------------------------------------------------------------------------------------------------------------------
-// @warn need jQuery & jQuery-UI
-// @see http://learn.jquery.com/jquery-ui/widget-factory/why-use-the-widget-factory/
-(function($){
+// --- MecSim --------------------------------------------------------------------------------------------------------------------------------------------------
 
-	$.widget("mecsim.mecsim", {
+var MecSim = (function () {
 
-        options: {
+    var s_instance;
+
+    function _ctor() {return {
+
+        getWebSocket : function( p_wspath ) {
+            if ((p_wspath.startsWith("ws://")) || (p_wspath.startsWith("wss://")))
+                return new WebSocket(p_wspath);
+
+            return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (p_wspath.startsWith("/") ? p_wspath : location.pathname + p_wspath ) );
         },
 
+        getConfiguration : function ( p_data ) {
+            var l_data = {};
 
-        // ctor
-        _create : function() {
-        },
+            $.ajax({
+                async: false,
+                url : "/cconfiguration/get",
+                success : function( p_data ) { l_data = p_data }
+            });
 
-
-        // public member
-        websocket : function( p_wspath ) {
-            return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (wspath.startsWith("/") ? p_wspath : location.pathname + p_wspath ) );
-        },
-
-        configuration : function ( p_data ) {
+            return l_data;
         }
 
-
-        // private member
-        //_myPrivateMethod: function( argument ) { }
+    };};
 
 
-    });
+    return {
 
-})(jQuery);
+        getInstance: function () {
+            if ( !s_instance )
+                s_instance = _ctor();
 
+            return s_instance;
+        }
 
+  };
 
+})();

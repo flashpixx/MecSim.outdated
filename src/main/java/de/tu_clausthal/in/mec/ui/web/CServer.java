@@ -494,7 +494,14 @@ public class CServer
             CLogger.info( CCommon.getResourceString( this, "bind", p_host, p_port ) );
         }
 
+        @Override
+        public WebSocket openWebSocket( final IHTTPSession p_handshake )
+        {
+            return new CWebSocket( p_handshake, null, null );
+        }
 
+
+/*
         @Override
         public WebSocket openWebSocket( final IHTTPSession p_handshake )
         {
@@ -514,6 +521,7 @@ public class CServer
 
             return super.openWebSocket( p_handshake );
         }
+*/
     }
 
 }

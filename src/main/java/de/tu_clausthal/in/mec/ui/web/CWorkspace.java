@@ -37,16 +37,22 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 public class CWorkspace extends CBrowser
 {
     /**
-     * path of the configuration value
+     * path of the binding port
      */
-    private static final String c_configpath = "ui/server/";
+    private static final String c_httpport = "ui/server/port";
+    /**
+     * path of the binding host
+     */
+    private static final String c_httphost = "ui/server/host";
+
+
     /**
      * HTTP server to handle websockets *
      */
     private final CServer m_server = new CServer(
-            "localhost", CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath + "http" ),
-            CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath + "websocket" ), new CVirtualDirectory(
-            CCommon.getResourceURL( "web/root" ), "index.htm"
+            CConfiguration.getInstance().get().<String>getTraverse( c_httphost ), CConfiguration.getInstance().get().<Integer>getTraverse( c_httpport ),
+            new CVirtualDirectory(
+                    CCommon.getResourceURL( "web/root" ), "index.htm"
     )
     );
 
@@ -57,7 +63,10 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super( EMenu.BackForward );
-        this.load( "http://localhost:" + CConfiguration.getInstance().get().<Integer>getTraverse( c_configpath + "http" ) );
+        this.load(
+                "http://" + CConfiguration.getInstance().get().<String>getTraverse( c_httphost ) + ":" +
+                CConfiguration.getInstance().get().<Integer>getTraverse( c_httpport )
+        );
 
         // set via reflection the server
         try

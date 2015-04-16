@@ -29,9 +29,10 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil2;
+import fi.iki.elonen.IWebSocketFactory;
 import fi.iki.elonen.NanoHTTPD;
-import fi.iki.elonen.NanoWebSocketServer;
 import fi.iki.elonen.WebSocket;
+import fi.iki.elonen.WebSocketResponseHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
@@ -47,9 +48,9 @@ import java.util.Map;
 
 
 /**
- * class of websocket & http server
+ * class of the HTTP server *
  */
-public class CServer
+public class CServer extends NanoHTTPD implements IWebSocketFactory
 {
     /**
      * seperator
@@ -68,39 +69,193 @@ public class CServer
      */
     private static final String c_weburibase = "web_uribase";
     /**
+     * markdown processor
+     */
+    private final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
+    /**
      * virtual-locations
      */
     private final CVirtualLocation m_virtuallocation;
     /**
-     * http server
+     * mimetype detector
      */
-    private final CHTTPServer m_httpserver;
+    private final MimeUtil2 m_mimetype = new MimeUtil2();
     /**
-     * websocket server
+     * websocket handler
      */
-    private final CWebSocketServer m_wsserver;
+    private final WebSocketResponseHandler m_websockethandler = new WebSocketResponseHandler( this );
 
 
     /**
      * ctor - starts the HTTP server
      *
      * @param p_host bind hostname
-     * @param p_httpport http bind port
-     * @param p_websocketport websocket bind port
+     * @param p_port bind port
      * @param p_default default location
      */
-    public CServer( final String p_host, final int p_httpport, final int p_websocketport, final CVirtualDirectory p_default )
+    public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {
-        if ( p_httpport == p_websocketport )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "portequal" ) );
-
+        super( p_host, p_port );
         m_virtuallocation = new CVirtualLocation( p_default );
-        m_wsserver = new CWebSocketServer( p_host, p_websocketport );
-        m_httpserver = new CHTTPServer( p_host, p_httpport );
+
+        for ( String l_detector : new String[]{
+                "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
+                "eu.medsea.mimeutil.detector.TextMimeDetector"
+        } )
+            m_mimetype.registerMimeDetector( l_detector );
+
+        try
+        {
+            this.start();
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
 
         CBootstrap.afterServerInit( this );
     }
 
+
+    @Override
+    public final Response serve( final IHTTPSession p_session )
+    {
+        // try to get the websocket first
+        final Response l_response = m_websockethandler.serve( p_session );
+        if ( l_response != null )
+            return l_response;
+
+        // no websocket
+        try
+        {
+            // get location
+            final IVirtualLocation l_location = m_virtuallocation.get( p_session );
+
+            if ( l_location instanceof CVirtualStaticMethod )
+                return this.setDefaultHeader( this.getVirtualStaticMethod( l_location, p_session ), p_session );
+
+            return this.setDefaultHeader( this.getVirtualDirFile( l_location, p_session ), p_session );
+
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+            return this.setDefaultHeader( new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
+        }
+    }
+
+
+    /**
+     * set default header items
+     *
+     * @param p_response response
+     * @param p_session session
+     * @return modified response
+     */
+    private Response setDefaultHeader( final Response p_response, final IHTTPSession p_session )
+    {
+        p_response.addHeader( "Location", p_session.getUri() );
+        p_response.addHeader( "Expires", "-1" );
+
+        // is needed for ajax request
+        // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
+        p_response.addHeader( "Access-Control-Allow-Origin", "*" );
+        p_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT" );
+        p_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept" );
+
+        return p_response;
+    }
+
+
+    /**
+     * generates HTTP response of a static method calls
+     *
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     * @throws Throwable on error
+     */
+    private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        CLogger.info( p_session.getUri() );
+        return p_location.<Response>get( p_session );
+    }
+
+    /**
+     * generates HTTP response of file & directory calls
+     *
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     * @throws Throwable on error
+     */
+    private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        final Response l_response;
+        final URL l_physicalfile = p_location.<URL>get( p_session );
+        final String l_mimetype = this.getMimeType( l_physicalfile );
+        CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
+
+        switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+        {
+            case "htm":
+            case "html":
+                l_response = new Response(
+                        Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
+                        l_physicalfile.openStream()
+                ).getEncoding() ), l_physicalfile.openStream()
+                );
+                break;
+
+            case "md":
+                if ( p_location.getMarkDownRenderer() != null )
+                    l_response = new Response(
+                            Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
+                            m_markdown, l_physicalfile
+                    )
+                    );
+                else
+                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                break;
+
+            default:
+                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+        }
+
+        return l_response;
+    }
+
+    /**
+     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
+     */
+    private String getMimeType( final URL p_url )
+    {
+        final Collection l_types = m_mimetype.getMimeTypes( p_url );
+        if ( l_types.size() == 1 )
+            return l_types.iterator().next().toString();
+
+        for ( Object l_item : l_types )
+        {
+            final MimeType l_type = (MimeType) l_item;
+            if ( !l_type.toString().startsWith( "application/" ) )
+                return l_type.toString();
+        }
+        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
+    }
+
+    @Override
+    public final WebSocket openWebSocket( final IHTTPSession p_session )
+    {
+        try
+        {
+            return m_virtuallocation.get( p_session ).<WebSocket>get( p_session );
+        }
+        catch ( final Throwable l_throwable )
+        {
+        }
+
+        return null;
+    }
 
     /**
      * returns the virtual-location object
@@ -111,7 +266,6 @@ public class CServer
     {
         return m_virtuallocation;
     }
-
 
     /**
      * registerObject an object for the UI
@@ -148,7 +302,6 @@ public class CServer
             this.bindDynamicMethod( p_object, l_method.getValue(), l_uriclass );
         }
     }
-
 
     /**
      * static method binding
@@ -221,7 +374,6 @@ public class CServer
         return l_uribase;
     }
 
-
     /**
      * adds a new virtual file to the server with existance checking
      *
@@ -242,7 +394,6 @@ public class CServer
         }
     }
 
-
     /**
      * adds a new virtual directory to the server with existance checking
      *
@@ -254,7 +405,6 @@ public class CServer
     {
         this.registerVirtualDirectory( p_source, p_index, p_uri, null );
     }
-
 
     /**
      * adds a new virtual directory to the server with existance checking
@@ -300,225 +450,6 @@ public class CServer
     public final void registerVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         this.registerVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
-    }
-
-
-    /**
-     * HTTP server to handle static content
-     */
-    private class CHTTPServer extends NanoHTTPD
-    {
-        /**
-         * markdown processor
-         */
-        private final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
-        /**
-         * mimetype detector
-         */
-        private final MimeUtil2 m_mimetype = new MimeUtil2();
-
-
-        /**
-         * ctor
-         *
-         * @param p_host bind host name
-         * @param p_port bind port
-         */
-        public CHTTPServer( final String p_host, final int p_port )
-        {
-            super( p_host, p_port );
-
-            for ( String l_detector : new String[]{
-                    "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
-                    "eu.medsea.mimeutil.detector.TextMimeDetector"
-            } )
-                m_mimetype.registerMimeDetector( l_detector );
-
-
-            try
-            {
-                this.start();
-            }
-            catch ( final IOException l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-
-            CLogger.info( CCommon.getResourceString( this, "bind", p_host, p_port ) );
-        }
-
-
-        @Override
-        public final Response serve( final IHTTPSession p_session )
-        {
-            try
-            {
-                // get location
-                final IVirtualLocation l_location = m_virtuallocation.get( p_session );
-                if ( l_location instanceof CVirtualStaticMethod )
-                    return this.setDefaultHeader( this.getVirtualStaticMethod( l_location, p_session ), p_session );
-
-                return this.setDefaultHeader( this.getVirtualDirFile( l_location, p_session ), p_session );
-            }
-            catch ( final Throwable l_throwable )
-            {
-                CLogger.error( l_throwable );
-                return this.setDefaultHeader( new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
-            }
-        }
-
-        /**
-         * set default header items
-         *
-         * @param p_response response
-         * @param p_session session
-         * @return modified response
-         */
-        private Response setDefaultHeader( final Response p_response, final IHTTPSession p_session )
-        {
-            p_response.addHeader( "Location", p_session.getUri() );
-            p_response.addHeader( "Expires", "-1" );
-
-            // is needed for ajax request
-            // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
-            p_response.addHeader( "Access-Control-Allow-Origin", "*" );
-            p_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT" );
-            p_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept" );
-
-            return p_response;
-        }
-
-        /**
-         * generates HTTP response of a static method calls
-         *
-         * @param p_location location object
-         * @param p_session session object
-         * @return response
-         * @throws Throwable on error
-         */
-        private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
-        {
-            CLogger.info( p_session.getUri() );
-            return p_location.<Response>get( p_session );
-        }
-
-        /**
-         * generates HTTP response of file & directory calls
-         *
-         * @param p_location location object
-         * @param p_session session object
-         * @return response
-         * @throws Throwable on error
-         */
-        private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
-        {
-            final Response l_response;
-            final URL l_physicalfile = p_location.<URL>get( p_session );
-            final String l_mimetype = this.getMimeType( l_physicalfile );
-            CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
-
-            switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
-            {
-                case "htm":
-                case "html":
-                    l_response = new Response(
-                            Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
-                            l_physicalfile.openStream()
-                    ).getEncoding() ), l_physicalfile.openStream()
-                    );
-                    break;
-
-                case "md":
-                    if ( p_location.getMarkDownRenderer() != null )
-                        l_response = new Response(
-                                Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
-                                m_markdown, l_physicalfile
-                        )
-                        );
-                    else
-                        l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-                    break;
-
-                default:
-                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-            }
-
-            return l_response;
-        }
-
-        /**
-         * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
-         */
-        private String getMimeType( final URL p_url )
-        {
-            final Collection l_types = m_mimetype.getMimeTypes( p_url );
-            if ( l_types.size() == 1 )
-                return l_types.iterator().next().toString();
-
-            for ( Object l_item : l_types )
-            {
-                final MimeType l_type = (MimeType) l_item;
-                if ( !l_type.toString().startsWith( "application/" ) )
-                    return l_type.toString();
-            }
-            return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
-        }
-    }
-
-
-    /**
-     * WebSocket server to handle dynamic content
-     */
-    private class CWebSocketServer extends NanoWebSocketServer
-    {
-
-        /**
-         * ctor
-         *
-         * @param p_host bind host name
-         * @param p_port bind port
-         */
-        public CWebSocketServer( final String p_host, final int p_port )
-        {
-            super( p_host, p_port );
-
-            try
-            {
-                this.start();
-            }
-            catch ( final IOException l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-
-            CLogger.info( CCommon.getResourceString( this, "bind", p_host, p_port ) );
-        }
-
-
-        @Override
-        public WebSocket openWebSocket( final IHTTPSession p_handshake )
-        {
-            try
-            {
-
-                // get location
-                final IVirtualLocation l_location = m_virtuallocation.get( p_handshake );
-                if ( l_location != null )
-                {
-                    WebSocket x = l_location.<WebSocket>get( p_handshake );
-                    System.out.println( x );
-                    return x;
-                }
-
-            }
-            catch ( final Throwable l_throwable )
-            {
-                CLogger.error( l_throwable );
-            }
-
-            return super.openWebSocket( p_handshake );
-        }
-
     }
 
 }

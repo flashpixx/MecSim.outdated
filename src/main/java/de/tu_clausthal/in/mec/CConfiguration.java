@@ -115,8 +115,8 @@ public class CConfiguration
                             put(
                                     "server", new CNameHashMap.CImmutable()
                                     {{
-                                            put( "http", 9876 );
-                                            put( "websocket", 9877 );
+                                            put( "host", "localhost" );
+                                            put( "port", 9876 );
                                         }}
                             );
                         }}

@@ -96,8 +96,9 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
     {
         super( p_host, p_port );
-        m_virtuallocation = new CVirtualLocation( p_default );
+        CLogger.info( CCommon.getResourceString( this, "bind", p_host, p_port ) );
 
+        m_virtuallocation = new CVirtualLocation( p_default );
         for ( String l_detector : new String[]{
                 "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
                 "eu.medsea.mimeutil.detector.TextMimeDetector"

@@ -25,9 +25,12 @@ String.prototype.endsWith = function(suffix) {
 
 
         // public member
-        websocket : function( wspath ) {
-            return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (wspath.startsWith("/") ? wspath : location.pathname + wspath ) );
+        websocket : function( p_wspath ) {
+            return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (wspath.startsWith("/") ? p_wspath : location.pathname + p_wspath ) );
         },
+
+        configuration : function ( p_data ) {
+        }
 
 
         // private member

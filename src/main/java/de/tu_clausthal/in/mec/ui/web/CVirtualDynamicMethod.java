@@ -96,4 +96,19 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     {
         return null;
     }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_uri.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        if ( p_object instanceof CVirtualLocation )
+            return this.hashCode() == p_object.hashCode();
+
+        return false;
+    }
 }

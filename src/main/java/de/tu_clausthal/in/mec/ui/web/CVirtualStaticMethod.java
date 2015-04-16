@@ -198,7 +198,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
         return m_uri.hashCode();
     }
 
-
     @Override
     public final boolean equals( final Object p_object )
     {

@@ -73,7 +73,7 @@ iframe
 
 #mecsim_global_content{
     z-index: 0;
-    /*background-color: #ecf0f1;*/
+    overflow: auto;
 }
 
 #mecsim_global_content::before{

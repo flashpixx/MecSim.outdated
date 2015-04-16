@@ -494,14 +494,7 @@ public class CServer
             CLogger.info( CCommon.getResourceString( this, "bind", p_host, p_port ) );
         }
 
-        @Override
-        public WebSocket openWebSocket( final IHTTPSession p_handshake )
-        {
-            return new CWebSocket( p_handshake, null, null );
-        }
 
-
-/*
         @Override
         public WebSocket openWebSocket( final IHTTPSession p_handshake )
         {
@@ -511,7 +504,11 @@ public class CServer
                 // get location
                 final IVirtualLocation l_location = m_virtuallocation.get( p_handshake );
                 if ( l_location != null )
-                    return l_location.<WebSocket>get( p_handshake );
+                {
+                    WebSocket x = l_location.<WebSocket>get( p_handshake );
+                    System.out.println( x );
+                    return x;
+                }
 
             }
             catch ( final Throwable l_throwable )
@@ -521,7 +518,7 @@ public class CServer
 
             return super.openWebSocket( p_handshake );
         }
-*/
+
     }
 
 }

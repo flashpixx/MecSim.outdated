@@ -89,7 +89,6 @@ public class CWebSocket extends WebSocket
                             try
                             {
                                 CWebSocket.this.ping( "".getBytes() );
-                                //CWebSocket.this.m_communicator.send( "hallo !?    " + CWebSocket.this.hashCode() );
                             }
                             catch ( final IOException l_exception )
                             {

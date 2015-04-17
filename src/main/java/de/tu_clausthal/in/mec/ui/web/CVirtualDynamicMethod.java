@@ -69,6 +69,7 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     /**
      * ctor
      *
+     * @param p_heartbeat websocket heartbeat
      * @param p_object object
      * @param p_method method
      * @param p_uri calling URI

@@ -60,6 +60,10 @@ public class CVirtualDynamicMethod implements IVirtualLocation
      * URI
      */
     private final String m_uri;
+    /**
+     * websocket heartbeat
+     */
+    private final int m_heartbeat;
 
 
     /**
@@ -69,9 +73,10 @@ public class CVirtualDynamicMethod implements IVirtualLocation
      * @param p_method method
      * @param p_uri calling URI
      */
-    public CVirtualDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uri )
+    public CVirtualDynamicMethod( final int p_heartbeat, final Object p_object, final CReflection.CMethod p_method, final String p_uri )
     {
         m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_uriallowchars, "" ) : c_seperator + p_uri.replaceAll( c_uriallowchars, "" );
+        m_heartbeat = p_heartbeat;
         m_method = p_method.getHandle();
         m_object = p_object;
 
@@ -88,7 +93,7 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     @Override
     public final WebSocket get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
-        return new CWebSocket( p_session, m_object, m_method );
+        return new CWebSocket( p_session, m_heartbeat, m_object, m_method );
     }
 
     @Override

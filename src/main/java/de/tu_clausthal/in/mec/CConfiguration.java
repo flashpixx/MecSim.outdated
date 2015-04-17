@@ -117,6 +117,7 @@ public class CConfiguration
                                     {{
                                             put( "host", "localhost" );
                                             put( "port", 9876 );
+                                            put( "websocketheartbeat", 6 );
                                         }}
                             );
                         }}

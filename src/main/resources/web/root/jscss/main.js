@@ -93,17 +93,25 @@ $(document).ready(function(){
 
 
         // logger
-        var ws_logerror = MecSim.getInstance().getWebSocket("/cconsole/output/log");
+        var ws_logerror = MecSim.getInstance().getWebSocket("/cconsole/error/log");
+        ws_logerror.onopen = function(evt) {
+        console.log("open");
+        }
+        ws_logerror.onclose = function(evt) {
+        console.log("close");
+        }
         ws_logerror.onmessage = function( p_event ) {
-            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + evt.data + "</span>");
+            console.log(p_event.data)
+            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         };
         ws_logerror.onerror = function( p_event ) {
+                console.log("error");
                $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">is closed</span>");
         }
-
-        var ws_logoutput = MecSim.getInstance().getWebSocket("/cconsole/error/log");
+/*
+        var ws_logoutput = MecSim.getInstance().getWebSocket("/cconsole/output/log");
         ws_logoutput.onmessage = function( p_event ) {
-            $("#mecsim_global_log").append("<span class=\"mecsim_log_output\">" + evt.data + "</span>");
+            $("#mecsim_global_log").append("<span class=\"mecsim_log_output\">" + p_event.data + "</span>");
         };
         ws_logoutput.onerror = function( p_event ) {
                $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
@@ -113,8 +121,7 @@ $(document).ready(function(){
             ws_logoutput.close();
             ws_logerror.close();
         });
-
-        setInterval(function() { ws_logerror.send('Heartbeat'); }, 60000);
+*/
 
 
         // load accordion

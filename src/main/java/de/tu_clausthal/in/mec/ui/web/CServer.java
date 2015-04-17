@@ -84,6 +84,10 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * websocket handler
      */
     private final WebSocketResponseHandler m_websockethandler = new WebSocketResponseHandler( this );
+    /**
+     * websocket heartbeat
+     */
+    private final int m_websocketheartbeat;
 
 
     /**
@@ -92,12 +96,14 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @param p_host bind hostname
      * @param p_port bind port
      * @param p_default default location
+     * @param p_websocketheartbeat websocket heartbeat
      */
-    public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default )
+    public CServer( final String p_host, final int p_port, final CVirtualDirectory p_default, final int p_websocketheartbeat )
     {
         super( p_host, p_port );
         CLogger.info( CCommon.getResourceString( this, "bind", p_host, p_port ) );
 
+        m_websocketheartbeat = p_websocketheartbeat;
         m_virtuallocation = new CVirtualLocation( p_default );
         for ( String l_detector : new String[]{
                 "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
@@ -340,7 +346,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         if ( l_methodname.isEmpty() )
             return;
 
-        m_virtuallocation.add( new CVirtualDynamicMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
+        m_virtuallocation.add( new CVirtualDynamicMethod( m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
     }
 
 

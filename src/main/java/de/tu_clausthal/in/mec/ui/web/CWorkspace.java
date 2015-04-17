@@ -51,8 +51,8 @@ public class CWorkspace extends CBrowser
      */
     private final CServer m_server = new CServer(
             CConfiguration.getInstance().get().<String>getTraverse( c_httphost ), CConfiguration.getInstance().get().<Integer>getTraverse( c_httpport ),
-            new CVirtualDirectory(
-                    CCommon.getResourceURL( "web/root" ), "index.htm"
+            new CVirtualDirectory( CCommon.getResourceURL( "web/root" ), "index.htm" ), CConfiguration.getInstance().get().<Integer>getTraverse(
+            "ui/server/websocketheartbeat"
     )
     );
 

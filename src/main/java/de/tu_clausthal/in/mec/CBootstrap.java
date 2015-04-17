@@ -107,7 +107,7 @@ public class CBootstrap
 
         // registerObject objects
         p_server.registerObject( CConsole.getError( "error" ) );
-        p_server.registerObject( CConsole.getOutput( "output" ) );
+        //p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CConfiguration.getInstance() );
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );

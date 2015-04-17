@@ -31,6 +31,7 @@ import fi.iki.elonen.WebSocketFrame;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -51,27 +52,53 @@ public class CWebSocket extends WebSocket
      * bind method
      */
     private final MethodHandle m_method;
-
-    Timer m_timer = new Timer()
-    {{
-
-        }};
+    /**
+     * heartbeat timer
+     */
+    private final Timer m_heartbeat;
 
 
     /**
      * ctor
      *
      * @param p_handshakeRequest handshake object
+     * @param p_heartbeat seconds in which the heartbeat is trasmittet
      * @param p_object bind object
      * @param p_method method handle
      */
-    public CWebSocket( final NanoHTTPD.IHTTPSession p_handshakeRequest, final Object p_object, final MethodHandle p_method )
+    public CWebSocket( final NanoHTTPD.IHTTPSession p_handshakeRequest, final int p_heartbeat, final Object p_object, final MethodHandle p_method )
     {
         super( p_handshakeRequest );
 
         m_object = p_object;
         m_method = p_method;
         m_communicator = new CCommunicator();
+
+        // create heartbeat
+        if ( p_heartbeat < 1 )
+            m_heartbeat = null;
+        else
+        {
+            m_heartbeat = new Timer();
+            m_heartbeat.schedule(
+                    new TimerTask()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            try
+                            {
+                                CWebSocket.this.ping( "".getBytes() );
+                                //CWebSocket.this.m_communicator.send( "hallo !?    " + CWebSocket.this.hashCode() );
+                            }
+                            catch ( final IOException l_exception )
+                            {
+                                CLogger.error( l_exception );
+                            }
+                        }
+                    }, p_heartbeat * 1000
+            );
+        }
 
         this.invokeMethod( EAction.Open, null );
     }

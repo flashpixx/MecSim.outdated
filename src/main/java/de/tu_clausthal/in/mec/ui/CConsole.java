@@ -23,9 +23,14 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.ui.web.CWebSocket;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -35,7 +40,10 @@ import java.io.PrintStream;
  */
 public class CConsole extends ByteArrayOutputStream
 {
-
+    /**
+     * set with all communicators
+     */
+    private final Set<CWebSocket.CCommunicator> m_communicator = Collections.synchronizedSet( new HashSet<>() );
     /**
      * base URI *
      */
@@ -89,15 +97,37 @@ public class CConsole extends ByteArrayOutputStream
     /**
      * UI method for testing
      */
-    private void web_dynamic_log()
+    private void web_dynamic_log( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {
+        switch ( p_action )
+        {
+            case Open:
+                m_communicator.add( p_communicator );
+                break;
 
+            case Close:
+                m_communicator.remove( p_communicator );
+                break;
+
+            default:
+        }
     }
 
     @Override
     public void flush() throws IOException
     {
-        // do web call
+        final String l_data = this.toString();
+        if ( l_data.isEmpty() )
+            return;
+
+        for ( CWebSocket.CCommunicator l_item : m_communicator )
+            try
+            {
+                l_item.send( l_data );
+            }
+            catch ( IOException e )
+            {
+            }
     }
 
 }

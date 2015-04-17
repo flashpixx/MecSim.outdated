@@ -111,4 +111,5 @@ public class CVirtualDynamicMethod implements IVirtualLocation
 
         return false;
     }
+
 }

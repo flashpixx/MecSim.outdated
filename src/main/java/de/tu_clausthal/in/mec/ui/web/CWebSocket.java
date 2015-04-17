@@ -34,19 +34,20 @@ import java.lang.invoke.MethodHandle;
 
 /**
  * encapsulating class for websocket
+ * the object represents one connection
  */
 public class CWebSocket extends WebSocket
 {
     /**
-     * encapsulate socket
+     * communicator object
      */
-    private final CConnection m_connection = new CConnection( this );
+    private final CCommunicator m_communicator;
     /**
-     * object
+     * bind Object
      */
     private final Object m_object;
     /**
-     * method handle
+     * bind method
      */
     private final MethodHandle m_method;
 
@@ -54,9 +55,9 @@ public class CWebSocket extends WebSocket
     /**
      * ctor
      *
-     * @param p_handshakeRequest
-     * @param p_object
-     * @param p_method
+     * @param p_handshakeRequest handshake object
+     * @param p_object bind object
+     * @param p_method method handle
      */
     public CWebSocket( final NanoHTTPD.IHTTPSession p_handshakeRequest, final Object p_object, final MethodHandle p_method )
     {
@@ -64,20 +65,28 @@ public class CWebSocket extends WebSocket
 
         m_object = p_object;
         m_method = p_method;
+        m_communicator = new CCommunicator();
+
+        this.invokeMethod( EAction.Open, null );
     }
 
-    @Override
-    protected void handleWebsocketFrame( final WebSocketFrame p_frame ) throws IOException
+    /**
+     * invokes the method
+     *
+     * @param p_action action of the call
+     * @param p_frame current frame or null
+     */
+    private void invokeMethod( final EAction p_action, final WebSocketFrame p_frame )
     {
-        super.handleWebsocketFrame( p_frame );
+        try
+        {
+            m_method.invoke( m_object, p_action, m_communicator, p_frame == null ? null : new CFrame( p_frame ) );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
     }
-
-    @Override
-    public synchronized void sendFrame( final WebSocketFrame p_frame ) throws IOException
-    {
-        super.sendFrame( p_frame );
-    }
-
 
     @Override
     protected void onPong( final WebSocketFrame p_frame )
@@ -88,20 +97,13 @@ public class CWebSocket extends WebSocket
     protected void onMessage( final WebSocketFrame p_frame )
     {
         p_frame.setUnmasked();
-
-        try
-        {
-            this.sendFrame( p_frame );
-        }
-        catch ( final IOException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
+        this.invokeMethod( EAction.Message, p_frame );
     }
 
     @Override
     protected void onClose( final WebSocketFrame.CloseCode p_close, final String p_reason, final boolean p_initbyremote )
     {
+        this.invokeMethod( EAction.Close, null );
     }
 
     @Override
@@ -112,50 +114,120 @@ public class CWebSocket extends WebSocket
 
 
     /**
-     * inner connection class to encapsulation send methods
+     * enum to define action
      */
-    public static class CConnection
+    public enum EAction
+    {
+        /**
+         * on websocket open *
+         */
+        Open,
+        /**
+         * on receiving message *
+         */
+        Message,
+        /**
+         * on closing *
+         */
+        Close,
+        /**
+         * on internal call - method call directly *
+         */
+        Internal
+    }
+
+    /**
+     * connunicator object to handle all communication data
+     */
+    public class CCommunicator
     {
 
         /**
-         * socket *
+         * returns an unqiue ID of the socket
+         *
+         * @return ID
          */
-        private final CWebSocket m_socket;
+        private int getID()
+        {
+            return CWebSocket.this.hashCode();
+        }
+
+        /**
+         * send string payload to the current socket
+         *
+         * @param p_payload string payload
+         * @throws IOException throws on IO error
+         */
+        public void send( final String p_payload ) throws IOException
+        {
+            CWebSocket.this.send( p_payload );
+        }
+
+        /**
+         * send byte payload to the current socket
+         *
+         * @param p_payload byte payload
+         * @throws IOException throws on IO error
+         */
+        public void send( final byte[] p_payload ) throws IOException
+        {
+            CWebSocket.this.send( p_payload );
+        }
+
+    }
+
+
+    /**
+     * data frame
+     */
+    public class CFrame
+    {
+        /**
+         * origin data frame *
+         */
+        private final WebSocketFrame m_frame;
 
 
         /**
          * ctor
          *
-         * @param p_socket websocket
+         * @param p_frame set frame
          */
-        public CConnection( final CWebSocket p_socket )
+        public CFrame( final WebSocketFrame p_frame )
         {
-            m_socket = p_socket;
-        }
-
-
-        /**
-         * send method
-         *
-         * @param p_payload string data payload
-         * @throws IOException throws on IO error
-         */
-        public final void send( final String p_payload ) throws IOException
-        {
-            m_socket.send( p_payload );
+            m_frame = p_frame;
         }
 
         /**
-         * send method
+         * returns an unqiue ID of the socket
          *
-         * @param p_payload binary data payload
-         * @throws IOException throws on IO error
+         * @return ID
          */
-
-        public final void send( final byte[] p_payload ) throws IOException
+        private int getID()
         {
-            m_socket.send( p_payload );
+            return CWebSocket.this.hashCode();
+        }
+
+        /**
+         * returns the text payload
+         *
+         * @return string with text payload
+         */
+        public String getTextPayload()
+        {
+            return m_frame.getTextPayload();
+        }
+
+        /**
+         * returns the binary payload
+         *
+         * @return byte payload
+         */
+        public byte[] getBinaryPayload()
+        {
+            return m_frame.getBinaryPayload();
         }
 
     }
+
 }

@@ -394,6 +394,7 @@ public class CConfiguration
      *
      * @param p_input input map
      * @todo check version
+     * @todo do configuration convert on non-existing values
      */
     private void setConfiguration( final CNameHashMap p_input )
     {

@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
+import org.pmw.tinylog.writers.ConsoleWriter;
 import org.pmw.tinylog.writers.FileWriter;
 
 import java.util.Collection;
@@ -79,7 +80,13 @@ public class CLogger
     public static void create( final Level p_level, final String p_filename )
     {
         s_level = p_level;
-        Configurator.defaultConfig().writer( p_level == Level.OFF ? null : new FileWriter( p_filename ) ).level( p_level ).activate();
+        Configurator.defaultConfig().writer(
+                p_level == Level.OFF ? null : p_filename.equalsIgnoreCase( "console" ) ? new ConsoleWriter() : new FileWriter(
+                        p_filename
+                )
+        ).level(
+                p_level
+        ).activate();
         Configurator.currentConfig().formatPattern( "{message}" ).activate();
     }
 

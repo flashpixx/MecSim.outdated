@@ -30,6 +30,7 @@ import fi.iki.elonen.WebSocketFrame;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
+import java.util.Timer;
 
 
 /**
@@ -50,6 +51,11 @@ public class CWebSocket extends WebSocket
      * bind method
      */
     private final MethodHandle m_method;
+
+    Timer m_timer = new Timer()
+    {{
+
+        }};
 
 
     /**
@@ -88,9 +94,18 @@ public class CWebSocket extends WebSocket
         }
     }
 
+
     @Override
-    protected void onPong( final WebSocketFrame p_frame )
+    protected void onPong( final WebSocketFrame p_webSocketFrame )
     {
+        try
+        {
+            this.ping( p_webSocketFrame.getBinaryPayload() );
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
     @Override
@@ -110,6 +125,14 @@ public class CWebSocket extends WebSocket
     protected void onException( final IOException p_exception )
     {
         CLogger.error( p_exception );
+        try
+        {
+            this.close( WebSocketFrame.CloseCode.InternalServerError, p_exception.getMessage() );
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
 

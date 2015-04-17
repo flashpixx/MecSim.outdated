@@ -119,6 +119,7 @@ public class CConsole extends ByteArrayOutputStream
         final String l_data = this.toString();
         if ( l_data.isEmpty() )
             return;
+        this.reset();
 
         for ( CWebSocket.CCommunicator l_item : m_communicator )
             try

@@ -127,10 +127,17 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     @Override
     public final Response serve( final IHTTPSession p_session )
     {
-        // try to get the websocket first
-        final Response l_response = m_websockethandler.serve( p_session );
-        if ( l_response != null )
-            return l_response;
+        // try to get the websocket first - try-catch avoid NPE because openWebSocket can create the exception
+        try
+        {
+            final Response l_response = m_websockethandler.serve( p_session );
+            if ( l_response != null )
+                return l_response;
+        }
+        catch ( final NullPointerException l_exception )
+        {
+        }
+
 
         // no websocket
         try

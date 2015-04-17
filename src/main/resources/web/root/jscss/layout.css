@@ -76,6 +76,10 @@ iframe
     overflow: auto;
 }
 
+#mecsim_global_log{
+    overflow: auto;
+}
+
 #mecsim_global_content::before{
     z-index: -1;
     position: absolute;

@@ -94,34 +94,26 @@ $(document).ready(function(){
 
         // logger
         var ws_logerror = MecSim.getInstance().getWebSocket("/cconsole/error/log");
-        ws_logerror.onopen = function(evt) {
-        console.log("open");
-        }
-        ws_logerror.onclose = function(evt) {
-        console.log("close");
-        }
         ws_logerror.onmessage = function( p_event ) {
-            console.log(p_event.data)
             $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         };
         ws_logerror.onerror = function( p_event ) {
-                console.log("error");
-               $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">is closed</span>");
+            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         }
-/*
-        var ws_logoutput = MecSim.getInstance().getWebSocket("/cconsole/output/log");
-        ws_logoutput.onmessage = function( p_event ) {
+
+        var ws_logout = MecSim.getInstance().getWebSocket("/cconsole/output/log");
+        ws_logout.onmessage = function( p_event ) {
             $("#mecsim_global_log").append("<span class=\"mecsim_log_output\">" + p_event.data + "</span>");
         };
-        ws_logoutput.onerror = function( p_event ) {
-               $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
+        ws_logout.onerror = function( p_event ) {
+            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         }
 
         $(window).on("beforeunload", function() {
-            ws_logoutput.close();
+            ws_logout.close();
             ws_logerror.close();
         });
-*/
+
 
 
         // load accordion

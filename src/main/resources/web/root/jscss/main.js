@@ -1,3 +1,61 @@
+// --- global prototype functions ------------------------------------------------------------------------------------------------------------------------------
+String.prototype.startsWith = function(prefix) {
+    return this.indexOf(prefix) === 0;
+}
+
+String.prototype.endsWith = function(suffix) {
+    return this.match(suffix+"$") == suffix;
+};
+
+
+
+
+// --- MecSim --------------------------------------------------------------------------------------------------------------------------------------------------
+
+var MecSim = (function () {
+
+    var s_instance;
+
+    function _ctor() {return {
+
+        getWebSocket : function( p_wspath ) {
+            if ((p_wspath.startsWith("ws://")) || (p_wspath.startsWith("wss://")))
+                return new WebSocket(p_wspath);
+
+            return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (p_wspath.startsWith("/") ? p_wspath : location.pathname + p_wspath ) );
+        },
+
+        getConfiguration : function ( p_data ) {
+            var l_data = {};
+
+            $.ajax({
+                async: false,
+                url : "/cconfiguration/get",
+                success : function( p_data ) { l_data = p_data }
+            });
+
+            return l_data;
+        }
+
+    };};
+
+
+    return {
+
+        getInstance: function () {
+            if ( !s_instance )
+                s_instance = _ctor();
+
+            return s_instance;
+        }
+
+  };
+
+})();
+
+
+
+// --- jQuery --------------------------------------------------------------------------------------------------------------------------------------------------
 $(document).ready(function(){
 
     // global variables
@@ -22,7 +80,39 @@ $(document).ready(function(){
 
     // global
     function layoutInit(){
-      $('#jqxSplitter').jqxSplitter({ width: '100%', height: '100%', panels: [{ size: '20%', min: 250 }, { size: '80%'}] });
+
+        // splitter
+        $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        $("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+
+
+        // logger
+        var ws_logerror = MecSim.getInstance().getWebSocket("/cconsole/output/log");
+        ws_logerror.onmessage = function( p_event ) {
+            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + evt.data + "</span>");
+        };
+        ws_logerror.onerror = function( p_event ) {
+               $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">is closed</span>");
+        }
+
+        var ws_logoutput = MecSim.getInstance().getWebSocket("/cconsole/error/log");
+        ws_logoutput.onmessage = function( p_event ) {
+            $("#mecsim_global_log").append("<span class=\"mecsim_log_output\">" + evt.data + "</span>");
+        };
+        ws_logoutput.onerror = function( p_event ) {
+               $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
+        }
+
+        $(window).on("beforeunload", function() {
+            ws_logoutput.close();
+            ws_logerror.close();
+        });
+
+        setInterval(function() { ws_logerror.send('Heartbeat'); }, 60000);
+
+
+
+
 
       mecsim_global_var.getAccordion.accordion({
           active: false,

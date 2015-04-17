@@ -198,3 +198,14 @@ iframe
 .mecsim_source_link-hidden{
   stroke-opacity: 0;
 }
+
+.mecsim_log_error
+{
+    color: #8C1C00;
+    display: block;
+}
+
+.mecsim_log_output
+{
+    display: block;
+}

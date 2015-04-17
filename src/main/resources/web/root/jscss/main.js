@@ -14,7 +14,9 @@ String.prototype.endsWith = function(suffix) {
 
 var MecSim = (function () {
 
+    // private variables and methods
     var s_instance;
+
 
     function _ctor() {return {
 
@@ -35,8 +37,19 @@ var MecSim = (function () {
             });
 
             return l_data;
+        },
+        getMenu : function() {
+            return $("#mecsim_global_menu");
+        },
+        getAccordion : function() {
+            $("#mecsim_global_accordion").accordion({
+                active: false,
+                collapsible: true
+            })
+        },
+        getContent : function() {
+            return $("#mecsim_global_content");
         }
-
     };};
 
 
@@ -49,25 +62,18 @@ var MecSim = (function () {
             return s_instance;
         }
 
-  };
+    };
 
 })();
 
-
+MecSim.getInstance().getConfiguration();
 
 // --- jQuery --------------------------------------------------------------------------------------------------------------------------------------------------
 $(document).ready(function(){
 
-    // global variables
-    var mecsim_global_var = {
-        getMenu      : $("#mecsim_global_menu"),
-        getAccordion : $("#mecsim_global_accordion"),
-        getContent   : $("#mecsim_global_content"),
-        getForm      : "",
-        getDialog    : ""
-    }
+    var form = "",
+        dialog = "";
 
-    //Global Stuff
     //TODO not work on external include of main.js
 
     layoutInit();
@@ -111,13 +117,9 @@ $(document).ready(function(){
         setInterval(function() { ws_logerror.send('Heartbeat'); }, 60000);
 
 
+        // load accordion
+        MecSim.getInstance().getAccordion();
 
-
-
-      mecsim_global_var.getAccordion.accordion({
-          active: false,
-          collapsible: true
-      });
 
       //TODO Check if really needed ?
       $("a.template").click(function( p_event ){
@@ -129,10 +131,14 @@ $(document).ready(function(){
           p_event.preventDefault();
           $("#mecsim_content").load( this.href );
       });
+
     }
 
     // file slider
     function fileSlider(){
+
+        MecSim.getInstance().getContent().empty();
+
         $("#mecsim_file_preferences").button().on("click", function(){
 
         });
@@ -194,8 +200,8 @@ $(document).ready(function(){
 
       //Load the Source-GUI
       $("#ui-id-5").on("click", function(data){
-        mecsim_global_var.getContent.empty();
-        mecsim_global_var.getContent.load("template/source.htm", function(){
+        MecSim.getInstance().getContent().empty();
+        MecSim.getInstance().getContent().load("template/source.htm", function(){
           initLayout();
           initClusterWidget();
           initSettingsWidget();
@@ -267,18 +273,18 @@ $(document).ready(function(){
       }
 
       // form to create new asl file
-      mecsim_global_var.getDialog = $("#mecsim_create_asl_form").dialog({
-          autoOpen: false,
-          buttons: {
-              "Create": create_new_asl,
-                  Cancel: function() {
-                    mecsim_global_var.getDialog.dialog( "close" );
-                  }
+      dialog = $("#mecsim_create_asl_form").dialog({
+              autoOpen: false,
+              buttons: {
+                  "Create": create_new_asl,
+                      Cancel: function() {
+                        dialog.dialog( "close" );
+                      }
               }
       });
 
       $("#mecsim_new_asl").click(function() {
-          mecsim_global_var.getDialog.dialog("open");
+          dialog.dialog("open");
       });
 
       function create_new_asl(){
@@ -289,7 +295,7 @@ $(document).ready(function(){
                   { "name" : $("#new_asl").val() }
               ).done(function() {
                   load_asl_files();
-                  mecsim_global_var.getDialog.dialog("close");
+                  dialog.dialog("close");
               });
           }
           else
@@ -355,13 +361,13 @@ $(document).ready(function(){
 
         $("#mecsim_help_userdoku").button().on("click", function(){
             //$.get("/userdoc/", function( p_result ) {
-            //    mecsim_global_var.getContent.empty();
-            //    mecsim_global_var.getContent.append( p_result );
+                  //MecSim.getInstance.getContent.empty();
+                  //MecSim.getInstance().getContent().append( p_result );
             //});
         });
 
         $("#mecsim_help_devdoku").button().on("click", function(){
-            //mecsim_global_var.getContent.load("template/develdoc.htm");
+            //MecSim.getInstance().getContent().load("template/develdoc.htm");
         });
     }
 

@@ -123,5 +123,4 @@ public class COSMViewer extends JXMapViewer
         return this.m_mouse;
     }
 
-
 }

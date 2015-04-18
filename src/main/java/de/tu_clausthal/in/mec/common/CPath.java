@@ -228,6 +228,7 @@ public class CPath implements Iterable<CPath>
     {
         return m_path.size();
     }
+
     /**
      * remove the suffix from the path
      *
@@ -242,16 +243,6 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
-     * returns the full path as string
-     *
-     * @return string path
-     */
-    public final String getPath()
-    {
-        return StringUtils.join( m_path, m_separator );
-    }
-
-    /**
      * returns the last part of the path
      *
      * @return string
@@ -260,7 +251,6 @@ public class CPath implements Iterable<CPath>
     {
         return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
     }
-
     /**
      * returns an part of the path
      *
@@ -270,6 +260,16 @@ public class CPath implements Iterable<CPath>
     public final String get( final int p_index )
     {
         return m_path.get( p_index );
+    }
+
+    /**
+     * returns the full path as string
+     *
+     * @return string path
+     */
+    public final String getPath()
+    {
+        return StringUtils.join( m_path, m_separator );
     }
 
     @Override

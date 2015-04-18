@@ -78,6 +78,7 @@ iframe
 
 #mecsim_global_log{
     overflow: auto;
+    margin: 1em;
 }
 
 #mecsim_global_content::before{
@@ -207,9 +208,13 @@ iframe
 {
     color: #8C1C00;
     display: block;
+    font-family: monospace;
+    white-space: nowrap;
 }
 
 .mecsim_log_output
 {
     display: block;
+    font-family: monospace;
+    white-space: nowrap;
 }

@@ -127,7 +127,7 @@ class COSMMouseListener extends MouseAdapter
                     return;
                 }
             }
-            l_sourcelayer.createSource( l_geoPosition, null, null );
+            l_sourcelayer.createSource( l_geoPosition );
         }
 
         //place or remote generator

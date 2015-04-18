@@ -57,6 +57,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
     private static ISource s_selectedSource;
 
     /**
+     * variable which defines the generator
+     */
+    private String m_selectedGenerator = "Default";
+
+    /**
+     * variable which defines the asl programm
+     */
+    private String m_selectedASL = null;
+
+    /**
      * List of all Atom Targets
      */
     private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
@@ -68,13 +78,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
         return 2;
     }
 
-
     @Override
     public final void release()
     {
 
     }
-
 
     @Override
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
@@ -95,36 +103,20 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * returns a list of source names
-     *
-     * @return source names
-     */
-    public final String[] getSourceNamesList()
-    {
-        return new String[]{"Default", "Jason Agent"};
-    }
-
-    /**
      * creates a new source
      *
      * @param p_geoposition position of the Source
      * @param p_defaultGenerator default Generator for this Source
      * @param p_aslname ASL Programm for the Generator
      */
-    public final void createSource( final GeoPosition p_geoposition, final String p_defaultGenerator, final String p_aslname )
+    public final void createSource( final GeoPosition p_geoposition )
     {
         CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
         final ISource l_newsource = new CSource( p_geoposition );
         this.add( l_newsource );
 
-        //Set Default Generator (Selected Generator)
-        if ( ( p_defaultGenerator == null ) || ( p_defaultGenerator.contains( "Jason" ) && p_aslname == null ) )
-            return;
-        this.setGenerator( l_newsource, p_defaultGenerator, p_aslname );
-
-        //Set Default Target (CChoice Target)
-        final CComplexTarget l_complexTarget = new CComplexTarget();
-        l_newsource.setComplexTarget( l_complexTarget );
+        this.setGenerator(l_newsource, m_selectedGenerator, m_selectedASL);
+        l_newsource.setComplexTarget( new CComplexTarget() );
     }
 
     /**

@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.object.source.ISource;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
@@ -54,18 +53,21 @@ class COSMMouseListener extends MouseAdapter
 
 
     /**
-     * @bug UI frame
+     * @bug incomplete - error messages
      */
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
-       try
+        try
         {
-            if ( CSimulation.getInstance().isRunning() ){};
-                //throw new IllegalStateException( CCommon.getResourceString(this, "running") );
+            if ( CSimulation.getInstance().isRunning() )
+            {
+            }
+            ;
+            //throw new IllegalStateException( CCommon.getResourceString(this, "running") );
 
             // single left click
-            if ( ( SwingUtilities.isLeftMouseButton(p_event) ) && ( p_event.getClickCount() == 1 ) )
+            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 1 ) )
             {
                 Thread.sleep( 200 );
                 leftClick( p_event );
@@ -88,6 +90,7 @@ class COSMMouseListener extends MouseAdapter
 
     /**
      * method for single left click
+     *
      * @param p_event
      */
     private void leftClick( final MouseEvent p_event )
@@ -107,7 +110,7 @@ class COSMMouseListener extends MouseAdapter
         }
     }
 
-    private void doubleLeftClick( final MouseEvent p_event)
+    private void doubleLeftClick( final MouseEvent p_event )
     {
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
         final CSourceLayer l_sourcelayer = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
@@ -169,7 +172,19 @@ class COSMMouseListener extends MouseAdapter
             l_sourcelayer.createTarget( l_geoPosition );
         }
 
+    }
 
+    /**
+     * returns the 2D position of a mouse position
+     *
+     * @param p_event mouse event
+     * @param p_viewer OSM viewer
+     * @return point
+     */
+    protected Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
+    {
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
     /**
@@ -200,19 +215,6 @@ class COSMMouseListener extends MouseAdapter
     {
         final Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
-    }
-
-    /**
-     * returns the 2D position of a mouse position
-     *
-     * @param p_event mouse event
-     * @param p_viewer OSM viewer
-     * @return point
-     */
-    protected Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
-    {
-        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
 }

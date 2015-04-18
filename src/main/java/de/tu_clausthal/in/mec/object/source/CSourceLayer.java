@@ -55,22 +55,18 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * @bug why static - should be a member
      */
     private static ISource s_selectedSource;
-
-    /**
-     * variable which defines the generator
-     */
-    private String m_selectedGenerator = "Default";
-
-    /**
-     * variable which defines the asl programm
-     */
-    private String m_selectedASL = null;
-
     /**
      * List of all Atom Targets
      */
     private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
-
+    /**
+     * variable which defines the generator
+     */
+    private String m_selectedGenerator = "Default";
+    /**
+     * variable which defines the asl programm
+     */
+    private String m_selectedASL = null;
 
     @Override
     public final int getCalculationIndex()
@@ -115,7 +111,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         final ISource l_newsource = new CSource( p_geoposition );
         this.add( l_newsource );
 
-        this.setGenerator(l_newsource, m_selectedGenerator, m_selectedASL);
+        this.setGenerator( l_newsource, m_selectedGenerator, m_selectedASL );
         l_newsource.setComplexTarget( new CComplexTarget() );
     }
 

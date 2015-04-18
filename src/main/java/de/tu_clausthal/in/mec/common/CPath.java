@@ -251,6 +251,7 @@ public class CPath implements Iterable<CPath>
     {
         return m_path.get( m_path.size() == 0 ? 0 : m_path.size() - 1 );
     }
+
     /**
      * returns an part of the path
      *
@@ -260,16 +261,6 @@ public class CPath implements Iterable<CPath>
     public final String get( final int p_index )
     {
         return m_path.get( p_index );
-    }
-
-    /**
-     * returns the full path as string
-     *
-     * @return string path
-     */
-    public final String getPath()
-    {
-        return StringUtils.join( m_path, m_separator );
     }
 
     @Override
@@ -291,6 +282,16 @@ public class CPath implements Iterable<CPath>
                 return new CPath( CCommon.convertCollectionToArray( String[].class, m_path.subList( 0, ++m_index ) ) );
             }
         };
+    }
+
+    /**
+     * returns the full path as string
+     *
+     * @return string path
+     */
+    public final String getPath()
+    {
+        return StringUtils.join( m_path, m_separator );
     }
 
 

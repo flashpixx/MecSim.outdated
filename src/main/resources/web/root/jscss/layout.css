@@ -52,6 +52,10 @@ iframe
     align: center;
 }
 
+.mecsim_global_accordeonbutton_half{
+    width: 36%;
+}
+
 .mecsim_global_sliderSubMenu{
     text-align: center;
 }

@@ -154,15 +154,15 @@ $(document).ready(function(){
     // simulation slider
     function simulationSlider(){
         $("#mecsim_simulation_start").button().on("click", function(){
-
+            $.post("csimulation/start")
         });
 
         $("#mecsim_simulation_stop").button().on("click", function(){
-
+            $.post("csimulation/stop")
         });
 
         $("#mecsim_simulation_reset").button().on("click", function(){
-
+            $.post("csimulation/reset")
         });
 
         $("#mecsim_simulation_load").button().on("click", function(){
@@ -170,14 +170,6 @@ $(document).ready(function(){
         });
 
         $("#mecsim_simulation_save").button().on("click", function(){
-
-        });
-
-        $("#mecsim_simulation_local").button().on("click", function(){
-
-        });
-
-        $("#mecsim_simulation_").button().on("click", function(){
 
         });
 
@@ -209,41 +201,28 @@ $(document).ready(function(){
       });
 
       //Listen to the Default Car Tool Button
-      $("#mecsim_source_defaultCar").button({
+      $("#mecsim_source_sourcemode").button({
         icons: {
-          primary: " ui-icon-pin-w"
+          primary: "ui-icon-pin-w"
         }
       })
-      .on("click", function(data){
-        $.post(
-            "cosmmouselistener/test"
-        ).fail( function( p_data )
-            {
-                console.log(p_data);
-                $("#mecsim_start_error_text").text(p_data.responseJSON.error);
-                $("#mecsim_start_error").dialog();
-        });
-      });
+      .on("click", function(data){});
 
       //Listen to the Default Agent Car Tool Button
-      $("#mecsim_source_defaultAgent").button({
+      $("#mecsim_source_generatormode").button({
         icons: {
-          primary: " ui-icon-pin-w"
+          primary: "ui-icon-arrowrefresh-1-e"
         }
       })
-      .on("click", function(data){
-
-      });
+      .on("click", function(data){});
 
       //Listen to the Target Tool Button
-      $("#mecsim_source_target").button({
+      $("#mecsim_source_targetmode").button({
         icons: {
           primary: "ui-icon-flag"
         }
       })
-      .on("click", function(data){
-
-      });
+      .on("click", function(data){});
     }
 
     // editor slider

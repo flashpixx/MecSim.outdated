@@ -165,11 +165,19 @@ $(document).ready(function() {
         });
 
         $("#mecsim_simulation_start").button().on("click", function(){
-            $.post("csimulation/start")
+            $.post("csimulation/start").fail( function( p_data ) {
+                console.log(p_data);
+                $("#mecsim_start_error_text").text(p_data.responseJSON.error);
+                $("#mecsim_start_error").dialog();
+            });
         });
 
         $("#mecsim_simulation_stop").button().on("click", function(){
-            $.post("csimulation/stop")
+            $.post("csimulation/stop").fail( function( p_data ) {
+                console.log(p_data);
+                $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
+                $("#mecsim_stop_error").dialog();
+            });
         });
 
         $("#mecsim_simulation_reset").button().on("click", function(){

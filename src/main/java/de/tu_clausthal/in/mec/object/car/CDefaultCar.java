@@ -263,9 +263,6 @@ public class CDefaultCar extends IInspector implements ICar
             l_edge.removeObject( this );
     }
 
-    /**
-     * @bug UI frame
-     */
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
@@ -279,8 +276,8 @@ public class CDefaultCar extends IInspector implements ICar
                 l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom
         );
 
-        //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-        //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 
     @Override

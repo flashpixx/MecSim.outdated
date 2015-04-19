@@ -289,7 +289,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * to the server with the URL part "/classname/[basepart/]methodname" (without prefix). The methods "String
      * web_uribase"
      * returns the basepart of the URI
-     * @bug incomplete
      */
     public final void registerObject( final Object p_object )
     {

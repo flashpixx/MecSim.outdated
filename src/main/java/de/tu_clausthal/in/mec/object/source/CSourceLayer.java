@@ -102,8 +102,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * creates a new source
      *
      * @param p_geoposition position of the Source
-     * @param p_defaultGenerator default Generator for this Source
-     * @param p_aslname ASL Programm for the Generator
      */
     public final void createSource( final GeoPosition p_geoposition )
     {

@@ -151,9 +151,6 @@ public class CSource extends IInspector implements ISource, ISerializable
         return null;
     }
 
-    /**
-     * @bug UI frame
-     */
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
@@ -168,8 +165,8 @@ public class CSource extends IInspector implements ISource, ISerializable
                 )
         );
 
-        //if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-        //    ( (CInspector) CSimulation.getInstance().getUIServer().getWidget( "Inspector" ) ).set( this );
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 
     @Override

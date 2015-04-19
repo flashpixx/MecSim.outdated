@@ -109,10 +109,17 @@ $(document).ready(function(){
             $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         }
 
+        var ws_inspector = MecSim.getInstance().getWebSocket("/cinspector/show");
+        ws_inspector.onmessage = function( p_event ) {
+            console.log( p_event.data );
+        };
+
         $(window).on("beforeunload", function() {
-            ws_logout.close();
             ws_logerror.close();
+            ws_logout.close();
+            ws_inspector.close();
         });
+
 
 
 

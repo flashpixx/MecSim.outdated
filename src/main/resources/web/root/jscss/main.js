@@ -336,7 +336,7 @@ $(document).ready(function() {
 
     // help panel
     function helpSlider(){
-        $("#mecsim_help_help").button().on("click", function(){
+        $("#mecsim_help_about").button().on("click", function(){
 
         });
 

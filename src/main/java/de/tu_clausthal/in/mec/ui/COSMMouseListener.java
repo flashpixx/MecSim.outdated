@@ -54,6 +54,7 @@ class COSMMouseListener extends MouseAdapter
 
     /**
      * @bug incomplete - error messages
+     * @bug mouse events should be run with http://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseEvent.html
      */
     @Override
     public void mouseClicked( final MouseEvent p_event )

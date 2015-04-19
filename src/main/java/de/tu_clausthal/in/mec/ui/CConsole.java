@@ -23,14 +23,12 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.ui.web.CSocketStorage;
 import de.tu_clausthal.in.mec.ui.web.CWebSocket;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -43,7 +41,7 @@ public class CConsole extends ByteArrayOutputStream
     /**
      * set with all communicators
      */
-    private final Set<CWebSocket.CCommunicator> m_communicator = Collections.synchronizedSet( new HashSet<>() );
+    private final CSocketStorage m_communicator = new CSocketStorage();
     /**
      * base URI *
      */
@@ -99,18 +97,7 @@ public class CConsole extends ByteArrayOutputStream
      */
     private void web_dynamic_log( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {
-        switch ( p_action )
-        {
-            case Open:
-                m_communicator.add( p_communicator );
-                break;
-
-            case Close:
-                m_communicator.remove( p_communicator );
-                break;
-
-            default:
-        }
+        m_communicator.handshake( p_action, p_communicator );
     }
 
     @Override
@@ -121,14 +108,7 @@ public class CConsole extends ByteArrayOutputStream
             return;
         this.reset();
 
-        for ( CWebSocket.CCommunicator l_item : m_communicator )
-            try
-            {
-                l_item.send( l_data );
-            }
-            catch ( IOException e )
-            {
-            }
+        m_communicator.send( l_data );
     }
 
 }

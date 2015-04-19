@@ -28,13 +28,10 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.ui.web.CSocketStorage;
 import de.tu_clausthal.in.mec.ui.web.CWebSocket;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -45,7 +42,7 @@ public class CInspector
     /**
      * set with all communicators
      */
-    private final Set<CWebSocket.CCommunicator> m_communicator = Collections.synchronizedSet( new HashSet<>() );
+    private final CSocketStorage m_communicator = new CSocketStorage();
 
 
     public CInspector()
@@ -76,14 +73,7 @@ public class CInspector
         if ( ( l_data == null ) || ( l_data.isEmpty() ) )
             return;
 
-        for ( CWebSocket.CCommunicator l_item : m_communicator )
-            try
-            {
-                l_item.send( CCommon.toJson( l_data ) );
-            }
-            catch ( IOException e )
-            {
-            }
+        m_communicator.send( CCommon.toJson( l_data ) );
     }
 
 
@@ -92,18 +82,7 @@ public class CInspector
      */
     private void web_dynamic_show( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {
-        switch ( p_action )
-        {
-            case Open:
-                m_communicator.add( p_communicator );
-                break;
-
-            case Close:
-                m_communicator.remove( p_communicator );
-                break;
-
-            default:
-        }
+        m_communicator.handshake( p_action, p_communicator );
     }
 
 }

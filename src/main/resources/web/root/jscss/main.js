@@ -1,4 +1,5 @@
-// --- global prototype functions ------------------------------------------------------------------------------------------------------------------------------
+// --- GLOBAL PROTOTYPE FUNCTIONS --------------------------------------------------------------------------------------
+
 String.prototype.startsWith = function(prefix) {
     return this.indexOf(prefix) === 0;
 }
@@ -7,10 +8,7 @@ String.prototype.endsWith = function(suffix) {
     return this.match(suffix+"$") == suffix;
 };
 
-
-
-
-// --- MecSim --------------------------------------------------------------------------------------------------------------------------------------------------
+// --- MECSIM ----------------------------------------------------------------------------------------------------------
 
 var MecSim = (function () {
 
@@ -68,10 +66,11 @@ var MecSim = (function () {
 
 MecSim.getInstance().getConfiguration();
 
-// --- jQuery --------------------------------------------------------------------------------------------------------------------------------------------------
-$(document).ready(function(){
+// --- JQUERY ----------------------------------------------------------------------------------------------------------
 
-    var form = "",
+$(document).ready(function() {
+
+    var form   = "",
         dialog = "";
 
     //TODO not work on external include of main.js
@@ -84,8 +83,7 @@ $(document).ready(function(){
     statisticsSlider();
     helpSlider();
 
-    // global
-    function layoutInit(){
+    function layoutInit() {
 
         // splitter
         $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
@@ -120,45 +118,44 @@ $(document).ready(function(){
             ws_inspector.close();
         });
 
-
-
-
         // load accordion
         MecSim.getInstance().getAccordion();
 
 
-      //TODO Check if really needed ?
-      $("a.template").click(function( p_event ){
-          p_event.preventDefault();
-          $("#mecsim_content").load( this.href );
-      });
+        //TODO Check if really needed ?
+        $("a.template").click(function( p_event ) {
+            p_event.preventDefault();
+            $("#mecsim_content").load( this.href );
+        });
 
-      $("a.template_button").button().click(function( p_event ){
-          p_event.preventDefault();
-          $("#mecsim_content").load( this.href );
-      });
+        $("a.template_button").button().click(function( p_event ) {
+            p_event.preventDefault();
+            $("#mecsim_content").load( this.href );
+        });
 
     }
 
-    // file slider
-    function fileSlider(){
+    // --- FILE PANEL --------------------------------------------------------------------------------------------------
+
+    function fileSlider() {
 
         MecSim.getInstance().getContent().empty();
 
-        $("#mecsim_file_preferences").button().on("click", function(){
+        $("#mecsim_file_preferences").button().on("click", function() {
 
         });
 
-        $("#mecsim_file_config").button().on("click", function(){
+        $("#mecsim_file_config").button().on("click", function() {
 
         });
 
-        $("#mecsim_file_local").button().on("click", function(){
+        $("#mecsim_file_local").button().on("click", function() {
 
         });
     }
 
-    // simulation slider
+    // --- SIMULATION PANEL --------------------------------------------------------------------------------------------
+
     function simulationSlider(){
         $("#mecsim_simulation_start").button().on("click", function(){
             $.post("csimulation/start")
@@ -193,166 +190,164 @@ $(document).ready(function(){
         $( "#speed" ).val( $( "#mecsim_speed_slider" ).slider( "value" ) );
     }
 
-    // source slider
+    // --- SOURCE PANEL ------------------------------------------------------------------------------------------------
     function sourceSlider(){
 
-      //Load the Source-GUI
-      $("#ui-id-5").on("click", function(data){
-        MecSim.getInstance().getContent().empty();
-        MecSim.getInstance().getContent().load("template/source.htm", function(){
-          initLayout();
-          initClusterWidget();
-          initSettingsWidget();
-          initTargetWeighting();
+        //Load the Source-GUI
+        $("#ui-id-5").on("click", function(data){
+            MecSim.getInstance().getContent().empty();
+            MecSim.getInstance().getContent().load("template/source.htm", function(){
+                initLayout();
+                initClusterWidget();
+                initSettingsWidget();
+                initTargetWeighting();
+            });
         });
-      });
 
-      //Listen to the Default Car Tool Button
-      $("#mecsim_source_sourcemode").button({
-        icons: {
-          primary: "ui-icon-pin-w"
-        }
-      })
-      .on("click", function(data){});
+        //Listen to the Default Car Tool Button
+        $("#mecsim_source_sourcemode").button({
+            icons: {
+                primary: "ui-icon-pin-w"
+            }
+        }).on("click", function(data){});
 
-      //Listen to the Default Agent Car Tool Button
-      $("#mecsim_source_generatormode").button({
-        icons: {
-          primary: "ui-icon-arrowrefresh-1-e"
-        }
-      })
-      .on("click", function(data){});
+        //Listen to the Default Agent Car Tool Button
+        $("#mecsim_source_generatormode").button({
+            icons: {
+                primary: "ui-icon-arrowrefresh-1-e"
+            }
+        }).on("click", function(data){});
 
-      //Listen to the Target Tool Button
-      $("#mecsim_source_targetmode").button({
-        icons: {
-          primary: "ui-icon-flag"
-        }
-      })
-      .on("click", function(data){});
+        //Listen to the Target Tool Button
+        $("#mecsim_source_targetmode").button({
+            icons: {
+                primary: "ui-icon-flag"
+            }
+        }).on("click", function(data){});
     }
 
-    // editor slider
+    // --- EDITOR PANEL ------------------------------------------------------------------------------------------------
+
     function editorSlider(){
-      $("#mecsim_load_asl").button();
-      $("#mecsim_delete_asl").button();
-      $("#mecsim_save_asl").button();
-      $("#mecsim_agent_files").selectmenu();
-      $("#mecsim_new_asl").button();
 
-      // load existing asl files
-      load_asl_files();
-      function load_asl_files()
-      {
-          $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
-          $("#mecsim_agent_files").empty();
-          for(var i in p_data.agents){
-              $("#mecsim_agent_files")
-                  .append( $("<option></option>")
-                  .attr("value",p_data.agents[i])
-                  .text(p_data.agents[i]));
-          }
-              $("#mecsim_agent_files option:first").attr('selected', true);
-              //$('#mecsim_agent_files').selectmenu('refresh', true);
-          });
-      }
+        $("#mecsim_load_asl").button();
+        $("#mecsim_delete_asl").button();
+        $("#mecsim_save_asl").button();
+        $("#mecsim_agent_files").selectmenu();
+        $("#mecsim_new_asl").button();
 
-      // form to create new asl file
-      dialog = $("#mecsim_create_asl_form").dialog({
-              autoOpen: false,
-              buttons: {
-                  "Create": create_new_asl,
-                      Cancel: function() {
-                        dialog.dialog( "close" );
-                      }
-              }
-      });
+        // load existing asl files
+        load_asl_files();
+        function load_asl_files()
+        {
+            $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
+                $("#mecsim_agent_files").empty();
+                for(var i in p_data.agents){
+                    $("#mecsim_agent_files")
+                        .append( $("<option></option>")
+                        .attr("value",p_data.agents[i])
+                        .text(p_data.agents[i]));
+                }
+                $("#mecsim_agent_files option:first").attr('selected', true);
+                //$('#mecsim_agent_files').selectmenu('refresh', true);
+            });
+        }
 
-      $("#mecsim_new_asl").click(function() {
-          dialog.dialog("open");
-      });
+        // form to create new asl file
+        dialog = $("#mecsim_create_asl_form").dialog({
+            autoOpen: false,
+            buttons: {
+                "Create": create_new_asl,
+                Cancel: function() {
+                    dialog.dialog( "close" );
+                }
+            }
+        });
 
-      function create_new_asl(){
-          if( $("#new_asl").val() )
-          {
-              $.post(
-                  "cagentenvironment/jason/create",
-                  { "name" : $("#new_asl").val() }
-              ).done(function() {
-                  load_asl_files();
-                  dialog.dialog("close");
-              });
-          }
-          else
-          {
-              alert("Please enter a file name");
-          }
+        $("#mecsim_new_asl").click(function() {
+            dialog.dialog("open");
+        });
 
-      }
+        function create_new_asl(){
 
-      // delete asl file
-      $("#mecsim_delete_asl").click(function(){
-          $.post(
-              "cagentenvironment/jason/delete",
-              { "name" : $("#mecsim_agent_files").val() }
-          ).done(function() {
-              load_asl_files();
-          });
-      });
+            if( $("#new_asl").val() ) {
+                $.post(
+                    "cagentenvironment/jason/create",
+                    { "name" : $("#new_asl").val() }
+                ).done(function() {
+                    load_asl_files();
+                    dialog.dialog("close");
+                });
+            } else {
+                alert("Please enter a file name");
+            }
 
-      /** TODO Move Javascript out of HTML Template.
-      var g_selected_asl = $("#mecsim_agent_files").val();
+        }
 
-      var g_editor = CodeMirror(function(elt) {
+        // delete asl file
+        $("#mecsim_delete_asl").click(function(){
+            $.post(
+                "cagentenvironment/jason/delete",
+                { "name" : $("#mecsim_agent_files").val() }
+            ).done(function() {
+                load_asl_files();
+            });
+        });
+
+        /** TODO Move Javascript out of HTML Template.
+        var g_selected_asl = $("#mecsim_agent_files").val();
+
+        var g_editor = CodeMirror(function(elt) {
           source.parentNode.replaceChild(elt, source);
-      }, {
+        }, {
            value: source.value,
            lineNumbers: true,
-      });
+        });
 
-      // TODO: catch exeption if no file exists
-      $.post(
+        // TODO: catch exeption if no file exists
+        $.post(
           "cagentenvironment/jason/read",
           { "name" : g_selected_asl },
           function( px_data ) {
               g_editor.setValue( px_data.source );
           }
-      )
+        )
 
-      // save asl file
-      // TODO: data field -> right?
-      $("#mecsim_save_asl").click(function(){
-      $.post(
+        // save asl file
+        // TODO: data field -> right?
+        $("#mecsim_save_asl").click(function(){
+        $.post(
               "cagentenvironment/jason/write",
               { "name" : $("#mecsim_agent_files").val(),
                 "source" : g_editor.getValue(),
                 "data" : g_editor.getValue()}
           );
-      });
-      **/
+        });
+        **/
 
     }
 
-    // statistics slider
+    // --- STATISTICS PANEL --------------------------------------------------------------------------------------------
     function statisticsSlider(){
         //TODO need to be implemented
     }
 
-    // help slider
+    // help panel
     function helpSlider(){
         $("#mecsim_help_help").button().on("click", function(){
 
         });
 
         $("#mecsim_help_userdoku").button().on("click", function(){
-            //$.get("/userdoc/", function( p_result ) {
-                  //MecSim.getInstance.getContent.empty();
-                  //MecSim.getInstance().getContent().append( p_result );
-            //});
+            $.get("/userdoc/", function( p_result ) {
+                console.log(p_result);
+                MecSim.getInstance().getContent().empty();
+                MecSim.getInstance().getContent().append( p_result );
+            });
         });
 
         $("#mecsim_help_devdoku").button().on("click", function(){
-            //MecSim.getInstance().getContent().load("template/develdoc.htm");
+            MecSim.getInstance().getContent().load("template/develdoc.htm");
         });
     }
 

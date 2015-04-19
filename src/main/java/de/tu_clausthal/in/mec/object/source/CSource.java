@@ -206,8 +206,8 @@ public class CSource extends IInspector implements ISource, ISerializable
         this.m_color = p_color;
         this.setImage();
 
-        if ( CSimulation.getInstance().hasUI() )
-            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
     @Override

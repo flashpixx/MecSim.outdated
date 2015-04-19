@@ -148,8 +148,8 @@ public class CBootstrap
      */
     public static void onSimulationReset( final CSimulation p_simulation )
     {
-        if ( p_simulation.hasUI() )
-            p_simulation.getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().resetConfiguration();
+        if ( p_simulation.getUIComponents().hasUI() )
+            p_simulation.getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().resetConfiguration();
 
     }
 

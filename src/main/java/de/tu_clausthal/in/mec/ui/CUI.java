@@ -125,8 +125,10 @@ public class CUI extends Application
         // set via reflection the UI
         try
         {
-            if ( CSimulation.getInstance().getUI() == null )
-                CReflection.getClassField( CSimulation.getInstance().getClass(), "m_ui" ).getSetter().invoke( CSimulation.getInstance(), this );
+            if ( CSimulation.getInstance().getUIComponents().getUI() == null )
+                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_ui" ).getSetter().invoke(
+                        CSimulation.getInstance().getUIComponents(), this
+                );
         }
         catch ( final Throwable l_throwable )
         {

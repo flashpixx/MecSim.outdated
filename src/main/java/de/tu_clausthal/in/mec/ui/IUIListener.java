@@ -52,8 +52,8 @@ public abstract class IUIListener implements MouseListener
      */
     public IUIListener()
     {
-        if ( CSimulation.getInstance().hasUI() )
-            CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().addMouseListener( this );
+        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().addMouseListener( this );
     }
 
     /**
@@ -83,7 +83,7 @@ public abstract class IUIListener implements MouseListener
      */
     public void release()
     {
-        CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().removeMouseListener( this );
+        CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().removeMouseListener( this );
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class IUIListener implements MouseListener
     public final void mousePressed( final MouseEvent p_event )
     {
         if ( SwingUtilities.isLeftMouseButton( p_event ) )
-            this.onClick( p_event, CSimulation.getInstance().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
+            this.onClick( p_event, CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
     }
 
     /**

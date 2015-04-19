@@ -75,15 +75,9 @@ public class CSimulation
      */
     private Thread m_mainloopthread;
     /**
-     * HTTP server
+     * UI components
      */
-    private CServer m_webserver;
-    /**
-     * UI
-     */
-    private CUI m_ui;
-
-
+    private CUIComponents m_uicomponents = new CUIComponents();
     /**
      * private ctor
      */
@@ -111,41 +105,19 @@ public class CSimulation
     }
 
     /**
+     * returns the UI components
+     */
+    public CUIComponents getUIComponents()
+    {
+        return m_uicomponents;
+    }
+
+    /**
      * returns event manager
      */
     public CMessageSystem getMessageSystem()
     {
         return m_messagesystem;
-    }
-
-    /**
-     * returns the HTTP server
-     *
-     * @return null or server
-     */
-    public CServer getWebServer()
-    {
-        return m_webserver;
-    }
-
-    /**
-     * returns the UI
-     *
-     * @return UI
-     */
-    public CUI getUI()
-    {
-        return m_ui;
-    }
-
-    /**
-     * returns a boolean for existing UI
-     *
-     * @return UI exists
-     */
-    public boolean hasUI()
-    {
-        return ( m_ui != null ) && ( m_webserver != null );
     }
 
     /**
@@ -342,7 +314,6 @@ public class CSimulation
         this.reset();
     }
 
-
     /**
      * UI method - returns a list with available layers
      *
@@ -363,7 +334,6 @@ public class CSimulation
 
         return l_return;
     }
-
 
     /**
      * UI method - enables a layer
@@ -418,5 +388,52 @@ public class CSimulation
         final Object l_layer = m_world.get( this.getLayerName( p_data ) );
         if ( l_layer instanceof IViewableLayer )
             ( (IViewableLayer) l_layer ).setVisible( false );
+    }
+
+    /**
+     * UI components bundle
+     */
+    public class CUIComponents
+    {
+        /**
+         * HTTP server
+         */
+        private CServer m_webserver;
+        /**
+         * UI
+         */
+        private CUI m_ui;
+
+
+        /**
+         * returns the HTTP server
+         *
+         * @return null or server
+         */
+        public CServer getWebServer()
+        {
+            return m_webserver;
+        }
+
+        /**
+         * returns the UI
+         *
+         * @return UI
+         */
+        public CUI getUI()
+        {
+            return m_ui;
+        }
+
+        /**
+         * returns a boolean for existing UI
+         *
+         * @return UI exists
+         */
+        public boolean hasUI()
+        {
+            return ( m_ui != null ) && ( m_webserver != null );
+        }
+
     }
 }

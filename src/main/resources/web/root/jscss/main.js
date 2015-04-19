@@ -230,6 +230,15 @@ $(document).ready(function() {
 
     function editorSlider(){
 
+        var g_editor;
+
+        $("#ui-id-7").on("click", function() {
+            MecSim.getInstance().getContent().empty();
+            g_editor = CodeMirror($("#mecsim_global_content")[0], {
+                lineNumbers: true
+            });
+        });
+
         $("#mecsim_load_asl").button();
         $("#mecsim_delete_asl").button();
         $("#mecsim_save_asl").button();
@@ -249,7 +258,7 @@ $(document).ready(function() {
                         .text(p_data.agents[i]));
                 }
                 $("#mecsim_agent_files option:first").attr('selected', true);
-                //$('#mecsim_agent_files').selectmenu('refresh', true);
+                $('#mecsim_agent_files').selectmenu('refresh', true);
             });
         }
 
@@ -294,36 +303,29 @@ $(document).ready(function() {
             });
         });
 
-        /** TODO Move Javascript out of HTML Template.
-        var g_selected_asl = $("#mecsim_agent_files").val();
-
-        var g_editor = CodeMirror(function(elt) {
-          source.parentNode.replaceChild(elt, source);
-        }, {
-           value: source.value,
-           lineNumbers: true,
+        // TODO: catch exception if no file exists
+        // load selected asl file
+        $("#mecsim_load_asl").click(function(){
+            $.post(
+              "cagentenvironment/jason/read",
+              { "name" : $("#mecsim_agent_files").val() },
+              function( px_data ) {
+                  g_editor.setValue( px_data.source );
+              }
+            );
         });
 
-        // TODO: catch exeption if no file exists
-        $.post(
-          "cagentenvironment/jason/read",
-          { "name" : g_selected_asl },
-          function( px_data ) {
-              g_editor.setValue( px_data.source );
-          }
-        )
 
         // save asl file
         // TODO: data field -> right?
         $("#mecsim_save_asl").click(function(){
-        $.post(
-              "cagentenvironment/jason/write",
-              { "name" : $("#mecsim_agent_files").val(),
+            $.post(
+                "cagentenvironment/jason/write",
+                { "name" : $("#mecsim_agent_files").val(),
                 "source" : g_editor.getValue(),
                 "data" : g_editor.getValue()}
           );
         });
-        **/
 
     }
 

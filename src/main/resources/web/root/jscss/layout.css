@@ -102,6 +102,7 @@ iframe
     color: red;
 }
 
+/* TODO: depcrecated? */
 #mecsim_global_editor{
     collapsible: false;
 }

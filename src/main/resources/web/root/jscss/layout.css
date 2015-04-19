@@ -165,6 +165,10 @@ iframe
   width: 100%;
 }
 
+#mecsim_about{
+    width: 500px;
+}
+
 
 /** Cluster Style TODO Rename**/
 .mecsim_source_node {

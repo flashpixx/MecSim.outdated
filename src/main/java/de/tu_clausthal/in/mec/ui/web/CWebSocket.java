@@ -102,6 +102,7 @@ public class CWebSocket extends WebSocket
         this.invokeMethod( EAction.Open, null );
     }
 
+
     /**
      * invokes the method
      *
@@ -178,11 +179,7 @@ public class CWebSocket extends WebSocket
         /**
          * on closing *
          */
-        Close,
-        /**
-         * on internal call - method call directly *
-         */
-        Internal
+        Close
     }
 
     /**
@@ -196,7 +193,7 @@ public class CWebSocket extends WebSocket
          *
          * @return ID
          */
-        private int getID()
+        public int getID()
         {
             return CWebSocket.this.hashCode();
         }
@@ -252,7 +249,7 @@ public class CWebSocket extends WebSocket
          *
          * @return ID
          */
-        private int getID()
+        public int getID()
         {
             return CWebSocket.this.hashCode();
         }

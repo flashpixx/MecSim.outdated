@@ -34,7 +34,7 @@ import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-import de.tu_clausthal.in.mec.ui.inspector.IInspector;
+import de.tu_clausthal.in.mec.ui.IInspector;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -206,7 +206,7 @@ public class CSource extends IInspector implements ISource, ISerializable
         this.m_color = p_color;
         this.setImage();
 
-        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+        if ( CSimulation.getInstance().getUIComponents().exists() )
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 

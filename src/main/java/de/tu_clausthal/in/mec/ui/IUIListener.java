@@ -52,7 +52,7 @@ public abstract class IUIListener implements MouseListener
      */
     public IUIListener()
     {
-        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+        if ( CSimulation.getInstance().getUIComponents().exists() )
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().addMouseListener( this );
     }
 

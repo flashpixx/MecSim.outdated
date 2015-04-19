@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.object.source.CSourceLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.CConsole;
+import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CTrafficEnvironment;
@@ -110,6 +111,8 @@ public class CBootstrap
         p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CConfiguration.getInstance() );
+        p_server.registerObject( new CInspector() );
+
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
     }
@@ -148,7 +151,7 @@ public class CBootstrap
      */
     public static void onSimulationReset( final CSimulation p_simulation )
     {
-        if ( p_simulation.getUIComponents().hasUI() )
+        if ( p_simulation.getUIComponents().exists() )
             p_simulation.getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().resetConfiguration();
 
     }

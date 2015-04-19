@@ -21,10 +21,9 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.ui.inspector;
+package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.ui.IUIListener;
 
 import java.util.HashMap;
 import java.util.Map;

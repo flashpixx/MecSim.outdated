@@ -180,7 +180,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         }
 
         // repaint the OSM viewer (supress flickering)
-        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+        if ( CSimulation.getInstance().getUIComponents().exists() )
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
@@ -211,7 +211,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void onDeserializationInitialization()
     {
-        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+        if ( CSimulation.getInstance().getUIComponents().exists() )
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().removePainter(
                     (Painter) this
             );
@@ -220,7 +220,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void onDeserializationComplete()
     {
-        if ( CSimulation.getInstance().getUIComponents().hasUI() )
+        if ( CSimulation.getInstance().getUIComponents().exists() )
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
                     (Painter) this
             );

@@ -23,81 +23,74 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.web.CWebSocket;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
 /**
- * stream to create stream access
- *
- * @note log messages can be written with System.out or System.err
+ * inspector class to create a visual view of an object
  */
-public class CConsole extends ByteArrayOutputStream
+public class CInspector
 {
     /**
      * set with all communicators
      */
     private final Set<CWebSocket.CCommunicator> m_communicator = Collections.synchronizedSet( new HashSet<>() );
-    /**
-     * base URI *
-     */
-    private final String m_baseuri;
 
 
-    /**
-     * ctor
-     */
-    private CConsole( final String p_baseuri )
+    public CInspector()
     {
-        m_baseuri = p_baseuri;
+        // set via reflection the inspector
+        try
+        {
+            if ( CSimulation.getInstance().getUIComponents().getInspector() == null )
+                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_inspector" ).getSetter().invoke(
+                        CSimulation.getInstance().getUIComponents(), this
+                );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
     }
 
+
     /**
-     * factor method to set output stream
+     * sets a new object
      *
-     * @param p_baseuri base uri
-     * @return console stream
+     * @param p_object object
      */
-    public static CConsole getOutput( final String p_baseuri )
+    public final void set( final IInspector p_object )
     {
-        final CConsole l_stream = new CConsole( p_baseuri );
-        System.setOut( new PrintStream( l_stream, true ) );
-        return l_stream;
+        final Map<String, Object> l_data = p_object.inspect();
+        if ( ( l_data == null ) || ( l_data.isEmpty() ) )
+            return;
+
+        for ( CWebSocket.CCommunicator l_item : m_communicator )
+            try
+            {
+                l_item.send( CCommon.toJson( l_data ) );
+            }
+            catch ( IOException e )
+            {
+            }
     }
 
-    /**
-     * factor method to set error stream
-     *
-     * @param p_baseuri base uri
-     * @return console stream
-     */
-    public static CConsole getError( final String p_baseuri )
-    {
-        final CConsole l_stream = new CConsole( p_baseuri );
-        System.setErr( new PrintStream( l_stream, true ) );
-        return l_stream;
-    }
 
     /**
      * UI method - register sockets
-     *
-     * @return base URI
      */
-    private String web_uribase()
-    {
-        return m_baseuri;
-    }
-
-    /**
-     * UI method for testing
-     */
-    private void web_dynamic_log( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
+    private void web_dynamic_show( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {
         switch ( p_action )
         {
@@ -113,22 +106,6 @@ public class CConsole extends ByteArrayOutputStream
         }
     }
 
-    @Override
-    public void flush() throws IOException
-    {
-        final String l_data = this.toString();
-        if ( l_data.isEmpty() )
-            return;
-        this.reset();
-
-        for ( CWebSocket.CCommunicator l_item : m_communicator )
-            try
-            {
-                l_item.send( l_data );
-            }
-            catch ( IOException e )
-            {
-            }
-    }
-
 }
+
+

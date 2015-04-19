@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.runtime.message.CMessageSystem;
 import de.tu_clausthal.in.mec.runtime.thread.CMainLoop;
+import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
@@ -78,6 +79,7 @@ public class CSimulation
      * UI components
      */
     private CUIComponents m_uicomponents = new CUIComponents();
+
     /**
      * private ctor
      */
@@ -398,12 +400,15 @@ public class CSimulation
         /**
          * HTTP server
          */
-        private CServer m_webserver;
+        private final CServer m_webserver = null;
         /**
          * UI
          */
-        private CUI m_ui;
-
+        private final CUI m_ui = null;
+        /**
+         * inspector
+         */
+        private final CInspector m_inspector = null;
 
         /**
          * returns the HTTP server
@@ -426,13 +431,23 @@ public class CSimulation
         }
 
         /**
+         * returns the inspector
+         *
+         * @return inspector
+         */
+        public CInspector getInspector()
+        {
+            return m_inspector;
+        }
+
+        /**
          * returns a boolean for existing UI
          *
          * @return UI exists
          */
-        public boolean hasUI()
+        public boolean exists()
         {
-            return ( m_ui != null ) && ( m_webserver != null );
+            return ( m_ui != null ) && ( m_webserver != null ) && ( m_inspector != null );
         }
 
     }

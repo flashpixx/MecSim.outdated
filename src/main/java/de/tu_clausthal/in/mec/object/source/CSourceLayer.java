@@ -30,7 +30,9 @@ import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
 import de.tu_clausthal.in.mec.object.source.generator.CJasonCarGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -232,16 +234,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private final void repaintOSM()
     {
-        /*
         try
         {
-            COSMViewer.getSimulationOSM().repaint();
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
         }
         catch ( Exception l_exception )
         {
         }
-        s_selectedSource = p_source;
-        */
     }
 
     /**

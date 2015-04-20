@@ -125,7 +125,7 @@ class COSMMouseListener extends MouseAdapter
         //final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
 
         //place or remove source
-        if ( true )
+        if ( m_sourceLayerTool.equals( "sourcemode" ) )
         {
             for ( ISource l_source : l_sourcelayer )
             {
@@ -139,7 +139,7 @@ class COSMMouseListener extends MouseAdapter
         }
 
         //place or remote generator
-        if ( false )
+        if ( m_sourceLayerTool.equals( "generatormode" ) )
         {
 
             for ( ISource l_source : l_sourcelayer )
@@ -162,7 +162,7 @@ class COSMMouseListener extends MouseAdapter
         }
 
         //place or remove target
-        if ( false )
+        if ( m_sourceLayerTool.equals( "targetmode" ) )
         {
 
             for ( CAtomTarget l_target : l_sourcelayer.getTargets() )

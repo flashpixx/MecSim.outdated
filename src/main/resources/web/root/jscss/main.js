@@ -361,19 +361,14 @@ $(document).ready(function() {
 
         $("#mecsim_help_about").button().on("click", function(){
             $.getJSON( "cconfiguration/get", function( p_data ) {
-                console.log(p_data);
-                $("#mecsim_about_text").append(
-                    "<div id=\"about\">" +
-                    "<div class=\"table\">" +
-                    "<div class=\"row\">  <div class=\"cell text_align_center\"><a href=\"" + p_data.manifest["project-url"] + "\">" + p_data.manifest["project-name"] + "</a></div>  </div>" +
-                    "<br/>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">License</div></div>       <div class=\"cell\"><a href=\"" + p_data.manifest["license-url"] + "\">" + p_data.manifest["license"] + "</a></div></div>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildversion</div></div>  <div class=\"cell\">" + p_data.manifest["build-version"] + "</div></div>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildnumber</div></div>   <div class=\"cell\">" + p_data.manifest["build-number"] + "</a></div></div>" +
-                    "<div class=\"row\"><div class=\"header\"><div class=\"cell\">Buildcommit</div></div>   <div class=\"cell\">" + p_data.manifest["build-commit"] + "</a></div></div>" +
-                    "</div>" +
-                    "</div>"
-                );
+                $("#mecsim_project_name").attr("href", p_data.manifest["project-url"]);
+                $("#mecsim_project_name").text(p_data.manifest["project-name"]);
+                $("#mecsim_licence").attr("href", p_data.manifest["licence-url"]);
+                $("#mecsim_licence").text(p_data.manifest["licence"]);
+                $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
+                $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
+                $("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
+
                 $("#mecsim_about").dialog({
                     width: 500
                 });

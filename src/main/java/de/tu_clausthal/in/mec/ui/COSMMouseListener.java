@@ -24,159 +24,71 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.source.CSourceLayer;
-import de.tu_clausthal.in.mec.object.source.ISource;
-import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.Map;
 
 
 /**
  * mouse listener for JxViewer
  */
-class COSMMouseListener extends MouseAdapter
+class COSMMouseListener extends PanMouseInputListener
 {
+    /**
+     * active layer
+     */
+    private COSMViewer.EClickableLayer m_currentlayer;
+
 
     /**
-     * size of the click range
+     * ctor
+     *
+     * @param p_viewer OSM viewer reference
+     * @param p_activelayer reference to the active layer
      */
-    private static final int c_rangesize = 10;
-    /**
-     * Flag for double click
-     */
-    private boolean m_doubleClick = false;
-    /**
-     * member variable which indicates the tool for the sourcelayer
-     */
-    private String m_sourceLayerTool = "sourcemode";
+    public COSMMouseListener( final JXMapViewer p_viewer, COSMViewer.EClickableLayer p_activelayer )
+    {
+        super( p_viewer );
+        m_currentlayer = p_activelayer;
+    }
 
     /**
      * @bug incomplete - error messages
-     * @bug mouse events should be run with http://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseEvent.html
      */
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
-        try
-        {
-            if ( CSimulation.getInstance().isRunning() )
+        if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
+            switch ( m_currentlayer )
             {
+                case Sources:
+                    addSource( p_event );
+                    break;
+                default:
             }
-            ;
-            //throw new IllegalStateException( CCommon.getResourceString(this, "running") );
-
-            // single left click
-            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 1 ) )
-            {
-                Thread.sleep( 200 );
-                leftClick( p_event );
-            }
-
-            // double left click
-            if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
-            {
-                m_doubleClick = true;
-                doubleLeftClick( p_event );
-                m_doubleClick = false;
-            }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            //JOptionPane.showMessageDialog( null, l_exception.getMessage(), CCommon.getResourceString( this, "warning" ), JOptionPane.CANCEL_OPTION );
-        }
     }
 
     /**
-     * method for single left click
+     * adds a new source
      *
-     * @param p_event
+     * @param p_event mouse event
      */
-    private void leftClick( final MouseEvent p_event )
-    {
-        final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
-        final CSourceLayer l_sourcelayer = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
-        final Point2D l_mousePosition = this.getMousePosition( p_event, l_viewer );
-
-        //select a source in range
-        for ( ISource l_source : l_sourcelayer )
-        {
-            if ( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
-            {
-                l_sourcelayer.setSelectedSource( l_source );
-                return;
-            }
-        }
-    }
-
-    private void doubleLeftClick( final MouseEvent p_event )
+    private void addSource( final MouseEvent p_event )
     {
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
         final CSourceLayer l_sourcelayer = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
         final Point2D l_mousePosition = this.getMousePosition( p_event, l_viewer );
         final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
-        //final String l_selectedGenerator = ( (CMenuBar) CSimulation.getInstance().getUIServer().getJMenuBar() ).getSelectedSourceName();
-        //final CCarJasonAgentLayer l_jasonlayer = ( (CCarJasonAgentLayer) CSimulation.getInstance().getWorld().get( "Jason Car Agents" ) );
 
-        //place or remove source
-        if ( m_sourceLayerTool.equals( "sourcemode" ) )
-        {
-            for ( ISource l_source : l_sourcelayer )
-            {
-                if ( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
-                {
-                    l_sourcelayer.removeSource( l_source );
-                    return;
-                }
-            }
-            l_sourcelayer.createSource( l_geoPosition );
-        }
 
-        //place or remote generator
-        if ( m_sourceLayerTool.equals( "generatormode" ) )
-        {
-
-            for ( ISource l_source : l_sourcelayer )
-            {
-                if ( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel( l_source.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
-                {
-
-                    if ( l_source.getGenerator() == null )
-                    {
-                        //l_sourcelayer.setGenerator( l_source, l_selectedGenerator, l_aslname );
-                    }
-                    else
-                    {
-                        // l_sourcelayer.removeGenerator( l_source );
-                    }
-
-                    return;
-                }
-            }
-        }
-
-        //place or remove target
-        if ( m_sourceLayerTool.equals( "targetmode" ) )
-        {
-
-            for ( CAtomTarget l_target : l_sourcelayer.getTargets() )
-            {
-                if ( this.inRange( l_mousePosition, l_viewer.getTileFactory().geoToPixel( l_target.getPosition(), l_viewer.getZoom() ), c_rangesize ) )
-                {
-                    l_sourcelayer.removeTarget( l_target );
-                    return;
-                }
-            }
-
-            l_sourcelayer.createTarget( l_geoPosition );
-        }
-
+        l_sourcelayer.createSource( l_geoPosition );
+        //l_sourcelayer.createTarget( l_geoPosition );
     }
 
     /**
@@ -193,23 +105,6 @@ class COSMMouseListener extends MouseAdapter
     }
 
     /**
-     * checks if a point is in a box around another point
-     *
-     * @param p_checkposition point of the click
-     * @param p_center point of the source
-     * @param p_size rectangle size
-     * @return boolean on existence
-     */
-    protected boolean inRange( final Point2D p_checkposition, final Point2D p_center, final int p_size )
-    {
-        if ( ( p_checkposition == null ) || ( p_center == null ) )
-            return false;
-
-        return ( ( p_checkposition.getX() - p_size / 2 ) <= p_center.getX() ) && ( ( p_checkposition.getX() + p_size / 2 ) >= p_center.getX() ) &&
-               ( ( p_checkposition.getY() - p_size / 2 ) <= p_center.getY() ) && ( ( p_checkposition.getY() + p_size / 2 ) >= p_center.getY() );
-    }
-
-    /**
      * returns the geoposition of a mouse position
      *
      * @param p_event mouse event
@@ -220,15 +115,6 @@ class COSMMouseListener extends MouseAdapter
     {
         final Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
-    }
-
-    private void web_static_setsourcelayertool(final Map<String, Object> p_data )
-    {
-        String l_tool = (String) p_data.get( "tool" );
-        if(l_tool.equals( "sourcemode" ) || l_tool.equals( "generatormode" ) || l_tool.equals( "targetmode" ))
-            this.m_sourceLayerTool = l_tool;
-
-        System.out.println(this.m_sourceLayerTool);
     }
 
 }

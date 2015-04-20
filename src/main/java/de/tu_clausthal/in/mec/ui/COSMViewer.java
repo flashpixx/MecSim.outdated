@@ -27,13 +27,15 @@ import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -49,10 +51,9 @@ public class COSMViewer extends JXMapViewer
      */
     private CompoundPainter m_painter = new CompoundPainter<>();
     /**
-     * mouse listener
+     * clickable layer
      */
-    private COSMMouseListener m_mouse = new COSMMouseListener();
-
+    private EClickableLayer m_clickablelayer = EClickableLayer.Sources;
 
     /**
      * ctor with loading configuration defaults and listener definition
@@ -74,9 +75,7 @@ public class COSMViewer extends JXMapViewer
         this.setOverlayPainter( m_painter );
 
         // new CenterMapListener(this)
-        this.addMouseListener( m_mouse );
-        this.addMouseMotionListener( m_mouse );
-        this.addMouseListener( new PanMouseInputListener( this ) );
+        this.addMouseListener( new COSMMouseListener( this, m_clickablelayer ) );
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
 
         this.resetConfiguration();
@@ -115,12 +114,43 @@ public class COSMViewer extends JXMapViewer
         return m_painter;
     }
 
+
     /**
-     * Getter Mouse Listener
+     * UI method - returns list of clickable layer names and its state
+     *
+     * @return map with layer list
      */
-    public final COSMMouseListener getMouseListener()
+    private Map<String, Object> web_static_getClickableLayer()
     {
-        return this.m_mouse;
+        final Map<String, Object> l_layer = new HashMap<>();
+        for ( EClickableLayer l_item : EClickableLayer.class.getEnumConstants() )
+            l_layer.put( l_item.name(), l_item == m_clickablelayer );
+        return l_layer;
+    }
+
+    /**
+     * UI method - sets the current clickable layer
+     *
+     * @bug incomplete - data format of the UI must defined
+     */
+    private void web_static_setClickableLayer( final Map<String, Object> p_data )
+    {
+    }
+
+
+    /**
+     * enum clickable layer
+     */
+    public enum EClickableLayer
+    {
+        /**
+         * source layer *
+         */
+        Sources,
+        /**
+         * forbidden edges layer *
+         */
+        ForbiddenEdges
     }
 
 }

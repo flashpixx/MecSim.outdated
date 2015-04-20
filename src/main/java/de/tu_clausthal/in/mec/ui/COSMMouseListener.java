@@ -83,25 +83,11 @@ class COSMMouseListener extends PanMouseInputListener
     {
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
         final CSourceLayer l_sourcelayer = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
-        final Point2D l_mousePosition = this.getMousePosition( p_event, l_viewer );
         final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
 
 
         l_sourcelayer.createSource( l_geoPosition );
         //l_sourcelayer.createTarget( l_geoPosition );
-    }
-
-    /**
-     * returns the 2D position of a mouse position
-     *
-     * @param p_event mouse event
-     * @param p_viewer OSM viewer
-     * @return point
-     */
-    protected Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
-    {
-        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
     /**
@@ -115,6 +101,19 @@ class COSMMouseListener extends PanMouseInputListener
     {
         final Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
+    }
+
+    /**
+     * returns the 2D position of a mouse position
+     *
+     * @param p_event mouse event
+     * @param p_viewer OSM viewer
+     * @return point
+     */
+    protected Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
+    {
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
 }

@@ -223,8 +223,8 @@ $(document).ready(function() {
             }
         }).on("click", function(data){
             $.post(
-              "cosmmouselistener/test",
-              { "name" : "sourcemode" }
+              "cosmmouselistener/setsourcelayertool",
+              { "tool" : "sourcemode" }
             );
         });
 
@@ -233,14 +233,24 @@ $(document).ready(function() {
             icons: {
                 primary: "ui-icon-arrowrefresh-1-e"
             }
-        }).on("click", function(data){});
+        }).on("click", function(data){
+            $.post(
+              "cosmmouselistener/setsourcelayertool",
+              { "tool" : "generatormode" }
+            );
+        });
 
         //Listen to the Target Tool Button
         $("#mecsim_source_targetmode").button({
             icons: {
                 primary: "ui-icon-flag"
             }
-        }).on("click", function(data){});
+        }).on("click", function(data){
+            $.post(
+              "cosmmouselistener/setsourcelayertool",
+              { "tool" : "targetmode" }
+            );
+        });
     }
 
     // --- EDITOR PANEL ------------------------------------------------------------------------------------------------

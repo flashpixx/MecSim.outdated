@@ -51,7 +51,10 @@ class COSMMouseListener extends MouseAdapter
      * Flag for double click
      */
     private boolean m_doubleClick = false;
-
+    /**
+     * member variable which indicates the tool for the sourcelayer
+     */
+    private String m_sourceLayerTool = "sourcemode";
 
     /**
      * @bug incomplete - error messages
@@ -219,9 +222,13 @@ class COSMMouseListener extends MouseAdapter
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
     }
 
-    private void web_static_test(final Map<String, Object> p_data )
+    private void web_static_setsourcelayertool(final Map<String, Object> p_data )
     {
-        System.out.println("test");
+        String l_tool = (String) p_data.get( "tool" );
+        if(l_tool.equals( "sourcemode" ) || l_tool.equals( "generatormode" ) || l_tool.equals( "targetmode" ))
+            this.m_sourceLayerTool = l_tool;
+
+        System.out.println(this.m_sourceLayerTool);
     }
 
 }

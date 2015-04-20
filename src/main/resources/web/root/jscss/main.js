@@ -67,7 +67,6 @@ var MecSim = (function () {
 MecSim.getInstance().getConfiguration();
 
 // --- JQUERY ----------------------------------------------------------------------------------------------------------
-
 $(document).ready(function() {
 
     var form   = "",
@@ -136,7 +135,6 @@ $(document).ready(function() {
     }
 
     // --- FILE PANEL --------------------------------------------------------------------------------------------------
-
     function fileSlider() {
 
         $("#ui-id-1").on("click", function(data){
@@ -157,7 +155,6 @@ $(document).ready(function() {
     }
 
     // --- SIMULATION PANEL --------------------------------------------------------------------------------------------
-
     function simulationSlider(){
 
         $("#ui-id-3").on("click", function(data){
@@ -242,7 +239,6 @@ $(document).ready(function() {
     }
 
     // --- EDITOR PANEL ------------------------------------------------------------------------------------------------
-
     function editorSlider(){
 
         var g_editor;
@@ -254,73 +250,11 @@ $(document).ready(function() {
             });
         });
 
-        $("#mecsim_load_asl").button();
-        $("#mecsim_delete_asl").button();
-        $("#mecsim_save_asl").button();
-        $("#mecsim_agent_files").selectmenu();
-        $("#mecsim_new_asl").button();
-
-        // load existing asl files
         load_asl_files();
-        function load_asl_files()
-        {
-            $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
-                $("#mecsim_agent_files").empty();
-                for(var i in p_data.agents){
-                    $("#mecsim_agent_files")
-                        .append( $("<option></option>")
-                        .attr("value",p_data.agents[i])
-                        .text(p_data.agents[i]));
-                }
-                $("#mecsim_agent_files option:first").attr('selected', true);
-                $('#mecsim_agent_files').selectmenu('refresh', true);
-            });
-        }
-
-        // form to create new asl file
-        dialog = $("#mecsim_create_asl_form").dialog({
-            autoOpen: false,
-            buttons: {
-                "Create": create_new_asl,
-                Cancel: function() {
-                    dialog.dialog( "close" );
-                }
-            }
-        });
-
-        $("#mecsim_new_asl").click(function() {
-            dialog.dialog("open");
-        });
-
-        function create_new_asl(){
-
-            if( $("#new_asl").val() ) {
-                $.post(
-                    "cagentenvironment/jason/create",
-                    { "name" : $("#new_asl").val() }
-                ).done(function() {
-                    load_asl_files();
-                    dialog.dialog("close");
-                });
-            } else {
-                alert("Please enter a file name");
-            }
-
-        }
-
-        // delete asl file
-        $("#mecsim_delete_asl").click(function(){
-            $.post(
-                "cagentenvironment/jason/delete",
-                { "name" : $("#mecsim_agent_files").val() }
-            ).done(function() {
-                load_asl_files();
-            });
-        });
+        $("#mecsim_agent_files").selectmenu();
 
         // TODO: catch exception if no file exists
-        // load selected asl file
-        $("#mecsim_load_asl").click(function(){
+        $("#mecsim_load_asl").button().on("click", function(p_data){
             $.post(
               "cagentenvironment/jason/read",
               { "name" : $("#mecsim_agent_files").val() },
@@ -330,10 +264,18 @@ $(document).ready(function() {
             );
         });
 
+        $("#mecsim_delete_asl").button().on("click", function(p_data){
+            $.post(
+                "cagentenvironment/jason/delete",
+                { "name" : $("#mecsim_agent_files").val() }
+            ).done(function() {
+                load_asl_files();
+            });
 
-        // save asl file
+        });
+
         // TODO: data field -> right?
-        $("#mecsim_save_asl").click(function(){
+        $("#mecsim_save_asl").button().on("click", function(p_data){
             $.post(
                 "cagentenvironment/jason/write",
                 { "name" : $("#mecsim_agent_files").val(),
@@ -342,6 +284,19 @@ $(document).ready(function() {
           );
         });
 
+        $("#mecsim_new_asl").button().on("click", function(p_data){
+            dialog.dialog("open");
+        });
+
+        dialog = $("#mecsim_create_asl_form").dialog({
+            autoOpen: false,
+            buttons: {
+                "Create": create_new_asl,
+                Cancel: function() {
+                    dialog.dialog( "close" );
+                }
+            }
+        });
     }
 
     // --- STATISTICS PANEL --------------------------------------------------------------------------------------------
@@ -352,7 +307,7 @@ $(document).ready(function() {
         });
     }
 
-    // help panel
+    // --- HELP PANEL --------------------------------------------------------------------------------------------------
     function helpSlider(){
 
         $("#ui-id-10").on("click", function(data){
@@ -388,28 +343,35 @@ $(document).ready(function() {
         });
     }
 
-    // stuff from clean up (configuration.htm)
-    function test(){
-        /**
-        //build table with configuration data
-        $.getJSON( "cconfiguration/get", function( p_data ) {
-            //$( "#routingalgorithm" ).selectmenu();
-            $( "#routingalgorithm_allowed" ).selectmenu();
+    // --- ADDITIONAL FUNCTIONS ----------------------------------------------------------------------------------------
+    function load_asl_files(){
+        $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
+            $("#mecsim_agent_files").empty();
+            for(var i in p_data.agents){
+                $("#mecsim_agent_files")
+                    .append( $("<option></option>")
+                    .attr("value",p_data.agents[i])
+                    .text(p_data.agents[i]));
+            }
+            $("#mecsim_agent_files option:first").attr('selected', true);
+            $('#mecsim_agent_files').selectmenu('refresh', true);
         });
+    }
 
-        //post request example
-        $.post(
-            "cconfiguration/set",
-            { "console" : {"LineBuffer":20,"LineNumber":20}, "ui" : { "xxx" : 123, "yyy" : "hallo", "map" : { "x" : 1, "y" : 2, "z" : 3 } } }
-        );
+    function create_new_asl(){
 
+        if( $("#new_asl").val() ) {
+            $.post(
+                "cagentenvironment/jason/create",
+                { "name" : $("#new_asl").val() }
+            ).done(function() {
+                load_asl_files();
+                dialog.dialog("close");
+            });
+        } else {
+            alert("Please enter a file name");
+        }
 
-        //get request example
-        $.get(
-            "cconfiguration/set",
-            { type : "get", bar : "foo", "foo_number" : 3, "bar_bool" : false }
-        );
-        **/
     }
 
 });

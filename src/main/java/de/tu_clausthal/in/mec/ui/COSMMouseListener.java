@@ -98,7 +98,7 @@ class COSMMouseListener extends PanMouseInputListener
      * @param p_viewer OSM viewer
      * @return geoposition
      */
-    protected GeoPosition getMouseGeoPosition( final MouseEvent p_event, final COSMViewer p_viewer )
+    private GeoPosition getMouseGeoPosition( final MouseEvent p_event, final COSMViewer p_viewer )
     {
         final Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
@@ -111,7 +111,7 @@ class COSMMouseListener extends PanMouseInputListener
      * @param p_viewer OSM viewer
      * @return point
      */
-    protected Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
+    private Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
     {
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );

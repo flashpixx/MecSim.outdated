@@ -331,10 +331,15 @@ $(document).ready(function() {
 
         $("#mecsim_help_about").button().on("click", function(){
             $.getJSON( "cconfiguration/get", function( p_data ) {
-                $("#mecsim_project_name").attr("href", p_data.manifest["project-url"]);
-                $("#mecsim_project_name").text(p_data.manifest["project-name"]);
-                $("#mecsim_licence").attr("href", p_data.manifest["licence-url"]);
-                $("#mecsim_licence").text(p_data.manifest["licence"]);
+
+                $("#mecsim_project_name")
+                        .attr("href", p_data.manifest["project-url"])
+                        .text(p_data.manifest["project-name"]);
+
+                $("#mecsim_licence")
+                        .attr("href", p_data.manifest["licence-url"])
+                        .text(p_data.manifest["licence"]);
+
                 $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
                 $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
                 $("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
@@ -361,15 +366,16 @@ $(document).ready(function() {
     // --- ADDITIONAL FUNCTIONS ----------------------------------------------------------------------------------------
     function load_asl_files(){
         $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
-            $("#mecsim_agent_files").empty();
+            var mecsim_agent_files = $("#mecsim_agemt_files")
+            mecsim_agent_files.empty();
             for(var i in p_data.agents){
-                $("#mecsim_agent_files")
+                mecsim_agent_files
                     .append( $("<option></option>")
                     .attr("value",p_data.agents[i])
                     .text(p_data.agents[i]));
             }
             $("#mecsim_agent_files option:first").attr('selected', true);
-            $('#mecsim_agent_files').selectmenu('refresh', true);
+            mecsim_agent_files.selectmenu('refresh');
         });
     }
 

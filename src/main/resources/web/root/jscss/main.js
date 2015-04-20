@@ -221,7 +221,12 @@ $(document).ready(function() {
             icons: {
                 primary: "ui-icon-pin-w"
             }
-        }).on("click", function(data){});
+        }).on("click", function(data){
+            $.post(
+              "cosmmouselistener/test",
+              { "name" : "sourcemode" }
+            );
+        });
 
         //Listen to the Default Agent Car Tool Button
         $("#mecsim_source_generatormode").button({

@@ -34,6 +34,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.Map;
 
 
 /**
@@ -216,6 +217,11 @@ class COSMMouseListener extends MouseAdapter
     {
         final Point2D l_position = this.getMousePosition( p_event, p_viewer );
         return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
+    }
+
+    private void web_static_test(final Map<String, Object> p_data )
+    {
+        System.out.println("test");
     }
 
 }

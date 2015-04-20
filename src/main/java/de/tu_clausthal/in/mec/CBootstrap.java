@@ -83,8 +83,8 @@ public class CBootstrap
      */
     public static void afterStageInit( final CUI p_ui )
     {
-        p_ui.add( "Main", new CWorkspace() );
         p_ui.add( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) );
+        p_ui.add( "Main", new CWorkspace() );
     }
 
 
@@ -111,6 +111,7 @@ public class CBootstrap
         p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CConfiguration.getInstance() );
+        p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getMouseListener() );
         p_server.registerObject( new CInspector() );
 
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );

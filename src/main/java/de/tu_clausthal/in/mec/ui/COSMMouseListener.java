@@ -74,6 +74,7 @@ class COSMMouseListener extends PanMouseInputListener
             }
     }
 
+
     /**
      * adds a new source
      *

@@ -34,6 +34,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
+import javax.swing.event.MouseInputListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,9 +75,11 @@ public class COSMViewer extends JXMapViewer
 
         this.setOverlayPainter( m_painter );
 
-        // new CenterMapListener(this)
-        this.addMouseListener( new COSMMouseListener( this, m_clickablelayer ) );
+        final MouseInputListener l_mouse = new COSMMouseListener( this, m_clickablelayer );
+        this.addMouseListener( l_mouse );
+        this.addMouseMotionListener( l_mouse );
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
+
 
         this.resetConfiguration();
 

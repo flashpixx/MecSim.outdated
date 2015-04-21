@@ -93,7 +93,7 @@ public class CConsole extends ByteArrayOutputStream
     }
 
     /**
-     * UI method for testing
+     * UI method - show log
      */
     private void web_dynamic_log( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {

@@ -1,73 +1,11 @@
-// --- GLOBAL PROTOTYPE FUNCTIONS --------------------------------------------------------------------------------------
-
-String.prototype.startsWith = function(prefix) {
-    return this.indexOf(prefix) === 0;
-}
-
-String.prototype.endsWith = function(suffix) {
-    return this.match(suffix+"$") == suffix;
-};
-
-// --- MECSIM ----------------------------------------------------------------------------------------------------------
-
-var MecSim = (function () {
-
-    // private variables and methods
-    var s_instance;
-
-
-    function _ctor() {return {
-
-        getWebSocket : function( p_wspath ) {
-            if ((p_wspath.startsWith("ws://")) || (p_wspath.startsWith("wss://")))
-                return new WebSocket(p_wspath);
-
-            return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (p_wspath.startsWith("/") ? p_wspath : location.pathname + p_wspath ) );
-        },
-
-        getConfiguration : function ( p_data ) {
-            var l_data = {};
-
-            $.ajax({
-                async: false,
-                url : "/cconfiguration/get",
-                success : function( p_data ) { l_data = p_data }
-            });
-
-            return l_data;
-        },
-        getMenu : function() {
-            return $("#mecsim_global_menu");
-        },
-        getAccordion : function() {
-            $("#mecsim_global_accordion").accordion({
-                active: false,
-                collapsible: true
-            })
-        },
-        getContent : function() {
-            return $("#mecsim_global_content");
-        }
-    };};
-
-
-    return {
-
-        getInstance: function () {
-            if ( !s_instance )
-                s_instance = _ctor();
-
-            return s_instance;
-        }
-
-    };
-
-})();
-
-MecSim.getInstance().getConfiguration();
-
 // --- JQUERY ----------------------------------------------------------------------------------------------------------
 $(document).ready(function() {
+
+    // singleton instanciation
+    Logger();
+    MecSim();
+    MecSim().getUI();
+
 
     var form   = "",
         dialog = "";
@@ -91,7 +29,7 @@ $(document).ready(function() {
 
 
         // logger
-        var ws_logerror = MecSim.getInstance().getWebSocket("/cconsole/error/log");
+        var ws_logerror = MecSim().getWebSocket("/cconsole/error/log");
         ws_logerror.onmessage = function( p_event ) {
             $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         };
@@ -99,7 +37,7 @@ $(document).ready(function() {
             $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         }
 
-        var ws_logout = MecSim.getInstance().getWebSocket("/cconsole/output/log");
+        var ws_logout = MecSim().getWebSocket("/cconsole/output/log");
         ws_logout.onmessage = function( p_event ) {
             $("#mecsim_global_log").append("<span class=\"mecsim_log_output\">" + p_event.data + "</span>");
         };
@@ -107,7 +45,7 @@ $(document).ready(function() {
             $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         }
 
-        var ws_inspector = MecSim.getInstance().getWebSocket("/cinspector/show");
+        var ws_inspector = MecSim().getWebSocket("/cinspector/show");
         ws_inspector.onmessage = function( p_event ) {
             console.log( p_event.data );
         };
@@ -117,10 +55,6 @@ $(document).ready(function() {
             ws_logout.close();
             ws_inspector.close();
         });
-
-
-        // load accordion
-        MecSim.getInstance().getAccordion();
 
 
         //TODO Check if really needed ?
@@ -140,7 +74,7 @@ $(document).ready(function() {
     function fileSlider() {
 
         $("#ui-id-1").on("click", function(data){
-            MecSim.getInstance().getContent().empty();
+            MecSime().getContent().empty();
         });
 
         $("#mecsim_file_preferences").button().on("click", function() {
@@ -160,7 +94,7 @@ $(document).ready(function() {
     function simulationSlider(){
 
         $("#ui-id-3").on("click", function(data){
-            MecSim.getInstance().getContent().empty();
+            MecSim().getContent().empty();
         });
 
         $("#mecsim_simulation_start").button().on("click", function(){
@@ -209,8 +143,8 @@ $(document).ready(function() {
 
         //Load the Source-GUI
         $("#ui-id-5").on("click", function(data){
-            MecSim.getInstance().getContent().empty();
-            MecSim.getInstance().getContent().load("template/source.htm", function(){
+            MecSim().getContent().empty();
+            MecSim().getContent().load("template/source.htm", function(){
                 initLayout();
                 initClusterWidget();
                 initSettingsWidget();
@@ -261,7 +195,7 @@ $(document).ready(function() {
         var g_editor;
 
         $("#ui-id-7").on("click", function() {
-            MecSim.getInstance().getContent().empty();
+            MecSim().getContent().empty();
             g_editor = CodeMirror($("#mecsim_global_content")[0], {
                 lineNumbers: true
             });
@@ -320,7 +254,7 @@ $(document).ready(function() {
     function statisticsSlider(){
         //TODO need to be implemented
         $("#ui-id-8").on("click", function(data){
-            MecSim.getInstance().getContent().empty();
+            MecSim().getContent().empty();
         });
     }
 
@@ -328,7 +262,7 @@ $(document).ready(function() {
     function helpSlider(){
 
         $("#ui-id-10").on("click", function(data){
-            MecSim.getInstance().getContent().empty();
+            MecSim().getContent().empty();
         });
 
         $("#mecsim_help_about").button().on("click", function(){
@@ -355,13 +289,13 @@ $(document).ready(function() {
         $("#mecsim_help_userdoku").button().on("click", function(){
             $.get("/userdoc/", function( p_result ) {
                 console.log(p_result);
-                MecSim.getInstance().getContent().empty();
-                MecSim.getInstance().getContent().append( p_result );
+                MecSim().getContent().empty();
+                MecSim().getContent().append( p_result );
             });
         });
 
         $("#mecsim_help_devdoku").button().on("click", function(){
-            MecSim.getInstance().getContent().load("template/develdoc.htm");
+            MecSim().getContent().load("template/develdoc.htm");
         });
     }
 

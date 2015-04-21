@@ -29,9 +29,12 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CTreeNode;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
+import de.tu_clausthal.in.mec.ui.web.CSocketStorage;
+import de.tu_clausthal.in.mec.ui.web.CWebSocket;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +42,7 @@ import java.util.Set;
 
 /**
  * message handler class
+ * @bug counting incomplete
  */
 public class CMessageSystem implements IVoidSteppable
 {
@@ -50,6 +54,14 @@ public class CMessageSystem implements IVoidSteppable
      * tree structure of all objects (root-node is equal to this object)
      */
     private final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
+    /**
+     * message counter
+     */
+    private final Pair<Map<CPath, Integer>, Map<CPath, Integer>> m_messagecounter = new ImmutablePair<>( new HashMap<>(), new HashMap<>() );
+    /**
+     * set with all communicators
+     */
+    private final CSocketStorage m_communicator = new CSocketStorage();
 
 
     /**
@@ -184,6 +196,8 @@ public class CMessageSystem implements IVoidSteppable
             // clear all messages, that are received
             l_item.getRight().clear();
         }
+
+        m_communicator.send( CCommon.toJson( m_messagecounter ) );
     }
 
 
@@ -196,7 +210,17 @@ public class CMessageSystem implements IVoidSteppable
     @Override
     public final void release()
     {
+        m_messagecounter.getKey().clear();
+        m_messagecounter.getValue().clear();
+    }
 
+
+    /**
+     * UI method - message counting information
+     */
+    private void web_dynamic_messagecount( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
+    {
+        m_communicator.handshake( p_action, p_communicator );
     }
 
 

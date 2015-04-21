@@ -31,6 +31,7 @@ import org.pmw.tinylog.writers.ConsoleWriter;
 import org.pmw.tinylog.writers.FileWriter;
 
 import java.util.Collection;
+import java.util.Map;
 
 
 /**
@@ -38,7 +39,10 @@ import java.util.Collection;
  */
 public class CLogger
 {
-
+    /**
+     * object instance to bind web UI calls *
+     */
+    private static final CLogger s_instance = new CLogger();
     /**
      * stack index of traces
      */
@@ -52,7 +56,7 @@ public class CLogger
     static
     {
 
-        // stack trace difference between JDK 1.5 and 1.6
+        // stack trace difference between JDK 1.5 and >= 1.6
         int i = 0;
         for ( StackTraceElement l_trace : Thread.currentThread().getStackTrace() )
         {
@@ -68,6 +72,17 @@ public class CLogger
      */
     private CLogger()
     {
+    }
+
+
+    /**
+     * returns logger instance
+     *
+     * @return logger instance
+     */
+    public static CLogger getInstance()
+    {
+        return s_instance;
     }
 
 
@@ -276,19 +291,6 @@ public class CLogger
     }
 
     /**
-     * adds a warn message
-     *
-     * @param p_data log data
-     * @return input data
-     * @tparam input data type
-     */
-    public static <T> T warn( final T p_data )
-    {
-        warn( p_data, true );
-        return p_data;
-    }
-
-    /**
      * adds a error message
      */
     public static void error()
@@ -368,19 +370,6 @@ public class CLogger
     }
 
     /**
-     * adds an info message
-     *
-     * @param p_data log data
-     * @return input data
-     * @tparam input data type
-     */
-    public static <T> T info( final T p_data )
-    {
-        info( p_data, true );
-        return p_data;
-    }
-
-    /**
      * adds a debug message
      */
     public static void debug()
@@ -411,19 +400,6 @@ public class CLogger
     public static void debug( final boolean p_write )
     {
         debug( null, p_write );
-    }
-
-    /**
-     * adds a debug message
-     *
-     * @param p_data log data
-     * @return input data
-     * @tparam input data type
-     */
-    public static <T> T debug( final T p_data )
-    {
-        debug( p_data, true );
-        return p_data;
     }
 
     /**
@@ -462,6 +438,95 @@ public class CLogger
     public static void out( final boolean p_write )
     {
         out( null, p_write );
+    }
+
+    /**
+     * UI method - log warn
+     *
+     * @param p_data UI input data
+     */
+    private void web_static_warn( final Map<String, Object> p_data )
+    {
+        CLogger.warn( p_data );
+    }
+
+    /**
+     * adds a warn message
+     *
+     * @param p_data log data
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T warn( final T p_data )
+    {
+        warn( p_data, true );
+        return p_data;
+    }
+
+    /**
+     * UI method - log error
+     *
+     * @param p_data UI input data
+     */
+    private void web_static_error( final Map<String, Object> p_data )
+    {
+        CLogger.info( p_data );
+    }
+
+    /**
+     * adds an info message
+     *
+     * @param p_data log data
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T info( final T p_data )
+    {
+        info( p_data, true );
+        return p_data;
+    }
+
+    /**
+     * UI method - log info
+     *
+     * @param p_data UI input data
+     */
+    private void web_static_info( final Map<String, Object> p_data )
+    {
+        CLogger.info( p_data );
+    }
+
+    /**
+     * UI method - log debug
+     *
+     * @param p_data UI input data
+     */
+    private void web_static_debug( final Map<String, Object> p_data )
+    {
+        CLogger.debug( p_data );
+    }
+
+    /**
+     * adds a debug message
+     *
+     * @param p_data log data
+     * @return input data
+     * @tparam input data type
+     */
+    public static <T> T debug( final T p_data )
+    {
+        debug( p_data, true );
+        return p_data;
+    }
+
+    /**
+     * UI method - log info
+     *
+     * @param p_data UI input data
+     */
+    private void web_static_out( final Map<String, Object> p_data )
+    {
+        CLogger.out( p_data );
     }
 
     /**

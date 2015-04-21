@@ -111,6 +111,7 @@ public class CBootstrap
         p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CConfiguration.getInstance() );
+        p_server.registerObject( CLogger.getInstance() );
         p_server.registerObject( new CInspector() );
 
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );

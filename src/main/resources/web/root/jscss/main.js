@@ -72,6 +72,7 @@ $(document).ready(function() {
     var form   = "",
         dialog = "";
 
+    //TODO e.g. logger call $.post/get("clogger/info", { "x" : "blub blub" } );
     //TODO not work on external include of main.js
 
     layoutInit();
@@ -116,6 +117,7 @@ $(document).ready(function() {
             ws_logout.close();
             ws_inspector.close();
         });
+
 
         // load accordion
         MecSim.getInstance().getAccordion();

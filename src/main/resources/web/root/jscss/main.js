@@ -368,7 +368,7 @@ $(document).ready(function() {
     // --- ADDITIONAL FUNCTIONS ----------------------------------------------------------------------------------------
     function load_asl_files(){
         $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
-            var mecsim_agent_files = $("#mecsim_agemt_files")
+            var mecsim_agent_files = $("#mecsim_agent_files")
             mecsim_agent_files.empty();
             for(var i in p_data.agents){
                 mecsim_agent_files

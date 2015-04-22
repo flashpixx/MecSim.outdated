@@ -123,7 +123,7 @@ public class COSMViewer extends JXMapViewer
      *
      * @return map with layer list
      */
-    private Map<String, Object> web_static_getClickableLayer()
+    private Map<String, Object> web_static_listClickableLayer()
     {
         final Map<String, Object> l_layer = new HashMap<>();
         for ( EClickableLayer l_item : EClickableLayer.class.getEnumConstants() )

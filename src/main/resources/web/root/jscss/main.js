@@ -136,6 +136,21 @@ $(document).ready(function() {
         });
 
         $( "#speed" ).val( $( "#mecsim_speed_slider" ).slider( "value" ) );
+
+
+        // @todo set must be called
+        $.ajax({
+            url     : "/cosmviewer/listclickablelayer",
+            success : function( px_data ){
+                $.each( px_data, function( pc_key, px_value ) {
+                    $( "#mecsim_simulationlayer" ).append( "<li class=\"ui-state-default\" id=\"" + pc_key + "\">" + pc_key + "</li>" );
+                });
+
+                $( "#mecsim_simulationlayer" ).sortable({ placeholder: "ui-state-highlight" });
+                $( "#mecsim_simulationlayer" ).disableSelection();
+            }
+        });
+
     }
 
     // --- SOURCE PANEL ------------------------------------------------------------------------------------------------

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.runtime.message;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CAdjacencyMatrix;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CTreeNode;
@@ -34,7 +35,6 @@ import de.tu_clausthal.in.mec.ui.web.CWebSocket;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +42,7 @@ import java.util.Set;
 
 /**
  * message handler class
+ *
  * @bug counting incomplete
  */
 public class CMessageSystem implements IVoidSteppable
@@ -57,7 +58,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * message counter
      */
-    private final Pair<Map<CPath, Integer>, Map<CPath, Integer>> m_messagecounter = new ImmutablePair<>( new HashMap<>(), new HashMap<>() );
+    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>();
     /**
      * set with all communicators
      */
@@ -139,23 +140,23 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * pushs a message to the queue
      *
-     * @param p_path receiver
+     * @param p_receiverpath receiver
      * @param p_message message
      */
-    public final synchronized void pushMessage( final CPath p_path, final IMessage<?> p_message )
+    public final synchronized void pushMessage( final CPath p_receiverpath, final IMessage<?> p_message )
     {
-        if ( ( p_path == null ) || ( p_message == null ) || ( p_path.isEmpty() ) )
+        if ( ( p_receiverpath == null ) || ( p_message == null ) || ( p_receiverpath.isEmpty() ) )
             return;
 
-        if ( !m_root.pathExist( p_path ) )
+        if ( !m_root.pathExist( p_receiverpath ) )
         {
-            CLogger.error( CCommon.getResourceString( this, "messagefail", p_message.getData(), p_path ) );
+            CLogger.error( CCommon.getResourceString( this, "messagefail", p_message.getData(), p_receiverpath ) );
             return;
         }
 
-        if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( p_message.getSource().getPath().equals( p_path ) ) )
+        if ( ( p_message.getSource() == null ) || ( p_message.getSource().isEmpty() ) || ( p_message.getSource().getPath().equals( p_receiverpath ) ) )
         {
-            CLogger.error( CCommon.getResourceString( this, "push", p_message, p_path ) );
+            CLogger.error( CCommon.getResourceString( this, "push", p_message, p_receiverpath ) );
             return;
         }
 
@@ -166,7 +167,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_path ).getTreeData() )
+        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_receiverpath ).getTreeData() )
         {
             // if item equal null skip
             if ( l_item == null )
@@ -176,7 +177,14 @@ public class CMessageSystem implements IVoidSteppable
         }
 
         for ( IActionListener l_item : m_listener )
-            l_item.onPushMessage( p_path, p_message );
+            l_item.onPushMessage( p_receiverpath, p_message );
+
+        // increment message flow
+        m_messageflow.set(
+                p_message.getSource(), p_receiverpath, ( m_messageflow.exist( p_message.getSource(), p_receiverpath ) ? m_messageflow.get(
+                        p_message.getSource(), p_receiverpath
+                ) : new Integer( -1 ) ) + 1
+        );
     }
 
 
@@ -197,7 +205,7 @@ public class CMessageSystem implements IVoidSteppable
             l_item.getRight().clear();
         }
 
-        m_communicator.send( CCommon.toJson( m_messagecounter ) );
+        m_communicator.send( CCommon.toJson( m_messageflow ) );
     }
 
 
@@ -210,8 +218,7 @@ public class CMessageSystem implements IVoidSteppable
     @Override
     public final void release()
     {
-        m_messagecounter.getKey().clear();
-        m_messagecounter.getValue().clear();
+        m_messageflow.clear();
     }
 
 

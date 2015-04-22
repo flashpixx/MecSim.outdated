@@ -142,9 +142,11 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         // no websocket
         try
         {
-            // get location
+            // get location - and check if it is a websocket
             final IVirtualLocation l_location = m_virtuallocation.get( p_session );
 
+            if ( l_location instanceof CVirtualDynamicMethod )
+                throw new Exception();
             if ( l_location instanceof CVirtualStaticMethod )
                 return this.setDefaultHeader( this.getVirtualStaticMethod( l_location, p_session ), p_session );
 
@@ -206,6 +208,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         final Response l_response;
+
         final URL l_physicalfile = p_location.<URL>get( p_session );
         final String l_mimetype = this.getMimeType( l_physicalfile );
         CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );

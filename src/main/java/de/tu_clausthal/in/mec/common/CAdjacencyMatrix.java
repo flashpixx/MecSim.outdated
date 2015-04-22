@@ -96,18 +96,6 @@ public class CAdjacencyMatrix<T, N>
 
 
     /**
-     * returns a matrix
-     *
-     * @return matrix representation
-     */
-    public CCell[][] getMatrix()
-    {
-        final CCell<T, N>[][] l_matrix = new CCell[m_matrix.size()][m_matrix.size()];
-        return l_matrix;
-    }
-
-
-    /**
      * cell element representation of a graph element
      */
     public class CCell<P, M>

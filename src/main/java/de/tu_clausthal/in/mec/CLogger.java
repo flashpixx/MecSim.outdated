@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
@@ -51,6 +52,10 @@ public class CLogger
      * defines the global log level
      */
     private static Level s_level = Level.OFF;
+    /**
+     * define ths flag, that the log is passend to the output
+     */
+    private static boolean s_logoutput = false;
 
     /** initialization **/
     static
@@ -85,7 +90,6 @@ public class CLogger
         return s_instance;
     }
 
-
     /**
      * creates the logger with properties
      *
@@ -95,8 +99,9 @@ public class CLogger
     public static void create( final Level p_level, final String p_filename )
     {
         s_level = p_level;
+        s_logoutput = p_filename.equalsIgnoreCase( "console" );
         Configurator.defaultConfig().writer(
-                p_level == Level.OFF ? null : p_filename.equalsIgnoreCase( "console" ) ? new ConsoleWriter() : new FileWriter(
+                p_level == Level.OFF ? null : s_logoutput ? new ConsoleWriter() : new FileWriter(
                         p_filename
                 )
         ).level(
@@ -438,6 +443,16 @@ public class CLogger
     public static void out( final boolean p_write )
     {
         out( null, p_write );
+    }
+
+    /**
+     * UI method - returns the loger definition
+     *
+     * @return map with definition
+     */
+    private Map<String, Object> web_static_warn()
+    {
+        return CCommon.getMap( "level", s_level, "outputconsole", s_logoutput );
     }
 
     /**

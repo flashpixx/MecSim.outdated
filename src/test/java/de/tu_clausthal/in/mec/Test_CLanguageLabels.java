@@ -27,6 +27,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -157,9 +158,22 @@ public class Test_CLanguageLabels
         }
 
         @Override
+        public void visit( final EnumDeclaration p_enum, final Object p_arg )
+        {
+            if ( m_outerclass.isEmpty() )
+            {
+                m_outerclass = p_enum.getName();
+                m_innerclass = m_outerclass;
+            }
+            else
+                m_innerclass = m_outerclass + "$" + p_enum.getName();
+            super.visit( p_enum, p_arg );
+        }
+
+        @Override
         public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
         {
-            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_innerclass );
+            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_outerclass, m_innerclass );
             if ( l_label != null )
                 this.checkLabel( l_label[0], l_label[1] );
             super.visit( p_methodcall, p_arg );
@@ -179,7 +193,7 @@ public class Test_CLanguageLabels
          * @param p_line input timmed line
          * @return null or array with class & label name
          */
-        private String[] getParameter( final String p_line, final String p_package, final String p_class )
+        private String[] getParameter( final String p_line, final String p_package, final String p_outerclass, final String p_innerclass )
         {
             final Matcher l_matcher = m_language.matcher( p_line );
             if ( !l_matcher.find() )
@@ -195,12 +209,12 @@ public class Test_CLanguageLabels
 
             // setup class name
             if ( "this".equals( l_return[0] ) )
-                l_return[0] = p_package + "." + p_class;
+                l_return[0] = p_package + "." + p_innerclass;
             else if ( l_return[0].endsWith( ".class" ) )
             {
                 l_return[0] = l_return[0].replace( ".class", "" );
                 if ( !l_return[0].contains( "." ) )
-                    l_return[0] = p_package + "." + l_return[0];
+                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ? "." + m_outerclass + "$" : "." ) + l_return[0];
             }
 
             return l_return;

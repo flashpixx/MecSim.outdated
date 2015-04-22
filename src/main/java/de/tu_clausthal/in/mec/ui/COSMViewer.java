@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
+import de.tu_clausthal.in.mec.common.CCommon;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
@@ -127,7 +128,8 @@ public class COSMViewer extends JXMapViewer
     {
         final Map<String, Object> l_layer = new HashMap<>();
         for ( EClickableLayer l_item : EClickableLayer.class.getEnumConstants() )
-            l_layer.put( l_item.name(), l_item == m_clickablelayer );
+            // name() cannot be overwritten
+            l_layer.put( l_item.toString(), l_item == m_clickablelayer );
         return l_layer;
     }
 
@@ -149,11 +151,38 @@ public class COSMViewer extends JXMapViewer
         /**
          * source layer *
          */
-        Sources,
+        Sources( CCommon.getResourceString( EClickableLayer.class, "source" ) ),
         /**
          * forbidden edges layer *
          */
-        ForbiddenEdges
+        ForbiddenEdges( CCommon.getResourceString( EClickableLayer.class, "forbiddenedges" ) );
+
+
+        /**
+         * internal string value *
+         */
+        private final String m_stringvalue;
+
+        /**
+         * private ctor
+         *
+         * @param p_value string
+         */
+        private EClickableLayer( final String p_value )
+        {
+            m_stringvalue = p_value;
+        }
+
+        /**
+         * overload to string - name cannot be overwritten
+         *
+         * @return string name
+         */
+        @Override
+        public String toString()
+        {
+            return m_stringvalue;
+        }
     }
 
 }

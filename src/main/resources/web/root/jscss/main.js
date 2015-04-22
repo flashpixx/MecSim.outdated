@@ -151,7 +151,7 @@ $(document).ready(function() {
             }
         });
 
-        // @todo switch-buttons must be setup (http://olance.github.io/jQuery-switchButton/)
+        // @todo switch-buttons must be setup (http://www.bootstrap-switch.org/)
         $.ajax({
             url     : "/csimulation/listlayer",
             success : function( px_data ){

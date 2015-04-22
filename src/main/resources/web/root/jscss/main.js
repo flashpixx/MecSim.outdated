@@ -143,11 +143,23 @@ $(document).ready(function() {
             url     : "/cosmviewer/listclickablelayer",
             success : function( px_data ){
                 $.each( px_data, function( pc_key, px_value ) {
-                    $( "#mecsim_simulationlayer" ).append( "<li class=\"ui-state-default\" id=\"" + pc_key + "\">" + pc_key + "</li>" );
+                    $( "#mecsim_osmclickablelayer" ).append( "<li class=\"ui-state-default\" id=\"" + pc_key + "\">" + pc_key + "</li>" );
                 });
 
-                $( "#mecsim_simulationlayer" ).sortable({ placeholder: "ui-state-highlight" });
-                $( "#mecsim_simulationlayer" ).disableSelection();
+                $( "#mecsim_osmclickablelayer" ).sortable({ placeholder: "ui-state-highlight" });
+                $( "#mecsim_osmclickablelayer" ).disableSelection();
+            }
+        });
+
+        // @todo switch-buttons must be setup (http://olance.github.io/jQuery-switchButton/)
+        $.ajax({
+            url     : "/csimulation/listlayer",
+            success : function( px_data ){
+                $.each( px_data, function( pc_key, px_value ) {
+                    $( "#mecsim_simulationlayer" ).append( "<li class=\"ui-widget-content\" id=\"" + pc_key + "\">" + pc_key + "</li>" );
+                });
+
+                $( "#mecsim_simulationlayer" ).selectable();
             }
         });
 

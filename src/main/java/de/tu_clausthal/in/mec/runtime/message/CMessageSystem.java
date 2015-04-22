@@ -218,7 +218,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * UI method - message counting information
      */
-    private void web_dynamic_messagecount( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
+    private void web_dynamic_flow( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {
         m_communicator.handshake( p_action, p_communicator );
     }

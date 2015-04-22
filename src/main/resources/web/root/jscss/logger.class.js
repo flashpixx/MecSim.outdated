@@ -24,7 +24,7 @@
 
 
 /**
- * global logger singleton
+ * global singleton prototype MecSim logger
  * @return instance
  **/
 function Logger()
@@ -34,6 +34,9 @@ function Logger()
     if ( arguments.callee._singletonInstance )
         return arguments.callee._singletonInstance;
     arguments.callee._singletonInstance = this;
+
+    //@todo ctor need to modify content panel
+
 
 
     /**

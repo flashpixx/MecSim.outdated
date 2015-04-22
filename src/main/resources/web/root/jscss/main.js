@@ -4,13 +4,13 @@ $(document).ready(function() {
     // singleton instanciation
     Logger();
     MecSim();
-    MecSim().getUI();
+    UI();
+
 
 
     var form   = "",
         dialog = "";
 
-    //TODO e.g. logger call $.post/get("clogger/info", { "x" : "blub blub" } );
     //TODO not work on external include of main.js
 
     layoutInit();
@@ -74,7 +74,7 @@ $(document).ready(function() {
     function fileSlider() {
 
         $("#ui-id-1").on("click", function(data){
-            MecSime().getContent().empty();
+            UI().getContent().empty();
         });
 
         $("#mecsim_file_preferences").button().on("click", function() {
@@ -94,7 +94,7 @@ $(document).ready(function() {
     function simulationSlider(){
 
         $("#ui-id-3").on("click", function(data){
-            MecSim().getContent().empty();
+            UI().getContent().empty();
         });
 
         $("#mecsim_simulation_start").button().on("click", function(){
@@ -143,8 +143,8 @@ $(document).ready(function() {
 
         //Load the Source-GUI
         $("#ui-id-5").on("click", function(data){
-            MecSim().getContent().empty();
-            MecSim().getContent().load("template/source.htm", function(){
+            UI().getContent().empty();
+            UI().getContent().load("template/source.htm", function(){
                 initLayout();
                 initClusterWidget();
                 initSettingsWidget();
@@ -195,7 +195,7 @@ $(document).ready(function() {
         var g_editor;
 
         $("#ui-id-7").on("click", function() {
-            MecSim().getContent().empty();
+            UI().getContent().empty();
             g_editor = CodeMirror($("#mecsim_global_content")[0], {
                 lineNumbers: true
             });
@@ -254,7 +254,7 @@ $(document).ready(function() {
     function statisticsSlider(){
         //TODO need to be implemented
         $("#ui-id-8").on("click", function(data){
-            MecSim().getContent().empty();
+            UI().getContent().empty();
         });
     }
 
@@ -262,7 +262,7 @@ $(document).ready(function() {
     function helpSlider(){
 
         $("#ui-id-10").on("click", function(data){
-            MecSim().getContent().empty();
+            UI().getContent().empty();
         });
 
         $("#mecsim_help_about").button().on("click", function(){
@@ -289,13 +289,13 @@ $(document).ready(function() {
         $("#mecsim_help_userdoku").button().on("click", function(){
             $.get("/userdoc/", function( p_result ) {
                 console.log(p_result);
-                MecSim().getContent().empty();
-                MecSim().getContent().append( p_result );
+                UI().getContent().empty();
+                UI().getContent().append( p_result );
             });
         });
 
         $("#mecsim_help_devdoku").button().on("click", function(){
-            MecSim().getContent().load("template/develdoc.htm");
+            UI().getContent().load("template/develdoc.htm");
         });
     }
 

@@ -23,10 +23,10 @@
 
 
 /**
- * global singleton prototype of MecSim calls
+ * global singleton prototype of MecSim UI calls
  * @return instance
  */
-function MecSim()
+function UI()
 {
 
     /** instantiation **/
@@ -43,29 +43,23 @@ function MecSim()
 
 
     /**
-     * creates a websocket instance
-     * @param pc_wspath path of the web socket (relative or full URI)
-     * @returns websocket instance
+     * returns the UI components
+     * @returns JSON object with UI references
      */
-    this.getWebSocket = function( pc_wspath )
+    this.get = function()
     {
-        if ((pc_wspath.startsWith("ws://")) || (pc_wspath.startsWith("wss://")))
-            return new WebSocket(pc_wspath);
-
-        return new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (pc_wspath.startsWith("/") ? pc_wspath : location.pathname + pc_wspath ) );
+        return m_ui;
     };
 
 
     /**
-     * reads the configuration JSON data
-     * @param px_success success function call
-     */
-    this.getConfiguration = function( px_success )
+     * need for unrefactored code
+     * @todo remove
+     **/
+    this.getContent = function()
     {
-        $.ajax({
-            url : "/cconfiguration/get",
-            success : px_success
-        });
-    };
+        return m_ui.content;
+    }
 
-};
+
+}

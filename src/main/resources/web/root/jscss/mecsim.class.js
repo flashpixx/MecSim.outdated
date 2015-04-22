@@ -24,15 +24,22 @@
 
 /**
  * global singleton prototype of MecSim calls
- * @return object
+ * @return instance
  */
 function MecSim()
 {
 
-    // instantiation
+    /** instantiation **/
     if ( arguments.callee._singletonInstance )
         return arguments.callee._singletonInstance;
     arguments.callee._singletonInstance = this;
+
+    /** private UI components **/
+    var m_ui = {
+        accordion   : $("#mecsim_global_accordion").accordion({ active: false, collapsible: true }),
+        menu        : $("#mecsim_global_menu"),
+        content     : $("#mecsim_global_content")
+    };
 
 
     /**
@@ -73,13 +80,17 @@ function MecSim()
      */
     this.getUI = function()
     {
-        return {
-
-            accordion   : $("#mecsim_global_accordion").accordion({ active: false, collapsible: true }),
-            menu        : $("#mecsim_global_menu"),
-            content     : $("#mecsim_global_content")
-        };
-
+        return m_ui;
     };
+
+
+    /**
+     * need for unrefactored code
+     * @todo remove
+     **/
+    this.getContent = function()
+    {
+        return m_ui.content;
+    }
 
 };

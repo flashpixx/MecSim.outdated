@@ -29,7 +29,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -41,10 +40,6 @@ public class CAdjacencyMatrix<T, N>
      * map with data *
      */
     private final Map<Pair<T, T>, N> m_matrix = new HashMap();
-    /** **/
-    private final Map<T, Set<Pair<T, T>>> m_column = new HashMap<>();
-    /** **/
-    private final Map<T, Set<Pair<T, T>>> m_rows = new HashMap<>();
 
 
     /**
@@ -52,8 +47,6 @@ public class CAdjacencyMatrix<T, N>
      */
     public void clear()
     {
-        m_rows.clear();
-        m_column.clear();
         m_matrix.clear();
     }
 
@@ -66,7 +59,9 @@ public class CAdjacencyMatrix<T, N>
      */
     public void remove( final T p_row, final T p_column )
     {
-        m_matrix.remove( new ImmutablePair<T, T>( p_row, p_column ) );
+        final Pair<T, T> l_key = new ImmutablePair<>( p_row, p_column );
+
+        m_matrix.remove( l_key );
     }
 
     /**
@@ -76,7 +71,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public void set( final T p_row, final T p_column, final N p_value )
     {
-        m_matrix.put( new ImmutablePair<T, T>( p_row, p_column ), p_value );
+        final Pair<T, T> l_key = new ImmutablePair<>( p_row, p_column );
     }
 
     /**
@@ -86,7 +81,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public N get( final T p_row, final T p_column )
     {
-        return m_matrix.get( new ImmutablePair<T, T>( p_row, p_column ) );
+        return m_matrix.get( new ImmutablePair<>( p_row, p_column ) );
     }
 
     /**
@@ -96,45 +91,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public boolean exist( final T p_row, final T p_column )
     {
-        return m_matrix.containsKey( new ImmutablePair<T, T>( p_row, p_column ) );
-    }
-
-
-    /**
-     * returns all row values
-     *
-     * @param p_row row value
-     * @return hashmap with row data
-     */
-    public Map<Pair<T, T>, N> getRow( final T p_row )
-    {
-        if ( !m_rows.containsKey( p_row ) )
-            return null;
-
-        final Map<Pair<T, T>, N> l_data = new HashMap<>();
-        for ( Pair<T, T> l_item : m_rows.get( p_row ) )
-            l_data.put( l_item, m_matrix.get( l_item ) );
-
-        return l_data;
-    }
-
-
-    /**
-     * returns all column values
-     *
-     * @param p_column column value
-     * @return hashmap with row data
-     */
-    public Map<Pair<T, T>, N> getColumn( final T p_column )
-    {
-        if ( !m_column.containsKey( p_column ) )
-            return null;
-
-        final Map<Pair<T, T>, N> l_data = new HashMap<>();
-        for ( Pair<T, T> l_item : m_column.get( p_column ) )
-            l_data.put( l_item, m_matrix.get( l_item ) );
-
-        return l_data;
+        return m_matrix.containsKey( new ImmutablePair<>( p_row, p_column ) );
     }
 
 

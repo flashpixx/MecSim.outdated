@@ -35,8 +35,18 @@ function Logger()
         return arguments.callee._singletonInstance;
     arguments.callee._singletonInstance = this;
 
-    //@todo ctor need to modify content panel
 
+    /**
+     * read the configuration of the logger
+     * @param px_success success function call
+     */
+    this.getConfiguration = function( px_success )
+    {
+        $.ajax({
+            url : "/clogger/configuration",
+            success : px_success
+        });
+    };
 
 
     /**

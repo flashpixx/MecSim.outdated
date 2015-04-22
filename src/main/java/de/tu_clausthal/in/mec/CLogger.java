@@ -450,7 +450,7 @@ public class CLogger
      *
      * @return map with definition
      */
-    private Map<String, Object> web_static_warn()
+    private Map<String, Object> web_static_configuration()
     {
         return CCommon.getMap( "level", s_level, "outputconsole", s_logoutput );
     }

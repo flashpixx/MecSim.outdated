@@ -391,3 +391,54 @@ function generateData(){
 
     return result;
 }
+
+// --- SOURCE PANEL ------------------------------------------------------------------------------------------------
+function sourceSlider(){
+
+    //Load the Source-GUI
+    $("#ui-id-5").on("click", function(data){
+        UI().getContent().empty();
+        UI().getContent().load("template/source.htm", function(){
+            initLayout();
+            initClusterWidget();
+            initSettingsWidget();
+            initTargetWeighting();
+        });
+    });
+
+    //Listen to the Default Car Tool Button
+    $("#mecsim_source_sourcemode").button({
+        icons: {
+            primary: "ui-icon-pin-w"
+        }
+    }).on("click", function(data){
+        $.post(
+          "cosmmouselistener/setsourcelayertool",
+          { "tool" : "sourcemode" }
+        );
+    });
+
+    //Listen to the Default Agent Car Tool Button
+    $("#mecsim_source_generatormode").button({
+        icons: {
+            primary: "ui-icon-arrowrefresh-1-e"
+        }
+    }).on("click", function(data){
+        $.post(
+          "cosmmouselistener/setsourcelayertool",
+          { "tool" : "generatormode" }
+        );
+    });
+
+    //Listen to the Target Tool Button
+    $("#mecsim_source_targetmode").button({
+        icons: {
+            primary: "ui-icon-flag"
+        }
+    }).on("click", function(data){
+        $.post(
+          "cosmmouselistener/setsourcelayertool",
+          { "tool" : "targetmode" }
+        );
+    });
+}

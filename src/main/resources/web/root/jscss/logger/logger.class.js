@@ -48,7 +48,6 @@ function Logger()
         });
     };
 
-
     /**
      * write warn message
      * @param px_value writing object
@@ -98,4 +97,18 @@ function Logger()
         $.post("clogger/error", px_value );
     };
 
+    /**
+     * close logger
+     * @param px_value writing object
+     */
+    this.onClose = function( px_value )
+    {
+        $(window).on("beforeunload", function() {
+            ws_logerror.close();
+            ws_logout.close();
+            ws_inspector.close();
+        });
+    }
+
 };
+

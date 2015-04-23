@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.common;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -156,6 +157,27 @@ public class CNameHashMap extends HashMap<String, Object>
     public final <T> T getTypedValue( final String p_key )
     {
         return (T) this.get( p_key );
+    }
+
+    public final Iterator<Map.Entry<CPath, Object>> iterator()
+    {
+        return new Iterator<Map.Entry<CPath, Object>>()
+        {
+            private Iterator<Map.Entry<String, Object>> m_iterator = CNameHashMap.super.entrySet().iterator();
+
+            @Override
+            public boolean hasNext()
+            {
+                return m_iterator.hasNext();
+            }
+
+            @Override
+            public Map.Entry<CPath, Object> next()
+            {
+                final Map.Entry<String, Object> l_item = m_iterator.next();
+                return null;
+            }
+        };
     }
 
 

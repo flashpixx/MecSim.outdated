@@ -11,22 +11,14 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false
-            //sortComp: this.sortByDistanceComp()
+            //sortComp: SourcePanel.sortByDistanceComp()
 
             //cluster data
             /*var model;
-            var cluster;
-            var bundle;
-            var line;
-            var bundle;
-            var svg;
-            var nodecontainer;
-            var linkcontainer;
             var nodes;
             var links;*/
 
             //target weightng
-            //var targetweighting
 
         },
 
@@ -39,18 +31,18 @@ var mecsim_source,
         initLayout: function() {
 
             //basic layout (jquerry ui widgets)
-            /*$("#mecsim_source_generatorsettings").resizable({
+            $("#mecsim_source_generatorsettings").resizable({
                 animate: true,
                 minHeight: 255,
                 minWidth: 500
-            });*/
+            });
 
-            /*targetweighting = $("#mecsim_source_targetweighting")
-            targetweighting.resizable({
+            SourcePanel.settings.targetweighting = $("#mecsim_source_targetweighting")
+            SourcePanel.settings.targetweighting.resizable({
                 animate: true,
                 minHeight: 375,
                 minWidth: 500
-            });*/
+            });
 
         },
 
@@ -58,34 +50,34 @@ var mecsim_source,
         initClusterWidget: function() {
 
             //listen to the sorting buttons
-            /*$("#mecsim_source_sortByDistance").on("click", function(){sort(sortByDistanceComp)});
+            $("#mecsim_source_sortByDistance").on("click", function(){sort(sortByDistanceComp)});
             $("#mecsim_source_sortByType").on("click", function(){sort(sortByTypeComp)});
             $("#mecsim_source_sortByName").on("click", function(){sort(sortByNameComp)});
 
-            cluster = d3.layout.cluster()
-                .size([360, innerRadius])
-                .sort(sortComp);
+            SourcePanel.settings.cluster = d3.layout.cluster()
+                .size([360, SourcePanel.settings.innerRadius])
+                //.sort(SourcePanel.settings.sortComp);
 
-            bundle = d3.layout.bundle();
+            SourcePanel.settings.bundle = d3.layout.bundle();
 
-            line = d3.svg.line.radial()
+            SourcePanel.settings.line = d3.svg.line.radial()
                 .interpolate("bundle")
                 .tension(0.75)
                 .radius(function(d) { return d.y; })
                 .angle(function(d) { return d.x / 180 * Math.PI; });
 
-            svg = d3.select("#mecsim_source_cluster").append("svg")
-                .attr("width", diameter)
-                .attr("height", diameter)
+            SourcePanel.settings.svg = d3.select("#mecsim_source_cluster").append("svg")
+                .attr("width", SourcePanel.settings.diameter)
+                .attr("height", SourcePanel.settings.diameter)
                 .attr("oncontextmenu", "return false;")
                 .append("g")
-                .attr("transform", "translate(" + radius + "," + radius + ")");
+                .attr("transform", "translate(" + SourcePanel.settings.radius + "," + SourcePanel.settings.radius + ")");
 
-            nodecontainer = svg.append("g").selectAll(".mecsim_source_node");
-            linkcontainer = svg.append("g").selectAll(".mecsim_source_link");
+            SourcePanel.settings.nodecontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_node");
+            SourcePanel.settings.linkcontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_link");
 
             //readFile("daten2.json", createCluster);
-            createCluster(generateData());*/
+            //createCluster(generateData());
 
         },
 
@@ -317,14 +309,14 @@ var mecsim_source,
         //},
 
         //comparator for sorting the cluster by distance
-        //sortByDistanceComp: function(a, b) {
+        sortByDistanceComp: function(a, b) {
 
-            /*var distance1 = getDistance(a.lat, a.long);
+            var distance1 = getDistance(a.lat, a.long);
             var distance2 = getDistance(b.lat, b.long);
 
-            return distance1 > distance2 ? 1 : -1;*/
+            return distance1 > distance2 ? 1 : -1;
 
-        //},
+        },
 
         //comparator for sorting the cluster by type
         //sortByTypeComp: function(a, b) {
@@ -441,12 +433,12 @@ var mecsim_source,
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
                 UI().getContent().empty();
-                /*UI().getContent().load("template/source.htm", function(){
-                    initLayout();
-                    initClusterWidget();
-                    initSettingsWidget();
-                    initTargetWeighting();
-                });*/
+                UI().getContent().load("template/source.htm", function(){
+                    SourcePanel.initLayout();
+                    SourcePanel.initClusterWidget();
+                    //initSettingsWidget();
+                    //initTargetWeighting();
+                });
             });
 
             //Listen to the Default Car Tool Button

@@ -19,6 +19,7 @@ $.when(
     EditorPanel.init();
     SimulationPanel.init();
     FilePanel.init();
+    HelpPanel.init();
 
     // splitter
     $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });

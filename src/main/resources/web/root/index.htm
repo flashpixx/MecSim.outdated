@@ -47,13 +47,13 @@
     <script type = "text/javascript" src = "jscss/ui/ui.class.js" ></script >
     <script type = "text/javascript" src = "jscss/logger/logger.class.js" ></script >
     <script type = "text/javascript" src = "jscss/mecsim/mecsim.class.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/source/source.js" ></script >
     <script type = "text/javascript" src = "jscss/main.js" ></script >
-    <script type = "text/javasctipt" src = "jscss/accordion/simulation/simulation.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/file/file.js" ></script >
-    <script type = "text/javascitpt" src = "jscss/accordion/editor/editor.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/help/help.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/statistics/statistics.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/source.js" ></script >
+    <script type = "text/javasctipt" src = "jscss/accordion/simulation.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/file.js" ></script >
+    <script type = "text/javascitpt" src = "jscss/accordion/editor.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/help.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/statistics.js" ></script >
     <link href = "jscss/layout.css" rel = "stylesheet" />
     <!------------------------------------------------------------------------------------------------------------->
 </head >
@@ -68,11 +68,11 @@
             <h3 >File</h3 >
 
             <div class = "mecsim_global_sliderSubMenu" >
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_file_preferences" >Preferences</button >
-                </p>
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_file_config" >User Configuration</button >
+                <button class = "mecsim_global_accordeonbutton" id = "mecsim_file_config" >Configuration</button >
                 </p>
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_file_local" >Local</button >
+                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_load" >Load</button >
+                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_save" >Save</button >
             </div >
 
             <h3 >Simulation</h3 >
@@ -83,8 +83,6 @@
                 </p>
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_reset" >Reset</button >
                 </p>
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_load" >Load</button >
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_save" >Save</button >
 
                 <br />
 

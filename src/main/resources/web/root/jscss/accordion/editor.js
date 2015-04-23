@@ -6,71 +6,79 @@ var mecsim_editor,
         settings: {
             globalContent: $("#mecsim_global_content"),
             mecsim_agent_files: $("#mecsim_agent_files"),
-            new_asl_button: $("#mecsim_new_asl").button(),
+            new_asl_button: $("#mecsim_new_asl"),
             load_asl_button: $("#mecsim_load_asl").button(),
             delete_asl_button: $("#mecsim_delete_asl").button(),
             save_asl_button: $("#mecsim_save_asl").button(),
-            mecsim_dialog: $("#mecsim_create_asl_form"),
             select_asl_menu: $("#mecsim_agent_files").selectmenu()
         },
 
         init: function() {
-            //this.initDialog();
-            //mecsim_editor = this.settings;
-            //this.bind_ui_actions();
-            //this.load_asl_files();
+            mecsim_editor = this.settings;
+            this.initDialog();
+            this.bind_ui_actions();
+            this.load_asl_files();
         },
 
         initDialog: function() {
-            mecsim_editor.settings.mecsim_dialog = mecsim_editor.settings.mecsim_dialog.dialog({
+            $("#mecsim_create_asl_form").dialog({
                 autoOpen: false,
-                buttons: {
-                    "Create": mecsim_editor.create_new_asl(),
-                    Cancel: function() {
-                        mecsim_editor.settings.mecsim_dialog.dialog( "close" );
+                buttons: [
+                    {
+                        text: "Create",
+                        click: function() {
+                            EditorPanel.create_new_asl();
+                            $( this ).dialog( "close" );
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        click: function() {
+                            $( this ).dialog( "close" );
+                        }
                     }
-                }
+                ]
             });
         },
-        /*
+
         bind_ui_actions: function() {
 
             $("#ui-id-7").on("click", function() {
-                mecsim_editor.settings.g_editor = CodeMirror(mecsim_editor.settings.globalContent[0], {
+                EditorPanel.settings.g_editor = CodeMirror(EditorPanel.settings.globalContent[0], {
                     lineNumbers: true
                 })
             });
 
-            mecsim_editor.settings.new_asl_button.on("click", function(p_data){
-                mecsim_editor.settings.mecsim_dialog.dialog("open");
+            $("#mecsim_new_asl").button().on("click", function(p_data){
+                $("#mecsim_create_asl_form").dialog("open");
             });
 
-            mecsim_editor.settings.load_asl_files.on("click", function(p_data){
+            EditorPanel.settings.load_asl_button.on("click", function(p_data){
                 $.post(
                   "cagentenvironment/jason/read",
                   { "name" : $("#mecsim_agent_files").val() },
                   function( px_data ) {
-                      mecsim_editor.settings.g_editor.setValue( px_data.source );
+                      EditorPanel.settings.g_editor.setValue( px_data.source );
                   }
                 );
             });
 
-            mecsim_editor.settings.delete_asl_button.on("click", function(p_data){
+            EditorPanel.settings.delete_asl_button.on("click", function(p_data){
                 $.post(
                     "cagentenvironment/jason/delete",
                     { "name" : $("#mecsim_agent_files").val() }
                 ).done(function() {
-                    this.load_asl_files();
+                    EditorPanel.load_asl_files();
                 });
 
             });
 
-            mecsim_editor.settings.save_asl_button.on("click", function(p_data){
+            EditorPanel.settings.save_asl_button.on("click", function(p_data){
                 $.post(
                     "cagentenvironment/jason/write",
                     { "name" : $("#mecsim_agent_files").val(),
-                    "source" : mecsim_editor.settings.g_editor.getValue(),
-                    "data" : mecsim_editor.settings.g_editor.getValue()}
+                    "source" : EditorPanel.settings.g_editor.getValue(),
+                    "data" : EditorPanel.settings.g_editor.getValue()}
               );
             });
 
@@ -78,15 +86,15 @@ var mecsim_editor,
 
         load_asl_files: function() {
             $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
-                mecsim_editor.settings.mecsim_agent_files.empty();
+                EditorPanel.settings.mecsim_agent_files.empty();
                 for(var i in p_data.agents){
-                    mecsim_editor.settings.mecsim_agent_files
+                    EditorPanel.settings.mecsim_agent_files
                         .append( $("<option></option>")
                         .attr("value",p_data.agents[i])
                         .text(p_data.agents[i]));
                 }
                 $("#mecsim_agent_files option:first").attr('selected', true);
-                mecsim_editor.settings.mecsim_agent_files.selectmenu('refresh');
+                EditorPanel.settings.mecsim_agent_files.selectmenu('refresh');
             });
         },
 
@@ -97,13 +105,13 @@ var mecsim_editor,
                     "cagentenvironment/jason/create",
                     { "name" : $("#new_asl").val() }
                 ).done(function() {
-                    this.load_asl_files();
-                    dialog.dialog("close");
+                    EditorPanel.load_asl_files();
+                    $("#mecsim_create_asl_form").dialog("close");
                 });
             } else {
                 alert("Please enter a file name");
             }
 
-        }*/
+        }
 
     };

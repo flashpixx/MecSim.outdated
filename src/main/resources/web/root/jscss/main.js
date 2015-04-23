@@ -10,8 +10,6 @@ $.when(
     $.getScript("jscss/accordion/statistics/statistics.js")
 ).done(function(){
 
-    console.log("Foobar");
-
     // singleton instantiation
     Logger();
     MecSim();

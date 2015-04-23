@@ -48,36 +48,6 @@ $.when(
         console.log( p_event.data );
     };
 
-    // @todo set must be called
-    $.ajax({
-        url     : "/cosmviewer/listclickablelayer",
-        success : function( px_data ){
-            $.each( px_data, function( pc_key, px_value ) {
-                $( "#mecsim_osmclickablelayer" ).append( "<li class=\"ui-state-default\" id=\"" + px_value.id + "\">" + pc_key + "</li>" );
-            });
-
-            $( "#mecsim_osmclickablelayer" ).sortable({ placeholder: "ui-state-highlight" });
-            $( "#mecsim_osmclickablelayer" ).disableSelection();
-        }
-    });
-
-    // @todo switch-buttons must be setup (http://www.bootstrap-switch.org/)
-    $.ajax({
-        url     : "/csimulation/listlayer",
-        success : function( px_data ){
-            $.each( px_data, function( pc_key, px_value ) {
-                $( "#mecsim_simulationlayer" ).append( "<li class=\"ui-widget-content onoffswitch\" id=\"" + px_value.id + "\">"+ pc_key +
-                                                       "<input class=\"active\" type=\"checkbox\" " + (px_value.active ? "checked" : "") + ">" +
-                                                       "<input class=\"visible\" type=\"checkbox\" " + (px_value.active ? "checked" : "") + ">" +
-                                                       "</li>" );
-            });
-
-            $( "#mecsim_simulationlayer" ).selectable();
-            $( "#mecsim_simulationlayer .active" ).bootstrapSwitch({ size : "mini", "onText" : "active", "offText" : "inactive" });
-            $( "#mecsim_simulationlayer .visible" ).bootstrapSwitch({ size : "mini", "onText" : "visible", "offText" : "invisible" });
-        }
-    });
-
 });
 
         //TODO Check if really needed ?

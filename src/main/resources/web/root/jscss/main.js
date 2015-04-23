@@ -17,6 +17,7 @@ $.when(
 
     // module instantiation
     EditorPanel.init();
+    SimulationPanel.init();
 
     // splitter
     $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
@@ -44,30 +45,7 @@ $.when(
         console.log( p_event.data );
     };
 
-    // @todo set must be called
-    $.ajax({
-        url     : "/cosmviewer/listclickablelayer",
-        success : function( px_data ){
-            $.each( px_data, function( pc_key, px_value ) {
-                $( "#mecsim_osmclickablelayer" ).append( "<li class=\"ui-state-default\" id=\"" + px_value.id + "\">" + pc_key + "</li>" );
-            });
 
-            $( "#mecsim_osmclickablelayer" ).sortable({ placeholder: "ui-state-highlight" });
-            $( "#mecsim_osmclickablelayer" ).disableSelection();
-        }
-    });
-
-    // @todo switch-buttons must be setup (http://www.bootstrap-switch.org/)
-    $.ajax({
-        url     : "/csimulation/listlayer",
-        success : function( px_data ){
-            $.each( px_data, function( pc_key, px_value ) {
-                $( "#mecsim_simulationlayer" ).append( "<li class=\"ui-widget-content\" id=\"" + px_value.id + "\">" + pc_key + "</li>" );
-            });
-
-            $( "#mecsim_simulationlayer" ).selectable();
-        }
-    });
 
 });
 

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 
 
@@ -36,5 +37,12 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
+    }
+
 
 }

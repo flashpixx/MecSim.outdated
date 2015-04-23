@@ -326,8 +326,9 @@ public class CSimulation
         final Map<String, Map<String, Object>> l_return = new HashMap<>();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             l_return.put(
-                    l_item.getKey(), new HashMap()
+                    l_item.getValue().toString(), new HashMap()
                     {{
+                            put( "id", l_item.getKey() );
                             put( "active", l_item.getValue().isActive() );
                             put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
                         }}
@@ -353,15 +354,14 @@ public class CSimulation
      */
     private String getLayerName( final Map<String, Object> p_data )
     {
-        if ( !p_data.containsKey( "name" ) )
+        if ( !p_data.containsKey( "id" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
 
-        final String l_name = (String) p_data.get( "name" );
+        final String l_id = (String) p_data.get( "id" );
+        if ( !m_world.containsKey( l_id ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_id ) );
 
-        if ( !m_world.containsKey( l_name ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_name ) );
-
-        return l_name;
+        return l_id;
     }
 
     /**

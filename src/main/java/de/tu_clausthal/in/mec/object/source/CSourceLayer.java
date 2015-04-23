@@ -273,4 +273,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
         return this.m_sourceTargets;
     }
 
+
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
+    }
+
 }

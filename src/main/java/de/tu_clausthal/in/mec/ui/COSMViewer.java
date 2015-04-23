@@ -128,8 +128,8 @@ public class COSMViewer extends JXMapViewer
     {
         final Map<String, Object> l_layer = new HashMap<>();
         for ( EClickableLayer l_item : EClickableLayer.class.getEnumConstants() )
-            // name() cannot be overwritten
-            l_layer.put( l_item.toString(), l_item == m_clickablelayer );
+            // name() cannot be overwritten but it is used for the ID
+            l_layer.put( l_item.toString(), CCommon.getMap( "id", l_item.name(), "click", l_item == m_clickablelayer ) );
         return l_layer;
     }
 

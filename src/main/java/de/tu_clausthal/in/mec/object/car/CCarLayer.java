@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 import com.graphhopper.routing.util.Weighting;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
@@ -230,6 +231,12 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final void push( final Collection<ICar> p_data )
     {
         super.addAll( p_data );
+    }
+
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
     }
 
 

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.analysis;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
@@ -125,6 +126,11 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         return Integer.MAX_VALUE;
     }
 
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
+    }
 
     /**
      * worker class to push data to the database *

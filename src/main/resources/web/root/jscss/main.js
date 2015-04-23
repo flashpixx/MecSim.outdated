@@ -2,12 +2,12 @@
 $(document).ready(function() {
 
 $.when(
-    $.getScript("jscss/accordion/editor/editor.js"),
-    $.getScript("jscss/accordion/file/file.js"),
-    $.getScript("jscss/accordion/help/help.js"),
-    $.getScript("jscss/accordion/simulation/simulation.js"),
-    $.getScript("jscss/accordion/source/source.js"),
-    $.getScript("jscss/accordion/statistics/statistics.js")
+    $.getScript("jscss/accordion/editor.js"),
+    $.getScript("jscss/accordion/file.js"),
+    $.getScript("jscss/accordion/help.js"),
+    $.getScript("jscss/accordion/simulation.js"),
+    $.getScript("jscss/accordion/source.js"),
+    $.getScript("jscss/accordion/statistics.js")
 ).done(function(){
 
     // singleton instantiation

@@ -6,17 +6,14 @@ var mecsim_source,
         settings: {
             // cluster config
             diameter: 600,
-            radius: this.diameter / 2,
-            innerRadius: this.radius - 120,
+            //radius: this.diameter / 2,
+            radius: 300,
+            //innerRadius: this.radius - 120,
+            innerRadius: 180,
             defaultLat: 0,
             defaultLon: 0,
             selected: false
-            //sortComp: SourcePanel.sortByDistanceComp()
-
-            //cluster data
-            /*var model;
-            var nodes;
-            var links;*/
+            //sortComp: SourcePanel.sortByDistanceComp
 
             //target weightng
 
@@ -77,7 +74,7 @@ var mecsim_source,
             SourcePanel.settings.linkcontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_link");
 
             //readFile("daten2.json", createCluster);
-            //createCluster(generateData());
+            SourcePanel.createCluster(SourcePanel.generateData());
 
         },
 
@@ -85,7 +82,7 @@ var mecsim_source,
         initSettingsWidget: function() {
 
             //generator settings
-            /*var selectDistribution = $("#mecsim_source_selectDistribution");
+            var selectDistribution = $("#mecsim_source_selectDistribution");
             selectDistribution.on("change", function(data){
                 switch(selectDistribution.val()) {
                     case "Konstant":
@@ -108,7 +105,7 @@ var mecsim_source,
                     default:
                         console.log("Keine Passende Verteilung gefunden!");
                 }
-            });*/
+            });
 
         },
 
@@ -116,7 +113,7 @@ var mecsim_source,
         initTargetWeighting: function() {
 
             //target weighting
-            /*$('#mecsim_source_weighting').dataTable({
+            $('#mecsim_source_weighting').dataTable({
                 "paging": true,
                 "lengthMenu": [4, 10, 25],
                 "ordering": false,
@@ -126,75 +123,75 @@ var mecsim_source,
             $("#mecsim_source_weighting_length").on("change", function(data){
                 var rows = $("select[name='mecsim_source_weighting_length']").val();
                 var result = 215    + (37* parseInt(rows));
-                targetweighting.height(result);
-            });*/
+                SourcePanel.settings.targetweighting.height(result);
+            });
 
         },
 
         //method to parse a json-file and call it with a callback function
-        //readFile: function(file, callback) {
-            /*d3.json(file, function(error, data){
+        readFile: function(file, callback) {
+            d3.json(file, function(error, data){
                 callback(data);
-            });*/
-        //},
+            });
+        },
 
         //method which is responsible for creating and updating the cluster
-        //createCluster: function(input) {
+        createCluster: function(input) {
 
-            /*model = input;
-            nodes = cluster.nodes(nodeWrapper(model));
-            links = linkWrapper(nodes);
+            SourcePanel.settings.model = input;
+            SourcePanel.settings.nodes = SourcePanel.settings.cluster.nodes(SourcePanel.nodeWrapper(SourcePanel.settings.model));
+            SourcePanel.settings.links = SourcePanel.linkWrapper(SourcePanel.settings.nodes);
 
-            nodecontainer = nodecontainer.data(nodes);
+            SourcePanel.settings.nodecontainer = SourcePanel.settings.nodecontainer.data(SourcePanel.settings.nodes);
 
             //enter section
-            nodecontainer.enter()
+            SourcePanel.settings.nodecontainer.enter()
                 .append("text")
                 .attr("class", function(node){ return node.sourcemode ? "mecsim_source_node" + " mecsim_source_node-source" : "mecsim_source_node" + " mecsim_source_node-target"})
                 .attr("dx", function(node){ return node.x < 180 ? 0 : "-" + String(node.key).length*6 + "px";})
                 .attr("dy", ".31em")
                 .attr("transform", function(node) { return "rotate(" + (node.x - 90) + ")translate(" + (node.y + 8) + ",0)" + (node.x < 180 ? "" : "rotate(180)"); })
                 .text(function(node) { return node.key; })
-                .on("mouseover", mouseovered)
-                .on("mouseout", mouseouted)
-                .on("click", leftclick)
-                .on("contextmenu", rightclick);
+                .on("mouseover", SourcePanel.mouseovered)
+                .on("mouseout", SourcePanel.mouseouted)
+                .on("click", SourcePanel.leftclick)
+                .on("contextmenu", SourcePanel.rightclick);
 
             //exit section
-            nodecontainer.exit().remove();
+            SourcePanel.settings.nodecontainer.exit().remove();
 
-            linkcontainer = linkcontainer.data(bundle(links));
+            SourcePanel.settings.linkcontainer = SourcePanel.settings.linkcontainer.data(SourcePanel.settings.bundle(SourcePanel.settings.links));
 
             //enter section
-            linkcontainer.enter()
+            SourcePanel.settings.linkcontainer.enter()
                 .append("path")
                 .each(function(link) {link.source = link[0]; link.target = link[link.length - 1]; })
                 .attr("class", "mecsim_source_link")
-                .attr("d", line);
+                .attr("d", SourcePanel.settings.line);
 
             //exit section
-            linkcontainer.exit().remove();*/
+            SourcePanel.settings.linkcontainer.exit().remove();
 
-        //},
+        },
 
         //method which produces from a json Input the node-strucutre
-        nodeWrapper: function() {
+        nodeWrapper: function(input) {
 
-            /*var children = [];
+            var children = [];
 
             input.forEach(function(entry){
                 children.push(entry);
                 entry.key = entry.name;
             });
 
-            return {name:"", children:children};*/
+            return {name:"", children:children};
 
         },
 
         //method which produces from a node-strucutre the link strucutre
-        //linkWrapper: function(nodeArray) {
+        linkWrapper: function(nodeArray) {
 
-            /*var map = {};
+            var map = {};
             var targets = [];
 
             //create a map with node-name and node
@@ -213,30 +210,30 @@ var mecsim_source,
                 }
             });
 
-            return targets;*/
+            return targets;
 
-        //},
+        },
 
         //method which should be triggered if a node was leftclicked
-        //leftclick: function(nodeclicked) {
+        leftclick: function(nodeclicked) {
 
             //if no node is selected or another node was clicked
-            /*if(selected === false || nodeclicked !== selected){
+            if(SourcePanel.settings.selected === false || nodeclicked !== SourcePanel.settings.selected){
 
                 //save the new selected node and make it black
-                selected=nodeclicked;
-                nodecontainer.classed("mecsim_source_node-selected", function(node){ return node.name === nodeclicked.name });
+                SourcePanel.settings.selected=nodeclicked;
+                SourcePanel.settings.nodecontainer.classed("mecsim_source_node-selected", function(node){ return node.name === nodeclicked.name });
 
                 //all nodes which are not connected to the selected should be transparent
-                nodecontainer.classed("mecsim_source_node-trans", function(node){
+                SourcePanel.settings.nodecontainer.classed("mecsim_source_node-trans", function(node){
                     if(node === selected)
                         return false;
 
                     //check if a node is in the list of the selected node
                     var inTargets = true;
-                    if(selected.targets.length <= 0) return false;
-                    for(var i=0; i< selected.targets.length; i++){
-                        if(selected.targets[i] === node.key)
+                    if(SourcePanel.settings.selected.targets.length <= 0) return false;
+                    for(var i=0; i< SourcePanel.settings.selected.targets.length; i++){
+                        if(SourcePanel.settings.selected.targets[i] === node.key)
                             inTargets = false;
                     }
 
@@ -247,23 +244,23 @@ var mecsim_source,
                 });
 
                 //links should be thick if they are connected to the selected node
-                linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === selected || link.target === selected });
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === selected || link.target === selected });
                 //links should be hidden if they are not connected to the selected node
-                linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== selected && link.target !== selected});
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== selected && link.target !== selected});
 
             }else{
                 //if the selected node was de-selected remove all effekts
                 selected=false;
-                nodecontainer.classed("mecsim_source_node-selected", false);
-                nodecontainer.classed("mecsim_source_node-trans", false);
-                linkcontainer.classed("mecsim_source_link-thick", false);
-                linkcontainer.classed("mecsim_source_link-hidden", false);
-            }*/
+                SourcePanel.settings.nodecontainer.classed("mecsim_source_node-selected", false);
+                SourcePanel.settings.nodecontainer.classed("mecsim_source_node-trans", false);
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", false);
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", false);
+            }
 
-        //},
+        },
 
         //method which should be triggered if a node was rightclicked
-        //rightclick: function(rightclicked) {
+        rightclick: function(rightclicked) {
 
              /** was commented out before!!!
                 d3.event.preventDefault();
@@ -288,7 +285,7 @@ var mecsim_source,
                 createCluster(model);
              */
 
-        //},
+        },
 
         //method which sets a new comparator and resort the cluster
         //sort: function(comparator) {
@@ -340,28 +337,28 @@ var mecsim_source,
         //},
 
         //method which should be triggered if the mouse hover-in to a node
-        //mouseovered: function(node) {
+        mouseovered: function(node) {
 
-            /*if(selected === false){
+            if(SourcePanel.settings.selected === false){
                 //if no node is selected make some hover-effekt (for every link which is connected to the hoverd-node)
-                linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === node || link.target === node; });
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === node || link.target === node; });
             }else{
                 //if a node is selected all links should be hidden (except the links which are connected to the hovered or selected node)
-                linkcontainer.classed("mecsim_source_link-hidden", function(link){ return (link.source !== node && link.target !== node) && (link.source !== selected && link.target !== selected);});
-            }*/
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return (link.source !== node && link.target !== node) && (link.source !== selected && link.target !== selected);});
+            }
 
-        //},
+        },
 
         //method which should be triggered if the mouse hover-out from a node
-        //mouseouted: function(node) {
+        mouseouted: function(node) {
 
-            /*if(selected === false){
-                linkcontainer.classed("mecsim_source_link-thick", false);
+            if(selected === false){
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", false);
             }else{
                 //if a node is selected an the mouse hover out it is a good idea to save the hover-effekt
-            }*/
+            }
 
-        //},
+        },
 
         //method to calculate the distance to (lat: 0/ long: 0)
         //getDistance: function(lat1, lon1, lat2, lon2) {
@@ -397,7 +394,7 @@ var mecsim_source,
         //method to generate some random dummy data for testing
         generateData: function() {
 
-            /*result = [];
+            result = [];
             names = [];
 
             //generate some nodes
@@ -424,7 +421,7 @@ var mecsim_source,
                 })
             }
 
-            return result;*/
+            return result;
 
         },
 
@@ -436,8 +433,8 @@ var mecsim_source,
                 UI().getContent().load("template/source.htm", function(){
                     SourcePanel.initLayout();
                     SourcePanel.initClusterWidget();
-                    //initSettingsWidget();
-                    //initTargetWeighting();
+                    SourcePanel.initSettingsWidget();
+                    SourcePanel.initTargetWeighting();
                 });
             });
 

@@ -140,6 +140,10 @@ public class COSMViewer extends JXMapViewer
      */
     private void web_static_setClickableLayer( final Map<String, Object> p_data )
     {
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
+
+        m_clickablelayer = EClickableLayer.valueOf( (String) p_data.get( "id" ) );
     }
 
 

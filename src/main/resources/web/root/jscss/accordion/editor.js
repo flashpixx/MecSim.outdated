@@ -46,13 +46,13 @@ var mecsim_editor,
             $("#ui-id-7").on("click", function() {
                 UI().getContent().empty();
                 EditorPanel.append_tab_div();
-                $("#tabs ul").append("<li><a href='#tab_01'>" + $("#mecsim_agent_files").val() + "</a></li>");
-                $("#tabs").append("<div id='tab_01'></div>");
+                EditorPanel.add_tab();
                 $("#tabs").tabs();
-                EditorPanel.settings.g_editor = CodeMirror($("#tab_01")[0], {
+                EditorPanel.settings.g_editor = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {
                     lineNumbers: true
                 });
                 EditorPanel.load_selected_file();
+                console.log(EditorPanel.settings.g_editor.EditorPanel.get_tab_id());
             });
 
             $("#mecsim_new_asl").button().on("click", function(p_data){
@@ -60,6 +60,7 @@ var mecsim_editor,
             });
 
             EditorPanel.settings.load_asl_button.on("click", function(p_data){
+                EditorPanel.add_tab();
                 EditorPanel.load_selected_file();
             });
 
@@ -82,6 +83,20 @@ var mecsim_editor,
               );
             });
 
+        },
+
+        add_tab: function() {
+            // TODO: check if file is already open in another tab
+            $("#tabs ul").append("<li><a href='#" + EditorPanel.get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
+            $("#tabs").append("<div id='" + EditorPanel.get_tab_id() + "'></div>");
+        },
+
+        add_code_mirror: function() {
+
+        },
+
+        get_tab_id: function() {
+            return $("#mecsim_agent_files").val().split(".").join("");
         },
 
         load_selected_file: function() {

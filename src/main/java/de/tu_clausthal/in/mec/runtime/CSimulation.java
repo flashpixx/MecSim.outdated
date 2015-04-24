@@ -340,11 +340,16 @@ public class CSimulation
     }
 
     /**
-     * UI method - enables a layer
+     * UI method - disables / enables a layer
      */
-    private void web_static_enablelayer( final Map<String, Object> p_data )
+    private void web_static_disableenablelayer( final Map<String, Object> p_data )
     {
-        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( true );
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( !p_data.containsKey( "state" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
+
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( (boolean) p_data.get( "state" ) );
     }
 
     /**
@@ -366,32 +371,18 @@ public class CSimulation
     }
 
     /**
-     * UI method - disables a layer
+     * UI method - hide / show a layer
      */
-    private void web_static_disablelayer( final Map<String, Object> p_data )
+    private void web_static_hideshowlayer( final Map<String, Object> p_data )
     {
-        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( false );
-    }
+        if ( !p_data.containsKey( "state" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
 
-    /**
-     * UI method - view a layer
-     */
-    private void web_static_showlayer( final Map<String, Object> p_data )
-    {
         final Object l_layer = m_world.get( this.getLayerName( p_data ) );
         if ( l_layer instanceof IViewableLayer )
-            ( (IViewableLayer) l_layer ).setVisible( true );
+            ( (IViewableLayer) l_layer ).setVisible( (boolean) p_data.get( "state" ) );
     }
 
-    /**
-     * UI method - hide a layer
-     */
-    private void web_static_hidelayer( final Map<String, Object> p_data )
-    {
-        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
-        if ( l_layer instanceof IViewableLayer )
-            ( (IViewableLayer) l_layer ).setVisible( false );
-    }
 
     /**
      * UI components bundle

@@ -76,7 +76,7 @@ var mecsim_simulation,
 
         list_static_layer: function() {
 
-            // @todo switch-buttons must be setup (http://www.bootstrap-switch.org/)
+            // @todo on error switch-state must be reset
             $.ajax({
                 url     : "/csimulation/listlayer",
                 success : function( px_data ){
@@ -88,8 +88,34 @@ var mecsim_simulation,
                     });
 
                     $( "#mecsim_simulationlayer" ).selectable();
-                    $( "#mecsim_simulationlayer .active" ).bootstrapSwitch({ size : "mini", "onText" : "active", "offText" : "inactive" });
-                    $( "#mecsim_simulationlayer .visible" ).bootstrapSwitch({ size : "mini", "onText" : "visible", "offText" : "invisible" });
+
+                    $( "#mecsim_simulationlayer .active" ).bootstrapSwitch({
+                        size : "mini",
+                        onText : "active",
+                        offText : "inactive",
+                        onSwitchChange : function( px_event, pl_state) {
+                            $.post("csimulation/disableenablelayer", {id : $(this).closest("li").attr("id"), state : pl_state})
+                                .fail( function( p_data ) {
+                                    console.log(p_data);
+                                    $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
+                                    $("#mecsim_stop_error").dialog();
+                                });
+                        }
+                    });
+
+                    $( "#mecsim_simulationlayer .visible" ).bootstrapSwitch({
+                        size : "mini",
+                        onText : "visible",
+                        offText : "invisible",
+                        onSwitchChange : function( px_event, pl_state) {
+                            $.post("csimulation/hideshowlayer", {id : $(this).closest("li").attr("id"), state : pl_state})
+                                .fail( function( p_data ) {
+                                    console.log(p_data);
+                                    $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
+                                    $("#mecsim_stop_error").dialog();
+                                });
+                        }
+                    });
                 }
             });
 

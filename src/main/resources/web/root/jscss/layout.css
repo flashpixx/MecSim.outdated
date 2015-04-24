@@ -31,20 +31,20 @@ iframe
 }
 
 .ui-widget-content{
-  border: 1px solid #CACACA;
+    border: 1px solid #CACACA;
 }
 
 .ui-resizable-helper{
-  border: 1px dotted gray;
+    border: 1px dotted gray;
 }
 
 .ui-widget-header{
-  margin: 0;
-  color: black;
-  text-align: center;
-  font-weight:normal;
-  background: #CBCBCB;
-  border: 1px solid #CACACA;
+    margin: 0;
+    color: black;
+    text-align: center;
+    font-weight:normal;
+    background: #CBCBCB;
+    border: 1px solid #CACACA;
 }
 
 .mecsim_global_accordeonbutton{
@@ -63,6 +63,21 @@ iframe
 .mecsim_editor_fixed_width_button{
     width: 30%;
     top: 10%;
+}
+
+.mecsim_log_error
+{
+    color: #8C1C00;
+    display: block;
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+.mecsim_log_output
+{
+    display: block;
+    font-family: monospace;
+    white-space: nowrap;
 }
 
 /******************************* id definitions ***********************************************************************/
@@ -107,123 +122,122 @@ iframe
     collapsible: false;
 }
 
-#mecsim_source_clustercontainer{
-  float: left;
-  width: 600px;
-  height: 640px;
-  padding: 0.5em;
-  margin: 10px;
-}
-
-#mecsim_source_generatorsettings{
-  float: left;
-  width: 482px;
-  height: 240px;
-  padding: 0.5em;
-  margin: 10px;
-}
-
-#mecsim_source_targetweighting{
-  float: left;
-  width: 482px;
-  height: 360px;
-  padding: 0.5em;
-  margin: 10px;
-}
-
-#mecsim_source_selectSource{
-  margin: 5px;
-  width: 155px;
-  overflow:scroll;
-}
-
-#mecsim_source_selectDistribution{
-  margin: 5px;
-  width: 155px;
-}
-
-#mecsim_source_input1, #mecsim_source_input2{
-  width: 75px;
-  text-align: center;
-  margin-left: 25px;
-}
-
-#mecsim_source_weighting_paginate, #mecsim_source_weighting_length ,#mecsim_source_weighting_filter{
-  float: left;
-  margin: 10px;
-}
-
-#mecsim_source_weighting{
-  width: 60%;
-  float: left;
-  margin: 10px;
-  text-align: center;
-}
-
-#mecsim_source_weightinginput{
-  text-align: center;
-  width: 100%;
-}
-
 #mecsim_about{
     width: 500px;
 }
 
+/******************************** css definitions for mecsim_source_? ************************************************/
 
-/** Cluster Style TODO Rename**/
+.ui-button .ui-icon.mecsim_source_cyanCircle .ui-icon.mecsim_source_redCircle{
+    width: 15px;
+    height: 15px;
+    background-image: none;
+}
+
+.ui-button .ui-icon.mecsim_source_cyanCircle{
+    background: cyan;
+}
+
+.ui-button .ui-icon.mecsim_source_redCircle{
+    background: red;
+}
+
 .mecsim_source_node {
-  font-size: 75%;
-  font-weight: bold;
-  user-select: none;
-  cursor: default;
+    font-size: 75%;
+    font-weight: bold;
+    user-select: none;
+    cursor: default;
 }
 
 .mecsim_source_node:hover{
-  opacity: 1;
+    opacity: 1;
 }
 
 .mecsim_source_node-source {
-  fill: #2ca02c;
+    fill: #2ca02c;
 }
 
 .mecsim_source_node-target {
-  fill: #d62728;
+    fill: #d62728;
 }
 
 .mecsim_source_node-selected{
-  fill: #000000;
+    fill: #000000;
 }
 
 .mecsim_source_node-trans{
-  opacity: 0.3;
+    opacity: 0.3;
 }
 
 .mecsim_source_link {
-  stroke: steelblue;
-  stroke-opacity: 0.2;
-  fill: none;
-  pointer-events: none;
+    stroke: steelblue;
+    stroke-opacity: 0.2;
+    fill: none;
+    pointer-events: none;
 }
 
 .mecsim_source_link-thick{
-  stroke-opacity: 1;
+    stroke-opacity: 1;
 }
 
 .mecsim_source_link-hidden{
-  stroke-opacity: 0;
+    stroke-opacity: 0;
 }
 
-.mecsim_log_error
-{
-    color: #8C1C00;
-    display: block;
-    font-family: monospace;
-    white-space: nowrap;
+#mecsim_source_clustercontainer{
+    float: left;
+    width: 600px;
+    height: 640px;
+    padding: 0.5em;
+    margin: 10px;
 }
 
-.mecsim_log_output
-{
-    display: block;
-    font-family: monospace;
-    white-space: nowrap;
+#mecsim_source_generatorsettings{
+    float: left;
+    width: 482px;
+    height: 240px;
+    padding: 0.5em;
+    margin: 10px;
+}
+
+#mecsim_source_targetweighting{
+    float: left;
+    width: 482px;
+    height: 360px;
+    padding: 0.5em;
+    margin: 10px;
+}
+
+#mecsim_source_selectSource{
+    margin: 5px;
+    width: 155px;
+    overflow:scroll;
+}
+
+#mecsim_source_selectDistribution{
+    margin: 5px;
+    width: 155px;
+}
+
+#mecsim_source_input1, #mecsim_source_input2{
+    width: 75px;
+    text-align: center;
+    margin-left: 25px;
+}
+
+#mecsim_source_weighting_paginate, #mecsim_source_weighting_length ,#mecsim_source_weighting_filter{
+    float: left;
+    margin: 10px;
+}
+
+#mecsim_source_weighting{
+    width: 60%;
+    float: left;
+    margin: 10px;
+    text-align: center;
+}
+
+#mecsim_source_weightinginput{
+    text-align: center;
+    width: 100%;
 }

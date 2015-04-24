@@ -44,6 +44,7 @@ var mecsim_editor,
         bind_ui_actions: function() {
 
             $("#ui-id-7").on("click", function() {
+                UI().getContent().empty();
                 EditorPanel.settings.g_editor = CodeMirror(EditorPanel.settings.globalContent[0], {
                     lineNumbers: true
                 })

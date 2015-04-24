@@ -47,9 +47,9 @@ var mecsim_source,
         initClusterWidget: function() {
 
             //listen to the sorting buttons
-            $("#mecsim_source_sortByDistance").on("click", function(){sort(sortByDistanceComp)});
-            $("#mecsim_source_sortByType").on("click", function(){sort(sortByTypeComp)});
-            $("#mecsim_source_sortByName").on("click", function(){sort(sortByNameComp)});
+            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp)});
+            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp)});
+            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp)});
 
             SourcePanel.settings.cluster = d3.layout.cluster()
                 .size([360, SourcePanel.settings.innerRadius])
@@ -226,7 +226,7 @@ var mecsim_source,
 
                 //all nodes which are not connected to the selected should be transparent
                 SourcePanel.settings.nodecontainer.classed("mecsim_source_node-trans", function(node){
-                    if(node === selected)
+                    if(node === SourcePanel.settings.selected)
                         return false;
 
                     //check if a node is in the list of the selected node
@@ -244,9 +244,9 @@ var mecsim_source,
                 });
 
                 //links should be thick if they are connected to the selected node
-                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === selected || link.target === selected });
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === SourcePanel.settings.selected || link.target === SourcePanel.settings.selected });
                 //links should be hidden if they are not connected to the selected node
-                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== selected && link.target !== selected});
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== SourcePanel.settings.selected && link.target !== SourcePanel.settings.selected});
 
             }else{
                 //if the selected node was de-selected remove all effekts
@@ -288,28 +288,28 @@ var mecsim_source,
         },
 
         //method which sets a new comparator and resort the cluster
-        //sort: function(comparator) {
+        sort: function(comparator) {
 
-            /*cluster.sort(comparator);
-            nodes = cluster.nodes(nodeWrapper(model));
-            links = linkWrapper(nodes);
+            SourcePanel.settings.cluster.sort(comparator);
+            SourcePanel.settings.nodes = SourcePanel.settings.cluster.nodes(SourcePanel.nodeWrapper(SourcePanel.settings.model));
+            SourcePanel.settings.links = SourcePanel.linkWrapper(SourcePanel.settings.nodes);
 
-            var transition = svg.transition().duration(2000);
+            var transition = SourcePanel.settings.svg.transition().duration(2000);
             transition.selectAll(".mecsim_source_node")
                 .attr("transform", function(node) { return "rotate(" + (node.x - 90) + ")translate(" + (node.y + 8) + ",0)" + (node.x < 180 ? "" : "rotate(180)"); })
                 .attr("dx", function(node){ return node.x < 180 ? 0 : "-" + String(node.key).length*6 + "px";});
 
             transition.selectAll(".mecsim_source_link")
                 .each(function(link) { link.source = link[0], link.target = link[link.length - 1]; })
-                .attr("d", line);*/
+                .attr("d", SourcePanel.settings.line);
 
-        //},
+        },
 
         //comparator for sorting the cluster by distance
         sortByDistanceComp: function(a, b) {
 
-            var distance1 = getDistance(a.lat, a.long);
-            var distance2 = getDistance(b.lat, b.long);
+            var distance1 = SourcePanel.getDistance(a.lat, a.long);
+            var distance2 = SourcePanel.getDistance(b.lat, b.long);
 
             return distance1 > distance2 ? 1 : -1;
 
@@ -344,7 +344,7 @@ var mecsim_source,
                 SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === node || link.target === node; });
             }else{
                 //if a node is selected all links should be hidden (except the links which are connected to the hovered or selected node)
-                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return (link.source !== node && link.target !== node) && (link.source !== selected && link.target !== selected);});
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return (link.source !== node && link.target !== node) && (link.source !== SourcePanel.settings.selected && link.target !== SourcePanel.settings.selected);});
             }
 
         },
@@ -352,7 +352,7 @@ var mecsim_source,
         //method which should be triggered if the mouse hover-out from a node
         mouseouted: function(node) {
 
-            if(selected === false){
+            if(SourcePanel.settings.selected === false){
                 SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", false);
             }else{
                 //if a node is selected an the mouse hover out it is a good idea to save the hover-effekt
@@ -361,17 +361,17 @@ var mecsim_source,
         },
 
         //method to calculate the distance to (lat: 0/ long: 0)
-        //getDistance: function(lat1, lon1, lat2, lon2) {
+        getDistance: function(lat1, lon1, lat2, lon2) {
 
-            /*if(lat1 === undefined || lon1 === undefined){
+            if(lat1 === undefined || lon1 === undefined){
                 lat1 = defaultLat;
                 lon1 = defaultLon;
                 console.log("Warning no Arguments are passed in!");
             }
 
             if(!lat2 || !lon2){
-                lat2 = defaultLat;
-                lon2 = defaultLon;
+                lat2 = SourcePanel.settings.defaultLat;
+                lon2 = SourcePanel.settings.defaultLon;
             }
 
             var R = 6371000;
@@ -387,9 +387,9 @@ var mecsim_source,
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             var d = R * c;
 
-            return d;*/
+            return d;
 
-        //},
+        },
 
         //method to generate some random dummy data for testing
         generateData: function() {

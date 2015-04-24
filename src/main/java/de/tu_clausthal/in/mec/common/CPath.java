@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.common;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +47,19 @@ public class CPath implements Iterable<CPath>
      * list with path parts *
      */
     private List<String> m_path = new ArrayList<>();
+
+
+    /**
+     * copy-ctor with arguments
+     *
+     * @param p_path path object
+     * @param p_varargs string arguments
+     */
+    public CPath( final CPath p_path, final String... p_varargs )
+    {
+        this( p_path );
+        m_path.addAll( Arrays.asList( p_varargs ) );
+    }
 
 
     /**
@@ -97,16 +111,6 @@ public class CPath implements Iterable<CPath>
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
-    }
-
-    /**
-     * check if the path is empty
-     *
-     * @return empty flag
-     */
-    public final boolean isEmpty()
-    {
-        return m_path.isEmpty();
     }
 
     /**
@@ -236,10 +240,23 @@ public class CPath implements Iterable<CPath>
      */
     public final String removeSuffix()
     {
+        if ( this.isEmpty() )
+            return null;
+
         final String l_suffix = this.getSuffix();
         if ( m_path.size() > 0 )
             m_path.remove( m_path.size() - 1 );
         return l_suffix;
+    }
+
+    /**
+     * check if the path is empty
+     *
+     * @return empty flag
+     */
+    public final boolean isEmpty()
+    {
+        return m_path.isEmpty();
     }
 
     /**

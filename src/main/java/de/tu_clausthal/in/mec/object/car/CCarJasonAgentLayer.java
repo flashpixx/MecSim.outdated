@@ -44,5 +44,4 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
         return CCommon.getResourceString( this, "name" );
     }
 
-
 }

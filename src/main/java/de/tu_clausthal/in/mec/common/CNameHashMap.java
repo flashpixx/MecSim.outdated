@@ -24,9 +24,11 @@
 package de.tu_clausthal.in.mec.common;
 
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 
 /**
@@ -159,23 +161,56 @@ public class CNameHashMap extends HashMap<String, Object>
         return (T) this.get( p_key );
     }
 
+
+    /**
+     * recrusive traversion with an serial iterator
+     *
+     * @return iterator
+     */
     public final Iterator<Map.Entry<CPath, Object>> iterator()
     {
         return new Iterator<Map.Entry<CPath, Object>>()
         {
-            private Iterator<Map.Entry<String, Object>> m_iterator = CNameHashMap.super.entrySet().iterator();
+            /**
+             * path of the current stack
+             */
+            private final CPath m_path = new CPath();
+            /**
+             * stack with iterator
+             */
+            private Stack<Iterator<Entry<String, Object>>> m_stackiterator = new Stack()
+            {{
+                    push( CNameHashMap.super.entrySet().iterator() );
+                }};
 
             @Override
             public boolean hasNext()
             {
-                return m_iterator.hasNext();
+                if ( m_stackiterator.isEmpty() )
+                    return false;
+                if ( m_stackiterator.peek().hasNext() )
+                    return true;
+
+                m_stackiterator.pop();
+                m_path.removeSuffix();
+
+                return this.hasNext();
             }
 
             @Override
             public Map.Entry<CPath, Object> next()
             {
-                final Map.Entry<String, Object> l_item = m_iterator.next();
-                return null;
+                final Map.Entry<String, Object> l_item = m_stackiterator.peek().next();
+
+                // check empty map, because iterator breaks down
+                if ( ( l_item.getValue() instanceof Map ) && ( !( ( (Map) l_item.getValue() ).isEmpty() ) ) )
+                {
+                    m_path.pushback( l_item.getKey() );
+                    m_stackiterator.push( ( (Map) l_item.getValue() ).entrySet().iterator() );
+                    return this.next();
+                }
+
+                return new AbstractMap.SimpleImmutableEntry( new CPath( m_path, l_item.getKey() ), l_item.getValue() );
             }
         };
     }

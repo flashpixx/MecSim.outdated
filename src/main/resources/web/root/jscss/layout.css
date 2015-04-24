@@ -60,6 +60,20 @@ iframe
     text-align: center;
 }
 
+.ui-button .ui-icon.mecsim_source_cyanCircle .ui-icon.mecsim_source_redCircle{
+    width: 15px;
+    height: 15px;
+    background-image: none;
+}
+
+.ui-button .ui-icon.mecsim_source_cyanCircle{
+    background: cyan;
+}
+
+.ui-button .ui-icon.mecsim_source_redCircle{
+    background: red;
+}
+
 .mecsim_editor_fixed_width_button{
     width: 30%;
     top: 10%;

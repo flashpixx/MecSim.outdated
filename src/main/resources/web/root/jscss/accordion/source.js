@@ -474,6 +474,22 @@ var mecsim_source,
                 );
             });
 
+            $("#mecsim_source_defaultCar").button({
+                icons: {
+                    primary: "mecsim_source_cyanCircle"
+                }
+            }).on("click", function(data){
+
+            })
+
+            $("#mecsim_source_defaultAgentCar").button({
+                icons: {
+                    primary: "mecsim_source_redCircle"
+                }
+            }).on("click", function(data){
+
+            })
+
         }
 
     };

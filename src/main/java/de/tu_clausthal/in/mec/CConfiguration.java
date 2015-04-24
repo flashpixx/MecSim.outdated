@@ -75,8 +75,6 @@ public class CConfiguration
     private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
     {{
             put( "reset", false );
-            put( "version", 1 );
-
 
             // language data
             put(

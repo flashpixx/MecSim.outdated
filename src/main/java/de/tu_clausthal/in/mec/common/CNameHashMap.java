@@ -34,7 +34,7 @@ import java.util.Stack;
 /**
  * named-base hashmap for Json serialization
  */
-public class CNameHashMap extends HashMap<String, Object>
+public class CNameHashMap extends HashMap<String, Object> implements Iterable<Map.Entry<CPath, Object>>
 {
 
     /**

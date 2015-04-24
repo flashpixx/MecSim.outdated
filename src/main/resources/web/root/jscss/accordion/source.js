@@ -316,14 +316,14 @@ var mecsim_source,
         },
 
         //comparator for sorting the cluster by type
-        //sortByTypeComp: function(a, b) {
-             //return a.sourcemode ?  -1 : 1;
-        //},
+        sortByTypeComp: function(a, b) {
+             return a.sourcemode ?  -1 : 1;
+        },
 
         //comparator for sorting the cluster by name
-        //sortByNameComp: function(a, b) {
+        sortByNameComp: function(a, b) {
 
-            /*var splitA = a.name.split("#");
+            var splitA = a.name.split("#");
             var splitB = b.name.split("#");
 
             if((splitA.length == 1) || (splitB.length == 1))
@@ -332,9 +332,9 @@ var mecsim_source,
             var numberA = parseInt(splitA[splitA.length-1]);
             var numberB = parseInt(splitB[splitB.length-1]);
 
-            return numberA < numberB ? -1 : 1;*/
+            return numberA < numberB ? -1 : 1;
 
-        //},
+        },
 
         //method which should be triggered if the mouse hover-in to a node
         mouseovered: function(node) {

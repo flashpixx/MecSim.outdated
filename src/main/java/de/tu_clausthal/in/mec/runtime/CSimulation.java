@@ -330,6 +330,7 @@ public class CSimulation
                     {{
                             put( "id", l_item.getKey() );
                             put( "active", l_item.getValue().isActive() );
+                            put( "isviewable", l_item.getValue() instanceof IViewableLayer );
                             put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
                         }}
             );

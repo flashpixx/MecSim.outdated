@@ -45,9 +45,14 @@ var mecsim_editor,
 
             $("#ui-id-7").on("click", function() {
                 UI().getContent().empty();
-                EditorPanel.settings.g_editor = CodeMirror(EditorPanel.settings.globalContent[0], {
+                EditorPanel.append_tab_div();
+                $("#tabs ul").append("<li><a href='#tab_01'>" + $("#mecsim_agent_files").val() + "</a></li>");
+                $("#tabs").append("<div id='tab_01'></div>");
+                $("#tabs").tabs();
+                EditorPanel.settings.g_editor = CodeMirror($("#tab_01")[0], {
                     lineNumbers: true
-                })
+                });
+                EditorPanel.load_selected_file();
             });
 
             $("#mecsim_new_asl").button().on("click", function(p_data){
@@ -55,13 +60,7 @@ var mecsim_editor,
             });
 
             EditorPanel.settings.load_asl_button.on("click", function(p_data){
-                $.post(
-                  "cagentenvironment/jason/read",
-                  { "name" : $("#mecsim_agent_files").val() },
-                  function( px_data ) {
-                      EditorPanel.settings.g_editor.setValue( px_data.source );
-                  }
-                );
+                EditorPanel.load_selected_file();
             });
 
             EditorPanel.settings.delete_asl_button.on("click", function(p_data){
@@ -82,6 +81,22 @@ var mecsim_editor,
                     "data" : EditorPanel.settings.g_editor.getValue()}
               );
             });
+
+        },
+
+        load_selected_file: function() {
+            $.post(
+                "cagentenvironment/jason/read",
+                { "name" : $("#mecsim_agent_files").val() },
+                function( px_data ) {
+                  EditorPanel.settings.g_editor.setValue( px_data.source );
+                }
+            );
+        },
+
+        append_tab_div: function() {
+
+             UI().getContent().append("<div id='tabs'><ul></ul></div>");
 
         },
 

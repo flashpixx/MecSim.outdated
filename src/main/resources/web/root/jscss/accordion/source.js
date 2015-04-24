@@ -4,18 +4,14 @@ var mecsim_source,
     SourcePanel = {
 
         settings: {
-            // cluster config
+
             diameter: 600,
-            //radius: this.diameter / 2,
-            radius: 300,
-            //innerRadius: this.radius - 120,
-            innerRadius: 180,
+            radius: 600 / 2,
+            innerRadius: (600 / 2) - 120,
             defaultLat: 0,
             defaultLon: 0,
             selected: false
             //sortComp: SourcePanel.sortByDistanceComp
-
-            //target weightng
 
         },
 

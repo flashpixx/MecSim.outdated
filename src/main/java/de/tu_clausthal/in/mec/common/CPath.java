@@ -234,6 +234,42 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * check of a path starts with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    public final boolean startsWith( final CPath p_path )
+    {
+        if ( m_path.size() < p_path.size() )
+            return false;
+
+        for ( int i = 0; i < m_path.size(); ++i )
+            if ( m_path.get( i ) != p_path.m_path.get( i ) )
+                return false;
+
+        return true;
+    }
+
+    /**
+     * check of a path ends with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    public final boolean endsWith( final CPath p_path )
+    {
+        if ( p_path.size() > m_path.size() )
+            return false;
+
+        for ( int i = m_path.size() - p_path.size(); i < m_path.size(); ++i )
+            if ( m_path.get( i ) != p_path.m_path.get( i ) )
+                return false;
+
+        return true;
+    }
+
+    /**
      * remove the suffix from the path
      *
      * @return last item of the path

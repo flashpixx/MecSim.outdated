@@ -135,8 +135,6 @@ public class COSMViewer extends JXMapViewer
 
     /**
      * UI method - sets the current clickable layer
-     *
-     * @bug incomplete - data format of the UI must defined
      */
     private void web_static_setClickableLayer( final Map<String, Object> p_data )
     {

@@ -440,10 +440,6 @@ var mecsim_source,
                     primary: "ui-icon-pin-w"
                 }
             }).on("click", function(data){
-                $.post(
-                  "cosmmouselistener/setsourcelayertool",
-                  { "tool" : "sourcemode" }
-                );
             });
 
             //Listen to the Default Agent Car Tool Button
@@ -452,10 +448,6 @@ var mecsim_source,
                     primary: "ui-icon-arrowrefresh-1-e"
                 }
             }).on("click", function(data){
-                $.post(
-                  "cosmmouselistener/setsourcelayertool",
-                  { "tool" : "generatormode" }
-                );
             });
 
             //Listen to the Target Tool Button
@@ -464,10 +456,6 @@ var mecsim_source,
                     primary: "ui-icon-flag"
                 }
             }).on("click", function(data){
-                $.post(
-                  "cosmmouselistener/setsourcelayertool",
-                  { "tool" : "targetmode" }
-                );
             });
 
             $("#mecsim_source_defaultCar").button({
@@ -475,16 +463,24 @@ var mecsim_source,
                     primary: "mecsim_source_cyanCircle"
                 }
             }).on("click", function(data){
-
-            })
+                $.ajax({
+                    type: "POST",
+                    url: "csourcelayer/setcartype",
+                    data: {"cartype": "defaultcar"}
+                });
+            });
 
             $("#mecsim_source_defaultAgentCar").button({
                 icons: {
                     primary: "mecsim_source_redCircle"
                 }
             }).on("click", function(data){
-
-            })
+                $.ajax({
+                    type: "POST",
+                    url: "csourcelayer/setcartype",
+                    data: {"cartype": "defaultagentcar"}
+                });
+            });
 
         }
 

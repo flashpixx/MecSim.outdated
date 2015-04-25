@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
@@ -35,6 +36,7 @@ import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -137,6 +139,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
                 break;
 
             case DEFAULTAGENTCAR:
+                if(this.m_selectedASL==null)
+                    throw new IllegalArgumentException( CCommon.getResourceString( this, "noaslprogrammselected" ) );
+
                 p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), this.m_selectedASL ) );
                 break;
 
@@ -216,6 +221,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public final Vector<CAtomTarget> getTargets()
     {
         return this.m_sourceTargets;
+    }
+
+    public void web_static_setcartype(final Map<String, Object> p_data)
+    {
+        if ( !p_data.containsKey( "cartype" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidcartype" ) );
+
+        String l_cartype = (String) p_data.get( "cartype" );
+
+        if(l_cartype.equals( "defaultcar" ))
+            this.m_carType=ECarType.DEFAULTCAR;
+
+        if(l_cartype.equals( "defaultagentcar" ))
+            this.m_carType=ECarType.DEFAULTAGENTCAR;
+
+        CLogger.out(this.m_carType);
     }
 
     /**

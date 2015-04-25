@@ -76,10 +76,10 @@ public class CBootstrap
     }
 
 
-    /*
+    /**
      * is called after the frame is initialize and before the UI configuration is load
      *
-     * @param UI
+     * @param p_ui UI Object
      */
     public static void afterStageInit( final CUI p_ui )
     {
@@ -118,6 +118,7 @@ public class CBootstrap
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
+        p_server.registerObject( CSimulation.getInstance().getWorld().get( "Sources" ) );
     }
 
 

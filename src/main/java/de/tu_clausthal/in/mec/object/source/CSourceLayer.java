@@ -129,15 +129,16 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_source source where the generator should be placed
      */
-    public final void setGenerator( final ISource p_source)
+    public final void setGenerator( final ISource p_source )
     {
-        switch(this.m_carType){
+        switch ( this.m_carType )
+        {
             case DEFAULTCAR:
                 p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
                 break;
 
             case DEFAULTAGENTCAR:
-                if(this.m_selectedASL==null)
+                if ( this.m_selectedASL == null )
                     break; //If no ASL is selected an empty source will be created
                 p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), this.m_selectedASL ) );
                 break;
@@ -221,38 +222,41 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * method to set a new car type
+     *
      * @param p_data key:cartype, value:defaulcar/defaultagentcar
      */
-    public void web_static_setcartype(final Map<String, Object> p_data)
+    public void web_static_setcartype( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "cartype" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidcartype" ) );
 
         String l_cartype = (String) p_data.get( "cartype" );
 
-        if(l_cartype.equals( "defaultcar" ))
-            this.m_carType=ECarType.DEFAULTCAR;
+        if ( l_cartype.equals( "defaultcar" ) )
+            this.m_carType = ECarType.DEFAULTCAR;
 
-        if(l_cartype.equals( "defaultagentcar" ))
-            this.m_carType=ECarType.DEFAULTAGENTCAR;
+        if ( l_cartype.equals( "defaultagentcar" ) )
+            this.m_carType = ECarType.DEFAULTAGENTCAR;
     }
 
     /**
      * method to set a new asl file
+     *
      * @param p_data key:aslname, value:name of the asl file
      */
-    public void web_static_setasl(final Map<String, Object> p_data)
+    public void web_static_setasl( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "aslname" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidaslname" ) );
 
-        this.m_selectedASL= (String) p_data.get( "aslname" );
+        this.m_selectedASL = (String) p_data.get( "aslname" );
     }
 
     /**
      * enum to indicate the car type
      */
-    public enum ECarType{
+    public enum ECarType
+    {
         DEFAULTCAR,
         DEFAULTAGENTCAR
     }

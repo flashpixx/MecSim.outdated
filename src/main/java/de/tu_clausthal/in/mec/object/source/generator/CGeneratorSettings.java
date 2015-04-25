@@ -32,6 +32,7 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 /**
  * Class which handles the Settings for the Generator
+ * @deprecated
  */
 public class CGeneratorSettings
 {

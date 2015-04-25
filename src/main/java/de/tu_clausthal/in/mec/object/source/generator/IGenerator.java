@@ -40,6 +40,7 @@ public interface IGenerator extends Serializable
      * method which defines the Color of a Source when a Generator was placed
      *
      * @return Color of the Generator
+     @deprecated remove / move to source class
      */
     public Color getColor();
 
@@ -48,6 +49,7 @@ public interface IGenerator extends Serializable
      *
      * @param p_currentStep
      * @return collection of cars
+     * @todo create generic call
      */
     Collection<ICar> generate( final int p_currentStep );
 
@@ -55,6 +57,7 @@ public interface IGenerator extends Serializable
      * method to get the settings object
      *
      * @return settings object
+     * @deprecated generator stores this information
      */
     public CGeneratorSettings getSettings();
 

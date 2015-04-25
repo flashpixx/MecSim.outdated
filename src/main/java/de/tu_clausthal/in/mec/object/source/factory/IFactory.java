@@ -39,6 +39,7 @@ public interface IFactory<T extends ICar>
      * method which provides a color to paint sources differently
      *
      * @return free color
+     * @deprecated remove / move to source class
      */
     public Color getColor();
 
@@ -46,6 +47,8 @@ public interface IFactory<T extends ICar>
      * factory method to create a new car
      *
      * @return created car
+     * @todo rename it, because a factory can create any object
+     * @todo add parameter to define the number of objects, which should created
      */
     public T createCar();
 }

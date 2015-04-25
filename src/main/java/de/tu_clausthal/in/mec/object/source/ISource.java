@@ -37,6 +37,7 @@ import java.io.Serializable;
 
 /**
  * factory interface of car source - defines a source
+ * @todo change to a abstract class for storing color information
  */
 public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
 {

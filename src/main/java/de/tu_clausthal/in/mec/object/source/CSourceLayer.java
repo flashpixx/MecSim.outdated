@@ -50,30 +50,30 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Member Variable to save a Source which was selected (null if no Source is selected)
-     *
-     * @bug why static - should be a member
-     */
-    private static ISource s_selectedSource;
     /**
      * List of all Atom Targets
      */
     private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
     /**
-     * variable which defines the generator
+     * member variable to indicate the car type for new sources/generators
      */
-    private String m_selectedGenerator = "Default";
+    private static ECarType m_carType = ECarType.DEFAULTCAR;
     /**
      * variable which defines the asl programm
      */
     private String m_selectedASL = null;
 
+
     @Override
     public final int getCalculationIndex()
     {
         return 2;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
     }
 
     @Override
@@ -111,25 +111,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
         final ISource l_newsource = new CSource( p_geoposition );
         this.add( l_newsource );
 
-        this.setGenerator( l_newsource, m_selectedGenerator, m_selectedASL );
+        this.setGenerator( l_newsource );
         l_newsource.setComplexTarget( new CComplexTarget() );
-    }
-
-    /**
-     * set a generator object for a source
-     *
-     * @param p_source source where the generator should be placed
-     * @param p_selectedgenerator new generator
-     * @param p_aslname ASL Programm for the Generator
-     */
-    public final void setGenerator( final ISource p_source, final String p_selectedgenerator, final String p_aslname )
-    {
-        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
-
-        if ( p_selectedgenerator.equals( "Default" ) )
-            p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
-        if ( p_selectedgenerator.equals( "Jason Agent" ) )
-            p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), p_aslname ) );
     }
 
     /**
@@ -140,54 +123,31 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public final void removeSource( final ISource p_source )
     {
         CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
-        if ( this.isSelectedSource( p_source ) )
-            s_selectedSource = null;
-
         p_source.release();
         this.remove( p_source );
     }
 
     /**
-     * checker if a source is selected
+     * set a generator object for a source
      *
-     * @param p_source source which should be checked
-     * @return true if the source is selected otherwise false
+     * @param p_source source where the generator should be placed
      */
-    public final boolean isSelectedSource( final ISource p_source )
+    public final void setGenerator( final ISource p_source)
     {
-        if ( p_source != null )
-            return p_source.equals( s_selectedSource );
+        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
 
-        return false;
-    }
+        switch(this.m_carType){
+            case DEFAULTCAR:
+                p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
+                break;
 
-    /**
-     * return the selected source
-     *
-     * @return selected Source or null (if no source is selected)
-     */
-    public final ISource getSelectedSource()
-    {
-        return s_selectedSource;
-    }
+            case DEFAULTAGENTCAR:
+                p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), this.m_selectedASL ) );
+                break;
 
-    /**
-     * set the selected Source
-     *
-     * @param p_source source which should be selected
-     */
-    public final void setSelectedSource( final ISource p_source )
-    {
-        CLogger.out( CCommon.getResourceString( this, "sourceselected" ) );
-        if ( s_selectedSource != null )
-        {
-            s_selectedSource.setColor( s_selectedSource.getGenerator() == null ? Color.BLACK : s_selectedSource.getGenerator().getColor() );
+            default:
+                p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
         }
-        if ( p_source != null )
-        {
-            p_source.setColor( Color.WHITE );
-        }
-        s_selectedSource = p_source;
     }
 
     /**
@@ -219,28 +179,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         final CAtomTarget l_newtarget = new CAtomTarget( p_geoposition );
         this.m_sourceTargets.add( l_newtarget );
 
-        //If a Source is Selected the Target also should be passed in the ComplexTarget of this Source
-        final Random l_random = new Random();
-        if ( this.s_selectedSource != null )
-            this.s_selectedSource.getComplexTarget().addTarget( l_newtarget, l_random.nextDouble() );
-
         this.repaintOSM();
-    }
-
-    /**
-     * after a target was created, OSM need to be repainted
-     *
-     * @bug must be fixed
-     */
-    private final void repaintOSM()
-    {
-        try
-        {
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     /**
@@ -264,6 +203,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
+     * after a target was created, OSM need to be repainted
+     *
+     * @bug must be fixed
+     */
+    private final void repaintOSM()
+    {
+        try
+        {
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
+    }
+
+    /**
      * return the full list of Atom Targets
      *
      * @return all Atom Targets
@@ -273,11 +228,12 @@ public class CSourceLayer extends IMultiLayer<ISource>
         return this.m_sourceTargets;
     }
 
-
-    @Override
-    public final String toString()
-    {
-        return CCommon.getResourceString( this, "name" );
+    /**
+     * enum to indicate the car type
+     */
+    public enum ECarType{
+        DEFAULTCAR,
+        DEFAULTAGENTCAR
     }
 
 }

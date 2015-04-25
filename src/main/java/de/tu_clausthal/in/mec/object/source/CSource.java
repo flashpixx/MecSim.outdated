@@ -55,6 +55,7 @@ import java.util.Map;
 
 /**
  * class with default source implementation
+ * @todo rename to CCarSource
  */
 public class CSource extends IInspector implements ISource, ISerializable
 {

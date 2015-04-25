@@ -61,6 +61,7 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * set a new Color for this source
      *
      * @param p_color new Color
+     * @deprecated
      */
     public void setColor( Color p_color );
 
@@ -68,6 +69,7 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * return the Generator of the source
      *
      * @return Generator Object of this Source
+     * @deprecated
      */
     public IGenerator getGenerator();
 
@@ -75,11 +77,13 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * set a new Generator for this source
      *
      * @param p_generator new Generator
+     * @deprecated
      */
     public void setGenerator( IGenerator p_generator );
 
     /**
      * Method to Remove the Generator
+     * @deprecated
      */
     public void removeGenerator();
 
@@ -87,6 +91,7 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * return the ComplexTarget of the source
      *
      * @return ComplexTarget of the source
+     * @deprecated
      */
     public CComplexTarget getComplexTarget();
 
@@ -94,6 +99,7 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * set a new ComplexTarget for this source
      *
      * @param p_complexTarget new ComplexTarget
+     * @deprecated
      */
     public void setComplexTarget( CComplexTarget p_complexTarget );
 

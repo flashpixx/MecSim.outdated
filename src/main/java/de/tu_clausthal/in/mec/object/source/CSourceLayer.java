@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
@@ -107,7 +106,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createSource( final GeoPosition p_geoposition )
     {
-        CLogger.out( CCommon.getResourceString( this, "sourcecreated" ) );
         final ISource l_newsource = new CSource( p_geoposition );
         this.add( l_newsource );
 
@@ -122,7 +120,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeSource( final ISource p_source )
     {
-        CLogger.out( CCommon.getResourceString( this, "sourceremoved" ) );
         p_source.release();
         this.remove( p_source );
     }
@@ -134,8 +131,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void setGenerator( final ISource p_source)
     {
-        CLogger.out( CCommon.getResourceString( this, "generatorcreated" ) );
-
         switch(this.m_carType){
             case DEFAULTCAR:
                 p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
@@ -157,7 +152,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeGenerator( final ISource p_source )
     {
-        CLogger.out( CCommon.getResourceString( this, "generatorremoved" ) );
         p_source.removeGenerator();
     }
 
@@ -171,8 +165,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createTarget( final GeoPosition p_geoposition )
     {
-        CLogger.out( CCommon.getResourceString( this, "targetcreated" ) );
-
         if ( p_geoposition == null )
             return;
 
@@ -189,8 +181,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeTarget( final CAtomTarget p_target )
     {
-        CLogger.out( CCommon.getResourceString( this, "targetremoved" ) );
-
         if ( p_target == null )
             return;
 

@@ -10,7 +10,8 @@ var mecsim_source,
             innerRadius: (600 / 2) - 120,
             defaultLat: 0,
             defaultLon: 0,
-            selected: false
+            selected: false,
+            aslselect: $("#mecsim_source_aslselect").selectmenu()
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
@@ -458,6 +459,7 @@ var mecsim_source,
             }).on("click", function(data){
             });
 
+            //Listen to the Default Car Button
             $("#mecsim_source_defaultCar").button({
                 icons: {
                     primary: "mecsim_source_cyanCircle"
@@ -470,6 +472,7 @@ var mecsim_source,
                 });
             });
 
+            //Listen to the Default Agent Car Button
             $("#mecsim_source_defaultAgentCar").button({
                 icons: {
                     primary: "mecsim_source_redCircle"
@@ -479,6 +482,34 @@ var mecsim_source,
                     type: "POST",
                     url: "csourcelayer/setcartype",
                     data: {"cartype": "defaultagentcar"}
+                }).done(function(){
+                    $.ajax({
+                        type: "POST",
+                        url: "csourcelayer/setasl",
+                        data: {"aslname": SourcePanel.settings.aslselect.val()}
+                    });
+                });
+            });
+
+            //Select ASL Programm
+            $.getJSON( "cagentenvironment/jason/list", function(data){
+                SourcePanel.settings.aslselect.empty();
+                for(var i in data.agents){
+                    SourcePanel.settings.aslselect
+                        .append( $("<option></option>")
+                        .attr("value",data.agents[i])
+                        .text(data.agents[i]));
+                }
+            });
+
+
+            SourcePanel.settings.aslselect.selectmenu().on("selectmenuchange", function(data){
+                $.ajax({
+                    type: "POST",
+                    url: "csourcelayer/setasl",
+                    data: {"aslname": SourcePanel.settings.aslselect.val()}
+                }).done(function(){
+                    SourcePanel.settings.aslselect.selectmenu("close");
                 });
             });
 

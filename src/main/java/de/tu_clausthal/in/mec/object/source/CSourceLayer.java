@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.source.generator.CDefaultCarGenerator;
@@ -37,7 +36,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 import java.util.Map;
-import java.util.Random;
 import java.util.Vector;
 
 
@@ -140,8 +138,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
             case DEFAULTAGENTCAR:
                 if(this.m_selectedASL==null)
-                    throw new IllegalArgumentException( CCommon.getResourceString( this, "noaslprogrammselected" ) );
-
+                    break; //If no ASL is selected an empty source will be created
                 p_source.setGenerator( new CJasonCarGenerator( p_source.getPosition(), this.m_selectedASL ) );
                 break;
 
@@ -166,7 +163,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * in the Complex Target of this Source
      *
      * @param p_geoposition position of the Atom Target
-     * @todo random can be stored with a member var
      */
     public final void createTarget( final GeoPosition p_geoposition )
     {
@@ -223,6 +219,10 @@ public class CSourceLayer extends IMultiLayer<ISource>
         return this.m_sourceTargets;
     }
 
+    /**
+     * method to set a new car type
+     * @param p_data key:cartype, value:defaulcar/defaultagentcar
+     */
     public void web_static_setcartype(final Map<String, Object> p_data)
     {
         if ( !p_data.containsKey( "cartype" ) )
@@ -235,8 +235,18 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
         if(l_cartype.equals( "defaultagentcar" ))
             this.m_carType=ECarType.DEFAULTAGENTCAR;
+    }
 
-        CLogger.out(this.m_carType);
+    /**
+     * method to set a new asl file
+     * @param p_data key:aslname, value:name of the asl file
+     */
+    public void web_static_setasl(final Map<String, Object> p_data)
+    {
+        if ( !p_data.containsKey( "aslname" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidaslname" ) );
+
+        this.m_selectedASL= (String) p_data.get( "aslname" );
     }
 
     /**

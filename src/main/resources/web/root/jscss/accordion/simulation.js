@@ -23,7 +23,7 @@ var mecsim_simulation,
             });
 
             SimulationPanel.settings.start_button.on("click", function(){
-                $.post("csimulation/start").fail( function( p_data ) {
+                $.ajax("csimulation/start").fail( function( p_data ) {
                     console.log(p_data);
                     $("#mecsim_start_error_text").text(p_data.responseJSON.error);
                     $("#mecsim_start_error").dialog();
@@ -32,7 +32,7 @@ var mecsim_simulation,
             });
 
             SimulationPanel.settings.stop_button.on("click", function(){
-                $.post("csimulation/stop").fail( function( p_data ) {
+                $.ajax("csimulation/stop").fail( function( p_data ) {
                     console.log(p_data);
                     $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
                     $("#mecsim_stop_error").dialog();
@@ -40,7 +40,7 @@ var mecsim_simulation,
             });
 
             SimulationPanel.settings.reset_button.on("click", function(){
-                $.post("csimulation/reset")
+                $.ajax("csimulation/reset");
             });
 
             $( "#mecsim_speed_slider" ).slider({

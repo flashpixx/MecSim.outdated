@@ -118,6 +118,9 @@ public class CConfiguration
                                             put( "websocketheartbeat", 3 );
                                         }}
                             );
+
+                            // web UI interface configuration
+                            put( "web", new CNameHashMap.CImmutable() );
                         }}
             );
 
@@ -392,8 +395,6 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
-     * @todo check version
-     * @todo do configuration convert on non-existing values
      */
     private void setConfiguration( final CNameHashMap p_input )
     {
@@ -405,10 +406,16 @@ public class CConfiguration
                     )
             );
 
+
         // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
         for ( Map.Entry<CPath, Object> l_item : new CNameHashMap( m_configuration ) )
             if ( p_input.containsKey( l_item.getKey() ) )
                 m_configuration.set( l_item.getKey(), p_input.get( l_item.getKey() ) );
+
+
+        // copy ui/web datasets complete
+        if ( p_input.containsKey( "ui/web" ) )
+            m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
     }
 
     /**

@@ -95,9 +95,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
         final ArrayList<N> l_initlist = new ArrayList<>();
         for ( int i = 0; i < (int) Math.ceil(
-                m_edgelength / CConfiguration.getInstance().get().<Integer>getTraverse(
-                        "simulation/traffic/cellsampling"
-                )
+                m_edgelength / CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" )
         ); i++
                 )
             l_initlist.add( null );

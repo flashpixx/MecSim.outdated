@@ -70,9 +70,9 @@ public class COSMViewer extends JXMapViewer
 
         LocalResponseCache.installResponseCache( l_info.getBaseURL(), CConfiguration.getInstance().getLocation( "root" ), false );
         this.setTileFactory( l_tileFactory );
-        this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setZoom( CConfiguration.getInstance().get().<Integer>get( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
 
         this.setOverlayPainter( m_painter );
 
@@ -93,9 +93,9 @@ public class COSMViewer extends JXMapViewer
      */
     public final void resetConfiguration()
     {
-        this.setZoom( CConfiguration.getInstance().get().<Integer>getTraverse( "ui/zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>getTraverse( "ui/geoposition" ) );
+        this.setZoom( CConfiguration.getInstance().get().<Integer>get( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
     }
 
     /**
@@ -103,8 +103,8 @@ public class COSMViewer extends JXMapViewer
      */
     public final void setConfiguration()
     {
-        CConfiguration.getInstance().get().<Integer>setTraverse( "ui/zoom", this.getZoom() );
-        CConfiguration.getInstance().get().<GeoPosition>setTraverse( "ui/geoposition", this.getCenterPosition() );
+        CConfiguration.getInstance().get().<Integer>set( "ui/zoom", this.getZoom() );
+        CConfiguration.getInstance().get().<GeoPosition>set( "ui/geoposition", this.getCenterPosition() );
     }
 
 

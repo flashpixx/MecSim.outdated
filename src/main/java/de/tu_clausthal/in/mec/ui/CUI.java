@@ -152,7 +152,7 @@ public class CUI extends Application
         if ( m_stage == null )
             m_stage = p_stage;
 
-        p_stage.setTitle( CConfiguration.getInstance().get().<String>getTraverse( "manifest/project-name" ) );
+        p_stage.setTitle( CConfiguration.getInstance().get().<String>get( "manifest/project-name" ) );
         p_stage.setOnCloseRequest(
                 new EventHandler<WindowEvent>()
                 {
@@ -161,10 +161,10 @@ public class CUI extends Application
                     {
                         CBootstrap.beforeStageShutdown( CUI.this );
 
-                        CConfiguration.getInstance().get().setTraverse(
+                        CConfiguration.getInstance().get().set(
                                 "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth()
                         );
-                        CConfiguration.getInstance().get().setTraverse(
+                        CConfiguration.getInstance().get().set(
                                 "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight()
                         );
 
@@ -194,11 +194,9 @@ public class CUI extends Application
         p_stage.setScene(
                 new Scene(
                         l_root, Math.min(
-                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse( "ui/windowwidth" )
+                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowwidth" )
                 ), Math.min(
-                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>getTraverse(
-                                "ui/windowheight"
-                        )
+                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowheight" )
                 )
                 )
         );

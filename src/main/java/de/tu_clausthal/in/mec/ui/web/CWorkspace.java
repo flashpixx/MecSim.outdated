@@ -50,8 +50,9 @@ public class CWorkspace extends CBrowser
      * HTTP server to handle websockets *
      */
     private final CServer m_server = new CServer(
-            CConfiguration.getInstance().get().<String>getTraverse( c_httphost ), CConfiguration.getInstance().get().<Integer>getTraverse( c_httpport ),
-            new CVirtualDirectory( CCommon.getResourceURL( "web/root" ), "index.htm" ), CConfiguration.getInstance().get().<Integer>getTraverse(
+            CConfiguration.getInstance().get().<String>get( c_httphost ), CConfiguration.getInstance().get().<Integer>get( c_httpport ), new CVirtualDirectory(
+            CCommon.getResourceURL( "web/root" ), "index.htm"
+    ), CConfiguration.getInstance().get().<Integer>get(
             "ui/server/websocketheartbeat"
     )
     );
@@ -64,8 +65,8 @@ public class CWorkspace extends CBrowser
     {
         super( EMenu.BackForward );
         this.load(
-                "http://" + CConfiguration.getInstance().get().<String>getTraverse( c_httphost ) + ":" +
-                CConfiguration.getInstance().get().<Integer>getTraverse( c_httpport )
+                "http://" + CConfiguration.getInstance().get().<String>get( c_httphost ) + ":" +
+                CConfiguration.getInstance().get().<Integer>get( c_httpport )
         );
 
         // set via reflection the server

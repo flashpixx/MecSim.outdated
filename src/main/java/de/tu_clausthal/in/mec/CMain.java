@@ -133,7 +133,7 @@ public class CMain
         try
         {
             if ( ( l_cli.hasOption( "uibindport" ) ) )
-                CConfiguration.getInstance().get().setTraverse( "ui/bindport", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
+                CConfiguration.getInstance().get().set( "ui/bindport", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
         }
         catch ( final NumberFormatException l_exception )
         {

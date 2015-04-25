@@ -147,9 +147,7 @@ public class CMarkdownRenderer extends LinkRenderer
                 return super.render(
                         new ExpLinkNode(
                                 l_parts[0], this.getWikipediaLink(
-                                CConfiguration.getInstance().get().<String>getTraverse(
-                                        "language/current"
-                                ).trim(), l_parts[0].trim()
+                                CConfiguration.getInstance().get().<String>get( "language/current" ).trim(), l_parts[0].trim()
                         ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 )
                         ), l_parts[0]
                 );
@@ -158,9 +156,7 @@ public class CMarkdownRenderer extends LinkRenderer
                 return super.render(
                         new ExpLinkNode(
                                 l_parts[1], this.getWikipediaLink(
-                                CConfiguration.getInstance().get().<String>getTraverse(
-                                        "language/current"
-                                ).trim(), l_parts[0].trim()
+                                CConfiguration.getInstance().get().<String>get( "language/current" ).trim(), l_parts[0].trim()
                         ), ( p_node.getChildren() == null ) || ( p_node.getChildren().isEmpty() ) ? null : p_node.getChildren().get( 0 )
                         ), l_parts[1]
                 );

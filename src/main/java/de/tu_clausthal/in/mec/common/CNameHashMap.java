@@ -33,6 +33,8 @@ import java.util.Stack;
 
 /**
  * named-base hashmap for Json serialization
+ *
+ * @warn map within map should be converted with copy-ctor
  */
 public class CNameHashMap extends HashMap<String, Object> implements Iterable<Map.Entry<CPath, Object>>
 {
@@ -46,7 +48,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     }
 
     /**
-     * creates a plain name-hash-map from a map of maps
+     * copy-ctor - creates a plain name-hash-map from a map of maps
      *
      * @param p_data map
      */
@@ -55,7 +57,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     {
         super();
         for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
-            this.put( l_item.getKey(), ( l_item.getValue() instanceof Map ) ? new CNameHashMap( (Map) l_item.getValue() ) : l_item.getValue() );
+            this.put( new String( l_item.getKey() ), ( l_item.getValue() instanceof Map ) ? new CNameHashMap( (Map) l_item.getValue() ) : l_item.getValue() );
     }
 
     /**
@@ -68,7 +70,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @tparam T value type
      */
     @SuppressWarnings( "unchecked" )
-    private static <T> void setTraverse( final CPath p_path, final int p_currentindex, final T p_value, final Map<String, Object> p_map )
+    private static <T> void set( final CPath p_path, final int p_currentindex, final T p_value, final Map<String, Object> p_map )
     {
         if ( p_currentindex >= p_path.size() )
             return;
@@ -83,20 +85,50 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
 
             final Object l_return = p_map.get( p_path.get( p_currentindex ) );
             if ( l_return instanceof Map )
-                setTraverse( p_path, p_currentindex + 1, p_value, (Map) l_return );
+                set( p_path, p_currentindex + 1, p_value, (Map) l_return );
         }
     }
 
     /**
-     * traverse and sets the value
+     * check if a path exists
      *
      * @param p_path path
-     * @param p_value value
+     * @return boolean
+     */
+    @SuppressWarnings( "unchecked" )
+    private static boolean containsKey( final CPath p_path, final Map<String, Object> p_map )
+    {
+        if ( p_path.isEmpty() )
+            return false;
+        if ( !p_map.containsKey( p_path.get( 0 ) ) )
+            return false;
+
+        final Object l_return = p_map.get( p_path.get( 0 ) );
+        if ( l_return instanceof Map )
+            return containsKey( p_path.getSubPath( 1 ), (Map) l_return );
+
+        return p_path.size() == 1;
+    }
+
+    /**
+     * traverse into the map
+     *
+     * @param p_path path of the items
+     * @param p_map map
+     * @return object
      * @tparam T type
      */
-    public final <T> void setTraverse( final CPath p_path, final T p_value )
+    @SuppressWarnings( "unchecked" )
+    private static <T> T get( final CPath p_path, final Map<String, Object> p_map )
     {
-        this.setTraverse( p_path, 0, p_value, this );
+        if ( p_path.isEmpty() )
+            return null;
+
+        final Object l_return = p_map.get( p_path.get( 0 ) );
+        if ( l_return instanceof Map )
+            return (T) get( p_path.getSubPath( 1 ), (Map) l_return );
+
+        return (T) l_return;
     }
 
     /**
@@ -106,11 +138,44 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @param p_value value
      * @tparam T type
      */
-    public final <T> void setTraverse( final String p_path, final T p_value )
+    public final <T> void set( final CPath p_path, final T p_value )
     {
-        this.setTraverse( new CPath( p_path ), p_value );
+        this.set( p_path, 0, p_value, this );
     }
 
+    /**
+     * traverse and sets the value
+     *
+     * @param p_path path
+     * @param p_value value
+     * @tparam T type
+     */
+    public final <T> void set( final String p_path, final T p_value )
+    {
+        this.set( new CPath( p_path ), p_value );
+    }
+
+    /**
+     * check if a path exists
+     *
+     * @param p_path string path
+     * @return boolean
+     */
+    public final boolean containsKey( final String p_path )
+    {
+        return this.containsKey( new CPath( p_path ) );
+    }
+
+    /**
+     * check if a path exists
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    public final boolean containsKey( final CPath p_path )
+    {
+        return containsKey( p_path, this );
+    }
 
     /**
      * traverse into the map
@@ -120,20 +185,10 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @tparam T type
      */
     @SuppressWarnings( "unchecked" )
-    public final <T> T getTraverse( final CPath p_path )
+    public final <T> T get( final CPath p_path )
     {
-        if ( p_path.isEmpty() )
-            return null;
-
-        final Object l_return = this.get( p_path.get( 0 ) );
-        if ( l_return instanceof CNameHashMap )
-            return ( (CNameHashMap) l_return ).getTraverse( p_path.getSubPath( 1 ) );
-        if ( l_return instanceof Map )
-            return (T) ( (Map) l_return ).get( p_path.get( 0 ) );
-
-        return (T) l_return;
+        return get( p_path, this );
     }
-
 
     /**
      * traverse into the map
@@ -142,25 +197,10 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @return object
      * @tparam T type
      */
-    public final <T> T getTraverse( final String p_path )
+    public final <T> T get( final String p_path )
     {
-        return this.<T>getTraverse( new CPath( p_path ) );
+        return this.<T>get( new CPath( p_path ) );
     }
-
-
-    /**
-     * get a type-cast value of the object
-     *
-     * @param p_key key
-     * @return null or casted value
-     * @tparam T type
-     */
-    @SuppressWarnings( "unchecked" )
-    public final <T> T getTypedValue( final String p_key )
-    {
-        return (T) this.get( p_key );
-    }
-
 
     /**
      * recrusive traversion with an serial iterator
@@ -210,6 +250,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
                     return this.next();
                 }
 
+                // returns an immutable entry, because modfication must pass traversal, so modification is forbidden
                 return new AbstractMap.SimpleImmutableEntry( new CPath( m_path, l_item.getKey() ), l_item.getValue() );
             }
         };

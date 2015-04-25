@@ -188,6 +188,9 @@ public class CMessageSystem implements IVoidSteppable
     }
 
 
+    /**
+     * @bug incomplete - messageflow object cannot serialized
+     */
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
@@ -205,7 +208,7 @@ public class CMessageSystem implements IVoidSteppable
             l_item.getRight().clear();
         }
 
-        m_communicator.send( CCommon.toJson( m_messageflow ) );
+        //m_communicator.send( CCommon.toJson( m_messageflow ) );
     }
 
 

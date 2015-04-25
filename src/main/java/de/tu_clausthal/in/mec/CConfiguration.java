@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -40,7 +41,6 @@ import java.net.URLClassLoader;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
@@ -269,7 +269,7 @@ public class CConfiguration
     public ResourceBundle getResourceBundle( final String p_language )
     {
         final Locale l_locale;
-        switch ( p_language == null || p_language.isEmpty() ? m_configuration.<String>getTraverse( "language/current" ) : p_language )
+        switch ( p_language == null || p_language.isEmpty() ? m_configuration.<String>get( "language/current" ) : p_language )
         {
             case "de":
                 l_locale = Locale.GERMANY;
@@ -359,10 +359,8 @@ public class CConfiguration
         {
             // read Json
             this.createDirectories();
-            final CNameHashMap l_input = new CNameHashMap();
-            l_input.putAll( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
-
-            if ( !l_input.<Boolean>getTypedValue( "reset" ) )
+            final CNameHashMap l_input = new CNameHashMap( CCommon.fromJson( FileUtils.readFileToString( l_config, "utf-8" ) ) );
+            if ( !l_input.<Boolean>get( "reset" ) )
                 this.setConfiguration( l_input );
         }
         catch ( final IOException | NullPointerException l_exception )
@@ -399,34 +397,18 @@ public class CConfiguration
      */
     private void setConfiguration( final CNameHashMap p_input )
     {
-        // convert read data
-        final Map<String, Double> l_geodata = ( (LinkedHashMap) ( (Map) p_input.get( "ui" ) ).get( "geoposition" ) );
-        p_input.<GeoPosition>setTraverse( "ui/geoposition", new GeoPosition( l_geodata.get( "latitude" ), l_geodata.get( "longitude" ) ) );
+        // convert special dara into individual types
+        if ( p_input.containsKey( "ui/geoposition" ) )
+            p_input.set(
+                    "ui/geoposition", new GeoPosition(
+                            p_input.<Double>get( "ui/geoposition/latitude" ), p_input.<Double>get( "ui/geoposition/longitude" )
+                    )
+            );
 
-        // check allow values
-        p_input.setTraverse(
-                "ui/current", CCommon.getCheckedValue(
-                        p_input.<String>getTraverse( "ui/current" ), m_configuration.<String>getTraverse(
-                                "ui/current"
-                        ), m_configuration.<ArrayList<String>>getTraverse( "language/allow" )
-                )
-        );
-        p_input.setTraverse(
-                "simulation/traffic/routing/algorithm", CCommon.getCheckedValue(
-                        p_input.<String>getTraverse(
-                                "simulation/traffic/routing/algorithm"
-                        ), m_configuration.<String>getTraverse(
-                                "simulation/traffic/routing/algorithm"
-                        ), m_configuration.<ArrayList<String>>getTraverse(
-                                "simulation/traffic/routing/allow"
-                        )
-                )
-        );
-
-        // set data into configuration
-        for ( String l_key : new String[]{"console", "ui", "reset", "database", "language", "simulation"} )
-            if ( p_input.containsKey( l_key ) )
-                m_configuration.put( l_key, p_input.get( l_key ) );
+        // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
+        for ( Map.Entry<CPath, Object> l_item : new CNameHashMap( m_configuration ) )
+            if ( p_input.containsKey( l_item.getKey() ) )
+                m_configuration.set( l_item.getKey(), p_input.get( l_item.getKey() ) );
     }
 
     /**

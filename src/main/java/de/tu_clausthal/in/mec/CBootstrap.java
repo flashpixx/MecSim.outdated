@@ -97,7 +97,7 @@ public class CBootstrap
     {
         // registerObject default locations
         p_server.registerVirtualDirectory(
-                "web/documentation/user/" + CConfiguration.getInstance().get().<String>getTraverse( "language/current" ), "index.md", "/userdoc/",
+                "web/documentation/user/" + CConfiguration.getInstance().get().<String>get( "language/current" ), "index.md", "/userdoc/",
                 new CMarkdownRenderer( CMarkdownRenderer.EHTMLType.Fragment, "/userdoc/" )
         );
 
@@ -108,7 +108,7 @@ public class CBootstrap
 
         // registerObject objects
         p_server.registerObject( CConsole.getError( "error" ) );
-        p_server.registerObject( CConsole.getOutput( "output" ) );
+        //p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );
         p_server.registerObject( CConfiguration.getInstance() );

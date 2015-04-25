@@ -50,13 +50,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private static final long serialVersionUID = 1L;
     /**
-     * List of all Atom Targets
-     */
-    private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
-    /**
      * member variable to indicate the car type for new sources/generators
      */
     private static ECarType m_carType = ECarType.DEFAULTCAR;
+    /**
+     * List of all Atom Targets
+     */
+    private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
     /**
      * variable which defines the asl programm
      */
@@ -67,12 +67,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
     public final int getCalculationIndex()
     {
         return 2;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return CCommon.getResourceString( this, "name" );
     }
 
     @Override
@@ -99,6 +93,12 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     }
 
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
+    }
+
     /**
      * creates a new source
      *
@@ -111,17 +111,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
         this.setGenerator( l_newsource );
         l_newsource.setComplexTarget( new CComplexTarget() );
-    }
-
-    /**
-     * removes a source
-     *
-     * @param p_source source which should be removed
-     */
-    public final void removeSource( final ISource p_source )
-    {
-        p_source.release();
-        this.remove( p_source );
     }
 
     /**
@@ -146,6 +135,17 @@ public class CSourceLayer extends IMultiLayer<ISource>
             default:
                 p_source.setGenerator( new CDefaultCarGenerator( p_source.getPosition() ) );
         }
+    }
+
+    /**
+     * removes a source
+     *
+     * @param p_source source which should be removed
+     */
+    public final void removeSource( final ISource p_source )
+    {
+        p_source.release();
+        this.remove( p_source );
     }
 
     /**
@@ -177,6 +177,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
+     * after a target was created, OSM need to be repainted
+     *
+     * @bug must be fixed
+     */
+    private final void repaintOSM()
+    {
+        try
+        {
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
+    }
+
+    /**
      * removes an Atom Target from the sourcelayer and all Complex Targets
      *
      * @param p_target Atom Target which should be removed
@@ -192,22 +208,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
             l_source.getComplexTarget().removeTarget( p_target );
 
         this.repaintOSM();
-    }
-
-    /**
-     * after a target was created, OSM need to be repainted
-     *
-     * @bug must be fixed
-     */
-    private final void repaintOSM()
-    {
-        try
-        {
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     /**

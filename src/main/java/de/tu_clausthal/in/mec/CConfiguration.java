@@ -366,7 +366,7 @@ public class CConfiguration
             if ( !l_input.<Boolean>get( "reset" ) )
                 this.setConfiguration( l_input );
         }
-        catch ( final IOException | NullPointerException l_exception )
+        catch ( final ClassNotFoundException | IOException | NullPointerException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
         }
@@ -396,7 +396,7 @@ public class CConfiguration
      *
      * @param p_input input map
      */
-    private void setConfiguration( final CNameHashMap p_input )
+    private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException
     {
         // convert special dara into individual types
         if ( p_input.containsKey( "ui/geoposition" ) )
@@ -406,9 +406,8 @@ public class CConfiguration
                     )
             );
 
-
         // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
-        for ( Map.Entry<CPath, Object> l_item : new CNameHashMap( m_configuration ) )
+        for ( Map.Entry<CPath, Object> l_item : m_configuration )
             if ( p_input.containsKey( l_item.getKey() ) )
                 m_configuration.set( l_item.getKey(), p_input.get( l_item.getKey() ) );
 

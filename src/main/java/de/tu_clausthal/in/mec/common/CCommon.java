@@ -29,9 +29,12 @@ import com.github.drapostolos.typeparser.TypeParserException;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -111,6 +114,28 @@ public class CCommon
 
         return null;
     }
+
+    /**
+     * create a deep-copy of a serializable object
+     *
+     * @param p_object input object
+     * @return deep-copy of object
+     * @throws IOException throws on serializing error
+     * @throws ClassNotFoundException throws on derserialzing error
+     * @tparam T object type
+     */
+    public static <T> T deepCopy( final T p_object ) throws IOException, ClassNotFoundException
+    {
+        final ByteArrayOutputStream l_transfer = new ByteArrayOutputStream();
+
+        final ObjectOutputStream l_input = new ObjectOutputStream( l_transfer );
+        l_input.writeObject( p_object );
+        l_input.flush();
+
+        final ObjectInputStream l_output = new ObjectInputStream( new ByteArrayInputStream( l_transfer.toByteArray() ) );
+        return (T) l_output.readObject();
+    }
+
 
     /**
      * creates a map from parameters

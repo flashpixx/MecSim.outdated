@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.common;
 
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -49,15 +50,20 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
 
     /**
      * copy-ctor - creates a plain name-hash-map from a map of maps
+     * with a full deep copy of keys and values
      *
      * @param p_data map
      */
     @SuppressWarnings( "unchecked" )
-    public CNameHashMap( final Map<String, Object> p_data )
+    public CNameHashMap( final Map<String, Object> p_data ) throws IOException, ClassNotFoundException
     {
         super();
         for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
-            this.put( new String( l_item.getKey() ), ( l_item.getValue() instanceof Map ) ? new CNameHashMap( (Map) l_item.getValue() ) : l_item.getValue() );
+            this.put(
+                    CCommon.deepCopy( l_item.getKey() ), ( l_item.getValue() instanceof Map ) ? new CNameHashMap( (Map) l_item.getValue() ) : CCommon.deepCopy(
+                            l_item.getValue()
+                    )
+            );
     }
 
     /**

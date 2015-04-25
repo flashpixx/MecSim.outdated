@@ -218,7 +218,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     public final void setGenerator( final IGenerator p_generator )
     {
         this.m_generator = p_generator;
-        this.setColor( p_generator.getColor() );
+        //this.setColor( p_generator.getColor() );
     }
 
     @Override
@@ -243,7 +243,8 @@ public class CSource extends IInspector implements ISource, ISerializable
     @Override
     public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        return this.m_generator.generate( p_currentstep );
+        return null;
+        //return this.m_generator.generate( p_currentstep );
     }
 
     @Override

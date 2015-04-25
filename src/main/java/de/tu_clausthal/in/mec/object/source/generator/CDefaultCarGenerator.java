@@ -23,16 +23,11 @@
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
-import de.tu_clausthal.in.mec.object.car.CDefaultCar;
-import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collection;
-import java.util.HashSet;
 
 
 /**
@@ -69,6 +64,7 @@ public class CDefaultCarGenerator implements IGenerator
         m_position = p_position;
     }
 
+/*
     @Override
     public Color getColor()
     {
@@ -91,7 +87,7 @@ public class CDefaultCarGenerator implements IGenerator
     {
         return m_settings;
     }
-
+*/
     /**
      * read call of serialize interface
      *
@@ -120,4 +116,9 @@ public class CDefaultCarGenerator implements IGenerator
         p_stream.writeDouble( m_position.getLongitude() );
     }
 
+    @Override
+    public int generate( final int p_currentStep )
+    {
+        return 0;
+    }
 }

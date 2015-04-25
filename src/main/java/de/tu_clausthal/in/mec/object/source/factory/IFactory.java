@@ -23,9 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source.factory;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-
-import java.awt.*;
+import java.util.Set;
 
 
 /**
@@ -33,22 +31,14 @@ import java.awt.*;
  *
  * @param <T> an object that implements ICar
  */
-public interface IFactory<T extends ICar>
+public interface IFactory<T>
 {
-    /**
-     * method which provides a color to paint sources differently
-     *
-     * @return free color
-     * @deprecated remove / move to source class
-     */
-    public Color getColor();
 
     /**
-     * factory method to create a new car
+     * factory method to create objects
      *
-     * @return created car
-     * @todo rename it, because a factory can create any object
-     * @todo add parameter to define the number of objects, which should created
+     * @param p_count number of objects
+     * @return set with objects
      */
-    public T createCar();
+    public Set<T> create( final int p_count );
 }

@@ -24,22 +24,17 @@
 package de.tu_clausthal.in.mec.object.source.generator;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
-import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.HashSet;
 
 
 /**
@@ -69,7 +64,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
 
         this.m_aslName = p_aslName;
     }
-
+/*
     @Override
     public final Color getColor()
     {
@@ -86,7 +81,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
 
         return l_sources;
     }
-
+*/
     /**
      * read call of serialize interface
      *

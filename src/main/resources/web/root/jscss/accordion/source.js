@@ -415,17 +415,31 @@ var mecsim_source,
                         lat: Math.random() * 180,
                         long: Math.random() * 90,
                         targets: randomTargets
-                })
+                });
             }
 
             return result;
 
         },
 
+        //load asl files in the select menu
+        loadASL: function() {
+            $.getJSON( "cagentenvironment/jason/list", function(data){
+                SourcePanel.settings.aslselect.empty();
+                for(var i in data.agents){
+                    SourcePanel.settings.aslselect
+                        .append( $("<option></option>")
+                        .attr("value",data.agents[i])
+                        .text(data.agents[i]));
+                }
+            });
+        },
+
         bind_ui_actions: function() {
 
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
+                SourcePanel.loadASL();
                 UI().getContent().empty();
                 UI().getContent().load("template/source.htm", function(){
                     SourcePanel.initLayout();
@@ -491,18 +505,8 @@ var mecsim_source,
                 });
             });
 
-            //Select ASL Programm
-            $.getJSON( "cagentenvironment/jason/list", function(data){
-                SourcePanel.settings.aslselect.empty();
-                for(var i in data.agents){
-                    SourcePanel.settings.aslselect
-                        .append( $("<option></option>")
-                        .attr("value",data.agents[i])
-                        .text(data.agents[i]));
-                }
-            });
-
-
+            //Listen to the Select Menu
+            SourcePanel.loadASL();
             SourcePanel.settings.aslselect.selectmenu().on("selectmenuchange", function(data){
                 $.ajax({
                     type: "POST",

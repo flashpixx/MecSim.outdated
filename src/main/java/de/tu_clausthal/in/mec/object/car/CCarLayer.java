@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.car;
 import com.graphhopper.routing.util.Weighting;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.car.drivemodel.CAgentNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -58,7 +59,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     /**
      * driving model list
      */
-    private static final IDriveModel[] s_drivemodellist = {new CNagelSchreckenberg()};
+    private static final IDriveModel[] s_drivemodellist = {new CNagelSchreckenberg(), new CAgentNagelSchreckenberg()};
     /**
      * data structure - not serializable
      */

@@ -44,10 +44,12 @@ public class CTrafficEnvironment
      */
     private final Map<String, Object> web_static_listdrivemodel()
     {
-        return new HashMap()
-        {{
-                put( "drivingmodel", CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getDrivingModelList() );
-            }};
+        final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
+        final Map<String, Object> l_models = new HashMap<>();
+        for ( String l_item : l_layer.getDrivingModelList() )
+            l_models.put( l_item, CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ) ) );
+
+        return l_models;
     }
 
 
@@ -60,6 +62,10 @@ public class CTrafficEnvironment
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nomodelname" ) );
+
+        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).setDriveModel( (String) p_data.get( "id" ) );
     }
 
 

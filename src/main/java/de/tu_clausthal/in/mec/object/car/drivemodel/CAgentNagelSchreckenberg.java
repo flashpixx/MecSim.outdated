@@ -23,65 +23,33 @@
 
 package de.tu_clausthal.in.mec.object.car.drivemodel;
 
+import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
-import java.util.Map;
-import java.util.Random;
-
 
 /**
- * class of the Nagel-Schreckenberg drive model
+ * class of the Nagel-Schreckenberg drive model which
+ * uses full control of agent cars
  *
  * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
  */
-public class CNagelSchreckenberg implements IDriveModel
+public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
 {
-
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * defines the minimal speed *
-     */
-    private static final int c_minimalspeed = 15;
-
-    /**
-     * random object for linger probability *
-     */
-    private final Random m_random = new Random();
-
-
     @Override
-    public String getName()
+    public final String getName()
     {
-        return "Nagel-Schreckenberg";
+        return "Agent Nagel-Schreckenberg";
     }
 
     @Override
-    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
+    public final void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
     {
+        // if car is an agent-car the agent gets full control over the car
+        if ( p_car instanceof CCarJasonAgent )
+            return;
 
-        //check maximum speed on the current edge and modify speed
-        final int l_maxspeed = Math.min( p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed( p_car.getEdge() ) );
-
-        // increment speed
-        p_car.setCurrentSpeed( Math.min( l_maxspeed, p_car.getCurrentSpeed() + p_car.getAcceleration() ) );
-
-        // check collision with the predecessor car
-        final Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
-        if ( ( l_predecessor != null ) && ( l_predecessor.size() > 0 ) )
-        {
-            final Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
-            if ( l_item.getKey().intValue() < p_car.getCurrentSpeed() )
-                p_car.setCurrentSpeed( Math.max( 0, l_item.getKey().intValue() - 1 ) );
-        }
-
-        // decrement on linger random value
-        if ( ( p_car.getCurrentSpeed() > 0 ) && ( m_random.nextDouble() <= p_car.getLingerProbability() ) )
-            p_car.setCurrentSpeed( Math.max( c_minimalspeed, p_car.getCurrentSpeed() - p_car.getDeceleration() ) );
-
+        // otherwise call super method
+        super.update( p_currentstep, p_graph, p_car );
     }
-
 }

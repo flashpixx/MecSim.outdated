@@ -79,18 +79,17 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     private Color m_color = Color.BLACK;
     /**
-     * Member Variable to save the last Zoom (If the Zoom changed the image need to be resized)
+     * last Zoom (if the zoom changed the image need to be resized)
      */
     private int m_lastZoom = 0;
     /**
-     * Member Variable which may hold a Generator
+     * generator of this source
      */
     private IGenerator m_generator;
     /**
-     * ComplexTarget of this Source
+     * ComplexTarget of this source
      */
-    private CComplexTarget m_complexTarget;
-
+    private CComplexTarget m_complexTarget = new CComplexTarget();
     /**
      * map with targets
      */
@@ -101,7 +100,7 @@ public class CSource extends IInspector implements ISource, ISerializable
 
 
     /**
-     * ctor that sets the geo position of the source
+     * ctor
      *
      * @param p_position geo position object
      */
@@ -217,29 +216,9 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public final void setGenerator( final IGenerator p_generator )
-    {
-        this.m_generator = p_generator;
-        //this.setColor( p_generator.getColor() );
-    }
-
-    @Override
-    public final void removeGenerator()
-    {
-        this.m_generator = null;
-        this.setColor( Color.BLACK );
-    }
-
-    @Override
     public final CComplexTarget getComplexTarget()
     {
         return m_complexTarget;
-    }
-
-    @Override
-    public final void setComplexTarget( final CComplexTarget p_complexTarget )
-    {
-        this.m_complexTarget = p_complexTarget;
     }
 
     @Override
@@ -311,7 +290,7 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     /**
-     * Method to scale a Buffered Image
+     * method to scale a buffered image
      *
      * @param p_source Image which should be scaled
      * @param p_width new Width

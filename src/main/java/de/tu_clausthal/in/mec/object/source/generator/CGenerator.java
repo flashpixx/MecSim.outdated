@@ -23,52 +23,84 @@
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.source.factory.IFactory;
+import de.tu_clausthal.in.mec.object.source.generator.CTimeUniformDistribution;
+import de.tu_clausthal.in.mec.object.source.generator.IGeneratorDistribution;
 
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
+import java.util.Collection;
+import java.util.HashSet;
 
 
 /**
- * generator of a static number of objects with a time-exponential function
+ * class which is responsible for generating cars in different ways
  */
-public abstract class CTimeDistribution implements IGeneratorDistribution
+public class CGenerator
 {
     /**
-     * distribution *
+     * member variable to create different types of car
      */
-    private final AbstractRealDistribution m_distribution;
+    private IFactory m_factory;
     /**
-     * number of cars *
+     * member variable to indicate the amount of cars which should be created
      */
-    private final int m_count;
+    private IGeneratorDistribution m_settings = new CTimeUniformDistribution(5, 0, 10);
+    /**
+     * member variable to restrict the steps where cars are generated
+     */
+    private static int m_restriction = 15;
 
 
     /**
-     * default ctor
+     * ctor - default no factory will be set
      */
-    private CTimeDistribution()
+    public CGenerator()
     {
-        m_distribution = null;
-        m_count = 0;
+
     }
 
     /**
-     * ctor
+     * method to get the factory
      *
-     * @param p_distribution distribution object
-     * @param p_count number of objects
+     * @return current factory
      */
-    protected CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
+    public IFactory getFactory()
     {
-        m_count = p_count;
-        m_distribution = p_distribution;
+        return this.m_factory;
     }
 
-
-    @Override
-    public int getCount( final int p_currentStep )
+    /**
+     * method to set a new factory
+     * @param p_factory new factory
+     */
+    public void setFactory(final IFactory p_factory)
     {
-        if ( m_distribution == null )
-            return 0;
-        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+        this.m_factory = p_factory;
     }
+
+    /**
+     * method to remove the factory
+     */
+    public void removeFactory()
+    {
+        this.m_factory = null;
+    }
+
+    /**
+     * method to generate cars
+     * @param p_currentStep actual step
+     * @return collection of cars which were generated
+     */
+    public Collection<ICar> generate( final int p_currentStep)
+    {
+        final Collection<ICar> l_sources = new HashSet<>();
+
+        if ( p_currentStep % m_restriction == 0 && m_factory!=null)
+            for ( int i = 0; i < m_settings.getCount(p_currentStep); i++ )
+                continue;
+                //l_sources.add( this.m_factory.createCar() );
+
+        return l_sources;
+    }
+
 }

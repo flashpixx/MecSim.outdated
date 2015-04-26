@@ -27,17 +27,17 @@ import java.io.Serializable;
 
 
 /**
- * generator interface to define different object generator
+ * distribution interface to define the amount of car that should be generated
  */
-public interface IGenerator extends Serializable
+public interface IGeneratorDistribution extends Serializable
 {
 
     /**
-     * method to generate a collection of cars
+     * method to get the amount of cars
      *
      * @param p_currentStep
      * @return number of objects
      */
-    int generate( final int p_currentStep );
+    int getCount( final int p_currentStep );
 
 }

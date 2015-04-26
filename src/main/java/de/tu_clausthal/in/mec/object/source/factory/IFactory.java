@@ -23,8 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.source.factory;
 
-import org.jxmapviewer.viewer.GeoPosition;
-
 import java.awt.*;
 import java.io.Serializable;
 import java.util.Set;

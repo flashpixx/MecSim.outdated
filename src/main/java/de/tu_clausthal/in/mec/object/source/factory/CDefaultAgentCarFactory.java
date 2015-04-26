@@ -60,10 +60,14 @@ public class CDefaultAgentCarFactory extends ICarFactory
     /**
      * ctor
      *
-     * @param p_aslName ASL name
+     * @param p_position position where the cars should be created
+     * @param p_aslName name of the asl file
      */
-    public CDefaultAgentCarFactory( final GeoPosition p_position,  final String p_aslName )
+    public CDefaultAgentCarFactory( final GeoPosition p_position, final String p_aslName )
     {
+        if ( p_position == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
+
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.source.factory;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -37,16 +38,20 @@ import java.util.Set;
 public class CDefaultCarFactory extends ICarFactory
 {
     /**
-     * position where the cars should be placed
+     * position where the cars should be created
      */
     private GeoPosition m_geoPosition;
 
     /**
      * ctor
      *
-     * @param p_position
+     * @param p_position position where the cars should be created
      */
-    public CDefaultCarFactory(final GeoPosition p_position){
+    public CDefaultCarFactory( final GeoPosition p_position )
+    {
+        if ( p_position == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
+
         this.m_geoPosition = p_position;
     }
 

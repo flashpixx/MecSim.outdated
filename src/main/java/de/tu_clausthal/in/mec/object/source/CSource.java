@@ -23,65 +23,22 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
-import de.tu_clausthal.in.mec.runtime.CSimulation;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
-import de.tu_clausthal.in.mec.runtime.ISerializable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-import de.tu_clausthal.in.mec.ui.IInspector;
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
 
 
 /**
  * class with default source implementation
+ *
  * @todo source is a tuple of IGenerator and IFactory -> a car-source is a derivation of source and overloads the factory to ICarFactory
- * @todo create abstract class car-source with iconize structure
- * @todo create abstract class with painting calls
  */
-public class CSource extends IInspector implements ISource, ISerializable
+public class CSource extends ISource
 {
-
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * position of the source within the map
-     */
-    private GeoPosition m_position;
-    /**
-     * image of the waypoint
-     */
-    private transient BufferedImage m_image;
-    /**
-     * waypoint color
-     */
-    private Color m_color = Color.BLACK;
-    /**
-     * last Zoom (if the zoom changed the image need to be resized)
-     */
-    private int m_lastZoom = 0;
     /**
      * generator of this source
      */
@@ -90,13 +47,6 @@ public class CSource extends IInspector implements ISource, ISerializable
      * ComplexTarget of this source
      */
     private CComplexTarget m_complexTarget = new CComplexTarget();
-    /**
-     * map with targets
-     */
-    private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
-    {{
-            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
-        }};
 
 
     /**
@@ -106,119 +56,8 @@ public class CSource extends IInspector implements ISource, ISerializable
      */
     public CSource( final GeoPosition p_position )
     {
-        m_position = p_position;
+        this.setPosition( p_position );
         this.setImage();
-    }
-
-    /**
-     * creates the image
-     */
-    private void setImage()
-    {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
-    }
-
-    @Override
-    public final Map<String, Object> inspect()
-    {
-        final Map<String, Object> l_map = super.inspect();
-        l_map.put( "geoposition", m_position );
-        return l_map;
-    }
-
-    @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
-    }
-
-    @Override
-    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
-    {
-        if ( m_position == null )
-            return;
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
-                this.iconsize(
-                        p_viewer
-                )
-        );
-
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
-    }
-
-    @Override
-    public final void onDeserializationInitialization()
-    {
-
-    }
-
-    @Override
-    public final void onDeserializationComplete()
-    {
-        m_target = new HashSet<>();
-        m_target.add( (CCarLayer) CSimulation.getInstance().getWorld().get( "Cars" ) );
-    }
-
-    @Override
-    public final GeoPosition getPosition()
-    {
-        return m_position;
-    }
-
-    @Override
-    public final Color getColor()
-    {
-        return m_color;
-    }
-
-    @Override
-    public final void setColor( final Color p_color )
-    {
-        if ( p_color == null )
-            this.m_color = Color.BLACK;
-
-        this.m_color = p_color;
-        this.setImage();
-
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-    }
-
-    @Override
-    public final IGenerator getGenerator()
-    {
-        return m_generator;
-    }
-
-    @Override
-    public final CComplexTarget getComplexTarget()
-    {
-        return m_complexTarget;
     }
 
     @Override
@@ -229,111 +68,14 @@ public class CSource extends IInspector implements ISource, ISerializable
     }
 
     @Override
-    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
+    public IGenerator getGenerator()
     {
-        return m_target;
+        return this.m_generator;
     }
 
     @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    public CComplexTarget getComplexTarget()
     {
-        if ( m_image == null )
-            return;
-
-        //If the Zoom changed Calculate the new Image and Scale
-        if ( p_viewer.getZoom() != m_lastZoom )
-        {
-            int l_newWidth = 20;
-            int l_newHeight = 34;
-
-            l_newHeight = (int) ( l_newHeight * this.iconscale( p_viewer ) );
-            l_newWidth = (int) ( l_newWidth * this.iconscale( p_viewer ) );
-
-            this.setImage( l_newWidth, l_newHeight );
-        }
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
+        return this.m_complexTarget;
     }
-
-    /**
-     * creates an image with a specific scale
-     *
-     * @param p_width image width
-     * @param p_height image height
-     */
-    private void setImage( final int p_width, final int p_height )
-    {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-            l_image = this.getScaledImage( l_image, p_width, p_height );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
-    }
-
-    /**
-     * method to scale a buffered image
-     *
-     * @param p_source Image which should be scaled
-     * @param p_width new Width
-     * @param p_height new Height
-     * @return new Image
-     */
-    private BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
-    {
-        final BufferedImage l_newimage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
-        final Graphics2D l_graphics = l_newimage.createGraphics();
-        l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
-        l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
-        l_graphics.dispose();
-        return l_newimage;
-    }
-
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
-
-        m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
-        this.setImage();
-    }
-
-    /**
-     * write call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws the exception on loading data
-     */
-    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
-    {
-        p_stream.defaultWriteObject();
-
-        p_stream.writeDouble( m_position.getLatitude() );
-        p_stream.writeDouble( m_position.getLongitude() );
-    }
-
 }

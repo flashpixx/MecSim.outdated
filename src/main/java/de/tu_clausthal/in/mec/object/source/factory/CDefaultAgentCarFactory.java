@@ -78,11 +78,11 @@ public class CDefaultAgentCarFactory extends ICarFactory
     }
 
     @Override
-    public Set<ICar> generate( final GeoPosition p_geoposition, final int p_step, final int p_count )
+    public Set<ICar> generate( final int p_count )
     {
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( p_geoposition, m_aslName ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( m_geoPosition, m_aslName ) );
         return l_set;
     }
 

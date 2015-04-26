@@ -48,11 +48,9 @@ public interface IFactory<T> extends Serializable
     /**
      * factory method to create objects
      *
-     * @param p_geoposition generate / source position
-     * @param p_step current step
      * @param p_count number of objects
      * @return set with objects
      */
-    public Set<T> generate( final GeoPosition p_geoposition, final int p_step, final int p_count );
+    public Set<T> generate( final int p_count );
 
 }

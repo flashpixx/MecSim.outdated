@@ -62,6 +62,6 @@ public class CSource extends ISource<ICar>
     @Override
     public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        return this.getFactory().generate( this.getPosition(), p_currentstep, this.getGenerator().getCount( p_currentstep ) );
+        return this.getFactory().generate( this.getGenerator().getCount( p_currentstep ) );
     }
 }

@@ -57,11 +57,11 @@ public class CDefaultCarFactory extends ICarFactory
     }
 
     @Override
-    public Set<ICar> generate( final GeoPosition p_geoposition, final int p_step, final int p_count )
+    public Set<ICar> generate( final int p_count )
     {
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( p_geoposition ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( m_geoPosition ) );
         return l_set;
     }
 

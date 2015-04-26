@@ -37,7 +37,7 @@ public class CDefaultCar extends ICarFactor
 {
 
     @Override
-    public Set<ICar> generate( final GeoPosition p_geoposition, final int p_count )
+    public Set<ICar> generate( final GeoPosition p_geoposition, final int p_step, final int p_count )
     {
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )

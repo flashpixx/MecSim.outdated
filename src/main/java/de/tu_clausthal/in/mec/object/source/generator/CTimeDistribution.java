@@ -64,6 +64,9 @@ public abstract class CTimeDistribution implements IGenerator
     }
 
 
+    /**
+     * @bug check threshold
+     */
     @Override
     public int generate( final int p_currentStep )
     {

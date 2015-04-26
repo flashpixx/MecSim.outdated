@@ -25,6 +25,8 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.source.factory.CDefaultCar;
+import de.tu_clausthal.in.mec.object.source.generator.CTimeUniformDistribution;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -104,10 +106,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createSource( final GeoPosition p_geoposition )
     {
-        final ISource l_newsource = new CSource( p_geoposition );
-        this.add( l_newsource );
+        this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCar() ) );
+        //final ISource l_newsource = new CSource( p_geoposition );
+        //this.add( l_newsource );
 
-        this.setFactory( l_newsource );
+        //this.setFactory( l_newsource );
         //l_newsource.setComplexTarget( new CComplexTarget() );
     }
 

@@ -65,10 +65,6 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
      */
     private static final long serialVersionUID = 1L;
     /**
-     * position of the source within the map
-     */
-    private GeoPosition m_position;
-    /**
      * image of the waypoint
      */
     private transient BufferedImage m_image;
@@ -80,6 +76,23 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
      * last zoom (if the zoom changed the image need to be resized)
      */
     private int m_lastZoom = 0;
+    /**
+     * position of the source within the map
+     */
+    private GeoPosition m_position;
+    /**
+     * generator of this source
+     */
+    private IGenerator m_generator;
+    /**
+     * factory of this source
+     */
+    private ICarFactory m_factory;
+    /**
+     * ComplexTarget of this source
+     */
+    private CComplexTarget m_complexTarget = new CComplexTarget();
+
     /**
      * map with targets
      */
@@ -222,6 +235,35 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
     }
 
     /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
+        this.setImage();
+    }
+
+    /**
+     * write call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws the exception on loading data
+     */
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    {
+        p_stream.defaultWriteObject();
+
+        p_stream.writeDouble( m_position.getLatitude() );
+        p_stream.writeDouble( m_position.getLongitude() );
+    }
+
+    /**
      * returns the position of the source
      *
      * @return geoposition of the source
@@ -262,62 +304,43 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
     }
 
     /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
-
-        m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
-        this.setImage();
-    }
-
-    /**
-     * write call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws the exception on loading data
-     */
-    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
-    {
-        p_stream.defaultWriteObject();
-
-        p_stream.writeDouble( m_position.getLatitude() );
-        p_stream.writeDouble( m_position.getLongitude() );
-    }
-
-    /**
      * return the generator of the source
      *
      * @return generator object of this source
      * @deprecated
      */
-    public abstract IGenerator getGenerator();
+    public IGenerator getGenerator(){
+        return m_generator;
+    }
 
     /**
      * set a new generator
      *
      * @param p_generator new generator
      */
-    public abstract void setGenerator(IGenerator p_generator);
+    public void setGenerator(IGenerator p_generator){
+        if(p_generator != null)
+            this.m_generator = p_generator;
+    }
 
     /**
      * return the factory of the source
      *
      * @return factory object of this source
      */
-    public abstract ICarFactory getFactory();
+    public ICarFactory getFactory(){
+        return m_factory;
+    }
 
     /**
      * set a new factory
      *
      * @param p_factory
      */
-    public abstract void setFactory(ICarFactory p_factory);
+    public void setFactory(ICarFactory p_factory){
+        if(p_factory != null)
+            this.m_factory = p_factory;
+    }
 
     /**
      * return the ComplexTarget of the source
@@ -325,6 +348,8 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
      * @return ComplexTarget of the source
      * @deprecated
      */
-    public abstract CComplexTarget getComplexTarget();
+    public CComplexTarget getComplexTarget(){
+        return this.m_complexTarget;
+    }
 
 }

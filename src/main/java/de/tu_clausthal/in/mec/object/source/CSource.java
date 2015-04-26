@@ -41,20 +41,6 @@ import java.util.Collection;
 public class CSource extends ISource
 {
     /**
-     * generator of this source
-     */
-    private IGenerator m_generator;
-    /**
-     * factory of this source
-     */
-    private ICarFactory m_factory;
-    /**
-     * ComplexTarget of this source
-     */
-    private CComplexTarget m_complexTarget = new CComplexTarget();
-
-
-    /**
      * ctor
      *
      * @param p_position geo position object
@@ -68,44 +54,13 @@ public class CSource extends ISource
     public CSource (final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory)
     {
         this(p_position);
-        this.m_generator=p_generator;
-        this.m_factory=p_factory;
+        this.setGenerator( p_generator );
+        this.setFactory( p_factory );
     }
 
     @Override
     public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        return null;
-        //return this.m_generator.generate( p_currentstep );
-    }
-
-    @Override
-    public IGenerator getGenerator()
-    {
-        return this.m_generator;
-    }
-
-    @Override
-    public void setGenerator( final IGenerator p_generator )
-    {
-        this.m_generator=p_generator;
-    }
-
-    @Override
-    public ICarFactory getFactory()
-    {
-        return null;
-    }
-
-    @Override
-    public void setFactory( final ICarFactory p_factory )
-    {
-        this.m_factory=p_factory;
-    }
-
-    @Override
-    public CComplexTarget getComplexTarget()
-    {
-        return this.m_complexTarget;
+        return this.getFactory().generate( this.getPosition(), p_currentstep, this.getGenerator().getCount( p_currentstep ) );
     }
 }

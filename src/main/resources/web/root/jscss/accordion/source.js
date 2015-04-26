@@ -432,6 +432,8 @@ var mecsim_source,
                         .attr("value",data.agents[i])
                         .text(data.agents[i]));
                 }
+            }).done(function(){
+                SourcePanel.settings.aslselect.selectmenu("refresh");
             });
         },
 

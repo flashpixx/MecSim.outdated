@@ -77,10 +77,10 @@ public class CCarJasonAgent extends CDefaultCar
     /**
      * ctor to create the initial values
      *
-     * @param p_asl agent ASL file
      * @param p_StartPosition start positions (position of the source)
+     * @param p_asl agent ASL file
      */
-    public CCarJasonAgent( final String p_asl, final GeoPosition p_StartPosition )
+    public CCarJasonAgent( final GeoPosition p_StartPosition, final String p_asl )
     {
         super( p_StartPosition );
 

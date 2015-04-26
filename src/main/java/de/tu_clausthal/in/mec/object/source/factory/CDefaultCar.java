@@ -23,26 +23,25 @@
 
 package de.tu_clausthal.in.mec.object.source.factory;
 
+import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
 /**
- * interface which defines the generic structure of every factory
- *
- * @tparam T any object type
+ * class to generate a default cars
  */
-public interface IFactory<T>
+public class CDefaultCar implements IFactory<ICar>
 {
 
-    /**
-     * factory method to create objects
-     *
-     * @param p_count number of objects
-     * @param p_geoposition generate / source position
-     * @return set with objects
-     */
-    public Set<T> create( final GeoPosition p_geoposition, final int p_count );
-
+    @Override
+    public Set<ICar> create( final GeoPosition p_geoposition, final int p_count )
+    {
+        final Set<ICar> l_set = new HashSet<>();
+        for ( int i = 0; i < p_count; i++ )
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( p_geoposition ) );
+        return l_set;
+    }
 }

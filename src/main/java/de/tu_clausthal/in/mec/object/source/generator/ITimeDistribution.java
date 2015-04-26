@@ -23,21 +23,52 @@
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
-import java.io.Serializable;
+
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
 
 /**
- * distribution interface to define the amount of car that should be generated
+ * generator of a static number of objects with a time-exponential function
  */
-public interface IGeneratorDistribution extends Serializable
+public abstract class ITimeDistribution implements IGenerator
 {
+    /**
+     * distribution *
+     */
+    private final AbstractRealDistribution m_distribution;
+    /**
+     * number of cars *
+     */
+    private final int m_count;
+
 
     /**
-     * method to get the amount of cars
-     *
-     * @param p_currentStep
-     * @return number of objects
+     * default ctor
      */
-    int getCount( final int p_currentStep );
+    private ITimeDistribution()
+    {
+        m_distribution = null;
+        m_count = 0;
+    }
 
+    /**
+     * ctor
+     *
+     * @param p_distribution distribution object
+     * @param p_count number of objects
+     */
+    protected ITimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
+    {
+        m_count = p_count;
+        m_distribution = p_distribution;
+    }
+
+
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        if ( m_distribution == null )
+            return 0;
+        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+    }
 }

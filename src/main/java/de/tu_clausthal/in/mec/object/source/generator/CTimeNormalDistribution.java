@@ -29,7 +29,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 /**
  * creates a time-normal distribution generator
  */
-public class CTimeNormalDistribution extends CTimeDistribution
+public class CTimeNormalDistribution extends ITimeDistribution
 {
 
     /**

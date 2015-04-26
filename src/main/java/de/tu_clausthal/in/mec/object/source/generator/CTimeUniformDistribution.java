@@ -30,7 +30,7 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 /**
  * creates a time-uniform distribution generator
  */
-public class CTimeUniformDistribution extends CTimeDistribution
+public class CTimeUniformDistribution extends ITimeDistribution
 {
     /**
      * ctor

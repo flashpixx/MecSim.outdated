@@ -29,7 +29,7 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
 /**
  * creates a time-exponential distribution generator
  */
-public class CTimeExponentialDistribution extends CTimeDistribution
+public class CTimeExponentialDistribution extends ITimeDistribution
 {
 
     /**

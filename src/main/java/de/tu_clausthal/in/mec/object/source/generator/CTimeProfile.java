@@ -28,7 +28,7 @@ package de.tu_clausthal.in.mec.object.source.generator;
 /**
  * profile generator to define a fixed histogram on the time steps
  */
-public class CTimeProfile implements IGeneratorDistribution
+public class CTimeProfile implements IGenerator
 {
 
     /**

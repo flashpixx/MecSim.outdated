@@ -29,6 +29,6 @@ import de.tu_clausthal.in.mec.object.car.ICar;
 /**
  * class to create an car factory object
  */
-public abstract class ICarFactor implements IFactory<ICar>
+public abstract class ICarFactory implements IFactory<ICar>
 {
 }

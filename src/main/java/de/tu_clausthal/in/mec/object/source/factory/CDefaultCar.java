@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * class to generate default cars
  */
-public class CDefaultCar extends ICarFactor
+public class CDefaultCar extends ICarFactory
 {
 
     @Override

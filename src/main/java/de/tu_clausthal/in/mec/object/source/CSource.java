@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.source.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -43,6 +44,10 @@ public class CSource extends ISource
      * generator of this source
      */
     private IGenerator m_generator;
+    /**
+     * factory of this source
+     */
+    private ICarFactory m_factory;
     /**
      * ComplexTarget of this source
      */

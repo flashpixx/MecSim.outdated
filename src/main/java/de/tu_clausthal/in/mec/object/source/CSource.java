@@ -25,26 +25,22 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.source.factory.IFactory;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
 
 
 /**
- * class with default source implementation
- *
- * @todo source is a tuple of IGenerator and IFactory -> a car-source is a derivation of source and overloads the factory to ICarFactory
+ * class with default source implementation for cars
  */
 public class CSource extends ISource<ICar>
 {
     /**
-     * ctor
+     * ctor - default: without generator and factory
      *
-     * @param p_position geo position object
+     * @param p_position position of the source
      */
     public CSource( final GeoPosition p_position )
     {
@@ -52,7 +48,14 @@ public class CSource extends ISource<ICar>
         this.setImage();
     }
 
-    public CSource (final GeoPosition p_position, final IGenerator p_generator, final IFactory<ICar> p_factory)
+    /**
+     * ctor - with specific generator and factory
+     *
+     * @param p_position position of the source
+     * @param p_generator generator for this source
+     * @param p_factory factory for this source
+     */
+    public CSource( final GeoPosition p_position, final IGenerator p_generator, final IFactory<ICar> p_factory )
     {
         this( p_position );
         this.setGenerator( p_generator );

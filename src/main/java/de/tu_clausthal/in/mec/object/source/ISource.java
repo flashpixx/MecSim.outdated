@@ -24,9 +24,8 @@
 package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.source.factory.IFactory;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
@@ -90,7 +89,7 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      */
     private IFactory<T> m_factory;
     /**
-     * ComplexTarget of this source
+     * complex target of this source
      */
     private CComplexTarget m_complexTarget = new CComplexTarget();
     /**
@@ -138,7 +137,7 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
         if ( m_image == null )
             return;
 
-        //If the Zoom changed Calculate the new Image and Scale
+        //if the zoom change calculate the new scaled image
         if ( p_viewer.getZoom() != m_lastZoom )
         {
             int l_newWidth = 20;
@@ -219,10 +218,10 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
     /**
      * method to scale a buffered image
      *
-     * @param p_source Image which should be scaled
-     * @param p_width new Width
-     * @param p_height new Height
-     * @return new Image
+     * @param p_source image which should be scaled
+     * @param p_width new width
+     * @param p_height new height
+     * @return new image
      */
     public BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
     {
@@ -264,7 +263,7 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
     }
 
     /**
-     * returns the position of the source
+     * returns the position
      *
      * @return geoposition of the source
      */
@@ -274,19 +273,22 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
     }
 
     /**
-     * set the position of a source
+     * set the position
      *
      * @param p_position geoposition where the source should be placed
      */
     public final void setPosition( final GeoPosition p_position )
     {
+        if(p_position== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
+
         this.m_position = p_position;
     }
 
     /**
-     * returns the color of the source
+     * returns the color
      *
-     * @return color of the source
+     * @return color of this source
      */
     public Color getColor()
     {
@@ -294,20 +296,22 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
     }
 
     /**
-     * set a color for this source
+     * set a color
      *
      * @param p_color new Color
      */
     public void setColor( final Color p_color )
     {
+        if(p_color== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidcolor" ) );
+
         this.m_color = p_color;
     }
 
     /**
-     * return the generator of the source
+     * returns the generator
      *
-     * @return generator object of this source
-     * @deprecated
+     * @return generator of this source
      */
     public IGenerator getGenerator(){
         return m_generator;
@@ -319,12 +323,14 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      * @param p_generator new generator
      */
     public void setGenerator(IGenerator p_generator){
-        if(p_generator != null)
-            this.m_generator = p_generator;
+        if(p_generator== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgenerator" ) );
+
+        this.m_generator = p_generator;
     }
 
     /**
-     * return the factory of the source
+     * returns the factory
      *
      * @return factory object of this source
      */
@@ -338,18 +344,17 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      * @param p_factory
      */
     public void setFactory(IFactory<T> p_factory){
-        if(p_factory == null)
-            return;
+        if(p_factory== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidfactory" ) );
 
         this.m_factory = p_factory;
         this.setColor( m_factory.getColor() );
     }
 
     /**
-     * return the ComplexTarget of the source
+     * returns the ComplexTarget
      *
-     * @return ComplexTarget of the source
-     * @deprecated
+     * @return ComplexTarget of this source
      */
     public CComplexTarget getComplexTarget(){
         return this.m_complexTarget;

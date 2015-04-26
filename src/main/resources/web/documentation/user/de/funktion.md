@@ -34,6 +34,14 @@ Dem Programm können initiale Parameter mit gegeben werden, um den Startprozess 
 
 ### Speicherort
 
+Der Defaultspeicherort der Daten liegt im Homeverzeichnis der Users im Unterverzeichnis ```.mecsim```. Innerhalb dieser Verzeichnis findet sich folgende Struktur:
+
+* die Datei ```config.json``` beinhaltet alle Einstellungen
+* das Verzeichnis ```graphs``` enthält die Graphdaten der Simulation ([GraphHopper](https://graphhopper.com/))
+* innerhalb des Verzeichnis ```jar``` können beliebige [[Java Archive]] abgelegt werden, die beim Start geladen werden, hierzu zählen z.B. Datenbanktreiber
+* das Unterverzeichnis ```mas``` beinhaltet alle Scriptdateien der Agenten
+* als [[Cache]] der visuelle Kacheldarstellung wird das Verzeichnis ```tile.openstreetmap.org``` verwendet
+* um eigene HTML Inhalte abzulegen kann das Verzeichnis ```www``` benutzt werden, wobei die Dokument-Root-Datei ```index.htm``` lauten muss
 
 
 ## Weltaufbau

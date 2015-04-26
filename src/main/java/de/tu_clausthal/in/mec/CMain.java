@@ -76,6 +76,7 @@ public class CMain
         l_clioptions.addOption( "configuration", true, CCommon.getResourceString( CMain.class, "config" ) );
         l_clioptions.addOption( "nogui", true, CCommon.getResourceString( CMain.class, "nogui" ) );
         l_clioptions.addOption( "uibindport", true, CCommon.getResourceString( CMain.class, "uibindport" ) );
+        l_clioptions.addOption( "uibindhost", true, CCommon.getResourceString( CMain.class, "uibindhost" ) );
         l_clioptions.addOption( "step", true, CCommon.getResourceString( CMain.class, "step" ) );
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
@@ -133,10 +134,18 @@ public class CMain
         try
         {
             if ( ( l_cli.hasOption( "uibindport" ) ) )
-                CConfiguration.getInstance().get().set( "ui/bindport", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
+            {
+                CConfiguration.getInstance().get().set( "ui/server/port", Integer.parseInt( l_cli.getOptionValue( "uibindport" ) ) );
+                CLogger.info( CCommon.getResourceString( CMain.class, "bindportoverwrite", l_cli.getOptionValue( "uibindport" ) ) );
+            }
         }
         catch ( final NumberFormatException l_exception )
         {
+        }
+        if ( ( l_cli.hasOption( "uibindhost" ) ) )
+        {
+            CConfiguration.getInstance().get().set( "ui/server/host", l_cli.getOptionValue( "uibindhost" ) );
+            CLogger.info( CCommon.getResourceString( CMain.class, "bindhostoverwrite", l_cli.getOptionValue( "uibindhost" ) ) );
         }
 
 

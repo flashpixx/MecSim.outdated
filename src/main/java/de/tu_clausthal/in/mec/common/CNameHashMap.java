@@ -35,7 +35,7 @@ import java.util.Stack;
 /**
  * named-base hashmap for Json serialization
  *
- * @warn map within map should be converted with copy-ctor
+ * @warning map within map should be converted with copy-ctor
  */
 public class CNameHashMap extends HashMap<String, Object> implements Iterable<Map.Entry<CPath, Object>>
 {
@@ -100,6 +100,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * check if a path exists
      *
      * @param p_path path
+     * @param p_map browsing map
      * @return boolean
      */
     @SuppressWarnings( "unchecked" )
@@ -121,7 +122,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * traverse into the map
      *
      * @param p_path path of the items
-     * @param p_map map
+     * @param p_map browsing map
      * @return object
      * @tparam T type
      */

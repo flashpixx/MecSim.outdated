@@ -23,14 +23,14 @@ var mecsim_help,
             HelpPanel.settings.about_button.on("click", function(){
 
                 $.getJSON( "cconfiguration/get", function( p_data ) {
-
+                    console.log(p_data);
                     $("#mecsim_project_name")
                             .attr("href", p_data.manifest["project-url"])
                             .text(p_data.manifest["project-name"]);
 
-                    $("#mecsim_licence")
-                            .attr("href", p_data.manifest["licence-url"])
-                            .text(p_data.manifest["licence"]);
+                    $("#mecsim_license")
+                            .attr("href", p_data.manifest["license-url"])
+                            .text(p_data.manifest["license"]);
 
                     $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
                     $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);

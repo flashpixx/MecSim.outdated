@@ -200,7 +200,7 @@ public class CConfiguration
         {
             final Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
-                ( (Map) m_configuration.get( "manifest" ) ).put( l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
+                m_configuration.set( "manifest/" + l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
 
         }
         catch ( final IOException l_exception )

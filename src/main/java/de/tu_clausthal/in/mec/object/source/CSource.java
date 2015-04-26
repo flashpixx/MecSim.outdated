@@ -55,7 +55,7 @@ import java.util.Map;
 
 /**
  * class with default source implementation
- * @todo define car-source depend on ICarFactory and IGenerator
+ * @todo source is a tuple of IGenerator and IFactory -> a car-source is a derivation of source and overloads the factory to ICarFactory
  * @todo create abstract class car-source with iconize structure
  * @todo create abstract class with painting calls
  */

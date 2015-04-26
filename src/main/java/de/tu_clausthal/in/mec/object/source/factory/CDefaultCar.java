@@ -31,7 +31,7 @@ import java.util.Set;
 
 
 /**
- * class to generate a default cars
+ * class to generate default cars
  */
 public class CDefaultCar extends ICarFactor
 {

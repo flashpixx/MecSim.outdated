@@ -65,6 +65,13 @@ public class CSource extends ISource
         this.setImage();
     }
 
+    public CSource (final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory)
+    {
+        this(p_position);
+        this.m_generator=p_generator;
+        this.m_factory=p_factory;
+    }
+
     @Override
     public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
@@ -76,6 +83,24 @@ public class CSource extends ISource
     public IGenerator getGenerator()
     {
         return this.m_generator;
+    }
+
+    @Override
+    public void setGenerator( final IGenerator p_generator )
+    {
+        this.m_generator=p_generator;
+    }
+
+    @Override
+    public ICarFactory getFactory()
+    {
+        return null;
+    }
+
+    @Override
+    public void setFactory( final ICarFactory p_factory )
+    {
+        this.m_factory=p_factory;
     }
 
     @Override

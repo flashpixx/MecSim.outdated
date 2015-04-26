@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.source;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.source.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -296,6 +297,27 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
      * @deprecated
      */
     public abstract IGenerator getGenerator();
+
+    /**
+     * set a new generator
+     *
+     * @param p_generator new generator
+     */
+    public abstract void setGenerator(IGenerator p_generator);
+
+    /**
+     * return the factory of the source
+     *
+     * @return factory object of this source
+     */
+    public abstract ICarFactory getFactory();
+
+    /**
+     * set a new factory
+     *
+     * @param p_factory
+     */
+    public abstract void setFactory(ICarFactory p_factory);
 
     /**
      * return the ComplexTarget of the source

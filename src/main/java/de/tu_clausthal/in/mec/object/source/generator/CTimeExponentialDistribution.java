@@ -35,13 +35,13 @@ public class CTimeExponentialDistribution extends CTimeDistribution
     /**
      * ctor
      *
-     * @param p_numberofcars number of cars
+     * @param p_count number of objects
      * @param p_mean mean value
      * @param p_deviation deviation value
      */
-    public CTimeExponentialDistribution( final int p_numberofcars, final double p_mean, final double p_deviation )
+    public CTimeExponentialDistribution( final int p_count, final double p_mean, final double p_deviation )
     {
-        super( new ExponentialDistribution( p_mean, p_deviation ), p_numberofcars );
+        super( new ExponentialDistribution( p_mean, p_deviation ), p_count );
     }
 
 }

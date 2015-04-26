@@ -39,7 +39,7 @@ public abstract class CTimeDistribution implements IGenerator
     /**
      * number of cars *
      */
-    private final int m_numberofcars;
+    private final int m_count;
 
 
     /**
@@ -48,18 +48,18 @@ public abstract class CTimeDistribution implements IGenerator
     private CTimeDistribution()
     {
         m_distribution = null;
-        m_numberofcars = 0;
+        m_count = 0;
     }
 
     /**
      * ctor
      *
      * @param p_distribution distribution object
-     * @param p_numberofcars number of cars
+     * @param p_count number of objects
      */
-    protected CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_numberofcars )
+    protected CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
     {
-        m_numberofcars = p_numberofcars;
+        m_count = p_count;
         m_distribution = p_distribution;
     }
 
@@ -72,6 +72,6 @@ public abstract class CTimeDistribution implements IGenerator
     {
         if ( m_distribution == null )
             return 0;
-        return m_distribution.sample() <= 0.5 ? 0 : m_numberofcars;
+        return m_distribution.sample() <= 0.5 ? 0 : m_count;
     }
 }

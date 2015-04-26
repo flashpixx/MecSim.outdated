@@ -35,13 +35,13 @@ public class CTimeNormalDistribution extends CTimeDistribution
     /**
      * ctor
      *
-     * @param p_numberofcars number of cars
+     * @param p_count number of objects
      * @param p_mean mean value
      * @param p_deviation deviation value
      */
-    public CTimeNormalDistribution( final int p_numberofcars, final double p_mean, final double p_deviation )
+    public CTimeNormalDistribution( final int p_count, final double p_mean, final double p_deviation )
     {
-        super( new NormalDistribution( p_mean, p_deviation ), p_numberofcars );
+        super( new NormalDistribution( p_mean, p_deviation ), p_count );
     }
 
 }

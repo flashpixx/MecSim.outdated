@@ -35,12 +35,12 @@ public class CTimeUniformDistribution extends CTimeDistribution
     /**
      * ctor
      *
-     * @param p_numberofcars number of cars
+     * @param p_count number of objects
      * @param p_lower lower-bound value
      * @param p_upper upper-bound value
      */
-    public CTimeUniformDistribution( final int p_numberofcars, final double p_lower, final double p_upper )
+    public CTimeUniformDistribution( final int p_count, final double p_lower, final double p_upper )
     {
-        super( new UniformRealDistribution( p_lower, p_upper ), p_numberofcars );
+        super( new UniformRealDistribution( p_lower, p_upper ), p_count );
     }
 }

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.source.factory;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.io.Serializable;
 import java.util.Set;
 
 
@@ -33,7 +34,7 @@ import java.util.Set;
  *
  * @tparam T any object type
  */
-public interface IFactory<T>
+public interface IFactory<T> extends Serializable
 {
 
     /**
@@ -43,6 +44,6 @@ public interface IFactory<T>
      * @param p_geoposition generate / source position
      * @return set with objects
      */
-    public Set<T> create( final GeoPosition p_geoposition, final int p_count );
+    public Set<T> generate( final GeoPosition p_geoposition, final int p_count );
 
 }

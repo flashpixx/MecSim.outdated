@@ -44,11 +44,15 @@ import java.util.Set;
 /**
  * class to generate Jason cars
  */
-public class CJasonCar extends ICarFactory
+public class CDefaultAgentCarFactory extends ICarFactory
 {
 
     /**
-     * Name of the ASL File
+     * position where the cars should be created
+     */
+    private GeoPosition m_geoPosition;
+    /**
+     * name of the ASL file
      */
     private String m_aslName;
 
@@ -58,11 +62,12 @@ public class CJasonCar extends ICarFactory
      *
      * @param p_aslName ASL name
      */
-    public CJasonCar( final String p_aslName )
+    public CDefaultAgentCarFactory( final GeoPosition p_position,  final String p_aslName )
     {
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
+        this.m_geoPosition = p_position;
         this.m_aslName = p_aslName;
     }
 
@@ -80,7 +85,6 @@ public class CJasonCar extends ICarFactory
             l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( p_geoposition, m_aslName ) );
         return l_set;
     }
-
 
     /**
      * read call of serialize interface

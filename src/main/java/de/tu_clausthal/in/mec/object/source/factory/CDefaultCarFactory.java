@@ -34,8 +34,21 @@ import java.util.Set;
 /**
  * class to generate default cars
  */
-public class CDefaultCar extends ICarFactory
+public class CDefaultCarFactory extends ICarFactory
 {
+    /**
+     * position where the cars should be placed
+     */
+    private GeoPosition m_geoPosition;
+
+    /**
+     * ctor
+     *
+     * @param p_position
+     */
+    public CDefaultCarFactory(final GeoPosition p_position){
+        this.m_geoPosition = p_position;
+    }
 
     @Override
     public Color getColor()

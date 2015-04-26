@@ -43,7 +43,7 @@ import java.util.Set;
 /**
  * class to generate Jason cars
  */
-public class CJasonCar implements IFactory<ICar>
+public class CJasonCar extends ICarFactor
 {
 
     /**

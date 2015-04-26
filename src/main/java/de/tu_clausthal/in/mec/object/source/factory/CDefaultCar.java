@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.source.factory;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,12 @@ import java.util.Set;
  */
 public class CDefaultCar extends ICarFactory
 {
+
+    @Override
+    public Color getColor()
+    {
+        return Color.CYAN;
+    }
 
     @Override
     public Set<ICar> generate( final GeoPosition p_geoposition, final int p_step, final int p_count )

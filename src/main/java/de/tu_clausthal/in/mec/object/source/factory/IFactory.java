@@ -25,17 +25,25 @@ package de.tu_clausthal.in.mec.object.source.factory;
 
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Set;
 
 
 /**
- * interface which defines the generic structure of every factory
+ * interface which defines the generic structure of every factory (for sources)
  *
  * @tparam T any object type
  */
 public interface IFactory<T> extends Serializable
 {
+
+    /**
+     * method which defines the color of a source
+     *
+     * @return free Color
+     */
+    public Color getColor();
 
     /**
      * factory method to create objects

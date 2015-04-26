@@ -338,8 +338,11 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      * @param p_factory
      */
     public void setFactory(IFactory<T> p_factory){
-        if(p_factory != null)
-            this.m_factory = p_factory;
+        if(p_factory == null)
+            return;
+
+        this.m_factory = p_factory;
+        this.setColor( m_factory.getColor() );
     }
 
     /**

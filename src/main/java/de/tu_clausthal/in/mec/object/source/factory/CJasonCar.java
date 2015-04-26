@@ -30,6 +30,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -63,6 +64,12 @@ public class CJasonCar extends ICarFactory
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
         this.m_aslName = p_aslName;
+    }
+
+    @Override
+    public Color getColor()
+    {
+        return Color.RED;
     }
 
     @Override

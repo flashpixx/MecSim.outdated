@@ -60,7 +60,7 @@ public class CBootstrap
      *
      * @param p_configuration configuration
      */
-    public static void configIsLoaded( final CConfiguration p_configuration )
+    public static void configurationIsLoaded( final CConfiguration p_configuration )
     {
     }
 

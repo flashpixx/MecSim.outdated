@@ -7,7 +7,6 @@
 !src/main/documentation/**/*.css
 !src/main/documentation/**/*.htm
 !src/main/documentation/**/*.doxyfile
-!src/main/documentation/**/*.vsdx
 !src/main/documentation/**/*.graffle
 
 !src/main/resources/**/*.htm

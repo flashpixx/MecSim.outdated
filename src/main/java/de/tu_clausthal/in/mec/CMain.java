@@ -122,7 +122,7 @@ public class CMain
         CConfiguration.getInstance().setConfigDir( l_defaultconfig );
         CConfiguration.getInstance().read();
 
-        CBootstrap.configIsLoaded( CConfiguration.getInstance() );
+        CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
 
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------

@@ -8,23 +8,31 @@ Events verarbeitet werden. Eine Besonderheit ist das Präprozessing beim Start d
 die die aktuelle Version und der Hersteller der Java Runtime geprüft wird, diese leitet dann den weiteren Startup-Prozess an die Klasse _CMain_ weiter, in
 der der eigentliche Start durchgeführt wird. Die nachfolgenden Diagramme visualisiert den groben Startprozess.
 
+![Startup](image/startup-diagramm.png)
+
 
 ### Start der Simulationsumgebung
 
-Die Simulationsumgebung (_CSimulation_ mit _CWorld_) wird immer gestartet. Die Simulation repräsentiert den Kern, d.h. die Berechnungsstruktur für alle
+Die Simulationsumgebung ( _CSimulation_ mit _CWorld_) wird immer gestartet. Die Simulation repräsentiert den Kern, d.h. die Berechnungsstruktur für alle
 Simualtionsobjekte. Die Welt beinhaltet alle Objekte, die simuliert werden sollen mit ihren dazugehörigen Strukturen. Dieser Simulationskern hat keine
 direkte visuelle Repräsentation, so dass die Simulation auch ohne UI gestartet werden kann. 
 
-![Startup](image/startup-diagram.png)
 
 ### Start der UI
 
+Die UI ist optional und wir somit in Abhängigkeit der Programmübergabe-Parameter geladen. Die UI besteht einmal aus den Tabs innerhalb der Java Anwendung und
+der HTMl darstellung. Die Tabs ( _Main_ und _OSM_ ) sind die internen Java-Komponenten die direkt durch den Simulationskern angesprochen werden können. Die
+Darstellung innerhalb des Tabs _Main_ stellt für den Benutzer die Eingabemasken mittels HTML dar. Die Default-Einstellungen für das Binden des Webservers
+ist die URL ```http://localhost:9876``` vorgesehen. Über die Programmparameter kann diese Adresse beim Start überschrieben werden.
 
 
+## Konfiguration / Speicherort
 
-### Startparameter
+### Programmparameter
 
 Dem Programm können initiale Parameter mit gegeben werden, um den Startprozess zu beeinflussen.
+
+### Speicherort
 
 
 

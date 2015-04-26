@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.source.factory.ICarFactory;
+import de.tu_clausthal.in.mec.object.source.factory.IFactory;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -57,7 +58,7 @@ import java.util.Map;
 /**
  * abstract class for sources (handles common tasks)
  */
-public abstract class ISource extends IInspector implements IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
+public abstract class ISource<T> extends IInspector implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
 {
 
     /**
@@ -87,23 +88,22 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
     /**
      * factory of this source
      */
-    private ICarFactory m_factory;
+    private IFactory<T> m_factory;
     /**
      * ComplexTarget of this source
      */
     private CComplexTarget m_complexTarget = new CComplexTarget();
-
     /**
      * map with targets
      */
-    private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
+    private transient Collection<IReturnSteppableTarget<T>> m_target = new HashSet()
     {{
             add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
 
     @Override
-    public final Collection<IReturnSteppableTarget<ICar>> getTargets()
+    public final Collection<IReturnSteppableTarget<T>> getTargets()
     {
         return m_target;
     }
@@ -328,7 +328,7 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
      *
      * @return factory object of this source
      */
-    public ICarFactory getFactory(){
+    public IFactory<T> getFactory(){
         return m_factory;
     }
 
@@ -337,7 +337,7 @@ public abstract class ISource extends IInspector implements IReturnSteppable<ICa
      *
      * @param p_factory
      */
-    public void setFactory(ICarFactory p_factory){
+    public void setFactory(IFactory<T> p_factory){
         if(p_factory != null)
             this.m_factory = p_factory;
     }

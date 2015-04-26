@@ -49,16 +49,15 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      */
     public GeoPosition getPosition();
 
-
     /**
-     * returns the Color of the source
+     * returns the color of the source
      *
      * @return color of the source
      */
     public Color getColor();
 
     /**
-     * set a new Color for this source
+     * set a new color for this source
      *
      * @param p_color new Color
      * @deprecated
@@ -66,26 +65,12 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
     public void setColor( Color p_color );
 
     /**
-     * return the Generator of the source
+     * return the generator of the source
      *
-     * @return Generator Object of this Source
+     * @return generator object of this source
      * @deprecated
      */
     public IGenerator getGenerator();
-
-    /**
-     * set a new Generator for this source
-     *
-     * @param p_generator new Generator
-     * @deprecated
-     */
-    public void setGenerator( IGenerator p_generator );
-
-    /**
-     * Method to Remove the Generator
-     * @deprecated
-     */
-    public void removeGenerator();
 
     /**
      * return the ComplexTarget of the source
@@ -94,13 +79,5 @@ public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Se
      * @deprecated
      */
     public CComplexTarget getComplexTarget();
-
-    /**
-     * set a new ComplexTarget for this source
-     *
-     * @param p_complexTarget new ComplexTarget
-     * @deprecated
-     */
-    public void setComplexTarget( CComplexTarget p_complexTarget );
 
 }

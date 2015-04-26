@@ -108,7 +108,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.add( l_newsource );
 
         this.setFactory( l_newsource );
-        l_newsource.setComplexTarget( new CComplexTarget() );
+        //l_newsource.setComplexTarget( new CComplexTarget() );
     }
 
     /**
@@ -154,7 +154,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeFactory( final ISource p_source )
     {
-        p_source.removeGenerator();
+        //p_source.removeGenerator();
     }
 
     /**

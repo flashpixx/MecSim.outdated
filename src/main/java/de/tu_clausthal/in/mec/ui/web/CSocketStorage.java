@@ -45,7 +45,7 @@ public class CSocketStorage
     /**
      * clear all data
      */
-    public void clear()
+    public final void clear()
     {
         m_communicator.clear();
     }
@@ -56,7 +56,7 @@ public class CSocketStorage
      *
      * @return
      */
-    public int size()
+    public final int size()
     {
         return m_communicator.size();
     }
@@ -67,7 +67,7 @@ public class CSocketStorage
      *
      * @return boolean of emptyness
      */
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_communicator.isEmpty();
     }
@@ -79,7 +79,7 @@ public class CSocketStorage
      * @param p_key ID of the websocket (hash code)
      * @return boolean of existance
      */
-    public boolean contains( final Integer p_key )
+    public final boolean contains( final Integer p_key )
     {
         return m_communicator.containsKey( p_key );
     }
@@ -91,7 +91,7 @@ public class CSocketStorage
      * @param p_value websocket communicator
      * @return boolean of existance
      */
-    public boolean contains( final CWebSocket.CCommunicator p_value )
+    public final boolean contains( final CWebSocket.CCommunicator p_value )
     {
         return m_communicator.containsKey( p_value.getID() );
     }
@@ -103,7 +103,7 @@ public class CSocketStorage
      * @param p_key ID of the socket (hash code)
      * @return communicator or null
      */
-    public CWebSocket.CCommunicator get( final Integer p_key )
+    public final CWebSocket.CCommunicator get( final Integer p_key )
     {
         return m_communicator.get( p_key );
     }
@@ -114,7 +114,7 @@ public class CSocketStorage
      *
      * @param p_value communicator object
      */
-    public void put( final CWebSocket.CCommunicator p_value )
+    public final void put( final CWebSocket.CCommunicator p_value )
     {
         m_communicator.put( p_value.getID(), p_value );
     }
@@ -126,7 +126,7 @@ public class CSocketStorage
      * @param p_key ID of the socket communicator
      * @return removed communicator
      */
-    public CWebSocket.CCommunicator remove( final Integer p_key )
+    public final CWebSocket.CCommunicator remove( final Integer p_key )
     {
         return m_communicator.remove( p_key );
     }
@@ -138,7 +138,7 @@ public class CSocketStorage
      * @param p_value communicator
      * @return removed communicator
      */
-    public CWebSocket.CCommunicator remove( final CWebSocket.CCommunicator p_value )
+    public final CWebSocket.CCommunicator remove( final CWebSocket.CCommunicator p_value )
     {
         return m_communicator.remove( p_value.getID() );
     }
@@ -150,7 +150,7 @@ public class CSocketStorage
      * @param p_action action
      * @param p_communicator communicator
      */
-    public void handshake( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator )
+    public final void handshake( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator )
     {
         switch ( p_action )
         {
@@ -172,7 +172,7 @@ public class CSocketStorage
      *
      * @param p_payload string payload
      */
-    public void send( final String p_payload )
+    public final void send( final String p_payload )
     {
         for ( CWebSocket.CCommunicator l_item : m_communicator.values() )
             try
@@ -191,7 +191,7 @@ public class CSocketStorage
      *
      * @param p_payload byte payload
      */
-    public void send( final byte[] p_payload )
+    public final void send( final byte[] p_payload )
     {
         for ( CWebSocket.CCommunicator l_item : m_communicator.values() )
             try

@@ -41,6 +41,10 @@ import java.util.TimerTask;
 public class CWebSocket extends WebSocket
 {
     /**
+     * millisecond multiplier
+     */
+    private static final int c_millisecond = 1000;
+    /**
      * communicator object
      */
     private final CCommunicator m_communicator;
@@ -95,7 +99,7 @@ public class CWebSocket extends WebSocket
                                 CLogger.error( l_exception );
                             }
                         }
-                    }, p_heartbeat * 1000
+                    }, p_heartbeat * c_millisecond
             );
         }
 
@@ -123,7 +127,7 @@ public class CWebSocket extends WebSocket
 
 
     @Override
-    protected void onPong( final WebSocketFrame p_webSocketFrame )
+    protected final void onPong( final WebSocketFrame p_webSocketFrame )
     {
         try
         {
@@ -136,20 +140,20 @@ public class CWebSocket extends WebSocket
     }
 
     @Override
-    protected void onMessage( final WebSocketFrame p_frame )
+    protected final void onMessage( final WebSocketFrame p_frame )
     {
         p_frame.setUnmasked();
         this.invokeMethod( EAction.Message, p_frame );
     }
 
     @Override
-    protected void onClose( final WebSocketFrame.CloseCode p_close, final String p_reason, final boolean p_initbyremote )
+    protected final void onClose( final WebSocketFrame.CloseCode p_close, final String p_reason, final boolean p_initbyremote )
     {
         this.invokeMethod( EAction.Close, null );
     }
 
     @Override
-    protected void onException( final IOException p_exception )
+    protected final void onException( final IOException p_exception )
     {
         CLogger.error( p_exception );
         try
@@ -193,7 +197,7 @@ public class CWebSocket extends WebSocket
          *
          * @return ID
          */
-        public int getID()
+        public final int getID()
         {
             return CWebSocket.this.hashCode();
         }
@@ -204,7 +208,7 @@ public class CWebSocket extends WebSocket
          * @param p_payload string payload
          * @throws IOException throws on IO error
          */
-        public void send( final String p_payload ) throws IOException
+        public final void send( final String p_payload ) throws IOException
         {
             CWebSocket.this.send( p_payload );
         }
@@ -215,7 +219,7 @@ public class CWebSocket extends WebSocket
          * @param p_payload byte payload
          * @throws IOException throws on IO error
          */
-        public void send( final byte[] p_payload ) throws IOException
+        public final void send( final byte[] p_payload ) throws IOException
         {
             CWebSocket.this.send( p_payload );
         }
@@ -249,7 +253,7 @@ public class CWebSocket extends WebSocket
          *
          * @return ID
          */
-        public int getID()
+        public final int getID()
         {
             return CWebSocket.this.hashCode();
         }
@@ -259,7 +263,7 @@ public class CWebSocket extends WebSocket
          *
          * @return string with text payload
          */
-        public String getTextPayload()
+        public final String getTextPayload()
         {
             return m_frame.getTextPayload();
         }
@@ -269,7 +273,7 @@ public class CWebSocket extends WebSocket
          *
          * @return byte payload
          */
-        public byte[] getBinaryPayload()
+        public final byte[] getBinaryPayload()
         {
             return m_frame.getBinaryPayload();
         }

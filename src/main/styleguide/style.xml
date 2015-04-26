@@ -84,7 +84,7 @@
 
         <module name = "AvoidEscapedUnicodeCharacters" />
 
-        <module name = "AvoidInlineConditionals" />
+        <!-- <module name = "AvoidInlineConditionals" /> -->
 
         <module name = "AvoidNestedBlocks" />
 

@@ -65,8 +65,7 @@ public class CWorkspace extends CBrowser
     {
         super( EMenu.BackForward );
         this.load(
-                "http://" + CConfiguration.getInstance().get().<String>get( c_httphost ) + ":" +
-                CConfiguration.getInstance().get().<Integer>get( c_httpport )
+                "http://" + CConfiguration.getInstance().get().<String>get( c_httphost ) + ":" + CConfiguration.getInstance().get().<Integer>get( c_httpport )
         );
 
         // set via reflection the server

@@ -75,7 +75,7 @@ public class CVirtualDirectory implements IVirtualLocation
         if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
 
-        m_uri = "/";
+        m_uri = c_seperator;
         m_directory = p_directory;
         m_index = p_index.startsWith( c_seperator ) ? p_index : c_seperator + p_index;
         m_markdown = null;
@@ -94,7 +94,7 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
         if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_directory ) );
-        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
+        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( c_seperator ) ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_directory = p_directory;
@@ -120,11 +120,11 @@ public class CVirtualDirectory implements IVirtualLocation
             throw new IllegalArgumentException( CCommon.getResourceString( this, "indexempty" ) );
         if ( p_directory == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "directorynotexists", p_uri ) );
-        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( "/" ) ) )
+        if ( ( p_uri == null ) || ( p_uri.isEmpty() ) || ( !p_uri.endsWith( c_seperator ) ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "trailingslashempty", p_uri ) );
 
         m_directory = p_directory;
-        m_index = p_index.startsWith( c_seperator ) ? p_index : "/" + p_index;
+        m_index = p_index.startsWith( c_seperator ) ? p_index : c_seperator + p_index;
         m_uri = p_uri.startsWith( c_seperator ) ? p_uri.replaceAll( c_allowchar, "" ) : c_seperator + p_uri.replaceAll( c_allowchar, "" );
         m_markdown = p_markdown;
     }

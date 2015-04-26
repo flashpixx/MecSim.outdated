@@ -64,14 +64,11 @@ public abstract class CTimeDistribution implements IGenerator
     }
 
 
-    /**
-     * @bug check threshold
-     */
     @Override
     public int generate( final int p_currentStep )
     {
         if ( m_distribution == null )
             return 0;
-        return m_distribution.sample() <= 0.5 ? 0 : m_count;
+        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
     }
 }

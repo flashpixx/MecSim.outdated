@@ -48,11 +48,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private static final long serialVersionUID = 1L;
     /**
-     * member variable to indicate the car type for new sources/generators
+     * indicate the car type for new sources/generators
      */
     private static ECarType m_carType = ECarType.DEFAULTCAR;
     /**
-     * List of all Atom Targets
+     * list of all Atom Targets
      */
     private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
     /**
@@ -107,17 +107,28 @@ public class CSourceLayer extends IMultiLayer<ISource>
         final ISource l_newsource = new CSource( p_geoposition );
         this.add( l_newsource );
 
-        this.setGenerator( l_newsource );
+        this.setFactory( l_newsource );
         l_newsource.setComplexTarget( new CComplexTarget() );
     }
 
     /**
-     * set a generator object for a source
+     * removes a source
      *
-     * @param p_source source where the generator should be placed
+     * @param p_source source which should be removed
+     */
+    public final void removeSource( final ISource p_source )
+    {
+        p_source.release();
+        this.remove( p_source );
+    }
+
+    /**
+     * set a factory object for a source
+     *
+     * @param p_source source where the factory should be placed
      * @bug must be fixed
      */
-    public final void setGenerator( final ISource p_source )
+    public final void setFactory( final ISource p_source )
     {
         switch ( this.m_carType )
         {
@@ -137,30 +148,17 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * removes a source
+     * removes the factory object from a source
      *
-     * @param p_source source which should be removed
+     * @param p_source source where the factory should be removed
      */
-    public final void removeSource( final ISource p_source )
-    {
-        p_source.release();
-        this.remove( p_source );
-    }
-
-    /**
-     * removes the generator object for a source
-     *
-     * @param p_source source where the generator should be removed
-     */
-    public final void removeGenerator( final ISource p_source )
+    public final void removeFactory( final ISource p_source )
     {
         p_source.removeGenerator();
     }
 
     /**
      * creates a new Atom Target
-     * if a Source is selected, the Atom Target will be passed
-     * in the Complex Target of this Source
      *
      * @param p_geoposition position of the Atom Target
      */
@@ -173,22 +171,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
         this.m_sourceTargets.add( l_newtarget );
 
         this.repaintOSM();
-    }
-
-    /**
-     * after a target was created, OSM need to be repainted
-     *
-     * @bug must be fixed
-     */
-    private final void repaintOSM()
-    {
-        try
-        {
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
     /**
@@ -207,6 +189,22 @@ public class CSourceLayer extends IMultiLayer<ISource>
             l_source.getComplexTarget().removeTarget( p_target );
 
         this.repaintOSM();
+    }
+
+    /**
+     * after a target was created, OSM need to be repainted
+     *
+     * @bug must be fixed
+     */
+    private final void repaintOSM()
+    {
+        try
+        {
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+        }
+        catch ( Exception l_exception )
+        {
+        }
     }
 
     /**

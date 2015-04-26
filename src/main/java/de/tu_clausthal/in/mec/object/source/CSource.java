@@ -55,7 +55,9 @@ import java.util.Map;
 
 /**
  * class with default source implementation
- * @todo rename to CCarSource
+ * @todo define car-source depend on ICarFactory and IGenerator
+ * @todo create abstract class car-source with iconize structure
+ * @todo create abstract class with painting calls
  */
 public class CSource extends IInspector implements ISource, ISerializable
 {

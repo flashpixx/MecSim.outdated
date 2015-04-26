@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.source;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.source.factory.CDefaultAgentCarFactory;
 import de.tu_clausthal.in.mec.object.source.factory.CDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.source.generator.CTimeUniformDistribution;
 import de.tu_clausthal.in.mec.object.source.sourcetarget.CAtomTarget;
@@ -49,15 +50,15 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private static final long serialVersionUID = 1L;
     /**
-     * indicate the car type for new sources/generators
-     */
-    private static ECarType m_carType = ECarType.DEFAULTCAR;
-    /**
      * list of all Atom Targets
      */
     private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
     /**
-     * variable which defines the asl programm
+     * indicate the car type
+     */
+    private static ECarType m_carType = ECarType.DEFAULTCAR;
+    /**
+     * variable which defines the asl program
      */
     private String m_selectedASL = null;
 
@@ -80,13 +81,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
         if ( !m_visible )
             return;
 
-        //Paint Sources
+        //paint sources
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
         for ( ISource l_source : this )
             l_source.paint( p_graphic, p_viewer, p_width, p_height );
 
-        //Paint Targets
+        //paint targets
         for ( CAtomTarget l_target : m_sourceTargets )
             l_target.paint( p_graphic, p_viewer, p_width, p_height );
 
@@ -102,15 +103,25 @@ public class CSourceLayer extends IMultiLayer<ISource>
      * creates a new source
      *
      * @param p_geoposition position of the Source
+     * todo replace default generator
      */
     public final void createSource( final GeoPosition p_geoposition )
     {
-        this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory(p_geoposition) ) );
-        //final ISource l_newsource = new CSource( p_geoposition );
-        //this.add( l_newsource );
+        switch ( this.m_carType )
+        {
+            case DEFAULTCAR:
+                this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory( p_geoposition ) ) );
+                break;
 
-        //this.setFactory( l_newsource );
-        //l_newsource.setComplexTarget( new CComplexTarget() );
+            case DEFAULTAGENTCAR:
+                if ( this.m_selectedASL == null )
+                    break; //If no ASL is selected an empty source will be created
+                this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultAgentCarFactory( p_geoposition, m_selectedASL ) ) );
+                break;
+
+            default:
+                this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory( p_geoposition ) ) );
+        }
     }
 
     /**
@@ -125,44 +136,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * set a factory object for a source
+     * creates a new atom target
      *
-     * @param p_source source where the factory should be placed
-     * @bug must be fixed
-     */
-    public final void setFactory( final ISource p_source )
-    {
-        switch ( this.m_carType )
-        {
-            case DEFAULTCAR:
-                //p_source.setGenerator( new CDefaultCar( p_source.getPosition() ) );
-                break;
-
-            case DEFAULTAGENTCAR:
-                if ( this.m_selectedASL == null )
-                    break; //If no ASL is selected an empty source will be created
-                //p_source.setGenerator( new CJasonCar( p_source.getPosition(), this.m_selectedASL ) );
-                break;
-
-            default:
-                //p_source.setGenerator( new CDefaultCar( p_source.getPosition() ) );
-        }
-    }
-
-    /**
-     * removes the factory object from a source
-     *
-     * @param p_source source where the factory should be removed
-     */
-    public final void removeFactory( final ISource p_source )
-    {
-        //p_source.removeGenerator();
-    }
-
-    /**
-     * creates a new Atom Target
-     *
-     * @param p_geoposition position of the Atom Target
+     * @param p_geoposition position of the atom target
      */
     public final void createTarget( final GeoPosition p_geoposition )
     {
@@ -176,7 +152,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
     }
 
     /**
-     * removes an Atom Target from the sourcelayer and all Complex Targets
+     * removes an atom target from the source layer and all complex targets
      *
      * @param p_target Atom Target which should be removed
      */
@@ -195,8 +171,6 @@ public class CSourceLayer extends IMultiLayer<ISource>
 
     /**
      * after a target was created, OSM need to be repainted
-     *
-     * @bug must be fixed
      */
     private final void repaintOSM()
     {
@@ -224,7 +198,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_data key:cartype, value:defaulcar/defaultagentcar
      */
-    public void web_static_setcartype( final Map<String, Object> p_data )
+    public final void web_static_setcartype( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "cartype" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidcartype" ) );
@@ -243,7 +217,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      *
      * @param p_data key:aslname, value:name of the asl file
      */
-    public void web_static_setasl( final Map<String, Object> p_data )
+    public final void web_static_setasl( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "aslname" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidaslname" ) );

@@ -107,6 +107,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createSource( final GeoPosition p_geoposition )
     {
+        if(p_geoposition== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
+
         switch ( this.m_carType )
         {
             case DEFAULTCAR:
@@ -131,6 +134,9 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeSource( final ISource p_source )
     {
+        if(p_source== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
+
         p_source.release();
         this.remove( p_source );
     }
@@ -142,8 +148,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createTarget( final GeoPosition p_geoposition )
     {
-        if ( p_geoposition == null )
-            return;
+        if(p_geoposition== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
 
         final CAtomTarget l_newtarget = new CAtomTarget( p_geoposition );
         this.m_sourceTargets.add( l_newtarget );
@@ -158,8 +164,8 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeTarget( final CAtomTarget p_target )
     {
-        if ( p_target == null )
-            return;
+        if(p_target== null)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtarget" ) );
 
         this.m_sourceTargets.remove( p_target );
 

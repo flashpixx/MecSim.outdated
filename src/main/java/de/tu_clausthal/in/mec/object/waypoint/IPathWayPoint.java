@@ -23,12 +23,15 @@
 
 package de.tu_clausthal.in.mec.object.waypoint;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,7 +45,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     /**
      * adjacency list *
      */
-    private final Map<IPathWayPoint<T, P, N>, Double> m_adjacency = new CWeightMap();
+    private final CWeightMap m_adjacency = new CWeightMap();
 
 
     /**
@@ -97,6 +100,25 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public class CWeightMap implements Map<IPathWayPoint<T, P, N>, Double>
     {
+        /**
+         * map to resolve the buckets for checking *
+         */
+        final Map<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> m_buckets = new HashMap<>();
+
+        /**
+         * returns the node depends on the weight
+         *
+         * @param p_value weight
+         * @return node
+         */
+        public IPathWayPoint<T, P, N> getNode( final double p_value )
+        {
+            for ( Map.Entry<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> l_item : m_buckets.entrySet() )
+                if ( ( l_item.getKey().getLeft() <= p_value ) && ( p_value < l_item.getKey().getRight() ) )
+                    return l_item.getValue();
+
+            throw new IllegalStateException( CCommon.getResourceString( this, "notexists" ) );
+        }
 
         @Override
         public final int size()

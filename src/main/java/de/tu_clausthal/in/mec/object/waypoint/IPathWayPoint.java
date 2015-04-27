@@ -158,6 +158,8 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
                 l_item.setValue( l_item.getValue() * l_multiplier );
 
             this.put( p_key, p_value );
+            this.bucketupdate();
+
             return p_value;
         }
 
@@ -170,6 +172,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
                 l_item.setValue( l_item.getValue() + l_value );
 
+            this.bucketupdate();
             return l_value;
         }
 
@@ -201,6 +204,17 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public Set<Entry<IPathWayPoint<T, P, N>, Double>> entrySet()
         {
             return this.entrySet();
+        }
+
+        /**
+         * update the bucket map
+         */
+        private void bucketupdate()
+        {
+            double l_value = 0;
+            m_buckets.clear();
+            for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
+                m_buckets.put( new ImmutablePair<>( l_value, l_value += l_item.getValue() ), l_item.getKey() );
         }
     }
 

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
@@ -88,6 +89,12 @@ public class CCarSource extends IWayPoint<ICar, ICarFactory, IGenerator>
     public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory )
     {
         super( p_position, p_generator, p_factory );
+    }
+
+    @Override
+    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        return null;
     }
 
     @Override

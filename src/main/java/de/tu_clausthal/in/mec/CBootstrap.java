@@ -118,7 +118,7 @@ public class CBootstrap
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
-        p_server.registerObject( CSimulation.getInstance().getWorld().get( "Sources" ) );
+        p_server.registerObject( CSimulation.getInstance().getWorld().get( "WayPoint" ) );
     }
 
 
@@ -129,7 +129,7 @@ public class CBootstrap
      */
     public static void afterOSMViewerInit( final COSMViewer p_viewer )
     {
-        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Sources" ) );
+        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "WayPoint" ) );
         p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Cars" ) );
     }
 
@@ -142,7 +142,7 @@ public class CBootstrap
     public static void afterSimulationInit( final CSimulation p_simulation )
     {
         p_simulation.getWorld().put( "Database", new CDatabase() );
-        p_simulation.getWorld().put( "Sources", new CWayPointLayer() );
+        p_simulation.getWorld().put( "WayPoint", new CWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
     }

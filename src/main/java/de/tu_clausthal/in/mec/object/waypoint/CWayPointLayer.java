@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
 
@@ -89,12 +88,12 @@ public class CWayPointLayer extends IMultiLayer<IWayPoint>
     /**
      * creates a new atom target
      *
-     * @param p_geoposition position of the atom target
+     * @param p_source source which should be removed
      */
-    public final void createTarget( final GeoPosition p_geoposition )
+    public final void createTarget( final IWayPoint p_source )
     {
-        if ( p_geoposition == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
+        if ( p_source == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
 
         this.repaintOSM();
     }

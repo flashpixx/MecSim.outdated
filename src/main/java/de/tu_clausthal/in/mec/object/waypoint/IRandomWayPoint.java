@@ -57,7 +57,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     private final Map<String, Object> m_inspect = new HashMap()
     {{
             putAll( IRandomWayPoint.super.inspect() );
-            put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
         }};
 
 
@@ -71,6 +70,7 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     {
         super( p_position );
         m_radius = p_radius;
+        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
     }
 
     /**
@@ -85,6 +85,7 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     {
         super( p_position, p_generator, p_factory );
         m_radius = p_radius;
+        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
     }
 
 
@@ -100,12 +101,16 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         if ( !this.hasFactoryGenerator() )
             return null;
 
-        final Collection<GeoPosition> l_position = new HashSet<>();
-        //l_position.add( new GeoPosition( m_position ) )
-
-
-        //m_factory.generate(  )
-
-        return null;
+        return m_factory.generate(
+                new HashSet()
+                {{
+                        add(
+                                new GeoPosition(
+                                        m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
+                                        m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
+                                )
+                        );
+                    }}, m_generator.getCount( p_currentstep )
+        );
     }
 }

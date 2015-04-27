@@ -23,104 +23,77 @@
 
 package de.tu_clausthal.in.mec.object.waypoint;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.IInspectorDefault;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 
 /**
- * abstract class for a waypoint
+ * waypoint class to describe a route
  */
-public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
+public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPoint<T, P, N>
 {
 
     /**
-     * serialize version ID *
+     * adjacency list *
      */
-    private static final long serialVersionUID = 1L;
-    /**
-     * position of the source within the map
-     */
-    protected final GeoPosition m_position;
-    /**
-     * generator of this source
-     */
-    protected final N m_generator;
-    /**
-     * factory of this source
-     */
-    protected final P m_factory;
-    /**
-     * inspector map
-     */
-    private final Map<String, Object> m_inspect = new HashMap()
-    {{
-            putAll( IWayPoint.super.inspect() );
-        }};
+    private final Map<IPathWayPoint<T, P, N>, Double> m_adjacency = new HashMap<>();
 
 
     /**
-     * ctor - source is a target only
+     * ctor
      *
-     * @param p_position geoposition
+     * @param p_position position
      */
-    public IWayPoint( final GeoPosition p_position )
+    public IPathWayPoint( final GeoPosition p_position )
     {
-        m_position = p_position;
-        m_generator = null;
-        m_factory = null;
+        super( p_position );
     }
 
+
     /**
-     * ctor - source generates elements
+     * ctor
      *
      * @param p_position position
      * @param p_generator generator
      * @param p_factory factory
      */
-    public IWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
+    public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
     {
-        m_position = p_position;
-        m_generator = p_generator;
-        m_factory = p_factory;
-
-        if ( this.hasFactoryGenerator() )
-        {
-            m_inspect.putAll( m_generator.inspect() );
-            m_inspect.putAll( m_factory.inspect() );
-        }
+        super( p_position, p_generator, p_factory );
     }
 
-    /**
-     * checks if a generator and factory exists
-     *
-     * @return boolean flag of existance
-     */
-    public boolean hasFactoryGenerator()
+
+    public void addWayPoint( final IPathWayPoint<T, P, N> p_waypoint, final double p_weight )
     {
-        return ( m_generator != null ) && ( m_factory != null );
+        if ( ( p_weight < 0 ) || ( p_weight > 1 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( IPathWayPoint.class, "weightrange" ) );
+
+        // change defined weights
+        final double l_multiplier = 1 - p_weight;
+        for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : m_adjacency.entrySet() )
+            l_item.setValue( l_item.getValue() * l_multiplier );
+        m_adjacency.put( p_waypoint, p_weight );
     }
 
-    /**
-     * returns the position
-     *
-     * @return geoposition of the source
-     */
-    public final GeoPosition getPosition()
+    public void removeWayPoint( final IPathWayPoint<T, P, N> p_waypoint )
     {
-        return m_position;
+        if ( !m_adjacency.containsKey( p_waypoint ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( IPathWayPoint.class, "notexists" ) );
+
+        final double l_value = m_adjacency.remove( p_waypoint ) / m_adjacency.size();
+        for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : m_adjacency.entrySet() )
+            l_item.setValue( l_item.getValue() + l_value );
     }
 
     @Override
-    public final Map<String, Object> analyse()
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         return null;
     }
@@ -128,7 +101,7 @@ public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> 
     @Override
     public Map<String, Object> inspect()
     {
-        return m_inspect;
+        return super.inspect();
     }
 
 }

@@ -42,6 +42,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,6 +62,10 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
      */
     protected final GeoPosition m_position;
     /**
+     * adjacency list with connections and weights
+     */
+    protected final Map<ISource<T, P, N>, Double> m_adjacencylist = new HashMap<>();
+    /**
      * generator of this source
      */
     private final N m_generator;
@@ -77,6 +82,11 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
         }};
 
 
+    /**
+     * ctor - source is a target only
+     *
+     * @param p_position geoposition
+     */
     public ISource( final GeoPosition p_position )
     {
         m_position = p_position;
@@ -84,7 +94,13 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
         m_factory = null;
     }
 
-
+    /**
+     * ctor - source generates elements
+     *
+     * @param p_position position
+     * @param p_generator generator
+     * @param p_factory factory
+     */
     public ISource( final GeoPosition p_position, final N p_generator, final P p_factory )
     {
         m_position = p_position;
@@ -98,9 +114,24 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
         }
     }
 
+    /**
+     * checks if a generator and factory exists
+     *
+     * @return boolean flag of existance
+     */
     public boolean hasFactoryGenerator()
     {
         return ( m_generator != null ) && ( m_factory != null );
+    }
+
+    /**
+     * returns the adjacency list with weights
+     *
+     * @return set with values
+     */
+    public final Map<ISource<T, P, N>, Double> getAdjacenyList()
+    {
+        return m_adjacencylist;
     }
 
     @Override
@@ -110,9 +141,23 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
         if ( this.hasFactoryGenerator() )
             return l_return;
 
-        l_return.addAll( m_factory.generate( null, m_generator.getCount( p_currentstep ) ) );
+        // create a route of nodes
+        final Collection<GeoPosition> l_path = new LinkedList<>();
+        l_path.add( this.getPosition() );
+
+        l_return.addAll( m_factory.generate( l_path, m_generator.getCount( p_currentstep ) ) );
 
         return null;
+    }
+
+    /**
+     * returns the position
+     *
+     * @return geoposition of the source
+     */
+    public final GeoPosition getPosition()
+    {
+        return m_position;
     }
 
     @Override
@@ -125,24 +170,6 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
     public Map<String, Object> inspect()
     {
         return m_inspect;
-    }
-
-    @Override
-    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
-    {
-        if ( m_position == null )
-            return;
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
-                this.iconsize(
-                        p_viewer
-                )
-        );
-
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 
 
@@ -176,14 +203,22 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
     }
      */
 
-    /**
-     * returns the position
-     *
-     * @return geoposition of the source
-     */
-    public final GeoPosition getPosition()
+    @Override
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
-        return m_position;
+        if ( m_position == null )
+            return;
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
+                this.iconsize(
+                        p_viewer
+                )
+        );
+
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 
 }

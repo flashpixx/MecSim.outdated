@@ -68,11 +68,23 @@ public class CCarSource extends ISource<ICar, ICarFactory, IGenerator>
         }};
 
 
+    /**
+     * ctor
+     *
+     * @param p_position position
+     */
     public CCarSource( final GeoPosition p_position )
     {
         super( p_position );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_position position
+     * @param p_generator generator
+     * @param p_factory car factory
+     */
     public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory )
     {
         super( p_position, p_generator, p_factory );

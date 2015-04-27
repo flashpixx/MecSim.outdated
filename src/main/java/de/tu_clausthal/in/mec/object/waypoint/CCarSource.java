@@ -32,11 +32,14 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
@@ -203,5 +206,24 @@ public class CCarSource extends IWayPoint<ICar, ICarFactory, IGenerator>
         {
             CLogger.warn( l_exception );
         }
+    }
+
+
+    @Override
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
+        if ( m_position == null )
+            return;
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
+                this.iconsize(
+                        p_viewer
+                )
+        );
+
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 }

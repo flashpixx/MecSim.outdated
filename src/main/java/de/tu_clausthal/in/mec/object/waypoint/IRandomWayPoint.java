@@ -23,103 +23,70 @@
 
 package de.tu_clausthal.in.mec.object.waypoint;
 
+
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.IInspectorDefault;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
- * abstract class for a waypoint
+ * creates a waypoint with a random target
  */
-public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
+public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPoint<T, P, N>
 {
 
     /**
-     * serialize version ID *
+     * radius around the waypoint *
      */
-    private static final long serialVersionUID = 1L;
+    private final double m_radius;
     /**
-     * position of the source within the map
+     * random interface
      */
-    protected final GeoPosition m_position;
-    /**
-     * generator of this source
-     */
-    protected final N m_generator;
-    /**
-     * factory of this source
-     */
-    protected final P m_factory;
+    private final Random m_random = new Random();
     /**
      * inspector map
      */
     private final Map<String, Object> m_inspect = new HashMap()
     {{
-            putAll( IWayPoint.super.inspect() );
-            putAll( m_generator != null ? m_generator.inspect() : null );
-            putAll( m_factory != null ? m_factory.inspect() : null );
+            putAll( IRandomWayPoint.super.inspect() );
+            put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
         }};
 
 
     /**
-     * ctor - source is a target only
+     * ctor
      *
-     * @param p_position geoposition
+     * @param p_position geoposition of the waypoint
+     * @param p_radius radius around the waypoint
      */
-    public IWayPoint( final GeoPosition p_position )
+    public IRandomWayPoint( final GeoPosition p_position, final double p_radius )
     {
-        m_position = p_position;
-        m_generator = null;
-        m_factory = null;
+        super( p_position );
+        m_radius = p_radius;
     }
 
     /**
-     * ctor - source generates elements
+     * ctor
      *
-     * @param p_position position
+     * @param p_position geoposition of the waypoint
      * @param p_generator generator
      * @param p_factory factory
+     * @param p_radius radius around the waypoint
      */
-    public IWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
+    public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius )
     {
-        m_position = p_position;
-        m_generator = p_generator;
-        m_factory = p_factory;
+        super( p_position, p_generator, p_factory );
+        m_radius = p_radius;
     }
 
-    /**
-     * checks if a generator and factory exists
-     *
-     * @return boolean flag of existance
-     */
-    public boolean hasFactoryGenerator()
-    {
-        return ( m_generator != null ) && ( m_factory != null );
-    }
-
-    /**
-     * returns the position
-     *
-     * @return geoposition of the source
-     */
-    public final GeoPosition getPosition()
-    {
-        return m_position;
-    }
-
-    @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
-    }
 
     @Override
     public Map<String, Object> inspect()
@@ -127,4 +94,18 @@ public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> 
         return m_inspect;
     }
 
+    @Override
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        if ( !this.hasFactoryGenerator() )
+            return null;
+
+        final Collection<GeoPosition> l_position = new HashSet<>();
+        //l_position.add( new GeoPosition( m_position ) )
+
+
+        //m_factory.generate(  )
+
+        return null;
+    }
 }

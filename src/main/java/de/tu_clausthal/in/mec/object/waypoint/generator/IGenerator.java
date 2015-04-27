@@ -21,14 +21,25 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.factory;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.ui.IInspector;
+
+import java.io.Serializable;
 
 
 /**
- * class to create an car factory object
+ * distribution interface to define the amount of car that should be generated
  */
-public abstract class ICarFactory implements IFactory<ICar>
+public interface IGenerator extends IInspector, Serializable
 {
+
+    /**
+     * method to get the amount of cars
+     *
+     * @param p_currentStep
+     * @return number of objects
+     */
+    int getCount( final int p_currentStep );
+
 }

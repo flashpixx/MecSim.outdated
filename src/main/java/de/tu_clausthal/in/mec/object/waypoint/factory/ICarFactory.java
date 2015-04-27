@@ -21,27 +21,14 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.generator;
+package de.tu_clausthal.in.mec.object.waypoint.factory;
 
-import org.apache.commons.math3.distribution.ExponentialDistribution;
+import de.tu_clausthal.in.mec.object.car.ICar;
 
 
 /**
- * creates a time-exponential distribution generator
+ * class to create an car factory object
  */
-public class CTimeExponentialDistribution extends ITimeDistribution
+public abstract class ICarFactory implements IFactory<ICar>
 {
-
-    /**
-     * ctor
-     *
-     * @param p_count number of objects
-     * @param p_mean mean value
-     * @param p_deviation deviation value
-     */
-    public CTimeExponentialDistribution( final int p_count, final double p_mean, final double p_deviation )
-    {
-        super( new ExponentialDistribution( p_mean, p_deviation ), p_count );
-    }
-
 }

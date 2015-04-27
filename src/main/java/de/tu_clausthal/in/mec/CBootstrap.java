@@ -27,7 +27,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.source.CSourceLayer;
+import de.tu_clausthal.in.mec.object.waypoint.CWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.CConsole;
@@ -142,7 +142,7 @@ public class CBootstrap
     public static void afterSimulationInit( final CSimulation p_simulation )
     {
         p_simulation.getWorld().put( "Database", new CDatabase() );
-        p_simulation.getWorld().put( "Sources", new CSourceLayer() );
+        p_simulation.getWorld().put( "Sources", new CWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
     }

@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.generator;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 

@@ -21,13 +21,13 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.waypoint;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.factory.ICarFactory;
-import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -45,7 +45,7 @@ import java.util.HashSet;
 /**
  * class with default source implementation for cars
  */
-public class CCarSource extends ISource<ICar, ICarFactory, IGenerator>
+public class CCarSource extends IWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
      * waypoint color

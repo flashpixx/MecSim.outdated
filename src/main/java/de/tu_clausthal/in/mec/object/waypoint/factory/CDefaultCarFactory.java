@@ -21,35 +21,36 @@
  * @endcond
  */
 
+package de.tu_clausthal.in.mec.object.waypoint.factory;
 
-package de.tu_clausthal.in.mec.object.source.generator;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import org.jxmapviewer.viewer.GeoPosition;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * profile generator to define a fixed histogram on the time steps
+ * class to generate default cars
  */
-public class CTimeProfile implements IGenerator
+public class CDefaultCarFactory extends ICarFactory
 {
 
-    /**
-     * profile histogram *
-     */
-    final int[] m_histogram;
 
-
-    /**
-     * ctor
-     *
-     * @param p_histogram array with histogram
-     */
-    public CTimeProfile( final int[] p_histogram )
+    @Override
+    public Set<ICar> generate( final Collection<GeoPosition> p_positions, final int p_count )
     {
-        m_histogram = p_histogram;
+        final Set<ICar> l_set = new HashSet<>();
+        for ( int i = 0; i < p_count; i++ )
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( null ) );
+        return l_set;
     }
 
     @Override
-    public int getCount( final int p_currentStep )
+    public Map<String, Object> inspect()
     {
-        return m_histogram[p_currentStep % m_histogram.length];
+        return null;
     }
 }

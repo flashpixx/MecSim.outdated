@@ -21,36 +21,27 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.factory;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 
 /**
- * class to generate default cars
+ * creates a time-uniform distribution generator
  */
-public class CDefaultCarFactory extends ICarFactory
+public class CTimeUniformDistribution extends ITimeDistribution
 {
-
-
-    @Override
-    public Set<ICar> generate( final Collection<GeoPosition> p_positions, final int p_count )
+    /**
+     * ctor
+     *
+     * @param p_count number of objects
+     * @param p_lower lower-bound value
+     * @param p_upper upper-bound value
+     */
+    public CTimeUniformDistribution( final int p_count, final double p_lower, final double p_upper )
     {
-        final Set<ICar> l_set = new HashSet<>();
-        for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( null ) );
-        return l_set;
+        super( new UniformRealDistribution( p_lower, p_upper ), p_count );
     }
 
-    @Override
-    public Map<String, Object> inspect()
-    {
-        return null;
-    }
 }

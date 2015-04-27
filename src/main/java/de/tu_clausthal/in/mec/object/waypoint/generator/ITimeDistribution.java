@@ -21,31 +21,62 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.factory;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import de.tu_clausthal.in.mec.ui.IInspector;
-import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Set;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
+
+import java.util.Map;
 
 
 /**
- * interface which defines the generic structure of every factory (for sources)
- *
- * @tparam T any object type
+ * generator of a static number of objects with a time-exponential function
  */
-public interface IFactory<T> extends IInspector, Serializable
+public abstract class ITimeDistribution implements IGenerator
 {
+    /**
+     * distribution *
+     */
+    private final AbstractRealDistribution m_distribution;
+    /**
+     * number of cars *
+     */
+    private final int m_count;
+
 
     /**
-     * factory method to create objects
-     *
-     * @param p_positions geoposition list for routing calls
-     * @param p_count number of objects
-     * @return set with objects
+     * default ctor
      */
-    public Set<T> generate( final Collection<GeoPosition> p_positions, final int p_count );
+    private ITimeDistribution()
+    {
+        m_distribution = null;
+        m_count = 0;
+    }
 
+    /**
+     * ctor
+     *
+     * @param p_distribution distribution object
+     * @param p_count number of objects
+     */
+    protected ITimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
+    {
+        m_count = p_count;
+        m_distribution = p_distribution;
+    }
+
+
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        if ( m_distribution == null )
+            return 0;
+        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return null;
+    }
 }

@@ -21,26 +21,44 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.generator;
+
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 
-import org.apache.commons.math3.distribution.UniformRealDistribution;
+import java.util.Map;
 
 
 /**
- * creates a time-uniform distribution generator
+ * profile generator to define a fixed histogram on the time steps
  */
-public class CTimeUniformDistribution extends ITimeDistribution
+public class CTimeProfile implements IGenerator
 {
+
+    /**
+     * profile histogram *
+     */
+    final int[] m_histogram;
+
+
     /**
      * ctor
      *
-     * @param p_count number of objects
-     * @param p_lower lower-bound value
-     * @param p_upper upper-bound value
+     * @param p_histogram array with histogram
      */
-    public CTimeUniformDistribution( final int p_count, final double p_lower, final double p_upper )
+    public CTimeProfile( final int[] p_histogram )
     {
-        super( new UniformRealDistribution( p_lower, p_upper ), p_count );
+        m_histogram = p_histogram;
+    }
+
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        return m_histogram[p_currentStep % m_histogram.length];
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return null;
     }
 }

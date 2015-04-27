@@ -21,11 +21,10 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.waypoint;
 
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.source.factory.IFactory;
-import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -39,18 +38,14 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
  * abstract class for sources (handles common tasks)
  */
-public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
+public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
 {
 
     /**
@@ -62,23 +57,19 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
      */
     protected final GeoPosition m_position;
     /**
-     * adjacency list with connections and weights
-     */
-    protected final Map<ISource<T, P, N>, Double> m_adjacencylist = new HashMap<>();
-    /**
      * generator of this source
      */
-    private final N m_generator;
+    protected final N m_generator;
     /**
      * factory of this source
      */
-    private final P m_factory;
+    protected final P m_factory;
     /**
      * inspector map
      */
     private final Map<String, Object> m_inspect = new HashMap()
     {{
-            putAll( ISource.super.inspect() );
+            putAll( IWayPoint.super.inspect() );
         }};
 
 
@@ -87,7 +78,7 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
      *
      * @param p_position geoposition
      */
-    public ISource( final GeoPosition p_position )
+    public IWayPoint( final GeoPosition p_position )
     {
         m_position = p_position;
         m_generator = null;
@@ -101,7 +92,7 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
      * @param p_generator generator
      * @param p_factory factory
      */
-    public ISource( final GeoPosition p_position, final N p_generator, final P p_factory )
+    public IWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
     {
         m_position = p_position;
         m_generator = p_generator;
@@ -124,31 +115,7 @@ public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> ex
         return ( m_generator != null ) && ( m_factory != null );
     }
 
-    /**
-     * returns the adjacency list with weights
-     *
-     * @return set with values
-     */
-    public final Map<ISource<T, P, N>, Double> getAdjacenyList()
-    {
-        return m_adjacencylist;
-    }
 
-    @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        final Set<T> l_return = new HashSet<>();
-        if ( this.hasFactoryGenerator() )
-            return l_return;
-
-        // create a route of nodes
-        final Collection<GeoPosition> l_path = new LinkedList<>();
-        l_path.add( this.getPosition() );
-
-        l_return.addAll( m_factory.generate( l_path, m_generator.getCount( p_currentstep ) ) );
-
-        return null;
-    }
 
     /**
      * returns the position

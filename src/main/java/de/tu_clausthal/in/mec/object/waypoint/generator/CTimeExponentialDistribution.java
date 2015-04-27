@@ -21,25 +21,27 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.generator;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import de.tu_clausthal.in.mec.ui.IInspector;
-
-import java.io.Serializable;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 
 /**
- * distribution interface to define the amount of car that should be generated
+ * creates a time-exponential distribution generator
  */
-public interface IGenerator extends IInspector, Serializable
+public class CTimeExponentialDistribution extends ITimeDistribution
 {
 
     /**
-     * method to get the amount of cars
+     * ctor
      *
-     * @param p_currentStep
-     * @return number of objects
+     * @param p_count number of objects
+     * @param p_mean mean value
+     * @param p_deviation deviation value
      */
-    int getCount( final int p_currentStep );
+    public CTimeExponentialDistribution( final int p_count, final double p_mean, final double p_deviation )
+    {
+        super( new ExponentialDistribution( p_mean, p_deviation ), p_count );
+    }
 
 }

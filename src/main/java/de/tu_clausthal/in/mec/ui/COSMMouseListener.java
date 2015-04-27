@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.object.source.CSourceLayer;
+import de.tu_clausthal.in.mec.object.waypoint.CWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -83,11 +83,11 @@ class COSMMouseListener extends PanMouseInputListener
     private void addSource( final MouseEvent p_event )
     {
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
-        final CSourceLayer l_sourcelayer = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
+        final CWayPointLayer l_sourcelayer = ( (CWayPointLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
         final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
 
 
-        l_sourcelayer.createSource( l_geoPosition );
+        //l_sourcelayer.createSource( l_geoPosition );
         //l_sourcelayer.createTarget( l_geoPosition );
     }
 

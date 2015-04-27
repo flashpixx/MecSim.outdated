@@ -30,14 +30,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -48,10 +49,6 @@ public class CDefaultAgentCarFactory extends ICarFactory
 {
 
     /**
-     * position where the cars should be created
-     */
-    private GeoPosition m_geoPosition;
-    /**
      * name of the ASL file
      */
     private String m_aslName;
@@ -60,33 +57,22 @@ public class CDefaultAgentCarFactory extends ICarFactory
     /**
      * ctor
      *
-     * @param p_position position where the cars should be created
      * @param p_aslName name of the asl file
      */
-    public CDefaultAgentCarFactory( final GeoPosition p_position, final String p_aslName )
+    public CDefaultAgentCarFactory( final String p_aslName )
     {
-        if ( p_position == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
-
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
-        this.m_geoPosition = p_position;
         this.m_aslName = p_aslName;
     }
 
     @Override
-    public Color getColor()
-    {
-        return Color.RED;
-    }
-
-    @Override
-    public Set<ICar> generate( final int p_count )
+    public Set<ICar> generate( final Collection<GeoPosition> p_positions, final int p_count )
     {
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( m_geoPosition, m_aslName ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( null, m_aslName ) );
         return l_set;
     }
 
@@ -140,4 +126,9 @@ public class CDefaultAgentCarFactory extends ICarFactory
         p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslName ).toString() ) ) ) );
     }
 
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return null;
+    }
 }

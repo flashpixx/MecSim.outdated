@@ -23,13 +23,15 @@
 
 package de.tu_clausthal.in.mec.object.source.generator;
 
+import de.tu_clausthal.in.mec.ui.IInspector;
+
 import java.io.Serializable;
 
 
 /**
  * distribution interface to define the amount of car that should be generated
  */
-public interface IGenerator extends Serializable
+public interface IGenerator extends IInspector, Serializable
 {
 
     /**

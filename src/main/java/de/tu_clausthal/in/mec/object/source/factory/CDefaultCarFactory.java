@@ -23,12 +23,12 @@
 
 package de.tu_clausthal.in.mec.object.source.factory;
 
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -37,37 +37,20 @@ import java.util.Set;
  */
 public class CDefaultCarFactory extends ICarFactory
 {
-    /**
-     * position where the cars should be created
-     */
-    private GeoPosition m_geoPosition;
 
-    /**
-     * ctor
-     *
-     * @param p_position position where the cars should be created
-     */
-    public CDefaultCarFactory( final GeoPosition p_position )
-    {
-        if ( p_position == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
-
-        this.m_geoPosition = p_position;
-    }
 
     @Override
-    public Color getColor()
-    {
-        return Color.CYAN;
-    }
-
-    @Override
-    public Set<ICar> generate( final int p_count )
+    public Set<ICar> generate( final Collection<GeoPosition> p_positions, final int p_count )
     {
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( m_geoPosition ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( null ) );
         return l_set;
     }
 
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return null;
+    }
 }

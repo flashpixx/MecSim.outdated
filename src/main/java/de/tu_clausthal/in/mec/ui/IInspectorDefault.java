@@ -21,50 +21,34 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.factory.IFactory;
-import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import org.jxmapviewer.viewer.GeoPosition;
+import de.tu_clausthal.in.mec.common.CCommon;
 
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * class with default source implementation for cars
+ * global default implementation to get information about a simulation object
  */
-public class CSource extends ISource<ICar>
+public abstract class IInspectorDefault extends IUIListener implements IInspector
 {
-    /**
-     * ctor - default: without generator and factory
-     *
-     * @param p_position position of the source
-     */
-    public CSource( final GeoPosition p_position )
-    {
-        this.setPosition( p_position );
-        this.setImage();
-    }
 
     /**
-     * ctor - with specific generator and factory
-     *
-     * @param p_position position of the source
-     * @param p_generator generator for this source
-     * @param p_factory factory for this source
+     * inspect variable *
      */
-    public CSource( final GeoPosition p_position, final IGenerator p_generator, final IFactory<ICar> p_factory )
-    {
-        this( p_position );
-        this.setGenerator( p_generator );
-        this.setFactory( p_factory );
-    }
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
+            put( CCommon.getResourceString( IInspectorDefault.class, "objectid" ), this.hashCode() );
+        }};
+
 
     @Override
-    public final Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    public Map<String, Object> inspect()
     {
-        return this.getFactory().generate( this.getGenerator().getCount( p_currentstep ) );
+        return m_inspect;
     }
+
 }

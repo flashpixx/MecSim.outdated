@@ -50,13 +50,13 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     private static final long serialVersionUID = 1L;
     /**
-     * list of all Atom Targets
-     */
-    private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
-    /**
      * indicate the car type
      */
     private static ECarType m_carType = ECarType.DEFAULTCAR;
+    /**
+     * list of all Atom Targets
+     */
+    private final Vector<CAtomTarget> m_sourceTargets = new Vector<>();
     /**
      * variable which defines the asl program
      */
@@ -107,23 +107,29 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createSource( final GeoPosition p_geoposition )
     {
-        if(p_geoposition== null)
+        if ( p_geoposition == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
 
         switch ( this.m_carType )
         {
             case DEFAULTCAR:
-                this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory( p_geoposition ) ) );
+                this.add( new CCarSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory( p_geoposition ) ) );
                 break;
 
             case DEFAULTAGENTCAR:
                 if ( this.m_selectedASL == null )
                     break; //If no ASL is selected an empty source will be created
-                this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultAgentCarFactory( p_geoposition, m_selectedASL ) ) );
+                this.add(
+                        new CCarSource(
+                                p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultAgentCarFactory(
+                                p_geoposition, m_selectedASL
+                        )
+                        )
+                );
                 break;
 
             default:
-                this.add( new CSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory( p_geoposition ) ) );
+                this.add( new CCarSource( p_geoposition, new CTimeUniformDistribution( 1, 0, 10 ), new CDefaultCarFactory( p_geoposition ) ) );
         }
     }
 
@@ -134,7 +140,7 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void removeSource( final ISource p_source )
     {
-        if(p_source== null)
+        if ( p_source == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
 
         p_source.release();
@@ -148,29 +154,11 @@ public class CSourceLayer extends IMultiLayer<ISource>
      */
     public final void createTarget( final GeoPosition p_geoposition )
     {
-        if(p_geoposition== null)
+        if ( p_geoposition == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
 
         final CAtomTarget l_newtarget = new CAtomTarget( p_geoposition );
         this.m_sourceTargets.add( l_newtarget );
-
-        this.repaintOSM();
-    }
-
-    /**
-     * removes an atom target from the source layer and all complex targets
-     *
-     * @param p_target Atom Target which should be removed
-     */
-    public final void removeTarget( final CAtomTarget p_target )
-    {
-        if(p_target== null)
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtarget" ) );
-
-        this.m_sourceTargets.remove( p_target );
-
-        for ( ISource l_source : this )
-            l_source.getComplexTarget().removeTarget( p_target );
 
         this.repaintOSM();
     }
@@ -187,6 +175,24 @@ public class CSourceLayer extends IMultiLayer<ISource>
         catch ( Exception l_exception )
         {
         }
+    }
+
+    /**
+     * removes an atom target from the source layer and all complex targets
+     *
+     * @param p_target Atom Target which should be removed
+     */
+    public final void removeTarget( final CAtomTarget p_target )
+    {
+        if ( p_target == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtarget" ) );
+
+        this.m_sourceTargets.remove( p_target );
+
+        for ( ISource l_source : this )
+            l_source.getComplexTarget().removeTarget( p_target );
+
+        this.repaintOSM();
     }
 
     /**

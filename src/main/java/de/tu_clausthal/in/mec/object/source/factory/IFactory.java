@@ -23,8 +23,11 @@
 
 package de.tu_clausthal.in.mec.object.source.factory;
 
-import java.awt.*;
+import de.tu_clausthal.in.mec.ui.IInspector;
+import org.jxmapviewer.viewer.GeoPosition;
+
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 
@@ -33,22 +36,16 @@ import java.util.Set;
  *
  * @tparam T any object type
  */
-public interface IFactory<T> extends Serializable
+public interface IFactory<T> extends IInspector, Serializable
 {
-
-    /**
-     * method which defines the color of a source
-     *
-     * @return free Color
-     */
-    public Color getColor();
 
     /**
      * factory method to create objects
      *
+     * @param p_positions geoposition list for routing calls
      * @param p_count number of objects
      * @return set with objects
      */
-    public Set<T> generate( final int p_count );
+    public Set<T> generate( final Collection<GeoPosition> p_positions, final int p_count );
 
 }

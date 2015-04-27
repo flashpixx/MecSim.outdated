@@ -33,6 +33,7 @@ import java.awt.geom.Point2D;
 
 /**
  * Most Basic Target for Sources
+ * @deprecated
  */
 public class CAtomTarget implements Painter<COSMViewer>
 {

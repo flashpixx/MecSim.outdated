@@ -30,7 +30,7 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.IInspector;
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -49,7 +49,7 @@ import java.util.Random;
 /**
  * class for a default car *
  */
-public class CDefaultCar extends IInspector implements ICar
+public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
     /**

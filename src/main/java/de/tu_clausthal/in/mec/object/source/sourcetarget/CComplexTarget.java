@@ -39,6 +39,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * A ComplexTarget is a Collection of Atom Targets.
  * Which can be equipped with a relative Probability.
  * This Class also provides some Methods to get a Collection of AtomTarget over their Probabilities.
+ * @deprecated
  */
 public class CComplexTarget
 {

@@ -23,41 +23,33 @@
 
 package de.tu_clausthal.in.mec.object.source;
 
-import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.source.factory.IFactory;
 import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.IInspector;
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
  * abstract class for sources (handles common tasks)
  */
-public abstract class ISource<T> extends IInspector implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
+public abstract class ISource<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
 {
 
     /**
@@ -65,52 +57,74 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      */
     private static final long serialVersionUID = 1L;
     /**
-     * image of the waypoint
-     */
-    private transient BufferedImage m_image;
-    /**
-     * waypoint color
-     */
-    private Color m_color = Color.BLACK;
-    /**
-     * last zoom (if the zoom changed the image need to be resized)
-     */
-    private int m_lastZoom = 0;
-    /**
      * position of the source within the map
      */
-    private GeoPosition m_position;
+    protected final GeoPosition m_position;
     /**
      * generator of this source
      */
-    private IGenerator m_generator;
+    private final N m_generator;
     /**
      * factory of this source
      */
-    private IFactory<T> m_factory;
+    private final P m_factory;
     /**
-     * complex target of this source
+     * inspector map
      */
-    private CComplexTarget m_complexTarget = new CComplexTarget();
-    /**
-     * map with targets
-     */
-    private transient Collection<IReturnSteppableTarget<T>> m_target = new HashSet()
+    private final Map<String, Object> m_inspect = new HashMap()
     {{
-            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
+            putAll( ISource.super.inspect() );
         }};
 
 
-    @Override
-    public final Collection<IReturnSteppableTarget<T>> getTargets()
+    public ISource( final GeoPosition p_position )
     {
-        return m_target;
+        m_position = p_position;
+        m_generator = null;
+        m_factory = null;
+    }
+
+
+    public ISource( final GeoPosition p_position, final N p_generator, final P p_factory )
+    {
+        m_position = p_position;
+        m_generator = p_generator;
+        m_factory = p_factory;
+
+        if ( this.hasFactoryGenerator() )
+        {
+            m_inspect.putAll( m_generator.inspect() );
+            m_inspect.putAll( m_factory.inspect() );
+        }
+    }
+
+    public boolean hasFactoryGenerator()
+    {
+        return ( m_generator != null ) && ( m_factory != null );
+    }
+
+    @Override
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        final Set<T> l_return = new HashSet<>();
+        if ( this.hasFactoryGenerator() )
+            return l_return;
+
+        l_return.addAll( m_factory.generate( null, m_generator.getCount( p_currentstep ) ) );
+
+        return null;
     }
 
     @Override
     public final Map<String, Object> analyse()
     {
         return null;
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
     }
 
     @Override
@@ -131,107 +145,6 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
             CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        if ( m_image == null )
-            return;
-
-        //if the zoom change calculate the new scaled image
-        if ( p_viewer.getZoom() != m_lastZoom )
-        {
-            int l_newWidth = 20;
-            int l_newHeight = 34;
-
-            l_newHeight = (int) ( l_newHeight * this.iconscale( p_viewer ) );
-            l_newWidth = (int) ( l_newWidth * this.iconscale( p_viewer ) );
-
-            this.setImage( l_newWidth, l_newHeight );
-        }
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
-    }
-
-    /**
-     * creates the image
-     */
-    public void setImage()
-    {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
-    }
-
-    /**
-     * creates an image with a specific scale
-     *
-     * @param p_width image width
-     * @param p_height image height
-     */
-    public void setImage( final int p_width, final int p_height )
-    {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-            l_image = this.getScaledImage( l_image, p_width, p_height );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
-    }
-
-    /**
-     * method to scale a buffered image
-     *
-     * @param p_source image which should be scaled
-     * @param p_width new width
-     * @param p_height new height
-     * @return new image
-     */
-    public BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
-    {
-        final BufferedImage l_newimage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
-        final Graphics2D l_graphics = l_newimage.createGraphics();
-        l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
-        l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
-        l_graphics.dispose();
-        return l_newimage;
-    }
 
     /**
      * read call of serialize interface
@@ -239,28 +152,29 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      * @param p_stream stream
      * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
-     */
+     *
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
-        p_stream.defaultReadObject();
+    p_stream.defaultReadObject();
 
-        m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
-        this.setImage();
+    m_position = new GeoPosition( p_stream.readDouble(), p_stream.readDouble() );
+    this.setImage();
     }
 
-    /**
+     **
      * write call of serialize interface
      *
      * @param p_stream stream
      * @throws IOException throws the exception on loading data
-     */
+     *
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
-        p_stream.defaultWriteObject();
+    p_stream.defaultWriteObject();
 
-        p_stream.writeDouble( m_position.getLatitude() );
-        p_stream.writeDouble( m_position.getLongitude() );
+    p_stream.writeDouble( m_position.getLatitude() );
+    p_stream.writeDouble( m_position.getLongitude() );
     }
+     */
 
     /**
      * returns the position
@@ -269,95 +183,7 @@ public abstract class ISource<T> extends IInspector implements IReturnSteppable<
      */
     public final GeoPosition getPosition()
     {
-        return this.m_position;
-    }
-
-    /**
-     * set the position
-     *
-     * @param p_position geoposition where the source should be placed
-     */
-    public final void setPosition( final GeoPosition p_position )
-    {
-        if(p_position== null)
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeoposition" ) );
-
-        this.m_position = p_position;
-    }
-
-    /**
-     * returns the color
-     *
-     * @return color of this source
-     */
-    public Color getColor()
-    {
-        return this.m_color;
-    }
-
-    /**
-     * set a color
-     *
-     * @param p_color new Color
-     */
-    public void setColor( final Color p_color )
-    {
-        if(p_color== null)
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidcolor" ) );
-
-        this.m_color = p_color;
-    }
-
-    /**
-     * returns the generator
-     *
-     * @return generator of this source
-     */
-    public IGenerator getGenerator(){
-        return m_generator;
-    }
-
-    /**
-     * set a new generator
-     *
-     * @param p_generator new generator
-     */
-    public void setGenerator(IGenerator p_generator){
-        if(p_generator== null)
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgenerator" ) );
-
-        this.m_generator = p_generator;
-    }
-
-    /**
-     * returns the factory
-     *
-     * @return factory object of this source
-     */
-    public IFactory<T> getFactory(){
-        return m_factory;
-    }
-
-    /**
-     * set a new factory
-     *
-     * @param p_factory
-     */
-    public void setFactory(IFactory<T> p_factory){
-        if(p_factory== null)
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidfactory" ) );
-
-        this.m_factory = p_factory;
-        this.setColor( m_factory.getColor() );
-    }
-
-    /**
-     * returns the ComplexTarget
-     *
-     * @return ComplexTarget of this source
-     */
-    public CComplexTarget getComplexTarget(){
-        return this.m_complexTarget;
+        return m_position;
     }
 
 }

@@ -49,7 +49,7 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     @Override
     public final void release()
     {
-        for ( IWayPoint<?> l_item : m_data )
+        for ( IWayPoint<ICar> l_item : m_data )
             l_item.release();
     }
 
@@ -62,7 +62,7 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
         //paint sources
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( IWayPoint<?> l_source : this )
+        for ( IWayPoint<ICar> l_source : this )
             l_source.paint( p_graphic, p_viewer, p_width, p_height );
         ;
     }
@@ -76,25 +76,25 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     /**
      * removes a source
      *
-     * @param p_source source which should be removed
+     * @param p_waypoint source which should be removed
      */
-    public final void removeSource( final IWayPoint<?> p_source )
+    public final void removeSource( final IWayPoint<ICar> p_waypoint )
     {
-        if ( p_source == null )
+        if ( p_waypoint == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
 
-        p_source.release();
-        this.remove( p_source );
+        p_waypoint.release();
+        this.remove( p_waypoint );
     }
 
     /**
      * creates a new atom target
      *
-     * @param p_source source which should be removed
+     * @param p_waypoint source which should be removed
      */
-    public final void createTarget( final IWayPoint<?> p_source )
+    public final void createTarget( final IWayPoint<ICar> p_waypoint )
     {
-        if ( p_source == null )
+        if ( p_waypoint == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
 
         this.repaintOSM();
@@ -105,13 +105,8 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
      */
     private final void repaintOSM()
     {
-        try
-        {
+        if ( CSimulation.getInstance().getUIComponents().exists() )
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-        }
-        catch ( Exception l_exception )
-        {
-        }
     }
 
 }

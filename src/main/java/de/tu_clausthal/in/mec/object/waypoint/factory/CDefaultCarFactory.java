@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.object.car.ICar;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +38,13 @@ import java.util.Set;
  */
 public class CDefaultCarFactory extends ICarFactory
 {
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            put( "Factory", this );
+        }};
 
 
     @Override
@@ -51,6 +59,6 @@ public class CDefaultCarFactory extends ICarFactory
     @Override
     public Map<String, Object> inspect()
     {
-        return null;
+        return m_inspect;
     }
 }

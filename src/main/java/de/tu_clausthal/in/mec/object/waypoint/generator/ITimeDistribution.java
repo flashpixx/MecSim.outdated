@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -42,6 +43,10 @@ public abstract class ITimeDistribution implements IGenerator
      * number of cars *
      */
     private final int m_count;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap<>();
 
 
     /**
@@ -77,6 +82,6 @@ public abstract class ITimeDistribution implements IGenerator
     @Override
     public Map<String, Object> inspect()
     {
-        return null;
+        return m_inspect;
     }
 }

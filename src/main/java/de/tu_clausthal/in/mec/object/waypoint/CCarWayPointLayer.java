@@ -27,11 +27,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
-import de.tu_clausthal.in.mec.runtime.CSimulation;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-
-import java.awt.*;
 
 
 /**
@@ -54,59 +49,9 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     }
 
     @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        if ( !m_visible )
-            return;
-
-        //paint sources
-        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( IWayPoint<ICar> l_source : this )
-            l_source.paint( p_graphic, p_viewer, p_width, p_height );
-        ;
-    }
-
-    @Override
     public final String toString()
     {
         return CCommon.getResourceString( this, "name" );
-    }
-
-    /**
-     * removes a source
-     *
-     * @param p_waypoint source which should be removed
-     */
-    public final void removeSource( final IWayPoint<ICar> p_waypoint )
-    {
-        if ( p_waypoint == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
-
-        p_waypoint.release();
-        this.remove( p_waypoint );
-    }
-
-    /**
-     * creates a new atom target
-     *
-     * @param p_waypoint source which should be removed
-     */
-    public final void createTarget( final IWayPoint<ICar> p_waypoint )
-    {
-        if ( p_waypoint == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
-
-        this.repaintOSM();
-    }
-
-    /**
-     * after a target was created, OSM need to be repainted
-     */
-    private final void repaintOSM()
-    {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
 }

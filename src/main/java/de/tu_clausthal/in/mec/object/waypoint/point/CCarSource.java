@@ -71,6 +71,13 @@ public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
         }};
 
 
+    /**
+     * ctor
+     *
+     * @param p_position geo position
+     * @param p_radius radius
+     * @param p_color color
+     */
     public CCarSource( final GeoPosition p_position, final double p_radius, final Color p_color )
     {
         super( p_position, p_radius );

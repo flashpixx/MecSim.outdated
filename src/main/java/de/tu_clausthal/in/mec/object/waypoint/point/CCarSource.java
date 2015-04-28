@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
@@ -52,17 +51,17 @@ import java.util.HashSet;
 public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
-     * waypoint color
-     */
-    private final Color m_color = Color.BLACK;
-    /**
      * image of the waypoint
      */
-    private transient BufferedImage m_image;
+    private final transient BufferedImage m_initializeimage;
+    /**
+     * current scaled image
+     */
+    private transient BufferedImage m_scaledimage;
     /**
      * last zoom (if the zoom changed the image need to be resized)
      */
-    private int m_lastZoom = 0;
+    private transient int m_lastZoom = 0;
     /**
      * map with targets
      */
@@ -71,49 +70,12 @@ public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
             add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
-    public CCarSource( final GeoPosition p_position, final double p_radius )
+
+    public CCarSource( final GeoPosition p_position, final double p_radius, final Color p_color )
     {
         super( p_position, p_radius );
-    }
-
-    public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius )
-    {
-        super( p_position, p_generator, p_factory, p_radius );
-    }
-
-
-    @Override
-    public Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        return null;
-    }
-
-    @Override
-    public Collection<IReturnSteppableTarget<ICar>> getTargets()
-    {
-        return m_target;
-    }
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        if ( m_image == null )
-            return;
-
-        //if the zoom change calculate the new scaled image
-        if ( p_viewer.getZoom() != m_lastZoom )
-        {
-            int l_newWidth = 20;
-            int l_newHeight = 34;
-
-            l_newHeight = (int) ( l_newHeight * this.iconscale( p_viewer ) );
-            l_newWidth = (int) ( l_newWidth * this.iconscale( p_viewer ) );
-
-            this.setImage( l_newWidth, l_newHeight );
-        }
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_image, (int) l_point.getX() - m_image.getWidth() / 2, (int) l_point.getY() - m_image.getHeight(), null );
+        m_initializeimage = this.initializeImage( 20, 34, p_color );
+        m_scaledimage = m_initializeimage;
     }
 
     /**
@@ -121,32 +83,32 @@ public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
      *
      * @param p_width image width
      * @param p_height image height
+     * @param p_color color of the waypoint
+     * @return image
      */
-    public void setImage( final int p_width, final int p_height )
+    private BufferedImage initializeImage( final int p_width, final int p_height, final Color p_color )
     {
-        if ( m_color == null )
-            return;
-
         try
         {
-            BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-            l_image = this.getScaledImage( l_image, p_width, p_height );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
+            final BufferedImage l_image = this.getScaledImage(
+                    ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) ), p_width, p_height
+            );
             for ( int i = 0; i < l_image.getHeight(); i++ )
                 for ( int j = 0; j < l_image.getWidth(); j++ )
                 {
                     final Color l_color = new Color( l_image.getRGB( j, i ) );
                     if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
+                        l_image.setRGB( j, i, p_color.getRGB() );
                 }
 
+            return l_image;
         }
         catch ( final Exception l_exception )
         {
-            CLogger.warn( l_exception );
+            CLogger.error( l_exception );
         }
+
+        return null;
     }
 
     /**
@@ -167,35 +129,32 @@ public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
         return l_newimage;
     }
 
-    /**
-     * creates the image
-     */
-    public void setImage()
+    public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius, final Color p_color )
     {
-        if ( m_color == null )
-            return;
-
-        try
-        {
-            final BufferedImage l_image = ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) );
-
-            // modify blue value to the color of the waypoint
-            m_image = new BufferedImage( l_image.getColorModel(), l_image.copyData( null ), l_image.isAlphaPremultiplied(), null );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        m_image.setRGB( j, i, m_color.getRGB() );
-                }
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.warn( l_exception );
-        }
+        super( p_position, p_generator, p_factory, p_radius );
+        m_initializeimage = this.initializeImage( 20, 34, p_color );
+        m_scaledimage = m_initializeimage;
     }
 
+    @Override
+    public Collection<IReturnSteppableTarget<ICar>> getTargets()
+    {
+        return m_target;
+    }
+
+    @Override
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        //if the zoom change calculate the new scaled image
+        if ( p_viewer.getZoom() != m_lastZoom )
+            m_scaledimage = this.getScaledImage(
+                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
+                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
+            );
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
+    }
 
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )

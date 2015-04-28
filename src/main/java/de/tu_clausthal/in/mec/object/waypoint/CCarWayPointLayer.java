@@ -37,7 +37,7 @@ import java.awt.*;
 /**
  * layer with all sources
  */
-public class CWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
+public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
     @Override

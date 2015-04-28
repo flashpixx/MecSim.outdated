@@ -59,7 +59,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     /**
      * driving model list
      */
-    private static final IDriveModel[] s_drivemodellist = {new CNagelSchreckenberg(), new CAgentNagelSchreckenberg()};
+    private static final IDriveModel[] s_drivemodellist = {new CAgentNagelSchreckenberg(), new CNagelSchreckenberg()};
     /**
      * data structure - not serializable
      */

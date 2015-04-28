@@ -125,7 +125,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     }
 
     /**
-     * weight map with guarantee of normalized weights in [0,1]
+     * weight map with guarantee of normalized weights in [0,max]
      */
     public class CWeightMap extends HashMap<IPathWayPoint<T, P, N>, Double>
     {
@@ -139,7 +139,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         private final double m_max;
 
-
         /**
          * ctor
          */
@@ -147,7 +146,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         {
             m_max = 1;
         }
-
 
         /**
          * ctor - set the maximum weight
@@ -158,6 +156,17 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         {
             m_max = p_max;
         }
+
+
+        /** maximum value
+         *
+         * @return maximum value
+         */
+        public double getMax()
+        {
+            return m_max;
+        }
+
 
         /**
          * returns the node depends on the weight

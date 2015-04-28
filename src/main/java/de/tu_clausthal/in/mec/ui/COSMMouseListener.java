@@ -70,7 +70,7 @@ class COSMMouseListener extends PanMouseInputListener
                     new CCarRandomWayPoint(
                             this.getMouseGeoPosition(
                                     p_event, (COSMViewer) p_event.getSource()
-                            ), 0.1, Color.red
+                            ), 0.01, Color.red
                     )
             );
     }

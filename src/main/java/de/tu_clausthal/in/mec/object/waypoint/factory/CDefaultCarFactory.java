@@ -52,7 +52,7 @@ public class CDefaultCarFactory extends ICarFactory
     {
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( null ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( p_positions.iterator().next() ) );
         return l_set;
     }
 

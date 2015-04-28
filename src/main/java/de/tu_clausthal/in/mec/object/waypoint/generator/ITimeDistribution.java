@@ -40,7 +40,7 @@ public abstract class ITimeDistribution implements IGenerator
      */
     private final AbstractRealDistribution m_distribution;
     /**
-     * number of cars *
+     * number of objects *
      */
     private final int m_count;
     /**

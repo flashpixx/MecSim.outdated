@@ -29,15 +29,15 @@ import java.io.Serializable;
 
 
 /**
- * distribution interface to define the amount of car that should be generated
+ * distribution interface to define the amount of objects that should be generated
  */
 public interface IGenerator extends IInspector, Serializable
 {
 
     /**
-     * method to get the amount of cars
+     * method to get the amount of objects
      *
-     * @param p_currentStep
+     * @param p_currentStep current step
      * @return number of objects
      */
     int getCount( final int p_currentStep );

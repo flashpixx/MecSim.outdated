@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.waypoint;
 
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
@@ -32,7 +31,9 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -46,6 +47,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      * adjacency list *
      */
     private final CWeightMap m_adjacency = new CWeightMap();
+    /**
+     * random interface
+     */
+    private final Random m_random = new Random();
 
 
     /**
@@ -85,7 +90,17 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        return null;
+        final Collection<GeoPosition> l_route = new LinkedList<>();
+
+        // calculate route points
+        IPathWayPoint<T, P, N> l_node = this;
+        while ( l_node != null )
+        {
+            l_route.add( l_node.getPosition() );
+            l_node = l_node.m_adjacency.getNode( m_random.nextDouble() );
+        }
+
+        return m_factory.generate( l_route, m_generator.getCount( p_currentstep ) );
     }
 
     @Override
@@ -100,16 +115,41 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public class CWeightMap implements Map<IPathWayPoint<T, P, N>, Double>
     {
+
         /**
          * map to resolve the buckets for checking *
          */
         final Map<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> m_buckets = new HashMap<>();
+        /**
+         * max value *
+         */
+        private final double m_max;
+
+
+        /**
+         * ctor
+         */
+        public CWeightMap()
+        {
+            m_max = 1;
+        }
+
+
+        /**
+         * ctor - set the maximum weight
+         *
+         * @param p_max weight
+         */
+        public CWeightMap( final double p_max )
+        {
+            m_max = p_max;
+        }
 
         /**
          * returns the node depends on the weight
          *
          * @param p_value weight
-         * @return node
+         * @return node or null on empty list
          */
         public IPathWayPoint<T, P, N> getNode( final double p_value )
         {
@@ -117,7 +157,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
                 if ( ( l_item.getKey().getLeft() <= p_value ) && ( p_value < l_item.getKey().getRight() ) )
                     return l_item.getValue();
 
-            throw new IllegalStateException( CCommon.getResourceString( this, "notexists" ) );
+            return null;
         }
 
         @Override
@@ -153,7 +193,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         @Override
         public final Double put( final IPathWayPoint<T, P, N> p_key, final Double p_value )
         {
-            final double l_multiplier = 1 - p_value;
+            final double l_multiplier = m_max - p_value;
             for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
                 l_item.setValue( l_item.getValue() * l_multiplier );
 

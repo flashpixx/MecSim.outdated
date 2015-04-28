@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.waypoint;
+package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
@@ -49,7 +49,7 @@ import java.util.HashSet;
 /**
  * class with default source implementation for cars
  */
-public class CCarSource extends IWayPoint<ICar, ICarFactory, IGenerator>
+public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
      * waypoint color
@@ -71,28 +71,16 @@ public class CCarSource extends IWayPoint<ICar, ICarFactory, IGenerator>
             add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
-
-    /**
-     * ctor
-     *
-     * @param p_position position
-     */
-    public CCarSource( final GeoPosition p_position )
+    public CCarSource( final GeoPosition p_position, final double p_radius )
     {
-        super( p_position );
+        super( p_position, p_radius );
     }
 
-    /**
-     * ctor
-     *
-     * @param p_position position
-     * @param p_generator generator
-     * @param p_factory car factory
-     */
-    public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory )
+    public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius )
     {
-        super( p_position, p_generator, p_factory );
+        super( p_position, p_generator, p_factory, p_radius );
     }
+
 
     @Override
     public Collection<ICar> step( final int p_currentstep, final ILayer p_layer ) throws Exception

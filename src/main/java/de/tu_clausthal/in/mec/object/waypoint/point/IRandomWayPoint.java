@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.waypoint;
+package de.tu_clausthal.in.mec.object.waypoint.point;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -40,7 +40,7 @@ import java.util.Random;
 /**
  * creates a waypoint with a random target
  */
-public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPoint<T, P, N>
+public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPointBase<T, P, N>
 {
 
     /**
@@ -88,7 +88,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
     }
 
-
     @Override
     public Map<String, Object> inspect()
     {
@@ -102,15 +101,27 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
             return null;
 
         return m_factory.generate(
-                new HashSet()
-                {{
-                        add(
-                                new GeoPosition(
-                                        m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
-                                        m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
-                                )
-                        );
-                    }}, m_generator.getCount( p_currentstep )
+                this.getPath(), m_generator.getCount( p_currentstep )
         );
+    }
+
+    @Override
+    public Collection<GeoPosition> getPath()
+    {
+        return new HashSet()
+        {{
+                add(
+                        new GeoPosition(
+                                m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
+                                m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
+                        )
+                );
+            }};
+    }
+
+    @Override
+    public Collection<GeoPosition> getNeighbor()
+    {
+        return null;
     }
 }

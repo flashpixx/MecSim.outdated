@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.waypoint;
+package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
@@ -31,6 +31,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
@@ -40,7 +41,7 @@ import java.util.Set;
 /**
  * waypoint class to describe a route
  */
-public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPoint<T, P, N>
+public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPointBase<T, P, N>
 {
 
     /**
@@ -86,21 +87,35 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         return m_adjacency;
     }
 
-
     @Override
     public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        final Collection<GeoPosition> l_route = new LinkedList<>();
+        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
+    }
+
+    @Override
+    public Collection<GeoPosition> getPath()
+    {
+        final Collection<GeoPosition> l_path = new LinkedList<>();
 
         // calculate route points
         IPathWayPoint<T, P, N> l_node = this;
         while ( l_node != null )
         {
-            l_route.add( l_node.getPosition() );
+            l_path.add( l_node.getPosition() );
             l_node = l_node.m_adjacency.getNode( m_random.nextDouble() );
         }
 
-        return m_factory.generate( l_route, m_generator.getCount( p_currentstep ) );
+        return l_path;
+    }
+
+    @Override
+    public Collection<GeoPosition> getNeighbor()
+    {
+        final Collection<GeoPosition> l_neighbor = new HashSet<>();
+        for ( IPathWayPoint<T, P, N> l_item : m_adjacency.keySet() )
+            l_neighbor.add( l_item.getPosition() );
+        return l_neighbor;
     }
 
     @Override
@@ -108,7 +123,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     {
         return super.inspect();
     }
-
 
     /**
      * weight map with guarantee of normalized weights in [0,1]

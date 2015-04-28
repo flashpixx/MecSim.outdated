@@ -21,17 +21,13 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.waypoint;
+package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +35,7 @@ import java.util.Map;
 /**
  * abstract class for a waypoint
  */
-public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IReturnSteppable<T>, Painter<COSMViewer>, Serializable
+public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IWayPoint<T>
 {
 
     /**
@@ -63,7 +59,7 @@ public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> 
      */
     private final Map<String, Object> m_inspect = new HashMap()
     {{
-            putAll( IWayPoint.super.inspect() );
+            putAll( IWayPointBase.super.inspect() );
         }};
 
 
@@ -72,7 +68,7 @@ public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> 
      *
      * @param p_position geoposition
      */
-    public IWayPoint( final GeoPosition p_position )
+    public IWayPointBase( final GeoPosition p_position )
     {
         m_position = p_position;
         m_generator = null;
@@ -86,7 +82,7 @@ public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> 
      * @param p_generator generator
      * @param p_factory factory
      */
-    public IWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
+    public IWayPointBase( final GeoPosition p_position, final N p_generator, final P p_factory )
     {
         m_position = p_position;
         m_generator = p_generator;
@@ -99,21 +95,13 @@ public abstract class IWayPoint<T, P extends IFactory<T>, N extends IGenerator> 
         }
     }
 
-    /**
-     * checks if a generator and factory exists
-     *
-     * @return boolean flag of existance
-     */
+    @Override
     public boolean hasFactoryGenerator()
     {
         return ( m_generator != null ) && ( m_factory != null );
     }
 
-    /**
-     * returns the position
-     *
-     * @return geoposition of the source
-     */
+    @Override
     public final GeoPosition getPosition()
     {
         return m_position;

@@ -25,6 +25,8 @@ package de.tu_clausthal.in.mec.object.waypoint;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
@@ -35,7 +37,7 @@ import java.awt.*;
 /**
  * layer with all sources
  */
-public class CWayPointLayer extends IMultiLayer<IWayPoint>
+public class CWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
     @Override
@@ -47,7 +49,7 @@ public class CWayPointLayer extends IMultiLayer<IWayPoint>
     @Override
     public final void release()
     {
-        for ( IWayPoint<?, ?, ?> l_item : m_data )
+        for ( IWayPoint<?> l_item : m_data )
             l_item.release();
     }
 
@@ -60,7 +62,7 @@ public class CWayPointLayer extends IMultiLayer<IWayPoint>
         //paint sources
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( IWayPoint l_source : this )
+        for ( IWayPoint<?> l_source : this )
             l_source.paint( p_graphic, p_viewer, p_width, p_height );
         ;
     }
@@ -76,7 +78,7 @@ public class CWayPointLayer extends IMultiLayer<IWayPoint>
      *
      * @param p_source source which should be removed
      */
-    public final void removeSource( final IWayPoint p_source )
+    public final void removeSource( final IWayPoint<?> p_source )
     {
         if ( p_source == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );
@@ -90,7 +92,7 @@ public class CWayPointLayer extends IMultiLayer<IWayPoint>
      *
      * @param p_source source which should be removed
      */
-    public final void createTarget( final IWayPoint p_source )
+    public final void createTarget( final IWayPoint<?> p_source )
     {
         if ( p_source == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidsource" ) );

@@ -117,6 +117,10 @@ iframe
     color: red;
 }
 
+#mecsim_simulation_switchlabel{
+    display: block;
+}
+
 /* TODO: depcrecated? */
 #mecsim_global_editor{
     collapsible: false;
@@ -126,7 +130,7 @@ iframe
     width: 500px;
 }
 
-/******************************** css definitions for mecsim_source_? ************************************************/
+/******************************** css definitions for mecsim_source ? ************************************************/
 
 .ui-button .ui-icon.mecsim_source_cyanCircle .ui-icon.mecsim_source_redCircle{
     width: 15px;

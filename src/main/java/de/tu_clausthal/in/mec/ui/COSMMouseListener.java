@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
-import de.tu_clausthal.in.mec.object.waypoint.point.CCarSource;
+import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -67,7 +67,7 @@ class COSMMouseListener extends PanMouseInputListener
     {
         if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
             ( (CCarWayPointLayer) CSimulation.getInstance().getWorld().get( "Car WayPoints" ) ).add(
-                    new CCarSource(
+                    new CCarRandomWayPoint(
                             this.getMouseGeoPosition(
                                     p_event, (COSMViewer) p_event.getSource()
                             ), 0.1, Color.red

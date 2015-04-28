@@ -127,7 +127,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     /**
      * weight map with guarantee of normalized weights in [0,1]
      */
-    public class CWeightMap implements Map<IPathWayPoint<T, P, N>, Double>
+    public class CWeightMap extends HashMap<IPathWayPoint<T, P, N>, Double>
     {
 
         /**
@@ -187,21 +187,15 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
         @Override
-        public final boolean containsKey( final Object p_key )
-        {
-            return this.containsKey( p_key );
-        }
-
-        @Override
-        public final boolean containsValue( final Object p_value )
-        {
-            return this.containsValue( p_value );
-        }
-
-        @Override
         public final Double get( final Object p_key )
         {
             return this.get( p_key );
+        }
+
+        @Override
+        public final boolean containsKey( final Object p_key )
+        {
+            return this.containsKey( p_key );
         }
 
         @Override
@@ -218,6 +212,12 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
         @Override
+        public void putAll( final Map<? extends IPathWayPoint<T, P, N>, ? extends Double> m )
+        {
+            this.putAll( m );
+        }
+
+        @Override
         public Double remove( final Object p_key )
         {
             final double l_value = this.remove( p_key );
@@ -231,15 +231,15 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
         @Override
-        public void putAll( final Map<? extends IPathWayPoint<T, P, N>, ? extends Double> m )
-        {
-            this.putAll( m );
-        }
-
-        @Override
         public void clear()
         {
             this.clear();
+        }
+
+        @Override
+        public final boolean containsValue( final Object p_value )
+        {
+            return this.containsValue( p_value );
         }
 
         @Override

@@ -48,7 +48,7 @@ import java.util.HashSet;
 /**
  * class with default source implementation for cars
  */
-public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
+public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
      * image of the waypoint
@@ -78,9 +78,9 @@ public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
      * @param p_radius radius
      * @param p_color color
      */
-    public CCarSource( final GeoPosition p_position, final double p_radius, final Color p_color )
+    public CCarRandomWayPoint( final GeoPosition p_position, final double p_radius, final Color p_color )
     {
-        super( p_position, p_radius );
+        super( p_position, null, null, p_radius );
         m_initializeimage = this.initializeImage( 20, 34, p_color );
         m_scaledimage = m_initializeimage;
     }
@@ -136,7 +136,9 @@ public class CCarSource extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
         return l_newimage;
     }
 
-    public CCarSource( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius, final Color p_color )
+    public CCarRandomWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
+                               final Color p_color
+    )
     {
         super( p_position, p_generator, p_factory, p_radius );
         m_initializeimage = this.initializeImage( 20, 34, p_color );

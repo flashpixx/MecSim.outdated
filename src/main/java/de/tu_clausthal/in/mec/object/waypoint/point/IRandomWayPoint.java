@@ -64,19 +64,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * ctor
      *
      * @param p_position geoposition of the waypoint
-     * @param p_radius radius around the waypoint
-     */
-    public IRandomWayPoint( final GeoPosition p_position, final double p_radius )
-    {
-        super( p_position );
-        m_radius = p_radius;
-        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_position geoposition of the waypoint
      * @param p_generator generator
      * @param p_factory factory
      * @param p_radius radius around the waypoint

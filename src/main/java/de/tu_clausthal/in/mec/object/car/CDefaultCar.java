@@ -164,25 +164,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return m_LingerProbability;
     }
 
-    @Override
-    public final void reroute()
-    {
-        this.reroute( m_EndPosition );
-    }
-
-    @Override
-    public final void reroute( final GeoPosition p_position )
-    {
-        m_EndPosition = p_position;
-
-        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
-        if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-        {
-            if ( m_routeindex < m_route.size() - 1 )
-                m_route.subList( m_routeindex + 1, m_route.size() ).clear();
-            m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
-        }
-    }
 
     @Override
     public final GeoPosition getGeoposition()
@@ -240,6 +221,15 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return m_deceleration;
     }
 
+    @Override
+    public void release()
+    {
+        super.release();
+        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        if ( l_edge != null )
+            l_edge.removeObject( this );
+    }
+
     /**
      * returns the edge from an index
      *
@@ -252,15 +242,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             return null;
 
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
-    }
-
-    @Override
-    public void release()
-    {
-        super.release();
-        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
-        if ( l_edge != null )
-            l_edge.removeObject( this );
     }
 
     @Override

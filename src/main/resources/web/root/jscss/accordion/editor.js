@@ -61,6 +61,7 @@ var mecsim_editor,
 
             EditorPanel.settings.load_asl_button.on("click", function(p_data){
                 EditorPanel.add_tab();
+                EditorPanel.add_code_mirror();
                 EditorPanel.load_selected_file();
             });
 

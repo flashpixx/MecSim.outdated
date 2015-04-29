@@ -36,8 +36,10 @@ var mecsim_help,
                     $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
                     $("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
 
+                }).done( function() {
                     $("#mecsim_about").dialog({
-                        width: 500
+                        width: 500,
+                        modal: false
                     });
                 });
 

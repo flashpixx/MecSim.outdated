@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -57,9 +58,9 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
     /**
      * returns a list of geoposition, which represent a path from this waypoint
      *
-     * @return geoposition list
+     * @return collection with tupel of geoposition
      */
-    public Collection<GeoPosition> getPath();
+    public Collection<Pair<GeoPosition, GeoPosition>> getPath();
 
 
     /**

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
 import de.tu_clausthal.in.mec.ui.IInspector;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.Serializable;
@@ -42,10 +43,10 @@ public interface IFactory<T> extends IInspector, Serializable
     /**
      * factory method to create objects
      *
-     * @param p_positions geoposition list for routing calls
+     * @param p_waypoints waypoint tupel list
      * @param p_count number of objects
      * @return set with objects
      */
-    public Set<T> generate( final Collection<GeoPosition> p_positions, final int p_count );
+    public Set<T> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count );
 
 }

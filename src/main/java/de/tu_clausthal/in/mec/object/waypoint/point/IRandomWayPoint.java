@@ -28,6 +28,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
@@ -93,14 +95,16 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     }
 
     @Override
-    public Collection<GeoPosition> getPath()
+    public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
         return new HashSet()
         {{
                 add(
-                        new GeoPosition(
+                        new ImmutablePair<>(
+                                m_position, new GeoPosition(
                                 m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
                                 m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
+                        )
                         )
                 );
             }};

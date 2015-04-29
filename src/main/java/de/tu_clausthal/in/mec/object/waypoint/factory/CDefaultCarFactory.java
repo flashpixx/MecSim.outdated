@@ -23,12 +23,19 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
+import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,15 +52,38 @@ public class CDefaultCarFactory extends ICarFactory
     {{
             put( "Factory", this );
         }};
-
+    /**
+     * reference to the graph
+     */
+    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
     @Override
-    public Set<ICar> generate( final Collection<GeoPosition> p_positions, final int p_count )
+    public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( p_positions.iterator().next() ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( l_cells ) );
         return l_set;
+    }
+
+    /**
+     * creates the route cells
+     *
+     * @param p_waypoints waypoint pair list
+     * @return cell list
+     */
+    protected final ArrayList<Pair<EdgeIteratorState, Integer>> generateRouteCells( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints )
+    {
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = new ArrayList<>();
+        for ( Pair<GeoPosition, GeoPosition> l_point : p_waypoints )
+        {
+            final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( l_point.getLeft(), l_point.getRight(), 1 );
+            if ( ( l_route != null ) && ( l_route.size() > 0 ) )
+                l_cells.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
+        }
+
+        return l_cells;
     }
 
     @Override

@@ -23,11 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
+import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.File;
@@ -36,6 +38,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -45,7 +48,7 @@ import java.util.Set;
 /**
  * class to generate Jason cars
  */
-public class CDefaultAgentCarFactory extends ICarFactory
+public class CDefaultAgentCarFactory extends CDefaultCarFactory
 {
 
     /**
@@ -61,6 +64,7 @@ public class CDefaultAgentCarFactory extends ICarFactory
      */
     public CDefaultAgentCarFactory( final String p_aslName )
     {
+        super();
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
@@ -68,12 +72,19 @@ public class CDefaultAgentCarFactory extends ICarFactory
     }
 
     @Override
-    public Set<ICar> generate( final Collection<GeoPosition> p_positions, final int p_count )
+    public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( null, m_aslName ) );
+            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( l_cells, m_aslName ) );
         return l_set;
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return null;
     }
 
     /**
@@ -124,11 +135,5 @@ public class CDefaultAgentCarFactory extends ICarFactory
 
         // write the ASL file to the stream
         p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslName ).toString() ) ) ) );
-    }
-
-    @Override
-    public Map<String, Object> inspect()
-    {
-        return null;
     }
 }

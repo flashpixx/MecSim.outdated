@@ -41,7 +41,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -61,11 +60,17 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**
+     * cell structure of the route
+     */
+    private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
+    /**
      * geo position of the start
+     * @deprecated
      */
     private GeoPosition m_StartPosition;
     /**
      * geo position of the end
+     * @deprecated
      */
     private GeoPosition m_EndPosition;
     /**
@@ -80,10 +85,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * linger probability value
      */
     private double m_LingerProbability = m_random.nextDouble();
-    /**
-     * cell structure of the route
-     */
-    private ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
      * current position on the route
      */
@@ -105,39 +106,13 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * ctor to create the initial values
      *
-     * @param p_StartPosition start positions (position of the source)
+     * @param p_route driving route
      */
-    public CDefaultCar( final GeoPosition p_StartPosition )
+    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route )
     {
-        if ( p_StartPosition == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "startnull" ) );
-
-        m_StartPosition = p_StartPosition;
+        m_route = p_route;
         while ( m_speed < 50 )
             m_speed = m_random.nextInt( m_maxSpeed );
-
-        // we try to find a route within the geo data, so we get a random end position and try to calculate a
-        // route between start and end position, so if an exception is cached, we create a new end position
-        while ( true )
-            try
-            {
-
-                m_EndPosition = new GeoPosition(
-                        m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1
-                );
-                final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
-
-                if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-                {
-                    m_route = m_graph.getRouteCells( l_route.get( 0 ) );
-                    break;
-                }
-
-            }
-            catch ( final Exception l_exception )
-            {
-            }
-
     }
 
     @Override
@@ -270,8 +245,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxSpeed );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "acceleration" ), m_acceleration );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "deceleration" ), m_deceleration );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "startposition" ), m_StartPosition );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "endposition" ), m_EndPosition );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
 

@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
@@ -94,16 +95,17 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public Collection<GeoPosition> getPath()
+    public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
-        final Collection<GeoPosition> l_path = new LinkedList<>();
+        final Collection<Pair<GeoPosition, GeoPosition>> l_path = new LinkedList<>();
 
         // calculate route points
-        IPathWayPoint<T, P, N> l_node = this;
-        while ( l_node != null )
+        IPathWayPoint<T, P, N> l_start = this;
+        while ( l_start != null )
         {
-            l_path.add( l_node.getPosition() );
-            l_node = l_node.m_adjacency.getNode( m_random.nextDouble() );
+            final IPathWayPoint<T, P, N> l_end = l_start.m_adjacency.getNode( m_random.nextDouble() );
+            l_path.add( new ImmutablePair<>( l_start.getPosition(), l_end.getPosition() ) );
+            l_start = l_end;
         }
 
         return l_path;
@@ -158,7 +160,8 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
 
-        /** maximum value
+        /**
+         * maximum value
          *
          * @return maximum value
          */

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 
+import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
@@ -31,8 +32,9 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
-import org.jxmapviewer.viewer.GeoPosition;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -77,12 +79,12 @@ public class CCarJasonAgent extends CDefaultCar
     /**
      * ctor to create the initial values
      *
-     * @param p_StartPosition start positions (position of the source)
+     * @param p_route driving route
      * @param p_asl agent ASL file
      */
-    public CCarJasonAgent( final GeoPosition p_StartPosition, final String p_asl )
+    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final String p_asl )
     {
-        super( p_StartPosition );
+        super( p_route );
 
         try
         {

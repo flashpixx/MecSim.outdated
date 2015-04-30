@@ -14,7 +14,7 @@ var mecsim_source,
             clusterwidget: $("#mecsim_source_clusterwidget"),
             waypointsettings: $("#mecsim_source_waypointsettings"),
             targetweighting: $("#mecsim_source_targetweighting"),
-            toolbox: $("#mecsim_source_toolbox"),
+            toolbox: $("#mecsim_source_toolbox")
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
@@ -79,6 +79,19 @@ var mecsim_source,
         initSettingsWidget: function() {
 
             //TODO implement possiblty for different waypoint tools
+            //TODO move jquery selectors
+            $("#mecsim_source_colorpicker").spectrum({
+                showPaletteOnly: true,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                color: 'blanchedalmond',
+                palette: [
+                    ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+                    ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+                    ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
+                ]
+            });
 
         },
 

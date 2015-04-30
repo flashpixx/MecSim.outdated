@@ -84,6 +84,7 @@ public class CGraphHopper extends GraphHopper
     private final int m_cellsize;
     /**
      * multiplier to scale cell-increment on the current cell size and time length
+     * @note [speed in meter/sec] * [timesampling in second] = [moved length in m] / ]cellsampling in meter] = moved cells ( km/h = 1000 / 3600 m/s )
      */
     private final int m_timestepmultiplier;
     /**

@@ -60,7 +60,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
-     * maximum speed definition
+     * maximum speed definition in km/h
      */
     private final int m_maxspeed;
     /**
@@ -68,15 +68,15 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private final double m_lingerprobability;
     /**
-     * individual acceleration
+     * individual acceleration in km/h
      */
     private final int m_acceleration;
     /**
-     * individual deceleration *
+     * individual deceleration in km/h
      */
     private final int m_deceleration;
     /**
-     * current speed
+     * current speed in km/h
      */
     private int m_speed;
     /**
@@ -121,10 +121,10 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
         if ( m_maxspeed > 350 )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
-        if ( m_acceleration < 1 )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationtolow" ) );
-        if ( m_deceleration < 1 )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationtolow" ) );
+        if ( ( m_acceleration < 1 ) || ( m_acceleration > m_maxspeed / 4 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationincorrect" ) );
+        if ( ( m_deceleration < 1 ) || ( m_deceleration > m_maxspeed / 4 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationincorrect" ) );
         if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );
     }

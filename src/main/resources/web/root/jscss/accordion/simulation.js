@@ -84,10 +84,9 @@ var mecsim_simulation,
                 url     : "/csimulation/listlayer",
                 success : function( px_data ){
                     $.each( px_data, function( pc_key, px_value ) {
-                        console.log(px_value.id)
-                        $("<label id='mecsim_simulation_switchlabel'>"+ px_value.id.toString() +"</label>").appendTo(SimulationPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id.toString() +"' checked>").appendTo(SimulationPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id.toString() +"' checked></p>").appendTo(SimulationPanel.settings.switchdiv);
+                        $("<label id='mecsim_simulation_switchlabel'>"+ pc_key +"</label>").appendTo(SimulationPanel.settings.switchdiv);
+                        $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id +"' checked>").appendTo(SimulationPanel.settings.switchdiv);
+                        $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' checked></p>").appendTo(SimulationPanel.settings.switchdiv);
                     });
                 }
             }).done(function(){

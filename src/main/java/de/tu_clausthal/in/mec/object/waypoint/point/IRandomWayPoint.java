@@ -100,7 +100,7 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         return new HashSet<Pair<GeoPosition, GeoPosition>>()
         {{
                 add(
-                        new ImmutablePair<>(
+                        new ImmutablePair<GeoPosition, GeoPosition>(
                                 m_position, new GeoPosition(
                                 m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
                                 m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2

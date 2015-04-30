@@ -21,30 +21,52 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+package de.tu_clausthal.in.mec.object.waypoint.point;
 
-import java.util.Map;
+
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.viewer.GeoPosition;
+
+import java.io.Serializable;
+import java.util.Collection;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * interface of a waypoint
  */
-public interface ISteppable
+public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, Serializable
 {
 
     /**
-     * method for analyse object
+     * checks if a generator and factory exists
      *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
+     * @return boolean flag of existance
      */
-    @Deprecated
-    Map<String, Object> analyse();
+    public boolean hasFactoryGenerator();
+
+    /**
+     * returns the position
+     *
+     * @return geoposition of the source
+     */
+    public GeoPosition getPosition();
 
 
     /**
-     * release function to remove object *
+     * returns a list of geoposition, which represent a path from this waypoint
+     *
+     * @return collection with tupel of geoposition
      */
-    public void release();
+    public Collection<Pair<GeoPosition, GeoPosition>> getPath();
 
+
+    /**
+     * returns all neighbor of this node
+     *
+     * @return neighbors of this node
+     */
+    public Collection<GeoPosition> getNeighbor();
 }

@@ -21,79 +21,32 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source;
+package de.tu_clausthal.in.mec.object.waypoint.factory;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.source.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.source.sourcetarget.CComplexTarget;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import org.jxmapviewer.painter.Painter;
+import de.tu_clausthal.in.mec.ui.IInspector;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Set;
 
 
 /**
- * factory interface of car source - defines a source
+ * interface which defines the generic structure of every factory (for sources)
+ *
+ * @tparam T any object type
  */
-public interface ISource extends IReturnSteppable<ICar>, Painter<COSMViewer>, Serializable
+public interface IFactory<T> extends IInspector, Serializable
 {
 
     /**
-     * returns the position of the source
+     * factory method to create objects
      *
-     * @return geoposition of the source
+     * @param p_waypoints waypoint tupel list
+     * @param p_count number of objects
+     * @return set with objects
      */
-    public GeoPosition getPosition();
-
-
-    /**
-     * returns the Color of the source
-     *
-     * @return color of the source
-     */
-    public Color getColor();
-
-    /**
-     * set a new Color for this source
-     *
-     * @param p_color new Color
-     */
-    public void setColor( Color p_color );
-
-    /**
-     * return the Generator of the source
-     *
-     * @return Generator Object of this Source
-     */
-    public IGenerator getGenerator();
-
-    /**
-     * set a new Generator for this source
-     *
-     * @param p_generator new Generator
-     */
-    public void setGenerator( IGenerator p_generator );
-
-    /**
-     * Method to Remove the Generator
-     */
-    public void removeGenerator();
-
-    /**
-     * return the ComplexTarget of the source
-     *
-     * @return ComplexTarget of the source
-     */
-    public CComplexTarget getComplexTarget();
-
-    /**
-     * set a new ComplexTarget for this source
-     *
-     * @param p_complexTarget new ComplexTarget
-     */
-    public void setComplexTarget( CComplexTarget p_complexTarget );
+    public Set<T> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count );
 
 }

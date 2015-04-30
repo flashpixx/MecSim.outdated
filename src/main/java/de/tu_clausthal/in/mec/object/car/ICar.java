@@ -60,26 +60,12 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      */
     public void setCurrentSpeed( int p_speed ) throws IllegalArgumentException;
 
-
     /**
      * returns a probability for lingering
      *
      * @return double value in [0,1]
      */
     public double getLingerProbability();
-
-
-    /**
-     * create a new route from the current position to the end
-     */
-    public void reroute();
-
-    /**
-     * create a new route from the current position to the new end
-     *
-     * @param p_position new end position
-     */
-    public void reroute( GeoPosition p_position );
 
     /**
      * returns the current geo position of the car

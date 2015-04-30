@@ -1,5 +1,5 @@
 <!-- Cluster Widget -->
-<div id = "mecsim_source_clustercontainer" class = "ui-widget-content" >
+<div id = "mecsim_source_clusterwidget" class = "ui-widget-content" >
     <h3 class = "ui-widget-header" >Source-Target Relation</h3 >
     <center style = "padding-top:10px;" >
         <button id = "mecsim_source_sortByDistance" type = "button" >Sort by Distance</button >
@@ -9,134 +9,13 @@
     <div id = "mecsim_source_cluster" ></div >
 </div >
 
-<!-- Generator Settings Widget -->
-<div id = "mecsim_source_generatorsettings" class = "ui-widget-content" >
-    <h3 class = "ui-widget-header" >Generator Settings</h3 >
-
-    <form action = "#" >
-        <label for = "mecsim_source_selectSource" >Select the Source that should be configured: </label >
-        <select name = "mecsim_source_selectSource" id = "mecsim_source_selectSource" >
-            <option selected = "selected" >Knoten#1</option >
-            <option >Knoten#2</option >
-            <option >Knoten#3</option >
-            <option >Knoten#4</option >
-            <option >Knoten#5</option >
-        </select >
-
-        <p ></p >
-
-        <label for = "mecsim_source_selectDistribution" >Select the Source that should be configured: </label >
-        <select name = "mecsim_source_selectDistribution" id = "mecsim_source_selectDistribution" >
-            <option selected = "selected" >Konstant</option >
-            <option >Gleichverteilung</option >
-            <option >Normalverteilung</option >
-            <option >Exponentialverteilung</option >
-            <option >Benutzerdefiniert</option >
-        </select >
-    </form >
-
-    <hr >
-
-    <div id = "mecsim_source_generatorSettings" >
-        <label id = "mecsim_source_input1Label" >Obere Grenze :</label >
-        <input id = "mecsim_source_input1" >
-
-        <p ></p >
-        <label id = "mecsim_source_input2Label" >Untere Grenze: </label >
-        <input id = "mecsim_source_input2" >
-    </div >
-
+<!-- Waypoint Settings Widget -->
+<div id = "mecsim_source_waypointsettings" class = "ui-widget-content" >
+    <h3 class = "ui-widget-header" >Waypoint Settings</h3 >
+    <input type='text' id="mecsim_source_colorpicker" />    
 </div >
 
 <!-- Target Weighting Widget -->
 <div id = "mecsim_source_targetweighting" class = "ui-widget-content" >
     <h3 class = "ui-widget-header" >Target Weighting</h3 >
-
-    <p ></p >
-
-    <table id = "mecsim_source_weighting" class = "display" >
-        <thead >
-        <tr >
-            <th >Ziel Name</th >
-            <th >Latitude</th >
-            <th >Longitude</th >
-            <th >Gewichtung</th >
-        </tr >
-        </thead >
-
-        <tbody >
-        <tr >
-            <td >Ziel 1</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 2</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 3</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 4</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        <tr >
-            <td >Ziel 5</td >
-            <td >Sample Lat</td >
-            <td >Sample Long</td >
-            <td ><input id = "mecsim_source_weightinginput" ></input ></td >
-        </tr >
-        </tbody >
-    </table >
 </div >

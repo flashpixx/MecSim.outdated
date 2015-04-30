@@ -21,30 +21,37 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+package de.tu_clausthal.in.mec.object.waypoint;
 
-import java.util.Map;
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * layer with all sources
  */
-public interface ISteppable
+public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
-    /**
-     * method for analyse object
-     *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
-     */
-    @Deprecated
-    Map<String, Object> analyse();
+    @Override
+    public final int getCalculationIndex()
+    {
+        return 2;
+    }
 
+    @Override
+    public final void release()
+    {
+        for ( IWayPoint<ICar> l_item : m_data )
+            l_item.release();
+    }
 
-    /**
-     * release function to remove object *
-     */
-    public void release();
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
+    }
 
 }

@@ -21,70 +21,87 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.generator;
+package de.tu_clausthal.in.mec.object.waypoint.factory;
 
+import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * Class to Generate Jason Cars
+ * class to generate Jason cars
  */
-public class CJasonCarGenerator extends CDefaultCarGenerator
+public class CDefaultAgentCarFactory extends CDefaultCarFactory
 {
 
     /**
-     * Name of the ASL File
+     * name of the ASL file
      */
-    private String m_aslName;
+    private String m_aslname;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
+            put( CCommon.getResourceString( CDefaultAgentCarFactory.class, "factoryasl" ), m_aslname );
+        }};
 
 
     /**
      * ctor
      *
-     * @param p_position geo position
-     * @param p_aslName ASL name
+     * @param p_aslName name of the asl file
      */
-    public CJasonCarGenerator( final GeoPosition p_position, final String p_aslName )
+    public CDefaultAgentCarFactory( final String p_aslName )
     {
-        super( p_position );
-
+        super();
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
-        this.m_aslName = p_aslName;
+        this.m_aslname = p_aslName;
     }
 
     @Override
-    public final Color getColor()
+    public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
-        return Color.RED;
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
+        final Set<ICar> l_set = new HashSet<>();
+        for ( int i = 0; i < p_count; i++ )
+            try
+            {
+                l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( l_cells, m_aslname ) );
+            }
+            catch ( final Exception l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+        return l_set;
     }
 
     @Override
-    public final Collection<ICar> generate( final int p_currentStep )
+    public Map<String, Object> inspect()
     {
-        final Collection<ICar> l_sources = new HashSet<>();
-        if ( p_currentStep % m_restriction == 0 )
-            for ( int i = 0; i < m_settings.getSample(); i++ )
-                l_sources.add( new CCarJasonAgent( m_aslName, m_position ) );
-
-        return l_sources;
+        return m_inspect;
     }
 
     /**
@@ -99,7 +116,7 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
         p_stream.defaultReadObject();
 
         // read the ASL file from the stream
-        final String l_aslname = m_aslName;
+        final String l_aslname = m_aslname;
         final String l_asldata = (String) p_stream.readObject();
         File l_output = IEnvironment.getAgentFile( l_aslname );
 
@@ -112,8 +129,8 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
                 l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
                 for ( int i = 1; l_output.exists(); i++ )
                 {
-                    m_aslName = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
-                    l_output = IEnvironment.getAgentFile( m_aslName );
+                    m_aslname = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
+                    l_output = IEnvironment.getAgentFile( m_aslname );
                 }
                 FileUtils.write( l_output, l_asldata );
             }
@@ -134,7 +151,6 @@ public class CJasonCarGenerator extends CDefaultCarGenerator
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslName ).toString() ) ) ) );
+        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslname ).toString() ) ) ) );
     }
-
 }

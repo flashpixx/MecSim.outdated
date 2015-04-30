@@ -21,30 +21,14 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+package de.tu_clausthal.in.mec.object.waypoint.factory;
 
-import java.util.Map;
+import de.tu_clausthal.in.mec.object.car.ICar;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * class to create an car factory object
  */
-public interface ISteppable
+public abstract class ICarFactory implements IFactory<ICar>
 {
-
-    /**
-     * method for analyse object
-     *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
-     */
-    @Deprecated
-    Map<String, Object> analyse();
-
-
-    /**
-     * release function to remove object *
-     */
-    public void release();
-
 }

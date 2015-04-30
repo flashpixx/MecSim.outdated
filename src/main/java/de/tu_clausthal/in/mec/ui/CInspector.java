@@ -67,7 +67,7 @@ public class CInspector
      *
      * @param p_object object
      */
-    public final void set( final IInspector p_object )
+    public final void set( final IInspectorDefault p_object )
     {
         final Map<String, Object> l_data = p_object.inspect();
         if ( ( l_data == null ) || ( l_data.isEmpty() ) )

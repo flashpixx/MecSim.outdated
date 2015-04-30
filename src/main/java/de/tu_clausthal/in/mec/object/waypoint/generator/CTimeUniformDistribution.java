@@ -21,65 +21,27 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.sourcetarget;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import org.jxmapviewer.viewer.GeoPosition;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Point2D;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 
 /**
- * Most Basic Target for Sources
+ * creates a time-uniform distribution generator
  */
-public class CAtomTarget implements Painter<COSMViewer>
+public class CTimeUniformDistribution extends ITimeDistribution
 {
-
     /**
-     * position of this Target
-     */
-    private GeoPosition m_position;
-
-
-    /**
-     * CTOR
+     * ctor
      *
-     * @param p_position position
+     * @param p_count number of objects
+     * @param p_lower lower-bound value
+     * @param p_upper upper-bound value
      */
-    public CAtomTarget( final GeoPosition p_position )
+    public CTimeUniformDistribution( final int p_count, final double p_lower, final double p_upper )
     {
-        m_position = p_position;
-    }
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        final int l_zoom = Math.max( 15 - p_viewer.getZoom(), 3 );
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( this.getPosition(), p_viewer.getZoom() );
-        p_graphic.setColor( Color.RED );
-        p_graphic.fillRect( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
-    }
-
-    /**
-     * return the position of this Target
-     *
-     * @return position of the Target
-     */
-    public final GeoPosition getPosition()
-    {
-        return m_position;
-    }
-
-    /**
-     * set a new position for this Target
-     *
-     * @param p_position new position of this Target
-     */
-    public final void setPosition( final GeoPosition p_position )
-    {
-        this.m_position = p_position;
+        super( new UniformRealDistribution( p_lower, p_upper ), p_count );
     }
 
 }

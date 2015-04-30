@@ -21,30 +21,67 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
+
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
+
+import java.util.HashMap;
 import java.util.Map;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * generator of a static number of objects with a time-exponential function
  */
-public interface ISteppable
+public abstract class ITimeDistribution implements IGenerator
 {
+    /**
+     * distribution *
+     */
+    private final AbstractRealDistribution m_distribution;
+    /**
+     * number of objects *
+     */
+    private final int m_count;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap<>();
+
 
     /**
-     * method for analyse object
+     * default ctor
+     */
+    private ITimeDistribution()
+    {
+        m_distribution = null;
+        m_count = 0;
+    }
+
+    /**
+     * ctor
      *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
+     * @param p_distribution distribution object
+     * @param p_count number of objects
      */
-    @Deprecated
-    Map<String, Object> analyse();
+    protected ITimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
+    {
+        m_count = p_count;
+        m_distribution = p_distribution;
+    }
 
 
-    /**
-     * release function to remove object *
-     */
-    public void release();
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        if ( m_distribution == null )
+            return 0;
+        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+    }
 
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
 }

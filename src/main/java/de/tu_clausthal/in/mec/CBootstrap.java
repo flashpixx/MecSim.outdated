@@ -27,7 +27,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.source.CSourceLayer;
+import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.CConsole;
@@ -118,7 +118,7 @@ public class CBootstrap
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
-        p_server.registerObject( CSimulation.getInstance().getWorld().get( "Sources" ) );
+        p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
     }
 
 
@@ -129,7 +129,7 @@ public class CBootstrap
      */
     public static void afterOSMViewerInit( final COSMViewer p_viewer )
     {
-        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Sources" ) );
+        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Car WayPoints" ) );
         p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Cars" ) );
     }
 
@@ -142,7 +142,7 @@ public class CBootstrap
     public static void afterSimulationInit( final CSimulation p_simulation )
     {
         p_simulation.getWorld().put( "Database", new CDatabase() );
-        p_simulation.getWorld().put( "Sources", new CSourceLayer() );
+        p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
     }

@@ -24,15 +24,17 @@
 package de.tu_clausthal.in.mec.object.car;
 
 
-import de.tu_clausthal.in.mec.CLogger;
+import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
-import org.jxmapviewer.viewer.GeoPosition;
+import jason.JasonException;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -52,69 +54,84 @@ public class CCarJasonAgent extends CDefaultCar
     private static final Set<String> c_forbidden = new HashSet()
     {{
             add( "m_agent" );
-            add( "m_route" );
             add( "m_graph" );
+            add( "m_route" );
             add( "m_inspect" );
-            add( "m_random" );
-            add( "m_endReached" );
+            add( "m_endreached" );
             add( "m_routeindex" );
-            add( "m_EndPosition" );
-            add( "m_StartPosition" );
+
             add( "release" );
             add( "paint" );
             add( "step" );
             add( "inspect" );
             add( "onClick" );
         }};
-
-
     /**
      * agent object *
      */
-    private CAgent<CDefaultCar> m_agent;
+    private final CAgent<CDefaultCar> m_agent;
 
 
     /**
-     * ctor to create the initial values
-     *
-     * @param p_asl agent ASL file
-     * @param p_StartPosition start positions (position of the source)
+     * ctor
+     * @param p_route driving route
+     * @param p_agent ASL name
+     * @throws JasonException
+     * @throws JasonException throws on Jason error
      */
-    public CCarJasonAgent( final String p_asl, final GeoPosition p_StartPosition )
+    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final String p_agent ) throws JasonException
     {
-        super( p_StartPosition );
+        super( p_route );
+        m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_agent );
+        this.initialAgentContext();
+    }
 
-        try
-        {
+    /**
+     * agent initial context
+     */
+    private void initialAgentContext()
+    {
+        // add the belief bind to the agent
+        final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
+                "self", this, c_forbidden
+        );
+        m_agent.getBelief().add( l_belief );
 
-            m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_asl );
+        // add the method bind to the agent
+        final CMethodBind l_method = new CMethodBind( "self", this );
+        l_method.getForbidden( "self" ).addAll( c_forbidden );
+        m_agent.getActions().put( "invoke", l_method );
 
-            // add the belief bind to the agent
-            final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
-                    "self", this, c_forbidden
-            );
-            m_agent.getBelief().add( l_belief );
-
-            // add the method bind to the agent
-            final CMethodBind l_method = new CMethodBind( "self", this );
-            l_method.getForbidden( "self" ).addAll( c_forbidden );
-            m_agent.getActions().put( "invoke", l_method );
-
-            // add the set bind to the agent
-            final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
-                    "self", this, c_forbidden
-            );
-            m_agent.getActions().put( "set", l_set );
+        // add the set bind to the agent
+        final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
+                "self", this, c_forbidden
+        );
+        m_agent.getActions().put( "set", l_set );
 
 
-            // add agent to layer
-            CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( m_agent );
+        // add agent to layer
+        CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( m_agent );
+    }
 
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
+    /**
+     *
+     * @param p_route driving route
+     * @param p_speed initial speed
+     * @param p_maxspeed maximum speed
+     * @param p_acceleration acceleration
+     * @param p_deceleration decceleration
+     * @param p_lingerprobability linger probability
+     * @param p_agent ASL name
+     * @throws JasonException throws on Jason error
+     */
+    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_deceleration,
+                           final int p_acceleration, final double p_lingerprobability, final String p_agent
+    ) throws JasonException
+    {
+        super( p_route, p_speed, p_maxspeed, p_deceleration, p_acceleration, p_lingerprobability );
+        m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_agent );
+        this.initialAgentContext();
+
     }
 
     @Override

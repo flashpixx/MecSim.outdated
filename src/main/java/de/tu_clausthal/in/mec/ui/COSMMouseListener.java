@@ -23,7 +23,8 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.object.source.CSourceLayer;
+import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
+import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -65,31 +66,15 @@ class COSMMouseListener extends PanMouseInputListener
     public void mouseClicked( final MouseEvent p_event )
     {
         if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
-            switch ( m_currentlayer )
-            {
-                case Sources:
-                    addSource( p_event );
-                    break;
-                default:
-            }
+            ( (CCarWayPointLayer) CSimulation.getInstance().getWorld().get( "Car WayPoints" ) ).add(
+                    new CCarRandomWayPoint(
+                            this.getMouseGeoPosition(
+                                    p_event, (COSMViewer) p_event.getSource()
+                            ), 0.5, Color.red
+                    )
+            );
     }
 
-
-    /**
-     * adds a new source
-     *
-     * @param p_event mouse event
-     */
-    private void addSource( final MouseEvent p_event )
-    {
-        final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
-        final CSourceLayer l_sourcelayer = ( (CSourceLayer) CSimulation.getInstance().getWorld().get( "Sources" ) );
-        final GeoPosition l_geoPosition = this.getMouseGeoPosition( p_event, l_viewer );
-
-
-        l_sourcelayer.createSource( l_geoPosition );
-        //l_sourcelayer.createTarget( l_geoPosition );
-    }
 
     /**
      * returns the geoposition of a mouse position

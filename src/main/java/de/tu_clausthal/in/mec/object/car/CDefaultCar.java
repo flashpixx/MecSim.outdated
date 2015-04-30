@@ -30,7 +30,7 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.IInspector;
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -41,7 +41,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -49,41 +48,37 @@ import java.util.Random;
 /**
  * class for a default car *
  */
-public class CDefaultCar extends IInspector implements ICar
+public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
-    /**
-     * random interface
-     */
-    private final Random m_random = new Random();
     /**
      * reference to the graph
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**
-     * geo position of the start
+     * cell structure of the route
      */
-    private GeoPosition m_StartPosition;
+    private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
-     * geo position of the end
+     * maximum speed definition
      */
-    private GeoPosition m_EndPosition;
+    private final int m_maxspeed;
+    /**
+     * linger probability value
+     */
+    private final double m_lingerprobability;
+    /**
+     * individual acceleration
+     */
+    private final int m_acceleration;
+    /**
+     * individual deceleration *
+     */
+    private final int m_deceleration;
     /**
      * current speed
      */
     private int m_speed;
-    /**
-     * maximum speed definition
-     */
-    private int m_maxSpeed = 200;
-    /**
-     * linger probability value
-     */
-    private double m_LingerProbability = m_random.nextDouble();
-    /**
-     * cell structure of the route
-     */
-    private ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
      * current position on the route
      */
@@ -91,59 +86,78 @@ public class CDefaultCar extends IInspector implements ICar
     /**
      * boolean flag for end reached
      */
-    private boolean m_endReached;
-    /**
-     * individual acceleration
-     */
-    private int m_acceleration = m_random.nextInt( 40 ) + 20;
-    /**
-     * individual deceleration *
-     */
-    private int m_deceleration = m_random.nextInt( 40 ) + 20;
+    private boolean m_endreached;
+
 
 
     /**
      * ctor to create the initial values
      *
-     * @param p_StartPosition start positions (position of the source)
+     * @param p_route driving route
      */
-    public CDefaultCar( final GeoPosition p_StartPosition )
+    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route ) throws IllegalArgumentException
     {
-        if ( p_StartPosition == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "startnull" ) );
+        final Random l_random = new Random();
 
-        m_StartPosition = p_StartPosition;
-        while ( m_speed < 50 )
-            m_speed = m_random.nextInt( m_maxSpeed );
+        m_route = p_route;
+        m_speed = l_random.nextInt( 51 ) + 20;
+        m_maxspeed = l_random.nextInt( 151 ) + 50;
+        m_acceleration = l_random.nextInt( 16 ) + 5;
+        m_deceleration = l_random.nextInt( 16 ) + 5;
+        m_lingerprobability = l_random.nextDouble();
 
-        // we try to find a route within the geo data, so we get a random end position and try to calculate a
-        // route between start and end position, so if an exception is cached, we create a new end position
-        while ( true )
-            try
-            {
+        this.checkInitialization();
+    }
 
-                m_EndPosition = new GeoPosition(
-                        m_StartPosition.getLatitude() + m_random.nextDouble() - 0.1, m_StartPosition.getLongitude() + m_random.nextDouble() - 0.1
-                );
-                final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( m_StartPosition, m_EndPosition, 1 );
+    /**
+     * checks initial vales
+     * @throws IllegalArgumentException is thrown on errors
+     */
+    private void checkInitialization() throws IllegalArgumentException
+    {
+        if ( ( m_route == null ) || ( m_route.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "routeempty" ) );
+        if ( m_speed < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
+        if ( m_maxspeed > 350 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
+        if ( m_acceleration < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationtolow" ) );
+        if ( m_deceleration < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationtolow" ) );
+        if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );
+    }
 
-                if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-                {
-                    m_route = m_graph.getRouteCells( l_route.get( 0 ) );
-                    break;
-                }
 
-            }
-            catch ( final Exception l_exception )
-            {
-            }
+    /**
+     * ctor to create the initial values
+     *
+     * @param p_route driving route
+     * @param p_speed initial speed
+     * @param p_maxspeed maximum speed
+     * @param p_acceleration acceleration
+     * @param p_deceleration decceleration
+     * @param p_lingerprobability linger probability
+     */
+    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
+                        final int p_deceleration, final double p_lingerprobability
+    ) throws IllegalArgumentException
+    {
+        m_route = p_route;
+        m_speed = p_speed;
+        m_maxspeed = p_maxspeed;
+        m_acceleration = p_acceleration;
+        m_deceleration = p_deceleration;
+        m_lingerprobability = p_lingerprobability;
 
+        this.checkInitialization();
     }
 
     @Override
     public final int getMaximumSpeed()
     {
-        return m_maxSpeed;
+        return m_maxspeed;
     }
 
     @Override
@@ -161,28 +175,9 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public final double getLingerProbability()
     {
-        return m_LingerProbability;
+        return m_lingerprobability;
     }
 
-    @Override
-    public final void reroute()
-    {
-        this.reroute( m_EndPosition );
-    }
-
-    @Override
-    public final void reroute( final GeoPosition p_position )
-    {
-        m_EndPosition = p_position;
-
-        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), m_EndPosition, 1 );
-        if ( ( l_route != null ) && ( l_route.size() > 0 ) )
-        {
-            if ( m_routeindex < m_route.size() - 1 )
-                m_route.subList( m_routeindex + 1, m_route.size() ).clear();
-            m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
-        }
-    }
 
     @Override
     public final GeoPosition getGeoposition()
@@ -197,7 +192,7 @@ public class CDefaultCar extends IInspector implements ICar
     @Override
     public final boolean hasEndReached()
     {
-        return m_endReached;
+        return m_endreached;
     }
 
     @Override
@@ -240,6 +235,15 @@ public class CDefaultCar extends IInspector implements ICar
         return m_deceleration;
     }
 
+    @Override
+    public void release()
+    {
+        super.release();
+        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        if ( l_edge != null )
+            l_edge.removeObject( this );
+    }
+
     /**
      * returns the edge from an index
      *
@@ -252,15 +256,6 @@ public class CDefaultCar extends IInspector implements ICar
             return null;
 
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
-    }
-
-    @Override
-    public void release()
-    {
-        super.release();
-        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
-        if ( l_edge != null )
-            l_edge.removeObject( this );
     }
 
     @Override
@@ -286,11 +281,9 @@ public class CDefaultCar extends IInspector implements ICar
         final Map<String, Object> l_map = super.inspect();
 
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "currentspeed" ), m_speed );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxSpeed );
+        l_map.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxspeed );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "acceleration" ), m_acceleration );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "deceleration" ), m_deceleration );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "startposition" ), m_StartPosition );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "endposition" ), m_EndPosition );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
 
@@ -342,7 +335,7 @@ public class CDefaultCar extends IInspector implements ICar
         int l_speed = this.getCurrentSpeed();
         if ( m_routeindex + l_speed >= m_route.size() )
         {
-            m_endReached = true;
+            m_endreached = true;
             l_speed = m_route.size() - m_routeindex - 1;
         }
 

@@ -21,30 +21,44 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+
+package de.tu_clausthal.in.mec.object.waypoint.generator;
+
 
 import java.util.Map;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * profile generator to define a fixed histogram on the time steps
  */
-public interface ISteppable
+public class CTimeProfile implements IGenerator
 {
 
     /**
-     * method for analyse object
-     *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
+     * profile histogram *
      */
-    @Deprecated
-    Map<String, Object> analyse();
+    final int[] m_histogram;
 
 
     /**
-     * release function to remove object *
+     * ctor
+     *
+     * @param p_histogram array with histogram
      */
-    public void release();
+    public CTimeProfile( final int[] p_histogram )
+    {
+        m_histogram = p_histogram;
+    }
 
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        return m_histogram[p_currentStep % m_histogram.length];
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return null;
+    }
 }

@@ -21,30 +21,27 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import java.util.Map;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * creates a time-exponential distribution generator
  */
-public interface ISteppable
+public class CTimeExponentialDistribution extends ITimeDistribution
 {
 
     /**
-     * method for analyse object
+     * ctor
      *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
+     * @param p_count number of objects
+     * @param p_mean mean value
+     * @param p_deviation deviation value
      */
-    @Deprecated
-    Map<String, Object> analyse();
-
-
-    /**
-     * release function to remove object *
-     */
-    public void release();
+    public CTimeExponentialDistribution( final int p_count, final double p_mean, final double p_deviation )
+    {
+        super( new ExponentialDistribution( p_mean, p_deviation ), p_count );
+    }
 
 }

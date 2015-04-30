@@ -21,30 +21,34 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime;
+package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+
+import java.util.HashMap;
 import java.util.Map;
 
 
 /**
- * interface for all objects which are triggered by the simulation worker
+ * global default implementation to get information about a simulation object
  */
-public interface ISteppable
+public abstract class IInspectorDefault extends IUIListener implements IInspector
 {
 
     /**
-     * method for analyse object
-     *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
+     * inspect variable *
      */
-    @Deprecated
-    Map<String, Object> analyse();
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
+            put( CCommon.getResourceString( IInspectorDefault.class, "objectid" ), this.hashCode() );
+        }};
 
 
-    /**
-     * release function to remove object *
-     */
-    public void release();
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
 
 }

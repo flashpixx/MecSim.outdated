@@ -21,41 +21,25 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.source.generator;
+package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.ui.IInspector;
 
-import java.awt.*;
 import java.io.Serializable;
-import java.util.Collection;
 
 
 /**
- * generator interface to define different object generator
+ * distribution interface to define the amount of objects that should be generated
  */
-public interface IGenerator extends Serializable
+public interface IGenerator extends IInspector, Serializable
 {
 
     /**
-     * method which defines the Color of a Source when a Generator was placed
+     * method to get the amount of objects
      *
-     * @return Color of the Generator
+     * @param p_currentStep current step
+     * @return number of objects
      */
-    public Color getColor();
-
-    /**
-     * method to generate a collection of cars
-     *
-     * @param p_currentStep
-     * @return collection of cars
-     */
-    Collection<ICar> generate( final int p_currentStep );
-
-    /**
-     * method to get the settings object
-     *
-     * @return settings object
-     */
-    public CGeneratorSettings getSettings();
+    int getCount( final int p_currentStep );
 
 }

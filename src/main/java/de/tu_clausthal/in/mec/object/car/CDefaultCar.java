@@ -52,10 +52,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
     /**
-     * random interface
-     */
-    private final Random m_random = new Random();
-    /**
      * reference to the graph
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
@@ -64,27 +60,25 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
-     * geo position of the start
-     * @deprecated
+     * maximum speed definition
      */
-    private GeoPosition m_StartPosition;
+    private final int m_maxspeed;
     /**
-     * geo position of the end
-     * @deprecated
+     * linger probability value
      */
-    private GeoPosition m_EndPosition;
+    private final double m_lingerprobability;
+    /**
+     * individual acceleration
+     */
+    private final int m_acceleration;
+    /**
+     * individual deceleration *
+     */
+    private final int m_deceleration;
     /**
      * current speed
      */
     private int m_speed;
-    /**
-     * maximum speed definition
-     */
-    private int m_maxSpeed = 200;
-    /**
-     * linger probability value
-     */
-    private double m_LingerProbability = m_random.nextDouble();
     /**
      * current position on the route
      */
@@ -92,15 +86,8 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * boolean flag for end reached
      */
-    private boolean m_endReached;
-    /**
-     * individual acceleration
-     */
-    private int m_acceleration = m_random.nextInt( 40 ) + 20;
-    /**
-     * individual deceleration *
-     */
-    private int m_deceleration = m_random.nextInt( 40 ) + 20;
+    private boolean m_endreached;
+
 
 
     /**
@@ -108,17 +95,69 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      *
      * @param p_route driving route
      */
-    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route )
+    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route ) throws IllegalArgumentException
+    {
+        final Random l_random = new Random();
+
+        m_route = p_route;
+        m_speed = l_random.nextInt( 51 ) + 20;
+        m_maxspeed = l_random.nextInt( 151 ) + 50;
+        m_acceleration = l_random.nextInt( 16 ) + 5;
+        m_deceleration = l_random.nextInt( 16 ) + 5;
+        m_lingerprobability = l_random.nextDouble();
+
+        this.checkInitialization();
+    }
+
+    /**
+     * checks initial vales
+     * @throws IllegalArgumentException is thrown on errors
+     */
+    private void checkInitialization() throws IllegalArgumentException
+    {
+        if ( ( m_route == null ) || ( m_route.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "routeempty" ) );
+        if ( m_speed < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
+        if ( m_maxspeed > 350 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
+        if ( m_acceleration < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationtolow" ) );
+        if ( m_deceleration < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationtolow" ) );
+        if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );
+    }
+
+
+    /**
+     * ctor to create the initial values
+     *
+     * @param p_route driving route
+     * @param p_speed initial speed
+     * @param p_maxspeed maximum speed
+     * @param p_acceleration acceleration
+     * @param p_deceleration decceleration
+     * @param p_lingerprobability linger probability
+     */
+    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
+                        final int p_deceleration, final double p_lingerprobability
+    ) throws IllegalArgumentException
     {
         m_route = p_route;
-        while ( m_speed < 50 )
-            m_speed = m_random.nextInt( m_maxSpeed );
+        m_speed = p_speed;
+        m_maxspeed = p_maxspeed;
+        m_acceleration = p_acceleration;
+        m_deceleration = p_deceleration;
+        m_lingerprobability = p_lingerprobability;
+
+        this.checkInitialization();
     }
 
     @Override
     public final int getMaximumSpeed()
     {
-        return m_maxSpeed;
+        return m_maxspeed;
     }
 
     @Override
@@ -136,7 +175,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @Override
     public final double getLingerProbability()
     {
-        return m_LingerProbability;
+        return m_lingerprobability;
     }
 
 
@@ -153,7 +192,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @Override
     public final boolean hasEndReached()
     {
-        return m_endReached;
+        return m_endreached;
     }
 
     @Override
@@ -242,7 +281,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         final Map<String, Object> l_map = super.inspect();
 
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "currentspeed" ), m_speed );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxSpeed );
+        l_map.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxspeed );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "acceleration" ), m_acceleration );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "deceleration" ), m_deceleration );
         l_map.put( CCommon.getResourceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
@@ -296,7 +335,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         int l_speed = this.getCurrentSpeed();
         if ( m_routeindex + l_speed >= m_route.size() )
         {
-            m_endReached = true;
+            m_endreached = true;
             l_speed = m_route.size() - m_routeindex - 1;
         }
 

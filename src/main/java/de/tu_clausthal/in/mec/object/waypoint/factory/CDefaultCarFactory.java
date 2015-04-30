@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -50,7 +52,7 @@ public class CDefaultCarFactory extends ICarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap()
     {{
-            put( "Factory", this );
+            put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
         }};
     /**
      * reference to the graph
@@ -63,7 +65,14 @@ public class CDefaultCarFactory extends ICarFactory
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( l_cells ) );
+            try
+            {
+                l_set.add( new de.tu_clausthal.in.mec.object.car.CDefaultCar( l_cells ) );
+            }
+            catch ( final Exception l_exception )
+            {
+                CLogger.error( l_exception );
+            }
         return l_set;
     }
 

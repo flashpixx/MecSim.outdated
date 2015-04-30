@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
@@ -55,14 +56,14 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
     /**
      * name of the ASL file
      */
-    private String m_aslName;
+    private String m_aslname;
     /**
      * inspect data
      */
     private final Map<String, Object> m_inspect = new HashMap()
     {{
             put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
-            put( CCommon.getResourceString( CDefaultAgentCarFactory.class, "factoryasl" ), m_aslName );
+            put( CCommon.getResourceString( CDefaultAgentCarFactory.class, "factoryasl" ), m_aslname );
         }};
 
 
@@ -77,7 +78,7 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
         if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
 
-        this.m_aslName = p_aslName;
+        this.m_aslname = p_aslName;
     }
 
     @Override
@@ -86,7 +87,14 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
         final Set<ICar> l_set = new HashSet<>();
         for ( int i = 0; i < p_count; i++ )
-            l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( l_cells, m_aslName ) );
+            try
+            {
+                l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( l_cells, m_aslname ) );
+            }
+            catch ( final Exception l_exception )
+            {
+                CLogger.error( l_exception );
+            }
         return l_set;
     }
 
@@ -108,7 +116,7 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
         p_stream.defaultReadObject();
 
         // read the ASL file from the stream
-        final String l_aslname = m_aslName;
+        final String l_aslname = m_aslname;
         final String l_asldata = (String) p_stream.readObject();
         File l_output = IEnvironment.getAgentFile( l_aslname );
 
@@ -121,8 +129,8 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
                 l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
                 for ( int i = 1; l_output.exists(); i++ )
                 {
-                    m_aslName = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
-                    l_output = IEnvironment.getAgentFile( m_aslName );
+                    m_aslname = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
+                    l_output = IEnvironment.getAgentFile( m_aslname );
                 }
                 FileUtils.write( l_output, l_asldata );
             }
@@ -143,6 +151,6 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslName ).toString() ) ) ) );
+        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslname ).toString() ) ) ) );
     }
 }

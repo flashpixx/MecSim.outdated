@@ -40,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -55,6 +56,14 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
      * name of the ASL file
      */
     private String m_aslName;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
+            put( CCommon.getResourceString( CDefaultAgentCarFactory.class, "factoryasl" ), m_aslName );
+        }};
 
 
     /**
@@ -84,7 +93,7 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
     @Override
     public Map<String, Object> inspect()
     {
-        return null;
+        return m_inspect;
     }
 
     /**

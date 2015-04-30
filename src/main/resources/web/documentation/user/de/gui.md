@@ -8,7 +8,7 @@
 
 ### Ebenen
 
-### Fahrzeugquellen
+### Wegpunkte
 
 ### Graphgewichte
 

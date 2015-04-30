@@ -1,4 +1,4 @@
-# Funktionsweise
+# Programmfunktionsweise
 
 ## System-Start
 
@@ -30,7 +30,9 @@ ist die URL ```http://localhost:9876``` vorgesehen. Über die Programmparameter 
 
 ### Programmparameter
 
-Dem Programm können initiale Parameter mit gegeben werden, um den Startprozess zu beeinflussen.
+Dem Programm können initiale Parameter mit gegeben werden, um den Startprozess zu beeinflussen. Die aktuellen möglichen Parameter können mittels ```--help```
+inkl. einer Beschreibung eingesehen werden.
+
 
 ### Speicherort
 
@@ -44,16 +46,6 @@ Der Defaultspeicherort der Daten liegt im Homeverzeichnis der Users im Unterverz
 * um eigene HTML Inhalte abzulegen kann das Verzeichnis ```www``` benutzt werden, wobei die Dokument-Root-Datei ```index.htm``` lauten muss
 
 
-## Weltaufbau
 
-Die Welt ist als _Schichtstruktur_ ([[Mannigfaltigkeit]]) aufgebaut, so dass jede Schicht als _eigenständige Struktur_ ([[Topologischer Raum]]) aufgefasst werden
-kann. Jede Schicht der Welt kann Simulationsobjekte enthalten, die bei Ausführung durch den Simulationskern ausgeführt werden. Es werden alle Objekte pro Schicht
-verarbeitet, bevor die nächste Schicht bearbeitet wird. Die Schichten besitzen eine festgelegte Ordnung, in welcher Reihenfolge sie abgearbeitet werden. Das nachfolgende
-Diagramm zeigt die den grundlegenden Aufbau.
-
-![Weltaufbau](image/welt.png)
-
-Die Welt wird bildlich von _oben nach unten_ berechnet, d.h. von der Schicht mit dem kleinsten Index zu der Schicht mit dem größten. Als Standart-Verhalten werden
-zuerst die _Jason Agenten, Fahrzeuge, Quellen_ und abschließend _statische Auswertung mit Transfer in eine Datenbank_ ausgeführt. 
 
 

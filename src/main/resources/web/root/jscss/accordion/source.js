@@ -11,7 +11,10 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false,
-            aslselect: $("#mecsim_source_aslselect").selectmenu()
+            clusterwidget: $("#mecsim_source_clusterwidget"),
+            waypointsettings: $("#mecsim_source_waypointsettings"),
+            targetweighting: $("#mecsim_source_targetweighting"),
+            toolbox: $("#mecsim_source_toolbox")
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
@@ -25,13 +28,12 @@ var mecsim_source,
         initLayout: function() {
 
             //basic layout (jquerry ui widgets)
-            $("#mecsim_source_generatorsettings").resizable({
+            SourcePanel.settings.waypointsettings.resizable({
                 animate: true,
                 minHeight: 255,
                 minWidth: 500
             });
 
-            SourcePanel.settings.targetweighting = $("#mecsim_source_targetweighting")
             SourcePanel.settings.targetweighting.resizable({
                 animate: true,
                 minHeight: 375,
@@ -44,12 +46,12 @@ var mecsim_source,
         initClusterWidget: function() {
 
             //listen to the sorting buttons
-            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp)});
-            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp)});
-            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp)});
+            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
+            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp);});
+            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
 
             SourcePanel.settings.cluster = d3.layout.cluster()
-                .size([360, SourcePanel.settings.innerRadius])
+                .size([360, SourcePanel.settings.innerRadius]);
                 //.sort(SourcePanel.settings.sortComp);
 
             SourcePanel.settings.bundle = d3.layout.bundle();
@@ -70,38 +72,25 @@ var mecsim_source,
             SourcePanel.settings.nodecontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_node");
             SourcePanel.settings.linkcontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_link");
 
-            //readFile("daten2.json", createCluster);
             SourcePanel.createCluster(SourcePanel.generateData());
-
         },
 
         //method to init the settings widget
         initSettingsWidget: function() {
 
-            //generator settings
-            var selectDistribution = $("#mecsim_source_selectDistribution");
-            selectDistribution.on("change", function(data){
-                switch(selectDistribution.val()) {
-                    case "Konstant":
-                        $("#mecsim_source_input1Label").text("Anzahl der zu produzierenden Autos: ");
-                        break;
-                    case "Gleichverteilung":
-                        $("#mecsim_source_input1Label").text("Untere Grenze: ");
-                        $("#mecsim_source_input2Label").text("Obere Grenze: ");
-                        break;
-                    case "Normalverteilung":
-                        $("#mecsim_source_input1Label").text("Erwartungswert: ");
-                        $("#mecsim_source_input2Label").text("Standardabweichung: ");
-                        break;
-                    case "Exponentialverteilung":
-                        $("#mecsim_source_input1Label").text("Erwartungswert: ");
-                        $("#mecsim_source_input2Label").text("Standardabweichung: ");
-                        break;
-                    case "Benutzerdefiniert":
-                        break;
-                    default:
-                        console.log("Keine Passende Verteilung gefunden!");
-                }
+            //TODO implement possiblty for different waypoint tools
+            //TODO move jquery selectors
+            $("#mecsim_source_colorpicker").spectrum({
+                showPaletteOnly: true,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                color: 'blanchedalmond',
+                palette: [
+                    ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+                    ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+                    ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
+                ]
             });
 
         },
@@ -109,7 +98,8 @@ var mecsim_source,
         //method to init the target-weighing widget
         initTargetWeighting: function() {
 
-            //target weighting
+            //TODO build the target-weighting-table from a json object out of simulation and remove/move jquery selecors
+            /**
             $('#mecsim_source_weighting').dataTable({
                 "paging": true,
                 "lengthMenu": [4, 10, 25],
@@ -122,6 +112,7 @@ var mecsim_source,
                 var result = 215    + (37* parseInt(rows));
                 SourcePanel.settings.targetweighting.height(result);
             });
+            **/
 
         },
 
@@ -144,7 +135,7 @@ var mecsim_source,
             //enter section
             SourcePanel.settings.nodecontainer.enter()
                 .append("text")
-                .attr("class", function(node){ return node.sourcemode ? "mecsim_source_node" + " mecsim_source_node-source" : "mecsim_source_node" + " mecsim_source_node-target"})
+                .attr("class", function(node){ return node.sourcemode ? "mecsim_source_node" + " mecsim_source_node-source" : "mecsim_source_node" + " mecsim_source_node-target";})
                 .attr("dx", function(node){ return node.x < 180 ? 0 : "-" + String(node.key).length*6 + "px";})
                 .attr("dy", ".31em")
                 .attr("transform", function(node) { return "rotate(" + (node.x - 90) + ")translate(" + (node.y + 8) + ",0)" + (node.x < 180 ? "" : "rotate(180)"); })
@@ -219,7 +210,7 @@ var mecsim_source,
 
                 //save the new selected node and make it black
                 SourcePanel.settings.selected=nodeclicked;
-                SourcePanel.settings.nodecontainer.classed("mecsim_source_node-selected", function(node){ return node.name === nodeclicked.name });
+                SourcePanel.settings.nodecontainer.classed("mecsim_source_node-selected", function(node){ return node.name === nodeclicked.name; });
 
                 //all nodes which are not connected to the selected should be transparent
                 SourcePanel.settings.nodecontainer.classed("mecsim_source_node-trans", function(node){
@@ -235,15 +226,14 @@ var mecsim_source,
                     }
 
                     //TODO check if selected node is in target list of node
-                    //console.log(node.targets.length);
 
                     return inTargets;
                 });
 
                 //links should be thick if they are connected to the selected node
-                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === SourcePanel.settings.selected || link.target === SourcePanel.settings.selected });
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-thick", function(link){ return link.source === SourcePanel.settings.selected || link.target === SourcePanel.settings.selected; });
                 //links should be hidden if they are not connected to the selected node
-                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== SourcePanel.settings.selected && link.target !== SourcePanel.settings.selected});
+                SourcePanel.settings.linkcontainer.classed("mecsim_source_link-hidden", function(link){ return link.source !== SourcePanel.settings.selected && link.target !== SourcePanel.settings.selected; });
 
             }else{
                 //if the selected node was de-selected remove all effekts
@@ -259,15 +249,14 @@ var mecsim_source,
         //method which should be triggered if a node was rightclicked
         rightclick: function(rightclicked) {
 
-             /** was commented out before!!!
+            //TODO On Righclick add Waypoint to a Markrov Chain
+            /** was commented out before!!!
                 d3.event.preventDefault();
 
                 if(selected === false)
                     return;
                 if(selected.sourcemode === nodeclicked.sourcemode)
                     return;
-
-                //TODO updating failed (only last added link get source and target attribut)
 
                 var exist = false;
                 selected.targets.forEach(function(entry){
@@ -297,7 +286,7 @@ var mecsim_source,
                 .attr("dx", function(node){ return node.x < 180 ? 0 : "-" + String(node.key).length*6 + "px";});
 
             transition.selectAll(".mecsim_source_link")
-                .each(function(link) { link.source = link[0], link.target = link[link.length - 1]; })
+                .each(function(link) { link.source = link[0]; link.target = link[link.length - 1]; })
                 .attr("d", SourcePanel.settings.line);
 
         },
@@ -395,8 +384,8 @@ var mecsim_source,
             names = [];
 
             //generate some nodes
-            for(var i=0; i<75; i++)
-                names.push("Knoten#"+i);
+            for(var h=0; h<75; h++)
+                names.push("Knoten#"+h);
 
             for(var i=0; i<names.length; i++){
 
@@ -424,19 +413,20 @@ var mecsim_source,
 
         //load asl files in the select menu
         loadASL: function() {
+            /** TODO will be used later on
             $.getJSON( "cagentenvironment/jason/list", function(data){
-                SourcePanel.settings.aslselect.empty();
+                SourcePanel.settings.aslSelect.empty();
                 for(var i in data.agents){
-                    SourcePanel.settings.aslselect
+                    SourcePanel.settings.aslSelect
                         .append( $("<option></option>")
                         .attr("value",data.agents[i])
                         .text(data.agents[i]));
                 }
             });
+            **/
         },
 
         bind_ui_actions: function() {
-
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
                 SourcePanel.loadASL();
@@ -448,75 +438,6 @@ var mecsim_source,
                     SourcePanel.initTargetWeighting();
                 });
             });
-
-            //Listen to the Default Car Tool Button
-            $("#mecsim_source_sourcemode").button({
-                icons: {
-                    primary: "ui-icon-pin-w"
-                }
-            }).on("click", function(data){
-            });
-
-            //Listen to the Default Agent Car Tool Button
-            $("#mecsim_source_generatormode").button({
-                icons: {
-                    primary: "ui-icon-arrowrefresh-1-e"
-                }
-            }).on("click", function(data){
-            });
-
-            //Listen to the Target Tool Button
-            $("#mecsim_source_targetmode").button({
-                icons: {
-                    primary: "ui-icon-flag"
-                }
-            }).on("click", function(data){
-            });
-
-            //Listen to the Default Car Button
-            $("#mecsim_source_defaultCar").button({
-                icons: {
-                    primary: "mecsim_source_cyanCircle"
-                }
-            }).on("click", function(data){
-                $.ajax({
-                    type: "POST",
-                    url: "csourcelayer/setcartype",
-                    data: {"cartype": "defaultcar"}
-                });
-            });
-
-            //Listen to the Default Agent Car Button
-            $("#mecsim_source_defaultAgentCar").button({
-                icons: {
-                    primary: "mecsim_source_redCircle"
-                }
-            }).on("click", function(data){
-                $.ajax({
-                    type: "POST",
-                    url: "csourcelayer/setcartype",
-                    data: {"cartype": "defaultagentcar"}
-                }).done(function(){
-                    $.ajax({
-                        type: "POST",
-                        url: "csourcelayer/setasl",
-                        data: {"aslname": SourcePanel.settings.aslselect.val()}
-                    });
-                });
-            });
-
-            //Listen to the Select Menu
-            SourcePanel.loadASL();
-            SourcePanel.settings.aslselect.selectmenu().on("selectmenuchange", function(data){
-                $.ajax({
-                    type: "POST",
-                    url: "csourcelayer/setasl",
-                    data: {"aslname": SourcePanel.settings.aslselect.val()}
-                }).done(function(){
-                    SourcePanel.settings.aslselect.selectmenu("close");
-                });
-            });
-
         }
 
     };

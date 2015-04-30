@@ -128,19 +128,14 @@ iframe
 
 /******************************** css definitions for mecsim_source_? ************************************************/
 
+/** TODO will be reused later
 .ui-button .ui-icon.mecsim_source_cyanCircle .ui-icon.mecsim_source_redCircle{
     width: 15px;
     height: 15px;
     background-image: none;
-}
-
-.ui-button .ui-icon.mecsim_source_cyanCircle{
     background: cyan;
 }
-
-.ui-button .ui-icon.mecsim_source_redCircle{
-    background: red;
-}
+**/
 
 .mecsim_source_node {
     font-size: 75%;
@@ -184,7 +179,7 @@ iframe
     stroke-opacity: 0;
 }
 
-#mecsim_source_clustercontainer{
+#mecsim_source_clusterwidget{
     float: left;
     width: 600px;
     height: 640px;
@@ -192,7 +187,7 @@ iframe
     margin: 10px;
 }
 
-#mecsim_source_generatorsettings{
+#mecsim_source_waypointsettings{
     float: left;
     width: 482px;
     height: 240px;

@@ -11,6 +11,13 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false,
+            clusterwidget: $("#mecsim_source_clusterwidget"),
+            waypointsettings: $("#mecsim_source_waypointsettings"),
+            targetweighting: $("#mecsim_source_targetweighting"),
+            toolbox: $("#mecsim_source_toolbox"),
+            sortByDistanceButton: $("#mecsim_source_sortByDistance"),
+            sortByTypeButton: $("#mecsim_source_sortByType"),
+            sortByNameButton: $("#mecsim_source_sortByName")
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
@@ -24,13 +31,12 @@ var mecsim_source,
         initLayout: function() {
 
             //basic layout (jquerry ui widgets)
-            $("#mecsim_source_generatorsettings").resizable({
+            SourcePanel.settings.waypointsettings.resizable({
                 animate: true,
                 minHeight: 255,
                 minWidth: 500
             });
 
-            SourcePanel.settings.targetweighting = $("#mecsim_source_targetweighting");
             SourcePanel.settings.targetweighting.resizable({
                 animate: true,
                 minHeight: 375,
@@ -43,9 +49,9 @@ var mecsim_source,
         initClusterWidget: function() {
 
             //listen to the sorting buttons
-            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
-            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp);});
-            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
+            SourcePanel.settings.sortByDistanceButton.on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
+            SourcePanel.settings.sortByTypeButton.on("click", function(){console.log("test"); SourcePanel.sort(SourcePanel.sortByTypeComp);});
+            SourcePanel.settings.sortByNameButton.on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
 
             SourcePanel.settings.cluster = d3.layout.cluster()
                 .size([360, SourcePanel.settings.innerRadius]);
@@ -69,9 +75,7 @@ var mecsim_source,
             SourcePanel.settings.nodecontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_node");
             SourcePanel.settings.linkcontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_link");
 
-            //readFile("daten2.json", createCluster);
             SourcePanel.createCluster(SourcePanel.generateData());
-
         },
 
         //method to init the settings widget
@@ -84,7 +88,8 @@ var mecsim_source,
         //method to init the target-weighing widget
         initTargetWeighting: function() {
 
-            //TODO build the target-weighting-table from a json object out of simulation
+            //TODO build the target-weighting-table from a json object out of simulation and remove/move jquery selecors
+            /**
             $('#mecsim_source_weighting').dataTable({
                 "paging": true,
                 "lengthMenu": [4, 10, 25],
@@ -97,6 +102,7 @@ var mecsim_source,
                 var result = 215    + (37* parseInt(rows));
                 SourcePanel.settings.targetweighting.height(result);
             });
+            **/
 
         },
 

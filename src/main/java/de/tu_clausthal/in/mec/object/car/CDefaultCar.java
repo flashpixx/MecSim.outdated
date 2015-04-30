@@ -209,7 +209,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         // we get the nearest predecessor within the speed range (performance boost)
         for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )
         {
-            final ICar l_object = (ICar) m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
+            final ICar l_object = m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
             if ( l_object != null )
                 l_predecessordistance.put( i - m_routeindex, l_object );
         }

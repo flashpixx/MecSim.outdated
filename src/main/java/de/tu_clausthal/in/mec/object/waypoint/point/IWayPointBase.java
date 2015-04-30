@@ -57,7 +57,7 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     /**
      * inspector map
      */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( IWayPointBase.super.inspect() );
         }};

@@ -39,7 +39,7 @@ public class CAdjacencyMatrix<T, N>
     /**
      * map with data *
      */
-    private final Map<Pair<T, T>, N> m_matrix = new HashMap();
+    private final Map<Pair<T, T>, N> m_matrix = new HashMap<>();
 
 
     /**

@@ -56,7 +56,7 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     /**
      * inspector map
      */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( IRandomWayPoint.super.inspect() );
         }};

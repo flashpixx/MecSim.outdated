@@ -49,6 +49,10 @@ import java.util.Map;
 public class COSMViewer extends JXMapViewer
 {
     /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * compounend painter
      */
     private CompoundPainter m_painter = new CompoundPainter<>();

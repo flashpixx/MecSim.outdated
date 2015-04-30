@@ -52,7 +52,10 @@ import java.util.Set;
  */
 public class CDefaultAgentCarFactory extends CDefaultCarFactory
 {
-
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
     /**
      * name of the ASL file
      */

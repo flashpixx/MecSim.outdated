@@ -34,11 +34,14 @@ import java.util.Map;
  */
 public abstract class IInspectorDefault extends IUIListener implements IInspector
 {
-
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
     /**
      * inspect variable *
      */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
             put( CCommon.getResourceString( IInspectorDefault.class, "objectid" ), this.hashCode() );

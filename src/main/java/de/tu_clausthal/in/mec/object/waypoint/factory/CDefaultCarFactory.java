@@ -48,9 +48,13 @@ import java.util.Set;
 public class CDefaultCarFactory extends ICarFactory
 {
     /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * inspect data
      */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
         }};

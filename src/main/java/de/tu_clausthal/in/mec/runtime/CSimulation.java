@@ -326,7 +326,7 @@ public class CSimulation
         final Map<String, Map<String, Object>> l_return = new HashMap<>();
         for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             l_return.put(
-                    l_item.getValue().toString(), new HashMap()
+                    l_item.getValue().toString(), new HashMap<String, Object>()
                     {{
                             put( "id", l_item.getKey() );
                             put( "active", l_item.getValue().isActive() );

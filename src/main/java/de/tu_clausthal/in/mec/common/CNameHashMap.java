@@ -39,6 +39,10 @@ import java.util.Stack;
  */
 public class CNameHashMap extends HashMap<String, Object> implements Iterable<Map.Entry<CPath, Object>>
 {
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * ctor
@@ -226,7 +230,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
             /**
              * stack with iterator
              */
-            private Stack<Iterator<Entry<String, Object>>> m_stackiterator = new Stack()
+            private Stack<Iterator<Entry<String, Object>>> m_stackiterator = new Stack<Iterator<Entry<String, Object>>>()
             {{
                     push( CNameHashMap.super.entrySet().iterator() );
                 }};
@@ -270,6 +274,11 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      */
     public static class CImmutable extends CNameHashMap
     {
+        /**
+         * serialize version ID *
+         */
+        private static final long serialVersionUID = 1L;
+
 
         /**
          * ctor
@@ -278,7 +287,6 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         {
             super();
         }
-
 
         /**
          * creates a plain name-hash-map from a map of maps

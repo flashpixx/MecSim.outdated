@@ -263,7 +263,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
                 }
 
                 // returns an immutable entry, because modfication must pass traversal, so modification is forbidden
-                return new AbstractMap.SimpleImmutableEntry( new CPath( m_path, l_item.getKey() ), l_item.getValue() );
+                return new AbstractMap.SimpleImmutableEntry<>( new CPath( m_path, l_item.getKey() ), l_item.getValue() );
             }
         };
     }

@@ -63,7 +63,7 @@ public class CDefaultAgentCarFactory extends CDefaultCarFactory
     /**
      * inspect data
      */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
             put( CCommon.getResourceString( CDefaultAgentCarFactory.class, "factoryasl" ), m_aslname );

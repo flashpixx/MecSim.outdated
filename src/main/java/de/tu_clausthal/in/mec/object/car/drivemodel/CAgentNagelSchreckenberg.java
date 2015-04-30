@@ -36,6 +36,11 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
  */
 public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
 {
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
+
     @Override
     public final String getName()
     {

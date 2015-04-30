@@ -134,7 +134,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public class CWeightMap extends HashMap<IPathWayPoint<T, P, N>, Double>
     {
-
+        /**
+         * serialize version ID *
+         */
+        private static final long serialVersionUID = 1L;
         /**
          * map to resolve the buckets for checking *
          */

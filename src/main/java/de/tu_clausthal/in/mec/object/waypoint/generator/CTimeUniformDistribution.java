@@ -32,6 +32,7 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
  */
 public class CTimeUniformDistribution extends ITimeDistribution
 {
+
     /**
      * ctor
      *

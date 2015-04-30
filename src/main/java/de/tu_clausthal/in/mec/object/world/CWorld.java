@@ -59,6 +59,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
      *
      * @return list of layer
      */
+    @SuppressWarnings( value = "unchecked" )
     public final List<ILayer> getOrderedLayer()
     {
 

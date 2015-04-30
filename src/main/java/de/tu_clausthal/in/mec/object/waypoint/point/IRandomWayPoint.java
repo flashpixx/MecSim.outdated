@@ -97,7 +97,7 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     @Override
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
-        return new HashSet()
+        return new HashSet<Pair<GeoPosition, GeoPosition>>()
         {{
                 add(
                         new ImmutablePair<>(

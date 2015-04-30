@@ -103,7 +103,7 @@ public class CMessageSystem implements IVoidSteppable
 
         final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
         if ( l_node.isDataNull() )
-            l_node.setData( new ImmutablePair<>( new HashSet(), new HashSet() ) );
+            l_node.setData( new ImmutablePair<>( new HashSet<>(), new HashSet<>() ) );
         l_node.getData().getLeft().add( p_receiver );
 
         CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );

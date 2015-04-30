@@ -36,6 +36,10 @@ import java.util.Map;
 public abstract class ITimeDistribution implements IGenerator
 {
     /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * distribution *
      */
     private final AbstractRealDistribution m_distribution;

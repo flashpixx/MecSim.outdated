@@ -89,7 +89,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     private boolean m_endreached;
 
 
-
     /**
      * ctor to create the initial values
      *
@@ -111,6 +110,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     /**
      * checks initial vales
+     *
      * @throws IllegalArgumentException is thrown on errors
      */
     private void checkInitialization() throws IllegalArgumentException

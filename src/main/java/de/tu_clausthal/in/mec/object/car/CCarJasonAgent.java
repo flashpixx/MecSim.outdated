@@ -74,6 +74,7 @@ public class CCarJasonAgent extends CDefaultCar
 
     /**
      * ctor
+     *
      * @param p_route driving route
      * @param p_agent ASL name
      * @throws JasonException
@@ -114,7 +115,6 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     /**
-     *
      * @param p_route driving route
      * @param p_speed initial speed
      * @param p_maxspeed maximum speed

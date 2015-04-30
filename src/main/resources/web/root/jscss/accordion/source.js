@@ -15,9 +15,6 @@ var mecsim_source,
             waypointsettings: $("#mecsim_source_waypointsettings"),
             targetweighting: $("#mecsim_source_targetweighting"),
             toolbox: $("#mecsim_source_toolbox"),
-            sortByDistanceButton: $("#mecsim_source_sortByDistance"),
-            sortByTypeButton: $("#mecsim_source_sortByType"),
-            sortByNameButton: $("#mecsim_source_sortByName")
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
@@ -49,9 +46,9 @@ var mecsim_source,
         initClusterWidget: function() {
 
             //listen to the sorting buttons
-            SourcePanel.settings.sortByDistanceButton.on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
-            SourcePanel.settings.sortByTypeButton.on("click", function(){console.log("test"); SourcePanel.sort(SourcePanel.sortByTypeComp);});
-            SourcePanel.settings.sortByNameButton.on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
+            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
+            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp);});
+            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
 
             SourcePanel.settings.cluster = d3.layout.cluster()
                 .size([360, SourcePanel.settings.innerRadius]);

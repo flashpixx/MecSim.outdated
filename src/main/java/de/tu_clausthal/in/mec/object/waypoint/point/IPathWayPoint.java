@@ -97,15 +97,18 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
+        // to avoid cycles, each geoposition is stored, on a cycle stop the loop
+        final Set<GeoPosition> l_cycle = new HashSet<>();
         final Collection<Pair<GeoPosition, GeoPosition>> l_path = new LinkedList<>();
 
         // calculate route points
         IPathWayPoint<T, P, N> l_start = this;
-        while ( l_start != null )
+        while ( ( l_start != null ) && ( !l_cycle.contains( l_start.getPosition() ) ) )
         {
             final IPathWayPoint<T, P, N> l_end = l_start.m_adjacency.getNode( m_random.nextDouble() );
             l_path.add( new ImmutablePair<>( l_start.getPosition(), l_end.getPosition() ) );
             l_start = l_end;
+            l_cycle.add( l_start.getPosition() );
         }
 
         return l_path;

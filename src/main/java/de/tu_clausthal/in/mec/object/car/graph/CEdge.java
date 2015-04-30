@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.car.graph;
 
 import com.graphhopper.util.EdgeIteratorState;
 import com.graphhopper.util.PointList;
-import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
@@ -86,8 +85,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * ctor create the samples
      *
      * @param p_edgestate edge
+     * @param p_cellsize samplling size of a cell
      */
-    public CEdge( final EdgeIteratorState p_edgestate )
+    public CEdge( final EdgeIteratorState p_edgestate, final int p_cellsize )
     {
         m_edgeid = p_edgestate.getEdge();
         m_edgelength = p_edgestate.getDistance();
@@ -95,7 +95,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
 
         final ArrayList<N> l_initlist = new ArrayList<>();
         for ( int i = 0; i < (int) Math.ceil(
-                m_edgelength / CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" )
+                m_edgelength / p_cellsize
         ); i++
                 )
             l_initlist.add( null );

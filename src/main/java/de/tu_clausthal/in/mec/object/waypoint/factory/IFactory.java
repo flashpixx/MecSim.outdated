@@ -46,6 +46,7 @@ public interface IFactory<T> extends IInspector, Serializable
      * @param p_waypoints waypoint tupel list
      * @param p_count number of objects
      * @return set with objects
+     * @todo think about time-step based generation
      */
     public Set<T> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count );
 

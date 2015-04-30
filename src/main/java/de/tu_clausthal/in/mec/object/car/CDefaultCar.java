@@ -338,7 +338,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             m_endreached = true;
             l_speed = m_route.size() - m_routeindex - 1;
         }
-
+        l_speed = m_graph.getSpeedToCellIncrement( l_speed );
 
         // if the route index equal to zero, push it car on the first item or wait until it is free
         if ( m_routeindex == 0 )

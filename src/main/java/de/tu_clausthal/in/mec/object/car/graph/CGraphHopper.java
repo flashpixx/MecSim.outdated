@@ -79,6 +79,14 @@ public class CGraphHopper extends GraphHopper
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
     /**
+     * cell size for sampling
+     */
+    private final int m_cellsize;
+    /**
+     * multiplier to scale cell-increment on the current cell size and time length
+     */
+    private final int m_timestepmultiplier;
+    /**
      * default weight
      */
     private CCombine m_weight;
@@ -101,6 +109,12 @@ public class CGraphHopper extends GraphHopper
      */
     public CGraphHopper( final String p_encoding )
     {
+        // creates the sampling definitions of the cell and the time increment
+        m_cellsize = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" );
+        m_timestepmultiplier = (int) Math.floor(
+                1000.0 / 3600 * CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/timesampling" ) / m_cellsize
+        );
+
         // set the default weight
         this.setCHShortcuts( "default" );
 
@@ -159,6 +173,17 @@ public class CGraphHopper extends GraphHopper
         }
         return null;
 
+    }
+
+    /**
+     * returns the speed in cell positions
+     *
+     * @param p_speed speed in km/h
+     * @return cell positions
+     */
+    public final int getSpeedToCellIncrement( final int p_speed )
+    {
+        return p_speed * m_timestepmultiplier;
     }
 
     /**
@@ -301,7 +326,7 @@ public class CGraphHopper extends GraphHopper
         CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
         if ( l_edge == null )
         {
-            l_edge = new CEdge<>( p_edgestate );
+            l_edge = new CEdge<>( p_edgestate, m_cellsize );
             l_edge.addListener( m_edgelister );
             m_edgecell.put( l_edge.getEdgeID(), l_edge );
         }

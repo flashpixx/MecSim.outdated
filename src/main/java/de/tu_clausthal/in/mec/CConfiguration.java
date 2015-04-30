@@ -74,14 +74,17 @@ public class CConfiguration
      */
     private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
     {{
+            // flag for resetting the full configuration
             put( "reset", false );
 
             // language data
             put(
                     "language", new CNameHashMap.CImmutable()
                     {{
+                            // current language
                             put( "current", "en" );
                             put(
+                                    // allowed language strings
                                     "allow", new ArrayList<String>()
                                     {{
                                             add( "en" );
@@ -91,30 +94,27 @@ public class CConfiguration
                         }}
             );
 
-
-            // console data
-            put(
-                    "console", new CNameHashMap.CImmutable()
-                    {{
-                            put( "LineBuffer", 120 );
-                            put( "LineNumber", 120 );
-                        }}
-            );
-
-
             // ui data
             put(
                     "ui", new CNameHashMap.CImmutable()
                     {{
+                            // initial geoposition of the map
                             put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                            // window height
                             put( "windowheight", 1024.0 );
+                            // window width
                             put( "windowwidth", 1280.0 );
+                            // zoom value
                             put( "zoom", 4 );
                             put(
+                                    // server bind information
                                     "server", new CNameHashMap.CImmutable()
                                     {{
+                                            // address / hostname bind name
                                             put( "host", "localhost" );
+                                            // bind port
                                             put( "port", 9876 );
+                                            // heartbeat of the websocket to avoid disconnecting
                                             put( "websocketheartbeat", 3 );
                                         }}
                             );
@@ -129,17 +129,23 @@ public class CConfiguration
             put(
                     "simulation", new CNameHashMap.CImmutable()
                     {{
+                            // sleep time of the thread
                             put( "threadsleeptime", 25 );
 
                             put(
                                     "traffic", new CNameHashMap.CImmutable()
                                     {{
+                                            // cell sampling of the graph data in meter
                                             put( "cellsampling", 2 );
+                                            // time sampling in seconds - each simulation step is equal to this time
+                                            put( "timesampling", 10 );
                                             put(
                                                     "routing", new CNameHashMap.CImmutable()
                                                     {{
+                                                            // current routing algorithms
                                                             put( "algorithm", "astarbi" );
                                                             put(
+                                                                    // allowed strings of the routing algoritm
                                                                     "allow", new ArrayList<String>()
                                                                     {{
                                                                             add( "astar" );
@@ -152,10 +158,14 @@ public class CConfiguration
                                                         }}
                                             );
                                             put(
+                                                    // map information
                                                     "map", new CNameHashMap.CImmutable()
                                                     {{
+                                                            // graph should be reimported
                                                             put( "reimport", false );
+                                                            // storing directory in the graph directory
                                                             put( "name", "europe/germany/lowersaxony" );
+                                                            // URL of downloading the PBF file
                                                             put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
                                                         }}
                                             );
@@ -169,11 +179,17 @@ public class CConfiguration
             put(
                     "database", new CNameHashMap.CImmutable()
                     {{
+                            // enables / disables the database connection - JDBC driver is needed
                             put( "active", false );
+                            // driver name
                             put( "driver", null );
+                            // connection URL
                             put( "url", null );
+                            // table prefix - different simulationtypes can be stored within the same database
                             put( "tableprefix", null );
+                            // connection username
                             put( "username", null );
+                            // connection password (uncrypted)
                             put( "password", null );
                         }}
             );

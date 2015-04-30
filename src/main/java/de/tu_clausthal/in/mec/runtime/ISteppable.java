@@ -36,7 +36,9 @@ public interface ISteppable
      * method for analyse object
      *
      * @return map with string for names and data to analyse or null for nothing
+     * @deprecated should be changed to a perceptable structure
      */
+    @Deprecated
     Map<String, Object> analyse();
 
 

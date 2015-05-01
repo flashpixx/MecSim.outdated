@@ -239,7 +239,13 @@ public class CConfiguration
                             add( new CGreater( 0 ) );
                         }}
             );
-
+            put(
+                    "ui/routepainterdelay", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CInRange( 1, 200 ) );
+                        }}
+            );
             put(
                     "ui/server/host", new LinkedList<ICheck>()
                     {{

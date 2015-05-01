@@ -23,7 +23,6 @@ var mecsim_layer,
         },
 
         list_clickable_layer: function() {
-            // @todo set must be called
             $.ajax({
                 url     : "/cosmviewer/listclickablelayer",
                 success : function(px_data){
@@ -31,7 +30,16 @@ var mecsim_layer,
                         LayerPanel.settings.clickableUI.append("<li class='ui-state-default' id="+ px_value.id +">" + pc_key + "</li>" );
                     });
 
-                    LayerPanel.settings.clickableUI.sortable({ placeholder: "ui-state-highlight" });
+                    LayerPanel.settings.clickableUI.sortable({
+                        placeholder: "ui-state-highlight",
+                        stop: function(px_event, po_ui) {
+                            $.ajax({
+                                type: "POST",
+                                url : "/cosmviewer/setclickablelayer",
+                                data: {"id": $(this).children(".ui-sortable-handle:first").attr("id")}
+                            });
+                        }
+                    });
                     LayerPanel.settings.clickableUI.disableSelection();
                 }
             });

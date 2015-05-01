@@ -516,8 +516,9 @@ public class CConfiguration
 
     /**
      * reads the configuration within the directory
+     * @return boolean on correct read
      */
-    public void read()
+    public boolean read()
     {
         final File l_config = this.getLocation( "root", c_filename );
         CLogger.info( CCommon.getResourceString( this, "read", l_config ) );
@@ -530,9 +531,10 @@ public class CConfiguration
             if ( !l_input.<Boolean>get( "reset" ) )
                 this.setConfiguration( l_input );
         }
-        catch ( final ClassNotFoundException | IOException | NullPointerException l_exception )
+        catch ( final IllegalArgumentException | ClassNotFoundException | IOException | NullPointerException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
+            return false;
         }
 
         // append all Jar files to the classpath of the system class loader
@@ -551,7 +553,10 @@ public class CConfiguration
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
+            return false;
         }
+
+        return true;
     }
 
 
@@ -559,9 +564,8 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
-     * @todo add value checking
      */
-    private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException
+    private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException, IllegalArgumentException
     {
         // convert special dara into individual types
         if ( p_input.traverseContainsKey( "ui/geoposition" ) )

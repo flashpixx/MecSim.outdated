@@ -121,7 +121,11 @@ public class CMain
             l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
 
         CConfiguration.getInstance().setConfigDir( l_defaultconfig );
-        CConfiguration.getInstance().read();
+        if ( !CConfiguration.getInstance().read() )
+        {
+            System.err.println( CCommon.getResourceString( CMain.class, "configload" ) );
+            System.exit( -1 );
+        }
 
         CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
 

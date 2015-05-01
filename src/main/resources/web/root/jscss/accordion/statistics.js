@@ -4,7 +4,6 @@ var mecsim_statistics,
     StatisticsPanel = {
 
         settings: {
-
         },
 
         init: function(){

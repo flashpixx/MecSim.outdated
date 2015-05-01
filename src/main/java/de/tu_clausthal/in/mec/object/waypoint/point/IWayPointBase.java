@@ -108,12 +108,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
-    }
-
-    @Override
     public Map<String, Object> inspect()
     {
         return m_inspect;

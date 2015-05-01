@@ -23,24 +23,11 @@
 
 package de.tu_clausthal.in.mec.runtime;
 
-import java.util.Map;
-
-
 /**
  * interface for all objects which are triggered by the simulation worker
  */
 public interface ISteppable
 {
-
-    /**
-     * method for analyse object
-     *
-     * @return map with string for names and data to analyse or null for nothing
-     * @deprecated should be changed to a perceptable structure
-     */
-    @Deprecated
-    Map<String, Object> analyse();
-
 
     /**
      * release function to remove object *

@@ -40,11 +40,16 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -199,8 +204,151 @@ public class CConfiguration
             put( "manifest", new CNameHashMap.CImmutable() );
 
         }};
+    /**
+     * map with path and check-item for the value
+     */
+    private Map<String, List<ICheck>> m_configurationchecks = new HashMap<String, List<ICheck>>()
+    {{
+            put(
+                    "language/current", new LinkedList<ICheck>()
+                    {{
+                            add( new CContains<String>( m_configuration.<List<String>>get( "language/allow" ) ) );
+                        }}
+            );
 
+            put(
+                    "ui/windowheight", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CGreater( 150 ) );
+                        }}
+            );
+            put(
+                    "ui/windowwidth", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CGreater( 150 ) );
+                        }}
+            );
+            put(
+                    "ui/zoom", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CGreater( 0 ) );
+                        }}
+            );
 
+            put(
+                    "ui/server/host", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                            add( new CStringNotEmpty() );
+                        }}
+            );
+            put(
+                    "ui/server/port", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CGreater( 1024 ) );
+                        }}
+            );
+            put(
+                    "ui/server/websocketheartbeat", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CGreater( 0 ) );
+                        }}
+            );
+
+            put(
+                    "simulation/threadsleeptime", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CInRange( 1, 50 ) );
+                        }}
+            );
+
+            put(
+                    "simulation/traffic/cellsampling", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CInRange( 1, 25 ) );
+                        }}
+            );
+            put(
+                    "simulation/traffic/timesampling", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Number.class ) );
+                            add( new CInRange( 1, 360 ) );
+                        }}
+            );
+
+            put(
+                    "simulation/traffic/routing/algorithm", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                            add( new CContains<String>( m_configuration.<List<String>>get( "simulation/traffic/routing/allow" ) ) );
+                        }}
+            );
+
+            put(
+                    "simulation/traffic/map/reimport", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Boolean.class ) );
+                        }}
+            );
+            put(
+                    "simulation/traffic/map/name", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                            add( new CStringNotEmpty() );
+                        }}
+            );
+            put(
+                    "simulation/traffic/map/url", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                            add( new CStringNotEmpty() );
+                        }}
+            );
+
+            put(
+                    "database/active", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( Boolean.class ) );
+                        }}
+            );
+            put(
+                    "database/driver", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                        }}
+            );
+            put(
+                    "database/url", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                        }}
+            );
+            put(
+                    "database/tableprefix", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                        }}
+            );
+            put(
+                    "database/username", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                        }}
+            );
+            put(
+                    "database/password", new LinkedList<ICheck>()
+                    {{
+                            add( new CClassType( String.class ) );
+                        }}
+            );
+        }};
     /**
      * UTF-8 property reader
      */
@@ -411,6 +559,7 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
+     * @todo add value checking
      */
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException
     {
@@ -423,16 +572,40 @@ public class CConfiguration
             );
 
         // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
+        final Set<String> l_errors = new HashSet<>();
+
         for ( Map.Entry<CPath, Object> l_item : m_configuration )
             if ( p_input.traverseContainsKey( l_item.getKey() ) )
             {
                 final Object l_data = p_input.get( l_item.getKey() );
-                m_configuration.set( l_item.getKey(), l_data == null ? null : l_data.getClass() == l_item.getValue().getClass() ? l_data : l_item.getValue() );
+                if ( l_data == null )
+                {
+                    m_configuration.set( l_item.getKey(), null );
+                    continue;
+                }
+
+                // run value checks
+                boolean l_valid = true;
+                if ( m_configurationchecks.containsKey( l_item.getKey().toString() ) )
+                    for ( ICheck l_check : m_configurationchecks.get( l_item.getKey().toString() ) )
+                        if ( l_check.isWrong( l_data ) )
+                        {
+                            l_errors.add( CCommon.getResourceString( this, "valuecheck", l_item.getKey(), l_data, l_check ) );
+                            l_valid = false;
+                            break;
+                        }
+
+
+                if ( l_valid )
+                    m_configuration.set( l_item.getKey(), l_data );
             }
 
         // copy ui/web datasets complete
         if ( p_input.traverseContainsKey( "ui/web" ) )
             m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
+
+        if ( !l_errors.isEmpty() )
+            throw new IllegalArgumentException( StringUtils.join( l_errors, "\n" ) );
     }
 
     /**
@@ -452,19 +625,12 @@ public class CConfiguration
      * @param p_data input data
      * @param p_header header data - configuration changeable only from localhost
      */
-    private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header )
+    private void web_static_set( final Map<String, Object> p_data, final Map<String, String> p_header ) throws IOException, ClassNotFoundException
     {
         if ( !( ( p_header.containsKey( "remote-addr" ) ) && ( p_header.get( "remote-addr" ).equals( "127.0.0.1" ) ) ) )
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
-        try
-        {
-            this.setConfiguration( new CNameHashMap.CImmutable( p_data ) );
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
+        this.setConfiguration( new CNameHashMap.CImmutable( p_data ) );
     }
 
 
@@ -514,6 +680,218 @@ public class CConfiguration
             }
 
             return null;
+        }
+    }
+
+
+    /**
+     * check class
+     *
+     * @tparam T parameter of the check
+     */
+    protected abstract class ICheck<T>
+    {
+        /**
+         * complement of ccorrect check
+         *
+         * @param p_value check value
+         * @return boolean
+         */
+        public boolean isWrong( final T p_value )
+        {
+            return !this.isCorrect( p_value );
+        }
+
+        /**
+         * check of a correct value
+         *
+         * @param p_value value
+         * @return boolean flag
+         */
+        public boolean isCorrect( final T p_value )
+        {
+            return true;
+        }
+    }
+
+
+    /**
+     * string empty check
+     */
+    protected class CStringNotEmpty extends ICheck<String>
+    {
+        @Override
+        public boolean isCorrect( final String p_value )
+        {
+            return ( p_value != null ) & ( !p_value.isEmpty() );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text" );
+        }
+    }
+
+    /**
+     * collection empty check
+     */
+    protected class CCollectionNotEmpty extends ICheck<Collection>
+    {
+        @Override
+        public boolean isCorrect( final Collection p_value )
+        {
+            return ( p_value != null ) & ( !p_value.isEmpty() );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text" );
+        }
+    }
+
+    /**
+     * numeric in range check
+     */
+    protected class CInRange extends ICheck<Number>
+    {
+        /**
+         * upper bound *
+         */
+        private final Number m_upper;
+        /**
+         * lower bound *
+         */
+        private final Number m_lower;
+
+        /**
+         * ctor - set upper & lower bound
+         *
+         * @param p_lower lower bound
+         * @param p_upper upper bound
+         */
+        public CInRange( final Number p_lower, final Number p_upper )
+        {
+            m_upper = p_upper;
+            m_lower = p_lower;
+        }
+
+        @Override
+        public boolean isCorrect( final Number p_value )
+        {
+            return ( m_lower.doubleValue() <= p_value.doubleValue() ) && ( p_value.doubleValue() <= m_upper.doubleValue() );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_lower, m_upper );
+        }
+    }
+
+    /**
+     * numeric greater check
+     */
+    protected class CGreater extends ICheck<Number>
+    {
+        /**
+         * bound
+         */
+        private final Number m_bound;
+
+        /**
+         * ctor - set the bound
+         *
+         * @param p_bound
+         */
+        public CGreater( final Number p_bound )
+        {
+            m_bound = p_bound;
+        }
+
+        @Override
+        public boolean isCorrect( final Number p_value )
+        {
+            return p_value.doubleValue() > m_bound.doubleValue();
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_bound );
+        }
+    }
+
+    /**
+     * collection contains check
+     *
+     * @tparam T type of the collection values
+     */
+    protected class CContains<T> extends ICheck<T>
+    {
+        /**
+         * collection *
+         */
+        private final Collection<T> m_collection;
+
+        /**
+         * ctor - set the collection
+         *
+         * @param p_collection collection
+         */
+        public CContains( final Collection<T> p_collection )
+        {
+            m_collection = p_collection;
+        }
+
+        @Override
+        public boolean isCorrect( final T p_value )
+        {
+            return m_collection.contains( p_value );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_collection );
+        }
+    }
+
+    /**
+     * class type check
+     */
+    protected class CClassType extends ICheck<Object>
+    {
+        /**
+         * class type *
+         */
+        private final Class<?> m_class;
+
+
+        /**
+         * ctor
+         *
+         * @param p_class class type
+         */
+        public CClassType( final Class<?> p_class )
+        {
+            m_class = p_class;
+        }
+
+        @Override
+        public boolean isCorrect( final Object p_value )
+        {
+            if ( p_value == null )
+                return true;
+
+            return m_class.isInstance( p_value );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_class );
         }
     }
 

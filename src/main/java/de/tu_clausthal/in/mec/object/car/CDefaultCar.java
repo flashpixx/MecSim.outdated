@@ -372,9 +372,4 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     }
 
-    @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
-    }
 }

@@ -187,23 +187,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public Map<String, Object> analyse()
-    {
-        m_analyse.put( "car count", this.getGraph().getNumberOfObjects() );
-        return m_analyse;
-    }
-
-    /**
-     * returns the graph of the layer
-     *
-     * @return graph object
-     */
-    public final CGraphHopper getGraph()
-    {
-        return m_graph;
-    }
-
-    @Override
     public final void release()
     {
         super.clear();
@@ -226,6 +209,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
                     (Painter) this
             );
+    }
+
+    /**
+     * returns the graph of the layer
+     *
+     * @return graph object
+     */
+    public final CGraphHopper getGraph()
+    {
+        return m_graph;
     }
 
     @Override

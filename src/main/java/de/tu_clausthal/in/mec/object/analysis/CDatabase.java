@@ -34,7 +34,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.Map;
 
 
 /**
@@ -141,12 +140,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         @Override
         public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
-        }
-
-        @Override
-        public final Map<String, Object> analyse()
-        {
-            return null;
         }
 
         @Override

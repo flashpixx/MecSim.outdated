@@ -37,7 +37,6 @@ import org.jxmapviewer.painter.Painter;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -273,11 +272,6 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
-    @Override
-    public Map<String, Object> analyse()
-    {
-        return null;
-    }
 
     @Override
     public void release()

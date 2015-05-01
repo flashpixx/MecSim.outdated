@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -151,12 +150,6 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     public final void clear()
     {
         m_data.clear();
-    }
-
-    @Override
-    public Map<String, Object> analyse()
-    {
-        return null;
     }
 
     @Override

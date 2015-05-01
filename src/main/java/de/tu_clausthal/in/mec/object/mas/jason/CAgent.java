@@ -234,12 +234,6 @@ public class CAgent<T> implements IVoidAgent
 
 
     @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
-    }
-
-    @Override
     public void paint( final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height )
     {
 

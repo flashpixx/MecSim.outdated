@@ -36,7 +36,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -211,12 +210,6 @@ public class CMessageSystem implements IVoidSteppable
         //m_communicator.send( CCommon.toJson( m_messageflow ) );
     }
 
-
-    @Override
-    public final Map<String, Object> analyse()
-    {
-        return null;
-    }
 
     @Override
     public final void release()

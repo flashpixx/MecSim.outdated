@@ -24,6 +24,7 @@ var mecsim_simulation,
 
             $("#ui-id-3").on("click", function(data){
                 UI().getContent().empty();
+                UI().getContent().load("template/clean.htm");
             });
 
             SimulationPanel.settings.start_button.on("click", function(){

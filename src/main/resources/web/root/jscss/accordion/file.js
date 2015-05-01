@@ -16,11 +16,10 @@ var mecsim_file,
         },
 
         bind_ui_actions: function() {
-
             $("#ui-id-1").on("click", function(data){
                 UI().getContent().empty();
+                UI().getContent().load("template/clean.htm");
             });
-
         }
 
     };

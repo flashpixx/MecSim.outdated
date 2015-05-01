@@ -55,6 +55,18 @@ iframe
     text-align: center;
 }
 
+.mecsim_global_cleanTemplate{
+    z-index: -1;
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0.5;
+    background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center;
+}
+
 .mecsim_editor_fixed_width_button{
     width: 30%;
     top: 10%;
@@ -93,18 +105,6 @@ iframe
 #mecsim_global_log{
     overflow: auto;
     margin: 1em;
-}
-
-#mecsim_global_content::before{
-    z-index: -1;
-    position: absolute;
-    content: "";
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    opacity: 0.5;
-    /** TODO: Maybe Logo only on FrontPage ? background: url(../img/Logo_TUC_de_CMYK.svg) no-repeat center; **/
 }
 
 #mecsim_global_accordion{

@@ -30,8 +30,12 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -41,6 +45,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -268,12 +274,52 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         final int l_zoom = this.iconsize( p_viewer );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom, l_zoom
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom * 2, l_zoom * 2
         );
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+        {
             CSimulation.getInstance().getUIComponents().getInspector().set( this );
+
+            final Stroke l_stroke = new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{1}, 0 );
+            final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_route = new LinkedList<>();
+            l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
+            l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintRoute( l_route, 0 );
+        }
     }
+
+    /**
+     * creates a list of items for route painting
+     *
+     * @param p_start start index of the route list
+     * @param p_end end index of the route list
+     * @param p_color color of the items
+     * @param p_stroke stroke of the items
+     * @return list with route
+     */
+    private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> getRouteLine( final int p_start, final int p_end, final Color p_color,
+                                                                                      final Stroke p_stroke
+    )
+    {
+        final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_list = new LinkedList<>();
+
+        GeoPosition l_start = m_graph.getEdge( m_route.get( p_start ).getLeft() ).getGeoPositions( m_route.get( p_start ).getRight().intValue() );
+        GeoPosition l_end;
+        for ( int i = p_start + 1; i < p_end; ++i )
+        {
+            l_end = m_graph.getEdge( m_route.get( i ).getLeft() ).getGeoPositions( m_route.get( i ).getRight().intValue() );
+            if ( l_start.equals( l_end ) )
+                continue;
+
+            l_list.add( new ImmutableTriple<>( new ImmutablePair<>( l_start, l_end ), p_color, p_stroke ) );
+            l_start = l_end;
+        }
+
+        return l_list;
+    }
+
+
 
     @Override
     public Map<String, Object> inspect()
@@ -290,9 +336,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return l_map;
     }
 
-    /**
-     * @todo draw route (solid for driven way, dashed for driving way)
-     */
     @Override
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {

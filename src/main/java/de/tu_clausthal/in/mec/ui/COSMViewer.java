@@ -26,17 +26,23 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
 import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
 import javax.swing.event.MouseInputListener;
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -53,9 +59,13 @@ public class COSMViewer extends JXMapViewer
      */
     private static final long serialVersionUID = 1L;
     /**
+     * route painter
+     */
+    private final CRoutePainter m_routepainter = new CRoutePainter();
+    /**
      * compounend painter
      */
-    private CompoundPainter m_painter = new CompoundPainter<>();
+    private CompoundPainter<JXMapViewer> m_painter = new CompoundPainter<>();
     /**
      * clickable layer
      */
@@ -79,6 +89,7 @@ public class COSMViewer extends JXMapViewer
         this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
 
         this.setOverlayPainter( m_painter );
+        m_painter.addPainter( m_routepainter );
 
         final MouseInputListener l_mouse = new COSMMouseListener( this, m_clickablelayer );
         this.addMouseListener( l_mouse );
@@ -91,7 +102,6 @@ public class COSMViewer extends JXMapViewer
         CBootstrap.afterOSMViewerInit( this );
     }
 
-
     /**
      * resets the view *
      */
@@ -100,6 +110,16 @@ public class COSMViewer extends JXMapViewer
         this.setZoom( CConfiguration.getInstance().get().<Integer>get( "ui/zoom" ) );
         this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
         this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
+    }
+
+    /**
+     * sets a new route
+     * @param p_route route list
+     * @param p_time opacity time delay
+     */
+    public void paintRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route, final int p_time )
+    {
+        m_routepainter.setRoute( p_route, p_time );
     }
 
     /**
@@ -188,6 +208,54 @@ public class COSMViewer extends JXMapViewer
         public String toString()
         {
             return m_stringvalue;
+        }
+    }
+
+
+    /**
+     * routing painter class
+     */
+    private class CRoutePainter implements Painter<JXMapViewer>
+    {
+        //private final Timer m_timer = new Timer();
+        /**
+         * route list with painting structure *
+         */
+        private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> m_route;
+
+        /**
+         * sets the route and restart the opacity timer
+         *
+         * @param p_route route list
+         * @param p_time timer delay
+         */
+        public void setRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route, final int p_time )
+        {
+            m_route = p_route;
+            COSMViewer.this.repaint();
+        }
+
+        @Override
+        public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
+        {
+            if ( ( m_route == null ) || ( m_route.isEmpty() ) )
+                return;
+
+            final Graphics2D l_graphic = (Graphics2D) p_graphic.create();
+            l_graphic.translate( -p_viewer.getViewportBounds().x, -p_viewer.getViewportBounds().y );
+            l_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+
+            for ( Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke> l_item : m_route )
+            {
+                l_graphic.setColor( l_item.getMiddle() );
+                l_graphic.setStroke( l_item.getRight() );
+
+                final Point2D l_start = p_viewer.getTileFactory().geoToPixel( l_item.getLeft().getLeft(), p_viewer.getZoom() );
+                final Point2D l_end = p_viewer.getTileFactory().geoToPixel( l_item.getLeft().getRight(), p_viewer.getZoom() );
+                l_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
+            }
+
+            l_graphic.dispose();
         }
     }
 

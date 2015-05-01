@@ -196,17 +196,13 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_edgeid;
     }
 
-
     /**
-     * returns the number of samples of the edge
-     *
-     * @return sample
+     * returns the list of geopositions on all cells
      */
-    public final int getEdgeCells()
+    public final GeoPosition[] getGeoPositions()
     {
-        return m_cells.length;
+        return m_cellgeoposition;
     }
-
 
     /**
      * returns the geoposition of an object
@@ -221,6 +217,28 @@ public class CEdge<N, T> implements Comparable<CEdge>
             return null;
 
         return m_cellgeoposition[l_position.intValue()];
+    }
+
+
+    /**
+     * returns the geoposition at a special index
+     *
+     * @param p_index index of the cell
+     * @return geoposition at the index
+     */
+    public final GeoPosition getGeoPositions( final int p_index )
+    {
+        return m_cellgeoposition[p_index];
+    }
+
+    /**
+     * returns the number of samples of the edge
+     *
+     * @return sample
+     */
+    public final int getEdgeCells()
+    {
+        return m_cells.length;
     }
 
 

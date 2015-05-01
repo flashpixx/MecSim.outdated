@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 $.when(
     $.getScript("jscss/accordion/editor.js"),
-    $.getScript("jscss/accordion/file.js"),
+    $.getScript("jscss/accordion/layer.js"),
     $.getScript("jscss/accordion/help.js"),
     $.getScript("jscss/accordion/simulation.js"),
     $.getScript("jscss/accordion/source.js"),
@@ -18,7 +18,7 @@ $.when(
     // module instantiation
     EditorPanel.init();
     SimulationPanel.init();
-    FilePanel.init();
+    LayerPanel.init();
     HelpPanel.init();
     SourcePanel.init();
 

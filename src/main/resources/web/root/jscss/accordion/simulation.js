@@ -1,28 +1,27 @@
-// --- SIMULATION PANEL --------------------------------------------------------------------------------------------
+// --- FILE PANEL --------------------------------------------------------------------------------------------------
 
 var mecsim_simulation,
     SimulationPanel = {
 
         settings: {
+            configuration_button: $("#mecsim_simulation_config").button(),
+            local_button: $("#mecsim_simulation_local").button(),
             start_button: $("#mecsim_simulation_start").button(),
             stop_button: $("#mecsim_simulation_stop").button(),
             reset_button: $("#mecsim_simulation_reset").button(),
-            slider: $("#mecsim_speed_slider"),
-            speedlabel: $("#speed"),
-            clickableUI: $("#mecsim_simulation_clickableUI"),
-            switchdiv: $("#mecsim_simulation_switchUI")
+            load_simulation_button: $("#mecsim_simulation_load").button(),
+            save_simulation_button: $("#mecsim_simulation_save").button(),
+            slider: $("#mecsim_simulation_speed_slider"),
+            speedlabel: $("#mecsim_simulation_speed")
         },
 
         init: function() {
             mecsim_simulation = this.settings;
             this.bind_ui_actions();
-            this.list_clickable_layer();
-            this.list_static_layer();
         },
 
         bind_ui_actions: function() {
-
-            $("#ui-id-3").on("click", function(data){
+            $("#ui-id-1").on("click", function(data){
                 UI().getContent().empty();
                 UI().getContent().load("template/clean.htm");
             });
@@ -60,74 +59,6 @@ var mecsim_simulation,
 
             SimulationPanel.settings.speedlabel.val(SimulationPanel.settings.slider.slider("value"));
 
-        },
-
-        list_clickable_layer: function() {
-
-            // @todo set must be called
-            $.ajax({
-                url     : "/cosmviewer/listclickablelayer",
-                success : function(px_data){
-                    $.each( px_data, function(pc_key, px_value){
-                        SimulationPanel.settings.clickableUI.append("<li class='ui-state-default' id="+ px_value.id +">" + pc_key + "</li>" );
-                    });
-
-                    SimulationPanel.settings.clickableUI.sortable({ placeholder: "ui-state-highlight" });
-                    SimulationPanel.settings.clickableUI.disableSelection();
-                }
-            });
-
-        },
-
-        list_static_layer: function() {
-            //get layer list and create html strucutre
-            $.ajax({
-                url     : "/csimulation/listlayer",
-                success : function( px_data ){
-                    $.each( px_data, function( pc_key, px_value ) {
-                        $("<label id='mecsim_simulation_switchlabel'>"+ pc_key +"</label>").appendTo(SimulationPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id +"' checked>").appendTo(SimulationPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' checked></p>").appendTo(SimulationPanel.settings.switchdiv);
-                    });
-                }
-            }).done(function(){
-
-                //create active switches and listen
-                $(".mecsim_simulaton_switchActiv").bootstrapSwitch({
-                    size: "mini",
-                    onText: "active",
-                    offText: "inactive",
-                    onSwitchChange : function( px_event, pl_state) {
-                        $.ajax({
-                            type: "POST",
-                            url: "csimulation/disableenablelayer",
-                            data: {"id": $(this).closest("input").attr("id"), "state": pl_state}
-                        }).fail(function(p_data){
-                            $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
-                            $("#mecsim_stop_error").dialog();
-                        });
-                    }
-                });
-
-                //create visibility switches and listen
-                $(".mecsim_simulaton_switchVisibil").bootstrapSwitch({
-                    size: "mini",
-                    onText: "visible",
-                    offText: "invisible",
-                    onSwitchChange : function( px_event, pl_state) {
-                        $.ajax({
-                            type: "POST",
-                            url: "csimulation/hideshowlayer",
-                            data: {"id": $(this).closest("input").attr("id"), "state": pl_state}
-                        }).fail(function(p_data){
-                            $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
-                            $("#mecsim_stop_error").dialog();
-                        });
-                    }
-                });
-
-            });
         }
-
 
     };

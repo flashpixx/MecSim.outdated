@@ -55,7 +55,7 @@
     <script type = "text/javascript" src = "jscss/main.js" ></script >
     <script type = "text/javascript" src = "jscss/accordion/source.js" ></script >
     <script type = "text/javasctipt" src = "jscss/accordion/simulation.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/file.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/layer.js" ></script >
     <script type = "text/javascitpt" src = "jscss/accordion/editor.js" ></script >
     <script type = "text/javascript" src = "jscss/accordion/help.js" ></script >
     <script type = "text/javascript" src = "jscss/accordion/statistics.js" ></script >
@@ -70,43 +70,39 @@
 
         <div id = "mecsim_global_accordion" class = "accordion" >
 
-            <h3 >File</h3 >
-
-            <div class = "mecsim_global_sliderSubMenu" >
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_file_config" >Configuration</button >
-                </p>
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_file_local" >Local</button >
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_load" >Load</button >
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_save" >Save</button >
-            </div >
-
             <h3 >Simulation</h3 >
-
             <div class = "mecsim_global_sliderSubMenu" >
+                <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_config" >Configuration</button >
+                </p>
+                <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_local" >Local</button >
+                </p>
                 <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_start" >Start</button >
                 <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_stop" >Stop</button >
                 </p>
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_reset" >Reset</button >
                 </p>
-                <label for = "speed" >Speed: </label >
-                <input type = "text" id = "speed" readonly style = "border:0;" >
-                </p >
-                <div id = "mecsim_speed_slider" ></div >
-                <h3 >Layer</h3 >
+                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_load" >Load</button >
+                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_save" >Save</button >
+                </p>
+                <label for = "mecsim_simulation_speed" >Speed: </label >
+                <input type = "text" id = "mecsim_simulation_speed" readonly style = "border:0;" >
+                </p>
+                <div id = "mecsim_simulation_speed_slider" ></div >
+            </div >
 
+            <h3 >Layer</h3 >
+            <div class = "mecsim_global_sliderSubMenu" >
+                <h3 >Activity & Visibility</h3 >
                 <div id = "mecsim_simulation_switchUI" ></div >
                 </p>
-                <h3 >Clickable Layer</h3 >
-
+                <h3 >Click-Order</h3 >
                 <div id = "mecsim_simulation_clickableUI" ></div >
-
             </div >
 
             <h3 >Sources</h3 >
 
             <div class = "mecsim_global_sliderSubMenu" >
                 <h3 >Toolbox</h3 >
-
                 <div id = "mecsim_source_toolbox" ></div >
             </div >
 

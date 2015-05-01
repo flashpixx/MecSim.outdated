@@ -38,8 +38,11 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.LocalResponseCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 
+import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
@@ -115,11 +118,10 @@ public class COSMViewer extends JXMapViewer
     /**
      * sets a new route
      * @param p_route route list
-     * @param p_time opacity time delay
      */
-    public void paintRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route, final int p_time )
+    public void paintRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
     {
-        m_routepainter.setRoute( p_route, p_time );
+        m_routepainter.setRoute( p_route );
     }
 
     /**
@@ -215,24 +217,32 @@ public class COSMViewer extends JXMapViewer
     /**
      * routing painter class
      */
-    private class CRoutePainter implements Painter<JXMapViewer>
+    private class CRoutePainter implements ActionListener, Painter<JXMapViewer>
     {
-        //private final Timer m_timer = new Timer();
+        /**
+         * timer
+         */
+        private final Timer m_timer = new Timer( CConfiguration.getInstance().get().<Integer>get( "ui/routepainterdelay" ), this );
         /**
          * route list with painting structure *
          */
         private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> m_route;
+        /**
+         * alpha value
+         */
+        private float m_alpha = 1;
 
         /**
          * sets the route and restart the opacity timer
          *
          * @param p_route route list
-         * @param p_time timer delay
          */
-        public void setRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route, final int p_time )
+        public void setRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
         {
+            m_timer.stop();
+            m_alpha = 1;
             m_route = p_route;
-            COSMViewer.this.repaint();
+            m_timer.start();
         }
 
         @Override
@@ -242,6 +252,7 @@ public class COSMViewer extends JXMapViewer
                 return;
 
             final Graphics2D l_graphic = (Graphics2D) p_graphic.create();
+            l_graphic.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, m_alpha ) );
             l_graphic.translate( -p_viewer.getViewportBounds().x, -p_viewer.getViewportBounds().y );
             l_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
@@ -256,6 +267,18 @@ public class COSMViewer extends JXMapViewer
             }
 
             l_graphic.dispose();
+        }
+
+        @Override
+        public void actionPerformed( final ActionEvent e )
+        {
+            m_alpha += -0.01;
+            if ( m_alpha <= 0 )
+            {
+                m_alpha = 0;
+                m_timer.stop();
+            }
+            COSMViewer.this.repaint();
         }
     }
 

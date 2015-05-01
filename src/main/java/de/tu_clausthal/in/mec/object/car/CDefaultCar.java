@@ -285,7 +285,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_route = new LinkedList<>();
             l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
             l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintRoute( l_route, 0 );
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintRoute( l_route );
         }
     }
 

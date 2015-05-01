@@ -111,6 +111,8 @@ public class CConfiguration
                             put( "windowwidth", 1280.0 );
                             // zoom value
                             put( "zoom", 4 );
+                            // route painter opacity delay
+                            put( "routepainterdelay", 60 );
                             put(
                                     // server bind information
                                     "server", new CNameHashMap.CImmutable()

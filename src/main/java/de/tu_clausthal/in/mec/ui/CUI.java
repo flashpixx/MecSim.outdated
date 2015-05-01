@@ -246,7 +246,7 @@ public class CUI extends Application
      * @param p_title title
      * @param p_node node
      * @return tab
-     * @bug closable is disable, because the library ControlFX creates a NPE on the close event - so can be activated at a new library release version
+     * @bug closable is disable, because the library ControlsFX creates a NPE on the close event - so can be activated at a new library release version
      */
     private Tab createTab( final String p_title, final Node p_node )
     {

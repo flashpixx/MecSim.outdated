@@ -46,8 +46,6 @@ import java.util.concurrent.Executors;
 
 /**
  * main simulation thread
- *
- * @bug breaks down on some longer runs (debugging)
  */
 public class CMainLoop implements Runnable
 {

@@ -415,24 +415,23 @@ public class CConfiguration
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException
     {
         // convert special dara into individual types
-        if ( p_input.containsKey( "ui/geoposition" ) )
+        if ( p_input.traverseContainsKey( "ui/geoposition" ) )
             p_input.set(
                     "ui/geoposition", new GeoPosition(
                             p_input.<Double>get( "ui/geoposition/latitude" ), p_input.<Double>get( "ui/geoposition/longitude" )
                     )
             );
 
-
         // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
         for ( Map.Entry<CPath, Object> l_item : m_configuration )
-            if ( p_input.containsKey( l_item.getKey() ) )
+            if ( p_input.traverseContainsKey( l_item.getKey() ) )
             {
                 final Object l_data = p_input.get( l_item.getKey() );
                 m_configuration.set( l_item.getKey(), l_data == null ? null : l_data.getClass() == l_item.getValue().getClass() ? l_data : l_item.getValue() );
             }
 
         // copy ui/web datasets complete
-        if ( p_input.containsKey( "ui/web" ) )
+        if ( p_input.traverseContainsKey( "ui/web" ) )
             m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
     }
 

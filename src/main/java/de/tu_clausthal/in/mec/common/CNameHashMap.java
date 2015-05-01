@@ -108,16 +108,17 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @return boolean
      */
     @SuppressWarnings( "unchecked" )
-    private static boolean containsKey( final CPath p_path, final Map<String, Object> p_map )
+    private static boolean traverseContainsKey( final CPath p_path, final Map<String, Object> p_map )
     {
         if ( p_path.isEmpty() )
             return false;
         if ( !p_map.containsKey( p_path.get( 0 ) ) )
             return false;
 
+        // get return value - if a map is found and the path does not contain one element, start traversing, otherwise break
         final Object l_return = p_map.get( p_path.get( 0 ) );
-        if ( l_return instanceof Map )
-            return containsKey( p_path.getSubPath( 1 ), (Map) l_return );
+        if ( ( l_return instanceof Map ) && ( p_path.size() > 1 ) )
+            return traverseContainsKey( p_path.getSubPath( 1 ), (Map) l_return );
 
         return p_path.size() == 1;
     }
@@ -144,6 +145,28 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     }
 
     /**
+     * check a key with traversing call
+     *
+     * @param p_key key name
+     * @return boolean of key existance
+     */
+    public boolean traverseContainsKey( final CPath p_key )
+    {
+        return traverseContainsKey( p_key, this );
+    }
+
+    /**
+     * check a key with traversing call
+     *
+     * @param p_key key name
+     * @return boolean of key existance
+     */
+    public boolean traverseContainsKey( final String p_key )
+    {
+        return traverseContainsKey( new CPath( p_key ), this );
+    }
+
+    /**
      * traverse and sets the value
      *
      * @param p_path path
@@ -165,28 +188,6 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     public final <T> void set( final String p_path, final T p_value )
     {
         this.set( new CPath( p_path ), p_value );
-    }
-
-    /**
-     * check if a path exists
-     *
-     * @param p_path string path
-     * @return boolean
-     */
-    public final boolean containsKey( final String p_path )
-    {
-        return this.containsKey( new CPath( p_path ) );
-    }
-
-    /**
-     * check if a path exists
-     *
-     * @param p_path path
-     * @return boolean
-     */
-    public final boolean containsKey( final CPath p_path )
-    {
-        return containsKey( p_path, this );
     }
 
     /**

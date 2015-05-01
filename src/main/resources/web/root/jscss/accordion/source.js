@@ -11,9 +11,6 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false,
-            clusterwidget: $("#mecsim_source_clusterwidget"),
-            waypointsettings: $("#mecsim_source_waypointsettings"),
-            targetweighting: $("#mecsim_source_targetweighting"),
             toolbox: $("#mecsim_source_toolbox")
             //sortComp: SourcePanel.sortByDistanceComp
 
@@ -28,13 +25,13 @@ var mecsim_source,
         initLayout: function() {
 
             //basic layout (jquerry ui widgets)
-            SourcePanel.settings.waypointsettings.resizable({
+            $("#mecsim_source_waypointsettings").resizable({
                 animate: true,
                 minHeight: 255,
                 minWidth: 500
             });
 
-            SourcePanel.settings.targetweighting.resizable({
+            $("#mecsim_source_targetweighting") .resizable({
                 animate: true,
                 minHeight: 375,
                 minWidth: 500
@@ -80,6 +77,22 @@ var mecsim_source,
 
             //TODO implement possiblty for different waypoint tools
             //TODO move jquery selectors
+
+            //Listen to the Select Menu
+            /**
+            SourcePanel.loadASL();
+            SourcePanel.settings.aslselect.selectmenu().on("selectmenuchange", function(data){
+                $.ajax({
+                    type: "POST",
+                    url: "csourcelayer/setasl",
+                    data: {"aslname": SourcePanel.settings.aslselect.val()}
+                }).done(function(){
+                    SourcePanel.settings.aslselect.selectmenu("close");
+                });
+            });
+            **/
+
+            //create colorpicker
             $("#mecsim_source_colorpicker").spectrum({
                 showPaletteOnly: true,
                 togglePaletteOnly: true,

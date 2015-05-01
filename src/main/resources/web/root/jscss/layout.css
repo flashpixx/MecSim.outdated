@@ -13,11 +13,6 @@ html, body
     background-color: white;
 }
 
-select
-{
-    width: 100px;
-}
-
 iframe
 {
     width: 100%;
@@ -130,7 +125,30 @@ iframe
     width: 500px;
 }
 
-/******************************** css definitions for mecsim_source ? ************************************************/
+/******************************** css definitions for mecsim_source ************************************************/
+
+/** Waypoint Settings Widget **/
+#mecsim_source_waypointsettings{
+    float: left;
+    width: 482px;
+    height: 240px;
+    padding: 0.5em;
+    margin: 10px;
+}
+
+.mecsim_source_select, .mecsim_source_inputCollection{
+    float:right;
+    margin-right: 10px;
+    width: 240px;
+}
+
+.mecsim_source_inputsmall{
+    width:70px;
+}
+
+.mecsim_source_customizetool{
+    padding-top: 75px;
+}
 
 /** TODO will be reused later
 .ui-button .ui-icon.mecsim_source_cyanCircle .ui-icon.mecsim_source_redCircle{
@@ -140,6 +158,43 @@ iframe
     background: cyan;
 }
 **/
+
+/** Target Weighting Widget **/
+#mecsim_source_targetweighting{
+    float: left;
+    width: 482px;
+    height: 360px;
+    padding: 0.5em;
+    margin: 10px;
+}
+
+/** TODO deprecated
+#mecsim_source_weighting_paginate, #mecsim_source_weighting_length ,#mecsim_source_weighting_filter{
+    float: left;
+    margin: 10px;
+}
+
+#mecsim_source_weighting{
+    width: 60%;
+    float: left;
+    margin: 10px;
+    text-align: center;
+}
+
+#mecsim_source_weightinginput{
+    text-align: center;
+    width: 100%;
+}
+**/
+
+/** Cluster Widget **/
+#mecsim_source_clusterwidget{
+    float: left;
+    width: 600px;
+    height: 640px;
+    padding: 0.5em;
+    margin: 10px;
+}
 
 .mecsim_source_node {
     font-size: 75%;
@@ -181,62 +236,4 @@ iframe
 
 .mecsim_source_link-hidden{
     stroke-opacity: 0;
-}
-
-#mecsim_source_clusterwidget{
-    float: left;
-    width: 600px;
-    height: 640px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-#mecsim_source_waypointsettings{
-    float: left;
-    width: 482px;
-    height: 240px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-#mecsim_source_targetweighting{
-    float: left;
-    width: 482px;
-    height: 360px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-#mecsim_source_selectSource{
-    margin: 5px;
-    width: 155px;
-    overflow:scroll;
-}
-
-#mecsim_source_selectDistribution{
-    margin: 5px;
-    width: 155px;
-}
-
-#mecsim_source_input1, #mecsim_source_input2{
-    width: 75px;
-    text-align: center;
-    margin-left: 25px;
-}
-
-#mecsim_source_weighting_paginate, #mecsim_source_weighting_length ,#mecsim_source_weighting_filter{
-    float: left;
-    margin: 10px;
-}
-
-#mecsim_source_weighting{
-    width: 60%;
-    float: left;
-    margin: 10px;
-    text-align: center;
-}
-
-#mecsim_source_weightinginput{
-    text-align: center;
-    width: 100%;
 }

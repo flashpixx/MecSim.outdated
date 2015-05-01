@@ -12,7 +12,44 @@
 <!-- Waypoint Settings Widget -->
 <div id = "mecsim_source_waypointsettings" class = "ui-widget-content" >
     <h3 class = "ui-widget-header" >Waypoint Settings</h3 >
-    <input type = 'text' id = "mecsim_source_colorpicker" />
+
+    <label>Select your Factory</label>
+    <select class="mecsim_source_select" id="mecsim_source_selectFactory">
+        <option>Default Car</option>
+        <option>Default Agent Car</option>
+    </select>
+    </p>
+
+    <label>Select your Agent Program</label>
+    <select class="mecsim_source_select"id="mecsim_source_selectASL">
+        <option>Dummy Agent Program#1</option>
+        <option>Dummy Agent Program#2</option>
+        <option>Dummy Agent Program#3</option>
+        <option>Dummy Agent Program#4</option>
+    </select>
+    </p>
+
+    <label>Select your Generator</label>
+    <select class="mecsim_source_select" id="mecsim_source_selectGenerator">
+        <option>Konstant</option>
+        <option>Expinential</option>
+        <option>Uniform</option>
+    </select>
+    </p>
+
+    <label>Define the Generator Settings</label>
+    <div class="mecsim_source_inputCollection">
+        <input class="mecsim_source_inputsmall" id="mecsim_source_generatorinput1" value="amount"></input>
+        <input class="mecsim_source_inputsmall" id="mecsim_source_generatorinput2" value="mean"></input>
+        <input class="mecsim_source_inputsmall" id="mecsim_source_generatorinput3" value="derivation"></input>
+    </div>
+
+    <div class="mecsim_source_customizetool">
+        <label>Save your Waypoint tool under a custom name and Color</label>
+        <input id="mecsim_source_toolName" value="Toolname"></input>
+        <input id="mecsim_source_colorpicker" type="text"></input>
+        <input id="mecsim_source_addTool" type="submit" value="Add to Toolbox"></input>
+    </div>
 </div >
 
 <!-- Target Weighting Widget -->

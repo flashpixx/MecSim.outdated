@@ -246,6 +246,7 @@ public class CUI extends Application
      * @param p_title title
      * @param p_node node
      * @return tab
+     * @bug closable is disable, because the library ControlFX creates a NPE on the close event - so can be activated at a new library release version
      */
     private Tab createTab( final String p_title, final Node p_node )
     {
@@ -254,7 +255,7 @@ public class CUI extends Application
         l_tab.setId( p_title );
         l_tab.setText( p_title );
         l_tab.setContent( p_node );
-        l_tab.setClosable( true );
+        l_tab.setClosable( false );
         l_tab.setOnClosed( m_tabcloseevent );
         m_tabpane.getTabs().add( l_tab );
 

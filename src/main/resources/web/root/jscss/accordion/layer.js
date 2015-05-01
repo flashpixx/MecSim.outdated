@@ -1,11 +1,11 @@
-// --- SIMULATION PANEL --------------------------------------------------------------------------------------------
+// --- LAYER PANEL --------------------------------------------------------------------------------------------
 
 var mecsim_layer,
     LayerPanel = {
 
         settings: {
-            clickableUI: $("#mecsim_simulation_clickableUI"),
-            switchdiv: $("#mecsim_simulation_switchUI")
+            clickableUI: $("#mecsim_layer_clickableUI"),
+            switchdiv: $("#mecsim_layer_switchUI")
         },
 
         init: function() {
@@ -23,7 +23,6 @@ var mecsim_layer,
         },
 
         list_clickable_layer: function() {
-
             // @todo set must be called
             $.ajax({
                 url     : "/cosmviewer/listclickablelayer",
@@ -36,7 +35,6 @@ var mecsim_layer,
                     LayerPanel.settings.clickableUI.disableSelection();
                 }
             });
-
         },
 
         list_static_layer: function() {
@@ -88,6 +86,5 @@ var mecsim_layer,
 
             });
         }
-
 
     };

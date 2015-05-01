@@ -53,12 +53,12 @@
     <script type = "text/javascript" src = "jscss/logger/logger.class.js" ></script >
     <script type = "text/javascript" src = "jscss/mecsim/mecsim.class.js" ></script >
     <script type = "text/javascript" src = "jscss/main.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/source.js" ></script >
     <script type = "text/javasctipt" src = "jscss/accordion/simulation.js" ></script >
     <script type = "text/javascript" src = "jscss/accordion/layer.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/source.js" ></script >
     <script type = "text/javascitpt" src = "jscss/accordion/editor.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/help.js" ></script >
     <script type = "text/javascript" src = "jscss/accordion/statistics.js" ></script >
+    <script type = "text/javascript" src = "jscss/accordion/help.js" ></script >
     <link href = "jscss/layout.css" rel = "stylesheet" />
     <!------------------------------------------------------------------------------------------------------------->
 </head >
@@ -67,7 +67,6 @@
 
 <div id = "mecsim_global_screen" >
     <div id = "mecsim_global_menu" >
-
         <div id = "mecsim_global_accordion" class = "accordion" >
 
             <h3 >Simulation</h3 >
@@ -93,23 +92,20 @@
             <h3 >Layer</h3 >
             <div class = "mecsim_global_sliderSubMenu" >
                 <h3 >Activity & Visibility</h3 >
-                <div id = "mecsim_simulation_switchUI" ></div >
+                <div id = "mecsim_layer_switchUI" ></div >
                 </p>
                 <h3 >Click-Order</h3 >
-                <div id = "mecsim_simulation_clickableUI" ></div >
+                <div id = "mecsim_layer_clickableUI" ></div >
             </div >
 
             <h3 >Sources</h3 >
-
             <div class = "mecsim_global_sliderSubMenu" >
                 <h3 >Toolbox</h3 >
                 <div id = "mecsim_source_toolbox" ></div >
             </div >
 
             <h3 >Editor</h3 >
-
             <div id = "mecsim_editor_panel" class = "mecsim_global_sliderSubMenu" >
-
                 <label for = "mecsim_agent_files" >Select a file</label >
                 <select name = "agentfiles" id = "mecsim_agent_files" style="width: 100px;" ></select >
                 <br />
@@ -120,11 +116,9 @@
             </div >
 
             <h3 >Statistics</h3 >
-
             <div class = "mecsim_global_sliderSubMenu" ></div >
 
             <h3 >Help</h3 >
-
             <div class = "mecsim_global_sliderSubMenu" >
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_about" >About</button >
                 </p>
@@ -134,7 +128,6 @@
             </div >
 
         </div >
-
     </div >
 
     <div >

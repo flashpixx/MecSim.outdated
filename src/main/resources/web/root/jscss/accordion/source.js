@@ -77,20 +77,48 @@ var mecsim_source,
 
             //TODO implement possiblty for different waypoint tools
             //TODO move jquery selectors
+            //TODO refresh asl
 
-            //Listen to the Select Menu
-            /**
-            SourcePanel.loadASL();
-            SourcePanel.settings.aslselect.selectmenu().on("selectmenuchange", function(data){
-                $.ajax({
-                    type: "POST",
-                    url: "csourcelayer/setasl",
-                    data: {"aslname": SourcePanel.settings.aslselect.val()}
-                }).done(function(){
-                    SourcePanel.settings.aslselect.selectmenu("close");
-                });
+            //create selectmenu with factory types
+            $.ajax({
+                url     : "cwaypointenvironment/listfactories",
+                success : function( px_data ){
+                    px_data.factories.forEach(function(data){
+                        $("#mecsim_source_selectFactory")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
             });
-            **/
+
+            //create selectmenu with possible agent programs
+            $.ajax({
+                url     : "cagentenvironment/jason/list",
+                success : function( px_data ){
+                    px_data.agents.forEach(function(data){
+                        $("#mecsim_source_selectASL")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //create selectmenu with possible generator types
+            $.ajax({
+                url     : "cwaypointenvironment/listgenerator",
+                success : function( px_data ){
+                    px_data.generators.forEach(function(data){
+                        $("#mecsim_source_selectGenerator")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //TODO change label for input (if different meaning)
 
             //create colorpicker
             $("#mecsim_source_colorpicker").spectrum({
@@ -424,27 +452,9 @@ var mecsim_source,
 
         },
 
-        //load asl files in the select menu
-        loadASL: function() {
-            /** TODO will be used later on
-            $.getJSON( "cagentenvironment/jason/list", function(data){
-                SourcePanel.settings.aslSelect.empty();
-                for(var i in data.agents){
-                    SourcePanel.settings.aslSelect
-                        .append( $("<option></option>")
-                        .attr("value",data.agents[i])
-                        .text(data.agents[i]));
-                }
-            }).done(function(){
-                SourcePanel.settings.aslselect.selectmenu("refresh");
-            });
-            **/
-        },
-
         bind_ui_actions: function() {
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
-                SourcePanel.loadASL();
                 UI().getContent().empty();
                 UI().getContent().load("template/source.htm", function(){
                     SourcePanel.initLayout();

@@ -136,7 +136,7 @@ iframe
     margin: 10px;
 }
 
-.mecsim_source_select, .mecsim_source_inputCollection{
+.mecsim_source_select{
     float:right;
     margin-right: 10px;
     width: 240px;
@@ -147,7 +147,7 @@ iframe
 }
 
 .mecsim_source_customizetool{
-    padding-top: 75px;
+    padding-top: 65px;
 }
 
 /** TODO will be reused later

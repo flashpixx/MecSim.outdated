@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CTrafficEnvironment;
 import de.tu_clausthal.in.mec.ui.CUI;
+import de.tu_clausthal.in.mec.ui.CWaypointEnvironment;
 import de.tu_clausthal.in.mec.ui.web.CMarkdownRenderer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
@@ -117,6 +118,7 @@ public class CBootstrap
 
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
+        p_server.registerObject( CWaypointEnvironment.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
     }

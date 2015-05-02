@@ -11,6 +11,7 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false,
+            colorpicker: {},
             labels: {}
             //sortComp: SourcePanel.sortByDistanceComp
 
@@ -19,6 +20,7 @@ var mecsim_source,
         init: function() {
             mecsim_source = this.settings;
             this.getLabels();
+            this.setToolbox();
             this.bind_ui_actions();
         },
 
@@ -134,22 +136,8 @@ var mecsim_source,
                 SourcePanel.setLabels();
             });
 
-            //create toolbox
-            $.ajax({
-                url     : "cwaypointenvironment/listtools",
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
-                        $("<button></button>")
-                            .text(data)
-                            .attr("value",data)
-                            .button()
-                            .appendTo($("#mecsim_source_toolbox"));
-                    });
-                }
-            });
-
             //create colorpicker
-            $("#mecsim_source_colorpicker").spectrum({
+            SourcePanel.settings.colorpicker = $("#mecsim_source_colorpicker").spectrum({
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
                 togglePaletteMoreText: 'more',
@@ -162,13 +150,64 @@ var mecsim_source,
                 ]
             });
 
-            // listen to the generator select and change label
-            $("#mecsim_source_selectGenerator").on("change", function(data, data1){
+            // listen to the generator-select and change label
+            $("#mecsim_source_selectGenerator").on("change", function(){
                 SourcePanel.setLabels();
+            });
+
+            //listen to the addtool-button
+            $("#mecsim_source_addTool").on("click", function(){
+                var color = SourcePanel.settings.colorpicker.spectrum("get");
+                $.ajax({
+                    url     : "cwaypointenvironment/createtool",
+                    data    : {
+                                "factory"  : $("#mecsim_source_selectFactory").val(),
+                                "asl"      : $("#mecsim_source_selectASL").val(),
+                                "generator": $("#mecsim_source_selectGenerator").val(),
+                                "input1"   : $("#mecsim_source_generatorinput1").val(),
+                                "input2"   : $("#mecsim_source_generatorinput2").val(),
+                                "input3"   : $("#mecsim_source_generatorinput3").val(),
+                                "name"     : $("#mecsim_source_toolName").val(),
+                                "r"        : color._r,
+                                "g"        : color._g,
+                                "b"        : color._b
+                            },
+                    success : function( px_data ){
+                        px_data.tools.forEach(function(data){
+                            $("</p>").appendTo($("#mecsim_source_toolbox"));
+                            $("<button></button>")
+                                .text(data)
+                                .attr("value",data)
+                                .button()
+                                .appendTo($("#mecsim_source_toolbox"));
+                        });
+                    }
+                }).fail(function(){
+                    //TODO show an error dialog
+                    console.log("Not a valid tool");
+                });
+
             });
 
         },
 
+        //method to creat tool-buttons in the toolbox
+        setToolbox: function(){
+            $.ajax({
+                url     : "cwaypointenvironment/listtools",
+                success : function( px_data ){
+                    px_data.tools.forEach(function(data){
+                        $("<button></button>")
+                            .text(data)
+                            .attr("value",data)
+                            .button()
+                            .appendTo($("#mecsim_source_toolbox"));
+                    });
+                }
+            });
+        },
+
+        //TODO make setLabels more general
         setLabels: function(){
             $("#mecsim_source_generatorinput1label").text(SourcePanel.settings.labels.carcount);
 

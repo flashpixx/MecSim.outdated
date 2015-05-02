@@ -524,6 +524,7 @@ public class CConfiguration
 
     /**
      * reads the configuration within the directory
+     *
      * @return boolean on correct read
      */
     public boolean read()

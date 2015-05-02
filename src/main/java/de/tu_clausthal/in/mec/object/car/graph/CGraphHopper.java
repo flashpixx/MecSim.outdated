@@ -377,7 +377,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final void enableDisableWeight( final EWeight p_weight )
     {
-        if ( m_weight.containsKey( p_weight ) )
+        if ( !m_weight.containsKey( p_weight ) )
             return;
 
         m_weight.get( p_weight ).setActive( !m_weight.get( p_weight ).isActive() );

@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.object.car;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -134,5 +135,15 @@ public class CCarJasonAgent extends CDefaultCar
     {
         m_inspect.put( CCommon.getResourceString( this, "cycle" ), m_agent.getCycle() );
         return m_inspect;
+    }
+
+    @Override
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        // check speed, because agent can modify the speed value and the value should always in range
+        // [0,max-speed] other values are declared as final member
+        m_speed = Math.min( Math.max( 0, m_speed ), m_maxspeed );
+
+        super.step( p_currentstep, p_layer );
     }
 }

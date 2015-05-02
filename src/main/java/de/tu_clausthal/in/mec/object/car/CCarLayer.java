@@ -23,13 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.car;
 
-import com.graphhopper.routing.util.Weighting;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CAgentNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
@@ -77,15 +77,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private transient CGraphHopper m_graph = new CGraphHopper();
 
-    /**
-     * returns this list of all weights
-     *
-     * @return weight name
-     */
-    public final String[] getGraphWeight()
-    {
-        return m_graph.getWeightingList();
-    }
 
     /**
      * enable / disable weight
@@ -94,10 +85,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
     {
-        if ( this.isActiveWeight( p_weight ) )
-            m_graph.disableWeight( p_weight );
-        else
-            m_graph.enableWeight( p_weight );
+        m_graph.enableDisableWeight( p_weight );
     }
 
     /**
@@ -117,9 +105,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_weight weight name
      * @return weight object or null
      */
-    public final Weighting getGraphWeight( final CGraphHopper.EWeight p_weight )
+    public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
     {
-        return m_graph.getWeight( p_weight );
+        return m_graph.<T>getWeight( p_weight );
     }
 
     /**

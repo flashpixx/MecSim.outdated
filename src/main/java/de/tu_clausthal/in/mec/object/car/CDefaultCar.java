@@ -57,6 +57,10 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
     /**
+     * maximum speed definition in km/h
+     */
+    protected final int m_maxspeed;
+    /**
      * reference to the graph
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
@@ -64,10 +68,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * cell structure of the route
      */
     private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
-    /**
-     * maximum speed definition in km/h
-     */
-    private final int m_maxspeed;
     /**
      * linger probability value
      */
@@ -90,7 +90,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * current speed in km/h
      */
-    private int m_speed;
+    protected int m_speed;
     /**
      * current position on the route
      */
@@ -338,7 +338,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
 
     @Override
-    public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
 
         // if the car is at the end

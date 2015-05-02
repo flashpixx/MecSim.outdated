@@ -301,7 +301,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
 
-
     @Override
     public Map<String, Object> inspect()
     {

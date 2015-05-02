@@ -80,7 +80,6 @@ public class CCarJasonAgent extends CDefaultCar
         }};
 
 
-
     /**
      * @param p_route driving route
      * @param p_speed initial speed

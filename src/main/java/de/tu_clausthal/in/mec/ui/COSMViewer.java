@@ -117,6 +117,7 @@ public class COSMViewer extends JXMapViewer
 
     /**
      * sets a new route
+     *
      * @param p_line route list
      */
     public void paintLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )

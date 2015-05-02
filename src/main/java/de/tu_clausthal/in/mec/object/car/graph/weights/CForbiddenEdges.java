@@ -50,6 +50,7 @@ public class CForbiddenEdges implements IWeighting
 
     /**
      * returns the set of edges
+     *
      * @return set with edges
      */
     public Set<EdgeIteratorState> getEdges()

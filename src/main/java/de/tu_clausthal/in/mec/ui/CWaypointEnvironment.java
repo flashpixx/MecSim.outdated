@@ -166,7 +166,24 @@ public class CWaypointEnvironment
     }
 
     /**
+     * method to read waypoint specific labels and resource stirngs
+     *
+     * @return
+     */
+    private final Map<String, String> web_static_getlabels()
+    {
+        HashMap<String, String> l_labels = new HashMap<>();
+        l_labels.put( "carcount", CCommon.getResourceString( this, "carcount" ) );
+        l_labels.put( "mean", CCommon.getResourceString( this, "mean" ) );
+        l_labels.put( "deviation", CCommon.getResourceString( this, "deviation" ) );
+        l_labels.put( "lowerbound", CCommon.getResourceString( this, "lowerbound" ) );
+        l_labels.put( "upperbound", CCommon.getResourceString( this, "upperbound" ) );
+        return l_labels;
+    }
+
+    /**
      * class which is able to deliver a Waypoint threw configerable settings
+     * todo read default tool settings from config
      * todo check if a tool can be better strucutred into subclasses (maybe for changes on the tool it might be good idea to have on single tool class)
      */
     protected class CTool

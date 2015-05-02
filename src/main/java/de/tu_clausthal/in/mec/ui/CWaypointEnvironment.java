@@ -38,7 +38,6 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,7 +154,8 @@ public class CWaypointEnvironment
 
         List<String> l_tools = new ArrayList<>();
 
-        for (String l_tool : this.m_toolbox.keySet()) {
+        for ( String l_tool : this.m_toolbox.keySet() )
+        {
             l_tools.add( l_tool );
         }
 
@@ -249,20 +249,23 @@ public class CWaypointEnvironment
             {
                 case DEFAULTCARFACTORY:
                     return new CDistributionDefaultCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
-                            new NormalDistribution()
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
+                            20, 5
+                    ), new NormalDistribution()
                     );
 
                 case DEFAULTAGENTCARFACTORY:
                     return new CDistributionAgentCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
-                            new NormalDistribution(), m_asl
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
+                            20, 5
+                    ), new NormalDistribution(), m_asl
                     );
 
                 default:
                     return new CDistributionDefaultCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
-                            new NormalDistribution()
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
+                            20, 5
+                    ), new NormalDistribution()
                     );
             }
         }

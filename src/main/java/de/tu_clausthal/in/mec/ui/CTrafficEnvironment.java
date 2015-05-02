@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 import java.util.HashMap;
@@ -80,7 +81,7 @@ public class CTrafficEnvironment
         final Map<String, Object> l_return = new HashMap<>();
 
         for ( String l_item : l_layer.getGraphWeight() )
-            l_return.put( l_item, CCommon.getMap( "active", l_layer.isActiveWeight( l_item ) ) );
+            l_return.put( l_item, CCommon.getMap( "active", l_layer.isActiveWeight( CGraphHopper.EWeight.valueOf( l_item ) ) ) );
 
         return l_return;
     }
@@ -98,7 +99,13 @@ public class CTrafficEnvironment
         if ( !p_data.containsKey( "name" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "noweightname" ) );
 
-        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).enableDisableGraphWeight( (String) p_data.get( "name" ) );
+        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).enableDisableGraphWeight(
+                CGraphHopper.EWeight.valueOf(
+                        (String) p_data.get(
+                                "name"
+                        )
+                )
+        );
     }
 
 }

@@ -47,24 +47,14 @@ public class CForbiddenEdges implements IWeighting
      */
     private boolean m_active = false;
 
-    /**
-     * adds a new edge
-     *
-     * @param p_edge edge
-     */
-    public final void setEdge( final EdgeIteratorState p_edge )
-    {
-        m_forbidden.add( p_edge );
-    }
 
     /**
-     * removes an edge
-     *
-     * @param p_edge edge
+     * returns the set of edges
+     * @return set with edges
      */
-    public final void removeEdge( final EdgeIteratorState p_edge )
+    public Set<EdgeIteratorState> getEdges()
     {
-        m_forbidden.remove( p_edge );
+        return m_forbidden;
     }
 
 

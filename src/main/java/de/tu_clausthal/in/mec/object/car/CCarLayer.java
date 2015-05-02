@@ -92,7 +92,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_weight weight name
      */
-    public final void enableDisableGraphWeight( final String p_weight )
+    public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
     {
         if ( this.isActiveWeight( p_weight ) )
             m_graph.disableWeight( p_weight );
@@ -106,7 +106,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_weight weight name
      * @return bool active flag
      */
-    public final boolean isActiveWeight( final String p_weight )
+    public final boolean isActiveWeight( final CGraphHopper.EWeight p_weight )
     {
         return m_graph.isActiveWeight( p_weight );
     }
@@ -117,7 +117,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_weight weight name
      * @return weight object or null
      */
-    public final Weighting getGraphWeight( final String p_weight )
+    public final Weighting getGraphWeight( final CGraphHopper.EWeight p_weight )
     {
         return m_graph.getWeight( p_weight );
     }
@@ -238,6 +238,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_stream stream
      * @throws IOException throws the exception on loading data
+     * @bug incomplete
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
@@ -253,14 +254,13 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_stream stream
      * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
+     * @bug incomplete
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 
         m_graph = new CGraphHopper();
-        m_graph.disableWeight();
-        for ( String l_weight : (String[]) p_stream.readObject() )
-            m_graph.enableWeight( l_weight );
+        //m_graph.disableWeight();
     }
 }

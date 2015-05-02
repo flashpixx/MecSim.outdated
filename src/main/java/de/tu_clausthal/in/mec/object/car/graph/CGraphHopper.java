@@ -91,7 +91,7 @@ public class CGraphHopper extends GraphHopper
     /**
      * default weight
      */
-    private CCombine m_weight;
+    private CCombine<EWeight> m_weight;
 
 
     /**
@@ -375,7 +375,11 @@ public class CGraphHopper extends GraphHopper
      */
     public final String[] getWeightingList()
     {
-        return CCommon.convertCollectionToArray( String[].class, m_weight.keySet() );
+        final List<String> l_list = new LinkedList<>();
+        for ( Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
+            l_list.add( l_item.getKey().name() );
+
+        return CCommon.convertCollectionToArray( String[].class, l_list );
     }
 
 
@@ -385,7 +389,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_weight weightning name
      * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    public final void enableWeight( final String p_weight )
+    public final void enableWeight( final EWeight p_weight )
     {
         if ( m_weight.containsKey( p_weight ) )
             return;
@@ -398,7 +402,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @param p_weight weight name
      */
-    public final void disableWeight( final String p_weight )
+    public final void disableWeight( final EWeight p_weight )
     {
         if ( m_weight.containsKey( p_weight ) )
             return;
@@ -425,9 +429,9 @@ public class CGraphHopper extends GraphHopper
     public final String[] getActiveWeights()
     {
         final List<String> l_active = new LinkedList<>();
-        for ( Map.Entry<String, IWeighting> l_item : m_weight.entrySet() )
+        for ( Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
             if ( l_item.getValue().isActive() )
-                l_active.add( l_item.getKey() );
+                l_active.add( l_item.getKey().name() );
 
         return CCommon.convertCollectionToArray( String[].class, l_active );
     }
@@ -439,7 +443,7 @@ public class CGraphHopper extends GraphHopper
      * @param p_weight weight name
      * @return bool flag if weight is active
      */
-    public final boolean isActiveWeight( final String p_weight )
+    public final boolean isActiveWeight( final EWeight p_weight )
     {
         return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
     }
@@ -451,7 +455,7 @@ public class CGraphHopper extends GraphHopper
      * @return weight object or null
      */
     @SuppressWarnings( "unchecked" )
-    public final <T extends IWeighting> T getWeight( final String p_weight )
+    public final <T extends IWeighting> T getWeight( final EWeight p_weight )
     {
         return (T) m_weight.get( p_weight );
     }
@@ -466,13 +470,37 @@ public class CGraphHopper extends GraphHopper
         {
             m_weight = new CCombine();
 
-            m_weight.put( "Default", new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
-            m_weight.put( "Traffic Jam", new CTrafficJam( this ) );
-            m_weight.put( "Speed Up", new CSpeedUp( p_encoder ) );
-            m_weight.put( "Forbidden Edge", new CForbiddenEdges() );
+            m_weight.put( EWeight.Default, new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
+            m_weight.put( EWeight.TrafficJam, new CTrafficJam( this ) );
+            m_weight.put( EWeight.SpeedUp, new CSpeedUp( p_encoder ) );
+            m_weight.put( EWeight.ForbiddenEdge, new CForbiddenEdges() );
         }
 
         return m_weight;
+    }
+
+
+    /**
+     * weight names
+     */
+    public enum EWeight
+    {
+        /**
+         * default weight *
+         */
+        Default,
+        /**
+         * traffic jam weight *
+         */
+        TrafficJam,
+        /**
+         * speed-up weight *
+         */
+        SpeedUp,
+        /**
+         * forbidden edges weight *
+         */
+        ForbiddenEdge
     }
 
 }

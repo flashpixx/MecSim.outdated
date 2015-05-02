@@ -26,31 +26,23 @@ package de.tu_clausthal.in.mec.object.car.graph.weights;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
  * combination weight, to use different weights in combination
  */
-public class CCombine implements Weighting, Map<String, IWeighting>
+public class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements Weighting
 {
-    /**
-     * map with weights *
-     */
-    private final Map<String, IWeighting> m_weights = new HashMap<>();
-
 
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        if ( m_weights.isEmpty() )
+        if ( this.isEmpty() )
             return 0;
 
         double l_min = Double.POSITIVE_INFINITY;
-        for ( IWeighting l_item : m_weights.values() )
+        for ( IWeighting l_item : this.values() )
             if ( l_item.isActive() )
                 l_min = Math.min( l_min, l_item.getMinWeight( p_weight ) );
 
@@ -60,87 +52,15 @@ public class CCombine implements Weighting, Map<String, IWeighting>
     @Override
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        if ( m_weights.isEmpty() )
+        if ( this.isEmpty() )
             return 0;
 
         double l_max = 0;
-        for ( IWeighting l_item : m_weights.values() )
+        for ( IWeighting l_item : this.values() )
             if ( l_item.isActive() )
                 l_max += l_item.calcWeight( p_edge, p_reverse );
 
         return l_max;
-    }
-
-    @Override
-    public final int size()
-    {
-        return m_weights.size();
-    }
-
-    @Override
-    public final boolean isEmpty()
-    {
-        return m_weights.isEmpty();
-    }
-
-    @Override
-    public final boolean containsKey( final Object p_key )
-    {
-        return m_weights.containsKey( p_key );
-    }
-
-    @Override
-    public final boolean containsValue( final Object p_value )
-    {
-        return m_weights.containsValue( p_value );
-    }
-
-    @Override
-    public final IWeighting get( final Object p_key )
-    {
-        return m_weights.get( p_key );
-    }
-
-    @Override
-    public final IWeighting put( final String p_key, final IWeighting p_value )
-    {
-        return m_weights.put( p_key, p_value );
-    }
-
-    @Override
-    public final IWeighting remove( final Object p_key )
-    {
-        return m_weights.remove( p_key );
-    }
-
-    @Override
-    public final void putAll( final Map<? extends String, ? extends IWeighting> p_map )
-    {
-        m_weights.putAll( p_map );
-    }
-
-    @Override
-    public final void clear()
-    {
-        m_weights.clear();
-    }
-
-    @Override
-    public final Set<String> keySet()
-    {
-        return m_weights.keySet();
-    }
-
-    @Override
-    public final Collection<IWeighting> values()
-    {
-        return m_weights.values();
-    }
-
-    @Override
-    public final Set<Entry<String, IWeighting>> entrySet()
-    {
-        return m_weights.entrySet();
     }
 
 }

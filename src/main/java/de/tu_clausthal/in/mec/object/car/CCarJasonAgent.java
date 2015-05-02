@@ -35,6 +35,7 @@ import jason.JasonException;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -70,49 +71,15 @@ public class CCarJasonAgent extends CDefaultCar
      * agent object *
      */
     private final CAgent<CDefaultCar> m_agent;
-
-
     /**
-     * ctor
-     *
-     * @param p_route driving route
-     * @param p_agent ASL name
-     * @throws JasonException
-     * @throws JasonException throws on Jason error
+     * inspector map
      */
-    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final String p_agent ) throws JasonException
-    {
-        super( p_route );
-        m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_agent );
-        this.initialAgentContext();
-    }
-
-    /**
-     * agent initial context
-     */
-    private void initialAgentContext()
-    {
-        // add the belief bind to the agent
-        final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
-                "self", this, c_forbidden
-        );
-        m_agent.getBelief().add( l_belief );
-
-        // add the method bind to the agent
-        final CMethodBind l_method = new CMethodBind( "self", this );
-        l_method.getForbidden( "self" ).addAll( c_forbidden );
-        m_agent.getActions().put( "invoke", l_method );
-
-        // add the set bind to the agent
-        final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
-                "self", this, c_forbidden
-        );
-        m_agent.getActions().put( "set", l_set );
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( CCarJasonAgent.super.inspect() );
+        }};
 
 
-        // add agent to layer
-        CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( m_agent );
-    }
 
     /**
      * @param p_route driving route
@@ -130,8 +97,29 @@ public class CCarJasonAgent extends CDefaultCar
     {
         super( p_route, p_speed, p_maxspeed, p_deceleration, p_acceleration, p_lingerprobability );
         m_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), "agent" ), p_agent );
-        this.initialAgentContext();
 
+        // add the belief bind to the agent
+        final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
+                "self", this, c_forbidden
+        );
+        m_agent.getBelief().add( l_belief );
+
+        // add the method bind to the agent
+        final CMethodBind l_method = new CMethodBind( "self", this );
+        l_method.getForbidden( "self" ).addAll( c_forbidden );
+        m_agent.getActions().put( "invoke", l_method );
+
+        // add the set bind to the agent
+        final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
+                "self", this, c_forbidden
+        );
+        m_agent.getActions().put( "set", l_set );
+
+        m_inspect.put( CCommon.getResourceString( this, "asl" ), m_agent.getSource() );
+        m_inspect.put( CCommon.getResourceString( this, "agent" ), m_agent.getName() );
+
+        // add agent to layer
+        CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( m_agent );
     }
 
     @Override
@@ -145,13 +133,7 @@ public class CCarJasonAgent extends CDefaultCar
     @Override
     public final Map<String, Object> inspect()
     {
-        final Map<String, Object> l_map = super.inspect();
-        if ( m_agent == null )
-            return l_map;
-
-        l_map.put( CCommon.getResourceString( this, "asl" ), m_agent.getSource() );
-        l_map.put( CCommon.getResourceString( this, "cycle" ), m_agent.getCycle() );
-        l_map.put( CCommon.getResourceString( this, "agent" ), m_agent.getName() );
-        return l_map;
+        m_inspect.put( CCommon.getResourceString( this, "cycle" ), m_agent.getCycle() );
+        return m_inspect;
     }
 }

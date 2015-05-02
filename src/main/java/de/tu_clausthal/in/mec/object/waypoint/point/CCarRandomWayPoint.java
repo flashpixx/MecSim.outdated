@@ -26,9 +26,7 @@ package de.tu_clausthal.in.mec.object.waypoint.point;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
-import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
@@ -77,12 +75,16 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
      * ctor
      *
      * @param p_position geo position
+     * @param p_generator generator object
+     * @param p_factory factory object
      * @param p_radius radius
      * @param p_color color
      */
-    public CCarRandomWayPoint( final GeoPosition p_position, final double p_radius, final Color p_color )
+    public CCarRandomWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
+                               final Color p_color
+    )
     {
-        super( p_position, new CTimeUniformDistribution( 1, 0, 1 ), new CDefaultCarFactory(), p_radius );
+        super( p_position, p_generator, p_factory, p_radius );
         m_initializeimage = this.initializeImage( 20, 34, p_color );
         m_scaledimage = m_initializeimage;
     }
@@ -138,14 +140,6 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
         return l_newimage;
     }
 
-    public CCarRandomWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
-                               final Color p_color
-    )
-    {
-        super( p_position, p_generator, p_factory, p_radius );
-        m_initializeimage = this.initializeImage( 20, 34, p_color );
-        m_scaledimage = m_initializeimage;
-    }
 
     @Override
     public Collection<IReturnSteppableTarget<ICar>> getTargets()

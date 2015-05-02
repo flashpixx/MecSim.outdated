@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import java.util.Map;
 /**
  * generator of a static number of objects with a time-exponential function
  */
-public abstract class ITimeDistribution implements IGenerator
+public abstract class ITimeDistribution extends IInspectorDefault implements IGenerator
 {
     /**
      * serialize version ID *
@@ -50,7 +51,10 @@ public abstract class ITimeDistribution implements IGenerator
     /**
      * inspect data
      */
-    private final Map<String, Object> m_inspect = new HashMap<>();
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            putAll( ITimeDistribution.super.inspect() );
+        }};
 
 
     /**

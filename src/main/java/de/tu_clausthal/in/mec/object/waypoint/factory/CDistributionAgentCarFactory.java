@@ -28,10 +28,11 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
+import jason.JasonException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jxmapviewer.viewer.GeoPosition;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,65 +41,71 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
  * class to generate Jason cars
  */
-public class CDefaultAgentCarFactory extends CDefaultCarFactory
+public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
 {
     /**
      * serialize version ID *
      */
     private static final long serialVersionUID = 1L;
     /**
-     * name of the ASL file
-     */
-    private String m_aslname;
-    /**
      * inspect data
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            put( CCommon.getResourceString( IFactory.class, "factoryname" ), this );
-            put( CCommon.getResourceString( CDefaultAgentCarFactory.class, "factoryasl" ), m_aslname );
+            putAll( CDistributionAgentCarFactory.super.inspect() );
         }};
-
+    /**
+     * name of the ASL file
+     */
+    private String m_aslname;
 
     /**
      * ctor
      *
-     * @param p_aslName name of the asl file
+     * @param p_speed distribution of speed
+     * @param p_maxspeed distribution of max-speed
+     * @param p_acceleration distribution of acceleration
+     * @param p_deceleration distribution of deceleration
+     * @param p_lingerdistribution distribution of linger-probability
+     * @param p_asl agent name
      */
-    public CDefaultAgentCarFactory( final String p_aslName )
+    public CDistributionAgentCarFactory( final AbstractRealDistribution p_speed, final AbstractRealDistribution p_maxspeed,
+                                         final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration,
+                                         final AbstractRealDistribution p_lingerdistribution, final String p_asl
+    )
     {
-        super();
-        if ( ( p_aslName == null ) || ( p_aslName.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
+        super( p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
 
-        this.m_aslname = p_aslName;
+        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
+        this.m_aslname = p_asl;
+
+        m_inspect.put( CCommon.getResourceString( CDistributionAgentCarFactory.class, "factoryasl" ), m_aslname );
     }
 
+
     @Override
-    public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
+    protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
     {
-        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
-        final Set<ICar> l_set = new HashSet<>();
-        for ( int i = 0; i < p_count; i++ )
-            try
-            {
-                l_set.add( new de.tu_clausthal.in.mec.object.car.CCarJasonAgent( l_cells, m_aslname ) );
-            }
-            catch ( final Exception l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-        return l_set;
+        try
+        {
+            return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
+                    p_cells, (int) m_speed.sample(), (int) m_maxspeed.sample(), (int) m_acceleration.sample(), (int) m_deceleration.sample(),
+                    m_lingerdistribution.sample(), m_aslname
+            );
+        }
+        catch ( final JasonException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+        return null;
     }
 
     @Override

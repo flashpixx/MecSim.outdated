@@ -48,7 +48,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 
 /**
@@ -82,6 +81,13 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private final int m_deceleration;
     /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( CDefaultCar.super.inspect() );
+        }};
+    /**
      * current speed in km/h
      */
     private int m_speed;
@@ -93,47 +99,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * boolean flag for end reached
      */
     private boolean m_endreached;
-
-
-    /**
-     * ctor to create the initial values
-     *
-     * @param p_route driving route
-     */
-    public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route ) throws IllegalArgumentException
-    {
-        final Random l_random = new Random();
-
-        m_route = p_route;
-        m_speed = l_random.nextInt( 51 ) + 20;
-        m_maxspeed = l_random.nextInt( 151 ) + 50;
-        m_acceleration = l_random.nextInt( 16 ) + 5;
-        m_deceleration = l_random.nextInt( 16 ) + 5;
-        m_lingerprobability = l_random.nextDouble();
-
-        this.checkInitialization();
-    }
-
-    /**
-     * checks initial vales
-     *
-     * @throws IllegalArgumentException is thrown on errors
-     */
-    private void checkInitialization() throws IllegalArgumentException
-    {
-        if ( ( m_route == null ) || ( m_route.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "routeempty" ) );
-        if ( m_speed < 1 )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
-        if ( m_maxspeed > 350 )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
-        if ( ( m_acceleration < 1 ) || ( m_acceleration > m_maxspeed / 4 ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationincorrect" ) );
-        if ( ( m_deceleration < 1 ) || ( m_deceleration > m_maxspeed / 4 ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationincorrect" ) );
-        if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );
-    }
 
 
     /**
@@ -157,7 +122,23 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         m_deceleration = p_deceleration;
         m_lingerprobability = p_lingerprobability;
 
-        this.checkInitialization();
+
+        if ( ( m_route == null ) || ( m_route.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "routeempty" ) );
+        if ( m_speed < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
+        if ( m_maxspeed > 350 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
+        if ( ( m_acceleration < 1 ) || ( m_acceleration > m_maxspeed / 4 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationincorrect" ) );
+        if ( ( m_deceleration < 1 ) || ( m_deceleration > m_maxspeed / 4 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationincorrect" ) );
+        if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );
+
+        m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxspeed );
+        m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "acceleration" ), m_acceleration );
+        m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "deceleration" ), m_deceleration );
     }
 
     @Override
@@ -324,16 +305,10 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @Override
     public Map<String, Object> inspect()
     {
-        final Map<String, Object> l_map = super.inspect();
-
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "currentspeed" ), m_speed );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "maximumspeed" ), m_maxspeed );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "acceleration" ), m_acceleration );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "deceleration" ), m_deceleration );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
-        l_map.put( CCommon.getResourceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
-
-        return l_map;
+        m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "currentspeed" ), m_speed );
+        m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
+        m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
+        return m_inspect;
     }
 
     @Override

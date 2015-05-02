@@ -70,16 +70,7 @@ class COSMMouseListener extends PanMouseInputListener
     {
         if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
             ( (CCarWayPointLayer) CSimulation.getInstance().getWorld().get( "Car WayPoints" ) ).add(
-                    new CCarRandomWayPoint(
-                            this.getMouseGeoPosition(
-                                    p_event, (COSMViewer) p_event.getSource()
-                            ), new CTimeUniformDistribution( 1, 0, 1 ), new CDistributionDefaultCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
-                            20, 5
-                    ), new NormalDistribution()
-                    ), 0.5, Color.red
-                    )
-            );
+                    CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint( this.getMouseGeoPosition( p_event, (COSMViewer) p_event.getSource() ) ));
     }
 
 

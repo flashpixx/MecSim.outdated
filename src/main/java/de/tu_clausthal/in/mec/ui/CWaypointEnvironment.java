@@ -38,7 +38,6 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +71,7 @@ public class CWaypointEnvironment
     {
         CTool l_defaultTool = new CTool();
         this.m_selectedTool = l_defaultTool;
-        this.m_toolbox.put( "defaulttool", l_defaultTool );
+        this.m_toolbox.put( CCommon.getResourceString( this, "defaulttoolname" ), l_defaultTool );
     }
 
     /**
@@ -146,7 +145,45 @@ public class CWaypointEnvironment
     }
 
     /**
+     * list all possible tools
+     *
+     * @return
+     */
+    private final Map<String, List<String>> web_static_listtools()
+    {
+
+        List<String> l_tools = new ArrayList<>();
+
+        for ( String l_tool : this.m_toolbox.keySet() )
+        {
+            l_tools.add( l_tool );
+        }
+
+        return new HashMap<String, List<String>>()
+        {{
+                put( "tools", l_tools );
+            }};
+    }
+
+    /**
+     * method to read waypoint specific labels and resource stirngs
+     *
+     * @return
+     */
+    private final Map<String, String> web_static_getlabels()
+    {
+        HashMap<String, String> l_labels = new HashMap<>();
+        l_labels.put( "carcount", CCommon.getResourceString( this, "carcount" ) );
+        l_labels.put( "mean", CCommon.getResourceString( this, "mean" ) );
+        l_labels.put( "deviation", CCommon.getResourceString( this, "deviation" ) );
+        l_labels.put( "lowerbound", CCommon.getResourceString( this, "lowerbound" ) );
+        l_labels.put( "upperbound", CCommon.getResourceString( this, "upperbound" ) );
+        return l_labels;
+    }
+
+    /**
      * class which is able to deliver a Waypoint threw configerable settings
+     * todo read default tool settings from config
      * todo check if a tool can be better strucutred into subclasses (maybe for changes on the tool it might be good idea to have on single tool class)
      */
     protected class CTool
@@ -229,20 +266,23 @@ public class CWaypointEnvironment
             {
                 case DEFAULTCARFACTORY:
                     return new CDistributionDefaultCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
-                            new NormalDistribution()
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
+                            20, 5
+                    ), new NormalDistribution()
                     );
 
                 case DEFAULTAGENTCARFACTORY:
                     return new CDistributionAgentCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
-                            new NormalDistribution(), m_asl
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
+                            20, 5
+                    ), new NormalDistribution(), m_asl
                     );
 
                 default:
                     return new CDistributionDefaultCarFactory(
-                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
-                            new NormalDistribution()
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
+                            20, 5
+                    ), new NormalDistribution()
                     );
             }
         }

@@ -11,14 +11,28 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false,
-            toolbox: $("#mecsim_source_toolbox")
+            labels: {}
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
 
         init: function() {
             mecsim_source = this.settings;
+            this.getLabels();
             this.bind_ui_actions();
+        },
+
+        getLabels: function(){
+            $.ajax({
+                url     : "cwaypointenvironment/getlabels",
+                success : function( px_data ){
+                    SourcePanel.settings.labels.carcount = px_data.carcount;
+                    SourcePanel.settings.labels.mean = px_data.mean;
+                    SourcePanel.settings.labels.deviation = px_data.deviation;
+                    SourcePanel.settings.labels.lowerbound = px_data.lowerbound;
+                    SourcePanel.settings.labels.upperbound = px_data.upperbound;
+                }
+            });
         },
 
         //method to init the basic widget layout
@@ -116,9 +130,23 @@ var mecsim_source,
                             .text(data));
                     });
                 }
+            }).done(function(){
+                SourcePanel.setLabels();
             });
 
-            //TODO change label for input (if different meaning)
+            //create toolbox
+            $.ajax({
+                url     : "cwaypointenvironment/listtools",
+                success : function( px_data ){
+                    px_data.tools.forEach(function(data){
+                        $("<button></button>")
+                            .text(data)
+                            .attr("value",data)
+                            .button()
+                            .appendTo($("#mecsim_source_toolbox"));
+                    });
+                }
+            });
 
             //create colorpicker
             $("#mecsim_source_colorpicker").spectrum({
@@ -134,6 +162,23 @@ var mecsim_source,
                 ]
             });
 
+            // listen to the generator select and change label
+            $("#mecsim_source_selectGenerator").on("change", function(data, data1){
+                SourcePanel.setLabels();
+            });
+
+        },
+
+        setLabels: function(){
+            $("#mecsim_source_generatorinput1label").text(SourcePanel.settings.labels.carcount);
+
+            if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
+                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.lowerbound);
+                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.upperbound);
+            }else{
+                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.mean);
+                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.deviation);
+            }
         },
 
         //method to init the target-weighing widget

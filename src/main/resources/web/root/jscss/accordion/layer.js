@@ -45,6 +45,7 @@ var mecsim_layer,
             });
         },
 
+        //TODO fix: undo if action failed
         list_static_layer: function() {
             //get layer list and create html strucutre
             $.ajax({
@@ -53,7 +54,8 @@ var mecsim_layer,
                     $.each( px_data, function( pc_key, px_value ) {
                         $("<label id='mecsim_simulation_switchlabel'>"+ pc_key +"</label>").appendTo(LayerPanel.settings.switchdiv);
                         $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id +"' checked>").appendTo(LayerPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' checked></p>").appendTo(LayerPanel.settings.switchdiv);
+                        if(px_value.isviewable)
+                            $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' checked></p>").appendTo(LayerPanel.settings.switchdiv);
                     });
                 }
             }).done(function(){

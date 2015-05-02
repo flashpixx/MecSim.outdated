@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
@@ -133,6 +134,11 @@ public class CBootstrap
     {
         p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Car WayPoints" ) );
         p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Cars" ) );
+        p_viewer.getCompoundPainter().addPainter(
+                CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().getWeight(
+                        CGraphHopper.EWeight.ForbiddenEdges
+                )
+        );
     }
 
 

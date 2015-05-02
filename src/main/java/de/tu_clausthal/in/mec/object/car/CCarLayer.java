@@ -23,13 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.car;
 
-import com.graphhopper.routing.util.Weighting;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CAgentNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
@@ -57,10 +57,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private static final long serialVersionUID = 1L;
     /**
-     * driving model list
-     */
-    private static final IDriveModel[] s_drivemodellist = {new CAgentNagelSchreckenberg(), new CNagelSchreckenberg()};
-    /**
      * data structure - not serializable
      */
     private final transient List<ICar> m_data = new LinkedList<>();
@@ -71,21 +67,12 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     /**
      * driving model
      */
-    private IDriveModel m_drivemodel = s_drivemodellist[0];
+    private EDrivingModel m_drivemodel = EDrivingModel.AgentNagelSchreckenberg;
     /**
      * graph
      */
     private transient CGraphHopper m_graph = new CGraphHopper();
 
-    /**
-     * returns this list of all weights
-     *
-     * @return weight name
-     */
-    public final String[] getGraphWeight()
-    {
-        return m_graph.getWeightingList();
-    }
 
     /**
      * enable / disable weight
@@ -94,10 +81,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
     {
-        if ( this.isActiveWeight( p_weight ) )
-            m_graph.disableWeight( p_weight );
-        else
-            m_graph.enableWeight( p_weight );
+        m_graph.enableDisableWeight( p_weight );
     }
 
     /**
@@ -117,9 +101,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_weight weight name
      * @return weight object or null
      */
-    public final Weighting getGraphWeight( final CGraphHopper.EWeight p_weight )
+    public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
     {
-        return m_graph.getWeight( p_weight );
+        return m_graph.<T>getWeight( p_weight );
     }
 
     /**
@@ -127,11 +111,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_model model
      */
-    public final void setDriveModel( final String p_model )
+    public final void setDriveModel( final EDrivingModel p_model )
     {
-        for ( IDriveModel l_model : s_drivemodellist )
-            if ( p_model.equals( l_model.getName() ) )
-                m_drivemodel = l_model;
+        m_drivemodel = p_model;
     }
 
     /**
@@ -139,24 +121,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @return name
      */
-    public final String getDrivingModel()
+    public final EDrivingModel getDrivingModel()
     {
-        return m_drivemodel.getName();
-    }
-
-    /**
-     * returns a list with all driving model names
-     *
-     * @return list
-     */
-    public final String[] getDrivingModelList()
-    {
-        int i = 0;
-        final String[] l_list = new String[s_drivemodellist.length];
-        for ( IDriveModel l_model : s_drivemodellist )
-            l_list[i++] = l_model.getName();
-
-        return l_list;
+        return m_drivemodel;
     }
 
     @Override
@@ -168,7 +135,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void beforeStepObject( final int p_currentstep, final ICar p_object )
     {
-        m_drivemodel.update( p_currentstep, this.m_graph, p_object );
+        m_drivemodel.getModel().update( p_currentstep, this.m_graph, p_object );
     }
 
     @Override
@@ -262,5 +229,58 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
 
         m_graph = new CGraphHopper();
         //m_graph.disableWeight();
+    }
+
+
+    /**
+     * enum for representating a driving model
+     */
+    public enum EDrivingModel
+    {
+        /**
+         * default Nagel-Schreckenberg model *
+         */
+        NagelSchreckenberg( CCommon.getResourceString( EDrivingModel.class, "nagelschreckenberg" ), new CNagelSchreckenberg() ),
+        /**
+         * additional Nagel-Schreckenberg model for agents *
+         */
+        AgentNagelSchreckenberg( CCommon.getResourceString( EDrivingModel.class, "agentnagelschreckenberg" ), new CAgentNagelSchreckenberg() );
+
+        /**
+         * string representation *
+         */
+        private final String m_text;
+        /**
+         * driving model instance
+         */
+        private final IDriveModel m_model;
+
+        /**
+         * ctor
+         *
+         * @param p_text text representation
+         * @param p_model model instance
+         */
+        private EDrivingModel( final String p_text, final IDriveModel p_model )
+        {
+            m_text = p_text;
+            m_model = p_model;
+        }
+
+        /**
+         * returns the driving model
+         *
+         * @return model instance
+         */
+        public IDriveModel getModel()
+        {
+            return m_model;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
+        }
     }
 }

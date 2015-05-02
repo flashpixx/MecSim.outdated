@@ -24,11 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
-import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
-import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
-import org.apache.commons.math3.distribution.NormalDistribution;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -70,7 +66,8 @@ class COSMMouseListener extends PanMouseInputListener
     {
         if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
             ( (CCarWayPointLayer) CSimulation.getInstance().getWorld().get( "Car WayPoints" ) ).add(
-                    CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint( this.getMouseGeoPosition( p_event, (COSMViewer) p_event.getSource() ) ));
+                    CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint( this.getMouseGeoPosition( p_event, (COSMViewer) p_event.getSource() ) )
+            );
     }
 
 

@@ -306,6 +306,74 @@ public class CWaypointEnvironment
     }
 
     /**
+     * enum for waypoint type
+     */
+    protected enum EWayPointType
+    {
+        CARWAYPOINTRANDOM( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
+        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
+
+        private final String text;
+
+        private EWayPointType( final String text )
+        {
+            this.text = text;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.text;
+        }
+    }
+
+    /**
+     * enum for factory type
+     */
+    protected enum EFactoryType
+    {
+        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
+        DEFAULTAGENTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
+
+        private final String text;
+
+        private EFactoryType( final String text )
+        {
+            this.text = text;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.text;
+        }
+    }
+
+    /**
+     * enum for generator type
+     */
+    protected enum EGeneratorType
+    {
+        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
+        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
+        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
+        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
+
+        private final String text;
+
+        private EGeneratorType( final String text )
+        {
+            this.text = text;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.text;
+        }
+    }
+
+    /**
      * class which is able to deliver a Waypoint threw configerable settings
      */
     protected class CTool
@@ -405,6 +473,33 @@ public class CWaypointEnvironment
         }
 
         /**
+         * method which returns a generator with settings from the ui
+         *
+         * @return configured generator
+         */
+        public final IGenerator getGenerator()
+        {
+
+            switch ( m_generatorType )
+            {
+                case UNIFORM:
+                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
+
+                case NORMAL:
+                    return new CTimeNormalDistribution( m_carcount, m_mean, m_deviation );
+
+                case EXPONENTIAL:
+                    return new CTimeExponentialDistribution( m_carcount, m_mean, m_deviation );
+
+                case PROFILE:
+                    return new CTimeProfile( m_histrogram );
+
+                default:
+                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
+            }
+        }
+
+        /**
          * method which returns a factory with settings from the ui
          *
          * @return configured factory
@@ -435,101 +530,6 @@ public class CWaypointEnvironment
                     ), new NormalDistribution()
                     );
             }
-        }
-
-        /**
-         * method which returns a generator with settings from the ui
-         *
-         * @return configured generator
-         */
-        protected final IGenerator getGenerator()
-        {
-
-            switch ( m_generatorType )
-            {
-                case UNIFORM:
-                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
-
-                case NORMAL:
-                    return new CTimeNormalDistribution( m_carcount, m_mean, m_deviation );
-
-                case EXPONENTIAL:
-                    return new CTimeExponentialDistribution( m_carcount, m_mean, m_deviation );
-
-                case PROFILE:
-                    return new CTimeProfile( m_histrogram );
-
-                default:
-                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
-            }
-        }
-    }
-
-    /**
-     * enum for waypoint type
-     */
-    protected enum EWayPointType
-    {
-        CARWAYPOINTRANDOM( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
-        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
-
-        private final String text;
-
-        private EWayPointType( final String text )
-        {
-            this.text = text;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.text;
-        }
-    }
-
-    /**
-     * enum for factory type
-     */
-    protected enum EFactoryType
-    {
-        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
-        DEFAULTAGENTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
-
-        private final String text;
-
-        private EFactoryType( final String text )
-        {
-            this.text = text;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.text;
-        }
-    }
-
-    /**
-     * enum for generator type
-     */
-    protected enum EGeneratorType
-    {
-        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
-        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
-        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
-        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
-
-        private final String text;
-
-        private EGeneratorType( final String text )
-        {
-            this.text = text;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.text;
         }
     }
 

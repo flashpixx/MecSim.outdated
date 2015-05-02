@@ -47,8 +47,8 @@ public class CTrafficEnvironment
     {
         final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
         final Map<String, Object> l_models = new HashMap<>();
-        for ( String l_item : l_layer.getDrivingModelList() )
-            l_models.put( l_item, CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ) ) );
+        for ( CCarLayer.EDrivingModel l_item : CCarLayer.EDrivingModel.values() )
+            l_models.put( l_item.toString(), CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ), "id", l_item.name() ) );
 
         return l_models;
     }
@@ -66,7 +66,7 @@ public class CTrafficEnvironment
         if ( !p_data.containsKey( "id" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "nomodelname" ) );
 
-        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).setDriveModel( (String) p_data.get( "id" ) );
+        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).setDriveModel( CCarLayer.EDrivingModel.valueOf( (String) p_data.get( "id" ) ) );
     }
 
 
@@ -80,8 +80,8 @@ public class CTrafficEnvironment
         final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
         final Map<String, Object> l_return = new HashMap<>();
 
-        for ( String l_item : l_layer.getGraphWeight() )
-            l_return.put( l_item, CCommon.getMap( "active", l_layer.isActiveWeight( CGraphHopper.EWeight.valueOf( l_item ) ) ) );
+        for ( CGraphHopper.EWeight l_item : CGraphHopper.EWeight.values() )
+            l_return.put( l_item.toString(), CCommon.getMap( "active", l_layer.isActiveWeight( l_item ), "id", l_item.name() ) );
 
         return l_return;
     }
@@ -96,13 +96,13 @@ public class CTrafficEnvironment
     {
         if ( CSimulation.getInstance().isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-        if ( !p_data.containsKey( "name" ) )
+        if ( !p_data.containsKey( "id" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "noweightname" ) );
 
         CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).enableDisableGraphWeight(
                 CGraphHopper.EWeight.valueOf(
                         (String) p_data.get(
-                                "name"
+                                "id"
                         )
                 )
         );

@@ -25,7 +25,10 @@ package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 
 import com.graphhopper.util.EdgeIteratorState;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.painter.Painter;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +38,7 @@ import java.util.Set;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CForbiddenEdges implements IWeighting
+public class CForbiddenEdges implements IWeighting, Painter<JXMapViewer>
 {
 
     /**
@@ -50,6 +53,7 @@ public class CForbiddenEdges implements IWeighting
 
     /**
      * returns the set of edges
+     *
      * @return set with edges
      */
     public Set<EdgeIteratorState> getEdges()
@@ -81,4 +85,12 @@ public class CForbiddenEdges implements IWeighting
     {
         m_active = p_value;
     }
+
+    @Override
+    public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
+    {
+        if ( !m_active )
+            return;
+    }
+
 }

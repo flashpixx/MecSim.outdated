@@ -24,7 +24,21 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeExponentialDistribution;
+import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeNormalDistribution;
+import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeProfile;
+import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
+import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,32 +54,30 @@ public class CWaypointEnvironment
      * singelton instance
      */
     private static final CWaypointEnvironment s_instance = new CWaypointEnvironment();
-
     /**
-     * type of waypoint (random/path)
+     * selected tool for the waypoint layer
      */
-    private EWayPointType m_wayPointType = EWayPointType.CARWAYPOINTRANDOM;
-
+    protected static CTool m_selectedTool;
     /**
-     * factory type (which car should be produced)
+     * toolbox - to save different tool settings
      */
-    private EFactoryType m_factoryType = EFactoryType.DEFAULTCARFACTORY;
+    protected final Map<String, CTool> m_toolbox = new HashMap<>();
 
-    /**
-     * generator type defines the probability and amount of cars
-     */
-    private EGeneratorType m_generatorType = EGeneratorType.UNIFORM;
 
     /**
      * ctor
+     * todo multilanguage default toolname
      */
     private CWaypointEnvironment()
     {
-        super();
+        CTool l_defaultTool = new CTool();
+        this.m_selectedTool = l_defaultTool;
+        this.m_toolbox.put( "defaulttool", l_defaultTool );
     }
 
     /**
      * getter
+     *
      * @return
      */
     public static CWaypointEnvironment getInstance()
@@ -75,6 +87,7 @@ public class CWaypointEnvironment
 
     /**
      * list all possible waypoint types
+     *
      * @return
      */
     private final Map<String, List<String>> web_static_listwaypointtypes()
@@ -94,6 +107,7 @@ public class CWaypointEnvironment
 
     /**
      * list all possible factory types
+     *
      * @return
      */
     private final Map<String, List<String>> web_static_listfactories()
@@ -113,6 +127,7 @@ public class CWaypointEnvironment
 
     /**
      * list all possible generator types
+     *
      * @return
      */
     private final Map<String, List<String>> web_static_listgenerator()
@@ -131,12 +146,142 @@ public class CWaypointEnvironment
     }
 
     /**
+     * class which is able to deliver a Waypoint threw configerable settings
+     * todo check if a tool can be better strucutred into subclasses (maybe for changes on the tool it might be good idea to have on single tool class)
+     */
+    protected class CTool
+    {
+        /**
+         * type of waypoint (random/path)
+         */
+        protected EWayPointType m_wayPointType = EWayPointType.CARWAYPOINTRANDOM;
+        /**
+         * factory type (which car should be produced)
+         */
+        protected EFactoryType m_factoryType = EFactoryType.DEFAULTCARFACTORY;
+        /**
+         * generator type defines the probability and amount of cars
+         */
+        protected EGeneratorType m_generatorType = EGeneratorType.UNIFORM;
+        /**
+         * radius for random target
+         */
+        protected double m_radius = 0.1;
+        /**
+         * color of the waypoint
+         */
+        protected Color m_color = Color.RED;
+        /**
+         * asl programm for agent cars
+         */
+        protected String m_asl = null;
+        /**
+         * amount of cars that should be generated und a special probability
+         */
+        protected int m_carcount = 1;
+        /**
+         * mean for the generator which defines the probability to generate cars
+         */
+        protected double m_mean = 1;
+        /**
+         * deviation for the generator which defines the probability to generate cars
+         */
+        protected double m_deviation = 1;
+        /**
+         * lower bound for the generator which defines the probability to generate cars
+         */
+        protected double m_lower = 1;
+        /**
+         * upper bound for the generator which defines the probability to generate cars
+         */
+        protected double m_upper = 10;
+        /**
+         * histrogramm for profile generators
+         */
+        protected int[] m_histrogram = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        /**
+         * method which returns a waypoint with settings from the ui
+         *
+         * @param p_position position of the waypoint
+         * @return configured waypoint
+         */
+        public final IWayPointBase getWaypoint( GeoPosition p_position )
+        {
+            //todo implement switch to distinguish between random and path waypoints
+            //todo maybe empty waypoint is a goo default waypoint ?
+
+            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color );
+        }
+
+        /**
+         * method which returns a factory with settings from the ui
+         *
+         * @return configured factory
+         */
+        public final ICarFactory getFactory()
+        {
+
+            //todo replace default-dummy parameters threw parameters which are configured by the ui
+            //todo better way to store factory distribution settings
+            //todo check for right asl
+            switch ( m_factoryType )
+            {
+                case DEFAULTCARFACTORY:
+                    return new CDistributionDefaultCarFactory(
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
+                            new NormalDistribution()
+                    );
+
+                case DEFAULTAGENTCARFACTORY:
+                    return new CDistributionAgentCarFactory(
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
+                            new NormalDistribution(), m_asl
+                    );
+
+                default:
+                    return new CDistributionDefaultCarFactory(
+                            new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution( 20, 5 ),
+                            new NormalDistribution()
+                    );
+            }
+        }
+
+        /**
+         * method which returns a generator with settings from the ui
+         *
+         * @return configured generator
+         */
+        public final IGenerator getGenerator()
+        {
+
+            switch ( m_generatorType )
+            {
+                case UNIFORM:
+                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
+
+                case NORMAL:
+                    return new CTimeNormalDistribution( m_carcount, m_mean, m_deviation );
+
+                case EXPONENTIAL:
+                    return new CTimeExponentialDistribution( m_carcount, m_mean, m_deviation );
+
+                case PROFILE:
+                    return new CTimeProfile( m_histrogram );
+
+                default:
+                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
+            }
+        }
+    }
+
+    /**
      * enum for waypoint type
      */
-    enum EWayPointType
+    protected enum EWayPointType
     {
-        CARWAYPOINTRANDOM(  CCommon.getResourceString( EWayPointType.class, "carwaypointrandom")  ),
-        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath") );
+        CARWAYPOINTRANDOM( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
+        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
 
         private final String text;
 
@@ -155,10 +300,10 @@ public class CWaypointEnvironment
     /**
      * enum for factory type
      */
-    enum EFactoryType
+    protected enum EFactoryType
     {
-        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory") ),
-        DEFAULTAGENTCARFACTORY(  CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory") );
+        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
+        DEFAULTAGENTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
 
         private final String text;
 
@@ -177,12 +322,12 @@ public class CWaypointEnvironment
     /**
      * enum for generator type
      */
-    enum EGeneratorType
+    protected enum EGeneratorType
     {
-        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution") ),
-        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution") ),
-        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution") ),
-        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution") );
+        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
+        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
+        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
+        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
 
         private final String text;
 

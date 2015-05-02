@@ -233,7 +233,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         return CCommon.getResourceString( this, "name" );
     }
 
-
     /**
      * write call of serialize interface
      *

@@ -64,7 +64,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * route painter
      */
-    private final CRoutePainter m_routepainter = new CRoutePainter();
+    private final CLinePainter m_linepainter = new CLinePainter();
     /**
      * compounend painter
      */
@@ -92,7 +92,7 @@ public class COSMViewer extends JXMapViewer
         this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
 
         this.setOverlayPainter( m_painter );
-        m_painter.addPainter( m_routepainter );
+        m_painter.addPainter( m_linepainter );
 
         final MouseInputListener l_mouse = new COSMMouseListener( this, m_clickablelayer );
         this.addMouseListener( l_mouse );
@@ -117,11 +117,11 @@ public class COSMViewer extends JXMapViewer
 
     /**
      * sets a new route
-     * @param p_route route list
+     * @param p_line route list
      */
-    public void paintRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
+    public void paintLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )
     {
-        m_routepainter.setRoute( p_route );
+        m_linepainter.setLine( p_line );
     }
 
     /**
@@ -217,7 +217,7 @@ public class COSMViewer extends JXMapViewer
     /**
      * routing painter class
      */
-    private class CRoutePainter implements ActionListener, Painter<JXMapViewer>
+    private class CLinePainter implements ActionListener, Painter<JXMapViewer>
     {
         /**
          * timer
@@ -226,7 +226,7 @@ public class COSMViewer extends JXMapViewer
         /**
          * route list with painting structure *
          */
-        private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> m_route;
+        private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> m_line;
         /**
          * alpha value
          */
@@ -237,18 +237,18 @@ public class COSMViewer extends JXMapViewer
          *
          * @param p_route route list
          */
-        public void setRoute( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
+        public void setLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
         {
             m_timer.stop();
             m_alpha = 1;
-            m_route = p_route;
+            m_line = p_route;
             m_timer.start();
         }
 
         @Override
         public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
         {
-            if ( ( m_route == null ) || ( m_route.isEmpty() ) )
+            if ( ( m_line == null ) || ( m_line.isEmpty() ) )
                 return;
 
             final Graphics2D l_graphic = (Graphics2D) p_graphic.create();
@@ -256,7 +256,7 @@ public class COSMViewer extends JXMapViewer
             l_graphic.translate( -p_viewer.getViewportBounds().x, -p_viewer.getViewportBounds().y );
             l_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
-            for ( Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke> l_item : m_route )
+            for ( Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke> l_item : m_line )
             {
                 l_graphic.setColor( l_item.getMiddle() );
                 l_graphic.setStroke( l_item.getRight() );

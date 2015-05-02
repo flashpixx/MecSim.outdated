@@ -47,6 +47,7 @@ import java.util.HashSet;
 
 /**
  * class with default source implementation for cars
+ * @todo symbol painter should be moved to an own structure
  */
 public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
 {

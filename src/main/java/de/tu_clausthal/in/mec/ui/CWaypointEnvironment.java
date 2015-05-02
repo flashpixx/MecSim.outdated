@@ -130,63 +130,72 @@ public class CWaypointEnvironment
             }};
     }
 
-}
-
-enum EWayPointType
-{
-    CARWAYPOINTRANDOM( "carwaypointrandom" ),
-    CARWAYPOINTPATH( "carwaypointpath" );
-
-    private final String text;
-
-    private EWayPointType( final String text )
+    /**
+     * enum for waypoint type
+     */
+    enum EWayPointType
     {
-        this.text = text;
+        CARWAYPOINTRANDOM(  CCommon.getResourceString( EWayPointType.class, "carwaypointrandom")  ),
+        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath") );
+
+        private final String text;
+
+        private EWayPointType( final String text )
+        {
+            this.text = text;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.text;
+        }
     }
 
-    @Override
-    public String toString()
+    /**
+     * enum for factory type
+     */
+    enum EFactoryType
     {
-        return this.text;
-    }
-}
+        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory") ),
+        DEFAULTAGENTCARFACTORY(  CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory") );
 
-enum EFactoryType
-{
-    DEFAULTCARFACTORY( "defaultcarfactory" ),
-    DEFAULTAGENTCARFACTORY(  "defaultagentcarfactory" );
+        private final String text;
 
-    private final String text;
+        private EFactoryType( final String text )
+        {
+            this.text = text;
+        }
 
-    private EFactoryType( final String text )
-    {
-        this.text = text;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.text;
-    }
-}
-
-enum EGeneratorType
-{
-    UNIFORM( "uniformdistribution" ),
-    NORMAL( "normaldistribution" ),
-    EXPONENTIAL( "exponentialdistribution" ),
-    PROFILE( "profiledistribution" );
-
-    private final String text;
-
-    private EGeneratorType( final String text )
-    {
-        this.text = text;
+        @Override
+        public String toString()
+        {
+            return this.text;
+        }
     }
 
-    @Override
-    public String toString()
+    /**
+     * enum for generator type
+     */
+    enum EGeneratorType
     {
-        return this.text;
+        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution") ),
+        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution") ),
+        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution") ),
+        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution") );
+
+        private final String text;
+
+        private EGeneratorType( final String text )
+        {
+            this.text = text;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.text;
+        }
     }
+
 }

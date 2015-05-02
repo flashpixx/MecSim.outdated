@@ -120,6 +120,19 @@ var mecsim_source,
 
             //TODO change label for input (if different meaning)
 
+            $.ajax({
+                url     : "cwaypointenvironment/listtools",
+                success : function( px_data ){
+                    px_data.tools.forEach(function(data){
+                        $("<button></button>")
+                            .text(data)
+                            .attr("value",data)
+                            .button()
+                            .appendTo($("#mecsim_source_toolbox"));
+                    });
+                }
+            });
+
             //create colorpicker
             $("#mecsim_source_colorpicker").spectrum({
                 showPaletteOnly: true,

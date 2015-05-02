@@ -72,7 +72,7 @@ public class CWaypointEnvironment
     {
         CTool l_defaultTool = new CTool();
         this.m_selectedTool = l_defaultTool;
-        this.m_toolbox.put( "defaulttool", l_defaultTool );
+        this.m_toolbox.put( CCommon.getResourceString( this, "defaulttoolname" ), l_defaultTool );
     }
 
     /**
@@ -142,6 +142,26 @@ public class CWaypointEnvironment
         return new HashMap<String, List<String>>()
         {{
                 put( "generators", l_generators );
+            }};
+    }
+
+    /**
+     * list all possible tools
+     *
+     * @return
+     */
+    private final Map<String, List<String>> web_static_listtools()
+    {
+
+        List<String> l_tools = new ArrayList<>();
+
+        for (String l_tool : this.m_toolbox.keySet()) {
+            l_tools.add( l_tool );
+        }
+
+        return new HashMap<String, List<String>>()
+        {{
+                put( "tools", l_tools );
             }};
     }
 

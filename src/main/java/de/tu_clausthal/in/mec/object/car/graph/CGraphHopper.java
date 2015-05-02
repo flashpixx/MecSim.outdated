@@ -450,9 +450,10 @@ public class CGraphHopper extends GraphHopper
      *
      * @return weight object or null
      */
-    public final IWeighting getWeight( final String p_weight )
+    @SuppressWarnings( "unchecked" )
+    public final <T extends IWeighting> T getWeight( final String p_weight )
     {
-        return m_weight.get( p_weight );
+        return (T) m_weight.get( p_weight );
     }
 
 

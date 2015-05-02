@@ -57,7 +57,6 @@ public class CForbiddenEdges implements IWeighting
         m_forbidden.add( p_edge );
     }
 
-
     /**
      * removes an edge
      *

@@ -134,8 +134,8 @@ public class CWaypointEnvironment
 
 enum EWayPointType
 {
-    CARWAYPOINTRANDOM( CCommon.getResourceString( CWaypointEnvironment.class, "carwaypointrandom" ) ),
-    CARWAYPOINTPATH( CCommon.getResourceString( CWaypointEnvironment.class, "carwaypointpath" ) );
+    CARWAYPOINTRANDOM( "carwaypointrandom" ),
+    CARWAYPOINTPATH( "carwaypointpath" );
 
     private final String text;
 
@@ -153,8 +153,8 @@ enum EWayPointType
 
 enum EFactoryType
 {
-    DEFAULTCARFACTORY( CCommon.getResourceString( CWaypointEnvironment.class, "defaultcarfactory" ) ),
-    DEFAULTAGENTCARFACTORY( CCommon.getResourceString( CWaypointEnvironment.class, "defaultagentcarfactory" ) );
+    DEFAULTCARFACTORY( "defaultcarfactory" ),
+    DEFAULTAGENTCARFACTORY(  "defaultagentcarfactory" );
 
     private final String text;
 
@@ -172,10 +172,10 @@ enum EFactoryType
 
 enum EGeneratorType
 {
-    UNIFORM( CCommon.getResourceString( CWaypointEnvironment.class, "uniformdistribution" ) ),
-    NORMAL( CCommon.getResourceString( CWaypointEnvironment.class, "normaldistribution" ) ),
-    EXPONENTIAL( CCommon.getResourceString( CWaypointEnvironment.class, "exponentialdistribution" ) ),
-    PROFILE( CCommon.getResourceString( CWaypointEnvironment.class, "profiledistribution" ) );
+    UNIFORM( "uniformdistribution" ),
+    NORMAL( "normaldistribution" ),
+    EXPONENTIAL( "exponentialdistribution" ),
+    PROFILE( "profiledistribution" );
 
     private final String text;
 

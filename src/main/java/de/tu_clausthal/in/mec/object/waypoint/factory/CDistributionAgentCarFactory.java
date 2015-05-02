@@ -46,7 +46,7 @@ import java.util.Map;
 
 
 /**
- * class to generate Jason cars
+ * class to generate Jason cars with a distribution of the attributes
  */
 public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
 {

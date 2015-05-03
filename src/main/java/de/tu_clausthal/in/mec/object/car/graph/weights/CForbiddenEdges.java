@@ -38,14 +38,15 @@ import java.util.HashSet;
 /**
  * weight class for forbidden edges
  *
+ * @note the hashset defines the set over the edge ID
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CForbiddenEdges extends HashSet<EdgeIteratorState> implements IWeighting, Painter<JXMapViewer>
+public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
     /**
      * stroke definition
      */
-    private static final Stroke s_stroke = new BasicStroke( 10 );
+    private static final Stroke s_stroke = new BasicStroke( 5 );
     /**
      * graph reference
      */
@@ -57,7 +58,7 @@ public class CForbiddenEdges extends HashSet<EdgeIteratorState> implements IWeig
     /**
      * marked edge to allow mouse-interaction
      */
-    private EdgeIteratorState m_reserveedge;
+    private Integer m_reserveedge;
 
 
     /**
@@ -73,9 +74,9 @@ public class CForbiddenEdges extends HashSet<EdgeIteratorState> implements IWeig
     /**
      * reserve an edge for an action
      *
-     * @param p_edge edge
+     * @param p_edge edge ID
      */
-    public final void reserve( final EdgeIteratorState p_edge )
+    public final void reserve( final Integer p_edge )
     {
         m_reserveedge = p_edge;
     }
@@ -113,7 +114,7 @@ public class CForbiddenEdges extends HashSet<EdgeIteratorState> implements IWeig
     @Override
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        return this.contains( p_edge ) ? Double.POSITIVE_INFINITY : 0;
+        return this.contains( p_edge.getEdge() ) ? Double.POSITIVE_INFINITY : 0;
     }
 
     @Override
@@ -141,9 +142,9 @@ public class CForbiddenEdges extends HashSet<EdgeIteratorState> implements IWeig
         p_graphic.setColor( Color.RED );
         p_graphic.setStroke( s_stroke );
 
-        for ( EdgeIteratorState l_item : this )
+        for ( Integer l_item : this )
         {
-            final CEdge<?, ?> l_edge = m_graph.getEdge( l_item );
+            final CEdge<?, ?> l_edge = m_graph.getEdge( m_graph.getEdgeIterator( l_item ) );
             final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
             final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
 

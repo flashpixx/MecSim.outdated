@@ -61,6 +61,7 @@ class COSMMouseListener extends PanMouseInputListener
             return;
 
         final COSMViewer l_viwer = (COSMViewer) p_event.getSource();
+
         switch ( l_viwer.getCurrentClickableLayer() )
         {
             case Sources:
@@ -75,15 +76,17 @@ class COSMMouseListener extends PanMouseInputListener
 
             case ForbiddenEdges:
                 final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
-                l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges ).add(
-                        l_graph.getEdgeIterator(
-                                l_graph.getClosestEdge(
-                                        l_viwer.getViewpointGeoPosition(
-                                                p_event.getPoint()
-                                        )
-                                )
+                final CForbiddenEdges l_weight = l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges );
+                final Integer l_edge = l_graph.getClosestEdge(
+                        l_viwer.getViewpointGeoPosition(
+                                p_event.getPoint()
                         )
                 );
+
+                if ( l_weight.contains( l_edge ) )
+                    l_weight.remove( l_edge );
+                else
+                    l_weight.add( l_edge );
                 l_viwer.repaint();
                 break;
         }

@@ -41,10 +41,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -61,10 +59,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private final transient List<ICar> m_data = new LinkedList<>();
     /**
-     * map of analyse call
-     */
-    private final transient Map<String, Object> m_analyse = new HashMap<>();
-    /**
      * driving model
      */
     private EDrivingModel m_drivemodel = EDrivingModel.AgentNagelSchreckenberg;
@@ -79,6 +73,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     public CCarLayer()
     {
+        //m_graph.enableDisableWeight( CGraphHopper.EWeight.Default );
         m_graph.enableDisableWeight( CGraphHopper.EWeight.ForbiddenEdges );
     }
 

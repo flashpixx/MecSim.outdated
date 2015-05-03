@@ -40,8 +40,12 @@ import java.util.HashSet;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
+public class CForbiddenEdges extends HashSet<EdgeIteratorState> implements IWeighting, Painter<JXMapViewer>
 {
+    /**
+     * stroke definition
+     */
+    private static final Stroke s_stroke = new BasicStroke( 10 );
     /**
      * graph reference
      */
@@ -53,11 +57,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     /**
      * marked edge to allow mouse-interaction
      */
-    private Integer m_reserveedge;
-    /**
-     * gradient paint
-     */
-    //private static final GradientPaint s_gradient = new GradientPaint(3, 3, Color.red, 5, 5, Color.black, true);
+    private EdgeIteratorState m_reserveedge;
 
 
     /**
@@ -75,7 +75,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      *
      * @param p_edge edge
      */
-    public final void reserve( final Integer p_edge )
+    public final void reserve( final EdgeIteratorState p_edge )
     {
         m_reserveedge = p_edge;
     }
@@ -103,7 +103,6 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
         this.remove( m_reserveedge );
         m_reserveedge = null;
     }
-
 
     @Override
     public final double getMinWeight( final double p_weight )
@@ -138,29 +137,18 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
         if ( !m_active )
             return;
 
-        /*
-        final Graphics2D l_graphic = (Graphics2D)p_graphic.create();
-        l_graphic.setColor( Color.ORANGE );
+        p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+        p_graphic.setColor( Color.RED );
+        p_graphic.setStroke( s_stroke );
 
-        for( Integer l_item : this )
-            this.paintRectangle( p_graphic, p_viewer, m_graph.getEdge( l_item.intValue() ) );
+        for ( EdgeIteratorState l_item : this )
+        {
+            final CEdge<?, ?> l_edge = m_graph.getEdge( l_item );
+            final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
+            final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
 
-        l_graphic.dispose();
-        */
-    }
-
-    /**
-     * paints a rectangle
-     *
-     * @param p_graphic graphic object
-     * @param p_viewer viewer object
-     * @param p_edge edge object
-     */
-    private void paintRectangle( final Graphics2D p_graphic, final JXMapViewer p_viewer, final CEdge<?, ?> p_edge )
-    {
-        final Point2D l_start = p_viewer.convertGeoPositionToPoint( p_edge.getGeoPositions( 0 ) );
-        final Point2D l_end = p_viewer.convertGeoPositionToPoint( p_edge.getGeoPositions( -1 ) );
-        p_graphic.fillRect( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
+            p_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
+        }
     }
 
 }

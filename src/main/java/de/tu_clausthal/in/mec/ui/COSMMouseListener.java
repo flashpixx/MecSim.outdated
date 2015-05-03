@@ -76,12 +76,15 @@ class COSMMouseListener extends PanMouseInputListener
             case ForbiddenEdges:
                 final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
                 l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges ).add(
-                        l_graph.getClosestEdge(
-                                l_viwer.getViewpointGeoPosition(
-                                        p_event.getPoint()
+                        l_graph.getEdgeIterator(
+                                l_graph.getClosestEdge(
+                                        l_viwer.getViewpointGeoPosition(
+                                                p_event.getPoint()
+                                        )
                                 )
                         )
                 );
+                l_viwer.repaint();
                 break;
         }
 

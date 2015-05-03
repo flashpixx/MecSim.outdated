@@ -275,22 +275,19 @@ public class COSMViewer extends JXMapViewer
             if ( ( m_line == null ) || ( m_line.isEmpty() ) )
                 return;
 
-            final Graphics2D l_graphic = (Graphics2D) p_graphic.create();
-            l_graphic.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, m_alpha ) );
-            l_graphic.translate( -p_viewer.getViewportBounds().x, -p_viewer.getViewportBounds().y );
-            l_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+            p_graphic.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, m_alpha ) );
+            p_graphic.translate( -p_viewer.getViewportBounds().x, -p_viewer.getViewportBounds().y );
+            p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
             for ( Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke> l_item : m_line )
             {
-                l_graphic.setColor( l_item.getMiddle() );
-                l_graphic.setStroke( l_item.getRight() );
+                p_graphic.setColor( l_item.getMiddle() );
+                p_graphic.setStroke( l_item.getRight() );
 
                 final Point2D l_start = p_viewer.getTileFactory().geoToPixel( l_item.getLeft().getLeft(), p_viewer.getZoom() );
                 final Point2D l_end = p_viewer.getTileFactory().geoToPixel( l_item.getLeft().getRight(), p_viewer.getZoom() );
-                l_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
+                p_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
             }
-
-            l_graphic.dispose();
         }
 
         @Override

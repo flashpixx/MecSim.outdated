@@ -50,6 +50,10 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      * datasource *
      */
     private final BasicDataSource m_datasource = new BasicDataSource();
+    /**
+     * flag to set connectivity
+     */
+    private final boolean m_connectable = isConnectable();
 
 
     /**
@@ -57,7 +61,8 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
      */
     public CDatabase()
     {
-        if ( !this.isConnectable() )
+        m_active = m_connectable;
+        if ( m_connectable )
             return;
 
         m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
@@ -69,21 +74,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
                 "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)",
                 new String[]{"add primary key (step,zonegroup,zone)"}
         );
-    }
-
-    /**
-     * check if database is connectable
-     *
-     * @return boolean of connectivity
-     */
-    private boolean isConnectable()
-    {
-        final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
-        final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
-
-        return CConfiguration.getInstance().get().<Boolean>get(
-                "database/active"
-        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
     }
 
     /**
@@ -117,6 +107,21 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         {
             CLogger.error( l_exception );
         }
+    }
+
+    /**
+     * check if database is connectable
+     *
+     * @return boolean of connectivity
+     */
+    private static boolean isConnectable()
+    {
+        final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
+        final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
+
+        return CConfiguration.getInstance().get().<Boolean>get(
+                "database/active"
+        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
     }
 
     @Override

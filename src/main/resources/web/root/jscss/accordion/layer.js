@@ -53,9 +53,9 @@ var mecsim_layer,
                 success : function( px_data ){
                     $.each( px_data, function( pc_key, px_value ) {
                         $("<label id='mecsim_simulation_switchlabel'>"+ pc_key +"</label>").appendTo(LayerPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id +"' checked>").appendTo(LayerPanel.settings.switchdiv);
+                        $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id +"' "+ (px_value.active ? "checked" : "") +">").appendTo(LayerPanel.settings.switchdiv);
                         if(px_value.isviewable)
-                            $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' checked></p>").appendTo(LayerPanel.settings.switchdiv);
+                            $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' " + (px_value.visible ? "checked" : "") + "></p>").appendTo(LayerPanel.settings.switchdiv);
                     });
                 }
             }).done(function(){

@@ -62,7 +62,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     public CDatabase()
     {
         m_active = m_connectable;
-        if ( m_connectable )
+        if ( !m_connectable )
             return;
 
         m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
@@ -118,10 +118,12 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     {
         final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
         final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
+        if ( ( l_driver == null ) || ( !l_driver.isEmpty() ) || ( l_url != null ) || ( !l_url.isEmpty() ) )
+            return false;
 
         return CConfiguration.getInstance().get().<Boolean>get(
                 "database/active"
-        ) && ( l_driver != null ) && ( !l_driver.isEmpty() ) && ( l_url != null ) && ( !l_url.isEmpty() );
+        );
     }
 
     @Override

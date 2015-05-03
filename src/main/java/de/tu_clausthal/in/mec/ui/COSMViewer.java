@@ -94,7 +94,7 @@ public class COSMViewer extends JXMapViewer
         this.setOverlayPainter( m_painter );
         m_painter.addPainter( m_linepainter );
 
-        final MouseInputListener l_mouse = new COSMMouseListener( this, m_clickablelayer );
+        final MouseInputListener l_mouse = new COSMMouseListener( this );
         this.addMouseListener( l_mouse );
         this.addMouseMotionListener( l_mouse );
         this.addMouseWheelListener( new ZoomMouseWheelListenerCenter( this ) );
@@ -120,7 +120,7 @@ public class COSMViewer extends JXMapViewer
      *
      * @param p_line route list
      */
-    public void paintLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )
+    public void paintFadeLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )
     {
         m_linepainter.setLine( p_line );
     }
@@ -147,6 +147,19 @@ public class COSMViewer extends JXMapViewer
 
 
     /**
+     * returns the geoposition of a mouse position
+     *
+     * @param p_point point
+     * @return geoposition
+     */
+    public final GeoPosition getViewpointGeoPosition( final Point p_point )
+    {
+        final Rectangle l_viewportBounds = this.getViewportBounds();
+        return this.getTileFactory().pixelToGeo( new Point( l_viewportBounds.x + p_point.x, l_viewportBounds.y + p_point.y ), this.getZoom() );
+    }
+
+
+    /**
      * UI method - returns list of clickable layer names and its state
      *
      * @return map with layer list
@@ -169,6 +182,16 @@ public class COSMViewer extends JXMapViewer
             throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
 
         m_clickablelayer = EClickableLayer.valueOf( (String) p_data.get( "id" ) );
+    }
+
+    /**
+     * returns the current active layer
+     *
+     * @return layer
+     */
+    public final EClickableLayer getCurrentClickableLayer()
+    {
+        return m_clickablelayer;
     }
 
 

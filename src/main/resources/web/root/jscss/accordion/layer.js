@@ -22,6 +22,7 @@ var mecsim_layer,
             });
         },
 
+        //TODO fix: order should be depend on current activity - initialization is wrong
         list_clickable_layer: function() {
             $.ajax({
                 url     : "/cosmviewer/listclickablelayer",

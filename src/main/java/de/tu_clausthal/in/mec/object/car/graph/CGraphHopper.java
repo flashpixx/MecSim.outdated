@@ -315,6 +315,7 @@ public class CGraphHopper extends GraphHopper
         return l_list;
     }
 
+
     /**
      * returns the linkage between edge and car
      *
@@ -445,7 +446,7 @@ public class CGraphHopper extends GraphHopper
             m_weight.put( EWeight.Default, new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
             m_weight.put( EWeight.TrafficJam, new CTrafficJam( this ) );
             m_weight.put( EWeight.SpeedUp, new CSpeedUp( p_encoder ) );
-            m_weight.put( EWeight.ForbiddenEdges, new CForbiddenEdges() );
+            m_weight.put( EWeight.ForbiddenEdges, new CForbiddenEdges( this ) );
         }
 
         return m_weight;

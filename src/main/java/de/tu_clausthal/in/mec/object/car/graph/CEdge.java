@@ -223,12 +223,12 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * returns the geoposition at a special index
      *
-     * @param p_index index of the cell
+     * @param p_index index of the cell (if index is less than 0, the position is defined from the back)
      * @return geoposition at the index
      */
     public final GeoPosition getGeoPositions( final int p_index )
     {
-        return m_cellgeoposition[p_index];
+        return p_index < 0 ? m_cellgeoposition[m_cellgeoposition.length + p_index] : m_cellgeoposition[p_index];
     }
 
     /**

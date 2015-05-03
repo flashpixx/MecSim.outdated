@@ -23,16 +23,16 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
-import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 
 
 /**
@@ -40,22 +40,15 @@ import java.awt.geom.Point2D;
  */
 class COSMMouseListener extends PanMouseInputListener
 {
-    /**
-     * active layer
-     */
-    private COSMViewer.EClickableLayer m_currentlayer;
-
 
     /**
      * ctor
      *
      * @param p_viewer OSM viewer reference
-     * @param p_activelayer reference to the active layer
      */
-    public COSMMouseListener( final JXMapViewer p_viewer, COSMViewer.EClickableLayer p_activelayer )
+    public COSMMouseListener( final JXMapViewer p_viewer )
     {
         super( p_viewer );
-        m_currentlayer = p_activelayer;
     }
 
     /**
@@ -64,37 +57,34 @@ class COSMMouseListener extends PanMouseInputListener
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
-        if ( ( SwingUtilities.isLeftMouseButton( p_event ) ) && ( p_event.getClickCount() == 2 ) )
-            ( (CCarWayPointLayer) CSimulation.getInstance().getWorld().get( "Car WayPoints" ) ).add(
-                    CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint( this.getMouseGeoPosition( p_event, (COSMViewer) p_event.getSource() ) )
-            );
-    }
+        if ( ( !SwingUtilities.isLeftMouseButton( p_event ) ) || ( p_event.getClickCount() != 2 ) )
+            return;
 
+        final COSMViewer l_viwer = (COSMViewer) p_event.getSource();
+        switch ( l_viwer.getCurrentClickableLayer() )
+        {
+            case Sources:
+                CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
+                        CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint(
+                                l_viwer.getViewpointGeoPosition(
+                                        p_event.getPoint()
+                                )
+                        )
+                );
+                break;
 
-    /**
-     * returns the geoposition of a mouse position
-     *
-     * @param p_event mouse event
-     * @param p_viewer OSM viewer
-     * @return geoposition
-     */
-    private GeoPosition getMouseGeoPosition( final MouseEvent p_event, final COSMViewer p_viewer )
-    {
-        final Point2D l_position = this.getMousePosition( p_event, p_viewer );
-        return p_viewer.getTileFactory().pixelToGeo( l_position, p_viewer.getZoom() );
-    }
+            case ForbiddenEdges:
+                final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
+                l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges ).add(
+                        l_graph.getClosestEdge(
+                                l_viwer.getViewpointGeoPosition(
+                                        p_event.getPoint()
+                                )
+                        )
+                );
+                break;
+        }
 
-    /**
-     * returns the 2D position of a mouse position
-     *
-     * @param p_event mouse event
-     * @param p_viewer OSM viewer
-     * @return point
-     */
-    private Point2D getMousePosition( final MouseEvent p_event, final COSMViewer p_viewer )
-    {
-        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        return new Point( l_viewportBounds.x + p_event.getPoint().x, l_viewportBounds.y + p_event.getPoint().y );
     }
 
 }

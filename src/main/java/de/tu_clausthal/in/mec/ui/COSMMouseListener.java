@@ -60,37 +60,56 @@ class COSMMouseListener extends PanMouseInputListener
         if ( ( !SwingUtilities.isLeftMouseButton( p_event ) ) || ( p_event.getClickCount() != 2 ) )
             return;
 
-        final COSMViewer l_viwer = (COSMViewer) p_event.getSource();
 
-        switch ( l_viwer.getCurrentClickableLayer() )
+        final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
+
+        switch ( l_viewer.getCurrentClickableLayer() )
         {
             case Sources:
                 CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
                         CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint(
-                                l_viwer.getViewpointGeoPosition(
+                                l_viewer.getViewpointGeoPosition(
                                         p_event.getPoint()
                                 )
                         )
                 );
                 break;
 
-            case ForbiddenEdges:
-                final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
-                final CForbiddenEdges l_weight = l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges );
-                final Integer l_edge = l_graph.getClosestEdge(
-                        l_viwer.getViewpointGeoPosition(
-                                p_event.getPoint()
-                        )
-                );
 
-                if ( l_weight.contains( l_edge ) )
-                    l_weight.remove( l_edge );
-                else
-                    l_weight.add( l_edge );
-                l_viwer.repaint();
+            case ForbiddenEdges:
+
+                // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
+                CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().<CForbiddenEdges>getWeight(
+                        CGraphHopper.EWeight.ForbiddenEdges
+                ).swap();
+
+                l_viewer.repaint();
                 break;
         }
 
+    }
+
+
+    @Override
+    public void mouseMoved( final MouseEvent p_event )
+    {
+        final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
+        if ( !l_viewer.getCurrentClickableLayer().equals( COSMViewer.EClickableLayer.ForbiddenEdges ) )
+            return;
+
+        // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
+        final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
+        final CForbiddenEdges l_weight = l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges );
+
+        l_weight.reserve(
+                l_graph.getClosestEdge(
+                        l_viewer.getViewpointGeoPosition(
+                                p_event.getPoint()
+                        )
+                )
+        );
+
+        l_viewer.repaint();
     }
 
 }

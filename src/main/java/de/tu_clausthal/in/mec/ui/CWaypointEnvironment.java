@@ -71,7 +71,7 @@ public class CWaypointEnvironment
     /**
      * toolbox - to save different tool settings
      */
-    protected static final Map<String, CTool> m_toolbox = new HashMap<>();
+    protected final Map<String, CTool> m_toolbox = new HashMap<>();
 
 
     /**

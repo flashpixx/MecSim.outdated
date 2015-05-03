@@ -46,8 +46,6 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
- * todo rename enums
- * todo check for final
  * todo remove singelton
  * todo check if input is correct
  * todo deliver static label map
@@ -82,7 +80,7 @@ public class CWaypointEnvironment
     private CWaypointEnvironment()
     {
         CTool l_defaultTool = new CTool(
-                EWayPointType.CARWAYPOINTRANDOM, EFactoryType.DEFAULTCARFACTORY, EGeneratorType.UNIFORM, 0.1, Color.RED, null, 1, 1, 1, 0, 10,
+                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EGeneratorType.Uniform, 0.1, Color.RED, null, 1, 1, 1, 0, 10,
                 new int[]{1, 2, 3, 4, 5}
         );
         this.m_selectedTool = l_defaultTool;
@@ -94,7 +92,7 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    public static CWaypointEnvironment getInstance()
+    public final static CWaypointEnvironment getInstance()
     {
         return s_instance;
     }
@@ -166,14 +164,14 @@ public class CWaypointEnvironment
      * @param p_waypointtype
      * @return specified WayPoint type or default (CarRandomWaypoint)
      */
-    private EWayPointType getWaypointEnum( final String p_waypointtype )
+    private final EWayPointType getWaypointEnum( final String p_waypointtype )
     {
         for ( EWayPointType l_waypoint : EWayPointType.values() )
         {
             if ( l_waypoint.toString().equals( p_waypointtype ) )
                 return l_waypoint;
         }
-        return EWayPointType.CARWAYPOINTRANDOM;
+        return EWayPointType.CarWaypointRandom;
     }
 
     /**
@@ -182,14 +180,14 @@ public class CWaypointEnvironment
      * @param p_factory
      * @return specified Factory type or default (DefaultCarFactory)
      */
-    private EFactoryType getFactoryEnum( final String p_factory )
+    private final EFactoryType getFactoryEnum( final String p_factory )
     {
         for ( EFactoryType l_factory : EFactoryType.values() )
         {
             if ( l_factory.toString().equals( p_factory ) )
                 return l_factory;
         }
-        return EFactoryType.DEFAULTCARFACTORY;
+        return EFactoryType.DefaultCarFactory;
     }
 
     /**
@@ -198,14 +196,14 @@ public class CWaypointEnvironment
      * @param p_generator
      * @return specified Generator type or default (Uniform)
      */
-    private EGeneratorType getGeneratorEnum( final String p_generator )
+    private final EGeneratorType getGeneratorEnum( final String p_generator )
     {
         for ( EGeneratorType l_generator : EGeneratorType.values() )
         {
             if ( l_generator.toString().equals( p_generator ) )
                 return l_generator;
         }
-        return EGeneratorType.UNIFORM;
+        return EGeneratorType.Uniform;
     }
 
     /**
@@ -310,8 +308,8 @@ public class CWaypointEnvironment
      */
     protected enum EWayPointType
     {
-        CARWAYPOINTRANDOM( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
-        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
+        CarWaypointRandom( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
+        CayWaypointPath( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
 
         private final String text;
 
@@ -332,8 +330,8 @@ public class CWaypointEnvironment
      */
     protected enum EFactoryType
     {
-        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
-        DEFAULTAGENTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
+        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
+        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
 
         private final String text;
 
@@ -354,10 +352,10 @@ public class CWaypointEnvironment
      */
     protected enum EGeneratorType
     {
-        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
-        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
-        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
-        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
+        Uniform( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
+        Normal( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
+        Exponential( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
+        Profile( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
 
         private final String text;
 
@@ -385,47 +383,47 @@ public class CWaypointEnvironment
         /**
          * factory type (which car should be produced)
          */
-        protected EFactoryType m_factoryType;
+        protected final EFactoryType m_factoryType;
         /**
          * generator type defines the probability and amount of cars
          */
-        protected EGeneratorType m_generatorType;
+        protected final EGeneratorType m_generatorType;
         /**
          * radius for random target
          */
-        protected double m_radius;
+        protected final double m_radius;
         /**
          * color of the waypoint
          */
-        protected Color m_color;
+        protected final Color m_color;
         /**
          * asl programm for agent cars
          */
-        protected String m_asl;
+        protected final String m_asl;
         /**
          * amount of cars that should be generated und a special probability
          */
-        protected int m_carcount;
+        protected final int m_carcount;
         /**
          * mean for the generator which defines the probability to generate cars
          */
-        protected double m_mean;
+        protected final double m_mean;
         /**
          * deviation for the generator which defines the probability to generate cars
          */
-        protected double m_deviation;
+        protected final double m_deviation;
         /**
          * lower bound for the generator which defines the probability to generate cars
          */
-        protected double m_lower;
+        protected final double m_lower;
         /**
          * upper bound for the generator which defines the probability to generate cars
          */
-        protected double m_upper;
+        protected final double m_upper;
         /**
          * histrogramm for profile generators
          */
-        protected int[] m_histrogram;
+        protected final int[] m_histrogram;
 
         /**
          * @param p_wayPointType
@@ -477,21 +475,21 @@ public class CWaypointEnvironment
          *
          * @return configured generator
          */
-        public final IGenerator getGenerator()
+        protected final IGenerator getGenerator()
         {
 
             switch ( m_generatorType )
             {
-                case UNIFORM:
+                case Uniform:
                     return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
 
-                case NORMAL:
+                case Normal:
                     return new CTimeNormalDistribution( m_carcount, m_mean, m_deviation );
 
-                case EXPONENTIAL:
+                case Exponential:
                     return new CTimeExponentialDistribution( m_carcount, m_mean, m_deviation );
 
-                case PROFILE:
+                case Profile:
                     return new CTimeProfile( m_histrogram );
 
                 default:
@@ -509,14 +507,14 @@ public class CWaypointEnvironment
 
             switch ( m_factoryType )
             {
-                case DEFAULTCARFACTORY:
+                case DefaultCarFactory:
                     return new CDistributionDefaultCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5
                     ), new NormalDistribution()
                     );
 
-                case DEFAULTAGENTCARFACTORY:
+                case DefaultAgentCarFactory:
                     return new CDistributionAgentCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5

@@ -46,8 +46,6 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
- * todo rename enums
- * todo check for final
  * todo remove singelton
  * todo check if input is correct
  * todo deliver static label map
@@ -73,7 +71,7 @@ public class CWaypointEnvironment
     /**
      * toolbox - to save different tool settings
      */
-    protected final Map<String, CTool> m_toolbox = new HashMap<>();
+    protected static final Map<String, CTool> m_toolbox = new HashMap<>();
 
 
     /**
@@ -94,7 +92,7 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    public static CWaypointEnvironment getInstance()
+    public final static CWaypointEnvironment getInstance()
     {
         return s_instance;
     }
@@ -166,7 +164,7 @@ public class CWaypointEnvironment
      * @param p_waypointtype
      * @return specified WayPoint type or default (CarRandomWaypoint)
      */
-    private EWayPointType getWaypointEnum( final String p_waypointtype )
+    private final EWayPointType getWaypointEnum( final String p_waypointtype )
     {
         for ( EWayPointType l_waypoint : EWayPointType.values() )
         {
@@ -182,7 +180,7 @@ public class CWaypointEnvironment
      * @param p_factory
      * @return specified Factory type or default (DefaultCarFactory)
      */
-    private EFactoryType getFactoryEnum( final String p_factory )
+    private final EFactoryType getFactoryEnum( final String p_factory )
     {
         for ( EFactoryType l_factory : EFactoryType.values() )
         {
@@ -198,7 +196,7 @@ public class CWaypointEnvironment
      * @param p_generator
      * @return specified Generator type or default (Uniform)
      */
-    private EGeneratorType getGeneratorEnum( final String p_generator )
+    private final EGeneratorType getGeneratorEnum( final String p_generator )
     {
         for ( EGeneratorType l_generator : EGeneratorType.values() )
         {
@@ -385,47 +383,47 @@ public class CWaypointEnvironment
         /**
          * factory type (which car should be produced)
          */
-        protected EFactoryType m_factoryType;
+        protected final EFactoryType m_factoryType;
         /**
          * generator type defines the probability and amount of cars
          */
-        protected EGeneratorType m_generatorType;
+        protected final EGeneratorType m_generatorType;
         /**
          * radius for random target
          */
-        protected double m_radius;
+        protected final double m_radius;
         /**
          * color of the waypoint
          */
-        protected Color m_color;
+        protected final Color m_color;
         /**
          * asl programm for agent cars
          */
-        protected String m_asl;
+        protected final String m_asl;
         /**
          * amount of cars that should be generated und a special probability
          */
-        protected int m_carcount;
+        protected final int m_carcount;
         /**
          * mean for the generator which defines the probability to generate cars
          */
-        protected double m_mean;
+        protected final double m_mean;
         /**
          * deviation for the generator which defines the probability to generate cars
          */
-        protected double m_deviation;
+        protected final double m_deviation;
         /**
          * lower bound for the generator which defines the probability to generate cars
          */
-        protected double m_lower;
+        protected final double m_lower;
         /**
          * upper bound for the generator which defines the probability to generate cars
          */
-        protected double m_upper;
+        protected final double m_upper;
         /**
          * histrogramm for profile generators
          */
-        protected int[] m_histrogram;
+        protected final int[] m_histrogram;
 
         /**
          * @param p_wayPointType
@@ -477,7 +475,7 @@ public class CWaypointEnvironment
          *
          * @return configured generator
          */
-        public final IGenerator getGenerator()
+        protected final IGenerator getGenerator()
         {
 
             switch ( m_generatorType )

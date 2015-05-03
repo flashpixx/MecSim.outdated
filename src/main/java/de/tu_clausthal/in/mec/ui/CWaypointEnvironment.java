@@ -82,7 +82,7 @@ public class CWaypointEnvironment
     private CWaypointEnvironment()
     {
         CTool l_defaultTool = new CTool(
-                EWayPointType.CARWAYPOINTRANDOM, EFactoryType.DEFAULTCARFACTORY, EGeneratorType.UNIFORM, 0.1, Color.RED, null, 1, 1, 1, 0, 10,
+                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EGeneratorType.Uniform, 0.1, Color.RED, null, 1, 1, 1, 0, 10,
                 new int[]{1, 2, 3, 4, 5}
         );
         this.m_selectedTool = l_defaultTool;
@@ -173,7 +173,7 @@ public class CWaypointEnvironment
             if ( l_waypoint.toString().equals( p_waypointtype ) )
                 return l_waypoint;
         }
-        return EWayPointType.CARWAYPOINTRANDOM;
+        return EWayPointType.CarWaypointRandom;
     }
 
     /**
@@ -189,7 +189,7 @@ public class CWaypointEnvironment
             if ( l_factory.toString().equals( p_factory ) )
                 return l_factory;
         }
-        return EFactoryType.DEFAULTCARFACTORY;
+        return EFactoryType.DefaultCarFactory;
     }
 
     /**
@@ -205,7 +205,7 @@ public class CWaypointEnvironment
             if ( l_generator.toString().equals( p_generator ) )
                 return l_generator;
         }
-        return EGeneratorType.UNIFORM;
+        return EGeneratorType.Uniform;
     }
 
     /**
@@ -310,8 +310,8 @@ public class CWaypointEnvironment
      */
     protected enum EWayPointType
     {
-        CARWAYPOINTRANDOM( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
-        CARWAYPOINTPATH( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
+        CarWaypointRandom( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
+        CayWaypointPath( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
 
         private final String text;
 
@@ -332,8 +332,8 @@ public class CWaypointEnvironment
      */
     protected enum EFactoryType
     {
-        DEFAULTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
-        DEFAULTAGENTCARFACTORY( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
+        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
+        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
 
         private final String text;
 
@@ -354,10 +354,10 @@ public class CWaypointEnvironment
      */
     protected enum EGeneratorType
     {
-        UNIFORM( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
-        NORMAL( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
-        EXPONENTIAL( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
-        PROFILE( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
+        Uniform( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
+        Normal( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
+        Exponential( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
+        Profile( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
 
         private final String text;
 
@@ -482,16 +482,16 @@ public class CWaypointEnvironment
 
             switch ( m_generatorType )
             {
-                case UNIFORM:
+                case Uniform:
                     return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
 
-                case NORMAL:
+                case Normal:
                     return new CTimeNormalDistribution( m_carcount, m_mean, m_deviation );
 
-                case EXPONENTIAL:
+                case Exponential:
                     return new CTimeExponentialDistribution( m_carcount, m_mean, m_deviation );
 
-                case PROFILE:
+                case Profile:
                     return new CTimeProfile( m_histrogram );
 
                 default:
@@ -509,14 +509,14 @@ public class CWaypointEnvironment
 
             switch ( m_factoryType )
             {
-                case DEFAULTCARFACTORY:
+                case DefaultCarFactory:
                     return new CDistributionDefaultCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5
                     ), new NormalDistribution()
                     );
 
-                case DEFAULTAGENTCARFACTORY:
+                case DefaultAgentCarFactory:
                     return new CDistributionAgentCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5

@@ -23,14 +23,6 @@ $(document).ready(function() {
         StatisticsPanel.init();
         HelpPanel.init();
 
-        // about dialog will close when clicked outside of the dialog
-        // TODO: there's still a bug when initializing that function since the dialog is not defined at that stage
-        jQuery('body').bind('click', function(e){
-            if( jQuery('#mecsim_about').dialog('isOpen') && !jQuery(e.target).is('.ui-dialog, a') && !jQuery(e.target).closest('.ui-dialog').length) {
-                jQuery('#mecsim_about').dialog('close');
-            }
-        });
-
         // splitter
         $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         $("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });

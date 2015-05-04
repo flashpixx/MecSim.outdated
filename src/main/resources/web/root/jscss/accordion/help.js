@@ -39,7 +39,7 @@ var mecsim_help,
                 }).done( function() {
                     $("#mecsim_about").dialog({
                         width: 500,
-                        modal: false
+                        modal: true
                     });
                 });
 

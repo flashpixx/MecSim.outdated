@@ -48,6 +48,10 @@ var mecsim_editor,
                 EditorPanel.append_tab_div();
                 EditorPanel.add_tab();
                 $("#tabs").tabs();
+
+                // json object that holds all editor instances
+                //EditorPanel.settings.g_editor = { EditorPanel.get_tab_id() : CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true}) };
+
                 EditorPanel.settings.g_editor = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {
                     lineNumbers: true
                 });
@@ -111,9 +115,7 @@ var mecsim_editor,
         },
 
         append_tab_div: function() {
-
              UI().getContent().append("<div id='tabs'><ul></ul></div>");
-
         },
 
         load_asl_files: function() {

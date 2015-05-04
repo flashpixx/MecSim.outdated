@@ -90,6 +90,14 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
             return;
 
         this.add( m_reserveedge );
+        this.clearReserve();
+    }
+
+    /**
+     * clears the reserve edge
+     */
+    public final void clearReserve()
+    {
         m_reserveedge = null;
     }
 
@@ -102,7 +110,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
             return;
 
         this.remove( m_reserveedge );
-        m_reserveedge = null;
+        this.clearReserve();
     }
 
     /**
@@ -118,7 +126,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
         else
             this.add( m_reserveedge );
 
-        m_reserveedge = null;
+        this.clearReserve();
     }
 
 

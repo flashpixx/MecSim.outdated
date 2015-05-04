@@ -94,20 +94,21 @@ class COSMMouseListener extends PanMouseInputListener
     public void mouseMoved( final MouseEvent p_event )
     {
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
-        if ( !l_viewer.getCurrentClickableLayer().equals( COSMViewer.EClickableLayer.ForbiddenEdges ) )
-            return;
 
         // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
         final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
         final CForbiddenEdges l_weight = l_graph.<CForbiddenEdges>getWeight( CGraphHopper.EWeight.ForbiddenEdges );
 
-        l_weight.reserve(
-                l_graph.getClosestEdge(
-                        l_viewer.getViewpointGeoPosition(
-                                p_event.getPoint()
-                        )
-                )
-        );
+        if ( !l_viewer.getCurrentClickableLayer().equals( COSMViewer.EClickableLayer.ForbiddenEdges ) )
+            l_weight.clearReserve();
+        else
+            l_weight.reserve(
+                    l_graph.getClosestEdge(
+                            l_viewer.getViewpointGeoPosition(
+                                    p_event.getPoint()
+                            )
+                    )
+            );
 
         l_viewer.repaint();
     }

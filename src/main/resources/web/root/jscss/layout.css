@@ -22,7 +22,7 @@ iframe
 /******************************** class definitions *******************************************************************/
 
 .ui-accordion-content{
-    height: 65%;
+    height: 55%;
 }
 
 .ui-widget-content{
@@ -125,6 +125,15 @@ iframe
     width: 500px;
 }
 
+#mecsim_about_text{
+    text-align: center;
+}
+
+#mecsim_project_name{
+    font-weight: bold;
+    font-size: large;
+    color: #428bca;
+}
 /******************************** css definitions for mecsim_source ************************************************/
 
 /** Waypoint Settings Widget **/

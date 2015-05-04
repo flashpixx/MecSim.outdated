@@ -33,8 +33,8 @@ var mecsim_help,
                             .text(p_data.manifest["license"]);
 
                     $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
-                    $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
-                    $("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
+                    //$("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
+                    //$("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
 
                 }).done( function() {
                     $("#mecsim_about").dialog({

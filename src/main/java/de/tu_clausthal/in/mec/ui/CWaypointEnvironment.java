@@ -373,7 +373,9 @@ public class CWaypointEnvironment
 
     /**
      * class which is able to deliver a Waypoint threw configerable settings
+     * @deprecated change to immutable hashmap
      */
+    @Deprecated
     protected class CTool
     {
         /**

@@ -22,13 +22,17 @@ var mecsim_layer,
             });
         },
 
-        //TODO fix: order should be depend on current activity - initialization is wrong
         list_clickable_layer: function() {
             $.ajax({
                 url     : "/cosmviewer/listclickablelayer",
                 success : function(px_data){
-                    $.each( px_data, function(pc_key, px_value){
-                        LayerPanel.settings.clickableUI.append("<li class='ui-state-default' id="+ px_value.id +">" + pc_key + "</li>" );
+
+                    // sort JSON objects depend on "click" property and store the ordered list in an array
+                    la_sorted = [];
+                    Object.keys(px_data).sort(function(i,j){ return px_data[i].click ? -1 : 1 }).forEach(function(pc_key){ lo=px_data[pc_key]; lo.name = pc_key; la_sorted.push(lo); });
+
+                    $.each( la_sorted, function(pn_key, px_value){
+                        LayerPanel.settings.clickableUI.append("<li class='ui-state-default' id="+ px_value.id +">" + px_value.name + "</li>" );
                     });
 
                     LayerPanel.settings.clickableUI.sortable({

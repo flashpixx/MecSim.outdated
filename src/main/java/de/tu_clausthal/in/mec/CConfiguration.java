@@ -540,10 +540,14 @@ public class CConfiguration
             if ( !l_input.<Boolean>get( "reset" ) )
                 this.setConfiguration( l_input );
         }
-        catch ( final IllegalArgumentException | ClassNotFoundException | IOException | NullPointerException l_exception )
+        catch ( final IllegalArgumentException | ClassNotFoundException | NullPointerException l_exception )
         {
             CLogger.error( l_exception.getMessage() );
             return false;
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
         }
 
         // append all Jar files to the classpath of the system class loader

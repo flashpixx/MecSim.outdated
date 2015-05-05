@@ -65,6 +65,14 @@ var mecsim_layer,
                 }
             }).done(function(){
 
+                // fail closure
+                lx_failClosure = function( px_event ) {
+                    return function(p_data) {
+                        $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
+                        $("#mecsim_stop_error").dialog();
+                    }
+                }
+
                 //create active switches and listen
                 $(".mecsim_simulaton_switchActiv").bootstrapSwitch({
                     size: "mini",
@@ -73,12 +81,9 @@ var mecsim_layer,
                     onSwitchChange : function( px_event, pl_state) {
                         $.ajax({
                             type: "POST",
-                            url: "csimulation/disableenablelayer",
+                            url: "/csimulation/disableenablelayer",
                             data: {"id": $(this).closest("input").attr("id"), "state": pl_state}
-                        }).fail(function(p_data){
-                            $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
-                            $("#mecsim_stop_error").dialog();
-                        });
+                        }).fail( lx_failClosure(px_event) );
                     }
                 });
 
@@ -90,12 +95,9 @@ var mecsim_layer,
                     onSwitchChange : function( px_event, pl_state) {
                         $.ajax({
                             type: "POST",
-                            url: "csimulation/hideshowlayer",
+                            url: "/csimulation/hideshowlayer",
                             data: {"id": $(this).closest("input").attr("id"), "state": pl_state}
-                        }).fail(function(p_data){
-                            $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
-                            $("#mecsim_stop_error").dialog();
-                        });
+                        }).fail(lx_failClosure(px_event) );
                     }
                 });
 

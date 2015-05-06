@@ -10,7 +10,8 @@ var mecsim_editor,
             load_asl_button: $("#mecsim_load_asl").button(),
             delete_asl_button: $("#mecsim_delete_asl").button(),
             save_asl_button: $("#mecsim_save_asl").button(),
-            select_asl_menu: $("#mecsim_agent_files").selectmenu()
+            select_asl_menu: $("#mecsim_agent_files").selectmenu(),
+            g_editor: {}
         },
 
         init: function() {
@@ -50,13 +51,8 @@ var mecsim_editor,
                 $("#tabs").tabs();
 
                 // json object that holds all editor instances
-                //EditorPanel.settings.g_editor = { EditorPanel.get_tab_id() : CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true}) };
-
-                EditorPanel.settings.g_editor = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {
-                    lineNumbers: true
-                });
+                EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
                 EditorPanel.load_selected_file();
-                console.log(EditorPanel.settings.g_editor.EditorPanel.get_tab_id());
             });
 
             $("#mecsim_new_asl").button().on("click", function(p_data){
@@ -83,8 +79,8 @@ var mecsim_editor,
                 $.post(
                     "cagentenvironment/jason/write",
                     { "name" : $("#mecsim_agent_files").val(),
-                    "source" : EditorPanel.settings.g_editor.getValue(),
-                    "data" : EditorPanel.settings.g_editor.getValue()}
+                    "source" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()],
+                    "data" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()]}
               );
             });
 
@@ -109,7 +105,7 @@ var mecsim_editor,
                 "cagentenvironment/jason/read",
                 { "name" : $("#mecsim_agent_files").val() },
                 function( px_data ) {
-                  EditorPanel.settings.g_editor.setValue( px_data.source );
+                    EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].setValue( px_data.source );
                 }
             );
         },

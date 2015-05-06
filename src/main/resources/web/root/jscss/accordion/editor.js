@@ -61,6 +61,12 @@ var mecsim_editor,
 
             EditorPanel.settings.load_asl_button.on("click", function(p_data){
                 EditorPanel.add_tab();
+                $("div#tabs").tabs("refresh");
+
+                var tab_index = $('#tabs a[href="#' + EditorPanel.get_tab_id() + '"]').parent().index();
+                $('#tabs').tabs( "option", "active", tab_index );
+                $("div#tabs").tabs("refresh");
+
                 EditorPanel.add_code_mirror();
                 EditorPanel.load_selected_file();
             });

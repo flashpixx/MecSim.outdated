@@ -99,7 +99,7 @@ var mecsim_editor,
         },
 
         add_code_mirror: function() {
-
+            EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
         },
 
         get_tab_id: function() {

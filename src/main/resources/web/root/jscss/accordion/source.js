@@ -26,7 +26,7 @@ var mecsim_source,
 
         getLabels: function(){
             $.ajax({
-                url     : "cwaypointenvironment/getlabels",
+                url     : "/cwaypointenvironment/getlabels",
                 success : function( px_data ){
                     SourcePanel.settings.labels.carcount = px_data.carcount;
                     SourcePanel.settings.labels.mean = px_data.mean;
@@ -97,7 +97,7 @@ var mecsim_source,
 
             //create selectmenu with factory types
             $.ajax({
-                url     : "cwaypointenvironment/listfactories",
+                url     : "/cwaypointenvironment/listfactories",
                 success : function( px_data ){
                     px_data.factories.forEach(function(data){
                         $("#mecsim_source_selectFactory")
@@ -110,7 +110,7 @@ var mecsim_source,
 
             //create selectmenu with possible agent programs
             $.ajax({
-                url     : "cagentenvironment/jason/list",
+                url     : "/cagentenvironment/jason/list",
                 success : function( px_data ){
                     px_data.agents.forEach(function(data){
                         $("#mecsim_source_selectASL")
@@ -123,7 +123,7 @@ var mecsim_source,
 
             //create selectmenu with possible generator types
             $.ajax({
-                url     : "cwaypointenvironment/listgenerator",
+                url     : "/cwaypointenvironment/listgenerator",
                 success : function( px_data ){
                     px_data.generators.forEach(function(data){
                         $("#mecsim_source_selectGenerator")
@@ -159,7 +159,7 @@ var mecsim_source,
             $("#mecsim_source_addTool").on("click", function(){
                 var color = SourcePanel.settings.colorpicker.spectrum("get");
                 $.ajax({
-                    url     : "cwaypointenvironment/createtool",
+                    url     : "/cwaypointenvironment/createtool",
                     data    : {
                                 "factory"  : $("#mecsim_source_selectFactory").val(),
                                 "asl"      : $("#mecsim_source_selectASL").val(),
@@ -194,7 +194,7 @@ var mecsim_source,
         //method to creat tool-buttons in the toolbox
         setToolbox: function(){
             $.ajax({
-                url     : "cwaypointenvironment/listtools",
+                url     : "/cwaypointenvironment/listtools",
                 success : function( px_data ){
                     px_data.tools.forEach(function(data){
                         $("<button></button>")

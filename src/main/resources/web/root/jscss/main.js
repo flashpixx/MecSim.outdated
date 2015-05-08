@@ -6,6 +6,7 @@ $(document).ready(function() {
         $.getScript("jscss/accordion/layer.js"),
         $.getScript("jscss/accordion/source.js"),
         $.getScript("jscss/accordion/editor.js"),
+        $.getScript("jscss/accordion/mas.js"),
         $.getScript("jscss/accordion/statistics.js"),
         $.getScript("jscss/accordion/help.js")
     ).done(function(){
@@ -20,6 +21,7 @@ $(document).ready(function() {
         LayerPanel.init();
         SourcePanel.init();
         EditorPanel.init();
+        MASPanel.init();
         StatisticsPanel.init();
         HelpPanel.init();
 

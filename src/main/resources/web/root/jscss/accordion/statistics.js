@@ -11,7 +11,7 @@ var mecsim_statistics,
         },
 
         bind_ui_actions: function(){
-            $("#ui-id-8").on("click", function(data){
+            $("#ui-id-10").on("click", function(data){
                 UI().getContent().empty();
                 UI().getContent().load("template/clean.htm");
             });

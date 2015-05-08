@@ -16,7 +16,7 @@ var mecsim_help,
 
         bind_ui_actions: function() {
 
-            $("#ui-id-10").on("click", function(data){
+            $("#ui-id-12").on("click", function(data){
                 UI().getContent().empty();
             });
 

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.car;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CAgentNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
@@ -133,6 +134,12 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final int getCalculationIndex()
     {
         return 1;
+    }
+
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+
     }
 
     @Override

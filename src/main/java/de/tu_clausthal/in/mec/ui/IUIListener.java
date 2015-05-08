@@ -87,7 +87,7 @@ public abstract class IUIListener implements MouseListener
     }
 
     @Override
-    public void mouseClicked( final MouseEvent p_event )
+    public final void mouseClicked( final MouseEvent p_event )
     {
     }
 
@@ -109,17 +109,17 @@ public abstract class IUIListener implements MouseListener
     }
 
     @Override
-    public void mouseReleased( final MouseEvent p_event )
+    public final void mouseReleased( final MouseEvent p_event )
     {
     }
 
     @Override
-    public void mouseEntered( final MouseEvent p_event )
+    public final void mouseEntered( final MouseEvent p_event )
     {
     }
 
     @Override
-    public void mouseExited( final MouseEvent p_event )
+    public final void mouseExited( final MouseEvent p_event )
     {
     }
 

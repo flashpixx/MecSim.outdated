@@ -139,8 +139,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
-        super.step( p_currentstep, p_layer );
-
         // mindinspector needs to load if there exists agents
         if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
             m_mindinspector.load( "http://localhost:3272" );

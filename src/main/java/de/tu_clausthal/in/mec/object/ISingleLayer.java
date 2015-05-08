@@ -77,13 +77,9 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
-    {
-    }
+    public abstract void step( final int p_currentstep, final ILayer p_layer );
 
     @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-    }
+    public abstract void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height );
 
 }

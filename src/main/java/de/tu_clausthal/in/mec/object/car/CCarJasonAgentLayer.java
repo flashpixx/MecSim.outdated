@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.car;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 
 
@@ -44,4 +45,17 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
         return CCommon.getResourceString( this, "name" );
     }
 
+    @Override
+    public final void beforeStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
+    )
+    {
+
+    }
+
+    @Override
+    public final void afterStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
+    )
+    {
+
+    }
 }

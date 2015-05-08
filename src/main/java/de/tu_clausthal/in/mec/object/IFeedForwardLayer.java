@@ -110,6 +110,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public void step( final int p_currentstep, final ILayer p_layer )
     {
+
     }
 
     /**
@@ -120,6 +121,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      */
     public void beforeStepObject( final int p_currentstep, final T p_object )
     {
+
     }
 
     /**

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
@@ -39,6 +40,26 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     public final int getCalculationIndex()
     {
         return 2;
+    }
+
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+
+    }
+
+    @Override
+    public final void beforeStepObject( final int p_currentstep, final IWayPoint<ICar> p_object
+    )
+    {
+
+    }
+
+    @Override
+    public final void afterStepObject( final int p_currentstep, final IWayPoint<ICar> p_object
+    )
+    {
+
     }
 
     @Override

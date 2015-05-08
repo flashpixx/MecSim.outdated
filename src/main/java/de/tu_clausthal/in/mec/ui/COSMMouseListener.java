@@ -24,15 +24,19 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
+import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 
 
 /**
@@ -40,6 +44,10 @@ import java.awt.event.MouseEvent;
  */
 class COSMMouseListener extends PanMouseInputListener
 {
+    /**
+     * size of the click radius *
+     */
+    private static final int s_clickradius = 10;
 
     /**
      * ctor
@@ -66,13 +74,25 @@ class COSMMouseListener extends PanMouseInputListener
         switch ( l_viewer.getCurrentClickableLayer() )
         {
             case Sources:
-                CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
+                final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+                boolean l_isfound = false;
+
+                for ( IWayPoint<ICar> l_item : l_layer )
+                    if ( isinBall( p_event.getPoint(), l_viewer.convertGeoPositionToPoint( l_item.getPosition() ) ) )
+                    {
+                        l_isfound = true;
+                        l_layer.remove( l_item );
+                        break;
+                    }
+
+                if ( !l_isfound )
+                    l_layer.add(
                         CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint(
                                 l_viewer.getViewpointGeoPosition(
                                         p_event.getPoint()
                                 )
                         )
-                );
+                    );
                 break;
 
 
@@ -113,4 +133,19 @@ class COSMMouseListener extends PanMouseInputListener
         l_viewer.repaint();
     }
 
+
+    /**
+     * checks if a point is in a radius around another
+     *
+     * @param p_click point of the click
+     * @param p_center point of the center
+     * @return bool if the click is within the radius
+     */
+    private static boolean isinBall( final Point p_click, final Point2D p_center )
+    {
+        final double p_xval = p_click.getX() - p_center.getX();
+        final double p_yval = p_center.getY() - p_center.getY();
+
+        return Math.sqrt( p_xval * p_yval + p_yval * p_yval ) <= s_clickradius;
+    }
 }

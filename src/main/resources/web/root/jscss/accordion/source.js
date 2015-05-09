@@ -87,7 +87,13 @@ var mecsim_source,
 
         //method to initalize the tool wizard
         initToolWizard: function(){
-
+            $("#mecsim_source_toolwizard").steps({
+                headerTag: "h3",
+                bodyTag: "section",
+                transitionEffect: "slideLeft",
+                stepsOrientation: "vertical",
+                autoFocus: true
+            });
         },
 
         //method to init the settings widget TODO Deprecated because of Wizard

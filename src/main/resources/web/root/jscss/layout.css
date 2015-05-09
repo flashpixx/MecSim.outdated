@@ -136,6 +136,12 @@ iframe
 }
 /******************************** css definitions for mecsim_source ************************************************/
 
+/** Tool Wizard **/
+#mecsim_source_toolwizard{
+    width: 75%;
+    margin: 20px;
+}
+
 /** Waypoint Settings Widget **/
 #mecsim_source_waypointsettings{
     float: left;

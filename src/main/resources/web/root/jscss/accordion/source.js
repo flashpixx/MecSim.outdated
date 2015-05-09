@@ -82,7 +82,7 @@ var mecsim_source,
         //method to get source-ui related labels
         getLabels: function(){
             $.ajax({
-                url     : "/cwaypointenvironment/getlabels",
+                url     : "/clanguageenvironment/getwaypointlabels",
                 success : function( px_data ){
                     SourcePanel.settings.labels.carcount = px_data.carcount;
                     SourcePanel.settings.labels.mean = px_data.mean;

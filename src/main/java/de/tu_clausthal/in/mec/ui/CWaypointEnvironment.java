@@ -288,22 +288,6 @@ public class CWaypointEnvironment
     }
 
     /**
-     * method to read waypoint specific labels and resource strings
-     *
-     * @return
-     */
-    private final Map<String, String> web_static_getlabels()
-    {
-        HashMap<String, String> l_labels = new HashMap<>();
-        l_labels.put( "carcount", CCommon.getResourceString( this, "carcount" ) );
-        l_labels.put( "mean", CCommon.getResourceString( this, "mean" ) );
-        l_labels.put( "deviation", CCommon.getResourceString( this, "deviation" ) );
-        l_labels.put( "lowerbound", CCommon.getResourceString( this, "lowerbound" ) );
-        l_labels.put( "upperbound", CCommon.getResourceString( this, "upperbound" ) );
-        return l_labels;
-    }
-
-    /**
      * enum for waypoint type
      */
     protected enum EWayPointType

@@ -18,6 +18,7 @@ var mecsim_source,
         },
 
         /** todo collection for source-ui ck
+        TODO check if it is an good idea to make on single content with widgets that can be closed, opened, resized, dragged
         TODO move jquery selectors into settings for better configuration
         TODO create Language Bundle
         TODO make setLabels more general

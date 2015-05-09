@@ -5,6 +5,7 @@ var mecsim_source,
 
         settings: {
             uimode: false, //temp variable to indicate which gui is used (will be deleted when ui is refactored)
+            labels: {},
             wizardWidget: {},
             wizardWidgetStatus: true,
             diameter: 600,
@@ -13,8 +14,7 @@ var mecsim_source,
             defaultLat: 0,
             defaultLon: 0,
             selected: false,
-            colorpicker: {},
-            labels: {}
+            colorpicker: {}
             //sortComp: SourcePanel.sortByDistanceComp
 
         },
@@ -32,6 +32,7 @@ var mecsim_source,
         TODO radial refactor (bugs and generic)
         TODO clean up source-ui styles inside of layout.css
         TODO wizard refresh bug
+        TODO remove old gui if new is ready
         **/
 
         //method to initialize source-ui
@@ -40,6 +41,93 @@ var mecsim_source,
             this.getLabels();
             this.setToolbox();
             this.bind_ui_actions();
+        },
+
+        //method to get source-ui related labels
+        getLabels: function(){
+            $.ajax({
+                url     : "/clanguageenvironment/getwaypointlabels",
+                success : function( px_data ){
+                     SourcePanel.settings.labels.wizardwidget = px_data.wizardwidget;
+                     SourcePanel.settings.labels.factorysettings = px_data.factorysettings;
+                     SourcePanel.settings.labels.generatorsettings = px_data.generatorsettings;
+                     SourcePanel.settings.labels.carsettings = px_data.carsettings;
+                     SourcePanel.settings.labels.customizing = px_data.customizing;
+                     SourcePanel.settings.labels.selectyourfactory = px_data.selectyourfactory;
+                     SourcePanel.settings.labels.selectyourasl = px_data.selectyourasl;
+                     SourcePanel.settings.labels.selectyourgenerator = px_data.selectyourgenerator;
+                     SourcePanel.settings.labels.selectyourcarcount = px_data.selectyourcarcount;
+                     SourcePanel.settings.labels.selectyourmean = px_data.selectyourmean;
+                     SourcePanel.settings.labels.selectyourdeviation = px_data.selectyourdeviation;
+                     SourcePanel.settings.labels.selectyourlowerbound = px_data.selectyourlowerbound;
+                     SourcePanel.settings.labels.selectyourupperbound = px_data.selectyourupperbound;
+                     SourcePanel.settings.labels.selectcarspeedprob = px_data.selectcarspeedprob;
+                     SourcePanel.settings.labels.selectmaxcarspeedprob = px_data.selectmaxcarspeedprob;
+                     SourcePanel.settings.labels.selectaccprob = px_data.selectaccprob;
+                     SourcePanel.settings.labels.selectdecprob = px_data.selectdecprob;
+                     SourcePanel.settings.labels.selectlingerprob = px_data.selectlingerprob;
+                     SourcePanel.settings.labels.selecttoolname = px_data.selecttoolname;
+                     SourcePanel.settings.labels.selecttoolnamevalue = px_data.selecttoolnamevalue;
+                     SourcePanel.settings.labels.selecttoolcolor = px_data.selecttoolcolor;
+                     SourcePanel.settings.labels.previous = px_data.previous;
+                     SourcePanel.settings.labels.next = px_data.next;
+                     SourcePanel.settings.labels.finish = px_data.finish;
+                }
+            });
+        },
+
+        //method to set source-ui related labels
+        setLabels: function(){
+            $("#mecsim_source_wizardwidgetheader").append(SourcePanel.settings.labels.wizardwidget);
+            $("#mesim_source_factorysettings").text(SourcePanel.settings.labels.factorysettings);
+            $("#mesim_source_generatorsettings").text(SourcePanel.settings.labels.generatorsettings);
+            $("#mesim_source_carsettings").text(SourcePanel.settings.labels.carsettings);
+            $("#mesim_source_customizing").text(SourcePanel.settings.labels.customizing);
+            $("#mecsim_source_selectfactory").text(SourcePanel.settings.labels.selectyourfactory);
+            $("#mecsim_source_selectasl").text(SourcePanel.settings.labels.selectyourasl);
+            $("#mecsim_source_selectgenerator").text(SourcePanel.settings.labels.selectyourgenerator);
+            $("#mecsim_source_generatorinput1_label").text(SourcePanel.settings.labels.selectyourcarcount);
+
+            SourcePanel.updateLabels();
+
+            $("#mecsim_source_speedprob").text(SourcePanel.settings.labels.selectcarspeedprob);
+            $("#mecsim_source_maxspeedprob").text(SourcePanel.settings.labels.selectmaxcarspeedprob);
+            $("#mecsim_source_accprob").text(SourcePanel.settings.labels.selectaccprob);
+            $("#mecsim_source_decprob").text(SourcePanel.settings.labels.selectdecprob);
+            $("#mecsim_source_lingerprob").text(SourcePanel.settings.labels.selectlingerprob);
+            $("#mecsim_source_toolname_label").text(SourcePanel.settings.labels.selecttoolname);
+            $("#mecsim_source_toolname").attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
+            $("#mecsim_source_toolcolor").text(SourcePanel.settings.labels.selecttoolcolor);
+            $("#mecsim_source_").text(SourcePanel.settings.labels.previous);
+            $("#mecsim_source_").text(SourcePanel.settings.labels.next);
+            $("#mecsim_source_").text(SourcePanel.settings.labels.finish);
+        },
+
+        //method to update labels
+        updateLabels: function(){
+            if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
+                $("#mecsim_source_generatorinput2_label").text(SourcePanel.settings.labels.selectyourlowerbound);
+                $("#mecsim_source_generatorinput3_label").text(SourcePanel.settings.labels.selectyourupperbound);
+            }else{
+                $("#mecsim_source_generatorinput2_label").text(SourcePanel.settings.labels.selectyourmean);
+                $("#mecsim_source_generatorinput3_label").text(SourcePanel.settings.labels.selectyourdeviation);
+            }
+        },
+
+        //method to create toolbox
+        setToolbox: function(){
+            $.ajax({
+                url     : "/cwaypointenvironment/listtools",
+                success : function( px_data ){
+                    px_data.tools.forEach(function(data){
+                        $("<button></button>")
+                            .text(data)
+                            .attr("value",data)
+                            .button()
+                            .appendTo($("#mecsim_source_toolbox"));
+                    });
+                }
+            });
         },
 
         //method to bind source-ui related actions
@@ -79,49 +167,6 @@ var mecsim_source,
             });
         },
 
-        //method to get source-ui related labels
-        getLabels: function(){
-            $.ajax({
-                url     : "/clanguageenvironment/getwaypointlabels",
-                success : function( px_data ){
-                    SourcePanel.settings.labels.carcount = px_data.carcount;
-                    SourcePanel.settings.labels.mean = px_data.mean;
-                    SourcePanel.settings.labels.deviation = px_data.deviation;
-                    SourcePanel.settings.labels.lowerbound = px_data.lowerbound;
-                    SourcePanel.settings.labels.upperbound = px_data.upperbound;
-                }
-            });
-        },
-
-        //method to set source-ui related labels
-        setLabels: function(){
-            $("#mecsim_source_generatorinput1label").text(SourcePanel.settings.labels.carcount);
-
-            if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
-                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.lowerbound);
-                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.upperbound);
-            }else{
-                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.mean);
-                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.deviation);
-            }
-        },
-
-        //method to create toolbox
-        setToolbox: function(){
-            $.ajax({
-                url     : "/cwaypointenvironment/listtools",
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
-                        $("<button></button>")
-                            .text(data)
-                            .attr("value",data)
-                            .button()
-                            .appendTo($("#mecsim_source_toolbox"));
-                    });
-                }
-            });
-        },
-
         //method to initalize the tool wizard
         initToolWizard: function(){
 
@@ -131,6 +176,8 @@ var mecsim_source,
                 minWidth: 725,
                 minHeight: 550
             }).hide();
+
+            SourcePanel.setLabels();
 
             //create and listen to minimize button
             $("#mecsim_source_collapse_wizard").button({icons: { primary: " ui-icon-newwin"},text: false}).on("click", function(data){
@@ -266,7 +313,7 @@ var mecsim_source,
                     });
                 }
             }).done(function(){
-                SourcePanel.setLabels();
+                SourcePanel.updateLabels();
             });
 
             //create colorpicker
@@ -285,7 +332,7 @@ var mecsim_source,
 
             // listen to the generator-select and change label
             $("#mecsim_source_selectGenerator").on("change", function(){
-                SourcePanel.setLabels();
+                SourcePanel.updateLabels();
             });
 
             //listen to the addtool-button

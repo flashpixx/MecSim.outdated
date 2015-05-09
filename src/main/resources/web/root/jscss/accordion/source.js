@@ -120,10 +120,12 @@ var mecsim_source,
                     SourcePanel.settings.wizardWidgetStatus = false;
                     $("#mecsim_source_toolwizard").hide();
                     $("#mecsim_source_toolwizardwidget").animate({width: "350px", height: "20px"}, 400);
+                    $("#mecsim_source_toolwizardwidget").resizable('disable');
                 }else{
                     SourcePanel.settings.wizardWidgetStatus = true;
                     $("#mecsim_source_toolwizard").show();
                     $("#mecsim_source_toolwizardwidget").animate({width: "725px", height: "550px"}, 400);
+                    $("#mecsim_source_toolwizardwidget").resizable('enable');
                 }
             });
 

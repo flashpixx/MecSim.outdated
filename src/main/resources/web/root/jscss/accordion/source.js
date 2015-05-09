@@ -24,6 +24,18 @@ var mecsim_source,
             this.bind_ui_actions();
         },
 
+        bind_ui_actions: function() {
+            //Load the Source-GUI
+            $("#ui-id-5").on("click", function(data){
+                UI().getContent().empty();
+                UI().getContent().load("template/source.htm", function(){
+                    SourcePanel.initClusterWidget();
+                    SourcePanel.initSettingsWidget();
+                    SourcePanel.initTargetWeighting();
+                });
+            });
+        },
+
         getLabels: function(){
             $.ajax({
                 url     : "/cwaypointenvironment/getlabels",
@@ -37,55 +49,33 @@ var mecsim_source,
             });
         },
 
-        //method to init the basic widget layout
-        initLayout: function() {
+        //TODO make setLabels more general
+        setLabels: function(){
+            $("#mecsim_source_generatorinput1label").text(SourcePanel.settings.labels.carcount);
 
-            //basic layout (jquerry ui widgets)
-            $("#mecsim_source_waypointsettings").resizable({
-                animate: true,
-                minHeight: 255,
-                minWidth: 500
-            });
-
-            $("#mecsim_source_targetweighting") .resizable({
-                animate: true,
-                minHeight: 375,
-                minWidth: 500
-            });
-
+            if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
+                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.lowerbound);
+                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.upperbound);
+            }else{
+                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.mean);
+                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.deviation);
+            }
         },
 
-        //method to init the basic widget layout
-        initClusterWidget: function() {
-
-            //listen to the sorting buttons
-            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
-            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp);});
-            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
-
-            SourcePanel.settings.cluster = d3.layout.cluster()
-                .size([360, SourcePanel.settings.innerRadius]);
-                //.sort(SourcePanel.settings.sortComp);
-
-            SourcePanel.settings.bundle = d3.layout.bundle();
-
-            SourcePanel.settings.line = d3.svg.line.radial()
-                .interpolate("bundle")
-                .tension(0.75)
-                .radius(function(d) { return d.y; })
-                .angle(function(d) { return d.x / 180 * Math.PI; });
-
-            SourcePanel.settings.svg = d3.select("#mecsim_source_cluster").append("svg")
-                .attr("width", SourcePanel.settings.diameter)
-                .attr("height", SourcePanel.settings.diameter)
-                .attr("oncontextmenu", "return false;")
-                .append("g")
-                .attr("transform", "translate(" + SourcePanel.settings.radius + "," + SourcePanel.settings.radius + ")");
-
-            SourcePanel.settings.nodecontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_node");
-            SourcePanel.settings.linkcontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_link");
-
-            SourcePanel.createCluster(SourcePanel.generateData());
+        //method to creat tool-buttons in the toolbox
+        setToolbox: function(){
+            $.ajax({
+                url     : "/cwaypointenvironment/listtools",
+                success : function( px_data ){
+                    px_data.tools.forEach(function(data){
+                        $("<button></button>")
+                            .text(data)
+                            .attr("value",data)
+                            .button()
+                            .appendTo($("#mecsim_source_toolbox"));
+                    });
+                }
+            });
         },
 
         //method to init the settings widget
@@ -94,6 +84,13 @@ var mecsim_source,
             //TODO implement possiblty for different waypoint tools
             //TODO move jquery selectors
             //TODO refresh asl
+
+            //basic layout (jquerry ui widgets)
+            $("#mecsim_source_waypointsettings").resizable({
+                animate: true,
+                minHeight: 255,
+                minWidth: 500
+            });
 
             //create selectmenu with factory types
             $.ajax({
@@ -191,37 +188,14 @@ var mecsim_source,
 
         },
 
-        //method to creat tool-buttons in the toolbox
-        setToolbox: function(){
-            $.ajax({
-                url     : "/cwaypointenvironment/listtools",
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
-                        $("<button></button>")
-                            .text(data)
-                            .attr("value",data)
-                            .button()
-                            .appendTo($("#mecsim_source_toolbox"));
-                    });
-                }
-            });
-        },
-
-        //TODO make setLabels more general
-        setLabels: function(){
-            $("#mecsim_source_generatorinput1label").text(SourcePanel.settings.labels.carcount);
-
-            if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
-                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.lowerbound);
-                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.upperbound);
-            }else{
-                $("#mecsim_source_generatorinput2label").text(SourcePanel.settings.labels.mean);
-                $("#mecsim_source_generatorinput3label").text(SourcePanel.settings.labels.deviation);
-            }
-        },
-
         //method to init the target-weighing widget
         initTargetWeighting: function() {
+
+            $("#mecsim_source_targetweighting") .resizable({
+                animate: true,
+                minHeight: 375,
+                minWidth: 500
+            });
 
             //TODO build the target-weighting-table from a json object out of simulation and remove/move jquery selecors
             /**
@@ -239,6 +213,39 @@ var mecsim_source,
             });
             **/
 
+        },
+
+        //method to init the basic widget layout
+        initClusterWidget: function() {
+
+            //listen to the sorting buttons
+            $("#mecsim_source_sortByDistance").on("click", function(){SourcePanel.sort(SourcePanel.sortByDistanceComp);});
+            $("#mecsim_source_sortByType").on("click", function(){SourcePanel.sort(SourcePanel.sortByTypeComp);});
+            $("#mecsim_source_sortByName").on("click", function(){SourcePanel.sort(SourcePanel.sortByNameComp);});
+
+            SourcePanel.settings.cluster = d3.layout.cluster()
+                .size([360, SourcePanel.settings.innerRadius]);
+                //.sort(SourcePanel.settings.sortComp);
+
+            SourcePanel.settings.bundle = d3.layout.bundle();
+
+            SourcePanel.settings.line = d3.svg.line.radial()
+                .interpolate("bundle")
+                .tension(0.75)
+                .radius(function(d) { return d.y; })
+                .angle(function(d) { return d.x / 180 * Math.PI; });
+
+            SourcePanel.settings.svg = d3.select("#mecsim_source_cluster").append("svg")
+                .attr("width", SourcePanel.settings.diameter)
+                .attr("height", SourcePanel.settings.diameter)
+                .attr("oncontextmenu", "return false;")
+                .append("g")
+                .attr("transform", "translate(" + SourcePanel.settings.radius + "," + SourcePanel.settings.radius + ")");
+
+            SourcePanel.settings.nodecontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_node");
+            SourcePanel.settings.linkcontainer = SourcePanel.settings.svg.append("g").selectAll(".mecsim_source_link");
+
+            SourcePanel.createCluster(SourcePanel.generateData());
         },
 
         //method to parse a json-file and call it with a callback function
@@ -535,18 +542,5 @@ var mecsim_source,
             return result;
 
         },
-
-        bind_ui_actions: function() {
-            //Load the Source-GUI
-            $("#ui-id-5").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
-                    SourcePanel.initLayout();
-                    SourcePanel.initClusterWidget();
-                    SourcePanel.initSettingsWidget();
-                    SourcePanel.initTargetWeighting();
-                });
-            });
-        }
 
     };

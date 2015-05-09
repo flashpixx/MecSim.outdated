@@ -43,11 +43,32 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_getwaypointlabels()
     {
         HashMap<String, String> l_labels = new HashMap<>();
-        l_labels.put( "carcount", CCommon.getResourceString( this, "carcount" ) );
-        l_labels.put( "mean", CCommon.getResourceString( this, "mean" ) );
-        l_labels.put( "deviation", CCommon.getResourceString( this, "deviation" ) );
-        l_labels.put( "lowerbound", CCommon.getResourceString( this, "lowerbound" ) );
-        l_labels.put( "upperbound", CCommon.getResourceString( this, "upperbound" ) );
+
+        l_labels.put( "wizardwidget", CCommon.getResourceString( this, "wizardwidget" ) );
+        l_labels.put( "factorysettings", CCommon.getResourceString( this, "factorysettings" ) );
+        l_labels.put( "generatorsettings", CCommon.getResourceString( this, "generatorsettings" ) );
+        l_labels.put( "carsettings", CCommon.getResourceString( this, "carsettings" ) );
+        l_labels.put( "customizing", CCommon.getResourceString( this, "customizing" ) );
+        l_labels.put( "selectyourfactory", CCommon.getResourceString( this, "selectyourfactory" ) );
+        l_labels.put( "selectyourasl", CCommon.getResourceString( this, "selectyourasl" ) );
+        l_labels.put( "selectyourgenerator", CCommon.getResourceString( this, "selectyourgenerator" ) );
+        l_labels.put( "selectyourcarcount", CCommon.getResourceString( this, "selectyourcarcount" ) );
+        l_labels.put( "selectyourmean", CCommon.getResourceString( this, "selectyourmean" ) );
+        l_labels.put( "selectyourdeviation", CCommon.getResourceString( this, "selectyourdeviation" ) );
+        l_labels.put( "selectyourlowerbound", CCommon.getResourceString( this, "selectyourlowerbound" ) );
+        l_labels.put( "selectyourupperbound", CCommon.getResourceString( this, "selectyourupperbound" ) );
+        l_labels.put( "selectcarspeedprob", CCommon.getResourceString( this, "selectcarspeedprob" ) );
+        l_labels.put( "selectmaxcarspeedprob", CCommon.getResourceString( this, "selectmaxcarspeedprob" ) );
+        l_labels.put( "selectaccprob", CCommon.getResourceString( this, "selectaccprob" ) );
+        l_labels.put( "selectdecprob", CCommon.getResourceString( this, "selectdecprob" ) );
+        l_labels.put( "selectlingerprob", CCommon.getResourceString( this, "selectlingerprob" ) );
+        l_labels.put( "selecttoolname", CCommon.getResourceString( this, "selecttoolname" ) );
+        l_labels.put( "selecttoolnamevalue", CCommon.getResourceString( this, "selecttoolnamevalue" ) );
+        l_labels.put( "selecttoolcolor", CCommon.getResourceString( this, "selecttoolcolor" ) );
+        l_labels.put( "previous", CCommon.getResourceString( this, "previous" ) );
+        l_labels.put( "next", CCommon.getResourceString( this, "next" ) );
+        l_labels.put( "finish", CCommon.getResourceString( this, "finish" ) );
+
         return l_labels;
     }
 

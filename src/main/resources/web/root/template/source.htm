@@ -1,67 +1,65 @@
 <!-- Wizard Widget for Waypoint Settings -->
 <div id="mecsim_source_toolwizardwidget">
 
-    <h3 class = "ui-widget-header" >
-        Configure your Waypoint Tool
-        <span class="mecsim_source_wizardrightalign">
-            <button id="mecsim_source_collapse_wizard"></button>
-            <button id="mecsim_source_close_wizard"></button>
-        </span>
+    <h3 id="mecsim_source_wizardwidgetheader" class = "ui-widget-header" >
+    <span class="mecsim_source_wizardrightalign">
+        <button id="mecsim_source_collapse_wizard"></button>
+        <button id="mecsim_source_close_wizard"></button>
+    </span>
     </h3>
     </p>
 
     <div id="mecsim_source_toolwizard">
 
-        <h3>Factory Settings</h3>
+        <h3 id="mesim_source_factorysettings"></h3>
         <section>
-            <label >Select your Factory</label >
+            <label id="mecsim_source_selectfactory"></label >
             <select id = "mecsim_source_selectFactory" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
             </p>
-            <label >Select your Agent Program</label >
+            <label id="mecsim_source_selectasl">Select your Agent Program</label >
             <select id = "mecsim_source_selectASL" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
         </section>
 
-        <h3>Generator Settings</h3>
+        <h3 id="mesim_source_generatorsettings"></h3>
         <section>
-            <label >Select your Generator</label >
+            <label id="mecsim_source_selectgenerator"></label >
             <select id = "mecsim_source_selectGenerator" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
             </p>
-            <label id = "mecsim_source_generatorinput1_label">Select the Car Count</label >
-            <input id = "mecsim_source_generatorinput1" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign" value="1"></input >
+            <label id = "mecsim_source_generatorinput1_label"></label >
+            <input id = "mecsim_source_generatorinput1" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign"></input >
             </p>
-            <label id = "mecsim_source_generatorinput2_label">Select the Mean Probability</label >
-            <input id = "mecsim_source_generatorinput2" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign" value="10"></input >
+            <label id = "mecsim_source_generatorinput2_label"></label >
+            <input id = "mecsim_source_generatorinput2" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign"></input >
             </p>
-            <label id = "mecsim_source_generatorinput3_label">Select the Standard Deviation</label >
-            <input id = "mecsim_source_generatorinput3" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign" value="11"></input >
+            <label id = "mecsim_source_generatorinput3_label"></label >
+            <input id = "mecsim_source_generatorinput3" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign"></input >
             </p>
         </section>
 
-        <h3>Car Settings</h3>
+        <h3 id="mesim_source_carsettings"></h3>
         <section>
-            <label >Car Speed Probability</label >
-            <select id = "mecsim_source_selectSpeedProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            <label id="mecsim_source_speedprob"></label ></br>
+            <select id = "mecsim_source_selectSpeedProb" class = "mecsim_source_wizardselect"></select >
             </p>
-            <label >Car Max-Speed Probability</label >
-            <select id = "mecsim_source_selectMaxSpeedProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            <label id="mecsim_source_maxspeedprob"></label ></br>
+            <select id = "mecsim_source_selectMaxSpeedProb" class = "mecsim_source_wizardselect"></select >
             </p>
-            <label >Car Acceleration Probability</label >
-            <select id = "mecsim_source_selectAccProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            <label id="mecsim_source_accprob"></label ></br>
+            <select id = "mecsim_source_selectAccProb" class = "mecsim_source_wizardselect"></select >
             </p>
-            <label >Car Deceleration Probability</label >
-            <select id = "mecsim_source_selectDevProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            <label id="mecsim_source_decprob"></label ></br>
+            <select id = "mecsim_source_selectDevProb" class = "mecsim_source_wizardselect"></select >
             </p>
-            <label >Car Linger Probability</label >
-            <select id = "mecsim_source_selectLingerProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
-
+            <label id="mecsim_source_lingerprob"></label ></br>
+            <select id = "mecsim_source_selectLingerProb" class = "mecsim_source_wizardselect"></select >
         </section>
 
-        <h3>Customizing</h3>
+        <h3 id="mesim_source_customizing"></h3>
         <section>
-            <label >Choose a name for your Waypoint Tool</label >
-            <input id = "mecsim_source_toolName" value = "custom waypoint name" ></input >
+            <label id="mecsim_source_toolname_label"></label >
+            <input id = "mecsim_source_toolname" style="width: 100%;"></input >
             </p></p>
-            <label >Choose a color for your Waypoint Tool</label >
+            <label id="mecsim_source_toolcolor"></label >
             </br>
             <input id = "mecsim_source_colorpicker" type = "text" ></input >
         </section>

@@ -61,6 +61,7 @@ class COSMMouseListener extends PanMouseInputListener
 
     /**
      * @bug incomplete - error messages
+     * @bug remove singleton & public property
      */
     @Override
     public void mouseClicked( final MouseEvent p_event )

@@ -144,8 +144,8 @@ class COSMMouseListener extends PanMouseInputListener
     private static boolean isinBall( final Point p_click, final Point2D p_center )
     {
         final double p_xval = p_click.getX() - p_center.getX();
-        final double p_yval = p_center.getY() - p_center.getY();
+        final double p_yval = p_click.getY() - p_center.getY();
 
-        return Math.sqrt( p_xval * p_yval + p_yval * p_yval ) <= s_clickradius;
+        return Math.sqrt( p_xval * p_xval + p_yval * p_yval ) <= s_clickradius;
     }
 }

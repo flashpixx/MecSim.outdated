@@ -17,6 +17,20 @@ var mecsim_source,
 
         },
 
+        /** todo collection for source-ui ck
+        TODO move jquery selectors into settings for better configuration
+        TODO create Language Bundle
+        TODO make setLabels more general
+        TODO remove old settings widget (is deprecated because of wizard)
+        TODO refresh asl when an asl was added (deprecated but might be important inside the wizard)
+        TODO show error dialog if tool can not created (check for correctness on java side)
+        TODO source list table (JTable or JQuery Plugin)
+        TODO source weighting table (JTable or JQuery Plugin)
+        TODO radial refactor (bugs and generic)
+        TODO clean up source-ui styles inside of layout.css
+        **/
+
+        //method to initialize source-ui
         init: function() {
             mecsim_source = this.settings;
             this.getLabels();
@@ -24,6 +38,7 @@ var mecsim_source,
             this.bind_ui_actions();
         },
 
+        //method to bind source-ui related actions
         bind_ui_actions: function() {
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
@@ -43,6 +58,7 @@ var mecsim_source,
             });
         },
 
+        //method to get source-ui related labels
         getLabels: function(){
             $.ajax({
                 url     : "/cwaypointenvironment/getlabels",
@@ -56,7 +72,7 @@ var mecsim_source,
             });
         },
 
-        //TODO make setLabels more general
+        //method to set source-ui related labels
         setLabels: function(){
             $("#mecsim_source_generatorinput1label").text(SourcePanel.settings.labels.carcount);
 
@@ -69,7 +85,7 @@ var mecsim_source,
             }
         },
 
-        //method to creat tool-buttons in the toolbox
+        //method to create toolbox
         setToolbox: function(){
             $.ajax({
                 url     : "/cwaypointenvironment/listtools",
@@ -87,7 +103,7 @@ var mecsim_source,
 
         //method to initalize the tool wizard
         initToolWizard: function(){
-            $("#mecsim_source_wizardwidget").resizable({
+            $("#mecsim_source_wizardwidget").draggable().resizable({
                 animate: true,
                 minHeight: 550,
                 minWidth: 550
@@ -102,15 +118,11 @@ var mecsim_source,
             });
         },
 
-        //method to init the settings widget TODO Deprecated because of Wizard
+        //method to init the settings widget
         initSettingsWidget: function() {
 
-            //TODO implement possiblty for different waypoint tools
-            //TODO move jquery selectors
-            //TODO refresh asl
-
             //basic layout (jquerry ui widgets)
-            $("#mecsim_source_waypointsettings").resizable({
+            $("#mecsim_source_waypointsettings").draggable().resizable({
                 animate: true,
                 minHeight: 255,
                 minWidth: 500
@@ -204,7 +216,6 @@ var mecsim_source,
                         });
                     }
                 }).fail(function(){
-                    //TODO show an error dialog
                     console.log("Not a valid tool");
                 });
 
@@ -221,7 +232,6 @@ var mecsim_source,
                 minWidth: 500
             });
 
-            //TODO build the target-weighting-table from a json object out of simulation and remove/move jquery selecors
             /**
             $('#mecsim_source_weighting').dataTable({
                 "paging": true,
@@ -381,8 +391,6 @@ var mecsim_source,
                             inTargets = false;
                     }
 
-                    //TODO check if selected node is in target list of node
-
                     return inTargets;
                 });
 
@@ -405,7 +413,6 @@ var mecsim_source,
         //method which should be triggered if a node was rightclicked
         rightclick: function(rightclicked) {
 
-            //TODO On Righclick add Waypoint to a Markrov Chain
             /** was commented out before!!!
                 d3.event.preventDefault();
 

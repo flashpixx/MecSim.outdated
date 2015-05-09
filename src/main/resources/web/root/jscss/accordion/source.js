@@ -4,7 +4,8 @@ var mecsim_source,
     SourcePanel = {
 
         settings: {
-
+            uimode: false, //temp variable to indicate which gui is used (will be deleted when ui is refactored)
+            wizardWidget: {},
             wizardWidgetStatus: true,
             diameter: 600,
             radius: 600 / 2,
@@ -46,18 +47,35 @@ var mecsim_source,
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
                 UI().getContent().empty();
+                UI().getContent().load("template/source.htm", function(){
+                    SourcePanel.initToolWizard();
+                });
+                SourcePanel.settings.uimode = true;
+            });
+
+            $("#mecsim_source_oldgui").button().on("click", function(data){
+                UI().getContent().empty();
                 UI().getContent().load("template/sourceold.htm", function(){
                     SourcePanel.initClusterWidget();
                     SourcePanel.initSettingsWidget();
                     SourcePanel.initTargetWeighting();
                 });
+                SourcePanel.settings.uimode = false;
             });
 
             $("#mecsim_source_createtool").button().on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
-                    SourcePanel.initToolWizard();
-                });
+
+                if(!SourcePanel.settings.uimode){
+                    UI().getContent().empty();
+                    UI().getContent().load("template/source.htm", function(){
+                        SourcePanel.initToolWizard();
+                        SourcePanel.settings.wizardWidget.show();
+                    });
+                    SourcePanel.settings.uimode = true;
+                }else{
+                    SourcePanel.settings.wizardWidget.show();
+                }
+
             });
         },
 
@@ -108,11 +126,11 @@ var mecsim_source,
         initToolWizard: function(){
 
             //layout wizard widget
-            $("#mecsim_source_toolwizardwidget").draggable().resizable({
+            SourcePanel.settings.wizardWidget = $("#mecsim_source_toolwizardwidget").draggable().resizable({
                 animate: true,
                 minWidth: 725,
                 minHeight: 550
-            });
+            }).hide();
 
             //create and listen to minimize button
             $("#mecsim_source_collapse_wizard").button({icons: { primary: " ui-icon-newwin"},text: false}).on("click", function(data){

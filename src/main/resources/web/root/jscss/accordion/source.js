@@ -104,12 +104,68 @@ var mecsim_source,
 
         //method to initalize the tool wizard
         initToolWizard: function(){
-            $("#mecsim_source_wizardwidget").draggable().resizable({
+
+            //layout wizard widget
+            $("#mecsim_source_toolwizardwidget").draggable().resizable({
                 animate: true,
                 minHeight: 550,
-                minWidth: 550
+                minWidth: 725
             });
 
+            //create selectmenu with factory types
+            $.ajax({
+                url     : "/cwaypointenvironment/listfactories",
+                success : function( px_data ){
+                    px_data.factories.forEach(function(data){
+                        $("#mecsim_source_selectFactory")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //create selectmenu with possible agent programs
+            $.ajax({
+                url     : "/cagentenvironment/jason/list",
+                success : function( px_data ){
+                    px_data.agents.forEach(function(data){
+                        $("#mecsim_source_selectASL")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //create selectmenu with possible generator types
+            $.ajax({
+                url     : "/cwaypointenvironment/listgenerator",
+                success : function( px_data ){
+                    px_data.generators.forEach(function(data){
+                        $("#mecsim_source_selectGenerator")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //create colorpicker
+            SourcePanel.settings.colorpicker = $("#mecsim_source_colorpicker").spectrum({
+                showPaletteOnly: true,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                color: 'blanchedalmond',
+                palette: [
+                    ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+                    ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+                    ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
+                ]
+            });
+
+            //create wizard
             $("#mecsim_source_toolwizard").steps({
                 headerTag: "h3",
                 bodyTag: "section",
@@ -117,6 +173,7 @@ var mecsim_source,
                 stepsOrientation: "vertical",
                 autoFocus: true
             });
+
         },
 
         //method to init the settings widget

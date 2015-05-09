@@ -1,47 +1,71 @@
-<!-- Cluster Widget -->
-<div id = "mecsim_source_clusterwidget" class = "ui-widget-content" >
-    <h3 class = "ui-widget-header" >Source-Target Relation</h3 >
-    <center style = "padding-top:10px;" >
-        <button id = "mecsim_source_sortByDistance" type = "button" >Sort by Distance</button >
-        <button id = "mecsim_source_sortByType" type = "button" >Sort by Type</button >
-        <button id = "mecsim_source_sortByName" type = "button" >Sort by Name</button >
-    </center >
-    <div id = "mecsim_source_cluster" ></div >
-</div >
+<!-- Wizard Widget for Waypoint Settings -->
+<div id="mecsim_source_toolwizardwidget">
 
-<!-- Waypoint Settings Widget -->
-<div id = "mecsim_source_waypointsettings" class = "ui-widget-content" >
-    <h3 class = "ui-widget-header" >Waypoint Settings</h3 >
-
-    <label >Select your Factory</label >
-    <select class = "mecsim_source_select" id = "mecsim_source_selectFactory" ></select >
+    <h3 class = "ui-widget-header" >
+        Configure your Waypoint Tool
+        <span class="mecsim_source_wizardrightalign">
+            <button id="mecsim_source_collapse_wizard"></button>
+            <button id="mecsim_source_close_wizard"></button>
+        </span>
+    </h3>
     </p>
 
-    <label >Select your Agent Program</label >
-    <select class = "mecsim_source_select" id = "mecsim_source_selectASL" ></select >
-    </p>
+    <div id="mecsim_source_toolwizard">
 
-    <label >Select your Generator</label >
-    <select class = "mecsim_source_select" id = "mecsim_source_selectGenerator" ></select >
-    </p>
+        <h3>Factory Settings</h3>
+        <section>
+            <label >Select your Factory</label >
+            <select id = "mecsim_source_selectFactory" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            </p>
+            <label >Select your Agent Program</label >
+            <select id = "mecsim_source_selectASL" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+        </section>
 
-    <label id = "mecsim_source_generatorinput1label"></label >
-    <input class = "mecsim_source_inputsmall" id = "mecsim_source_generatorinput1" value="1"></input >
-    <label id = "mecsim_source_generatorinput2label"></label >
-    <input class = "mecsim_source_inputsmall" id = "mecsim_source_generatorinput2" value="10"></input >
-    <label id = "mecsim_source_generatorinput3label"></label >
-    <input class = "mecsim_source_inputsmall" id = "mecsim_source_generatorinput3" value="11"></input >
+        <h3>Generator Settings</h3>
+        <section>
+            <label >Select your Generator</label >
+            <select id = "mecsim_source_selectGenerator" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            </p>
+            <label id = "mecsim_source_generatorinput1_label">Select the Car Count</label >
+            <input id = "mecsim_source_generatorinput1" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign" value="1"></input >
+            </p>
+            <label id = "mecsim_source_generatorinput2_label">Select the Mean Probability</label >
+            <input id = "mecsim_source_generatorinput2" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign" value="10"></input >
+            </p>
+            <label id = "mecsim_source_generatorinput3_label">Select the Standard Deviation</label >
+            <input id = "mecsim_source_generatorinput3" class = "mecsim_source_wizardinputsmall mecsim_source_wizardrightalign" value="11"></input >
+            </p>
+        </section>
 
-    <div class = "mecsim_source_customizetool" >
-        <label >AKTUELL WERDEN KONFIGURATION INPUTS NICHT GECHECKT !</label >
-        </br>
-        <input id = "mecsim_source_toolName" value = "Toolname" ></input >
-        <input id = "mecsim_source_colorpicker" type = "text" ></input >
-        <input id = "mecsim_source_addTool" type = "submit" value = "Add to Toolbox" ></input >
-    </div >
-</div >
+        <h3>Car Settings</h3>
+        <section>
+            <label >Car Speed Probability</label >
+            <select id = "mecsim_source_selectSpeedProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            </p>
+            <label >Car Max-Speed Probability</label >
+            <select id = "mecsim_source_selectMaxSpeedProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            </p>
+            <label >Car Acceleration Probability</label >
+            <select id = "mecsim_source_selectAccProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            </p>
+            <label >Car Deceleration Probability</label >
+            <select id = "mecsim_source_selectDevProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
+            </p>
+            <label >Car Linger Probability</label >
+            <select id = "mecsim_source_selectLingerProb" class = "mecsim_source_wizardselect mecsim_source_wizardrightalign"></select >
 
-<!-- Target Weighting Widget -->
-<div id = "mecsim_source_targetweighting" class = "ui-widget-content" >
-    <h3 class = "ui-widget-header" >Target Weighting</h3 >
-</div >
+        </section>
+
+        <h3>Customizing</h3>
+        <section>
+            <label >Choose a name for your Waypoint Tool</label >
+            <input id = "mecsim_source_toolName" value = "custom waypoint name" ></input >
+            </p></p>
+            <label >Choose a color for your Waypoint Tool</label >
+            </br>
+            <input id = "mecsim_source_colorpicker" type = "text" ></input >
+        </section>
+
+    </div>
+
+</div>

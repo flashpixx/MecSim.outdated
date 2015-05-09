@@ -46,7 +46,7 @@ var mecsim_source,
             //Load the Source-GUI
             $("#ui-id-5").on("click", function(data){
                 UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
+                UI().getContent().load("template/sourceold.htm", function(){
                     SourcePanel.initClusterWidget();
                     SourcePanel.initSettingsWidget();
                     SourcePanel.initTargetWeighting();
@@ -55,7 +55,7 @@ var mecsim_source,
 
             $("#mecsim_source_createtool").button().on("click", function(data){
                 UI().getContent().empty();
-                UI().getContent().load("template/sourcewizard.htm", function(){
+                UI().getContent().load("template/source.htm", function(){
                     SourcePanel.initToolWizard();
                 });
             });

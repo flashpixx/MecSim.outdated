@@ -34,6 +34,13 @@ var mecsim_source,
                     SourcePanel.initTargetWeighting();
                 });
             });
+
+            $("#mecsim_source_createtool").button().on("click", function(data){
+                UI().getContent().empty();
+                UI().getContent().load("template/sourcewizard.htm", function(){
+                    SourcePanel.initToolWizard();
+                });
+            });
         },
 
         getLabels: function(){
@@ -78,7 +85,12 @@ var mecsim_source,
             });
         },
 
-        //method to init the settings widget
+        //method to initalize the tool wizard
+        initToolWizard: function(){
+
+        },
+
+        //method to init the settings widget TODO Deprecated because of Wizard
         initSettingsWidget: function() {
 
             //TODO implement possiblty for different waypoint tools

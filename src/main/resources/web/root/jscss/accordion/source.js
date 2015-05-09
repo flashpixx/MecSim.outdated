@@ -5,6 +5,7 @@ var mecsim_source,
 
         settings: {
 
+            wizardWidgetStatus: true,
             diameter: 600,
             radius: 600 / 2,
             innerRadius: (600 / 2) - 120,
@@ -29,6 +30,7 @@ var mecsim_source,
         TODO source weighting table (JTable or JQuery Plugin)
         TODO radial refactor (bugs and generic)
         TODO clean up source-ui styles inside of layout.css
+        TODO wizard refresh bug
         **/
 
         //method to initialize source-ui
@@ -108,8 +110,26 @@ var mecsim_source,
             //layout wizard widget
             $("#mecsim_source_toolwizardwidget").draggable().resizable({
                 animate: true,
-                minHeight: 550,
-                minWidth: 725
+                minWidth: 725,
+                minHeight: 550
+            });
+
+            //create and listen to minimize button
+            $("#mecsim_source_collapse_wizard").button({icons: { primary: " ui-icon-newwin"},text: false}).on("click", function(data){
+                if(SourcePanel.settings.wizardWidgetStatus){
+                    SourcePanel.settings.wizardWidgetStatus = false;
+                    $("#mecsim_source_toolwizard").hide();
+                    $("#mecsim_source_toolwizardwidget").animate({width: "350px", height: "20px"}, 400);
+                }else{
+                    SourcePanel.settings.wizardWidgetStatus = true;
+                    $("#mecsim_source_toolwizard").show();
+                    $("#mecsim_source_toolwizardwidget").animate({width: "725px", height: "550px"}, 400);
+                }
+            });
+
+            //create and listen to the close button
+            $("#mecsim_source_close_wizard").button({icons: { primary: "ui-icon-closethick"},text: false}).on("click", function(data){
+                $("#mecsim_source_toolwizardwidget").hide();
             });
 
             //create selectmenu with factory types

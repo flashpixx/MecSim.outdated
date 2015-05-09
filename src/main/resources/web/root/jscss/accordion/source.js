@@ -87,6 +87,12 @@ var mecsim_source,
 
         //method to initalize the tool wizard
         initToolWizard: function(){
+            $("#mecsim_source_wizardwidget").resizable({
+                animate: true,
+                minHeight: 550,
+                minWidth: 550
+            });
+
             $("#mecsim_source_toolwizard").steps({
                 headerTag: "h3",
                 bodyTag: "section",

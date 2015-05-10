@@ -207,7 +207,7 @@ public class CMessageSystem implements IVoidSteppable
             l_item.getRight().clear();
         }
 
-        //m_communicator.send( CCommon.toJson( m_messageflow ) );
+        m_communicator.send( CCommon.toJson( m_messageflow ) );
     }
 
 

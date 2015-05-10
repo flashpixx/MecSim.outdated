@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.drapostolos.typeparser.TypeParser;
 import com.github.drapostolos.typeparser.TypeParserException;
 import de.tu_clausthal.in.mec.CConfiguration;
@@ -73,7 +74,7 @@ public class CCommon
                 final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
         )
         {
-            new ObjectMapper().writer().writeValue( l_stream, p_data );
+            new ObjectMapper().configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false ).writer().writeValue( l_stream, p_data );
             return l_stream.toString();
         }
         catch ( final IOException l_exception )

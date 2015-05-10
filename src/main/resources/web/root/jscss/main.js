@@ -50,5 +50,10 @@ $(document).ready(function() {
         ws_inspector.onmessage = function( p_event ) {
             console.log( p_event.data );
         };
+
+        var ws_messageflow = MecSim().getWebSocket("/cmessagesystem/flow");
+        ws_messageflow.onmessage = function( p_event ) {
+            console.log( p_event.data );
+        };
     });
 });

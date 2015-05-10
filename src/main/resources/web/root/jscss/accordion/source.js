@@ -263,7 +263,18 @@ var mecsim_source,
                             ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
                         ]
                     });
-                }
+                },
+                onStepChanging: function (event, currentIndex, newIndex){
+
+                    //validate wizard
+                    if(currentIndex===0){
+                        if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && $("#mecsim_source_selectASL").val()===null)
+                            return false;
+                    }
+
+                    return true;
+                },
+
             });
 
         },

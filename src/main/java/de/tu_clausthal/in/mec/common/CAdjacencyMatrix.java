@@ -71,7 +71,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public void set( final T p_row, final T p_column, final N p_value )
     {
-        final Pair<T, T> l_key = new ImmutablePair<>( p_row, p_column );
+        m_matrix.put( new ImmutablePair<>( p_row, p_column ), p_value );
     }
 
     /**

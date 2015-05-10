@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -231,16 +232,16 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<String>> web_static_listfactories()
+    private final Map<String, List<ImmutablePair<String, Boolean>>> web_static_listfactories()
     {
 
-        List<String> l_factories = new ArrayList<>();
+        List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
         for ( EFactoryType l_factory : EFactoryType.values() )
         {
-            l_factories.add( l_factory.toString() );
+            l_factories.add( new ImmutablePair<>( l_factory.toString(), l_factory.m_requireASL ) );
         }
 
-        return new HashMap<String, List<String>>()
+        return new HashMap<String, List<ImmutablePair<String, Boolean>>>()
         {{
                 put( "factories", l_factories );
             }};

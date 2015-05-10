@@ -28,41 +28,13 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
  * class of an adjacence matrix
  */
-public class CAdjacencyMatrix<T, N>
+public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
-    /**
-     * map with data *
-     */
-    private final Map<Pair<T, T>, N> m_matrix = new HashMap<>();
-
-
-    /**
-     * clears matrix
-     */
-    public void clear()
-    {
-        m_matrix.clear();
-    }
-
-
-    /**
-     * remove a full cell
-     *
-     * @param p_row
-     * @param p_column
-     */
-    public void remove( final T p_row, final T p_column )
-    {
-        final Pair<T, T> l_key = new ImmutablePair<>( p_row, p_column );
-
-        m_matrix.remove( l_key );
-    }
 
     /**
      * @param p_row
@@ -71,7 +43,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public void set( final T p_row, final T p_column, final N p_value )
     {
-        m_matrix.put( new ImmutablePair<>( p_row, p_column ), p_value );
+        this.put( new ImmutablePair<>( p_row, p_column ), p_value );
     }
 
     /**
@@ -81,7 +53,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public N get( final T p_row, final T p_column )
     {
-        return m_matrix.get( new ImmutablePair<>( p_row, p_column ) );
+        return this.get( new ImmutablePair<>( p_row, p_column ) );
     }
 
     /**
@@ -91,7 +63,7 @@ public class CAdjacencyMatrix<T, N>
      */
     public boolean exist( final T p_row, final T p_column )
     {
-        return m_matrix.containsKey( new ImmutablePair<>( p_row, p_column ) );
+        return this.containsKey( new ImmutablePair<>( p_row, p_column ) );
     }
 
 

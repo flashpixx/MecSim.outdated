@@ -199,48 +199,6 @@ var mecsim_source,
                 $("#mecsim_source_toolwizardwidget").hide();
             });
 
-            //create selectmenu with factory types
-            $.ajax({
-                url     : "/cwaypointenvironment/listfactories",
-                success : function( px_data ){
-                    px_data.factories.forEach(function(data){
-                        $.each( data, function( pc_key, px_value ) {
-                            $("#mecsim_source_selectFactory")
-                                .append( $("<option></option>")
-                                .attr("value",pc_key)
-                                .attr("requireASL", px_value)
-                                .text(pc_key));
-                        });
-                    });
-                }
-            });
-
-            //create selectmenu with possible agent programs
-            $.ajax({
-                url     : "/cagentenvironment/jason/list",
-                success : function( px_data ){
-                    px_data.agents.forEach(function(data){
-                        $("#mecsim_source_selectASL")
-                            .append( $("<option></option>")
-                            .attr("value",data)
-                            .text(data));
-                    });
-                }
-            });
-
-            //create selectmenu with possible generator types
-            $.ajax({
-                url     : "/cwaypointenvironment/listgenerator",
-                success : function( px_data ){
-                    px_data.generators.forEach(function(data){
-                        $("#mecsim_source_selectGenerator")
-                            .append( $("<option></option>")
-                            .attr("value",data)
-                            .text(data));
-                    });
-                }
-            });
-
             //create wizard
             $("#mecsim_source_toolwizard").steps({
                 headerTag: "h3",
@@ -249,6 +207,48 @@ var mecsim_source,
                 stepsOrientation: "vertical",
                 autoFocus: true,
                 onInit: function () {
+
+                    //create selectmenu with factory types
+                    $.ajax({
+                        url     : "/cwaypointenvironment/listfactories",
+                        success : function( px_data ){
+                            px_data.factories.forEach(function(data){
+                                $.each( data, function( pc_key, px_value ) {
+                                    $("#mecsim_source_selectFactory")
+                                        .append( $("<option></option>")
+                                        .attr("value",pc_key)
+                                        .attr("requireASL", px_value)
+                                        .text(pc_key));
+                                });
+                            });
+                        }
+                    });
+
+                    //create selectmenu with possible agent programs
+                    $.ajax({
+                        url     : "/cagentenvironment/jason/list",
+                        success : function( px_data ){
+                            px_data.agents.forEach(function(data){
+                                $("#mecsim_source_selectASL")
+                                    .append( $("<option></option>")
+                                    .attr("value",data)
+                                    .text(data));
+                            });
+                        }
+                    });
+
+                    //create selectmenu with possible generator types
+                    $.ajax({
+                        url     : "/cwaypointenvironment/listgenerator",
+                        success : function( px_data ){
+                            px_data.generators.forEach(function(data){
+                                $("#mecsim_source_selectGenerator")
+                                    .append( $("<option></option>")
+                                    .attr("value",data)
+                                    .text(data));
+                            });
+                        }
+                    });
 
                     //create colorpicker
                     SourcePanel.settings.colorpicker = $("#mecsim_source_colorpicker").spectrum({

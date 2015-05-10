@@ -4,7 +4,6 @@ var mecsim_source,
     SourcePanel = {
 
         settings: {
-            uimode: false, //temp variable to indicate which gui is used (will be deleted when ui is refactored)
             labels: {},
             wizardWidget: {},
             wizardWidgetStatus: true,
@@ -132,14 +131,6 @@ var mecsim_source,
 
         //method to bind source-ui related actions
         bind_ui_actions: function() {
-            //Load the Source-GUI
-            $("#ui-id-5").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
-                    SourcePanel.initToolWizard();
-                });
-                SourcePanel.settings.uimode = true;
-            });
 
             $("#mecsim_source_oldgui").button().on("click", function(data){
                 UI().getContent().empty();
@@ -148,22 +139,19 @@ var mecsim_source,
                     SourcePanel.initSettingsWidget();
                     SourcePanel.initTargetWeighting();
                 });
-                SourcePanel.settings.uimode = false;
+            });
+
+            $("#ui-id-5").on("click", function(data){
+                UI().getContent().empty();
+                UI().getContent().load("template/source.htm", function(){
+                    SourcePanel.initToolWizard();
+                    SourcePanel.settings.wizardWidgetStatus=true;
+                    SourcePanel.settings.wizardWidget.show();
+                });
             });
 
             $("#mecsim_source_createtool").button().on("click", function(data){
-
-                if(!SourcePanel.settings.uimode){
-                    UI().getContent().empty();
-                    UI().getContent().load("template/source.htm", function(){
-                        SourcePanel.initToolWizard();
-                        SourcePanel.settings.wizardWidget.show();
-                    });
-                    SourcePanel.settings.uimode = true;
-                }else{
-                    SourcePanel.settings.wizardWidget.show();
-                }
-
+                SourcePanel.settings.wizardWidget.show();
             });
         },
 

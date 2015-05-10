@@ -4,7 +4,6 @@ var mecsim_source,
     SourcePanel = {
 
         settings: {
-            uimode: false, //temp variable to indicate which gui is used (will be deleted when ui is refactored)
             labels: {},
             wizardWidget: {},
             wizardWidgetStatus: true,
@@ -78,29 +77,26 @@ var mecsim_source,
 
         //method to set source-ui related labels
         setLabels: function(){
-            $("#mecsim_source_wizardwidgetheader").append(SourcePanel.settings.labels.wizardwidget);
-            $("#mesim_source_factorysettings").text(SourcePanel.settings.labels.factorysettings);
-            $("#mesim_source_generatorsettings").text(SourcePanel.settings.labels.generatorsettings);
-            $("#mesim_source_carsettings").text(SourcePanel.settings.labels.carsettings);
-            $("#mesim_source_customizing").text(SourcePanel.settings.labels.customizing);
-            $("#mecsim_source_selectfactory").text(SourcePanel.settings.labels.selectyourfactory);
-            $("#mecsim_source_selectasl").text(SourcePanel.settings.labels.selectyourasl);
-            $("#mecsim_source_selectgenerator").text(SourcePanel.settings.labels.selectyourgenerator);
+            $("#mecsim_source_wizardwidget_label").append(SourcePanel.settings.labels.wizardwidget);
+            $("#mesim_source_factorysettings_label").text(SourcePanel.settings.labels.factorysettings);
+            $("#mesim_source_generatorsettings_label").text(SourcePanel.settings.labels.generatorsettings);
+            $("#mesim_source_carsettings_label").text(SourcePanel.settings.labels.carsettings);
+            $("#mesim_source_customizing_label").text(SourcePanel.settings.labels.customizing);
+            $("#mecsim_source_selectfactory_label").text(SourcePanel.settings.labels.selectyourfactory);
+            $("#mecsim_source_selectasl_label").text(SourcePanel.settings.labels.selectyourasl);
+            $("#mecsim_source_selectgenerator_label").text(SourcePanel.settings.labels.selectyourgenerator);
             $("#mecsim_source_generatorinput1_label").text(SourcePanel.settings.labels.selectyourcarcount);
 
             SourcePanel.updateLabels();
 
-            $("#mecsim_source_speedprob").text(SourcePanel.settings.labels.selectcarspeedprob);
-            $("#mecsim_source_maxspeedprob").text(SourcePanel.settings.labels.selectmaxcarspeedprob);
-            $("#mecsim_source_accprob").text(SourcePanel.settings.labels.selectaccprob);
-            $("#mecsim_source_decprob").text(SourcePanel.settings.labels.selectdecprob);
-            $("#mecsim_source_lingerprob").text(SourcePanel.settings.labels.selectlingerprob);
+            $("#mecsim_source_speedprob_label").text(SourcePanel.settings.labels.selectcarspeedprob);
+            $("#mecsim_source_maxspeedprob_label").text(SourcePanel.settings.labels.selectmaxcarspeedprob);
+            $("#mecsim_source_accprob_label").text(SourcePanel.settings.labels.selectaccprob);
+            $("#mecsim_source_decprob_label").text(SourcePanel.settings.labels.selectdecprob);
+            $("#mecsim_source_lingerprob_label").text(SourcePanel.settings.labels.selectlingerprob);
             $("#mecsim_source_toolname_label").text(SourcePanel.settings.labels.selecttoolname);
             $("#mecsim_source_toolname").attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
-            $("#mecsim_source_toolcolor").text(SourcePanel.settings.labels.selecttoolcolor);
-            $("#mecsim_source_").text(SourcePanel.settings.labels.previous);
-            $("#mecsim_source_").text(SourcePanel.settings.labels.next);
-            $("#mecsim_source_").text(SourcePanel.settings.labels.finish);
+            $("#mecsim_source_toolcolor_label").text(SourcePanel.settings.labels.selecttoolcolor);
         },
 
         //method to update labels
@@ -132,14 +128,6 @@ var mecsim_source,
 
         //method to bind source-ui related actions
         bind_ui_actions: function() {
-            //Load the Source-GUI
-            $("#ui-id-5").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
-                    SourcePanel.initToolWizard();
-                });
-                SourcePanel.settings.uimode = true;
-            });
 
             $("#mecsim_source_oldgui").button().on("click", function(data){
                 UI().getContent().empty();
@@ -148,22 +136,17 @@ var mecsim_source,
                     SourcePanel.initSettingsWidget();
                     SourcePanel.initTargetWeighting();
                 });
-                SourcePanel.settings.uimode = false;
+            });
+
+            $("#ui-id-5").on("click", function(data){
+                UI().getContent().empty();
+                UI().getContent().load("template/source.htm", function(){
+                    SourcePanel.initToolWizard();
+                });
             });
 
             $("#mecsim_source_createtool").button().on("click", function(data){
-
-                if(!SourcePanel.settings.uimode){
-                    UI().getContent().empty();
-                    UI().getContent().load("template/source.htm", function(){
-                        SourcePanel.initToolWizard();
-                        SourcePanel.settings.wizardWidget.show();
-                    });
-                    SourcePanel.settings.uimode = true;
-                }else{
-                    SourcePanel.settings.wizardWidget.show();
-                }
-
+                SourcePanel.settings.wizardWidget.show();
             });
         },
 

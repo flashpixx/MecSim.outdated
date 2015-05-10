@@ -105,7 +105,7 @@ public class CCarJasonAgent extends CDefaultCar
     {
         this(
                 p_objectname, new HashSet<String>()
-        {{
+                {{
                         add( p_agent );
                     }}, p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability
         );
@@ -123,8 +123,8 @@ public class CCarJasonAgent extends CDefaultCar
      * @param p_lingerprobability linger probability
      * @throws JasonException throws on Jason error
      */
-    public CCarJasonAgent( final String p_objectname, final Set<String> p_agent, final ArrayList<Pair<EdgeIteratorState, Integer>> p_route,
-                           final int p_speed, final int p_maxspeed, final int p_acceleration, final int p_deceleration, final double p_lingerprobability
+    public CCarJasonAgent( final String p_objectname, final Set<String> p_agent, final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed,
+                           final int p_maxspeed, final int p_acceleration, final int p_deceleration, final double p_lingerprobability
     ) throws JasonException
     {
         super( p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability );
@@ -143,7 +143,6 @@ public class CCarJasonAgent extends CDefaultCar
      */
     private void bind( final CPath p_objectname, final String p_asl ) throws JasonException
     {
-
         final CAgent<CDefaultCar> l_agent = new CAgent<>( p_objectname.append( p_asl ), p_asl );
 
         // add the belief bind to the agent

@@ -315,7 +315,7 @@ public class CWaypointEnvironment
      */
     protected enum EFactoryType
     {
-        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false),
+        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false ),
         DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ), true );
 
         private final String m_text;

@@ -97,7 +97,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     {
         final List<String> l_list = new LinkedList<>();
         for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
-            l_list.add( new File( l_file ).getName() );
+            l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
 
         return CCommon.convertCollectionToArray( String[].class, l_list );
     }

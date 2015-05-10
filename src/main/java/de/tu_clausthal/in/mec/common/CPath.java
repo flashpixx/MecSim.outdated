@@ -122,26 +122,6 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
-     * adds a path at the end
-     *
-     * @param p_path string path
-     */
-    public final void pushback( final String p_path )
-    {
-        this.pushback( new CPath( p_path ) );
-    }
-
-    /**
-     * adds a path at the end
-     *
-     * @param p_path path
-     */
-    public final void pushback( final CPath p_path )
-    {
-        m_path.addAll( p_path.m_path );
-    }
-
-    /**
      * adds a path at the front
      *
      * @param p_path string path
@@ -171,9 +151,19 @@ public class CPath implements Iterable<CPath>
      */
     public CPath append( final CPath p_path )
     {
-        final CPath l_path = new CPath( p_path );
+        final CPath l_path = new CPath( this );
         l_path.pushback( p_path );
         return l_path;
+    }
+
+    /**
+     * adds a path at the end
+     *
+     * @param p_path path
+     */
+    public final void pushback( final CPath p_path )
+    {
+        m_path.addAll( p_path.m_path );
     }
 
     /**
@@ -184,9 +174,19 @@ public class CPath implements Iterable<CPath>
      */
     public CPath append( final String p_path )
     {
-        final CPath l_path = new CPath( p_path );
-        l_path.pushback( new CPath( p_path ) );
+        final CPath l_path = new CPath( this );
+        l_path.pushback( p_path );
         return l_path;
+    }
+
+    /**
+     * adds a path at the end
+     *
+     * @param p_path string path
+     */
+    public final void pushback( final String p_path )
+    {
+        this.pushback( new CPath( p_path ) );
     }
 
     /**

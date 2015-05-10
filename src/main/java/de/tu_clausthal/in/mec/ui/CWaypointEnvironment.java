@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -231,16 +232,16 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<String>> web_static_listfactories()
+    private final Map<String, List<ImmutablePair<String, Boolean>>> web_static_listfactories()
     {
 
-        List<String> l_factories = new ArrayList<>();
+        List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
         for ( EFactoryType l_factory : EFactoryType.values() )
         {
-            l_factories.add( l_factory.toString() );
+            l_factories.add( new ImmutablePair<>( l_factory.toString(), l_factory.m_requireASL ) );
         }
 
-        return new HashMap<String, List<String>>()
+        return new HashMap<String, List<ImmutablePair<String, Boolean>>>()
         {{
                 put( "factories", l_factories );
             }};
@@ -314,20 +315,22 @@ public class CWaypointEnvironment
      */
     protected enum EFactoryType
     {
-        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
-        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
+        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false),
+        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ), true );
 
-        private final String text;
+        private final String m_text;
+        private final Boolean m_requireASL;
 
-        private EFactoryType( final String text )
+        private EFactoryType( final String p_text, final Boolean p_requireASL )
         {
-            this.text = text;
+            this.m_text = p_text;
+            this.m_requireASL = p_requireASL;
         }
 
         @Override
         public String toString()
         {
-            return this.text;
+            return this.m_text;
         }
     }
 

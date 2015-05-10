@@ -145,8 +145,6 @@ var mecsim_source,
                 UI().getContent().empty();
                 UI().getContent().load("template/source.htm", function(){
                     SourcePanel.initToolWizard();
-                    SourcePanel.settings.wizardWidgetStatus=true;
-                    SourcePanel.settings.wizardWidget.show();
                 });
             });
 

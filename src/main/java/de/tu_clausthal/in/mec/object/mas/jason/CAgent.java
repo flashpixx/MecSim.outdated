@@ -69,7 +69,10 @@ import java.util.Set;
  */
 public class CAgent<T> implements IVoidAgent
 {
-
+    /**
+     * path seperator
+     */
+    private final static String c_seperator = "::";
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
@@ -211,7 +214,7 @@ public class CAgent<T> implements IVoidAgent
     //@Override
     public final String getName()
     {
-        return m_namepath.getPath();
+        return m_namepath.getPath( c_seperator );
     }
 
     @Override
@@ -293,7 +296,7 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public final String getAgName()
         {
-            return m_namepath.getPath( "_" );
+            return m_namepath.getPath( c_seperator );
         }
 
         @Override

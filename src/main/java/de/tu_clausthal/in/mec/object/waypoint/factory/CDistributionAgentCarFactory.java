@@ -97,8 +97,8 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
         try
         {
             return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
-                    p_cells, (int) m_speed.sample(), (int) m_maxspeed.sample(), (int) m_acceleration.sample(), (int) m_deceleration.sample(),
-                    m_lingerdistribution.sample(), m_aslname
+                    "agentcar %hash%", m_aslname, p_cells, (int) m_speed.sample(), (int) m_maxspeed.sample(), (int) m_acceleration.sample(),
+                    (int) m_deceleration.sample(), m_lingerdistribution.sample()
             );
         }
         catch ( final JasonException l_exception )

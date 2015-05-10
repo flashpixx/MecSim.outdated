@@ -52,6 +52,8 @@ import java.util.Map;
 
 /**
  * class for a default car *
+ *
+ * @bug refactor ctor (reduce parameter)
  */
 public class CDefaultCar extends IInspectorDefault implements ICar
 {

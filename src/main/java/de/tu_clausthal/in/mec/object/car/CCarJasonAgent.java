@@ -46,6 +46,7 @@ import java.util.Set;
  * agent car
  *
  * @bug check agent name / structure
+ * @bug refactor ctor (reduce parameter)
  */
 public class CCarJasonAgent extends CDefaultCar
 {
@@ -58,7 +59,7 @@ public class CCarJasonAgent extends CDefaultCar
      */
     private static final Set<String> c_forbidden = new HashSet()
     {{
-            add( "m_agent" );
+            add( "m_agents" );
             add( "m_graph" );
             add( "m_route" );
             add( "m_inspect" );
@@ -83,31 +84,36 @@ public class CCarJasonAgent extends CDefaultCar
             putAll( CCarJasonAgent.super.inspect() );
         }};
 
+
     /**
+     * ctor
+     *
+     * @param p_objectname name of the object within the simulation
+     * @param p_agent ASL name
      * @param p_route driving route
      * @param p_speed initial speed
      * @param p_maxspeed maximum speed
      * @param p_acceleration acceleration
      * @param p_deceleration decceleration
      * @param p_lingerprobability linger probability
-     * @param p_agent ASL name
      * @throws JasonException throws on Jason error
      */
-    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_deceleration,
-                           final int p_acceleration, final double p_lingerprobability, final String p_agent
+    public CCarJasonAgent( final String p_objectname, final String p_agent, final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed,
+                           final int p_maxspeed, final int p_acceleration, final int p_deceleration, final double p_lingerprobability
     ) throws JasonException
 
     {
         this(
-                p_route, p_speed, p_maxspeed, p_deceleration, p_acceleration, p_lingerprobability, new HashMap<String, String>()
+                p_objectname, new HashMap<String, String>()
         {{
                         put( "main", p_agent );
-            }}
+                    }}, p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability
         );
     }
 
 
     /**
+     * @param p_objectname name of the object within the simulation
      * @param p_route driving route
      * @param p_speed initial speed
      * @param p_maxspeed maximum speed
@@ -117,27 +123,29 @@ public class CCarJasonAgent extends CDefaultCar
      * @param p_agent map with bind and ASL name
      * @throws JasonException throws on Jason error
      */
-    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_deceleration,
-                           final int p_acceleration, final double p_lingerprobability, final Map<String, String> p_agent
+    public CCarJasonAgent( final String p_objectname, final Map<String, String> p_agent, final ArrayList<Pair<EdgeIteratorState, Integer>> p_route,
+                           final int p_speed, final int p_maxspeed, final int p_acceleration, final int p_deceleration, final double p_lingerprobability
     ) throws JasonException
     {
-        super( p_route, p_speed, p_maxspeed, p_deceleration, p_acceleration, p_lingerprobability );
+        super( p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability );
+        final CPath l_path = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
         for ( Map.Entry<String, String> l_item : p_agent.entrySet() )
-            this.bind( l_item.getKey(), l_item.getValue() );
+            this.bind( l_path, l_item.getKey(), l_item.getValue() );
     }
 
 
     /**
      * binds an agent with the name
      *
+     * @param p_objectname name of the object (for message system)
      * @param p_bind bind name
      * @param p_asl ASL name
      * @throws JasonException
      */
-    private void bind( final String p_bind, final String p_asl ) throws JasonException
+    private void bind( final CPath p_objectname, final String p_bind, final String p_asl ) throws JasonException
     {
 
-        final CAgent<CDefaultCar> l_agent = new CAgent<>( new CPath( this.getClass().getSimpleName() + "@" + this.hashCode(), p_bind ), p_asl );
+        final CAgent<CDefaultCar> l_agent = new CAgent<>( p_objectname, p_asl );
 
         // add the belief bind to the agent
         final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(

@@ -88,11 +88,11 @@ class COSMMouseListener extends PanMouseInputListener
 
                 if ( !l_isfound )
                     l_layer.add(
-                        CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint(
-                                l_viewer.getViewpointGeoPosition(
-                                        p_event.getPoint()
-                                )
-                        )
+                            CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint(
+                                    l_viewer.getViewpointGeoPosition(
+                                            p_event.getPoint()
+                                    )
+                            )
                     );
                 break;
 

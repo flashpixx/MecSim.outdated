@@ -276,21 +276,18 @@ public class CSimulation
      * get a object name, depend on simulation data
      *
      * @param p_input input string
-     * @param p_index index
      * @return string with name
-     * @note substric %index% replaces with the index value, $hash% with the object hash or 0,
-     * %step% with the current simulation step, %rand% with a random integer value
+     * @note %hash% with the object hash or 0, %step% with the current simulation step, %rand% with a random integer value
      */
-    public final String generateObjectName( final String p_input, final int p_index, final Object p_object )
+    public final String generateObjectName( final String p_input, final Object p_object )
     {
-        final String p_return = p_input;
+        String l_return = new String( p_input );
 
-        p_return.replace( "%index%", new Integer( p_index ).toString() );
-        p_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
-        p_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
-        p_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
+        l_return = l_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
+        l_return = l_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
+        l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
 
-        return p_input;
+        return l_return;
     }
 
     /**

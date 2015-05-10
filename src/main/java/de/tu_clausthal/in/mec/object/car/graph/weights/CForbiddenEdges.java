@@ -142,7 +142,6 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     }
 
 
-
     @Override
     public final double getMinWeight( final double p_weight )
     {

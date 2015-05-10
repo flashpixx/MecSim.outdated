@@ -164,6 +164,32 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * appends a path at the current and returns a new object
+     *
+     * @param p_path path
+     * @return new path
+     */
+    public CPath append( final CPath p_path )
+    {
+        final CPath l_path = new CPath( p_path );
+        l_path.pushback( p_path );
+        return l_path;
+    }
+
+    /**
+     * appends a string at the current path and returns the new object
+     *
+     * @param p_path string with path
+     * @return new path
+     */
+    public CPath append( final String p_path )
+    {
+        final CPath l_path = new CPath( p_path );
+        l_path.pushback( new CPath( p_path ) );
+        return l_path;
+    }
+
+    /**
      * returns the separator
      *
      * @return separator

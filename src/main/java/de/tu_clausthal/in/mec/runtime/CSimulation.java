@@ -47,6 +47,7 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -67,6 +68,10 @@ public class CSimulation
      * event manager
      */
     private final CMessageSystem m_messagesystem = new CMessageSystem();
+    /**
+     * random object
+     */
+    private final Random m_random = new Random();
     /**
      * world of the simulation
      */
@@ -264,6 +269,28 @@ public class CSimulation
 
         CBootstrap.onSimulationReset( this );
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
+    }
+
+
+    /**
+     * get a object name, depend on simulation data
+     *
+     * @param p_input input string
+     * @param p_index index
+     * @return string with name
+     * @note substric %index% replaces with the index value, $hash% with the object hash or 0,
+     * %step% with the current simulation step, %rand% with a random integer value
+     */
+    public final String generateObjectName( final String p_input, final int p_index, final Object p_object )
+    {
+        final String p_return = p_input;
+
+        p_return.replace( "%index%", new Integer( p_index ).toString() );
+        p_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
+        p_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
+        p_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
+
+        return p_input;
     }
 
     /**

@@ -101,7 +101,7 @@ public class CCarJasonAgent extends CDefaultCar
         this(
                 p_route, p_speed, p_maxspeed, p_deceleration, p_acceleration, p_lingerprobability, new HashMap<String, String>()
         {{
-                put( "global", p_agent );
+                        put( "main", p_agent );
             }}
         );
     }

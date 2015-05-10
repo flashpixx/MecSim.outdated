@@ -234,6 +234,17 @@ public class CMainLoop implements Runnable
         m_pause = false;
     }
 
+
+    /**
+     * returns the simulation step
+     *
+     * @return step number
+     */
+    public final int getSimulationstep()
+    {
+        return m_simulationcount;
+    }
+
     /**
      * resets the thread
      */

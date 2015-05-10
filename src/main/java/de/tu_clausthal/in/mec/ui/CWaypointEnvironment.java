@@ -314,20 +314,22 @@ public class CWaypointEnvironment
      */
     protected enum EFactoryType
     {
-        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ) ),
-        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ) );
+        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false),
+        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ), true );
 
-        private final String text;
+        private final String m_text;
+        private final Boolean m_requireASL;
 
-        private EFactoryType( final String text )
+        private EFactoryType( final String p_text, final Boolean p_requireASL )
         {
-            this.text = text;
+            this.m_text = p_text;
+            this.m_requireASL = p_requireASL;
         }
 
         @Override
         public String toString()
         {
-            return this.text;
+            return this.m_text;
         }
     }
 

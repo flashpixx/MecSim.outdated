@@ -204,10 +204,13 @@ var mecsim_source,
                 url     : "/cwaypointenvironment/listfactories",
                 success : function( px_data ){
                     px_data.factories.forEach(function(data){
-                        $("#mecsim_source_selectFactory")
-                            .append( $("<option></option>")
-                            .attr("value",data)
-                            .text(data));
+                        $.each( data, function( pc_key, px_value ) {
+                            $("#mecsim_source_selectFactory")
+                                .append( $("<option></option>")
+                                .attr("value",pc_key)
+                                .attr("requireASL", px_value)
+                                .text(pc_key));
+                        });
                     });
                 }
             });

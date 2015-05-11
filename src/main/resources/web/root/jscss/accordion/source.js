@@ -19,21 +19,14 @@ var mecsim_source,
         },
 
         /** todo collection for source-ui ck
-        TODO check if it is an good idea to make on single content with widgets that can be closed, opened, resized, dragged
         TODO move jquery selectors into settings for better configuration
-        TODO create Language Bundle
-        TODO make setLabels more general
-        TODO remove old settings widget (is deprecated because of wizard)
-        TODO refresh asl when an asl was added (deprecated but might be important inside the wizard)
+        TODO distingusish between init and refresh(asl, ...)
         TODO show error dialog if tool can not created (check for correctness on java side)
         TODO source list table (JTable or JQuery Plugin)
         TODO source weighting table (JTable or JQuery Plugin)
         TODO radial refactor (bugs and generic)
         TODO clean up source-ui styles inside of layout.css
-        TODO wizard refresh bug
         TODO remove old gui if new is ready
-        TODO jquery refresh bug
-        TODO inital labelupdate
         **/
 
         //method to initialize source-ui

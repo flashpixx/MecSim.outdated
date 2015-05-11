@@ -20,8 +20,14 @@ var mecsim_source,
 
         /** todo collection for source-ui ck
         TODO move jquery selectors into settings for better configuration
-        TODO distingusish between init and refresh(asl, ...)
+        TODO bounding for widgets
+        TODO visualize closing to make clear what happened
+        TODO center header label
+        TODO increase minimal width
+        TODO Car Settings
+        TODO Tool creation
         TODO show error dialog if tool can not created (check for correctness on java side)
+        TODO distingusish between init and refresh(asl, ...)
         TODO source list table (JTable or JQuery Plugin)
         TODO source weighting table (JTable or JQuery Plugin)
         TODO radial refactor (bugs and generic)

@@ -25,23 +25,6 @@ iframe
     height: 55%;
 }
 
-.ui-widget-content{
-    border: 1px solid #CACACA;
-}
-
-.ui-resizable-helper{
-    border: 1px dotted gray;
-}
-
-.ui-widget-header{
-    margin: 0;
-    color: white;
-    text-align: center;
-    font-weight:normal;
-    background: #428bca;
-    border: 1px solid #CACACA;
-}
-
 .mecsim_global_accordeonbutton{
     width: 75%;
     align: center;
@@ -135,6 +118,29 @@ iframe
     color: #428bca;
 }
 /******************************** css definitions for mecsim_source ************************************************/
+
+
+/** General **/
+.ui-widget-content{
+    border: 1px solid #CACACA;
+}
+
+.ui-resizable-helper{
+    border: 1px dotted gray;
+}
+
+.ui-widget-header{
+    margin: 0;
+    color: white;
+    text-align: center;
+    font-weight:normal;
+    background: #428bca;
+    border: 1px solid #CACACA;
+}
+
+#mecsim_source_wizardwidget_label{
+
+}
 
 /** Tool Wizard **/
 #mecsim_source_toolwizardwidget{

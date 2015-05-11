@@ -94,6 +94,7 @@ var mecsim_editor,
 
         add_tab: function() {
             // TODO: check if file is already open in another tab
+            var selected_file = EditorPanel.get_tab_id();
             $("#tabs ul").append("<li><a href='#" + EditorPanel.get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
             $("#tabs").append("<div id='" + EditorPanel.get_tab_id() + "'></div>");
         },

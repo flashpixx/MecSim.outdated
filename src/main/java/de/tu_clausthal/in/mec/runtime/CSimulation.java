@@ -48,6 +48,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -73,6 +74,10 @@ public class CSimulation
      */
     private final Random m_random = new Random();
     /**
+     * object increment value - thread-safe
+     */
+    private final AtomicLong m_objectcounter = new AtomicLong( 0 );
+    /**
      * world of the simulation
      */
     private CWorld m_world = new CWorld();
@@ -84,10 +89,6 @@ public class CSimulation
      * UI components
      */
     private CUIComponents m_uicomponents = new CUIComponents();
-    /**
-     * object increment value
-     */
-    private long m_objectcounter;
 
     /**
      * private ctor
@@ -292,7 +293,7 @@ public class CSimulation
         l_return = l_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
         l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
         if ( l_return.contains( "%inc%" ) )
-            l_return = l_return.replace( "%inc%", new Long( m_objectcounter++ ).toString() );
+            l_return = l_return.replace( "%inc%", new Long( m_objectcounter.getAndIncrement() ).toString() );
 
         return l_return;
     }

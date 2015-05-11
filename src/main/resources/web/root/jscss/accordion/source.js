@@ -39,7 +39,27 @@ var mecsim_source,
             mecsim_source = this.settings;
             this.getLabels();
             this.setToolbox();
-            this.bind_ui_actions();
+
+            $("#mecsim_source_oldgui").button().on("click", function(data){
+                UI().getContent().empty();
+                UI().getContent().load("template/sourceold.htm", function(){
+                    SourcePanel.initClusterWidget();
+                    SourcePanel.initSettingsWidget();
+                    SourcePanel.initTargetWeighting();
+                });
+            });
+
+            $("#ui-id-5").on("click", function(data){
+                UI().getContent().empty();
+                UI().getContent().load("template/source.htm", function(){
+                    SourcePanel.initToolWizard();
+                });
+            });
+
+            $("#mecsim_source_createtool").button().on("click", function(data){
+                SourcePanel.settings.wizardWidget.show();
+            });
+
         },
 
         //method to get source-ui related labels
@@ -123,30 +143,6 @@ var mecsim_source,
                             .appendTo($("#mecsim_source_toolbox"));
                     });
                 }
-            });
-        },
-
-        //method to bind source-ui related actions
-        bind_ui_actions: function() {
-
-            $("#mecsim_source_oldgui").button().on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/sourceold.htm", function(){
-                    SourcePanel.initClusterWidget();
-                    SourcePanel.initSettingsWidget();
-                    SourcePanel.initTargetWeighting();
-                });
-            });
-
-            $("#ui-id-5").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
-                    SourcePanel.initToolWizard();
-                });
-            });
-
-            $("#mecsim_source_createtool").button().on("click", function(data){
-                SourcePanel.settings.wizardWidget.show();
             });
         },
 

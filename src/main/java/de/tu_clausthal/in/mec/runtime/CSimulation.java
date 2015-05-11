@@ -291,7 +291,8 @@ public class CSimulation
 
         l_return = l_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
         l_return = l_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
-        l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
+        if ( l_return.contains( "%rand%" ) )
+            l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
         if ( l_return.contains( "%inc%" ) )
             l_return = l_return.replace( "%inc%", new Long( m_objectcounter.getAndIncrement() ).toString() );
 

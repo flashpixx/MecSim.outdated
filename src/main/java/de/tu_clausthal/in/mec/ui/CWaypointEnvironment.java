@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -501,21 +502,21 @@ public class CWaypointEnvironment
                     return new CDistributionDefaultCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5
-                    ), new NormalDistribution()
+                    ), new UniformRealDistribution()
                     );
 
                 case DefaultAgentCarFactory:
                     return new CDistributionAgentCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5
-                    ), new NormalDistribution(), m_asl
+                    ), new UniformRealDistribution(), m_asl
                     );
 
                 default:
                     return new CDistributionDefaultCarFactory(
                             new NormalDistribution( 50, 25 ), new NormalDistribution( 250, 50 ), new NormalDistribution( 20, 5 ), new NormalDistribution(
                             20, 5
-                    ), new NormalDistribution()
+                    ), new UniformRealDistribution()
                     );
             }
         }

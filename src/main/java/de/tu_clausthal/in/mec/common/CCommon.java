@@ -70,6 +70,9 @@ public class CCommon
      */
     public static String toJson( final Object p_data )
     {
+        if ( p_data == null )
+            return "{}";
+
         try (
                 final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
         )

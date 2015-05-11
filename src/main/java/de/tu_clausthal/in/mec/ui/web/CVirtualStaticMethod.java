@@ -129,7 +129,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
                     throw new IllegalArgumentException( CCommon.getResourceString( this, "argumentnumber", m_arguments ) );
             }
 
-            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.OK, c_mimetype, l_return == null ? "{}" : CCommon.toJson( l_return ) );
+            return new NanoHTTPD.Response( NanoHTTPD.Response.Status.OK, c_mimetype, CCommon.toJson( l_return ) );
         }
         catch ( final Exception l_exception )
         {

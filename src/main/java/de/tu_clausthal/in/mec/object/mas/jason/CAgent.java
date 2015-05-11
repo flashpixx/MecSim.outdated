@@ -122,6 +122,8 @@ public class CAgent<T> implements IVoidAgent
 
     /**
      * ctor
+     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
+     * and all properties and methods will be bind to the agent with the source "self"
      *
      * @param p_namepath name of the agent (full path)
      * @param p_asl agent ASL file

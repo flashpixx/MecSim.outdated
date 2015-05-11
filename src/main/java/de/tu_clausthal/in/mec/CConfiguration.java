@@ -122,7 +122,7 @@ public class CConfiguration
                                             // bind port
                                             put( "port", 9876 );
                                             // heartbeat of the websocket to avoid disconnecting
-                                            put( "websocketheartbeat", 3 );
+                                            put( "websocketheartbeat", 5 );
                                         }}
                             );
 

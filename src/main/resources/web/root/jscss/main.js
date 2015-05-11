@@ -32,18 +32,18 @@ $(document).ready(function() {
         // logger
         var ws_logerror = MecSim().getWebSocket("/cconsole/error/log");
         ws_logerror.onmessage = function( p_event ) {
-            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
+            $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         };
         ws_logerror.onerror = function( p_event ) {
-            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
+            $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         };
 
         var ws_logout = MecSim().getWebSocket("/cconsole/output/log");
         ws_logout.onmessage = function( p_event ) {
-            $("#mecsim_global_log").append("<span class=\"mecsim_log_output\">" + p_event.data + "</span>");
+            $("#mecsim_global_log").prepend("<span class=\"mecsim_log_output\">" + p_event.data + "</span>");
         };
         ws_logout.onerror = function( p_event ) {
-            $("#mecsim_global_log").append("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
+            $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
         };
 
         var ws_inspector = MecSim().getWebSocket("/cinspector/show");

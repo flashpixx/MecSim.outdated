@@ -111,7 +111,7 @@ public class CConfiguration
                             put( "windowwidth", 1280.0 );
                             // zoom value
                             put( "zoom", 4 );
-                            // route painter opacity delay
+                            // route painter opacity delay - accessible within the UI
                             put( "routepainterdelay", 60 );
                             put(
                                     // server bind information - accessible within the UI

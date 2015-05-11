@@ -85,8 +85,8 @@ var mecsim_editor,
                 $.post(
                     "cagentenvironment/jason/write",
                     { "name" : $("#mecsim_agent_files").val(),
-                    "source" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()],
-                    "data" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()]}
+                    "source" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].getValue(),
+                    "data" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].getValue()}
               );
             });
 
@@ -94,6 +94,7 @@ var mecsim_editor,
 
         add_tab: function() {
             // TODO: check if file is already open in another tab
+            var selected_file = EditorPanel.get_tab_id();
             $("#tabs ul").append("<li><a href='#" + EditorPanel.get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
             $("#tabs").append("<div id='" + EditorPanel.get_tab_id() + "'></div>");
         },

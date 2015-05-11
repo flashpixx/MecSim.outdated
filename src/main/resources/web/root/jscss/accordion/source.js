@@ -32,6 +32,8 @@ var mecsim_source,
         TODO clean up source-ui styles inside of layout.css
         TODO wizard refresh bug
         TODO remove old gui if new is ready
+        TODO jquery refresh bug
+        TODO inital labelupdate
         **/
 
         //method to initialize source-ui
@@ -189,8 +191,10 @@ var mecsim_source,
 
             });
 
-            //listen to generator select and update labels and also make an inital update
-            //SourcePanel.updateLabels();
+            //listen to generator select
+            $("#mecsim_source_selectGenerator").on("change", function(){
+                SourcePanel.updateLabels();
+            });
 
         },
 

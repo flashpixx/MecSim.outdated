@@ -20,7 +20,6 @@ var mecsim_source,
 
         /** todo collection for source-ui ck
         TODO move jquery selectors into settings for better configuration
-        TODO bounding for widgets
         TODO Car Settings
         TODO Tool creation
         TODO show error dialog if tool can not created (check for correctness on java side)
@@ -147,11 +146,17 @@ var mecsim_source,
         initToolWizard: function(){
 
             //layout wizard widget
-            SourcePanel.settings.wizardWidget = $("#mecsim_source_toolwizardwidget").draggable().resizable({
-                animate: true,
-                minWidth: 750,
-                minHeight: 550
-            }).hide();
+                SourcePanel.settings.wizardWidget = $("#mecsim_source_toolwizardwidget")
+                .draggable({
+                    drag: function(event, ui) {
+                        ui.position.top = Math.max( -500, ui.position.top );
+                        ui.position.left = Math.max( -700, ui.position.left );
+                    }
+                }).resizable({
+                    animate: true,
+                    minWidth: 750,
+                    minHeight: 550
+                }).hide();
 
             SourcePanel.setLabels();
 

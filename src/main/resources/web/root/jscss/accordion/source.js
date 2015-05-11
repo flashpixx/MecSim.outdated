@@ -20,6 +20,8 @@ var mecsim_source,
 
         /** todo collection for source-ui ck
         TODO move jquery selectors into settings for better configuration
+        TODO bounding in minimized mode
+        TODO plot distribution
         TODO Car Settings
         TODO Tool creation
         TODO show error dialog if tool can not created (check for correctness on java side)

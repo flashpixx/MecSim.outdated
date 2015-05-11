@@ -85,8 +85,8 @@ var mecsim_editor,
                 $.post(
                     "cagentenvironment/jason/write",
                     { "name" : $("#mecsim_agent_files").val(),
-                    "source" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()],
-                    "data" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()]}
+                    "source" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].getValue(),
+                    "data" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].getValue()}
               );
             });
 

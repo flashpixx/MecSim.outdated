@@ -21,9 +21,6 @@ var mecsim_source,
         /** todo collection for source-ui ck
         TODO move jquery selectors into settings for better configuration
         TODO bounding for widgets
-        TODO visualize closing to make clear what happened
-        TODO center header label
-        TODO increase minimal width
         TODO Car Settings
         TODO Tool creation
         TODO show error dialog if tool can not created (check for correctness on java side)
@@ -58,7 +55,7 @@ var mecsim_source,
             });
 
             $("#mecsim_source_createtool").button().on("click", function(data){
-                SourcePanel.settings.wizardWidget.show();
+                SourcePanel.settings.wizardWidget.show("drop", 500);
             });
 
         },
@@ -152,7 +149,7 @@ var mecsim_source,
             //layout wizard widget
             SourcePanel.settings.wizardWidget = $("#mecsim_source_toolwizardwidget").draggable().resizable({
                 animate: true,
-                minWidth: 725,
+                minWidth: 750,
                 minHeight: 550
             }).hide();
 
@@ -168,14 +165,14 @@ var mecsim_source,
                 }else{
                     SourcePanel.settings.wizardWidgetStatus = true;
                     $("#mecsim_source_toolwizard").show();
-                    $("#mecsim_source_toolwizardwidget").animate({width: "725px", height: "550px"}, 400);
+                    $("#mecsim_source_toolwizardwidget").animate({width: "750px", height: "550px"}, 400);
                     $("#mecsim_source_toolwizardwidget").resizable('enable');
                 }
             });
 
             //create and listen to the close button
             $("#mecsim_source_close_wizard").button({icons: { primary: "ui-icon-closethick"},text: false}).on("click", function(data){
-                $("#mecsim_source_toolwizardwidget").hide();
+                $("#mecsim_source_toolwizardwidget").hide("drop", 500);
             });
 
             //create wizard

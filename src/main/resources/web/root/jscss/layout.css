@@ -138,14 +138,10 @@ iframe
     border: 1px solid #CACACA;
 }
 
-#mecsim_source_wizardwidget_label{
-
-}
-
 /** Tool Wizard **/
 #mecsim_source_toolwizardwidget{
     float: left;
-    width: 725px;
+    width: 750px;
     height: 550px;
     padding: 5px;
     margin: 5px;

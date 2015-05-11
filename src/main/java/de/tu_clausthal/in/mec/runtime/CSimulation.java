@@ -84,6 +84,10 @@ public class CSimulation
      * UI components
      */
     private CUIComponents m_uicomponents = new CUIComponents();
+    /**
+     * object increment value
+     */
+    private long m_objectcounter;
 
     /**
      * private ctor
@@ -276,8 +280,9 @@ public class CSimulation
      * get a object name, depend on simulation data
      *
      * @param p_input input string
+     * @param p_object object for object hash
      * @return string with name
-     * @note %hash% with the object hash or 0, %step% with the current simulation step, %rand% with a random integer value
+     * @note %hash% with the object hash or 0, %step% with the current simulation step, %rand% with a random integer value, %inc% increment value
      */
     public final String generateObjectName( final String p_input, final Object p_object )
     {
@@ -286,6 +291,8 @@ public class CSimulation
         l_return = l_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
         l_return = l_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
         l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
+        if ( l_return.contains( "%inc%" ) )
+            l_return = l_return.replace( "%inc%", new Long( m_objectcounter++ ).toString() );
 
         return l_return;
     }

@@ -106,9 +106,8 @@ var mecsim_source,
             $("#mecsim_source_selectasl_label").text(SourcePanel.settings.labels.selectyourasl);
             $("#mecsim_source_selectgenerator_label").text(SourcePanel.settings.labels.selectyourgenerator);
             $("#mecsim_source_generatorinput1_label").text(SourcePanel.settings.labels.selectyourcarcount);
-
-            SourcePanel.updateLabels();
-
+            $("#mecsim_source_generatorinput2_label").text(SourcePanel.settings.labels.selectyourlowerbound);
+            $("#mecsim_source_generatorinput3_label").text(SourcePanel.settings.labels.selectyourupperbound);
             $("#mecsim_source_speedprob_label").text(SourcePanel.settings.labels.selectcarspeedprob);
             $("#mecsim_source_maxspeedprob_label").text(SourcePanel.settings.labels.selectmaxcarspeedprob);
             $("#mecsim_source_accprob_label").text(SourcePanel.settings.labels.selectaccprob);
@@ -185,77 +184,83 @@ var mecsim_source,
                 transitionEffect: "slideLeft",
                 stepsOrientation: "vertical",
                 autoFocus: true,
-                onInit: function () {
-
-                    //create selectmenu with factory types
-                    $.ajax({
-                        url     : "/cwaypointenvironment/listfactories",
-                        success : function( px_data ){
-                            px_data.factories.forEach(function(data){
-                                $.each( data, function( pc_key, px_value ) {
-                                    $("#mecsim_source_selectFactory")
-                                        .append( $("<option></option>")
-                                        .attr("value",pc_key)
-                                        .attr("requireASL", px_value)
-                                        .text(pc_key));
-                                });
-                            });
-                        }
-                    });
-
-                    //create selectmenu with possible agent programs
-                    $.ajax({
-                        url     : "/cagentenvironment/jason/list",
-                        success : function( px_data ){
-                            px_data.agents.forEach(function(data){
-                                $("#mecsim_source_selectASL")
-                                    .append( $("<option></option>")
-                                    .attr("value",data)
-                                    .text(data));
-                            });
-                        }
-                    });
-
-                    //create selectmenu with possible generator types
-                    $.ajax({
-                        url     : "/cwaypointenvironment/listgenerator",
-                        success : function( px_data ){
-                            px_data.generators.forEach(function(data){
-                                $("#mecsim_source_selectGenerator")
-                                    .append( $("<option></option>")
-                                    .attr("value",data)
-                                    .text(data));
-                            });
-                        }
-                    });
-
-                    //create colorpicker
-                    SourcePanel.settings.colorpicker = $("#mecsim_source_colorpicker").spectrum({
-                        showPaletteOnly: true,
-                        togglePaletteOnly: true,
-                        togglePaletteMoreText: 'more',
-                        togglePaletteLessText: 'less',
-                        color: 'blanchedalmond',
-                        palette: [
-                            ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
-                            ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
-                            ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
-                        ]
-                    });
-                },
-                onStepChanging: function (event, currentIndex, newIndex){
-
-                    //validate wizard
-                    if(currentIndex===0){
-                        if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && $("#mecsim_source_selectASL").val()===null)
-                            return false;
-                    }
-
-                    return true;
-                },
+                onInit: SourcePanel.buildWizardContent,
+                onStepChanging: SourcePanel.validateWizardStep
 
             });
 
+            //listen to generator select and update labels and also make an inital update
+            //SourcePanel.updateLabels();
+
+        },
+
+        //method to build up the wizard content
+        buildWizardContent: function() {
+            //create selectmenu with factory types
+            $.ajax({
+                url     : "/cwaypointenvironment/listfactories",
+                success : function( px_data ){
+                    px_data.factories.forEach(function(data){
+                        $.each( data, function( pc_key, px_value ) {
+                            $("#mecsim_source_selectFactory")
+                                .append( $("<option></option>")
+                                .attr("value",pc_key)
+                                .attr("requireASL", px_value)
+                                .text(pc_key));
+                        });
+                    });
+                }
+            });
+
+            //create selectmenu with possible agent programs
+            $.ajax({
+                url     : "/cagentenvironment/jason/list",
+                success : function( px_data ){
+                    px_data.agents.forEach(function(data){
+                        $("#mecsim_source_selectASL")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //create selectmenu with possible generator types
+            $.ajax({
+                url     : "/cwaypointenvironment/listgenerator",
+                success : function( px_data ){
+                    px_data.generators.forEach(function(data){
+                        $("#mecsim_source_selectGenerator")
+                            .append( $("<option></option>")
+                            .attr("value",data)
+                            .text(data));
+                    });
+                }
+            });
+
+            //create colorpicker
+            SourcePanel.settings.colorpicker = $("#mecsim_source_colorpicker").spectrum({
+                showPaletteOnly: true,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                color: 'blanchedalmond',
+                palette: [
+                    ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+                    ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+                    ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
+                ]
+            });
+        },
+
+        //method to validate if the current wizard step is valide
+        validateWizardStep: function(event , currentIndex, newIndex) {
+            if(currentIndex===0){
+                if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && $("#mecsim_source_selectASL").val()===null)
+                    return false;
+            }
+
+            return true;
         },
 
         //method to init the settings widget

@@ -79,10 +79,10 @@ public class CConfiguration
      */
     private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
     {{
-            // flag for resetting the full configuration
+            // flag for resetting the full configuration - accessible within the UI
             put( "reset", false );
 
-            // language data
+            // language data - accessible within the UI
             put(
                     "language", new CNameHashMap.CImmutable()
                     {{
@@ -114,7 +114,7 @@ public class CConfiguration
                             // route painter opacity delay
                             put( "routepainterdelay", 60 );
                             put(
-                                    // server bind information
+                                    // server bind information - accessible within the UI
                                     "server", new CNameHashMap.CImmutable()
                                     {{
                                             // address / hostname bind name
@@ -140,6 +140,7 @@ public class CConfiguration
                             put( "threadsleeptime", 25 );
 
                             put(
+                                    // traffic simulation components - accessible within the UI
                                     "traffic", new CNameHashMap.CImmutable()
                                     {{
                                             // cell sampling of the graph data in meter
@@ -165,7 +166,7 @@ public class CConfiguration
                                                         }}
                                             );
                                             put(
-                                                    // map information
+                                                    // map information - accessible within the UI
                                                     "map", new CNameHashMap.CImmutable()
                                                     {{
                                                             // graph should be reimported
@@ -182,7 +183,7 @@ public class CConfiguration
             );
 
 
-            // database data
+            // database data - accessible within the UI
             put(
                     "database", new CNameHashMap.CImmutable()
                     {{

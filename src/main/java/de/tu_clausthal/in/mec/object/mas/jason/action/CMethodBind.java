@@ -45,7 +45,7 @@ import java.util.Map;
  * action to invoke any method on an object
  *
  * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
- * @note the command uses the following structure "commandname( sourcename, methodname, return parameter, method arguments )"
+ * @note the command uses the following structure "commandname( sourcebind, methodname, return parameter, method arguments )"
  */
 public class CMethodBind extends IAction
 {
@@ -114,7 +114,7 @@ public class CMethodBind extends IAction
             throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argument" ) );
 
         // first & second argument must changed to a string (cast calls are not needed, we use the object string call)
-        final String l_objectname = l_args.get( 0 ).toString();
+        final String l_objectname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 0 ).toString() );
         final CReflection.CMethodCache<Object> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "object", l_objectname ) );
@@ -163,7 +163,7 @@ public class CMethodBind extends IAction
 
 
             // invoke and cast return data
-            final String l_methodname = l_args.get( 1 ).toString();
+            final String l_methodname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 1 ).toString() );
             final CReflection.CMethod l_invoke = l_object.get( l_methodname, l_argumenttype );
             final Object l_return = l_returntype.cast(
                     ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke(
@@ -201,7 +201,7 @@ public class CMethodBind extends IAction
      */
     protected final Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
     {
-        String l_classname = p_term.toString();
+        String l_classname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( p_term.toString() ).toLowerCase();
         if ( "void".equalsIgnoreCase( l_classname ) )
             return void.class;
 

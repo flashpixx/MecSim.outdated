@@ -143,14 +143,14 @@ public class CFieldBind extends IAction
         if ( l_args.size() < 3 )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "argument" ) );
 
-        // first argument is the object name - try to get object
-        final String l_objectname = l_args.get( 0 ).toString();
+        // first argument is the object name - try to get object (Jason has got a bug implemention, it pass the quotes to the toString() method, so the quotes must be removed)
+        final String l_objectname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 0 ).toString() );
         final Pair<Object, Map<String, CReflection.CGetSet>> l_object = m_bind.get( l_objectname );
         if ( l_object == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "object", l_objectname ) );
 
         // second argument is the field name - try to get the field
-        final String l_fieldname = l_args.get( 1 ).toString();
+        final String l_fieldname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 1 ).toString() );
         final CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
         if ( l_handle == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldnotfound", l_fieldname, l_objectname ) );

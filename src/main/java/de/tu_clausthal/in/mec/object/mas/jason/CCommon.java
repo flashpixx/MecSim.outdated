@@ -38,6 +38,25 @@ public class CCommon
 {
 
     /**
+     * private ctor - avoid instantiation
+     */
+    private CCommon()
+    {
+    }
+
+
+    /**
+     * Jason creates quoted string, so we need to clean the string to create corrected Java strings
+     *
+     * @param p_input input Jason string
+     * @return cleanup Java String
+     */
+    public static String clearString( final String p_input )
+    {
+        return p_input.replaceAll( "\"", "" ).replaceAll( "'", "" );
+    }
+
+    /**
      * creates a Jason literal with optional data
      *
      * @param p_name name of the literal

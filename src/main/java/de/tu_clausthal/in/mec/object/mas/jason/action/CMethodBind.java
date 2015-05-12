@@ -27,14 +27,14 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import jason.NoValueException;
 import jason.asSemantics.Agent;
-import jason.asSyntax.ASSyntax;
 import jason.asSyntax.ListTerm;
-import jason.asSyntax.Literal;
 import jason.asSyntax.NumberTerm;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +45,6 @@ import java.util.Map;
  * action to invoke any method on an object
  *
  * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
- * @note the command uses the following structure "commandname( sourcebind, methodname, return parameter, method arguments )"
  */
 public class CMethodBind extends IAction
 {
@@ -121,65 +120,34 @@ public class CMethodBind extends IAction
 
         try
         {
-
-            // construct method signature with data
+            final List<Class<?>> l_argumenttypes = new LinkedList<>();
+            final List<Object> l_argumentdata = new LinkedList<>();
+            Class<?> l_returntype = null;
             String l_returnname = null;
-            Class<?> l_returntype = Void.class;
-            Class<?>[] l_argumenttype = null;
-            List<Term> l_argumentdata = null;
 
-            if ( ( l_args.size() > 4 ) && ( l_args.get( 4 ).isList() ) )
-            {
-                l_returnname = l_args.get( 2 ).toString();
-                l_returntype = this.convertTermToClass( l_args.get( 3 ) );
-                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 4 ) );
-                l_argumentdata = l_args.subList( 5, l_args.size() );
-            }
-            else if ( ( l_args.size() > 3 ) && ( l_args.get( 3 ).isList() ) )
-            {
-                l_returntype = this.convertTermToClass( l_args.get( 2 ) );
-                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 3 ) );
-                l_argumentdata = l_args.subList( 4, l_args.size() );
-            }
-            else if ( ( l_args.size() > 2 ) && ( l_args.get( 2 ).isList() ) )
-            {
-                l_argumenttype = this.convertTermListToArray( (ListTerm) l_args.get( 2 ) );
-                l_argumentdata = l_args.subList( 3, l_args.size() );
-            }
+            this.decodeMethodSignature( l_args, l_argumenttypes, l_argumentdata, l_returntype, l_returnname );
+            //System.out.println( l_returnname + " -----> " + l_returntype );
 
-            if ( ( l_argumentdata == null ) || ( l_argumenttype == null ) || ( l_argumentdata.size() != l_argumenttype.length ) )
-                throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argumentnumber" ) );
-
-
-            // build invoke parameter with explizit cast of the argument types
-            final List<Object> l_argumentinvokedata = new LinkedList<>();
-            l_argumentinvokedata.add( l_object.getObject() );
-
-            for ( int i = 0; i < l_argumentdata.size(); i++ )
-                if ( l_argumentdata.get( i ).isNumeric() )
-                    l_argumentinvokedata.add( CCommon.convertNumber( l_argumenttype[i], ( (NumberTerm) l_argumentdata.get( i ) ).solve() ) );
-                else
-                    l_argumentinvokedata.add( l_argumenttype[i].cast( l_argumentdata.get( i ) ) );
-
+/*
 
             // invoke and cast return data
             final String l_methodname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 1 ).toString() );
-            final CReflection.CMethod l_invoke = l_object.get( l_methodname, l_argumenttype );
+            final CReflection.CMethod l_invoke = l_object.get( l_methodname, (Class<?>[])l_argumenttypes.toArray() );
             final Object l_return = l_returntype.cast(
                     ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke(
-                            l_argumentinvokedata.get( 0 )
-                    ) : l_invoke.getHandle().invokeWithArguments( l_argumentinvokedata )
+                            l_object.getObject()
+                    ) : l_invoke.getHandle().invokeWithArguments( new LinkedList<Object>(){{ add( l_object ); addAll( l_argumentdata ); }} )
             );
+
 
             // push return data into the agent
             if ( ( l_return != null ) && ( !void.class.equals( l_return.getClass() ) ) )
             {
-                final Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                        ( l_returnname == null ) || ( l_returnname.isEmpty() ) ? l_methodname : l_returnname, l_return
-                );
+                final Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( l_returnname, l_return );
                 l_literalreturn.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_objectname ) ) );
                 p_agent.addBel( l_literalreturn );
             }
+*/
 
         }
         catch ( final Exception l_exception )
@@ -190,6 +158,63 @@ public class CMethodBind extends IAction
         {
             throw new IllegalArgumentException( l_throwable.getMessage() );
         }
+    }
+
+
+    /**
+     * decodes the Jason parameter list to create the Java signature call
+     *
+     * @param p_parameter
+     * @param p_argumenttypes
+     * @param p_argumentdata
+     * @param p_returntype
+     * @param p_returnname
+     * @throws ClassNotFoundException
+     * @throws NoValueException
+     * @code commandname(bind, method, [return type / default void | [return type, return belief name]], [method type arguments / default void], ...arguments
+     *)
+     * @endcode The first two arguments are ignored here, because they were used before
+     */
+    private void decodeMethodSignature( final List<Term> p_parameter, final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata,
+                                        Class<?> p_returntype, String p_returnname
+    ) throws ClassNotFoundException, NoValueException
+    {
+        p_returnname = CCommon.clearString( p_parameter.get( 1 ).toString() );
+        p_returntype = void.class;
+
+        // if paramter count > 2, then return type exists (single value or list value)
+        if ( p_parameter.size() > 2 )
+            if ( !p_parameter.get( 2 ).isList() )
+                p_returntype = this.convertTermToClass( p_parameter.get( 2 ) );
+            else
+            {
+                final ListTerm l_list = ( (ListTerm) p_parameter.get( 2 ) );
+                if ( l_list.size() != 2 )
+                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "returnargument" ) );
+
+                p_returntype = this.convertTermToClass( l_list.get( 0 ) );
+                p_returnname = CCommon.clearString( l_list.get( 1 ).toString() );
+            }
+
+        // if parameter count > 3, method arguments and argument types are exists
+        if ( p_parameter.size() > 3 )
+        {
+            if ( !p_parameter.get( 3 ).isList() )
+                throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argumenttype" ) );
+
+            p_argumenttypes.addAll( Arrays.asList( this.convertTermListToArray( (ListTerm) p_parameter.get( 3 ) ) ) );
+            if ( p_parameter.size() - 4 != p_argumenttypes.size() )
+                throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argumentnumber" ) );
+
+            for ( int i = 4; i < p_parameter.size(); ++i )
+                p_argumentdata.add(
+                        p_parameter.get( i ).isNumeric() ? CCommon.convertNumber(
+                                p_argumenttypes.get( i - 4 ), ( (NumberTerm) p_parameter.get( i ) ).solve()
+                        ) : p_argumenttypes.get( i - 4 ).cast( p_parameter.get( i ) )
+                );
+
+        }
+
     }
 
 

@@ -35,6 +35,7 @@ import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,6 +155,8 @@ public class CFieldBind extends IAction
         final CReflection.CGetSet l_handle = l_object.getRight().get( l_fieldname );
         if ( l_handle == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldnotfound", l_fieldname, l_objectname ) );
+        if ( Modifier.isFinal( l_handle.getField().getModifiers() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldfinal", l_fieldname, l_objectname ) );
 
 
         try

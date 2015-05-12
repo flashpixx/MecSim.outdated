@@ -309,6 +309,7 @@ public class COSMViewer extends JXMapViewer
             m_alpha += -0.01;
             if ( m_alpha <= 0 )
             {
+                m_line = null;
                 m_alpha = 0;
                 m_timer.stop();
             }

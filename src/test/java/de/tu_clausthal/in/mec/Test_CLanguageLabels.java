@@ -31,6 +31,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import de.tu_clausthal.in.mec.common.CCommon;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
@@ -152,7 +153,7 @@ public class Test_CLanguageLabels
                 m_innerclass = m_outerclass;
             }
             else
-                m_innerclass = m_outerclass + "$" + p_class.getName();
+                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_class.getName();
 
             super.visit( p_class, p_arg );
         }
@@ -166,7 +167,7 @@ public class Test_CLanguageLabels
                 m_innerclass = m_outerclass;
             }
             else
-                m_innerclass = m_outerclass + "$" + p_enum.getName();
+                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
             super.visit( p_enum, p_arg );
         }
 
@@ -209,12 +210,13 @@ public class Test_CLanguageLabels
 
             // setup class name
             if ( "this".equals( l_return[0] ) )
-                l_return[0] = p_package + "." + p_innerclass;
+                l_return[0] = p_package + ClassUtils.PACKAGE_SEPARATOR + p_innerclass;
             else if ( l_return[0].endsWith( ".class" ) )
             {
                 l_return[0] = l_return[0].replace( ".class", "" );
-                if ( !l_return[0].contains( "." ) )
-                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ? "." + m_outerclass + "$" : "." ) + l_return[0];
+                if ( !l_return[0].contains( ClassUtils.PACKAGE_SEPARATOR ) )
+                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ?
+                            ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
             }
 
             return l_return;

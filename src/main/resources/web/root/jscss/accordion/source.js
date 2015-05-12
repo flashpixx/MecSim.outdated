@@ -20,7 +20,7 @@ var mecsim_source,
 
         /** todo collection for source-ui ck
         TODO move jquery selectors into settings for better configuration
-        TODO bounding in minimized mode
+        TODO bounding in minimized mode maybe snap to tab
         TODO plot distribution
         TODO Car Settings
         TODO Tool creation
@@ -56,7 +56,7 @@ var mecsim_source,
             });
 
             $("#mecsim_source_createtool").button().on("click", function(data){
-                SourcePanel.settings.wizardWidget.show("drop", 500);
+                SourcePanel.settings.wizardWidget.show("drop", 350);
             });
 
         },
@@ -179,7 +179,7 @@ var mecsim_source,
 
             //create and listen to the close button
             $("#mecsim_source_close_wizard").button({icons: { primary: "ui-icon-closethick"},text: false}).on("click", function(data){
-                $("#mecsim_source_toolwizardwidget").hide("drop", 500);
+                $("#mecsim_source_toolwizardwidget").hide("drop", 350);
             });
 
             //create wizard
@@ -192,6 +192,11 @@ var mecsim_source,
                 onInit: SourcePanel.buildWizardContent,
                 onStepChanging: SourcePanel.validateWizardStep
 
+            });
+
+            //listen to factory select
+            $("#mecsim_source_selectFactory").on("change", function(){
+                SourcePanel.updateFactorySettings();
             });
 
             //listen to generator select
@@ -216,6 +221,7 @@ var mecsim_source,
                                 .text(pc_key));
                         });
                     });
+                    SourcePanel.updateFactorySettings();
                 }
             });
 
@@ -242,6 +248,7 @@ var mecsim_source,
                             .attr("value",data)
                             .text(data));
                     });
+                    SourcePanel.updateLabels();
                 }
             });
 
@@ -268,6 +275,15 @@ var mecsim_source,
             }
 
             return true;
+        },
+
+        //method to update factory settings
+        updateFactorySettings: function(){
+            if($( "#mecsim_source_selectFactory option:selected").attr("requireASL") === "true"){
+                $("#mecsim_source_selectASLContainer").show();
+            }else{
+                $("#mecsim_source_selectASLContainer").hide();
+            }
         },
 
         //method to init the settings widget

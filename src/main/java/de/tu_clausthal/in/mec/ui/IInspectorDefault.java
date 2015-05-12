@@ -43,7 +43,7 @@ public abstract class IInspectorDefault extends IUIListener implements IInspecto
     /**
      * inspect variable *
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
@@ -52,7 +52,7 @@ public abstract class IInspectorDefault extends IUIListener implements IInspecto
 
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public Map<String, Object> inspect()
     {
         return m_inspect;

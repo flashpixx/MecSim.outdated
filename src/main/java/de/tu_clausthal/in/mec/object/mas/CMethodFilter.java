@@ -44,7 +44,7 @@ public class CMethodFilter implements CReflection.IMethodFilter
     {
         boolean l_use = true;
         if ( p_method.isAnnotationPresent( CAgent.class ) )
-            l_use = ( (CAgent) p_method.getAnnotation( CAgent.class ) ).use();
+            l_use = ( (CAgent) p_method.getAnnotation( CAgent.class ) ).bind();
 
         return l_use && ( !( Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
                 p_method.getModifiers()
@@ -56,6 +56,6 @@ public class CMethodFilter implements CReflection.IMethodFilter
     @Target( ElementType.METHOD )
     public @interface CAgent
     {
-        public boolean use() default true;
+        public boolean bind() default true;
     }
 }

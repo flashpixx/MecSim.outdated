@@ -53,12 +53,12 @@ public class CCarJasonAgent extends CDefaultCar
     /**
      * agent object *
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private final Set<de.tu_clausthal.in.mec.object.mas.jason.CAgent> m_agents = new HashSet<>();
     /**
      * inspector map
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( CCarJasonAgent.super.inspect() );
@@ -122,7 +122,7 @@ public class CCarJasonAgent extends CDefaultCar
      * @throws JasonException
      * @bug incomplete
      */
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     private void bind( final CPath p_objectname, final String p_asl ) throws JasonException
     {
         final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent = new de.tu_clausthal.in.mec.object.mas.jason.CAgent(
@@ -137,7 +137,7 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final void release()
     {
         super.release();
@@ -149,14 +149,14 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final Map<String, Object> inspect()
     {
         return m_inspect;
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         // check speed, because agent can modify the speed value and the value should always in range

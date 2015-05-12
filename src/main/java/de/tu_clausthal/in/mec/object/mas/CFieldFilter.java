@@ -44,7 +44,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
     {
         boolean l_use = true;
         if ( p_field.isAnnotationPresent( CAgent.class ) )
-            l_use = ( (CAgent) p_field.getAnnotation( CAgent.class ) ).use();
+            l_use = ( (CAgent) p_field.getAnnotation( CAgent.class ) ).bind();
 
         return l_use && ( !( ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface(
                 p_field.getModifiers()
@@ -56,7 +56,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
     @Target( ElementType.FIELD )
     public @interface CAgent
     {
-        public boolean use() default true;
+        public boolean bind() default true;
     }
 
 }

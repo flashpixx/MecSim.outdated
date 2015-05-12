@@ -67,12 +67,12 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * reference to the graph
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**
      * cell structure of the route
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
      * linger probability value
@@ -89,7 +89,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * inspector map
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( CDefaultCar.super.inspect() );
@@ -101,12 +101,12 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * current position on the route
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private int m_routeindex;
     /**
      * boolean flag for end reached
      */
-    @CFieldFilter.CAgent( use = false )
+    @CFieldFilter.CAgent( bind = false )
     private boolean m_endreached;
 
 
@@ -151,28 +151,28 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final int getMaximumSpeed()
     {
         return m_maxspeed;
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final int getCurrentSpeed()
     {
         return m_speed;
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final void setCurrentSpeed( final int p_speed )
     {
         m_speed = p_speed;
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final double getLingerProbability()
     {
         return m_lingerprobability;
@@ -190,7 +190,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final boolean hasEndReached()
     {
         return m_endreached;
@@ -225,21 +225,21 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final int getAcceleration()
     {
         return m_acceleration;
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final int getDeceleration()
     {
         return m_deceleration;
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public void release()
     {
         super.release();
@@ -254,7 +254,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * @param p_index index
      * @return null or edge
      */
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     private final EdgeIteratorState getEdge( final int p_index )
     {
         if ( m_route == null )
@@ -264,7 +264,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
         final GeoPosition l_position = this.getGeoposition();
@@ -298,7 +298,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * @param p_stroke stroke of the items
      * @return list with route
      */
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> getRouteLine( final int p_start, final int p_end, final Color p_color,
                                                                                       final Stroke p_stroke
     )
@@ -322,7 +322,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public Map<String, Object> inspect()
     {
         m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "currentspeed" ), m_speed );
@@ -332,7 +332,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
         final GeoPosition l_position = this.getGeoposition();
@@ -360,7 +360,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
 
     @Override
-    @CMethodFilter.CAgent( use = false )
+    @CMethodFilter.CAgent( bind = false )
     public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
 

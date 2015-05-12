@@ -33,9 +33,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -220,7 +218,7 @@ public class CReflection
          * @param p_field field object
          * @return true field will be added, false field will be ignored
          */
-        public boolean filter( Field p_field );
+        public boolean filter( final Field p_field );
     }
 
 
@@ -236,7 +234,7 @@ public class CReflection
          * @param p_method method object
          * @return true field will be added, false method will be ignored
          */
-        public boolean filter( Method p_method );
+        public boolean filter( final Method p_method );
     }
 
 
@@ -392,13 +390,13 @@ public class CReflection
          */
         private final T m_object;
         /**
-         * forbidden names *
-         */
-        private final Set<String> m_forbidden = new HashSet<>();
-        /**
          * cache map *
          */
         private final Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
+        /**
+         * method filter
+         */
+        private final IMethodFilter m_filter;
 
 
         /**
@@ -408,7 +406,19 @@ public class CReflection
          */
         public CMethodCache( final T p_bind )
         {
+            this( p_bind, null );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_bind bind object
+         * @param p_filter method filter object
+         */
+        public CMethodCache( final T p_bind, final IMethodFilter p_filter )
+        {
             m_object = p_bind;
+            m_filter = p_filter;
         }
 
         /**
@@ -420,18 +430,6 @@ public class CReflection
         {
             return m_object;
         }
-
-
-        /**
-         * get forbidden set
-         *
-         * @return set with names
-         */
-        public final Set<String> getForbidden()
-        {
-            return m_forbidden;
-        }
-
 
         /**
          * get the method handle
@@ -454,14 +452,17 @@ public class CReflection
          */
         public final CMethod get( final String p_methodname, final Class<?>[] p_arguments ) throws IllegalAccessException
         {
+            // check cache
             final Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
             if ( m_cache.containsKey( l_method ) )
                 return m_cache.get( l_method );
 
-            if ( m_forbidden.contains( p_methodname ) )
+            // get method and check filter
+            final CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+            if ( ( m_filter != null ) && ( !m_filter.filter( l_handle.getMethod() ) ) )
                 throw new IllegalAccessException( CCommon.getResourceString( this, "access", p_methodname ) );
 
-            final CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+            // add to cache
             m_cache.put( l_method, l_handle );
             return l_handle;
         }

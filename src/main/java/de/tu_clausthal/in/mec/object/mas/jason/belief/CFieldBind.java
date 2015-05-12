@@ -26,8 +26,8 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
-import de.tu_clausthal.in.mec.object.mas.jason.CFieldFilter;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -44,7 +44,10 @@ import java.util.Set;
  */
 public class CFieldBind implements IBelief
 {
-
+    /**
+     * field filter
+     */
+    private static final CFieldFilter c_filter = new CFieldFilter();
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
@@ -72,41 +75,9 @@ public class CFieldBind implements IBelief
      */
     public CFieldBind( final String p_name, final Object p_object )
     {
-        this.push( p_name, p_object, null );
+        this.push( p_name, p_object );
     }
 
-    /**
-     * adds a new bind object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     * @param p_forbiddennames set with forbidden names of the object fields
-     */
-    public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
-    {
-        m_bind.put(
-                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
-                        p_object, CReflection.getClassFields(
-                        p_object.getClass(), new CFieldFilter(
-                                p_forbiddennames
-                        )
-                )
-                )
-        );
-    }
-
-
-    /**
-     * ctor
-     *
-     * @param p_name name / annotation of the bind object
-     * @param p_object bind object
-     * @param p_forbiddennames set with forbidden field names of the object fields
-     */
-    public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
-    {
-        this.push( p_name, p_object, p_forbiddennames );
-    }
 
     /**
      * adds / binds an object
@@ -116,7 +87,13 @@ public class CFieldBind implements IBelief
      */
     public final void push( final String p_name, final Object p_object )
     {
-        this.push( p_name, p_object, null );
+        m_bind.put(
+                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
+                        p_object, CReflection.getClassFields(
+                        p_object.getClass(), c_filter
+                )
+                )
+        );
     }
 
     /**

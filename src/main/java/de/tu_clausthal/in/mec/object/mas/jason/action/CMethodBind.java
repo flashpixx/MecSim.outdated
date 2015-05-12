@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSemantics.Agent;
 import jason.asSyntax.ASSyntax;
@@ -38,17 +39,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
  * action to invoke any method on an object
  *
  * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
+ * @note the command uses the following structure "commandname( sourcename, methodname, return parameter, method arguments )"
  */
 public class CMethodBind extends IAction
 {
-
+    /**
+     * method filter
+     */
+    private static final CMethodFilter c_filter = new CMethodFilter();
     /**
      * bind object *
      */
@@ -83,7 +87,7 @@ public class CMethodBind extends IAction
      */
     public final void push( final String p_name, final Object p_object )
     {
-        m_bind.put( p_name, new CReflection.CMethodCache( p_object ) );
+        m_bind.put( p_name, new CReflection.CMethodCache( p_object, c_filter ) );
     }
 
 
@@ -97,26 +101,12 @@ public class CMethodBind extends IAction
         m_bind.remove( p_name );
     }
 
-    /**
-     * returns the forbidden set
-     *
-     * @param p_name name of the object
-     * @return set with forbidden names
-     */
-    public final Set<String> getForbidden( final String p_name )
-    {
-        final CReflection.CMethodCache l_object = m_bind.get( p_name );
-        if ( l_object == null )
-            return null;
 
-        return l_object.getForbidden();
-    }
-
-
-    @Override
     /**
      * @todo handle term list
-     */ public final void act( final Agent p_agent, final Structure p_args )
+     */
+    @Override
+    public final void act( final Agent p_agent, final Structure p_args )
     {
         // check number of argument first
         final List<Term> l_args = p_args.getTerms();

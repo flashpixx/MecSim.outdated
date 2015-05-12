@@ -65,10 +65,13 @@ import java.util.Set;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
- * @bug check agent name / structure
  */
 public class CAgent<T> implements IVoidAgent
 {
+    /**
+     * bind name
+     */
+    private static final String c_bindname = "self";
     /**
      * path seperator
      */
@@ -122,13 +125,13 @@ public class CAgent<T> implements IVoidAgent
 
     /**
      * ctor
-     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
-     * and all properties and methods will be bind to the agent with the source "self"
      *
      * @param p_namepath name of the agent (full path)
      * @param p_asl agent ASL file
      * @param p_bind object that should be bind with the agent
      * @throws JasonException throws an Jason exception
+     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
+     * and all properties and methods will be bind to the agent with the source "self"
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
@@ -138,9 +141,9 @@ public class CAgent<T> implements IVoidAgent
 
         if ( p_bind != null )
         {
-            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( "self", p_bind ) );
-            m_action.put( "invoke", new CMethodBind( "self", p_bind ) );
-            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( "self", p_bind ) );
+            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
+            m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
+            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( c_bindname, p_bind ) );
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch

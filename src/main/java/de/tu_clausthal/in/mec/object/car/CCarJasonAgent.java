@@ -29,8 +29,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
+import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
+import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import jason.JasonException;
 import org.apache.commons.lang3.tuple.Pair;
@@ -45,40 +45,20 @@ import java.util.Set;
 /**
  * agent car
  *
- * @bug check agent name / structure
  * @bug refactor ctor (reduce parameter)
  */
 public class CCarJasonAgent extends CDefaultCar
 {
-    /**
-     * bind name
-     */
-    private static final String s_bindname = "self";
-    /**
-     * list of forbidden names *
-     */
-    private static final Set<String> c_forbidden = new HashSet()
-    {{
-            add( "m_agents" );
-            add( "m_graph" );
-            add( "m_route" );
-            add( "m_inspect" );
-            add( "m_endreached" );
-            add( "m_routeindex" );
 
-            add( "release" );
-            add( "paint" );
-            add( "step" );
-            add( "inspect" );
-            add( "onClick" );
-        }};
     /**
      * agent object *
      */
-    private final Set<CAgent<CDefaultCar>> m_agents = new HashSet<>();
+    @CFieldFilter.CAgent( use = false )
+    private final Set<de.tu_clausthal.in.mec.object.mas.jason.CAgent> m_agents = new HashSet<>();
     /**
      * inspector map
      */
+    @CFieldFilter.CAgent( use = false )
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( CCarJasonAgent.super.inspect() );
@@ -140,28 +120,14 @@ public class CCarJasonAgent extends CDefaultCar
      * @param p_objectname name of the object (for message system)
      * @param p_asl ASL / agent name
      * @throws JasonException
+     * @bug incomplete
      */
+    @CMethodFilter.CAgent( use = false )
     private void bind( final CPath p_objectname, final String p_asl ) throws JasonException
     {
-        final CAgent<CDefaultCar> l_agent = new CAgent<>( p_objectname.append( p_asl ), p_asl );
-
-        // add the belief bind to the agent
-        final de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind l_belief = new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(
-                s_bindname, this, c_forbidden
+        final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent = new de.tu_clausthal.in.mec.object.mas.jason.CAgent(
+                p_objectname.append( p_asl ), p_asl, this
         );
-        l_agent.getBelief().add( l_belief );
-
-        // add the method bind to the agent
-        final CMethodBind l_method = new CMethodBind( s_bindname, this );
-        l_method.getForbidden( s_bindname ).addAll( c_forbidden );
-        l_agent.getActions().put( "invoke", l_method );
-
-        // add the set bind to the agent
-        final de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind l_set = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(
-                s_bindname, this, c_forbidden
-        );
-        l_agent.getActions().put( "set", l_set );
-
         m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
 
         // add agent to layer and internal set
@@ -171,10 +137,11 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     @Override
+    @CMethodFilter.CAgent( use = false )
     public final void release()
     {
         super.release();
-        for ( CAgent<CDefaultCar> l_agent : m_agents )
+        for ( de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
         {
             l_agent.release();
             CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).remove( l_agent );
@@ -182,12 +149,14 @@ public class CCarJasonAgent extends CDefaultCar
     }
 
     @Override
+    @CMethodFilter.CAgent( use = false )
     public final Map<String, Object> inspect()
     {
         return m_inspect;
     }
 
     @Override
+    @CMethodFilter.CAgent( use = false )
     public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         // check speed, because agent can modify the speed value and the value should always in range

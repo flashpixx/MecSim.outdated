@@ -21,41 +21,41 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.ui;
+package de.tu_clausthal.in.mec.object.mas;
 
-import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 
-import java.util.HashMap;
-import java.util.Map;
+import de.tu_clausthal.in.mec.common.CReflection;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 
 /**
- * global default implementation to get information about a simulation object
+ * class to filter methods *
  */
-public abstract class IInspectorDefault extends IUIListener implements IInspector
+public class CMethodFilter implements CReflection.IMethodFilter
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * inspect variable *
-     */
-    @CFieldFilter.CAgent( use = false )
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
-            put( CCommon.getResourceString( IInspectorDefault.class, "objectid" ), this.hashCode() );
-        }};
-
-
     @Override
-    @CMethodFilter.CAgent( use = false )
-    public Map<String, Object> inspect()
+    public boolean filter( final Method p_method )
     {
-        return m_inspect;
+        boolean l_use = true;
+        if ( p_method.isAnnotationPresent( CAgent.class ) )
+            l_use = ( (CAgent) p_method.getAnnotation( CAgent.class ) ).use();
+
+        return l_use && ( !( Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
+                p_method.getModifiers()
+        ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
     }
 
+
+    @Retention( RetentionPolicy.RUNTIME )
+    @Target( ElementType.METHOD )
+    public @interface CAgent
+    {
+        public boolean use() default true;
+    }
 }

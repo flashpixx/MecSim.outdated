@@ -21,14 +21,16 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.jason;
+package de.tu_clausthal.in.mec.object.mas;
 
 import de.tu_clausthal.in.mec.common.CReflection;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -37,34 +39,24 @@ import java.util.Set;
 public class CFieldFilter implements CReflection.IFieldFilter
 {
 
-    /**
-     * set with forbidden field names *
-     */
-    private final Set<String> m_forbiddennames = new HashSet<>();
-
-    /**
-     * ctor *
-     */
-    public CFieldFilter()
-    {
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_names set with forbidden field names
-     */
-    public CFieldFilter( final Set<String> p_names )
-    {
-        m_forbiddennames.addAll( p_names );
-    }
-
     @Override
     public final boolean filter( final Field p_field )
     {
-        return !( ( m_forbiddennames.contains( p_field.getName() ) ) || ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface(
+        boolean l_use = true;
+        if ( p_field.isAnnotationPresent( CAgent.class ) )
+            l_use = ( (CAgent) p_field.getAnnotation( CAgent.class ) ).use();
+
+        return l_use && ( !( ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface(
                 p_field.getModifiers()
-        ) ) || ( Modifier.isAbstract( p_field.getModifiers() ) ) );
+        ) ) || ( Modifier.isAbstract( p_field.getModifiers() ) ) ) );
+    }
+
+
+    @Retention( RetentionPolicy.RUNTIME )
+    @Target( ElementType.FIELD )
+    public @interface CAgent
+    {
+        public boolean use() default true;
     }
 
 }

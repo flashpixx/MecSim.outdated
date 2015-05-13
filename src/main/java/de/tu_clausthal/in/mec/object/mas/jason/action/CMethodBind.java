@@ -30,9 +30,10 @@ import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.NoValueException;
 import jason.asSemantics.Agent;
 import jason.asSyntax.ListTerm;
-import jason.asSyntax.NumberTerm;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,8 +64,8 @@ public class CMethodBind extends IAction
      */
     public CMethodBind()
     {
-
     }
+
 
     /**
      * ctor bind an object
@@ -100,10 +101,6 @@ public class CMethodBind extends IAction
         m_bind.remove( p_name );
     }
 
-
-    /**
-     * @todo handle term list
-     */
     @Override
     public final void act( final Agent p_agent, final Structure p_args )
     {
@@ -120,34 +117,19 @@ public class CMethodBind extends IAction
 
         try
         {
+
+            // build argument data & types and invoke the method
             final List<Class<?>> l_argumenttypes = new LinkedList<>();
             final List<Object> l_argumentdata = new LinkedList<>();
-            Class<?> l_returntype = null;
-            String l_returnname = null;
-
-            this.decodeMethodSignature( l_args, l_argumenttypes, l_argumentdata, l_returntype, l_returnname );
-            //System.out.println( l_returnname + " -----> " + l_returntype );
-
-/*
-
-            // invoke and cast return data
-            final String l_methodname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 1 ).toString() );
-            final CReflection.CMethod l_invoke = l_object.get( l_methodname, (Class<?>[])l_argumenttypes.toArray() );
-            final Object l_return = l_returntype.cast(
-                    ( l_argumentdata == null ) || ( l_argumentdata.size() == 0 ) ? l_invoke.getHandle().invoke(
-                            l_object.getObject()
-                    ) : l_invoke.getHandle().invokeWithArguments( new LinkedList<Object>(){{ add( l_object ); addAll( l_argumentdata ); }} )
+            final Pair<Class<?>, String> l_returntype = this.decodeMethodSignature( l_args, l_argumenttypes, l_argumentdata );
+            final Object l_return = this.invokeMethod(
+                    l_object, de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( l_args.get( 1 ).toString() ), l_returntype.getKey(), l_argumenttypes,
+                    l_argumentdata
             );
-
 
             // push return data into the agent
             if ( ( l_return != null ) && ( !void.class.equals( l_return.getClass() ) ) )
-            {
-                final Literal l_literalreturn = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( l_returnname, l_return );
-                l_literalreturn.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_objectname ) ) );
-                p_agent.addBel( l_literalreturn );
-            }
-*/
+                p_agent.addBel( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( l_returntype.getValue(), l_return ) );
 
         }
         catch ( final Exception l_exception )
@@ -160,63 +142,97 @@ public class CMethodBind extends IAction
         }
     }
 
-
     /**
      * decodes the Jason parameter list to create the Java signature call
      *
-     * @param p_parameter
-     * @param p_argumenttypes
-     * @param p_argumentdata
-     * @param p_returntype
-     * @param p_returnname
-     * @throws ClassNotFoundException
-     * @throws NoValueException
+     * @param p_parameter Jason parameter
+     * @param p_argumenttypes append list with method argument types
+     * @param p_argumentdata append list with method argument data
+     * @return returns a pair with class and belief name of the return paramater
+     * @throws ClassNotFoundException on class error
+     * @throws NoValueException on value error
      * @code commandname(bind, method, [return type / default void | [return type, return belief name]], [method type arguments / default void], ...arguments
      *)
      * @endcode The first two arguments are ignored here, because they were used before
      */
-    private void decodeMethodSignature( final List<Term> p_parameter, final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata,
-                                        Class<?> p_returntype, String p_returnname
+    private org.apache.commons.lang3.tuple.Pair<Class<?>, String> decodeMethodSignature( final List<Term> p_parameter, final List<Class<?>> p_argumenttypes,
+                                                                                         final List<Object> p_argumentdata
     ) throws ClassNotFoundException, NoValueException
     {
-        p_returnname = CCommon.clearString( p_parameter.get( 1 ).toString() );
-        p_returntype = void.class;
+        // class and string are immutable types, so we need to create a return argument
+        Class<?> l_returntype = void.class;
+        String l_returnname = CCommon.clearString( p_parameter.get( 1 ).toString() );
 
-        // if paramter count > 2, then return type exists (single value or list value)
+        // if paramter count > 2, then return type exists (single value or list value with 2 elements)
         if ( p_parameter.size() > 2 )
             if ( !p_parameter.get( 2 ).isList() )
-                p_returntype = this.convertTermToClass( p_parameter.get( 2 ) );
+                l_returntype = this.convertTermToClass( p_parameter.get( 2 ) );
             else
             {
                 final ListTerm l_list = ( (ListTerm) p_parameter.get( 2 ) );
                 if ( l_list.size() != 2 )
                     throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "returnargument" ) );
 
-                p_returntype = this.convertTermToClass( l_list.get( 0 ) );
-                p_returnname = CCommon.clearString( l_list.get( 1 ).toString() );
+                l_returntype = this.convertTermToClass( l_list.get( 0 ) );
+                l_returnname = CCommon.clearString( l_list.get( 1 ).toString() );
             }
 
         // if parameter count > 3, method arguments and argument types are exists
         if ( p_parameter.size() > 3 )
         {
-            if ( !p_parameter.get( 3 ).isList() )
-                throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argumenttype" ) );
+            if ( p_parameter.get( 3 ).isList() )
+                p_argumenttypes.addAll( Arrays.asList( this.convertTermListToClassArray( (ListTerm) p_parameter.get( 3 ) ) ) );
+            else
+                p_argumenttypes.add( this.convertTermToClass( p_parameter.get( 3 ) ) );
 
-            p_argumenttypes.addAll( Arrays.asList( this.convertTermListToArray( (ListTerm) p_parameter.get( 3 ) ) ) );
             if ( p_parameter.size() - 4 != p_argumenttypes.size() )
                 throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argumentnumber" ) );
 
             for ( int i = 4; i < p_parameter.size(); ++i )
-                p_argumentdata.add(
-                        p_parameter.get( i ).isNumeric() ? CCommon.convertNumber(
-                                p_argumenttypes.get( i - 4 ), ( (NumberTerm) p_parameter.get( i ) ).solve()
-                        ) : p_argumenttypes.get( i - 4 ).cast( p_parameter.get( i ) )
-                );
-
+                p_argumentdata.add( CCommon.convertJasonValuetoJava( p_parameter.get( i ) ) );
         }
 
+        // return immutable types
+        return new ImmutablePair<>( l_returntype, l_returnname );
     }
 
+    /**
+     * invokes a method
+     *
+     * @param p_object invoking object
+     * @param p_methodname method name
+     * @param p_returntype return type
+     * @param p_argumenttypes argument type list
+     * @param p_argumentdata argument data list
+     * @return return value
+     * @throws Throwable on invoking error
+     */
+    private Object invokeMethod( final CReflection.CMethodCache<Object> p_object, final String p_methodname, final Class<?> p_returntype,
+                                 final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata
+    ) throws Throwable
+    {
+        // method has got any arguments
+        if ( ( !p_argumentdata.isEmpty() ) && ( !p_argumenttypes.isEmpty() ) )
+        {
+            // convert argumenttypes to array
+            final Class<?>[] l_argumenttypes = new Class[p_argumenttypes.size()];
+            p_argumenttypes.toArray( l_argumenttypes );
+
+            // call invoker
+            return p_returntype.cast(
+                    p_object.get( p_methodname, l_argumenttypes ).getHandle().invokeWithArguments(
+                            new LinkedList<Object>()
+                            {{
+                                    add( p_object.getObject() );
+                                    addAll( p_argumentdata );
+                                }}
+                    )
+            );
+        }
+
+        // otherwise method does not have any arguments
+        return p_returntype.cast( p_object.get( p_methodname ).getHandle().invoke( p_object.getObject() ) );
+    }
 
     /**
      * converts a term value into a class object
@@ -224,9 +240,9 @@ public class CMethodBind extends IAction
      * @param p_term Jason term
      * @return class object
      */
-    protected final Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
+    private Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
     {
-        String l_classname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( p_term.toString() ).toLowerCase();
+        String l_classname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( p_term.toString() );
         if ( "void".equalsIgnoreCase( l_classname ) )
             return void.class;
 
@@ -279,7 +295,7 @@ public class CMethodBind extends IAction
      * @param p_list term list
      * @return class array
      */
-    protected final Class<?>[] convertTermListToArray( final ListTerm p_list ) throws ClassNotFoundException
+    private Class<?>[] convertTermListToClassArray( final ListTerm p_list ) throws ClassNotFoundException
     {
         final Class<?>[] l_classes = new Class<?>[p_list.size()];
         for ( int i = 0; i < l_classes.length; i++ )
@@ -293,7 +309,7 @@ public class CMethodBind extends IAction
      * @param p_term term
      * @return class object array
      */
-    protected final Class<?>[] convertTermListToArray( final Term p_term ) throws ClassNotFoundException
+    private Class<?>[] convertTermListToClassArray( final Term p_term ) throws ClassNotFoundException
     {
         final Class<?>[] l_classes = new Class<?>[1];
         l_classes[0] = this.convertTermToClass( p_term );

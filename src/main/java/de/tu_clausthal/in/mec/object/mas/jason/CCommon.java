@@ -24,11 +24,18 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 
+import jason.NoValueException;
 import jason.asSyntax.ASSyntax;
+import jason.asSyntax.ListTerm;
 import jason.asSyntax.Literal;
+import jason.asSyntax.NumberTerm;
+import jason.asSyntax.StringTerm;
+import jason.asSyntax.Term;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -54,6 +61,36 @@ public class CCommon
     public static String clearString( final String p_input )
     {
         return p_input.replaceAll( "\"", "" ).replaceAll( "'", "" );
+    }
+
+
+    /**
+     * Jason does not support Java-type binding, so an explicit converting of Jason types to the corresponding Java type is needed
+     *
+     * @param p_term Jason term
+     * @return Java type
+     * @throws NoValueException on empty value
+     */
+    public static Object convertJasonValuetoJava( final Term p_term ) throws NoValueException
+    {
+        if ( p_term.isList() )
+        {
+            final List<Object> l_return = new LinkedList<>();
+            for ( Term l_term : (ListTerm) p_term )
+                l_return.add( convertJasonValuetoJava( l_term ) );
+            return l_return;
+        }
+
+        if ( p_term.isNumeric() )
+            return ( (NumberTerm) p_term ).solve();
+
+        if ( p_term.isString() )
+            return ( (StringTerm) p_term ).getString();
+
+        if ( p_term.isAtom() )
+            return clearString( p_term.toString() );
+
+        throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "jasonvaluetype" ) );
     }
 
     /**

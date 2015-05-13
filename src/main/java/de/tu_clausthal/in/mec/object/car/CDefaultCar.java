@@ -150,11 +150,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "deceleration" ), m_deceleration );
     }
 
-    private void blub()
-    {
-        System.out.println( "-----> blub" );
-    }
-
     @Override
     @CMethodFilter.CAgent( bind = false )
     public final int getMaximumSpeed()

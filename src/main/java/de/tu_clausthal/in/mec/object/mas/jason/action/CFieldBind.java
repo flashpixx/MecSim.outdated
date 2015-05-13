@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import jason.asSemantics.Agent;
-import jason.asSyntax.NumberTerm;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -134,9 +133,7 @@ public class CFieldBind extends IAction
 
 
     @Override
-    /**
-     * @todo handle term list
-     */ public final void act( final Agent p_agent, final Structure p_args )
+    public final void act( final Agent p_agent, final Structure p_args )
     {
 
         // check number of argument first
@@ -161,19 +158,7 @@ public class CFieldBind extends IAction
 
         try
         {
-
-            // set value with the setter handle (for numeric types we need an explicit type cast, because Jason returns only double values)
-            if ( l_args.get( 2 ).isNumeric() )
-                l_handle.getSetter().invoke(
-                        l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertNumber(
-                                l_handle.getField().getType(), ( (NumberTerm) l_args.get(
-                                        2
-                                ) ).solve()
-                        )
-                );
-            else
-                l_handle.getSetter().invoke( l_object.getLeft(), l_args.get( 2 ) );
-
+            l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertJasonValuetoJava( l_args.get( 2 ) ) );
         }
         catch ( final Throwable l_throwable )
         {

@@ -69,9 +69,6 @@ public class CMainLoop implements Runnable
      */
     private int m_shutdownstep = Integer.MAX_VALUE;
 
-    /**
-     * @todo check speed of thread-sleep-time with caching
-     */
     @Override
     @SuppressWarnings( "unchecked" )
     public final void run()

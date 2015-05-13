@@ -166,9 +166,6 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
         m_active = p_value;
     }
 
-    /**
-     * @bug incomplete
-     */
     @Override
     public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
     {

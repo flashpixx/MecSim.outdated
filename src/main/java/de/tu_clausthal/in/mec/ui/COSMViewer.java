@@ -27,6 +27,8 @@ import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.CDefaultCar;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.*;
 import javafx.stage.Popup;
 import org.apache.commons.lang3.tuple.Pair;
@@ -126,16 +128,6 @@ public class COSMViewer extends JXMapViewer
     public void paintFadeLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )
     {
         m_linepainter.setLine(p_line);
-    }
-
-    /**
-     * shows object inspector of selected car
-     *
-     * @param defaultCar
-     */
-    public void showObjectInspector(CDefaultCar defaultCar)
-    {
-        System.out.println("current speed: " + defaultCar.getCurrentSpeed());
     }
 
     /**

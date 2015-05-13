@@ -286,9 +286,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
             l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintFadeLine( l_route );
-
-            // start object inspector when a car is clicked
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().showObjectInspector(this);
         }
     }
 

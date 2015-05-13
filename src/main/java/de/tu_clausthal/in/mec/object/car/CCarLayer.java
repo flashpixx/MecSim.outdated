@@ -70,15 +70,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
 
 
     /**
-     * @bug remove - only testing
-     */
-    public CCarLayer()
-    {
-        //m_graph.enableDisableWeight( CGraphHopper.EWeight.Default );
-        m_graph.enableDisableWeight( CGraphHopper.EWeight.ForbiddenEdges );
-    }
-
-    /**
      * enable / disable weight
      *
      * @param p_weight weight name

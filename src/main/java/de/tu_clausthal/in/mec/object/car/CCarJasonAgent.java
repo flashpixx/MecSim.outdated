@@ -119,8 +119,7 @@ public class CCarJasonAgent extends CDefaultCar
      *
      * @param p_objectname name of the object (for message system)
      * @param p_asl ASL / agent name
-     * @throws JasonException
-     * @bug incomplete
+     * @throws JasonException throws on Jason error
      */
     @CMethodFilter.CAgent( bind = false )
     private void bind( final CPath p_objectname, final String p_asl ) throws JasonException

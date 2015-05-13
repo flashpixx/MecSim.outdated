@@ -27,7 +27,6 @@ $(document).ready(function() {
 
         $( "#mecsim_object_inspector" ).dialog({
             autoOpen: false,
-          modal: true
         });
 
         // splitter

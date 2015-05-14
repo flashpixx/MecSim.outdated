@@ -67,6 +67,7 @@ public class CReflection
             {{
                     addAll( Arrays.asList( System.getProperty( "java.class.path" ).split( File.pathSeparator ) ) );
                     addAll( Arrays.asList( System.getProperty( "java.ext.dirs" ).split( File.pathSeparator ) ) );
+                    addAll( Arrays.asList( System.getProperty( "java.library.path" ).split( File.pathSeparator ) ) );
                 }} )
             {
                 final File l_file = new File( l_path );

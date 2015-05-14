@@ -458,8 +458,8 @@ public class CWaypointEnvironment
          * @param p_histrogram
          */
         protected CTool( final EWayPointType p_wayPointType, final EFactoryType p_factoryType, final EGeneratorType p_generatorType, final double p_radius,
-                         final Color p_color, final String p_asl, final int p_carcount, final int p_mean, final int p_deviation, final int p_lower,
-                         final int p_upper, final int[] p_histrogram
+                final Color p_color, final String p_asl, final int p_carcount, final int p_mean, final int p_deviation, final int p_lower, final int p_upper,
+                final int[] p_histrogram
         )
         {
             this.m_wayPointType = p_wayPointType;

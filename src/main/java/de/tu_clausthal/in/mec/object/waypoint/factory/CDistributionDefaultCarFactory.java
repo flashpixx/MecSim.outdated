@@ -79,8 +79,7 @@ public class CDistributionDefaultCarFactory extends ICarFactory
      * @param p_lingerdistribution distribution of linger-probability
      */
     public CDistributionDefaultCarFactory( final AbstractRealDistribution p_speed, final AbstractRealDistribution p_maxspeed,
-                                           final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration,
-                                           final AbstractRealDistribution p_lingerdistribution
+            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution
     )
     {
         super();

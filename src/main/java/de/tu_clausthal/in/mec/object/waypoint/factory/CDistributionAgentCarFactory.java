@@ -77,8 +77,8 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
      * @param p_asl agent name
      */
     public CDistributionAgentCarFactory( final AbstractRealDistribution p_speed, final AbstractRealDistribution p_maxspeed,
-                                         final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration,
-                                         final AbstractRealDistribution p_lingerdistribution, final String p_asl
+            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
+            final String p_asl
     )
     {
         super( p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );

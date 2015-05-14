@@ -155,7 +155,7 @@ public class CMethodBind extends IAction
      * @throws NoValueException on value error
      */
     private org.apache.commons.lang3.tuple.Pair<Class<?>, String> decodeMethodSignature( final List<Term> p_parameter, final List<Class<?>> p_argumenttypes,
-                                                                                         final List<Object> p_argumentdata
+            final List<Object> p_argumentdata
     ) throws ClassNotFoundException, NoValueException
     {
         // class and string are immutable types, so we need to create a return argument
@@ -208,7 +208,7 @@ public class CMethodBind extends IAction
      * @throws Throwable on invoking error
      */
     private Object invokeMethod( final CReflection.CMethodCache<Object> p_object, final String p_methodname, final Class<?> p_returntype,
-                                 final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata
+            final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata
     ) throws Throwable
     {
         // method has got any arguments
@@ -254,29 +254,21 @@ public class CMethodBind extends IAction
             {
                 // check primitive datatypes
                 case "bool":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "boolean":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "byte":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "char":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "short":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "int":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "long":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "float":
-                    throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
                 case "double":
                     throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "primitive", l_classname ) );
 
                     // object types
                 default:
-                    if ( !l_classname.contains( "." ) )
-                        l_classname = "java.lang." + l_classname;
-                    l_class = Class.forName( l_classname );
+                    l_class = CReflection.getClassIndex().get( l_classname );
+                    if ( l_class == null )
+                        l_class = Class.forName( l_classname );
             }
 
         }

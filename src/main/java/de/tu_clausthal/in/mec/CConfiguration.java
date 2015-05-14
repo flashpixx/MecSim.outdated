@@ -673,7 +673,7 @@ public class CConfiguration
     {
 
         public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,
-                                               final boolean p_reload
+                final boolean p_reload
         ) throws IllegalAccessException, InstantiationException, IOException
         {
             InputStream l_stream = null;

@@ -208,8 +208,8 @@ public class CReflection
      * Integer.TYPE};
      * @return method
      */
-    public static CMethod getClassMethod( final Class<?> p_class, final String p_method, final Class<?>[] p_parameter ) throws IllegalArgumentException,
-                                                                                                                               IllegalAccessException
+    public static CMethod getClassMethod( final Class<?> p_class, final String p_method, final Class<?>[] p_parameter )
+            throws IllegalArgumentException, IllegalAccessException
     {
         Method l_method = null;
         for ( Class<?> l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )

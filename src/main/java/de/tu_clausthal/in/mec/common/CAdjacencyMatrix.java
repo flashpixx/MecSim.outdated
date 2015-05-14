@@ -24,15 +24,23 @@
 package de.tu_clausthal.in.mec.common;
 
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * class of an adjacence matrix
  */
+@JsonSerialize( using = CAdjacencyMatrix.CJson.class )
 public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
 
@@ -68,67 +76,30 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
 
     /**
-     * cell element representation of a graph element
+     * serializer for Json access
      */
-    public class CCell<P, M>
+    public static class CJson extends JsonSerializer<CAdjacencyMatrix<?, ?>>
     {
-        /**
-         * row key *
-         */
-        private final P m_rowkey;
-        /**
-         * column key *
-         */
-        private final P m_columnkey;
-        /**
-         * value *
-         */
-        private final M m_value;
 
-        /**
-         * @param p_rowkey row key
-         * @param p_columnkey column key
-         * @param p_value value
-         */
-        public CCell( final P p_rowkey, final P p_columnkey, final M p_value )
+        @Override
+        public void serialize( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator, final SerializerProvider p_serializer
+        ) throws IOException, JsonProcessingException
         {
-            m_rowkey = p_rowkey;
-            m_columnkey = p_columnkey;
-            m_value = p_value;
+            p_generator.writeStartObject();
+            p_generator.writeArrayFieldStart( "cells" );
+            for ( final Map.Entry<?, ?> l_item : p_matrix.entrySet() )
+            {
+                final Pair<?, ?> l_pair = (Pair<?, ?>) l_item.getKey();
+
+                p_generator.writeStartObject();
+                p_generator.writeObjectField( "row", l_pair.getLeft() );
+                p_generator.writeObjectField( "col", l_pair.getRight() );
+                p_generator.writeObjectField( "value", l_item.getValue() );
+                p_generator.writeEndObject();
+            }
+            p_generator.writeEndArray();
+            p_generator.writeEndObject();
         }
-
-        /**
-         * returns row key
-         *
-         * @return row key
-         */
-        public P getRowKey()
-        {
-            return m_rowkey;
-        }
-
-
-        /**
-         * returns column key
-         *
-         * @return column key
-         */
-        public P getColumnKey()
-        {
-            return m_columnkey;
-        }
-
-
-        /**
-         * returns value
-         *
-         * @return value
-         */
-        public M getValue()
-        {
-            return m_value;
-        }
-
     }
 
 }

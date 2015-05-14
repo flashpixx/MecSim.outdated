@@ -354,10 +354,10 @@ public class CAgent<T> implements IVoidAgent
          */
         protected final void updateBindBeliefs()
         {
-            for ( IBelief l_item : m_beliefs )
+            for ( final IBelief l_item : m_beliefs )
             {
                 // remove old belief within the agent
-                for ( Literal l_literal : l_item.getLiterals() )
+                for ( final Literal l_literal : l_item.getLiterals() )
                     try
                     {
                         m_agent.delBel( l_literal );
@@ -372,7 +372,7 @@ public class CAgent<T> implements IVoidAgent
 
 
                 // set new belief into the agent
-                for ( Literal l_literal : l_item.getLiterals() )
+                for ( final Literal l_literal : l_item.getLiterals() )
                     try
                     {
                         m_agent.addBel( l_literal );
@@ -388,7 +388,7 @@ public class CAgent<T> implements IVoidAgent
          */
         protected final void updateMessageBeliefs()
         {
-            for ( IMessage l_msg : m_receivedmessages )
+            for ( final IMessage l_msg : m_receivedmessages )
                 try
                 {
 

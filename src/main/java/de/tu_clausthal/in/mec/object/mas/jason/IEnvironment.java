@@ -98,7 +98,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     public static String[] getAgentFiles()
     {
         final List<String> l_list = new LinkedList<>();
-        for ( String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
+        for ( final String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
             l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
 
         return CCommon.convertCollectionToArray( String[].class, l_list );
@@ -150,7 +150,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     @Override
     public final void release()
     {
-        for ( IAgent l_agent : m_data )
+        for ( final IAgent l_agent : m_data )
             l_agent.release();
         m_data.clear();
     }

@@ -77,7 +77,7 @@ public class CCommon
         if ( p_term.isList() )
         {
             final List<Object> l_return = new LinkedList<>();
-            for ( Term l_term : (ListTerm) p_term )
+            for ( final Term l_term : (ListTerm) p_term )
                 l_return.add( convertJasonValuetoJava( l_term ) );
             return l_return;
         }

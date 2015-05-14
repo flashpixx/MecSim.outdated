@@ -118,10 +118,10 @@ public class CFieldBind implements IBelief
     public final void update()
     {
         // iterate over all binded objects
-        for ( Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
+        for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
 
             // iterate over all object fields
-            for ( Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet() )
+            for ( final Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet() )
                 try
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value

@@ -109,7 +109,7 @@ public class CCarJasonAgent extends CDefaultCar
     {
         super( p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability );
         final CPath l_path = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
-        for ( String l_item : p_agent )
+        for ( final String l_item : p_agent )
             this.bind( l_path, l_item );
     }
 
@@ -140,7 +140,7 @@ public class CCarJasonAgent extends CDefaultCar
     public final void release()
     {
         super.release();
-        for ( de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
+        for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
         {
             l_agent.release();
             CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).remove( l_agent );

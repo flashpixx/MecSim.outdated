@@ -217,7 +217,7 @@ public class CGraphHopper extends GraphHopper
         final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
         {
-            for ( Throwable l_msg : l_result.getErrors() )
+            for ( final Throwable l_msg : l_result.getErrors() )
                 CLogger.error( l_msg.getMessage() );
             throw new IllegalArgumentException( CCommon.getResourceString( this, "grapherror" ) );
         }
@@ -230,7 +230,7 @@ public class CGraphHopper extends GraphHopper
 
         // create edge list with routes
         final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
-        for ( Path l_path : l_routes )
+        for ( final Path l_path : l_routes )
         {
             if ( l_paths.size() >= p_maxroutes )
                 return l_paths;
@@ -308,7 +308,7 @@ public class CGraphHopper extends GraphHopper
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
 
-        for ( EdgeIteratorState l_edge : p_route )
+        for ( final EdgeIteratorState l_edge : p_route )
             for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
                 l_list.add( new ImmutablePair<>( l_edge, i ) );
 
@@ -343,7 +343,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final synchronized void clear()
     {
-        for ( Map.Entry<Integer, CEdge<ICar, ?>> l_item : m_edgecell.entrySet() )
+        for ( final Map.Entry<Integer, CEdge<ICar, ?>> l_item : m_edgecell.entrySet() )
             l_item.getValue().clear();
     }
 
@@ -355,7 +355,7 @@ public class CGraphHopper extends GraphHopper
     public final synchronized int getNumberOfObjects()
     {
         int l_count = 0;
-        for ( CEdge<ICar, ?> l_item : m_edgecell.values() )
+        for ( final CEdge<ICar, ?> l_item : m_edgecell.values() )
             l_count += l_item.getNumberOfObjects();
         return l_count;
     }
@@ -390,7 +390,7 @@ public class CGraphHopper extends GraphHopper
      */
     public final void disableWeights()
     {
-        for ( IWeighting l_item : m_weight.values() )
+        for ( final IWeighting l_item : m_weight.values() )
             l_item.setActive( false );
     }
 
@@ -403,7 +403,7 @@ public class CGraphHopper extends GraphHopper
     public final EWeight[] getActiveWeights()
     {
         final List<EWeight> l_active = new LinkedList<>();
-        for ( Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
+        for ( final Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
             if ( l_item.getValue().isActive() )
                 l_active.add( l_item.getKey() );
 

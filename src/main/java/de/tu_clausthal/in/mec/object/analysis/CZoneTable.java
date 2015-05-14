@@ -97,7 +97,7 @@ public class CZoneTable<T, S>
      */
     public final void reset()
     {
-        for ( Pair<S, Integer> l_item : m_zones.values() )
+        for ( final Pair<S, Integer> l_item : m_zones.values() )
             l_item.getRight().valueOf( 0 );
     }
 
@@ -108,7 +108,7 @@ public class CZoneTable<T, S>
      */
     public final void count( final T p_data )
     {
-        for ( Pair<S, Integer> l_item : m_zones.values() )
+        for ( final Pair<S, Integer> l_item : m_zones.values() )
             if ( m_validation.validate( p_data, l_item.getLeft() ) )
             {
                 l_item.getRight().valueOf( l_item.getRight().intValue() + 1 );
@@ -124,7 +124,7 @@ public class CZoneTable<T, S>
     public final Map<String, Integer> getTable()
     {
         final Map<String, Integer> l_table = new HashMap<>();
-        for ( Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )
+        for ( final Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )
             l_table.put( l_item.getKey(), l_item.getValue().getRight() );
         return l_table;
     }

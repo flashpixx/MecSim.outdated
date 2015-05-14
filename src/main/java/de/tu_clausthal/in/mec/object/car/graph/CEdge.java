@@ -349,7 +349,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         m_objects.put( p_object, p_position );
 
         // call listener
-        for ( IAction l_action : m_listener )
+        for ( final IAction l_action : m_listener )
             l_action.actionPerformed( this, p_position, p_object );
     }
 

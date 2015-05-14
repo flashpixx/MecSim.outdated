@@ -176,7 +176,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
         p_graphic.setStroke( s_stroke );
 
         p_graphic.setColor( Color.RED );
-        for ( Integer l_item : this )
+        for ( final Integer l_item : this )
             this.paintLine( p_graphic, p_viewer, l_item );
 
         p_graphic.setColor( Color.BLUE );

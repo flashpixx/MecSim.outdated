@@ -98,7 +98,7 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
             if ( !l_result.next() )
             {
                 l_connect.createStatement().execute( "create table " + l_table + " " + p_createsql );
-                for ( String l_item : p_altertable )
+                for ( final String l_item : p_altertable )
                     l_connect.createStatement().execute( "alter table " + l_table + " " + l_item );
             }
             l_result.close();

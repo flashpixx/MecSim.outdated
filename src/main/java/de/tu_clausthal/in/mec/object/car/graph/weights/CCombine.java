@@ -42,7 +42,7 @@ public class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements 
             return 0;
 
         double l_min = Double.POSITIVE_INFINITY;
-        for ( IWeighting l_item : this.values() )
+        for ( final IWeighting l_item : this.values() )
             if ( l_item.isActive() )
                 l_min = Math.min( l_min, l_item.getMinWeight( p_weight ) );
 
@@ -56,7 +56,7 @@ public class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements 
             return 0;
 
         double l_max = 0;
-        for ( IWeighting l_item : this.values() )
+        for ( final IWeighting l_item : this.values() )
             if ( l_item.isActive() )
                 l_max += l_item.calcWeight( p_edge, p_reverse );
 

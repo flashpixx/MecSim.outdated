@@ -134,20 +134,20 @@ var mecsim_source,
         setToolbox: function(){
             $.ajax({
                 url     : "/cwaypointenvironment/listtools",
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
+                success : function( data ){
+                    $.each( data, function( pc_key, px_value ) {
 
                         $("</p>").appendTo($("#mecsim_source_toolbox"));
 
                         var button = $("<button></button>")
-                            .text(data)
+                            .text(pc_key)
                             .attr("class", "mecsim_global_accordeonbutton")
-                            .attr("value",data)
+                            .attr("value",pc_key)
                             .button()
                             .appendTo($("#mecsim_source_toolbox"));
 
                         $("<span></span>")
-                            .css("background-color", "red")
+                            .css("background-color", "rgb("+ px_value.redValue +","+ px_value.greenValue +","+ px_value.blueValue +")")
                             .attr("class", "mecsim_source_toolIcon")
                             .prependTo(button);
 
@@ -305,20 +305,20 @@ var mecsim_source,
                             "g"        : SourcePanel.settings.colorpicker.spectrum("get")._g,
                             "b"        : SourcePanel.settings.colorpicker.spectrum("get")._b
                         },
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
+                success : function( data ){
+                    $.each( data, function( pc_key, px_value ) {
 
                         $("</p>").appendTo($("#mecsim_source_toolbox"));
 
                         var button = $("<button></button>")
-                            .text(data)
+                            .text(pc_key)
                             .attr("class", "mecsim_global_accordeonbutton")
-                            .attr("value",data)
+                            .attr("value",pc_key)
                             .button()
                             .appendTo($("#mecsim_source_toolbox"));
 
                         $("<span></span>")
-                            .css("background-color", "red")
+                            .css("background-color", "rgb("+ px_value.redValue +","+ px_value.greenValue +","+ px_value.blueValue +")")
                             .attr("class", "mecsim_source_toolIcon")
                             .prependTo(button);
 

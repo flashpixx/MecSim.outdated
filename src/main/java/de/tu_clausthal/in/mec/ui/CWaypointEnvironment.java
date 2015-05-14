@@ -48,6 +48,7 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
+ * todo java cleanup (doc, style)
  * todo remove singelton
  * todo check if input is correct
  * todo deliver static label map
@@ -104,7 +105,7 @@ public class CWaypointEnvironment
      *
      * @param p_data
      */
-    private final Map<String, List<String>> web_static_createtool( final Map<String, Object> p_data )
+    private final Map<String, Map<String, Integer>> web_static_createtool( final Map<String, Object> p_data )
     {
         //validate json
         if ( !p_data.containsKey( "factory" ) )
@@ -155,13 +156,17 @@ public class CWaypointEnvironment
         this.m_selectedTool = l_newTool;
         this.m_toolbox.put( l_name, l_newTool );
 
-        //return to add new tool to toolbox
-        List<String> l_return = new ArrayList<>();
-        l_return.add( l_name );
-        return new HashMap<String, List<String>>()
-        {{
-                put( "tools", l_return );
-            }};
+        //return data
+        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
+
+        Map<String, Integer> l_properties = new HashMap<>();
+        l_properties.put( "redValue", l_newTool.m_color.getRed() );
+        l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
+        l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
+
+        l_tools.put( l_name, l_properties );
+
+        return l_tools;
     }
 
     /**
@@ -277,20 +282,21 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<String>> web_static_listtools()
+    private final Map<String, Map<String, Integer>> web_static_listtools()
     {
 
-        List<String> l_tools = new ArrayList<>();
-
+        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
         for ( String l_tool : this.m_toolbox.keySet() )
         {
-            l_tools.add( l_tool );
+            Map<String, Integer> l_properties = new HashMap<>();
+            l_properties.put( "redValue", this.m_toolbox.get( l_tool ).m_color.getRed() );
+            l_properties.put( "greenValue", this.m_toolbox.get( l_tool ).m_color.getGreen() );
+            l_properties.put( "blueValue", this.m_toolbox.get( l_tool ).m_color.getBlue() );
+
+            l_tools.put( l_tool, l_properties );
         }
 
-        return new HashMap<String, List<String>>()
-        {{
-                put( "tools", l_tools );
-            }};
+        return l_tools;
     }
 
     /**

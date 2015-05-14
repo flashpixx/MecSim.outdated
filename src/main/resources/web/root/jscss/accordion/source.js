@@ -136,12 +136,21 @@ var mecsim_source,
                 url     : "/cwaypointenvironment/listtools",
                 success : function( px_data ){
                     px_data.tools.forEach(function(data){
-                        $("<button></button>")
+
+                        $("</p>").appendTo($("#mecsim_source_toolbox"));
+
+                        var button = $("<button></button>")
                             .text(data)
                             .attr("class", "mecsim_global_accordeonbutton")
                             .attr("value",data)
-                            .button({ icons: { primary: "mecsim_source_cyanCircle" } })
+                            .button()
                             .appendTo($("#mecsim_source_toolbox"));
+
+                        $("<span></span>")
+                            .css("background-color", "red")
+                            .attr("class", "mecsim_source_toolIcon")
+                            .prependTo(button);
+
                     });
                 }
             });
@@ -298,14 +307,23 @@ var mecsim_source,
                         },
                 success : function( px_data ){
                     px_data.tools.forEach(function(data){
+
                         $("</p>").appendTo($("#mecsim_source_toolbox"));
-                        $("<button></button>")
+
+                        var button = $("<button></button>")
                             .text(data)
                             .attr("class", "mecsim_global_accordeonbutton")
                             .attr("value",data)
-                            .button({ icons: { primary: "mecsim_source_cyanCircle" } })
+                            .button()
                             .appendTo($("#mecsim_source_toolbox"));
-                    });                }
+
+                        $("<span></span>")
+                            .css("background-color", "red")
+                            .attr("class", "mecsim_source_toolIcon")
+                            .prependTo(button);
+
+                    });
+                }
             }).fail(function(){
                 console.log("tool creation failed!");
             });

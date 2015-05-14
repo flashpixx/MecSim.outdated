@@ -143,11 +143,12 @@ iframe
     right: 0;
 }
 
-.ui-button .ui-icon.mecsim_source_cyanCircle{
+.mecsim_source_toolIcon{
+    display: inline;
+    float: left;
+    margin: 5px;
     width: 15px;
     height: 15px;
-    background-image: none;
-    background: cyan;
 }
 
 /** Tool Wizard **/

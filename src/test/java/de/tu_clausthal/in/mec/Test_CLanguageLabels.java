@@ -80,7 +80,7 @@ public class Test_CLanguageLabels
                     path -> l_files.add( path )
             );
 
-            for ( Path l_item : l_files )
+            for ( final Path l_item : l_files )
                 this.checkFile( l_item );
 
         }
@@ -92,7 +92,7 @@ public class Test_CLanguageLabels
 
 
         // --- check label -> property definition
-        for ( String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
+        for ( final String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
         {
             final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle( l_language ).keySet();
             l_labels.removeAll( m_labels );
@@ -271,7 +271,7 @@ public class Test_CLanguageLabels
             }
 
             // check resource
-            for ( String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
+            for ( final String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
                 try
                 {
                     final String l_label = CCommon.getResourceString( l_language, l_class, p_label );

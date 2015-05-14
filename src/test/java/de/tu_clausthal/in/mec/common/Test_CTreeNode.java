@@ -95,7 +95,7 @@ public class Test_CTreeNode
         {{
                 add( new Double( 0 ) );
             }};
-        for ( Pair<CPath, Double> l_item : l_treedata )
+        for ( final Pair<CPath, Double> l_item : l_treedata )
             l_data.add( l_item.getValue() );
 
         final CTreeNode<Double> l_root = new CTreeNode<>( "root" );
@@ -104,7 +104,7 @@ public class Test_CTreeNode
 
 
         assertEquals( l_root.getNode( "sub3/subsub3.1" ).getData(), new Double( 3.1 ) );
-        for ( Double l_item : l_root.getTreeData( true ) )
+        for ( final Double l_item : l_root.getTreeData( true ) )
         {
             assertTrue( l_data.contains( l_item ) );
             l_data.remove( l_item );

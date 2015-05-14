@@ -19,7 +19,6 @@ var mecsim_source,
         },
 
         /** todo collection for source-ui ck
-        TODO Further wizard validation
         TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
         TODO bounding in minimized mode maybe snap to tab
         TODO plot distribution
@@ -221,6 +220,7 @@ var mecsim_source,
             //listen to generator select
             $("#mecsim_source_selectGenerator").on("change", function(){
                 SourcePanel.updateLabels();
+                SourcePanel.updateGeneratorSettings();
             });
 
         },
@@ -268,6 +268,7 @@ var mecsim_source,
                             .text(data));
                     });
                     SourcePanel.updateLabels();
+                    SourcePanel.updateGeneratorSettings();
                 }
             });
 
@@ -291,6 +292,24 @@ var mecsim_source,
             if(currentIndex===0){
                 if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && $("#mecsim_source_selectASL").val()===null)
                     return false;
+            }
+
+            if(currentIndex===1){
+                var input1 = Number($("#mecsim_source_generatorinput1").val());
+                var input2 = Number($("#mecsim_source_generatorinput2").val());
+                var input3 = Number($("#mecsim_source_generatorinput3").val());
+
+                if( isNaN(input1) || isNaN(input2) || isNaN(input3) || input1 <= 0)
+                    return false;
+
+                if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
+                    if( (input2 >= input3) || (input2 < 0) )
+                        return false;
+                }else{
+                    if( input2 < input3){
+                        return false;
+                    }
+                }
             }
 
             return true;
@@ -343,6 +362,22 @@ var mecsim_source,
                 $("#mecsim_source_selectASLContainer").show();
             }else{
                 $("#mecsim_source_selectASLContainer").hide();
+            }
+        },
+
+        //method to update generator settings
+        updateGeneratorSettings: function(){
+            $("#mecsim_source_generatorinput1").val(3);
+            if($("#mecsim_source_selectGenerator").val() === "uniform distribution" || $("#mecsim_source_selectGenerator").val() === "Gleichverteilung"){
+                $("#mecsim_source_generatorinput2").val(3);
+                $("#mecsim_source_generatorinput3").val(7);
+            }else{
+                $("#mecsim_source_generatorinput2").val(5);
+                $("#mecsim_source_generatorinput3").val(1);
+            }
+            if(currentIndex===0){
+                if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && $("#mecsim_source_selectASL").val()===null)
+                    return false;
             }
         },
 

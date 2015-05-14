@@ -32,6 +32,7 @@ import jason.asSyntax.NumberTerm;
 import jason.asSyntax.StringTerm;
 import jason.asSyntax.Term;
 import org.apache.commons.lang3.StringUtils;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -128,6 +129,18 @@ public class CCommon
         // collection into term list
         if ( p_data instanceof Collection )
             return ASSyntax.createLiteral( l_name, ASSyntax.createList( (Collection) p_data ) );
+
+
+        // individual types
+        if ( p_data instanceof GeoPosition )
+            return ASSyntax.createLiteral(
+                    l_name, ASSyntax.createLiteral( "Latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ), ASSyntax.createLiteral(
+                            "Longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() )
+                    )
+            );
+
+
+
 
         // otherwise into string
         return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );

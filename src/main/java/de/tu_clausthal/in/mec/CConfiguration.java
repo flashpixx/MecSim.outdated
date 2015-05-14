@@ -376,7 +376,7 @@ public class CConfiguration
         try
         {
             final Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
-            for ( Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
+            for ( final Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
                 m_configuration.set( "manifest/" + l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
 
         }
@@ -392,7 +392,7 @@ public class CConfiguration
      */
     private void setDefaultDirectories()
     {
-        for ( String l_item : new String[]{"mas", "jar", "www"} )
+        for ( final String l_item : new String[]{"mas", "jar", "www"} )
             m_location.put( l_item, this.getBasePath( l_item ) );
     }
 
@@ -494,7 +494,7 @@ public class CConfiguration
      */
     private void createDirectories() throws IOException
     {
-        for ( File l_dir : m_location.values() )
+        for ( final File l_dir : m_location.values() )
             if ( !l_dir.exists() && !l_dir.mkdirs() )
                 throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
     }
@@ -567,7 +567,7 @@ public class CConfiguration
         try
         {
             final URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            for ( String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
+            for ( final String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
                 CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke(
                         l_classloader, CCommon.getResourceURL(
                                 m_location.get(
@@ -604,7 +604,7 @@ public class CConfiguration
         // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
         final Set<String> l_errors = new HashSet<>();
 
-        for ( Map.Entry<CPath, Object> l_item : m_configuration )
+        for ( final Map.Entry<CPath, Object> l_item : m_configuration )
             if ( p_input.traverseContainsKey( l_item.getKey() ) )
             {
                 final Object l_data = p_input.get( l_item.getKey() );
@@ -617,7 +617,7 @@ public class CConfiguration
                 // run value checks
                 boolean l_valid = true;
                 if ( m_configurationchecks.containsKey( l_item.getKey().toString() ) )
-                    for ( ICheck l_check : m_configurationchecks.get( l_item.getKey().toString() ) )
+                    for ( final ICheck l_check : m_configurationchecks.get( l_item.getKey().toString() ) )
                         if ( l_check.isWrong( l_data ) )
                         {
                             l_errors.add( CCommon.getResourceString( this, "valuecheck", l_item.getKey(), l_data, l_check ) );

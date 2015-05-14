@@ -138,8 +138,9 @@ var mecsim_source,
                     px_data.tools.forEach(function(data){
                         $("<button></button>")
                             .text(data)
+                            .attr("class", "mecsim_global_accordeonbutton")
                             .attr("value",data)
-                            .button()
+                            .button({ icons: { primary: "mecsim_source_cyanCircle" } })
                             .appendTo($("#mecsim_source_toolbox"));
                     });
                 }
@@ -300,8 +301,9 @@ var mecsim_source,
                         $("</p>").appendTo($("#mecsim_source_toolbox"));
                         $("<button></button>")
                             .text(data)
+                            .attr("class", "mecsim_global_accordeonbutton")
                             .attr("value",data)
-                            .button()
+                            .button({ icons: { primary: "mecsim_source_cyanCircle" } })
                             .appendTo($("#mecsim_source_toolbox"));
                     });                }
             }).fail(function(){

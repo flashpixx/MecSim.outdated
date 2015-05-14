@@ -143,6 +143,13 @@ iframe
     right: 0;
 }
 
+.ui-button .ui-icon.mecsim_source_cyanCircle{
+    width: 15px;
+    height: 15px;
+    background-image: none;
+    background: cyan;
+}
+
 /** Tool Wizard **/
 #mecsim_source_toolwizardwidget{
     width: 750px;
@@ -188,15 +195,6 @@ iframe
 .mecsim_source_customizetool{
     padding-top: 65px;
 }
-
-/** TODO will be reused later
-.ui-button .ui-icon.mecsim_source_cyanCircle .ui-icon.mecsim_source_redCircle{
-    width: 15px;
-    height: 15px;
-    background-image: none;
-    background: cyan;
-}
-**/
 
 /** Target Weighting Widget **/
 #mecsim_source_targetweighting{

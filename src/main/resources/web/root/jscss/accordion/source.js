@@ -144,6 +144,7 @@ var mecsim_source,
                             .attr("class", "mecsim_global_accordeonbutton")
                             .attr("value",pc_key)
                             .button()
+                            .on("click", {"toolname": pc_key}, SourcePanel.listenToolButton)
                             .appendTo($("#mecsim_source_toolbox"));
 
                         $("<span></span>")
@@ -153,6 +154,14 @@ var mecsim_source,
 
                     });
                 }
+            });
+        },
+
+        //method to listen to toolbutton
+        listenToolButton: function(event){
+            $.ajax({
+                url     : "/cwaypointenvironment/settool",
+                data    : {"toolname": event.data.toolname}
             });
         },
 
@@ -315,6 +324,7 @@ var mecsim_source,
                             .attr("class", "mecsim_global_accordeonbutton")
                             .attr("value",pc_key)
                             .button()
+                            .on("click", {"toolname": pc_key}, SourcePanel.listenToolButton)
                             .appendTo($("#mecsim_source_toolbox"));
 
                         $("<span></span>")

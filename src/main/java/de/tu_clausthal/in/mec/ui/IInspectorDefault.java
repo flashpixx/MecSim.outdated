@@ -44,17 +44,20 @@ public abstract class IInspectorDefault extends IUIListener implements IInspecto
      * inspect variable *
      */
     @CFieldFilter.CAgent( bind = false )
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
-            put( CCommon.getResourceString( IInspectorDefault.class, "objectid" ), this.hashCode() );
-        }};
-
+    private final Map<String, Object> m_inspect = new HashMap<>();
 
     @Override
     @CMethodFilter.CAgent( bind = false )
     public Map<String, Object> inspect()
     {
+        // data must be added in the method, because the instantiation of the map is called before the child object is instantiate,
+        // so to get the correct data must be read during method call, to avoid calling new strings we check the key first
+        if ( !m_inspect.containsKey( CCommon.getResourceString( IInspectorDefault.class, "objectid" ) ) )
+            m_inspect.put( CCommon.getResourceString( IInspectorDefault.class, "objectid" ), this.hashCode() );
+
+        if ( !m_inspect.containsKey( CCommon.getResourceString( IInspectorDefault.class, "classname" ) ) )
+            m_inspect.put( CCommon.getResourceString( IInspectorDefault.class, "classname" ), CCommon.removePackageName( this.getClass().getName() ) );
+
         return m_inspect;
     }
 

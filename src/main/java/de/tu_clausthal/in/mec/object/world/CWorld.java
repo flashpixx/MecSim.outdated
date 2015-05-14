@@ -64,7 +64,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
     {
 
         final MultiMap<Integer, ILayer> l_order = new MultiValueMap<>();
-        for ( ILayer l_layer : m_layer.values() )
+        for ( final ILayer l_layer : m_layer.values() )
             l_order.put( l_layer.getCalculationIndex(), l_layer );
 
         // get key values and sort it
@@ -73,7 +73,7 @@ public class CWorld implements Map<String, ILayer>, Serializable
 
         // build the list of the layer
         final List<ILayer> l_list = new LinkedList<>();
-        for ( Object l_key : l_sortkeys )
+        for ( final Object l_key : l_sortkeys )
             l_list.addAll( (Collection<ILayer>) l_order.get( l_key ) );
 
         return l_list;

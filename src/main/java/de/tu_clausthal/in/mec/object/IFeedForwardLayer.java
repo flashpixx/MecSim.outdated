@@ -221,7 +221,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public final boolean containsAll( final Collection<?> p_collection )
     {
-        for ( Object l_item : p_collection )
+        for ( final Object l_item : p_collection )
             if ( !m_processingdata.contains( l_item ) )
                 return false;
 
@@ -245,7 +245,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public final boolean removeAll( final Collection<?> p_collection )
     {
-        for ( Object l_item : p_collection )
+        for ( final Object l_item : p_collection )
         {
             if ( m_processingdata.remove( l_item ) )
                 continue;
@@ -278,7 +278,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public void release()
     {
-        for ( ISteppable l_item : m_processingdata )
+        for ( final ISteppable l_item : m_processingdata )
             l_item.release();
     }
 
@@ -290,7 +290,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( T l_item : this )
+        for ( final T l_item : this )
             l_item.paint( p_graphic, p_viewer, p_width, p_height );
     }
 

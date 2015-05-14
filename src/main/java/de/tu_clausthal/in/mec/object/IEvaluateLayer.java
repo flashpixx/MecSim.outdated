@@ -155,7 +155,7 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     @Override
     public void release()
     {
-        for ( ISteppable l_item : m_data )
+        for ( final ISteppable l_item : m_data )
             l_item.release();
     }
 

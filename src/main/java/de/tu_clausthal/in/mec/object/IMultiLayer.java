@@ -179,7 +179,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public final boolean containsAll( final Collection<?> p_collection )
     {
-        for ( Object l_item : p_collection )
+        for ( final Object l_item : p_collection )
             if ( !m_data.contains( l_item ) )
                 return false;
 
@@ -203,7 +203,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public final boolean removeAll( final Collection<?> p_collection )
     {
-        for ( Object l_item : p_collection )
+        for ( final Object l_item : p_collection )
         {
             if ( m_data.remove( l_item ) )
                 continue;
@@ -235,7 +235,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public void release()
     {
-        for ( ISteppable l_item : m_data )
+        for ( final ISteppable l_item : m_data )
             l_item.release();
     }
 
@@ -247,7 +247,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
         p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( T l_item : this )
+        for ( final T l_item : this )
             l_item.paint( p_graphic, p_viewer, p_width, p_height );
     }
 

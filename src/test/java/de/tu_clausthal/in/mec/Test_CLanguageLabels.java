@@ -149,6 +149,7 @@ public class Test_CLanguageLabels
         {
             if ( m_outerclass.isEmpty() )
             {
+
                 m_outerclass = p_class.getName();
                 m_innerclass = m_outerclass;
             }
@@ -161,15 +162,42 @@ public class Test_CLanguageLabels
         @Override
         public void visit( final EnumDeclaration p_enum, final Object p_arg )
         {
+
+            final String l_resetinner;
+            final String l_resetouter;
+
             if ( m_outerclass.isEmpty() )
             {
+                l_resetinner = null;
+                l_resetouter = null;
+
                 m_outerclass = p_enum.getName();
                 m_innerclass = m_outerclass;
             }
-            else
+            else if ( m_innerclass.isEmpty() )
+            {
+                l_resetinner = null;
+                l_resetouter = null;
+
                 m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
+            }
+            else
+            {
+                l_resetinner = m_innerclass;
+                l_resetouter = m_outerclass;
+
+                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + m_innerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
+
+            }
+
             super.visit( p_enum, p_arg );
+
+            if ( l_resetinner != null )
+                m_innerclass = l_resetinner;
+            if ( l_resetouter != null )
+                m_outerclass = l_resetouter;
         }
+
 
         @Override
         public void visit( final MethodCallExpr p_methodcall, final Object p_arg )

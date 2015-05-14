@@ -223,7 +223,7 @@ public class CCommon
      */
     public static String removePackageName( final String p_package )
     {
-        return p_package.replace( "de.tu_clausthal.in.mec.", "" );
+        return p_package.replace( CConfiguration.getPackage() + ".", "" );
     }
 
     /**

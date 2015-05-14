@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.common;
 
 
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import org.apache.commons.collections4.map.MultiValueMap;
 import org.apache.commons.io.FileUtils;
@@ -55,20 +56,29 @@ public class CReflection
 {
     /**
      * class index *
+     * @note use a whitelist for filtering, because it is faster
      */
-    private static final CClassIndex c_classindex = new CClassIndex()
+    private static final CClassIndex c_classindex = new CClassIndex( CClassIndex.EFilter.WhiteList )
     {{
-            ignore( "sun" );
-            ignore( "com.sun" );
 
-        /*
-        for ( final String l_path : getSystemClassPathes() )
+            filter( CConfiguration.getPackage(), "org.jxmapviewer", "com.graphhopper", "java.lang" );
 
-            if ( l_path.endsWith( ".jar" ) )
-                scanJar( new File(l_path) );
+            for ( final String l_path : new HashSet<String>()
+            {{
+                    addAll( Arrays.asList( System.getProperty( "java.class.path" ).split( File.pathSeparator ) ) );
+                    addAll( Arrays.asList( System.getProperty( "java.ext.dirs" ).split( File.pathSeparator ) ) );
+                }} )
+            {
+                final File l_file = new File( l_path );
+                if ( !l_file.exists() )
+                    continue;
+
+                if ( l_path.toLowerCase().endsWith( ".jar" ) )
+                    scanJar( l_file );
             else
-                scanDirectory( new File(l_path) );
-            */
+                    scanDirectory( l_file );
+            }
+
         }};
 
 
@@ -517,44 +527,40 @@ public class CReflection
     public static class CClassIndex
     {
         /**
-         * set with system class pathes *
-         */
-        private static final Set<String> c_systemclasspath = new HashSet<String>()
-        {{
-                addAll( Arrays.asList( System.getProperty( "java.class.path" ).split( File.pathSeparator ) ) );
-                addAll( Arrays.asList( System.getProperty( "java.ext.dirs" ).split( File.pathSeparator ) ) );
-            }};
-        /**
          * extension of the class files (without dot) *
          */
         private static final String c_classextension = "class";
         /**
          * parts (start-with) for ignores *
          */
-        private final Set<String> m_ignored = new HashSet<>();
+        private final Set<String> m_filter = new HashSet<>();
         /**
          * map with classname and class object *
          */
         private final MultiValueMap<String, Class<?>> m_classname = new MultiValueMap<>();
+        /**
+         * filter type
+         */
+        private final EFilter m_filterdefinition;
 
         /**
-         * returns a set with system class pathes
+         * ctor
          *
-         * @return set with class pathes
+         * @param p_filter filter type
          */
-        public static Set<String> getSystemClassPathes()
+        public CClassIndex( final EFilter p_filter )
         {
-            return c_systemclasspath;
+            m_filterdefinition = p_filter;
         }
 
         /**
-         * adds an element to the ignore list
+         * adds an element to the filter list
          *
          * @param p_startwith class part name
          */
-        public void ignore( final String p_startwith )
+        public void filter( final String... p_startwith )
         {
-            m_ignored.add( p_startwith );
+            m_filter.addAll( Arrays.asList( p_startwith ) );
         }
 
         /**
@@ -571,11 +577,14 @@ public class CReflection
                 try
                 {
                     final String l_classname = this.getClassnameFromFile( l_item.getAbsolutePath().replace( p_path.getAbsolutePath() + File.separator, "" ) );
-                    if ( this.startsIgnoreWith( l_classname ) )
+                    if ( ( ( EFilter.BlackList.equals( m_filterdefinition ) ) && ( this.startsIgnoreWith( l_classname ) ) ) || ( ( EFilter.WhiteList.equals(
+                            m_filterdefinition
+                    ) ) && ( !this.startsIgnoreWith( l_classname ) ) ) )
                         continue;
 
                     final Class<?> l_class = Class.forName( l_classname );
-                    m_classname.put( l_class.getSimpleName(), l_class );
+                    if ( !l_class.getSimpleName().isEmpty() )
+                        m_classname.put( l_class.getSimpleName(), l_class );
                 }
                 catch ( final Exception l_exception )
                 {
@@ -604,7 +613,7 @@ public class CReflection
          */
         private boolean startsIgnoreWith( final String p_classname )
         {
-            for ( final String l_item : m_ignored )
+            for ( final String l_item : m_filter )
                 if ( p_classname.startsWith( l_item ) )
                     return true;
 
@@ -632,11 +641,13 @@ public class CReflection
                         try
                         {
                             final String l_classname = this.getClassnameFromFile( l_file );
-                            if ( this.startsIgnoreWith( l_classname ) )
+                            if ( ( ( EFilter.BlackList.equals( m_filterdefinition ) ) && ( this.startsIgnoreWith( l_classname ) ) ) ||
+                                 ( ( EFilter.WhiteList.equals( m_filterdefinition ) ) && ( !this.startsIgnoreWith( l_classname ) ) ) )
                                 continue;
 
                             final Class<?> l_class = Class.forName( l_classname );
-                            m_classname.put( l_class.getSimpleName(), l_class );
+                            if ( !l_class.getSimpleName().isEmpty() )
+                                m_classname.put( l_class.getSimpleName(), l_class );
                         }
                         catch ( final Exception l_exception )
                         {
@@ -673,6 +684,21 @@ public class CReflection
         public Collection<Class<?>> getAll( final String p_class )
         {
             return m_classname.getCollection( p_class );
+        }
+
+        /**
+         * enum to define the filter *
+         */
+        enum EFilter
+        {
+            /**
+             * blacklisting items *
+             */
+            BlackList,
+            /**
+             * whitelisting items *
+             */
+            WhiteList
         }
 
     }

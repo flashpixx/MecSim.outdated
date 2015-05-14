@@ -60,6 +60,10 @@ import java.util.jar.Manifest;
 public class CConfiguration
 {
     /**
+     * name of the main package
+     */
+    private static final String c_mainpackage = "de.tu_clausthal.in.mec";
+    /**
      * name of the configuration file
      */
     private static final String c_filename = "config.json";
@@ -414,6 +418,14 @@ public class CConfiguration
     public static CConfiguration getInstance()
     {
         return c_instance;
+    }
+
+    /**
+     * returns the main package name
+     */
+    public static String getPackage()
+    {
+        return c_mainpackage;
     }
 
     /**

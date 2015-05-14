@@ -48,6 +48,7 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
+ * todo java cleanup (doc, style)
  * todo remove singelton
  * todo check if input is correct
  * todo deliver static label map
@@ -104,7 +105,7 @@ public class CWaypointEnvironment
      *
      * @param p_data
      */
-    private final Map<String, List<String>> web_static_createtool( final Map<String, Object> p_data )
+    private final Map<String, Map<String, Integer>> web_static_createtool( final Map<String, Object> p_data )
     {
         //validate json
         if ( !p_data.containsKey( "factory" ) )
@@ -147,6 +148,10 @@ public class CWaypointEnvironment
         String l_asl = (String) p_data.get( "asl" );
         String l_name = (String) p_data.get( "name" );
 
+        //validate settings
+        if ( m_toolbox.containsKey( l_name ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
+
         //create and set tool
         CTool l_newTool = new CTool(
                 l_waypointtype, l_factorytype, l_generatortype, l_radius, l_color, l_asl, l_input1, l_input2, l_input3, l_input2, l_input3, l_histrogramm
@@ -155,61 +160,30 @@ public class CWaypointEnvironment
         this.m_selectedTool = l_newTool;
         this.m_toolbox.put( l_name, l_newTool );
 
-        //return to add new tool to toolbox
-        List<String> l_return = new ArrayList<>();
-        l_return.add( l_name );
-        return new HashMap<String, List<String>>()
-        {{
-                put( "tools", l_return );
-            }};
+        //return data
+        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
+
+        Map<String, Integer> l_properties = new HashMap<>();
+        l_properties.put( "redValue", l_newTool.m_color.getRed() );
+        l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
+        l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
+
+        l_tools.put( l_name, l_properties );
+
+        return l_tools;
     }
 
     /**
-     * method to get tje WayPoint type by name-string
+     * method to set a new tool selected
      *
-     * @param p_waypointtype
-     * @return specified WayPoint type or default (CarRandomWaypoint)
+     * @param p_data
      */
-    private final EWayPointType getWaypointEnum( final String p_waypointtype )
+    private final void web_static_settool( final Map<String, Object> p_data )
     {
-        for ( EWayPointType l_waypoint : EWayPointType.values() )
-        {
-            if ( l_waypoint.toString().equals( p_waypointtype ) )
-                return l_waypoint;
-        }
-        return EWayPointType.CarWaypointRandom;
-    }
+        if ( !p_data.containsKey( "toolname" ) || !m_toolbox.containsKey( p_data.get( "toolname" ) ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtool" ) );
 
-    /**
-     * method to get the Factory type by name-string
-     *
-     * @param p_factory
-     * @return specified Factory type or default (DefaultCarFactory)
-     */
-    private final EFactoryType getFactoryEnum( final String p_factory )
-    {
-        for ( EFactoryType l_factory : EFactoryType.values() )
-        {
-            if ( l_factory.toString().equals( p_factory ) )
-                return l_factory;
-        }
-        return EFactoryType.DefaultCarFactory;
-    }
-
-    /**
-     * method to get the Generator type by name-string
-     *
-     * @param p_generator
-     * @return specified Generator type or default (Uniform)
-     */
-    private final EGeneratorType getGeneratorEnum( final String p_generator )
-    {
-        for ( EGeneratorType l_generator : EGeneratorType.values() )
-        {
-            if ( l_generator.toString().equals( p_generator ) )
-                return l_generator;
-        }
-        return EGeneratorType.Uniform;
+        m_selectedTool = m_toolbox.get( p_data.get( "toolname" ) );
     }
 
     /**
@@ -277,20 +251,69 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<String>> web_static_listtools()
+    private final Map<String, Map<String, Integer>> web_static_listtools()
     {
 
-        List<String> l_tools = new ArrayList<>();
-
+        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
         for ( String l_tool : this.m_toolbox.keySet() )
         {
-            l_tools.add( l_tool );
+            Map<String, Integer> l_properties = new HashMap<>();
+            l_properties.put( "redValue", this.m_toolbox.get( l_tool ).m_color.getRed() );
+            l_properties.put( "greenValue", this.m_toolbox.get( l_tool ).m_color.getGreen() );
+            l_properties.put( "blueValue", this.m_toolbox.get( l_tool ).m_color.getBlue() );
+
+            l_tools.put( l_tool, l_properties );
         }
 
-        return new HashMap<String, List<String>>()
-        {{
-                put( "tools", l_tools );
-            }};
+        return l_tools;
+    }
+
+    /**
+     * method to get tje WayPoint type by name-string
+     *
+     * @param p_waypointtype
+     * @return specified WayPoint type or default (CarRandomWaypoint)
+     */
+    private final EWayPointType getWaypointEnum( final String p_waypointtype )
+    {
+        for ( EWayPointType l_waypoint : EWayPointType.values() )
+        {
+            if ( l_waypoint.toString().equals( p_waypointtype ) )
+                return l_waypoint;
+        }
+        return EWayPointType.CarWaypointRandom;
+    }
+
+    /**
+     * method to get the Factory type by name-string
+     *
+     * @param p_factory
+     * @return specified Factory type or default (DefaultCarFactory)
+     */
+    private final EFactoryType getFactoryEnum( final String p_factory )
+    {
+        for ( EFactoryType l_factory : EFactoryType.values() )
+        {
+            if ( l_factory.toString().equals( p_factory ) )
+                return l_factory;
+        }
+        return EFactoryType.DefaultCarFactory;
+    }
+
+    /**
+     * method to get the Generator type by name-string
+     *
+     * @param p_generator
+     * @return specified Generator type or default (Uniform)
+     */
+    private final EGeneratorType getGeneratorEnum( final String p_generator )
+    {
+        for ( EGeneratorType l_generator : EGeneratorType.values() )
+        {
+            if ( l_generator.toString().equals( p_generator ) )
+                return l_generator;
+        }
+        return EGeneratorType.Uniform;
     }
 
     /**

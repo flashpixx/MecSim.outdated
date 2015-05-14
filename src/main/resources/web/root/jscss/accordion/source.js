@@ -134,15 +134,34 @@ var mecsim_source,
         setToolbox: function(){
             $.ajax({
                 url     : "/cwaypointenvironment/listtools",
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
-                        $("<button></button>")
-                            .text(data)
-                            .attr("value",data)
+                success : function( data ){
+                    $.each( data, function( pc_key, px_value ) {
+
+                        $("</p>").appendTo($("#mecsim_source_toolbox"));
+
+                        var button = $("<button></button>")
+                            .text(pc_key)
+                            .attr("class", "mecsim_global_accordeonbutton")
+                            .attr("value",pc_key)
                             .button()
+                            .on("click", {"toolname": pc_key}, SourcePanel.listenToolButton)
                             .appendTo($("#mecsim_source_toolbox"));
+
+                        $("<span></span>")
+                            .css("background-color", "rgb("+ px_value.redValue +","+ px_value.greenValue +","+ px_value.blueValue +")")
+                            .attr("class", "mecsim_source_toolIcon")
+                            .prependTo(button);
+
                     });
                 }
+            });
+        },
+
+        //method to listen to toolbutton
+        listenToolButton: function(event){
+            $.ajax({
+                url     : "/cwaypointenvironment/settool",
+                data    : {"toolname": event.data.toolname}
             });
         },
 
@@ -295,15 +314,26 @@ var mecsim_source,
                             "g"        : SourcePanel.settings.colorpicker.spectrum("get")._g,
                             "b"        : SourcePanel.settings.colorpicker.spectrum("get")._b
                         },
-                success : function( px_data ){
-                    px_data.tools.forEach(function(data){
+                success : function( data ){
+                    $.each( data, function( pc_key, px_value ) {
+
                         $("</p>").appendTo($("#mecsim_source_toolbox"));
-                        $("<button></button>")
-                            .text(data)
-                            .attr("value",data)
+
+                        var button = $("<button></button>")
+                            .text(pc_key)
+                            .attr("class", "mecsim_global_accordeonbutton")
+                            .attr("value",pc_key)
                             .button()
+                            .on("click", {"toolname": pc_key}, SourcePanel.listenToolButton)
                             .appendTo($("#mecsim_source_toolbox"));
-                    });                }
+
+                        $("<span></span>")
+                            .css("background-color", "rgb("+ px_value.redValue +","+ px_value.greenValue +","+ px_value.blueValue +")")
+                            .attr("class", "mecsim_source_toolIcon")
+                            .prependTo(button);
+
+                    });
+                }
             }).fail(function(){
                 console.log("tool creation failed!");
             });

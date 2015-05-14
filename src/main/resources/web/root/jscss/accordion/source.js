@@ -167,7 +167,7 @@ var mecsim_source,
                 if(SourcePanel.settings.wizardWidgetStatus){
                     SourcePanel.settings.wizardWidgetStatus = false;
                     $("#mecsim_source_toolwizard").hide();
-                    $("#mecsim_source_toolwizardwidget").animate({width: "350px", height: "20px"}, 400);
+                    $("#mecsim_source_toolwizardwidget").animate({width: "400px", height: "20px"}, 400);
                     $("#mecsim_source_toolwizardwidget").resizable('disable');
                 }else{
                     SourcePanel.settings.wizardWidgetStatus = true;

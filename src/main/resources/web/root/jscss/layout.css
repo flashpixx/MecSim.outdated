@@ -132,15 +132,19 @@ iframe
 .ui-widget-header{
     margin: 0;
     color: white;
-    text-align: center;
-    font-weight:normal;
     background: #428bca;
     border: 1px solid #CACACA;
+    position: relative;
+    text-align: center;
+}
+
+.mecsim_source_widgetButton{
+    position: absolute;
+    right: 0;
 }
 
 /** Tool Wizard **/
 #mecsim_source_toolwizardwidget{
-    float: left;
     width: 750px;
     height: 550px;
     padding: 5px;

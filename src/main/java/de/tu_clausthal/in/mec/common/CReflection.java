@@ -25,15 +25,27 @@ package de.tu_clausthal.in.mec.common;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import org.apache.commons.collections4.map.MultiValueMap;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 
 /**
@@ -41,12 +53,41 @@ import java.util.Map;
  */
 public class CReflection
 {
+    /**
+     * class index *
+     */
+    private static final CClassIndex c_classindex = new CClassIndex()
+    {{
+            ignore( "sun" );
+            ignore( "com.sun" );
+
+        /*
+        for ( final String l_path : getSystemClassPathes() )
+
+            if ( l_path.endsWith( ".jar" ) )
+                scanJar( new File(l_path) );
+            else
+                scanDirectory( new File(l_path) );
+            */
+        }};
+
 
     /**
      * private ctor - avoid instantiation
      */
     private CReflection()
     {
+    }
+
+
+    /**
+     * retruns the class index
+     *
+     * @return class index object
+     */
+    public static CClassIndex getClassIndex()
+    {
+        return c_classindex;
     }
 
 
@@ -465,6 +506,173 @@ public class CReflection
             // add to cache
             m_cache.put( l_method, l_handle );
             return l_handle;
+        }
+
+    }
+
+
+    /**
+     * class to represent a class index
+     */
+    public static class CClassIndex
+    {
+        /**
+         * set with system class pathes *
+         */
+        private static final Set<String> c_systemclasspath = new HashSet<String>()
+        {{
+                addAll( Arrays.asList( System.getProperty( "java.class.path" ).split( File.pathSeparator ) ) );
+                addAll( Arrays.asList( System.getProperty( "java.ext.dirs" ).split( File.pathSeparator ) ) );
+            }};
+        /**
+         * extension of the class files (without dot) *
+         */
+        private static final String c_classextension = "class";
+        /**
+         * parts (start-with) for ignores *
+         */
+        private final Set<String> m_ignored = new HashSet<>();
+        /**
+         * map with classname and class object *
+         */
+        private final MultiValueMap<String, Class<?>> m_classname = new MultiValueMap<>();
+
+        /**
+         * returns a set with system class pathes
+         *
+         * @return set with class pathes
+         */
+        public static Set<String> getSystemClassPathes()
+        {
+            return c_systemclasspath;
+        }
+
+        /**
+         * adds an element to the ignore list
+         *
+         * @param p_startwith class part name
+         */
+        public void ignore( final String p_startwith )
+        {
+            m_ignored.add( p_startwith );
+        }
+
+        /**
+         * scans a directory for classes
+         *
+         * @param p_path path
+         */
+        public void scanDirectory( final File p_path )
+        {
+            if ( !p_path.isDirectory() )
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "notdirectory", p_path ) );
+
+            for ( final File l_item : FileUtils.listFiles( p_path, new String[]{c_classextension}, true ) )
+                try
+                {
+                    final String l_classname = this.getClassnameFromFile( l_item.getAbsolutePath().replace( p_path.getAbsolutePath() + File.separator, "" ) );
+                    if ( this.startsIgnoreWith( l_classname ) )
+                        continue;
+
+                    final Class<?> l_class = Class.forName( l_classname );
+                    m_classname.put( l_class.getSimpleName(), l_class );
+                }
+                catch ( final Exception l_exception )
+                {
+                }
+                catch ( final Error l_error )
+                {
+                }
+        }
+
+        /**
+         * replaces a file name with path to a class name
+         *
+         * @param p_file filename
+         * @return class name
+         */
+        private String getClassnameFromFile( String p_file )
+        {
+            return p_file.replace( "." + c_classextension, "" ).replace( File.separator, ClassUtils.PACKAGE_SEPARATOR );
+        }
+
+        /**
+         * checks a string class name with the ignore list
+         *
+         * @param p_classname class string name
+         * @return true on existsing of the ignore list
+         */
+        private boolean startsIgnoreWith( final String p_classname )
+        {
+            for ( final String l_item : m_ignored )
+                if ( p_classname.startsWith( l_item ) )
+                    return true;
+
+            return false;
+        }
+
+        /**
+         * scans a Jar for classes
+         *
+         * @param p_jar Jar file
+         */
+        public void scanJar( final File p_jar )
+        {
+            if ( !p_jar.isFile() )
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "notfile", p_jar ) );
+
+            try (
+                    final JarFile l_jar = new JarFile( p_jar );
+            )
+            {
+                for ( final Enumeration<JarEntry> l_entry = l_jar.entries(); l_entry.hasMoreElements(); )
+                {
+                    final String l_file = l_entry.nextElement().getName();
+                    if ( l_file.endsWith( c_classextension ) )
+                        try
+                        {
+                            final String l_classname = this.getClassnameFromFile( l_file );
+                            if ( this.startsIgnoreWith( l_classname ) )
+                                continue;
+
+                            final Class<?> l_class = Class.forName( l_classname );
+                            m_classname.put( l_class.getSimpleName(), l_class );
+                        }
+                        catch ( final Exception l_exception )
+                        {
+                        }
+                        catch ( final Error l_error )
+                        {
+                        }
+                }
+            }
+            catch ( final IOException l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+
+        }
+
+        /**
+         * returns the first entry of the name
+         *
+         * @param p_class simple class name
+         * @return first match
+         */
+        public Class<?> get( final String p_class )
+        {
+            return m_classname.getCollection( p_class ).iterator().next();
+        }
+
+        /**
+         * returns the collection of all classes
+         *
+         * @param p_class simple class name
+         * @return collection of classes objects
+         */
+        public Collection<Class<?>> getAll( final String p_class )
+        {
+            return m_classname.getCollection( p_class );
         }
 
     }

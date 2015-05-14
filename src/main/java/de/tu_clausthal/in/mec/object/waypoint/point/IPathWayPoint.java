@@ -118,7 +118,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public Collection<GeoPosition> getNeighbor()
     {
         final Collection<GeoPosition> l_neighbor = new HashSet<>();
-        for ( IPathWayPoint<T, P, N> l_item : m_adjacency.keySet() )
+        for ( final IPathWayPoint<T, P, N> l_item : m_adjacency.keySet() )
             l_neighbor.add( l_item.getPosition() );
         return l_neighbor;
     }
@@ -185,7 +185,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public IPathWayPoint<T, P, N> getNode( final double p_value )
         {
-            for ( Map.Entry<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> l_item : m_buckets.entrySet() )
+            for ( final Map.Entry<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> l_item : m_buckets.entrySet() )
                 if ( ( l_item.getKey().getLeft() <= p_value ) && ( p_value < l_item.getKey().getRight() ) )
                     return l_item.getValue();
 
@@ -220,7 +220,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public final Double put( final IPathWayPoint<T, P, N> p_key, final Double p_value )
         {
             final double l_multiplier = m_max - p_value;
-            for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
+            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
                 l_item.setValue( l_item.getValue() * l_multiplier );
 
             this.put( p_key, p_value );
@@ -241,7 +241,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             final double l_value = this.remove( p_key );
 
             final double l_multiplier = l_value / this.size();
-            for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
+            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
                 l_item.setValue( l_item.getValue() + l_value );
 
             this.bucketupdate();
@@ -285,7 +285,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         {
             double l_value = 0;
             m_buckets.clear();
-            for ( Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
+            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
                 m_buckets.put( new ImmutablePair<>( l_value, l_value += l_item.getValue() ), l_item.getKey() );
         }
     }

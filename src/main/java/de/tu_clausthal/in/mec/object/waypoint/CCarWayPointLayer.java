@@ -65,7 +65,7 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     @Override
     public final void release()
     {
-        for ( IWayPoint<ICar> l_item : m_data )
+        for ( final IWayPoint<ICar> l_item : m_data )
             l_item.release();
     }
 

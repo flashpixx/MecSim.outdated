@@ -674,7 +674,10 @@ public class CReflection
          */
         public Class<?> get( final String p_class )
         {
-            return m_classname.getCollection( p_class ).iterator().next();
+            final Collection<Class<?>> l_return =  m_classname.getCollection( p_class );
+            if ((l_return != null) && (l_return.iterator().hasNext()))
+                return l_return.iterator().next();
+            return null;
         }
 
         /**

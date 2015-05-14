@@ -119,7 +119,7 @@ public class CCommon
 
         // null value into atom
         if ( p_data == null )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createString( null ) );
+            return ASSyntax.createLiteral( l_name, ASSyntax.createAtom( "" ) );
 
         // number value into number
         if ( p_data instanceof Number )

@@ -69,6 +69,7 @@ public class CCommon
      *
      * @param p_term Jason term
      * @return Java type
+     *
      * @throws NoValueException on empty value
      */
     public static Object convertJasonValuetoJava( final Term p_term ) throws NoValueException

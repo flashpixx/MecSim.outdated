@@ -103,6 +103,7 @@ public class CCommon
      * @param p_data string data
      * @param p_class class type
      * @return deserialized type
+     *
      * @tparam T type parameter
      */
     public static <T> T fromJson( final String p_data, final Class<T> p_class )
@@ -124,6 +125,7 @@ public class CCommon
      *
      * @param p_object input object
      * @return deep-copy of object
+     *
      * @throws IOException throws on serializing error
      * @throws ClassNotFoundException throws on derserialzing error
      * @tparam T object type
@@ -255,6 +257,7 @@ public class CCommon
      * @param p_default default value
      * @param p_allowedvalues allowed values
      * @return checked value
+     *
      * @tparam T              value type
      */
     public static <T> T getCheckedValue( final T p_input, final T p_default, final Collection<T> p_allowedvalues )
@@ -330,6 +333,7 @@ public class CCommon
      * @param p_base base URL
      * @param p_string additional path
      * @return new URL
+     *
      * @throws URISyntaxException thrown on syntax error
      * @throws MalformedURLException thrown on malformat
      */
@@ -371,6 +375,7 @@ public class CCommon
      * @param p_class class array
      * @param p_collection collection
      * @return typed array
+     *
      * @tparam T collection / array type
      */
     public static <T> T[] convertCollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )

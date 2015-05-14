@@ -124,6 +124,7 @@ public class CLogger
      * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T warn( final T p_data, final boolean p_write )
@@ -309,6 +310,7 @@ public class CLogger
      * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T error( final T p_data, final boolean p_write )
@@ -333,6 +335,7 @@ public class CLogger
      *
      * @param p_data log data
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T error( final T p_data )
@@ -355,6 +358,7 @@ public class CLogger
      * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T info( final T p_data, final boolean p_write )
@@ -388,6 +392,7 @@ public class CLogger
      * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T debug( final T p_data, final boolean p_write )
@@ -421,6 +426,7 @@ public class CLogger
      * @param p_data log data
      * @param p_write boolean on true message is written
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T out( final T p_data, final boolean p_write )
@@ -470,6 +476,7 @@ public class CLogger
      *
      * @param p_data log data
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T warn( final T p_data )
@@ -493,6 +500,7 @@ public class CLogger
      *
      * @param p_data log data
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T info( final T p_data )
@@ -526,6 +534,7 @@ public class CLogger
      *
      * @param p_data log data
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T debug( final T p_data )
@@ -549,6 +558,7 @@ public class CLogger
      *
      * @param p_data log data
      * @return input data
+     *
      * @tparam input data type
      */
     public static <T> T out( final T p_data )

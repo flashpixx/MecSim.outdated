@@ -143,17 +143,16 @@ public class CMethodBind extends IAction
     }
 
     /**
-     * decodes the Jason parameter list to create the Java signature call
+     * decodes the Jason parameter list to create the Java signature call in the structure
+     * "commandname(bind, method, [return type / default void | [return type, return belief name]], [method type arguments / default void], ...arguments)"
      *
      * @param p_parameter Jason parameter
      * @param p_argumenttypes append list with method argument types
      * @param p_argumentdata append list with method argument data
      * @return returns a pair with class and belief name of the return paramater
+     *
      * @throws ClassNotFoundException on class error
      * @throws NoValueException on value error
-     * @code commandname(bind, method, [return type / default void | [return type, return belief name]], [method type arguments / default void], ...arguments
-     *)
-     * @endcode The first two arguments are ignored here, because they were used before
      */
     private org.apache.commons.lang3.tuple.Pair<Class<?>, String> decodeMethodSignature( final List<Term> p_parameter, final List<Class<?>> p_argumenttypes,
                                                                                          final List<Object> p_argumentdata
@@ -205,6 +204,7 @@ public class CMethodBind extends IAction
      * @param p_argumenttypes argument type list
      * @param p_argumentdata argument data list
      * @return return value
+     *
      * @throws Throwable on invoking error
      */
     private Object invokeMethod( final CReflection.CMethodCache<Object> p_object, final String p_methodname, final Class<?> p_returntype,

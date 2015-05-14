@@ -72,6 +72,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @return file object
+     *
      * @throws IOException throws IO exception on file creating error
      */
     public static File createAgentFile( final String p_agentname ) throws IOException
@@ -91,6 +92,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
+     *
      * @todo add ASL build-in files with the resource directory
      */
     public static String[] getAgentFiles()
@@ -125,6 +127,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @return existing file object
+     *
      * @note must support a agent filename as file with extension and without extension
      * @todo add ASL build-in files with the resource directory
      */

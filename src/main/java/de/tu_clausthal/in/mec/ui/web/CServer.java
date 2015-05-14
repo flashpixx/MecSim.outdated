@@ -189,6 +189,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @param p_location location object
      * @param p_session session object
      * @return response
+     *
      * @throws Throwable on error
      */
     private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
@@ -203,6 +204,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      * @param p_location location object
      * @param p_session session object
      * @return response
+     *
      * @throws Throwable on error
      */
     private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable

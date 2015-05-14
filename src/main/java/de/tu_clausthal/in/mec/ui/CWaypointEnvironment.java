@@ -174,6 +174,54 @@ public class CWaypointEnvironment
     }
 
     /**
+     * method to get tje WayPoint type by name-string
+     *
+     * @param p_waypointtype
+     * @return specified WayPoint type or default (CarRandomWaypoint)
+     */
+    private final EWayPointType getWaypointEnum( final String p_waypointtype )
+    {
+        for ( EWayPointType l_waypoint : EWayPointType.values() )
+        {
+            if ( l_waypoint.toString().equals( p_waypointtype ) )
+                return l_waypoint;
+        }
+        return EWayPointType.CarWaypointRandom;
+    }
+
+    /**
+     * method to get the Factory type by name-string
+     *
+     * @param p_factory
+     * @return specified Factory type or default (DefaultCarFactory)
+     */
+    private final EFactoryType getFactoryEnum( final String p_factory )
+    {
+        for ( EFactoryType l_factory : EFactoryType.values() )
+        {
+            if ( l_factory.toString().equals( p_factory ) )
+                return l_factory;
+        }
+        return EFactoryType.DefaultCarFactory;
+    }
+
+    /**
+     * method to get the Generator type by name-string
+     *
+     * @param p_generator
+     * @return specified Generator type or default (Uniform)
+     */
+    private final EGeneratorType getGeneratorEnum( final String p_generator )
+    {
+        for ( EGeneratorType l_generator : EGeneratorType.values() )
+        {
+            if ( l_generator.toString().equals( p_generator ) )
+                return l_generator;
+        }
+        return EGeneratorType.Uniform;
+    }
+
+    /**
      * method to set a new tool selected
      *
      * @param p_data
@@ -266,54 +314,6 @@ public class CWaypointEnvironment
         }
 
         return l_tools;
-    }
-
-    /**
-     * method to get tje WayPoint type by name-string
-     *
-     * @param p_waypointtype
-     * @return specified WayPoint type or default (CarRandomWaypoint)
-     */
-    private final EWayPointType getWaypointEnum( final String p_waypointtype )
-    {
-        for ( EWayPointType l_waypoint : EWayPointType.values() )
-        {
-            if ( l_waypoint.toString().equals( p_waypointtype ) )
-                return l_waypoint;
-        }
-        return EWayPointType.CarWaypointRandom;
-    }
-
-    /**
-     * method to get the Factory type by name-string
-     *
-     * @param p_factory
-     * @return specified Factory type or default (DefaultCarFactory)
-     */
-    private final EFactoryType getFactoryEnum( final String p_factory )
-    {
-        for ( EFactoryType l_factory : EFactoryType.values() )
-        {
-            if ( l_factory.toString().equals( p_factory ) )
-                return l_factory;
-        }
-        return EFactoryType.DefaultCarFactory;
-    }
-
-    /**
-     * method to get the Generator type by name-string
-     *
-     * @param p_generator
-     * @return specified Generator type or default (Uniform)
-     */
-    private final EGeneratorType getGeneratorEnum( final String p_generator )
-    {
-        for ( EGeneratorType l_generator : EGeneratorType.values() )
-        {
-            if ( l_generator.toString().equals( p_generator ) )
-                return l_generator;
-        }
-        return EGeneratorType.Uniform;
     }
 
     /**

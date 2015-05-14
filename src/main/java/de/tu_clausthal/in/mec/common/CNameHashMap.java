@@ -129,6 +129,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @param p_path path of the items
      * @param p_map browsing map
      * @return object
+     *
      * @tparam T type
      */
     @SuppressWarnings( "unchecked" )
@@ -195,6 +196,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      *
      * @param p_path path of the items
      * @return object
+     *
      * @tparam T type
      */
     @SuppressWarnings( "unchecked" )
@@ -208,6 +210,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      *
      * @param p_path string path
      * @return object
+     *
      * @tparam T type
      */
     public final <T> T get( final String p_path )

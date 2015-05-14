@@ -283,6 +283,7 @@ public class CSimulation
      * @param p_input input string
      * @param p_object object for object hash
      * @return string with name
+     *
      * @note %hash% with the object hash or 0, %step% with the current simulation step, %rand% with a random integer value, %inc% increment value
      */
     public final String generateObjectName( final String p_input, final Object p_object )

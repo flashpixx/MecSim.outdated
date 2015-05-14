@@ -56,6 +56,7 @@ public class CReflection
 {
     /**
      * class index *
+     *
      * @note use a whitelist for filtering, because it is faster
      */
     private static final CClassIndex c_classindex = new CClassIndex( CClassIndex.EFilter.WhiteList )
@@ -76,7 +77,7 @@ public class CReflection
 
                 if ( l_path.toLowerCase().endsWith( ".jar" ) )
                     scanJar( l_file );
-            else
+                else
                     scanDirectory( l_file );
             }
 

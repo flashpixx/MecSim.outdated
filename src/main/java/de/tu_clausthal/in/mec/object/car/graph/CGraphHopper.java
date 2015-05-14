@@ -321,6 +321,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @param p_edgestate edge object
      * @return linkage object
+     *
      * @note listener object will be set at the edge instantiation process
      * @todo check generic
      */

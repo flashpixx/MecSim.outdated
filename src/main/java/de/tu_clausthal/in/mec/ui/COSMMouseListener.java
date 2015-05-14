@@ -78,7 +78,7 @@ class COSMMouseListener extends PanMouseInputListener
                 final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
                 boolean l_isfound = false;
 
-                for ( IWayPoint<ICar> l_item : l_layer )
+                for ( final IWayPoint<ICar> l_item : l_layer )
                     if ( isinBall( p_event.getPoint(), l_viewer.convertGeoPositionToPoint( l_item.getPosition() ) ) )
                     {
                         l_isfound = true;

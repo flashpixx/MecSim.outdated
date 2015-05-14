@@ -167,7 +167,7 @@ public class COSMViewer extends JXMapViewer
     private Map<String, Object> web_static_listClickableLayer()
     {
         final Map<String, Object> l_layer = new HashMap<>();
-        for ( EClickableLayer l_item : EClickableLayer.class.getEnumConstants() )
+        for ( final EClickableLayer l_item : EClickableLayer.class.getEnumConstants() )
             // name() cannot be overwritten but it is used for the ID
             l_layer.put( l_item.toString(), CCommon.getMap( "id", l_item.name(), "click", l_item == m_clickablelayer ) );
         return l_layer;
@@ -279,7 +279,7 @@ public class COSMViewer extends JXMapViewer
             p_graphic.translate( -p_viewer.getViewportBounds().x, -p_viewer.getViewportBounds().y );
             p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
-            for ( Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke> l_item : m_line )
+            for ( final Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke> l_item : m_line )
             {
                 p_graphic.setColor( l_item.getMiddle() );
                 p_graphic.setStroke( l_item.getRight() );

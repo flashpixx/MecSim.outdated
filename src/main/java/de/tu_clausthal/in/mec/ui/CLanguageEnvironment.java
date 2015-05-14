@@ -39,6 +39,7 @@ public class CLanguageEnvironment
      * method to read waypoint specific labels and resource strings
      *
      * @return
+     * @bug refactor
      */
     private final Map<String, String> web_static_getwaypointlabels()
     {

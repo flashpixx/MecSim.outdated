@@ -181,7 +181,7 @@ public class CWaypointEnvironment
      */
     private final EWayPointType getWaypointEnum( final String p_waypointtype )
     {
-        for ( EWayPointType l_waypoint : EWayPointType.values() )
+        for ( final EWayPointType l_waypoint : EWayPointType.values() )
         {
             if ( l_waypoint.toString().equals( p_waypointtype ) )
                 return l_waypoint;
@@ -197,7 +197,7 @@ public class CWaypointEnvironment
      */
     private final EFactoryType getFactoryEnum( final String p_factory )
     {
-        for ( EFactoryType l_factory : EFactoryType.values() )
+        for ( final EFactoryType l_factory : EFactoryType.values() )
         {
             if ( l_factory.toString().equals( p_factory ) )
                 return l_factory;
@@ -213,7 +213,7 @@ public class CWaypointEnvironment
      */
     private final EGeneratorType getGeneratorEnum( final String p_generator )
     {
-        for ( EGeneratorType l_generator : EGeneratorType.values() )
+        for ( final EGeneratorType l_generator : EGeneratorType.values() )
         {
             if ( l_generator.toString().equals( p_generator ) )
                 return l_generator;
@@ -243,7 +243,7 @@ public class CWaypointEnvironment
     {
 
         List<String> l_waypointtypes = new ArrayList<>();
-        for ( EWayPointType l_waypoint : EWayPointType.values() )
+        for ( final EWayPointType l_waypoint : EWayPointType.values() )
         {
             l_waypointtypes.add( l_waypoint.toString() );
         }
@@ -263,7 +263,7 @@ public class CWaypointEnvironment
     {
 
         List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
-        for ( EFactoryType l_factory : EFactoryType.values() )
+        for ( final EFactoryType l_factory : EFactoryType.values() )
         {
             l_factories.add( new ImmutablePair<>( l_factory.toString(), l_factory.m_requireASL ) );
         }
@@ -283,7 +283,7 @@ public class CWaypointEnvironment
     {
 
         List<String> l_generators = new ArrayList<>();
-        for ( EGeneratorType l_generator : EGeneratorType.values() )
+        for ( final EGeneratorType l_generator : EGeneratorType.values() )
         {
             l_generators.add( l_generator.toString() );
         }
@@ -303,7 +303,7 @@ public class CWaypointEnvironment
     {
 
         Map<String, Map<String, Integer>> l_tools = new HashMap<>();
-        for ( String l_tool : this.m_toolbox.keySet() )
+        for ( final String l_tool : this.m_toolbox.keySet() )
         {
             Map<String, Integer> l_properties = new HashMap<>();
             l_properties.put( "redValue", this.m_toolbox.get( l_tool ).m_color.getRed() );

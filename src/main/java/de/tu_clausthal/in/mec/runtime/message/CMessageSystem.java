@@ -107,7 +107,7 @@ public class CMessageSystem implements IVoidSteppable
 
         CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );
 
-        for ( IActionListener l_item : m_listener )
+        for ( final IActionListener l_item : m_listener )
             l_item.onRegister( p_path, p_receiver );
     }
 
@@ -131,7 +131,7 @@ public class CMessageSystem implements IVoidSteppable
 
         CLogger.info( CCommon.getResourceString( this, "unregistered", p_receiver, p_path ) );
 
-        for ( IActionListener l_item : m_listener )
+        for ( final IActionListener l_item : m_listener )
             l_item.onUnregister( p_path, p_receiver );
     }
 
@@ -166,7 +166,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_receiverpath ).getTreeData() )
+        for ( final Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_receiverpath ).getTreeData() )
         {
             // if item equal null skip
             if ( l_item == null )
@@ -175,7 +175,7 @@ public class CMessageSystem implements IVoidSteppable
             l_item.getRight().add( p_message );
         }
 
-        for ( IActionListener l_item : m_listener )
+        for ( final IActionListener l_item : m_listener )
             l_item.onPushMessage( p_receiverpath, p_message );
 
         // increment message flow
@@ -190,14 +190,14 @@ public class CMessageSystem implements IVoidSteppable
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
-        for ( Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getTreeData( false ) )
+        for ( final Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getTreeData( false ) )
         {
             // data element within the tree can be used null values, so this items will be skipped
             // the item is also skipped, if there does not exists messages
             if ( ( l_item == null ) || ( l_item.getRight() == null ) || ( l_item.getRight().isEmpty() ) )
                 continue;
 
-            for ( IParticipant l_receiver : l_item.getLeft() )
+            for ( final IParticipant l_receiver : l_item.getLeft() )
                 l_receiver.receiveMessage( l_item.getRight() );
 
             // clear all messages, that are received

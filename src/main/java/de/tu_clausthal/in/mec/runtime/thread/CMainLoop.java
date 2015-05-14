@@ -100,14 +100,14 @@ public class CMainLoop implements Runnable
                 // run all layer
                 final Collection<Callable<Object>> l_tasks = new LinkedList<>();
                 l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
-                for ( ILayer l_layer : l_layerorder )
+                for ( final ILayer l_layer : l_layerorder )
                     if ( l_layer.isActive() )
                         l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
                 m_pool.invokeAll( l_tasks );
 
 
                 // run all layer objects - only multi-, evaluate- & network layer can store other objects
-                for ( ILayer l_layer : l_layerorder )
+                for ( final ILayer l_layer : l_layerorder )
                 {
                     if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
                         continue;
@@ -178,7 +178,7 @@ public class CMainLoop implements Runnable
     protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
     {
         final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
-        for ( ISteppable l_object : p_tasksource )
+        for ( final ISteppable l_object : p_tasksource )
             l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
         m_pool.invokeAll( l_tasklist );
     }
@@ -256,7 +256,7 @@ public class CMainLoop implements Runnable
         {
             m_simulationcount = 0;
             final Collection<Callable<Object>> l_tasks = new LinkedList<>();
-            for ( ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+            for ( final ILayer l_layer : CSimulation.getInstance().getWorld().values() )
                 l_tasks.add( new CLayerReset( l_layer ) );
             m_pool.invokeAll( l_tasks );
         }

@@ -224,13 +224,13 @@ public class CSimulation
         )
         {
 
-            for ( ILayer l_layer : m_world.values() )
+            for ( final ILayer l_layer : m_world.values() )
             {
                 if ( l_layer instanceof ISerializable )
                     ( (ISerializable) l_layer ).onDeserializationInitialization();
 
                 if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
-                    for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
+                    for ( final ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
                         if ( l_item instanceof ISerializable )
                             ( (ISerializable) l_item ).onDeserializationInitialization();
             }
@@ -239,13 +239,13 @@ public class CSimulation
             m_world.clear();
             m_world = (CWorld) l_input.readObject();
 
-            for ( ILayer l_layer : m_world.values() )
+            for ( final ILayer l_layer : m_world.values() )
             {
                 if ( l_layer instanceof ISerializable )
                     ( (ISerializable) l_layer ).onDeserializationComplete();
 
                 if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
-                    for ( ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
+                    for ( final ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
                         if ( l_item instanceof ISerializable )
                             ( (ISerializable) l_item ).onDeserializationComplete();
             }
@@ -358,7 +358,7 @@ public class CSimulation
     private Map<String, Map<String, Object>> web_static_listlayer()
     {
         final Map<String, Map<String, Object>> l_return = new HashMap<>();
-        for ( Map.Entry<String, ILayer> l_item : m_world.entrySet() )
+        for ( final Map.Entry<String, ILayer> l_item : m_world.entrySet() )
             l_return.put(
                     l_item.getValue().toString(), new HashMap<String, Object>()
                     {{

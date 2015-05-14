@@ -156,7 +156,7 @@ public class CMethodBind extends IAction
      */
     private org.apache.commons.lang3.tuple.Pair<Class<?>, String> decodeMethodSignature( final List<Term> p_parameter, final List<Class<?>> p_argumenttypes,
             final List<Object> p_argumentdata
-    ) throws ClassNotFoundException, NoValueException
+    ) throws ClassNotFoundException, NoValueException, IllegalAccessException
     {
         // class and string are immutable types, so we need to create a return argument
         Class<?> l_returntype = void.class;
@@ -183,6 +183,9 @@ public class CMethodBind extends IAction
                 p_argumenttypes.addAll( Arrays.asList( this.convertTermListToClassArray( (ListTerm) p_parameter.get( 3 ) ) ) );
             else
                 p_argumenttypes.add( this.convertTermToClass( p_parameter.get( 3 ) ) );
+
+            // strip null values
+
 
             if ( p_parameter.size() - 4 != p_argumenttypes.size() )
                 throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "argumentnumber" ) );
@@ -240,7 +243,7 @@ public class CMethodBind extends IAction
      * @param p_term Jason term
      * @return class object
      */
-    private Class<?> convertTermToClass( final Term p_term ) throws IllegalArgumentException
+    private Class<?> convertTermToClass( final Term p_term ) throws IllegalAccessException
     {
         String l_classname = de.tu_clausthal.in.mec.object.mas.jason.CCommon.clearString( p_term.toString() );
         if ( "void".equalsIgnoreCase( l_classname ) )
@@ -274,7 +277,7 @@ public class CMethodBind extends IAction
         }
         catch ( final ClassNotFoundException l_exception )
         {
-            throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "classnotfound", l_classname ) );
+            throw new IllegalAccessException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( this, "classnotfound", l_classname ) );
         }
 
         return l_class;
@@ -287,7 +290,7 @@ public class CMethodBind extends IAction
      * @param p_list term list
      * @return class array
      */
-    private Class<?>[] convertTermListToClassArray( final ListTerm p_list ) throws ClassNotFoundException
+    private Class<?>[] convertTermListToClassArray( final ListTerm p_list ) throws ClassNotFoundException, IllegalAccessException
     {
         final Class<?>[] l_classes = new Class<?>[p_list.size()];
         for ( int i = 0; i < l_classes.length; i++ )
@@ -301,7 +304,7 @@ public class CMethodBind extends IAction
      * @param p_term term
      * @return class object array
      */
-    private Class<?>[] convertTermListToClassArray( final Term p_term ) throws ClassNotFoundException
+    private Class<?>[] convertTermListToClassArray( final Term p_term ) throws ClassNotFoundException, IllegalAccessException
     {
         final Class<?>[] l_classes = new Class<?>[1];
         l_classes[0] = this.convertTermToClass( p_term );

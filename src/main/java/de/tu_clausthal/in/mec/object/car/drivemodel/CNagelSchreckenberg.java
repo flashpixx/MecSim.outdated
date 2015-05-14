@@ -62,14 +62,34 @@ public class CNagelSchreckenberg implements IDriveModel
     @Override
     public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
     {
+        this.checkAccelerationWithEdgeSpeed( p_graph, p_car );
+        this.checkCollision( p_car );
+        this.checkLinger( p_car );
+    }
 
-        //check maximum speed on the current edge and modify speed
-        final int l_maxspeed = Math.min( p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed( p_car.getEdge() ) );
+    /**
+     * checks the acceleration and increment the speed
+     *
+     * @param p_graph graph instamce
+     * @param p_car car object
+     */
+    protected final void checkAccelerationWithEdgeSpeed( final CGraphHopper p_graph, final ICar p_car )
+    {
+        p_car.setCurrentSpeed(
+                Math.min(
+                        Math.min( p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed( p_car.getEdge() ) ), p_car.getCurrentSpeed() + p_car.getAcceleration()
+                )
+        );
+    }
 
-        // increment speed
-        p_car.setCurrentSpeed( Math.min( l_maxspeed, p_car.getCurrentSpeed() + p_car.getAcceleration() ) );
 
-        // check collision with the predecessor car
+    /**
+     * checks of a collision and reduce speed
+     *
+     * @param p_car car object
+     */
+    protected void checkCollision( final ICar p_car )
+    {
         final Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
         if ( ( l_predecessor != null ) && ( l_predecessor.size() > 0 ) )
         {
@@ -77,11 +97,18 @@ public class CNagelSchreckenberg implements IDriveModel
             if ( l_item.getKey().intValue() < p_car.getCurrentSpeed() )
                 p_car.setCurrentSpeed( Math.max( 0, l_item.getKey().intValue() - 1 ) );
         }
+    }
 
-        // decrement on linger random value
+
+    /**
+     * checks the linger probability and modify speed
+     *
+     * @param p_car car object
+     */
+    protected final void checkLinger( final ICar p_car )
+    {
         if ( ( p_car.getCurrentSpeed() > 0 ) && ( m_random.nextDouble() <= p_car.getLingerProbability() ) )
             p_car.setCurrentSpeed( Math.max( c_minimalspeed, p_car.getCurrentSpeed() - p_car.getDeceleration() ) );
-
     }
 
 }

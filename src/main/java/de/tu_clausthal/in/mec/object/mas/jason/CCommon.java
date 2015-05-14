@@ -134,8 +134,8 @@ public class CCommon
         // individual types
         if ( p_data instanceof GeoPosition )
             return ASSyntax.createLiteral(
-                    l_name, ASSyntax.createLiteral( "Latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ), ASSyntax.createLiteral(
-                            "Longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() )
+                    l_name, ASSyntax.createLiteral( "latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ), ASSyntax.createLiteral(
+                            "longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() )
                     )
             );
 

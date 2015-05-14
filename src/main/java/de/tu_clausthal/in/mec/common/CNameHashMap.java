@@ -301,7 +301,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         public CImmutable( final Map<? extends String, ?> p_data )
         {
             super();
-            for ( Map.Entry<? extends String, ?> l_item : p_data.entrySet() )
+            for ( final Map.Entry<? extends String, ?> l_item : p_data.entrySet() )
                 this.put( l_item.getKey(), l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
         }
 
@@ -316,7 +316,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         @SuppressWarnings( "unchecked" )
         public final void putAll( final Map<? extends String, ?> p_map )
         {
-            for ( Map.Entry<? extends String, ?> l_item : p_map.entrySet() )
+            for ( final Map.Entry<? extends String, ?> l_item : p_map.entrySet() )
                 this.put( l_item.getKey(), l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
         }
 
@@ -339,7 +339,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         public final Map<String, Object> toHashMap()
         {
             final Map<String, Object> l_return = new HashMap<>();
-            for ( Map.Entry<String, Object> l_item : this.entrySet() )
+            for ( final Map.Entry<String, Object> l_item : this.entrySet() )
                 l_return.put( l_item.getKey(), l_item.getValue() instanceof CImmutable ? ( (CImmutable) l_item.getValue() ).toHashMap() : l_item.getValue() );
 
             return l_return;

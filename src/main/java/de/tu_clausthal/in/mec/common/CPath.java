@@ -91,7 +91,7 @@ public class CPath implements Iterable<CPath>
      */
     private void initialize( final String p_fqn )
     {
-        for ( String l_item : p_fqn.split( m_separator ) )
+        for ( final String l_item : p_fqn.split( m_separator ) )
             if ( !l_item.isEmpty() )
                 m_path.add( l_item );
 

@@ -238,7 +238,7 @@ public class CCommon
      */
     public static Object convertValue( final String p_value, final Class[] p_types, final TypeParser p_parser )
     {
-        for ( Class l_class : p_types )
+        for ( final Class l_class : p_types )
             try
             {
                 return p_parser.parseType( p_value, l_class );
@@ -265,7 +265,7 @@ public class CCommon
         if ( p_input == null )
             return p_default;
 
-        for ( T l_item : p_allowedvalues )
+        for ( final T l_item : p_allowedvalues )
             if ( p_input.equals( l_item ) )
                 return l_item;
 
@@ -428,7 +428,7 @@ public class CCommon
     private static String getBytes2Hex( final byte[] p_bytes )
     {
         final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
-        for ( byte l_byte : p_bytes )
+        for ( final byte l_byte : p_bytes )
             l_str.append( String.format( "%02x", l_byte & 0xff ) );
 
         return l_str.toString();

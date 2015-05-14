@@ -135,7 +135,7 @@ public class CTreeNode<T>
     {
         CTreeNode<T> l_node = this;
 
-        for ( CPath l_item : p_path )
+        for ( final CPath l_item : p_path )
         {
             if ( !l_node.m_childs.containsKey( l_item.getSuffix() ) )
                 return false;
@@ -209,7 +209,7 @@ public class CTreeNode<T>
      */
     public final void addChild( final Collection<String> p_names )
     {
-        for ( String l_item : p_names )
+        for ( final String l_item : p_names )
             this.addChild( l_item );
     }
 
@@ -274,7 +274,7 @@ public class CTreeNode<T>
         if ( p_withroot )
             l_list.add( m_data );
 
-        for ( CTreeNode<T> l_child : m_childs.values() )
+        for ( final CTreeNode<T> l_child : m_childs.values() )
             l_list.addAll( l_child.getTreeData( true ) );
 
         return l_list;
@@ -303,17 +303,6 @@ public class CTreeNode<T>
     }
 
     /**
-     * adds a collection of pair with path and data
-     *
-     * @param p_data collection of pair with path and data
-     */
-    public final void setData( final Collection<Pair<CPath, T>> p_data )
-    {
-        for ( Pair<CPath, T> l_item : p_data )
-            this.getNode( l_item.getKey() ).setData( l_item.getValue() );
-    }
-
-    /**
      * sets the data to the current node
      *
      * @param p_data data
@@ -321,6 +310,17 @@ public class CTreeNode<T>
     public final void setData( final T p_data )
     {
         m_data = p_data;
+    }
+
+    /**
+     * adds a collection of pair with path and data
+     *
+     * @param p_data collection of pair with path and data
+     */
+    public final void setData( final Collection<Pair<CPath, T>> p_data )
+    {
+        for ( final Pair<CPath, T> l_item : p_data )
+            this.getNode( l_item.getKey() ).setData( l_item.getValue() );
     }
 
     /**
@@ -391,7 +391,7 @@ public class CTreeNode<T>
         if ( !p_path.isEmpty() )
             p_set.add( p_path );
 
-        for ( Map.Entry<String, CTreeNode<T>> l_item : m_childs.entrySet() )
+        for ( final Map.Entry<String, CTreeNode<T>> l_item : m_childs.entrySet() )
         {
             final CPath l_path = new CPath( p_path );
             l_path.pushback( l_item.getKey() );
@@ -408,7 +408,7 @@ public class CTreeNode<T>
     public final String toString()
     {
         String l_return = this.getFQN() + "   [" + m_data + "]";
-        for ( CTreeNode<T> l_item : m_childs.values() )
+        for ( final CTreeNode<T> l_item : m_childs.values() )
             l_return += "\n" + l_item;
         return l_return;
     }

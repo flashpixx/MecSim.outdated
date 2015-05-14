@@ -163,7 +163,7 @@ public class CReflection
     {
         final Map<String, CGetSet> l_fields = new HashMap<>();
         for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
-            for ( Field l_field : l_class.getDeclaredFields() )
+            for ( final Field l_field : l_class.getDeclaredFields() )
             {
                 l_field.setAccessible( true );
                 if ( ( p_filter != null ) && ( !p_filter.filter( l_field ) ) )
@@ -240,7 +240,7 @@ public class CReflection
     {
         final Map<String, CMethod> l_methods = new HashMap<>();
         for ( Class<?> l_class = p_class; l_class != null; l_class = l_class.getSuperclass() )
-            for ( Method l_method : l_class.getDeclaredMethods() )
+            for ( final Method l_method : l_class.getDeclaredMethods() )
             {
                 l_method.setAccessible( true );
                 if ( ( p_filter != null ) && ( !p_filter.filter( l_method ) ) )

@@ -19,6 +19,8 @@ var mecsim_source,
         },
 
         /** todo collection for source-ui ck
+        TODO Further wizard validation
+        TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
         TODO move jquery selectors into settings for better configuration
         TODO bounding in minimized mode maybe snap to tab
         TODO plot distribution
@@ -190,8 +192,8 @@ var mecsim_source,
                 stepsOrientation: "vertical",
                 autoFocus: true,
                 onInit: SourcePanel.buildWizardContent,
-                onStepChanging: SourcePanel.validateWizardStep
-
+                onStepChanging: SourcePanel.validateWizardStep,
+                onFinished: SourcePanel.finishWizard
             });
 
             //listen to factory select
@@ -275,6 +277,36 @@ var mecsim_source,
             }
 
             return true;
+        },
+
+        //method to finish the last wizard step
+        finishWizard :function(){
+            $.ajax({
+                url     : "/cwaypointenvironment/createtool",
+                data    : {
+                            "factory"  : $("#mecsim_source_selectFactory").val(),
+                            "asl"      : $("#mecsim_source_selectASL").val(),
+                            "generator": $("#mecsim_source_selectGenerator").val(),
+                            "input1"   : $("#mecsim_source_generatorinput1").val(),
+                            "input2"   : $("#mecsim_source_generatorinput2").val(),
+                            "input3"   : $("#mecsim_source_generatorinput3").val(),
+                            "name"     : $("#mecsim_source_toolname").val(),
+                            "r"        : SourcePanel.settings.colorpicker.spectrum("get")._r,
+                            "g"        : SourcePanel.settings.colorpicker.spectrum("get")._g,
+                            "b"        : SourcePanel.settings.colorpicker.spectrum("get")._b
+                        },
+                success : function( px_data ){
+                    px_data.tools.forEach(function(data){
+                        $("</p>").appendTo($("#mecsim_source_toolbox"));
+                        $("<button></button>")
+                            .text(data)
+                            .attr("value",data)
+                            .button()
+                            .appendTo($("#mecsim_source_toolbox"));
+                    });                }
+            }).fail(function(){
+                console.log("tool creation failed!");
+            });
         },
 
         //method to update factory settings

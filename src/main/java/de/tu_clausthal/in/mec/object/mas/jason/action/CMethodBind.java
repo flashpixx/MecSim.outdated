@@ -35,7 +35,6 @@ import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -217,12 +216,6 @@ public class CMethodBind extends IAction
             final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata
     ) throws Throwable
     {
-        final MethodHandle l_invoker;
-        final List<Object> l_invokerarguments = new LinkedList<Object>()
-        {{
-                add( p_object.getObject() );
-            }};
-
         // method has got any arguments
         if ( ( !p_argumentdata.isEmpty() ) && ( !p_argumenttypes.isEmpty() ) )
         {
@@ -230,16 +223,20 @@ public class CMethodBind extends IAction
             final Class<?>[] l_argumenttypes = new Class[p_argumenttypes.size()];
             p_argumenttypes.toArray( l_argumenttypes );
 
-            // add to invoker-argument list and get invoker
-            l_invokerarguments.addAll( p_argumentdata );
-            l_invoker = p_object.get( p_methodname, l_argumenttypes ).getHandle();
+            // add to invoker-argument list and call invoker
+            return p_returntype.cast(
+                    p_object.get( p_methodname, l_argumenttypes ).getHandle().invokeWithArguments(
+                            new LinkedList<Object>()
+                            {{
+                                    add( p_object.getObject() );
+                                    addAll( p_argumentdata );
+                                }}
+                    )
+            );
         }
-        else
-            // otherwise method does not have any arguments and
-            l_invoker = p_object.get( p_methodname ).getHandle();
 
         // call invoker
-        return p_returntype.cast( l_invoker.invokeWithArguments( l_invokerarguments ) );
+        return p_returntype.cast( p_object.get( p_methodname ).getHandle().invoke( p_object.getObject() ) );
     }
 
     /**

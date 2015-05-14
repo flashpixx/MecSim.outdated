@@ -178,7 +178,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return m_lingerprobability;
     }
 
-
     @Override
     public final GeoPosition getGeoposition()
     {

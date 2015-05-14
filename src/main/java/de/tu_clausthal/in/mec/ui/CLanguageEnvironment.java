@@ -36,41 +36,44 @@ public class CLanguageEnvironment
 {
 
     /**
+     * waypoint labels
+     */
+    private static final Map<String, String> m_waypointLabels = new HashMap<String, String>()
+    {{
+            put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
+            put( "factorysettings", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
+            put( "generatorsettings", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
+            put( "carsettings", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
+            put( "customizing", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+            put( "selectyourfactory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
+            put( "selectyourasl", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourasl" ) );
+            put( "selectyourgenerator", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
+            put( "selectyourcarcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
+            put( "selectyourmean", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourmean" ) );
+            put( "selectyourdeviation", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourdeviation" ) );
+            put( "selectyourlowerbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourlowerbound" ) );
+            put( "selectyourupperbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourupperbound" ) );
+            put( "selectcarspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectcarspeedprob" ) );
+            put( "selectmaxcarspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxcarspeedprob" ) );
+            put( "selectaccprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectaccprob" ) );
+            put( "selectdecprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectdecprob" ) );
+            put( "selectlingerprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
+            put( "selecttoolname", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolname" ) );
+            put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
+            put( "selecttoolcolor", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
+            put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
+            put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
+            put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
+        }};
+
+    /**
      * method to read waypoint specific labels and resource strings
      *
      * @return
-     * @bug refactor
      */
     private final Map<String, String> web_static_getwaypointlabels()
     {
-        HashMap<String, String> l_labels = new HashMap<>();
-
-        l_labels.put( "wizardwidget", CCommon.getResourceString( this, "wizardwidget" ) );
-        l_labels.put( "factorysettings", CCommon.getResourceString( this, "factorysettings" ) );
-        l_labels.put( "generatorsettings", CCommon.getResourceString( this, "generatorsettings" ) );
-        l_labels.put( "carsettings", CCommon.getResourceString( this, "carsettings" ) );
-        l_labels.put( "customizing", CCommon.getResourceString( this, "customizing" ) );
-        l_labels.put( "selectyourfactory", CCommon.getResourceString( this, "selectyourfactory" ) );
-        l_labels.put( "selectyourasl", CCommon.getResourceString( this, "selectyourasl" ) );
-        l_labels.put( "selectyourgenerator", CCommon.getResourceString( this, "selectyourgenerator" ) );
-        l_labels.put( "selectyourcarcount", CCommon.getResourceString( this, "selectyourcarcount" ) );
-        l_labels.put( "selectyourmean", CCommon.getResourceString( this, "selectyourmean" ) );
-        l_labels.put( "selectyourdeviation", CCommon.getResourceString( this, "selectyourdeviation" ) );
-        l_labels.put( "selectyourlowerbound", CCommon.getResourceString( this, "selectyourlowerbound" ) );
-        l_labels.put( "selectyourupperbound", CCommon.getResourceString( this, "selectyourupperbound" ) );
-        l_labels.put( "selectcarspeedprob", CCommon.getResourceString( this, "selectcarspeedprob" ) );
-        l_labels.put( "selectmaxcarspeedprob", CCommon.getResourceString( this, "selectmaxcarspeedprob" ) );
-        l_labels.put( "selectaccprob", CCommon.getResourceString( this, "selectaccprob" ) );
-        l_labels.put( "selectdecprob", CCommon.getResourceString( this, "selectdecprob" ) );
-        l_labels.put( "selectlingerprob", CCommon.getResourceString( this, "selectlingerprob" ) );
-        l_labels.put( "selecttoolname", CCommon.getResourceString( this, "selecttoolname" ) );
-        l_labels.put( "selecttoolnamevalue", CCommon.getResourceString( this, "selecttoolnamevalue" ) );
-        l_labels.put( "selecttoolcolor", CCommon.getResourceString( this, "selecttoolcolor" ) );
-        l_labels.put( "previous", CCommon.getResourceString( this, "previous" ) );
-        l_labels.put( "next", CCommon.getResourceString( this, "next" ) );
-        l_labels.put( "finish", CCommon.getResourceString( this, "finish" ) );
-
-        return l_labels;
+        return m_waypointLabels;
     }
 
 }

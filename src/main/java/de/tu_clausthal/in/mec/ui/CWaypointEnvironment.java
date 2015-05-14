@@ -51,15 +51,8 @@ import java.util.Map;
  * todo java cleanup (doc, style)
  * todo remove singelton
  * todo check if input is correct
- * todo deliver static label map
  * todo read default tool settings from config
- * todo check if a tool can be better strucutred into subclasses (maybe for changes on the tool it might be good idea to have on single tool class)
- * todo implement switch to distinguish between random and path waypoints
- * todo need for empty waypoints?
- * todo how to configure factory distribution setinngs
- * todo ui for histrogramm and radius
  * todo check for casts
- * todo colorbutton
  */
 public class CWaypointEnvironment
 {

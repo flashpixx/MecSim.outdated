@@ -21,11 +21,9 @@ var mecsim_source,
         /** todo collection for source-ui ck
         TODO Further wizard validation
         TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
-        TODO move jquery selectors into settings for better configuration
         TODO bounding in minimized mode maybe snap to tab
         TODO plot distribution
         TODO Car Settings
-        TODO Tool creation
         TODO show error dialog if tool can not created (check for correctness on java side)
         TODO distingusish between init and refresh(asl, ...)
         TODO source list table (JTable or JQuery Plugin)

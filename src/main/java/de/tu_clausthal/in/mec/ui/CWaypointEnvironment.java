@@ -132,31 +132,35 @@ public class CWaypointEnvironment
         EWayPointType l_waypointtype = this.getWaypointEnum( "" );
         EFactoryType l_factorytype = this.getFactoryEnum( (String) p_data.get( "factory" ) );
         EGeneratorType l_generatortype = this.getGeneratorEnum( (String) p_data.get( "generator" ) );
-        double l_radius = 0.1;
-        double r = Double.parseDouble( String.valueOf( p_data.get( "r" ) ) );
-        double g = Double.parseDouble( String.valueOf( p_data.get( "g" ) ) );
-        double b = Double.parseDouble( String.valueOf( p_data.get( "b" ) ) );
-        Color l_color = new Color( (int) r, (int) g, (int) b );
-        String l_asl = (String) p_data.get( "asl" );
-        String l_name = (String) p_data.get( "name" );
+
         int l_input1 = Integer.parseInt( String.valueOf( p_data.get( "input1" ) ) );
         int l_input2 = Integer.parseInt( String.valueOf( p_data.get( "input2" ) ) );
         int l_input3 = Integer.parseInt( String.valueOf( p_data.get( "input3" ) ) );
         int[] l_histrogramm = new int[]{1, 2, 3, 4, 5};
 
+        double l_radius = 0.1;
+        double r = Double.parseDouble( String.valueOf( p_data.get( "r" ) ) );
+        double g = Double.parseDouble( String.valueOf( p_data.get( "g" ) ) );
+        double b = Double.parseDouble( String.valueOf( p_data.get( "b" ) ) );
+
+        Color l_color = new Color( (int) r, (int) g, (int) b );
+        String l_asl = (String) p_data.get( "asl" );
+        String l_name = (String) p_data.get( "name" );
+
         //create and set tool
-        CTool l_defaultTool = new CTool(
+        CTool l_newTool = new CTool(
                 l_waypointtype, l_factorytype, l_generatortype, l_radius, l_color, l_asl, l_input1, l_input2, l_input3, l_input2, l_input3, l_histrogramm
         );
-        this.m_selectedTool = l_defaultTool;
-        this.m_toolbox.put( CCommon.getResourceString( this, "defaulttoolname" ), l_defaultTool );
 
-        //return tool name
-        List<String> l_tools = new ArrayList<>();
-        l_tools.add( l_name );
+        this.m_selectedTool = l_newTool;
+        this.m_toolbox.put( l_name, l_newTool );
+
+        //return to add new tool to toolbox
+        List<String> l_return = new ArrayList<>();
+        l_return.add( l_name );
         return new HashMap<String, List<String>>()
         {{
-                put( "tools", l_tools );
+                put( "tools", l_return );
             }};
     }
 

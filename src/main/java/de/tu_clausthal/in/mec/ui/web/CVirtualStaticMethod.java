@@ -159,7 +159,7 @@ public class CVirtualStaticMethod implements IVirtualLocation
     private Map<String, Object> convertMap( final Map<String, String> p_input )
     {
         final Map<String, Object> l_return = new HashMap<>();
-        for ( Map.Entry<String, String> l_item : p_input.entrySet() )
+        for ( final Map.Entry<String, String> l_item : p_input.entrySet() )
             this.splitKeyValues( l_item.getKey().replace( "]", "" ).split( "\\[" ), 0, l_item.getValue(), l_return );
         return l_return;
     }

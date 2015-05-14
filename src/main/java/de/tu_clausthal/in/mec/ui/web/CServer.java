@@ -105,7 +105,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
 
         m_websocketheartbeat = p_websocketheartbeat;
         m_virtuallocation = new CVirtualLocation( p_default );
-        for ( String l_detector : new String[]{
+        for ( final String l_detector : new String[]{
                 "eu.medsea.mimeutil.detector.MagicMimeMimeDetector", "eu.medsea.mimeutil.detector.ExtensionMimeDetector",
                 "eu.medsea.mimeutil.detector.TextMimeDetector"
         } )
@@ -253,7 +253,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         if ( l_types.size() == 1 )
             return l_types.iterator().next().toString();
 
-        for ( Object l_item : l_types )
+        for ( final Object l_item : l_types )
         {
             final MimeType l_type = (MimeType) l_item;
             if ( !l_type.toString().startsWith( "application/" ) )
@@ -301,7 +301,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         final String l_uriclass = c_seperator + p_object.getClass().getSimpleName().toLowerCase() + c_seperator;
 
         // get methods
-        for ( Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods(
+        for ( final Map.Entry<String, CReflection.CMethod> l_method : CReflection.getClassMethods(
                 p_object.getClass(), new CReflection.IMethodFilter()
                 {
                     @Override

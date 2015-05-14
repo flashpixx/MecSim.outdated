@@ -174,7 +174,7 @@ public class CSocketStorage
      */
     public final void send( final String p_payload )
     {
-        for ( CWebSocket.CCommunicator l_item : m_communicator.values() )
+        for ( final CWebSocket.CCommunicator l_item : m_communicator.values() )
             try
             {
                 l_item.send( p_payload );
@@ -193,7 +193,7 @@ public class CSocketStorage
      */
     public final void send( final byte[] p_payload )
     {
-        for ( CWebSocket.CCommunicator l_item : m_communicator.values() )
+        for ( final CWebSocket.CCommunicator l_item : m_communicator.values() )
             try
             {
                 l_item.send( p_payload );

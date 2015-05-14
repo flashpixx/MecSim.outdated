@@ -88,7 +88,7 @@ public class CVirtualLocation
         if ( m_locations.containsKey( p_session.getUri().hashCode() ) )
             return true;
 
-        for ( IVirtualLocation l_item : m_locations.values() )
+        for ( final IVirtualLocation l_item : m_locations.values() )
             if ( l_item.match( p_session.getUri() ) )
                 return true;
 
@@ -110,7 +110,7 @@ public class CVirtualLocation
 
 
         // otherwise check each match
-        for ( IVirtualLocation l_item : m_locations.values() )
+        for ( final IVirtualLocation l_item : m_locations.values() )
             if ( l_item.match( p_session.getUri() ) )
                 return l_item;
 

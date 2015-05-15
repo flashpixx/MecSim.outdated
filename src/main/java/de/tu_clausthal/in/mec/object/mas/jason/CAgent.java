@@ -420,7 +420,7 @@ public class CAgent<T> implements IVoidAgent
 
                     // otherwise message will direct converted
                     final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
-                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_msg.getSource().toString() ) ) );
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( c_seperator ) ) ) );
                     m_agent.addBel( l_literal );
 
                 }

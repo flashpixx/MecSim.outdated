@@ -109,14 +109,6 @@ public class CCommon
     {
         final String l_name = getLiteralName( p_name );
 
-        // null value into atom
-        if ( p_data == null )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createAtom( "" ) );
-
-        // number value into number
-        if ( p_data instanceof Number )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createNumber( ( (Number) p_data ).doubleValue() ) );
-
         // map into complex term list
         if ( p_data instanceof Map )
             return ASSyntax.createLiteral(
@@ -129,30 +121,49 @@ public class CCommon
                     )
             );
 
-        // collection into term list
-        if ( p_data instanceof Collection )
-            return ASSyntax.createLiteral( l_name, ASSyntax.createList( (Collection) p_data ) );
-
         // individual type - GeoPosition
         if ( p_data instanceof GeoPosition )
             return ASSyntax.createLiteral(
                     l_name,
-                    ASSyntax.createLiteral( "latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ),
-                    ASSyntax.createLiteral( "longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() ) )
+                    ASSyntax.createLiteral( "latitude", getTerm( ( (GeoPosition) p_data ).getLatitude() ) ),
+                    ASSyntax.createLiteral( "longitude", getTerm( ( (GeoPosition) p_data ).getLongitude() ) )
             );
 
         // individual type - Edge
         if ( p_data instanceof EdgeIteratorState )
             return ASSyntax.createLiteral(
                     l_name,
-                    ASSyntax.createLiteral( "id", ASSyntax.createNumber( ( (EdgeIteratorState) p_data ).getEdge() ) ),
-                    ASSyntax.createLiteral( "name", ASSyntax.createString( ( (EdgeIteratorState) p_data ).getName() ) ),
-                    ASSyntax.createLiteral( "distance", ASSyntax.createNumber( ( (EdgeIteratorState) p_data ).getDistance() ) )
+                    ASSyntax.createLiteral( "id", getTerm( ( (EdgeIteratorState) p_data ).getEdge() ) ),
+                    ASSyntax.createLiteral( "name", getTerm( ( (EdgeIteratorState) p_data ).getName() ) ),
+                    ASSyntax.createLiteral( "distance", getTerm( ( (EdgeIteratorState) p_data ).getDistance() ) )
             );
 
+        // otherwise
+        return ASSyntax.createLiteral( l_name, getTerm( p_data ) );
+    }
 
-        // otherwise into string
-        return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
+
+    /**
+     * convert data type into Jason term
+     *
+     * @param p_data
+     * @return Jason term
+     */
+    private static Term getTerm( final Object p_data )
+    {
+        // null value into atom
+        if ( p_data == null )
+            return ASSyntax.createAtom( "" );
+
+        // number value into number
+        if ( p_data instanceof Number )
+            return ASSyntax.createNumber( ( (Number) p_data ).doubleValue() );
+
+        // collection into term list
+        if ( p_data instanceof Collection )
+            return ASSyntax.createList( (Collection) p_data );
+
+        return ASSyntax.createString( p_data.toString() );
     }
 
 

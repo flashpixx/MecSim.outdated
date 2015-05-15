@@ -78,7 +78,7 @@ public class CCommon
         )
         {
             new ObjectMapper().configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false ).writer().writeValue( l_stream, p_data );
-            return l_stream.toString( "UTF-8" );
+            return l_stream.toString( "UTF-8" ).replace( "\t", " " ).replace( "\n", " " ).replace( "\t", "" ).trim();
         }
         catch ( final IOException l_exception )
         {

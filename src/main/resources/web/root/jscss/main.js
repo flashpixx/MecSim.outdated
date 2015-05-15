@@ -52,10 +52,13 @@ $(document).ready(function() {
 
         var ws_inspector = MecSim().getWebSocket("/cinspector/show");
         ws_inspector.onmessage = function( p_event ) {
+            console.log( p_event.data.trim() )
+            console.log( $.parseJSON(p_event.data.trim()) );
+
 
             $("#mecsim_object_inspector").empty();
             //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
-            $("#mecsim_object_inspector").prepend("<p>" + p_event.data + "</p>");
+            $("#mecsim_object_inspector").prepend("<p></p>");
             //$('#mecsim_inspector_table').DataTable();
             $("#mecsim_object_inspector").dialog("open");
 

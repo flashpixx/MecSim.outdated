@@ -397,7 +397,7 @@ public class CAgent<T> implements IVoidAgent
                     {
                         final Message l_jmsg = ( (Message) l_msg.getData() );
                         final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_jmsg.getSender() ) ) );
+                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( c_seperator ) ) ) );
 
                         if ( l_jmsg.isTell() )
                             m_agent.addBel( l_literal );

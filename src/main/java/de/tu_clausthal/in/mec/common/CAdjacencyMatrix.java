@@ -46,11 +46,11 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
     /**
      * row name
-     **/
+     */
     private final String m_rowname;
     /**
      * column name
-     **/
+     */
     private final String m_colname;
 
 

@@ -205,13 +205,13 @@ public class CWebSocket extends WebSocket
         /**
          * send string payload to the current socket
          *
-         * @note line break at the end of the string to avoid an EOF error
          * @param p_payload string payload
          * @throws IOException throws on IO error
+         * @note line break at the end of the string to avoid an EOF error
          */
         public final void send( final String p_payload ) throws IOException
         {
-            CWebSocket.this.send( p_payload + "\n" );
+            CWebSocket.this.send( p_payload );
         }
 
         /**

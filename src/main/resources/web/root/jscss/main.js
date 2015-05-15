@@ -51,10 +51,11 @@ $(document).ready(function() {
         };
 
         var ws_inspector = MecSim().getWebSocket("/cinspector/show");
+        ws_inspector.onerror = function( p_event ) {
+            $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + p_event.data + "</span>");
+        };
         ws_inspector.onmessage = function( p_event ) {
-            console.log( p_event.data.trim() )
-            console.log( $.parseJSON(p_event.data.trim()) );
-
+            console.log( $.parseJSON(p_event.data.clearnull()) );
 
             $("#mecsim_object_inspector").empty();
             //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");

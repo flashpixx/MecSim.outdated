@@ -43,3 +43,12 @@ String.prototype.endsWith = function( p_suffix )
     return this.match( p_suffix+"$" ) == p_suffix;
 };
 
+
+/**
+ * clear null bytes from the string
+ * @return cleared null bytes
+ */
+String.prototype.clearnull = function()
+{
+    return this.replace(/\0/g, "");
+};

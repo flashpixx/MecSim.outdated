@@ -271,6 +271,7 @@ public class CSimulation
         this.threadStartUp();
         m_mainloop.pause();
         m_mainloop.reset();
+        m_objectcounter.set( 0 );
 
         CBootstrap.onSimulationReset( this );
         CLogger.info( CCommon.getResourceString( this, "reset" ) );

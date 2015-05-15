@@ -62,7 +62,7 @@ public class CReflection
     private static final CClassIndex c_classindex = new CClassIndex( CClassIndex.EFilter.WhiteList )
     {{
 
-            filter( CConfiguration.getPackage(), "org.jxmapviewer", "com.graphhopper", "java.lang" );
+            filter( CConfiguration.getPackage(), "org.jxmapviewer", "com.graphhopper", "java.lang", "java.util" );
 
             for ( final String l_path : new HashSet<String>()
             {{

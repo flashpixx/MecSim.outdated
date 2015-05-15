@@ -76,7 +76,7 @@ public class CWaypointEnvironment
     private CWaypointEnvironment()
     {
         CTool l_defaultTool = new CTool(
-                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EGeneratorType.Uniform, 0.1, Color.RED, null, 1, 1, 1, 0, 10,
+                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EGeneratorType.Uniform, 0.75, Color.RED, null, 1, 1, 1, 0, 10,
                 new int[]{1, 2, 3, 4, 5}
         );
         this.m_selectedTool = l_defaultTool;

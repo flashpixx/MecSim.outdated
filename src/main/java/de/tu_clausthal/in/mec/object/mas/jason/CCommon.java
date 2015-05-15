@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason;
 
 
+import com.graphhopper.util.EdgeIteratorState;
 import jason.NoValueException;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.ListTerm;
@@ -134,12 +135,18 @@ public class CCommon
         // individual types
         if ( p_data instanceof GeoPosition )
             return ASSyntax.createLiteral(
-                    l_name, ASSyntax.createLiteral( "latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ), ASSyntax.createLiteral(
-                            "longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() )
-                    )
+                    l_name,
+                    ASSyntax.createLiteral( "latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ),
+                    ASSyntax.createLiteral( "longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() ) )
             );
 
-
+        if ( p_data instanceof EdgeIteratorState )
+            return ASSyntax.createLiteral(
+                    l_name,
+                    ASSyntax.createLiteral( "id", ASSyntax.createNumber( ( (EdgeIteratorState) p_data ).getEdge() ) ),
+                    ASSyntax.createLiteral( "name", ASSyntax.createString( ( (EdgeIteratorState) p_data ).getName() ) ),
+                    ASSyntax.createLiteral( "distance", ASSyntax.createNumber( ( (EdgeIteratorState) p_data ).getDistance() ) )
+            );
 
 
         // otherwise into string

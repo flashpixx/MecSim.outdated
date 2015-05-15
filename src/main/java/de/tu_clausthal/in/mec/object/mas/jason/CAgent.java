@@ -308,7 +308,7 @@ public class CAgent<T> implements IVoidAgent
         public final void sendMsg( final Message p_message ) throws Exception
         {
             p_message.setSender( getReceiverPath().toString() );
-            m_participant.sendMessage( new CPath( p_message.getReceiver() ), new CMessage( p_message ) );
+            m_participant.sendMessage( new CPath( p_message.getReceiver().split( c_seperator ) ), new CMessage( p_message ) );
         }
 
         @Override

@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.NoValueException;
 import jason.asSemantics.Agent;
 import jason.asSyntax.ListTerm;
+import jason.asSyntax.Literal;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -49,6 +50,10 @@ import java.util.Map;
  */
 public class CMethodBind extends IAction
 {
+    /**
+     * name of the source literal on returning argument
+     */
+    private static final String c_returnannotation = "source";
     /**
      * method filter
      */
@@ -127,12 +132,12 @@ public class CMethodBind extends IAction
                     l_argumentdata
             );
 
-            // push return data into the agent (empty belief is allowed)
-            if ( l_return == null )
-                p_agent.addBel( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( l_returntype.getValue(), l_return ) );
-            else if ( !void.class.equals( l_return.getClass() ) )
-                p_agent.addBel( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( l_returntype.getValue(), l_return ) );
+            // push return data into the agent (empty belief is allowed) - source of the belief is set explicit
+            final Literal l_belief = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( l_returntype.getValue(), l_return );
+            l_belief.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_returnannotation, l_objectname ) );
 
+            if ( ( l_return == null ) || ( !void.class.equals( l_return.getClass() ) ) )
+                p_agent.addBel( l_belief );
         }
         catch ( final Exception l_exception )
         {

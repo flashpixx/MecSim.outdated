@@ -38,6 +38,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -103,21 +104,10 @@ public class CCommon
      * @param p_data data of the literal
      * @return literal object
      */
+    @SuppressWarnings( "unchecked" )
     public static Literal getLiteral( final String p_name, final Object p_data )
     {
-        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
-            throw new IllegalArgumentException(
-                    de.tu_clausthal.in.mec.common.CCommon.getResourceString(
-                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.class, "namenotempty"
-                    )
-            );
-
-        // first char must be lower-case - split on spaces and create camel-case
-        final String[] l_parts = p_name.split( " " );
-        for ( int i = 0; i < l_parts.length; i++ )
-            l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
-        final String l_name = StringUtils.join( l_parts ).replaceAll( "\\W", "" );
-
+        final String l_name = getLiteralName( p_name );
 
         // null value into atom
         if ( p_data == null )
@@ -127,12 +117,23 @@ public class CCommon
         if ( p_data instanceof Number )
             return ASSyntax.createLiteral( l_name, ASSyntax.createNumber( ( (Number) p_data ).doubleValue() ) );
 
+        // map into complex term list
+        if ( p_data instanceof Map )
+            return ASSyntax.createLiteral(
+                    l_name, ASSyntax.createList(
+                            new LinkedList<Term>()
+                            {{
+                                    for ( final Object l_item : ( (Map) p_data ).entrySet() )
+                                        add( getLiteral( ( (Map.Entry<?, ?>) l_item ).getKey().toString(), ( (Map.Entry<?, ?>) l_item ).getValue() ) );
+                                }}
+                    )
+            );
+
         // collection into term list
         if ( p_data instanceof Collection )
             return ASSyntax.createLiteral( l_name, ASSyntax.createList( (Collection) p_data ) );
 
-
-        // individual types
+        // individual type - GeoPosition
         if ( p_data instanceof GeoPosition )
             return ASSyntax.createLiteral(
                     l_name,
@@ -140,6 +141,7 @@ public class CCommon
                     ASSyntax.createLiteral( "longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() ) )
             );
 
+        // individual type - Edge
         if ( p_data instanceof EdgeIteratorState )
             return ASSyntax.createLiteral(
                     l_name,
@@ -153,6 +155,52 @@ public class CCommon
         return ASSyntax.createLiteral( l_name, ASSyntax.createString( p_data.toString() ) );
     }
 
+
+    /**
+     * returns an atom within in a literal
+     *
+     * @param p_literal name of the literal
+     * @param p_atom name of the atom
+     * @return literal object
+     */
+    public static Literal getLiteral( final String p_literal, final String p_atom )
+    {
+        return ASSyntax.createLiteral( getLiteralName( p_literal ), getLiteral( p_atom ) );
+    }
+
+    /**
+     * checks a literal name and convert it to the correct syntax
+     *
+     * @param p_name name of the literal
+     * @return converted literal name
+     */
+    private static String getLiteralName( final String p_name )
+    {
+        if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+            throw new IllegalArgumentException(
+                    de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.class, "namenotempty"
+                    )
+            );
+
+        // first char must be lower-case - split on spaces and create camel-case
+        final String[] l_parts = p_name.split( " " );
+        for ( int i = 0; i < l_parts.length; i++ )
+            l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
+
+        return StringUtils.join( l_parts ).replaceAll( "\\W", "" );
+    }
+
+    /**
+     * returns an atom
+     *
+     * @param p_atom name of the atom
+     * @return literal object
+     */
+    public static Literal getLiteral( final String p_atom )
+    {
+        return ASSyntax.createAtom( getLiteralName( p_atom ) );
+    }
 
     /**
      * converts a Double into a number

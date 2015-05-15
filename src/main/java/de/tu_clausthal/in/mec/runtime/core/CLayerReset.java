@@ -21,42 +21,27 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime.thread;
+package de.tu_clausthal.in.mec.runtime.core;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 
 /**
- * wrapper class to process a void-steppable item
+ * wrapper class to reset a layer
  */
-public class CVoidSteppable extends IRunnable<IVoidSteppable>
+public class CLayerReset extends IRunnable<ILayer>
 {
 
     /**
-     * layer object
-     */
-    private final ILayer m_layer;
-    /**
-     * iteration value
-     */
-    private final int m_iteration;
-
-
-    /**
-     * ctor
+     * ctor for setting the object
      *
-     * @param p_iteration current iteration value
-     * @param p_object void-steppable object
-     * @param p_layer layer of the object or null
+     * @param p_object performing object
      */
-    public CVoidSteppable( final int p_iteration, final IVoidSteppable p_object, final ILayer p_layer )
+    public CLayerReset( final ILayer p_object )
     {
         super( p_object );
-        m_layer = p_layer;
-        m_iteration = p_iteration;
     }
 
 
@@ -67,21 +52,11 @@ public class CVoidSteppable extends IRunnable<IVoidSteppable>
     {
         try
         {
-
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
-
-
-            m_object.step( m_iteration, m_layer );
-
-
-            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
-                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
-
+            m_object.release();
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
-            CLogger.error( l_exception );
+            CLogger.error( CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
         }
     }
 

@@ -21,54 +21,75 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime.thread;
+package de.tu_clausthal.in.mec.runtime.core;
 
-import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 
-import java.util.concurrent.Callable;
+import java.util.Collection;
 
 
 /**
- * runnable class to define objects which is callable and runable for thread-pool
+ * wrapper class to process a return-steppable item
  */
-public abstract class IRunnable<T> implements Runnable, Callable<Object>
+public class CReturnSteppable extends IRunnable<IReturnSteppable>
 {
 
     /**
-     * object reference
+     * layer object
      */
-    protected final T m_object;
+    private final ILayer m_layer;
+    /**
+     * iteration value
+     */
+    private final int m_iteration;
 
 
     /**
      * ctor for setting the object
      *
-     * @param p_object performing object
+     * @param p_iteration current iteration value
+     * @param p_object return-steppable object
+     * @param p_layer layer of the object or null
      */
-    public IRunnable( final T p_object )
+    public CReturnSteppable( final int p_iteration, final IReturnSteppable p_object, final ILayer p_layer )
     {
-        if ( p_object == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
-
-        m_object = p_object;
+        super( p_object );
+        m_layer = p_layer;
+        m_iteration = p_iteration;
     }
 
-    @Override
-    public final Object call() throws Exception
-    {
-        this.perform();
-        return m_object;
-    }
 
     /**
      * run method to perform the action on runnable and callable interface
      */
-    protected abstract void perform();
-
-    @Override
-    public final void run()
+    protected final void perform()
     {
-        this.perform();
+        try
+        {
+
+            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
+                ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
+
+
+            final Collection<?> l_data = m_object.step( m_iteration, m_layer );
+            final Collection<IReturnSteppableTarget> l_targets = m_object.getTargets();
+            if ( ( l_data != null ) && ( l_targets != null ) )
+                for ( final IReturnSteppableTarget l_target : l_targets )
+                    l_target.push( l_data );
+
+
+            if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
+                ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
+
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
 }

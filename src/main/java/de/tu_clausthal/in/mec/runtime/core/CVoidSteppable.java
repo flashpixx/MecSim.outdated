@@ -21,21 +21,18 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime.thread;
+package de.tu_clausthal.in.mec.runtime.core;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
-import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
-
-import java.util.Collection;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 
 /**
- * wrapper class to process a return-steppable item
+ * wrapper class to process a void-steppable item
  */
-public class CReturnSteppable extends IRunnable<IReturnSteppable>
+public class CVoidSteppable extends IRunnable<IVoidSteppable>
 {
 
     /**
@@ -49,13 +46,13 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
 
 
     /**
-     * ctor for setting the object
+     * ctor
      *
      * @param p_iteration current iteration value
-     * @param p_object return-steppable object
+     * @param p_object void-steppable object
      * @param p_layer layer of the object or null
      */
-    public CReturnSteppable( final int p_iteration, final IReturnSteppable p_object, final ILayer p_layer )
+    public CVoidSteppable( final int p_iteration, final IVoidSteppable p_object, final ILayer p_layer )
     {
         super( p_object );
         m_layer = p_layer;
@@ -75,18 +72,14 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
                 ( (IMultiLayer) m_layer ).beforeStepObject( m_iteration, m_object );
 
 
-            final Collection<?> l_data = m_object.step( m_iteration, m_layer );
-            final Collection<IReturnSteppableTarget> l_targets = m_object.getTargets();
-            if ( ( l_data != null ) && ( l_targets != null ) )
-                for ( final IReturnSteppableTarget l_target : l_targets )
-                    l_target.push( l_data );
+            m_object.step( m_iteration, m_layer );
 
 
             if ( ( m_layer != null ) && ( m_layer instanceof IMultiLayer ) )
                 ( (IMultiLayer) m_layer ).afterStepObject( m_iteration, m_object );
 
         }
-        catch ( final Exception l_exception )
+        catch ( Exception l_exception )
         {
             CLogger.error( l_exception );
         }

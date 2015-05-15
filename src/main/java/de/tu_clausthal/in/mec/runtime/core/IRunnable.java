@@ -21,43 +21,54 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.runtime.thread;
+package de.tu_clausthal.in.mec.runtime.core;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
+
+import java.util.concurrent.Callable;
 
 
 /**
- * wrapper class to reset a layer
+ * runnable class to define objects which is callable and runable for thread-pool
  */
-public class CLayerReset extends IRunnable<ILayer>
+public abstract class IRunnable<T> implements Runnable, Callable<Object>
 {
+
+    /**
+     * object reference
+     */
+    protected final T m_object;
+
 
     /**
      * ctor for setting the object
      *
      * @param p_object performing object
      */
-    public CLayerReset( final ILayer p_object )
+    public IRunnable( final T p_object )
     {
-        super( p_object );
+        if ( p_object == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
+
+        m_object = p_object;
     }
 
+    @Override
+    public final Object call() throws Exception
+    {
+        this.perform();
+        return m_object;
+    }
 
     /**
      * run method to perform the action on runnable and callable interface
      */
-    protected final void perform()
+    protected abstract void perform();
+
+    @Override
+    public final void run()
     {
-        try
-        {
-            m_object.release();
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( CCommon.getResourceString( this, "error", m_object.toString(), l_exception.toString() ) );
-        }
+        this.perform();
     }
 
 }

@@ -45,6 +45,40 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
 
     /**
+     * row name
+     **/
+    private final String m_rowname;
+    /**
+     * column name
+     **/
+    private final String m_colname;
+
+
+    /**
+     * ctor
+     */
+    public CAdjacencyMatrix()
+    {
+        super();
+        m_rowname = "row";
+        m_colname = "col";
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_rowname row name
+     * @param p_colname column name
+     */
+    public CAdjacencyMatrix( final String p_rowname, final String p_colname )
+    {
+        super();
+        m_rowname = p_rowname;
+        m_colname = p_colname;
+    }
+
+
+    /**
      * @param p_row row element
      * @param p_column column element
      * @param p_value value
@@ -90,8 +124,8 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
             for ( final Map.Entry<?, ?> l_item : p_matrix.entrySet() )
             {
                 p_generator.writeStartObject();
-                p_generator.writeObjectField( "row", ( (Pair<?, ?>) l_item.getKey() ).getLeft() );
-                p_generator.writeObjectField( "col", ( (Pair<?, ?>) l_item.getKey() ).getRight() );
+                p_generator.writeObjectField( p_matrix.m_rowname, ( (Pair<?, ?>) l_item.getKey() ).getLeft() );
+                p_generator.writeObjectField( p_matrix.m_colname, ( (Pair<?, ?>) l_item.getKey() ).getRight() );
                 p_generator.writeObjectField( "value", l_item.getValue() );
                 p_generator.writeEndObject();
             }

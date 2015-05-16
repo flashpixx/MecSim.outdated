@@ -12,7 +12,6 @@ $(document).ready(function() {
     ).done(function(){
 
         // singleton instantiation
-        MecSim();
         UI();
 
         // module instantiation

@@ -12,7 +12,6 @@ $(document).ready(function() {
     ).done(function(){
 
         // singleton instantiation
-        Logger();
         MecSim();
         UI();
 
@@ -34,20 +33,20 @@ $(document).ready(function() {
         $("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
 
 
+
         // create logger websockets access
-        MecSimNew.connectWebSocket( "/cconsole/output/log", {
+        MecSimNew.WebSocket( "/cconsole/output/log", {
             "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
             "onmessage" : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
         });
 
-        MecSimNew.connectWebSocket( "/cconsole/error/log", {
+        MecSimNew.WebSocket( "/cconsole/error/log", {
             "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
         });
 
-
         // create inspector websocket access
-        MecSimNew.connectWebSocket( "/cinspector/show", {
+        MecSimNew.WebSocket( "/cinspector/show", {
             "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) {
 
@@ -62,12 +61,10 @@ $(document).ready(function() {
             }
         });
 
-
         // create realtime message-flow websocket access
-        MecSimNew.connectWebSocket( "/cmessagesystem/flow", {
+        MecSimNew.WebSocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) { console.log( $.parseJSON(po_event.data.clearnull()) ); }
         });
-
 
 
     });

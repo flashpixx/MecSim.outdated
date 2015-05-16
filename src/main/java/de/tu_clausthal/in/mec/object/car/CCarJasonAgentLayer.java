@@ -40,9 +40,10 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     private static final long serialVersionUID = 1L;
 
     @Override
-    public final String toString()
+    public final void afterStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
+    )
     {
-        return CCommon.getResourceString( this, "name" );
+
     }
 
     @Override
@@ -53,9 +54,8 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     }
 
     @Override
-    public final void afterStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
-    )
+    public final String toString()
     {
-
+        return CCommon.getResourceString( this, "name" );
     }
 }

@@ -37,13 +37,8 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
     @Override
-    public final int getCalculationIndex()
-    {
-        return 2;
-    }
-
-    @Override
-    public final void step( final int p_currentstep, final ILayer p_layer )
+    public final void afterStepObject( final int p_currentstep, final IWayPoint<ICar> p_object
+    )
     {
 
     }
@@ -56,10 +51,9 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     }
 
     @Override
-    public final void afterStepObject( final int p_currentstep, final IWayPoint<ICar> p_object
-    )
+    public final int getCalculationIndex()
     {
-
+        return 2;
     }
 
     @Override
@@ -67,6 +61,12 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     {
         for ( final IWayPoint<ICar> l_item : m_data )
             l_item.release();
+    }
+
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+
     }
 
     @Override

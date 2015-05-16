@@ -42,13 +42,13 @@ public class CZoneTable<T, S>
 {
 
     /**
-     * map with zone names and zone definition *
-     */
-    private final Map<String, Pair<S, Integer>> m_zones = new HashMap<>();
-    /**
      * check object *
      */
     private final CValidation<T, S> m_validation;
+    /**
+     * map with zone names and zone definition *
+     */
+    private final Map<String, Pair<S, Integer>> m_zones = new HashMap<>();
 
     /**
      * ctor
@@ -64,41 +64,11 @@ public class CZoneTable<T, S>
     }
 
     /**
-     * adds a new zone with the elements
-     *
-     * @param p_zonename unique zone name
-     * @param p_data zone dat
-     */
-    public final void put( final String p_zonename, final S p_data )
-    {
-        m_zones.put( p_zonename, new ImmutablePair<S, Integer>( p_data, new Integer( 0 ) ) );
-    }
-
-    /**
-     * removes a zone
-     *
-     * @param p_zonename zone name
-     */
-    public final void remove( final String p_zonename )
-    {
-        m_zones.remove( p_zonename );
-    }
-
-    /**
      * removes all zones *
      */
     public final void clear()
     {
         m_zones.clear();
-    }
-
-    /**
-     * resets all zones *
-     */
-    public final void reset()
-    {
-        for ( final Pair<S, Integer> l_item : m_zones.values() )
-            l_item.getRight().valueOf( 0 );
     }
 
     /**
@@ -127,6 +97,36 @@ public class CZoneTable<T, S>
         for ( final Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )
             l_table.put( l_item.getKey(), l_item.getValue().getRight() );
         return l_table;
+    }
+
+    /**
+     * adds a new zone with the elements
+     *
+     * @param p_zonename unique zone name
+     * @param p_data zone dat
+     */
+    public final void put( final String p_zonename, final S p_data )
+    {
+        m_zones.put( p_zonename, new ImmutablePair<S, Integer>( p_data, new Integer( 0 ) ) );
+    }
+
+    /**
+     * removes a zone
+     *
+     * @param p_zonename zone name
+     */
+    public final void remove( final String p_zonename )
+    {
+        m_zones.remove( p_zonename );
+    }
+
+    /**
+     * resets all zones *
+     */
+    public final void reset()
+    {
+        for ( final Pair<S, Integer> l_item : m_zones.values() )
+            l_item.getRight().valueOf( 0 );
     }
 
 

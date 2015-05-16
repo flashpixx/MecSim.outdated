@@ -58,6 +58,14 @@ import java.util.Map;
 public class CUI extends Application
 {
     /**
+     * map with name and content
+     */
+    private final Map<String, Node> m_content = new HashMap<>();
+    /**
+     * main stage *
+     */
+    private Stage m_stage;
+    /**
      * tab list *
      */
     private final TabPane m_tabpane = new TabPane();
@@ -65,10 +73,6 @@ public class CUI extends Application
      * map with nodes (of tab content) and pair of dockables and tab
      */
     private final Map<Node, Pair<PopOver, Tab>> m_widget = new HashMap<>();
-    /**
-     * map with name and content
-     */
-    private final Map<String, Node> m_content = new HashMap<>();
     /**
      * hidden event handler
      */
@@ -86,10 +90,6 @@ public class CUI extends Application
             m_tabpane.getTabs().add( m_widget.get( l_node ).getValue() );
         }
     };
-    /**
-     * main stage *
-     */
-    private Stage m_stage;
     /**
      * tab close handler
      */
@@ -117,93 +117,6 @@ public class CUI extends Application
     {
         launch( p_args );
     }
-
-
-    @Override
-    public final void start( final Stage p_stage ) throws Exception
-    {
-        // set via reflection the UI
-        try
-        {
-            if ( CSimulation.getInstance().getUIComponents().getUI() == null )
-                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_ui" ).getSetter().invoke(
-                        CSimulation.getInstance().getUIComponents(), this
-                );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
-
-        this.stageInitialization( p_stage );
-        this.stageLayoutInitialization( p_stage );
-        CBootstrap.afterStageInit( this );
-    }
-
-
-    /**
-     * state initialization
-     *
-     * @param p_stage main stage
-     */
-    private void stageInitialization( final Stage p_stage )
-    {
-        this.setUserAgentStylesheet( null );
-        if ( m_stage == null )
-            m_stage = p_stage;
-
-        p_stage.setTitle( CConfiguration.getInstance().get().<String>get( "manifest/project-name" ) );
-        p_stage.setOnCloseRequest(
-                new EventHandler<WindowEvent>()
-                {
-                    @Override
-                    public void handle( final WindowEvent p_event )
-                    {
-                        CBootstrap.beforeStageShutdown( CUI.this );
-
-                        CConfiguration.getInstance().get().set(
-                                "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth()
-                        );
-                        CConfiguration.getInstance().get().set(
-                                "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight()
-                        );
-
-                        CConfiguration.getInstance().write();
-                    }
-                }
-        );
-    }
-
-
-    /**
-     * stage layout initialization
-     *
-     * @param p_stage main stage
-     */
-    private void stageLayoutInitialization( final Stage p_stage )
-    {
-        // border pane for with menu
-        final BorderPane l_root = new BorderPane();
-
-        final MenuBar l_menubar = new MenuBar();
-        l_menubar.setUseSystemMenuBar( true );
-        l_root.setTop( l_menubar );
-
-        // create tab pane for content and scene (screen size depends on the configuration or the current screen size)
-        l_root.setCenter( m_tabpane );
-        p_stage.setScene(
-                new Scene(
-                        l_root, Math.min(
-                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowwidth" )
-                ), Math.min(
-                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowheight" )
-                )
-                )
-        );
-        p_stage.sizeToScene();
-        p_stage.show();
-    }
-
 
     /**
      * adds a new tab to the UI
@@ -275,6 +188,89 @@ public class CUI extends Application
     public final <T extends Node> T getTyped( final String p_name )
     {
         return (T) m_content.get( p_name );
+    }
+
+    /**
+     * state initialization
+     *
+     * @param p_stage main stage
+     */
+    private void stageInitialization( final Stage p_stage )
+    {
+        this.setUserAgentStylesheet( null );
+        if ( m_stage == null )
+            m_stage = p_stage;
+
+        p_stage.setTitle( CConfiguration.getInstance().get().<String>get( "manifest/project-name" ) );
+        p_stage.setOnCloseRequest(
+                new EventHandler<WindowEvent>()
+                {
+                    @Override
+                    public void handle( final WindowEvent p_event )
+                    {
+                        CBootstrap.beforeStageShutdown( CUI.this );
+
+                        CConfiguration.getInstance().get().set(
+                                "ui/windowwidth", ( (Stage) p_event.getSource() ).getScene().getWidth()
+                        );
+                        CConfiguration.getInstance().get().set(
+                                "ui/windowheight", ( (Stage) p_event.getSource() ).getScene().getHeight()
+                        );
+
+                        CConfiguration.getInstance().write();
+                    }
+                }
+        );
+    }
+
+    /**
+     * stage layout initialization
+     *
+     * @param p_stage main stage
+     */
+    private void stageLayoutInitialization( final Stage p_stage )
+    {
+        // border pane for with menu
+        final BorderPane l_root = new BorderPane();
+
+        final MenuBar l_menubar = new MenuBar();
+        l_menubar.setUseSystemMenuBar( true );
+        l_root.setTop( l_menubar );
+
+        // create tab pane for content and scene (screen size depends on the configuration or the current screen size)
+        l_root.setCenter( m_tabpane );
+        p_stage.setScene(
+                new Scene(
+                        l_root, Math.min(
+                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowwidth" )
+                ), Math.min(
+                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowheight" )
+                )
+                )
+        );
+        p_stage.sizeToScene();
+        p_stage.show();
+    }
+
+    @Override
+    public final void start( final Stage p_stage ) throws Exception
+    {
+        // set via reflection the UI
+        try
+        {
+            if ( CSimulation.getInstance().getUIComponents().getUI() == null )
+                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_ui" ).getSetter().invoke(
+                        CSimulation.getInstance().getUIComponents(), this
+                );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
+
+        this.stageInitialization( p_stage );
+        this.stageLayoutInitialization( p_stage );
+        CBootstrap.afterStageInit( this );
     }
 
 }

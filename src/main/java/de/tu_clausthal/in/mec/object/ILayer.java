@@ -35,12 +35,18 @@ public interface ILayer extends ISteppable, Serializable
 {
 
     /**
+     * returns an index value to defining an order for calculation
+     *
+     * @return index value of ordering (need not be unique)
+     */
+    public int getCalculationIndex();
+
+    /**
      * checks activity of the layer
      *
      * @return boolean of activity
      */
     public boolean isActive();
-
 
     /**
      * activates / deactivates the layer
@@ -48,12 +54,5 @@ public interface ILayer extends ISteppable, Serializable
      * @param p_active activity
      */
     public void setActive( final boolean p_active );
-
-    /**
-     * returns an index value to defining an order for calculation
-     *
-     * @return index value of ordering (need not be unique)
-     */
-    public int getCalculationIndex();
 
 }

@@ -35,13 +35,13 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 public class CTrafficJam implements IWeighting
 {
     /**
-     * graph instance
-     */
-    private final CGraphHopper m_graph;
-    /**
      * active flag *
      */
     private boolean m_active = false;
+    /**
+     * graph instance
+     */
+    private final CGraphHopper m_graph;
 
 
     /**

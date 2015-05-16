@@ -64,19 +64,6 @@ public class CVirtualLocation
         m_locations.put( p_location.hashCode(), p_location );
     }
 
-
-    /**
-     * checks of an exact match
-     *
-     * @param p_session session object
-     * @return boolean of exact existance
-     */
-    public final boolean containsexact( final NanoHTTPD.IHTTPSession p_session )
-    {
-        return m_locations.containsKey( p_session.getUri().hashCode() );
-    }
-
-
     /**
      * checks if a URI is exists (exact and start match)
      *
@@ -95,6 +82,16 @@ public class CVirtualLocation
         return false;
     }
 
+    /**
+     * checks of an exact match
+     *
+     * @param p_session session object
+     * @return boolean of exact existance
+     */
+    public final boolean containsexact( final NanoHTTPD.IHTTPSession p_session )
+    {
+        return m_locations.containsKey( p_session.getUri().hashCode() );
+    }
 
     /**
      * gets the name-based location matched by the URI

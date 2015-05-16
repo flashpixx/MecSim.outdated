@@ -64,27 +64,90 @@ public class CCommon
     }
 
     /**
-     * convert any object data into Json
+     * adds a file extension if necessary
      *
-     * @return Json object
+     * @param p_file file object
+     * @param p_suffix suffix
+     * @return file with extension
      */
-    public static String toJson( final Object p_data )
+    public static File addFileExtension( final File p_file, final String p_suffix )
     {
-        if ( p_data == null )
-            return "{}";
+        return ( p_file.getAbsolutePath().endsWith( p_suffix ) ) ? p_file : new File( p_file + p_suffix );
+    }
 
-        try (
-                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
-        )
-        {
-            new ObjectMapper().configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false ).writer().writeValue( l_stream, p_data );
-            return l_stream.toString( "UTF-8" ).trim();
-        }
-        catch ( final IOException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-        return null;
+    /**
+     * concats an URL with a path
+     *
+     * @param p_base base URL
+     * @param p_string additional path
+     * @return new URL
+     *
+     * @throws URISyntaxException thrown on syntax error
+     * @throws MalformedURLException thrown on malformat
+     */
+    public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    {
+        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
+    }
+
+    /**
+     * converts any collection type into a typed array
+     *
+     * @param p_class class array
+     * @param p_collection collection
+     * @return typed array
+     *
+     * @tparam T collection / array type
+     */
+    public static <T> T[] convertCollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
+    {
+        final T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
+        p_collection.toArray( l_return );
+        return l_return;
+    }
+
+    /**
+     * converts a value into class
+     *
+     * @param p_value string input class
+     * @param p_types type classes
+     * @param p_parser type parser
+     * @return converted type
+     */
+    public static Object convertValue( final String p_value, final Class[] p_types, final TypeParser p_parser )
+    {
+        for ( final Class l_class : p_types )
+            try
+            {
+                return p_parser.parseType( p_value, l_class );
+            }
+            catch ( final TypeParserException l_exception )
+            {
+            }
+
+        return p_value;
+    }
+
+    /**
+     * create a deep-copy of a serializable object
+     *
+     * @param p_object input object
+     * @return deep-copy of object
+     *
+     * @throws IOException throws on serializing error
+     * @throws ClassNotFoundException throws on derserialzing error
+     * @tparam T object type
+     */
+    public static <T> T deepCopy( final T p_object ) throws IOException, ClassNotFoundException
+    {
+        final ByteArrayOutputStream l_transfer = new ByteArrayOutputStream();
+
+        final ObjectOutputStream l_input = new ObjectOutputStream( l_transfer );
+        l_input.writeObject( p_object );
+        l_input.flush();
+
+        final ObjectInputStream l_output = new ObjectInputStream( new ByteArrayInputStream( l_transfer.toByteArray() ) );
+        return (T) l_output.readObject();
     }
 
     /**
@@ -121,27 +184,79 @@ public class CCommon
     }
 
     /**
-     * create a deep-copy of a serializable object
+     * returns a string with hexadecimal bytes
      *
-     * @param p_object input object
-     * @return deep-copy of object
-     *
-     * @throws IOException throws on serializing error
-     * @throws ClassNotFoundException throws on derserialzing error
-     * @tparam T object type
+     * @param p_bytes input bytes
+     * @return hexadecimal string
      */
-    public static <T> T deepCopy( final T p_object ) throws IOException, ClassNotFoundException
+    private static String getBytes2Hex( final byte[] p_bytes )
     {
-        final ByteArrayOutputStream l_transfer = new ByteArrayOutputStream();
+        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
+        for ( final byte l_byte : p_bytes )
+            l_str.append( String.format( "%02x", l_byte & 0xff ) );
 
-        final ObjectOutputStream l_input = new ObjectOutputStream( l_transfer );
-        l_input.writeObject( p_object );
-        l_input.flush();
-
-        final ObjectInputStream l_output = new ObjectInputStream( new ByteArrayInputStream( l_transfer.toByteArray() ) );
-        return (T) l_output.readObject();
+        return l_str.toString();
     }
 
+    /**
+     * checks a value and returns the checkd value or the default value
+     *
+     * @param p_input unchecked value
+     * @param p_default default value
+     * @param p_allowedvalues allowed values
+     * @return checked value
+     *
+     * @tparam T              value type
+     */
+    public static <T> T getCheckedValue( final T p_input, final T p_default, final Collection<T> p_allowedvalues )
+    {
+        if ( p_input == null )
+            return p_default;
+
+        for ( final T l_item : p_allowedvalues )
+            if ( p_input.equals( l_item ) )
+                return l_item;
+
+        return p_default;
+    }
+
+    /**
+     * returns the hash of a string
+     *
+     * @param p_string input string
+     * @param p_hash hash algorithm
+     * @return hexadecimal hash value
+     */
+    public static String getHash( final String p_string, final String p_hash )
+    {
+        try
+        {
+            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( p_string.getBytes() ) );
+        }
+        catch ( final Exception l_exception )
+        {
+        }
+
+        return null;
+    }
+
+    /**
+     * @param p_file input file
+     * @param p_hash hash algorithm
+     * @return hexadecimal hash value
+     */
+    public static String getHash( final File p_file, final String p_hash )
+    {
+        try
+        {
+            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
+        }
+        catch ( final Exception l_exception )
+        {
+        }
+
+        return null;
+    }
 
     /**
      * creates a map from parameters
@@ -165,6 +280,18 @@ public class CCommon
 
 
         return l_return;
+    }
+
+    /**
+     * returns a default value of an empty string
+     *
+     * @param p_input input value
+     * @param p_default default value
+     * @return string
+     */
+    public static String getNonEmptyValue( final String p_input, final String p_default )
+    {
+        return ( ( p_input == null ) || ( p_input.isEmpty() ) ) ? p_default : p_input;
     }
 
     /**
@@ -204,6 +331,33 @@ public class CCommon
     }
 
     /**
+     * returns a default string of the resource file
+     *
+     * @param p_object object for label
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final Object p_object, final String p_label, final Object... p_parameter )
+    {
+        return getResourceString( null, p_object.getClass(), p_label, p_parameter );
+    }
+
+    /**
+     * returns a string of the resource file
+     *
+     * @param p_language language code / empty for default
+     * @param p_object object for label
+     * @param p_label label name of the object
+     * @param p_parameter object array with substitutions
+     * @return resource string
+     */
+    public static String getResourceString( final String p_language, final Object p_object, final String p_label, final Object... p_parameter )
+    {
+        return getResourceString( p_language, p_object.getClass(), p_label, p_parameter );
+    }
+
+    /**
      * returns the label of a class and string to get access to the resource
      *
      * @param p_class class for static calls
@@ -215,73 +369,6 @@ public class CCommon
         return removePackageName( p_class.getCanonicalName().toLowerCase() ).replaceAll( "[^a-zA-Z0-9_\\.]+", "" ) + "." + p_label.toLowerCase().replace(
                 " ", ""
         );
-    }
-
-    /**
-     * remove from a string the system package name
-     *
-     * @param p_package package / class path
-     * @return path without main package name
-     */
-    public static String removePackageName( final String p_package )
-    {
-        return p_package.replace( CConfiguration.getPackage() + ".", "" );
-    }
-
-    /**
-     * converts a value into class
-     *
-     * @param p_value string input class
-     * @param p_types type classes
-     * @param p_parser type parser
-     * @return converted type
-     */
-    public static Object convertValue( final String p_value, final Class[] p_types, final TypeParser p_parser )
-    {
-        for ( final Class l_class : p_types )
-            try
-            {
-                return p_parser.parseType( p_value, l_class );
-            }
-            catch ( final TypeParserException l_exception )
-            {
-            }
-
-        return p_value;
-    }
-
-    /**
-     * checks a value and returns the checkd value or the default value
-     *
-     * @param p_input unchecked value
-     * @param p_default default value
-     * @param p_allowedvalues allowed values
-     * @return checked value
-     *
-     * @tparam T              value type
-     */
-    public static <T> T getCheckedValue( final T p_input, final T p_default, final Collection<T> p_allowedvalues )
-    {
-        if ( p_input == null )
-            return p_default;
-
-        for ( final T l_item : p_allowedvalues )
-            if ( p_input.equals( l_item ) )
-                return l_item;
-
-        return p_default;
-    }
-
-    /**
-     * returns a default value of an empty string
-     *
-     * @param p_input input value
-     * @param p_default default value
-     * @return string
-     */
-    public static String getNonEmptyValue( final String p_input, final String p_default )
-    {
-        return ( ( p_input == null ) || ( p_input.isEmpty() ) ) ? p_default : p_input;
     }
 
     /**
@@ -328,127 +415,37 @@ public class CCommon
     }
 
     /**
-     * concats an URL with a path
+     * remove from a string the system package name
      *
-     * @param p_base base URL
-     * @param p_string additional path
-     * @return new URL
-     *
-     * @throws URISyntaxException thrown on syntax error
-     * @throws MalformedURLException thrown on malformat
+     * @param p_package package / class path
+     * @return path without main package name
      */
-    public static URL concatURL( final URL p_base, final String p_string ) throws MalformedURLException, URISyntaxException
+    public static String removePackageName( final String p_package )
     {
-        return new URL( p_base.toString() + p_string ).toURI().normalize().toURL();
+        return p_package.replace( CConfiguration.getPackage() + ".", "" );
     }
 
     /**
-     * returns a default string of the resource file
+     * convert any object data into Json
      *
-     * @param p_object object for label
-     * @param p_label label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
+     * @return Json object
      */
-    public static String getResourceString( final Object p_object, final String p_label, final Object... p_parameter )
+    public static String toJson( final Object p_data )
     {
-        return getResourceString( null, p_object.getClass(), p_label, p_parameter );
-    }
+        if ( p_data == null )
+            return "{}";
 
-    /**
-     * returns a string of the resource file
-     *
-     * @param p_language language code / empty for default
-     * @param p_object object for label
-     * @param p_label label name of the object
-     * @param p_parameter object array with substitutions
-     * @return resource string
-     */
-    public static String getResourceString( final String p_language, final Object p_object, final String p_label, final Object... p_parameter )
-    {
-        return getResourceString( p_language, p_object.getClass(), p_label, p_parameter );
-    }
-
-    /**
-     * converts any collection type into a typed array
-     *
-     * @param p_class class array
-     * @param p_collection collection
-     * @return typed array
-     *
-     * @tparam T collection / array type
-     */
-    public static <T> T[] convertCollectionToArray( final Class<T[]> p_class, final Collection<T> p_collection )
-    {
-        final T[] l_return = p_class.cast( Array.newInstance( p_class.getComponentType(), p_collection.size() ) );
-        p_collection.toArray( l_return );
-        return l_return;
-    }
-
-
-    /**
-     * adds a file extension if necessary
-     *
-     * @param p_file file object
-     * @param p_suffix suffix
-     * @return file with extension
-     */
-    public static File addFileExtension( final File p_file, final String p_suffix )
-    {
-        return ( p_file.getAbsolutePath().endsWith( p_suffix ) ) ? p_file : new File( p_file + p_suffix );
-    }
-
-
-    /**
-     * returns the hash of a string
-     *
-     * @param p_string input string
-     * @param p_hash hash algorithm
-     * @return hexadecimal hash value
-     */
-    public static String getHash( final String p_string, final String p_hash )
-    {
-        try
+        try (
+                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
+        )
         {
-            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( p_string.getBytes() ) );
+            new ObjectMapper().configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false ).writer().writeValue( l_stream, p_data );
+            return l_stream.toString( "UTF-8" ).trim();
         }
-        catch ( final Exception l_exception )
+        catch ( final IOException l_exception )
         {
+            CLogger.error( l_exception );
         }
-
-        return null;
-    }
-
-    /**
-     * returns a string with hexadecimal bytes
-     *
-     * @param p_bytes input bytes
-     * @return hexadecimal string
-     */
-    private static String getBytes2Hex( final byte[] p_bytes )
-    {
-        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
-        for ( final byte l_byte : p_bytes )
-            l_str.append( String.format( "%02x", l_byte & 0xff ) );
-
-        return l_str.toString();
-    }
-
-    /**
-     * @param p_file input file
-     * @param p_hash hash algorithm
-     * @return hexadecimal hash value
-     */
-    public static String getHash( final File p_file, final String p_hash )
-    {
-        try
-        {
-            return getBytes2Hex( MessageDigest.getInstance( p_hash ).digest( Files.readAllBytes( Paths.get( p_file.toString() ) ) ) );
-        }
-        catch ( final Exception l_exception )
-        {
-        }
-
         return null;
     }
 

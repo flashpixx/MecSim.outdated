@@ -37,14 +37,14 @@ import java.util.Map;
 public abstract class IInspectorDefault extends IUIListener implements IInspector
 {
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * inspect variable *
      */
     @CFieldFilter.CAgent( bind = false )
     private final Map<String, Object> m_inspect = new HashMap<>();
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Override
     @CMethodFilter.CAgent( bind = false )

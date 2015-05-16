@@ -52,10 +52,6 @@ import java.util.List;
 public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
 {
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * data structure - not serializable
      */
     private final transient List<ICar> m_data = new LinkedList<>();
@@ -67,77 +63,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * graph
      */
     private transient CGraphHopper m_graph = new CGraphHopper();
-
-
     /**
-     * enable / disable weight
-     *
-     * @param p_weight weight name
+     * serialize version ID *
      */
-    public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
-    {
-        m_graph.enableDisableWeight( p_weight );
-    }
-
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool active flag
-     */
-    public final boolean isActiveWeight( final CGraphHopper.EWeight p_weight )
-    {
-        return m_graph.isActiveWeight( p_weight );
-    }
-
-    /**
-     * returns a graph weight
-     *
-     * @param p_weight weight name
-     * @return weight object or null
-     */
-    public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
-    {
-        return m_graph.<T>getWeight( p_weight );
-    }
-
-    /**
-     * sets the drive model
-     *
-     * @param p_model model
-     */
-    public final void setDriveModel( final EDrivingModel p_model )
-    {
-        m_drivemodel = p_model;
-    }
-
-    /**
-     * returns the name of the driving model
-     *
-     * @return name
-     */
-    public final EDrivingModel getDrivingModel()
-    {
-        return m_drivemodel;
-    }
-
-    @Override
-    public final int getCalculationIndex()
-    {
-        return 1;
-    }
-
-    @Override
-    public final void step( final int p_currentstep, final ILayer p_layer )
-    {
-
-    }
-
-    @Override
-    public final void beforeStepObject( final int p_currentstep, final ICar p_object )
-    {
-        m_drivemodel.getModel().update( p_currentstep, this.m_graph, p_object );
-    }
+    private static final long serialVersionUID = 1L;
 
     @Override
     public final void afterStepObject( final int p_currentstep, final ICar p_object )
@@ -155,10 +84,24 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public final void release()
+    public final void beforeStepObject( final int p_currentstep, final ICar p_object )
     {
-        super.clear();
-        m_graph.clear();
+        m_drivemodel.getModel().update( p_currentstep, this.m_graph, p_object );
+    }
+
+    @Override
+    public final int getCalculationIndex()
+    {
+        return 1;
+    }
+
+    @Override
+    public final void onDeserializationComplete()
+    {
+        if ( CSimulation.getInstance().getUIComponents().exists() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
+                    (Painter) this
+            );
     }
 
     @Override
@@ -171,12 +114,36 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public final void onDeserializationComplete()
+    public final void release()
     {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
-                    (Painter) this
-            );
+        super.clear();
+        m_graph.clear();
+    }
+
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+
+    }
+
+    /**
+     * enable / disable weight
+     *
+     * @param p_weight weight name
+     */
+    public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
+    {
+        m_graph.enableDisableWeight( p_weight );
+    }
+
+    /**
+     * returns the name of the driving model
+     *
+     * @return name
+     */
+    public final EDrivingModel getDrivingModel()
+    {
+        return m_drivemodel;
     }
 
     /**
@@ -189,10 +156,58 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         return m_graph;
     }
 
+    /**
+     * returns a graph weight
+     *
+     * @param p_weight weight name
+     * @return weight object or null
+     */
+    public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
+    {
+        return m_graph.<T>getWeight( p_weight );
+    }
+
+    /**
+     * checks if a weight is active
+     *
+     * @param p_weight weight name
+     * @return bool active flag
+     */
+    public final boolean isActiveWeight( final CGraphHopper.EWeight p_weight )
+    {
+        return m_graph.isActiveWeight( p_weight );
+    }
+
     @Override
     public final void push( final Collection<ICar> p_data )
     {
         super.addAll( p_data );
+    }
+
+    /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
+     * @bug incomplete
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        m_graph = new CGraphHopper();
+        //m_graph.disableWeight();
+    }
+
+    /**
+     * sets the drive model
+     *
+     * @param p_model model
+     */
+    public final void setDriveModel( final EDrivingModel p_model )
+    {
+        m_drivemodel = p_model;
     }
 
     @Override
@@ -216,22 +231,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         p_stream.writeObject( m_graph.getActiveWeights() );
     }
 
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     * @bug incomplete
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
-
-        m_graph = new CGraphHopper();
-        //m_graph.disableWeight();
-    }
-
 
     /**
      * enum for representating a driving model
@@ -248,13 +247,13 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         AgentNagelSchreckenberg( CCommon.getResourceString( EDrivingModel.class, "agentnagelschreckenberg" ), new CAgentNagelSchreckenberg() );
 
         /**
-         * string representation *
-         */
-        private final String m_text;
-        /**
          * driving model instance
          */
         private final IDriveModel m_model;
+        /**
+         * string representation *
+         */
+        private final String m_text;
 
         /**
          * ctor

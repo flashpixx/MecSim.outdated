@@ -38,18 +38,23 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IVoidSteppable, Collection<T>
 {
     /**
-     * serialize version ID *
+     * flag for activity
      */
-    static final long serialVersionUID = 1L;
-
+    protected boolean m_active = true;
     /**
      * list of data items
      */
     protected final Queue<T> m_data = new ConcurrentLinkedQueue<>();
     /**
-     * flag for activity
+     * serialize version ID *
      */
-    protected boolean m_active = true;
+    static final long serialVersionUID = 1L;
+
+    @Override
+    public int getCalculationIndex()
+    {
+        return Integer.MAX_VALUE;
+    }
 
     @Override
     public final boolean isActive()
@@ -64,14 +69,10 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public int getCalculationIndex()
+    public void release()
     {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
-    {
+        for ( final ISteppable l_item : m_data )
+            l_item.release();
     }
 
     @Override
@@ -153,10 +154,8 @@ public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IV
     }
 
     @Override
-    public void release()
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
-        for ( final ISteppable l_item : m_data )
-            l_item.release();
     }
 
 }

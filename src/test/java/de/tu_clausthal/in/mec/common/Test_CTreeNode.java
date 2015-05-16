@@ -44,33 +44,6 @@ public class Test_CTreeNode
 {
 
     /**
-     * test-case for root node
-     */
-    @Test
-    public void testEmpty()
-    {
-        final CTreeNode<String> l_node = new CTreeNode<>( "root" );
-
-        assertTrue( l_node.isDataNull() );
-        assertFalse( l_node.hasParent() );
-    }
-
-
-    /**
-     * test-case for path-node traversing
-     */
-    @Test
-    public void testPathNodeTraversing()
-    {
-        final CTreeNode<String> l_root = new CTreeNode<>( "root" );
-        l_root.getNode( "sub/subsub" );
-
-        assertTrue( l_root.pathExist( "sub/subsub" ) );
-        assertNotNull( l_root.getNode( "sub/subsub" ) );
-    }
-
-
-    /**
      * test-case for path-data store
      */
     @Test
@@ -110,6 +83,31 @@ public class Test_CTreeNode
             l_data.remove( l_item );
         }
         assertTrue( l_data.isEmpty() );
+    }
+
+    /**
+     * test-case for root node
+     */
+    @Test
+    public void testEmpty()
+    {
+        final CTreeNode<String> l_node = new CTreeNode<>( "root" );
+
+        assertTrue( l_node.isDataNull() );
+        assertFalse( l_node.hasParent() );
+    }
+
+    /**
+     * test-case for path-node traversing
+     */
+    @Test
+    public void testPathNodeTraversing()
+    {
+        final CTreeNode<String> l_root = new CTreeNode<>( "root" );
+        l_root.getNode( "sub/subsub" );
+
+        assertTrue( l_root.pathExist( "sub/subsub" ) );
+        assertNotNull( l_root.getNode( "sub/subsub" ) );
     }
 
 }

@@ -35,6 +35,13 @@ public interface IReturnSteppable<T> extends ISteppable
 {
 
     /**
+     * returns the object which gets the data
+     *
+     * @return objects which gets the data
+     */
+    public Collection<IReturnSteppableTarget<T>> getTargets();
+
+    /**
      * step method with return argument
      *
      * @param p_currentstep current step value
@@ -42,13 +49,5 @@ public interface IReturnSteppable<T> extends ISteppable
      * @return collection with step values
      */
     public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception;
-
-
-    /**
-     * returns the object which gets the data
-     *
-     * @return objects which gets the data
-     */
-    public Collection<IReturnSteppableTarget<T>> getTargets();
 
 }

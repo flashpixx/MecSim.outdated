@@ -78,14 +78,6 @@ public abstract class IUIListener implements MouseListener
         return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
     }
 
-    /**
-     * release of the event handler
-     */
-    public void release()
-    {
-        CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().removeMouseListener( this );
-    }
-
     @Override
     public final void mouseClicked( final MouseEvent p_event )
     {
@@ -96,16 +88,6 @@ public abstract class IUIListener implements MouseListener
     {
         if ( SwingUtilities.isLeftMouseButton( p_event ) )
             this.onClick( p_event, CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
-    }
-
-    /**
-     * click method which is called by a click on the object
-     *
-     * @param p_event mouse event
-     * @param p_viewer viewer
-     */
-    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
-    {
     }
 
     @Override
@@ -121,6 +103,24 @@ public abstract class IUIListener implements MouseListener
     @Override
     public final void mouseExited( final MouseEvent p_event )
     {
+    }
+
+    /**
+     * click method which is called by a click on the object
+     *
+     * @param p_event mouse event
+     * @param p_viewer viewer
+     */
+    public void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
+    }
+
+    /**
+     * release of the event handler
+     */
+    public void release()
+    {
+        CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().removeMouseListener( this );
     }
 
 }

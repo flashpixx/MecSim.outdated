@@ -47,9 +47,9 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer, ISerializable
 {
     /**
-     * serialize version ID *
+     * flag for activity
      */
-    private static final long serialVersionUID = 1L;
+    protected boolean m_active = true;
     /**
      * list of data items
      */
@@ -59,9 +59,31 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      */
     protected boolean m_visible = true;
     /**
-     * flag for activity
+     * serialize version ID *
      */
-    protected boolean m_active = true;
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * method which is called after the object step method is called
+     *
+     * @param p_currentstep current step
+     * @param p_object object
+     */
+    public abstract void afterStepObject( final int p_currentstep, final T p_object );
+
+    /**
+     * method which is called before the object step method is called
+     *
+     * @param p_currentstep current step
+     * @param p_object object
+     */
+    public abstract void beforeStepObject( final int p_currentstep, final T p_object );
+
+    @Override
+    public int getCalculationIndex()
+    {
+        return 0;
+    }
 
     @Override
     public final boolean isActive()
@@ -73,12 +95,6 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final void setActive( final boolean p_active )
     {
         m_active = p_active;
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return 0;
     }
 
     @Override
@@ -100,23 +116,41 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public abstract void step( final int p_currentstep, final ILayer p_layer );
+    public void onDeserializationComplete()
+    {
+        if ( CSimulation.getInstance().getUIComponents().exists() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
+                    (Painter) this
+            );
+    }
 
-    /**
-     * method which is called before the object step method is called
-     *
-     * @param p_currentstep current step
-     * @param p_object object
-     */
-    public abstract void beforeStepObject( final int p_currentstep, final T p_object );
+    @Override
+    public void onDeserializationInitialization()
+    {
+        if ( CSimulation.getInstance().getUIComponents().exists() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().removePainter(
+                    (Painter) this
+            );
+    }
 
-    /**
-     * method which is called after the object step method is called
-     *
-     * @param p_currentstep current step
-     * @param p_object object
-     */
-    public abstract void afterStepObject( final int p_currentstep, final T p_object );
+    @Override
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        if ( !m_visible )
+            return;
+
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
+        for ( final T l_item : this )
+            l_item.paint( p_graphic, p_viewer, p_width, p_height );
+    }
+
+    @Override
+    public void release()
+    {
+        for ( final ISteppable l_item : m_data )
+            l_item.release();
+    }
 
     @Override
     public final int size()
@@ -233,41 +267,6 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public void release()
-    {
-        for ( final ISteppable l_item : m_data )
-            l_item.release();
-    }
-
-    @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        if ( !m_visible )
-            return;
-
-        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( final T l_item : this )
-            l_item.paint( p_graphic, p_viewer, p_width, p_height );
-    }
-
-
-    @Override
-    public void onDeserializationInitialization()
-    {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().removePainter(
-                    (Painter) this
-            );
-    }
-
-    @Override
-    public void onDeserializationComplete()
-    {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
-                    (Painter) this
-            );
-    }
+    public abstract void step( final int p_currentstep, final ILayer p_layer );
 
 }

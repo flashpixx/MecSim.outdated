@@ -67,6 +67,29 @@ public class Test_CLanguageLabels
     private final Pattern m_language = Pattern.compile( "CCommon.getResourceString.+\\)" );
 
     /**
+     * checks all labels within a Java file
+     *
+     * @param p_file
+     */
+    private void checkFile( final Path p_file ) throws IOException
+    {
+        if ( !p_file.toString().endsWith( ".java" ) )
+            return;
+
+        try
+                (
+                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
+                )
+        {
+            new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
+        }
+        catch ( final ParseException l_exception )
+        {
+            fail( l_exception.getMessage() );
+        }
+    }
+
+    /**
      * test-case all resource strings
      */
     @Test
@@ -102,47 +125,97 @@ public class Test_CLanguageLabels
         }
     }
 
-
-    /**
-     * checks all labels within a Java file
-     *
-     * @param p_file
-     */
-    private void checkFile( final Path p_file ) throws IOException
-    {
-        if ( !p_file.toString().endsWith( ".java" ) )
-            return;
-
-        try
-                (
-                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
-                )
-        {
-            new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
-        }
-        catch ( final ParseException l_exception )
-        {
-            fail( l_exception.getMessage() );
-        }
-    }
-
     /**
      * AST visitor class
      */
     private class MyMethodVisitor extends VoidVisitorAdapter
     {
         /**
-         * package name *
+         * inner class name *
          */
-        private String m_package = "";
+        private String m_innerclass = "";
         /**
          * outer class name *
          */
         private String m_outerclass = "";
         /**
-         * inner class name *
+         * package name *
          */
-        private String m_innerclass = "";
+        private String m_package = "";
+
+        /**
+         * checks all languages
+         *
+         * @param p_classname full qualified class name
+         * @param p_label label name
+         */
+        private void checkLabel( final String p_classname, final String p_label )
+        {
+            // construct class object
+            final Class<?> l_class;
+            try
+            {
+                l_class = Class.forName( p_classname );
+            }
+            catch ( final ClassNotFoundException l_exception )
+            {
+                fail( String.format( "class [%s] not found", p_classname ) );
+                return;
+            }
+
+            // check resource
+            for ( final String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
+                try
+                {
+                    final String l_label = CCommon.getResourceString( l_language, l_class, p_label );
+                    assertFalse(
+                            String.format(
+                                    "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language,
+                                    p_classname
+                            ), ( l_label == null ) || ( l_label.isEmpty() )
+                    );
+                }
+                catch ( final IllegalStateException l_exception )
+                {
+                    return;
+                }
+
+            m_labels.add( CCommon.getResourceStringLabel( l_class, p_label ) );
+        }
+
+        /**
+         * gets the class name and label name
+         *
+         * @param p_line input timmed line
+         * @return null or array with class & label name
+         */
+        private String[] getParameter( final String p_line, final String p_package, final String p_outerclass, final String p_innerclass )
+        {
+            final Matcher l_matcher = m_language.matcher( p_line );
+            if ( !l_matcher.find() )
+                return null;
+
+            final String[] l_split = l_matcher.group( 0 ).split( "," );
+            final String[] l_return = new String[2];
+
+            // class name
+            l_return[0] = l_split[0].replace( "CCommon.getResourceString", "" ).replace( "(", "" ).trim();
+            // label name
+            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
+
+            // setup class name
+            if ( "this".equals( l_return[0] ) )
+                l_return[0] = p_package + ClassUtils.PACKAGE_SEPARATOR + p_innerclass;
+            else if ( l_return[0].endsWith( ".class" ) )
+            {
+                l_return[0] = l_return[0].replace( ".class", "" );
+                if ( !l_return[0].contains( ClassUtils.PACKAGE_SEPARATOR ) )
+                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ?
+                            ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
+            }
+
+            return l_return;
+        }
 
         @Override
         public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
@@ -198,7 +271,6 @@ public class Test_CLanguageLabels
                 m_outerclass = l_resetouter;
         }
 
-
         @Override
         public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
         {
@@ -213,81 +285,6 @@ public class Test_CLanguageLabels
         {
             m_package = p_package.getName().toStringWithoutComments();
             super.visit( p_package, p_arg );
-        }
-
-
-        /**
-         * gets the class name and label name
-         *
-         * @param p_line input timmed line
-         * @return null or array with class & label name
-         */
-        private String[] getParameter( final String p_line, final String p_package, final String p_outerclass, final String p_innerclass )
-        {
-            final Matcher l_matcher = m_language.matcher( p_line );
-            if ( !l_matcher.find() )
-                return null;
-
-            final String[] l_split = l_matcher.group( 0 ).split( "," );
-            final String[] l_return = new String[2];
-
-            // class name
-            l_return[0] = l_split[0].replace( "CCommon.getResourceString", "" ).replace( "(", "" ).trim();
-            // label name
-            l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
-
-            // setup class name
-            if ( "this".equals( l_return[0] ) )
-                l_return[0] = p_package + ClassUtils.PACKAGE_SEPARATOR + p_innerclass;
-            else if ( l_return[0].endsWith( ".class" ) )
-            {
-                l_return[0] = l_return[0].replace( ".class", "" );
-                if ( !l_return[0].contains( ClassUtils.PACKAGE_SEPARATOR ) )
-                    l_return[0] = p_package + ( !m_innerclass.equals( m_outerclass ) ?
-                            ClassUtils.PACKAGE_SEPARATOR + m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR : ClassUtils.PACKAGE_SEPARATOR ) + l_return[0];
-            }
-
-            return l_return;
-        }
-
-        /**
-         * checks all languages
-         *
-         * @param p_classname full qualified class name
-         * @param p_label label name
-         */
-        private void checkLabel( final String p_classname, final String p_label )
-        {
-            // construct class object
-            final Class<?> l_class;
-            try
-            {
-                l_class = Class.forName( p_classname );
-            }
-            catch ( final ClassNotFoundException l_exception )
-            {
-                fail( String.format( "class [%s] not found", p_classname ) );
-                return;
-            }
-
-            // check resource
-            for ( final String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
-                try
-                {
-                    final String l_label = CCommon.getResourceString( l_language, l_class, p_label );
-                    assertFalse(
-                            String.format(
-                                    "label [%s] in language [%s] within class [%s] not found", CCommon.getResourceStringLabel( l_class, p_label ), l_language,
-                                    p_classname
-                            ), ( l_label == null ) || ( l_label.isEmpty() )
-                    );
-                }
-                catch ( final IllegalStateException l_exception )
-                {
-                    return;
-                }
-
-            m_labels.add( CCommon.getResourceStringLabel( l_class, p_label ) );
         }
     }
 

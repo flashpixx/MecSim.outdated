@@ -41,14 +41,6 @@ import java.util.Map;
 public class CDistributionDefaultCarFactory extends ICarFactory
 {
     /**
-     * speed distribution
-     */
-    protected final AbstractRealDistribution m_speed;
-    /**
-     * max-speed distribution *
-     */
-    protected final AbstractRealDistribution m_maxspeed;
-    /**
      * acceleration *
      */
     protected final AbstractRealDistribution m_acceleration;
@@ -57,16 +49,24 @@ public class CDistributionDefaultCarFactory extends ICarFactory
      */
     protected final AbstractRealDistribution m_deceleration;
     /**
-     * max-speed distribution *
-     */
-    protected final AbstractRealDistribution m_lingerdistribution;
-    /**
      * inspector map
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( CDistributionDefaultCarFactory.super.inspect() );
         }};
+    /**
+     * max-speed distribution *
+     */
+    protected final AbstractRealDistribution m_lingerdistribution;
+    /**
+     * max-speed distribution *
+     */
+    protected final AbstractRealDistribution m_maxspeed;
+    /**
+     * speed distribution
+     */
+    protected final AbstractRealDistribution m_speed;
 
 
     /**

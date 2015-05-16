@@ -39,13 +39,13 @@ import java.io.PrintStream;
 public class CConsole extends ByteArrayOutputStream
 {
     /**
-     * set with all communicators
-     */
-    private final CSocketStorage m_communicator = new CSocketStorage();
-    /**
      * base URI *
      */
     private final String m_baseuri;
+    /**
+     * set with all communicators
+     */
+    private final CSocketStorage m_communicator = new CSocketStorage();
 
 
     /**
@@ -54,19 +54,6 @@ public class CConsole extends ByteArrayOutputStream
     private CConsole( final String p_baseuri )
     {
         m_baseuri = p_baseuri;
-    }
-
-    /**
-     * factor method to set output stream
-     *
-     * @param p_baseuri base uri
-     * @return console stream
-     */
-    public static CConsole getOutput( final String p_baseuri )
-    {
-        final CConsole l_stream = new CConsole( p_baseuri );
-        System.setOut( new PrintStream( l_stream, true ) );
-        return l_stream;
     }
 
     /**
@@ -83,21 +70,16 @@ public class CConsole extends ByteArrayOutputStream
     }
 
     /**
-     * UI method - register sockets
+     * factor method to set output stream
      *
-     * @return base URI
+     * @param p_baseuri base uri
+     * @return console stream
      */
-    private String web_uribase()
+    public static CConsole getOutput( final String p_baseuri )
     {
-        return m_baseuri;
-    }
-
-    /**
-     * UI method - show log
-     */
-    private void web_dynamic_log( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
-    {
-        m_communicator.handshake( p_action, p_communicator );
+        final CConsole l_stream = new CConsole( p_baseuri );
+        System.setOut( new PrintStream( l_stream, true ) );
+        return l_stream;
     }
 
     @Override
@@ -109,6 +91,24 @@ public class CConsole extends ByteArrayOutputStream
         this.reset();
 
         m_communicator.send( l_data );
+    }
+
+    /**
+     * UI method - show log
+     */
+    private void web_dynamic_log( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
+    {
+        m_communicator.handshake( p_action, p_communicator );
+    }
+
+    /**
+     * UI method - register sockets
+     *
+     * @return base URI
+     */
+    private String web_uribase()
+    {
+        return m_baseuri;
     }
 
 }

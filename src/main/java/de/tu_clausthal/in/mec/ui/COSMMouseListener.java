@@ -60,6 +60,21 @@ class COSMMouseListener extends PanMouseInputListener
     }
 
     /**
+     * checks if a point is in a radius around another
+     *
+     * @param p_click point of the click
+     * @param p_center point of the center
+     * @return bool if the click is within the radius
+     */
+    private static boolean isinBall( final Point p_click, final Point2D p_center )
+    {
+        final double p_xval = p_click.getX() - p_center.getX();
+        final double p_yval = p_click.getY() - p_center.getY();
+
+        return Math.sqrt( p_xval * p_xval + p_yval * p_yval ) <= s_clickradius;
+    }
+
+    /**
      * @bug incomplete - error messages
      * @bug remove singleton & public property
      */
@@ -110,7 +125,6 @@ class COSMMouseListener extends PanMouseInputListener
 
     }
 
-
     @Override
     public void mouseMoved( final MouseEvent p_event )
     {
@@ -132,21 +146,5 @@ class COSMMouseListener extends PanMouseInputListener
             );
 
         l_viewer.repaint();
-    }
-
-
-    /**
-     * checks if a point is in a radius around another
-     *
-     * @param p_click point of the click
-     * @param p_center point of the center
-     * @return bool if the click is within the radius
-     */
-    private static boolean isinBall( final Point p_click, final Point2D p_center )
-    {
-        final double p_xval = p_click.getX() - p_center.getX();
-        final double p_yval = p_click.getY() - p_center.getY();
-
-        return Math.sqrt( p_xval * p_xval + p_yval * p_yval ) <= s_clickradius;
     }
 }

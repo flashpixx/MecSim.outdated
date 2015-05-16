@@ -39,55 +39,6 @@ public class CTrafficEnvironment
 {
 
     /**
-     * UI method - lists all driving model
-     *
-     * @return list wir driving models
-     */
-    private final Map<String, Object> web_static_listdrivemodel()
-    {
-        final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-        final Map<String, Object> l_models = new HashMap<>();
-        for ( final CCarLayer.EDrivingModel l_item : CCarLayer.EDrivingModel.values() )
-            l_models.put( l_item.toString(), CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ), "id", l_item.name() ) );
-
-        return l_models;
-    }
-
-
-    /**
-     * UI method - sets the driving model
-     *
-     * @param p_data input data
-     */
-    private final void web_static_setdrivemodel( final Map<String, Object> p_data )
-    {
-        if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-        if ( !p_data.containsKey( "id" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "nomodelname" ) );
-
-        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).setDriveModel( CCarLayer.EDrivingModel.valueOf( (String) p_data.get( "id" ) ) );
-    }
-
-
-    /**
-     * UI method - list all graph weights
-     *
-     * @return graphweight list
-     */
-    private final Map<String, Object> web_static_listgraphweight()
-    {
-        final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-        final Map<String, Object> l_return = new HashMap<>();
-
-        for ( final CGraphHopper.EWeight l_item : CGraphHopper.EWeight.values() )
-            l_return.put( l_item.toString(), CCommon.getMap( "active", l_layer.isActiveWeight( l_item ), "id", l_item.name() ) );
-
-        return l_return;
-    }
-
-
-    /**
      * UI method - enable graph weight
      *
      * @param p_data input data
@@ -106,6 +57,52 @@ public class CTrafficEnvironment
                         )
                 )
         );
+    }
+
+    /**
+     * UI method - lists all driving model
+     *
+     * @return list wir driving models
+     */
+    private final Map<String, Object> web_static_listdrivemodel()
+    {
+        final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
+        final Map<String, Object> l_models = new HashMap<>();
+        for ( final CCarLayer.EDrivingModel l_item : CCarLayer.EDrivingModel.values() )
+            l_models.put( l_item.toString(), CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ), "id", l_item.name() ) );
+
+        return l_models;
+    }
+
+    /**
+     * UI method - list all graph weights
+     *
+     * @return graphweight list
+     */
+    private final Map<String, Object> web_static_listgraphweight()
+    {
+        final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
+        final Map<String, Object> l_return = new HashMap<>();
+
+        for ( final CGraphHopper.EWeight l_item : CGraphHopper.EWeight.values() )
+            l_return.put( l_item.toString(), CCommon.getMap( "active", l_layer.isActiveWeight( l_item ), "id", l_item.name() ) );
+
+        return l_return;
+    }
+
+    /**
+     * UI method - sets the driving model
+     *
+     * @param p_data input data
+     */
+    private final void web_static_setdrivemodel( final Map<String, Object> p_data )
+    {
+        if ( CSimulation.getInstance().isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nomodelname" ) );
+
+        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).setDriveModel( CCarLayer.EDrivingModel.valueOf( (String) p_data.get( "id" ) ) );
     }
 
 }

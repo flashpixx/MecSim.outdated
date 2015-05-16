@@ -34,14 +34,6 @@ public interface IVirtualLocation
 {
 
     /**
-     * checks an URI if it matches the named-based location
-     *
-     * @param p_uri input URI
-     * @return machting boolean
-     */
-    public boolean match( final String p_uri );
-
-    /**
      * gets the source of the file
      *
      * @param p_session HTTP session
@@ -49,10 +41,17 @@ public interface IVirtualLocation
      */
     public <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable;
 
-
     /**
      * returns an markdown renderer or nul
      */
     public CMarkdownRenderer getMarkDownRenderer();
+
+    /**
+     * checks an URI if it matches the named-based location
+     *
+     * @param p_uri input URI
+     * @return machting boolean
+     */
+    public boolean match( final String p_uri );
 
 }

@@ -80,25 +80,6 @@ public class CFieldBind extends IAction
     }
 
     /**
-     * adds a new bind object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     * @param p_forbiddennames set with forbidden names of the object fields
-     */
-    public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
-    {
-        m_bind.put(
-                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
-                        p_object, CReflection.getClassFields(
-                        p_object.getClass(), c_filter
-                )
-                )
-        );
-    }
-
-
-    /**
      * ctor
      *
      * @param p_name name / annotation of the bind object
@@ -109,28 +90,6 @@ public class CFieldBind extends IAction
     {
         this.push( p_name, p_object, p_forbiddennames );
     }
-
-    /**
-     * adds / binds an object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        this.push( p_name, p_object, null );
-    }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void remove( final String p_name )
-    {
-        m_bind.remove( p_name );
-    }
-
 
     @Override
     public final void act( final Agent p_agent, final Structure p_args )
@@ -158,11 +117,50 @@ public class CFieldBind extends IAction
 
         try
         {
-            l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.convertJasonValuetoJava( l_args.get( 2 ) ) );
+            l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.getJavaValue( l_args.get( 2 ) ) );
         }
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
         }
+    }
+
+    /**
+     * adds / binds an object
+     *
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     */
+    public final void push( final String p_name, final Object p_object )
+    {
+        this.push( p_name, p_object, null );
+    }
+
+    /**
+     * adds a new bind object
+     *
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     * @param p_forbiddennames set with forbidden names of the object fields
+     */
+    public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
+    {
+        m_bind.put(
+                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
+                        p_object, CReflection.getClassFields(
+                        p_object.getClass(), c_filter
+                )
+                )
+        );
+    }
+
+    /**
+     * removes an object from the bind
+     *
+     * @param p_name name
+     */
+    public final void remove( final String p_name )
+    {
+        m_bind.remove( p_name );
     }
 }

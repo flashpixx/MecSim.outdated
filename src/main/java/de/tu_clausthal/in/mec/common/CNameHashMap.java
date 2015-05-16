@@ -70,6 +70,27 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
             );
     }
 
+    /**
+     * traverse into the map
+     *
+     * @param p_path path of the items
+     * @param p_map browsing map
+     * @return object
+     *
+     * @tparam T type
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <T> T get( final CPath p_path, final Map<String, Object> p_map )
+    {
+        if ( p_path.isEmpty() )
+            return null;
+
+        final Object l_return = p_map.get( p_path.get( 0 ) );
+        if ( l_return instanceof Map )
+            return (T) get( p_path.getSubPath( 1 ), (Map) l_return );
+
+        return (T) l_return;
+    }
 
     /**
      * static traverse to set data
@@ -121,74 +142,6 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
             return traverseContainsKey( p_path.getSubPath( 1 ), (Map) l_return );
 
         return p_path.size() == 1;
-    }
-
-    /**
-     * traverse into the map
-     *
-     * @param p_path path of the items
-     * @param p_map browsing map
-     * @return object
-     *
-     * @tparam T type
-     */
-    @SuppressWarnings( "unchecked" )
-    private static <T> T get( final CPath p_path, final Map<String, Object> p_map )
-    {
-        if ( p_path.isEmpty() )
-            return null;
-
-        final Object l_return = p_map.get( p_path.get( 0 ) );
-        if ( l_return instanceof Map )
-            return (T) get( p_path.getSubPath( 1 ), (Map) l_return );
-
-        return (T) l_return;
-    }
-
-    /**
-     * check a key with traversing call
-     *
-     * @param p_key key name
-     * @return boolean of key existance
-     */
-    public boolean traverseContainsKey( final CPath p_key )
-    {
-        return traverseContainsKey( p_key, this );
-    }
-
-    /**
-     * check a key with traversing call
-     *
-     * @param p_key key name
-     * @return boolean of key existance
-     */
-    public boolean traverseContainsKey( final String p_key )
-    {
-        return traverseContainsKey( new CPath( p_key ), this );
-    }
-
-    /**
-     * traverse and sets the value
-     *
-     * @param p_path path
-     * @param p_value value
-     * @tparam T type
-     */
-    public final <T> void set( final CPath p_path, final T p_value )
-    {
-        this.set( p_path, 0, p_value, this );
-    }
-
-    /**
-     * traverse and sets the value
-     *
-     * @param p_path path
-     * @param p_value value
-     * @tparam T type
-     */
-    public final <T> void set( final String p_path, final T p_value )
-    {
-        this.set( new CPath( p_path ), p_value );
     }
 
     /**
@@ -272,6 +225,51 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         };
     }
 
+    /**
+     * traverse and sets the value
+     *
+     * @param p_path path
+     * @param p_value value
+     * @tparam T type
+     */
+    public final <T> void set( final String p_path, final T p_value )
+    {
+        this.set( new CPath( p_path ), p_value );
+    }
+
+    /**
+     * traverse and sets the value
+     *
+     * @param p_path path
+     * @param p_value value
+     * @tparam T type
+     */
+    public final <T> void set( final CPath p_path, final T p_value )
+    {
+        this.set( p_path, 0, p_value, this );
+    }
+
+    /**
+     * check a key with traversing call
+     *
+     * @param p_key key name
+     * @return boolean of key existance
+     */
+    public boolean traverseContainsKey( final String p_key )
+    {
+        return traverseContainsKey( new CPath( p_key ), this );
+    }
+
+    /**
+     * check a key with traversing call
+     *
+     * @param p_key key name
+     * @return boolean of key existance
+     */
+    public boolean traverseContainsKey( final CPath p_key )
+    {
+        return traverseContainsKey( p_key, this );
+    }
 
     /**
      * immutable map

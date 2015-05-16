@@ -40,23 +40,6 @@ import java.util.Map;
  */
 public class CLogger
 {
-    /**
-     * object instance to bind web UI calls *
-     */
-    private static final CLogger s_instance = new CLogger();
-    /**
-     * stack index of traces
-     */
-    private static final int c_stackindex;
-    /**
-     * defines the global log level
-     */
-    private static Level s_level = Level.OFF;
-    /**
-     * define ths flag, that the log is passend to the output
-     */
-    private static boolean s_logoutput = false;
-
     /** initialization **/
     static
     {
@@ -73,21 +56,27 @@ public class CLogger
     }
 
     /**
+     * stack index of traces
+     */
+    private static final int c_stackindex;
+    /**
+     * object instance to bind web UI calls *
+     */
+    private static final CLogger s_instance = new CLogger();
+    /**
+     * defines the global log level
+     */
+    private static Level s_level = Level.OFF;
+    /**
+     * define ths flag, that the log is passend to the output
+     */
+    private static boolean s_logoutput = false;
+
+    /**
      * private ctor - avoid instantiation
      */
     private CLogger()
     {
-    }
-
-
-    /**
-     * returns logger instance
-     *
-     * @return logger instance
-     */
-    public static CLogger getInstance()
-    {
-        return s_instance;
     }
 
     /**
@@ -108,30 +97,6 @@ public class CLogger
                 p_level
         ).activate();
         Configurator.currentConfig().formatPattern( "{message}" ).activate();
-    }
-
-    /**
-     * adds a warn message
-     */
-    public static void warn()
-    {
-        warn( null, true );
-    }
-
-    /**
-     * adds a warn message
-     *
-     * @param p_data log data
-     * @param p_write boolean on true message is written
-     * @return input data
-     *
-     * @tparam input data type
-     */
-    public static <T> T warn( final T p_data, final boolean p_write )
-    {
-        if ( p_write )
-            Logger.warn( createLogData( Level.WARNING, p_data ) );
-        return p_data;
     }
 
     /**
@@ -193,107 +158,51 @@ public class CLogger
     }
 
     /**
-     * gets the current invoker FQN method name
-     *
-     * @return FQN method name
+     * adds a debug message
      */
-    private static String getInvokingMethodNameFqn( final int p_offset )
+    public static void debug()
     {
-        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
-        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
-
-        return l_invokingClassName + "." + l_invokingMethodName;
+        debug( null, true );
     }
 
     /**
-     * pad / cut string of a define length
+     * adds a debug message
      *
-     * @param p_input input string
-     * @param p_filler fill character
-     * @param p_length max string length
-     * @return modified string
+     * @param p_data log data
+     * @param p_write boolean on true message is written
+     * @return input data
+     *
+     * @tparam input data type
      */
-    private static String padCut( final String p_input, final char p_filler, final int p_length )
+    public static <T> T debug( final T p_data, final boolean p_write )
     {
-        if ( p_length < 1 )
-            return p_input;
-        if ( p_input.length() < p_length )
-            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
-
-        return p_input.substring( 0, p_length );
+        if ( p_write )
+            Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        return p_data;
     }
 
     /**
-     * gets the current FQN method name
-     *
-     * @return FQN method name
-     */
-    private static String getCurrentMethodNameFqn( final int p_offset )
-    {
-        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
-        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
-
-        return l_currentClassName + "." + l_currentMethodName;
-    }
-
-    /**
-     * gets the current line number
-     *
-     * @return number
-     */
-    private static int getCurrentLineNumber( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
-    }
-
-    /**
-     * gets the current invoker class name
-     *
-     * @return class name
-     */
-    private static String getInvokingClassName( final int p_offset )
-    {
-        return getCurrentClassName( p_offset + 1 );
-    }
-
-    /**
-     * gets the current invoker method name
-     *
-     * @return method name
-     */
-    private static String getInvokingMethodName( final int p_offset )
-    {
-        return getCurrentMethodName( p_offset + 1 );
-    }
-
-    /**
-     * gets the current class name
-     *
-     * @return class name
-     */
-    private static String getCurrentClassName( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
-    }
-
-    /**
-     * gets the current method name
-     *
-     * @return method name
-     */
-    private static String getCurrentMethodName( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
-    }
-
-    /**
-     * adds a warn message *
+     * adds a debug message
      *
      * @param p_write boolean on true message is written
      */
-    public static void warn( final boolean p_write )
+    public static void debug( final boolean p_write )
     {
-        warn( null, p_write );
+        debug( null, p_write );
+    }
+
+    /**
+     * adds a debug message
+     *
+     * @param p_data log data
+     * @return input data
+     *
+     * @tparam input data type
+     */
+    public static <T> T debug( final T p_data )
+    {
+        debug( p_data, true );
+        return p_data;
     }
 
     /**
@@ -345,6 +254,92 @@ public class CLogger
     }
 
     /**
+     * gets the current class name
+     *
+     * @return class name
+     */
+    private static String getCurrentClassName( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
+    }
+
+    /**
+     * gets the current line number
+     *
+     * @return number
+     */
+    private static int getCurrentLineNumber( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
+    }
+
+    /**
+     * gets the current method name
+     *
+     * @return method name
+     */
+    private static String getCurrentMethodName( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
+    }
+
+    /**
+     * gets the current FQN method name
+     *
+     * @return FQN method name
+     */
+    private static String getCurrentMethodNameFqn( final int p_offset )
+    {
+        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
+        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
+
+        return l_currentClassName + "." + l_currentMethodName;
+    }
+
+    /**
+     * returns logger instance
+     *
+     * @return logger instance
+     */
+    public static CLogger getInstance()
+    {
+        return s_instance;
+    }
+
+    /**
+     * gets the current invoker class name
+     *
+     * @return class name
+     */
+    private static String getInvokingClassName( final int p_offset )
+    {
+        return getCurrentClassName( p_offset + 1 );
+    }
+
+    /**
+     * gets the current invoker method name
+     *
+     * @return method name
+     */
+    private static String getInvokingMethodName( final int p_offset )
+    {
+        return getCurrentMethodName( p_offset + 1 );
+    }
+
+    /**
+     * gets the current invoker FQN method name
+     *
+     * @return FQN method name
+     */
+    private static String getInvokingMethodNameFqn( final int p_offset )
+    {
+        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
+        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
+
+        return l_invokingClassName + "." + l_invokingMethodName;
+    }
+
+    /**
      * adds an info message
      */
     public static void info()
@@ -379,37 +374,17 @@ public class CLogger
     }
 
     /**
-     * adds a debug message
-     */
-    public static void debug()
-    {
-        debug( null, true );
-    }
-
-    /**
-     * adds a debug message
+     * adds an info message
      *
      * @param p_data log data
-     * @param p_write boolean on true message is written
      * @return input data
      *
      * @tparam input data type
      */
-    public static <T> T debug( final T p_data, final boolean p_write )
+    public static <T> T info( final T p_data )
     {
-        if ( p_write )
-            Logger.debug( createLogData( Level.DEBUG, p_data ) );
+        info( p_data, true );
         return p_data;
-    }
-
-    /**
-     * adds a debug message
-     *
-     * @param p_write boolean on true message is written
-     */
-    public static void debug( final boolean p_write )
-    {
-        debug( null, p_write );
     }
 
     /**
@@ -452,23 +427,69 @@ public class CLogger
     }
 
     /**
-     * UI method - returns the loger definition
+     * adds a output message
      *
-     * @return map with definition
+     * @param p_data log data
+     * @return input data
+     *
+     * @tparam input data type
      */
-    private Map<String, Object> web_static_configuration()
+    public static <T> T out( final T p_data )
     {
-        return CCommon.getMap( "level", s_level, "outputconsole", s_logoutput );
+        out( p_data, true );
+        return p_data;
     }
 
     /**
-     * UI method - log warn
+     * pad / cut string of a define length
      *
-     * @param p_data UI input data
+     * @param p_input input string
+     * @param p_filler fill character
+     * @param p_length max string length
+     * @return modified string
      */
-    private void web_static_warn( final Map<String, Object> p_data )
+    private static String padCut( final String p_input, final char p_filler, final int p_length )
     {
-        CLogger.warn( p_data );
+        if ( p_length < 1 )
+            return p_input;
+        if ( p_input.length() < p_length )
+            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
+
+        return p_input.substring( 0, p_length );
+    }
+
+    /**
+     * adds a warn message
+     */
+    public static void warn()
+    {
+        warn( null, true );
+    }
+
+    /**
+     * adds a warn message
+     *
+     * @param p_data log data
+     * @param p_write boolean on true message is written
+     * @return input data
+     *
+     * @tparam input data type
+     */
+    public static <T> T warn( final T p_data, final boolean p_write )
+    {
+        if ( p_write )
+            Logger.warn( createLogData( Level.WARNING, p_data ) );
+        return p_data;
+    }
+
+    /**
+     * adds a warn message *
+     *
+     * @param p_write boolean on true message is written
+     */
+    public static void warn( final boolean p_write )
+    {
+        warn( null, p_write );
     }
 
     /**
@@ -486,37 +507,13 @@ public class CLogger
     }
 
     /**
-     * UI method - log error
+     * UI method - returns the loger definition
      *
-     * @param p_data UI input data
+     * @return map with definition
      */
-    private void web_static_error( final Map<String, Object> p_data )
+    private Map<String, Object> web_static_configuration()
     {
-        CLogger.info( p_data );
-    }
-
-    /**
-     * adds an info message
-     *
-     * @param p_data log data
-     * @return input data
-     *
-     * @tparam input data type
-     */
-    public static <T> T info( final T p_data )
-    {
-        info( p_data, true );
-        return p_data;
-    }
-
-    /**
-     * UI method - log info
-     *
-     * @param p_data UI input data
-     */
-    private void web_static_info( final Map<String, Object> p_data )
-    {
-        CLogger.info( p_data );
+        return CCommon.getMap( "level", s_level, "outputconsole", s_logoutput );
     }
 
     /**
@@ -530,17 +527,23 @@ public class CLogger
     }
 
     /**
-     * adds a debug message
+     * UI method - log error
      *
-     * @param p_data log data
-     * @return input data
-     *
-     * @tparam input data type
+     * @param p_data UI input data
      */
-    public static <T> T debug( final T p_data )
+    private void web_static_error( final Map<String, Object> p_data )
     {
-        debug( p_data, true );
-        return p_data;
+        CLogger.info( p_data );
+    }
+
+    /**
+     * UI method - log info
+     *
+     * @param p_data UI input data
+     */
+    private void web_static_info( final Map<String, Object> p_data )
+    {
+        CLogger.info( p_data );
     }
 
     /**
@@ -554,17 +557,13 @@ public class CLogger
     }
 
     /**
-     * adds a output message
+     * UI method - log warn
      *
-     * @param p_data log data
-     * @return input data
-     *
-     * @tparam input data type
+     * @param p_data UI input data
      */
-    public static <T> T out( final T p_data )
+    private void web_static_warn( final Map<String, Object> p_data )
     {
-        out( p_data, true );
-        return p_data;
+        CLogger.warn( p_data );
     }
 
 }

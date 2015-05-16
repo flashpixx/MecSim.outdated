@@ -35,6 +35,10 @@ import com.graphhopper.util.EdgeIteratorState;
 public class CSpeedUp implements IWeighting
 {
     /**
+     * active flag *
+     */
+    private boolean m_active = false;
+    /**
      * flag encoder for edge data
      */
     private final FlagEncoder m_encoder;
@@ -42,10 +46,6 @@ public class CSpeedUp implements IWeighting
      * max speed value *
      */
     private final double m_maxSpeed;
-    /**
-     * active flag *
-     */
-    private boolean m_active = false;
 
 
     /**

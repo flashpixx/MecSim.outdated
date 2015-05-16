@@ -36,33 +36,6 @@ public class CNames
 {
 
     /**
-     * creates a full name
-     *
-     * @param p_object object
-     * @return fqn path
-     */
-    public static CPath getName( final Object p_object )
-    {
-        return getName( p_object, p_object.toString() );
-    }
-
-
-    /**
-     * creates a full name
-     *
-     * @param p_object object
-     * @param p_name name
-     * @return fqn path
-     */
-    public static CPath getName( final Object p_object, final String p_name )
-    {
-        final CPath l_path = getGroup( p_object );
-        l_path.pushback( p_name );
-        return l_path;
-    }
-
-
-    /**
      * creates the group path
      *
      * @param p_object object
@@ -78,6 +51,31 @@ public class CNames
             return new CPath( "car" );
 
         return new CPath( "unkown" );
+    }
+
+    /**
+     * creates a full name
+     *
+     * @param p_object object
+     * @param p_name name
+     * @return fqn path
+     */
+    public static CPath getName( final Object p_object, final String p_name )
+    {
+        final CPath l_path = getGroup( p_object );
+        l_path.pushback( p_name );
+        return l_path;
+    }
+
+    /**
+     * creates a full name
+     *
+     * @param p_object object
+     * @return fqn path
+     */
+    public static CPath getName( final Object p_object )
+    {
+        return getName( p_object, p_object.toString() );
     }
 
 }

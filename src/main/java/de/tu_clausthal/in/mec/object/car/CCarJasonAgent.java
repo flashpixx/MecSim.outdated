@@ -137,6 +137,13 @@ public class CCarJasonAgent extends CDefaultCar
 
     @Override
     @CMethodFilter.CAgent( bind = false )
+    public final Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
     public final void release()
     {
         super.release();
@@ -145,13 +152,6 @@ public class CCarJasonAgent extends CDefaultCar
             l_agent.release();
             CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).remove( l_agent );
         }
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public final Map<String, Object> inspect()
-    {
-        return m_inspect;
     }
 
     @Override

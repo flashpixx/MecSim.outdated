@@ -37,17 +37,17 @@ public class CInternalEmpty extends DefaultInternalAction
 {
 
     /**
-     * default result value *
+     * maximum number of arguments *
      */
-    private final boolean m_result;
+    private final int m_maximumarguments;
     /**
      * minimum number of arguments *
      */
     private final int m_minimumarguments;
     /**
-     * maximum number of arguments *
+     * default result value *
      */
-    private final int m_maximumarguments;
+    private final boolean m_result;
 
 
     /**

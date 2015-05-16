@@ -60,10 +60,6 @@ import java.util.jar.Manifest;
 public class CConfiguration
 {
     /**
-     * name of the main package
-     */
-    private static final String c_mainpackage = "de.tu_clausthal.in.mec";
-    /**
      * name of the configuration file
      */
     private static final String c_filename = "config.json";
@@ -72,12 +68,9 @@ public class CConfiguration
      */
     private static final CConfiguration c_instance = new CConfiguration();
     /**
-     * location map
+     * name of the main package
      */
-    private final Map<String, File> m_location = new HashMap<String, File>()
-    {{
-            put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
-        }};
+    private static final String c_mainpackage = "de.tu_clausthal.in.mec";
     /**
      * configuration map
      */
@@ -363,6 +356,13 @@ public class CConfiguration
             );
         }};
     /**
+     * location map
+     */
+    private final Map<String, File> m_location = new HashMap<String, File>()
+    {{
+            put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
+        }};
+    /**
      * UTF-8 property reader
      */
     private ResourceBundle.Control m_reader = new UTF8Control();
@@ -388,29 +388,6 @@ public class CConfiguration
     }
 
     /**
-     * creates the default directories relative to the root dir
-     */
-    private void setDefaultDirectories()
-    {
-        for ( final String l_item : new String[]{"mas", "jar", "www"} )
-            m_location.put( l_item, this.getBasePath( l_item ) );
-    }
-
-    /**
-     * returns a path relative to the root directory
-     *
-     * @param p_dir directories
-     * @return full file
-     */
-    private File getBasePath( final String... p_dir )
-    {
-        if ( !m_location.containsKey( "root" ) )
-            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
-
-        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
-    }
-
-    /**
      * singleton get instance method
      *
      * @return configuration instance
@@ -429,6 +406,16 @@ public class CConfiguration
     }
 
     /**
+     * creates the configuration directories
+     */
+    private void createDirectories() throws IOException
+    {
+        for ( final File l_dir : m_location.values() )
+            if ( !l_dir.exists() && !l_dir.mkdirs() )
+                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
+    }
+
+    /**
      * returns the data items of the configuration
      *
      * @return configuration map
@@ -436,6 +423,35 @@ public class CConfiguration
     public CNameHashMap.CImmutable get()
     {
         return m_configuration;
+    }
+
+    /**
+     * returns a path relative to the root directory
+     *
+     * @param p_dir directories
+     * @return full file
+     */
+    private File getBasePath( final String... p_dir )
+    {
+        if ( !m_location.containsKey( "root" ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
+
+        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
+    }
+
+    /**
+     * returns the location of a directory
+     *
+     * @param p_name name of the location
+     * @param p_varargs path components after the directory
+     * @return full directory
+     */
+    public File getLocation( final String p_name, final String... p_varargs )
+    {
+        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
+            return m_location.get( p_name );
+
+        return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
 
     /**
@@ -468,71 +484,6 @@ public class CConfiguration
 
         Locale.setDefault( l_locale );
         return ResourceBundle.getBundle( "language.locals", l_locale, m_reader );
-    }
-
-    /**
-     * sets the config dir
-     *
-     * @param p_dir directory
-     */
-    public void setConfigDir( final File p_dir )
-    {
-        m_location.put( "root", p_dir );
-        this.setDefaultDirectories();
-        try
-        {
-            this.createDirectories();
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
-    }
-
-    /**
-     * creates the configuration directories
-     */
-    private void createDirectories() throws IOException
-    {
-        for ( final File l_dir : m_location.values() )
-            if ( !l_dir.exists() && !l_dir.mkdirs() )
-                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
-    }
-
-    /**
-     * write method of the configuration
-     */
-    public void write()
-    {
-        try
-        {
-            this.createDirectories();
-
-            // remove manifest from config
-            final Map<String, Object> l_output = m_configuration.toHashMap();
-            l_output.remove( "manifest" );
-
-            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( l_output ) );
-        }
-        catch ( final IOException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-    }
-
-    /**
-     * returns the location of a directory
-     *
-     * @param p_name name of the location
-     * @param p_varargs path components after the directory
-     * @return full directory
-     */
-    public File getLocation( final String p_name, final String... p_varargs )
-    {
-        if ( ( p_varargs == null ) || ( p_varargs.length == 0 ) )
-            return m_location.get( p_name );
-
-        return new File( m_location.get( p_name ) + File.separator + StringUtils.join( p_varargs, File.separator ) );
     }
 
     /**
@@ -585,6 +536,24 @@ public class CConfiguration
         return true;
     }
 
+    /**
+     * sets the config dir
+     *
+     * @param p_dir directory
+     */
+    public void setConfigDir( final File p_dir )
+    {
+        m_location.put( "root", p_dir );
+        this.setDefaultDirectories();
+        try
+        {
+            this.createDirectories();
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
+    }
 
     /**
      * sets the configuration values with semantic check
@@ -639,6 +608,15 @@ public class CConfiguration
     }
 
     /**
+     * creates the default directories relative to the root dir
+     */
+    private void setDefaultDirectories()
+    {
+        for ( final String l_item : new String[]{"mas", "jar", "www"} )
+            m_location.put( l_item, this.getBasePath( l_item ) );
+    }
+
+    /**
      * UI method - read configuration
      *
      * @return data
@@ -647,7 +625,6 @@ public class CConfiguration
     {
         return m_configuration;
     }
-
 
     /**
      * UI method - set data
@@ -663,6 +640,26 @@ public class CConfiguration
         this.setConfiguration( new CNameHashMap.CImmutable( p_data ) );
     }
 
+    /**
+     * write method of the configuration
+     */
+    public void write()
+    {
+        try
+        {
+            this.createDirectories();
+
+            // remove manifest from config
+            final Map<String, Object> l_output = m_configuration.toHashMap();
+            l_output.remove( "manifest" );
+
+            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( l_output ) );
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
 
     /**
      * class to read UTF-8 encoded property file
@@ -722,17 +719,6 @@ public class CConfiguration
     protected abstract class ICheck<T>
     {
         /**
-         * complement of ccorrect check
-         *
-         * @param p_value check value
-         * @return boolean
-         */
-        public boolean isWrong( final T p_value )
-        {
-            return !this.isCorrect( p_value );
-        }
-
-        /**
          * check of a correct value
          *
          * @param p_value value
@@ -741,6 +727,17 @@ public class CConfiguration
         public boolean isCorrect( final T p_value )
         {
             return true;
+        }
+
+        /**
+         * complement of ccorrect check
+         *
+         * @param p_value check value
+         * @return boolean
+         */
+        public boolean isWrong( final T p_value )
+        {
+            return !this.isCorrect( p_value );
         }
     }
 
@@ -787,13 +784,13 @@ public class CConfiguration
     protected class CInRange extends ICheck<Number>
     {
         /**
-         * upper bound *
-         */
-        private final Number m_upper;
-        /**
          * lower bound *
          */
         private final Number m_lower;
+        /**
+         * upper bound *
+         */
+        private final Number m_upper;
 
         /**
          * ctor - set upper & lower bound

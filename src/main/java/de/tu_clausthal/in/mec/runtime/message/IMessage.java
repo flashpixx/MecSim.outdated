@@ -43,6 +43,10 @@ public interface IMessage<T> extends Serializable
      */
     public T getData();
 
+    /**
+     * returns the source of the message
+     */
+    public CPath getSource();
 
     /**
      * a name if the message
@@ -50,13 +54,6 @@ public interface IMessage<T> extends Serializable
      * @return name
      */
     public String getTitle();
-
-
-    /**
-     * returns the source of the message
-     */
-    public CPath getSource();
-
 
     /**
      * decrements the time-to-live value and returns the decrement value and on zero the message is discarded

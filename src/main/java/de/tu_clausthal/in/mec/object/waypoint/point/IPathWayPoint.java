@@ -89,9 +89,12 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    public Collection<GeoPosition> getNeighbor()
     {
-        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
+        final Collection<GeoPosition> l_neighbor = new HashSet<>();
+        for ( final IPathWayPoint<T, P, N> l_item : m_adjacency.keySet() )
+            l_neighbor.add( l_item.getPosition() );
+        return l_neighbor;
     }
 
     @Override
@@ -115,18 +118,15 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public Collection<GeoPosition> getNeighbor()
-    {
-        final Collection<GeoPosition> l_neighbor = new HashSet<>();
-        for ( final IPathWayPoint<T, P, N> l_item : m_adjacency.keySet() )
-            l_neighbor.add( l_item.getPosition() );
-        return l_neighbor;
-    }
-
-    @Override
     public Map<String, Object> inspect()
     {
         return super.inspect();
+    }
+
+    @Override
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
     }
 
     /**
@@ -135,10 +135,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public class CWeightMap extends HashMap<IPathWayPoint<T, P, N>, Double>
     {
         /**
-         * serialize version ID *
-         */
-        private static final long serialVersionUID = 1L;
-        /**
          * map to resolve the buckets for checking *
          */
         final Map<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> m_buckets = new HashMap<>();
@@ -146,6 +142,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          * max value *
          */
         private final double m_max;
+        /**
+         * serialize version ID *
+         */
+        private static final long serialVersionUID = 1L;
 
         /**
          * ctor
@@ -165,6 +165,16 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             m_max = p_max;
         }
 
+        /**
+         * update the bucket map
+         */
+        private void bucketupdate()
+        {
+            double l_value = 0;
+            m_buckets.clear();
+            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
+                m_buckets.put( new ImmutablePair<>( l_value, l_value += l_item.getValue() ), l_item.getKey() );
+        }
 
         /**
          * maximum value
@@ -175,7 +185,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         {
             return m_max;
         }
-
 
         /**
          * returns the node depends on the weight
@@ -276,17 +285,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public Set<Entry<IPathWayPoint<T, P, N>, Double>> entrySet()
         {
             return this.entrySet();
-        }
-
-        /**
-         * update the bucket map
-         */
-        private void bucketupdate()
-        {
-            double l_value = 0;
-            m_buckets.clear();
-            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
-                m_buckets.put( new ImmutablePair<>( l_value, l_value += l_item.getValue() ), l_item.getKey() );
         }
     }
 

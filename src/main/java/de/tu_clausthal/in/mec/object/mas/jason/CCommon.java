@@ -66,6 +66,37 @@ public class CCommon
         return p_input.replaceAll( "\"", "" ).replaceAll( "'", "" );
     }
 
+    /**
+     * converts Jason Term to Java types to complex types e.g. List -> Geoposition
+     *
+     * @param p_term Jason term
+     * @param p_argumenttypes type list with the target type
+     * @return Java value
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Object getJavaValue( final Term p_term, final Class<?> p_argumenttypes ) throws NoValueException
+    {
+        if ( GeoPosition.class.equals( p_argumenttypes ) )
+        {
+            if ( ( !p_term.isList() ) || ( ( (ListTerm) p_term ).size() != 2 ) )
+                throw new IllegalArgumentException(
+                        de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                                CCommon.class, "jasontocustomjava", GeoPosition.class.getCanonicalName(), p_term
+                        )
+                );
+
+            return new GeoPosition(
+                    ( (Number) getJavaValue( ( (ListTerm) p_term ).get( 0 ) ) ).doubleValue(), ( (Number) getJavaValue(
+                    ( (ListTerm) p_term ).get( 1 )
+            ) ).doubleValue()
+            );
+        }
+
+        if ( p_argumenttypes.isInstance( Number.class ) )
+            return getJavaValue( ( (NumberTerm) p_term ).solve(), p_argumenttypes );
+
+        return getJavaValue( p_term );
+    }
 
     /**
      * Jason does not support Java-type binding, so an explicit converting of Jason types to the corresponding Java type is needed
@@ -75,13 +106,14 @@ public class CCommon
      *
      * @throws NoValueException on empty value
      */
-    public static Object convertJasonValuetoJava( final Term p_term ) throws NoValueException
+    @SuppressWarnings( "unchecked" )
+    public static Object getJavaValue( final Term p_term ) throws NoValueException
     {
         if ( p_term.isList() )
         {
             final List<Object> l_return = new LinkedList<>();
             for ( final Term l_term : (ListTerm) p_term )
-                l_return.add( convertJasonValuetoJava( l_term ) );
+                l_return.add( getJavaValue( l_term ) );
             return l_return;
         }
 
@@ -94,7 +126,43 @@ public class CCommon
         if ( p_term.isAtom() )
             return clearString( p_term.toString() );
 
-        throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "jasonvaluetype" ) );
+        throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "jasontodefaultjava", p_term ) );
+    }
+
+    /**
+     * converts a Double into a number object with correct type structure
+     *
+     * @param p_value double value
+     * @param p_class class that is the target type
+     * @return converted boxed-type
+     */
+    private static Number getJavaValue( final Double p_value, final Class<?> p_class )
+    {
+        if ( ( p_class.equals( Byte.class ) ) || ( p_class.equals( Byte.TYPE ) ) )
+            return new Byte( p_value.byteValue() );
+        if ( ( p_class.equals( Double.class ) ) || ( p_class.equals( Double.TYPE ) ) )
+            return p_value;
+        if ( ( p_class.equals( Float.class ) ) || ( p_class.equals( Float.TYPE ) ) )
+            return new Float( p_value.floatValue() );
+        if ( ( p_class.equals( Integer.class ) ) || ( p_class.equals( Integer.TYPE ) ) )
+            return new Integer( p_value.intValue() );
+        if ( ( p_class.equals( Long.class ) ) || ( p_class.equals( Long.TYPE ) ) )
+            return new Long( p_value.longValue() );
+        if ( ( p_class.equals( Short.class ) ) || ( p_class.equals( Short.TYPE ) ) )
+            return new Short( p_value.shortValue() );
+
+        throw new IllegalArgumentException( "class unknown" );
+    }
+
+    /**
+     * returns an atom
+     *
+     * @param p_atom name of the atom
+     * @return literal object
+     */
+    private static Literal getLiteral( final String p_atom )
+    {
+        return ASSyntax.createAtom( getLiteralName( p_atom ) );
     }
 
     /**
@@ -142,31 +210,6 @@ public class CCommon
         return ASSyntax.createLiteral( l_name, getTerm( p_data ) );
     }
 
-
-    /**
-     * convert data type into Jason term
-     *
-     * @param p_data
-     * @return Jason term
-     */
-    private static Term getTerm( final Object p_data )
-    {
-        // null value into atom
-        if ( p_data == null )
-            return ASSyntax.createAtom( "" );
-
-        // number value into number
-        if ( p_data instanceof Number )
-            return ASSyntax.createNumber( ( (Number) p_data ).doubleValue() );
-
-        // collection into term list
-        if ( p_data instanceof Collection )
-            return ASSyntax.createList( (Collection) p_data );
-
-        return ASSyntax.createString( p_data.toString() );
-    }
-
-
     /**
      * returns an atom within in a literal
      *
@@ -203,39 +246,27 @@ public class CCommon
     }
 
     /**
-     * returns an atom
+     * convert data type into Jason term
      *
-     * @param p_atom name of the atom
-     * @return literal object
+     * @param p_data Jason Term value
+     * @return Jason term
      */
-    public static Literal getLiteral( final String p_atom )
+    @SuppressWarnings( "unchecked" )
+    private static Term getTerm( final Object p_data )
     {
-        return ASSyntax.createAtom( getLiteralName( p_atom ) );
-    }
+        // null value into atom
+        if ( p_data == null )
+            return ASSyntax.createAtom( "" );
 
-    /**
-     * converts a Double into a number
-     *
-     * @param p_class class that is the target type
-     * @param p_value double value
-     * @return converted boxed-type
-     */
-    public static Number convertNumber( final Class<?> p_class, final Double p_value )
-    {
-        if ( ( p_class.equals( Byte.class ) ) || ( p_class.equals( Byte.TYPE ) ) )
-            return new Byte( p_value.byteValue() );
-        if ( ( p_class.equals( Double.class ) ) || ( p_class.equals( Double.TYPE ) ) )
-            return p_value;
-        if ( ( p_class.equals( Float.class ) ) || ( p_class.equals( Float.TYPE ) ) )
-            return new Float( p_value.floatValue() );
-        if ( ( p_class.equals( Integer.class ) ) || ( p_class.equals( Integer.TYPE ) ) )
-            return new Integer( p_value.intValue() );
-        if ( ( p_class.equals( Long.class ) ) || ( p_class.equals( Long.TYPE ) ) )
-            return new Long( p_value.longValue() );
-        if ( ( p_class.equals( Short.class ) ) || ( p_class.equals( Short.TYPE ) ) )
-            return new Short( p_value.shortValue() );
+        // number value into number
+        if ( p_data instanceof Number )
+            return ASSyntax.createNumber( ( (Number) p_data ).doubleValue() );
 
-        throw new IllegalArgumentException( "class unknown" );
+        // collection into term list
+        if ( p_data instanceof Collection )
+            return ASSyntax.createList( (Collection) p_data );
+
+        return ASSyntax.createString( p_data.toString() );
     }
 
 }

@@ -57,39 +57,21 @@ public class CBootstrap
     {
     }
 
-
     /**
-     * is called after configuration is loaded
+     * is called after the OSM viewer is initialize
      *
-     * @param p_configuration configuration
+     * @param p_viewer viewer object
      */
-    public static void configurationIsLoaded( final CConfiguration p_configuration )
+    public static void afterOSMViewerInit( final COSMViewer p_viewer )
     {
+        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Car WayPoints" ) );
+        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Cars" ) );
+        p_viewer.getCompoundPainter().addPainter(
+                CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().getWeight(
+                        CGraphHopper.EWeight.ForbiddenEdges
+                )
+        );
     }
-
-
-    /**
-     * is called at UI shutdown
-     *
-     * @param p_ui
-     */
-    public static void beforeStageShutdown( final CUI p_ui )
-    {
-        p_ui.<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().setConfiguration();
-    }
-
-
-    /**
-     * is called after the frame is initialize and before the UI configuration is load
-     *
-     * @param p_ui UI Object
-     */
-    public static void afterStageInit( final CUI p_ui )
-    {
-        p_ui.add( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) );
-        p_ui.add( "Main", new CWorkspace() );
-    }
-
 
     /**
      * is called after the webserver is started
@@ -126,24 +108,6 @@ public class CBootstrap
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
     }
 
-
-    /**
-     * is called after the OSM viewer is initialize
-     *
-     * @param p_viewer viewer object
-     */
-    public static void afterOSMViewerInit( final COSMViewer p_viewer )
-    {
-        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Car WayPoints" ) );
-        p_viewer.getCompoundPainter().addPainter( CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Cars" ) );
-        p_viewer.getCompoundPainter().addPainter(
-                CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().getWeight(
-                        CGraphHopper.EWeight.ForbiddenEdges
-                )
-        );
-    }
-
-
     /**
      * is called after the simulation is initialize
      *
@@ -157,6 +121,35 @@ public class CBootstrap
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
     }
 
+    /**
+     * is called after the frame is initialize and before the UI configuration is load
+     *
+     * @param p_ui UI Object
+     */
+    public static void afterStageInit( final CUI p_ui )
+    {
+        p_ui.add( "OSM", new CSwingWrapper<COSMViewer>( new COSMViewer() ) );
+        p_ui.add( "Main", new CWorkspace() );
+    }
+
+    /**
+     * is called at UI shutdown
+     *
+     * @param p_ui
+     */
+    public static void beforeStageShutdown( final CUI p_ui )
+    {
+        p_ui.<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().setConfiguration();
+    }
+
+    /**
+     * is called after configuration is loaded
+     *
+     * @param p_configuration configuration
+     */
+    public static void configurationIsLoaded( final CConfiguration p_configuration )
+    {
+    }
 
     /**
      * is called on simulation reset

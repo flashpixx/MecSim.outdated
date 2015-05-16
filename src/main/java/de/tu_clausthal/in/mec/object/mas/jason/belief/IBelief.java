@@ -36,6 +36,11 @@ public interface IBelief
 {
 
     /**
+     * clear all literals *
+     */
+    public void clear();
+
+    /**
      * get non-atom literals
      *
      * @return non-atom literals
@@ -46,10 +51,5 @@ public interface IBelief
      * update the literals *
      */
     public void update();
-
-    /**
-     * clear all literals *
-     */
-    public void clear();
 
 }

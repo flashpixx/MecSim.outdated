@@ -50,24 +50,129 @@ import java.util.concurrent.Executors;
 public class CMainLoop implements Runnable
 {
     /**
+     * boolean to pause/resume the thread
+     */
+    private boolean m_pause = true;
+    /**
      * thread-pool for handling all objects
      */
     private ExecutorService m_pool = Executors.newWorkStealingPool();
-
+    /**
+     * number of threads for running *
+     */
+    private int m_shutdownstep = Integer.MAX_VALUE;
     /**
      * simulation counter
      */
     private int m_simulationcount;
 
     /**
-     * boolean to pause/resume the thread
+     * returns a runnable object of the steppable input
+     *
+     * @param p_iteration iteration
+     * @param p_object steppable object
+     * @param p_layer layer
+     * @return runnable object
      */
-    private boolean m_pause = true;
+    private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
+    {
+        if ( p_object instanceof IVoidSteppable )
+            return new CVoidSteppable( p_iteration, (IVoidSteppable) p_object, p_layer );
+
+        if ( p_object instanceof IReturnSteppable )
+            return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
+
+        throw new IllegalArgumentException( CCommon.getResourceString( CMainLoop.class, "notsteppable" ) );
+    }
 
     /**
-     * number of threads for running *
+     * returns the simulation step
+     *
+     * @return step number
      */
-    private int m_shutdownstep = Integer.MAX_VALUE;
+    public final int getSimulationstep()
+    {
+        return m_simulationcount;
+    }
+
+    /**
+     * invokes all defined data
+     *
+     * @param p_layer layer
+     * @param p_tasksource invoking tasks
+     * @throws InterruptedException is throws on task error
+     */
+    protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
+    {
+        final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
+        for ( final ISteppable l_object : p_tasksource )
+            l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
+        m_pool.invokeAll( l_tasklist );
+    }
+
+    /**
+     * checks if the thread is paused
+     *
+     * @return boolean for pause
+     */
+    public final boolean isPaused()
+    {
+        return m_pause;
+    }
+
+    /**
+     * sets pause state
+     */
+    public final void pause()
+    {
+        m_pause = true;
+    }
+
+    /**
+     * resets the thread
+     */
+    public final void reset()
+    {
+        if ( !m_pause )
+            throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
+
+        CLogger.info( CCommon.getResourceString( this, "reset" ) );
+
+        try
+        {
+            m_simulationcount = 0;
+            final Collection<Callable<Object>> l_tasks = new LinkedList<>();
+            for ( final ILayer l_layer : CSimulation.getInstance().getWorld().values() )
+                l_tasks.add( new CLayerReset( l_layer ) );
+            m_pool.invokeAll( l_tasks );
+        }
+        catch ( final InterruptedException l_exception )
+        {
+        }
+
+    }
+
+    /**
+     * resume state
+     */
+    public final void resume()
+    {
+        m_pause = false;
+    }
+
+    /**
+     * resumes thread and shut down thread after
+     *
+     * @param p_steps number of steps which are run
+     */
+    public final void resume( final int p_steps )
+    {
+        if ( p_steps < 1 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "stepnumber" ) );
+
+        m_shutdownstep = m_simulationcount + p_steps;
+        m_pause = false;
+    }
 
     @Override
     @SuppressWarnings( "unchecked" )
@@ -150,120 +255,11 @@ public class CMainLoop implements Runnable
     }
 
     /**
-     * returns a runnable object of the steppable input
-     *
-     * @param p_iteration iteration
-     * @param p_object steppable object
-     * @param p_layer layer
-     * @return runnable object
-     */
-    private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
-    {
-        if ( p_object instanceof IVoidSteppable )
-            return new CVoidSteppable( p_iteration, (IVoidSteppable) p_object, p_layer );
-
-        if ( p_object instanceof IReturnSteppable )
-            return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
-
-        throw new IllegalArgumentException( CCommon.getResourceString( CMainLoop.class, "notsteppable" ) );
-    }
-
-    /**
-     * invokes all defined data
-     *
-     * @param p_layer layer
-     * @param p_tasksource invoking tasks
-     * @throws InterruptedException is throws on task error
-     */
-    protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
-    {
-        final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
-        for ( final ISteppable l_object : p_tasksource )
-            l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
-        m_pool.invokeAll( l_tasklist );
-    }
-
-    /**
      * thread is shut down
      */
     public final void stop()
     {
         Thread.currentThread().interrupt();
-    }
-
-    /**
-     * checks if the thread is paused
-     *
-     * @return boolean for pause
-     */
-    public final boolean isPaused()
-    {
-        return m_pause;
-    }
-
-    /**
-     * sets pause state
-     */
-    public final void pause()
-    {
-        m_pause = true;
-    }
-
-    /**
-     * resume state
-     */
-    public final void resume()
-    {
-        m_pause = false;
-    }
-
-    /**
-     * resumes thread and shut down thread after
-     *
-     * @param p_steps number of steps which are run
-     */
-    public final void resume( final int p_steps )
-    {
-        if ( p_steps < 1 )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "stepnumber" ) );
-
-        m_shutdownstep = m_simulationcount + p_steps;
-        m_pause = false;
-    }
-
-
-    /**
-     * returns the simulation step
-     *
-     * @return step number
-     */
-    public final int getSimulationstep()
-    {
-        return m_simulationcount;
-    }
-
-    /**
-     * resets the thread
-     */
-    public final void reset()
-    {
-        if ( !m_pause )
-            throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
-
-        CLogger.info( CCommon.getResourceString( this, "reset" ) );
-
-        try
-        {
-            m_simulationcount = 0;
-            final Collection<Callable<Object>> l_tasks = new LinkedList<>();
-            for ( final ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                l_tasks.add( new CLayerReset( l_layer ) );
-            m_pool.invokeAll( l_tasks );
-        }
-        catch ( final InterruptedException l_exception )
-        {
-        }
-
     }
 
 }

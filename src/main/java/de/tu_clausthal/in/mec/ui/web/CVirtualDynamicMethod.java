@@ -49,21 +49,21 @@ public class CVirtualDynamicMethod implements IVirtualLocation
      */
     private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
     /**
-     * object
+     * websocket heartbeat
      */
-    private final Object m_object;
+    private final int m_heartbeat;
     /**
      * method handle
      */
     private final MethodHandle m_method;
     /**
+     * object
+     */
+    private final Object m_object;
+    /**
      * URI
      */
     private final String m_uri;
-    /**
-     * websocket heartbeat
-     */
-    private final int m_heartbeat;
 
 
     /**
@@ -84,13 +84,6 @@ public class CVirtualDynamicMethod implements IVirtualLocation
         CLogger.info( p_uri );
     }
 
-
-    @Override
-    public final boolean match( final String p_uri )
-    {
-        return m_uri.equals( p_uri );
-    }
-
     @Override
     public final WebSocket get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable
     {
@@ -101,6 +94,12 @@ public class CVirtualDynamicMethod implements IVirtualLocation
     public final CMarkdownRenderer getMarkDownRenderer()
     {
         return null;
+    }
+
+    @Override
+    public final boolean match( final String p_uri )
+    {
+        return m_uri.equals( p_uri );
     }
 
     @Override

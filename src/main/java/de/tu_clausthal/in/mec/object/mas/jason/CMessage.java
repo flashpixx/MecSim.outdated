@@ -66,15 +66,15 @@ public class CMessage implements IMessage<Message>
     }
 
     @Override
-    public final String getTitle()
-    {
-        return this.getClass().getName();
-    }
-
-    @Override
     public final CPath getSource()
     {
         return new CPath( m_data.getSender() );
+    }
+
+    @Override
+    public final String getTitle()
+    {
+        return this.getClass().getName();
     }
 
     @Override

@@ -47,14 +47,13 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
 {
 
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * reference to the graph
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
-
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Override
     public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )

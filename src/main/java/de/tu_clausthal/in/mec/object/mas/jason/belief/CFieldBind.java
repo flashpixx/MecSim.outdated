@@ -78,41 +78,17 @@ public class CFieldBind implements IBelief
         this.push( p_name, p_object );
     }
 
-
-    /**
-     * adds / binds an object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     */
-    public final void push( final String p_name, final Object p_object )
+    @Override
+    public final void clear()
     {
-        m_bind.put(
-                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
-                        p_object, CReflection.getClassFields(
-                        p_object.getClass(), c_filter
-                )
-                )
-        );
+        m_literals.clear();
     }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void remove( final String p_name )
-    {
-        m_bind.remove( p_name );
-    }
-
 
     @Override
     public final Set<Literal> getLiterals()
     {
         return m_literals;
     }
-
 
     @Override
     public final void update()
@@ -155,9 +131,30 @@ public class CFieldBind implements IBelief
                 }
     }
 
-    @Override
-    public final void clear()
+    /**
+     * adds / binds an object
+     *
+     * @param p_name name / annotation of the object
+     * @param p_object object
+     */
+    public final void push( final String p_name, final Object p_object )
     {
-        m_literals.clear();
+        m_bind.put(
+                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
+                        p_object, CReflection.getClassFields(
+                        p_object.getClass(), c_filter
+                )
+                )
+        );
+    }
+
+    /**
+     * removes an object from the bind
+     *
+     * @param p_name name
+     */
+    public final void remove( final String p_name )
+    {
+        m_bind.remove( p_name );
     }
 }

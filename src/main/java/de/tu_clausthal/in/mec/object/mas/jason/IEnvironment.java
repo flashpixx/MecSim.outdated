@@ -54,10 +54,6 @@ import java.util.List;
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * agent file suffix *
      */
     private static final String c_filesuffix = ".asl";
@@ -65,7 +61,28 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     private transient CBrowser m_mindinspector;
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
+    /**
+     * checks the syntax of an agent
+     *
+     * @param p_agentname agent name
+     * @note should throw exception on syntax error
+     */
+    public static void checkAgentFileSyntax( final String p_agentname )
+    {
+        try
+        {
+            Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
+        }
+        catch ( final Exception l_exception )
+        {
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
+        }
+    }
 
     /**
      * creates an agent filename on an agent name
@@ -89,40 +106,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     }
 
     /**
-     * gets a list of all agents file names
-     *
-     * @return string list with the filenames only
-     *
-     * @todo add ASL build-in files with the resource directory
-     */
-    public static String[] getAgentFiles()
-    {
-        final List<String> l_list = new LinkedList<>();
-        for ( final String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
-            l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
-
-        return CCommon.convertCollectionToArray( String[].class, l_list );
-    }
-
-    /**
-     * checks the syntax of an agent
-     *
-     * @param p_agentname agent name
-     * @note should throw exception on syntax error
-     */
-    public static void checkAgentFileSyntax( final String p_agentname )
-    {
-        try
-        {
-            Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
-        }
-        catch ( final Exception l_exception )
-        {
-            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
-        }
-    }
-
-    /**
      * get from an agent name the storing file name
      *
      * @param p_agentname agent name
@@ -139,20 +122,29 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( c_filesuffix ) ? p_agentname : p_agentname + c_filesuffix );
     }
 
-    @Override
-    public final void step( final int p_currentstep, final ILayer p_layer )
+    /**
+     * gets a list of all agents file names
+     *
+     * @return string list with the filenames only
+     *
+     * @todo add ASL build-in files with the resource directory
+     */
+    public static String[] getAgentFiles()
     {
-        // mindinspector needs to load if there exists agents
-        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
-            m_mindinspector.load( "http://localhost:3272" );
+        final List<String> l_list = new LinkedList<>();
+        for ( final String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
+            l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
+
+        return CCommon.convertCollectionToArray( String[].class, l_list );
     }
 
+    /**
+     * @bug UI frame
+     */
     @Override
-    public final void release()
+    public final void onDeserializationComplete()
     {
-        for ( final IAgent l_agent : m_data )
-            l_agent.release();
-        m_data.clear();
+        //this.setFrame( CSimulation.getInstance().getUIServer() );
     }
 
     /**
@@ -165,13 +157,20 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         //    CSimulation.getInstance().getUIServer().removeWidget( "Jason Mindinspector" );
     }
 
-    /**
-     * @bug UI frame
-     */
     @Override
-    public final void onDeserializationComplete()
+    public final void release()
     {
-        //this.setFrame( CSimulation.getInstance().getUIServer() );
+        for ( final IAgent l_agent : m_data )
+            l_agent.release();
+        m_data.clear();
+    }
+
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+        // mindinspector needs to load if there exists agents
+        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
+            m_mindinspector.load( "http://localhost:3272" );
     }
 
     /**

@@ -35,9 +35,11 @@ public interface IAgent extends Painter, IReceiver
 {
 
     /**
-     * release agent call *
+     * returns the current cycle
+     *
+     * @return cycle number
      */
-    public void release();
+    public int getCycle();
 
     /**
      * returns the name of the agent
@@ -47,17 +49,15 @@ public interface IAgent extends Painter, IReceiver
     public String getName();
 
     /**
-     * returns the current cycle
-     *
-     * @return cycle number
-     */
-    public int getCycle();
-
-    /**
      * returns the source / file of the agent
      *
      * @return source
      */
     public String getSource();
+
+    /**
+     * release agent call *
+     */
+    public void release();
 
 }

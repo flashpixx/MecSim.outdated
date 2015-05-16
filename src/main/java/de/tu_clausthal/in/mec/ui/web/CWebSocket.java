@@ -49,17 +49,17 @@ public class CWebSocket extends WebSocket
      */
     private final CCommunicator m_communicator;
     /**
-     * bind Object
+     * heartbeat timer
      */
-    private final Object m_object;
+    private final Timer m_heartbeat;
     /**
      * bind method
      */
     private final MethodHandle m_method;
     /**
-     * heartbeat timer
+     * bind Object
      */
-    private final Timer m_heartbeat;
+    private final Object m_object;
 
 
     /**
@@ -250,6 +250,16 @@ public class CWebSocket extends WebSocket
         }
 
         /**
+         * returns the binary payload
+         *
+         * @return byte payload
+         */
+        public final byte[] getBinaryPayload()
+        {
+            return m_frame.getBinaryPayload();
+        }
+
+        /**
          * returns an unqiue ID of the socket
          *
          * @return ID
@@ -267,16 +277,6 @@ public class CWebSocket extends WebSocket
         public final String getTextPayload()
         {
             return m_frame.getTextPayload();
-        }
-
-        /**
-         * returns the binary payload
-         *
-         * @return byte payload
-         */
-        public final byte[] getBinaryPayload()
-        {
-            return m_frame.getBinaryPayload();
         }
 
     }

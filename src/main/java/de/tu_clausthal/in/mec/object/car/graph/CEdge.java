@@ -52,13 +52,17 @@ public class CEdge<N, T> implements Comparable<CEdge>
 {
 
     /**
-     * map with object-2-position in forward direction
+     * array with additional information
      */
-    private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
+    private final T[] m_additionalinformation;
     /**
-     * set with listener
+     * array with geopositions of the cell
      */
-    private final Set<IAction<N, T>> m_listener = new HashSet<>();
+    private final GeoPosition[] m_cellgeoposition;
+    /**
+     * array with cells of the forward direction
+     */
+    private final N[] m_cells;
     /**
      * edge ID
      */
@@ -68,17 +72,13 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     private final double m_edgelength;
     /**
-     * array with cells of the forward direction
+     * set with listener
      */
-    private final N[] m_cells;
+    private final Set<IAction<N, T>> m_listener = new HashSet<>();
     /**
-     * array with geopositions of the cell
+     * map with object-2-position in forward direction
      */
-    private final GeoPosition[] m_cellgeoposition;
-    /**
-     * array with additional information
-     */
-    private final T[] m_additionalinformation;
+    private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
 
 
     /**
@@ -128,6 +128,61 @@ public class CEdge<N, T> implements Comparable<CEdge>
         }
     }
 
+    /**
+     * adds a set of edge listener
+     *
+     * @param p_listener listener collection
+     */
+    public final void addListener( final Collection<IAction<N, T>> p_listener )
+    {
+        m_listener.addAll( p_listener );
+    }
+
+    /**
+     * adds an edge listener
+     *
+     * @param p_listener listener
+     */
+    public final void addListener( final IAction<N, T> p_listener )
+    {
+        m_listener.add( p_listener );
+    }
+
+    /**
+     * clears the edge information
+     */
+    public final void clear()
+    {
+        m_objects.clear();
+        synchronized ( m_cells )
+        {
+            for ( int i = 0; i < m_cells.length; i++ )
+                m_cells[i] = null;
+        }
+    }
+
+    @Override
+    public final int compareTo( final CEdge p_edgelink )
+    {
+        if ( m_edgeid > p_edgelink.m_edgeid )
+            return 1;
+        if ( m_edgeid < p_edgelink.m_edgeid )
+            return -1;
+
+        return 0;
+    }
+
+    /**
+     * checks if an object is on the edge
+     *
+     * @param p_object object
+     * @return contains boolean
+     */
+
+    public final boolean contains( final N p_object )
+    {
+        return m_objects.containsKey( p_object );
+    }
 
     /**
      * filter point list to create a list of points which stores monoton increase points
@@ -162,7 +217,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return new PointListArray( l_x, l_y );
     }
 
-
     /**
      * retuns an element of the additional array
      *
@@ -173,18 +227,15 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_additionalinformation[p_position];
     }
 
-
     /**
-     * sets an element into the additional array
+     * returns the number of samples of the edge
      *
-     * @param p_position position
-     * @param p_object object
+     * @return sample
      */
-    public final void setAdditionalInformation( final int p_position, final T p_object )
+    public final int getEdgeCells()
     {
-        m_additionalinformation[p_position] = p_object;
+        return m_cells.length;
     }
-
 
     /**
      * returns the edge ID
@@ -205,6 +256,17 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     /**
+     * returns the geoposition at a special index
+     *
+     * @param p_index index of the cell (if index is less than 0, the position is defined from the back)
+     * @return geoposition at the index
+     */
+    public final GeoPosition getGeoPositions( final int p_index )
+    {
+        return p_index < 0 ? m_cellgeoposition[m_cellgeoposition.length + p_index] : m_cellgeoposition[p_index];
+    }
+
+    /**
      * returns the geoposition of an object
      *
      * @param p_object object
@@ -219,29 +281,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
         return m_cellgeoposition[l_position.intValue()];
     }
 
-
-    /**
-     * returns the geoposition at a special index
-     *
-     * @param p_index index of the cell (if index is less than 0, the position is defined from the back)
-     * @return geoposition at the index
-     */
-    public final GeoPosition getGeoPositions( final int p_index )
-    {
-        return p_index < 0 ? m_cellgeoposition[m_cellgeoposition.length + p_index] : m_cellgeoposition[p_index];
-    }
-
-    /**
-     * returns the number of samples of the edge
-     *
-     * @return sample
-     */
-    public final int getEdgeCells()
-    {
-        return m_cells.length;
-    }
-
-
     /**
      * returns the number of objects on the current edge
      *
@@ -250,27 +289,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final int getNumberOfObjects()
     {
         return m_objects.size();
-    }
-
-    /**
-     * check if the edge is empty
-     *
-     * @return empty boolean
-     */
-    public final boolean isEmpty()
-    {
-        return m_objects.isEmpty();
-    }
-
-    /**
-     * returns the position of an object
-     *
-     * @param p_object object
-     * @return position
-     */
-    public final Integer getPosition( final N p_object )
-    {
-        return m_objects.get( p_object );
     }
 
     /**
@@ -285,23 +303,50 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     /**
-     * adds a set of edge listener
+     * returns the position of an object
      *
-     * @param p_listener listener collection
+     * @param p_object object
+     * @return position
      */
-    public final void addListener( final Collection<IAction<N, T>> p_listener )
+    public final Integer getPosition( final N p_object )
     {
-        m_listener.addAll( p_listener );
+        return m_objects.get( p_object );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_edgeid;
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        if ( p_object instanceof CEdge )
+            return this.hashCode() == p_object.hashCode();
+
+        return false;
     }
 
     /**
-     * adds an edge listener
+     * check if the edge is empty
      *
-     * @param p_listener listener
+     * @return empty boolean
      */
-    public final void addListener( final IAction<N, T> p_listener )
+    public final boolean isEmpty()
     {
-        m_listener.add( p_listener );
+        return m_objects.isEmpty();
+    }
+
+    /**
+     * checks if a position is empty
+     *
+     * @param p_position position index
+     * @return empty for empty
+     */
+    public final boolean isEmpty( final int p_position )
+    {
+        return m_cells[p_position] == null;
     }
 
     /**
@@ -324,6 +369,33 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final boolean removeListener( final Collection<IAction<N, T>> p_listener )
     {
         return m_listener.removeAll( p_listener );
+    }
+
+    /**
+     * removes an object of the edge
+     *
+     * @param p_object object
+     */
+    public final void removeObject( final N p_object )
+    {
+        if ( !m_objects.containsKey( p_object ) )
+            return;
+
+        synchronized ( m_cells )
+        {
+            m_cells[m_objects.remove( p_object )] = null;
+        }
+    }
+
+    /**
+     * sets an element into the additional array
+     *
+     * @param p_position position
+     * @param p_object object
+     */
+    public final void setAdditionalInformation( final int p_position, final T p_object )
+    {
+        m_additionalinformation[p_position] = p_object;
     }
 
     /**
@@ -351,72 +423,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
         // call listener
         for ( final IAction l_action : m_listener )
             l_action.actionPerformed( this, p_position, p_object );
-    }
-
-    /**
-     * checks if a position is empty
-     *
-     * @param p_position position index
-     * @return empty for empty
-     */
-    public final boolean isEmpty( final int p_position )
-    {
-        return m_cells[p_position] == null;
-    }
-
-    /**
-     * removes an object of the edge
-     *
-     * @param p_object object
-     */
-    public final void removeObject( final N p_object )
-    {
-        if ( !m_objects.containsKey( p_object ) )
-            return;
-
-        synchronized ( m_cells )
-        {
-            m_cells[m_objects.remove( p_object )] = null;
-        }
-    }
-
-
-    /**
-     * checks if an object is on the edge
-     *
-     * @param p_object object
-     * @return contains boolean
-     */
-
-    public final boolean contains( final N p_object )
-    {
-        return m_objects.containsKey( p_object );
-    }
-
-
-    /**
-     * clears the edge information
-     */
-    public final void clear()
-    {
-        m_objects.clear();
-        synchronized ( m_cells )
-        {
-            for ( int i = 0; i < m_cells.length; i++ )
-                m_cells[i] = null;
-        }
-    }
-
-
-    @Override
-    public final int compareTo( final CEdge p_edgelink )
-    {
-        if ( m_edgeid > p_edgelink.m_edgeid )
-            return 1;
-        if ( m_edgeid < p_edgelink.m_edgeid )
-            return -1;
-
-        return 0;
     }
 
     /**
@@ -513,21 +519,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
             return m_xpoints.length;
         }
 
-    }
-
-    @Override
-    public final int hashCode()
-    {
-        return m_edgeid;
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        if ( p_object instanceof CEdge )
-            return this.hashCode() == p_object.hashCode();
-
-        return false;
     }
 
 }

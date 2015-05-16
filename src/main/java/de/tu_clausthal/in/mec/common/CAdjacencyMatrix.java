@@ -45,13 +45,13 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
 
     /**
-     * row name
-     */
-    private final String m_rowname;
-    /**
      * column name
      */
     private final String m_colname;
+    /**
+     * row name
+     */
+    private final String m_rowname;
 
 
     /**
@@ -77,15 +77,14 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         m_colname = p_colname;
     }
 
-
     /**
      * @param p_row row element
      * @param p_column column element
-     * @param p_value value
+     * @return boolean for existance
      */
-    public void set( final T p_row, final T p_column, final N p_value )
+    public boolean exist( final T p_row, final T p_column )
     {
-        this.put( new ImmutablePair<>( p_row, p_column ), p_value );
+        return this.containsKey( new ImmutablePair<>( p_row, p_column ) );
     }
 
     /**
@@ -101,13 +100,12 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
     /**
      * @param p_row row element
      * @param p_column column element
-     * @return boolean for existance
+     * @param p_value value
      */
-    public boolean exist( final T p_row, final T p_column )
+    public void set( final T p_row, final T p_column, final N p_value )
     {
-        return this.containsKey( new ImmutablePair<>( p_row, p_column ) );
+        this.put( new ImmutablePair<>( p_row, p_column ), p_value );
     }
-
 
     /**
      * serializer for Json access

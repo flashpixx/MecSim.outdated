@@ -57,13 +57,13 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
      */
     private final transient BufferedImage m_initializeimage;
     /**
-     * current scaled image
-     */
-    private transient BufferedImage m_scaledimage;
-    /**
      * last zoom (if the zoom changed the image need to be resized)
      */
     private transient int m_lastZoom = 0;
+    /**
+     * current scaled image
+     */
+    private transient BufferedImage m_scaledimage;
     /**
      * map with targets
      */
@@ -89,6 +89,30 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
         super( p_position, p_generator, p_factory, p_radius );
         m_initializeimage = this.initializeImage( 20, 34, p_color );
         m_scaledimage = m_initializeimage;
+    }
+
+    /**
+     * method to scale a buffered image
+     *
+     * @param p_source image which should be scaled
+     * @param p_width new width
+     * @param p_height new height
+     * @return new image
+     */
+    public BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
+    {
+        final BufferedImage l_newimage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
+        final Graphics2D l_graphics = l_newimage.createGraphics();
+        l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
+        l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
+        l_graphics.dispose();
+        return l_newimage;
+    }
+
+    @Override
+    public Collection<IReturnSteppableTarget<ICar>> getTargets()
+    {
+        return m_target;
     }
 
     /**
@@ -124,45 +148,6 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
         return null;
     }
 
-    /**
-     * method to scale a buffered image
-     *
-     * @param p_source image which should be scaled
-     * @param p_width new width
-     * @param p_height new height
-     * @return new image
-     */
-    public BufferedImage getScaledImage( final BufferedImage p_source, final int p_width, final int p_height )
-    {
-        final BufferedImage l_newimage = new BufferedImage( p_width, p_height, BufferedImage.TRANSLUCENT );
-        final Graphics2D l_graphics = l_newimage.createGraphics();
-        l_graphics.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
-        l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
-        l_graphics.dispose();
-        return l_newimage;
-    }
-
-
-    @Override
-    public Collection<IReturnSteppableTarget<ICar>> getTargets()
-    {
-        return m_target;
-    }
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        //if the zoom change calculate the new scaled image
-        if ( p_viewer.getZoom() != m_lastZoom )
-            m_scaledimage = this.getScaledImage(
-                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
-                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
-            );
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
-    }
-
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
@@ -179,5 +164,19 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
             CSimulation.getInstance().getUIComponents().getInspector().set( this );
+    }
+
+    @Override
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        //if the zoom change calculate the new scaled image
+        if ( p_viewer.getZoom() != m_lastZoom )
+            m_scaledimage = this.getScaledImage(
+                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
+                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
+            );
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
     }
 }

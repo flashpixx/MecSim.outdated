@@ -61,24 +61,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
     /**
-     * maximum speed definition in km/h
-     */
-    protected final int m_maxspeed;
-    /**
-     * reference to the graph
-     */
-    @CFieldFilter.CAgent( bind = false )
-    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
-    /**
-     * cell structure of the route
-     */
-    @CFieldFilter.CAgent( bind = false )
-    private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
-    /**
-     * linger probability value
-     */
-    private final double m_lingerprobability;
-    /**
      * individual acceleration in km/h
      */
     private final int m_acceleration;
@@ -86,6 +68,16 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * individual deceleration in km/h
      */
     private final int m_deceleration;
+    /**
+     * boolean flag for end reached
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private boolean m_endreached;
+    /**
+     * reference to the graph
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**
      * inspector map
      */
@@ -95,19 +87,27 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             putAll( CDefaultCar.super.inspect() );
         }};
     /**
-     * current speed in km/h
+     * linger probability value
      */
-    protected int m_speed;
+    private final double m_lingerprobability;
+    /**
+     * maximum speed definition in km/h
+     */
+    protected final int m_maxspeed;
+    /**
+     * cell structure of the route
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
     /**
      * current position on the route
      */
     @CFieldFilter.CAgent( bind = false )
     private int m_routeindex;
     /**
-     * boolean flag for end reached
+     * current speed in km/h
      */
-    @CFieldFilter.CAgent( bind = false )
-    private boolean m_endreached;
+    protected int m_speed;
 
 
     /**
@@ -152,9 +152,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     @Override
     @CMethodFilter.CAgent( bind = false )
-    public final int getMaximumSpeed()
+    public final int getAcceleration()
     {
-        return m_maxspeed;
+        return m_acceleration;
     }
 
     @Override
@@ -173,9 +173,15 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     @Override
     @CMethodFilter.CAgent( bind = false )
-    public final double getLingerProbability()
+    public final int getDeceleration()
     {
-        return m_lingerprobability;
+        return m_deceleration;
+    }
+
+    @Override
+    public final EdgeIteratorState getEdge()
+    {
+        return this.getEdge( m_routeindex );
     }
 
     @Override
@@ -190,9 +196,16 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     @Override
     @CMethodFilter.CAgent( bind = false )
-    public final boolean hasEndReached()
+    public final double getLingerProbability()
     {
-        return m_endreached;
+        return m_lingerprobability;
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public final int getMaximumSpeed()
+    {
+        return m_maxspeed;
     }
 
     @Override
@@ -218,33 +231,10 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
-    public final EdgeIteratorState getEdge()
-    {
-        return this.getEdge( m_routeindex );
-    }
-
-    @Override
     @CMethodFilter.CAgent( bind = false )
-    public final int getAcceleration()
+    public final boolean hasEndReached()
     {
-        return m_acceleration;
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public final int getDeceleration()
-    {
-        return m_deceleration;
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public void release()
-    {
-        super.release();
-        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
-        if ( l_edge != null )
-            l_edge.removeObject( this );
+        return m_endreached;
     }
 
     /**
@@ -260,32 +250,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             return null;
 
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
-    {
-        final GeoPosition l_position = this.getGeoposition();
-        if ( l_position == null )
-            return;
-
-        final int l_zoom = this.iconsize( p_viewer );
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
-        final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom * 2, l_zoom * 2
-        );
-
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-        {
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
-
-            final Stroke l_stroke = new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{1}, 0 );
-            final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_route = new LinkedList<>();
-            l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
-            l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintFadeLine( l_route );
-        }
     }
 
     /**
@@ -319,7 +283,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return l_list;
     }
 
-
     @Override
     @CMethodFilter.CAgent( bind = false )
     public Map<String, Object> inspect()
@@ -328,6 +291,42 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "streetname" ), m_route.get( m_routeindex ).getLeft().getName() );
         m_inspect.put( CCommon.getResourceString( CDefaultCar.class, "currentgeoposition" ), this.getGeoposition() );
         return m_inspect;
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
+        final GeoPosition l_position = this.getGeoposition();
+        if ( l_position == null )
+            return;
+
+        final int l_zoom = this.iconsize( p_viewer );
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom * 2, l_zoom * 2
+        );
+
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+        {
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
+
+            final Stroke l_stroke = new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{1}, 0 );
+            final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_route = new LinkedList<>();
+            l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
+            l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintFadeLine( l_route );
+        }
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public void release()
+    {
+        super.release();
+        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        if ( l_edge != null )
+            l_edge.removeObject( this );
     }
 
     @Override

@@ -37,17 +37,13 @@ import java.util.Map;
 public abstract class ITimeDistribution extends IInspectorDefault implements IGenerator
 {
     /**
-     * serialize version ID *
+     * number of objects *
      */
-    private static final long serialVersionUID = 1L;
+    private final int m_count;
     /**
      * distribution *
      */
     private final AbstractRealDistribution m_distribution;
-    /**
-     * number of objects *
-     */
-    private final int m_count;
     /**
      * inspect data
      */
@@ -55,6 +51,10 @@ public abstract class ITimeDistribution extends IInspectorDefault implements IGe
     {{
             putAll( ITimeDistribution.super.inspect() );
         }};
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
 
     /**

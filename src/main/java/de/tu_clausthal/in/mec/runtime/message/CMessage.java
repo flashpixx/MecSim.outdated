@@ -35,10 +35,6 @@ import de.tu_clausthal.in.mec.common.CPath;
 public class CMessage<T> implements IMessage<T>
 {
     /**
-     * title of the message
-     */
-    private final String m_title;
-    /**
      * data of the message
      */
     private final T m_data;
@@ -46,6 +42,10 @@ public class CMessage<T> implements IMessage<T>
      * source of the message
      */
     private final CPath m_source;
+    /**
+     * title of the message
+     */
+    private final String m_title;
     /**
      * time-to-live value *
      */
@@ -97,15 +97,15 @@ public class CMessage<T> implements IMessage<T>
     }
 
     @Override
-    public final String getTitle()
-    {
-        return m_title;
-    }
-
-    @Override
     public final CPath getSource()
     {
         return m_source;
+    }
+
+    @Override
+    public final String getTitle()
+    {
+        return m_title;
     }
 
     @Override

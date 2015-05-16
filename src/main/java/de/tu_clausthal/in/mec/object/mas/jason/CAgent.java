@@ -77,25 +77,21 @@ public class CAgent<T> implements IVoidAgent
      */
     private final static String c_seperator = "::";
     /**
-     * Jason interal agent architecture to run the reasoning cycle
+     * set with actions of this implementation
      */
-    private final CJasonArchitecture m_architecture;
+    private final Map<String, IAction> m_action = new HashMap<>();
     /**
      * Jason agent object
      */
     private final Agent m_agent;
     /**
-     * set with actions of this implementation
+     * Jason interal agent architecture to run the reasoning cycle
      */
-    private final Map<String, IAction> m_action = new HashMap<>();
+    private final CJasonArchitecture m_architecture;
     /**
      * set with belief binds
      */
     private final Set<IBelief> m_beliefs = new HashSet<>();
-    /**
-     * set with received messages
-     */
-    private final Set<IMessage> m_receivedmessages = new HashSet<>();
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
@@ -109,6 +105,10 @@ public class CAgent<T> implements IVoidAgent
      * participant object *
      */
     private CParticipant m_participant;
+    /**
+     * set with received messages
+     */
+    private final Set<IMessage> m_receivedmessages = new HashSet<>();
 
 
     /**
@@ -206,26 +206,16 @@ public class CAgent<T> implements IVoidAgent
         return m_beliefs;
     }
 
-
     @Override
-    public final void release()
+    public final int getCycle()
     {
-        m_agent.stopAg();
-        m_participant.release();
-        MindInspectorWeb.get().removeAg( m_agent );
+        return m_cycle;
     }
-
 
     //@Override
     public final String getName()
     {
         return m_namepath.getPath( c_seperator );
-    }
-
-    @Override
-    public final int getCycle()
-    {
-        return m_cycle;
     }
 
     @Override
@@ -235,16 +225,17 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public final void step( final int p_currentstep, final ILayer p_layer )
+    public final void release()
     {
-        m_architecture.cycle( p_currentstep );
+        m_agent.stopAg();
+        m_participant.release();
+        MindInspectorWeb.get().removeAg( m_agent );
     }
 
-
     @Override
-    public void paint( final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height )
+    public final CPath getReceiverPath()
     {
-
+        return m_namepath;
     }
 
     @Override
@@ -255,11 +246,16 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public final CPath getReceiverPath()
+    public void paint( final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height )
     {
-        return m_namepath;
+
     }
 
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+        m_architecture.cycle( p_currentstep );
+    }
 
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture

@@ -81,37 +81,67 @@ public class CBrowser extends GridPane
     }
 
     /**
-     * sets the mennubar
+     * ctor with instantiation the engine
      *
      * @param p_menu menu settings
-     * @param p_menu menu options
-     * @return column number
+     * @param p_url string with URL
      */
-    private int setMenuBar( final EMenu p_menu )
+    public CBrowser( final EMenu p_menu, final String p_url )
     {
-        this.setVgap( 5 );
-        this.setHgap( 5 );
+        this( p_menu );
+        if ( ( p_url == null ) || ( p_url.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( CBrowser.class, "urlempty" ) );
+        m_webview.getEngine().load( p_url );
+    }
 
-        final int l_return;
-        switch ( p_menu )
-        {
-            case BackForward:
-                l_return = this.setBackForward( 0 );
-                break;
+    /**
+     * navigates one item back
+     */
+    public final void back()
+    {
+        if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 )
+            return;
 
-            case URL:
-                l_return = this.setURLMenu( 0 );
-                break;
+        m_webview.getEngine().getHistory().go( -1 );
+    }
 
-            case Full:
-                l_return = this.setBackForward( this.setURLMenu( 0 ) );
-                break;
+    /**
+     * navigates on item forward
+     */
+    public final void forward()
+    {
+        if ( m_webview.getEngine().getHistory().getCurrentIndex() >= m_webview.getEngine().getHistory().getEntries().size() - 1 )
+            return;
 
-            default:
-                l_return = 1;
-        }
+        m_webview.getEngine().getHistory().go( +1 );
+    }
 
-        return l_return;
+    /**
+     * returns the current URL
+     *
+     * @return string URL
+     */
+    public final String getURL()
+    {
+        return m_webview.getEngine().locationProperty().getValue();
+    }
+
+    /**
+     * loads a URL on the browser
+     *
+     * @param p_url string with URL
+     */
+    public final void load( final String p_url )
+    {
+        m_webview.getEngine().load( p_url );
+    }
+
+    /**
+     * refresh the current URL
+     */
+    public final void reload()
+    {
+        m_webview.getEngine().reload();
     }
 
     /**
@@ -163,6 +193,40 @@ public class CBrowser extends GridPane
     }
 
     /**
+     * sets the mennubar
+     *
+     * @param p_menu menu settings
+     * @param p_menu menu options
+     * @return column number
+     */
+    private int setMenuBar( final EMenu p_menu )
+    {
+        this.setVgap( 5 );
+        this.setHgap( 5 );
+
+        final int l_return;
+        switch ( p_menu )
+        {
+            case BackForward:
+                l_return = this.setBackForward( 0 );
+                break;
+
+            case URL:
+                l_return = this.setURLMenu( 0 );
+                break;
+
+            case Full:
+                l_return = this.setBackForward( this.setURLMenu( 0 ) );
+                break;
+
+            default:
+                l_return = 1;
+        }
+
+        return l_return;
+    }
+
+    /**
      * create the URL input box
      *
      * @param p_column start column index
@@ -207,70 +271,6 @@ public class CBrowser extends GridPane
         this.getChildren().addAll( l_url, l_button );
 
         return p_column + 2;
-    }
-
-    /**
-     * navigates one item back
-     */
-    public final void back()
-    {
-        if ( m_webview.getEngine().getHistory().getCurrentIndex() < 1 )
-            return;
-
-        m_webview.getEngine().getHistory().go( -1 );
-    }
-
-    /**
-     * navigates on item forward
-     */
-    public final void forward()
-    {
-        if ( m_webview.getEngine().getHistory().getCurrentIndex() >= m_webview.getEngine().getHistory().getEntries().size() - 1 )
-            return;
-
-        m_webview.getEngine().getHistory().go( +1 );
-    }
-
-    /**
-     * loads a URL on the browser
-     *
-     * @param p_url string with URL
-     */
-    public final void load( final String p_url )
-    {
-        m_webview.getEngine().load( p_url );
-    }
-
-    /**
-     * ctor with instantiation the engine
-     *
-     * @param p_menu menu settings
-     * @param p_url string with URL
-     */
-    public CBrowser( final EMenu p_menu, final String p_url )
-    {
-        this( p_menu );
-        if ( ( p_url == null ) || ( p_url.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( CBrowser.class, "urlempty" ) );
-        m_webview.getEngine().load( p_url );
-    }
-
-    /**
-     * refresh the current URL
-     */
-    public final void reload()
-    {
-        m_webview.getEngine().reload();
-    }
-
-    /**
-     * returns the current URL
-     *
-     * @return string URL
-     */
-    public final String getURL()
-    {
-        return m_webview.getEngine().locationProperty().getValue();
     }
 
     /**

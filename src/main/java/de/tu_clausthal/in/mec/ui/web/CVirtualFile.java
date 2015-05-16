@@ -37,13 +37,13 @@ import java.net.URL;
 public class CVirtualFile implements IVirtualLocation
 {
     /**
-     * seperator
-     */
-    private static final String c_seperator = "/";
-    /**
      * URI reg expression for filter
      */
     private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
+    /**
+     * seperator
+     */
+    private static final String c_seperator = "/";
     /**
      * file
      */
@@ -74,12 +74,6 @@ public class CVirtualFile implements IVirtualLocation
     }
 
     @Override
-    public final boolean match( final String p_uri )
-    {
-        return p_uri.equals( m_uri );
-    }
-
-    @Override
     public final URL get( final NanoHTTPD.IHTTPSession p_session )
     {
         return m_file;
@@ -89,6 +83,12 @@ public class CVirtualFile implements IVirtualLocation
     public final CMarkdownRenderer getMarkDownRenderer()
     {
         return null;
+    }
+
+    @Override
+    public final boolean match( final String p_uri )
+    {
+        return p_uri.equals( m_uri );
     }
 
     @Override

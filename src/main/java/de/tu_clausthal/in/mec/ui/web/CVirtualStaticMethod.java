@@ -41,6 +41,14 @@ import java.util.Map;
 public class CVirtualStaticMethod implements IVirtualLocation
 {
     /**
+     * mime type
+     */
+    private static final String c_mimetype = "application/json; charset=utf-8";
+    /**
+     * type parser
+     */
+    private static final TypeParser c_parser = TypeParser.newBuilder().build();
+    /**
      * seperator
      */
     private static final String c_seperator = "/";
@@ -49,13 +57,9 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     private static final String c_uriallowchars = "[^a-zA-Z0-9_/]+";
     /**
-     * mime type
+     * number of method arguments
      */
-    private static final String c_mimetype = "application/json; charset=utf-8";
-    /**
-     * type parser
-     */
-    private static final TypeParser c_parser = TypeParser.newBuilder().build();
+    private final int m_arguments;
     /**
      * method handle
      */
@@ -68,10 +72,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
      * object
      */
     private final Object m_object;
-    /**
-     * number of method arguments
-     */
-    private final int m_arguments;
     /**
      * URI
      */
@@ -96,10 +96,18 @@ public class CVirtualStaticMethod implements IVirtualLocation
         CLogger.info( p_uri );
     }
 
-    @Override
-    public final boolean match( final String p_uri )
+    /**
+     * converts the string-string map into a string-object map to create map-in-map structure
+     *
+     * @param p_input input map
+     * @return string-object map
+     */
+    private Map<String, Object> convertMap( final Map<String, String> p_input )
     {
-        return m_uri.equals( p_uri );
+        final Map<String, Object> l_return = new HashMap<>();
+        for ( final Map.Entry<String, String> l_item : p_input.entrySet() )
+            this.splitKeyValues( l_item.getKey().replace( "]", "" ).split( "\\[" ), 0, l_item.getValue(), l_return );
+        return l_return;
     }
 
     @Override
@@ -150,18 +158,25 @@ public class CVirtualStaticMethod implements IVirtualLocation
         return null;
     }
 
-    /**
-     * converts the string-string map into a string-object map to create map-in-map structure
-     *
-     * @param p_input input map
-     * @return string-object map
-     */
-    private Map<String, Object> convertMap( final Map<String, String> p_input )
+    @Override
+    public final boolean match( final String p_uri )
     {
-        final Map<String, Object> l_return = new HashMap<>();
-        for ( final Map.Entry<String, String> l_item : p_input.entrySet() )
-            this.splitKeyValues( l_item.getKey().replace( "]", "" ).split( "\\[" ), 0, l_item.getValue(), l_return );
-        return l_return;
+        return m_uri.equals( p_uri );
+    }
+
+    @Override
+    public final int hashCode()
+    {
+        return m_uri.hashCode();
+    }
+
+    @Override
+    public final boolean equals( final Object p_object )
+    {
+        if ( p_object instanceof CVirtualLocation )
+            return this.hashCode() == p_object.hashCode();
+
+        return false;
     }
 
     /**
@@ -189,22 +204,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
             p_map.put( p_key[p_keyindex], new HashMap<>() );
 
         this.splitKeyValues( p_key, p_keyindex + 1, p_value, (Map) p_map.get( p_key[p_keyindex] ) );
-    }
-
-
-    @Override
-    public final int hashCode()
-    {
-        return m_uri.hashCode();
-    }
-
-    @Override
-    public final boolean equals( final Object p_object )
-    {
-        if ( p_object instanceof CVirtualLocation )
-            return this.hashCode() == p_object.hashCode();
-
-        return false;
     }
 
 }

@@ -37,15 +37,13 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 public class CWorkspace extends CBrowser
 {
     /**
-     * path of the binding port
-     */
-    private static final String c_httpport = "ui/server/port";
-    /**
      * path of the binding host
      */
     private static final String c_httphost = "ui/server/host";
-
-
+    /**
+     * path of the binding port
+     */
+    private static final String c_httpport = "ui/server/port";
     /**
      * HTTP server to handle websockets *
      */

@@ -45,14 +45,13 @@ import java.util.Set;
 public class CWorld implements Map<String, ILayer>, Serializable
 {
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * map with layer
      */
     private final Map<String, ILayer> m_layer = new HashMap<>();
-
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * creates a list with the layer objects depends on the ordering value
@@ -79,6 +78,21 @@ public class CWorld implements Map<String, ILayer>, Serializable
         return l_list;
     }
 
+    /**
+     * returns a type-casted object
+     *
+     * @param p_key key
+     * @return casted value
+     *
+     * @tparam T value type
+     */
+    @SuppressWarnings( "unchecked" )
+    public final <T extends ILayer> T getTyped( final Object p_key )
+    {
+        final ILayer l_layer = m_layer.get( p_key );
+        CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
+        return (T) l_layer;
+    }
 
     @Override
     public final int size()
@@ -152,21 +166,5 @@ public class CWorld implements Map<String, ILayer>, Serializable
     public final Set<Entry<String, ILayer>> entrySet()
     {
         return m_layer.entrySet();
-    }
-
-    /**
-     * returns a type-casted object
-     *
-     * @param p_key key
-     * @return casted value
-     *
-     * @tparam T value type
-     */
-    @SuppressWarnings( "unchecked" )
-    public final <T extends ILayer> T getTyped( final Object p_key )
-    {
-        final ILayer l_layer = m_layer.get( p_key );
-        CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
-        return (T) l_layer;
     }
 }

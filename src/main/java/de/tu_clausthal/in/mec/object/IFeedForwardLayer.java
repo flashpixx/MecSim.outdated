@@ -51,77 +51,33 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
 {
 
     /**
-     * serialize version ID *
+     * flag for activity
      */
-    private static final long serialVersionUID = 1L;
-    /**
-     * list unprocessing data items
-     */
-    protected final Queue<T> m_processingdata = new ConcurrentLinkedDeque<>();
+    protected boolean m_active = true;
     /**
      * list of finished data
      */
     protected final Queue<T> m_finisheddata = new ConcurrentLinkedDeque<>();
     /**
+     * list unprocessing data items
+     */
+    protected final Queue<T> m_processingdata = new ConcurrentLinkedDeque<>();
+    /**
      * flag for visibility
      */
     protected boolean m_visible = true;
     /**
-     * flag for activity
+     * serialize version ID *
      */
-    protected boolean m_active = true;
-
-    @Override
-    public final boolean isActive()
-    {
-        return m_active;
-    }
-
-    @Override
-    public final void setActive( final boolean p_active )
-    {
-        m_active = p_active;
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return 0;
-    }
-
-    @Override
-    public final boolean isVisible()
-    {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-
-        return m_visible;
-    }
-
-    @Override
-    public final void setVisible( final boolean p_visible )
-    {
-        m_visible = p_visible;
-
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
-    }
-
-    @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
-    {
-
-    }
+    private static final long serialVersionUID = 1L;
 
     /**
-     * method which is called before the object step method is called
+     * method is run, after all objects are finished
      *
-     * @param p_currentstep current step
-     * @param p_object object
+     * @param p_currentstep step number
      */
-    public void beforeStepObject( final int p_currentstep, final T p_object )
+    public void afterStepAllObject( final int p_currentstep )
     {
-
     }
 
     /**
@@ -151,14 +107,70 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     /**
-     * method is run, after all objects are finished
+     * method which is called before the object step method is called
      *
-     * @param p_currentstep step number
+     * @param p_currentstep current step
+     * @param p_object object
      */
-    public void afterStepAllObject( final int p_currentstep )
+    public void beforeStepObject( final int p_currentstep, final T p_object )
     {
+
     }
 
+    @Override
+    public int getCalculationIndex()
+    {
+        return 0;
+    }
+
+    @Override
+    public final boolean isActive()
+    {
+        return m_active;
+    }
+
+    @Override
+    public final void setActive( final boolean p_active )
+    {
+        m_active = p_active;
+    }
+
+    @Override
+    public final boolean isVisible()
+    {
+        if ( CSimulation.getInstance().getUIComponents().exists() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+
+        return m_visible;
+    }
+
+    @Override
+    public final void setVisible( final boolean p_visible )
+    {
+        m_visible = p_visible;
+
+        if ( CSimulation.getInstance().getUIComponents().exists() )
+            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+    }
+
+    @Override
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        if ( !m_visible )
+            return;
+
+        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
+        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
+        for ( final T l_item : this )
+            l_item.paint( p_graphic, p_viewer, p_width, p_height );
+    }
+
+    @Override
+    public void release()
+    {
+        for ( final ISteppable l_item : m_processingdata )
+            l_item.release();
+    }
 
     @Override
     public final int size()
@@ -274,24 +286,10 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
             CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
     }
 
-
     @Override
-    public void release()
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
-        for ( final ISteppable l_item : m_processingdata )
-            l_item.release();
-    }
 
-    @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        if ( !m_visible )
-            return;
-
-        final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
-        for ( final T l_item : this )
-            l_item.paint( p_graphic, p_viewer, p_width, p_height );
     }
 
 

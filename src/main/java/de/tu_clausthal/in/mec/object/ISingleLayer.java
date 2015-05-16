@@ -38,13 +38,19 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
 {
 
     /**
-     * flag for visibility
-     */
-    protected boolean m_visible = true;
-    /**
      * flag for activity
      */
     protected boolean m_active = true;
+    /**
+     * flag for visibility
+     */
+    protected boolean m_visible = true;
+
+    @Override
+    public int getCalculationIndex()
+    {
+        return 0;
+    }
 
     @Override
     public final boolean isActive()
@@ -56,12 +62,6 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     public final void setActive( final boolean p_active )
     {
         m_active = p_active;
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return 0;
     }
 
     @Override
@@ -77,9 +77,9 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
-    public abstract void step( final int p_currentstep, final ILayer p_layer );
+    public abstract void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height );
 
     @Override
-    public abstract void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height );
+    public abstract void step( final int p_currentstep, final ILayer p_layer );
 
 }

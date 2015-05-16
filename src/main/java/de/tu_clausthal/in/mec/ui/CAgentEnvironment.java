@@ -43,13 +43,13 @@ public class CAgentEnvironment
 {
 
     /**
-     * type of the MAS name *
-     */
-    private final EType m_type;
-    /**
      * base URI *
      */
     private final String m_baseuri;
+    /**
+     * type of the MAS name *
+     */
+    private final EType m_type;
 
     /**
      * ctor
@@ -70,13 +70,34 @@ public class CAgentEnvironment
     }
 
     /**
-     * UI method - returns URI base
+     * UI method - gets the agent name from the map
      *
-     * @return base name
+     * @param p_data input data
+     * @return agent name
      */
-    private final String web_uribase()
+    private final String getAgentName( final Map<String, Object> p_data )
     {
-        return m_baseuri;
+        if ( !p_data.containsKey( "name" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );
+
+        return (String) p_data.get( "name" );
+    }
+
+    /**
+     * UI method - checks the syntax of an agent
+     *
+     * @param p_data input data
+     */
+    private final void web_static_check( final Map<String, Object> p_data )
+    {
+        switch ( m_type )
+        {
+            case Jason:
+                IEnvironment.checkAgentFileSyntax( this.getAgentName( p_data ) );
+                break;
+
+            default:
+        }
     }
 
     /**
@@ -93,20 +114,6 @@ public class CAgentEnvironment
                 break;
             default:
         }
-    }
-
-    /**
-     * UI method - gets the agent name from the map
-     *
-     * @param p_data input data
-     * @return agent name
-     */
-    private final String getAgentName( final Map<String, Object> p_data )
-    {
-        if ( !p_data.containsKey( "name" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "noagentname" ) );
-
-        return (String) p_data.get( "name" );
     }
 
     /**
@@ -127,6 +134,27 @@ public class CAgentEnvironment
 
             default:
         }
+    }
+
+    /**
+     * UI method - returns a list of all agents
+     *
+     * @return agent list
+     */
+    private final Map<String, List<String>> web_static_list()
+    {
+        switch ( m_type )
+        {
+            case Jason:
+                return new HashMap<String, List<String>>()
+                {{
+                        put( "agents", Arrays.asList( IEnvironment.getAgentFiles() ) );
+                    }};
+
+            default:
+        }
+
+        return null;
     }
 
     /**
@@ -172,41 +200,13 @@ public class CAgentEnvironment
     }
 
     /**
-     * UI method - returns a list of all agents
+     * UI method - returns URI base
      *
-     * @return agent list
+     * @return base name
      */
-    private final Map<String, List<String>> web_static_list()
+    private final String web_uribase()
     {
-        switch ( m_type )
-        {
-            case Jason:
-                return new HashMap<String, List<String>>()
-                {{
-                        put( "agents", Arrays.asList( IEnvironment.getAgentFiles() ) );
-                    }};
-
-            default:
-        }
-
-        return null;
-    }
-
-    /**
-     * UI method - checks the syntax of an agent
-     *
-     * @param p_data input data
-     */
-    private final void web_static_check( final Map<String, Object> p_data )
-    {
-        switch ( m_type )
-        {
-            case Jason:
-                IEnvironment.checkAgentFileSyntax( this.getAgentName( p_data ) );
-                break;
-
-            default:
-        }
+        return m_baseuri;
     }
 
 

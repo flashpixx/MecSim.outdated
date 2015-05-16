@@ -34,12 +34,12 @@ public interface ISerializable extends Serializable
 {
 
     /**
-     * method is called before data is deserialized *
-     */
-    public void onDeserializationInitialization();
-
-    /**
      * method is called after all data is deserialized *
      */
     public void onDeserializationComplete();
+
+    /**
+     * method is called before data is deserialized *
+     */
+    public void onDeserializationInitialization();
 }

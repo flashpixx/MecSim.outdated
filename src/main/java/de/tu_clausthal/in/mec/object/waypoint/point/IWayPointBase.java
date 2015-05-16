@@ -39,21 +39,13 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
 {
 
     /**
-     * serialize version ID *
+     * factory of this source
      */
-    private static final long serialVersionUID = 1L;
-    /**
-     * position of the source within the map
-     */
-    protected final GeoPosition m_position;
+    protected final P m_factory;
     /**
      * generator of this source
      */
     protected final N m_generator;
-    /**
-     * factory of this source
-     */
-    protected final P m_factory;
     /**
      * inspector map
      */
@@ -61,6 +53,14 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     {{
             putAll( IWayPointBase.super.inspect() );
         }};
+    /**
+     * position of the source within the map
+     */
+    protected final GeoPosition m_position;
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
 
     /**
@@ -96,15 +96,15 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public boolean hasFactoryGenerator()
-    {
-        return ( m_generator != null ) && ( m_factory != null );
-    }
-
-    @Override
     public final GeoPosition getPosition()
     {
         return m_position;
+    }
+
+    @Override
+    public boolean hasFactoryGenerator()
+    {
+        return ( m_generator != null ) && ( m_factory != null );
     }
 
     @Override

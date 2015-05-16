@@ -47,13 +47,13 @@ import java.sql.ResultSet;
 public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
 {
     /**
-     * datasource *
-     */
-    private final BasicDataSource m_datasource = new BasicDataSource();
-    /**
      * flag to set connectivity
      */
     private final boolean m_connectable = isConnectable();
+    /**
+     * datasource *
+     */
+    private final BasicDataSource m_datasource = new BasicDataSource();
 
 
     /**
@@ -73,6 +73,23 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         this.createTableIfNotExists(
                 "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)",
                 new String[]{"add primary key (step,zonegroup,zone)"}
+        );
+    }
+
+    /**
+     * check if database is connectable
+     *
+     * @return boolean of connectivity
+     */
+    private static boolean isConnectable()
+    {
+        final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
+        final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
+        if ( ( l_driver == null ) || ( !l_driver.isEmpty() ) || ( l_url != null ) || ( !l_url.isEmpty() ) )
+            return false;
+
+        return CConfiguration.getInstance().get().<Boolean>get(
+                "database/active"
         );
     }
 
@@ -109,23 +126,6 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
         }
     }
 
-    /**
-     * check if database is connectable
-     *
-     * @return boolean of connectivity
-     */
-    private static boolean isConnectable()
-    {
-        final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
-        final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
-        if ( ( l_driver == null ) || ( !l_driver.isEmpty() ) || ( l_url != null ) || ( !l_url.isEmpty() ) )
-            return false;
-
-        return CConfiguration.getInstance().get().<Boolean>get(
-                "database/active"
-        );
-    }
-
     @Override
     public final int getCalculationIndex()
     {
@@ -145,12 +145,12 @@ public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
     {
 
         @Override
-        public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+        public final void release()
         {
         }
 
         @Override
-        public final void release()
+        public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
         }
     }

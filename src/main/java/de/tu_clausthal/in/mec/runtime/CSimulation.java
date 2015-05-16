@@ -66,29 +66,29 @@ public class CSimulation
      */
     private final CMainLoop m_mainloop = new CMainLoop();
     /**
+     * object of the thread loop *
+     */
+    private Thread m_mainloopthread;
+    /**
      * event manager
      */
     private final CMessageSystem m_messagesystem = new CMessageSystem();
-    /**
-     * random object
-     */
-    private final Random m_random = new Random();
     /**
      * object increment value - thread-safe
      */
     private final AtomicLong m_objectcounter = new AtomicLong( 0 );
     /**
-     * world of the simulation
+     * random object
      */
-    private CWorld m_world = new CWorld();
-    /**
-     * object of the thread loop *
-     */
-    private Thread m_mainloopthread;
+    private final Random m_random = new Random();
     /**
      * UI components
      */
     private CUIComponents m_uicomponents = new CUIComponents();
+    /**
+     * world of the simulation
+     */
+    private CWorld m_world = new CWorld();
 
     /**
      * private ctor
@@ -109,19 +109,44 @@ public class CSimulation
     }
 
     /**
-     * returns the simulation world
+     * get a object name, depend on simulation data
+     *
+     * @param p_input input string
+     * @param p_object object for object hash
+     * @return string with name
+     *
+     * @note %hash% with the object hash or 0, %step% with the current simulation step, %rand% with a random integer value, %inc% increment value
      */
-    public CWorld getWorld()
+    public final String generateObjectName( final String p_input, final Object p_object )
     {
-        return m_world;
+        String l_return = new String( p_input );
+
+        l_return = l_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
+        l_return = l_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
+        if ( l_return.contains( "%rand%" ) )
+            l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
+        if ( l_return.contains( "%inc%" ) )
+            l_return = l_return.replace( "%inc%", new Long( m_objectcounter.getAndIncrement() ).toString() );
+
+        return l_return;
     }
 
     /**
-     * returns the UI components
+     * UI method - gets the layer name from the map
+     *
+     * @param p_data input data
+     * @return layer name
      */
-    public CUIComponents getUIComponents()
+    private String getLayerName( final Map<String, Object> p_data )
     {
-        return m_uicomponents;
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
+
+        final String l_id = (String) p_data.get( "id" );
+        if ( !m_world.containsKey( l_id ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_id ) );
+
+        return l_id;
     }
 
     /**
@@ -133,24 +158,19 @@ public class CSimulation
     }
 
     /**
-     * runs the simulation for n steps
-     *
-     * @param p_steps number of steps
-     * @throws InterruptedException throws the exception on thread startup
+     * returns the UI components
      */
-    public void start( final int p_steps ) throws InterruptedException
+    public CUIComponents getUIComponents()
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-        this.threadStartUp();
+        return m_uicomponents;
+    }
 
-        CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
-
-        // run thread and wait until thread is finished
-        m_mainloop.resume( p_steps );
-        m_mainloopthread.join();
-
-        m_mainloopthread = null;
+    /**
+     * returns the simulation world
+     */
+    public CWorld getWorld()
+    {
+        return m_world;
     }
 
     /**
@@ -161,48 +181,6 @@ public class CSimulation
     public boolean isRunning()
     {
         return !m_mainloop.isPaused();
-    }
-
-    /**
-     * starts the thread worker *
-     */
-    private void threadStartUp()
-    {
-        if ( m_mainloopthread != null )
-            return;
-
-        m_mainloopthread = new Thread( m_mainloop );
-        m_mainloopthread.start();
-    }
-
-    /**
-     * stores the simulation in an output stream
-     *
-     * @param p_output output file
-     * @throws IOException throws the exception on file writing
-     * @bug incomplete routing map
-     */
-    public void store( final File p_output ) throws IOException
-    {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-
-
-        try (
-                FileOutputStream l_stream = new FileOutputStream( p_output );
-                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
-        )
-        {
-            //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
-            l_output.writeObject( m_world );
-
-            CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-            throw new IOException( l_exception.getMessage() );
-        }
     }
 
     /**
@@ -277,36 +255,25 @@ public class CSimulation
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
     }
 
-
     /**
-     * get a object name, depend on simulation data
+     * runs the simulation for n steps
      *
-     * @param p_input input string
-     * @param p_object object for object hash
-     * @return string with name
-     *
-     * @note %hash% with the object hash or 0, %step% with the current simulation step, %rand% with a random integer value, %inc% increment value
+     * @param p_steps number of steps
+     * @throws InterruptedException throws the exception on thread startup
      */
-    public final String generateObjectName( final String p_input, final Object p_object )
+    public void start( final int p_steps ) throws InterruptedException
     {
-        String l_return = new String( p_input );
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        this.threadStartUp();
 
-        l_return = l_return.replace( "%hash%", new Integer( p_object != null ? p_object.hashCode() : 0 ).toString() );
-        l_return = l_return.replace( "%step%", new Integer( m_mainloop.getSimulationstep() ).toString() );
-        if ( l_return.contains( "%rand%" ) )
-            l_return = l_return.replace( "%rand%", new Integer( m_random.nextInt() ).toString() );
-        if ( l_return.contains( "%inc%" ) )
-            l_return = l_return.replace( "%inc%", new Long( m_objectcounter.getAndIncrement() ).toString() );
+        CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
 
-        return l_return;
-    }
+        // run thread and wait until thread is finished
+        m_mainloop.resume( p_steps );
+        m_mainloopthread.join();
 
-    /**
-     * UI method - start the simulation
-     */
-    private void web_static_start()
-    {
-        this.start();
+        m_mainloopthread = null;
     }
 
     /**
@@ -324,14 +291,6 @@ public class CSimulation
     }
 
     /**
-     * UI method - stop the simulation
-     */
-    private void web_static_stop()
-    {
-        this.stop();
-    }
-
-    /**
      * stops the current simulation
      */
     public void stop()
@@ -344,11 +303,71 @@ public class CSimulation
     }
 
     /**
-     * UI method - reset the simulation
+     * stores the simulation in an output stream
+     *
+     * @param p_output output file
+     * @throws IOException throws the exception on file writing
+     * @bug incomplete routing map
      */
-    private void web_static_reset()
+    public void store( final File p_output ) throws IOException
     {
-        this.reset();
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+
+
+        try (
+                FileOutputStream l_stream = new FileOutputStream( p_output );
+                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
+        )
+        {
+            //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
+            l_output.writeObject( m_world );
+
+            CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+            throw new IOException( l_exception.getMessage() );
+        }
+    }
+
+    /**
+     * starts the thread worker *
+     */
+    private void threadStartUp()
+    {
+        if ( m_mainloopthread != null )
+            return;
+
+        m_mainloopthread = new Thread( m_mainloop );
+        m_mainloopthread.start();
+    }
+
+    /**
+     * UI method - disables / enables a layer
+     */
+    private void web_static_disableenablelayer( final Map<String, Object> p_data )
+    {
+        if ( this.isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+        if ( !p_data.containsKey( "state" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
+
+        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( (boolean) p_data.get( "state" ) );
+    }
+
+    /**
+     * UI method - hide / show a layer
+     */
+    private void web_static_hideshowlayer( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "state" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
+
+        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
+        if ( l_layer instanceof IViewableLayer )
+            ( (IViewableLayer) l_layer ).setVisible( (boolean) p_data.get( "state" ) );
     }
 
     /**
@@ -375,49 +394,28 @@ public class CSimulation
     }
 
     /**
-     * UI method - disables / enables a layer
+     * UI method - reset the simulation
      */
-    private void web_static_disableenablelayer( final Map<String, Object> p_data )
+    private void web_static_reset()
     {
-        if ( this.isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-        if ( !p_data.containsKey( "state" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
-
-        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( (boolean) p_data.get( "state" ) );
+        this.reset();
     }
 
     /**
-     * UI method - gets the layer name from the map
-     *
-     * @param p_data input data
-     * @return layer name
+     * UI method - start the simulation
      */
-    private String getLayerName( final Map<String, Object> p_data )
+    private void web_static_start()
     {
-        if ( !p_data.containsKey( "id" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
-
-        final String l_id = (String) p_data.get( "id" );
-        if ( !m_world.containsKey( l_id ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_id ) );
-
-        return l_id;
+        this.start();
     }
 
     /**
-     * UI method - hide / show a layer
+     * UI method - stop the simulation
      */
-    private void web_static_hideshowlayer( final Map<String, Object> p_data )
+    private void web_static_stop()
     {
-        if ( !p_data.containsKey( "state" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
-
-        final Object l_layer = m_world.get( this.getLayerName( p_data ) );
-        if ( l_layer instanceof IViewableLayer )
-            ( (IViewableLayer) l_layer ).setVisible( (boolean) p_data.get( "state" ) );
+        this.stop();
     }
-
 
     /**
      * UI components bundle
@@ -425,36 +423,26 @@ public class CSimulation
     public class CUIComponents
     {
         /**
-         * HTTP server
+         * inspector
          */
-        private final CServer m_webserver = null;
+        private final CInspector m_inspector = null;
         /**
          * UI
          */
         private final CUI m_ui = null;
         /**
-         * inspector
+         * HTTP server
          */
-        private final CInspector m_inspector = null;
+        private final CServer m_webserver = null;
 
         /**
-         * returns the HTTP server
+         * returns a boolean for existing UI
          *
-         * @return null or server
+         * @return UI exists
          */
-        public CServer getWebServer()
+        public boolean exists()
         {
-            return m_webserver;
-        }
-
-        /**
-         * returns the UI
-         *
-         * @return UI
-         */
-        public CUI getUI()
-        {
-            return m_ui;
+            return ( m_ui != null ) && ( m_webserver != null ) && ( m_inspector != null );
         }
 
         /**
@@ -468,13 +456,23 @@ public class CSimulation
         }
 
         /**
-         * returns a boolean for existing UI
+         * returns the UI
          *
-         * @return UI exists
+         * @return UI
          */
-        public boolean exists()
+        public CUI getUI()
         {
-            return ( m_ui != null ) && ( m_webserver != null ) && ( m_inspector != null );
+            return m_ui;
+        }
+
+        /**
+         * returns the HTTP server
+         *
+         * @return null or server
+         */
+        public CServer getWebServer()
+        {
+            return m_webserver;
         }
 
     }

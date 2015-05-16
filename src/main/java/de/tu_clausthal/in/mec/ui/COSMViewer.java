@@ -58,9 +58,9 @@ import java.util.Map;
 public class COSMViewer extends JXMapViewer
 {
     /**
-     * serialize version ID *
+     * clickable layer
      */
-    private static final long serialVersionUID = 1L;
+    private EClickableLayer m_clickablelayer = EClickableLayer.Sources;
     /**
      * route painter
      */
@@ -70,9 +70,9 @@ public class COSMViewer extends JXMapViewer
      */
     private CompoundPainter<JXMapViewer> m_painter = new CompoundPainter<>();
     /**
-     * clickable layer
+     * serialize version ID *
      */
-    private EClickableLayer m_clickablelayer = EClickableLayer.Sources;
+    private static final long serialVersionUID = 1L;
 
     /**
      * ctor with loading configuration defaults and listener definition
@@ -106,36 +106,6 @@ public class COSMViewer extends JXMapViewer
     }
 
     /**
-     * resets the view *
-     */
-    public final void resetConfiguration()
-    {
-        this.setZoom( CConfiguration.getInstance().get().<Integer>get( "ui/zoom" ) );
-        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
-        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
-    }
-
-    /**
-     * sets a new route
-     *
-     * @param p_line route list
-     */
-    public void paintFadeLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )
-    {
-        m_linepainter.setLine( p_line );
-    }
-
-    /**
-     * stores the current configuration
-     */
-    public final void setConfiguration()
-    {
-        CConfiguration.getInstance().get().<Integer>set( "ui/zoom", this.getZoom() );
-        CConfiguration.getInstance().get().<GeoPosition>set( "ui/geoposition", this.getCenterPosition() );
-    }
-
-
-    /**
      * returns the compounend painter
      *
      * @return painter
@@ -145,6 +115,15 @@ public class COSMViewer extends JXMapViewer
         return m_painter;
     }
 
+    /**
+     * returns the current active layer
+     *
+     * @return layer
+     */
+    public final EClickableLayer getCurrentClickableLayer()
+    {
+        return m_clickablelayer;
+    }
 
     /**
      * returns the geoposition of a mouse position
@@ -158,6 +137,34 @@ public class COSMViewer extends JXMapViewer
         return this.getTileFactory().pixelToGeo( new Point( l_viewportBounds.x + p_point.x, l_viewportBounds.y + p_point.y ), this.getZoom() );
     }
 
+    /**
+     * sets a new route
+     *
+     * @param p_line route list
+     */
+    public void paintFadeLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_line )
+    {
+        m_linepainter.setLine( p_line );
+    }
+
+    /**
+     * resets the view *
+     */
+    public final void resetConfiguration()
+    {
+        this.setZoom( CConfiguration.getInstance().get().<Integer>get( "ui/zoom" ) );
+        this.setCenterPosition( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
+        this.setAddressLocation( CConfiguration.getInstance().get().<GeoPosition>get( "ui/geoposition" ) );
+    }
+
+    /**
+     * stores the current configuration
+     */
+    public final void setConfiguration()
+    {
+        CConfiguration.getInstance().get().<Integer>set( "ui/zoom", this.getZoom() );
+        CConfiguration.getInstance().get().<GeoPosition>set( "ui/geoposition", this.getCenterPosition() );
+    }
 
     /**
      * UI method - returns list of clickable layer names and its state
@@ -182,16 +189,6 @@ public class COSMViewer extends JXMapViewer
             throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
 
         m_clickablelayer = EClickableLayer.valueOf( (String) p_data.get( "id" ) );
-    }
-
-    /**
-     * returns the current active layer
-     *
-     * @return layer
-     */
-    public final EClickableLayer getCurrentClickableLayer()
-    {
-        return m_clickablelayer;
     }
 
 
@@ -244,29 +241,29 @@ public class COSMViewer extends JXMapViewer
     private class CLinePainter implements ActionListener, Painter<JXMapViewer>
     {
         /**
-         * timer
+         * alpha value
          */
-        private final Timer m_timer = new Timer( CConfiguration.getInstance().get().<Integer>get( "ui/routepainterdelay" ), this );
+        private float m_alpha = 1;
         /**
          * route list with painting structure *
          */
         private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> m_line;
         /**
-         * alpha value
+         * timer
          */
-        private float m_alpha = 1;
+        private final Timer m_timer = new Timer( CConfiguration.getInstance().get().<Integer>get( "ui/routepainterdelay" ), this );
 
-        /**
-         * sets the route and restart the opacity timer
-         *
-         * @param p_route route list
-         */
-        public void setLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
+        @Override
+        public void actionPerformed( final ActionEvent e )
         {
-            m_timer.stop();
-            m_alpha = 1;
-            m_line = p_route;
-            m_timer.start();
+            m_alpha += -0.01;
+            if ( m_alpha <= 0 )
+            {
+                m_line = null;
+                m_alpha = 0;
+                m_timer.stop();
+            }
+            COSMViewer.this.repaint();
         }
 
         @Override
@@ -290,17 +287,17 @@ public class COSMViewer extends JXMapViewer
             }
         }
 
-        @Override
-        public void actionPerformed( final ActionEvent e )
+        /**
+         * sets the route and restart the opacity timer
+         *
+         * @param p_route route list
+         */
+        public void setLine( final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> p_route )
         {
-            m_alpha += -0.01;
-            if ( m_alpha <= 0 )
-            {
-                m_line = null;
-                m_alpha = 0;
-                m_timer.stop();
-            }
-            COSMViewer.this.repaint();
+            m_timer.stop();
+            m_alpha = 1;
+            m_line = p_route;
+            m_timer.start();
         }
     }
 

@@ -50,29 +50,6 @@ public class CSocketStorage
         m_communicator.clear();
     }
 
-
-    /**
-     * returns the number of objects
-     *
-     * @return
-     */
-    public final int size()
-    {
-        return m_communicator.size();
-    }
-
-
-    /**
-     * checks emptyness
-     *
-     * @return boolean of emptyness
-     */
-    public final boolean isEmpty()
-    {
-        return m_communicator.isEmpty();
-    }
-
-
     /**
      * checks if a key exists
      *
@@ -83,7 +60,6 @@ public class CSocketStorage
     {
         return m_communicator.containsKey( p_key );
     }
-
 
     /**
      * checks if a websocket exists
@@ -96,7 +72,6 @@ public class CSocketStorage
         return m_communicator.containsKey( p_value.getID() );
     }
 
-
     /**
      * returns the websocket communicator
      *
@@ -108,6 +83,37 @@ public class CSocketStorage
         return m_communicator.get( p_key );
     }
 
+    /**
+     * runs the handshake
+     *
+     * @param p_action action
+     * @param p_communicator communicator
+     */
+    public final void handshake( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator )
+    {
+        switch ( p_action )
+        {
+            case Open:
+                m_communicator.put( p_communicator.getID(), p_communicator );
+                break;
+
+            case Close:
+                m_communicator.remove( p_communicator.getID() );
+                break;
+
+            default:
+        }
+    }
+
+    /**
+     * checks emptyness
+     *
+     * @return boolean of emptyness
+     */
+    public final boolean isEmpty()
+    {
+        return m_communicator.isEmpty();
+    }
 
     /**
      * adds a websocket communicator
@@ -143,30 +149,6 @@ public class CSocketStorage
         return m_communicator.remove( p_value.getID() );
     }
 
-
-    /**
-     * runs the handshake
-     *
-     * @param p_action action
-     * @param p_communicator communicator
-     */
-    public final void handshake( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator )
-    {
-        switch ( p_action )
-        {
-            case Open:
-                m_communicator.put( p_communicator.getID(), p_communicator );
-                break;
-
-            case Close:
-                m_communicator.remove( p_communicator.getID() );
-                break;
-
-            default:
-        }
-    }
-
-
     /**
      * sends the payload to all sockets
      *
@@ -185,7 +167,6 @@ public class CSocketStorage
             }
     }
 
-
     /**
      * sends the byte payload to all sockets
      *
@@ -202,5 +183,15 @@ public class CSocketStorage
             {
                 CLogger.error( l_exception );
             }
+    }
+
+    /**
+     * returns the number of objects
+     *
+     * @return
+     */
+    public final int size()
+    {
+        return m_communicator.size();
     }
 }

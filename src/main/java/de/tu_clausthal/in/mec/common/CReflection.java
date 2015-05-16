@@ -91,18 +91,6 @@ public class CReflection
     {
     }
 
-
-    /**
-     * retruns the class index
-     *
-     * @return class index object
-     */
-    public static CClassIndex getClassIndex()
-    {
-        return c_classindex;
-    }
-
-
     /**
      * get a class field of the class or super classes and returns getter / setter handles
      *
@@ -139,7 +127,6 @@ public class CReflection
         return l_struct;
     }
 
-
     /**
      * returns all fields of a class and the super classes
      *
@@ -150,7 +137,6 @@ public class CReflection
     {
         return getClassFields( p_class, null );
     }
-
 
     /**
      * returns filtered fields of a class and the super classes
@@ -185,6 +171,15 @@ public class CReflection
         return l_fields;
     }
 
+    /**
+     * retruns the class index
+     *
+     * @return class index object
+     */
+    public static CClassIndex getClassIndex()
+    {
+        return c_classindex;
+    }
 
     /**
      * returns a void-method from a class
@@ -297,13 +292,13 @@ public class CReflection
     public static class CMethod
     {
         /**
-         * method object *
-         */
-        private final Method m_method;
-        /**
          * method handle *
          */
         private final MethodHandle m_handle;
+        /**
+         * method object *
+         */
+        private final Method m_method;
 
 
         /**
@@ -318,16 +313,6 @@ public class CReflection
         }
 
         /**
-         * returns the method object
-         *
-         * @return method object
-         */
-        public final Method getMethod()
-        {
-            return m_method;
-        }
-
-        /**
          * returns the method handle object
          *
          * @return handle object
@@ -335,6 +320,16 @@ public class CReflection
         public final MethodHandle getHandle()
         {
             return m_handle;
+        }
+
+        /**
+         * returns the method object
+         *
+         * @return method object
+         */
+        public final Method getMethod()
+        {
+            return m_method;
         }
 
     }
@@ -347,6 +342,10 @@ public class CReflection
     {
 
         /**
+         * field of the property
+         */
+        private final Field m_field;
+        /**
          * getter method handle *
          */
         private final MethodHandle m_getter;
@@ -354,10 +353,6 @@ public class CReflection
          * setter method handle *
          */
         private final MethodHandle m_setter;
-        /**
-         * field of the property
-         */
-        private final Field m_field;
 
 
         /**
@@ -439,10 +434,6 @@ public class CReflection
     {
 
         /**
-         * object reference *
-         */
-        private final T m_object;
-        /**
          * cache map *
          */
         private final Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
@@ -450,6 +441,10 @@ public class CReflection
          * method filter
          */
         private final IMethodFilter m_filter;
+        /**
+         * object reference *
+         */
+        private final T m_object;
 
 
         /**
@@ -475,16 +470,6 @@ public class CReflection
         }
 
         /**
-         * object getter
-         *
-         * @return bind object
-         */
-        public final T getObject()
-        {
-            return m_object;
-        }
-
-        /**
          * get the method handle
          *
          * @param p_methodname method name
@@ -494,7 +479,6 @@ public class CReflection
         {
             return this.get( p_methodname, null );
         }
-
 
         /**
          * get the method handle
@@ -520,6 +504,16 @@ public class CReflection
             return l_handle;
         }
 
+        /**
+         * object getter
+         *
+         * @return bind object
+         */
+        public final T getObject()
+        {
+            return m_object;
+        }
+
     }
 
 
@@ -533,13 +527,13 @@ public class CReflection
          */
         private static final String c_classextension = "class";
         /**
-         * parts (start-with) for ignores *
-         */
-        private final Set<String> m_filter = new HashSet<>();
-        /**
          * map with classname and class object *
          */
         private final MultiValueMap<String, Class<?>> m_classname = new MultiValueMap<>();
+        /**
+         * parts (start-with) for ignores *
+         */
+        private final Set<String> m_filter = new HashSet<>();
         /**
          * filter type
          */
@@ -563,6 +557,42 @@ public class CReflection
         public void filter( final String... p_startwith )
         {
             m_filter.addAll( Arrays.asList( p_startwith ) );
+        }
+
+        /**
+         * returns the first entry of the name
+         *
+         * @param p_class simple class name
+         * @return first match
+         */
+        public Class<?> get( final String p_class )
+        {
+            final Collection<Class<?>> l_return = m_classname.getCollection( p_class );
+            if ( ( l_return != null ) && ( l_return.iterator().hasNext() ) )
+                return l_return.iterator().next();
+            return null;
+        }
+
+        /**
+         * returns the collection of all classes
+         *
+         * @param p_class simple class name
+         * @return collection of classes objects
+         */
+        public Collection<Class<?>> getAll( final String p_class )
+        {
+            return m_classname.getCollection( p_class );
+        }
+
+        /**
+         * replaces a file name with path to a class name
+         *
+         * @param p_file filename
+         * @return class name
+         */
+        private String getClassnameFromFile( String p_file )
+        {
+            return p_file.replace( "." + c_classextension, "" ).replace( File.separator, ClassUtils.PACKAGE_SEPARATOR );
         }
 
         /**
@@ -594,32 +624,6 @@ public class CReflection
                 catch ( final Error l_error )
                 {
                 }
-        }
-
-        /**
-         * replaces a file name with path to a class name
-         *
-         * @param p_file filename
-         * @return class name
-         */
-        private String getClassnameFromFile( String p_file )
-        {
-            return p_file.replace( "." + c_classextension, "" ).replace( File.separator, ClassUtils.PACKAGE_SEPARATOR );
-        }
-
-        /**
-         * checks a string class name with the ignore list
-         *
-         * @param p_classname class string name
-         * @return true on existsing of the ignore list
-         */
-        private boolean startsIgnoreWith( final String p_classname )
-        {
-            for ( final String l_item : m_filter )
-                if ( p_classname.startsWith( l_item ) )
-                    return true;
-
-            return false;
         }
 
         /**
@@ -667,28 +671,18 @@ public class CReflection
         }
 
         /**
-         * returns the first entry of the name
+         * checks a string class name with the ignore list
          *
-         * @param p_class simple class name
-         * @return first match
+         * @param p_classname class string name
+         * @return true on existsing of the ignore list
          */
-        public Class<?> get( final String p_class )
+        private boolean startsIgnoreWith( final String p_classname )
         {
-            final Collection<Class<?>> l_return = m_classname.getCollection( p_class );
-            if ( ( l_return != null ) && ( l_return.iterator().hasNext() ) )
-                return l_return.iterator().next();
-            return null;
-        }
+            for ( final String l_item : m_filter )
+                if ( p_classname.startsWith( l_item ) )
+                    return true;
 
-        /**
-         * returns the collection of all classes
-         *
-         * @param p_class simple class name
-         * @return collection of classes objects
-         */
-        public Collection<Class<?>> getAll( final String p_class )
-        {
-            return m_classname.getCollection( p_class );
+            return false;
         }
 
         /**

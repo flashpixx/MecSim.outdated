@@ -57,13 +57,13 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      */
     private static final String c_seperator = "/";
     /**
-     * web-static prefix
-     */
-    private static final String c_webstatic = "web_static_";
-    /**
      * web-dynamic prefix
      */
     private static final String c_webdynamic = "web_dynamic_";
+    /**
+     * web-static prefix
+     */
+    private static final String c_webstatic = "web_static_";
     /**
      * web-uribase name
      */
@@ -73,13 +73,13 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      */
     private final PegDownProcessor m_markdown = new PegDownProcessor( Extensions.ALL );
     /**
-     * virtual-locations
-     */
-    private final CVirtualLocation m_virtuallocation;
-    /**
      * mimetype detector
      */
     private final MimeUtil2 m_mimetype = new MimeUtil2();
+    /**
+     * virtual-locations
+     */
+    private final CVirtualLocation m_virtuallocation;
     /**
      * websocket handler
      */
@@ -123,79 +123,91 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         CBootstrap.afterServerInit( this );
     }
 
-
-    @Override
-    public final Response serve( final IHTTPSession p_session )
+    /**
+     * dynamic method binding
+     *
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
+     */
+    private void bindDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
     {
-        // try to get the websocket first - try-catch avoid NPE because openWebSocket can create the exception
-        try
-        {
-            final Response l_response = m_websockethandler.serve( p_session );
-            if ( l_response != null )
-                return l_response;
-        }
-        catch ( final NullPointerException l_exception )
-        {
-        }
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webdynamic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webdynamic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
 
-
-        // no websocket
-        try
-        {
-            // get location - and check if it is a websocket
-            final IVirtualLocation l_location = m_virtuallocation.get( p_session );
-
-            if ( l_location instanceof CVirtualDynamicMethod )
-                throw new Exception();
-            if ( l_location instanceof CVirtualStaticMethod )
-                return this.setDefaultHeader( this.getVirtualStaticMethod( l_location, p_session ), p_session );
-
-            return this.setDefaultHeader( this.getVirtualDirFile( l_location, p_session ), p_session );
-
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-            return this.setDefaultHeader( new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
-        }
+        m_virtuallocation.add( new CVirtualDynamicMethod( m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
     }
 
-
     /**
-     * set default header items
+     * static method binding
      *
-     * @param p_response response
-     * @param p_session session
-     * @return modified response
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
      */
-    private Response setDefaultHeader( final Response p_response, final IHTTPSession p_session )
+    private void bindStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
     {
-        p_response.addHeader( "Location", p_session.getUri() );
-        p_response.addHeader( "Expires", "-1" );
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webstatic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webstatic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
 
-        // is needed for ajax request
-        // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
-        p_response.addHeader( "Access-Control-Allow-Origin", "*" );
-        p_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT" );
-        p_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept" );
-
-        return p_response;
+        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
     }
 
+    /**
+     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
+     */
+    private String getMimeType( final URL p_url )
+    {
+        final Collection l_types = m_mimetype.getMimeTypes( p_url );
+        if ( l_types.size() == 1 )
+            return l_types.iterator().next().toString();
+
+        for ( final Object l_item : l_types )
+        {
+            final MimeType l_type = (MimeType) l_item;
+            if ( !l_type.toString().startsWith( "application/" ) )
+                return l_type.toString();
+        }
+        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
+    }
 
     /**
-     * generates HTTP response of a static method calls
+     * returns URI base if exists
      *
-     * @param p_location location object
-     * @param p_session session object
-     * @return response
-     *
-     * @throws Throwable on error
+     * @param p_object object
+     * @return empty string or URI
      */
-    private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    private String getURIBase( final Object p_object )
     {
-        CLogger.info( p_session.getUri() );
-        return p_location.<Response>get( p_session );
+        // try to read basepart
+        String l_uribase = "";
+        try
+        {
+            final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
+            if ( l_data instanceof String )
+                l_uribase = l_data.toString().toLowerCase();
+
+            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
+            {
+                if ( l_uribase.startsWith( c_seperator ) )
+                    l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( c_seperator ) )
+                    l_uribase += c_seperator;
+            }
+        }
+        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
+        {
+        }
+
+        return l_uribase;
     }
 
     /**
@@ -245,21 +257,28 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     }
 
     /**
-     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
+     * returns the virtual-location object
+     *
+     * @return location
      */
-    private String getMimeType( final URL p_url )
+    public final CVirtualLocation getVirtualLocation()
     {
-        final Collection l_types = m_mimetype.getMimeTypes( p_url );
-        if ( l_types.size() == 1 )
-            return l_types.iterator().next().toString();
+        return m_virtuallocation;
+    }
 
-        for ( final Object l_item : l_types )
-        {
-            final MimeType l_type = (MimeType) l_item;
-            if ( !l_type.toString().startsWith( "application/" ) )
-                return l_type.toString();
-        }
-        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
+    /**
+     * generates HTTP response of a static method calls
+     *
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     *
+     * @throws Throwable on error
+     */
+    private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        CLogger.info( p_session.getUri() );
+        return p_location.<Response>get( p_session );
     }
 
     @Override
@@ -274,16 +293,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         }
 
         return null;
-    }
-
-    /**
-     * returns the virtual-location object
-     *
-     * @return location
-     */
-    public final CVirtualLocation getVirtualLocation()
-    {
-        return m_virtuallocation;
     }
 
     /**
@@ -318,97 +327,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         {
             this.bindStaticMethod( p_object, l_method.getValue(), l_uriclass );
             this.bindDynamicMethod( p_object, l_method.getValue(), l_uriclass );
-        }
-    }
-
-    /**
-     * static method binding
-     *
-     * @param p_object bind object
-     * @param p_method method object
-     * @param p_uriclass class name
-     */
-    private void bindStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
-    {
-        String l_methodname = p_method.getMethod().getName().toLowerCase();
-        if ( !l_methodname.contains( c_webstatic ) )
-            return;
-        l_methodname = l_methodname.replace( c_webstatic, "" );
-        if ( l_methodname.isEmpty() )
-            return;
-
-        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
-    }
-
-
-    /**
-     * dynamic method binding
-     *
-     * @param p_object bind object
-     * @param p_method method object
-     * @param p_uriclass class name
-     */
-    private void bindDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
-    {
-        String l_methodname = p_method.getMethod().getName().toLowerCase();
-        if ( !l_methodname.contains( c_webdynamic ) )
-            return;
-        l_methodname = l_methodname.replace( c_webdynamic, "" );
-        if ( l_methodname.isEmpty() )
-            return;
-
-        m_virtuallocation.add( new CVirtualDynamicMethod( m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
-    }
-
-
-    /**
-     * returns URI base if exists
-     *
-     * @param p_object object
-     * @return empty string or URI
-     */
-    private String getURIBase( final Object p_object )
-    {
-        // try to read basepart
-        String l_uribase = "";
-        try
-        {
-            final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
-            if ( l_data instanceof String )
-                l_uribase = l_data.toString().toLowerCase();
-
-            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
-            {
-                if ( l_uribase.startsWith( c_seperator ) )
-                    l_uribase = l_uribase.substring( 1 );
-                if ( !l_uribase.endsWith( c_seperator ) )
-                    l_uribase += c_seperator;
-            }
-        }
-        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
-        {
-        }
-
-        return l_uribase;
-    }
-
-    /**
-     * adds a new virtual file to the server with existance checking
-     *
-     * @param p_source relative source path
-     * @param p_uri URI
-     */
-    public final void registerVirtualFile( final String p_source, final String p_uri )
-    {
-        try
-        {
-            final URL l_url = CCommon.getResourceURL( p_source );
-            if ( l_url != null )
-                m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
-        }
-        catch ( final IllegalArgumentException l_exception )
-        {
-            CLogger.error( l_exception );
         }
     }
 
@@ -468,6 +386,83 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     public final void registerVirtualDirectory( final String p_source, final String p_index, final String p_uri, final CMarkdownRenderer p_markdown )
     {
         this.registerVirtualDirectory( new File( p_source ), p_index, p_uri, p_markdown );
+    }
+
+    /**
+     * adds a new virtual file to the server with existance checking
+     *
+     * @param p_source relative source path
+     * @param p_uri URI
+     */
+    public final void registerVirtualFile( final String p_source, final String p_uri )
+    {
+        try
+        {
+            final URL l_url = CCommon.getResourceURL( p_source );
+            if ( l_url != null )
+                m_virtuallocation.add( new CVirtualFile( l_url, p_uri ) );
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
+
+    @Override
+    public final Response serve( final IHTTPSession p_session )
+    {
+        // try to get the websocket first - try-catch avoid NPE because openWebSocket can create the exception
+        try
+        {
+            final Response l_response = m_websockethandler.serve( p_session );
+            if ( l_response != null )
+                return l_response;
+        }
+        catch ( final NullPointerException l_exception )
+        {
+        }
+
+
+        // no websocket
+        try
+        {
+            // get location - and check if it is a websocket
+            final IVirtualLocation l_location = m_virtuallocation.get( p_session );
+
+            if ( l_location instanceof CVirtualDynamicMethod )
+                throw new Exception();
+            if ( l_location instanceof CVirtualStaticMethod )
+                return this.setDefaultHeader( this.getVirtualStaticMethod( l_location, p_session ), p_session );
+
+            return this.setDefaultHeader( this.getVirtualDirFile( l_location, p_session ), p_session );
+
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+            return this.setDefaultHeader( new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
+        }
+    }
+
+    /**
+     * set default header items
+     *
+     * @param p_response response
+     * @param p_session session
+     * @return modified response
+     */
+    private Response setDefaultHeader( final Response p_response, final IHTTPSession p_session )
+    {
+        p_response.addHeader( "Location", p_session.getUri() );
+        p_response.addHeader( "Expires", "-1" );
+
+        // is needed for ajax request
+        // @see http://stackoverflow.com/questions/10548883/request-header-field-authorization-is-not-allowed-error-tastypie
+        p_response.addHeader( "Access-Control-Allow-Origin", "*" );
+        p_response.addHeader( "Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT" );
+        p_response.addHeader( "Access-Control-Allow-Headers", "Origin,Content-Type,Accept" );
+
+        return p_response;
     }
 
 }

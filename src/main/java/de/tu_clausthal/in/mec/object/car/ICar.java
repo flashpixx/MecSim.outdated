@@ -40,12 +40,11 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
 
 
     /**
-     * returns the maximum speed of the car
+     * define an individual acceleration
      *
-     * @return speed value
+     * @return number (greater than zero)
      */
-    public int getMaximumSpeed();
-
+    public int getAcceleration();
 
     /**
      * returns the current speed of the car
@@ -61,11 +60,18 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
     public void setCurrentSpeed( int p_speed ) throws IllegalArgumentException;
 
     /**
-     * returns a probability for lingering
+     * define an individual deceleration
      *
-     * @return double value in [0,1]
+     * @return number (greater than zero)
      */
-    public double getLingerProbability();
+    public int getDeceleration();
+
+    /**
+     * get current edge object on the graph
+     *
+     * @return edge
+     */
+    public EdgeIteratorState getEdge();
 
     /**
      * returns the current geo position of the car
@@ -74,13 +80,19 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      */
     public GeoPosition getGeoposition();
 
+    /**
+     * returns a probability for lingering
+     *
+     * @return double value in [0,1]
+     */
+    public double getLingerProbability();
 
     /**
-     * boolean method, that returns true, if the car has reached its end
+     * returns the maximum speed of the car
      *
-     * @return boolean for reaching the end
+     * @return speed value
      */
-    public boolean hasEndReached();
+    public int getMaximumSpeed();
 
     /**
      * returns the current predecessor of the car and the distance
@@ -88,7 +100,6 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      * @return predecessor car object and its distance
      */
     public Map<Integer, ICar> getPredecessor();
-
 
     /**
      * returns the current predecessor of the car and the distance
@@ -98,28 +109,11 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      */
     public Map<Integer, ICar> getPredecessor( int p_count );
 
-
     /**
-     * get current edge object on the graph
+     * boolean method, that returns true, if the car has reached its end
      *
-     * @return edge
+     * @return boolean for reaching the end
      */
-    public EdgeIteratorState getEdge();
-
-
-    /**
-     * define an individual acceleration
-     *
-     * @return number (greater than zero)
-     */
-    public int getAcceleration();
-
-
-    /**
-     * define an individual deceleration
-     *
-     * @return number (greater than zero)
-     */
-    public int getDeceleration();
+    public boolean hasEndReached();
 
 }

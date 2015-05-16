@@ -39,33 +39,17 @@ public class CNagelSchreckenberg implements IDriveModel
 {
 
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * defines the minimal speed *
      */
     private static final int c_minimalspeed = 15;
-
     /**
      * random object for linger probability *
      */
     private final Random m_random = new Random();
-
-
-    @Override
-    public String getName()
-    {
-        return "Nagel-Schreckenberg";
-    }
-
-    @Override
-    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
-    {
-        this.checkAccelerationWithEdgeSpeed( p_graph, p_car );
-        this.checkCollision( p_car );
-        this.checkLinger( p_car );
-    }
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * checks the acceleration and increment the speed
@@ -81,7 +65,6 @@ public class CNagelSchreckenberg implements IDriveModel
                 )
         );
     }
-
 
     /**
      * checks of a collision and reduce speed
@@ -99,7 +82,6 @@ public class CNagelSchreckenberg implements IDriveModel
         }
     }
 
-
     /**
      * checks the linger probability and modify speed
      *
@@ -109,6 +91,20 @@ public class CNagelSchreckenberg implements IDriveModel
     {
         if ( ( p_car.getCurrentSpeed() > 0 ) && ( m_random.nextDouble() <= p_car.getLingerProbability() ) )
             p_car.setCurrentSpeed( Math.max( c_minimalspeed, p_car.getCurrentSpeed() - p_car.getDeceleration() ) );
+    }
+
+    @Override
+    public String getName()
+    {
+        return "Nagel-Schreckenberg";
+    }
+
+    @Override
+    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
+    {
+        this.checkAccelerationWithEdgeSpeed( p_graph, p_car );
+        this.checkCollision( p_car );
+        this.checkLinger( p_car );
     }
 
 }

@@ -67,7 +67,7 @@ $(document).ready(function() {
 
         var ws_messageflow = MecSim().getWebSocket("/cmessagesystem/flow");
         ws_messageflow.onmessage = function( p_event ) {
-            console.log( p_event.data );
+            console.log( $.parseJSON(p_event.data.clearnull()) );
         };
     });
 });

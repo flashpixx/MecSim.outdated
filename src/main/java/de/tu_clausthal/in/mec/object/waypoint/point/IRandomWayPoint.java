@@ -46,6 +46,13 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
 {
 
     /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( IRandomWayPoint.super.inspect() );
+        }};
+    /**
      * radius around the waypoint *
      */
     private final double m_radius;
@@ -53,13 +60,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * random interface
      */
     private final Random m_random = new Random();
-    /**
-     * inspector map
-     */
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            putAll( IRandomWayPoint.super.inspect() );
-        }};
 
 
     /**
@@ -78,20 +78,9 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     }
 
     @Override
-    public Map<String, Object> inspect()
+    public Collection<GeoPosition> getNeighbor()
     {
-        return m_inspect;
-    }
-
-    @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        if ( !this.hasFactoryGenerator() )
-            return null;
-
-        return m_factory.generate(
-                this.getPath(), m_generator.getCount( p_currentstep )
-        );
+        return null;
     }
 
     @Override
@@ -111,8 +100,19 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     }
 
     @Override
-    public Collection<GeoPosition> getNeighbor()
+    public Map<String, Object> inspect()
     {
-        return null;
+        return m_inspect;
+    }
+
+    @Override
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        if ( !this.hasFactoryGenerator() )
+            return null;
+
+        return m_factory.generate(
+                this.getPath(), m_generator.getCount( p_currentstep )
+        );
     }
 }

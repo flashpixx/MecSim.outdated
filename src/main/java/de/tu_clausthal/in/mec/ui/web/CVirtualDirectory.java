@@ -38,21 +38,13 @@ import java.net.URL;
 public class CVirtualDirectory implements IVirtualLocation
 {
     /**
-     * seperator
-     */
-    private static final String c_seperator = "/";
-    /**
      * URI reg expression for filter
      */
     private static final String c_allowchar = "[^a-zA-Z0-9_/]+";
     /**
-     * markdown renderer
+     * seperator
      */
-    private final CMarkdownRenderer m_markdown;
-    /**
-     * URI pattern *
-     */
-    private final String m_uri;
+    private static final String c_seperator = "/";
     /**
      * virtual-location-directory *
      */
@@ -61,6 +53,14 @@ public class CVirtualDirectory implements IVirtualLocation
      * index file *
      */
     private final String m_index;
+    /**
+     * markdown renderer
+     */
+    private final CMarkdownRenderer m_markdown;
+    /**
+     * URI pattern *
+     */
+    private final String m_uri;
 
     /**
      * ctor
@@ -129,14 +129,6 @@ public class CVirtualDirectory implements IVirtualLocation
         m_markdown = p_markdown;
     }
 
-
-    @Override
-    public final boolean match( final String p_uri )
-    {
-        return p_uri.startsWith( m_uri );
-    }
-
-
     @Override
     public final URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException, URISyntaxException
     {
@@ -154,6 +146,11 @@ public class CVirtualDirectory implements IVirtualLocation
         return m_markdown;
     }
 
+    @Override
+    public final boolean match( final String p_uri )
+    {
+        return p_uri.startsWith( m_uri );
+    }
 
     @Override
     public final int hashCode()

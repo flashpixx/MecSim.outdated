@@ -71,6 +71,10 @@ public class CGraphHopper extends GraphHopper
 {
 
     /**
+     * cell size for sampling
+     */
+    private final int m_cellsize;
+    /**
      * map with edge-cell connection
      */
     private final Map<Integer, CEdge<ICar, ?>> m_edgecell = new ConcurrentHashMap<>();
@@ -78,10 +82,6 @@ public class CGraphHopper extends GraphHopper
      * set with listerner of the edges
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
-    /**
-     * cell size for sampling
-     */
-    private final int m_cellsize;
     /**
      * multiplier to scale cell-increment on the current cell size and time length
      *
@@ -150,6 +150,52 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
+     * adds an edge listener
+     *
+     * @note listener object will be set at the edge instantiation process
+     */
+    public final synchronized void addEdgeListener( final IAction<ICar, ?> p_listener )
+    {
+        m_edgelister.add( p_listener );
+    }
+
+    /**
+     * clears all edges
+     */
+    public final synchronized void clear()
+    {
+        for ( final Map.Entry<Integer, CEdge<ICar, ?>> l_item : m_edgecell.entrySet() )
+            l_item.getValue().clear();
+    }
+
+    @Override
+    public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
+    {
+        // method creates on the first call all weights and store it within the
+        // combined-weight object and returns it like a singleton
+        if ( m_weight == null )
+        {
+            m_weight = new CCombine();
+
+            m_weight.put( EWeight.Default, new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
+            m_weight.put( EWeight.TrafficJam, new CTrafficJam( this ) );
+            m_weight.put( EWeight.SpeedUp, new CSpeedUp( p_encoder ) );
+            m_weight.put( EWeight.ForbiddenEdges, new CForbiddenEdges( this ) );
+        }
+
+        return m_weight;
+    }
+
+    /**
+     * disable all weights *
+     */
+    public final void disableWeights()
+    {
+        for ( final IWeighting l_item : m_weight.values() )
+            l_item.setActive( false );
+    }
+
+    /**
      * downloads the OSM data
      *
      * @return download file with full path
@@ -178,14 +224,133 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
-     * returns the speed in cell positions
+     * enable / disable a weighing
      *
-     * @param p_speed speed in km/h
-     * @return cell positions
+     * @param p_weight weightning name
+     * @see https://github.com/graphhopper/graphhopper/issues/111
      */
-    public final int getSpeedToCellIncrement( final int p_speed )
+    public final void enableDisableWeight( final EWeight p_weight )
     {
-        return p_speed * m_timestepmultiplier;
+        if ( !m_weight.containsKey( p_weight ) )
+            return;
+
+        m_weight.get( p_weight ).setActive( !m_weight.get( p_weight ).isActive() );
+    }
+
+    /**
+     * returns a list of the active weights
+     *
+     * @return String list
+     */
+    public final EWeight[] getActiveWeights()
+    {
+        final List<EWeight> l_active = new LinkedList<>();
+        for ( final Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
+            if ( l_item.getValue().isActive() )
+                l_active.add( l_item.getKey() );
+
+        return CCommon.convertCollectionToArray( EWeight[].class, l_active );
+    }
+
+    /**
+     * returns the closest edge(s) of a geo position
+     *
+     * @param p_position geo position
+     * @return ID of the edge
+     */
+    public final int getClosestEdge( final GeoPosition p_position )
+    {
+        final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
+        return l_result.getClosestEdge().getEdge();
+    }
+
+    /**
+     * returns the ID of the closest node
+     *
+     * @param p_position geo position
+     * @return ID of the node
+     */
+    public final int getClosestNode( final GeoPosition p_position )
+    {
+        final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
+        return l_result.getClosestNode();
+    }
+
+    /**
+     * returns the linkage between edge and car
+     *
+     * @param p_edgestate edge object
+     * @return linkage object
+     *
+     * @note listener object will be set at the edge instantiation process
+     * @todo check generic
+     */
+    public final synchronized CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
+    {
+        CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
+        if ( l_edge == null )
+        {
+            l_edge = new CEdge<>( p_edgestate, m_cellsize );
+            l_edge.addListener( m_edgelister );
+            m_edgecell.put( l_edge.getEdgeID(), l_edge );
+        }
+
+        return l_edge;
+    }
+
+    /**
+     * returns an iterator state of an edge
+     *
+     * @param p_edgeid edge ID
+     * @return iterator
+     */
+    public final EdgeIteratorState getEdgeIterator( final int p_edgeid )
+    {
+        return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
+    }
+
+    /**
+     * returns the max. speed of an edge
+     *
+     * @param p_edge edge ID
+     * @return speed
+     */
+    public final double getEdgeSpeed( final EdgeIteratorState p_edge )
+    {
+        if ( p_edge == null )
+            return Double.POSITIVE_INFINITY;
+
+        return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
+    }
+
+    /**
+     * number of cars
+     *
+     * @return number of cars on the graph
+     */
+    public final synchronized int getNumberOfObjects()
+    {
+        int l_count = 0;
+        for ( final CEdge<ICar, ?> l_item : m_edgecell.values() )
+            l_count += l_item.getNumberOfObjects();
+        return l_count;
+    }
+
+    /**
+     * creates the full path of cells with the edge value
+     *
+     * @param p_route edge list
+     * @return list with pair of edge and cell position
+     */
+    public final ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( final List<EdgeIteratorState> p_route )
+    {
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
+
+        for ( final EdgeIteratorState l_edge : p_route )
+            for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
+                l_list.add( new ImmutablePair<>( l_edge, i ) );
+
+        return l_list;
     }
 
     /**
@@ -250,178 +415,15 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
-     * returns the closest edge(s) of a geo position
+     * returns the speed in cell positions
      *
-     * @param p_position geo position
-     * @return ID of the edge
+     * @param p_speed speed in km/h
+     * @return cell positions
      */
-    public final int getClosestEdge( final GeoPosition p_position )
+    public final int getSpeedToCellIncrement( final int p_speed )
     {
-        final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
-        return l_result.getClosestEdge().getEdge();
+        return p_speed * m_timestepmultiplier;
     }
-
-    /**
-     * returns the max. speed of an edge
-     *
-     * @param p_edge edge ID
-     * @return speed
-     */
-    public final double getEdgeSpeed( final EdgeIteratorState p_edge )
-    {
-        if ( p_edge == null )
-            return Double.POSITIVE_INFINITY;
-
-        return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
-    }
-
-    /**
-     * returns an iterator state of an edge
-     *
-     * @param p_edgeid edge ID
-     * @return iterator
-     */
-    public final EdgeIteratorState getEdgeIterator( final int p_edgeid )
-    {
-        return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
-    }
-
-    /**
-     * returns the ID of the closest node
-     *
-     * @param p_position geo position
-     * @return ID of the node
-     */
-    public final int getClosestNode( final GeoPosition p_position )
-    {
-        final QueryResult l_result = this.getLocationIndex().findClosest( p_position.getLatitude(), p_position.getLongitude(), EdgeFilter.ALL_EDGES );
-        return l_result.getClosestNode();
-    }
-
-    /**
-     * creates the full path of cells with the edge value
-     *
-     * @param p_route edge list
-     * @return list with pair of edge and cell position
-     */
-    public final ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( final List<EdgeIteratorState> p_route )
-    {
-        final ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
-
-        for ( final EdgeIteratorState l_edge : p_route )
-            for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
-                l_list.add( new ImmutablePair<>( l_edge, i ) );
-
-        return l_list;
-    }
-
-
-    /**
-     * returns the linkage between edge and car
-     *
-     * @param p_edgestate edge object
-     * @return linkage object
-     *
-     * @note listener object will be set at the edge instantiation process
-     * @todo check generic
-     */
-    public final synchronized CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
-    {
-        CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
-        if ( l_edge == null )
-        {
-            l_edge = new CEdge<>( p_edgestate, m_cellsize );
-            l_edge.addListener( m_edgelister );
-            m_edgecell.put( l_edge.getEdgeID(), l_edge );
-        }
-
-        return l_edge;
-    }
-
-    /**
-     * clears all edges
-     */
-    public final synchronized void clear()
-    {
-        for ( final Map.Entry<Integer, CEdge<ICar, ?>> l_item : m_edgecell.entrySet() )
-            l_item.getValue().clear();
-    }
-
-    /**
-     * number of cars
-     *
-     * @return number of cars on the graph
-     */
-    public final synchronized int getNumberOfObjects()
-    {
-        int l_count = 0;
-        for ( final CEdge<ICar, ?> l_item : m_edgecell.values() )
-            l_count += l_item.getNumberOfObjects();
-        return l_count;
-    }
-
-    /**
-     * adds an edge listener
-     *
-     * @note listener object will be set at the edge instantiation process
-     */
-    public final synchronized void addEdgeListener( final IAction<ICar, ?> p_listener )
-    {
-        m_edgelister.add( p_listener );
-    }
-
-
-    /**
-     * enable / disable a weighing
-     *
-     * @param p_weight weightning name
-     * @see https://github.com/graphhopper/graphhopper/issues/111
-     */
-    public final void enableDisableWeight( final EWeight p_weight )
-    {
-        if ( !m_weight.containsKey( p_weight ) )
-            return;
-
-        m_weight.get( p_weight ).setActive( !m_weight.get( p_weight ).isActive() );
-    }
-
-    /**
-     * disable all weights *
-     */
-    public final void disableWeights()
-    {
-        for ( final IWeighting l_item : m_weight.values() )
-            l_item.setActive( false );
-    }
-
-
-    /**
-     * returns a list of the active weights
-     *
-     * @return String list
-     */
-    public final EWeight[] getActiveWeights()
-    {
-        final List<EWeight> l_active = new LinkedList<>();
-        for ( final Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
-            if ( l_item.getValue().isActive() )
-                l_active.add( l_item.getKey() );
-
-        return CCommon.convertCollectionToArray( EWeight[].class, l_active );
-    }
-
-
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool flag if weight is active
-     */
-    public final boolean isActiveWeight( final EWeight p_weight )
-    {
-        return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
-    }
-
 
     /**
      * returns the weight object
@@ -434,23 +436,15 @@ public class CGraphHopper extends GraphHopper
         return (T) m_weight.get( p_weight );
     }
 
-
-    @Override
-    public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
+    /**
+     * checks if a weight is active
+     *
+     * @param p_weight weight name
+     * @return bool flag if weight is active
+     */
+    public final boolean isActiveWeight( final EWeight p_weight )
     {
-        // method creates on the first call all weights and store it within the
-        // combined-weight object and returns it like a singleton
-        if ( m_weight == null )
-        {
-            m_weight = new CCombine();
-
-            m_weight.put( EWeight.Default, new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
-            m_weight.put( EWeight.TrafficJam, new CTrafficJam( this ) );
-            m_weight.put( EWeight.SpeedUp, new CSpeedUp( p_encoder ) );
-            m_weight.put( EWeight.ForbiddenEdges, new CForbiddenEdges( this ) );
-        }
-
-        return m_weight;
+        return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
     }
 
 

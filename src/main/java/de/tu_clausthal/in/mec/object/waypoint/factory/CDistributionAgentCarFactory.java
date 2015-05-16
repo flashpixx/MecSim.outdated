@@ -51,9 +51,9 @@ import java.util.Map;
 public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
 {
     /**
-     * serialize version ID *
+     * name of the ASL file
      */
-    private static final long serialVersionUID = 1L;
+    private String m_aslname;
     /**
      * inspect data
      */
@@ -62,9 +62,9 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
             putAll( CDistributionAgentCarFactory.super.inspect() );
         }};
     /**
-     * name of the ASL file
+     * serialize version ID *
      */
-    private String m_aslname;
+    private static final long serialVersionUID = 1L;
 
     /**
      * ctor

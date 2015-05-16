@@ -47,22 +47,21 @@ import java.util.Set;
 public class CMessageSystem implements IVoidSteppable
 {
     /**
+     * set with all communicators
+     */
+    private final CSocketStorage m_communicator = new CSocketStorage();
+    /**
      * event listener *
      */
     private final Set<IActionListener> m_listener = new HashSet<>();
-    /**
-     * tree structure of all objects (root-node is equal to this object)
-     */
-    private final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
     /**
      * message counter
      */
     private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "receiver" );
     /**
-     * set with all communicators
+     * tree structure of all objects (root-node is equal to this object)
      */
-    private final CSocketStorage m_communicator = new CSocketStorage();
-
+    private final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> m_root = new CTreeNode( this.toString() );
 
     /**
      * adds a listener
@@ -73,68 +72,6 @@ public class CMessageSystem implements IVoidSteppable
     {
         m_listener.add( p_listener );
     }
-
-
-    /**
-     * removes a listener
-     *
-     * @param p_listener listener
-     */
-    public final void removeListener( final IActionListener p_listener )
-    {
-        m_listener.remove( p_listener );
-    }
-
-
-    /**
-     * register a new participant
-     *
-     * @param p_path path of the receiver
-     * @param p_receiver participant
-     */
-    public final synchronized void register( final CPath p_path, final IParticipant p_receiver )
-    {
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
-        {
-            CLogger.error( CCommon.getResourceString( this, "register", p_receiver, p_path ) );
-            return;
-        }
-
-        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
-        if ( l_node.isDataNull() )
-            l_node.setData( new ImmutablePair<>( new HashSet<>(), new HashSet<>() ) );
-        l_node.getData().getLeft().add( p_receiver );
-
-        CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );
-
-        for ( final IActionListener l_item : m_listener )
-            l_item.onRegister( p_path, p_receiver );
-    }
-
-
-    /**
-     * unregister a participant
-     *
-     * @param p_path path of the receiver
-     * @param p_receiver participant
-     */
-    public final synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
-    {
-        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathExist( p_path ) ) )
-        {
-            CLogger.error( CCommon.getResourceString( this, "unregister", p_receiver, p_path ) );
-            return;
-        }
-
-        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
-        l_node.getData().getLeft().remove( p_receiver );
-
-        CLogger.info( CCommon.getResourceString( this, "unregistered", p_receiver, p_path ) );
-
-        for ( final IActionListener l_item : m_listener )
-            l_item.onUnregister( p_path, p_receiver );
-    }
-
 
     /**
      * pushs a message to the queue
@@ -186,6 +123,46 @@ public class CMessageSystem implements IVoidSteppable
         );
     }
 
+    /**
+     * register a new participant
+     *
+     * @param p_path path of the receiver
+     * @param p_receiver participant
+     */
+    public final synchronized void register( final CPath p_path, final IParticipant p_receiver )
+    {
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( p_receiver == null ) )
+        {
+            CLogger.error( CCommon.getResourceString( this, "register", p_receiver, p_path ) );
+            return;
+        }
+
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
+        if ( l_node.isDataNull() )
+            l_node.setData( new ImmutablePair<>( new HashSet<>(), new HashSet<>() ) );
+        l_node.getData().getLeft().add( p_receiver );
+
+        CLogger.info( CCommon.getResourceString( this, "registered", p_receiver, p_path ) );
+
+        for ( final IActionListener l_item : m_listener )
+            l_item.onRegister( p_path, p_receiver );
+    }
+
+    @Override
+    public final void release()
+    {
+        m_messageflow.clear();
+    }
+
+    /**
+     * removes a listener
+     *
+     * @param p_listener listener
+     */
+    public final void removeListener( final IActionListener p_listener )
+    {
+        m_listener.remove( p_listener );
+    }
 
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
@@ -207,13 +184,28 @@ public class CMessageSystem implements IVoidSteppable
         m_communicator.send( CCommon.toJson( m_messageflow ) );
     }
 
-
-    @Override
-    public final void release()
+    /**
+     * unregister a participant
+     *
+     * @param p_path path of the receiver
+     * @param p_receiver participant
+     */
+    public final synchronized void unregister( final CPath p_path, final IParticipant p_receiver )
     {
-        m_messageflow.clear();
-    }
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) || ( p_receiver == null ) || ( !m_root.pathExist( p_path ) ) )
+        {
+            CLogger.error( CCommon.getResourceString( this, "unregister", p_receiver, p_path ) );
+            return;
+        }
 
+        final CTreeNode<Pair<Set<IParticipant>, Set<IMessage>>> l_node = m_root.getNode( p_path );
+        l_node.getData().getLeft().remove( p_receiver );
+
+        CLogger.info( CCommon.getResourceString( this, "unregistered", p_receiver, p_path ) );
+
+        for ( final IActionListener l_item : m_listener )
+            l_item.onUnregister( p_path, p_receiver );
+    }
 
     /**
      * UI method - message counting information
@@ -231,6 +223,11 @@ public class CMessageSystem implements IVoidSteppable
     {
 
         /**
+         * is called on a message push
+         */
+        public void onPushMessage( final CPath p_pathreceiver, final IMessage<?> p_message );
+
+        /**
          * is called on register
          *
          * @param p_path path of the object
@@ -245,11 +242,6 @@ public class CMessageSystem implements IVoidSteppable
          * @param p_receiver receiver
          */
         public void onUnregister( final CPath p_path, final IParticipant p_receiver );
-
-        /**
-         * is called on a message push
-         */
-        public void onPushMessage( final CPath p_pathreceiver, final IMessage<?> p_message );
 
     }
 }

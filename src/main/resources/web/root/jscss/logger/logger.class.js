@@ -104,9 +104,11 @@ function Logger()
     this.onClose = function( px_value )
     {
         $(window).on("beforeunload", function() {
+        /*
             ws_logerror.close();
             ws_logout.close();
             ws_inspector.close();
+            */
         });
     }
 

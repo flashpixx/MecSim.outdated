@@ -45,11 +45,11 @@ $(document).ready(function() {
 
                 console.log( $.parseJSON(po_event.data.clearnull()) );
 
-                MecSim.UI().Inspector().empty();
+                MecSim.ui().inspector().empty();
                 //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
-                MecSim.UI().Inspector().prepend("<p></p>");
+                MecSim.ui().inspector().prepend("<p></p>");
                 //$('#mecsim_inspector_table').DataTable();
-                MecSim.UI().Inspector().dialog("open");
+                MecSim.io().inspector().dialog("open");
 
             }
         });

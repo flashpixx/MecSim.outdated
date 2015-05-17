@@ -61,6 +61,6 @@ $(document).ready(function() {
 
 
 
-        Visualization.HierarchicalEdgeBundle("#mecsim_global_content", { "id" : "graphtest" });
+        //Visualization.HierarchicalEdgeBundle("#mecsim_global_content", { "id" : "graphtest" });
     });
 });

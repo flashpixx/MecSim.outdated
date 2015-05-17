@@ -20,11 +20,10 @@ $(document).ready(function() {
         StatisticsPanel.init();
         HelpPanel.init();
 
+        // UI instantiation
+        // @todo refactor
         MecSim.UI().accordion.accordion({ active: false, collapsible: true }),
-
-        $( "#mecsim_object_inspector" ).dialog({
-            autoOpen: false,
-        });
+        MecSim.UI().inspector.dialog({ autoOpen: false });
 
         // splitter
         $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
@@ -34,27 +33,27 @@ $(document).ready(function() {
 
         // create logger websockets access
         MecSim.WebSocket( "/cconsole/output/log", {
-            "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
-            "onmessage" : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
+            "onerror"   : function( po_event ) { MecSim.UI().log.prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
+            "onmessage" : function( po_event ) { MecSim.UI().log.prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
         });
 
         MecSim.WebSocket( "/cconsole/error/log", {
-            "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
-            "onmessage" : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
+            "onerror"   : function( po_event ) { MecSim.UI().log.prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
+            "onmessage" : function( po_event ) { MecSim.UI().log.prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
         });
 
         // create inspector websocket access
         MecSim.WebSocket( "/cinspector/show", {
-            "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
+            "onerror"   : function( po_event ) { MecSim.UI().log.prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) {
 
                 console.log( $.parseJSON(po_event.data.clearnull()) );
 
-                $("#mecsim_object_inspector").empty();
+                MecSim.UI().inspector.empty();
                 //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
-                $("#mecsim_object_inspector").prepend("<p></p>");
+                MecSim.UI().inspector.prepend("<p></p>");
                 //$('#mecsim_inspector_table').DataTable();
-                $("#mecsim_object_inspector").dialog("open");
+                MecSim.UI().inspector.dialog("open");
 
             }
         });

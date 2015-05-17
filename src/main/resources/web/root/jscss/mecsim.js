@@ -111,22 +111,40 @@ var MecSim = (function (px_modul) {
 
     px_modul.Configuration = function() { return {
 
-        "get" : null,
+        /** get the configuration
+         * @param px_success function which is called on successful reading
+         **/
+        "get" : function( px_success ) { $.ajax({ url : "/cconfiguration/get", type: "POST",  success : px_success }); },
 
-        "set" : null
+        /**
+         * sets the configuration
+         * @param po_data full configuration object
+         **/
+        "set" : function( po_data ) { $.ajax({ url : "/cconfiguration/set", type: "POST",  data : po_data }); },
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    // --- UI references ---------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * references to static UI components
+     **/
     px_modul.UI = function() {return {
 
+        /** reference to the accordion **/
         "accordion"   : $("#mecsim_global_accordion"),
+        /** reference to the menu **/
         "menu"        : $("#mecsim_global_menu"),
-        "content"     : $("#mecsim_global_content")
+        /** reference to the content area **/
+        "content"     : $("#mecsim_global_content"),
+        /** reference to the object inspector **/
+        "inspector"   : $( "#mecsim_object_inspector" ),
+        /** reference to log area **/
+        "log"         : $("#mecsim_global_log")
 
     };}
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     return px_modul;

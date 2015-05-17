@@ -48,10 +48,10 @@ var MecSim = (function (px_modul) {
 
         if (lo_socket !== undefined)
         {
-            lo_socket.onopen    = lo_options.onopen || null;
-            lo_socket.onclose   = lo_options.onclose || null;
+            lo_socket.onopen    = lo_options.onopen    || null;
+            lo_socket.onclose   = lo_options.onclose   || null;
             lo_socket.onmessage = lo_options.onmessage || null;
-            lo_socket.onerror   = lo_options.onerror || null;
+            lo_socket.onerror   = lo_options.onerror   || null;
         }
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

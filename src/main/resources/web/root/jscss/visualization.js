@@ -35,12 +35,18 @@ var Visualization = (function (px_modul) {
      * @param pc_element element in which the graph is added
      * @param po_options options of the graph
      **/
-    px_modul.EdgeBundle = function(pc_element, po_options)
+    px_modul.HierarchicalEdgeBundle = function(pc_element, po_options)
     {
         var lo_options   = po_options || {};
 
-        lo_options.size  = lo_options.size ||  800;
-        lo_options.id    = lo_options.id || null;
+        lo_options.size    = lo_options.size    || 800;
+        lo_options.id      = lo_options.id      || null;
+        lo_options.tension = lo_options.tension || 0.85;
+        lo_options.radius  = lo_options.radius  || function( po_data ) { return po_data.y; };
+        lo_options.angle   = lo_options.angle   || function( po_data ) { return po_data.x / 180 * Math.PI; }
+
+        // graph bundle
+        var lo_bundle = d3.layout.bundle();
 
         // add div for bundle
         var lo_main = d3.select(pc_element).insert("div")
@@ -51,11 +57,19 @@ var Visualization = (function (px_modul) {
             lo_main.attr("id", lo_options.id);
 
         // add svg graphic
-        var svg = lo_main.append("svg:svg")
+        var lo_svg = lo_main.append("svg:svg")
             .attr("width", lo_options.size+"px")
             .attr("height", lo_options.size+"px")
             .append("svg:g")
             .attr("transform", "translate(" + lo_options.size/2 + "," + lo_options.size/2 + ")");
+
+        // add line structure
+        var lo_line = d3.svg.line.radial()
+            .interpolate("bundle")
+            .tension(lo_options.tension)
+            .radius(lo_options.radius)
+            .angle(lo_options.angle);
+
     }
 
 

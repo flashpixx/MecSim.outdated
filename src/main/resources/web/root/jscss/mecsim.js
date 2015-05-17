@@ -141,7 +141,11 @@ var MecSim = (function (px_modul) {
         /** reference to the object inspector **/
         "inspector"   : $( "#mecsim_object_inspector" ),
         /** reference to log area **/
-        "log"         : $("#mecsim_global_log")
+        "log"         : $("#mecsim_global_log"),
+        /** reference to the screen area **/
+        "screen"      : $("#mecsim_global_screen"),
+        /** reference to the menu section of the screen **/
+        "menu"        : $("#mecsim_global_screen_right")
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

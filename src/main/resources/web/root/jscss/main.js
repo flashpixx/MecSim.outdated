@@ -22,14 +22,10 @@ $(document).ready(function() {
 
         // UI instantiation
         // @todo refactor
+        MecSim.UI().screen.jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        MecSim.UI().menu.jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         MecSim.UI().accordion.accordion({ active: false, collapsible: true }),
         MecSim.UI().inspector.dialog({ autoOpen: false });
-
-        // splitter
-        $("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        $("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-
-
 
         // create logger websockets access
         MecSim.WebSocket( "/cconsole/output/log", {

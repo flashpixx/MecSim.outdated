@@ -47,7 +47,7 @@ var mecsim_source,
                 });
             });
 
-            $("#ui-id-5").on("click", function(data){
+            $("#mecsim_source_slider").parent().on("click", function(data){
                 MecSim.UI().content.empty();
                 MecSim.UI().content.load("template/source.htm", function(){
                     SourcePanel.initToolWizard();
@@ -374,10 +374,6 @@ var mecsim_source,
             }else{
                 $("#mecsim_source_generatorinput2").val(5);
                 $("#mecsim_source_generatorinput3").val(1);
-            }
-            if(currentIndex===0){
-                if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && $("#mecsim_source_selectASL").val()===null)
-                    return false;
             }
         },
 

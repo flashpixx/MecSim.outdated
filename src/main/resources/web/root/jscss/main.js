@@ -49,7 +49,7 @@ $(document).ready(function() {
                 //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
                 MecSim.ui().inspector().prepend("<p></p>");
                 //$('#mecsim_inspector_table').DataTable();
-                MecSim.io().inspector().dialog("open");
+                MecSim.ui().inspector().dialog("open");
 
             }
         });

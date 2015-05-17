@@ -29,7 +29,6 @@
 var MecSim = (function (px_modul) {
 
 
-
     // --- websocket structure ---------------------------------------------------------------------------------------------------------------------------------
     /**
      * websocket structure to encapsulate access to the internal websocket structure  with function binding
@@ -129,6 +128,7 @@ var MecSim = (function (px_modul) {
     // --- UI references ---------------------------------------------------------------------------------------------------------------------------------------
     /**
      * references to static UI components
+     * @todo add also object names
      **/
     px_modul.UI = function() {return {
 

@@ -59,5 +59,8 @@ $(document).ready(function() {
             "onmessage" : function( po_event ) { console.log( $.parseJSON(po_event.data.clearnull()) ); }
         });
 
+
+
+        //Visualization.EdgeBundle("#mecsim_global_content", { "id" : "graphtest" });
     });
 });

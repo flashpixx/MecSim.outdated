@@ -32,9 +32,30 @@ var Visualization = (function (px_modul) {
     /**
      * creates a edge bundle with D3.JS
      * @see http://mbostock.github.io/d3/talk/20111116/bundle.html
+     * @param pc_element element in which the graph is added
+     * @param po_options options of the graph
      **/
-    px_modul.EdgeBundle = function()
+    px_modul.EdgeBundle = function(pc_element, po_options)
     {
+        var lo_options   = po_options || {};
+
+        lo_options.size  = lo_options.size ||  800;
+        lo_options.id    = lo_options.id || null;
+
+        // add div for bundle
+        var lo_main = d3.select(pc_element).insert("div")
+            .style("width", lo_options.width+"px")
+            .style("height", lo_options.size+"px")
+            .style("-webkit-backface-visibility", "hidden");
+        if (lo_options.id !== null)
+            lo_main.attr("id", lo_options.id);
+
+        // add svg graphic
+        var svg = lo_main.append("svg:svg")
+            .attr("width", lo_options.size+"px")
+            .attr("height", lo_options.size+"px")
+            .append("svg:g")
+            .attr("transform", "translate(" + lo_options.size/2 + "," + lo_options.size/2 + ")");
     }
 
 

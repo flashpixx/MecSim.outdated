@@ -17,7 +17,7 @@ var mecsim_help,
         bind_ui_actions: function() {
 
             $("#ui-id-12").on("click", function(data){
-                MecSim.UI().content.empty();
+                MecSim.UI().Content().empty();
             });
 
             HelpPanel.settings.about_button.on("click", function(){
@@ -48,13 +48,13 @@ var mecsim_help,
             HelpPanel.settings.user_doc_button.on("click", function(){
                 $.get("/userdoc/", function( p_result ) {
                     console.log(p_result);
-                    MecSim.UI().content.empty();
-                    MecSim.UI().content.append( p_result );
+                    MecSim.UI().Content().empty();
+                    MecSim.UI().Content().append( p_result );
                 });
             });
 
             HelpPanel.settings.developer_doc_button.on("click", function(){
-                MecSim.UI().content.load("template/develdoc.htm");
+                MecSim.UI().Content().load("template/develdoc.htm");
             });
 
         }

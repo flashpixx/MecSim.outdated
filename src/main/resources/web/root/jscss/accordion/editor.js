@@ -45,7 +45,7 @@ var mecsim_editor,
         bind_ui_actions: function() {
 
             $("#ui-id-7").on("click", function() {
-                MecSim.UI().content.empty();
+                MecSim.UI().Content().empty();
                 EditorPanel.append_tab_div();
                 EditorPanel.add_tab();
                 $("#tabs").tabs();
@@ -118,7 +118,7 @@ var mecsim_editor,
         },
 
         append_tab_div: function() {
-             MecSim.UI().content.append("<div id='tabs'><ul></ul></div>");
+             MecSim.UI().Content().append("<div id='tabs'><ul></ul></div>");
         },
 
         load_asl_files: function() {

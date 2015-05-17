@@ -128,24 +128,23 @@ var MecSim = (function (px_modul) {
     // --- UI references ---------------------------------------------------------------------------------------------------------------------------------------
     /**
      * references to static UI components
-     * @todo add also object names
      **/
     px_modul.UI = function() {return {
 
         /** reference to the accordion **/
-        "accordion"   : $("#mecsim_global_accordion"),
+        "Accordion"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_accordion"    : $("#mecsim_global_accordion"); },
         /** reference to the menu **/
-        "menu"        : $("#mecsim_global_menu"),
+        "Menu"        : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_menu"         : $("#mecsim_global_menu"); },
         /** reference to the content area **/
-        "content"     : $("#mecsim_global_content"),
+        "Content"     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_content"      : $("#mecsim_global_content"); },
         /** reference to the object inspector **/
-        "inspector"   : $( "#mecsim_object_inspector" ),
+        "Inspector"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_object_inspector"    : $( "#mecsim_object_inspector" ); },
         /** reference to log area **/
-        "log"         : $("#mecsim_global_log"),
+        "Log"         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_log"          : $("#mecsim_global_log"); },
         /** reference to the screen area **/
-        "screen"      : $("#mecsim_global_screen"),
+        "Screen"      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
         /** reference to the menu section of the screen **/
-        "menu"        : $("#mecsim_global_screen_right")
+        "ScreenMenu"  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

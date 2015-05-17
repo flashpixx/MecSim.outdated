@@ -63,6 +63,11 @@ var Visualization = (function (px_modul) {
             .append("svg:g")
             .attr("transform", "translate(" + lo_options.size/2 + "," + lo_options.size/2 + ")");
 
+        lo_svg.append("svg:path")
+            .attr("d", d3.svg.arc().outerRadius(lo_options.size/2 - 120).innerRadius(0).startAngle(0).endAngle(2 * Math.PI))
+            //.on("mousedown", mousedown);
+            //.attr("class", "arc")
+
         // add line structure
         var lo_line = d3.svg.line.radial()
             .interpolate("bundle")

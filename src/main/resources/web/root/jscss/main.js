@@ -22,25 +22,25 @@ $(document).ready(function() {
 
         // UI instantiation
         // @todo refactor
-        MecSim.UI().Screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        MecSim.UI().ScreenMenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        MecSim.UI().Accordion().accordion({ active: false, collapsible: true }),
-        MecSim.UI().Inspector().dialog({ autoOpen: false });
+        MecSim.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        MecSim.ui().screenMenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        MecSim.ui().accordion().accordion({ active: false, collapsible: true }),
+        MecSim.ui().inspector().dialog({ autoOpen: false });
 
         // create logger websockets access
-        MecSim.WebSocket( "/cconsole/output/log", {
-            "onerror"   : function( po_event ) { MecSim.UI().Log().prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
-            "onmessage" : function( po_event ) { MecSim.UI().Log().prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
+        MecSim.websocket( "/cconsole/output/log", {
+            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
+            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
         });
 
-        MecSim.WebSocket( "/cconsole/error/log", {
-            "onerror"   : function( po_event ) { MecSim.UI().Log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
-            "onmessage" : function( po_event ) { MecSim.UI().Log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
+        MecSim.websocket( "/cconsole/error/log", {
+            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
+            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
         });
 
         // create inspector websocket access
-        MecSim.WebSocket( "/cinspector/show", {
-            "onerror"   : function( po_event ) { MecSim.UI().Log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
+        MecSim.websocket( "/cinspector/show", {
+            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) {
 
                 console.log( $.parseJSON(po_event.data.clearnull()) );
@@ -55,7 +55,7 @@ $(document).ready(function() {
         });
 
         // create realtime message-flow websocket access
-        MecSim.WebSocket( "/cmessagesystem/flow", {
+        MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) { console.log( $.parseJSON(po_event.data.clearnull()) ); }
         });
 

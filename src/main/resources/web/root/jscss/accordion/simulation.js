@@ -22,8 +22,8 @@ var mecsim_simulation,
 
         bind_ui_actions: function() {
             $("#ui-id-1").on("click", function(data){
-                MecSim.UI().Content().empty();
-                MecSim.UI().Content().load("template/clean.htm");
+                MecSim.ui().content().empty();
+                MecSim.ui().content().load("template/clean.htm");
             });
 
             SimulationPanel.settings.start_button.on("click", function(){

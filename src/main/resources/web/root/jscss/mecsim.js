@@ -24,7 +24,7 @@
 
 /**
  * base modul to represent base algorithms
- * and structure to encapsulate
+ * and structure to encapsulate structures
  **/
 var MecSim = (function (px_modul) {
 
@@ -36,7 +36,7 @@ var MecSim = (function (px_modul) {
      * @param pc_wspath path of the websocket (can set relative to the window location)
      * @param po_options object with onmessage, onerror, onopen and onclose functions to bind functions direct
      **/
-    px_modul.WebSocket = function( pc_wspath, po_options )
+    px_modul.websocket = function( pc_wspath, po_options )
     {
         var lo_options   = po_options || {};
         var lo_socket;
@@ -61,7 +61,7 @@ var MecSim = (function (px_modul) {
     /**
      * logger structure to encapsulate functionality of Java logger class
      **/
-    px_modul.Logger = function() {return{
+    px_modul.logger = function() {return{
 
         /**
          * function to read the logger configuration
@@ -108,7 +108,7 @@ var MecSim = (function (px_modul) {
      * configuration access to encapsulate access
     **/
 
-    px_modul.Configuration = function() { return {
+    px_modul.configuration = function() { return {
 
         /** get the configuration
          * @param px_success function which is called on successful reading
@@ -129,22 +129,22 @@ var MecSim = (function (px_modul) {
     /**
      * references to static UI components
      **/
-    px_modul.UI = function() {return {
+    px_modul.ui = function() {return {
 
         /** reference to the accordion **/
-        "Accordion"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_accordion"    : $("#mecsim_global_accordion"); },
+        "accordion"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_accordion"    : $("#mecsim_global_accordion"); },
         /** reference to the menu **/
-        "Menu"        : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_menu"         : $("#mecsim_global_menu"); },
+        "menu"        : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_menu"         : $("#mecsim_global_menu"); },
         /** reference to the content area **/
-        "Content"     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_content"      : $("#mecsim_global_content"); },
+        "content"     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_content"      : $("#mecsim_global_content"); },
         /** reference to the object inspector **/
-        "Inspector"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_object_inspector"    : $( "#mecsim_object_inspector" ); },
+        "inspector"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_object_inspector"    : $( "#mecsim_object_inspector" ); },
         /** reference to log area **/
-        "Log"         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_log"          : $("#mecsim_global_log"); },
+        "log"         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_log"          : $("#mecsim_global_log"); },
         /** reference to the screen area **/
-        "Screen"      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
+        "screen"      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
         /** reference to the menu section of the screen **/
-        "ScreenMenu"  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
+        "screenMenu"  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

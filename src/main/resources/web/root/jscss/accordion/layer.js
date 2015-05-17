@@ -17,8 +17,8 @@ var mecsim_layer,
 
         bind_ui_actions: function() {
             $("#ui-id-3").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/clean.htm");
+                MecSim.UI().content.empty();
+                MecSim.UI().content.load("template/clean.htm");
             });
         },
 

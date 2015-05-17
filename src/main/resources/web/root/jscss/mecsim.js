@@ -26,7 +26,7 @@
  * base modul to represent base algorithms
  * and structure to encapsulate
  **/
-var MecSimNew = (function (px_modul) {
+var MecSim = (function (px_modul) {
 
 
 
@@ -62,7 +62,7 @@ var MecSimNew = (function (px_modul) {
     /**
      * logger structure to encapsulate functionality of Java logger class
      **/
-    px_modul.Logger = {
+    px_modul.Logger = function() {return{
 
         /**
          * function to read the logger configuration
@@ -100,7 +100,7 @@ var MecSimNew = (function (px_modul) {
          **/
         "out"   : function( px_message ) { $.ajax({ url : "/clogger/out",           type: "POST",  data : px_message  }); }
 
-    }
+    };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -109,17 +109,26 @@ var MecSimNew = (function (px_modul) {
      * configuration access to encapsulate access
     **/
 
-    px_modul.Configuration = {
+    px_modul.Configuration = function() { return {
 
         "get" : null,
 
         "set" : null
 
-    }
+    };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    px_modul.UI = function() {return {
+
+        "accordion"   : $("#mecsim_global_accordion"),
+        "menu"        : $("#mecsim_global_menu"),
+        "content"     : $("#mecsim_global_content")
+
+    };}
 
 
 
     return px_modul;
 
-}(MecSimNew || {}));
+}(MecSim || {}));

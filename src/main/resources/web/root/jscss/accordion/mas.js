@@ -15,11 +15,11 @@ var mecsim_mas,
         bind_ui_actions: function() {
 
             $("#ui-id-8").on("click", function(data){
-                UI().getContent().empty();
+                MecSim.UI().content.empty();
             });
 
             MASPanel.settings.jasonmindinspector.on("click", function(){
-                UI().getContent().load("template/mindinspector.htm");
+                MecSim.UI().content.load("template/mindinspector.htm");
             });
 
         }

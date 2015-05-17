@@ -39,8 +39,8 @@ var mecsim_source,
             this.setToolbox();
 
             $("#mecsim_source_oldgui").button().on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/sourceold.htm", function(){
+                MecSim.UI().content.empty();
+                MecSim.UI().content.load("template/sourceold.htm", function(){
                     SourcePanel.initClusterWidget();
                     SourcePanel.initSettingsWidget();
                     SourcePanel.initTargetWeighting();
@@ -48,8 +48,8 @@ var mecsim_source,
             });
 
             $("#ui-id-5").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/source.htm", function(){
+                MecSim.UI().content.empty();
+                MecSim.UI().content.load("template/source.htm", function(){
                     SourcePanel.initToolWizard();
                 });
             });

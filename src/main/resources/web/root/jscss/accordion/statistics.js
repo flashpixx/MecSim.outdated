@@ -12,8 +12,8 @@ var mecsim_statistics,
 
         bind_ui_actions: function(){
             $("#ui-id-10").on("click", function(data){
-                UI().getContent().empty();
-                UI().getContent().load("template/clean.htm");
+                MecSim.UI().content.empty();
+                MecSim.UI().content.load("template/clean.htm");
             });
         }
 

@@ -11,9 +11,6 @@ $(document).ready(function() {
         $.getScript("jscss/accordion/help.js")
     ).done(function(){
 
-        // singleton instantiation
-        UI();
-
         // module instantiation
         SimulationPanel.init();
         LayerPanel.init();
@@ -22,6 +19,8 @@ $(document).ready(function() {
         MASPanel.init();
         StatisticsPanel.init();
         HelpPanel.init();
+
+        MecSim.UI().accordion.accordion({ active: false, collapsible: true }),
 
         $( "#mecsim_object_inspector" ).dialog({
             autoOpen: false,
@@ -34,18 +33,18 @@ $(document).ready(function() {
 
 
         // create logger websockets access
-        MecSimNew.WebSocket( "/cconsole/output/log", {
+        MecSim.WebSocket( "/cconsole/output/log", {
             "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
             "onmessage" : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
         });
 
-        MecSimNew.WebSocket( "/cconsole/error/log", {
+        MecSim.WebSocket( "/cconsole/error/log", {
             "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
         });
 
         // create inspector websocket access
-        MecSimNew.WebSocket( "/cinspector/show", {
+        MecSim.WebSocket( "/cinspector/show", {
             "onerror"   : function( po_event ) { $("#mecsim_global_log").prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) {
 
@@ -61,10 +60,9 @@ $(document).ready(function() {
         });
 
         // create realtime message-flow websocket access
-        MecSimNew.WebSocket( "/cmessagesystem/flow", {
+        MecSim.WebSocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) { console.log( $.parseJSON(po_event.data.clearnull()) ); }
         });
-
 
     });
 });

@@ -1,8 +1,11 @@
 // --- EDITOR PANEL MODULE------------------------------------------------------------------------------------------------
+// javascript module pattern as described at:
+// https://css-tricks.com/how-do-you-structure-javascript-the-module-pattern-edition/
 
 var mecsim_editor,
     EditorPanel = {
 
+        // bind dom elements to variables
         settings: {
             globalContent: $("#mecsim_global_content"),
             mecsim_agent_files: $("#mecsim_agent_files"),
@@ -14,6 +17,7 @@ var mecsim_editor,
             g_editor: {}
         },
 
+        // initialization functions for editor
         init: function() {
             mecsim_editor = this.settings;
             this.initDialog();
@@ -21,6 +25,7 @@ var mecsim_editor,
             this.load_asl_files();
         },
 
+        // initialization of dialog for creating new files
         initDialog: function() {
             $("#mecsim_create_asl_form").dialog({
                 autoOpen: false,
@@ -42,9 +47,24 @@ var mecsim_editor,
             });
         },
 
+        // bind actions to ui elements
         bind_ui_actions: function() {
 
-            $("#ui-id-7").on("click", function() {
+            // #ui-id-8 onclick function not working, seems to have a problem with the id
+            /*$("#ui-id-8").on("click", function() {
+
+                MecSim.ui().content().empty();
+                EditorPanel.append_tab_div();
+                EditorPanel.add_tab();
+                $("#tabs").tabs();
+
+                // json object that holds all editor instances
+                EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
+                EditorPanel.load_selected_file();
+            });*/
+
+            // quick fix since #ui-id-8 function from above is not working TODO: fix that
+            $("#mecsim_code_mirror_button").button().on("click", function(p_data) {
                 MecSim.ui().content().empty();
                 EditorPanel.append_tab_div();
                 EditorPanel.add_tab();
@@ -92,22 +112,28 @@ var mecsim_editor,
 
         },
 
+        // add a tab to the editor
         add_tab: function() {
+            console.log("hello from addTab");
             // TODO: check if file is already open in another tab
             var selected_file = EditorPanel.get_tab_id();
             $("#tabs ul").append("<li><a href='#" + EditorPanel.get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
             $("#tabs").append("<div id='" + EditorPanel.get_tab_id() + "'></div>");
         },
 
+        // add a code mirror object to the editor
         add_code_mirror: function() {
             EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
         },
 
+        // get current tab id of selected file
         get_tab_id: function() {
             return $("#mecsim_agent_files").val().split(".").join("");
         },
 
+        // load selected file into editor
         load_selected_file: function() {
+
             $.post(
                 "cagentenvironment/jason/read",
                 { "name" : $("#mecsim_agent_files").val() },
@@ -117,10 +143,12 @@ var mecsim_editor,
             );
         },
 
+        // append new tab <div> elements to dom of editor
         append_tab_div: function() {
              MecSim.ui().content().append("<div id='tabs'><ul></ul></div>");
         },
 
+        // load asl files which are stored under ~/.mecsim/mas/
         load_asl_files: function() {
             $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
                 EditorPanel.settings.mecsim_agent_files.empty();
@@ -135,6 +163,7 @@ var mecsim_editor,
             });
         },
 
+        // create new asl file which is then stored under ~/.mecsim/mas/
         create_new_asl: function(){
 
             if( $("#new_asl").val() ) {

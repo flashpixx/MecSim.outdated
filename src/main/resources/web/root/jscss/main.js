@@ -67,6 +67,6 @@ $(document).ready(function() {
             "onmessage" : function( po_event ) { console.log( po_event.data.toJSON() ); }
         });
 
-        //Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { "id" : "graphtest" });
+        Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { "id" : "graphtest" });
     });
 });

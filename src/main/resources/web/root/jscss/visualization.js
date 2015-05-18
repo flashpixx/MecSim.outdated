@@ -27,7 +27,7 @@
  * visualization components
  **/
 var Visualization = (function (px_modul) {
-/*
+
     var randomData = function() {
 
         result = [];
@@ -49,18 +49,18 @@ var Visualization = (function (px_modul) {
 
 
             //push the new node object to the result array
-            result.push({ name: names[i].trim(),
-                sourcemode: sourcemode,
+            result.push({
+                key: names[i].trim(),
                 lat: Math.random() * 180,
                 long: Math.random() * 90,
-                targets: randomTargets
+                children: []
             });
 
         }
 
         return result;
     }
-*/
+
 
     /**
      * creates a edge bundle with D3.JS
@@ -72,7 +72,7 @@ var Visualization = (function (px_modul) {
     {
         var lo_options   = po_options || {};
 
-        lo_options.datanodes    = lo_options.datanodes    || []
+        lo_options.datanodes    = lo_options.datanodes    || randomData();
         lo_options.size         = lo_options.size         || 800;
         lo_options.id           = lo_options.id           || null;
         lo_options.tension      = lo_options.tension      || 0.85;
@@ -81,6 +81,8 @@ var Visualization = (function (px_modul) {
         lo_options.nodeid       = lo_options.nodeid       || function( po_node ) { return "node-" + po_node.key; };
         lo_options.nodefilter   = lo_options.nodefilter   || function( po_node ) { return !po_node.children; };
         lo_options.nodetext     = lo_options.nodetext     || function( po_node ) { return po_node.key; };
+
+
 
         // graph bundle
         var lo_bundle = d3.layout.bundle();

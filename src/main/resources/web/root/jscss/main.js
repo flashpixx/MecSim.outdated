@@ -32,7 +32,6 @@ $(document).ready(function() {
         EditorPanel.ui().load_file_button().button();
         EditorPanel.ui().delete_file_button().button();
         EditorPanel.ui().save_file_button().button();
-        //EditorPanel.ui().select_file_type_menu();
         EditorPanel.ui_actions().initDialog();
         EditorPanel.ui_actions().initNewFileButton();
 

@@ -254,9 +254,9 @@ public class COSMViewer extends JXMapViewer
         private final Timer m_timer = new Timer( CConfiguration.getInstance().get().<Integer>get( "ui/routepainterdelay" ), this );
 
         @Override
-        public void actionPerformed( final ActionEvent e )
+        public void actionPerformed( final ActionEvent p_event )
         {
-            m_alpha += -0.01;
+            m_alpha -= 0.01;
             if ( m_alpha <= 0 )
             {
                 m_line = null;

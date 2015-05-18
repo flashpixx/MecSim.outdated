@@ -85,7 +85,7 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
         for ( final Pair<GeoPosition, GeoPosition> l_point : p_waypoints )
         {
             final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( l_point.getLeft(), l_point.getRight(), 1 );
-            if ( ( l_route != null ) && ( l_route.size() > 0 ) )
+            if ( l_route.size() > 0 )
                 l_cells.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
         }
 

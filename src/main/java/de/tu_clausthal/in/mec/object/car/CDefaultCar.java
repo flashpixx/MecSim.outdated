@@ -356,6 +356,23 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         p_graphic.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
     }
 
+    /**
+     * reroute to a new target position
+     *
+     * @param p_position new end position
+     */
+    private void reroute( final GeoPosition p_position )
+    {
+        if ( m_routeindex >= m_route.size() - 1 )
+            return;
+
+        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), p_position, 1 );
+        if ( l_route.size() > 0 )
+        {
+            m_route.subList( m_routeindex + 1, m_route.size() );
+            m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
+        }
+    }
 
     @Override
     @CMethodFilter.CAgent( bind = false )

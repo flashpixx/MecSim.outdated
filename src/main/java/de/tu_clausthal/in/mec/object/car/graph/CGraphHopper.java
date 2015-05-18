@@ -345,6 +345,8 @@ public class CGraphHopper extends GraphHopper
     public final ArrayList<Pair<EdgeIteratorState, Integer>> getRouteCells( final List<EdgeIteratorState> p_route )
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_list = new ArrayList<>();
+        if ( p_route.isEmpty() )
+            return l_list;
 
         for ( final EdgeIteratorState l_edge : p_route )
             for ( int i = 0; i < this.getEdge( l_edge ).getEdgeCells(); i++ )
@@ -388,13 +390,12 @@ public class CGraphHopper extends GraphHopper
         }
 
 
-        // get all paths
+        // get all paths and create routes
+        final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
         final List<Path> l_routes = this.getPaths( l_request, l_result );
         if ( l_routes.size() == 0 )
-            return null;
+            return l_paths;
 
-        // create edge list with routes
-        final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
         for ( final Path l_path : l_routes )
         {
             if ( l_paths.size() >= p_maxroutes )

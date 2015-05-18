@@ -15,7 +15,6 @@ $(document).ready(function() {
         SimulationPanel.init();
         LayerPanel.init();
         SourcePanel.init();
-        EditorPanel.init();
         MASPanel.init();
         StatisticsPanel.init();
         HelpPanel.init();
@@ -24,8 +23,18 @@ $(document).ready(function() {
         // @todo refactor
         MecSim.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         MecSim.ui().screenMenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        MecSim.ui().accordion().accordion({ active: false, collapsible: true }),
+        MecSim.ui().accordion().accordion({ active: false, collapsible: true });
         MecSim.ui().inspector().dialog({ autoOpen: false });
+
+        // Editor Panel instantiation
+        EditorPanel.ui().mecsim_agent_files().selectmenu();
+        EditorPanel.ui().new_file_button().button();
+        EditorPanel.ui().load_file_button().button();
+        EditorPanel.ui().delete_file_button().button();
+        EditorPanel.ui().save_file_button().button();
+        //EditorPanel.ui().select_file_type_menu();
+        EditorPanel.ui_actions().initDialog();
+        EditorPanel.ui_actions().initNewFileButton();
 
         // create logger websockets access
         MecSim.websocket( "/cconsole/output/log", {
@@ -58,7 +67,6 @@ $(document).ready(function() {
         MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) { console.log( $.parseJSON(po_event.data.clearnull()) ); }
         });
-
 
         //Visualization.HierarchicalEdgeBundle("#mecsim_global_content", { "id" : "graphtest" });
 

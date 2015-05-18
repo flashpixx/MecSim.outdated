@@ -1,12 +1,33 @@
-// --- EDITOR PANEL MODULE------------------------------------------------------------------------------------------------
-// javascript module pattern as described at:
-// https://css-tricks.com/how-do-you-structure-javascript-the-module-pattern-edition/
+/**
+ * @cond LICENSE
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
 
-var mecsim_editor,
-    EditorPanel = {
+// --- EDITOR PANEL MODULE ---------------------------------------------------------------------------------------------
+
+var EditorPanel = ( function (px_module) {
+
 
         // bind dom elements to variables
-        settings: {
+        /*settings: {
             globalContent: $("#mecsim_global_content"),
             mecsim_agent_files: $("#mecsim_agent_files"),
             new_asl_button: $("#mecsim_new_asl"),
@@ -51,7 +72,7 @@ var mecsim_editor,
         bind_ui_actions: function() {
 
             // #ui-id-8 onclick function not working, seems to have a problem with the id
-            /*$("#ui-id-8").on("click", function() {
+            //$("#ui-id-8").on("click", function() {
 
                 MecSim.ui().content().empty();
                 EditorPanel.append_tab_div();
@@ -61,7 +82,7 @@ var mecsim_editor,
                 // json object that holds all editor instances
                 EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
                 EditorPanel.load_selected_file();
-            });*/
+            //});
 
             // quick fix since #ui-id-8 function from above is not working TODO: fix that
             $("#mecsim_code_mirror_button").button().on("click", function(p_data) {
@@ -180,4 +201,63 @@ var mecsim_editor,
 
         }
 
-    };
+    };*/
+
+    px_module.ui_actions = function() { return {
+
+        "initDialog" : function() {
+            $("#mecsim_create_file_form").dialog({
+                autoOpen: false,
+                buttons: [
+                    {
+                        text: "Create",
+                        click: function() {
+                            EditorPanel.create_new_asl();
+                            $( this ).dialog( "close" );
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        click: function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                ]
+            });
+        },
+
+        "initNewFileButton" : function() {
+            $("#mecsim_new_file").button().on("click", function(p_data){
+                $("#mecsim_create_file_form").dialog("open");
+                $("#mecsim_file_type").selectmenu();
+            });
+        }
+
+    };}
+
+    // --- UI references -----------------------------------------------------------------------------------------------
+
+    /**
+     * references to static UI components of the editor panel
+     **/
+    px_module.ui = function() {return {
+
+        /** reference to mecsim agent files select menu **/
+        "mecsim_agent_files" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_agent_files" : $("#mecsim_agent_files"); },
+        /** reference to 'new file' button **/
+        "new_file_button"    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_new_file"    : $("#mecsim_new_file"); },
+        /** reference to 'load file' button **/
+        "load_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_load_file"   : $("#mecsim_load_file"); },
+        /** reference to 'delete file' button **/
+        "delete_file_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_delete_file" : $( "#mecsim_delete_file" ); },
+        /** reference to 'save file' button **/
+        "save_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
+        /** reference to 'select file type' menu **/
+        "select_file_type_menu"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); }
+
+    };}
+    // -----------------------------------------------------------------------------------------------------------------
+
+    return px_module;
+
+}(EditorPanel || {}));

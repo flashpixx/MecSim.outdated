@@ -51,7 +51,7 @@ $(document).ready(function() {
             "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
             "onmessage" : function( po_event ) {
 
-                console.log( $.parseJSON(po_event.data.clearnull()) );
+                console.log( po_event.data.toJSON() );
 
                 MecSim.ui().inspector().empty();
                 //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
@@ -64,7 +64,7 @@ $(document).ready(function() {
 
         // create realtime message-flow websocket access
         MecSim.websocket( "/cmessagesystem/flow", {
-            "onmessage" : function( po_event ) { console.log( $.parseJSON(po_event.data.clearnull()) ); }
+            "onmessage" : function( po_event ) { console.log( po_event.data.toJSON() ); }
         });
 
         //Visualization.HierarchicalEdgeBundle("#mecsim_global_content", { "id" : "graphtest" });

@@ -26,7 +26,7 @@
  * prototype overload - add startwidth to string
  * @param prefix
  * @return boolean existance
- */
+**/
 String.prototype.startsWith = function( p_prefix )
 {
     return this.indexOf( p_prefix ) === 0;
@@ -37,7 +37,7 @@ String.prototype.startsWith = function( p_prefix )
  * prototype overload - add endwidth to string
  * @param suffix
  * @return boolean existance
- */
+**/
 String.prototype.endsWith = function( p_suffix )
 {
     return this.match( p_suffix+"$" ) == p_suffix;
@@ -47,8 +47,17 @@ String.prototype.endsWith = function( p_suffix )
 /**
  * clear null bytes from the string
  * @return cleared null bytes
- */
+**/
 String.prototype.clearnull = function()
 {
     return this.replace(/\0/g, "");
 };
+
+
+/**
+ * parse the string to a JSON object
+**/
+String.prototype.toJSON = function()
+{
+    return $.parseJSON(this.clearnull());
+}

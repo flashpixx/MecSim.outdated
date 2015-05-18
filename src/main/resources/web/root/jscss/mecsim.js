@@ -167,7 +167,7 @@ var MecSim = (function (px_modul) {
         /** reference to the screen area **/
         "screen"      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
         /** reference to the menu section of the screen **/
-        "screenMenu"  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
+        "screenmenu"  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

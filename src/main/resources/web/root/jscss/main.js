@@ -22,7 +22,7 @@ $(document).ready(function() {
         // UI instantiation
         // @todo refactor
         MecSim.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        MecSim.ui().screenMenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        MecSim.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         MecSim.ui().accordion().accordion({ active: false, collapsible: true });
         MecSim.ui().inspector().dialog({ autoOpen: false });
 

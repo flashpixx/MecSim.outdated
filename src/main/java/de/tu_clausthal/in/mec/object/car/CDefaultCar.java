@@ -247,6 +247,21 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return m_graph.getEdgeSpeed( this.getEdge() );
     }
 
+
+    /**
+     * returns a triple of the current edge id, cell position and geoposition
+     *
+     * @return tripel
+     */
+    private Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
+    {
+        return new ImmutableTriple<>(
+                ( m_route == null ) || ( m_routeindex >= m_route.size() ) ? null : m_route.get( m_routeindex ).getLeft(),
+                ( m_route == null ) || ( m_routeindex >= m_route.size() ) ? null : m_route.get( m_routeindex ).getRight(),
+                this.getGeoposition()
+        );
+    }
+
     /**
      * returns the edge from an index
      *

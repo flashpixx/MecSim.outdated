@@ -238,6 +238,16 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     /**
+     * returns the maximum allowed speed at the current edge
+     *
+     * @return speed value
+     */
+    private Double getCurrentEdgeMaxSpeed()
+    {
+        return m_graph.getEdgeSpeed( this.getEdge() );
+    }
+
+    /**
      * returns the edge from an index
      *
      * @param p_index index

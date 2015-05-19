@@ -101,7 +101,8 @@ public class CCommon
     }
 
     /**
-     * Jason does not support Java-type binding, so an explicit converting of Jason types to the corresponding Java type is needed
+     * Jason does not support Java-type binding, so an explicit converting of
+     * Jason types to the corresponding Java type is needed
      *
      * @param p_term Jason term
      * @return Java type
@@ -180,21 +181,10 @@ public class CCommon
         return ASSyntax.createLiteral( getLiteralName( p_name ), getTerm( p_data ) );
     }
 
-    /**
-     * returns an atom within in a literal
-     *
-     * @param p_literal name of the literal
-     * @param p_atom name of the atom
-     * @return literal object
-     */
-    public static Literal getLiteral( final String p_literal, final String p_atom )
-    {
-        return ASSyntax.createLiteral( getLiteralName( p_literal ), getLiteral( p_atom ) );
-    }
 
     /**
      * checks a literal name and convert it to the correct syntax
-     *
+     * @note note the precendence of the data types
      * @param p_name name of the literal
      * @return converted literal name
      */
@@ -228,60 +218,66 @@ public class CCommon
         if ( p_data == null )
             return ASSyntax.createAtom( "" );
 
+        // number value into number
+        if ( p_data instanceof Number )
+            return ASSyntax.createNumber( ( (Number) p_data ).doubleValue() );
+
+        // GeoPosition
+        if ( p_data instanceof GeoPosition )
+            return ASSyntax.createLiteral(
+                    "geoposition",
+                    ASSyntax.createLiteral( "latitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLatitude() ) ),
+                    ASSyntax.createLiteral( "longitude", ASSyntax.createNumber( ( (GeoPosition) p_data ).getLongitude() ) )
+            );
+
+        // Edge
+        if ( p_data instanceof EdgeIteratorState )
+            return ASSyntax.createLiteral(
+                    "edge",
+                    ASSyntax.createLiteral( "id", ASSyntax.createNumber( ( (EdgeIteratorState) p_data ).getEdge() ) ),
+                    ASSyntax.createLiteral( "name", ASSyntax.createString( ( (EdgeIteratorState) p_data ).getName() ) ),
+                    ASSyntax.createLiteral( "distance", ASSyntax.createNumber( ( (EdgeIteratorState) p_data ).getDistance() ) )
+            );
+
         // pair into complex term
         if ( p_data instanceof Pair )
             return ASSyntax.createLiteral(
                     "pair",
-                    getLiteral( "left", ( (Pair) p_data ).getLeft() ),
-                    getLiteral( "right", ( (Pair) p_data ).getRight() )
+                    ASSyntax.createLiteral( "left", getTerm( ( (Pair) p_data ).getLeft() ) ),
+                    ASSyntax.createLiteral( "right", getTerm( ( (Pair) p_data ).getRight() ) )
             );
 
         // triple into complex term
         if ( p_data instanceof Triple )
-            ASSyntax.createLiteral(
+            return ASSyntax.createLiteral(
                     "tripel",
-                    getLiteral( "left", ( (Triple) p_data ).getLeft() ),
-                    getLiteral( "right", ( (Triple) p_data ).getRight() ),
-                    getLiteral( "middle", ( (Triple) p_data ).getMiddle() )
+                    ASSyntax.createLiteral( "left", getTerm( ( (Triple) p_data ).getLeft() ) ),
+                    ASSyntax.createLiteral( "right", getTerm( ( (Triple) p_data ).getRight() ) ),
+                    ASSyntax.createLiteral( "middle", getTerm( ( (Triple) p_data ).getMiddle() ) )
             );
 
         // map into complex term list
         if ( p_data instanceof Map )
-            ASSyntax.createList(
+            return ASSyntax.createList(
                     new LinkedList<Term>()
                     {{
                             for ( final Object l_item : ( (Map) p_data ).entrySet() )
-                                add( getLiteral( ( (Map.Entry<?, ?>) l_item ).getKey().toString(), ( (Map.Entry<?, ?>) l_item ).getValue() ) );
+                                add(
+                                        ASSyntax.createLiteral(
+                                                ( (Map.Entry<?, ?>) l_item ).getKey().toString(), getTerm(
+                                                        ( (Map.Entry<?, ?>) l_item ).getValue()
+                                                )
+                                        )
+                                );
                         }}
             );
-
-        // individual type - GeoPosition
-        if ( p_data instanceof GeoPosition )
-            return ASSyntax.createLiteral(
-                    "geoposition",
-                    ASSyntax.createLiteral( "latitude", getTerm( ( (GeoPosition) p_data ).getLatitude() ) ),
-                    ASSyntax.createLiteral( "longitude", getTerm( ( (GeoPosition) p_data ).getLongitude() ) )
-            );
-
-        // individual type - Edge
-        if ( p_data instanceof EdgeIteratorState )
-            return ASSyntax.createLiteral(
-                    "edge",
-                    ASSyntax.createLiteral( "id", getTerm( ( (EdgeIteratorState) p_data ).getEdge() ) ),
-                    ASSyntax.createLiteral( "name", getTerm( ( (EdgeIteratorState) p_data ).getName() ) ),
-                    ASSyntax.createLiteral( "distance", getTerm( ( (EdgeIteratorState) p_data ).getDistance() ) )
-            );
-
-
-        // number value into number
-        if ( p_data instanceof Number )
-            return ASSyntax.createNumber( ( (Number) p_data ).doubleValue() );
 
         // collection into term list
         if ( p_data instanceof Collection )
             return ASSyntax.createList( (Collection) p_data );
 
-        return ASSyntax.createString( p_data.toString() );
+        // otherwise to string
+        return ASSyntax.createString( p_data );
     }
 
 }

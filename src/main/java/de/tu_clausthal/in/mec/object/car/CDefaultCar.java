@@ -251,7 +251,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * returns a triple of the current edge id, cell position and geoposition
      *
-     * @return tripel
+     * @return tripel (edge information, cell position, geoposition)
      */
     private Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
     {

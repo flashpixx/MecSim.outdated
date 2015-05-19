@@ -120,14 +120,14 @@ var Visualization = (function (px_modul) {
             .text(lo_options.nodetext);
             //.on("mouseover", mouseover)
             //.on("mouseout", mouseout);
-
+/*
         // add line structure
         var lo_line = d3.svg.line.radial()
             .interpolate("bundle")
             .tension(lo_options.tension)
             .radius(lo_options.radius)
             .angle(lo_options.angle);
-
+*/
 
     }
 

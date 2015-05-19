@@ -52,6 +52,10 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      * row name
      */
     private final String m_rowname;
+    /**
+     * option for serializing result
+     */
+    private final ESerialzeType m_type;
 
 
     /**
@@ -59,9 +63,18 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix()
     {
-        super();
-        m_rowname = "row";
-        m_colname = "col";
+        this("row", "col", ESerialzeType.Matrix);
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_type serializing type
+     */
+    public CAdjacencyMatrix( final ESerialzeType p_type )
+    {
+        this("row", "col", p_type);
     }
 
     /**
@@ -72,9 +85,22 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix( final String p_rowname, final String p_colname )
     {
+        this( p_rowname, p_colname, ESerialzeType.Matrix);
+    }
+
+
+    /**
+     * ctor
+     *
+     * @param p_rowname row name
+     * @param p_colname column name
+     */
+    public CAdjacencyMatrix( final String p_rowname, final String p_colname, final ESerialzeType p_type )
+    {
         super();
         m_rowname = p_rowname;
         m_colname = p_colname;
+        m_type = p_type;
     }
 
     /**
@@ -108,6 +134,21 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
     }
 
     /**
+     * enum typ for serializing
+     **/
+    public enum ESerialzeType
+    {
+        /**
+         * returns the matrix as matrix
+         **/
+        Matrix,
+        /**
+         * returns the matrix as tree
+         */
+        Tree;
+    }
+
+    /**
      * serializer for Json access
      */
     public static class CJson extends JsonSerializer<CAdjacencyMatrix<?, ?>>
@@ -116,6 +157,23 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         @Override
         public void serialize( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator, final SerializerProvider p_serializer
         ) throws IOException, JsonProcessingException
+        {
+            switch ( p_matrix.m_type )
+            {
+                case Matrix: this.toMatrix( p_matrix, p_generator ); break;
+                case Tree: this.toTree( p_matrix, p_generator ); break;
+                default:
+            }
+        }
+
+        /**
+         * converts the matrix to JSON matrix object
+         *
+         * @param p_matrix matrix object
+         * @param p_generator JSON generator
+         * @throws IOException is thrown on IO errors
+         */
+        private void toMatrix( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator ) throws IOException
         {
             p_generator.writeStartObject();
             p_generator.writeArrayFieldStart( "cells" );
@@ -130,6 +188,34 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
             p_generator.writeEndArray();
             p_generator.writeEndObject();
         }
+
+
+        /**
+         * converts the matrix to JSON tree object
+         *
+         * @param p_matrix matrix object
+         * @param p_generator JSON generator
+         * @throws IOException is thrown on IO errors
+         */
+        private void toTree( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator ) throws IOException
+        {
+            p_generator.writeStartObject();
+            p_generator.writeArrayFieldStart( "cells" );
+            for ( final Map.Entry<?, ?> l_item : p_matrix.entrySet() )
+            {
+
+            }
+            p_generator.writeEndObject();
+        }
+    }    /**
+     * enum typ for serializing
+     **/
+    public enum ESerialzeType
+    {
+        /** returns the matrix as matrix **/
+        Matrix,
+        /** returns the matrix as tree */
+        Tree;
     }
 
 }

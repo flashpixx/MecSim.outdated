@@ -255,9 +255,12 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
     {
+        if ( ( m_route == null ) || ( m_routeindex >= m_route.size() ) )
+            return new ImmutableTriple<>( null, null, this.getGeoposition() );
+
         return new ImmutableTriple<>(
-                ( m_route == null ) || ( m_routeindex >= m_route.size() ) ? null : m_route.get( m_routeindex ).getLeft(),
-                ( m_route == null ) || ( m_routeindex >= m_route.size() ) ? null : m_route.get( m_routeindex ).getRight(),
+                m_route.get( m_routeindex ).getLeft(),
+                m_route.get( m_routeindex ).getRight(),
                 this.getGeoposition()
         );
     }

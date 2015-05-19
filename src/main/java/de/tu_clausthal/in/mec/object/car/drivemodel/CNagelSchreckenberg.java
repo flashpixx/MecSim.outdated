@@ -94,12 +94,6 @@ public class CNagelSchreckenberg implements IDriveModel
     }
 
     @Override
-    public String getName()
-    {
-        return "Nagel-Schreckenberg";
-    }
-
-    @Override
     public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
     {
         this.checkAccelerationWithEdgeSpeed( p_graph, p_car );

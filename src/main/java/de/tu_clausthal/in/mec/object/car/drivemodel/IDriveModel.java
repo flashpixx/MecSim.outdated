@@ -36,13 +36,6 @@ public interface IDriveModel extends Serializable
 {
 
     /**
-     * returns the name of the model
-     *
-     * @return string with name
-     */
-    public String getName();
-
-    /**
      * updates car
      *
      * @param p_currentstep current step number

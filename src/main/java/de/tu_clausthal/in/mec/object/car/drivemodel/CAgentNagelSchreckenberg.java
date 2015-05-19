@@ -42,12 +42,6 @@ public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
     private static final long serialVersionUID = 1L;
 
     @Override
-    public final String getName()
-    {
-        return "Agent Nagel-Schreckenberg";
-    }
-
-    @Override
     public final void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
     {
         // if car is an agent-car the agent gets full control over the car - we check only the precessor to avoid collisions

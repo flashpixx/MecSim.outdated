@@ -250,7 +250,7 @@ public class CCommon
         // triple into complex term
         if ( p_data instanceof Triple )
             return ASSyntax.createLiteral(
-                    "tripel",
+                    "triple",
                     ASSyntax.createLiteral( "left", getTerm( ( (Triple) p_data ).getLeft() ) ),
                     ASSyntax.createLiteral( "right", getTerm( ( (Triple) p_data ).getRight() ) ),
                     ASSyntax.createLiteral( "middle", getTerm( ( (Triple) p_data ).getMiddle() ) )

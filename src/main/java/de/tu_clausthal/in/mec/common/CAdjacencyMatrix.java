@@ -55,7 +55,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
     /**
      * option for serializing result
      */
-    private final ESerialzeType m_type;
+    private final ESerialzeOutput m_type;
 
 
     /**
@@ -63,7 +63,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix()
     {
-        this("row", "col", ESerialzeType.Matrix);
+        this( "row", "col", ESerialzeOutput.Matrix );
     }
 
 
@@ -72,7 +72,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      *
      * @param p_type serializing type
      */
-    public CAdjacencyMatrix( final ESerialzeType p_type )
+    public CAdjacencyMatrix( final ESerialzeOutput p_type )
     {
         this("row", "col", p_type);
     }
@@ -85,7 +85,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix( final String p_rowname, final String p_colname )
     {
-        this( p_rowname, p_colname, ESerialzeType.Matrix);
+        this( p_rowname, p_colname, ESerialzeOutput.Matrix );
     }
 
 
@@ -95,7 +95,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      * @param p_rowname row name
      * @param p_colname column name
      */
-    public CAdjacencyMatrix( final String p_rowname, final String p_colname, final ESerialzeType p_type )
+    public CAdjacencyMatrix( final String p_rowname, final String p_colname, final ESerialzeOutput p_type )
     {
         super();
         m_rowname = p_rowname;
@@ -137,6 +137,21 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      * enum typ for serializing
      **/
     public enum ESerialzeType
+    {
+        /**
+         * returns the matrix as matrix
+         **/
+        Matrix,
+        /**
+         * returns the matrix as tree
+         */
+        Tree;
+    }
+
+    /**
+     * enum typ for serializing
+     **/
+    public enum ESerialzeOutput
     {
         /**
          * returns the matrix as matrix
@@ -207,15 +222,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
             }
             p_generator.writeEndObject();
         }
-    }    /**
-     * enum typ for serializing
-     **/
-    public enum ESerialzeType
-    {
-        /** returns the matrix as matrix **/
-        Matrix,
-        /** returns the matrix as tree */
-        Tree;
     }
 
 }

@@ -329,8 +329,8 @@ public class CAgent<T> implements IVoidAgent
             // add the simulationstep belief with the new number and remove the old one
             try
             {
-                m_agent.addBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
-                m_agent.delBel( ASSyntax.createLiteral( "simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
+                m_agent.addBel( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
+                m_agent.delBel( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
             }
             catch ( final Exception l_exception )
             {

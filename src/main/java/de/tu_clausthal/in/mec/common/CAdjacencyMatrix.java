@@ -94,6 +94,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      *
      * @param p_rowname row name
      * @param p_colname column name
+     * @param p_type serializing type
      */
     public CAdjacencyMatrix( final String p_rowname, final String p_colname, final ESerialzeOutput p_type )
     {

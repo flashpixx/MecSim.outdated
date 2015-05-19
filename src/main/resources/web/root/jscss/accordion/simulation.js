@@ -45,6 +45,7 @@ var mecsim_simulation,
 
             SimulationPanel.settings.reset_button.on("click", function(){
                 $.ajax("csimulation/reset");
+                MecSim.ui().log().empty();
             });
 
             SimulationPanel.settings.slider.slider({

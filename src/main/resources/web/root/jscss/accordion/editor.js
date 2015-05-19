@@ -46,43 +46,11 @@ var EditorPanel = ( function (px_module) {
             this.load_asl_files();
         },
 
-        // initialization of dialog for creating new files
-        initDialog: function() {
-            $("#mecsim_create_asl_form").dialog({
-                autoOpen: false,
-                buttons: [
-                    {
-                        text: "Create",
-                        click: function() {
-                            EditorPanel.create_new_asl();
-                            $( this ).dialog( "close" );
-                        }
-                    },
-                    {
-                        text: "Cancel",
-                        click: function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
-                ]
-            });
-        },
 
         // bind actions to ui elements
         bind_ui_actions: function() {
 
-            // #ui-id-8 onclick function not working, seems to have a problem with the id
-            //$("#ui-id-8").on("click", function() {
 
-                MecSim.ui().content().empty();
-                EditorPanel.append_tab_div();
-                EditorPanel.add_tab();
-                $("#tabs").tabs();
-
-                // json object that holds all editor instances
-                EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
-                EditorPanel.load_selected_file();
-            //});
 
             // quick fix since #ui-id-8 function from above is not working TODO: fix that
             $("#mecsim_code_mirror_button").button().on("click", function(p_data) {
@@ -205,6 +173,28 @@ var EditorPanel = ( function (px_module) {
 
     px_module.ui_actions = function() { return {
 
+        // #ui-id-8 onclick function not working, seems to have a problem with the id
+        "initAccordionAction" : function() {
+
+            /*MecSim.ui().accordion().accordion({ active: false, collapsible: true , activate: function(event, ui) {
+                console.log(ui.newHeader.context.id);
+            }});
+
+            $("#ui-id-8").on("click", function() {
+
+                MecSim.ui().content().empty();
+                EditorPanel.append_tab_div();
+                EditorPanel.add_tab();
+                $("#tabs").tabs();
+
+                // json object that holds all editor instances
+                EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
+                EditorPanel.load_selected_file();
+            });*/
+
+        },
+
+        // initialization of dialog for creating new files
         "initDialog" : function() {
             $("#mecsim_create_file_form").dialog({
                 autoOpen: false,

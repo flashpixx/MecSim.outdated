@@ -81,7 +81,7 @@ class COSMMouseListener extends PanMouseInputListener
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
-        if ( ( !SwingUtilities.isLeftMouseButton( p_event ) ) || ( p_event.getClickCount() != 2 ) )
+        if ( ( CSimulation.getInstance().isRunning() ) || ( !SwingUtilities.isLeftMouseButton( p_event ) ) || ( p_event.getClickCount() != 2 ) )
             return;
 
 

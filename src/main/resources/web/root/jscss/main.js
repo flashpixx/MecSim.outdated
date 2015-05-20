@@ -73,9 +73,9 @@ $(document).ready(function() {
         d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
             Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
-                id   : "graphtest",
-                data : packages.root(classes),
-                link : packages.imports
+                id    : "graphtest",
+                data  : packages.root(classes),
+                links : packages.imports
             });
 
         });

@@ -107,16 +107,16 @@ var Visualization = (function (px_modul) {
         // set data
         d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
-            var nodes = lo_cluster.nodes(packages.root(classes)), links = packages.imports(nodes);
+            var la_nodes = lo_cluster.nodes(packages.root(classes)), la_links = packages.imports(la_nodes);
 
             var path = svg.selectAll( "path.link" )
-                .data( links )
+                .data( la_links )
                 .enter().append( "svg:path" )
                 .attr( "class", lo_options.linkclass )
-                .attr( "d",     function(d, i) { return lo_line(lo_bundle(links)[i]); });
+                .attr( "d",     function(d, i) { return lo_line(lo_bundle(la_links)[i]); });
 
             svg.selectAll( "g.node" )
-                .data( nodes.filter( lo_options.nodefilter) )
+                .data( la_nodes.filter( lo_options.nodefilter) )
 
                 .enter().append( "svg:g" )
                 .attr( "class",     lo_options.nodeclass )

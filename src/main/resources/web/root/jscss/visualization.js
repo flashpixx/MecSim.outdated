@@ -112,15 +112,16 @@ var Visualization = (function (px_modul) {
 
             svg.selectAll( "g.node" )
                 .data( nodes.filter( lo_options.nodefilter) )
+
                 .enter().append( "svg:g" )
-                .attr( "class", lo_options.nodeclass )
-                .attr("id",     lo_options.nodeid )
-                .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-                .append("svg:text")
-                .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
-                .attr("dy", "0.5em")
-                .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-                .attr("transform",   function(d) { return d.x < 180 ? null : "rotate(180)"; })
+                .attr( "class",     lo_options.nodeclass )
+                .attr( "id",        lo_options.nodeid )
+                .attr( "transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+                .append( "svg:text" )
+                .attr( "dx", function(d) { return d.x < 180 ? 8 : -8; } )
+                .attr( "dy", "0.3em")
+                .attr( "text-anchor", function(d) { return d.x < 180 ? "start" : "end"; } )
+                .attr( "transform",   function(d) { return d.x < 180 ? null : "rotate(180)"; } )
                 .text( lo_options.nodetext );
 
         });

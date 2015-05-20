@@ -67,37 +67,37 @@ var MecSim = (function (px_modul) {
          * function to read the logger configuration
          * @param px_success function which is called on read success
          **/
-        "get"   : function( px_success ) { $.ajax({ url : "/clogger/configuration", type: "POST",  success : px_success }); },
+        get   : function( px_success ) { $.ajax({ url : "/clogger/configuration", type: "POST",  success : px_success }); },
 
         /**
          * error logging
          * @param px_message message
          **/
-        "error" : function( px_message ) { $.ajax({ url : "/clogger/error",         type: "POST",  data : px_message  }); },
+        error : function( px_message ) { $.ajax({ url : "/clogger/error",         type: "POST",  data : px_message  }); },
 
         /**
          * debug logging
          * @param px_message message
          **/
-        "debug" : function( px_message ) { $.ajax({ url : "/clogger/debug",         type: "POST",  data : px_message  }); },
+        debug : function( px_message ) { $.ajax({ url : "/clogger/debug",         type: "POST",  data : px_message  }); },
 
         /**
          * warning logging
          * @param px_message message
          **/
-        "warn"  : function( px_message ) { $.ajax({ url : "/clogger/warn",          type: "POST",  data : px_message  }); },
+        warn  : function( px_message ) { $.ajax({ url : "/clogger/warn",          type: "POST",  data : px_message  }); },
 
         /**
          * information logging
          * @param px_message message
          **/
-        "info"  : function( px_message ) { $.ajax({ url : "/clogger/info",          type: "POST",  data : px_message  }); },
+        info  : function( px_message ) { $.ajax({ url : "/clogger/info",          type: "POST",  data : px_message  }); },
 
         /**
          * output logging
          * @param px_message message
          **/
-        "out"   : function( px_message ) { $.ajax({ url : "/clogger/out",           type: "POST",  data : px_message  }); }
+        out   : function( px_message ) { $.ajax({ url : "/clogger/out",           type: "POST",  data : px_message  }); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -113,13 +113,13 @@ var MecSim = (function (px_modul) {
         /** get the configuration
          * @param px_success function which is called on successful reading
          **/
-        "get" : function( px_success ) { $.ajax({ url : "/cconfiguration/get", type: "POST",  success : px_success }); },
+        get : function( px_success ) { $.ajax({ url : "/cconfiguration/get", type: "POST",  success : px_success }); },
 
         /**
          * sets the configuration
          * @param po_data full configuration object
          **/
-        "set" : function( po_data ) { $.ajax({ url : "/cconfiguration/set", type: "POST",  data : po_data }); },
+        set : function( po_data ) { $.ajax({ url : "/cconfiguration/set", type: "POST",  data : po_data }); },
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -155,19 +155,19 @@ var MecSim = (function (px_modul) {
     px_modul.ui = function() {return {
 
         /** reference to the accordion **/
-        "accordion"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_accordion"    : $("#mecsim_global_accordion"); },
+        accordion   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_accordion"    : $("#mecsim_global_accordion"); },
         /** reference to the menu **/
-        "menu"        : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_menu"         : $("#mecsim_global_menu"); },
+        menu        : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_menu"         : $("#mecsim_global_menu"); },
         /** reference to the content area **/
-        "content"     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_content"      : $("#mecsim_global_content"); },
+        content     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_content"      : $("#mecsim_global_content"); },
         /** reference to the object inspector **/
-        "inspector"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_object_inspector"    : $( "#mecsim_object_inspector" ); },
+        inspector   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_object_inspector"    : $( "#mecsim_object_inspector" ); },
         /** reference to log area **/
-        "log"         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_log"          : $("#mecsim_global_log"); },
+        log         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_log"          : $("#mecsim_global_log"); },
         /** reference to the screen area **/
-        "screen"      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
+        screen      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
         /** reference to the menu section of the screen **/
-        "screenmenu"  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
+        screenmenu  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

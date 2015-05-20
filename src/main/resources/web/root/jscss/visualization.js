@@ -49,9 +49,9 @@ var Visualization = (function (px_modul) {
         /** DOM ID of the graphic **/
         lo_options.id           = lo_options.id           || null;
         /** DOM class of the arc **/
-        lo_options.pathclass    = lo_options.pathclass    || "arc";
+        lo_options.pathclass    = lo_options.pathclass    || (lo_options.id == null ? "" : lo_options.id+"-") + "arc";
         /** DOM class of the node **/
-        lo_options.nodeclass    = lo_options.nodeclass    || "node";
+        lo_options.nodeclass    = lo_options.nodeclass    || (lo_options.id == null ? "" : lo_options.id+"-") + "node";
 
         /** data sorting function **/
         lo_options.sort         = lo_options.sort         || null;

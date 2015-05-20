@@ -234,17 +234,14 @@ iframe
     position: relative;
 }
 
-path.arc {
+path.graphtest-arc {
   fill: #fff;
 }
 
-.node {
+.graphtest-node {
   font-size: 10px;
 }
 
-.node:hover {
-  fill: #1f77b4;
-}
 
 .link {
   fill: none;

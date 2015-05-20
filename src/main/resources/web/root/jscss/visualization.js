@@ -39,7 +39,8 @@ var Visualization = (function (px_modul) {
         var lo_options   = po_options || {};
 
         lo_options.datanodes    = lo_options.datanodes    || [];
-        lo_options.size         = lo_options.size         || 500;
+        lo_options.size         = lo_options.size         || 1000;
+        lo_options.clustersize  = lo_options.clustersize  || lo_options.size/4;
         lo_options.id           = lo_options.id           || null;
         lo_options.tension      = lo_options.tension      || 0.85;
         lo_options.radius       = lo_options.radius       || function( po_data ) { return po_data.y; };
@@ -51,7 +52,7 @@ var Visualization = (function (px_modul) {
 
 
 var cluster = d3.layout.cluster()
-    .size([lo_options.size, lo_options.size/2])
+    .size([360, lo_options.clustersize])
     .sort(function(a, b) { return d3.ascending(a.key, b.key); });
 
 var bundle = d3.layout.bundle();
@@ -63,7 +64,7 @@ var line = d3.svg.line.radial()
     .angle( lo_options.angle );
 
 var div = d3.select(pc_element).insert("div")
-    .style("width", lo_options.size* + "px")
+    .style("width", lo_options.size + "px")
     .style("height", lo_options.size + "px")
     .attr("id", lo_options.id);
 

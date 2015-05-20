@@ -230,8 +230,7 @@ iframe
 /*** start testing ***/
 #graphtest
 {
-    top: 15em;
-    left: 30em;
+    left: 10em;
     position: relative;
 }
 

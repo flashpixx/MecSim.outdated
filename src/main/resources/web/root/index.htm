@@ -77,9 +77,8 @@
     <div id = "mecsim_global_menu" >
         <div id = "mecsim_global_accordion" class = "accordion" >
 
-            <h3 >Simulation</h3 >
-
-            <div class = "mecsim_global_sliderSubMenu" >
+            <h3 id="mecsim_simulation_panel">Simulation</h3 >
+            <div id="mecsim_simulation_panel_content" class = "mecsim_global_sliderSubMenu" >
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_config" >Configuration</button >
                 </p>
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_local" >Local</button >
@@ -98,9 +97,8 @@
                 <div id = "mecsim_simulation_speed_slider" ></div >
             </div >
 
-            <h3 >Layer</h3 >
-
-            <div class = "mecsim_global_sliderSubMenu" >
+            <h3 id="mecsim_layer_panel" >Layer</h3 >
+            <div id="mecsim_layer_panel_content" class = "mecsim_global_sliderSubMenu" >
                 <h3 >Activity & Visibility</h3 >
 
                 <div id = "mecsim_layer_switchUI" ></div >
@@ -110,9 +108,8 @@
                 <div id = "mecsim_layer_clickableUI" ></div >
             </div >
 
-            <h3 ><span id = "mecsim_source_slider" >Sources</span ></h3 >
-
-            <div class = "mecsim_global_sliderSubMenu" >
+            <h3 id="mecsim_source_panel"><span id = "mecsim_source_slider" >Sources</span ></h3 >
+            <div id="mecsim_source_panel_content" class = "mecsim_global_sliderSubMenu" >
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_source_oldgui" >Show old GUI</button >
                 </p>
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_source_createtool" >Create new Tool</button >
@@ -121,9 +118,8 @@
                 <div id = "mecsim_source_toolbox" ></div >
             </div >
 
-            <h3 >Editor</h3 >
-
-            <div id = "mecsim_editor_panel" class = "mecsim_global_sliderSubMenu" >
+            <h3 id="mecsim_editor_panel">Editor</h3 >
+            <div id = "mecsim_editor_panel_content" class = "mecsim_global_sliderSubMenu" >
                 <label for = "mecsim_agent_files" >Select a file</label >
                 <select name = "agentfiles" id = "mecsim_agent_files" style = "width: 100px;" ></select >
                 <br />
@@ -133,19 +129,16 @@
                 <button id = "mecsim_save_file" class = "mecsim_editor_fixed_width_button" >Save</button >
             </div >
 
-            <h3 >Multi-Agent System</h3 >
-
-            <div class = "mecsim_global_sliderSubMenu" >
+            <h3 id="mecsim_multiagent_panel">Multi-Agent System</h3 >
+            <div id="mecsim_multiagent_panel_content" class = "mecsim_global_sliderSubMenu" >
                 <button id = "mecsim_mas_jasonmindinspector" class = "mecsim_global_accordeonbutton" >Jason Mindinspector</button >
             </div >
 
-            <h3 >Statistics</h3 >
+            <h3 id="mecsim_statistics_panel">Statistics</h3 >
+            <div id="mecsim_statistics_panel_content" class = "mecsim_global_sliderSubMenu" ></div >
 
-            <div class = "mecsim_global_sliderSubMenu" ></div >
-
-            <h3 >Help</h3 >
-
-            <div class = "mecsim_global_sliderSubMenu" >
+            <h3 id="mecsim_help_panel">Help</h3 >
+            <div id="mecsim_help_panel_content" class = "mecsim_global_sliderSubMenu" >
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_about" >About</button >
                 </p>
                 <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_userdoku" >User Dokumentation</button >

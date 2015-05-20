@@ -101,14 +101,6 @@ var EditorPanel = ( function (px_module) {
 
         },
 
-        // add a tab to the editor
-        add_tab: function() {
-            console.log("hello from addTab");
-            // TODO: check if file is already open in another tab
-            var selected_file = EditorPanel.get_tab_id();
-            $("#tabs ul").append("<li><a href='#" + EditorPanel.get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
-            $("#tabs").append("<div id='" + EditorPanel.get_tab_id() + "'></div>");
-        },
 
         // add a code mirror object to the editor
         add_code_mirror: function() {
@@ -173,25 +165,34 @@ var EditorPanel = ( function (px_module) {
 
     px_module.ui_actions = function() { return {
 
-        // #ui-id-8 onclick function not working, seems to have a problem with the id
+        // initialization of editor panel action
         "initAccordionAction" : function() {
 
-            /*MecSim.ui().accordion().accordion({ active: false, collapsible: true , activate: function(event, ui) {
-                console.log(ui.newHeader.context.id);
-            }});
+            $("#mecsim_editor_panel").on("click", function() {
 
-            $("#ui-id-8").on("click", function() {
+                if( $( "#mecsim_global_accordion" ).accordion( "option", "active" ) ) {
 
-                MecSim.ui().content().empty();
-                EditorPanel.append_tab_div();
-                EditorPanel.add_tab();
-                $("#tabs").tabs();
+                    MecSim.ui().content().empty();
+                    //EditorPanel.append_tab_div();
+                    //EditorPanel.add_tab();
+                    //$("#tabs").tabs();
 
-                // json object that holds all editor instances
-                EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
-                EditorPanel.load_selected_file();
-            });*/
+                    // json object that holds all editor instances
+                    //EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
+                    //EditorPanel.load_selected_file();
 
+                }
+            });
+
+        },
+
+        // add a tab to the editor
+        add_tab: function() {
+            console.log("hello from addTab");
+            // TODO: check if file is already open in another tab
+            var selected_file = EditorPanel.get_tab_id();
+            $("#tabs ul").append("<li><a href='#" + EditorPanel.get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
+            $("#tabs").append("<div id='" + EditorPanel.get_tab_id() + "'></div>");
         },
 
         // initialization of dialog for creating new files

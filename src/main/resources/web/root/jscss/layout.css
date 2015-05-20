@@ -227,16 +227,15 @@ iframe
 
 /** Cluster Widget **/
 
+/*** start testing ***/
 #graphtest
 {
-     margin: auto;
-     position: relative;
-     width: 1000px;
-     height: 1000px;
+    top: 15em;
+    left: 30em;
+    position: relative;
 }
 
 path.arc {
-  cursor: move;
   fill: #fff;
 }
 
@@ -275,6 +274,11 @@ path.arc {
 .link.target {
   stroke: #2ca02c;
 }
+/*** end testing ***/
+
+
+
+
 
 #mecsim_source_clusterwidget{
     float: left;

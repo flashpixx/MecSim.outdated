@@ -39,7 +39,7 @@ var Visualization = (function (px_modul) {
         var lo_options   = po_options || {};
 
         lo_options.datanodes    = lo_options.datanodes    || [];
-        lo_options.size         = lo_options.size         || 600;
+        lo_options.size         = lo_options.size         || 500;
         lo_options.id           = lo_options.id           || null;
         lo_options.tension      = lo_options.tension      || 0.85;
         lo_options.radius       = lo_options.radius       || function( po_data ) { return po_data.y; };

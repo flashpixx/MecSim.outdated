@@ -68,6 +68,18 @@ $(document).ready(function() {
             "onmessage" : function( po_event ) { console.log( po_event.data.toJSON() ); }
         });
 
-        Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id : "graphtest" });
+
+        // --- visualization test ---
+        d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
+
+            Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
+                id   : "graphtest",
+                data : packages.root(classes),
+                link : packages.imports
+            });
+
+        });
+
+
     });
 });

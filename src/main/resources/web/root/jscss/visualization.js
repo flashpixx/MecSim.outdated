@@ -39,8 +39,8 @@ var Visualization = (function (px_modul) {
         var lo_options   = po_options || {};
 
         // --- option definition ---
-        /** array with JSON nodes with the structure { key : "labelname", children : [list with key names]} **/
-        lo_options.datanodes    = lo_options.datanodes    || [];
+        /** data object with tree and link structure: { data : { "" : { children : [{node}...] }, "nodekey" : { children : [{}...]} },  links : [] } **/
+        lo_options.data         = lo_options.data         || {};
         /** image size **/
         lo_options.size         = lo_options.size         || 1000;
         /** size of the cluster (quarter of the size) **/
@@ -107,13 +107,13 @@ var Visualization = (function (px_modul) {
         // set data
         d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
-            var nodes = lo_cluster.nodes(packages.root(classes)), links = packages.imports(nodes), splines = lo_bundle(links);
+            var nodes = lo_cluster.nodes(packages.root(classes)), links = packages.imports(nodes);
 
             var path = svg.selectAll( "path.link" )
                 .data( links )
                 .enter().append( "svg:path" )
                 .attr( "class", lo_options.linkclass )
-                .attr( "d",     function(d, i) { return lo_line(splines[i]); });
+                .attr( "d",     function(d, i) { return lo_line(lo_bundle(links)[i]); });
 
             svg.selectAll( "g.node" )
                 .data( nodes.filter( lo_options.nodefilter) )
@@ -121,10 +121,10 @@ var Visualization = (function (px_modul) {
                 .enter().append( "svg:g" )
                 .attr( "class",     lo_options.nodeclass )
                 .attr( "id",        lo_options.nodeid )
-                .attr( "transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+                .attr( "transform", function(d) { return "rotate(" + (d.x - 90) + ") translate(" + d.y + ")"; })
                 .append( "svg:text" )
                 .attr( "dx", function(d) { return d.x < 180 ? 8 : -8; } )
-                .attr( "dy", "0.3em")
+                .attr( "dy", "0.3em" )
                 .attr( "text-anchor", function(d) { return d.x < 180 ? "start" : "end"; } )
                 .attr( "transform",   function(d) { return d.x < 180 ? null : "rotate(180)"; } )
                 .text( lo_options.nodetext );

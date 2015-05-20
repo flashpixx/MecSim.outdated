@@ -24,7 +24,6 @@ $(document).ready(function() {
         MecSim.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         MecSim.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         MecSim.ui().accordion().accordion({ active: false, collapsible: true , activate: function(event, ui) {
-            //console.log(event);
             console.log(ui.newHeader.context.id);
         }});
         MecSim.ui().inspector().dialog({ autoOpen: false });
@@ -70,6 +69,6 @@ $(document).ready(function() {
             "onmessage" : function( po_event ) { console.log( po_event.data.toJSON() ); }
         });
 
-        //Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { "id" : "graphtest" });
+        //Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id : "graphtest" });
     });
 });

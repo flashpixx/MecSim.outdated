@@ -43,6 +43,10 @@ var Visualization = (function (px_modul) {
         lo_options.clustersize  = lo_options.clustersize  || lo_options.size/4;
         lo_options.id           = lo_options.id           || null;
         lo_options.tension      = lo_options.tension      || 0.85;
+        lo_options.pathclass    = lo_options.pathclass    || "arc";
+        lo_options.nodeclass    = lo_options.nodeclass    || "node";
+
+        lo_options.sort         = lo_options.sort         || null;
         lo_options.radius       = lo_options.radius       || function( po_data ) { return po_data.y; };
         lo_options.angle        = lo_options.angle        || function( po_data ) { return po_data.x / 180 * Math.PI; };
 
@@ -51,60 +55,63 @@ var Visualization = (function (px_modul) {
         lo_options.nodetext     = lo_options.nodetext     || function( po_node ) { return po_node.key; };
 
 
-var cluster = d3.layout.cluster()
-    .size([360, lo_options.clustersize])
-    .sort(function(a, b) { return d3.ascending(a.key, b.key); });
 
-var bundle = d3.layout.bundle();
+        var lo_cluster = d3.layout.cluster()
+            .size( [360, lo_options.clustersize] )
+            .sort( lo_options.sort );
 
-var line = d3.svg.line.radial()
-    .interpolate("bundle")
-    .tension(lo_options.tension)
-    .radius( lo_options.radius )
-    .angle( lo_options.angle );
+        var lo_bundle = d3.layout.bundle();
 
-var div = d3.select(pc_element).insert("div")
-    .style("width", lo_options.size + "px")
-    .style("height", lo_options.size + "px")
-    .attr("id", lo_options.id);
+        var line = d3.svg.line.radial()
+            .interpolate( "bundle" )
+            .tension(     lo_options.tension )
+            .radius(      lo_options.radius )
+            .angle(       lo_options.angle );
 
-var svg = div.append("svg:svg")
-    .attr("width", lo_options.size)
-    .attr("height", lo_options.size)
-    .append("svg:g")
-    .attr("transform", "translate(" + lo_options.size/2 + "," + lo_options.size/2 + ")");
+        var div = d3.select( pc_element )
+            .insert( "div" )
+            .style(  "width",  lo_options.size + "px")
+            .style(  "height", lo_options.size + "px")
 
-svg.append("svg:path")
-    .attr("class", "arc")
-    .attr("d", d3.svg.arc().outerRadius(lo_options.size/2).innerRadius(0).startAngle(0).endAngle(2 * Math.PI));
+        if (lo_options.id  != null)
+            div.attr("id", lo_options.id);
 
-d3.json("http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
-  var nodes = cluster.nodes(packages.root(classes)), links = packages.imports(nodes), splines = bundle(links);
+        var svg = div.append("svg:svg")
+            .attr(   "width",     lo_options.size )
+            .attr(   "height",    lo_options.size )
+            .append( "svg:g" )
+            .attr(   "transform", "translate(" +  lo_options.size/2  + "," +  lo_options.size/2  + ")" );
 
-  var path = svg.selectAll("path.link")
-      .data(links)
-      .enter().append("svg:path")
-      .attr("class", function(d) { return "link source-" + d.source.key + " target-" + d.target.key; })
-      .attr("d", function(d, i) { return line(splines[i]); });
+        svg.append("svg:path")
+            .attr("class", lo_options.pathclass)
+            .attr("d",     d3.svg.arc().outerRadius(lo_options.size/2).innerRadius(0).startAngle(0).endAngle(2 * Math.PI) );
 
-  svg.selectAll("g.node")
-      .data(nodes.filter(function(n) { return !n.children; }))
-      .enter().append("svg:g")
-      .attr("class", "node")
-      .attr("id", function(d) { return "node-" + d.key; })
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-      .append("svg:text")
-      .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
-      .attr("dy", ".31em")
-      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-      .text(function(d) { return d.key; });
+        d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
-    });
+            var nodes = lo_cluster.nodes(packages.root(classes)), links = packages.imports(nodes), splines = lo_bundle(links);
+
+            var path = svg.selectAll( "path.link" )
+                .data(links)
+                .enter().append("svg:path")
+                .attr("class", function(d) { return "link source-" + d.source.key + " target-" + d.target.key; })
+                .attr("d", function(d, i) { return line(splines[i]); });
+
+            svg.selectAll( "g.node" )
+                .data( nodes.filter( lo_options.nodefilter) )
+                .enter().append( "svg:g" )
+                .attr( "class", lo_options.nodeclass )
+                .attr("id",     lo_options.nodeid )
+                .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+                .append("svg:text")
+                .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
+                .attr("dy", ".31em")
+                .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+                .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
+                .text(function(d) { return d.key; });
+
+        });
 
     }
-
-
 
 
 

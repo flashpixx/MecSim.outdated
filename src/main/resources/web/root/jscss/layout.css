@@ -243,31 +243,31 @@ path.graphtest-arc {
 }
 
 
-.link {
+.graphtest-link {
   fill: none;
   stroke: #1f77b4;
   stroke-opacity: .4;
   pointer-events: none;
 }
 
-.link.source, .link.target {
+.graphtest-link.source, .graphtest-link.target {
   stroke-opacity: 1;
   stroke-width: 2px;
 }
 
-.node.target {
+.graphtest-node.target {
   fill: #d62728 !important;
 }
 
-.link.source {
+.graphtest-link.source {
   stroke: #d62728;
 }
 
-.node.source {
+.graphtest-node.source {
   fill: #2ca02c;
 }
 
-.link.target {
+.graphtest-link.target {
   stroke: #2ca02c;
 }
 /*** end testing ***/

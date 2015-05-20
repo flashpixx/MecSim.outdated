@@ -61,8 +61,10 @@ var Visualization = (function (px_modul) {
         /** angle function **/
         lo_options.angle        = lo_options.angle        || function( po_data ) { return po_data.x / 180 * Math.PI; };
 
-        /** function tp create DOM ID of the node **/
+        /** function to create DOM ID of the node **/
         lo_options.nodeid       = lo_options.nodeid       || function( po_node ) { return (lo_options.id == null ? "" : lo_options.id+"-") + "node-" + po_node.key; };
+        /** function to create DOM class of the links **/
+        lo_options.linkclass    = lo_options.linkclass    || function( po_link ) { var lc_prefix = (lo_options.id == null ? "" : lo_options.id+"-"); return [lc_prefix+"link", lc_prefix+"source-"+po_link.source.key, lc_prefix+"target-"+po_link.target.key].join(" "); };
         /** function for filtering the nodes **/
         lo_options.nodefilter   = lo_options.nodefilter   || function( po_node ) { return !po_node.children; };
         /** function to return the node text **/
@@ -99,7 +101,7 @@ var Visualization = (function (px_modul) {
 
         svg.append("svg:path")
             .attr("class", lo_options.pathclass)
-            .attr("d",     d3.svg.arc().outerRadius(lo_options.size/2).innerRadius(0).startAngle(0).endAngle(2 * Math.PI) );
+            .attr("d",     d3.svg.arc().outerRadius( lo_options.size/2 ).innerRadius( 0 ).startAngle( 0 ).endAngle( 2 * Math.PI ) );
 
 
         // set data
@@ -108,10 +110,10 @@ var Visualization = (function (px_modul) {
             var nodes = lo_cluster.nodes(packages.root(classes)), links = packages.imports(nodes), splines = lo_bundle(links);
 
             var path = svg.selectAll( "path.link" )
-                .data(links)
-                .enter().append("svg:path")
-                .attr("class", function(d) { return "link source-" + d.source.key + " target-" + d.target.key; })
-                .attr("d", function(d, i) { return lo_line(splines[i]); });
+                .data( links )
+                .enter().append( "svg:path" )
+                .attr( "class", lo_options.linkclass )
+                .attr( "d",     function(d, i) { return lo_line(splines[i]); });
 
             svg.selectAll( "g.node" )
                 .data( nodes.filter( lo_options.nodefilter) )

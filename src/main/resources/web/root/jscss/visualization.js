@@ -32,12 +32,13 @@ var Visualization = (function (px_modul) {
      * creates a edge bundle with D3.JS
      * @see http://mbostock.github.io/d3/talk/20111116/bundle.html
      * @param pc_element element in which the graph is added
-     * @param po_options options of the graph
+     * @param po_options options of the graph (option definition below)
      **/
     px_modul.HierarchicalEdgeBundling = function(pc_element, po_options)
     {
         var lo_options   = po_options || {};
 
+        // --- option definition ---
         /** array with JSON nodes with the structure { key : "labelname", children : [list with key names]} **/
         lo_options.datanodes    = lo_options.datanodes    || [];
         /** image size **/
@@ -66,6 +67,8 @@ var Visualization = (function (px_modul) {
         lo_options.nodefilter   = lo_options.nodefilter   || function( po_node ) { return !po_node.children; };
         /** function to return the node text **/
         lo_options.nodetext     = lo_options.nodetext     || function( po_node ) { return po_node.key; };
+        // -------------------------
+
 
 
         // create cluster call (size = 360 degree, cluster size)

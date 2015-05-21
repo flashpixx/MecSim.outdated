@@ -94,7 +94,7 @@ public class CCarJasonAgent extends CDefaultCar
 
     /**
      * @param p_objectname name of the object within the simulation
-     * @param p_agent map with ASL / agent name
+     * @param p_agent set with ASL / agent name
      * @param p_route driving route
      * @param p_speed initial speed
      * @param p_maxspeed maximum speed

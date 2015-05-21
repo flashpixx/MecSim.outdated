@@ -832,6 +832,7 @@ var mecsim_source,
                 });
             }
 
+console.log(result);
             return result;
 
         },

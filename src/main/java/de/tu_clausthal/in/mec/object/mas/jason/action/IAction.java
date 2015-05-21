@@ -40,8 +40,6 @@ public abstract class IAction
      * @param p_agent agent which is run the action
      * @param p_args arguments of the action
      */
-    public void act( final Agent p_agent, final Structure p_args )
-    {
-    }
+    public abstract void act( final Agent p_agent, final Structure p_args );
 
 }

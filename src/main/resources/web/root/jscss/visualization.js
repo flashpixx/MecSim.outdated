@@ -28,6 +28,57 @@
  **/
 var Visualization = (function (px_modul) {
 
+
+    /**
+     * function for building tree structure
+     * @note empty key == root node
+     * @param po_data input data
+     * @return tree JSON object
+    **/
+    function buildtree(po_data){
+        var lo_node = {}
+
+        function traverse( pc_key, pc_object )
+        {
+
+        }
+
+
+        $.each(po_data, function(lc_key, lx_value) {
+
+
+        });
+
+        return lo_data;
+    }
+
+
+
+
+
+    /**
+     * function to define the link structure
+     * @param po_nodes node tree
+     * @return link object structure
+    **/
+    function linknode( po_nodes )
+    {
+        var la_links = [];
+
+        $.each(po_nodes, function(pc_key, po_object) {
+            if (po_object.children)
+                po_object.children.forEach( function(po_child) {
+                    la_links.push({
+                        source : pc_key,
+                        target : po_child.key
+                    });
+                });
+            });
+
+      return la_links;
+    }
+
+
     /**
      * creates a edge bundle with D3.JS
      * @see http://mbostock.github.io/d3/talk/20111116/bundle.html
@@ -39,7 +90,7 @@ var Visualization = (function (px_modul) {
         var lo_options   = po_options || {};
 
         // --- option definition ---
-        /** data object with tree and link structure: { data : { "" : { children : [{node}...] }, "nodekey" : { children : [{}...]} },  links : [] } **/
+        /** data object with tree and link structure **/
         lo_options.data         = lo_options.data         || {};
         /** image size **/
         lo_options.size         = lo_options.size         || 1000;
@@ -110,7 +161,9 @@ var Visualization = (function (px_modul) {
 
 
         // creates the visualization of the data
-        var la_nodes = lo_cluster.nodes(lo_options.data), la_links = lo_options.link(la_nodes);
+        var lo_tree = buildtree(lo_options.data) , la_nodes = lo_cluster.nodes(lo_tree), la_links = linknode(lo_tree);
+        //console.log(la_nodes);
+        //console.log(la_links);
 
         // link visualization
         var path = lo_svg.selectAll( "path.link" )

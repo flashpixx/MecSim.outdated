@@ -238,6 +238,16 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     /**
+     * returns the number of cars on the current edge
+     *
+     * @return number of cars
+     */
+    private Integer getCurrentCarsOnEdge()
+    {
+        return m_graph.getEdge( this.getEdge() ).getNumberOfObjects();
+    }
+
+    /**
      * returns the maximum allowed speed at the current edge
      *
      * @return speed value
@@ -246,7 +256,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     {
         return m_graph.getEdgeSpeed( this.getEdge() );
     }
-
 
     /**
      * returns a triple of the current edge id, cell position and geoposition

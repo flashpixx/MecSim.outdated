@@ -38,18 +38,25 @@ var Visualization = (function (px_modul) {
     function buildtree(po_data){
         var lo_node = {}
 
-        function traverse( pc_key, pc_object )
+        function traverse( pc_key, po_object )
         {
+            var la_children = [];
+            if (po_object.children)
+                po_object.children.forEach( function(lc_item) { la_children.push(traverse(lc_item, po_data[lc_item])); } );
 
+            var lo_tree = $.extend( {}, po_object );
+            lo_tree.children = la_children;
+            lo_tree.key = pc_key;
+            return lo_tree;
         }
 
 
         $.each(po_data, function(lc_key, lx_value) {
-
-
+            lo_node[lc_key] = traverse(lc_key, lx_value);
         });
 
-        return lo_data;
+        console.log(lo_node);
+        return lo_node;
     }
 
 

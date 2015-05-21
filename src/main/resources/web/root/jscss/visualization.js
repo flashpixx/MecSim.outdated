@@ -54,6 +54,8 @@ var Visualization = (function (px_modul) {
         /** DOM class of the node **/
         lo_options.nodeclass    = lo_options.nodeclass    || (lo_options.id == null ? "" : lo_options.id+"-") + "node";
 
+        /** function to create the connection structure between nodes **/
+        lo_options.link         = lo_options.link         || null;
         /** data sorting function **/
         lo_options.sort         = lo_options.sort         || null;
         /** radius function **/
@@ -73,7 +75,7 @@ var Visualization = (function (px_modul) {
 
 
 
-        // create cluster call (size = 360 degree, cluster size)
+        // create cluster initialization call (size = 360 degree, cluster size)
         var lo_cluster = d3.layout.cluster()
             .size( [360, lo_options.clustersize] )
             .sort( lo_options.sort );
@@ -86,6 +88,7 @@ var Visualization = (function (px_modul) {
             .radius(      lo_options.radius )
             .angle(       lo_options.angle );
 
+        // appends the visualization in the element in an inner div
         var div = d3.select( pc_element )
             .insert( "div" )
             .style(  "width",  lo_options.size + "px")
@@ -93,44 +96,42 @@ var Visualization = (function (px_modul) {
         if (lo_options.id  != null)
             div.attr("id", lo_options.id);
 
-        var svg = div.append("svg:svg")
+        // adds an SVG image in the div
+        var lo_svg = div.append("svg:svg")
             .attr(   "width",     lo_options.size )
             .attr(   "height",    lo_options.size )
             .append( "svg:g" )
             .attr(   "transform", "translate(" +  lo_options.size/2  + "," +  lo_options.size/2  + ")" );
 
-        svg.append("svg:path")
+        lo_svg.append("svg:path")
             .attr("class", lo_options.pathclass)
             .attr("d",     d3.svg.arc().outerRadius( lo_options.size/2 ).innerRadius( 0 ).startAngle( 0 ).endAngle( 2 * Math.PI ) );
 
 
-        // set data
-        d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
-            var la_nodes = lo_cluster.nodes(packages.root(classes)), la_links = packages.imports(la_nodes);
+        // creates the visualization of the data
+        var la_nodes = lo_cluster.nodes(lo_options.data), la_links = lo_options.link(la_nodes);
 
-            var path = svg.selectAll( "path.link" )
-                .data( la_links )
-                .enter().append( "svg:path" )
-                .attr( "class", lo_options.linkclass )
-                .attr( "d",     function(d, i) { return lo_line(lo_bundle(la_links)[i]); });
+        // link visualization
+        var path = lo_svg.selectAll( "path.link" )
+            .data( la_links )
+            .enter().append( "svg:path" )
+            .attr( "class", lo_options.linkclass )
+            .attr( "d",     function(d, i) { return lo_line(lo_bundle(la_links)[i]); });
 
-            svg.selectAll( "g.node" )
-                .data( la_nodes.filter( lo_options.nodefilter) )
-
-                .enter().append( "svg:g" )
-                .attr( "class",     lo_options.nodeclass )
-                .attr( "id",        lo_options.nodeid )
-                .attr( "transform", function(d) { return "rotate(" + (d.x - 90) + ") translate(" + d.y + ")"; })
-                .append( "svg:text" )
-                .attr( "dx", function(d) { return d.x < 180 ? 8 : -8; } )
-                .attr( "dy", "0.3em" )
-                .attr( "text-anchor", function(d) { return d.x < 180 ? "start" : "end"; } )
-                .attr( "transform",   function(d) { return d.x < 180 ? null : "rotate(180)"; } )
-                .text( lo_options.nodetext );
-
-        });
-
+        // node visualisation
+        lo_svg.selectAll( "g.node" )
+            .data( la_nodes.filter( lo_options.nodefilter) )
+            .enter().append( "svg:g" )
+            .attr( "class",     lo_options.nodeclass )
+            .attr( "id",        lo_options.nodeid )
+            .attr( "transform", function(d) { return "rotate(" + (d.x - 90) + ") translate(" + d.y + ")"; })
+            .append( "svg:text" )
+            .attr( "dx", function(d) { return d.x < 180 ? 8 : -8; } )
+            .attr( "dy", "0.3em" )
+            .attr( "text-anchor", function(d) { return d.x < 180 ? "start" : "end"; } )
+            .attr( "transform",   function(d) { return d.x < 180 ? null : "rotate(180)"; } )
+            .text( lo_options.nodetext );
     }
 
 

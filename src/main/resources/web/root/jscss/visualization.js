@@ -117,20 +117,20 @@ var Visualization = (function (px_modul) {
             .data( la_links )
             .enter().append( "svg:path" )
             .attr( "class", lo_options.linkclass )
-            .attr( "d",     function(d, i) { return lo_line(lo_bundle(la_links)[i]); });
+            .attr( "d",     function(po_link, pn_index) { return lo_line(lo_bundle(la_links)[pn_index]); });
 
         // node visualisation
         lo_svg.selectAll( "g.node" )
             .data( la_nodes.filter( lo_options.nodefilter) )
             .enter().append( "svg:g" )
-            .attr( "class",     lo_options.nodeclass )
-            .attr( "id",        lo_options.nodeid )
-            .attr( "transform", function(d) { return "rotate(" + (d.x - 90) + ") translate(" + d.y + ")"; })
+            .attr( "class",       lo_options.nodeclass )
+            .attr( "id",          lo_options.nodeid )
+            .attr( "transform",   function(po_link) { return "rotate(" + (po_link.x - 90) + ") translate(" + po_link.y + ")"; })
             .append( "svg:text" )
-            .attr( "dx", function(d) { return d.x < 180 ? 8 : -8; } )
+            .attr( "dx",          function(po_link) { return po_link.x < 180 ? 8 : -8; } )
             .attr( "dy", "0.3em" )
-            .attr( "text-anchor", function(d) { return d.x < 180 ? "start" : "end"; } )
-            .attr( "transform",   function(d) { return d.x < 180 ? null : "rotate(180)"; } )
+            .attr( "text-anchor", function(po_link) { return po_link.x < 180 ? "start" : "end"; } )
+            .attr( "transform",   function(po_link) { return po_link.x < 180 ? null : "rotate(180)"; } )
             .text( lo_options.nodetext );
     }
 

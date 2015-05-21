@@ -116,12 +116,14 @@
 
 
         <!-- math structures -->
+        <!--
         <dependency>
             <groupId>org.jblas</groupId>
             <artifactId>jblas</artifactId>
             <version>1.2.3</version>
             <scope>compile</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
@@ -136,7 +138,15 @@
         </dependency>
 
 
-        <!-- database -->
+        <!-- component structure -->
+        <!--
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.12</version>
+            <scope>compile</scope>
+        </dependency>
+        -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>

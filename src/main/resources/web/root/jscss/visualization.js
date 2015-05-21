@@ -46,7 +46,7 @@ var Visualization = (function (px_modul) {
         /** size of the cluster (quarter of the size) **/
         lo_options.clustersize  = lo_options.clustersize  || lo_options.size/4;
         /** tension value **/
-        lo_options.tension      = lo_options.tension      || 0.85;
+        lo_options.tension      = lo_options.tension      || 0.75;
         /** DOM ID of the graphic **/
         lo_options.id           = lo_options.id           || null;
         /** DOM class of the arc **/

@@ -35,6 +35,7 @@ $(document).ready(function() {
         EditorPanel.ui_actions().initDialog();
         EditorPanel.ui_actions().initNewFileButton();
         EditorPanel.ui_actions().initAccordionAction();
+        EditorPanel.ui_actions().load_asl_files();
 
         // create logger websockets access
         MecSim.websocket( "/cconsole/output/log", {

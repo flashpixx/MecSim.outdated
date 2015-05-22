@@ -105,9 +105,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @CFieldFilter.CAgent( bind = false )
     private int m_routeindex;
     /**
-     * current speed in km/h
+     * current speed in km/h (use boxed-type because MAS can modify value)
      */
-    protected int m_speed;
+    protected Integer m_speed;
 
 
     /**

@@ -119,7 +119,6 @@ iframe
 }
 /******************************** css definitions for mecsim_source ************************************************/
 
-
 /** General **/
 .ui-widget-content{
     border: 1px solid #CACACA;
@@ -177,60 +176,6 @@ iframe
 {
     height: 75vh;
 }
-
-
-/** Waypoint Settings Widget TODO Deprecated in a view commit **/
-#mecsim_source_waypointsettings{
-    float: left;
-    width: 482px;
-    height: 240px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-.mecsim_source_select{
-    float:right;
-    margin-right: 10px;
-    width: 240px;
-}
-
-.mecsim_source_inputsmall{
-    width:30px;
-}
-
-.mecsim_source_customizetool{
-    padding-top: 65px;
-}
-
-/** Target Weighting Widget **/
-#mecsim_source_targetweighting{
-    float: left;
-    width: 482px;
-    height: 360px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-/** TODO deprecated
-#mecsim_source_weighting_paginate, #mecsim_source_weighting_length ,#mecsim_source_weighting_filter{
-    float: left;
-    margin: 10px;
-}
-
-#mecsim_source_weighting{
-    width: 60%;
-    float: left;
-    margin: 10px;
-    text-align: center;
-}
-
-#mecsim_source_weightinginput{
-    text-align: center;
-    width: 100%;
-}
-**/
-
-/** Cluster Widget **/
 
 /*** start testing ***/
 #graphtest

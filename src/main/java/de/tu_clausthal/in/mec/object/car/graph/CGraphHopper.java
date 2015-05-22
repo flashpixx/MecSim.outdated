@@ -253,6 +253,16 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
+     * returns cell number to distance in meter
+     * @param p_cells cell number
+     * @return meter value
+     */
+    public final double getCellDistanceToMeter( final int p_cells )
+    {
+        return p_cells * m_cellsize;
+    }
+
+    /**
      * returns the closest edge(s) of a geo position
      *
      * @param p_position geo position

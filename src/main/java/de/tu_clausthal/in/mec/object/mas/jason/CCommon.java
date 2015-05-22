@@ -94,7 +94,8 @@ public class CCommon
             );
         }
 
-        if ( p_type.isInstance( Number.class ) )
+        // check for numbers
+        if ( Number.class.isAssignableFrom( p_type ) )
             return getJavaValue( ( (NumberTerm) p_term ).solve(), p_type );
 
         return getJavaValue( p_term );

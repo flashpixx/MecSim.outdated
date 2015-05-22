@@ -173,6 +173,11 @@ iframe
     margin-right: 10px;
 }
 
+.CodeMirror
+{
+    height: 75vh;
+}
+
 
 /** Waypoint Settings Widget TODO Deprecated in a view commit **/
 #mecsim_source_waypointsettings{

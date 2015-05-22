@@ -2,7 +2,7 @@
 ag_scramble(3).
 
 // initial goal
-!think.
+!drive.
 
 
 
@@ -26,7 +26,7 @@ ag_scramble(3).
    :  true
    <- -ag_distance(_)[source(_)];
       .getFunctor(Predecessor, ag_distance);
-      !think.
+      !drive.
 
 
 
@@ -45,11 +45,11 @@ ag_scramble(3).
 
 
 // default behaviour - accelerate
-+!think
++!drive
    :  true
    <- -ag_position(_)[source(_)];
       -ag_predecessor([_])[source(_)];
       invoke(self, getCurrentPosition, [Triple, ag_position]);
       invoke(self, getPredecessor, [Map, ag_predecessor]);
       !accelerate;
-      !think.
+      !drive.

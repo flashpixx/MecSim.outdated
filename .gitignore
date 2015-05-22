@@ -9,6 +9,7 @@
 !src/main/documentation/**/*.doxyfile
 !src/main/documentation/**/*.graffle
 
+!src/main/resources/**/*.asl
 !src/main/resources/**/*.htm
 !src/main/resources/**/*.html
 !src/main/resources/**/*.js

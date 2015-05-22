@@ -79,6 +79,9 @@ public class CConfiguration
             // flag for resetting the full configuration - accessible within the UI
             put( "reset", false );
 
+            // extract all MAS files from the Jar to the home path (should be run once)
+            put( "extractmas", true );
+
             // language data - accessible within the UI
             put(
                     "language", new CNameHashMap.CImmutable()
@@ -532,6 +535,20 @@ public class CConfiguration
             CLogger.error( l_throwable );
             return false;
         }
+
+        // extract MAS files to the home directory
+        if ( m_configuration.get( "extractmas" ) )
+            for ( final String l_mas : new String[]{"scramble.asl"} )
+                try
+                {
+                    FileUtils.copyURLToFile( CCommon.getResourceURL( "mas/" + l_mas ), new File( m_location.get( "mas" ) + File.separator + l_mas ) );
+                }
+                catch ( final IOException l_exception )
+                {
+                    CLogger.error( l_exception );
+                    return false;
+                }
+        m_configuration.set( "extractmas", false );
 
         return true;
     }

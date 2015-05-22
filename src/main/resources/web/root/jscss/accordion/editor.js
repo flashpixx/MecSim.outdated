@@ -25,121 +25,12 @@
 
 var EditorPanel = ( function (px_module) {
 
-
-        // bind dom elements to variables
-        /*settings: {
-            globalContent: $("#mecsim_global_content"),
-            mecsim_agent_files: $("#mecsim_agent_files"),
-            new_asl_button: $("#mecsim_new_asl"),
-            load_asl_button: $("#mecsim_load_asl").button(),
-            delete_asl_button: $("#mecsim_delete_asl").button(),
-            save_asl_button: $("#mecsim_save_asl").button(),
-            select_asl_menu: $("#mecsim_agent_files").selectmenu(),
-            g_editor: {}
-        },
-
-        // initialization functions for editor
-        init: function() {
-            mecsim_editor = this.settings;
-            this.initDialog();
-            this.bind_ui_actions();
-            this.load_asl_files();
-        },
-
-
-        // bind actions to ui elements
-        bind_ui_actions: function() {
-
-
-
-            // quick fix since #ui-id-8 function from above is not working TODO: fix that
-            $("#mecsim_code_mirror_button").button().on("click", function(p_data) {
-                MecSim.ui().content().empty();
-                EditorPanel.append_tab_div();
-                EditorPanel.add_tab();
-                $("#tabs").tabs();
-
-                // json object that holds all editor instances
-                EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
-                EditorPanel.load_selected_file();
-            });
-
-            $("#mecsim_new_asl").button().on("click", function(p_data){
-                $("#mecsim_create_asl_form").dialog("open");
-            });
-
-            EditorPanel.settings.load_asl_button.on("click", function(p_data){
-                EditorPanel.add_tab();
-                $("div#tabs").tabs("refresh");
-
-                var tab_index = $('#tabs a[href="#' + EditorPanel.get_tab_id() + '"]').parent().index();
-                $('#tabs').tabs( "option", "active", tab_index );
-                $("div#tabs").tabs("refresh");
-
-                EditorPanel.add_code_mirror();
-                EditorPanel.load_selected_file();
-            });
-
-            EditorPanel.settings.delete_asl_button.on("click", function(p_data){
-                $.post(
-                    "cagentenvironment/jason/delete",
-                    { "name" : $("#mecsim_agent_files").val() }
-                ).done(function() {
-                    EditorPanel.load_asl_files();
-                });
-
-            });
-
-            EditorPanel.settings.save_asl_button.on("click", function(p_data){
-                $.post(
-                    "cagentenvironment/jason/write",
-                    { "name" : $("#mecsim_agent_files").val(),
-                    "source" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].getValue(),
-                    "data" : EditorPanel.settings.g_editor[EditorPanel.get_tab_id()].getValue()}
-              );
-            });
-
-        },
-
-
-        // add a code mirror object to the editor
-        add_code_mirror: function() {
-            EditorPanel.settings.g_editor[EditorPanel.get_tab_id()] = CodeMirror($("#" + EditorPanel.get_tab_id() + "")[0], {lineNumbers: true});
-        },
-
-
-
-
-
-
-
-
-
-        // create new asl file which is then stored under ~/.mecsim/mas/
-        create_new_asl: function(){
-
-            if( $("#new_asl").val() ) {
-                $.post(
-                    "cagentenvironment/jason/create",
-                    { "name" : $("#new_asl").val() }
-                ).done(function() {
-                    EditorPanel.load_asl_files();
-                    $("#mecsim_create_asl_form").dialog("close");
-                });
-            } else {
-                alert("Please enter a file name");
-            }
-
-        }
-
-    };*/
-
     px_module.g_editor = {}
 
     px_module.ui_actions = function() { return {
 
         // load asl files which are stored under ~/.mecsim/mas/
-        "load_asl_files" : function() {
+        "load_agent_files" : function() {
             $.getJSON( "cagentenvironment/jason/list", function( p_data ) {
                 $("#mecsim_agent_files").empty();
                 for(var i in p_data.agents){
@@ -163,34 +54,6 @@ var EditorPanel = ( function (px_module) {
                 success : function( px_data )
                 {
                     EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].setValue( px_data.source );
-                }
-            });
-
-            /*$.post(
-                "cagentenvironment/jason/read",
-                { "name" : $("#mecsim_agent_files").val() },
-                function( px_data ) {
-                    EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].setValue( px_data.source );
-                }
-            );*/
-        },
-
-        // initialization of editor panel action
-        "initAccordionAction" : function() {
-
-            $("#mecsim_editor_panel").on("click", function() {
-
-                if( $( "#mecsim_global_accordion" ).accordion( "option", "active" ) ) {
-
-                    MecSim.ui().content().empty();
-                    EditorPanel.ui_actions().append_tab_div();
-                    EditorPanel.ui_actions().add_tab();
-                    $("#tabs").tabs();
-
-                    // json object that holds all editor instances
-                    EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
-                    EditorPanel.ui_actions().load_selected_file();
-
                 }
             });
 
@@ -222,7 +85,7 @@ var EditorPanel = ( function (px_module) {
                     {
                         text: "Create",
                         click: function() {
-                            EditorPanel.create_new_asl();
+                            EditorPanel.ui_actions().create_new_file();
                             $( this ).dialog( "close" );
                         }
                     },
@@ -236,14 +99,111 @@ var EditorPanel = ( function (px_module) {
             });
         },
 
-        "initNewFileButton" : function() {
-            $("#mecsim_new_file").button().on("click", function(p_data){
-                $("#mecsim_create_file_form").dialog("open");
-                $("#mecsim_file_type").selectmenu();
-            });
+        // create new file which is then stored under ~/.mecsim/mas/
+        "create_new_file" : function(){
+
+            if( $("#new_file").val() ) {
+
+                $.ajax({
+                    url : "/cagentenvironment/jason/create",
+                    type: "POST",
+                    data: { "name" : $("#new_file").val() },
+                    success : function( px_data )
+                    {
+                        EditorPanel.ui_actions().load_agent_files();
+                        $("#mecsim_create_file_form").dialog("close");
+                    }
+                });
+
+            } else {
+                alert("Please enter a file name");
+            }
+
+        },
+
+        // add a code mirror object to the editor
+        "add_code_mirror" : function() {
+            EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
         }
 
     };}
+
+    px_module.bind_ui_actions = function() {
+
+        // bind select menu, initialize dialog, and load agent files
+        EditorPanel.ui().mecsim_agent_files().selectmenu();
+        EditorPanel.ui_actions().initDialog();
+        EditorPanel.ui_actions().load_agent_files();
+
+        // initialization of editor panel action
+        EditorPanel.ui().mecsim_editor_panel().on("click", function() {
+
+            if( MecSim.ui().accordion().accordion( "option", "active" ) ) {
+
+                MecSim.ui().content().empty();
+                EditorPanel.ui_actions().append_tab_div();
+                EditorPanel.ui_actions().add_tab();
+                $("#tabs").tabs();
+
+                // json object that holds all editor instances
+                EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
+                EditorPanel.ui_actions().load_selected_file();
+
+            }
+        });
+
+        // create new file
+        EditorPanel.ui().new_file_button().button().on("click", function(p_data){
+            $("#mecsim_create_file_form").dialog("open");
+            $("#mecsim_file_type").selectmenu();
+        });
+
+        // load file
+        EditorPanel.ui().load_file_button().button().on("click", function(p_data){
+            EditorPanel.ui_actions().add_tab();
+            $("div#tabs").tabs("refresh");
+
+            var tab_index = $('#tabs a[href="#' + EditorPanel.ui_actions().get_tab_id() + '"]').parent().index();
+            $('#tabs').tabs( "option", "active", tab_index );
+            $("div#tabs").tabs("refresh");
+
+            EditorPanel.ui_actions().add_code_mirror();
+            EditorPanel.ui_actions().load_selected_file();
+        });
+
+        // delete file
+        EditorPanel.ui().delete_file_button().button().on("click", function(p_data){
+
+            $.ajax({
+                url : "/cagentenvironment/jason/delete",
+                type: "POST",
+                data: { "name" : $("#mecsim_agent_files").val() },
+                success : function( px_data )
+                {
+                    EditorPanel.ui_actions().load_agent_files();
+                }
+            });
+
+        });
+
+        // save file
+        EditorPanel.ui().save_file_button().button().on("click", function(p_data){
+
+            $.ajax({
+                url : "/cagentenvironment/jason/write",
+                type: "POST",
+                data: { "name" : $("#mecsim_agent_files").val(),
+                "source" : EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].getValue(),
+                "data" : EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].getValue()},
+                success : function( px_data )
+                {
+                    console.log("file saved");
+                }
+            });
+
+        });
+
+    }
 
     // --- UI references -----------------------------------------------------------------------------------------------
 
@@ -263,8 +223,9 @@ var EditorPanel = ( function (px_module) {
         /** reference to 'save file' button **/
         "save_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
         /** reference to 'select file type' menu **/
-        "select_file_type_menu"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); }
-
+        "select_file_type_menu"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
+        /** reference to accordion editor panel h3 element **/
+        "mecsim_editor_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

@@ -27,15 +27,7 @@ $(document).ready(function() {
         MecSim.ui().inspector().dialog({ autoOpen: false });
 
         // Editor Panel instantiation
-        EditorPanel.ui().mecsim_agent_files().selectmenu();
-        EditorPanel.ui().new_file_button().button();
-        EditorPanel.ui().load_file_button().button();
-        EditorPanel.ui().delete_file_button().button();
-        EditorPanel.ui().save_file_button().button();
-        EditorPanel.ui_actions().initDialog();
-        EditorPanel.ui_actions().initNewFileButton();
-        EditorPanel.ui_actions().initAccordionAction();
-        EditorPanel.ui_actions().load_asl_files();
+        EditorPanel.bind_ui_actions();
 
         // create logger websockets access
         MecSim.websocket( "/cconsole/output/log", {

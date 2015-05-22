@@ -20,9 +20,6 @@ var mecsim_source,
 
         /** todo collection for source-ui ck
         TODO bug finish wizard
-        TODO remove old gui
-        TODO remove old css
-        TODO accordion fix (better)
         TODO ajax kapseln
         TODO function with parameters
         TODO javascript structure like philipp
@@ -44,7 +41,7 @@ var mecsim_source,
             this.getLabels();
             this.setToolbox();
 
-            $("#mecsim_source_slider").parent().on("click", function(data){
+            $("#mecsim_source_panel").on("click", function(data){
                 MecSim.ui().content().empty();
                 MecSim.ui().content().load("template/source.htm", function(){
                     SourcePanel.initToolWizard();

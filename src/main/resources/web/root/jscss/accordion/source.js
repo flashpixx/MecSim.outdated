@@ -19,6 +19,13 @@ var mecsim_source,
         },
 
         /** todo collection for source-ui ck
+        TODO bug finish wizard
+        TODO remove old gui
+        TODO remove old css
+        TODO ajax kapseln
+        TODO function with parameters
+        TODO javascript structure like philipp
+        TODO save toolbox in config/web
         TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
         TODO bounding in minimized mode maybe snap to tab
         TODO plot distribution
@@ -28,8 +35,6 @@ var mecsim_source,
         TODO source list table (JTable or JQuery Plugin)
         TODO source weighting table (JTable or JQuery Plugin)
         TODO radial refactor (bugs and generic)
-        TODO clean up source-ui styles inside of layout.css
-        TODO remove old gui if new is ready
         **/
 
         //method to initialize source-ui

@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CGetFunctor;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
@@ -72,6 +73,23 @@ public class CAgent<T> implements IVoidAgent
      * bind name
      */
     private static final String c_bindname = "self";
+    /**
+     * static list of internal overwrite actions
+     */
+    private static final Map<String, InternalAction> c_overwriteaction = new HashMap<String, InternalAction>()
+    {{
+
+            // overwrite default internal actions
+            final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
+            put( "jason.stdlib.clone", new CInternalEmpty() );
+            put( "jason.stdlib.wait", l_empty13 );
+            put( "jason.stdlib.create_agent", l_empty13 );
+            put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
+            put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+
+            // set own internal actions (use also "jason.stdlib." as prefix to avoid internal Jason buggy class loading)
+            put( "jason.stdlib.getFunctor", new CGetFunctor() );
+        }};
     /**
      * path seperator
      */
@@ -457,16 +475,7 @@ public class CAgent<T> implements IVoidAgent
                 CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                final Map<String, InternalAction> l_action = new HashMap<>();
-                final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
-
-                l_action.put( "jason.stdlib.clone", new CInternalEmpty() );
-                l_action.put( "jason.stdlib.wait", l_empty13 );
-                l_action.put( "jason.stdlib.create_agent", l_empty13 );
-                l_action.put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
-                l_action.put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
-
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, l_action );
+                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
             }
             catch ( final Throwable l_throwable )
             {

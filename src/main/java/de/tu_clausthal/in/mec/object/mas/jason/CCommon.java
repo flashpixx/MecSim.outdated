@@ -72,13 +72,13 @@ public class CCommon
      * converts Jason Term to Java types to complex types e.g. List -> Geoposition
      *
      * @param p_term Jason term
-     * @param p_argumenttypes type list with the target type
+     * @param p_type type list with the target type
      * @return Java value
      */
     @SuppressWarnings( "unchecked" )
-    public static Object getJavaValue( final Term p_term, final Class<?> p_argumenttypes ) throws NoValueException
+    public static Object getJavaValue( final Term p_term, final Class<?> p_type ) throws NoValueException
     {
-        if ( GeoPosition.class.equals( p_argumenttypes ) )
+        if ( GeoPosition.class.equals( p_type ) )
         {
             if ( ( !p_term.isList() ) || ( ( (ListTerm) p_term ).size() != 2 ) )
                 throw new IllegalArgumentException(
@@ -94,8 +94,8 @@ public class CCommon
             );
         }
 
-        if ( p_argumenttypes.isInstance( Number.class ) )
-            return getJavaValue( ( (NumberTerm) p_term ).solve(), p_argumenttypes );
+        if ( p_type.isInstance( Number.class ) )
+            return getJavaValue( ( (NumberTerm) p_term ).solve(), p_type );
 
         return getJavaValue( p_term );
     }
@@ -132,6 +132,7 @@ public class CCommon
         throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "jasontodefaultjava", p_term ) );
     }
 
+
     /**
      * converts a Double into a number object with correct type structure
      *
@@ -156,6 +157,7 @@ public class CCommon
 
         throw new IllegalArgumentException( "class unknown" );
     }
+
 
     /**
      * returns an atom

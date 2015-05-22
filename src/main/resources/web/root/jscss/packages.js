@@ -22,6 +22,8 @@
         find(d.name, d);
       });
 
+      //console.log(map);
+
       return map[""];
     },
 

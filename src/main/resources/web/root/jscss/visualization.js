@@ -40,13 +40,15 @@ var Visualization = (function (px_modul) {
 
         function traverse( pc_key, po_object )
         {
-            var la_children = [];
-            if (po_object.children)
-                po_object.children.forEach( function(lc_item) { la_children.push(traverse(lc_item, po_data[lc_item])); } );
+            var lo_tree = po_object || $.extend( {}, po_data[pc_key] );
 
-            var lo_tree = $.extend( {}, po_object );
+            var la_children = [];
+            if (lo_tree.children)
+                lo_tree.children.forEach( function(lc_item) { la_children.push(traverse(lc_item, lo_node[lc_item])); } );
+
             lo_tree.children = la_children;
-            lo_tree.key = pc_key;
+            lo_tree.key      = pc_key;
+            lo_tree.parent   = {};
             return lo_tree;
         }
 

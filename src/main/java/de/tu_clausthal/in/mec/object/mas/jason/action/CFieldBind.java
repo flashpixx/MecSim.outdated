@@ -117,7 +117,11 @@ public class CFieldBind extends IAction
 
         try
         {
-            l_handle.getSetter().invoke( l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.getJavaValue( l_args.get( 2 ) ) );
+            l_handle.getSetter().invoke(
+                    l_object.getLeft(), de.tu_clausthal.in.mec.object.mas.jason.CCommon.getJavaValue(
+                            l_args.get( 2 ), l_handle.getField().getType()
+                    )
+            );
         }
         catch ( final Throwable l_throwable )
         {

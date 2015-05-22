@@ -97,7 +97,7 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
     /**
      * returns the current predecessor of the car and the distance
      *
-     * @return predecessor car object and its distance
+     * @return predecessor car object and its cell distance
      */
     public Map<Integer, ICar> getPredecessor();
 

@@ -180,7 +180,7 @@ public class CWaypointEnvironment
         int l_input3 = Integer.parseInt( String.valueOf( p_data.get( "input3" ) ) );
         int[] l_histrogramm = new int[]{1, 2, 3, 4, 5};
 
-        double l_radius = 0.1;
+        double l_radius = 0.75;
         double r = Double.parseDouble( String.valueOf( p_data.get( "r" ) ) );
         double g = Double.parseDouble( String.valueOf( p_data.get( "g" ) ) );
         double b = Double.parseDouble( String.valueOf( p_data.get( "b" ) ) );

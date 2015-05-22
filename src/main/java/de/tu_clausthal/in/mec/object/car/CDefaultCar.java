@@ -209,12 +209,14 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
+    @CMethodFilter.CAgent( bind = false )
     public final Map<Integer, ICar> getPredecessor()
     {
         return this.getPredecessor( 1 );
     }
 
     @Override
+    @CMethodFilter.CAgent( bind = false )
     public final Map<Integer, ICar> getPredecessor( final int p_count )
     {
         final Map<Integer, ICar> l_predecessordistance = new HashMap<>();
@@ -287,6 +289,31 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             return null;
 
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
+    }
+
+    /**
+     * returns the predeccor with meter values
+     *
+     * @param p_count number of predecessors
+     * @return distance and predecessor
+     */
+    private final Map<Double, ICar> getPredecessorDistance( final int p_count )
+    {
+        return new HashMap<Double, ICar>()
+        {{
+                for ( final Map.Entry<Integer, ICar> l_item : CDefaultCar.this.getPredecessor( p_count ).entrySet() )
+                    put( m_graph.getCellDistanceToMeter( l_item.getKey() ), l_item.getValue() );
+            }};
+    }
+
+    /**
+     * returns the predeccor with meter values
+     *
+     * @return distance and predecessor
+     */
+    private final Map<Double, ICar> getPredecessorDistance()
+    {
+        return this.getPredecessorDistance( 1 );
     }
 
     /**
@@ -421,13 +448,12 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             return;
 
         // if the car reaches the end
-        int l_speed = this.getCurrentSpeed();
+        int l_speed = m_graph.getSpeedToCellIncrement( this.getCurrentSpeed() );
         if ( m_routeindex + l_speed >= m_route.size() )
         {
             m_endreached = true;
             l_speed = m_route.size() - m_routeindex - 1;
         }
-        l_speed = m_graph.getSpeedToCellIncrement( l_speed );
 
         // if the route index equal to zero, push it car on the first item or wait until it is free
         if ( m_routeindex == 0 )

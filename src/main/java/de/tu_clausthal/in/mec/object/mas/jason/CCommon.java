@@ -78,7 +78,7 @@ public class CCommon
     @SuppressWarnings( "unchecked" )
     public static Object getJavaValue( final Term p_term, final Class<?> p_type ) throws NoValueException
     {
-        if ( GeoPosition.class.equals( p_type ) )
+        if ( GeoPosition.class.isAssignableFrom( p_type ) )
         {
             if ( ( !p_term.isList() ) || ( ( (ListTerm) p_term ).size() != 2 ) )
                 throw new IllegalArgumentException(

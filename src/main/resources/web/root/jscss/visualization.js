@@ -38,23 +38,23 @@ var Visualization = (function (px_modul) {
     function buildtree(po_data){
         var lo_node = {}
 
-        function traverse( pc_key, po_object )
+        function traverse( pc_key, po_object, po_parent )
         {
             var lo_tree = po_object || $.extend( {}, po_data[pc_key] );
 
             var la_children = [];
             if (lo_tree.children)
-                lo_tree.children.forEach( function(lc_item) { la_children.push(traverse(lc_item, lo_node[lc_item])); } );
+                lo_tree.children.forEach( function(lc_item) { la_children.push(traverse(lc_item, lo_node[lc_item], lo_tree)); } );
 
             lo_tree.children = la_children;
             lo_tree.key      = pc_key;
-            lo_tree.parent   = {};
+            lo_tree.parent   = po_parent || lo_tree;
             return lo_tree;
         }
 
 
         $.each(po_data, function(lc_key, lx_value) {
-            lo_node[lc_key] = traverse(lc_key, lx_value);
+            lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
         });
 
         console.log(lo_node);

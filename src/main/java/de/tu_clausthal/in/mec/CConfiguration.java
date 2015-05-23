@@ -79,8 +79,8 @@ public class CConfiguration
             // flag for resetting the full configuration - accessible within the UI
             put( "reset", false );
 
-            // extract all MAS files from the Jar to the home path (should be run once)
-            put( "extractmas", true );
+            // extract all MAS files from the Jar to the home path (should be run once) - accessible within the UI
+            put( "extractmasexamples", true );
 
             // language data - accessible within the UI
             put(
@@ -537,7 +537,7 @@ public class CConfiguration
         }
 
         // extract MAS files to the home directory
-        if ( m_configuration.get( "extractmas" ) )
+        if ( m_configuration.get( "extractmasexamples" ) )
             for ( final String l_mas : new String[]{"scramble.asl"} )
                 try
                 {
@@ -548,7 +548,7 @@ public class CConfiguration
                     CLogger.error( l_exception );
                     return false;
                 }
-        m_configuration.set( "extractmas", false );
+        m_configuration.set( "extractmasexamples", false );
 
         return true;
     }

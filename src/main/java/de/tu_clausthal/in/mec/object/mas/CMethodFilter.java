@@ -56,6 +56,12 @@ public class CMethodFilter implements CReflection.IMethodFilter
     @Target( ElementType.METHOD )
     public @interface CAgent
     {
+
+        /**
+         * defines the bind
+         *
+         * @return true if the method is bind
+         */
         public boolean bind() default true;
     }
 }

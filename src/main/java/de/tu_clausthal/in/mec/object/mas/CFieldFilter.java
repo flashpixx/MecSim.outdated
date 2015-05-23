@@ -52,11 +52,20 @@ public class CFieldFilter implements CReflection.IFieldFilter
     }
 
 
+    /**
+     * @todo define an own name
+     */
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.FIELD )
     public @interface CAgent
     {
+        /**
+         * defines the bind
+         *
+         * @return true if the field is bind
+         */
         public boolean bind() default true;
+
     }
 
 }

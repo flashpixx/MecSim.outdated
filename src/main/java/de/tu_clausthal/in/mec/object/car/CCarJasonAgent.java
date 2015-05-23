@@ -135,6 +135,35 @@ public class CCarJasonAgent extends CDefaultCar
 
     }
 
+    /**
+     * returns the predeccor with meter values
+     *
+     * @param p_count number of predecessors
+     * @return distance and predecessor
+     *
+     * @todo should be represent with a sensor definition
+     */
+    private final Map<Double, ICar> getPredecessorDistance( final int p_count )
+    {
+        return new HashMap<Double, ICar>()
+        {{
+                for ( final Map.Entry<Integer, ICar> l_item : getPredecessor( p_count ).entrySet() )
+                    put( m_graph.getCellDistanceToMeter( l_item.getKey() ), l_item.getValue() );
+            }};
+    }
+
+    /**
+     * returns the predeccor with meter values
+     *
+     * @return distance and predecessor
+     *
+     * @todo should be represent with a sensor definition
+     */
+    private final Map<Double, ICar> getPredecessorDistance()
+    {
+        return this.getPredecessorDistance( 1 );
+    }
+
     @Override
     @CMethodFilter.CAgent( bind = false )
     public final Map<String, Object> inspect()

@@ -77,7 +77,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * reference to the graph
      */
     @CFieldFilter.CAgent( bind = false )
-    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
+    protected final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**
      * inspector map
      */
@@ -289,31 +289,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             return null;
 
         return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
-    }
-
-    /**
-     * returns the predeccor with meter values
-     *
-     * @param p_count number of predecessors
-     * @return distance and predecessor
-     */
-    private final Map<Double, ICar> getPredecessorDistance( final int p_count )
-    {
-        return new HashMap<Double, ICar>()
-        {{
-                for ( final Map.Entry<Integer, ICar> l_item : CDefaultCar.this.getPredecessor( p_count ).entrySet() )
-                    put( m_graph.getCellDistanceToMeter( l_item.getKey() ), l_item.getValue() );
-            }};
-    }
-
-    /**
-     * returns the predeccor with meter values
-     *
-     * @return distance and predecessor
-     */
-    private final Map<Double, ICar> getPredecessorDistance()
-    {
-        return this.getPredecessorDistance( 1 );
     }
 
     /**

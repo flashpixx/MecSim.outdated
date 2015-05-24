@@ -31,6 +31,8 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import jason.JasonException;
 import org.apache.commons.lang3.tuple.Pair;
@@ -47,7 +49,7 @@ import java.util.Set;
  *
  * @bug refactor ctor (reduce parameter)
  */
-public class CCarJasonAgent extends CDefaultCar
+public class CCarJasonAgent extends CDefaultCar implements ICycle
 {
 
     /**
@@ -128,10 +130,17 @@ public class CCarJasonAgent extends CDefaultCar
                 p_objectname.append( p_asl ), p_asl, this
         );
         m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
+        l_agent.registerCycle( this );
 
         // add agent to layer and internal set
         CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
         m_agents.add( l_agent );
+
+    }
+
+    @Override
+    public void cycle( final int p_currentstep, final IAgent p_agent )
+    {
 
     }
 

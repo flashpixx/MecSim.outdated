@@ -21,73 +21,22 @@
  * @endcond
  */
 
+
 package de.tu_clausthal.in.mec.object.mas;
 
 
-import de.tu_clausthal.in.mec.runtime.message.IReceiver;
-import org.jxmapviewer.painter.Painter;
-
-
 /**
- * interface of an agent
+ * interface of running calls on the agent-cycle
  */
-public interface IAgent extends Painter, IReceiver
+public interface ICycle
 {
 
     /**
-     * adds new belief
+     * method is called within the agent-cycle
      *
-     * @param p_name name of the belief
-     * @param p_data belief data
+     * @param p_currentstep current simulation step
+     * @param p_agent agent
      */
-    public void addBelief( final String p_name, final Object p_data );
-
-    /**
-     * returns the current cycle
-     *
-     * @return cycle number
-     */
-    public int getCycle();
-
-    /**
-     * returns the name of the agent
-     *
-     * @return name of the agent
-     */
-    public String getName();
-
-    /**
-     * returns the source / file of the agent
-     *
-     * @return source
-     */
-    public String getSource();
-
-    /**
-     * register a cycle object
-     *
-     * @param p_cycle cycle object
-     */
-    public void registerCycle( final ICycle p_cycle );
-
-    /**
-     * release agent call *
-     */
-    public void release();
-
-    /**
-     * removes a belief
-     *
-     * @param p_name name of the belief
-     * @param p_data belief data
-     */
-    public void removeBelief( final String p_name, final Object p_data );
-
-    /**
-     * unregister a cycle object
-     *
-     * @param p_cycle cycle object
-     */
-    public void unregisterCycle( final ICycle p_cycle );
+    public void cycle( final int p_currentstep, final IAgent p_agent );
 
 }

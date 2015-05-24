@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CGetFunctor;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
@@ -36,6 +37,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
+import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.ActionExec;
@@ -115,6 +117,10 @@ public class CAgent<T> implements IVoidAgent
      * agent)
      */
     private int m_cycle;
+    /**
+     * set with cycle objects
+     */
+    private final Set<ICycle> m_cycleobject = new HashSet<>();
     /**
      * name of the agent
      */
@@ -202,26 +208,17 @@ public class CAgent<T> implements IVoidAgent
         this( null, p_asl, p_bind );
     }
 
-
-    /**
-     * returns the set of actions
-     *
-     * @return action set
-     */
-    public final Map<String, IAction> getActions()
+    @Override
+    public void addBelief( final String p_name, final Object p_data )
     {
-        return m_action;
-    }
-
-
-    /**
-     * returns a set of belief obejcts
-     *
-     * @return belief set
-     */
-    public final Set<IBelief> getBelief()
-    {
-        return m_beliefs;
+        try
+        {
+            m_agent.addBel( CCommon.getLiteral( p_name, p_data ) );
+        }
+        catch ( final RevisionFailedException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
     }
 
     @Override
@@ -243,11 +240,56 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
+    public void registerCycle( final ICycle p_cycle )
+    {
+        m_cycleobject.add( p_cycle );
+    }
+
+    @Override
     public final void release()
     {
         m_agent.stopAg();
         m_participant.release();
         MindInspectorWeb.get().removeAg( m_agent );
+    }
+
+    @Override
+    public void removeBelief( final String p_name, final Object p_data )
+    {
+        try
+        {
+            m_agent.delBel( CCommon.getLiteral( p_name, p_data ) );
+        }
+        catch ( final RevisionFailedException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
+
+    @Override
+    public void unregisterCycle( final ICycle p_cycle )
+    {
+        m_cycleobject.remove( p_cycle );
+    }
+
+    /**
+     * returns the set of actions
+     *
+     * @return action set
+     */
+    public final Map<String, IAction> getActions()
+    {
+        return m_action;
+    }
+
+    /**
+     * returns a set of belief obejcts
+     *
+     * @return belief set
+     */
+    public final Set<IBelief> getBelief()
+    {
+        return m_beliefs;
     }
 
     @Override
@@ -344,6 +386,10 @@ public class CAgent<T> implements IVoidAgent
          */
         public final void cycle( final int p_currentstep )
         {
+            // run all register cycle object
+            for ( final ICycle l_item : m_cycleobject )
+                l_item.cycle( p_currentstep, CAgent.this );
+
             // add the simulationstep belief with the new number and remove the old one
             try
             {

@@ -24,23 +24,23 @@
 
 /**
  * prototype overload - add startwidth to string
- * @param prefix
+ * @param pc_prefix prefix
  * @return boolean existance
 **/
-String.prototype.startsWith = function( p_prefix )
+String.prototype.startsWith = String.prototype.startsWith || function( pc_prefix )
 {
-    return this.indexOf( p_prefix ) === 0;
+    return this.indexOf( pc_prefix ) === 0;
 }
 
 
 /**
  * prototype overload - add endwidth to string
- * @param suffix
+ * @param pc_suffix
  * @return boolean existance
 **/
-String.prototype.endsWith = function( p_suffix )
+String.prototype.endsWith = String.prototype.endsWith || function( pc_suffix )
 {
-    return this.match( p_suffix+"$" ) == p_suffix;
+    return this.match( pc_suffix+"$" ) == pc_suffix;
 };
 
 
@@ -48,7 +48,7 @@ String.prototype.endsWith = function( p_suffix )
  * clear null bytes from the string
  * @return cleared null bytes
 **/
-String.prototype.clearnull = function()
+String.prototype.clearnull = String.prototype.clearnull || function()
 {
     return this.replace(/\0/g, "");
 };
@@ -57,7 +57,19 @@ String.prototype.clearnull = function()
 /**
  * parse the string to a JSON object
 **/
-String.prototype.toJSON = function()
+String.prototype.toJSON = String.prototype.toJSON || function()
 {
     return $.parseJSON(this.clearnull());
 }
+
+
+/**
+ * removes an element of an array
+ * @param px_value value
+**/
+Array.prototype.remove = Array.prototype.remove || function( px_value )
+{
+    delete this[ Array.prototype.indexOf.call(this, px_value) ];
+}
+
+

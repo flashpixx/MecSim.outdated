@@ -53,12 +53,21 @@ var Visualization = (function (px_modul) {
         }
 
 
+        // get the root key
+        var lx_root = Object.keys(po_data);
+        $.each(po_data, function(lc_key, lx_value) {
+            if (lx_value.children)
+                lx_value.children.forEach( function(lc_item) { lx_root.remove(lc_item); } );
+        });
+        lx_root = lx_root[0];
+
+        // build tree
         $.each(po_data, function(lc_key, lx_value) {
             lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
         });
 
-        console.log(lo_node);
-        return lo_node;
+
+        return lo_node[lx_root];
     }
 
 

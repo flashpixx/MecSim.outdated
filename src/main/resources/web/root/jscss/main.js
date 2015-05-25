@@ -71,7 +71,7 @@ $(document).ready(function() {
 
             Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
                 id   : "graphtest",
-                data : { a : { value : 123, children : ["b", "c"] }, b : { value : 234}, c : { value : 345 } },
+                data : { x : { value : 123, children : ["b", "c"] }, b : { value : 234}, c : { value : 345 } },
                 //link : packages.imports
             });
 

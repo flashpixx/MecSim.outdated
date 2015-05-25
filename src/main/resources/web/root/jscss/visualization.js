@@ -31,13 +31,20 @@ var Visualization = (function (px_modul) {
 
     /**
      * function for building tree structure
-     * @note empty key == root node
+     * @note create a deep copy of the data
      * @param po_data input data
      * @return tree JSON object
     **/
     function buildtree(po_data){
         var lo_node = {}
 
+        /**
+         * traverse call
+         * @param pc_key key name
+         * @param po_object object of the key
+         * @param po_parent parent object
+         * @return tree object
+        **/
         function traverse( pc_key, po_object, po_parent )
         {
             var lo_tree = po_object || $.extend( {}, po_data[pc_key] );
@@ -48,7 +55,8 @@ var Visualization = (function (px_modul) {
 
             lo_tree.children = la_children;
             lo_tree.key      = pc_key;
-            lo_tree.parent   = po_parent || lo_tree;
+            if (po_parent)
+                lo_tree.parent   = po_parent;
             return lo_tree;
         }
 
@@ -66,7 +74,7 @@ var Visualization = (function (px_modul) {
             lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
         });
 
-
+        // return the root-node
         return lo_node[lx_root];
     }
 

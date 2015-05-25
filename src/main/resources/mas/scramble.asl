@@ -25,7 +25,7 @@ ag_scramble(0.75).
 +ag_predecessor([Predecessor])
    :  true
    <- -ag_distance(_)[source(_)];
-      .getFunctor(Predecessor, ag_distance);
+      mecsim.getFunctor(Predecessor, ag_distance);
       !drive.
 
 

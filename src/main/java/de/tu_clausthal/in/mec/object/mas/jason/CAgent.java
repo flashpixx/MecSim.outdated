@@ -90,7 +90,7 @@ public class CAgent<T> implements IVoidAgent
             put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
             // set own internal actions (use also "jason.stdlib." as prefix to avoid internal Jason buggy class loading)
-            put( "jason.stdlib.getFunctor", new CGetFunctor() );
+            put( "mecsim.getFunctor", new CGetFunctor() );
         }};
     /**
      * path seperator

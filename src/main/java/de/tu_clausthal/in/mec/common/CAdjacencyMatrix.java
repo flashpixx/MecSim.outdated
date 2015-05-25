@@ -74,7 +74,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix( final ESerialzeOutput p_type )
     {
-        this("row", "col", p_type);
+        this( "row", "col", p_type );
     }
 
     /**
@@ -176,8 +176,12 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         {
             switch ( p_matrix.m_type )
             {
-                case Matrix: this.toMatrix( p_matrix, p_generator ); break;
-                case Tree: this.toTree( p_matrix, p_generator ); break;
+                case Matrix:
+                    this.toMatrix( p_matrix, p_generator );
+                    break;
+                case Tree:
+                    this.toTree( p_matrix, p_generator );
+                    break;
                 default:
             }
         }

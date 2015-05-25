@@ -47,9 +47,5 @@ ag_scramble(0.75).
 // default behaviour - accelerate
 +!drive
    :  true
-   <- -ag_position(_)[source(_)];
-      -ag_predecessor([_])[source(_)];
-      invoke(self, getCurrentPosition, [Triple, ag_position]);
-      invoke(self, getPredecessorDistance, [Map, ag_predecessor]);
-      !accelerate;
+   <- !accelerate;
       !drive.

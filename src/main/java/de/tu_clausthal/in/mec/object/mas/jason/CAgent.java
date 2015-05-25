@@ -386,9 +386,10 @@ public class CAgent<T> implements IVoidAgent
          */
         public final void cycle( final int p_currentstep )
         {
-            // run all register cycle object
+            // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )
-                l_item.cycle( p_currentstep, CAgent.this );
+                l_item.beforeCycle( p_currentstep, CAgent.this );
+
 
             // add the simulationstep belief with the new number and remove the old one
             try
@@ -407,6 +408,11 @@ public class CAgent<T> implements IVoidAgent
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
+
+
+            // run all register after-cycle object
+            for ( final ICycle l_item : m_cycleobject )
+                l_item.afterCycle( p_currentstep, CAgent.this );
         }
 
         /**

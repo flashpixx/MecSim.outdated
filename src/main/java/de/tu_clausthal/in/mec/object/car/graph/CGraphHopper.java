@@ -254,6 +254,7 @@ public class CGraphHopper extends GraphHopper
 
     /**
      * returns cell number to distance in meter
+     *
      * @param p_cells cell number
      * @return meter value
      */

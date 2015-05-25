@@ -264,7 +264,8 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      *
      * @return tripel (edge information, cell position, geoposition)
      */
-    private Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
+    @CMethodFilter.CAgent( bind = false )
+    protected final Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
     {
         if ( ( m_route == null ) || ( m_routeindex >= m_route.size() ) )
             return new ImmutableTriple<>( null, null, this.getGeoposition() );

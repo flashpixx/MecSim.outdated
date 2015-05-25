@@ -51,12 +51,16 @@ import java.util.Set;
  */
 public class CCarJasonAgent extends CDefaultCar implements ICycle
 {
-
     /**
      * agent object *
      */
     @CFieldFilter.CAgent( bind = false )
     private final Set<de.tu_clausthal.in.mec.object.mas.jason.CAgent> m_agents = new HashSet<>();
+    /**
+     * cache of beliefs to remove it automatically
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private final Map<String, Object> m_beliefcache = new HashMap<>();
     /**
      * inspector map
      */
@@ -115,6 +119,29 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
             this.bind( l_path, l_item );
     }
 
+    @Override
+    public void afterCycle( final int p_currentstep, final IAgent p_agent )
+    {
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public void beforeCycle( final int p_currentstep, final IAgent p_agent )
+    {
+        // removes old beliefs
+        for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
+            p_agent.removeBelief( l_item.getKey(), l_item.getValue() );
+        m_beliefcache.clear();
+
+        // add new beliefs
+        m_beliefcache.put(
+                "ag_position", this.getCurrentPosition()
+        );
+        m_beliefcache.put( "ag_predecessor", this.getPredecessorDistance( 1 ) );
+
+        for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
+            p_agent.addBelief( l_item.getKey(), l_item.getValue() );
+    }
 
     /**
      * binds an agent with the name
@@ -138,12 +165,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
 
     }
 
-    @Override
-    public void cycle( final int p_currentstep, final IAgent p_agent )
-    {
-
-    }
-
     /**
      * returns the predeccor with meter values
      *
@@ -161,17 +182,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
             }};
     }
 
-    /**
-     * returns the predeccor with meter values
-     *
-     * @return distance and predecessor
-     *
-     * @todo should be represent with a sensor definition
-     */
-    private final Map<Double, ICar> getPredecessorDistance()
-    {
-        return this.getPredecessorDistance( 1 );
-    }
 
     @Override
     @CMethodFilter.CAgent( bind = false )

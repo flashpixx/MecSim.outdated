@@ -187,9 +187,11 @@ public class CCommon
 
     /**
      * checks a literal name and convert it to the correct syntax
-     * @note note the precendence of the data types
+     *
      * @param p_name name of the literal
      * @return converted literal name
+     *
+     * @note note the precendence of the data types
      */
     private static String getLiteralName( final String p_name )
     {

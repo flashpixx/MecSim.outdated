@@ -46,7 +46,7 @@ public class CLanguageEnvironment
             put( "carsettings", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
             put( "customizing", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
             put( "selectyourfactory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
-            put( "selectyourasl", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourasl" ) );
+            put( "selectyouragentprogram", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
             put( "selectyourgenerator", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
             put( "selectyourcarcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
             put( "selectyourmean", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourmean" ) );

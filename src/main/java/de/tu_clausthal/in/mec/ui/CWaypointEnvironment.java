@@ -151,7 +151,7 @@ public class CWaypointEnvironment
         //validate json
         if ( !p_data.containsKey( "factory" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidfactory" ) );
-        if ( !p_data.containsKey( "asl" ) )
+        if ( !p_data.containsKey( "agentprogram" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidasl" ) );
         if ( !p_data.containsKey( "generator" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgenerator" ) );
@@ -186,7 +186,7 @@ public class CWaypointEnvironment
         double b = Double.parseDouble( String.valueOf( p_data.get( "b" ) ) );
 
         Color l_color = new Color( (int) r, (int) g, (int) b );
-        String l_asl = (String) p_data.get( "asl" );
+        String l_asl = (String) p_data.get( "agentprogram" );
         String l_name = (String) p_data.get( "name" );
 
         //validate settings

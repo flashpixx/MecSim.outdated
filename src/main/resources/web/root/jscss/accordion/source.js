@@ -115,7 +115,7 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.carSettingsLabel          = $("#mesim_source_carSettings_label");
         SourcePanel.settings.dom.customizingLabel          = $("#mesim_source_customizing_label");
         SourcePanel.settings.dom.selectFactoryLabel        = $("#mecsim_source_selectFactory_label");
-        SourcePanel.settings.dom.selectASLLabel            = $("#mecsim_source_selectASL_label");
+        SourcePanel.settings.dom.selectAgentProgramLabel   = $("#mecsim_source_selectAgentProgram_label");
         SourcePanel.settings.dom.selectGeneratorLabel      = $("#mecsim_source_selectGenerator_label");
         SourcePanel.settings.dom.generatorInput1Label      = $("#mecsim_source_generatorInput1_label");
         SourcePanel.settings.dom.generatorInput2Label      = $("#mecsim_source_generatorInput2_label");
@@ -134,8 +134,8 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.wizard                    = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.colorpicker               = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.selectFactory             = $("#mecsim_source_selectFactory");
-        SourcePanel.settings.dom.selectASL                 = $("#mecsim_source_selectASL");
-        SourcePanel.settings.dom.ASLContainer              = $("#mecsim_source_selectASLContainer");
+        SourcePanel.settings.dom.selectAgentProgram        = $("#mecsim_source_selectAgentProgram");
+        SourcePanel.settings.dom.agentContainer            = $("#mecsim_source_agentContainer");
         SourcePanel.settings.dom.selectGenerator           = $("#mecsim_source_selectGenerator");
         SourcePanel.settings.dom.generatorInput1           = $("#mecsim_source_generatorInput1");
         SourcePanel.settings.dom.generatorInput2           = $("#mecsim_source_generatorInput2");
@@ -153,7 +153,7 @@ var SourcePanel = ( function (px_module) {
                  SourcePanel.settings.labels.carsettings = px_data.carsettings;
                  SourcePanel.settings.labels.customizing = px_data.customizing;
                  SourcePanel.settings.labels.selectyourfactory = px_data.selectyourfactory;
-                 SourcePanel.settings.labels.selectyourasl = px_data.selectyourasl;
+                 SourcePanel.settings.labels.selectyouragentprogram = px_data.selectyouragentprogram;
                  SourcePanel.settings.labels.selectyourgenerator = px_data.selectyourgenerator;
                  SourcePanel.settings.labels.selectyourcarcount = px_data.selectyourcarcount;
                  SourcePanel.settings.labels.selectyourmean = px_data.selectyourmean;
@@ -182,7 +182,7 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.carSettingsLabel.text(SourcePanel.settings.labels.carsettings);
         SourcePanel.settings.dom.customizingLabel.text(SourcePanel.settings.labels.customizing);
         SourcePanel.settings.dom.selectFactoryLabel.text(SourcePanel.settings.labels.selectyourfactory);
-        SourcePanel.settings.dom.selectASLLabel.text(SourcePanel.settings.labels.selectyourasl);
+        SourcePanel.settings.dom.selectAgentProgramLabel.text(SourcePanel.settings.labels.selectyouragentprogram);
         SourcePanel.settings.dom.selectGeneratorLabel.text(SourcePanel.settings.labels.selectyourgenerator);
         SourcePanel.settings.dom.generatorInput1Label.text(SourcePanel.settings.labels.selectyourcarcount);
         SourcePanel.settings.dom.generatorInput2Label.text(SourcePanel.settings.labels.selectyourlowerbound);
@@ -244,7 +244,7 @@ var SourcePanel = ( function (px_module) {
                         SourcePanel.settings.dom.selectFactory
                             .append( $("<option></option>")
                             .attr("value",pc_key)
-                            .attr("requireASL", px_value)
+                            .attr("requireAgent", px_value)
                             .text(pc_key));
                     });
                 });
@@ -257,7 +257,7 @@ var SourcePanel = ( function (px_module) {
             url     : "/cagentenvironment/jason/list",
             success : function( px_data ){
                 px_data.agents.forEach(function(data){
-                    SourcePanel.settings.dom.selectASL
+                    SourcePanel.settings.dom.selectAgentProgram
                         .append( $("<option></option>")
                         .attr("value",data)
                         .text(data));
@@ -299,7 +299,7 @@ var SourcePanel = ( function (px_module) {
 
         //validate first step
         if(currentIndex===0){
-            if($('#mecsim_source_selectFactory option:selected').attr('requireASL')==="true" && SourcePanel.settings.dom.selectASL.val()===null)
+            if($('#mecsim_source_selectFactory option:selected').attr('requireAgent')==="true" && SourcePanel.settings.dom.selectAgentProgram.val()===null)
                 return false;
         }
 
@@ -330,16 +330,16 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/cwaypointenvironment/createtool",
             data    : {
-                        "factory"  : SourcePanel.settings.dom.selectFactory.val(),
-                        "asl"      : SourcePanel.settings.dom.selectASL.val(),
-                        "generator": SourcePanel.settings.dom.selectGenerator.val(),
-                        "input1"   : SourcePanel.settings.dom.generatorInput1.val(),
-                        "input2"   : SourcePanel.settings.dom.generatorInput2.val(),
-                        "input3"   : SourcePanel.settings.dom.generatorInput3.val(),
-                        "name"     : SourcePanel.settings.dom.toolName.val(),
-                        "r"        : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
-                        "g"        : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,
-                        "b"        : SourcePanel.settings.obj.colorpicker.spectrum("get")._b
+                        "factory"       : SourcePanel.settings.dom.selectFactory.val(),
+                        "agentprogram"  : SourcePanel.settings.dom.selectAgentProgram.val(),
+                        "generator"     : SourcePanel.settings.dom.selectGenerator.val(),
+                        "input1"        : SourcePanel.settings.dom.generatorInput1.val(),
+                        "input2"        : SourcePanel.settings.dom.generatorInput2.val(),
+                        "input3"        : SourcePanel.settings.dom.generatorInput3.val(),
+                        "name"          : SourcePanel.settings.dom.toolName.val(),
+                        "r"             : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
+                        "g"             : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,
+                        "b"             : SourcePanel.settings.obj.colorpicker.spectrum("get")._b
                     },
             success : function( data ){
                 $.each( data, function( pc_key, px_value ) {
@@ -368,10 +368,10 @@ var SourcePanel = ( function (px_module) {
 
     //method to update factory settings
     px_module.updateFactorySettings = function(){
-        if($("#mecsim_source_selectFactory option:selected").attr("requireASL") === "true"){
-            SourcePanel.settings.dom.ASLContainer.show();
+        if($("#mecsim_source_selectFactory option:selected").attr("requireAgent") === "true"){
+            SourcePanel.settings.dom.agentContainer.show();
         }else{
-            SourcePanel.settings.dom.ASLContainer.hide();
+            SourcePanel.settings.dom.agentContainer.hide();
         }
     };
 

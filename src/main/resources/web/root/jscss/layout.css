@@ -24,6 +24,29 @@ select
     width: 120px;
 }
 
+/******************************** TODO section *+++++******************************************************************/
+
+/** deprecated? or move to editor section **/
+.CodeMirror
+{
+    height: 75vh;
+}
+
+/** deprecated for mecsim_source and mecsim_widget, check if needed (effects the tab background and more) **/
+.ui-widget-header{
+    margin: 0;
+    color: white;
+    background: #428bca;
+    border: 1px solid #CACACA;
+    position: relative;
+    text-align: center;
+}
+
+/* depcrecated? */
+#mecsim_global_editor{
+    collapsible: false;
+}
+
 /******************************** class definitions *******************************************************************/
 
 .ui-accordion-content{
@@ -112,11 +135,6 @@ select
     display: block;
 }
 
-/* TODO: depcrecated? */
-#mecsim_global_editor{
-    collapsible: false;
-}
-
 #mecsim_about{
     width: 500px;
 }
@@ -130,15 +148,19 @@ select
     font-size: large;
     color: #008C4F;
 }
+
 /******************************** css definitions for mecsim_source ************************************************/
 
-/** General **/
-.ui-widget-content{
-    border: 1px solid #CACACA;
+.mecsim_source_toolIcon{
+    display: inline;
+    float: left;
+    margin: 5px;
+    width: 15px;
+    height: 15px;
 }
 
-.ui-resizable-helper{
-    border: 1px dotted gray;
+.mecsim_source_wizardSelect{
+    width: 240px;
 }
 
 .ui-widget-header{
@@ -150,45 +172,47 @@ select
     text-align: center;
 }
 
-.mecsim_source_widgetButton{
-    position: absolute;
-    right: 0;
-}
-
-.mecsim_source_toolIcon{
-    display: inline;
-    float: left;
-    margin: 5px;
-    width: 15px;
-    height: 15px;
-}
-
-/** Tool Wizard **/
-#mecsim_source_toolwizardwidget{
-    width: 750px;
-    height: 550px;
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid #CACACA;
-}
-
-.mecsim_source_wizardselect{
-    width: 240px;
-}
-
-.mecsim_source_wizardinputsmall{
+.mecsim_source_wizardInputSmall{
     width:30px;
 }
 
-.mecsim_source_wizardrightalign{
+.mecsim_source_wizardRightAlign{
     float:right;
     margin-right: 10px;
 }
 
-.CodeMirror
-{
-    height: 75vh;
+/******************************** css definitions for mecsim_widget ************************************************/
+
+.ui-resizable-helper{
+    border: 1px dotted gray;
 }
+
+.mecsim_widget_defaultWidget{
+    width: 750px;
+    height: 550px;
+    padding: 5px;
+    margin: 5px;
+    background: white;
+    border: 1px solid #CACACA;
+    position: absolute;
+}
+
+.mecsim_widget_widgetHeader{
+    margin: 0;
+    color: white;
+    background: #428bca;
+    border: 1px solid #CACACA;
+    position: relative;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.mecsim_widget_widgetButton{
+    position: absolute;
+    right: 0;
+}
+
+/******************************** css definitions for radial visualization ************************************************/
 
 /*** start testing ***/
 #graphtest
@@ -234,57 +258,3 @@ path.graphtest-arc {
   stroke: #2ca02c;
 }
 /*** end testing ***/
-
-
-
-
-
-#mecsim_source_clusterwidget{
-    float: left;
-    width: 600px;
-    height: 640px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-.mecsim_source_node {
-    font-size: 75%;
-    font-weight: bold;
-    user-select: none;
-    cursor: default;
-}
-
-.mecsim_source_node:hover{
-    opacity: 1;
-}
-
-.mecsim_source_node-source {
-    fill: #2ca02c;
-}
-
-.mecsim_source_node-target {
-    fill: #d62728;
-}
-
-.mecsim_source_node-selected{
-    fill: #000000;
-}
-
-.mecsim_source_node-trans{
-    opacity: 0.3;
-}
-
-.mecsim_source_link {
-    stroke: steelblue;
-    stroke-opacity: 0.2;
-    fill: none;
-    pointer-events: none;
-}
-
-.mecsim_source_link-thick{
-    stroke-opacity: 1;
-}
-
-.mecsim_source_link-hidden{
-    stroke-opacity: 0;
-}

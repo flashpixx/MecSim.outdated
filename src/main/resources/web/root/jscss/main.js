@@ -71,9 +71,7 @@ $(document).ready(function() {
             "onmessage" : function( po_event ) {
 
                 MecSim.ui().inspector().empty();
-                //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
                 MecSim.ui().inspector().prepend("<p></p>");
-                //$('#mecsim_inspector_table').DataTable();
                 MecSim.ui().inspector().dialog("open");
 
             }
@@ -86,19 +84,32 @@ $(document).ready(function() {
 
 
         // --- visualization test ---
-/*
-        d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
-            //console.log(classes);
-            //console.log( packages.root(classes) );
+//        d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
+/*
+            var splines = [];
+
+            var cluster = d3.layout.cluster()
+                .size([360, 120])
+                .sort(function(a, b) { return d3.ascending(a.key, b.key); });
+
+            var bundle = d3.layout.bundle();
+
+            var nodes = cluster.nodes(packages.root(classes)),
+                links = packages.imports(nodes),
+                splines = bundle(links);
+
+            console.log(nodes);
+            console.log(links);
+*/
+
 
             Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
                 id   : "graphtest",
-                data : { x : { value : 123, children : ["b", "c"] }, b : { value : 234}, c : { value : 345 } },
-                //link : packages.imports
+                data : { test : { children : ["subtest1", "subtest2"] }, subtest1 : { connect : ["subtest2"] }, subtest2 : {} },
             });
 
-        });
-*/
+//        });
+
     });
 });

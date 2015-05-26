@@ -71,9 +71,7 @@ $(document).ready(function() {
             "onmessage" : function( po_event ) {
 
                 MecSim.ui().inspector().empty();
-                //$("#mecsim_object_inspector").prepend("<table id=\"mecsim_inspector_table\"><tbody><tr><td>" + p_event.data[acceleration] + "</td></tr></tbody></table>");
                 MecSim.ui().inspector().prepend("<p></p>");
-                //$('#mecsim_inspector_table').DataTable();
                 MecSim.ui().inspector().dialog("open");
 
             }
@@ -90,11 +88,11 @@ $(document).ready(function() {
         d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
             //console.log(classes);
-            console.log( packages.root(classes) );
+            //console.log( packages.root(classes) );
 
             Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
                 id   : "graphtest",
-                data : { test : { value : 123, children : ["subtest1", "subtest2"] }, subtest1 : { value : 234}, subtest2 : { value : 345 } },
+                data : { test : { value : 123, children : ["subtest1", "subtest2"] }, subtest1 : { value : 234 }, subtest2 : { value : 345 } },
                 //link : packages.imports
             });
 

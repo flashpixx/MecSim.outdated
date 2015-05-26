@@ -81,29 +81,28 @@ var Visualization = (function (px_modul) {
     }
 
 
-
-
-
     /**
      * function to define the link structure
-     * @param po_nodes node tree
+     * @param po_root root node
      * @return link object structure
     **/
-    function linknode( po_nodes )
+    function linknode( po_root )
     {
+        /** array with linked structure **/
         var la_links = [];
 
-        $.each(po_nodes, function(pc_key, po_object) {
-            if (po_object.children)
-                po_object.children.forEach( function(po_child) {
-                    la_links.push({
-                        source : pc_key,
-                        target : po_child.key
-                    });
-                });
-            });
+        /**
+         * traverses the node tree and adds link structure
+         * @param po_node tree node
+        **/
+        function traverse( po_node )
+        {
+            if (po_node.children)
+                po_node.children.forEach( function(lo_item) { la_links.push({ source : po_node.key, target : lo_item.key }); traverse( lo_item ); } );
+        }
 
-      return la_links;
+        traverse(po_root);
+        return la_links;
     }
 
 
@@ -190,9 +189,9 @@ var Visualization = (function (px_modul) {
 
         // creates the visualization of the data
         var lo_tree = buildtree(lo_options.data) , la_nodes = lo_cluster.nodes(lo_tree), la_links = linknode(lo_tree);
-        console.log(lo_tree);
+        //console.log(lo_tree);
         //console.log(la_nodes);
-        //console.log(la_links);
+        console.log(la_links);
 
         // link visualization
         var path = lo_svg.selectAll( "path.link" )

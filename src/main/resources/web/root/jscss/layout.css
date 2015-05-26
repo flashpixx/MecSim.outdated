@@ -164,6 +164,8 @@ select
     margin-right: 10px;
 }
 
+/******************************** css definitions for mecsim_widget ************************************************/
+
 .ui-widget-content{
     border: 1px solid #CACACA;
 }
@@ -172,7 +174,7 @@ select
     border: 1px dotted gray;
 }
 
-.mecsim_source_defaultWidget{
+.mecsim_widget_defaultWidget{
     width: 750px;
     height: 550px;
     padding: 5px;
@@ -182,7 +184,7 @@ select
     position: absolute;
 }
 
-.mecsim_source_widgetHeader{
+.mecsim_widget_widgetHeader{
     margin: 0;
     color: white;
     background: #428bca;
@@ -192,7 +194,7 @@ select
     margin-bottom: 10px;
 }
 
-.mecsim_source_widgetButton{
+.mecsim_widget_widgetButton{
     position: absolute;
     right: 0;
 }

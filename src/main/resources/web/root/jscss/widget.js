@@ -25,12 +25,12 @@ var Widget = ( function (px_module) {
         this._minimizedStatus = false;
 
         //meta data (header and buttons)
-        this._div.attr("class", "mecsim_source_defaultWidget");
+        this._div.attr("class", "mecsim_widget_defaultWidget");
         this._div.prepend(
             $("<h3></h3>")
-                .attr("class", "mecsim_source_widgetHeader")
+                .attr("class", "mecsim_widget_widgetHeader")
                 .append("<span>"+ this._name +"</span>")
-                .append($("<span class = 'mecsim_source_widgetButton'></span>")
+                .append($("<span class = 'mecsim_widget_widgetButton'></span>")
                     .append($("<button></button>").button({icons:{primary: "ui-icon-newwin"},text: false}).on("click", this.collapse.bind(this)))
                     .append($("<button></button>").button({icons:{primary: "ui-icon-closethick"},text: false}).on("click", this.close.bind(this)))
                 )
@@ -57,11 +57,11 @@ var Widget = ( function (px_module) {
     //method to collapse widget
     px_module.prototype.collapse = function(){
         if(this._minimizedStatus){
-            this._div.children().not(".mecsim_source_widgetHeader").show();
+            this._div.children().not(".mecsim_widget_widgetHeader").show();
             this._div.animate({width: this._minWidth+"px", height: this._minHeight+"px"}, this._animationTime);
             this._div.resizable('enable');
         }else{
-            this._div.children().not(".mecsim_source_widgetHeader").hide();
+            this._div.children().not(".mecsim_widget_widgetHeader").hide();
             this._div.animate({width: this._collapseWidth+"px", height: this._collapseHeight+"px"}, this._animationTime);
             this._div.resizable('disable');
         }

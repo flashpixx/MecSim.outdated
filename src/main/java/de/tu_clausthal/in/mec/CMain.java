@@ -51,7 +51,7 @@ public class CMain
     /**
      * needed memory in gigabyte
      */
-    private static final float c_neededmemory = 2.5f;
+    private static final float c_neededmemory = 3f;
 
 
     /**
@@ -99,6 +99,7 @@ public class CMain
         {
             final HelpFormatter l_formatter = new HelpFormatter();
             l_formatter.printHelp( ( new java.io.File( CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getName() ), l_clioptions );
+            System.out.println( "\n" + CCommon.getResourceString( CMain.class, "vmoptions", Math.ceil( c_neededmemory ) ) );
             System.exit( 0 );
         }
 

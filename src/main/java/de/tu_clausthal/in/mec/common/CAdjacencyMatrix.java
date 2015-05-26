@@ -245,7 +245,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
             p_generator.writeStartObject();
             for ( final T l_row : p_matrix.m_keys )
             {
-                p_generator.writeObjectField( "key", l_row );
+                p_generator.writeObjectFieldStart( l_row.toString() );
                 p_generator.writeArrayFieldStart( "children" );
                 for ( final T l_col : p_matrix.m_keys )
                 {
@@ -260,6 +260,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
                 }
                 p_generator.writeEndArray();
+                p_generator.writeEndObject();
             }
             p_generator.writeEndObject();
         }

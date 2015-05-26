@@ -22,10 +22,7 @@
  */
 
 /** todo collection for source-ui ck
-TODO finish allround restruct
-TODO cleanup css
 TODO remove unused code
-TODO rename asl
 TODO rename input
 TODO check last jquery slectors
 TODO differ between open and close

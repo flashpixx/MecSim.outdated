@@ -24,13 +24,15 @@ select
     width: 120px;
 }
 
-/******************************** class definitions *******************************************************************/
+/******************************** TODO section *+++++******************************************************************/
 
-.ui-accordion-content{
-    height: 55%;
+/** deprecated? or move to editor section **/
+.CodeMirror
+{
+    height: 75vh;
 }
 
-/** TODO check if needed! Effect the Tab Background! (deprecated for widget and other source related ui)  ck**/
+/** deprecated for mecsim_source and mecsim_widget, check if needed (effects the tab background and more) **/
 .ui-widget-header{
     margin: 0;
     color: white;
@@ -38,6 +40,17 @@ select
     border: 1px solid #CACACA;
     position: relative;
     text-align: center;
+}
+
+/* depcrecated? */
+#mecsim_global_editor{
+    collapsible: false;
+}
+
+/******************************** class definitions *******************************************************************/
+
+.ui-accordion-content{
+    height: 55%;
 }
 
 .mecsim_global_accordeonbutton{
@@ -122,11 +135,6 @@ select
     display: block;
 }
 
-/* TODO: depcrecated? */
-#mecsim_global_editor{
-    collapsible: false;
-}
-
 #mecsim_about{
     width: 500px;
 }
@@ -166,10 +174,6 @@ select
 
 /******************************** css definitions for mecsim_widget ************************************************/
 
-.ui-widget-content{
-    border: 1px solid #CACACA;
-}
-
 .ui-resizable-helper{
     border: 1px dotted gray;
 }
@@ -200,11 +204,6 @@ select
 }
 
 /******************************** css definitions for radial visualization ************************************************/
-
-.CodeMirror
-{
-    height: 75vh;
-}
 
 /*** start testing ***/
 #graphtest
@@ -250,57 +249,3 @@ path.graphtest-arc {
   stroke: #2ca02c;
 }
 /*** end testing ***/
-
-
-
-
-
-#mecsim_source_clusterwidget{
-    float: left;
-    width: 600px;
-    height: 640px;
-    padding: 0.5em;
-    margin: 10px;
-}
-
-.mecsim_source_node {
-    font-size: 75%;
-    font-weight: bold;
-    user-select: none;
-    cursor: default;
-}
-
-.mecsim_source_node:hover{
-    opacity: 1;
-}
-
-.mecsim_source_node-source {
-    fill: #2ca02c;
-}
-
-.mecsim_source_node-target {
-    fill: #d62728;
-}
-
-.mecsim_source_node-selected{
-    fill: #000000;
-}
-
-.mecsim_source_node-trans{
-    opacity: 0.3;
-}
-
-.mecsim_source_link {
-    stroke: steelblue;
-    stroke-opacity: 0.2;
-    fill: none;
-    pointer-events: none;
-}
-
-.mecsim_source_link-thick{
-    stroke-opacity: 1;
-}
-
-.mecsim_source_link-hidden{
-    stroke-opacity: 0;
-}

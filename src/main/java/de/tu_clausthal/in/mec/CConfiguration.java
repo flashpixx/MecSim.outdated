@@ -193,11 +193,11 @@ public class CConfiguration
                             put( "driver", null );
                             // connection URL
                             put( "url", null );
-                            // table prefix - different simulationtypes can be stored within the same database
+                            // table prefix - different simulation-types can be stored within the same database
                             put( "tableprefix", null );
                             // connection username
                             put( "username", null );
-                            // connection password (uncrypted)
+                            // connection password (decrypted)
                             put( "password", null );
                         }}
             );

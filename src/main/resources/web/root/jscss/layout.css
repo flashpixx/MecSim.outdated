@@ -19,6 +19,11 @@ iframe
     height: 100%;
 }
 
+select
+{
+    width: 120px;
+}
+
 /******************************** class definitions *******************************************************************/
 
 .ui-accordion-content{
@@ -71,6 +76,14 @@ iframe
 }
 
 /******************************* id definitions ***********************************************************************/
+
+#mecsim_configuration_tabs{
+    height: 100%;
+}
+
+#tabs{
+    height: 100%;
+}
 
 #mecsim_global_menu{
     height: 100%;

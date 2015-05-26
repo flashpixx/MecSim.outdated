@@ -124,6 +124,7 @@ var EditorPanel = ( function (px_module) {
         // add a code mirror object to the editor
         "add_code_mirror" : function() {
             EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
+            //$("#" + EditorPanel.ui_actions().get_tab_id() + "").css("height", "100%");
         }
 
     };}
@@ -187,6 +188,7 @@ var EditorPanel = ( function (px_module) {
         });
 
         // save file
+        // TODO: parametrize agent file type (e.g. jason, goal)
         EditorPanel.ui().save_file_button().button().on("click", function(p_data){
 
             $.ajax({
@@ -223,7 +225,7 @@ var EditorPanel = ( function (px_module) {
         /** reference to 'save file' button **/
         "save_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
         /** reference to 'select file type' menu **/
-        "select_file_type_menu"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
+        "select_file_type_menu" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
         /** reference to accordion editor panel h3 element **/
         "mecsim_editor_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); }
     };}

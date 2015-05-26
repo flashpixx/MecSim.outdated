@@ -25,6 +25,35 @@
 
 var SimulationPanel = ( function (px_module) {
 
+
+    px_module.ui_actions = function() { return {
+
+        // load configuration data
+        "load_configuration_data" : function() {
+            $.ajax({
+                url : "/cconfiguration/get",
+                type: "POST",
+                success : function( px_data )
+                {
+                    SimulationPanel.ui_actions().add_languages(px_data.language.allow);
+                }
+            });
+        },
+
+        "add_languages" : function(languages) {
+            SimulationPanel.ui().mecsim_config_select_language().empty();
+            languages.forEach(function(language) {
+                console.log(language);
+                SimulationPanel.ui().mecsim_config_select_language().append( $("<option></option>")
+                                                                    .attr("value", language)
+                                                                    .text(language));
+            });
+            $("#mecsim_config_select_language option:first").attr('selected', true);
+            SimulationPanel.ui().mecsim_config_select_language().selectmenu('refresh');
+        }
+
+    };}
+
     // bind actions to ui components
     px_module.bind_ui_actions = function() {
 
@@ -36,6 +65,16 @@ var SimulationPanel = ( function (px_module) {
                 MecSim.ui().content().load("template/clean.htm");
             }
 
+        });
+
+        // configure simulation
+        SimulationPanel.ui().configuration_button().button().on("click", function() {
+             MecSim.ui().content().empty();
+             MecSim.ui().content().load("template/configuration.htm", function(){
+                SimulationPanel.ui_actions().load_configuration_data();
+                SimulationPanel.ui().mecsim_configuration_tabs().tabs();
+                SimulationPanel.ui().mecsim_config_select_language().selectmenu();
+             });
         });
 
         // start simulation
@@ -63,6 +102,21 @@ var SimulationPanel = ( function (px_module) {
             MecSim.ui().log().empty();
         });
 
+        // save simulation
+        SimulationPanel.ui().save_simulation_button().button().on("click", function() {
+            // save simulation
+        });
+
+        // load simulation
+        SimulationPanel.ui().load_simulation_button().button().on("click", function() {
+            // load simulation
+        });
+
+        // local button
+        SimulationPanel.ui().local_button().button().on("click", function() {
+
+        });
+
         // configure speed of simulation
         SimulationPanel.ui().speed_slider().slider({
             range: "min",
@@ -88,23 +142,27 @@ var SimulationPanel = ( function (px_module) {
         /** reference to configuration button **/
         "configuration_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_config" : $("#mecsim_simulation_config"); },
         /** reference to local button **/
-        "local_button"    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_local"    : $("#mecsim_simulation_local"); },
+        "local_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_local"    : $("#mecsim_simulation_local"); },
         /** reference to start button **/
-        "start_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_start"   : $("#mecsim_simulation_start"); },
+        "start_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_start"   : $("#mecsim_simulation_start"); },
         /** reference to stop button **/
         "stop_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_stop" : $( "#mecsim_simulation_stop" ); },
         /** reference to reset button **/
-        "reset_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_reset"   : $("#mecsim_simulation_reset"); },
+        "reset_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_reset"   : $("#mecsim_simulation_reset"); },
         /** reference to 'load simulation' button **/
-        "load_simulation_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_load"   : $("#mecsim_simulation_load"); },
+        "load_simulation_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_load"   : $("#mecsim_simulation_load"); },
         /** reference to 'save simulation' button **/
-        "save_simulation_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_save"   : $("#mecsim_simulation_save"); },
+        "save_simulation_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_save"   : $("#mecsim_simulation_save"); },
         /** reference to speed slider **/
-        "speed_slider"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed_slider"   : $("#mecsim_simulation_speed_slider"); },
+        "speed_slider" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed_slider"   : $("#mecsim_simulation_speed_slider"); },
         /** reference to speed label **/
-        "speed_label"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed"   : $("#mecsim_simulation_speed"); },
+        "speed_label" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed"   : $("#mecsim_simulation_speed"); },
         /** reference to accordion simulation panel h3 element **/
-        "mecsim_simulation_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_panel"   : $("#mecsim_simulation_panel"); }
+        "mecsim_simulation_panel" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_panel"   : $("#mecsim_simulation_panel"); },
+        /** reference to configuration tabs **/
+        "mecsim_configuration_tabs" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_configuration_tabs"   : $("#mecsim_configuration_tabs"); },
+        /** reference to language select menu**/
+        "mecsim_config_select_language" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_select_language"   : $("#mecsim_config_select_language"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

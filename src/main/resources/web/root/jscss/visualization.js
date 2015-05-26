@@ -74,8 +74,10 @@ var Visualization = (function (px_modul) {
             lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
         });
 
-        // return the root-node
-        return lo_node[lx_root];
+        // get the root-node and a blank-node on top with a empty key
+        lo_root = { children : [lo_node[lx_root]], key : "" };
+        lo_node[lx_root].parent = lo_root;
+        return lo_root;
     }
 
 
@@ -188,6 +190,7 @@ var Visualization = (function (px_modul) {
 
         // creates the visualization of the data
         var lo_tree = buildtree(lo_options.data) , la_nodes = lo_cluster.nodes(lo_tree), la_links = linknode(lo_tree);
+        console.log(lo_tree);
         //console.log(la_nodes);
         //console.log(la_links);
 

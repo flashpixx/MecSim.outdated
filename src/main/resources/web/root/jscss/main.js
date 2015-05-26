@@ -90,11 +90,11 @@ $(document).ready(function() {
         d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 
             //console.log(classes);
-            //console.log( packages.root(classes) );
+            console.log( packages.root(classes) );
 
             Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
                 id   : "graphtest",
-                data : { x : { value : 123, children : ["b", "c"] }, b : { value : 234}, c : { value : 345 } },
+                data : { test : { value : 123, children : ["subtest1", "subtest2"] }, subtest1 : { value : 234}, subtest2 : { value : 345 } },
                 //link : packages.imports
             });
 

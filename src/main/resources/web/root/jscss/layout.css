@@ -128,7 +128,7 @@ select
 #mecsim_project_name{
     font-weight: bold;
     font-size: large;
-    color: #428bca;
+    color: #008C4F;
 }
 /******************************** css definitions for mecsim_source ************************************************/
 
@@ -144,7 +144,7 @@ select
 .ui-widget-header{
     margin: 0;
     color: white;
-    background: #428bca;
+    background: #008C4F;
     border: 1px solid #CACACA;
     position: relative;
     text-align: center;

@@ -57,7 +57,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * message counter
      */
-    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "receiver" );
+    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "receiver", CAdjacencyMatrix.ESerialzeOutput.Tree );
     /**
      * tree structure of all objects (root-node is equal to this object)
      */

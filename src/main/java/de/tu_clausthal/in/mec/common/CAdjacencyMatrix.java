@@ -34,7 +34,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -43,11 +45,14 @@ import java.util.Map;
 @JsonSerialize( using = CAdjacencyMatrix.CJson.class )
 public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
-
     /**
      * column name
      */
     private final String m_colname;
+    /**
+     * set of keys
+     */
+    private final Set<T> m_keys = new HashSet<>();
     /**
      * row name
      */
@@ -124,6 +129,20 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         return this.get( new ImmutablePair<>( p_row, p_column ) );
     }
 
+    @Override
+    public N put( final Pair<T, T> p_key, final N p_value )
+    {
+        m_keys.add( p_key.getKey() );
+        m_keys.add( p_key.getValue() );
+        return super.put( p_key, p_value );
+    }
+
+    @Override
+    public N remove( final Object p_key )
+    {
+        throw new IllegalStateException( CCommon.getResourceString( this, "remove" ) );
+    }
+
     /**
      * @param p_row row element
      * @param p_column column element
@@ -131,8 +150,11 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public void set( final T p_row, final T p_column, final N p_value )
     {
+        m_keys.add( p_row );
+        m_keys.add( p_column );
         this.put( new ImmutablePair<>( p_row, p_column ), p_value );
     }
+
 
     /**
      * enum typ for serializing
@@ -212,21 +234,36 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
         /**
          * converts the matrix to JSON tree object
+         * @note wildcard type set up to generic to avoid compiler inference error
          *
          * @param p_matrix matrix object
          * @param p_generator JSON generator
          * @throws IOException is thrown on IO errors
          */
-        private void toTree( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator ) throws IOException
+        private <T, N> void toTree( final CAdjacencyMatrix<T, N> p_matrix, final JsonGenerator p_generator ) throws IOException
         {
             p_generator.writeStartObject();
-            p_generator.writeArrayFieldStart( "cells" );
-            for ( final Map.Entry<?, ?> l_item : p_matrix.entrySet() )
+            for ( final T l_row : p_matrix.m_keys )
             {
+                p_generator.writeObjectField( "key", l_row );
+                p_generator.writeArrayFieldStart( "children" );
+                for ( final T l_col : p_matrix.m_keys )
+                {
+                    p_generator.writeStartObject();
 
+                    p_generator.writeObjectField( "connect", l_col );
+                    final N l_value = p_matrix.get( l_row, l_col );
+                    if ( l_value != null )
+                        p_generator.writeObjectField( "value", l_value );
+
+                    p_generator.writeEndObject();
+
+                }
+                p_generator.writeEndArray();
             }
             p_generator.writeEndObject();
         }
+
     }
 
 }

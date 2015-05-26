@@ -43,7 +43,7 @@ var Visualization = (function (px_modul) {
          * @param pc_key key name
          * @param po_object object of the key
          * @param po_parent parent object
-         * @return tree object
+         * @return object with tree structure (root) and object structure (nodes)
         **/
         function traverse( pc_key, po_object, po_parent )
         {
@@ -57,6 +57,7 @@ var Visualization = (function (px_modul) {
             lo_tree.key      = pc_key;
             if (po_parent)
                 lo_tree.parent   = po_parent;
+            lo_node[lo_tree.key] = lo_tree;
             return lo_tree;
         }
 
@@ -71,22 +72,24 @@ var Visualization = (function (px_modul) {
 
         // build tree
         $.each(po_data, function(lc_key, lx_value) {
-            lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
+            if (!lo_node[lc_key])
+                lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
         });
 
         // get the root-node and a blank-node on top with a empty key
         lo_root = { children : [lo_node[lx_root]], key : "" };
         lo_node[lx_root].parent = lo_root;
-        return lo_root;
+        return { root : lo_root, nodes : lo_node };
     }
 
 
     /**
      * function to define the link structure
-     * @param po_root root node
+     * @param po_nodes node structure
+     * @param po_objects object definition of the nodes
      * @return link object structure
     **/
-    function linknode( po_root )
+    function linknode( po_nodes, po_objects )
     {
         /** array with linked structure **/
         var la_links = [];
@@ -95,13 +98,12 @@ var Visualization = (function (px_modul) {
          * traverses the node tree and adds link structure
          * @param po_node tree node
         **/
-        function traverse( po_node )
+        $.each( po_nodes, function( lc_key, lo_value )
         {
-            if (po_node.children)
-                po_node.children.forEach( function(lo_item) { la_links.push({ source : po_node.key, target : lo_item.key }); traverse( lo_item ); } );
-        }
+            if (lo_value.connect)
+                lo_value.connect.forEach( function(lc_connect) { la_links.push({ source : po_objects[lc_key], target : po_objects[lc_connect] }); } );
+        });
 
-        traverse(po_root);
         return la_links;
     }
 
@@ -188,10 +190,10 @@ var Visualization = (function (px_modul) {
 
 
         // creates the visualization of the data
-        var lo_tree = buildtree(lo_options.data) , la_nodes = lo_cluster.nodes(lo_tree), la_links = linknode(lo_tree);
-        //console.log(lo_tree);
-        //console.log(la_nodes);
-        console.log(la_links);
+        // 1. build tree with node structure
+        // 2. build visualization
+        // 3. build link structure of the node structure
+        var lo_treedata = buildtree(lo_options.data), la_nodes = lo_cluster.nodes(lo_treedata.root), la_links = linknode(lo_options.data, lo_treedata.nodes);
 
         // link visualization
         var path = lo_svg.selectAll( "path.link" )

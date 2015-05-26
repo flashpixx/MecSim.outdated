@@ -30,6 +30,16 @@ select
     height: 55%;
 }
 
+/** TODO check if needed! Effect the Tab Background! (deprecated for widget and other source related ui)  ck**/
+.ui-widget-header{
+    margin: 0;
+    color: white;
+    background: #428bca;
+    border: 1px solid #CACACA;
+    position: relative;
+    text-align: center;
+}
+
 .mecsim_global_accordeonbutton{
     width: 75%;
     align: center;
@@ -130,30 +140,8 @@ select
     font-size: large;
     color: #428bca;
 }
+
 /******************************** css definitions for mecsim_source ************************************************/
-
-/** General **/
-.ui-widget-content{
-    border: 1px solid #CACACA;
-}
-
-.ui-resizable-helper{
-    border: 1px dotted gray;
-}
-
-.ui-widget-header{
-    margin: 0;
-    color: white;
-    background: #428bca;
-    border: 1px solid #CACACA;
-    position: relative;
-    text-align: center;
-}
-
-.mecsim_source_widgetButton{
-    position: absolute;
-    right: 0;
-}
 
 .mecsim_source_toolIcon{
     display: inline;
@@ -163,27 +151,53 @@ select
     height: 15px;
 }
 
-/** Tool Wizard **/
-#mecsim_source_toolwizardwidget{
+.mecsim_source_wizardSelect{
+    width: 240px;
+}
+
+.mecsim_source_wizardInputSmall{
+    width:30px;
+}
+
+.mecsim_source_wizardRightAlign{
+    float:right;
+    margin-right: 10px;
+}
+
+.ui-widget-content{
+    border: 1px solid #CACACA;
+}
+
+.ui-resizable-helper{
+    border: 1px dotted gray;
+}
+
+.mecsim_source_defaultWidget{
     width: 750px;
     height: 550px;
     padding: 5px;
     margin: 5px;
+    background: white;
     border: 1px solid #CACACA;
+    position: absolute;
 }
 
-.mecsim_source_wizardselect{
-    width: 240px;
+.mecsim_source_widgetHeader{
+    margin: 0;
+    color: white;
+    background: #428bca;
+    border: 1px solid #CACACA;
+    position: relative;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-.mecsim_source_wizardinputsmall{
-    width:30px;
+.mecsim_source_widgetButton{
+    position: absolute;
+    right: 0;
 }
 
-.mecsim_source_wizardrightalign{
-    float:right;
-    margin-right: 10px;
-}
+/******************************** css definitions for radial visualization ************************************************/
 
 .CodeMirror
 {

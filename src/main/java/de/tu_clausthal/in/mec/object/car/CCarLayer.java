@@ -92,7 +92,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final int getCalculationIndex()
     {
-        return 1;
+        return 200;
     }
 
     @Override

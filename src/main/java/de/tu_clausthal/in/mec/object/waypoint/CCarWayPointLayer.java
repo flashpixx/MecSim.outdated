@@ -53,7 +53,7 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     @Override
     public final int getCalculationIndex()
     {
-        return 2;
+        return 300;
     }
 
     @Override

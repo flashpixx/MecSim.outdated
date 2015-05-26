@@ -54,6 +54,12 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     }
 
     @Override
+    public int getCalculationIndex()
+    {
+        return 100;
+    }
+
+    @Override
     public final String toString()
     {
         return CCommon.getResourceString( this, "name" );

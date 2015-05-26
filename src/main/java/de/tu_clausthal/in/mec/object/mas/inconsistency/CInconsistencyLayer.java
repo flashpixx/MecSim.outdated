@@ -23,48 +23,117 @@
 
 package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
+import de.tu_clausthal.in.mec.runtime.ISteppable;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jxmapviewer.painter.Painter;
+
+import java.awt.*;
 
 
 /**
  * layer with inconsistence data
  */
-public class CInconsistencyLayer extends IMultiLayer<IMeasurement<?>>
+public class CInconsistencyLayer<T extends IAgent> extends IMultiLayer<CInconsistencyLayer.CImmutablePair<T>>
 {
-
     @Override
-    @CMethodFilter.CAgent( bind = false )
-    public void afterStepObject( final int p_currentstep, final IMeasurement<?> p_object )
+    public void afterStepObject( final int p_currentstep, final CImmutablePair<T> p_object )
     {
 
     }
 
     @Override
-    @CMethodFilter.CAgent( bind = false )
-    public void beforeStepObject( final int p_currentstep, final IMeasurement<?> p_object )
+    public void beforeStepObject( final int p_currentstep, final CImmutablePair<T> p_object )
     {
 
     }
 
     @Override
-    @CMethodFilter.CAgent( bind = false )
+    public int getCalculationIndex()
+    {
+        return 50;
+    }
+
+    @Override
     public void step( final int p_currentstep, final ILayer p_layer )
     {
+
     }
 
+    @Override
+    public String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
+    }
+
+    /**
+     * static class to represent a tuple of two elements
+     *
+     * @tparam <N>
+     */
+    public static class CImmutablePair<N> extends Pair<N, N> implements ISteppable, Painter
+    {
+        /**
+         * pair value
+         **/
+        private final ImmutablePair<N, N> m_data;
+
+        /**
+         * ctor
+         *
+         * @param p_left left value
+         * @param p_right right value
+         */
+        public CImmutablePair( final N p_left, final N p_right )
+        {
+            m_data = new ImmutablePair<>( p_left, p_right );
+        }
+
+
+        @Override
+        public N getLeft()
+        {
+            return m_data.getLeft();
+        }
+
+        @Override
+        public N getRight()
+        {
+            return m_data.getRight();
+        }
+
+        @Override
+        public void paint( final Graphics2D p_graphics2D, final Object o, final int i, final int i1 )
+        {
+        }
+
+        @Override
+        public void release()
+        {
+        }
+
+        @Override
+        public N setValue( final N p_value )
+        {
+            return m_data.setValue( p_value );
+        }
+
+    }
 
     /**
      * class to create a bind between
-     * agent and inconsistency
+     * agent and inconsistency value
      */
     public class CBind
     {
         @CFieldFilter.CAgent( bind = false )
-        final CAgent<?> m_bind;
+        final CAgent<T> m_bind;
 
 
         /**
@@ -72,7 +141,7 @@ public class CInconsistencyLayer extends IMultiLayer<IMeasurement<?>>
          *
          * @param p_agent sets the agent
          */
-        public CBind( final CAgent<?> p_agent )
+        public CBind( final CAgent<T> p_agent )
         {
             m_bind = p_agent;
         }

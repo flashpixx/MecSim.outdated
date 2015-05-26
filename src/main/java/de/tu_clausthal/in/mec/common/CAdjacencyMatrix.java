@@ -234,11 +234,11 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
         /**
          * converts the matrix to JSON tree object
-         * @note wildcard type set up to generic to avoid compiler inference error
          *
          * @param p_matrix matrix object
          * @param p_generator JSON generator
          * @throws IOException is thrown on IO errors
+         * @note wildcard type set up to generic to avoid compiler inference error
          */
         private <T, N> void toTree( final CAdjacencyMatrix<T, N> p_matrix, final JsonGenerator p_generator ) throws IOException
         {

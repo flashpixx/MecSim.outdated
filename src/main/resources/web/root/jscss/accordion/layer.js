@@ -16,7 +16,7 @@ var mecsim_layer,
         },
 
         bind_ui_actions: function() {
-            $("#ui-id-3").on("click", function(data){
+            $("#mecsim_layer_panel").on("click", function(data){
                 MecSim.ui().content().empty();
                 MecSim.ui().content().load("template/clean.htm");
             });
@@ -58,9 +58,9 @@ var mecsim_layer,
                 success : function( px_data ){
                     $.each( px_data, function( pc_key, px_value ) {
                         $("<label id='mecsim_simulation_switchlabel'>"+ pc_key +"</label>").appendTo(LayerPanel.settings.switchdiv);
-                        $("<input class='mecsim_simulaton_switchActiv' type='checkbox' id='"+ px_value.id +"' "+ (px_value.active ? "checked" : "") +">").appendTo(LayerPanel.settings.switchdiv);
+                        $("<input class='mecsim_simulation_switchActive' type='checkbox' id='"+ px_value.id +"' "+ (px_value.active ? "checked" : "") +">").appendTo(LayerPanel.settings.switchdiv);
                         if(px_value.isviewable)
-                            $("<input class='mecsim_simulaton_switchVisibil' type='checkbox' id='"+ px_value.id +"' " + (px_value.visible ? "checked" : "") + "></p>").appendTo(LayerPanel.settings.switchdiv);
+                            $("<input class='mecsim_simulation_switchVisible' type='checkbox' id='"+ px_value.id +"' " + (px_value.visible ? "checked" : "") + "></p>").appendTo(LayerPanel.settings.switchdiv);
                     });
                 }
             }).done(function(){
@@ -74,7 +74,7 @@ var mecsim_layer,
                 }
 
                 //create active switches and listen
-                $(".mecsim_simulaton_switchActiv").bootstrapSwitch({
+                $(".mecsim_simulation_switchActive").bootstrapSwitch({
                     size: "mini",
                     onText: "active",
                     offText: "inactive",
@@ -88,7 +88,7 @@ var mecsim_layer,
                 });
 
                 //create visibility switches and listen
-                $(".mecsim_simulaton_switchVisibil").bootstrapSwitch({
+                $(".mecsim_simulation_switchVisible").bootstrapSwitch({
                     size: "mini",
                     onText: "visible",
                     offText: "invisible",

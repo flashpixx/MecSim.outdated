@@ -23,9 +23,7 @@
 
 /** todo collection for source-ui ck
 TODO remove unused code
-TODO rename input
 TODO check last jquery slectors
-TODO differ between open and close
 TODO refactor build content
 TODO ajax kapseln
 TODO function with parameters
@@ -302,18 +300,18 @@ var SourcePanel = ( function (px_module) {
 
         //validate second step
         if(currentIndex===1){
-            var input1 = Number(SourcePanel.settings.dom.generatorInput1.val());
-            var input2 = Number(SourcePanel.settings.dom.generatorInput2.val());
-            var input3 = Number(SourcePanel.settings.dom.generatorInput3.val());
+            var generatorInput1 = Number(SourcePanel.settings.dom.generatorInput1.val());
+            var generatorInput2 = Number(SourcePanel.settings.dom.generatorInput2.val());
+            var generatorInput3 = Number(SourcePanel.settings.dom.generatorInput3.val());
 
-            if( isNaN(input1) || isNaN(input2) || isNaN(input3) || input1 <= 0)
+            if( isNaN(generatorInput1) || isNaN(generatorInput2) || isNaN(generatorInput3) || generatorInput1 <= 0)
                 return false;
 
             if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-                if( (input2 >= input3) || (input2 < 0) )
+                if( (generatorInput2 >= generatorInput3) || (generatorInput2 < 0) )
                     return false;
             }else{
-                if( input2 < input3){
+                if( generatorInput2 < generatorInput3){
                     return false;
                 }
             }
@@ -330,9 +328,9 @@ var SourcePanel = ( function (px_module) {
                         "factory"       : SourcePanel.settings.dom.selectFactory.val(),
                         "agentprogram"  : SourcePanel.settings.dom.selectAgentProgram.val(),
                         "generator"     : SourcePanel.settings.dom.selectGenerator.val(),
-                        "input1"        : SourcePanel.settings.dom.generatorInput1.val(),
-                        "input2"        : SourcePanel.settings.dom.generatorInput2.val(),
-                        "input3"        : SourcePanel.settings.dom.generatorInput3.val(),
+                        "generatorInput1"        : SourcePanel.settings.dom.generatorInput1.val(),
+                        "generatorInput2"        : SourcePanel.settings.dom.generatorInput2.val(),
+                        "generatorInput3"        : SourcePanel.settings.dom.generatorInput3.val(),
                         "name"          : SourcePanel.settings.dom.toolName.val(),
                         "r"             : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
                         "g"             : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,

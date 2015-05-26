@@ -35,15 +35,23 @@ var SimulationPanel = ( function (px_module) {
                 type: "POST",
                 success : function( px_data )
                 {
+                    SimulationPanel.ui_actions().add_reset_flag(px_data.reset);
                     SimulationPanel.ui_actions().add_languages(px_data.language.allow);
                 }
             });
         },
 
+        "add_reset_flag" : function(reset) {
+            if(!reset){
+                $("#reset_no").attr("checked", "checked");
+            }else{
+                $("#reset_yes").attr("checked", "checked");
+            }
+        },
+
         "add_languages" : function(languages) {
             SimulationPanel.ui().mecsim_config_select_language().empty();
             languages.forEach(function(language) {
-                console.log(language);
                 SimulationPanel.ui().mecsim_config_select_language().append( $("<option></option>")
                                                                     .attr("value", language)
                                                                     .text(language));
@@ -74,6 +82,7 @@ var SimulationPanel = ( function (px_module) {
                 SimulationPanel.ui_actions().load_configuration_data();
                 SimulationPanel.ui().mecsim_configuration_tabs().tabs();
                 SimulationPanel.ui().mecsim_config_select_language().selectmenu();
+                SimulationPanel.ui().mecsim_config_reset().buttonset();
              });
         });
 
@@ -162,7 +171,9 @@ var SimulationPanel = ( function (px_module) {
         /** reference to configuration tabs **/
         "mecsim_configuration_tabs" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_configuration_tabs"   : $("#mecsim_configuration_tabs"); },
         /** reference to language select menu**/
-        "mecsim_config_select_language" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_select_language"   : $("#mecsim_config_select_language"); }
+        "mecsim_config_select_language" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_select_language"   : $("#mecsim_config_select_language"); },
+        /** reference to reset config flag**/
+        "mecsim_config_reset" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"   : $("#mecsim_config_reset"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

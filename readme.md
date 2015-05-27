@@ -5,13 +5,23 @@ Micro traffic simulation with multi-agent structure based on  [Jason](http://jas
 
 ![Screenshot](screen.png)
 
+
+
 ## Requirements
 
-* [Oracle Java 1.8](http://www.java.com)
+### Running
+
+* [Oracle Java Runtime 1.8](http://www.java.com)
+* online access
+* at least 3 GB RAM
+
+### Compiling
+
+* [Oracle Java Developing Kit 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [Maven 3.0](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
 
-### tested IDEs
+#### IDE Support
 
 * [IntelliJ Community Edition](http://www.jetbrains.com/idea/)
 * [Eclipse](http://www.eclipse.org/)
@@ -22,10 +32,9 @@ Micro traffic simulation with multi-agent structure based on  [Jason](http://jas
 
 Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
 
-The Maven package build creates a Jar file in the path ```target/MecSim-<Version>.jar```. The
-program must use more memory of the Java VM on graph downloading and converting, so the Jar must be started with the
-suffix ```-Xmx<Memory Size>``` (a good choice of the memory size can be 3g-5g), also the parallel garbage collector
-should be used with ```-XX:+UseParallelGC```
+The Maven package build creates a Jar file in the path ```target/MecSim-<Version>.jar```. The program must use more memory
+of the Java VM on graph downloading and converting, so the Jar must be started with the suffix ```-Xmx<Memory Size>```
+(a good choice of the memory size can be 3g-5g), also the parallel garbage collector should be used with ```-XX:+UseParallelGC```
 
 The program can be used in two structures:
 

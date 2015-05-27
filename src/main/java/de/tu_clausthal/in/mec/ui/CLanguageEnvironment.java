@@ -40,30 +40,44 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> m_waypointLabels = new HashMap<String, String>()
     {{
+            //general wizard labels
             put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
             put( "factorysettings", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
             put( "generatorsettings", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
             put( "carsettings", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
             put( "customizing", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+            put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
+            put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
+            put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
+
+            //wizardstep#1 (factory settings)
             put( "selectyourfactory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
             put( "selectyouragentprogram", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
+
+            //wizardstep#2 (generator settings)
             put( "selectyourgenerator", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
             put( "selectyourcarcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
             put( "selectyourmean", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourmean" ) );
             put( "selectyourdeviation", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourdeviation" ) );
             put( "selectyourlowerbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourlowerbound" ) );
             put( "selectyourupperbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourupperbound" ) );
-            put( "selectcarspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectcarspeedprob" ) );
-            put( "selectmaxcarspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxcarspeedprob" ) );
+
+            //wizardstep#3 (car settings)
+            put( "speedsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
+            put( "selectspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectspeedprob" ) );
+            put( "maxspeedsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
+            put( "selectmaxspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxspeedprob" ) );
+            put( "accsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
             put( "selectaccprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectaccprob" ) );
+            put( "decsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
             put( "selectdecprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectdecprob" ) );
+            put( "lingerersettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
             put( "selectlingerprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
+
+            //wizardstep#4 (customozing)
             put( "selecttoolname", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolname" ) );
             put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
             put( "selecttoolcolor", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
-            put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
-            put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
-            put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
         }};
 
     /**

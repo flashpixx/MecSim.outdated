@@ -22,11 +22,13 @@
  */
 
 /** todo collection for source-ui ck
-TODO remove unused code
+TODO responsive wizard content height
+TODO fix widget bounding
+TODO read and write labels in a better way
+TODO fix css widget attributes
+TODO same selectmenu (consistent)
+TODO use next previous finish labels
 TODO check last jquery slectors
-TODO refactor build content
-TODO ajax kapseln
-TODO function with parameters
 TODO save toolbox in config/web
 TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
 TODO bounding in minimized mode maybe snap to tab
@@ -89,6 +91,8 @@ var SourcePanel = ( function (px_module) {
                 //get dom elements (needed because dom tree changes)
                 SourcePanel.getDOMElements();
 
+                SourcePanel.settings.dom.carSettings.accordion({collapsible: true, heightStyle: "content", active: false});
+
                 //listen to ui elements
                 SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
                 SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
@@ -104,27 +108,8 @@ var SourcePanel = ( function (px_module) {
 
     //method to get DOM Elements (template)
     px_module.getDOMElements = function(){
-        //labels
-        SourcePanel.settings.dom.factorySettingsLabel      = $("#mesim_source_factorySettings_label");
-        SourcePanel.settings.dom.generatorSettingsLabel    = $("#mesim_source_generatorSettings_label");
-        SourcePanel.settings.dom.carSettingsLabel          = $("#mesim_source_carSettings_label");
-        SourcePanel.settings.dom.customizingLabel          = $("#mesim_source_customizing_label");
-        SourcePanel.settings.dom.selectFactoryLabel        = $("#mecsim_source_selectFactory_label");
-        SourcePanel.settings.dom.selectAgentProgramLabel   = $("#mecsim_source_selectAgentProgram_label");
-        SourcePanel.settings.dom.selectGeneratorLabel      = $("#mecsim_source_selectGenerator_label");
-        SourcePanel.settings.dom.generatorInput1Label      = $("#mecsim_source_generatorInput1_label");
-        SourcePanel.settings.dom.generatorInput2Label      = $("#mecsim_source_generatorInput2_label");
-        SourcePanel.settings.dom.generatorInput3Label      = $("#mecsim_source_generatorInput3_label");
-        SourcePanel.settings.dom.speedProbLabel            = $("#mecsim_source_speedProb_label");
-        SourcePanel.settings.dom.maxSpeedProbLabel         = $("#mecsim_source_maxSpeedProb_label");
-        SourcePanel.settings.dom.accProbLabel              = $("#mecsim_source_accProb_label");
-        SourcePanel.settings.dom.decProbLabel              = $("#mecsim_source_decProb_label");
-        SourcePanel.settings.dom.lingerProbLabel           = $("#mecsim_source_lingerProb_label");
-        SourcePanel.settings.dom.toolNameLabel             = $("#mecsim_source_toolName_label");
-        SourcePanel.settings.dom.toolName                  = $("#mecsim_source_toolName");
-        SourcePanel.settings.dom.toolColorLabel            = $("#mecsim_source_toolColor_label");
 
-        //futher dom elements
+        //dom elements (no labels)
         SourcePanel.settings.dom.widget                    = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                    = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.colorpicker               = $("#mecsim_source_colorpicker");
@@ -135,6 +120,54 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.generatorInput1           = $("#mecsim_source_generatorInput1");
         SourcePanel.settings.dom.generatorInput2           = $("#mecsim_source_generatorInput2");
         SourcePanel.settings.dom.generatorInput3           = $("#mecsim_source_generatorInput3");
+        SourcePanel.settings.dom.carSettings               = $("#mecsim_source_carSettings");
+
+        //general wizard labels
+        SourcePanel.settings.dom.factorySettingsLabel      = $("#mesim_source_factorySettings_label");
+        SourcePanel.settings.dom.generatorSettingsLabel    = $("#mesim_source_generatorSettings_label");
+        SourcePanel.settings.dom.carSettingsLabel          = $("#mesim_source_carSettings_label");
+        SourcePanel.settings.dom.customizingLabel          = $("#mesim_source_customizing_label");
+
+        //wizardstep#1 (factory settings)
+        SourcePanel.settings.dom.selectFactoryLabel        = $("#mecsim_source_selectFactory_label");
+        SourcePanel.settings.dom.selectAgentProgramLabel   = $("#mecsim_source_selectAgentProgram_label");
+
+        //wizardstep#2 (generator settings)
+        SourcePanel.settings.dom.selectGeneratorLabel      = $("#mecsim_source_selectGenerator_label");
+        SourcePanel.settings.dom.generatorInput1Label      = $("#mecsim_source_generatorInput1_label");
+        SourcePanel.settings.dom.generatorInput2Label      = $("#mecsim_source_generatorInput2_label");
+        SourcePanel.settings.dom.generatorInput3Label      = $("#mecsim_source_generatorInput3_label");
+
+        //wizardstep#3 (car settings)
+        SourcePanel.settings.dom.speedSettingsLabel        = $("#mecsim_source_speedSettings_label");
+        SourcePanel.settings.dom.selectSpeedProbLabel      = $("#mecsim_source_selectSpeedProb_label");
+        SourcePanel.settings.dom.speedProbInput1Label      = $("#mecsim_source_speedProbInput1_label");
+        SourcePanel.settings.dom.speedProbInput2Label      = $("#mecsim_source_speedProbInput2_label");
+
+        SourcePanel.settings.dom.maxSpeedSettingsLabel     = $("#mecsim_source_maxSpeedSettings_label");
+        SourcePanel.settings.dom.selectMaxSpeedProbLabel   = $("#mecsim_source_selectMaxSpeedProb_label");
+        SourcePanel.settings.dom.maxSpeedProbInput1Label   = $("#mecsim_source_maxSpeedProbInput1_label");
+        SourcePanel.settings.dom.maxSpeedProbInput2Label   = $("#mecsim_source_maxSpeedProbInput2_label");
+
+        SourcePanel.settings.dom.accSettingsLabel          = $("#mecsim_source_accSettings_label");
+        SourcePanel.settings.dom.selectAccProbLabel        = $("#mecsim_source_selectAccProb_label");
+        SourcePanel.settings.dom.accProbInput1Label        = $("#mecsim_source_accProbInput1_label");
+        SourcePanel.settings.dom.accProbInput2Label        = $("#mecsim_source_accProbInput2_label");
+
+        SourcePanel.settings.dom.decSettingsLabel          = $("#mecsim_source_decSettings_label");
+        SourcePanel.settings.dom.selectDecProbLabel        = $("#mecsim_source_selectDecProb_label");
+        SourcePanel.settings.dom.decProbInput1Label        = $("#mecsim_source_decProbInput1_label");
+        SourcePanel.settings.dom.decProbInput2Label        = $("#mecsim_source_decProbInput2_label");
+
+        SourcePanel.settings.dom.lingerSettingsLabel       = $("#mecsim_source_lingerSettings_label");
+        SourcePanel.settings.dom.selectLingerProbLabel     = $("#mecsim_source_selectLingerProb_label");
+        SourcePanel.settings.dom.lingerProbInput1Label     = $("#mecsim_source_lingerProbInput1_label");
+        SourcePanel.settings.dom.lingerProbInput2Label     = $("#mecsim_source_lingerProbInput2_label");
+
+        //wizardstep#4 (customozing)
+        SourcePanel.settings.dom.toolNameLabel             = $("#mecsim_source_toolName_label");
+        SourcePanel.settings.dom.toolName                  = $("#mecsim_source_toolName");
+        SourcePanel.settings.dom.toolColorLabel            = $("#mecsim_source_toolColor_label");
      };
 
     //method to get source-ui related labels
@@ -142,51 +175,95 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/clanguageenvironment/getwaypointlabels",
             success : function( px_data ){
-                 SourcePanel.settings.labels.wizardwidget = px_data.wizardwidget;
-                 SourcePanel.settings.labels.factorysettings = px_data.factorysettings;
-                 SourcePanel.settings.labels.generatorsettings = px_data.generatorsettings;
-                 SourcePanel.settings.labels.carsettings = px_data.carsettings;
-                 SourcePanel.settings.labels.customizing = px_data.customizing;
-                 SourcePanel.settings.labels.selectyourfactory = px_data.selectyourfactory;
-                 SourcePanel.settings.labels.selectyouragentprogram = px_data.selectyouragentprogram;
-                 SourcePanel.settings.labels.selectyourgenerator = px_data.selectyourgenerator;
-                 SourcePanel.settings.labels.selectyourcarcount = px_data.selectyourcarcount;
-                 SourcePanel.settings.labels.selectyourmean = px_data.selectyourmean;
-                 SourcePanel.settings.labels.selectyourdeviation = px_data.selectyourdeviation;
-                 SourcePanel.settings.labels.selectyourlowerbound = px_data.selectyourlowerbound;
-                 SourcePanel.settings.labels.selectyourupperbound = px_data.selectyourupperbound;
-                 SourcePanel.settings.labels.selectcarspeedprob = px_data.selectcarspeedprob;
-                 SourcePanel.settings.labels.selectmaxcarspeedprob = px_data.selectmaxcarspeedprob;
-                 SourcePanel.settings.labels.selectaccprob = px_data.selectaccprob;
-                 SourcePanel.settings.labels.selectdecprob = px_data.selectdecprob;
-                 SourcePanel.settings.labels.selectlingerprob = px_data.selectlingerprob;
-                 SourcePanel.settings.labels.selecttoolname = px_data.selecttoolname;
-                 SourcePanel.settings.labels.selecttoolnamevalue = px_data.selecttoolnamevalue;
-                 SourcePanel.settings.labels.selecttoolcolor = px_data.selecttoolcolor;
-                 SourcePanel.settings.labels.previous = px_data.previous;
-                 SourcePanel.settings.labels.next = px_data.next;
-                 SourcePanel.settings.labels.finish = px_data.finish;
+
+                //general wizard labels
+                SourcePanel.settings.labels.wizardwidget = px_data.wizardwidget;
+                SourcePanel.settings.labels.factorysettings = px_data.factorysettings;
+                SourcePanel.settings.labels.generatorsettings = px_data.generatorsettings;
+                SourcePanel.settings.labels.carsettings = px_data.carsettings;
+                SourcePanel.settings.labels.customizing = px_data.customizing;
+                SourcePanel.settings.labels.previous = px_data.previous;
+                SourcePanel.settings.labels.next = px_data.next;
+                SourcePanel.settings.labels.finish = px_data.finish;
+
+                //wizardstep#1 (factory settings)
+                SourcePanel.settings.labels.selectyourfactory = px_data.selectyourfactory;
+                SourcePanel.settings.labels.selectyouragentprogram = px_data.selectyouragentprogram;
+
+                //wizardstep#2 (generator settings)
+                SourcePanel.settings.labels.selectyourgenerator = px_data.selectyourgenerator;
+                SourcePanel.settings.labels.selectyourcarcount = px_data.selectyourcarcount;
+                SourcePanel.settings.labels.selectyourmean = px_data.selectyourmean;
+                SourcePanel.settings.labels.selectyourdeviation = px_data.selectyourdeviation;
+                SourcePanel.settings.labels.selectyourlowerbound = px_data.selectyourlowerbound;
+                SourcePanel.settings.labels.selectyourupperbound = px_data.selectyourupperbound;
+
+                //wizardstep#3 (car settings)
+                SourcePanel.settings.labels.speedsettingslabel = px_data.speedsettingslabel;
+                SourcePanel.settings.labels.selectspeedprob = px_data.selectspeedprob;
+                SourcePanel.settings.labels.maxspeedsettingslabel = px_data.maxspeedsettingslabel;
+                SourcePanel.settings.labels.selectmaxspeedprob = px_data.selectmaxspeedprob;
+                SourcePanel.settings.labels.accsettingslabel = px_data.accsettingslabel;
+                SourcePanel.settings.labels.selectaccprob = px_data.selectaccprob;
+                SourcePanel.settings.labels.decsettingslabel = px_data.decsettingslabel;
+                SourcePanel.settings.labels.selectdecprob = px_data.selectdecprob;
+                SourcePanel.settings.labels.lingerersettingslabel = px_data.lingerersettingslabel;
+                SourcePanel.settings.labels.selectlingerprob = px_data.selectlingerprob;
+
+                //wizardstep#4 (customozing)
+                SourcePanel.settings.labels.selecttoolname = px_data.selecttoolname;
+                SourcePanel.settings.labels.selecttoolnamevalue = px_data.selecttoolnamevalue;
+                SourcePanel.settings.labels.selecttoolcolor = px_data.selecttoolcolor;
             }
         });
     };
 
     //method to set source-ui related labels
     px_module.setLabels = function(){
+
+        //general wizard labels
         SourcePanel.settings.dom.factorySettingsLabel.text(SourcePanel.settings.labels.factorysettings);
         SourcePanel.settings.dom.generatorSettingsLabel.text(SourcePanel.settings.labels.generatorsettings);
         SourcePanel.settings.dom.carSettingsLabel.text(SourcePanel.settings.labels.carsettings);
         SourcePanel.settings.dom.customizingLabel.text(SourcePanel.settings.labels.customizing);
+
+        //wizardstep#1 (factory settings)
         SourcePanel.settings.dom.selectFactoryLabel.text(SourcePanel.settings.labels.selectyourfactory);
         SourcePanel.settings.dom.selectAgentProgramLabel.text(SourcePanel.settings.labels.selectyouragentprogram);
+
+        //wizardstep#2 (generator settings)
         SourcePanel.settings.dom.selectGeneratorLabel.text(SourcePanel.settings.labels.selectyourgenerator);
         SourcePanel.settings.dom.generatorInput1Label.text(SourcePanel.settings.labels.selectyourcarcount);
         SourcePanel.settings.dom.generatorInput2Label.text(SourcePanel.settings.labels.selectyourlowerbound);
         SourcePanel.settings.dom.generatorInput3Label.text(SourcePanel.settings.labels.selectyourupperbound);
-        SourcePanel.settings.dom.speedProbLabel.text(SourcePanel.settings.labels.selectcarspeedprob);
-        SourcePanel.settings.dom.maxSpeedProbLabel.text(SourcePanel.settings.labels.selectmaxcarspeedprob);
-        SourcePanel.settings.dom.accProbLabel.text(SourcePanel.settings.labels.selectaccprob);
-        SourcePanel.settings.dom.decProbLabel.text(SourcePanel.settings.labels.selectdecprob);
-        SourcePanel.settings.dom.lingerProbLabel.text(SourcePanel.settings.labels.selectlingerprob);
+
+        //wizardstep#3 (car settings)
+        SourcePanel.settings.dom.speedSettingsLabel.text(SourcePanel.settings.labels.speedsettingslabel);
+        SourcePanel.settings.dom.selectSpeedProbLabel.text(SourcePanel.settings.labels.selectspeedprob);
+        SourcePanel.settings.dom.speedProbInput1Label.text(SourcePanel.settings.labels.selectyourlowerbound);
+        SourcePanel.settings.dom.speedProbInput2Label.text(SourcePanel.settings.labels.selectyourupperbound);
+
+        SourcePanel.settings.dom.maxSpeedSettingsLabel.text(SourcePanel.settings.labels.maxspeedsettingslabel);
+        SourcePanel.settings.dom.selectMaxSpeedProbLabel.text(SourcePanel.settings.labels.selectmaxspeedprob);
+        SourcePanel.settings.dom.maxSpeedProbInput1Label.text(SourcePanel.settings.labels.selectyourlowerbound);
+        SourcePanel.settings.dom.maxSpeedProbInput2Label.text(SourcePanel.settings.labels.selectyourupperbound);
+
+        SourcePanel.settings.dom.accSettingsLabel.text(SourcePanel.settings.labels.accsettingslabel);
+        SourcePanel.settings.dom.selectAccProbLabel.text(SourcePanel.settings.labels.selectaccprob);
+        SourcePanel.settings.dom.accProbInput1Label.text(SourcePanel.settings.labels.selectyourlowerbound);
+        SourcePanel.settings.dom.accProbInput2Label.text(SourcePanel.settings.labels.selectyourupperbound);
+
+        SourcePanel.settings.dom.decSettingsLabel.text(SourcePanel.settings.labels.decsettingslabel);
+        SourcePanel.settings.dom.selectDecProbLabel.text(SourcePanel.settings.labels.selectdecprob);
+        SourcePanel.settings.dom.decProbInput1Label.text(SourcePanel.settings.labels.selectyourlowerbound);
+        SourcePanel.settings.dom.decProbInput2Label.text(SourcePanel.settings.labels.selectyourupperbound);
+
+        SourcePanel.settings.dom.lingerSettingsLabel.text(SourcePanel.settings.labels.lingerersettingslabel);
+        SourcePanel.settings.dom.selectLingerProbLabel.text(SourcePanel.settings.labels.selectlingerprob);
+        SourcePanel.settings.dom.lingerProbInput1Label.text(SourcePanel.settings.labels.selectyourlowerbound);
+        SourcePanel.settings.dom.lingerProbInput2Label.text(SourcePanel.settings.labels.selectyourupperbound);
+
+        //wizardstep#4 (customozing)
         SourcePanel.settings.dom.toolNameLabel.text(SourcePanel.settings.labels.selecttoolname);
         SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
         SourcePanel.settings.dom.toolColorLabel.text(SourcePanel.settings.labels.selecttoolcolor);

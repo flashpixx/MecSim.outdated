@@ -38,8 +38,11 @@
         this._animate           = options.animate          || true;
         this._animateEffect     = options.animateEffect    || "drop";
         this._animationTime     = options.animateTime      || 400;
-        this._minWidth          = options.minWidth         || 750;
-        this._minHeight         = options.minHeight        || 550;
+        this._background        = options.background       || "white";
+        this._width             = options.width            || 750;
+        this._height            = options.height           || 550;
+        this._minWidth          = options.minWidth         || this._width  || 750;
+        this._minHeight         = options.minHeight        || this._height || 550;
         this._collapseWidth     = options.collapseWidth    || 400;
         this._collapseHeight    = options.collapseHeight   || 20;
         this._minOffset         = options.minOffSet        || 50;
@@ -48,7 +51,12 @@
         this._minimizedStatus = false;
 
         //meta data (header and buttons)
-        this._div.attr("class", "mecsim_widget_defaultWidget");
+        this._div
+            .attr("class", "mecsim_widget_defaultWidget")
+            .css("width", this._width)
+            .css("height", this._height)
+            .css("background", this._background);
+
         this._div.prepend(
             $("<h3></h3>")
                 .attr("class", "mecsim_widget_widgetHeader")

@@ -36,7 +36,7 @@ select
 .ui-widget-header{
     margin: 0;
     color: white;
-    background: #428bca;
+    background: #008C4F;
     border: 1px solid #CACACA;
     position: relative;
     text-align: center;
@@ -163,15 +163,6 @@ select
     width: 240px;
 }
 
-.ui-widget-header{
-    margin: 0;
-    color: white;
-    background: #008C4F;
-    border: 1px solid #CACACA;
-    position: relative;
-    text-align: center;
-}
-
 .mecsim_source_wizardInputSmall{
     width:30px;
 }
@@ -188,13 +179,10 @@ select
 }
 
 .mecsim_widget_defaultWidget{
-    width: 750px;
-    height: 550px;
+    position: absolute;
     padding: 5px;
     margin: 5px;
-    background: white;
     border: 1px solid #CACACA;
-    position: absolute;
 }
 
 .mecsim_widget_widgetHeader{

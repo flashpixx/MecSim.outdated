@@ -25,7 +25,6 @@
 TODO responsive wizard content height
 TODO fix widget bounding
 TODO read and write labels in a better way
-TODO fix css widget attributes
 TODO same selectmenu (consistent)
 TODO use next previous finish labels
 TODO check last jquery slectors
@@ -72,7 +71,8 @@ var SourcePanel = ( function (px_module) {
                 SourcePanel.settings.obj.widget = Widget.createWidget(
                     SourcePanel.settings.dom.widget,
                     {
-                        name: SourcePanel.settings.labels.wizardwidget
+                        name     : SourcePanel.settings.labels.wizardwidget,
+                        width    : 850
                     }
                 );
 

@@ -33,6 +33,8 @@
         }
 
         //settings
+        var self = this;
+
         this._div               = element;
         this._name              = options.name             || "Default Widgetname";
         this._animate           = options.animate          || true;
@@ -41,8 +43,8 @@
         this._background        = options.background       || "white";
         this._width             = options.width            || 750;
         this._height            = options.height           || 550;
-        this._minWidth          = options.minWidth         || this._width  || 750;
-        this._minHeight         = options.minHeight        || this._height || 550;
+        this._minWidth          = options.minWidth         || this._width;
+        this._minHeight         = options.minHeight        || this._height;
         this._collapseWidth     = options.collapseWidth    || 400;
         this._collapseHeight    = options.collapseHeight   || 20;
         this._minOffset         = options.minOffSet        || 50;
@@ -70,8 +72,8 @@
         //create widget
         this._div.draggable({
             drag: function(event, ui) {
-                ui.position.top = Math.max( -500, ui.position.top );
-                ui.position.left = Math.max( -700, ui.position.left );
+                ui.position.top = Math.max( -1*(self._minHeight - self._minOffset), ui.position.top );
+                ui.position.left = Math.max( -1*(self._minWidth - self._minOffset), ui.position.left );
             }})
             .resizable({
                 animate: this._animate,

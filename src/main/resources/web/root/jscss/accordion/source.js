@@ -23,7 +23,6 @@
 
 /** todo collection for source-ui ck
 TODO responsive wizard content height
-TODO fix widget bounding
 TODO read and write labels in a better way
 TODO same selectmenu (consistent)
 TODO use next previous finish labels

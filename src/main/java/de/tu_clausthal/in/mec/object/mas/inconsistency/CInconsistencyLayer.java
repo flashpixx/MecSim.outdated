@@ -34,10 +34,12 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +49,7 @@ import java.util.Map;
 /**
  * layer with inconsistence data
  */
-public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
+public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
 {
 
     /**
@@ -69,17 +71,21 @@ public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
     /**
      * metric object to create the value of two objects
      **/
-    private final IMetric<T> m_metric;
-
+    private final IMetric<T> m_objectmetric;
+    /**
+     * metric to build the probability matrix
+     */
+    private final IMetric<DenseDoubleMatrix1D> m_probabilitymetric;
 
     /**
      * ctor - use numeric algorithm
      *
-     * @param p_metric object metric
+     * @param p_objectmetric object metric
      */
-    protected IInconsistencyLayer( final IMetric<T> p_metric )
+    public CInconsistencyLayer( final IMetric<T> p_objectmetric, final IMetric<DenseDoubleMatrix1D> p_probabilitymetric )
     {
-        m_metric = p_metric;
+        m_objectmetric = p_objectmetric;
+        m_probabilitymetric = p_probabilitymetric;
         m_algorithm = EAlgorithm.Numeric;
         m_iteration = 0;
         m_epsilon = 0;
@@ -89,13 +95,16 @@ public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
     /**
      * ctor - use stochastic algorithm
      *
-     * @param p_metric object metric
+     * @param p_objectmetric object metric
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    protected IInconsistencyLayer( final IMetric<T> p_metric, final int p_iteration, final double p_epsilon )
+    public CInconsistencyLayer( final IMetric<T> p_objectmetric, final IMetric<DenseDoubleMatrix1D> p_probabilitymetric, final int p_iteration,
+            final double p_epsilon
+    )
     {
-        m_metric = p_metric;
+        m_objectmetric = p_objectmetric;
+        m_probabilitymetric = p_probabilitymetric;
         m_algorithm = EAlgorithm.Stochastic;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
@@ -116,7 +125,7 @@ public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
         for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
         {
             // calculate metric value
-            final double l_value = m_metric.calculate( p_object, l_item.getKey() );
+            final double l_value = m_objectmetric.calculate( p_object, l_item.getKey() );
 
             // add value to the existing column and define new column
             l_item.getValue().getLeft().add( l_value );
@@ -130,6 +139,12 @@ public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
     public int getCalculationIndex()
     {
         return 500;
+    }
+
+    @Override
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+
     }
 
     @Override
@@ -166,7 +181,7 @@ public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
                 l_eigenvector = this.getLargestEigenvector( l_matrix );
 
             default:
-                throw new IllegalStateException( CCommon.getResourceString( IInconsistencyLayer.class, "algroithm" ) );
+                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algroithm" ) );
         }
 
 
@@ -222,6 +237,12 @@ public abstract class IInconsistencyLayer<T extends IAgent> extends ISingleLayer
 
 
         return l_probability;
+    }
+
+    @Override
+    public void release()
+    {
+
     }
 
     /**

@@ -28,7 +28,9 @@ import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
-import de.tu_clausthal.in.mec.object.mas.inconsistency.IInconsistencyLayer;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CBoolBeliefMetric;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
+import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
@@ -120,7 +122,7 @@ public class CBootstrap
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
-        p_simulation.getWorld().put( "Agent Inconsistency", new IInconsistencyLayer<>( p_iteration, p_epsilon ) );
+        p_simulation.getWorld().put( "Agent Inconsistency", new CInconsistencyLayer<CAgent>( new CBoolBeliefMetric<CAgent>(), null ) );
 
     }
 

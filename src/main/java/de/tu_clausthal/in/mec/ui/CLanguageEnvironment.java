@@ -36,48 +36,57 @@ public class CLanguageEnvironment
 {
 
     /**
-     * waypoint labels
+     * dynamic waypoint labels
      */
-    private static final Map<String, String> m_waypointLabels = new HashMap<String, String>()
+    private static final Map<String, String> m_dynamicWaypointLabels = new HashMap<String, String>()
     {{
-            //general wizard labels
             put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
-            put( "factorysettings", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
-            put( "generatorsettings", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
-            put( "carsettings", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
-            put( "customizing", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
             put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
             put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
             put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
 
-            //wizardstep#1 (factory settings)
-            put( "selectyourfactory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
-            put( "selectyouragentprogram", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
-
-            //wizardstep#2 (generator settings)
-            put( "selectyourgenerator", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
-            put( "selectyourcarcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
             put( "selectyourmean", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourmean" ) );
             put( "selectyourdeviation", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourdeviation" ) );
             put( "selectyourlowerbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourlowerbound" ) );
             put( "selectyourupperbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourupperbound" ) );
 
+            put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
+    }};
+
+    /**
+     * static waypoint labels
+     */
+    private static final Map<String, String> m_staticWaypointLabels = new HashMap<String, String>()
+    {{
+            //general wizard labels
+            put( "#mesim_source_factorySettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
+            put( "#mesim_source_generatorSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
+            put( "#mesim_source_carSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
+            put( "#mesim_source_customizing_label", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+
+            //wizardstep#1 (factory settings)
+            put( "#mecsim_source_selectFactory_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
+            put( "#mecsim_source_selectAgentProgram_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
+
+            //wizardstep#2 (generator settings)
+            put( "#mecsim_source_selectGenerator_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
+            put( "#mecsim_source_generatorInputCarcount_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
+
             //wizardstep#3 (car settings)
-            put( "speedsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
-            put( "selectspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectspeedprob" ) );
-            put( "maxspeedsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
-            put( "selectmaxspeedprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxspeedprob" ) );
-            put( "accsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
-            put( "selectaccprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectaccprob" ) );
-            put( "decsettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
-            put( "selectdecprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectdecprob" ) );
-            put( "lingerersettingslabel", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
-            put( "selectlingerprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
+            put( "#mecsim_source_speedSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
+            put( "#mecsim_source_selectSpeedProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectspeedprob" ) );
+            put( "#mecsim_source_maxSpeedSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
+            put( "#mecsim_source_selectMaxSpeedProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxspeedprob" ) );
+            put( "#mecsim_source_accSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
+            put( "#mecsim_source_selectAccProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectaccprob" ) );
+            put( "#mecsim_source_decSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
+            put( "#mecsim_source_selectDecProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectdecprob" ) );
+            put( "#mecsim_source_lingerSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
+            put( "#mecsim_source_selectLingerProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
 
             //wizardstep#4 (customozing)
-            put( "selecttoolnamelabel", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
-            put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
-            put( "selecttoolcolor", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
+            put( "#mecsim_source_toolName_label", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
+            put( "#mecsim_source_toolColor_label", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
         }};
 
     /**
@@ -85,9 +94,14 @@ public class CLanguageEnvironment
      *
      * @return
      */
-    private final Map<String, String> web_static_getwaypointlabels()
+    private final Map<String, String> web_static_getstaticwaypointlabels()
     {
-        return m_waypointLabels;
+        return m_staticWaypointLabels;
+    }
+
+    private final Map<String, String> web_static_getdynamicwaypointlabels()
+    {
+        return m_dynamicWaypointLabels;
     }
 
 }

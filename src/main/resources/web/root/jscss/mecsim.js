@@ -132,7 +132,7 @@ var MecSim = (function (px_modul) {
      * @note the keys of the returned json object are the labels of the DOM elements
      * @param pc_group the group label, that matches the URL part
     **/
-    px_modul.language = function( pc_group )
+    px_modul.language = function( pc_group, pc_callback )
     {
         $.ajax({
             url : "/clanguageenvironment/"+pc_group,
@@ -142,6 +142,7 @@ var MecSim = (function (px_modul) {
                 $.each(po_data, function(pc_key, pc_text){
                     $(pc_key).text(pc_text);
                 });
+                pc_callback();
             }
         });
     }

@@ -58,44 +58,37 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.getLabels();
         SourcePanel.buildToolbox();
 
+        //load template if panel clicked
         SourcePanel.settings.dom.panel.on("click", function(data){
             MecSim.ui().content().empty();
             MecSim.ui().content().load("template/source.htm", function(){
 
-                //general stuff after template is loaded
+                //get dom elements and set labels
                 SourcePanel.getDOMElements();
-                SourcePanel.setLabels();
+                SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
+                MecSim.language("getstaticwaypointlabels", function(){
 
-                //create widget
-                SourcePanel.settings.obj.widget = Widget.createWidget(
-                    SourcePanel.settings.dom.widget,
-                    {
-                        name     : SourcePanel.settings.labels.wizardwidget,
-                        width    : 850
-                    }
-                );
+                    //create widget
+                    SourcePanel.settings.obj.widget = Widget.createWidget(
+                        SourcePanel.settings.dom.widget,
+                        {
+                            name     : SourcePanel.settings.labels.wizardwidget,
+                            width    : 850
+                        }
+                    );
 
-                //create wizard
-                SourcePanel.settings.obj.wizard = SourcePanel.settings.dom.wizard.steps({
-                    headerTag: "h3",
-                    bodyTag: "section",
-                    transitionEffect: "slideLeft",
-                    stepsOrientation: "vertical",
-                    autoFocus: true,
-                    onInit: SourcePanel.buildContent,
-                    onStepChanging: SourcePanel.validateWizardStep,
-                    onFinished: SourcePanel.finishWizard
+                    //create wizard
+                    SourcePanel.settings.obj.wizard = SourcePanel.settings.dom.wizard.steps({
+                        headerTag: "h3",
+                        bodyTag: "section",
+                        transitionEffect: "slideLeft",
+                        stepsOrientation: "vertical",
+                        autoFocus: true,
+                        onInit: SourcePanel.buildContent,
+                        onStepChanging: SourcePanel.validateWizardStep,
+                        onFinished: SourcePanel.finishWizard
+                    });
                 });
-
-                //get dom elements (needed because dom tree changes)
-                SourcePanel.getDOMElements();
-
-                SourcePanel.settings.dom.carSettings.accordion({collapsible: true, heightStyle: "content", active: false});
-
-                //listen to ui elements
-                SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
-                SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
-
             });
         });
 
@@ -105,7 +98,7 @@ var SourcePanel = ( function (px_module) {
         });
     };
 
-    //method to get DOM Elements (template)
+    //method to get DOM Elements
     px_module.getDOMElements = function(){
 
         //dom elements (no labels)
@@ -116,63 +109,31 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
         SourcePanel.settings.dom.agentContainer                  = $("#mecsim_source_agentContainer");
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
-        SourcePanel.settings.dom.generatorInput1                 = $("#mecsim_source_generatorInput1");
+        SourcePanel.settings.dom.generatorInputCarcount          = $("#mecsim_source_generatorInputCarcount");
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
         SourcePanel.settings.dom.generatorInput3                 = $("#mecsim_source_generatorInput3");
         SourcePanel.settings.dom.carSettings                     = $("#mecsim_source_carSettings");
+        SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
 
-        //general wizard labels
-        SourcePanel.settings.dom.label.factorysettings           = $("#mesim_source_factorySettings_label");
-        SourcePanel.settings.dom.label.generatorsettings         = $("#mesim_source_generatorSettings_label");
-        SourcePanel.settings.dom.label.carsettings               = $("#mesim_source_carSettings_label");
-        SourcePanel.settings.dom.label.customizing               = $("#mesim_source_customizing_label");
-
-        //wizardstep#1 (factory settings)
-        SourcePanel.settings.dom.label.selectyourfactory         = $("#mecsim_source_selectFactory_label");
-        SourcePanel.settings.dom.label.selectyouragentprogram    = $("#mecsim_source_selectAgentProgram_label");
-
-        //wizardstep#2 (generator settings)
-        SourcePanel.settings.dom.label.selectyourgenerator       = $("#mecsim_source_selectGenerator_label");
-        SourcePanel.settings.dom.label.selectyourcarcount        = $("#mecsim_source_generatorInput1_label");
+        //dom elements (dynamic labels)
         SourcePanel.settings.dom.label.generatorinput2label      = $("#mecsim_source_generatorInput2_label");
         SourcePanel.settings.dom.label.generatorinput3label      = $("#mecsim_source_generatorInput3_label");
-
-        //wizardstep#3 (car settings)
-        SourcePanel.settings.dom.label.speedsettingslabel        = $("#mecsim_source_speedSettings_label");
-        SourcePanel.settings.dom.label.selectspeedprob           = $("#mecsim_source_selectSpeedProb_label");
         SourcePanel.settings.dom.label.speedprobinput1label      = $("#mecsim_source_speedProbInput1_label");
         SourcePanel.settings.dom.label.speedprobinput2label      = $("#mecsim_source_speedProbInput2_label");
-
-        SourcePanel.settings.dom.label.maxspeedsettingslabel     = $("#mecsim_source_maxSpeedSettings_label");
-        SourcePanel.settings.dom.label.selectmaxspeedprob        = $("#mecsim_source_selectMaxSpeedProb_label");
         SourcePanel.settings.dom.label.maxSpeedprobinput1label   = $("#mecsim_source_maxSpeedProbInput1_label");
         SourcePanel.settings.dom.label.maxSpeedprobinput2label   = $("#mecsim_source_maxSpeedProbInput2_label");
-
-        SourcePanel.settings.dom.label.accsettingslabel          = $("#mecsim_source_accSettings_label");
-        SourcePanel.settings.dom.label.selectaccprob             = $("#mecsim_source_selectAccProb_label");
         SourcePanel.settings.dom.label.accprobinput1label        = $("#mecsim_source_accProbInput1_label");
         SourcePanel.settings.dom.label.accprobinput2label        = $("#mecsim_source_accProbInput2_label");
-
-        SourcePanel.settings.dom.label.decsettingslabel          = $("#mecsim_source_decSettings_label");
-        SourcePanel.settings.dom.label.selectdecprob             = $("#mecsim_source_selectDecProb_label");
         SourcePanel.settings.dom.label.decprobinput1label        = $("#mecsim_source_decProbInput1_label");
         SourcePanel.settings.dom.label.decprobinput2label        = $("#mecsim_source_decProbInput2_label");
-
-        SourcePanel.settings.dom.label.lingerersettingslabel     = $("#mecsim_source_lingerSettings_label");
-        SourcePanel.settings.dom.label.selectlingerprob          = $("#mecsim_source_selectLingerProb_label");
         SourcePanel.settings.dom.label.lingerprobinput1label     = $("#mecsim_source_lingerProbInput1_label");
         SourcePanel.settings.dom.label.lingerprobinput2label     = $("#mecsim_source_lingerProbInput2_label");
-
-        //wizardstep#4 (customozing)
-        SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
-        SourcePanel.settings.dom.label.selecttoolnamelabel       = $("#mecsim_source_toolName_label");
-        SourcePanel.settings.dom.label.selecttoolcolor           = $("#mecsim_source_toolColor_label");
      };
 
-    //method to get source-ui related labels
+    //method to get source-ui related labels which are dynamic
     px_module.getLabels = function(){
         $.ajax({
-            url     : "/clanguageenvironment/getwaypointlabels",
+            url     : "/clanguageenvironment/getdynamicwaypointlabels",
             success : function( px_data ){
 
                 for(var key in px_data){
@@ -180,20 +141,6 @@ var SourcePanel = ( function (px_module) {
                 }
             }
         });
-    };
-
-    //method to set source-ui related labels
-    px_module.setLabels = function(){
-
-        SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
-        for(var key1 in SourcePanel.settings.dom.label){
-            if(!SourcePanel.settings.labels.hasOwnProperty(key1)){
-                //console.log("No Label found for: \"" + key1 + "\"");
-                continue;
-            }
-
-            SourcePanel.settings.dom.label[key1].text(SourcePanel.settings.labels[key1]);
-        }
     };
 
     //method to create toolbox
@@ -233,6 +180,8 @@ var SourcePanel = ( function (px_module) {
 
     //method to build up the wizard content
     px_module.buildContent = function() {
+
+        SourcePanel.getDOMElements();
 
         //create selectmenu with factory types
         $.ajax({
@@ -278,6 +227,9 @@ var SourcePanel = ( function (px_module) {
             }
         });
 
+        //create carsettings accordion
+        SourcePanel.settings.dom.carSettings.accordion({collapsible: true, heightStyle: "content", active: false});
+
         //create colorpicker
         SourcePanel.settings.obj.colorpicker = $("#mecsim_source_colorpicker").spectrum({
             showPaletteOnly: true,
@@ -291,6 +243,10 @@ var SourcePanel = ( function (px_module) {
                 ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
             ]
         });
+
+        //listen to different ui elements
+        SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
+        SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
     };
 
     //method to validate if the current wizard step is valide
@@ -304,7 +260,7 @@ var SourcePanel = ( function (px_module) {
 
         //validate second step
         if(currentIndex===1){
-            var generatorInput1 = Number(SourcePanel.settings.dom.generatorInput1.val());
+            var generatorInput1 = Number(SourcePanel.settings.dom.generatorInputCarcount.val());
             var generatorInput2 = Number(SourcePanel.settings.dom.generatorInput2.val());
             var generatorInput3 = Number(SourcePanel.settings.dom.generatorInput3.val());
 
@@ -332,7 +288,7 @@ var SourcePanel = ( function (px_module) {
                         "factory"           : SourcePanel.settings.dom.selectFactory.val(),
                         "agentprogram"      : SourcePanel.settings.dom.selectAgentProgram.val(),
                         "generator"         : SourcePanel.settings.dom.selectGenerator.val(),
-                        "generatorInput1"   : SourcePanel.settings.dom.generatorInput1.val(),
+                        "generatorInput1"   : SourcePanel.settings.dom.generatorInputCarcount.val(),
                         "generatorInput2"   : SourcePanel.settings.dom.generatorInput2.val(),
                         "generatorInput3"   : SourcePanel.settings.dom.generatorInput3.val(),
                         "name"              : SourcePanel.settings.dom.toolName.val(),
@@ -376,7 +332,7 @@ var SourcePanel = ( function (px_module) {
 
     //method to update generator settings
     px_module.updateGeneratorSettings = function(){
-        SourcePanel.settings.dom.generatorInput1.val(3);
+        SourcePanel.settings.dom.generatorInputCarcount.val(3);
         if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
             SourcePanel.settings.dom.label.generatorinput2label.text(SourcePanel.settings.labels.selectyourlowerbound);
             SourcePanel.settings.dom.label.generatorinput3label.text(SourcePanel.settings.labels.selectyourupperbound);

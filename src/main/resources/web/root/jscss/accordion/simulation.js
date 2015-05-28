@@ -151,33 +151,33 @@ var SimulationPanel = ( function (px_module) {
     px_module.ui = function() {return {
 
         /** reference to configuration button **/
-        "configuration_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_config" : $("#mecsim_simulation_config"); },
+        configuration_button            : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_config"         : $("#mecsim_simulation_config"); },
         /** reference to local button **/
-        "local_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_local"    : $("#mecsim_simulation_local"); },
+        local_button                    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_local"          : $("#mecsim_simulation_local"); },
         /** reference to start button **/
-        "start_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_start"   : $("#mecsim_simulation_start"); },
+        start_button                    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_start"          : $("#mecsim_simulation_start"); },
         /** reference to stop button **/
-        "stop_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_stop" : $( "#mecsim_simulation_stop" ); },
+        stop_button                     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_stop"           : $( "#mecsim_simulation_stop" ); },
         /** reference to reset button **/
-        "reset_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_reset"   : $("#mecsim_simulation_reset"); },
+        reset_button                    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_reset"          : $("#mecsim_simulation_reset"); },
         /** reference to 'load simulation' button **/
-        "load_simulation_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_load"   : $("#mecsim_simulation_load"); },
+        load_simulation_button          : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_load"           : $("#mecsim_simulation_load"); },
         /** reference to 'save simulation' button **/
-        "save_simulation_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_save"   : $("#mecsim_simulation_save"); },
+        save_simulation_button          : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_save"           : $("#mecsim_simulation_save"); },
         /** reference to speed slider **/
-        "speed_slider" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed_slider"   : $("#mecsim_simulation_speed_slider"); },
+        speed_slider                    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed_slider"   : $("#mecsim_simulation_speed_slider"); },
         /** reference to speed label **/
-        "speed_label" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed"   : $("#mecsim_simulation_speed"); },
+        speed_label                     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_speed"          : $("#mecsim_simulation_speed"); },
         /** reference to accordion simulation panel h3 element **/
-        "mecsim_simulation_panel" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_panel"   : $("#mecsim_simulation_panel"); },
+        mecsim_simulation_panel         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_simulation_panel"          : $("#mecsim_simulation_panel"); },
         /** reference to configuration tabs **/
-        "mecsim_configuration_tabs" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_configuration_tabs"   : $("#mecsim_configuration_tabs"); },
+        mecsim_configuration_tabs       : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_configuration_tabs"        : $("#mecsim_configuration_tabs"); },
         /** reference to language select menu**/
-        "mecsim_config_select_language" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_select_language"   : $("#mecsim_config_select_language"); },
+        mecsim_config_select_language   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_select_language"    : $("#mecsim_config_select_language"); },
         /** reference to reset config flag**/
-        "mecsim_config_reset" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"   : $("#mecsim_config_reset"); },
+        mecsim_config_reset             : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"              : $("#mecsim_config_reset"); },
         /** reference to extract mas-files config flag**/
-        "mecsim_config_extract" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"   : $("#mecsim_config_extract"); }
+        mecsim_config_extract           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"            : $("#mecsim_config_extract"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

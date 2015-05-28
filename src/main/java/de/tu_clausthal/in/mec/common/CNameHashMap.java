@@ -207,6 +207,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
             }
 
             @Override
+            @SuppressWarnings( "unchecked" )
             public Map.Entry<CPath, Object> next()
             {
                 final Map.Entry<String, Object> l_item = m_stackiterator.peek().next();

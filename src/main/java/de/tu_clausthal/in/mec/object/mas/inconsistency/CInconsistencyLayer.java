@@ -159,7 +159,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * adds a new object to the
      * inconsistency structure
      *
-     * @param p_object
+     * @param p_object new object
      */
     public synchronized void add( final T p_object )
     {
@@ -251,7 +251,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * removes an object from the
      * inconsistency structure
      *
-     * @param p_object
+     * @param p_object removing object
      */
     public synchronized void remove( final T p_object )
     {

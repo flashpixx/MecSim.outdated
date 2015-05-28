@@ -29,6 +29,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
+import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
@@ -72,20 +73,15 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
      * metric object to create the value of two objects
      **/
     private final IMetric<T> m_objectmetric;
-    /**
-     * metric to build the probability matrix
-     */
-    private final IMetric<DenseDoubleMatrix1D> m_probabilitymetric;
 
     /**
      * ctor - use numeric algorithm
      *
      * @param p_objectmetric object metric
      */
-    public CInconsistencyLayer( final IMetric<T> p_objectmetric, final IMetric<DenseDoubleMatrix1D> p_probabilitymetric )
+    public CInconsistencyLayer( final IMetric<T> p_objectmetric )
     {
         m_objectmetric = p_objectmetric;
-        m_probabilitymetric = p_probabilitymetric;
         m_algorithm = EAlgorithm.Numeric;
         m_iteration = 0;
         m_epsilon = 0;
@@ -99,12 +95,11 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistencyLayer( final IMetric<T> p_objectmetric, final IMetric<DenseDoubleMatrix1D> p_probabilitymetric, final int p_iteration,
+    public CInconsistencyLayer( final IMetric<T> p_objectmetric, final int p_iteration,
             final double p_epsilon
     )
     {
         m_objectmetric = p_objectmetric;
-        m_probabilitymetric = p_probabilitymetric;
         m_algorithm = EAlgorithm.Stochastic;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
@@ -135,6 +130,29 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
         m_data.put( p_object, new MutablePair<>( l_column, new Double( 0 ) ) );
     }
 
+    /**
+     * builds the matrix
+     *
+     * @return matrix
+     */
+    private DoubleMatrix2D buildMatrix()
+    {
+        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
+        int i = 0;
+        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
+            l_matrix.viewColumn( i++ ).assign(
+                    new DenseDoubleMatrix1D(
+                            ArrayUtils.toPrimitive(
+                                    l_item.getValue().getLeft().toArray(
+                                            new Double[m_data.size()]
+                                    )
+                            )
+                    )
+            );
+
+        return l_matrix;
+    }
+
     @Override
     public int getCalculationIndex()
     {
@@ -154,19 +172,10 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
             return;
 
 
-        // build matrix
-        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
-        int i = 0;
-        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
-            l_matrix.viewColumn( i++ ).assign(
-                    new DenseDoubleMatrix1D(
-                            ArrayUtils.toPrimitive(
-                                    l_item.getValue().getLeft().toArray(
-                                            new Double[m_data.size()]
-                                    )
-                            )
-                    )
-            );
+        // build matrix and create markow-chain
+        final DoubleMatrix2D l_matrix = this.buildMatrix();
+        for ( int i = 0; i < l_matrix.rows(); ++i )
+            l_matrix.viewRow( i ).assign( Mult.div( l_matrix.viewRow( i ).zSum() ) );
 
 
         // get the stationary probility with eigen decomposition
@@ -186,7 +195,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
 
 
         // set inconsistency value for each entry
-        i = 0;
+        int i = 0;
         for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
             l_item.getValue().setValue( l_eigenvector.get( i++ ) );
     }

@@ -75,7 +75,7 @@ public class CLanguageEnvironment
             put( "selectlingerprob", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
 
             //wizardstep#4 (customozing)
-            put( "selecttoolname", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolname" ) );
+            put( "selecttoolnamelabel", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
             put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
             put( "selecttoolcolor", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
         }};

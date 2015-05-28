@@ -28,6 +28,7 @@ import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -51,7 +52,10 @@ import java.util.Map;
  */
 public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 {
-
+    /**
+     * algebra object
+     */
+    private static final Algebra c_algebra = new Algebra();
     /**
      * algorithm to calculate stationary probability
      **/
@@ -102,6 +106,53 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_algorithm = EAlgorithm.Stochastic;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
+    }
+
+    /**
+     * get the largest eigen vector with QR decomposition
+     *
+     * @param p_matrix matrix
+     * @return largest eigenvector (not normalized)
+     */
+    private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
+    {
+        final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
+
+        // gets the position of the largest eigenvalue
+        final DoubleMatrix1D l_eigenvalues = l_eigen.getRealEigenvalues();
+
+        int l_position = 0;
+        for ( int i = 0; i < l_eigenvalues.size(); ++i )
+            if ( l_eigenvalues.get( i ) > l_eigenvalues.get( l_position ) )
+                l_position = i;
+
+        // gets the largest eigenvector
+        return l_eigen.getV().viewColumn( l_position );
+    }
+
+    /**
+     * get the largest eigen vector based on the perron-frobenius theorem
+     *
+     * @param p_matrix matrix
+     * @param p_iteration number of iterations
+     * @return largest eigenvector (not normalized)
+     *
+     * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
+     */
+    private static DoubleMatrix1D getPerronFrobenius( final DoubleMatrix2D p_matrix, final int p_iteration )
+    {
+        DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
+        for ( int i = 0; i < p_iteration; ++i )
+        {
+            l_probability = c_algebra.mult( p_matrix, l_probability );
+            l_probability.assign(
+                    Mult.div(
+                            c_algebra.norm2( l_probability )
+                    )
+            );
+        }
+
+        return l_probability;
     }
 
     /**
@@ -158,7 +209,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return 500;
     }
 
-
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
@@ -169,7 +219,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         // build matrix and create markow-chain
         final DoubleMatrix2D l_matrix = this.buildMatrix();
         for ( int i = 0; i < l_matrix.rows(); ++i )
-            l_matrix.viewRow( i ).assign( Mult.div( l_matrix.viewRow( i ).zSum() ) );
+            l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
 
 
         // get the stationary probility with eigen decomposition
@@ -177,15 +227,18 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         switch ( m_algorithm )
         {
             case Stochastic:
-                l_eigenvector = this.getPerronFrobenius( l_matrix );
+                l_eigenvector = getPerronFrobenius( l_matrix, m_iteration );
                 break;
 
             case Numeric:
-                l_eigenvector = this.getLargestEigenvector( l_matrix );
+                l_eigenvector = getLargestEigenvector( l_matrix );
 
             default:
-                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algroithm" ) );
+                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algorithm" ) );
         }
+
+        // normalize vector (to probabilites)
+        l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
 
 
         // set inconsistency value for each entry
@@ -193,55 +246,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
             l_item.getValue().setValue( l_eigenvector.get( i++ ) );
     }
-
-    /**
-     * get the largest eigen vector with QR decomposition
-     *
-     * @param p_matrix matrix
-     * @return largest eigenvector
-     */
-    private DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
-    {
-        final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
-
-        // gets the position of the largest eigenvalue
-        final DoubleMatrix1D l_eigenvalues = l_eigen.getRealEigenvalues();
-
-        int l_position = 0;
-        for ( int i = 0; i < l_eigenvalues.size(); ++i )
-            if ( l_eigenvalues.get( i ) > l_eigenvalues.get( l_position ) )
-                l_position = i;
-
-        // gets the largest eigenvector
-        return l_eigen.getV().viewColumn( l_position );
-    }
-
-    /**
-     * get the largest eigen vector based on the perron-frobenius theorem
-     *
-     * @param p_matrix matrix
-     * @return largest eigenvector
-     *
-     * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
-     */
-    private DoubleMatrix1D getPerronFrobenius( final DoubleMatrix2D p_matrix )
-    {
-        DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
-        for ( int i = 0; i < m_iteration; ++i )
-        {
-            //l_probability =
-
-            //l_probability = l_probability.mmul( l_matrix );
-            //l_probability = l_probability.div( l_probability.norm2() );
-        }
-
-        // normalisiere den Eigenvektor um Wahrscheinlichkeiten zu erhalten
-        //l_probability = l_probability.div( l_probability.sum() );
-
-
-        return l_probability;
-    }
-
 
     /**
      * removes an object from the

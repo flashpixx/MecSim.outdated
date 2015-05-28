@@ -26,10 +26,11 @@ package de.tu_clausthal.in.mec.runtime.core;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
+import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ISingleLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
@@ -214,7 +215,7 @@ public class CMainLoop implements Runnable
                 // run all layer objects - only multi-, evaluate- & network layer can store other objects
                 for ( final ILayer l_layer : l_layerorder )
                 {
-                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) )
+                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) || ( l_layer instanceof ISingleEvaluateLayer ) )
                         continue;
 
                     if ( l_layer instanceof IMultiLayer )
@@ -223,9 +224,9 @@ public class CMainLoop implements Runnable
                         continue;
                     }
 
-                    if ( l_layer instanceof IEvaluateLayer )
+                    if ( l_layer instanceof IMultiEvaluateLayer )
                     {
-                        this.invokeTasks( l_layer, (IEvaluateLayer) l_layer );
+                        this.invokeTasks( l_layer, (IMultiEvaluateLayer) l_layer );
                         continue;
                     }
 

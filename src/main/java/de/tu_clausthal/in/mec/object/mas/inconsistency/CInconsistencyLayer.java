@@ -32,15 +32,13 @@ import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.ISingleLayer;
+import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +48,7 @@ import java.util.Map;
 /**
  * layer with inconsistence data
  */
-public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
+public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 {
 
     /**
@@ -159,11 +157,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
         return 500;
     }
 
-    @Override
-    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-
-    }
 
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )
@@ -264,6 +257,13 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleLayer
     {
         if ( ( p_object == null ) || ( !m_data.containsKey( p_object ) ) )
             return;
+    }
+
+
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
     }
 
 

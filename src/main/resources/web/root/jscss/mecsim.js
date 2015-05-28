@@ -142,7 +142,9 @@ var MecSim = (function (px_modul) {
                 $.each(po_data, function(pc_key, pc_text){
                     $(pc_key).text(pc_text);
                 });
-                pc_callback();
+
+                if(pc_callback !== undefined || pc_callback !==null)
+                    pc_callback();
             }
         });
     }

@@ -49,6 +49,7 @@ import java.util.Map;
 
 /**
  * layer with inconsistence data
+ * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
 public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 {
@@ -298,7 +299,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     {
         @CFieldFilter.CAgent( bind = false )
         final T m_bind;
-
 
         /**
          * ctor

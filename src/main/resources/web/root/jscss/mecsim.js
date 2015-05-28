@@ -136,7 +136,7 @@ var MecSim = (function (px_modul) {
     {
         $.ajax({
             url : "/clanguageenvironment/"+pc_group,
-            type: "POST",
+            type: "GET",
             success : function( po_data )
             {
                 $.each(po_data, function(pc_key, pc_text){

@@ -23,7 +23,6 @@
 
 /** todo collection for source-ui ck
 TODO responsive wizard content height
-TODO read and write labels in a better way
 TODO same selectmenu (consistent)
 TODO use next previous finish labels
 TODO check last jquery slectors
@@ -175,44 +174,9 @@ var SourcePanel = ( function (px_module) {
             url     : "/clanguageenvironment/getwaypointlabels",
             success : function( px_data ){
 
-                //general wizard labels
-                SourcePanel.settings.labels.wizardwidget = px_data.wizardwidget;
-                SourcePanel.settings.labels.factorysettings = px_data.factorysettings;
-                SourcePanel.settings.labels.generatorsettings = px_data.generatorsettings;
-                SourcePanel.settings.labels.carsettings = px_data.carsettings;
-                SourcePanel.settings.labels.customizing = px_data.customizing;
-                SourcePanel.settings.labels.previous = px_data.previous;
-                SourcePanel.settings.labels.next = px_data.next;
-                SourcePanel.settings.labels.finish = px_data.finish;
-
-                //wizardstep#1 (factory settings)
-                SourcePanel.settings.labels.selectyourfactory = px_data.selectyourfactory;
-                SourcePanel.settings.labels.selectyouragentprogram = px_data.selectyouragentprogram;
-
-                //wizardstep#2 (generator settings)
-                SourcePanel.settings.labels.selectyourgenerator = px_data.selectyourgenerator;
-                SourcePanel.settings.labels.selectyourcarcount = px_data.selectyourcarcount;
-                SourcePanel.settings.labels.selectyourmean = px_data.selectyourmean;
-                SourcePanel.settings.labels.selectyourdeviation = px_data.selectyourdeviation;
-                SourcePanel.settings.labels.selectyourlowerbound = px_data.selectyourlowerbound;
-                SourcePanel.settings.labels.selectyourupperbound = px_data.selectyourupperbound;
-
-                //wizardstep#3 (car settings)
-                SourcePanel.settings.labels.speedsettingslabel = px_data.speedsettingslabel;
-                SourcePanel.settings.labels.selectspeedprob = px_data.selectspeedprob;
-                SourcePanel.settings.labels.maxspeedsettingslabel = px_data.maxspeedsettingslabel;
-                SourcePanel.settings.labels.selectmaxspeedprob = px_data.selectmaxspeedprob;
-                SourcePanel.settings.labels.accsettingslabel = px_data.accsettingslabel;
-                SourcePanel.settings.labels.selectaccprob = px_data.selectaccprob;
-                SourcePanel.settings.labels.decsettingslabel = px_data.decsettingslabel;
-                SourcePanel.settings.labels.selectdecprob = px_data.selectdecprob;
-                SourcePanel.settings.labels.lingerersettingslabel = px_data.lingerersettingslabel;
-                SourcePanel.settings.labels.selectlingerprob = px_data.selectlingerprob;
-
-                //wizardstep#4 (customozing)
-                SourcePanel.settings.labels.selecttoolname = px_data.selecttoolname;
-                SourcePanel.settings.labels.selecttoolnamevalue = px_data.selecttoolnamevalue;
-                SourcePanel.settings.labels.selecttoolcolor = px_data.selecttoolcolor;
+                for(var key in px_data){
+                    SourcePanel.settings.labels[key] = px_data[key];
+                }
             }
         });
     };

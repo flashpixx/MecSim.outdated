@@ -70,16 +70,16 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * metric object to create the value of two objects
      **/
-    private final IMetric<T> m_objectmetric;
+    private final IMetric<T> m_metric;
 
     /**
      * ctor - use numeric algorithm
      *
-     * @param p_objectmetric object metric
+     * @param p_metric object metric
      */
-    public CInconsistencyLayer( final IMetric<T> p_objectmetric )
+    public CInconsistencyLayer( final IMetric<T> p_metric )
     {
-        m_objectmetric = p_objectmetric;
+        m_metric = p_metric;
         m_algorithm = EAlgorithm.Numeric;
         m_iteration = 0;
         m_epsilon = 0;
@@ -89,15 +89,15 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * ctor - use stochastic algorithm
      *
-     * @param p_objectmetric object metric
+     * @param p_metric object metric
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistencyLayer( final IMetric<T> p_objectmetric, final int p_iteration,
+    public CInconsistencyLayer( final IMetric<T> p_metric, final int p_iteration,
             final double p_epsilon
     )
     {
-        m_objectmetric = p_objectmetric;
+        m_metric = p_metric;
         m_algorithm = EAlgorithm.Stochastic;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
@@ -118,7 +118,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
         {
             // calculate metric value
-            final double l_value = m_objectmetric.calculate( p_object, l_item.getKey() );
+            final double l_value = m_metric.calculate( p_object, l_item.getKey() );
 
             // add value to the existing column and define new column
             l_item.getValue().getLeft().add( l_value );
@@ -241,11 +241,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return l_probability;
     }
 
-    @Override
-    public void release()
-    {
-
-    }
 
     /**
      * removes an object from the

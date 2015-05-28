@@ -59,8 +59,13 @@ public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
     }
 
     @Override
+    public final void release()
+    {
+
+    }
+
+    @Override
     public void step( final int p_currentstep, final ILayer p_layer )
     {
     }
-
 }

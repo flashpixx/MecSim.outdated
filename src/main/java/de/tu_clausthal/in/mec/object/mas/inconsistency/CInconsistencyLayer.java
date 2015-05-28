@@ -39,6 +39,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -252,6 +253,13 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     {
         if ( ( p_object == null ) || ( !m_data.containsKey( p_object ) ) )
             return;
+
+        // get index of the removing item
+        final int l_position = new ArrayList<T>( m_data.keySet() ).indexOf( p_object );
+        m_data.remove( p_object );
+
+        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
+            l_item.getValue().getLeft().remove( l_position );
     }
 
 

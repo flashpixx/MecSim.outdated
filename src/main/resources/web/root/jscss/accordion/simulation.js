@@ -43,9 +43,6 @@ var SimulationPanel = ( function (px_module) {
 
         "add_reset_flag" : function(reset) {
             if(!reset){
-                $("#reset_no").attr("checked", "checked");
-            }else{
-                $("#reset_yes").attr("checked", "checked");
             }
         },
 
@@ -82,7 +79,12 @@ var SimulationPanel = ( function (px_module) {
                 SimulationPanel.ui_actions().load_configuration_data();
                 SimulationPanel.ui().mecsim_configuration_tabs().tabs();
                 SimulationPanel.ui().mecsim_config_select_language().selectmenu();
-                SimulationPanel.ui().mecsim_config_reset().buttonset();
+                SimulationPanel.ui().mecsim_config_reset().bootstrapSwitch({
+                    size: "mini"
+                });
+                SimulationPanel.ui().mecsim_config_extract().bootstrapSwitch({
+                    size: "mini"
+                });
              });
         });
 
@@ -173,7 +175,9 @@ var SimulationPanel = ( function (px_module) {
         /** reference to language select menu**/
         "mecsim_config_select_language" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_select_language"   : $("#mecsim_config_select_language"); },
         /** reference to reset config flag**/
-        "mecsim_config_reset" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"   : $("#mecsim_config_reset"); }
+        "mecsim_config_reset" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"   : $("#mecsim_config_reset"); },
+        /** reference to extract mas-files config flag**/
+        "mecsim_config_extract" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"   : $("#mecsim_config_extract"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

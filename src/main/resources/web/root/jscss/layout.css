@@ -98,6 +98,10 @@ select
     white-space: nowrap;
 }
 
+.bootstrap-switch-handle-on.bootstrap-switch-primary{
+    background: #008C4F !important;
+}
+
 /******************************* id definitions ***********************************************************************/
 
 #mecsim_configuration_tabs{
@@ -246,3 +250,4 @@ path.graphtest-arc {
   stroke: #2ca02c;
 }
 /*** end testing ***/
+

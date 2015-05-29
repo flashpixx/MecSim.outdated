@@ -360,18 +360,47 @@ var SourcePanel = ( function (px_module) {
 
     //method to update generator settings
     px_module.updateGeneratorSettings = function(){
-        SourcePanel.settings.dom.generatorInputCarcount.val(3);
-        if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-            SourcePanel.settings.dom.label.generatorinput2label.text(SourcePanel.settings.labels.selectyourlowerbound);
-            SourcePanel.settings.dom.label.generatorinput3label.text(SourcePanel.settings.labels.selectyourupperbound);
-            SourcePanel.settings.dom.generatorInput2.val(3);
-            SourcePanel.settings.dom.generatorInput3.val(7);
-        }else{
-            SourcePanel.settings.dom.label.generatorinput2label.text(SourcePanel.settings.labels.selectyourmean);
-            SourcePanel.settings.dom.label.generatorinput3label.text(SourcePanel.settings.labels.selectyourdeviation);
-            SourcePanel.settings.dom.generatorInput2.val(5);
-            SourcePanel.settings.dom.generatorInput3.val(1);
-        }
+
+        SourcePanel.updateLabels(
+            SourcePanel.settings.dom.selectGenerator.val(),
+            [
+                {
+                    expected: ["uniform distribution", "Gleichverteilung"],
+                    config : [
+                        { label : SourcePanel.settings.dom.label.generatorinput2label, text  : SourcePanel.settings.labels.selectyourlowerbound },
+                        { label : SourcePanel.settings.dom.label.generatorinput3label, text  : SourcePanel.settings.labels.selectyourupperbound }
+                    ]
+                },
+                {
+                    expected: ["default"],
+                    config : [
+                        { label : SourcePanel.settings.dom.label.generatorinput2label, text  : SourcePanel.settings.labels.selectyourmean },
+                        { label : SourcePanel.settings.dom.label.generatorinput3label, text  : SourcePanel.settings.labels.selectyourdeviation }
+                    ]
+                }
+            ]
+        );
+    };
+
+    //generic method to upate labels
+    px_module.updateLabels = function(checkElement, options){
+        checkElement = SourcePanel.settings.dom.selectGenerator.val();
+
+        var foundflag = false;
+
+        options.forEach(function(p_option){
+            if(foundflag)
+                return;
+
+            p_option.expected.forEach(function(p_expected){
+                if(checkElement === p_expected || p_expected === "default"){
+                    p_option.config.forEach(function(entry){
+                        entry.label.text(entry.text);
+                    });
+                    foundflag = true;
+                }
+            });
+        });
     };
 
     return px_module;

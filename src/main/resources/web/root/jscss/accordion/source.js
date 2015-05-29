@@ -90,6 +90,7 @@ var SourcePanel = ( function (px_module) {
 
                     //additional initial value
                     SourcePanel.settings.dom.selectRadius.val(0.75);
+                    SourcePanel.settings.dom.generatorInputCarcount.val(1);
                     SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
                 });
             });
@@ -254,7 +255,7 @@ var SourcePanel = ( function (px_module) {
             togglePaletteOnly: true,
             togglePaletteMoreText: 'more',
             togglePaletteLessText: 'less',
-            color: 'blanchedalmond',
+            color: '#008C4F',
             palette: [
                 ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
                 ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
@@ -367,15 +368,19 @@ var SourcePanel = ( function (px_module) {
                 {
                     expected: ["uniform distribution", "Gleichverteilung"],
                     config : [
-                        { label : SourcePanel.settings.dom.label.generatorinput2label, text  : SourcePanel.settings.labels.selectyourlowerbound },
-                        { label : SourcePanel.settings.dom.label.generatorinput3label, text  : SourcePanel.settings.labels.selectyourupperbound }
+                        { element : SourcePanel.settings.dom.label.generatorinput2label, text   : SourcePanel.settings.labels.selectyourlowerbound },
+                        { element : SourcePanel.settings.dom.label.generatorinput3label, text   : SourcePanel.settings.labels.selectyourupperbound },
+                        { element : SourcePanel.settings.dom.generatorInput2, value  : 1 },
+                        { element : SourcePanel.settings.dom.generatorInput3, value  : 3 }
                     ]
                 },
                 {
                     expected: ["default"],
                     config : [
-                        { label : SourcePanel.settings.dom.label.generatorinput2label, text  : SourcePanel.settings.labels.selectyourmean },
-                        { label : SourcePanel.settings.dom.label.generatorinput3label, text  : SourcePanel.settings.labels.selectyourdeviation }
+                        { element : SourcePanel.settings.dom.label.generatorinput2label, text  : SourcePanel.settings.labels.selectyourmean },
+                        { element : SourcePanel.settings.dom.label.generatorinput3label, text  : SourcePanel.settings.labels.selectyourdeviation },
+                        { element : SourcePanel.settings.dom.generatorInput2, value  : 5 },
+                        { element : SourcePanel.settings.dom.generatorInput3, value  : 1 }
                     ]
                 }
             ]
@@ -395,7 +400,10 @@ var SourcePanel = ( function (px_module) {
             p_option.expected.forEach(function(p_expected){
                 if(checkElement === p_expected || p_expected === "default"){
                     p_option.config.forEach(function(entry){
-                        entry.label.text(entry.text);
+                        if(entry.text !== undefined && entry.text !== null)
+                            entry.element.text(entry.text);
+                        if(entry.value !== undefined && entry.value !== null)
+                            entry.element.val(entry.value);
                     });
                     foundflag = true;
                 }

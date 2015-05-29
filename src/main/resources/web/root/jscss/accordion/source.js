@@ -115,8 +115,8 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
         SourcePanel.settings.dom.generatorInputCarcount          = $("#mecsim_source_generatorInputCarcount");
+        SourcePanel.settings.dom.generatorInput1                 = $("#mecsim_source_generatorInput1");
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
-        SourcePanel.settings.dom.generatorInput3                 = $("#mecsim_source_generatorInput3");
         SourcePanel.settings.dom.carSettings                     = $("#mecsim_source_carSettings");
         SourcePanel.settings.dom.selectSpeedProb                 = $("#mecsim_source_selectSpeedProb");
         SourcePanel.settings.dom.selectMaxSpeedProb              = $("#mecsim_source_selectMaxSpeedProb");
@@ -126,8 +126,8 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
 
         //dom elements (dynamic labels)
-        SourcePanel.settings.dom.label.generatorinput2label      = $("#mecsim_source_generatorInput2_label");
-        SourcePanel.settings.dom.label.generatorinput3label      = $("#mecsim_source_generatorInput3_label");
+        SourcePanel.settings.dom.label.generatorInput1label      = $("#mecsim_source_generatorInput1_label");
+        SourcePanel.settings.dom.label.generatorInput2label      = $("#mecsim_source_generatorInput2_label");
         SourcePanel.settings.dom.label.speedprobinput1label      = $("#mecsim_source_speedProbInput1_label");
         SourcePanel.settings.dom.label.speedprobinput2label      = $("#mecsim_source_speedProbInput2_label");
         SourcePanel.settings.dom.label.maxSpeedprobinput1label   = $("#mecsim_source_maxSpeedProbInput1_label");
@@ -291,17 +291,17 @@ var SourcePanel = ( function (px_module) {
         //validate second step
         if(currentIndex===1){
             var generatorInput1 = Number(SourcePanel.settings.dom.generatorInputCarcount.val());
-            var generatorInput2 = Number(SourcePanel.settings.dom.generatorInput2.val());
-            var generatorInput3 = Number(SourcePanel.settings.dom.generatorInput3.val());
+            var generatorInput2 = Number(SourcePanel.settings.dom.generatorInput1.val());
+            var generatorInput3 = Number(SourcePanel.settings.dom.generatorInput2.val());
 
             if( isNaN(generatorInput1) || isNaN(generatorInput2) || isNaN(generatorInput3) || generatorInput1 <= 0)
                 return false;
 
             if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-                if( (generatorInput2 >= generatorInput3) || (generatorInput2 < 0) )
+                if( (generatorInput1 >= generatorInput2) || (generatorInput1 < 0) )
                     return false;
             }else{
-                if( generatorInput2 < generatorInput3){
+                if( generatorInput1 < generatorInput2){
                     return false;
                 }
             }
@@ -318,9 +318,9 @@ var SourcePanel = ( function (px_module) {
                         "factory"           : SourcePanel.settings.dom.selectFactory.val(),
                         "agentprogram"      : SourcePanel.settings.dom.selectAgentProgram.val(),
                         "generator"         : SourcePanel.settings.dom.selectGenerator.val(),
-                        "generatorInput1"   : SourcePanel.settings.dom.generatorInputCarcount.val(),
+                        "carcount"          : SourcePanel.settings.dom.generatorInputCarcount.val(),
+                        "generatorInput1"   : SourcePanel.settings.dom.generatorInput1.val(),
                         "generatorInput2"   : SourcePanel.settings.dom.generatorInput2.val(),
-                        "generatorInput3"   : SourcePanel.settings.dom.generatorInput3.val(),
                         "name"              : SourcePanel.settings.dom.toolName.val(),
                         "r"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
                         "g"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,
@@ -378,19 +378,19 @@ var SourcePanel = ( function (px_module) {
                 {
                     expected: ["uniform distribution", "Gleichverteilung"],
                     config : [
-                        { element : SourcePanel.settings.dom.label.generatorinput2label, text   : SourcePanel.settings.labels.selectyourlowerbound },
-                        { element : SourcePanel.settings.dom.label.generatorinput3label, text   : SourcePanel.settings.labels.selectyourupperbound },
-                        { element : SourcePanel.settings.dom.generatorInput2, value  : 1 },
-                        { element : SourcePanel.settings.dom.generatorInput3, value  : 3 }
+                        { element : SourcePanel.settings.dom.label.generatorInput1label, text   : SourcePanel.settings.labels.selectyourlowerbound },
+                        { element : SourcePanel.settings.dom.label.generatorInput2label, text   : SourcePanel.settings.labels.selectyourupperbound },
+                        { element : SourcePanel.settings.dom.generatorInput1, value  : 1 },
+                        { element : SourcePanel.settings.dom.generatorInput2, value  : 3 }
                     ]
                 },
                 {
                     expected: ["default"],
                     config : [
-                        { element : SourcePanel.settings.dom.label.generatorinput2label, text  : SourcePanel.settings.labels.selectyourmean },
-                        { element : SourcePanel.settings.dom.label.generatorinput3label, text  : SourcePanel.settings.labels.selectyourdeviation },
-                        { element : SourcePanel.settings.dom.generatorInput2, value  : 5 },
-                        { element : SourcePanel.settings.dom.generatorInput3, value  : 1 }
+                        { element : SourcePanel.settings.dom.label.generatorInput1label, text  : SourcePanel.settings.labels.selectyourmean },
+                        { element : SourcePanel.settings.dom.label.generatorInput2label, text  : SourcePanel.settings.labels.selectyourdeviation },
+                        { element : SourcePanel.settings.dom.generatorInput1, value  : 5 },
+                        { element : SourcePanel.settings.dom.generatorInput2, value  : 1 }
                     ]
                 }
             ]

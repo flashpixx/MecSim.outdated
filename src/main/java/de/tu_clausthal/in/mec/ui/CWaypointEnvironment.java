@@ -156,11 +156,11 @@ public class CWaypointEnvironment
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidasl" ) );
         if ( !p_data.containsKey( "generator" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgenerator" ) );
+        if ( !p_data.containsKey( "carcount" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
         if ( !p_data.containsKey( "generatorInput1" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
         if ( !p_data.containsKey( "generatorInput2" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
-        if ( !p_data.containsKey( "generatorInput3" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
         if ( !p_data.containsKey( "name" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
@@ -176,9 +176,9 @@ public class CWaypointEnvironment
         EFactoryType l_factorytype = this.getFactoryEnum( (String) p_data.get( "factory" ) );
         EDistributionType l_generatortype = this.getGeneratorEnum( (String) p_data.get( "generator" ) );
 
-        int l_input1 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput1" ) ) );
-        int l_input2 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput2" ) ) );
-        int l_input3 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput3" ) ) );
+        int l_input1 = Integer.parseInt( String.valueOf( p_data.get( "carcount" ) ) );
+        int l_input2 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput1" ) ) );
+        int l_input3 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput2" ) ) );
         int[] l_histrogramm = new int[]{1, 2, 3, 4, 5};
 
         double l_radius = 0.75;

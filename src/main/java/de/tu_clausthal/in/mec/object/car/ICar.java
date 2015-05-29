@@ -42,12 +42,13 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
     /**
      * define an individual acceleration
      *
-     * @return number (greater than zero)
+     * @return number (greater than zero) in m/sec^2
      */
     public int getAcceleration();
 
     /**
      * returns the current speed of the car
+     * @return speed in km/h
      */
     public int getCurrentSpeed();
 
@@ -55,14 +56,14 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
     /**
      * sets the current speed of the care
      *
-     * @param p_speed speed value
+     * @param p_speed speed value in km/h
      */
     public void setCurrentSpeed( int p_speed ) throws IllegalArgumentException;
 
     /**
      * define an individual deceleration
      *
-     * @return number (greater than zero)
+     * @return number (greater than zero) in m/sec^2
      */
     public int getDeceleration();
 
@@ -90,24 +91,24 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
     /**
      * returns the maximum speed of the car
      *
-     * @return speed value
+     * @return speed value in km/h
      */
     public int getMaximumSpeed();
 
     /**
      * returns the current predecessor of the car and the distance
      *
-     * @return predecessor car object and its cell distance
+     * @return predecessor car object and its distance in m
      */
-    public Map<Integer, ICar> getPredecessor();
+    public Map<Double, ICar> getPredecessor();
 
     /**
      * returns the current predecessor of the car and the distance
      *
      * @param p_count number of predecessors
-     * @return predecessor car object and its distance
+     * @return predecessor car object and its distance in meter
      */
-    public Map<Integer, ICar> getPredecessor( int p_count );
+    public Map<Double, ICar> getPredecessor( int p_count );
 
     /**
      * boolean method, that returns true, if the car has reached its end

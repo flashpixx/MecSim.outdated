@@ -69,7 +69,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CGraphHopper extends GraphHopper
 {
-
     /**
      * cell size for sampling
      */
@@ -83,12 +82,6 @@ public class CGraphHopper extends GraphHopper
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
     /**
-     * multiplier to scale cell-increment on the current cell size and time length
-     *
-     * @note [speed in meter/sec] * [timesampling in second] = [moved length in m] / ]cellsampling in meter] = moved cells ( km/h = 1000 / 3600 m/s )
-     */
-    private final int m_timestepmultiplier;
-    /**
      * default weight
      */
     private CCombine<EWeight> m_weight;
@@ -97,9 +90,9 @@ public class CGraphHopper extends GraphHopper
     /**
      * ctor
      */
-    public CGraphHopper()
+    public CGraphHopper( final int p_cellsize  )
     {
-        this( "CAR" );
+        this( "CAR", p_cellsize );
     }
 
 
@@ -109,15 +102,10 @@ public class CGraphHopper extends GraphHopper
      * @param p_encoding flag encoder name
      * @see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      */
-    public CGraphHopper( final String p_encoding )
+    public CGraphHopper( final String p_encoding, final int p_cellsize )
     {
-        // creates the sampling definitions of the cell and the time increment
-        m_cellsize = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" );
-        m_timestepmultiplier = (int) Math.floor(
-                1000.0 / 3600 * CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/timesampling" ) / m_cellsize
-        );
-
-        // set the default weight
+        // set the default settings
+        m_cellsize = p_cellsize;
         this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
@@ -250,17 +238,6 @@ public class CGraphHopper extends GraphHopper
                 l_active.add( l_item.getKey() );
 
         return CCommon.convertCollectionToArray( EWeight[].class, l_active );
-    }
-
-    /**
-     * returns cell number to distance in meter
-     *
-     * @param p_cells cell number
-     * @return meter value
-     */
-    public final double getCellDistanceToMeter( final int p_cells )
-    {
-        return p_cells * m_cellsize;
     }
 
     /**
@@ -424,17 +401,6 @@ public class CGraphHopper extends GraphHopper
         }
 
         return l_paths;
-    }
-
-    /**
-     * returns the speed in cell positions
-     *
-     * @param p_speed speed in km/h
-     * @return cell positions
-     */
-    public final int getSpeedToCellIncrement( final int p_speed )
-    {
-        return p_speed * m_timestepmultiplier;
     }
 
     /**

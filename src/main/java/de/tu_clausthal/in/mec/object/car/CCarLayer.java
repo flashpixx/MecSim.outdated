@@ -51,6 +51,8 @@ import java.util.List;
  */
 public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
 {
+    /** unit converting for traffic structure **/
+    private final transient CUnitConvert m_unit = new CUnitConvert();
     /**
      * data structure - not serializable
      */
@@ -62,7 +64,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     /**
      * graph
      */
-    private transient CGraphHopper m_graph = new CGraphHopper();
+    private transient CGraphHopper m_graph = new CGraphHopper( m_unit.getCellSize() );
     /**
      * serialize version ID *
      */
@@ -86,7 +88,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void beforeStepObject( final int p_currentstep, final ICar p_object )
     {
-        m_drivemodel.getModel().update( p_currentstep, this.m_graph, p_object );
+        m_drivemodel.getModel().update( p_currentstep, this, p_object );
     }
 
     @Override
@@ -157,6 +159,13 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
+     * returns the unit converting object
+     *
+     * @return unit converter
+     */
+    public CUnitConvert getUnitConvert() { return m_unit; }
+
+    /**
      * returns a graph weight
      *
      * @param p_weight weight name
@@ -196,7 +205,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     {
         p_stream.defaultReadObject();
 
-        m_graph = new CGraphHopper();
+        m_graph = new CGraphHopper( m_unit.getCellSize() );
         //m_graph.disableWeight();
     }
 

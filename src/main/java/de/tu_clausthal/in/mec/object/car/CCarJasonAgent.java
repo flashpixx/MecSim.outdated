@@ -137,7 +137,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
         m_beliefcache.put(
                 "ag_position", this.getCurrentPosition()
         );
-        m_beliefcache.put( "ag_predecessor", this.getPredecessorDistance( 1 ) );
+        m_beliefcache.put( "ag_predecessor", this.getPredecessor() );
 
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
             p_agent.addBelief( l_item.getKey(), l_item.getValue() );
@@ -164,24 +164,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
         m_agents.add( l_agent );
 
     }
-
-    /**
-     * returns the predeccor with meter values
-     *
-     * @param p_count number of predecessors
-     * @return distance in meter and predecessor
-     *
-     * @todo should be represent with a sensor definition
-     */
-    private final Map<Double, ICar> getPredecessorDistance( final int p_count )
-    {
-        return new HashMap<Double, ICar>()
-        {{
-                for ( final Map.Entry<Integer, ICar> l_item : getPredecessor( p_count ).entrySet() )
-                    put( m_graph.getCellDistanceToMeter( l_item.getKey() ), l_item.getValue() );
-            }};
-    }
-
 
     @Override
     @CMethodFilter.CAgent( bind = false )

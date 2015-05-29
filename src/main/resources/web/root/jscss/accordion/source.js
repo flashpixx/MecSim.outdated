@@ -21,22 +21,24 @@
  * @endcond
  */
 
-/** todo collection for source-ui ck
-TODO responsive wizard content height
-TODO same selectmenu (consistent)
-TODO use next previous finish labels
-TODO check last jquery slectors
-TODO save toolbox in config/web
-TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
-TODO bounding in minimized mode maybe snap to tab
-TODO plot distribution
-TODO Car Settings
-TODO show error dialog if tool can not created (check for correctness on java side)
-TODO distingusish between init and refresh(asl, ...)
-TODO source list table (JTable or JQuery Plugin)
-TODO source weighting table (JTable or JQuery Plugin)
-TODO radial refactor (bugs and generic)
-**/
+ /** todo collection for source-ui ck
+ TODO close if finished
+ TODO show error dialog if tool can not created (check for correctness on java side)
+ TODO save toolbox in config/web
+ TODO histogramm
+ TODO further validation
+ TODO read more data
+
+ TODO path waypoints
+ TODO source weighting list
+ TODO radial to add waypoints to makrov chain
+
+ TODO plot distribution -> responsive wizard height
+ TODO bounding in minimized mode maybe snap to tab
+ TODO layout multiple widgets
+ TODO check last jquery slectors
+ TODO distingusish between open and close klick
+ **/
 
 var SourcePanel = ( function (px_module) {
 
@@ -83,15 +85,31 @@ var SourcePanel = ( function (px_module) {
                         transitionEffect: "slideLeft",
                         stepsOrientation: "vertical",
                         autoFocus: true,
+                        preloadContent: false,
                         onInit: SourcePanel.buildContent,
                         onStepChanging: SourcePanel.validateWizardStep,
-                        onFinished: SourcePanel.finishWizard
+                        onFinished: SourcePanel.finishWizard,
+                        labels: {
+                          finish: SourcePanel.settings.labels.finish,
+                          next: SourcePanel.settings.labels.next,
+                          previous: SourcePanel.settings.labels.previous,
+                        }
                     });
 
                     //additional initial value
                     SourcePanel.settings.dom.selectRadius.val(0.75);
                     SourcePanel.settings.dom.generatorInputCarcount.val(1);
                     SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
+
+                    //listen to different ui elements
+                    SourcePanel.settings.dom.selectWaypointType.on("change", SourcePanel.updateWaypointSettings);
+                    SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
+                    SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
+                    SourcePanel.settings.dom.selectSpeedProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectMaxSpeedProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectAccProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectDecProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectLingerProb.on("change", SourcePanel.updateCarSettings);
                 });
             });
         });
@@ -100,8 +118,6 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.createTool.button().on("click", function(data){
             SourcePanel.settings.obj.widget.close();
         });
-        SourcePanel.getDOMElements();
-
     };
 
     //method to get DOM Elements
@@ -110,40 +126,30 @@ var SourcePanel = ( function (px_module) {
         //dom elements (no labels)
         SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
-
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
         SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
-
         SourcePanel.settings.dom.selectFactory                   = $("#mecsim_source_selectFactory");
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
-
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
         SourcePanel.settings.dom.generatorInputCarcount          = $("#mecsim_source_generatorInputCarcount");
         SourcePanel.settings.dom.generatorInput1                 = $("#mecsim_source_generatorInput1");
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
-
         SourcePanel.settings.dom.carSettings                     = $("#mecsim_source_carSettings");
-
         SourcePanel.settings.dom.selectSpeedProb                 = $("#mecsim_source_selectSpeedProb");
         SourcePanel.settings.dom.speedProbInput1                 = $("#mecsim_source_speedProbInput1");
         SourcePanel.settings.dom.speedProbInput2                 = $("#mecsim_source_speedProbInput2");
-
         SourcePanel.settings.dom.selectMaxSpeedProb              = $("#mecsim_source_selectMaxSpeedProb");
         SourcePanel.settings.dom.maxSpeedProbInput1              = $("#mecsim_source_maxSpeedProbInput1");
         SourcePanel.settings.dom.maxSpeedProbInput2              = $("#mecsim_source_maxSpeedProbInput2");
-
         SourcePanel.settings.dom.selectAccProb                   = $("#mecsim_source_selectAccProb");
         SourcePanel.settings.dom.accProbInput1                   = $("#mecsim_source_accProbInput1");
         SourcePanel.settings.dom.accProbInput2                   = $("#mecsim_source_accProbInput2");
-
         SourcePanel.settings.dom.selectDecProb                   = $("#mecsim_source_selectDecProb");
         SourcePanel.settings.dom.decProbInput1                   = $("#mecsim_source_decProbInput1");
         SourcePanel.settings.dom.decProbInput2                   = $("#mecsim_source_decProbInput2");
-
         SourcePanel.settings.dom.selectLingerProb                = $("#mecsim_source_selectLingerProb");
         SourcePanel.settings.dom.lingerProbInput1                = $("#mecsim_source_lingerProbInput1");
         SourcePanel.settings.dom.lingerProbInput2                = $("#mecsim_source_lingerProbInput2");
-
         SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
 
@@ -196,7 +202,6 @@ var SourcePanel = ( function (px_module) {
                         .css("background-color", "rgb("+ px_value.redValue +","+ px_value.greenValue +","+ px_value.blueValue +")")
                         .attr("class", "mecsim_source_toolIcon")
                         .prependTo(button);
-
                 });
             }
         });
@@ -215,7 +220,7 @@ var SourcePanel = ( function (px_module) {
 
         SourcePanel.getDOMElements();
 
-        //create selectmenu with possible agent programs
+        //create selectmenu with waypoint types
         $.ajax({
             url     : "/cwaypointenvironment/listwaypointtypes",
             success : function( px_data ){
@@ -258,7 +263,7 @@ var SourcePanel = ( function (px_module) {
             }
         });
 
-        //create selectmenu with distribution select
+        //create all selectmenu with distribution select
         $.ajax({
             url     : "/cwaypointenvironment/listdistribution",
             success : function( px_data ){
@@ -294,16 +299,6 @@ var SourcePanel = ( function (px_module) {
                 ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
             ]
         });
-
-        //listen to different ui elements
-        SourcePanel.settings.dom.selectWaypointType.on("change", SourcePanel.updateWaypointSettings);
-        SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
-        SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
-        SourcePanel.settings.dom.selectSpeedProb.on("change", SourcePanel.updateCarSettings);
-        SourcePanel.settings.dom.selectMaxSpeedProb.on("change", SourcePanel.updateCarSettings);
-        SourcePanel.settings.dom.selectAccProb.on("change", SourcePanel.updateCarSettings);
-        SourcePanel.settings.dom.selectDecProb.on("change", SourcePanel.updateCarSettings);
-        SourcePanel.settings.dom.selectLingerProb.on("change", SourcePanel.updateCarSettings);
     };
 
     //method to validate if the current wizard step is valide

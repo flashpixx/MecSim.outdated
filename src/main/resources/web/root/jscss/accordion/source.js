@@ -112,7 +112,6 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
         SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
-        SourcePanel.settings.dom.agentContainer                  = $("#mecsim_source_agentContainer");
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
         SourcePanel.settings.dom.generatorInputCarcount          = $("#mecsim_source_generatorInputCarcount");
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
@@ -263,6 +262,7 @@ var SourcePanel = ( function (px_module) {
         });
 
         //listen to different ui elements
+        SourcePanel.settings.dom.selectWaypointType.on("change", SourcePanel.updateWaypointSettings);
         SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
         SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
     };
@@ -339,12 +339,21 @@ var SourcePanel = ( function (px_module) {
         });
     };
 
+    //method to update waypoint settings
+    px_module.updateWaypointSettings = function(){
+        if(SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Zufall)" || SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Ziel)"){
+            SourcePanel.settings.dom.selectRadius.attr('disabled', false);
+        }else{
+            SourcePanel.settings.dom.selectRadius.attr('disabled', true);
+        }
+    };
+
     //method to update factory settings
     px_module.updateFactorySettings = function(){
         if($("#mecsim_source_selectFactory option:selected").attr("requireAgent") === "true"){
-            SourcePanel.settings.dom.agentContainer.show();
+            SourcePanel.settings.dom.selectAgentProgram.attr('disabled', false);
         }else{
-            SourcePanel.settings.dom.agentContainer.hide();
+            SourcePanel.settings.dom.selectAgentProgram.attr('disabled', true);
         }
     };
 

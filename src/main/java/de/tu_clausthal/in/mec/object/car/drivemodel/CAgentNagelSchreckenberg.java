@@ -24,8 +24,8 @@
 package de.tu_clausthal.in.mec.object.car.drivemodel;
 
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 
 /**
@@ -42,16 +42,16 @@ public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
     private static final long serialVersionUID = 1L;
 
     @Override
-    public final void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
+    public final void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
     {
         // if car is an agent-car the agent gets full control over the car - we check only the precessor to avoid collisions
         if ( p_car instanceof CCarJasonAgent )
         {
-            this.checkCollision( p_car );
+            this.checkCollision( p_layer, p_car );
             return;
         }
 
         // otherwise call super method
-        super.update( p_currentstep, p_graph, p_car );
+        super.update( p_currentstep, p_layer, p_car );
     }
 }

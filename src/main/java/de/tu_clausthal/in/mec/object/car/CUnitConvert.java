@@ -43,15 +43,19 @@ public class CUnitConvert
      **/
     private static final double c_MsInKmh = 1 / c_kmhInMs;
     /**
-     * cell size for sampling
+     * cell size in meter
      */
     private final int m_cellsize = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" );
     /**
-     * meter on each timestep
+     * timestep
      */
-    private final double m_distancetimestep = c_kmhInMs * CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/timesampling" );
+    private final int m_timestep = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/timesampling" );
     /**
-     * multiplier to define cells on each timestep
+     * meter on each timestep (timestep is defined in meter)
+     */
+    private final double m_distancetimestep = c_kmhInMs * m_timestep;
+    /**
+     * number of cell which can be drives at a constant speed
      */
     private final int m_celltimestep = (int) Math.floor( m_distancetimestep / m_cellsize );
 
@@ -90,10 +94,21 @@ public class CUnitConvert
     }
 
     /**
+     * returns the speed for a distance
+     *
+     * @param p_distance distance in meter
+     * @return speed in km/h
+     */
+    public final int getSpeedOfDistance( final double p_distance )
+    {
+        return (int) ( p_distance / m_timestep * c_MsInKmh );
+    }
+
+    /**
      * returns the speed in cell positions
      *
      * @param p_speed speed in km/h
-     * @return cell positions
+     * @return cell number
      */
     public final int getSpeedToCell( final int p_speed )
     {
@@ -101,13 +116,22 @@ public class CUnitConvert
     }
 
     /**
-     * returns the speed in meter in m/s
+     * returns the distance in meter which
+     * can moved in one timestep
      *
      * @param p_speed speed in km/h
-     * @return speed in m/s
+     * @return meter
      */
-    public final double getSpeedToMs( final int p_speed )
+    public final double getSpeedToDistance( final int p_speed )
     {
         return p_speed * c_kmhInMs * m_distancetimestep;
+    }
+
+    /**
+     * returns the timestep in seconds
+     */
+    public int getTime()
+    {
+        return m_timestep;
     }
 }

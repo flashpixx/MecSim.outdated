@@ -100,6 +100,8 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.createTool.button().on("click", function(data){
             SourcePanel.settings.obj.widget.close();
         });
+        SourcePanel.getDOMElements();
+
     };
 
     //method to get DOM Elements
@@ -108,21 +110,41 @@ var SourcePanel = ( function (px_module) {
         //dom elements (no labels)
         SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
-        SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
-        SourcePanel.settings.dom.selectFactory                   = $("#mecsim_source_selectFactory");
+
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
         SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
+
+        SourcePanel.settings.dom.selectFactory                   = $("#mecsim_source_selectFactory");
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
+
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
         SourcePanel.settings.dom.generatorInputCarcount          = $("#mecsim_source_generatorInputCarcount");
         SourcePanel.settings.dom.generatorInput1                 = $("#mecsim_source_generatorInput1");
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
+
         SourcePanel.settings.dom.carSettings                     = $("#mecsim_source_carSettings");
+
         SourcePanel.settings.dom.selectSpeedProb                 = $("#mecsim_source_selectSpeedProb");
+        SourcePanel.settings.dom.speedProbInput1                 = $("#mecsim_source_speedProbInput1");
+        SourcePanel.settings.dom.speedProbInput2                 = $("#mecsim_source_speedProbInput2");
+
         SourcePanel.settings.dom.selectMaxSpeedProb              = $("#mecsim_source_selectMaxSpeedProb");
+        SourcePanel.settings.dom.maxSpeedProbInput1              = $("#mecsim_source_maxSpeedProbInput1");
+        SourcePanel.settings.dom.maxSpeedProbInput2              = $("#mecsim_source_maxSpeedProbInput2");
+
         SourcePanel.settings.dom.selectAccProb                   = $("#mecsim_source_selectAccProb");
+        SourcePanel.settings.dom.accProbInput1                   = $("#mecsim_source_accProbInput1");
+        SourcePanel.settings.dom.accProbInput2                   = $("#mecsim_source_accProbInput2");
+
         SourcePanel.settings.dom.selectDecProb                   = $("#mecsim_source_selectDecProb");
+        SourcePanel.settings.dom.decProbInput1                   = $("#mecsim_source_decProbInput1");
+        SourcePanel.settings.dom.decProbInput2                   = $("#mecsim_source_decProbInput2");
+
         SourcePanel.settings.dom.selectLingerProb                = $("#mecsim_source_selectLingerProb");
+        SourcePanel.settings.dom.lingerProbInput1                = $("#mecsim_source_lingerProbInput1");
+        SourcePanel.settings.dom.lingerProbInput2                = $("#mecsim_source_lingerProbInput2");
+
+        SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
 
         //dom elements (dynamic labels)
@@ -248,6 +270,11 @@ var SourcePanel = ( function (px_module) {
                     });
 
                 SourcePanel.updateGeneratorSettings();
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectSpeedProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectMaxSpeedProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectAccProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectDecProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectLingerProb"} });
             }
         });
 
@@ -298,10 +325,10 @@ var SourcePanel = ( function (px_module) {
                 return false;
 
             if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-                if( (generatorInput1 >= generatorInput2) || (generatorInput1 < 0) )
+                if( (generatorInput2 >= generatorInput3) || (generatorInput2 < 0) )
                     return false;
             }else{
-                if( generatorInput1 < generatorInput2){
+                if( generatorInput2 < generatorInput3){
                     return false;
                 }
             }
@@ -399,50 +426,70 @@ var SourcePanel = ( function (px_module) {
 
     //method to update car settings
     px_module.updateCarSettings = function(event){
-        var l_element1, l_element2;
+
+        var l_element1, l_element2, l_element3, l_element4;
         switch(event.target.id){
 
             case "mecsim_source_selectSpeedProb":
+                l_value    = SourcePanel.settings.dom.selectSpeedProb.val();
                 l_element1 = SourcePanel.settings.dom.label.speedprobinput1label;
                 l_element2 = SourcePanel.settings.dom.label.speedprobinput2label;
+                l_element3 = SourcePanel.settings.dom.speedProbInput1;
+                l_element4 = SourcePanel.settings.dom.speedProbInput2;
                 break;
 
             case "mecsim_source_selectMaxSpeedProb":
+                l_value    = SourcePanel.settings.dom.selectMaxSpeedProb.val();
                 l_element1 = SourcePanel.settings.dom.label.maxSpeedprobinput1label;
                 l_element2 = SourcePanel.settings.dom.label.maxSpeedprobinput2label;
+                l_element3 = SourcePanel.settings.dom.maxSpeedProbInput1;
+                l_element4 = SourcePanel.settings.dom.maxSpeedProbInput2;
                 break;
 
             case "mecsim_source_selectAccProb":
+                l_value    = SourcePanel.settings.dom.selectAccProb.val();
                 l_element1 = SourcePanel.settings.dom.label.accprobinput1label;
                 l_element2 = SourcePanel.settings.dom.label.accprobinput2label;
+                l_element3 = SourcePanel.settings.dom.accProbInput1;
+                l_element4 = SourcePanel.settings.dom.accProbInput2;
                 break;
 
             case "mecsim_source_selectDecProb":
+                l_value    = SourcePanel.settings.dom.selectDecProb.val();
                 l_element1 = SourcePanel.settings.dom.label.decprobinput1label;
                 l_element2 = SourcePanel.settings.dom.label.decprobinput2label;
+                l_element3 = SourcePanel.settings.dom.decProbInput1;
+                l_element4 = SourcePanel.settings.dom.decProbInput2;
                 break;
 
             case "mecsim_source_selectLingerProb":
+                l_value    = SourcePanel.settings.dom.selectLingerProb.val();
                 l_element1 = SourcePanel.settings.dom.label.lingerprobinput1label;
                 l_element2 = SourcePanel.settings.dom.label.lingerprobinput2label;
+                l_element3 = SourcePanel.settings.dom.lingerProbInput1;
+                l_element4 = SourcePanel.settings.dom.lingerProbInput2;
                 break;
         }
 
         SourcePanel.updateLabels(
-            event.target.value,
+            l_value,
             [
                 {
                     expected: ["uniform distribution", "Gleichverteilung"],
                     config : [
                         { element : l_element1, text   : SourcePanel.settings.labels.selectyourlowerbound },
-                        { element : l_element2, text   : SourcePanel.settings.labels.selectyourupperbound }
+                        { element : l_element2, text   : SourcePanel.settings.labels.selectyourupperbound },
+                        { element : l_element3, value  : 1 },
+                        { element : l_element4, value  : 3 }
                     ]
                 },
                 {
                     expected: ["default"],
                     config : [
                         { element : l_element1, text  : SourcePanel.settings.labels.selectyourmean },
-                        { element : l_element2, text  : SourcePanel.settings.labels.selectyourdeviation }
+                        { element : l_element2, text  : SourcePanel.settings.labels.selectyourdeviation },
+                        { element : l_element3, value  : 5 },
+                        { element : l_element4, value  : 1 }
                     ]
                 }
             ]

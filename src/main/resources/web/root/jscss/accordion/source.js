@@ -232,7 +232,7 @@ var SourcePanel = ( function (px_module) {
 
         //create selectmenu with possible generator types
         $.ajax({
-            url     : "/cwaypointenvironment/listgenerator",
+            url     : "/cwaypointenvironment/listdistribution",
             success : function( px_data ){
                 px_data.generators.forEach(function(data){
                     SourcePanel.settings.dom.selectGenerator
@@ -341,7 +341,7 @@ var SourcePanel = ( function (px_module) {
 
     //method to update waypoint settings
     px_module.updateWaypointSettings = function(){
-        if(SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Zufall)" || SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Ziel)"){
+        if(SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Zufall)" || SourcePanel.settings.dom.selectWaypointType.val() === "random car waypoint"){
             SourcePanel.settings.dom.selectRadius.attr('disabled', false);
         }else{
             SourcePanel.settings.dom.selectRadius.attr('disabled', true);

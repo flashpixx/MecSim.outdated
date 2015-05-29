@@ -77,7 +77,7 @@ public class CWaypointEnvironment
     private CWaypointEnvironment()
     {
         CTool l_defaultTool = new CTool(
-                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EGeneratorType.Uniform, 0.75, Color.RED, null, 1, 1, 1, 0, 10,
+                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EDistributionType.Uniform, 0.75, Color.RED, null, 1, 1, 1, 0, 10,
                 new int[]{1, 2, 3, 4, 5}
         );
         this.m_selectedTool = l_defaultTool;
@@ -116,14 +116,14 @@ public class CWaypointEnvironment
      * @param p_generator
      * @return specified Generator type or default (Uniform)
      */
-    private final EGeneratorType getGeneratorEnum( final String p_generator )
+    private final EDistributionType getGeneratorEnum( final String p_generator )
     {
-        for ( final EGeneratorType l_generator : EGeneratorType.values() )
+        for ( final EDistributionType l_generator : EDistributionType.values() )
         {
             if ( l_generator.toString().equals( p_generator ) )
                 return l_generator;
         }
-        return EGeneratorType.Uniform;
+        return EDistributionType.Uniform;
     }
 
     /**
@@ -174,7 +174,7 @@ public class CWaypointEnvironment
         //read data
         EWayPointType l_waypointtype = this.getWaypointEnum( "" );
         EFactoryType l_factorytype = this.getFactoryEnum( (String) p_data.get( "factory" ) );
-        EGeneratorType l_generatortype = this.getGeneratorEnum( (String) p_data.get( "generator" ) );
+        EDistributionType l_generatortype = this.getGeneratorEnum( (String) p_data.get( "generator" ) );
 
         int l_input1 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput1" ) ) );
         int l_input2 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput2" ) ) );
@@ -216,43 +216,16 @@ public class CWaypointEnvironment
     }
 
     /**
-     * list all possible factory types
+     * method to set a new tool selected
      *
-     * @return
+     * @param p_data
      */
-    private final Map<String, List<ImmutablePair<String, Boolean>>> web_static_listfactories()
+    private final void web_static_settool( final Map<String, Object> p_data )
     {
+        if ( !p_data.containsKey( "toolname" ) || !m_toolbox.containsKey( p_data.get( "toolname" ) ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtool" ) );
 
-        List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
-        for ( final EFactoryType l_factory : EFactoryType.values() )
-        {
-            l_factories.add( new ImmutablePair<>( l_factory.toString(), l_factory.m_requireASL ) );
-        }
-
-        return new HashMap<String, List<ImmutablePair<String, Boolean>>>()
-        {{
-                put( "factories", l_factories );
-            }};
-    }
-
-    /**
-     * list all possible generator types
-     *
-     * @return
-     */
-    private final Map<String, List<String>> web_static_listgenerator()
-    {
-
-        List<String> l_generators = new ArrayList<>();
-        for ( final EGeneratorType l_generator : EGeneratorType.values() )
-        {
-            l_generators.add( l_generator.toString() );
-        }
-
-        return new HashMap<String, List<String>>()
-        {{
-                put( "generators", l_generators );
-            }};
+        m_selectedTool = m_toolbox.get( p_data.get( "toolname" ) );
     }
 
     /**
@@ -271,7 +244,7 @@ public class CWaypointEnvironment
             l_properties.put( "greenValue", this.m_toolbox.get( l_tool ).m_color.getGreen() );
             l_properties.put( "blueValue", this.m_toolbox.get( l_tool ).m_color.getBlue() );
 
-            l_tools.put( l_tool, l_properties );
+            l_tools.put(l_tool, l_properties);
         }
 
         return l_tools;
@@ -298,16 +271,43 @@ public class CWaypointEnvironment
     }
 
     /**
-     * method to set a new tool selected
+     * list all possible factory types
      *
-     * @param p_data
+     * @return
      */
-    private final void web_static_settool( final Map<String, Object> p_data )
+    private final Map<String, List<ImmutablePair<String, Boolean>>> web_static_listfactories()
     {
-        if ( !p_data.containsKey( "toolname" ) || !m_toolbox.containsKey( p_data.get( "toolname" ) ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtool" ) );
 
-        m_selectedTool = m_toolbox.get( p_data.get( "toolname" ) );
+        List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
+        for ( final EFactoryType l_factory : EFactoryType.values() )
+        {
+            l_factories.add(new ImmutablePair<>(l_factory.toString(), l_factory.m_requireASL));
+        }
+
+        return new HashMap<String, List<ImmutablePair<String, Boolean>>>()
+        {{
+                put( "factories", l_factories );
+            }};
+    }
+
+    /**
+     * list all possible generator types
+     *
+     * @return
+     */
+    private final Map<String, List<String>> web_static_listdistribution()
+    {
+
+        List<String> l_generators = new ArrayList<>();
+        for ( final EDistributionType l_generator : EDistributionType.values() )
+        {
+            l_generators.add( l_generator.toString() );
+        }
+
+        return new HashMap<String, List<String>>()
+        {{
+                put( "generators", l_generators );
+            }};
     }
 
     /**
@@ -359,16 +359,16 @@ public class CWaypointEnvironment
     /**
      * enum for generator type
      */
-    protected enum EGeneratorType
+    protected enum EDistributionType
     {
-        Uniform( CCommon.getResourceString( EGeneratorType.class, "uniformdistribution" ) ),
-        Normal( CCommon.getResourceString( EGeneratorType.class, "normaldistribution" ) ),
-        Exponential( CCommon.getResourceString( EGeneratorType.class, "exponentialdistribution" ) ),
-        Profile( CCommon.getResourceString( EGeneratorType.class, "profiledistribution" ) );
+        Uniform( CCommon.getResourceString( EDistributionType.class, "uniformdistribution" ) ),
+        Normal( CCommon.getResourceString( EDistributionType.class, "normaldistribution" ) ),
+        Exponential( CCommon.getResourceString( EDistributionType.class, "exponentialdistribution" ) ),
+        Profile( CCommon.getResourceString( EDistributionType.class, "profiledistribution" ) );
 
         private final String text;
 
-        private EGeneratorType( final String text )
+        private EDistributionType( final String text )
         {
             this.text = text;
         }
@@ -411,7 +411,7 @@ public class CWaypointEnvironment
         /**
          * generator type defines the probability and amount of cars
          */
-        protected final EGeneratorType m_generatorType;
+        protected final EDistributionType m_generatorType;
         /**
          * histrogramm for profile generators
          */
@@ -451,7 +451,7 @@ public class CWaypointEnvironment
          * @param p_upper
          * @param p_histrogram
          */
-        protected CTool( final EWayPointType p_wayPointType, final EFactoryType p_factoryType, final EGeneratorType p_generatorType, final double p_radius,
+        protected CTool( final EWayPointType p_wayPointType, final EFactoryType p_factoryType, final EDistributionType p_generatorType, final double p_radius,
                 final Color p_color, final String p_asl, final int p_carcount, final int p_mean, final int p_deviation, final int p_lower, final int p_upper,
                 final int[] p_histrogram
         )

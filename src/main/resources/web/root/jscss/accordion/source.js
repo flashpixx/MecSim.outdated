@@ -230,16 +230,17 @@ var SourcePanel = ( function (px_module) {
             }
         });
 
-        //create selectmenu with possible generator types
+        //create selectmenu with distribution select
         $.ajax({
             url     : "/cwaypointenvironment/listdistribution",
             success : function( px_data ){
                 px_data.generators.forEach(function(data){
-                    SourcePanel.settings.dom.selectGenerator
-                        .append( $("<option></option>")
+                    $("<option></option>")
                         .attr("value",data)
-                        .text(data));
-                });
+                        .text(data)
+                        .appendTo(".mecsim_source_distributionSelect");
+                    });
+
                 SourcePanel.updateGeneratorSettings();
             }
         });

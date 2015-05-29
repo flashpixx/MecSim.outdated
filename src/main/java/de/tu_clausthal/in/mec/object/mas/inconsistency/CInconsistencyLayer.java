@@ -77,6 +77,10 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * metric object to create the value of two objects
      **/
     private final IMetric<T> m_metric;
+    /**
+     * update of the metric values
+     */
+    private final int m_updatestep;
 
     /**
      * ctor - use numeric algorithm
@@ -89,6 +93,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_algorithm = EAlgorithm.Numeric;
         m_iteration = 0;
         m_epsilon = 0;
+        m_updatestep = 1;
     }
 
 
@@ -107,6 +112,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_algorithm = EAlgorithm.Stochastic;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
+        m_updatestep = 1;
     }
 
     /**
@@ -213,9 +219,10 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
-        if ( m_data.size() < 2 )
+        if ( ( m_data.size() < 2 ) || ( p_currentstep % m_updatestep != 0 ) )
             return;
 
+        // @todo update list values
 
         // build matrix and create markow-chain
         final DoubleMatrix2D l_matrix = this.buildMatrix();

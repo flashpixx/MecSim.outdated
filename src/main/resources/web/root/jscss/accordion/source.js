@@ -65,7 +65,6 @@ var SourcePanel = ( function (px_module) {
 
                 //get dom elements and set labels
                 SourcePanel.getDOMElements();
-                SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
                 MecSim.language("getstaticwaypointlabels", function(){
 
                     //create widget
@@ -88,6 +87,10 @@ var SourcePanel = ( function (px_module) {
                         onStepChanging: SourcePanel.validateWizardStep,
                         onFinished: SourcePanel.finishWizard
                     });
+
+                    //additional initial value
+                    SourcePanel.settings.dom.selectRadius.val(0.75);
+                    SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
                 });
             });
         });
@@ -106,6 +109,8 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.selectFactory                   = $("#mecsim_source_selectFactory");
+        SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
+        SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
         SourcePanel.settings.dom.agentContainer                  = $("#mecsim_source_agentContainer");
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
@@ -182,6 +187,19 @@ var SourcePanel = ( function (px_module) {
     px_module.buildContent = function() {
 
         SourcePanel.getDOMElements();
+
+        //create selectmenu with possible agent programs
+        $.ajax({
+            url     : "/cwaypointenvironment/listwaypointtypes",
+            success : function( px_data ){
+                px_data.waypointtypes.forEach(function(data){
+                    SourcePanel.settings.dom.selectWaypointType
+                        .append( $("<option></option>")
+                        .attr("value",data)
+                        .text(data));
+                });
+            }
+        });
 
         //create selectmenu with factory types
         $.ajax({

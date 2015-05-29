@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
-import jason.asSyntax.NumberTerm;
 import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.Term;
 
@@ -52,10 +51,7 @@ public class CLiteral2Number extends DefaultInternalAction
     @Override
     public Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
     {
-        if ( !p_args[0].isNumeric() )
-            return false;
-
-        return p_unifier.unifies( p_args[1], new NumberTermImpl( ( (NumberTerm) p_args[0] ).solve() ) );
+        return p_unifier.unifies( p_args[1], new NumberTermImpl( Double.parseDouble( p_args[0].toString() ) ) );
     }
 
 }

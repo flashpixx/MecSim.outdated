@@ -89,6 +89,7 @@ public class CGraphHopper extends GraphHopper
 
     /**
      * ctor
+     * @param p_cellsize cellsize in meter for sampling
      */
     public CGraphHopper( final int p_cellsize  )
     {
@@ -100,6 +101,7 @@ public class CGraphHopper extends GraphHopper
      * ctor
      *
      * @param p_encoding flag encoder name
+     * @param p_cellsize cellsize in meter for sampling
      * @see https://github.com/graphhopper/graphhopper/blob/master/core/src/main/java/com/graphhopper/routing/util/EncodingManager.java
      */
     public CGraphHopper( final String p_encoding, final int p_cellsize )

@@ -47,15 +47,15 @@ public class CUnitConvert
      */
     private final int m_cellsize = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" );
     /**
-     * timestep in seconds on simulation step
+     * timestep in seconds
      */
     private final int m_timestep = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/timesampling" );
     /**
-     * meter on each timestep (timestep is defined in seconds)
+     * meter which can be moved at one timestep
      */
     private final double m_distancetimestep = c_kmhInMs * m_timestep;
     /**
-     * number of cells which can be moved at on timestep
+     * number of cells which can be moved at one timestep
      */
     private final int m_celltimestep = (int) Math.floor( m_distancetimestep / m_cellsize );
 
@@ -76,7 +76,7 @@ public class CUnitConvert
      *
      * @return cell size in meter
      */
-    public int getCellSize()
+    public final int getCellSize()
     {
         return m_cellsize;
     }
@@ -129,7 +129,7 @@ public class CUnitConvert
     /**
      * returns the timestep in seconds
      */
-    public int getTime()
+    public final int getTime()
     {
         return m_timestep;
     }

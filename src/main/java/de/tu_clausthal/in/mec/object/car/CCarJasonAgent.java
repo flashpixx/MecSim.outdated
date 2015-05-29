@@ -166,10 +166,10 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     }
 
     /**
-     * returns the predeccor with kilometer values
+     * returns the predeccor with meter values
      *
      * @param p_count number of predecessors
-     * @return distance and predecessor
+     * @return distance in meter and predecessor
      *
      * @todo should be represent with a sensor definition
      */
@@ -178,7 +178,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
         return new HashMap<Double, ICar>()
         {{
                 for ( final Map.Entry<Integer, ICar> l_item : getPredecessor( p_count ).entrySet() )
-                    put( m_graph.getCellDistanceToMeter( l_item.getKey() ) / 1000.0, l_item.getValue() );
+                    put( m_graph.getCellDistanceToMeter( l_item.getKey() ), l_item.getValue() );
             }};
     }
 

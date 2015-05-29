@@ -118,6 +118,11 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
         SourcePanel.settings.dom.generatorInput3                 = $("#mecsim_source_generatorInput3");
         SourcePanel.settings.dom.carSettings                     = $("#mecsim_source_carSettings");
+        SourcePanel.settings.dom.selectSpeedProb                 = $("#mecsim_source_selectSpeedProb");
+        SourcePanel.settings.dom.selectMaxSpeedProb              = $("#mecsim_source_selectMaxSpeedProb");
+        SourcePanel.settings.dom.selectAccProb                   = $("#mecsim_source_selectAccProb");
+        SourcePanel.settings.dom.selectDecProb                   = $("#mecsim_source_selectDecProb");
+        SourcePanel.settings.dom.selectLingerProb                = $("#mecsim_source_selectLingerProb");
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
 
         //dom elements (dynamic labels)
@@ -267,6 +272,11 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.selectWaypointType.on("change", SourcePanel.updateWaypointSettings);
         SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
         SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
+        SourcePanel.settings.dom.selectSpeedProb.on("change", SourcePanel.updateCarSettings);
+        SourcePanel.settings.dom.selectMaxSpeedProb.on("change", SourcePanel.updateCarSettings);
+        SourcePanel.settings.dom.selectAccProb.on("change", SourcePanel.updateCarSettings);
+        SourcePanel.settings.dom.selectDecProb.on("change", SourcePanel.updateCarSettings);
+        SourcePanel.settings.dom.selectLingerProb.on("change", SourcePanel.updateCarSettings);
     };
 
     //method to validate if the current wizard step is valide
@@ -387,10 +397,60 @@ var SourcePanel = ( function (px_module) {
         );
     };
 
+    //method to update car settings
+    px_module.updateCarSettings = function(event){
+        var l_element1, l_element2;
+        switch(event.target.id){
+
+            case "mecsim_source_selectSpeedProb":
+                l_element1 = SourcePanel.settings.dom.label.speedprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.speedprobinput2label;
+                break;
+
+            case "mecsim_source_selectMaxSpeedProb":
+                l_element1 = SourcePanel.settings.dom.label.maxSpeedprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.maxSpeedprobinput2label;
+                break;
+
+            case "mecsim_source_selectAccProb":
+                l_element1 = SourcePanel.settings.dom.label.accprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.accprobinput2label;
+                break;
+
+            case "mecsim_source_selectDecProb":
+                l_element1 = SourcePanel.settings.dom.label.decprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.decprobinput2label;
+                break;
+
+            case "mecsim_source_selectLingerProb":
+                l_element1 = SourcePanel.settings.dom.label.lingerprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.lingerprobinput2label;
+                break;
+        }
+
+        SourcePanel.updateLabels(
+            event.target.value,
+            [
+                {
+                    expected: ["uniform distribution", "Gleichverteilung"],
+                    config : [
+                        { element : l_element1, text   : SourcePanel.settings.labels.selectyourlowerbound },
+                        { element : l_element2, text   : SourcePanel.settings.labels.selectyourupperbound }
+                    ]
+                },
+                {
+                    expected: ["default"],
+                    config : [
+                        { element : l_element1, text  : SourcePanel.settings.labels.selectyourmean },
+                        { element : l_element2, text  : SourcePanel.settings.labels.selectyourdeviation }
+                    ]
+                }
+            ]
+        );
+    };
+
     //generic method to upate labels
     px_module.updateLabels = function(checkElement, options){
-        checkElement = SourcePanel.settings.dom.selectGenerator.val();
-
         var foundflag = false;
 
         options.forEach(function(p_option){

@@ -21,22 +21,21 @@
  * @endcond
  */
 
-/** todo collection for source-ui ck
-TODO responsive wizard content height
-TODO same selectmenu (consistent)
-TODO use next previous finish labels
-TODO check last jquery slectors
-TODO save toolbox in config/web
-TODO Further GUI Elements (WaypointType, Radius, CarSettings Patameters, Histrogramm)
-TODO bounding in minimized mode maybe snap to tab
-TODO plot distribution
-TODO Car Settings
-TODO show error dialog if tool can not created (check for correctness on java side)
-TODO distingusish between init and refresh(asl, ...)
-TODO source list table (JTable or JQuery Plugin)
-TODO source weighting table (JTable or JQuery Plugin)
-TODO radial refactor (bugs and generic)
-**/
+ /** todo collection for source-ui ck
+ TODO save toolbox in config/web
+ TODO histogramm
+ TODO read more data
+
+ TODO path waypoints
+ TODO source weighting list
+ TODO radial to add waypoints to makrov chain
+
+ TODO plot distribution -> responsive wizard height
+ TODO bounding in minimized mode maybe snap to tab
+ TODO layout multiple widgets
+ TODO check last jquery slectors
+ TODO distingusish between open and close klick
+ **/
 
 var SourcePanel = ( function (px_module) {
 
@@ -65,7 +64,6 @@ var SourcePanel = ( function (px_module) {
 
                 //get dom elements and set labels
                 SourcePanel.getDOMElements();
-                SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
                 MecSim.language("getstaticwaypointlabels", function(){
 
                     //create widget
@@ -84,10 +82,31 @@ var SourcePanel = ( function (px_module) {
                         transitionEffect: "slideLeft",
                         stepsOrientation: "vertical",
                         autoFocus: true,
+                        preloadContent: false,
                         onInit: SourcePanel.buildContent,
                         onStepChanging: SourcePanel.validateWizardStep,
-                        onFinished: SourcePanel.finishWizard
+                        onFinished: SourcePanel.finishWizard,
+                        labels: {
+                          finish: SourcePanel.settings.labels.finish,
+                          next: SourcePanel.settings.labels.next,
+                          previous: SourcePanel.settings.labels.previous,
+                        }
                     });
+
+                    //additional initial value
+                    SourcePanel.settings.dom.selectRadius.val(0.75);
+                    SourcePanel.settings.dom.generatorInputCarcount.val(1);
+                    SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
+
+                    //listen to different ui elements
+                    SourcePanel.settings.dom.selectWaypointType.on("change", SourcePanel.updateWaypointSettings);
+                    SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
+                    SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
+                    SourcePanel.settings.dom.selectSpeedProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectMaxSpeedProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectAccProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectDecProb.on("change", SourcePanel.updateCarSettings);
+                    SourcePanel.settings.dom.selectLingerProb.on("change", SourcePanel.updateCarSettings);
                 });
             });
         });
@@ -104,20 +123,37 @@ var SourcePanel = ( function (px_module) {
         //dom elements (no labels)
         SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
-        SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
+        SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
+        SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
         SourcePanel.settings.dom.selectFactory                   = $("#mecsim_source_selectFactory");
         SourcePanel.settings.dom.selectAgentProgram              = $("#mecsim_source_selectAgentProgram");
-        SourcePanel.settings.dom.agentContainer                  = $("#mecsim_source_agentContainer");
         SourcePanel.settings.dom.selectGenerator                 = $("#mecsim_source_selectGenerator");
         SourcePanel.settings.dom.generatorInputCarcount          = $("#mecsim_source_generatorInputCarcount");
+        SourcePanel.settings.dom.generatorInput1                 = $("#mecsim_source_generatorInput1");
         SourcePanel.settings.dom.generatorInput2                 = $("#mecsim_source_generatorInput2");
-        SourcePanel.settings.dom.generatorInput3                 = $("#mecsim_source_generatorInput3");
         SourcePanel.settings.dom.carSettings                     = $("#mecsim_source_carSettings");
+        SourcePanel.settings.dom.selectSpeedProb                 = $("#mecsim_source_selectSpeedProb");
+        SourcePanel.settings.dom.speedProbInput1                 = $("#mecsim_source_speedProbInput1");
+        SourcePanel.settings.dom.speedProbInput2                 = $("#mecsim_source_speedProbInput2");
+        SourcePanel.settings.dom.selectMaxSpeedProb              = $("#mecsim_source_selectMaxSpeedProb");
+        SourcePanel.settings.dom.maxSpeedProbInput1              = $("#mecsim_source_maxSpeedProbInput1");
+        SourcePanel.settings.dom.maxSpeedProbInput2              = $("#mecsim_source_maxSpeedProbInput2");
+        SourcePanel.settings.dom.selectAccProb                   = $("#mecsim_source_selectAccProb");
+        SourcePanel.settings.dom.accProbInput1                   = $("#mecsim_source_accProbInput1");
+        SourcePanel.settings.dom.accProbInput2                   = $("#mecsim_source_accProbInput2");
+        SourcePanel.settings.dom.selectDecProb                   = $("#mecsim_source_selectDecProb");
+        SourcePanel.settings.dom.decProbInput1                   = $("#mecsim_source_decProbInput1");
+        SourcePanel.settings.dom.decProbInput2                   = $("#mecsim_source_decProbInput2");
+        SourcePanel.settings.dom.selectLingerProb                = $("#mecsim_source_selectLingerProb");
+        SourcePanel.settings.dom.lingerProbInput1                = $("#mecsim_source_lingerProbInput1");
+        SourcePanel.settings.dom.lingerProbInput2                = $("#mecsim_source_lingerProbInput2");
+        SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
+        SourcePanel.settings.dom.errorMessage                    = $("#mecsim_source_errorMessage");
 
         //dom elements (dynamic labels)
-        SourcePanel.settings.dom.label.generatorinput2label      = $("#mecsim_source_generatorInput2_label");
-        SourcePanel.settings.dom.label.generatorinput3label      = $("#mecsim_source_generatorInput3_label");
+        SourcePanel.settings.dom.label.generatorInput1label      = $("#mecsim_source_generatorInput1_label");
+        SourcePanel.settings.dom.label.generatorInput2label      = $("#mecsim_source_generatorInput2_label");
         SourcePanel.settings.dom.label.speedprobinput1label      = $("#mecsim_source_speedProbInput1_label");
         SourcePanel.settings.dom.label.speedprobinput2label      = $("#mecsim_source_speedProbInput2_label");
         SourcePanel.settings.dom.label.maxSpeedprobinput1label   = $("#mecsim_source_maxSpeedProbInput1_label");
@@ -164,7 +200,6 @@ var SourcePanel = ( function (px_module) {
                         .css("background-color", "rgb("+ px_value.redValue +","+ px_value.greenValue +","+ px_value.blueValue +")")
                         .attr("class", "mecsim_source_toolIcon")
                         .prependTo(button);
-
                 });
             }
         });
@@ -182,6 +217,19 @@ var SourcePanel = ( function (px_module) {
     px_module.buildContent = function() {
 
         SourcePanel.getDOMElements();
+
+        //create selectmenu with waypoint types
+        $.ajax({
+            url     : "/cwaypointenvironment/listwaypointtypes",
+            success : function( px_data ){
+                px_data.waypointtypes.forEach(function(data){
+                    SourcePanel.settings.dom.selectWaypointType
+                        .append( $("<option></option>")
+                        .attr("value",data)
+                        .text(data));
+                });
+            }
+        });
 
         //create selectmenu with factory types
         $.ajax({
@@ -213,17 +261,23 @@ var SourcePanel = ( function (px_module) {
             }
         });
 
-        //create selectmenu with possible generator types
+        //create all selectmenu with distribution select
         $.ajax({
-            url     : "/cwaypointenvironment/listgenerator",
+            url     : "/cwaypointenvironment/listdistribution",
             success : function( px_data ){
                 px_data.generators.forEach(function(data){
-                    SourcePanel.settings.dom.selectGenerator
-                        .append( $("<option></option>")
+                    $("<option></option>")
                         .attr("value",data)
-                        .text(data));
-                });
+                        .text(data)
+                        .appendTo(".mecsim_source_distributionSelect");
+                    });
+
                 SourcePanel.updateGeneratorSettings();
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectSpeedProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectMaxSpeedProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectAccProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectDecProb"} });
+                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectLingerProb"} });
             }
         });
 
@@ -236,45 +290,51 @@ var SourcePanel = ( function (px_module) {
             togglePaletteOnly: true,
             togglePaletteMoreText: 'more',
             togglePaletteLessText: 'less',
-            color: 'blanchedalmond',
+            color: '#008C4F',
             palette: [
                 ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
                 ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
                 ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
             ]
         });
-
-        //listen to different ui elements
-        SourcePanel.settings.dom.selectFactory.on("change", SourcePanel.updateFactorySettings);
-        SourcePanel.settings.dom.selectGenerator.on("change", SourcePanel.updateGeneratorSettings);
     };
 
     //method to validate if the current wizard step is valide
     px_module.validateWizardStep = function(event , currentIndex, newIndex) {
 
-        //validate first step
+        function validateDistributionInput(distribution, distributionInput1, distributionInput2){
+            if( isNaN(distributionInput1) || isNaN(distributionInput2) )
+                return false;
+
+            if(distribution === "uniform distribution" || distribution === "Gleichverteilung"){
+                if( (distributionInput1 >= distributionInput2) || (distributionInput1 < 0) )
+                    return false;
+            }else{
+                if( distributionInput1 < distributionInput2){
+                    return false;
+                }
+            }
+            return true;
+        }
+
         if(currentIndex===0){
             if($('#mecsim_source_selectFactory option:selected').attr('requireAgent')==="true" && SourcePanel.settings.dom.selectAgentProgram.val()===null)
                 return false;
         }
 
-        //validate second step
         if(currentIndex===1){
-            var generatorInput1 = Number(SourcePanel.settings.dom.generatorInputCarcount.val());
-            var generatorInput2 = Number(SourcePanel.settings.dom.generatorInput2.val());
-            var generatorInput3 = Number(SourcePanel.settings.dom.generatorInput3.val());
-
-            if( isNaN(generatorInput1) || isNaN(generatorInput2) || isNaN(generatorInput3) || generatorInput1 <= 0)
+            if( isNaN(Number(SourcePanel.settings.dom.generatorInputCarcount.val())) || SourcePanel.settings.dom.generatorInputCarcount.val() <= 0)
                 return false;
 
-            if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-                if( (generatorInput2 >= generatorInput3) || (generatorInput2 < 0) )
-                    return false;
-            }else{
-                if( generatorInput2 < generatorInput3){
-                    return false;
-                }
-            }
+            return validateDistributionInput(SourcePanel.settings.dom.selectGenerator.val(), Number(SourcePanel.settings.dom.generatorInput1.val()),  Number(SourcePanel.settings.dom.generatorInput2.val()));
+        }
+
+        if(currentIndex===2){
+            return  validateDistributionInput(SourcePanel.settings.dom.selectSpeedProb.val(), Number(SourcePanel.settings.dom.speedProbInput1.val()),  Number(SourcePanel.settings.dom.speedProbInput2.val()))              &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectMaxSpeedProb.val(), Number(SourcePanel.settings.dom.maxSpeedProbInput1.val()),  Number(SourcePanel.settings.dom.maxSpeedProbInput2.val()))     &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectAccProb.val(), Number(SourcePanel.settings.dom.accProbInput1.val()),  Number(SourcePanel.settings.dom.accProbInput2.val()))                    &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectDecProb.val(), Number(SourcePanel.settings.dom.decProbInput1.val()),  Number(SourcePanel.settings.dom.decProbInput2.val()))                    &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectLingerProb.val(), Number(SourcePanel.settings.dom.lingerProbInput1.val()),  Number(SourcePanel.settings.dom.lingerProbInput2.val()));
         }
 
         return true;
@@ -288,9 +348,9 @@ var SourcePanel = ( function (px_module) {
                         "factory"           : SourcePanel.settings.dom.selectFactory.val(),
                         "agentprogram"      : SourcePanel.settings.dom.selectAgentProgram.val(),
                         "generator"         : SourcePanel.settings.dom.selectGenerator.val(),
-                        "generatorInput1"   : SourcePanel.settings.dom.generatorInputCarcount.val(),
+                        "carcount"          : SourcePanel.settings.dom.generatorInputCarcount.val(),
+                        "generatorInput1"   : SourcePanel.settings.dom.generatorInput1.val(),
                         "generatorInput2"   : SourcePanel.settings.dom.generatorInput2.val(),
-                        "generatorInput3"   : SourcePanel.settings.dom.generatorInput3.val(),
                         "name"              : SourcePanel.settings.dom.toolName.val(),
                         "r"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
                         "g"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,
@@ -315,35 +375,155 @@ var SourcePanel = ( function (px_module) {
                         .prependTo(button);
 
                 });
+
+                SourcePanel.settings.obj.widget.close();
+                setTimeout(function(){
+                    SourcePanel.settings.obj.wizard.steps("setStep", 0);
+                }, SourcePanel.settings.obj.widget._animationTime);
             }
         }).fail(function(){
-            console.log("tool creation failed!");
+            SourcePanel.settings.dom.errorMessage.text(SourcePanel.settings.labels.toolcreationfailed);
         });
+    };
+
+    //method to update waypoint settings
+    px_module.updateWaypointSettings = function(){
+        if(SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Zufall)" || SourcePanel.settings.dom.selectWaypointType.val() === "random car waypoint"){
+            SourcePanel.settings.dom.selectRadius.attr('disabled', false);
+        }else{
+            SourcePanel.settings.dom.selectRadius.attr('disabled', true);
+        }
     };
 
     //method to update factory settings
     px_module.updateFactorySettings = function(){
         if($("#mecsim_source_selectFactory option:selected").attr("requireAgent") === "true"){
-            SourcePanel.settings.dom.agentContainer.show();
+            SourcePanel.settings.dom.selectAgentProgram.attr('disabled', false);
         }else{
-            SourcePanel.settings.dom.agentContainer.hide();
+            SourcePanel.settings.dom.selectAgentProgram.attr('disabled', true);
         }
     };
 
     //method to update generator settings
     px_module.updateGeneratorSettings = function(){
-        SourcePanel.settings.dom.generatorInputCarcount.val(3);
-        if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-            SourcePanel.settings.dom.label.generatorinput2label.text(SourcePanel.settings.labels.selectyourlowerbound);
-            SourcePanel.settings.dom.label.generatorinput3label.text(SourcePanel.settings.labels.selectyourupperbound);
-            SourcePanel.settings.dom.generatorInput2.val(3);
-            SourcePanel.settings.dom.generatorInput3.val(7);
-        }else{
-            SourcePanel.settings.dom.label.generatorinput2label.text(SourcePanel.settings.labels.selectyourmean);
-            SourcePanel.settings.dom.label.generatorinput3label.text(SourcePanel.settings.labels.selectyourdeviation);
-            SourcePanel.settings.dom.generatorInput2.val(5);
-            SourcePanel.settings.dom.generatorInput3.val(1);
+
+        SourcePanel.updateLabels(
+            SourcePanel.settings.dom.selectGenerator.val(),
+            [
+                {
+                    expected: ["uniform distribution", "Gleichverteilung"],
+                    config : [
+                        { element : SourcePanel.settings.dom.label.generatorInput1label, text   : SourcePanel.settings.labels.selectyourlowerbound },
+                        { element : SourcePanel.settings.dom.label.generatorInput2label, text   : SourcePanel.settings.labels.selectyourupperbound },
+                        { element : SourcePanel.settings.dom.generatorInput1, value  : 1 },
+                        { element : SourcePanel.settings.dom.generatorInput2, value  : 3 }
+                    ]
+                },
+                {
+                    expected: ["default"],
+                    config : [
+                        { element : SourcePanel.settings.dom.label.generatorInput1label, text  : SourcePanel.settings.labels.selectyourmean },
+                        { element : SourcePanel.settings.dom.label.generatorInput2label, text  : SourcePanel.settings.labels.selectyourdeviation },
+                        { element : SourcePanel.settings.dom.generatorInput1, value  : 5 },
+                        { element : SourcePanel.settings.dom.generatorInput2, value  : 1 }
+                    ]
+                }
+            ]
+        );
+    };
+
+    //method to update car settings
+    px_module.updateCarSettings = function(event){
+
+        var l_element1, l_element2, l_element3, l_element4;
+        switch(event.target.id){
+
+            case "mecsim_source_selectSpeedProb":
+                l_value    = SourcePanel.settings.dom.selectSpeedProb.val();
+                l_element1 = SourcePanel.settings.dom.label.speedprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.speedprobinput2label;
+                l_element3 = SourcePanel.settings.dom.speedProbInput1;
+                l_element4 = SourcePanel.settings.dom.speedProbInput2;
+                break;
+
+            case "mecsim_source_selectMaxSpeedProb":
+                l_value    = SourcePanel.settings.dom.selectMaxSpeedProb.val();
+                l_element1 = SourcePanel.settings.dom.label.maxSpeedprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.maxSpeedprobinput2label;
+                l_element3 = SourcePanel.settings.dom.maxSpeedProbInput1;
+                l_element4 = SourcePanel.settings.dom.maxSpeedProbInput2;
+                break;
+
+            case "mecsim_source_selectAccProb":
+                l_value    = SourcePanel.settings.dom.selectAccProb.val();
+                l_element1 = SourcePanel.settings.dom.label.accprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.accprobinput2label;
+                l_element3 = SourcePanel.settings.dom.accProbInput1;
+                l_element4 = SourcePanel.settings.dom.accProbInput2;
+                break;
+
+            case "mecsim_source_selectDecProb":
+                l_value    = SourcePanel.settings.dom.selectDecProb.val();
+                l_element1 = SourcePanel.settings.dom.label.decprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.decprobinput2label;
+                l_element3 = SourcePanel.settings.dom.decProbInput1;
+                l_element4 = SourcePanel.settings.dom.decProbInput2;
+                break;
+
+            case "mecsim_source_selectLingerProb":
+                l_value    = SourcePanel.settings.dom.selectLingerProb.val();
+                l_element1 = SourcePanel.settings.dom.label.lingerprobinput1label;
+                l_element2 = SourcePanel.settings.dom.label.lingerprobinput2label;
+                l_element3 = SourcePanel.settings.dom.lingerProbInput1;
+                l_element4 = SourcePanel.settings.dom.lingerProbInput2;
+                break;
         }
+
+        SourcePanel.updateLabels(
+            l_value,
+            [
+                {
+                    expected: ["uniform distribution", "Gleichverteilung"],
+                    config : [
+                        { element : l_element1, text   : SourcePanel.settings.labels.selectyourlowerbound },
+                        { element : l_element2, text   : SourcePanel.settings.labels.selectyourupperbound },
+                        { element : l_element3, value  : 1 },
+                        { element : l_element4, value  : 3 }
+                    ]
+                },
+                {
+                    expected: ["default"],
+                    config : [
+                        { element : l_element1, text  : SourcePanel.settings.labels.selectyourmean },
+                        { element : l_element2, text  : SourcePanel.settings.labels.selectyourdeviation },
+                        { element : l_element3, value  : 5 },
+                        { element : l_element4, value  : 1 }
+                    ]
+                }
+            ]
+        );
+    };
+
+    //generic method to upate labels
+    px_module.updateLabels = function(checkElement, options){
+        var foundflag = false;
+
+        options.forEach(function(p_option){
+            if(foundflag)
+                return;
+
+            p_option.expected.forEach(function(p_expected){
+                if(checkElement === p_expected || p_expected === "default"){
+                    p_option.config.forEach(function(entry){
+                        if(entry.text !== undefined && entry.text !== null)
+                            entry.element.text(entry.text);
+                        if(entry.value !== undefined && entry.value !== null)
+                            entry.element.val(entry.value);
+                    });
+                    foundflag = true;
+                }
+            });
+        });
     };
 
     return px_module;

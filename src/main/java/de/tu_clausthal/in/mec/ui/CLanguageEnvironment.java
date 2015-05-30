@@ -51,6 +51,7 @@ public class CLanguageEnvironment
             put( "selectyourupperbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourupperbound" ) );
 
             put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
+            put( "toolcreationfailed", CCommon.getResourceString( CLanguageEnvironment.class, "toolcreationfailed" ) );
     }};
 
     /**
@@ -65,6 +66,8 @@ public class CLanguageEnvironment
             put( "#mesim_source_customizing_label", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
 
             //wizardstep#1 (factory settings)
+            put( "#mecsim_source_selectWaypointType_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
+            put( "#mecsim_source_waypointRadius_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
             put( "#mecsim_source_selectFactory_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
             put( "#mecsim_source_selectAgentProgram_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
 

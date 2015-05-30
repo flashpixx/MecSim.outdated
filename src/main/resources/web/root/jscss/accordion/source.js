@@ -22,10 +22,8 @@
  */
 
  /** todo collection for source-ui ck
- TODO show error dialog if tool can not created (check for correctness on java side)
  TODO save toolbox in config/web
  TODO histogramm
- TODO further validation
  TODO read more data
 
  TODO path waypoints
@@ -304,29 +302,39 @@ var SourcePanel = ( function (px_module) {
     //method to validate if the current wizard step is valide
     px_module.validateWizardStep = function(event , currentIndex, newIndex) {
 
-        //validate first step
+        function validateDistributionInput(distribution, distributionInput1, distributionInput2){
+            if( isNaN(distributionInput1) || isNaN(distributionInput2) )
+                return false;
+
+            if(distribution === "uniform distribution" || distribution === "Gleichverteilung"){
+                if( (distributionInput1 >= distributionInput2) || (distributionInput1 < 0) )
+                    return false;
+            }else{
+                if( distributionInput1 < distributionInput2){
+                    return false;
+                }
+            }
+            return true;
+        }
+
         if(currentIndex===0){
             if($('#mecsim_source_selectFactory option:selected').attr('requireAgent')==="true" && SourcePanel.settings.dom.selectAgentProgram.val()===null)
                 return false;
         }
 
-        //validate second step
         if(currentIndex===1){
-            var generatorInput1 = Number(SourcePanel.settings.dom.generatorInputCarcount.val());
-            var generatorInput2 = Number(SourcePanel.settings.dom.generatorInput1.val());
-            var generatorInput3 = Number(SourcePanel.settings.dom.generatorInput2.val());
-
-            if( isNaN(generatorInput1) || isNaN(generatorInput2) || isNaN(generatorInput3) || generatorInput1 <= 0)
+            if( isNaN(Number(SourcePanel.settings.dom.generatorInputCarcount.val())) || SourcePanel.settings.dom.generatorInputCarcount.val() <= 0)
                 return false;
 
-            if(SourcePanel.settings.dom.selectGenerator.val() === "uniform distribution" || SourcePanel.settings.dom.selectGenerator.val() === "Gleichverteilung"){
-                if( (generatorInput2 >= generatorInput3) || (generatorInput2 < 0) )
-                    return false;
-            }else{
-                if( generatorInput2 < generatorInput3){
-                    return false;
-                }
-            }
+            return validateDistributionInput(SourcePanel.settings.dom.selectGenerator.val(), Number(SourcePanel.settings.dom.generatorInput1.val()),  Number(SourcePanel.settings.dom.generatorInput2.val()));
+        }
+
+        if(currentIndex===2){
+            return  validateDistributionInput(SourcePanel.settings.dom.selectSpeedProb.val(), Number(SourcePanel.settings.dom.speedProbInput1.val()),  Number(SourcePanel.settings.dom.speedProbInput2.val()))              &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectMaxSpeedProb.val(), Number(SourcePanel.settings.dom.maxSpeedProbInput1.val()),  Number(SourcePanel.settings.dom.maxSpeedProbInput2.val()))     &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectAccProb.val(), Number(SourcePanel.settings.dom.accProbInput1.val()),  Number(SourcePanel.settings.dom.accProbInput2.val()))                    &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectDecProb.val(), Number(SourcePanel.settings.dom.decProbInput1.val()),  Number(SourcePanel.settings.dom.decProbInput2.val()))                    &&
+                    validateDistributionInput(SourcePanel.settings.dom.selectLingerProb.val(), Number(SourcePanel.settings.dom.lingerProbInput1.val()),  Number(SourcePanel.settings.dom.lingerProbInput2.val()));
         }
 
         return true;

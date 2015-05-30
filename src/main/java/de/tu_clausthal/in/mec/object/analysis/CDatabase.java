@@ -27,8 +27,8 @@ package de.tu_clausthal.in.mec.object.analysis;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.IEvaluateLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -44,7 +44,7 @@ import java.sql.ResultSet;
  * @note JDBC driver is needed
  * @see http://commons.apache.org/proper/commons-dbcp/
  */
-public class CDatabase extends IEvaluateLayer<CDatabase.CWorker>
+public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
 {
     /**
      * flag to set connectivity

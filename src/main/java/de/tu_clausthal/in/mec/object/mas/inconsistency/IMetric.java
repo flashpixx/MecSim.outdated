@@ -23,14 +23,21 @@
 
 package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
-import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
-import org.jxmapviewer.painter.Painter;
-
 
 /**
- * measurement to calculate the inconsistencies
+ * metric interface of the inconsistency structure
+ * @see http://en.wikipedia.org/wiki/Metric_space
  */
-public abstract class IMeasurement<T extends IAgent> implements IVoidSteppable, Painter
+public interface IMetric<T>
 {
+
+    /**
+     * calculates the metric value between two objects
+     *
+     * @param p_first first object
+     * @param p_second second object
+     * @return double metric
+     */
+    public double calculate( final T p_first, final T p_second );
+
 }

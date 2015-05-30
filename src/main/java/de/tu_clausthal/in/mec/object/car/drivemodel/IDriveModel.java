@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.car.drivemodel;
 
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
@@ -39,9 +40,9 @@ public interface IDriveModel extends Serializable
      * updates car
      *
      * @param p_currentstep current step number
-     * @param p_graph graph object
+     * @param p_layer car layer
      * @param p_car car object
      */
-    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car );
+    public void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car );
 
 }

@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.car.drivemodel;
 
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 import java.util.Map;
 import java.util.Random;
@@ -39,7 +39,7 @@ public class CNagelSchreckenberg implements IDriveModel
 {
 
     /**
-     * defines the minimal speed *
+     * defines the minimal speed in km/h
      */
     private static final int c_minimalspeed = 15;
     /**
@@ -54,14 +54,15 @@ public class CNagelSchreckenberg implements IDriveModel
     /**
      * checks the acceleration and increment the speed
      *
-     * @param p_graph graph instamce
+     * @param p_layer car layer
      * @param p_car car object
      */
-    protected final void checkAccelerationWithEdgeSpeed( final CGraphHopper p_graph, final ICar p_car )
+    protected final void checkAccelerationWithEdgeSpeed( final CCarLayer p_layer, final ICar p_car )
     {
         p_car.setCurrentSpeed(
                 Math.min(
-                        Math.min( p_car.getMaximumSpeed(), (int) p_graph.getEdgeSpeed( p_car.getEdge() ) ), p_car.getCurrentSpeed() + p_car.getAcceleration()
+                        Math.min( p_car.getMaximumSpeed(), (int) p_layer.getGraph().getEdgeSpeed( p_car.getEdge() ) ),
+                        p_car.getCurrentSpeed() + (int) p_layer.getUnitConvert().getAccelerationToSpeed( p_car.getAcceleration() )
                 )
         );
     }
@@ -69,36 +70,47 @@ public class CNagelSchreckenberg implements IDriveModel
     /**
      * checks of a collision and reduce speed
      *
+     * @param p_layer car layer
      * @param p_car car object
      */
-    protected void checkCollision( final ICar p_car )
+    protected void checkCollision( final CCarLayer p_layer, final ICar p_car )
     {
-        final Map<Integer, ICar> l_predecessor = p_car.getPredecessor();
+        final Map<Double, ICar> l_predecessor = p_car.getPredecessor();
         if ( ( l_predecessor != null ) && ( l_predecessor.size() > 0 ) )
         {
-            final Map.Entry<Integer, ICar> l_item = l_predecessor.entrySet().iterator().next();
-            if ( l_item.getKey().intValue() < p_car.getCurrentSpeed() )
-                p_car.setCurrentSpeed( Math.max( 0, l_item.getKey().intValue() - 1 ) );
+            // get distance which can be drive in one step and distance to the predecessor
+            final double l_speeddistance = p_layer.getUnitConvert().getSpeedToDistance( p_car.getCurrentSpeed() );
+            final double l_distance = l_predecessor.entrySet().iterator().next().getKey();
+
+            if ( l_distance < l_speeddistance )
+                p_car.setCurrentSpeed( Math.max( 0, p_layer.getUnitConvert().getSpeedOfDistance( l_speeddistance - l_distance ) ) );
         }
     }
 
     /**
      * checks the linger probability and modify speed
      *
+     * @param p_layer car layer
      * @param p_car car object
      */
-    protected final void checkLinger( final ICar p_car )
+    protected final void checkLinger( final CCarLayer p_layer, final ICar p_car )
     {
         if ( ( p_car.getCurrentSpeed() > 0 ) && ( m_random.nextDouble() <= p_car.getLingerProbability() ) )
-            p_car.setCurrentSpeed( Math.max( c_minimalspeed, p_car.getCurrentSpeed() - p_car.getDeceleration() ) );
+            p_car.setCurrentSpeed(
+                    Math.max(
+                            c_minimalspeed, p_car.getCurrentSpeed() - (int) p_layer.getUnitConvert().getAccelerationToSpeed(
+                            p_car.getDeceleration()
+                    )
+                    )
+            );
     }
 
     @Override
-    public void update( final int p_currentstep, final CGraphHopper p_graph, final ICar p_car )
+    public void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
     {
-        this.checkAccelerationWithEdgeSpeed( p_graph, p_car );
-        this.checkCollision( p_car );
-        this.checkLinger( p_car );
+        this.checkAccelerationWithEdgeSpeed( p_layer, p_car );
+        this.checkCollision( p_layer, p_car );
+        this.checkLinger( p_layer, p_car );
     }
 
 }

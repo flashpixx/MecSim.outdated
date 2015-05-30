@@ -61,11 +61,11 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
     /**
-     * individual acceleration in km/h
+     * individual acceleration in m/sec^2
      */
     private final int m_acceleration;
     /**
-     * individual deceleration in km/h
+     * individual deceleration in m/sec^2
      */
     private final int m_deceleration;
     /**
@@ -77,7 +77,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * reference to the graph
      */
     @CFieldFilter.CAgent( bind = false )
-    protected final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
+    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
     /**
      * inspector map
      */
@@ -191,7 +191,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         if ( l_edgeid == null )
             return null;
 
-        return m_graph.getEdge( l_edgeid ).getGeoposition( this );
+        return m_layer.getGraph().getEdge( l_edgeid ).getGeoposition( this );
     }
 
     @Override
@@ -210,23 +210,23 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     @Override
     @CMethodFilter.CAgent( bind = false )
-    public final Map<Integer, ICar> getPredecessor()
+    public final Map<Double, ICar> getPredecessor()
     {
         return this.getPredecessor( 1 );
     }
 
     @Override
     @CMethodFilter.CAgent( bind = false )
-    public final Map<Integer, ICar> getPredecessor( final int p_count )
+    public final Map<Double, ICar> getPredecessor( final int p_count )
     {
-        final Map<Integer, ICar> l_predecessordistance = new HashMap<>();
+        final Map<Double, ICar> l_predecessordistance = new HashMap<>();
 
         // we get the nearest predecessor within the speed range (performance boost)
         for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )
         {
-            final ICar l_object = m_graph.getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
+            final ICar l_object = m_layer.getGraph().getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
             if ( l_object != null )
-                l_predecessordistance.put( i - m_routeindex, l_object );
+                l_predecessordistance.put( m_layer.getUnitConvert().getCellToMeter( i - m_routeindex ), l_object );
         }
 
         return l_predecessordistance;
@@ -246,7 +246,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private Integer getCurrentCarsOnEdge()
     {
-        return m_graph.getEdge( this.getEdge() ).getNumberOfObjects();
+        return m_layer.getGraph().getEdge( this.getEdge() ).getNumberOfObjects();
     }
 
     /**
@@ -256,7 +256,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     private Double getCurrentEdgeMaxSpeed()
     {
-        return m_graph.getEdgeSpeed( this.getEdge() );
+        return m_layer.getGraph().getEdgeSpeed( this.getEdge() );
     }
 
     /**
@@ -308,11 +308,11 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     {
         final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_list = new LinkedList<>();
 
-        GeoPosition l_start = m_graph.getEdge( m_route.get( p_start ).getLeft() ).getGeoPositions( m_route.get( p_start ).getRight().intValue() );
+        GeoPosition l_start = m_layer.getGraph().getEdge( m_route.get( p_start ).getLeft() ).getGeoPositions( m_route.get( p_start ).getRight().intValue() );
         GeoPosition l_end;
         for ( int i = p_start + 1; i < p_end; ++i )
         {
-            l_end = m_graph.getEdge( m_route.get( i ).getLeft() ).getGeoPositions( m_route.get( i ).getRight().intValue() );
+            l_end = m_layer.getGraph().getEdge( m_route.get( i ).getLeft() ).getGeoPositions( m_route.get( i ).getRight().intValue() );
             if ( l_start.equals( l_end ) )
                 continue;
 
@@ -364,7 +364,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     public void release()
     {
         super.release();
-        final CEdge l_edge = m_graph.getEdge( this.getEdge() );
+        final CEdge l_edge = m_layer.getGraph().getEdge( this.getEdge() );
         if ( l_edge != null )
             l_edge.removeObject( this );
     }
@@ -406,11 +406,11 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         if ( m_routeindex >= m_route.size() - 1 )
             return;
 
-        final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( this.getGeoposition(), p_position, 1 );
+        final List<List<EdgeIteratorState>> l_route = m_layer.getGraph().getRoutes( this.getGeoposition(), p_position, 1 );
         if ( l_route.size() > 0 )
         {
             m_route.subList( m_routeindex + 1, m_route.size() );
-            m_route.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
+            m_route.addAll( m_layer.getGraph().getRouteCells( l_route.get( 0 ) ) );
         }
     }
 
@@ -424,7 +424,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             return;
 
         // if the car reaches the end
-        int l_speed = m_graph.getSpeedToCellIncrement( this.getCurrentSpeed() );
+        int l_speed = m_layer.getUnitConvert().getSpeedToCell( this.getCurrentSpeed() );
         if ( m_routeindex + l_speed >= m_route.size() )
         {
             m_endreached = true;
@@ -435,12 +435,12 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         if ( m_routeindex == 0 )
         {
 
-            if ( !m_graph.getEdge( m_route.get( l_speed ).getLeft() ).isEmpty( m_route.get( l_speed ).getRight().intValue() ) )
+            if ( !m_layer.getGraph().getEdge( m_route.get( l_speed ).getLeft() ).isEmpty( m_route.get( l_speed ).getRight().intValue() ) )
                 return;
 
             try
             {
-                m_graph.getEdge( m_route.get( l_speed ).getLeft() ).setObject( this, m_route.get( l_speed ).getRight().intValue() );
+                m_layer.getGraph().getEdge( m_route.get( l_speed ).getLeft() ).setObject( this, m_route.get( l_speed ).getRight().intValue() );
                 m_routeindex += l_speed;
             }
             catch ( final IllegalAccessException l_exception )
@@ -453,13 +453,13 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
             try
             {
-                m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
-                m_graph.getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
+                m_layer.getGraph().getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
+                m_layer.getGraph().getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
                 m_routeindex += l_speed;
             }
             catch ( final IllegalAccessException l_exception )
             {
-                m_graph.getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
+                m_layer.getGraph().getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
             }
 
         }

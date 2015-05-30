@@ -21,37 +21,51 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.car.drivemodel;
+package de.tu_clausthal.in.mec.object;
 
-import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 
 
 /**
- * class of the Nagel-Schreckenberg drive model which
- * uses full control of agent cars
- *
- * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
+ * layer for any calculation atomic task without visibility
  */
-public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
+public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
 {
+    /**
+     * flag for activity
+     */
+    protected boolean m_active = true;
     /**
      * serialize version ID *
      */
-    private static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     @Override
-    public final void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
+    public int getCalculationIndex()
     {
-        // if car is an agent-car the agent gets full control over the car - we check only the precessor to avoid collisions
-        if ( p_car instanceof CCarJasonAgent )
-        {
-            this.checkCollision( p_layer, p_car );
-            return;
-        }
+        return Integer.MAX_VALUE;
+    }
 
-        // otherwise call super method
-        super.update( p_currentstep, p_layer, p_car );
+    @Override
+    public final boolean isActive()
+    {
+        return m_active;
+    }
+
+    @Override
+    public final void setActive( final boolean p_active )
+    {
+        m_active = p_active;
+    }
+
+    @Override
+    public final void release()
+    {
+
+    }
+
+    @Override
+    public void step( final int p_currentstep, final ILayer p_layer )
+    {
     }
 }

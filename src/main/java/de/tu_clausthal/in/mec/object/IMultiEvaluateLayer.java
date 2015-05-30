@@ -33,9 +33,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
- * layer for any calculation without visibility
+ * layer for any calculation multiple elements without visibility
  */
-public abstract class IEvaluateLayer<T extends ISteppable> implements ILayer, IVoidSteppable, Collection<T>
+public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILayer, IVoidSteppable, Collection<T>
 {
     /**
      * flag for activity

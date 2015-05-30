@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
@@ -87,6 +88,9 @@ public class CAgent<T> implements IVoidAgent
             put( "jason.stdlib.create_agent", l_empty13 );
             put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
             put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+
+            // add own function
+            put( "mecsim.literal2number", new CLiteral2Number() );
         }};
     /**
      * path seperator

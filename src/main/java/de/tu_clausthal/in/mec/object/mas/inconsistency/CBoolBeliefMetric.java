@@ -21,37 +21,39 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.car.drivemodel;
+package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
-import de.tu_clausthal.in.mec.object.car.CCarJasonAgent;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * class of the Nagel-Schreckenberg drive model which
- * uses full control of agent cars
- *
- * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
+ * belief-base metric with bool structure
  */
-public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
+public class CBoolBeliefMetric<T extends IAgent> implements IMetric<T>
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
     @Override
-    public final void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
+    public double calculate( final T p_first, final T p_second )
     {
-        // if car is an agent-car the agent gets full control over the car - we check only the precessor to avoid collisions
-        if ( p_car instanceof CCarJasonAgent )
-        {
-            this.checkCollision( p_layer, p_car );
-            return;
-        }
+        // equal objects create zero value
+        if ( p_first.equals( p_second ) ) return 0;
 
-        // otherwise call super method
-        super.update( p_currentstep, p_layer, p_car );
+        // create aggregate belief-base
+        /*
+        final Set<N> l_aggregate = new HashSet<N>()
+        {{
+                addAll( p_current.getBeliefs() );
+                addAll( p_other.getBeliefs() );
+            }};
+        */
+
+        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
+        //return new Integer( ( ( l_aggregate.size() - p_current.getBeliefs().size() ) + ( l_aggregate.size() - p_other.getBeliefs().size() ) ) );
+
+        return 0;
+
     }
 }

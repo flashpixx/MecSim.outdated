@@ -151,6 +151,7 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.lingerProbInput2                = $("#mecsim_source_lingerProbInput2");
         SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
+        SourcePanel.settings.dom.errorMessage                    = $("#mecsim_source_errorMessage");
 
         //dom elements (dynamic labels)
         SourcePanel.settings.dom.label.generatorInput1label      = $("#mecsim_source_generatorInput1_label");
@@ -366,15 +367,15 @@ var SourcePanel = ( function (px_module) {
                         .prependTo(button);
 
                 });
+
+                SourcePanel.settings.obj.widget.close();
+                setTimeout(function(){
+                    SourcePanel.settings.obj.wizard.steps("setStep", 0);
+                }, SourcePanel.settings.obj.widget._animationTime);
             }
         }).fail(function(){
-            console.log("tool creation failed!");
+            SourcePanel.settings.dom.errorMessage.text(SourcePanel.settings.labels.toolcreationfailed);
         });
-
-        SourcePanel.settings.obj.widget.close();
-        setTimeout(function(){
-            SourcePanel.settings.obj.wizard.steps("setStep", 0);
-        }, SourcePanel.settings.obj.widget._animationTime);
     };
 
     //method to update waypoint settings

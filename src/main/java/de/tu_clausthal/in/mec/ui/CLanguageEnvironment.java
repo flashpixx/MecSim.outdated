@@ -51,6 +51,7 @@ public class CLanguageEnvironment
             put( "selectyourupperbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourupperbound" ) );
 
             put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
+            put( "toolcreationfailed", CCommon.getResourceString( CLanguageEnvironment.class, "toolcreationfailed" ) );
     }};
 
     /**

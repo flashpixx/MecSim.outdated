@@ -176,6 +176,11 @@ select
     margin-right: 10px;
 }
 
+#mecsim_source_errorMessage{
+    color: red;
+    margin-top: 50px;
+}
+
 /******************************** css definitions for mecsim_widget ************************************************/
 
 .ui-resizable-helper{

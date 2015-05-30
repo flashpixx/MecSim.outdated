@@ -22,7 +22,6 @@
  */
 
  /** todo collection for source-ui ck
- TODO close if finished
  TODO show error dialog if tool can not created (check for correctness on java side)
  TODO save toolbox in config/web
  TODO histogramm
@@ -371,6 +370,11 @@ var SourcePanel = ( function (px_module) {
         }).fail(function(){
             console.log("tool creation failed!");
         });
+
+        SourcePanel.settings.obj.widget.close();
+        setTimeout(function(){
+            SourcePanel.settings.obj.wizard.steps("setStep", 0);
+        }, SourcePanel.settings.obj.widget._animationTime);
     };
 
     //method to update waypoint settings

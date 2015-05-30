@@ -57,7 +57,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * message counter
      */
-    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "receiver", CAdjacencyMatrix.ESerialzeOutput.Tree );
+    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "receiver" );
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
@@ -71,6 +71,21 @@ public class CMessageSystem implements IVoidSteppable
     public final void addActionListener( final IActionListener p_listener )
     {
         m_listener.add( p_listener );
+    }
+
+    /**
+     * increments the message flow
+     *
+     * @param p_row row value of the adjacency matrix
+     * @param p_colum column value of the adjacency matrix
+     */
+    private void incrementMessageFlow( final CPath p_row, final CPath p_colum )
+    {
+        m_messageflow.set(
+                p_row, p_colum, ( m_messageflow.exist( p_row, p_colum ) ? m_messageflow.get(
+                        p_row, p_colum
+                ) : new Integer( -1 ) ) + 1
+        );
     }
 
     /**
@@ -103,6 +118,7 @@ public class CMessageSystem implements IVoidSteppable
             return;
         }
 
+        // receive message / push message to the receiver - increment main receiver of the message
         for ( final Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_receiverpath ).getTreeData() )
         {
             // if item equal null skip
@@ -110,17 +126,18 @@ public class CMessageSystem implements IVoidSteppable
                 continue;
 
             l_item.getRight().add( p_message );
+
+            // all subnodes of the receiver gets the message from the receiver the root node get the receiver from the message sender
+            for ( final IParticipant l_subreceiver : l_item.getLeft() )
+                this.incrementMessageFlow(
+                        l_subreceiver.getReceiverPath().equals( p_receiverpath ) ? p_message.getSource() : p_receiverpath, l_subreceiver.getReceiverPath()
+                );
         }
 
+
+        // call listener with receiver and message
         for ( final IActionListener l_item : m_listener )
             l_item.onPushMessage( p_receiverpath, p_message );
-
-        // increment message flow
-        m_messageflow.set(
-                p_message.getSource(), p_receiverpath, ( m_messageflow.exist( p_message.getSource(), p_receiverpath ) ? m_messageflow.get(
-                        p_message.getSource(), p_receiverpath
-                ) : new Integer( -1 ) ) + 1
-        );
     }
 
     /**

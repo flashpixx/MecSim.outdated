@@ -57,10 +57,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      * row name
      */
     private final String m_rowname;
-    /**
-     * option for serializing result
-     */
-    private final ESerialzeOutput m_type;
+
 
 
     /**
@@ -68,19 +65,9 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix()
     {
-        this( "row", "col", ESerialzeOutput.Matrix );
+        this( "row", "col" );
     }
 
-
-    /**
-     * ctor
-     *
-     * @param p_type serializing type
-     */
-    public CAdjacencyMatrix( final ESerialzeOutput p_type )
-    {
-        this( "row", "col", p_type );
-    }
 
     /**
      * ctor
@@ -90,23 +77,9 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     public CAdjacencyMatrix( final String p_rowname, final String p_colname )
     {
-        this( p_rowname, p_colname, ESerialzeOutput.Matrix );
-    }
-
-
-    /**
-     * ctor
-     *
-     * @param p_rowname row name
-     * @param p_colname column name
-     * @param p_type serializing type
-     */
-    public CAdjacencyMatrix( final String p_rowname, final String p_colname, final ESerialzeOutput p_type )
-    {
         super();
         m_rowname = p_rowname;
         m_colname = p_colname;
-        m_type = p_type;
     }
 
     /**
@@ -157,36 +130,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
 
     /**
-     * enum typ for serializing
-     **/
-    public enum ESerialzeType
-    {
-        /**
-         * returns the matrix as matrix
-         **/
-        Matrix,
-        /**
-         * returns the matrix as tree
-         */
-        Tree;
-    }
-
-    /**
-     * enum typ for serializing
-     **/
-    public enum ESerialzeOutput
-    {
-        /**
-         * returns the matrix as matrix
-         **/
-        Matrix,
-        /**
-         * returns the matrix as tree
-         */
-        Tree;
-    }
-
-    /**
      * serializer for Json access
      */
     public static class CJson extends JsonSerializer<CAdjacencyMatrix<?, ?>>
@@ -195,27 +138,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         @Override
         public void serialize( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator, final SerializerProvider p_serializer
         ) throws IOException, JsonProcessingException
-        {
-            switch ( p_matrix.m_type )
-            {
-                case Matrix:
-                    this.toMatrix( p_matrix, p_generator );
-                    break;
-                case Tree:
-                    this.toTree( p_matrix, p_generator );
-                    break;
-                default:
-            }
-        }
-
-        /**
-         * converts the matrix to JSON matrix object
-         *
-         * @param p_matrix matrix object
-         * @param p_generator JSON generator
-         * @throws IOException is thrown on IO errors
-         */
-        private void toMatrix( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator ) throws IOException
         {
             p_generator.writeStartObject();
             p_generator.writeArrayFieldStart( "cells" );
@@ -228,40 +150,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
                 p_generator.writeEndObject();
             }
             p_generator.writeEndArray();
-            p_generator.writeEndObject();
-        }
-
-
-        /**
-         * converts the matrix to JSON tree object
-         *
-         * @param p_matrix matrix object
-         * @param p_generator JSON generator
-         * @throws IOException is thrown on IO errors
-         * @note wildcard type set up to generic to avoid compiler inference error
-         */
-        private <T, N> void toTree( final CAdjacencyMatrix<T, N> p_matrix, final JsonGenerator p_generator ) throws IOException
-        {
-            p_generator.writeStartObject();
-            for ( final T l_row : p_matrix.m_keys )
-            {
-                p_generator.writeObjectFieldStart( l_row.toString() );
-                p_generator.writeArrayFieldStart( "children" );
-                for ( final T l_col : p_matrix.m_keys )
-                {
-                    p_generator.writeStartObject();
-
-                    p_generator.writeObjectField( "connect", l_col );
-                    final N l_value = p_matrix.get( l_row, l_col );
-                    if ( l_value != null )
-                        p_generator.writeObjectField( "value", l_value );
-
-                    p_generator.writeEndObject();
-
-                }
-                p_generator.writeEndArray();
-                p_generator.writeEndObject();
-            }
             p_generator.writeEndObject();
         }
 

@@ -107,6 +107,7 @@ public class CWaypointEnvironment
             put("blue", 0);
     }};
 
+
     /**
      * ctor which create a default tool
      */
@@ -201,19 +202,14 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<String>> web_static_listwaypointtypes()
+    private final List<String> web_static_listwaypointtypes()
     {
-
         List<String> l_waypointtypes = new ArrayList<>();
-        for ( final EWayPointType l_waypoint : EWayPointType.values() )
-        {
-            l_waypointtypes.add( l_waypoint.m_name );
-        }
 
-        return new HashMap<String, List<String>>()
-        {{
-                put( "waypointtypes", l_waypointtypes );
-            }};
+        for( final EWayPointType l_waypoint : EWayPointType.values())
+            l_waypointtypes.add( l_waypoint.m_name );
+
+        return l_waypointtypes;
     }
 
     /**
@@ -221,19 +217,14 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<ImmutablePair<String, Boolean>>> web_static_listfactories()
+    private final Map<String, Boolean> web_static_listfactories()
     {
+        Map<String, Boolean> l_factories = new HashMap<>();
 
-        List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
-        for ( final EFactoryType l_factory : EFactoryType.values() )
-        {
-            l_factories.add(new ImmutablePair<>(l_factory.m_name, l_factory.m_requireASL));
-        }
+        for( final EFactoryType l_factory : EFactoryType.values())
+            l_factories.put( l_factory.m_name, l_factory.m_requireASL );
 
-        return new HashMap<String, List<ImmutablePair<String, Boolean>>>()
-        {{
-                put( "factories", l_factories );
-            }};
+        return l_factories;
     }
 
     /**
@@ -241,19 +232,14 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, List<String>> web_static_listdistribution()
+    private final List<String> web_static_listdistribution()
     {
+        List<String> l_distributions = new ArrayList<>();
 
-        List<String> l_generators = new ArrayList<>();
-        for ( final EDistributionType l_generator : EDistributionType.values() )
-        {
-            l_generators.add( l_generator.m_name );
-        }
+        for( final EDistributionType l_distribution : EDistributionType.values())
+            l_distributions.add( l_distribution.m_name );
 
-        return new HashMap<String, List<String>>()
-        {{
-                put( "generators", l_generators );
-            }};
+        return l_distributions;
     }
 
     /**

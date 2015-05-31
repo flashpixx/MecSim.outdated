@@ -230,7 +230,7 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/cwaypointenvironment/listwaypointtypes",
             success : function( px_data ){
-                px_data.waypointtypes.forEach(function(data){
+                px_data.forEach(function(data){
                     SourcePanel.settings.dom.selectWaypointType
                         .append( $("<option></option>")
                         .attr("value",data)
@@ -243,14 +243,12 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/cwaypointenvironment/listfactories",
             success : function( px_data ){
-                px_data.factories.forEach(function(data){
-                    $.each( data, function( pc_key, px_value ) {
-                        SourcePanel.settings.dom.selectFactory
-                            .append( $("<option></option>")
-                            .attr("value",pc_key)
-                            .attr("requireAgent", px_value)
-                            .text(pc_key));
-                    });
+                $.each( px_data, function( pc_key, px_value ) {
+                    SourcePanel.settings.dom.selectFactory
+                        .append( $("<option></option>")
+                        .attr("value",pc_key)
+                        .attr("requireAgent", px_value)
+                        .text(pc_key));
                 });
                 SourcePanel.updateFactorySettings();
             }
@@ -273,7 +271,7 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/cwaypointenvironment/listdistribution",
             success : function( px_data ){
-                px_data.generators.forEach(function(data){
+                px_data.forEach(function(data){
                     $("<option></option>")
                         .attr("value",data)
                         .text(data)

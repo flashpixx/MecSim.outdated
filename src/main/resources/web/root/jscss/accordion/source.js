@@ -62,6 +62,8 @@ var SourcePanel = ( function (px_module) {
             MecSim.ui().content().empty();
             MecSim.ui().content().load("template/source.htm", function(){
 
+                MecSim.ui().content().hide();
+
                 //get dom elements and set labels
                 SourcePanel.getDOMElements();
                 MecSim.language("getstaticwaypointlabels", function(){
@@ -92,6 +94,8 @@ var SourcePanel = ( function (px_module) {
                           previous: SourcePanel.settings.labels.previous,
                         }
                     });
+
+                    MecSim.ui().content().show();
 
                     //additional initial value
                     SourcePanel.settings.dom.selectRadius.val(0.75);

@@ -99,12 +99,23 @@ var SourcePanel = ( function (px_module) {
                         }
                     });
 
-                    MecSim.ui().content().show();
+                    SourcePanel.settings.obj.slider = SourcePanel.settings.dom.lingerSlider.slider({
+                        range:true,
+                        min: 0,
+                        max: 100,
+                        values: [25, 75],
+                        slide: function(event, ui){
+                            SourcePanel.settings.dom.label.lingerSliderLabel.text(ui.values[0] + " - " + ui.values[1]  + "%");
+                        }
+                    });
 
                     //additional initial value
                     SourcePanel.settings.dom.selectRadius.val(0.75);
                     SourcePanel.settings.dom.generatorInputCarcount.val(1);
                     SourcePanel.settings.dom.toolName.attr("value", SourcePanel.settings.labels.selecttoolnamevalue);
+                    SourcePanel.settings.dom.label.lingerSliderLabel.text(SourcePanel.settings.obj.slider.slider("values", 0) + " - " + SourcePanel.settings.obj.slider.slider("values", 1) + "%");
+
+                    MecSim.ui().content().show();
 
                     //listen to different ui elements
                     SourcePanel.settings.dom.selectWaypointType.on("change", SourcePanel.updateWaypointSettings);
@@ -114,7 +125,6 @@ var SourcePanel = ( function (px_module) {
                     SourcePanel.settings.dom.selectMaxSpeedProb.on("change", SourcePanel.updateCarSettings);
                     SourcePanel.settings.dom.selectAccProb.on("change", SourcePanel.updateCarSettings);
                     SourcePanel.settings.dom.selectDecProb.on("change", SourcePanel.updateCarSettings);
-                    SourcePanel.settings.dom.selectLingerProb.on("change", SourcePanel.updateCarSettings);
                 });
             });
         });
@@ -152,9 +162,7 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.selectDecProb                   = $("#mecsim_source_selectDecProb");
         SourcePanel.settings.dom.decProbInput1                   = $("#mecsim_source_decProbInput1");
         SourcePanel.settings.dom.decProbInput2                   = $("#mecsim_source_decProbInput2");
-        SourcePanel.settings.dom.selectLingerProb                = $("#mecsim_source_selectLingerProb");
-        SourcePanel.settings.dom.lingerProbInput1                = $("#mecsim_source_lingerProbInput1");
-        SourcePanel.settings.dom.lingerProbInput2                = $("#mecsim_source_lingerProbInput2");
+        SourcePanel.settings.dom.lingerSlider                    = $("#mecsim_source_lingerSlider");
         SourcePanel.settings.dom.colorpicker                     = $("#mecsim_source_colorpicker");
         SourcePanel.settings.dom.toolName                        = $("#mecsim_source_toolName");
         SourcePanel.settings.dom.errorMessage                    = $("#mecsim_source_errorMessage");
@@ -170,8 +178,7 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.label.accprobinput2label        = $("#mecsim_source_accProbInput2_label");
         SourcePanel.settings.dom.label.decprobinput1label        = $("#mecsim_source_decProbInput1_label");
         SourcePanel.settings.dom.label.decprobinput2label        = $("#mecsim_source_decProbInput2_label");
-        SourcePanel.settings.dom.label.lingerprobinput1label     = $("#mecsim_source_lingerProbInput1_label");
-        SourcePanel.settings.dom.label.lingerprobinput2label     = $("#mecsim_source_lingerProbInput2_label");
+        SourcePanel.settings.dom.label.lingerSliderLabel         = $("#mecsim_source_lingerLabel");
      };
 
     //method to get source-ui related labels which are dynamic
@@ -283,7 +290,6 @@ var SourcePanel = ( function (px_module) {
                 SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectMaxSpeedProb"} });
                 SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectAccProb"} });
                 SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectDecProb"} });
-                SourcePanel.updateCarSettings({target : {id: "mecsim_source_selectLingerProb"} });
             }
         });
 
@@ -339,8 +345,7 @@ var SourcePanel = ( function (px_module) {
             return  validateDistributionInput(SourcePanel.settings.dom.selectSpeedProb.val(), Number(SourcePanel.settings.dom.speedProbInput1.val()),  Number(SourcePanel.settings.dom.speedProbInput2.val()))              &&
                     validateDistributionInput(SourcePanel.settings.dom.selectMaxSpeedProb.val(), Number(SourcePanel.settings.dom.maxSpeedProbInput1.val()),  Number(SourcePanel.settings.dom.maxSpeedProbInput2.val()))     &&
                     validateDistributionInput(SourcePanel.settings.dom.selectAccProb.val(), Number(SourcePanel.settings.dom.accProbInput1.val()),  Number(SourcePanel.settings.dom.accProbInput2.val()))                    &&
-                    validateDistributionInput(SourcePanel.settings.dom.selectDecProb.val(), Number(SourcePanel.settings.dom.decProbInput1.val()),  Number(SourcePanel.settings.dom.decProbInput2.val()))                    &&
-                    validateDistributionInput(SourcePanel.settings.dom.selectLingerProb.val(), Number(SourcePanel.settings.dom.lingerProbInput1.val()),  Number(SourcePanel.settings.dom.lingerProbInput2.val()));
+                    validateDistributionInput(SourcePanel.settings.dom.selectDecProb.val(), Number(SourcePanel.settings.dom.decProbInput1.val()),  Number(SourcePanel.settings.dom.decProbInput2.val()));
         }
 
         return true;
@@ -376,9 +381,8 @@ var SourcePanel = ( function (px_module) {
                 "decprobinput1"      : SourcePanel.settings.dom.decProbInput1.val(),
                 "decprobinput2"      : SourcePanel.settings.dom.decProbInput2.val(),
 
-                "lingerprob"         : SourcePanel.settings.dom.selectLingerProb.val(),
-                "lingerprobinput1"   : SourcePanel.settings.dom.lingerProbInput1.val(),
-                "lingerprobinput2"   : SourcePanel.settings.dom.lingerProbInput2.val(),
+                "lingerprobinput1"   : SourcePanel.settings.obj.slider.slider("values", 0)/100,
+                "lingerprobinput2"   : SourcePanel.settings.obj.slider.slider("values", 1)/100,
 
                 "name"               : SourcePanel.settings.dom.toolName.val(),
                 "red"                : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
@@ -505,16 +509,6 @@ var SourcePanel = ( function (px_module) {
                 l_element4 = SourcePanel.settings.dom.decProbInput2;
                 l_defaultPara1 = 20;
                 l_defaultPara2 = 5;
-                break;
-
-            case "mecsim_source_selectLingerProb":
-                l_value    = SourcePanel.settings.dom.selectLingerProb.val();
-                l_element1 = SourcePanel.settings.dom.label.lingerprobinput1label;
-                l_element2 = SourcePanel.settings.dom.label.lingerprobinput2label;
-                l_element3 = SourcePanel.settings.dom.lingerProbInput1;
-                l_element4 = SourcePanel.settings.dom.lingerProbInput2;
-                l_defaultPara1 = 0;
-                l_defaultPara2 = 1;
                 break;
         }
 

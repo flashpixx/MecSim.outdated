@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
@@ -82,25 +83,24 @@ public class CWaypointEnvironment
             put("radius", 0.75);
             put("factory", EFactoryType.DefaultCarFactory.m_name);
             put("agentprogram", "");
-            put("generator", EDistributionType.Uniform.m_name);
+            put("generator", EDistributionType.Normal.m_name);
             put("carcount", 1);
-            put("generatorinput1", 1);
-            put("generatorinput2", 3);
-            put( "speedprob", EDistributionType.Uniform.m_name );
-            put( "speedprobinput1", 1 );
-            put( "speedprobinput2", 3 );
-            put( "maxspeedprob", EDistributionType.Uniform.m_name );
-            put( "maxspeedprobinput1", 1);
-            put( "maxspeedprobinput2", 3 );
-            put( "accprob", EDistributionType.Uniform.m_name );
-            put( "accprobinput1", 1 );
-            put( "accprobinput2", 3 );
-            put( "decprob", EDistributionType.Uniform.m_name );
-            put( "decprobinput1", 1 );
-            put( "decprobinput2", 3 );
-            put( "lingerprob", EDistributionType.Uniform.m_name);
-            put( "lingerprobinput1", 1);
-            put( "lingerprobinput2", 3);
+            put("generatorinput1", 5);
+            put("generatorinput2", 1);
+            put( "speedprob", EDistributionType.Normal.m_name );
+            put( "speedprobinput1", 50 );
+            put( "speedprobinput2", 25 );
+            put( "maxspeedprob", EDistributionType.Normal.m_name );
+            put( "maxspeedprobinput1", 250);
+            put( "maxspeedprobinput2", 50 );
+            put( "accprob", EDistributionType.Normal.m_name );
+            put( "accprobinput1", 20 );
+            put( "accprobinput2", 5 );
+            put( "decprob", EDistributionType.Normal.m_name );
+            put( "decprobinput1", 20 );
+            put( "decprobinput2", 5 );
+            put( "lingerprobinput1", 0);
+            put( "lingerprobinput2", 1);
             put("name", CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ));
             put("red", 255);
             put("green", 0);
@@ -174,6 +174,8 @@ public class CWaypointEnvironment
             if( !p_data.containsKey( l_parameter )){
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtoolconfiguration" ) );
             }
+
+            CLogger.out(l_parameter +"->"+ p_data.get( l_parameter ));
 
             //check if tool already exist
             if(m_toolbox.containsKey( p_data.get( "name" ) )){
@@ -332,8 +334,8 @@ public class CWaypointEnvironment
      */
     protected enum EDistributionType
     {
-        Uniform( CCommon.getResourceString( EDistributionType.class, "uniformdistribution" ) ),
         Normal( CCommon.getResourceString( EDistributionType.class, "normaldistribution" ) ),
+        Uniform( CCommon.getResourceString( EDistributionType.class, "uniformdistribution" ) ),
         Exponential( CCommon.getResourceString( EDistributionType.class, "exponentialdistribution" ) ),
         Profile( CCommon.getResourceString( EDistributionType.class, "profiledistribution" ) );
 
@@ -457,10 +459,6 @@ public class CWaypointEnvironment
          */
         protected final double m_decProbInput2;
         /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_lingerProb;
-        /**
          * generatorInput1 (lower bound or mean)
          */
         protected final double m_lingerProbInput1;
@@ -509,7 +507,6 @@ public class CWaypointEnvironment
             this.m_decProb = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "decprob" ) ) );
             this.m_decProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "decprobinput1" ) ) );
             this.m_decProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "decprobinput2" ) ) );
-            this.m_lingerProb = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "lingerprob" ) ) );
             this.m_lingerProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput1" ) ) );
             this.m_lingerProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput2" ) ) );
             this.m_color = new Color(l_redValue, l_greenValue, l_blueValue);
@@ -543,7 +540,7 @@ public class CWaypointEnvironment
                             getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
                             getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
                             getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            getDistribution( m_lingerProb, m_lingerProbInput1, m_lingerProbInput2 )
+                            new UniformRealDistribution(m_lingerProbInput1, m_lingerProbInput2)
                             );
 
                 case DefaultAgentCarFactory:
@@ -552,7 +549,7 @@ public class CWaypointEnvironment
                             getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
                             getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
                             getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            getDistribution( m_lingerProb, m_lingerProbInput1, m_lingerProbInput2 ),
+                            new UniformRealDistribution( m_lingerProbInput1, m_lingerProbInput2 ),
                             m_asl
                     );
 
@@ -562,7 +559,7 @@ public class CWaypointEnvironment
                             getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
                             getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
                             getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            getDistribution( m_lingerProb, m_lingerProbInput1, m_lingerProbInput2 )
+                            new UniformRealDistribution( m_lingerProbInput1, m_lingerProbInput2 )
                     );
             }
         }

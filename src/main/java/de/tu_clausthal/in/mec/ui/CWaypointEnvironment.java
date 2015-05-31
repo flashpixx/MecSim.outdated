@@ -48,6 +48,7 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
+ * todo validation
  * todo java cleanup (doc, style)
  * todo remove singelton
  * todo rename asl and input
@@ -58,6 +59,10 @@ import java.util.Map;
 public class CWaypointEnvironment
 {
     /**
+     * singelton instance
+     */
+    private static final CWaypointEnvironment s_instance = new CWaypointEnvironment();
+    /**
      * selected tool for the waypoint layer
      */
     protected static CTool m_selectedTool;
@@ -66,22 +71,63 @@ public class CWaypointEnvironment
      */
     protected final Map<String, CTool> m_toolbox = new HashMap<>();
     /**
-     * singelton instance
+     * list of all expected parameters for tool creation
      */
-    private static final CWaypointEnvironment s_instance = new CWaypointEnvironment();
-
+    protected final List<String> m_expectedParameter = new ArrayList<String>()
+    {{
+            add( "waypointtype" );
+            add( "radius" );
+            add( "factory" );
+            add( "agentprogram" );
+            add( "generator" );
+            add( "carcount" );
+            add( "generatorinput1" );
+            add( "generatorinput2" );
+            /**
+            add( "speedprob" );
+            add( "speedprobinput1" );
+            add( "speedprobinput2" );
+            add( "maxspeedprob" );
+            add( "maxspeedprobinput1" );
+            add( "maxspeedprobinput2" );
+            add( "accprob" );
+            add( "accprobinput1" );
+            add( "accprobinput2" );
+            add( "decprob" );
+            add( "decprobinput1" );
+            add( "decprobinput2" );
+            add( "decprob" );
+            add( "lingerprob" );
+            add( "lingerprobinput1" );
+            add( "lingerprobinput2" );
+            **/
+            add( "name" );
+            add( "red" );
+            add( "green" );
+            add( "blue" );
+        }};
+    protected final Map<String, Object> m_defaultProperties = new HashMap<String, Object>()
+    {{
+            put("waypointtype", EWayPointType.CarWaypointRandom.m_name);
+            put("radius", 0.75);
+            put("factory", EFactoryType.DefaultCarFactory.m_name);
+            put("agentprogram", "");
+            put("generator", EDistributionType.Uniform.m_name);
+            put("carcount", 1);
+            put("generatorinput1", 1);
+            put("generatorinput2", 3);
+            put("name", CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ));
+            put("red", 255);
+            put("green", 0);
+            put("blue", 0);
+    }};
 
     /**
      * ctor which create a default tool
      */
     private CWaypointEnvironment()
     {
-        CTool l_defaultTool = new CTool(
-                EWayPointType.CarWaypointRandom, EFactoryType.DefaultCarFactory, EDistributionType.Uniform, 0.75, Color.RED, null, 1, 1, 1, 0, 10,
-                new int[]{1, 2, 3, 4, 5}
-        );
-        this.m_selectedTool = l_defaultTool;
-        this.m_toolbox.put( CCommon.getResourceString( this, "defaulttoolname" ), l_defaultTool );
+        this.web_static_createtool( m_defaultProperties );
     }
 
     /**
@@ -92,127 +138,6 @@ public class CWaypointEnvironment
     public final static CWaypointEnvironment getInstance()
     {
         return s_instance;
-    }
-
-    /**
-     * method to get the Factory type by name-string
-     *
-     * @param p_factory
-     * @return specified Factory type or default (DefaultCarFactory)
-     */
-    private final EFactoryType getFactoryEnum( final String p_factory )
-    {
-        for ( final EFactoryType l_factory : EFactoryType.values() )
-        {
-            if ( l_factory.toString().equals( p_factory ) )
-                return l_factory;
-        }
-        return EFactoryType.DefaultCarFactory;
-    }
-
-    /**
-     * method to get the Generator type by name-string
-     *
-     * @param p_generator
-     * @return specified Generator type or default (Uniform)
-     */
-    private final EDistributionType getGeneratorEnum( final String p_generator )
-    {
-        for ( final EDistributionType l_generator : EDistributionType.values() )
-        {
-            if ( l_generator.toString().equals( p_generator ) )
-                return l_generator;
-        }
-        return EDistributionType.Uniform;
-    }
-
-    /**
-     * method to get tje WayPoint type by name-string
-     *
-     * @param p_waypointtype
-     * @return specified WayPoint type or default (CarRandomWaypoint)
-     */
-    private final EWayPointType getWaypointEnum( final String p_waypointtype )
-    {
-        for ( final EWayPointType l_waypoint : EWayPointType.values() )
-        {
-            if ( l_waypoint.toString().equals( p_waypointtype ) )
-                return l_waypoint;
-        }
-        return EWayPointType.CarWaypointRandom;
-    }
-
-    /**
-     * method to create a new tool
-     *
-     * @param p_data
-     */
-    private final Map<String, Map<String, Integer>> web_static_createtool( final Map<String, Object> p_data )
-    {
-        //validate json
-        if ( !p_data.containsKey( "factory" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidfactory" ) );
-        if ( !p_data.containsKey( "agentprogram" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidasl" ) );
-        if ( !p_data.containsKey( "generator" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgenerator" ) );
-        if ( !p_data.containsKey( "carcount" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
-        if ( !p_data.containsKey( "generatorInput1" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
-        if ( !p_data.containsKey( "generatorInput2" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgeneratorinput" ) );
-        if ( !p_data.containsKey( "name" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
-        if ( !p_data.containsKey( "r" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidredvalue" ) );
-        if ( !p_data.containsKey( "g" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidgreenvalue" ) );
-        if ( !p_data.containsKey( "b" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidbluevalue" ) );
-
-        //read data
-        EWayPointType l_waypointtype = this.getWaypointEnum( "" );
-        EFactoryType l_factorytype = this.getFactoryEnum( (String) p_data.get( "factory" ) );
-        EDistributionType l_generatortype = this.getGeneratorEnum( (String) p_data.get( "generator" ) );
-
-        int l_input1 = Integer.parseInt( String.valueOf( p_data.get( "carcount" ) ) );
-        int l_input2 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput1" ) ) );
-        int l_input3 = Integer.parseInt( String.valueOf( p_data.get( "generatorInput2" ) ) );
-        int[] l_histrogramm = new int[]{1, 2, 3, 4, 5};
-
-        double l_radius = 0.75;
-        double r = Double.parseDouble( String.valueOf( p_data.get( "r" ) ) );
-        double g = Double.parseDouble( String.valueOf( p_data.get( "g" ) ) );
-        double b = Double.parseDouble( String.valueOf( p_data.get( "b" ) ) );
-
-        Color l_color = new Color( (int) r, (int) g, (int) b );
-        String l_asl = (String) p_data.get( "agentprogram" );
-        String l_name = (String) p_data.get( "name" );
-
-        //validate settings
-        if ( m_toolbox.containsKey( l_name ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
-
-        //create and set tool
-        CTool l_newTool = new CTool(
-                l_waypointtype, l_factorytype, l_generatortype, l_radius, l_color, l_asl, l_input1, l_input2, l_input3, l_input2, l_input3, l_histrogramm
-        );
-
-        this.m_selectedTool = l_newTool;
-        this.m_toolbox.put( l_name, l_newTool );
-
-        //return data
-        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
-
-        Map<String, Integer> l_properties = new HashMap<>();
-        l_properties.put( "redValue", l_newTool.m_color.getRed() );
-        l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
-        l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
-
-        l_tools.put( l_name, l_properties );
-
-        return l_tools;
     }
 
     /**
@@ -251,6 +176,42 @@ public class CWaypointEnvironment
     }
 
     /**
+     * method to create a new tool
+     *
+     * @param p_data
+     */
+    private final Map<String, Map<String, Integer>> web_static_createtool( final Map<String, Object> p_data )
+    {
+        for(String l_parameter : m_expectedParameter){
+
+            //check for expected parameters
+            if( !p_data.containsKey( l_parameter )){
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtoolconfiguration" ) );
+            }
+
+            //check if tool already exist
+            if(m_toolbox.containsKey( p_data.get( "name" ) )){
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
+            }
+        }
+
+        //create tool
+        CTool l_newTool = new CTool( p_data );
+        this.m_selectedTool = l_newTool;
+        this.m_toolbox.put( l_newTool.m_name, l_newTool );
+
+        //return data
+        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
+        Map<String, Integer> l_properties = new HashMap<>();
+        l_properties.put( "redValue", l_newTool.m_color.getRed() );
+        l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
+        l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
+        l_tools.put( l_newTool.m_name, l_properties );
+
+        return l_tools;
+    }
+
+    /**
      * list all possible waypoint types
      *
      * @return
@@ -261,7 +222,7 @@ public class CWaypointEnvironment
         List<String> l_waypointtypes = new ArrayList<>();
         for ( final EWayPointType l_waypoint : EWayPointType.values() )
         {
-            l_waypointtypes.add( l_waypoint.toString() );
+            l_waypointtypes.add( l_waypoint.m_name );
         }
 
         return new HashMap<String, List<String>>()
@@ -281,7 +242,7 @@ public class CWaypointEnvironment
         List<ImmutablePair<String, Boolean>> l_factories = new ArrayList<>();
         for ( final EFactoryType l_factory : EFactoryType.values() )
         {
-            l_factories.add(new ImmutablePair<>(l_factory.toString(), l_factory.m_requireASL));
+            l_factories.add(new ImmutablePair<>(l_factory.m_name, l_factory.m_requireASL));
         }
 
         return new HashMap<String, List<ImmutablePair<String, Boolean>>>()
@@ -301,7 +262,7 @@ public class CWaypointEnvironment
         List<String> l_generators = new ArrayList<>();
         for ( final EDistributionType l_generator : EDistributionType.values() )
         {
-            l_generators.add( l_generator.toString() );
+            l_generators.add( l_generator.m_name );
         }
 
         return new HashMap<String, List<String>>()
@@ -311,24 +272,42 @@ public class CWaypointEnvironment
     }
 
     /**
-     * enum for waypoint type
+     * enum for waypoint types
      */
     protected enum EWayPointType
     {
         CarWaypointRandom( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
         CayWaypointPath( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
 
-        private final String text;
+        /**
+         * name of this waypoint type
+         */
+        private final String m_name;
 
-        private EWayPointType( final String text )
+        /**
+         * ctor
+         *
+         * @param p_name
+         */
+        private EWayPointType( final String p_name )
         {
-            this.text = text;
+            this.m_name = p_name;
         }
 
-        @Override
-        public String toString()
+        /**
+         * method to get waypoint type by name
+         *
+         * @param p_name
+         * @return
+         */
+        private static final EWayPointType getWaypointTypeByName( final String p_name )
         {
-            return this.text;
+            for ( final EWayPointType l_waypoint : EWayPointType.values() )
+            {
+                if ( l_waypoint.m_name.equals( p_name ) )
+                    return l_waypoint;
+            }
+            return EWayPointType.CarWaypointRandom;
         }
     }
 
@@ -340,19 +319,40 @@ public class CWaypointEnvironment
         DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false ),
         DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ), true );
 
-        private final Boolean m_requireASL;
-        private final String m_text;
+        /**
+         * name of this factory type
+         */
+        private final String m_name;
 
-        private EFactoryType( final String p_text, final Boolean p_requireASL )
+        /**
+         * variable indicate if this factory type require an agent program
+         */
+        private final Boolean m_requireASL;
+
+        /**
+         * ctor
+         * @param p_name
+         * @param p_requireASL
+         */
+        private EFactoryType( final String p_name, final Boolean p_requireASL )
         {
-            this.m_text = p_text;
+            this.m_name = p_name;
             this.m_requireASL = p_requireASL;
         }
 
-        @Override
-        public String toString()
+        /**
+         * method to get factory type by name
+         * @param p_name
+         * @return
+         */
+        protected static final EFactoryType getFactoryTypeByName( final String p_name )
         {
-            return this.m_text;
+            for ( final EFactoryType l_factory : EFactoryType.values() )
+            {
+                if ( l_factory.m_name.equals( p_name ) )
+                    return l_factory;
+            }
+            return EFactoryType.DefaultCarFactory;
         }
     }
 
@@ -366,22 +366,38 @@ public class CWaypointEnvironment
         Exponential( CCommon.getResourceString( EDistributionType.class, "exponentialdistribution" ) ),
         Profile( CCommon.getResourceString( EDistributionType.class, "profiledistribution" ) );
 
-        private final String text;
+        /**
+         * name of this distribution type
+         */
+        private final String m_name;
 
-        private EDistributionType( final String text )
+        /**
+         * ctor
+         * @param p_name
+         */
+        private EDistributionType( final String p_name )
         {
-            this.text = text;
+            this.m_name = p_name;
         }
 
-        @Override
-        public String toString()
+        /**
+         * method to get distribution type by name
+         * @param p_name
+         * @return
+         */
+        private static final EDistributionType getDistributionTypeByName( final String p_name )
         {
-            return this.text;
+            for ( final EDistributionType l_generator : EDistributionType.values() )
+            {
+                if ( l_generator.m_name.equals( p_name ) )
+                    return l_generator;
+            }
+            return EDistributionType.Uniform;
         }
     }
 
     /**
-     * class which is able to deliver a Waypoint threw configerable settings
+     * class which is able to deliver a waypoint threw configerable settings
      *
      * @deprecated change to immutable hashmap
      */
@@ -389,85 +405,83 @@ public class CWaypointEnvironment
     protected class CTool
     {
         /**
-         * asl programm for agent cars
+         * type of waypoint (random/path)
          */
-        protected final String m_asl;
-        /**
-         * amount of cars that should be generated und a special probability
-         */
-        protected final int m_carcount;
-        /**
-         * color of the waypoint
-         */
-        protected final Color m_color;
-        /**
-         * deviation for the generator which defines the probability to generate cars
-         */
-        protected final double m_deviation;
-        /**
-         * factory type (which car should be produced)
-         */
-        protected final EFactoryType m_factoryType;
-        /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_generatorType;
-        /**
-         * histrogramm for profile generators
-         */
-        protected final int[] m_histrogram;
-        /**
-         * lower bound for the generator which defines the probability to generate cars
-         */
-        protected final double m_lower;
-        /**
-         * mean for the generator which defines the probability to generate cars
-         */
-        protected final double m_mean;
+        protected final EWayPointType m_wayPointType;
         /**
          * radius for random target
          */
         protected final double m_radius;
         /**
-         * upper bound for the generator which defines the probability to generate cars
+         * factory type (which car should be produced)
          */
-        protected final double m_upper;
+        protected final EFactoryType m_factoryType;
         /**
-         * type of waypoint (random/path)
+         * asl program for agent cars
          */
-        protected final EWayPointType m_wayPointType;
+        protected final String m_asl;
+        /**
+         * generator type defines the probability and amount of cars
+         */
+        protected final EDistributionType m_generatorType;
+        /**
+         * amount of cars that should be generated under a special probability
+         */
+        protected final int m_carcount;
+        /**
+         * generatorInput1 (lower bound or mean)
+         */
+        protected final double m_generatorInput1;
+        /**
+         * generatorInput2 (upper bound or deviation)
+         */
+        protected final double m_generatorInput2;
+        /**
+         * histrogram for profile generators
+         */
+        protected final int[] m_histrogram;
+        /**
+         * name of the tool
+         */
+        protected final String m_name;
+        /**
+         * color of the waypoint
+         */
+        protected final Color m_color;
+
 
         /**
-         * @param p_wayPointType
-         * @param p_factoryType
-         * @param p_generatorType
-         * @param p_radius
-         * @param p_color
-         * @param p_asl
-         * @param p_carcount
-         * @param p_mean
-         * @param p_deviation
-         * @param p_lower
-         * @param p_upper
-         * @param p_histrogram
+         * ctor
+         * @param p_parameter
          */
-        protected CTool( final EWayPointType p_wayPointType, final EFactoryType p_factoryType, final EDistributionType p_generatorType, final double p_radius,
-                final Color p_color, final String p_asl, final int p_carcount, final int p_mean, final int p_deviation, final int p_lower, final int p_upper,
-                final int[] p_histrogram
-        )
+        protected CTool( final Map<String, Object> p_parameter){
+
+            int l_redValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "red" ) ) );
+            int l_greenValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "green" ) ) );
+            int l_blueValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "blue" ) ) );
+
+            this.m_wayPointType = EWayPointType.getWaypointTypeByName( "" );;
+            this.m_radius = Double.parseDouble( String.valueOf( p_parameter.get( "radius" ) ) );
+            this.m_factoryType = EFactoryType.getFactoryTypeByName( (String) p_parameter.get( "factory" ) );;
+            this.m_asl = String.valueOf( p_parameter.get( "agentprogram" ) );
+            this.m_generatorType = EDistributionType.getDistributionTypeByName( (String) p_parameter.get( "generator" ) );;
+            this.m_carcount = Integer.parseInt( String.valueOf( p_parameter.get( "carcount" ) ) );
+            this.m_generatorInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput1" ) ) );
+            this.m_generatorInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput2" ) ) );
+            this.m_histrogram = new int[]{};
+            this.m_color = new Color(l_redValue, l_greenValue, l_blueValue);
+            this.m_name = (String) p_parameter.get( "name" );
+        }
+
+        /**
+         * method which returns a waypoint with settings from the ui
+         *
+         * @param p_position position of the waypoint
+         * @return configured waypoint
+         */
+        protected final IWayPointBase getWaypoint( GeoPosition p_position )
         {
-            this.m_wayPointType = p_wayPointType;
-            this.m_factoryType = p_factoryType;
-            this.m_generatorType = p_generatorType;
-            this.m_radius = p_radius;
-            this.m_color = p_color;
-            this.m_asl = p_asl;
-            this.m_carcount = p_carcount;
-            this.m_mean = p_mean;
-            this.m_deviation = p_deviation;
-            this.m_lower = p_lower;
-            this.m_upper = p_upper;
-            this.m_histrogram = p_histrogram;
+            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color );
         }
 
         /**
@@ -514,33 +528,20 @@ public class CWaypointEnvironment
             switch ( m_generatorType )
             {
                 case Uniform:
-                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
+                    return new CTimeUniformDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
 
                 case Normal:
-                    return new CTimeNormalDistribution( m_carcount, m_mean, m_deviation );
+                    return new CTimeNormalDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
 
                 case Exponential:
-                    return new CTimeExponentialDistribution( m_carcount, m_mean, m_deviation );
+                    return new CTimeExponentialDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
 
                 case Profile:
                     return new CTimeProfile( m_histrogram );
 
                 default:
-                    return new CTimeUniformDistribution( m_carcount, m_lower, m_upper );
+                    return new CTimeUniformDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
             }
         }
-
-        /**
-         * method which returns a waypoint with settings from the ui
-         *
-         * @param p_position position of the waypoint
-         * @return configured waypoint
-         */
-        protected final IWayPointBase getWaypoint( GeoPosition p_position )
-        {
-
-            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color );
-        }
     }
-
 }

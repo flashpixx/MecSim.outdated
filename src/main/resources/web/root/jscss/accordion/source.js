@@ -25,6 +25,8 @@
  TODO save toolbox in config/web
  TODO histogramm
  TODO read more data
+ TODO better error messges
+ TODO delete tool
 
  TODO path waypoints
  TODO source weighting list
@@ -349,17 +351,40 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/cwaypointenvironment/createtool",
             data    : {
-                        "factory"           : SourcePanel.settings.dom.selectFactory.val(),
-                        "agentprogram"      : SourcePanel.settings.dom.selectAgentProgram.val(),
-                        "generator"         : SourcePanel.settings.dom.selectGenerator.val(),
-                        "carcount"          : SourcePanel.settings.dom.generatorInputCarcount.val(),
-                        "generatorInput1"   : SourcePanel.settings.dom.generatorInput1.val(),
-                        "generatorInput2"   : SourcePanel.settings.dom.generatorInput2.val(),
-                        "name"              : SourcePanel.settings.dom.toolName.val(),
-                        "r"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
-                        "g"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,
-                        "b"                 : SourcePanel.settings.obj.colorpicker.spectrum("get")._b
-                    },
+                "waypointtype"       : SourcePanel.settings.dom.selectFactory.val(),
+                "radius"             : SourcePanel.settings.dom.selectRadius.val(),
+                "factory"            : SourcePanel.settings.dom.selectFactory.val(),
+                "agentprogram"       : SourcePanel.settings.dom.selectAgentProgram.val(),
+                "generator"          : SourcePanel.settings.dom.selectGenerator.val(),
+                "carcount"           : SourcePanel.settings.dom.generatorInputCarcount.val(),
+                "generatorinput1"    : SourcePanel.settings.dom.generatorInput1.val(),
+                "generatorinput2"    : SourcePanel.settings.dom.generatorInput2.val(),
+
+                "speedprob"          : SourcePanel.settings.dom.generatorInput2.val(),
+                "speedprobinput1"    : SourcePanel.settings.dom.generatorInput2.val(),
+                "speedprobinput2"    : SourcePanel.settings.dom.generatorInput2.val(),
+
+                "maxspeedprob"       : SourcePanel.settings.dom.generatorInput2.val(),
+                "maxspeedprobinput1" : SourcePanel.settings.dom.generatorInput2.val(),
+                "maxspeedprobinput2" : SourcePanel.settings.dom.generatorInput2.val(),
+
+                "accprob"            : SourcePanel.settings.dom.generatorInput2.val(),
+                "accprobinput1"      : SourcePanel.settings.dom.generatorInput2.val(),
+                "accprobinput2"      : SourcePanel.settings.dom.generatorInput2.val(),
+
+                "decprob"            : SourcePanel.settings.dom.generatorInput2.val(),
+                "decprobinput1"      : SourcePanel.settings.dom.generatorInput2.val(),
+                "decprobinput2"      : SourcePanel.settings.dom.generatorInput2.val(),
+
+                "lingerprob"         : SourcePanel.settings.dom.generatorInput2.val(),
+                "lingerprobinput1"   : SourcePanel.settings.dom.generatorInput2.val(),
+                "lingerprobinput2"   : SourcePanel.settings.dom.generatorInput2.val(),
+
+                "name"               : SourcePanel.settings.dom.toolName.val(),
+                "red"                : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
+                "green"              : SourcePanel.settings.obj.colorpicker.spectrum("get")._g,
+                "blue"               : SourcePanel.settings.obj.colorpicker.spectrum("get")._b
+            },
             success : function( data ){
                 $.each( data, function( pc_key, px_value ) {
 

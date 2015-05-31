@@ -31,7 +31,7 @@ import org.jxmapviewer.viewer.GeoPosition;
  *
  * @see http://www.movable-type.co.uk/scripts/latlong.html
  */
-public class CGeopositionMetric implements IMetric<GeoPosition, Double>
+public class CGeopositionMetric implements IMetric<GeoPosition>
 {
     /**
      * earth radius
@@ -45,7 +45,7 @@ public class CGeopositionMetric implements IMetric<GeoPosition, Double>
 
 
     @Override
-    public Double getDistance( final ISensor<GeoPosition> p_sensor, final IPercept<GeoPosition> p_perceptable )
+    public double getDistance( final ISensor<GeoPosition> p_sensor, final IPercept<GeoPosition> p_perceptable )
     {
         final double l_alpha = Math.pow( Math.sin( ( p_sensor.getPosition().getLatitude() - p_perceptable.getPosition().getLatitude() ) * c_radiant / 2 ), 2 ) +
                                Math.pow(
@@ -53,6 +53,6 @@ public class CGeopositionMetric implements IMetric<GeoPosition, Double>
                                ) *
                                Math.cos( p_sensor.getPosition().getLatitude() ) * Math.cos( p_perceptable.getPosition().getLatitude() );
 
-        return new Double( 1000 * c_earthradius * 2 * Math.atan2( Math.sqrt( l_alpha ), Math.sqrt( l_alpha ) ) );
+        return 1000 * c_earthradius * 2 * Math.atan2( Math.sqrt( l_alpha ), Math.sqrt( l_alpha ) );
     }
 }

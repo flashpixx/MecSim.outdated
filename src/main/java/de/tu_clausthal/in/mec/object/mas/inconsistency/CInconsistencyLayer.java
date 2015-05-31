@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
@@ -36,14 +35,10 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -62,9 +57,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      **/
     private final EAlgorithm m_algorithm;
     /**
-     * map with object and pair of metric data and inconsistency value
+     * synchronized map with object and inconsistency value
      **/
-    private final Map<T, Pair<List<Double>, Double>> m_data = new LinkedHashMap<>();
+    private final Map<T, Double> m_data = Collections.synchronizedMap( new LinkedHashMap<>() );
     /**
      * epsilon value to create an aperiodic markow-chain
      **/
@@ -168,46 +163,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_object new object
      */
-    public synchronized void add( final T p_object )
+    public void add( final T p_object )
     {
         if ( ( p_object == null ) || ( m_data.containsKey( p_object ) ) )
             return;
 
-        final List<Double> l_column = new LinkedList<>();
-        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
-        {
-            // calculate metric value
-            final double l_value = m_metric.calculate( p_object, l_item.getKey() );
-
-            // add value to the existing column and define new column
-            l_item.getValue().getLeft().add( l_value );
-            l_column.add( l_value );
-        }
-
-        m_data.put( p_object, new MutablePair<>( l_column, new Double( 0 ) ) );
-    }
-
-    /**
-     * builds the matrix
-     *
-     * @return matrix
-     */
-    private DoubleMatrix2D buildMatrix()
-    {
-        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
-        int i = 0;
-        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
-            l_matrix.viewColumn( i++ ).assign(
-                    new DenseDoubleMatrix1D(
-                            ArrayUtils.toPrimitive(
-                                    l_item.getValue().getLeft().toArray(
-                                            new Double[m_data.size()]
-                                    )
-                            )
-                    )
-            );
-
-        return l_matrix;
+        m_data.put( p_object, new Double( 0 ) );
     }
 
     @Override
@@ -216,18 +177,35 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return 500;
     }
 
+    /**
+     *
+     * @bug matrix allocation chan be create a memory overflow if it is possible
+     * update existing matrix object
+     */
     @Override
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
         if ( ( m_data.size() < 2 ) || ( p_currentstep % m_updatestep != 0 ) )
             return;
 
-        // @todo update list values
+        // get key list of map for addressing elements in the correct order
+        final ArrayList<T> l_keys = new ArrayList<T>( m_data.keySet() );
 
-        // build matrix and create markow-chain
-        final DoubleMatrix2D l_matrix = this.buildMatrix();
-        for ( int i = 0; i < l_matrix.rows(); ++i )
+        // calculate matrix and build metric value
+        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
+        for ( int i = 0; i < l_keys.size(); ++i )
+        {
+            final T l_item = l_keys.get( i );
+            for ( int j = i; j < l_keys.size(); ++j )
+            {
+                final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
+                l_matrix.set( i, j, l_value );
+                l_matrix.set( j, i, l_value );
+            }
+
+            // create markow-chain (normalize row)
             l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
+        }
 
 
         // get the stationary probility with eigen decomposition
@@ -250,9 +228,23 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 
 
         // set inconsistency value for each entry
-        int i = 0;
-        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
-            l_item.getValue().setValue( l_eigenvector.get( i++ ) );
+        for ( int i = 0; i < l_keys.size(); ++i )
+            m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
+    }
+
+    /**
+     * returns metric value
+     *
+     * @param p_first
+     * @param p_second
+     * @return
+     */
+    private double getMetricValue( final T p_first, final T p_second )
+    {
+        if ( p_first.equals( p_second ) )
+            return m_epsilon;
+
+        return m_metric.calculate( p_first, p_second );
     }
 
     /**
@@ -261,17 +253,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_object removing object
      */
-    public synchronized void remove( final T p_object )
+    public void remove( final T p_object )
     {
-        if ( ( p_object == null ) || ( !m_data.containsKey( p_object ) ) )
-            return;
-
-        // get index of the removing item
-        final int l_position = new ArrayList<T>( m_data.keySet() ).indexOf( p_object );
         m_data.remove( p_object );
-
-        for ( final Map.Entry<T, Pair<List<Double>, Double>> l_item : m_data.entrySet() )
-            l_item.getValue().getLeft().remove( l_position );
     }
 
 
@@ -325,8 +309,8 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
          */
         public final double getInconsistency()
         {
-            final Pair<List<Double>, Double> l_value = m_data.get( m_bind );
-            return l_value == null ? 0 : l_value.getRight().doubleValue();
+            final Double l_value = m_data.get( m_bind );
+            return l_value == null ? 0 : l_value.doubleValue();
         }
 
     }

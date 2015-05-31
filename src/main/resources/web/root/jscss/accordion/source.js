@@ -27,6 +27,8 @@
  TODO read more data
  TODO better error messges
  TODO delete tool
+ TODO improve labels for carsettings
+ TODO linger probability as slider ?
 
  TODO path waypoints
  TODO source weighting list
@@ -360,25 +362,25 @@ var SourcePanel = ( function (px_module) {
                 "generatorinput1"    : SourcePanel.settings.dom.generatorInput1.val(),
                 "generatorinput2"    : SourcePanel.settings.dom.generatorInput2.val(),
 
-                "speedprob"          : SourcePanel.settings.dom.generatorInput2.val(),
-                "speedprobinput1"    : SourcePanel.settings.dom.generatorInput2.val(),
-                "speedprobinput2"    : SourcePanel.settings.dom.generatorInput2.val(),
+                "speedprob"          : SourcePanel.settings.dom.selectSpeedProb.val(),
+                "speedprobinput1"    : SourcePanel.settings.dom.speedProbInput1.val(),
+                "speedprobinput2"    : SourcePanel.settings.dom.speedProbInput2.val(),
 
-                "maxspeedprob"       : SourcePanel.settings.dom.generatorInput2.val(),
-                "maxspeedprobinput1" : SourcePanel.settings.dom.generatorInput2.val(),
-                "maxspeedprobinput2" : SourcePanel.settings.dom.generatorInput2.val(),
+                "maxspeedprob"       : SourcePanel.settings.dom.selectMaxSpeedProb.val(),
+                "maxspeedprobinput1" : SourcePanel.settings.dom.maxSpeedProbInput1.val(),
+                "maxspeedprobinput2" : SourcePanel.settings.dom.maxSpeedProbInput2.val(),
 
-                "accprob"            : SourcePanel.settings.dom.generatorInput2.val(),
-                "accprobinput1"      : SourcePanel.settings.dom.generatorInput2.val(),
-                "accprobinput2"      : SourcePanel.settings.dom.generatorInput2.val(),
+                "accprob"            : SourcePanel.settings.dom.selectAccProb.val(),
+                "accprobinput1"      : SourcePanel.settings.dom.accProbInput1.val(),
+                "accprobinput2"      : SourcePanel.settings.dom.accProbInput2.val(),
 
-                "decprob"            : SourcePanel.settings.dom.generatorInput2.val(),
-                "decprobinput1"      : SourcePanel.settings.dom.generatorInput2.val(),
-                "decprobinput2"      : SourcePanel.settings.dom.generatorInput2.val(),
+                "decprob"            : SourcePanel.settings.dom.selectDecProb.val(),
+                "decprobinput1"      : SourcePanel.settings.dom.decProbInput1.val(),
+                "decprobinput2"      : SourcePanel.settings.dom.decProbInput2.val(),
 
-                "lingerprob"         : SourcePanel.settings.dom.generatorInput2.val(),
-                "lingerprobinput1"   : SourcePanel.settings.dom.generatorInput2.val(),
-                "lingerprobinput2"   : SourcePanel.settings.dom.generatorInput2.val(),
+                "lingerprob"         : SourcePanel.settings.dom.selectLingerProb.val(),
+                "lingerprobinput1"   : SourcePanel.settings.dom.lingerProbInput1.val(),
+                "lingerprobinput2"   : SourcePanel.settings.dom.lingerProbInput2.val(),
 
                 "name"               : SourcePanel.settings.dom.toolName.val(),
                 "red"                : SourcePanel.settings.obj.colorpicker.spectrum("get")._r,
@@ -473,6 +475,8 @@ var SourcePanel = ( function (px_module) {
                 l_element2 = SourcePanel.settings.dom.label.speedprobinput2label;
                 l_element3 = SourcePanel.settings.dom.speedProbInput1;
                 l_element4 = SourcePanel.settings.dom.speedProbInput2;
+                l_defaultPara1 = 50;
+                l_defaultPara2 = 25;
                 break;
 
             case "mecsim_source_selectMaxSpeedProb":
@@ -481,6 +485,8 @@ var SourcePanel = ( function (px_module) {
                 l_element2 = SourcePanel.settings.dom.label.maxSpeedprobinput2label;
                 l_element3 = SourcePanel.settings.dom.maxSpeedProbInput1;
                 l_element4 = SourcePanel.settings.dom.maxSpeedProbInput2;
+                l_defaultPara1 = 250;
+                l_defaultPara2 = 50;
                 break;
 
             case "mecsim_source_selectAccProb":
@@ -489,6 +495,8 @@ var SourcePanel = ( function (px_module) {
                 l_element2 = SourcePanel.settings.dom.label.accprobinput2label;
                 l_element3 = SourcePanel.settings.dom.accProbInput1;
                 l_element4 = SourcePanel.settings.dom.accProbInput2;
+                l_defaultPara1 = 20;
+                l_defaultPara2 = 5;
                 break;
 
             case "mecsim_source_selectDecProb":
@@ -497,6 +505,8 @@ var SourcePanel = ( function (px_module) {
                 l_element2 = SourcePanel.settings.dom.label.decprobinput2label;
                 l_element3 = SourcePanel.settings.dom.decProbInput1;
                 l_element4 = SourcePanel.settings.dom.decProbInput2;
+                l_defaultPara1 = 20;
+                l_defaultPara2 = 5;
                 break;
 
             case "mecsim_source_selectLingerProb":
@@ -505,6 +515,8 @@ var SourcePanel = ( function (px_module) {
                 l_element2 = SourcePanel.settings.dom.label.lingerprobinput2label;
                 l_element3 = SourcePanel.settings.dom.lingerProbInput1;
                 l_element4 = SourcePanel.settings.dom.lingerProbInput2;
+                l_defaultPara1 = 0;
+                l_defaultPara2 = 1;
                 break;
         }
 
@@ -516,8 +528,8 @@ var SourcePanel = ( function (px_module) {
                     config : [
                         { element : l_element1, text   : SourcePanel.settings.labels.selectyourlowerbound },
                         { element : l_element2, text   : SourcePanel.settings.labels.selectyourupperbound },
-                        { element : l_element3, value  : 1 },
-                        { element : l_element4, value  : 3 }
+                        { element : l_element3, value  : l_defaultPara1 },
+                        { element : l_element4, value  : l_defaultPara2 }
                     ]
                 },
                 {
@@ -525,8 +537,8 @@ var SourcePanel = ( function (px_module) {
                     config : [
                         { element : l_element1, text  : SourcePanel.settings.labels.selectyourmean },
                         { element : l_element2, text  : SourcePanel.settings.labels.selectyourdeviation },
-                        { element : l_element3, value  : 5 },
-                        { element : l_element4, value  : 1 }
+                        { element : l_element3, value  : l_defaultPara1 },
+                        { element : l_element4, value  : l_defaultPara2 }
                     ]
                 }
             ]

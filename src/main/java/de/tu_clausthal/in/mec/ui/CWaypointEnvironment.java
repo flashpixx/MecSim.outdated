@@ -174,9 +174,7 @@ public class CWaypointEnvironment
             if( !p_data.containsKey( l_parameter )){
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtoolconfiguration" ) );
             }
-
-            CLogger.out(l_parameter +"->"+ p_data.get( l_parameter ));
-
+            
             //check if tool already exist
             if(m_toolbox.containsKey( p_data.get( "name" ) )){
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );

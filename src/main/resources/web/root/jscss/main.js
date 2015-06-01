@@ -91,7 +91,7 @@ $(document).ready(function() {
                     // add receiver and add it to the parent target
                     if (!lo_matrix[po_object.target.path])
                         lo_matrix[po_object.target.path] = { children : [], connect : [] };
-
+/*
                     for( var i=1, la = po_object.target.path.split(po_object.target.path.sperator), ln_length = la.length; i < ln_length; ++i )
                     {
                         var lc_parent = la.slice(0, i-1).join(po_object.target.path.sperator);
@@ -100,43 +100,28 @@ $(document).ready(function() {
 
                         lo_matrix[lc_parent].children.push(la.slice(0, i).join(po_object.target.path.sperator));
                     }
-
+*/
 
                 } );
 
-                //console.log(lo_matrix);
-
+//                console.dir(lo_matrix);
+/*
+                Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
+                    id   : "messageflow",
+                    data : lo_matrix
+                });
+*/
             }
         });
 
 
         // --- visualization test ---
-
-//        d3.json( "http://mbostock.github.io/d3/talk/20111116/flare-imports.json", function(classes) {
 /*
-            var splines = [];
-
-            var cluster = d3.layout.cluster()
-                .size([360, 120])
-                .sort(function(a, b) { return d3.ascending(a.key, b.key); });
-
-            var bundle = d3.layout.bundle();
-
-            var nodes = cluster.nodes(packages.root(classes)),
-                links = packages.imports(nodes),
-                splines = bundle(links);
-
-            console.log(nodes);
-            console.log(links);
-
+        Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
+            id   : "graphtest",
+            //data : { test : { children : ["subtest1", "subtest2"] }, subtest1 : { connect : ["subtest2"] }, subtest2 : {} },
+            data : {"traffic/car/agentcar 7/agent":{"children":[],"connect":["traffic/car/agentcar 5","traffic/car/agentcar 1","traffic/car/agentcar 0"]},"traffic/car/agentcar 5":{"children":[],"connect":["traffic/car/agentcar 5/agent"]},"traffic/car/agentcar 6/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},"traffic/car/agentcar 0":{"children":[],"connect":["traffic/car/agentcar 0/agent"]},"traffic/car/agentcar 1":{"children":[],"connect":["traffic/car/agentcar 1/agent"]},"traffic/car/agentcar 4/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0","traffic/car/agentcar 5"]},"traffic/car/agentcar 0/agent":{"children":[],"connect":["traffic/car/agentcar 0"]},"traffic/car/agentcar 5/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},"traffic/car/agentcar 1/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},"traffic/car/agentcar 2/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},"traffic/car/agentcar 3/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1"]}}
+        });
 */
-
-            Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
-                id   : "graphtest",
-                data : { test : { children : ["subtest1", "subtest2"] }, subtest1 : { connect : ["subtest2"] }, subtest2 : {} },
-            });
-
-//        });
-
     });
 });

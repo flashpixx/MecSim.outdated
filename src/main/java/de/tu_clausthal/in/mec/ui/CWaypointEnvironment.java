@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
@@ -174,7 +173,7 @@ public class CWaypointEnvironment
             if( !p_data.containsKey( l_parameter )){
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtoolconfiguration" ) );
             }
-            
+
             //check if tool already exist
             if(m_toolbox.containsKey( p_data.get( "name" ) )){
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );

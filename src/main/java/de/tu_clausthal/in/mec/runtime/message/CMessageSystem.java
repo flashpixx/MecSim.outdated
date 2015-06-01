@@ -57,7 +57,7 @@ public class CMessageSystem implements IVoidSteppable
     /**
      * message counter
      */
-    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "receiver" );
+    private final CAdjacencyMatrix<CPath, Integer> m_messageflow = new CAdjacencyMatrix<>( "source", "target" );
     /**
      * tree structure of all objects (root-node is equal to this object)
      */
@@ -119,6 +119,7 @@ public class CMessageSystem implements IVoidSteppable
         }
 
         // receive message / push message to the receiver - increment main receiver of the message
+        this.incrementMessageFlow( p_message.getSource(), p_receiverpath );
         for ( final Pair<Set<IParticipant>, Set<IMessage>> l_item : m_root.getNode( p_receiverpath ).getTreeData() )
         {
             // if item equal null skip
@@ -129,11 +130,8 @@ public class CMessageSystem implements IVoidSteppable
 
             // all subnodes of the receiver gets the message from the receiver the root node get the receiver from the message sender
             for ( final IParticipant l_subreceiver : l_item.getLeft() )
-                this.incrementMessageFlow(
-                        l_subreceiver.getReceiverPath().equals( p_receiverpath ) ? p_message.getSource() : p_receiverpath, l_subreceiver.getReceiverPath()
-                );
+                this.incrementMessageFlow( p_receiverpath, l_subreceiver.getReceiverPath() );
         }
-
 
         // call listener with receiver and message
         for ( final IActionListener l_item : m_listener )

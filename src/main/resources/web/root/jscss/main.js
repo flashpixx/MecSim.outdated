@@ -77,7 +77,36 @@ $(document).ready(function() {
 
         // create realtime message-flow websocket access
         MecSim.websocket( "/cmessagesystem/flow", {
-            "onmessage" : function( po_event ) { console.log( po_event.data.toJSON() ); }
+            "onmessage" : function( po_event ) {
+
+
+                var lo_matrix = {};
+                po_event.data.toJSON().cells.forEach( function( po_object ) {
+
+                    // add source node and connecting between source -> target
+                    if (!lo_matrix[po_object.source.path])
+                        lo_matrix[po_object.source.path] = { children : [], connect : [] };
+                    lo_matrix[po_object.source.path].connect.push( po_object.target.path );
+
+                    // add receiver and add it to the parent target
+                    if (!lo_matrix[po_object.target.path])
+                        lo_matrix[po_object.target.path] = { children : [], connect : [] };
+
+                    for( var i=1, la = po_object.target.path.split(po_object.target.path.sperator), ln_length = la.length; i < ln_length; ++i )
+                    {
+                        var lc_parent = la.slice(0, i-1).join(po_object.target.path.sperator);
+                        if (!lo_matrix[lc_parent])
+                            lo_matrix[lc_parent] = { children : [], connect : [] };
+
+                        lo_matrix[lc_parent].children.push(la.slice(0, i).join(po_object.target.path.sperator));
+                    }
+
+
+                } );
+
+                //console.log(lo_matrix);
+
+            }
         });
 
 
@@ -99,8 +128,8 @@ $(document).ready(function() {
 
             console.log(nodes);
             console.log(links);
-*/
 
+*/
 
             Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
                 id   : "graphtest",

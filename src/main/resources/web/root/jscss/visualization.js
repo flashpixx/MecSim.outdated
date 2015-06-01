@@ -194,7 +194,7 @@ var Visualization = (function (px_modul) {
         // 2. build visualization
         // 3. build link structure of the node structure
         var lo_treedata = buildtree(lo_options.data), la_nodes = lo_cluster.nodes(lo_treedata.root), la_links = linknode(lo_options.data, lo_treedata.nodes);
-
+        console.log(lo_treedata);
         // link visualization
         var path = lo_svg.selectAll( "path.link" )
             .data( la_links )

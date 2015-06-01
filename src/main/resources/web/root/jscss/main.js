@@ -116,11 +116,35 @@ $(document).ready(function() {
 
 
         // --- visualization test ---
-/*
+/*)
         Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
             id   : "graphtest",
             //data : { test : { children : ["subtest1", "subtest2"] }, subtest1 : { connect : ["subtest2"] }, subtest2 : {} },
-            data : {"traffic/car/agentcar 7/agent":{"children":[],"connect":["traffic/car/agentcar 5","traffic/car/agentcar 1","traffic/car/agentcar 0"]},"traffic/car/agentcar 5":{"children":[],"connect":["traffic/car/agentcar 5/agent"]},"traffic/car/agentcar 6/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},"traffic/car/agentcar 0":{"children":[],"connect":["traffic/car/agentcar 0/agent"]},"traffic/car/agentcar 1":{"children":[],"connect":["traffic/car/agentcar 1/agent"]},"traffic/car/agentcar 4/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0","traffic/car/agentcar 5"]},"traffic/car/agentcar 0/agent":{"children":[],"connect":["traffic/car/agentcar 0"]},"traffic/car/agentcar 5/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},"traffic/car/agentcar 1/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},"traffic/car/agentcar 2/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},"traffic/car/agentcar 3/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1"]}}
+            data : {
+                "traffic/car/agentcar 7" : { "children":["traffic/car/agentcar 7/agent"], "connect":[] },
+                "traffic/car/agentcar 7/agent" : { "children":[], "connect":["traffic/car/agentcar 5","traffic/car/agentcar 1","traffic/car/agentcar 0"] },
+
+                "traffic/car/agentcar 6" : { "children":["traffic/car/agentcar 6/agent"], "connect":[]},
+                "traffic/car/agentcar 6/agent" : { "children":[], "connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},
+
+                "traffic/car/agentcar 5" : { "children":["traffic/car/agentcar 5/agent"], "connect":["traffic/car/agentcar 5/agent"]},
+                "traffic/car/agentcar 5/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},
+
+                "traffic/car/agentcar 4":{"children":["traffic/car/agentcar 4/agent"],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0","traffic/car/agentcar 5"]},
+                "traffic/car/agentcar 4/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0","traffic/car/agentcar 5"]},
+
+                "traffic/car/agentcar 3":{"children":["traffic/car/agentcar 3/agent"],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1"]},
+                "traffic/car/agentcar 3/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1"]},
+
+                "traffic/car/agentcar 2":{"children":["traffic/car/agentcar 2/agent"],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},
+                "traffic/car/agentcar 2/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},
+
+                "traffic/car/agentcar 1":{"children":[],"connect":["traffic/car/agentcar 1/agent"]},
+                "traffic/car/agentcar 1/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},
+
+                "traffic/car/agentcar 0":{"children":[],"connect":["traffic/car/agentcar 0/agent"]},
+                "traffic/car/agentcar 0/agent":{"children":[],"connect":["traffic/car/agentcar 0"]}
+            }
         });
 */
     });

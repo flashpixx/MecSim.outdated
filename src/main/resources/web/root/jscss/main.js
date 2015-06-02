@@ -79,10 +79,41 @@ $(document).ready(function() {
         MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) {
 
-
                 var lo_matrix = {};
+
+                function add2Tree( pc_path, pc_seperator )
+                {
+                    for( var i=0, la = pc_path.split(pc_seperator), ln_length = la.length; i < ln_length; ++i )
+                    {
+                        var lc_item = la.slice(0,i);
+                        /*
+                        if (i > 0)
+                        {
+                            var lc_parent = la.slice(0, i-1);
+                            if (!lo_matrix[lc_parent])
+                                lo_matrix[lc_parent].children = new Set();
+                            lo_matrix[lc_parent].children.add(lc_item);
+                        }
+
+                        if (lo_matrix[lc_item])
+                            lo_matrix[lc_item] = { children : new Set(), connect : new Set() };
+                        */
+
+                        console.log(lc_item);
+                    }
+                }
+
                 po_event.data.toJSON().cells.forEach( function( po_object ) {
 
+                    add2tree( po_object.source.path, po_object.source.path.seperator );
+                    add2tree( po_object.target.path, po_object.target.path.seperator );
+
+                } );
+
+                //console.log(lo_matrix);
+
+
+/*
                     // add source node and connecting between source -> target
                     if (!lo_matrix[po_object.source.path])
                         lo_matrix[po_object.source.path] = { children : [], connect : [] };
@@ -91,7 +122,7 @@ $(document).ready(function() {
                     // add receiver and add it to the parent target
                     if (!lo_matrix[po_object.target.path])
                         lo_matrix[po_object.target.path] = { children : [], connect : [] };
-/*
+
                     for( var i=1, la = po_object.target.path.split(po_object.target.path.sperator), ln_length = la.length; i < ln_length; ++i )
                     {
                         var lc_parent = la.slice(0, i-1).join(po_object.target.path.sperator);
@@ -102,7 +133,6 @@ $(document).ready(function() {
                     }
 */
 
-                } );
 
 //                console.dir(lo_matrix);
 /*

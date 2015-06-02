@@ -534,7 +534,7 @@ public class CWaypointEnvironment
             this.m_lingerProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput2" ) ) );
             this.m_color = new Color(l_redValue, l_greenValue, l_blueValue);
             this.m_name = (String) p_parameter.get( "name" );
-            this.m_deleteable = m_name.equals( CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ) ) ? false : true;
+            this.m_deleteable = m_name.equals( m_defaultProperties.get( "name" ) ) ? false : true;
         }
 
         /**

@@ -142,18 +142,18 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, Map<String, Integer>> web_static_listtools()
+    private final Map<String, Map<String, Object>> web_static_listtools()
     {
 
-        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
-        for ( final String l_tool : this.m_toolbox.keySet() )
-        {
-            Map<String, Integer> l_properties = new HashMap<>();
-            l_properties.put( "redValue", this.m_toolbox.get( l_tool ).m_color.getRed() );
-            l_properties.put( "greenValue", this.m_toolbox.get( l_tool ).m_color.getGreen() );
-            l_properties.put( "blueValue", this.m_toolbox.get( l_tool ).m_color.getBlue() );
+        Map<String, Map<String, Object>> l_tools = new HashMap<>();
+        for (Map.Entry<String, CTool> l_tool : m_toolbox.entrySet()) {
+            Map<String, Object> l_properties = new HashMap<>();
+            l_properties.put( "redValue", l_tool.getValue().m_color.getRed() );
+            l_properties.put( "greenValue", l_tool.getValue().m_color.getGreen() );
+            l_properties.put( "blueValue", l_tool.getValue().m_color.getBlue() );
+            l_properties.put( "deleteable", l_tool.getValue().m_deleteable);
 
-            l_tools.put(l_tool, l_properties);
+            l_tools.put(l_tool.getKey(), l_properties);
         }
 
         return l_tools;
@@ -164,7 +164,7 @@ public class CWaypointEnvironment
      *
      * @param p_data
      */
-    private final Map<String, Map<String, Integer>> web_static_createtool( final Map<String, Object> p_data )
+    private final Map<String, Map<String, Object>> web_static_createtool( final Map<String, Object> p_data )
     {
         for(String l_parameter : m_defaultProperties.keySet()){
 
@@ -185,11 +185,13 @@ public class CWaypointEnvironment
         this.m_toolbox.put( l_newTool.m_name, l_newTool );
 
         //return data
-        Map<String, Map<String, Integer>> l_tools = new HashMap<>();
-        Map<String, Integer> l_properties = new HashMap<>();
+        Map<String, Map<String, Object>> l_tools = new HashMap<>();
+        Map<String, Object> l_properties = new HashMap<>();
         l_properties.put( "redValue", l_newTool.m_color.getRed() );
         l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
         l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
+        l_properties.put( "deleteable", l_newTool.m_deleteable);
+
         l_tools.put( l_newTool.m_name, l_properties );
 
         return l_tools;
@@ -492,7 +494,10 @@ public class CWaypointEnvironment
          * color of the waypoint
          */
         protected final Color m_color;
-
+        /**
+         * indicates if this tool is deleteable
+         */
+        protected final boolean m_deleteable;
 
         /**
          * ctor
@@ -529,6 +534,7 @@ public class CWaypointEnvironment
             this.m_lingerProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput2" ) ) );
             this.m_color = new Color(l_redValue, l_greenValue, l_blueValue);
             this.m_name = (String) p_parameter.get( "name" );
+            this.m_deleteable = m_name.equals( CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ) ) ? false : true;
         }
 
         /**

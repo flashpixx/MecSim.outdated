@@ -200,7 +200,7 @@ var SourcePanel = ( function (px_module) {
             url     : "/cwaypointenvironment/listtools",
             success : function( data ){
                 $.each( data, function( pc_key, px_value ) {
-                    SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue);
+                    SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue, px_value.deleteable);
                 });
             }
         });
@@ -215,12 +215,12 @@ var SourcePanel = ( function (px_module) {
     };
 
     //method to create a toolbutton
-    px_module.createToolButton = function(toolname, redValue, greenValue, blueValue){
+    px_module.createToolButton = function(toolname, redValue, greenValue, blueValue, deleteable){
         $("<button></button>")
             .text(toolname)
             .attr("class", "mecsim_source_toolButton")
             .attr("value", toolname)
-            .button({icons: {secondary: "ui-icon-close"}})
+            .button( deleteable ? {icons: {secondary: "ui-icon-close"}} : {})
             .prepend(
                 $("<span></span>")
                     .css("background-color", "rgb("+ redValue +","+ greenValue +","+ blueValue +")")
@@ -407,7 +407,7 @@ var SourcePanel = ( function (px_module) {
             },
             success : function( data ){
                 $.each( data, function( pc_key, px_value ) {
-                    SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue);
+                    SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue, px_value.deleteable);
                 });
 
                 SourcePanel.settings.obj.widget.close();

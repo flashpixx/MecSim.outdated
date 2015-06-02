@@ -81,33 +81,32 @@ $(document).ready(function() {
 
                 var lo_matrix = {};
 
-                function add2Tree( pc_path, pc_seperator )
+                function add2Tree( pc_path, pc_separator )
                 {
-                    for( var i=0, la = pc_path.split(pc_seperator), ln_length = la.length; i < ln_length; ++i )
+                    if (lo_matrix[pc_path])
+                        return;
+
+                    for( var i=1, la = pc_path.split(pc_separator), ln_length = la.length; i < ln_length; ++i )
                     {
-                        var lc_item = la.slice(0,i);
-                        /*
-                        if (i > 0)
-                        {
-                            var lc_parent = la.slice(0, i-1);
-                            if (!lo_matrix[lc_parent])
-                                lo_matrix[lc_parent].children = new Set();
-                            lo_matrix[lc_parent].children.add(lc_item);
-                        }
+                        var lc_parent = la.slice(0, i-1).join(pc_separator);
+                        if (!lo_matrix[lc_parent])
+                            lo_matrix[lc_parent] =  { children : new Set(), connect : new Set() };
 
-                        if (lo_matrix[lc_item])
-                            lo_matrix[lc_item] = { children : new Set(), connect : new Set() };
-                        */
-
-                        console.log(lc_item);
+                        lo_matrix[lc_parent].children.add( la.slice(0, i).join(pc_separator) );
                     }
-                }
+
+                    //lo_matrix[pc_path] = { children : new Set(), connect : new Set() };
+                };
+
 
                 po_event.data.toJSON().cells.forEach( function( po_object ) {
 
-                    add2tree( po_object.source.path, po_object.source.path.seperator );
-                    add2tree( po_object.target.path, po_object.target.path.seperator );
+                    add2Tree( po_object.source.path, po_object.source.separator );
+                    add2Tree( po_object.target.path, po_object.target.separator );
 
+                    //lo_matrix[po_object.source.path, po_object.source.separator].connect.add( po_object.target.path, po_object.target.separator );
+
+                    console.log( lo_matrix );
                 } );
 
                 //console.log(lo_matrix);

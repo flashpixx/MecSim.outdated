@@ -37,4 +37,15 @@ public interface IAtom<T>
      */
     public T get();
 
+
+    /**
+     * checks if the generic type of the atom matches a class
+     *
+     * @param p_class matching class
+     * @return boolean of checking
+     *
+     * @note use generic_type_class.isAssignableFrom(p_class)
+     */
+    public boolean instanceOf( final Class<?> p_class );
+
 }

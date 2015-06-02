@@ -85,6 +85,17 @@ var SimulationPanel = ( function (px_module) {
                 SimulationPanel.ui().mecsim_config_extract().bootstrapSwitch({
                     size: "mini"
                 });
+                SimulationPanel.ui().mecsim_config_opacity_slider().slider({
+                    range: "min",
+                    value: 20,
+                    min: 1,
+                    max: 50,
+                    slide: function( event, ui ) {
+                        SimulationPanel.ui().mecsim_config_opacity_label().val(  ui.value );
+                    }
+                });
+                SimulationPanel.ui().mecsim_config_opacity_label().val(SimulationPanel.ui().mecsim_config_opacity_slider().slider("value"));
+                SimulationPanel.ui().mecsim_config_server_bind().selectmenu();
              });
         });
 
@@ -177,7 +188,13 @@ var SimulationPanel = ( function (px_module) {
         /** reference to reset config flag**/
         mecsim_config_reset             : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"              : $("#mecsim_config_reset"); },
         /** reference to extract mas-files config flag**/
-        mecsim_config_extract           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"            : $("#mecsim_config_extract"); }
+        mecsim_config_extract           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"            : $("#mecsim_config_extract"); },
+        /** reference to opacity route painter config slider **/
+        mecsim_config_opacity_slider    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_opacity_slider"     : $("#mecsim_config_opacity_slider"); },
+        /** reference to opacity route painter config slider label **/
+        mecsim_config_opacity_label           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_opacity"     : $("#mecsim_config_opacity"); },
+        /** reference to server bind information of config **/
+        mecsim_config_server_bind: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_server_bind"     : $("#mecsim_config_server_bind"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

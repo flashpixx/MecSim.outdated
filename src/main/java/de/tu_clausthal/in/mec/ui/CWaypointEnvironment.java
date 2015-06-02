@@ -34,7 +34,6 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -194,6 +193,28 @@ public class CWaypointEnvironment
         l_tools.put( l_newTool.m_name, l_properties );
 
         return l_tools;
+    }
+
+    /**
+     * method to delete a tool
+     *
+     * @param p_data
+     * @return
+     */
+    private final boolean web_static_deletetool( final Map<String, Object> p_data )
+    {
+        if(!p_data.containsKey( "toolname" ))
+            return false;
+
+        String l_toolname = String.valueOf( p_data.get( "toolname" ) );
+
+        if(m_toolbox.containsKey( l_toolname ) && !l_toolname.equals( CCommon.getResourceString( this, "defaulttoolname" ) )){
+            m_selectedTool = m_toolbox.get( CCommon.getResourceString( this, "defaulttoolname" ) );
+            m_toolbox.remove( l_toolname );
+            return true;
+        }
+
+        return false;
     }
 
     /**

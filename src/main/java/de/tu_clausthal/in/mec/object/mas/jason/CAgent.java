@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -283,13 +284,14 @@ public class CAgent<T> implements IVoidAgent
     }
 
     /**
-     * returns a set of belief obejcts
+     * returns the current belief base of the agent
      *
-     * @return belief set
+     * @return belief base
      */
-    public final Set<IBelief> getBelief()
+    public final IBeliefBase getBeliefBase()
     {
-        return m_beliefs;
+        // must be converted m_agent.getBB()
+        return null;
     }
 
     @Override

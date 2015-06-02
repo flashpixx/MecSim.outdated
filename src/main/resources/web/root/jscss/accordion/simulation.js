@@ -96,6 +96,13 @@ var SimulationPanel = ( function (px_module) {
                 });
                 SimulationPanel.ui().mecsim_config_opacity_label().val(SimulationPanel.ui().mecsim_config_opacity_slider().slider("value"));
                 SimulationPanel.ui().mecsim_config_server_bind().selectmenu();
+                SimulationPanel.ui().mecsim_config_cell_sampling().selectmenu();
+                SimulationPanel.ui().mecsim_config_time_sampling().selectmenu();
+                SimulationPanel.ui().mecsim_config_routing_algorithm().selectmenu();
+                SimulationPanel.ui().mecsim_config_map_information().selectmenu();
+                SimulationPanel.ui().mecsim_config_database_connection().bootstrapSwitch({
+                    size: "mini"
+                });
              });
         });
 
@@ -194,7 +201,17 @@ var SimulationPanel = ( function (px_module) {
         /** reference to opacity route painter config slider label **/
         mecsim_config_opacity_label           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_opacity"     : $("#mecsim_config_opacity"); },
         /** reference to server bind information of config **/
-        mecsim_config_server_bind: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_server_bind"     : $("#mecsim_config_server_bind"); }
+        mecsim_config_server_bind: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_server_bind"     : $("#mecsim_config_server_bind"); },
+        /** reference to cell sampling size **/
+        mecsim_config_cell_sampling     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_cell_sampling"     : $("#mecsim_config_cell_sampling"); },
+        /** reference to time sampling **/
+        mecsim_config_time_sampling: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_time_sampling"     : $("#mecsim_config_time_sampling"); },
+        /** reference to routing algorithm **/
+        mecsim_config_routing_algorithm : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_routing_algorithm"     : $("#mecsim_config_routing_algorithm"); },
+        /** reference to map information **/
+        mecsim_config_map_information: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_map_information"     : $("#mecsim_config_map_information"); },
+        /** reference to database connection **/
+        mecsim_config_database_connection: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_database_connection"     : $("#mecsim_config_database_connection"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

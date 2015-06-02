@@ -141,20 +141,20 @@ public class CLogger
             {
                 l_add = "[   ";
                 for ( Object l_item : (Collection) p_add )
-                    l_add += l_item + "   ";
+                    l_add += l_item.toString().trim() + "   ";
                 l_add += "]";
             }
             else
-                l_add = p_add.toString();
+                l_add = p_add.toString().trim();
         }
 
         if ( !l_add.isEmpty() )
         {
             l_str.append( l_sep ).
-                    append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ) );
+                    append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ).trim() );
         }
 
-        return l_str.toString();
+        return l_str.toString().trim();
     }
 
     /**

@@ -5,16 +5,24 @@
         <li ><a href = "#tabs-3" >Database Data</a ></li >
     </ul >
     <div id = "tabs-1" >
-        <label for = "mecsim_config_select_language" >Select a language</label >
-        <select name = "language" id = "mecsim_config_select_language" >
-        </select >
-        <br /><br />
 
         <label for = "mecsim_config_reset" >Reset Configuration?</label >
         <input id="mecsim_config_reset" type="checkbox" name="reset_config_checkbox">
         <br/>
         <label for="mecsim_config_extract">Extract MAS files</label>
         <input id="mecsim_config_extract" type="checkbox" name="extract_config_checkbox">
+        <br/>
+        <label for = "mecsim_config_select_language" >Select a language</label >
+        <select name = "language" id = "mecsim_config_select_language" ></select >
+        <br/>
+        <label for="mecsim_config_opacity">Select opacity delay of route painter: </label>
+        <input type="text" id="mecsim_config_opacity" readonly style="border:0;">
+        <div id="mecsim_config_opacity_slider"></div>
+        <br/>
+        <labal for="mecsim_config_server_bind">Please select a server bind function: </labal>
+        <select name="server bind" id="mecsim_config_server_bind"></select>
+        <br/>
+
 
     </div >
     <div id = "tabs-2" >

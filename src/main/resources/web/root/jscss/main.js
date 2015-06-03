@@ -120,13 +120,10 @@ $(document).ready(function() {
                     lo_tree[po_object.source.path].connect.add( po_object.target.path );
 
                 } );
-
-//                console.log(lo_tree);
-
 /*
                 Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
-                    id   : "messageflow",
-                    data : lo_matrix
+                    id   : "graphtest",
+                    data : lo_tree
                 });
 */
             }

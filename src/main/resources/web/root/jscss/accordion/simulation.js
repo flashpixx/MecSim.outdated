@@ -211,7 +211,17 @@ var SimulationPanel = ( function (px_module) {
         /** reference to map information **/
         mecsim_config_map_information: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_map_information"     : $("#mecsim_config_map_information"); },
         /** reference to database connection **/
-        mecsim_config_database_connection: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_database_connection"     : $("#mecsim_config_database_connection"); }
+        mecsim_config_database_connection: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_database_connection"     : $("#mecsim_config_database_connection"); },
+        /** reference to database driver name **/
+        mecsim_config_driver_name: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_driver_name"     : $("#mecsim_config_driver_name"); },
+        /** reference to database connection url **/
+        mecsim_config_connection_url: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_connection_url"     : $("#mecsim_config_connection_url"); },
+        /** reference to database table prefix **/
+        mecsim_config_table_prefix: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_table_prefix"     : $("#mecsim_config_table_prefix"); },
+        /** reference to database username **/
+        mecsim_config_username: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_username"     : $("#mecsim_config_username"); },
+        /** reference to database password **/
+        mecsim_config_password: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_password"     : $("#mecsim_config_password"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

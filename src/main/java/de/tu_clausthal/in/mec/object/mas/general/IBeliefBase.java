@@ -23,23 +23,41 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import org.apache.commons.collections4.map.LinkedMap;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * agent belief base
  */
-public interface IBeliefBase
+public abstract class IBeliefBase<T> extends HashMap<String, IBeliefBase<T>>
 {
     /**
-     * collapse of beliefbase
+     * set of literals
      */
-    public IBeliefBase collapse();
+    Set<ILiteral<T>> m_literals;
+
+    /**
+     * returns the aggregated beliefbase which contains
+     * every nested literal
+     */
+    public abstract IBeliefBase collapse();
 
     /**
      * update method for beliefbase
      */
-    public void update();
+    public abstract void update();
 
     /**
-     * clear method for beliefbase
+     * removes all literals of each beliefbase
      */
-    public void clear();
+    public void clearLiterals()
+    {
+        m_literals.clear();
+
+        for( String l_name : this.keySet() )
+            this.get(l_name).clear();
+    }
 }

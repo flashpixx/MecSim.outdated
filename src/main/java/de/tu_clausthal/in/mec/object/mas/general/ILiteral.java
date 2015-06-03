@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * literal interface
  */
-public interface ILiteral extends ITerm
+public interface ILiteral<T> extends ITerm
 {
     /**
      * returns the optional annotations
@@ -51,4 +51,11 @@ public interface ILiteral extends ITerm
      * @return value term
      */
     public ITermList getValues();
+
+    /**
+     * getter for language specific literal
+     *
+     * @return literal
+     */
+    public T getLiteral();
 }

@@ -21,20 +21,36 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.jason.general;
+
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import jason.asSyntax.Literal;
+
+import java.util.Map;
 
 /**
- * literal which can be changed
+ * agent beliefbase
  */
-public interface IUpdatableLiteral extends ILiteral
+public class CBeliefBase implements IBeliefBase
 {
-    /**
-     * clear all terms
-     */
-    public void clear();
+    Map<String, ILiteral<Literal>>
 
-    /**
-     * update the terms
-     */
-    public void update();
+    @Override
+    public IBeliefBase collapse()
+    {
+        return null;
+    }
+
+    @Override
+    public void update()
+    {
+
+    }
+
+    @Override
+    public void clear()
+    {
+
+    }
 }

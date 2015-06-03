@@ -76,6 +76,8 @@ $(document).ready(function() {
         });
 
         // create realtime message-flow websocket access
+        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "graphtest" });
+
         MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) {
 
@@ -120,24 +122,12 @@ $(document).ready(function() {
                     lo_tree[po_object.source.path].connect.add( po_object.target.path );
 
                 } );
-/*
-                Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
-                    id   : "graphtest",
-                    data : lo_tree
-                });
-*/
+
+                // update visualization
+                lo_agentcommunication(lo_tree);
+
             }
         });
 
-
-        // --- visualization test ---
-/*)
-        Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
-            id   : "graphtest",
-            //data : { test : { children : ["subtest1", "subtest2"] }, subtest1 : { connect : ["subtest2"] }, subtest2 : {} },
-            data : {
-            }
-        });
-*/
     });
 });

@@ -113,13 +113,16 @@ var Visualization = (function (px_modul) {
      * @see http://mbostock.github.io/d3/talk/20111116/bundle.html
      * @param pc_element element in which the graph is added
      * @param po_options options of the graph (option definition below)
+     * @return update function
      **/
     px_modul.HierarchicalEdgeBundling = function(pc_element, po_options)
     {
         var lo_options   = po_options || {};
 
         // --- option definition ---
-        /** data object with tree and link structure **/
+        /** data object with tree and link structure on initialization in the JSON structure
+         * { node1 : { children : ["node2", "node3"] }, node2 : { connect : ["node3"] }, node3 : {} }
+        **/
         lo_options.data         = lo_options.data         || {};
         /** image size **/
         lo_options.size         = lo_options.size         || 1000;
@@ -188,33 +191,43 @@ var Visualization = (function (px_modul) {
             .attr("d",     d3.svg.arc().outerRadius( lo_options.size/2 ).innerRadius( 0 ).startAngle( 0 ).endAngle( 2 * Math.PI ) );
 
 
+        /**
+         * build visualization in 3 steps: build tree from definite data set with node structure, build visualization, build link structure
+         * @param po_data update dataset
+        **/
+        var lo_update = function( po_data )
+        {
+            if (Object.getOwnPropertyNames(po_data).length === 0)
+                return;
 
-        // creates the visualization of the data
-        // 1. build tree with node structure
-        // 2. build visualization
-        // 3. build link structure of the node structure
-        var lo_treedata = buildtree(lo_options.data), la_nodes = lo_cluster.nodes(lo_treedata.root), la_links = linknode(lo_options.data, lo_treedata.nodes);
-        console.log(lo_treedata);
-        // link visualization
-        var path = lo_svg.selectAll( "path.link" )
-            .data( la_links )
-            .enter().append( "svg:path" )
-            .attr( "class", lo_options.linkclass )
-            .attr( "d",     function(po_link, pn_index) { return lo_line(lo_bundle(la_links)[pn_index]); });
+            var lo_treedata = buildtree(po_data), la_nodes = lo_cluster.nodes(lo_treedata.root), la_links = linknode(po_data, lo_treedata.nodes);
 
-        // node visualisation
-        lo_svg.selectAll( "g.node" )
-            .data( la_nodes.filter( lo_options.nodefilter) )
-            .enter().append( "svg:g" )
-            .attr( "class",       lo_options.nodeclass )
-            .attr( "id",          lo_options.nodeid )
-            .attr( "transform",   function(po_link) { return "rotate(" + (po_link.x - 90) + ") translate(" + po_link.y + ")"; })
-            .append( "svg:text" )
-            .attr( "dx",          function(po_link) { return po_link.x < 180 ? 8 : -8; } )
-            .attr( "dy", "0.3em" )
-            .attr( "text-anchor", function(po_link) { return po_link.x < 180 ? "start" : "end"; } )
-            .attr( "transform",   function(po_link) { return po_link.x < 180 ? null : "rotate(180)"; } )
-            .text( lo_options.nodetext );
+            // link visualization
+            var path = lo_svg.selectAll( "path.link" )
+                .data( la_links )
+                .enter().append( "svg:path" )
+                .attr( "class", lo_options.linkclass )
+                .attr( "d",     function(po_link, pn_index) { return lo_line(lo_bundle(la_links)[pn_index]); });
+
+            // node visualisation
+            lo_svg.selectAll( "g.node" )
+                .data( la_nodes.filter( lo_options.nodefilter) )
+                .enter().append( "svg:g" )
+                .attr( "class",       lo_options.nodeclass )
+                .attr( "id",          lo_options.nodeid )
+                .attr( "transform",   function(po_link) { return "rotate(" + (po_link.x - 90) + ") translate(" + po_link.y + ")"; })
+                .append( "svg:text" )
+                .attr( "dx",          function(po_link) { return po_link.x < 180 ? 8 : -8; } )
+                .attr( "dy", "0.3em" )
+                .attr( "text-anchor", function(po_link) { return po_link.x < 180 ? "start" : "end"; } )
+                .attr( "transform",   function(po_link) { return po_link.x < 180 ? null : "rotate(180)"; } )
+                .text( lo_options.nodetext );
+        };
+
+        // run function for initialization
+        lo_update( lo_options.data );
+
+        return lo_update;
     }
 
 

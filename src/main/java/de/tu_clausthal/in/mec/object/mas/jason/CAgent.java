@@ -29,9 +29,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.general.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -167,7 +165,7 @@ public class CAgent<T> implements IVoidAgent
         {
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
-            m_beliefs.addAll( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( c_bindname, p_bind ) );
+            m_beliefs.addAll(new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch

@@ -32,24 +32,17 @@ import java.util.Map;
 /**
  * agent beliefbase
  */
-public class CBeliefBase implements IBeliefBase
+public class CBeliefBase extends IBeliefBase<Literal>
 {
-    Map<String, ILiteral<Literal>>
-
     @Override
     public IBeliefBase collapse()
     {
+        
         return null;
     }
 
     @Override
     public void update()
-    {
-
-    }
-
-    @Override
-    public void clear()
     {
 
     }

@@ -23,17 +23,19 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import org.apache.commons.collections4.map.LinkedMap;
-
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * agent belief base
  */
-public abstract class IBeliefBase<T> extends HashMap<String, IBeliefBase<T>>
+public abstract class IBeliefBase<T>
 {
+    /**
+     * map of string/beliefbase
+     */
+    Map<String,IBeliefBase<T>> m_beliefbases;
     /**
      * set of literals
      */
@@ -43,7 +45,7 @@ public abstract class IBeliefBase<T> extends HashMap<String, IBeliefBase<T>>
      * returns the aggregated beliefbase which contains
      * every nested literal
      */
-    public abstract IBeliefBase collapse();
+    public abstract IBeliefBase<T> collapse();
 
     /**
      * update method for beliefbase
@@ -57,7 +59,13 @@ public abstract class IBeliefBase<T> extends HashMap<String, IBeliefBase<T>>
     {
         m_literals.clear();
 
-        for( String l_name : this.keySet() )
-            this.get(l_name).clear();
+        for( String l_name : m_beliefbases.keySet() )
+            m_beliefbases.get( l_name ).clearLiterals();
+    }
+
+    public void clear()
+    {
+        m_beliefbases.clear();
+        m_literals.clear();
     }
 }

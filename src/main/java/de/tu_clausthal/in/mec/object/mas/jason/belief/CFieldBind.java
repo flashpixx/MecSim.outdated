@@ -44,7 +44,7 @@ import java.util.Set;
 /**
  * belief structure to bind object properties
  */
-public class CFieldBind implements IUpdatableLiteral
+public class CFieldBind implements IBeliefBase<Literal>
 {
     /**
      * field filter

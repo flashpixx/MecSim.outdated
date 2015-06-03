@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.general.*;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.ListTerm;
+import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -34,14 +35,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static jason.asSyntax.ASSyntax.createLiteral;
+
 /**
  * class for literals
  */
-public class CLiteral implements ILiteral
+public class CLiteral implements ILiteral<Literal>
 {
+    private final boolean m_negated = false;
     private final String m_functor;
     private final ITermList m_values = new CTermList();
     private final ITermSet m_annotations = new CTermSet();
+
+    public String toString()
+    {
+        String l_return = (m_negated) ? "~" : "";
+
+        l_return = l_return.concat(m_functor);
+
+        if(!m_values.isEmpty())
+        {
+
+            String l_valueString = "";
+
+            for( ITerm l_term : m_values )
+                l_valueString.concat(l_term.toString() + ",");
+
+            l_return = l_return.concat("(" + l_valueString.substring(0, l_valueString.length() - 1) + ")" );
+        }
+
+        if( !m_annotations.isEmpty() )
+        {
+            String l_annotationString = "";
+
+            for(ITerm l_term : m_annotations )
+                l_annotationString.concat( l_term.toString() + "," );
+
+            l_return = l_return.concat("[" + l_annotationString + "]");
+        }
+
+        return l_return;
+    }
 
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
@@ -161,6 +195,15 @@ public class CLiteral implements ILiteral
     public ITermList getValues()
     {
         return m_values;
+    }
+
+    @Override
+    public Literal getLiteral()
+    {
+        return createLiteral( ( m_negated ) ? Literal.LNeg : Literal.LPos,
+                m_functor,
+                this.toString() )
+                .addAnnots(m_annotations);;
     }
 
     /**

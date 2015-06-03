@@ -58,4 +58,11 @@ public interface ILiteral<T> extends ITerm
      * @return literal
      */
     public T getLiteral();
+
+    /**
+     * convert literal to string
+     *
+     * @return
+     */
+    public String toString();
 }

@@ -30,8 +30,8 @@ import java.util.Set;
 
 
 /**
- * generic default belief base for agents.
- * each beliefbase can contain further beliefbases.
+ * Generic default belief base for agents.
+ * Each beliefbase can contain further beliefbases.
  */
 public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
@@ -133,20 +133,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @return true if beliefbase equals a given object
      */
     @Override
-    public boolean equals(Object p_object)
+    public boolean equals(final Object p_object)
     {
         return this.hashCode() == p_object.hashCode();
     }
-
-    /**
-     *
-     * @param p_literals
-     * @return
-     *
-     * @todo definition
-     */
-    public boolean addAll(final Set<ILiteral<T>> p_literals)
-    {
-        return true;
-    };
 }

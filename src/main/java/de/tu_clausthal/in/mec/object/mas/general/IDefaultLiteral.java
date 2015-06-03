@@ -135,7 +135,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @return true if the literals equals a given object
      */
     @Override
-    public final boolean equals(Object p_object)
+    public final boolean equals(final Object p_object)
     {
         return this.hashCode() == p_object.hashCode();
     }

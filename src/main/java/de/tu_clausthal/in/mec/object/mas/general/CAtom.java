@@ -66,7 +66,7 @@ public class CAtom<T> implements IAtom<T>
      * @return true if the atom's type is assignable from matching class
      */
     @Override
-    public boolean instanceOf(Class<?> p_class)
+    public boolean instanceOf(final Class<?> p_class)
     {
         return m_type.isAssignableFrom(p_class);
     }

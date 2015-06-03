@@ -29,7 +29,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -105,7 +105,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * set with belief binds
      */
-    private final IBeliefBase m_beliefs;
+    private final IDefaultBeliefBase m_beliefs;
     /**
      * set with cycle objects
      */
@@ -280,7 +280,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return belief base
      */
-    public final IBeliefBase getBeliefBase()
+    public final IDefaultBeliefBase getBeliefBase()
     {
         return m_beliefs;
     }

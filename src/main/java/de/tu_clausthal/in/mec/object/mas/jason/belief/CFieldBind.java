@@ -29,7 +29,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.general.CTermList;
 import de.tu_clausthal.in.mec.object.mas.general.IAtom;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.ASSyntax;
@@ -45,7 +45,7 @@ import java.util.Set;
 /**
  * belief structure to bind object properties
  */
-public class CFieldBind extends IBeliefBase<Literal>
+public class CFieldBind extends IDefaultBeliefBase<Literal>
 {
     /**
      * field filter
@@ -93,7 +93,7 @@ public class CFieldBind extends IBeliefBase<Literal>
     }
 
     @Override
-    public IBeliefBase<Literal> collapse()
+    public IDefaultBeliefBase<Literal> collapse()
     {
         return null;
     }

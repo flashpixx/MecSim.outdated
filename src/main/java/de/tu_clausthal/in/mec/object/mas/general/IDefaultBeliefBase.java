@@ -30,54 +30,66 @@ import java.util.Set;
 
 
 /**
- * agent belief base
+ * generic default belief base for agents.
+ * each beliefbase can contain further beliefbases.
+ *
  * @todo DefaultBeliefBase als Interface und abstrakte Klasse (diese umbenennen)
  * @todo add documentation
  * @todo equals und Hashcode ueberladen
  */
-public abstract class IBeliefBase<T>
+public abstract class IDefaultBeliefBase<T>
 {
     /**
      * map of string/beliefbase
+     * each entry represents an inherited beliefbase with its name
      */
-    private Map<String, IBeliefBase<T>> m_beliefbases;
+    private Map<String, IDefaultBeliefBase<T>> m_beliefbases;
     /**
-     * set of literals
+     * set of literals representing the top level beliefs,
+     * i.e. it does not contain literals of inherited beliefbases
      */
     private Set<ILiteral<T>> m_literals;
 
     /**
-     * returns the aggregated beliefbase which contains
-     * every nested literal
+     * returns the aggregated beliefbase which also contains
+     * the literals of the inherited beliefbases
      */
     public Set<T> collapseLiterals()
     {
+        // set for aggregation
         final Set<T> l_beliefbase = new HashSet<>();
 
+        // top level start of recursion
         collapseLiterals(this, l_beliefbase);
 
         return l_beliefbase;
     }
 
-    private static void collapseLiterals( final IBeliefBase<?> p_bb, final Set p_return  )
+    /**
+     * static method for recursive traversation of beliefbases
+     * to aggregate the literals. It prevents the instantiation of
+     * an aggregation set in every recursion step.
+     *
+     * @param p_currentBeliefbase beliefbase to add
+     * @param p_currentAggregatedSet the current aggregation
+     */
+    private static void collapseLiterals( final IDefaultBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet  )
     {
-        for(final ILiteral<?> l_literal : p_bb.m_literals )
-            p_return.add(l_literal.getLiteral());
+        // add the current beliefbases' literals to aggregated set
+        for(final ILiteral<?> l_literal : p_currentBeliefbase.m_literals )
+            p_currentAggregatedSet.add(l_literal.getLiteral());
 
-        for( final IBeliefBase<?> l_bb : p_bb.m_beliefbases.values() )
-            collapseLiterals(l_bb, p_return);
+        // recursive method call for each inherited beliefbase
+        for( final IDefaultBeliefBase<?> l_bb : p_currentBeliefbase.m_beliefbases.values() )
+            collapseLiterals(l_bb, p_currentAggregatedSet);
     }
 
     /**
      * returns collapsed beliefbase
-<<<<<<< HEAD
      *
-     * @todo Traversierung/Rekursion fuer Annotations
-=======
      * @todo incomplete
->>>>>>> 8e6f794bcb81b0c98f68d2da6ecedc2b6de8f4d7
      */
-    public IBeliefBase collapseBeliefbase()
+    public IDefaultBeliefBase<T> collapseBeliefbase()
     {
         return null;
     }

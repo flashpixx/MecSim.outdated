@@ -23,7 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import jason.asSyntax.Literal;
 
 import java.util.Set;
@@ -32,7 +32,7 @@ import java.util.Set;
  * agent beliefbase
  * @todo define correct inheritance
  */
-public class CBeliefBase extends IBeliefBase<Literal>
+public class CBeliefBase extends IDefaultBeliefBase<Literal>
 {
     @Override
     public Set<Literal> collapse()

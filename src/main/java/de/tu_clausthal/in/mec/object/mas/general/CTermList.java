@@ -27,11 +27,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * list for terms
+ * generic term list for agent literals
  */
 public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
-
+    /**
+     * check for the termlist's class type
+     *
+     * @param p_class matching class
+     * @return true if List is assignable from matching class
+     */
     @Override
     public boolean instanceOf(final Class<?> p_class)
     {

@@ -27,11 +27,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * set for terms
+ * generic term set for agent literals
  */
 public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
-
+    /**
+     * check for the termset's class type
+     *
+     * @param p_class matching class
+     * @return true if Set is assignable from matching class
+     */
     @Override
     public boolean instanceOf(final Class<?> p_class)
     {

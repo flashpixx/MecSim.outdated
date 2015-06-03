@@ -23,9 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-
 /**
- * atom interface
+ * interface for atoms of agent literals
  */
 public interface IAtom<T> extends ITerm
 {

@@ -30,6 +30,7 @@ import jason.asSyntax.Term;
 
 /**
  * class for literals
+ * @todo add deocumentation
  */
 public class CLiteral extends IDefaultLiteral<Literal>
 {

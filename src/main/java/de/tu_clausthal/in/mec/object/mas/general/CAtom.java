@@ -2,6 +2,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 /**
  * Created by marcel on 03.06.15.
+ * @todo add documentation + license
  */
 public class CAtom<T> implements IAtom<T>
 {

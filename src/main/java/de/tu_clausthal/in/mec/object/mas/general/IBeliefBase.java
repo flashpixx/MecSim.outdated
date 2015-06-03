@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,17 +37,41 @@ public abstract class IBeliefBase<T>
     /**
      * map of string/beliefbase
      */
-    Map<String, IBeliefBase<T>> m_beliefbases;
+    private Map<String, IBeliefBase<T>> m_beliefbases;
     /**
      * set of literals
      */
-    Set<ILiteral<T>> m_literals;
+    private Set<ILiteral<T>> m_literals;
 
     /**
      * returns the aggregated beliefbase which contains
      * every nested literal
      */
-    public abstract IBeliefBase<T> collapse();
+    public Set<T> collapseLiterals()
+    {
+        final Set<T> l_beliefbase = new HashSet<>();
+
+        collapseLiterals(this, l_beliefbase);
+
+        return l_beliefbase;
+    }
+
+    private static void collapseLiterals( final IBeliefBase<?> p_bb, final Set p_return  )
+    {
+        for(final ILiteral<?> l_literal : p_bb.m_literals )
+            p_return.add(l_literal.getLiteral());
+
+        for( final IBeliefBase<?> l_bb : p_bb.m_beliefbases.values() )
+            collapseLiterals(l_bb, p_return);
+    }
+
+    /**
+     * returns collapsed beliefbase
+     */
+    public IBeliefBase collapseBeliefbase()
+    {
+        return null;
+    }
 
     /**
      * update method for beliefbase

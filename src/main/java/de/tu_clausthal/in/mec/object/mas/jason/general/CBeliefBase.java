@@ -26,13 +26,15 @@ package de.tu_clausthal.in.mec.object.mas.jason.general;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import jason.asSyntax.Literal;
 
+import java.util.Set;
+
 /**
  * agent beliefbase
  */
 public class CBeliefBase extends IBeliefBase<Literal>
 {
     @Override
-    public IBeliefBase collapse()
+    public Set<Literal> collapse()
     {
 
         return null;

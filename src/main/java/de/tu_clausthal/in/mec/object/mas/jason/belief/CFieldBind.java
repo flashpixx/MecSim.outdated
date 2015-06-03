@@ -164,7 +164,7 @@ public class CFieldBind extends IBeliefBase<Literal>
         m_bind.remove(p_name);
     }
 
-    public ITermSet getAnnotation()
+    public ITermCollection getAnnotation()
     {
         return null;
     }
@@ -174,7 +174,7 @@ public class CFieldBind extends IBeliefBase<Literal>
         return null;
     }
 
-    public ITermList getValues()
+    public ITermCollection getValues()
     {
         return null;
     }

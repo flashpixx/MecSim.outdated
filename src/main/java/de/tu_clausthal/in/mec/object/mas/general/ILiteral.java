@@ -24,12 +24,13 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
+import java.util.Set;
+
 /**
  * literal interface
  */
 public interface ILiteral extends ITerm
 {
-
     /**
      * returns the optional annotations
      *
@@ -50,5 +51,4 @@ public interface ILiteral extends ITerm
      * @return value term
      */
     public ITermList getValues();
-
 }

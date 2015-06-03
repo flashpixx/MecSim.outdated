@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.general.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
@@ -109,7 +110,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * set with belief binds
      */
-    private final Set<IBelief> m_beliefs = new HashSet<>();
+    private final IBeliefBase m_beliefs;
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
@@ -157,6 +158,7 @@ public class CAgent<T> implements IVoidAgent
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
+        m_beliefs = new CBeliefBase();
         m_namepath = p_namepath;
         if ( ( m_namepath == null ) || ( m_namepath.isEmpty() ) )
             m_namepath = new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() );
@@ -165,7 +167,7 @@ public class CAgent<T> implements IVoidAgent
         {
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
-            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( c_bindname, p_bind ) );
+            m_beliefs.addAll( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( c_bindname, p_bind ) );
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -287,86 +289,7 @@ public class CAgent<T> implements IVoidAgent
      */
     public final IBeliefBase getBeliefBase()
     {
-        return(new IBeliefBase()
-        {
-            @Override
-            public int size()
-            {
-                return m_agent.getBB().size();
-            }
-
-            @Override
-            public boolean isEmpty()
-            {
-                return m_agent.getBB().size() == 0;
-            }
-
-            @Override
-            public boolean contains(Object o)
-            {
-                return false;
-            }
-
-            @Override
-            public Iterator<ILiteral> iterator()
-            {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray()
-            {
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a)
-            {
-                return null;
-            }
-
-            @Override
-            public boolean add(ILiteral iLiteral)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends ILiteral> c)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c)
-            {
-                return false;
-            }
-
-            @Override
-            public void clear()
-            {
-                m_agent.getBB().clear();
-            }
-        });
+        return m_beliefs;
     }
 
     @Override

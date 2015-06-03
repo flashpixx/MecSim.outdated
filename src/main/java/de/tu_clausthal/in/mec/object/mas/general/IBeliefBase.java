@@ -23,12 +23,23 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.Set;
-
-
 /**
- * belief base of terms
+ * agent belief base
  */
-public interface IBeliefBase extends Set<ITerm>
+public interface IBeliefBase
 {
+    /**
+     * collapse of beliefbase
+     */
+    public IBeliefBase collapse();
+
+    /**
+     * update method for beliefbase
+     */
+    public void update();
+
+    /**
+     * clear method for beliefbase
+     */
+    public void clear();
 }

@@ -23,17 +23,91 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
- * generic set type
+ * class for beliefbase
  */
-public abstract class ITermSet extends HashSet<ITerm> implements ITerm
+public class CBeliefBase implements IBeliefBase
 {
     @Override
-    public boolean instanceOf(Class<?> p_class)
+    public int size()
     {
-        return Set.class.isAssignableFrom( p_class ) && ITerm.class.isAssignableFrom( p_class );
+        return size();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o)
+    {
+        return contains( o );
+    }
+
+    @Override
+    public Iterator<ILiteral> iterator()
+    {
+        return iterator();
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        return toArray();
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a)
+    {
+        return toArray( a );
+    }
+
+    @Override
+    public boolean add(ILiteral p_literal)
+    {
+        return add( p_literal );
+    }
+
+    @Override
+    public boolean remove(Object o)
+    {
+        return remove( o );
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c)
+    {
+        return containsAll( c );
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends ILiteral> c)
+    {
+        return addAll( c );
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c)
+    {
+        return retainAll( c );
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c)
+    {
+        return removeAll( c );
+    }
+
+    @Override
+    public void clear()
+    {
+        clear();
     }
 }

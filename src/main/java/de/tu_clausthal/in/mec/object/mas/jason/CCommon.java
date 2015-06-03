@@ -28,7 +28,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.mas.general.*;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CTermList;
+import de.tu_clausthal.in.mec.object.mas.general.CTermList;
 import jason.NoValueException;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.StringUtils;

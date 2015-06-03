@@ -27,7 +27,9 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
+import de.tu_clausthal.in.mec.object.mas.general.*;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -42,7 +44,7 @@ import java.util.Set;
 /**
  * belief structure to bind object properties
  */
-public class CFieldBind implements IBelief
+public class CFieldBind implements IUpdatableLiteral
 {
     /**
      * field filter
@@ -56,7 +58,8 @@ public class CFieldBind implements IBelief
     /**
      * set with literals
      */
-    private final Set<Literal> m_literals = new HashSet<>();
+    private final ITermList m_literals = new CTermList();
+
 
 
     /**
@@ -156,5 +159,29 @@ public class CFieldBind implements IBelief
     public final void remove( final String p_name )
     {
         m_bind.remove( p_name );
+    }
+
+    @Override
+    public ITermSet getAnnotation()
+    {
+        return null;
+    }
+
+    @Override
+    public IAtom<?> getFunctor()
+    {
+        return null;
+    }
+
+    @Override
+    public ITermList getValues()
+    {
+        return null;
+    }
+
+    @Override
+    public boolean instanceOf(Class<?> p_class)
+    {
+        return false;
     }
 }

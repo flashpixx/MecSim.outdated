@@ -23,17 +23,18 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * generic set type
+ * literal which can be changed
  */
-public abstract class ITermSet extends HashSet<ITerm> implements ITerm
+public interface IUpdatableLiteral extends ILiteral
 {
-    @Override
-    public boolean instanceOf(Class<?> p_class)
-    {
-        return Set.class.isAssignableFrom( p_class ) && ITerm.class.isAssignableFrom( p_class );
-    }
+    /**
+     * clear all terms
+     */
+    public void clear();
+
+    /**
+     * update the terms
+     */
+    public void update();
 }

@@ -34,13 +34,10 @@ import java.util.Set;
  */
 public class CBeliefBase extends IDefaultBeliefBase<Literal>
 {
-    @Override
-    public Set<Literal> collapse()
-    {
-
-        return null;
-    }
-
+    /**
+     * method for updating the agents beliefbase,
+     * i.e. read and store the values of binded objects
+     */
     @Override
     public void update()
     {

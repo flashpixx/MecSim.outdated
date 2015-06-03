@@ -155,6 +155,11 @@ select
 
 /******************************** css definitions for mecsim_source ************************************************/
 
+.mecsim_source_toolButton{
+    width: 75%;
+    text-align: center;
+}
+
 .mecsim_source_toolIcon{
     display: inline;
     float: left;

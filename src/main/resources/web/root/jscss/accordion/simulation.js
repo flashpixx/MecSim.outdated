@@ -85,6 +85,24 @@ var SimulationPanel = ( function (px_module) {
                 SimulationPanel.ui().mecsim_config_extract().bootstrapSwitch({
                     size: "mini"
                 });
+                SimulationPanel.ui().mecsim_config_opacity_slider().slider({
+                    range: "min",
+                    value: 20,
+                    min: 1,
+                    max: 50,
+                    slide: function( event, ui ) {
+                        SimulationPanel.ui().mecsim_config_opacity_label().val(  ui.value );
+                    }
+                });
+                SimulationPanel.ui().mecsim_config_opacity_label().val(SimulationPanel.ui().mecsim_config_opacity_slider().slider("value"));
+                SimulationPanel.ui().mecsim_config_server_bind().selectmenu();
+                SimulationPanel.ui().mecsim_config_cell_sampling().selectmenu();
+                SimulationPanel.ui().mecsim_config_time_sampling().selectmenu();
+                SimulationPanel.ui().mecsim_config_routing_algorithm().selectmenu();
+                SimulationPanel.ui().mecsim_config_map_information().selectmenu();
+                SimulationPanel.ui().mecsim_config_database_connection().bootstrapSwitch({
+                    size: "mini"
+                });
              });
         });
 
@@ -177,7 +195,33 @@ var SimulationPanel = ( function (px_module) {
         /** reference to reset config flag**/
         mecsim_config_reset             : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_reset"              : $("#mecsim_config_reset"); },
         /** reference to extract mas-files config flag**/
-        mecsim_config_extract           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"            : $("#mecsim_config_extract"); }
+        mecsim_config_extract           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_extract"            : $("#mecsim_config_extract"); },
+        /** reference to opacity route painter config slider **/
+        mecsim_config_opacity_slider    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_opacity_slider"     : $("#mecsim_config_opacity_slider"); },
+        /** reference to opacity route painter config slider label **/
+        mecsim_config_opacity_label           : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_opacity"     : $("#mecsim_config_opacity"); },
+        /** reference to server bind information of config **/
+        mecsim_config_server_bind: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_server_bind"     : $("#mecsim_config_server_bind"); },
+        /** reference to cell sampling size **/
+        mecsim_config_cell_sampling     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_cell_sampling"     : $("#mecsim_config_cell_sampling"); },
+        /** reference to time sampling **/
+        mecsim_config_time_sampling: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_time_sampling"     : $("#mecsim_config_time_sampling"); },
+        /** reference to routing algorithm **/
+        mecsim_config_routing_algorithm : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_routing_algorithm"     : $("#mecsim_config_routing_algorithm"); },
+        /** reference to map information **/
+        mecsim_config_map_information: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_map_information"     : $("#mecsim_config_map_information"); },
+        /** reference to database connection **/
+        mecsim_config_database_connection: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_database_connection"     : $("#mecsim_config_database_connection"); },
+        /** reference to database driver name **/
+        mecsim_config_driver_name: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_driver_name"     : $("#mecsim_config_driver_name"); },
+        /** reference to database connection url **/
+        mecsim_config_connection_url: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_connection_url"     : $("#mecsim_config_connection_url"); },
+        /** reference to database table prefix **/
+        mecsim_config_table_prefix: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_table_prefix"     : $("#mecsim_config_table_prefix"); },
+        /** reference to database username **/
+        mecsim_config_username: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_username"     : $("#mecsim_config_username"); },
+        /** reference to database password **/
+        mecsim_config_password: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_password"     : $("#mecsim_config_password"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

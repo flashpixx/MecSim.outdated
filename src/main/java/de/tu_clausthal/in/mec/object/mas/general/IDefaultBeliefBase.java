@@ -32,10 +32,6 @@ import java.util.Set;
 /**
  * generic default belief base for agents.
  * each beliefbase can contain further beliefbases.
- *
- * @todo DefaultBeliefBase als Interface und abstrakte Klasse (diese umbenennen)
- * @todo add documentation
- * @todo equals und Hashcode ueberladen
  */
 public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
@@ -118,6 +114,37 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         m_literals.clear();
     }
 
+    /**
+     * hashcode function based on prime number linear combination
+     *
+     * @return hashcode calculated with prime numbers
+     */
+    @Override
+    public int hashCode()
+    {
+        return  61 * m_beliefbases.hashCode() +
+                79 * m_literals.hashCode();
+    }
+
+    /**
+     * method for equivalence check
+     *
+     * @param p_object
+     * @return true if beliefbase equals a given object
+     */
+    @Override
+    public boolean equals(Object p_object)
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    /**
+     *
+     * @param p_literals
+     * @return
+     *
+     * @todo definition
+     */
     public boolean addAll(final Set<ILiteral<T>> p_literals)
     {
         return true;

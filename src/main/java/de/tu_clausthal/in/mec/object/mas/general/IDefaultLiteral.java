@@ -24,52 +24,102 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 /**
- * Created by marcel on 03.06.15.
- * @todo add documentation + license
+ * default generic literal class for agent beliefs
+ * a literal consists of a functor, an optional list of values and
+ * an optional set of annotations, e.g. speed(50)[source(self)]
  */
 public abstract class IDefaultLiteral<T> implements ILiteral<T>
 {
-    protected final ITermCollection m_values = new CTermList();
-    protected final ITermCollection m_annotations = new CTermSet();
-    private final T m_literal;
+    /**
+     * the literals functor
+     */
     private final IAtom<String> m_functor;
+    /**
+     * the literal values
+     */
+    protected final ITermCollection m_values = new CTermList();
+    /**
+     * the literal annotations
+     */
+    protected final ITermCollection m_annotations = new CTermSet();
+    /**
+     * the original agent specific literal (i.e. Jason, Goal, 2APL)
+     */
+    private final T m_literal;
 
+    /**
+     * ctor
+     *
+     * @param p_functor functor of the literal
+     * @param p_literal the original literal
+     */
     protected IDefaultLiteral(final String p_functor, final T p_literal)
     {
         m_functor = new CAtom<>(p_functor);
         m_literal = p_literal;
     }
 
+    /**
+     * getter method for annotation
+     *
+     * @return the literals annotation
+     */
     @Override
     public ITermCollection getAnnotation()
     {
         return m_annotations;
     }
 
+    /**
+     * getter method for functor
+     *
+     * @return the literals functor
+     */
     @Override
     public IAtom<?> getFunctor()
     {
         return m_functor;
     }
 
+    /**
+     * getter method for values
+     *
+     * @return the literals values
+     */
     @Override
     public ITermCollection getValues()
     {
         return m_values;
     }
 
+    /**
+     * getter method for original literal
+     *
+     * @return original literal
+     */
     @Override
     public T getLiteral()
     {
         return m_literal;
     }
 
+    /**
+     * check for literal class type
+     *
+     * @param p_class matching class
+     * @return true if ILiteral is assignable from given class
+     */
     @Override
     public boolean instanceOf(final Class<?> p_class)
     {
         return ILiteral.class.isAssignableFrom(p_class);
     }
 
+    /**
+     * hashcode method based on prime number linear combination
+     *
+     * @return literal hashcode
+     */
     @Override
     public final int hashCode()
     {
@@ -78,6 +128,12 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
                 59 * m_annotations.hashCode();
     }
 
+    /**
+     * method for equivalence check
+     *
+     * @param p_object
+     * @return true if the literals equals a given object
+     */
     @Override
     public final boolean equals(Object p_object)
     {

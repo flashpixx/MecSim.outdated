@@ -37,7 +37,7 @@ import java.util.Set;
  * @todo add documentation
  * @todo equals und Hashcode ueberladen
  */
-public abstract class IDefaultBeliefBase<T>
+public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * map of string/beliefbase
@@ -89,7 +89,7 @@ public abstract class IDefaultBeliefBase<T>
      *
      * @todo incomplete
      */
-    public IDefaultBeliefBase<T> collapseBeliefbase()
+    public IBeliefBase<T> collapseBeliefbase()
     {
         return null;
     }

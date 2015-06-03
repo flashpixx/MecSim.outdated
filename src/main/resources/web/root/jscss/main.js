@@ -79,61 +79,50 @@ $(document).ready(function() {
         MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) {
 
-                var lo_matrix = {};
+                /** variable to store the tree **/
+                var lo_tree = {};
 
+                /**
+                 * build from an item (and its separator) the full path within the tree
+                 * @param pc_path string with path
+                 * @param pc_separator path separator
+                **/
                 function add2Tree( pc_path, pc_separator )
                 {
-                    if (lo_matrix[pc_path])
+                    if (lo_tree[pc_path])
                         return;
 
-                    for( var i=1, la = pc_path.split(pc_separator), ln_length = la.length; i < ln_length; ++i )
+                    // array.slice(x,y) is definied as [x,y)
+                    for( var i=1, la = pc_path.split(pc_separator), ln_length = la.length+1; i < ln_length; ++i )
                     {
                         var lc_parent = la.slice(0, i-1).join(pc_separator);
-                        if (!lo_matrix[lc_parent])
-                            lo_matrix[lc_parent] =  { children : new Set(), connect : new Set() };
+                        if (!lo_tree[lc_parent])
+                            lo_tree[lc_parent] =  { children : new Set(), connect : new Set() };
 
-                        lo_matrix[lc_parent].children.add( la.slice(0, i).join(pc_separator) );
+                        lo_tree[lc_parent].children.add( la.slice(0, i).join(pc_separator) );
                     }
 
-                    //lo_matrix[pc_path] = { children : new Set(), connect : new Set() };
+                    // add child if not exists
+                    if (!lo_tree[pc_path])
+                        lo_tree[pc_path] =  { children : new Set(), connect : new Set() };
+
                 };
 
 
+                /**
+                 * iterator of the data for building the tree
+                 **/
                 po_event.data.toJSON().cells.forEach( function( po_object ) {
 
                     add2Tree( po_object.source.path, po_object.source.separator );
                     add2Tree( po_object.target.path, po_object.target.separator );
 
-                    //lo_matrix[po_object.source.path, po_object.source.separator].connect.add( po_object.target.path, po_object.target.separator );
+                    lo_tree[po_object.source.path].connect.add( po_object.target.path );
 
-                    console.log( lo_matrix );
                 } );
 
-                //console.log(lo_matrix);
+//                console.log(lo_tree);
 
-
-/*
-                    // add source node and connecting between source -> target
-                    if (!lo_matrix[po_object.source.path])
-                        lo_matrix[po_object.source.path] = { children : [], connect : [] };
-                    lo_matrix[po_object.source.path].connect.push( po_object.target.path );
-
-                    // add receiver and add it to the parent target
-                    if (!lo_matrix[po_object.target.path])
-                        lo_matrix[po_object.target.path] = { children : [], connect : [] };
-
-                    for( var i=1, la = po_object.target.path.split(po_object.target.path.sperator), ln_length = la.length; i < ln_length; ++i )
-                    {
-                        var lc_parent = la.slice(0, i-1).join(po_object.target.path.sperator);
-                        if (!lo_matrix[lc_parent])
-                            lo_matrix[lc_parent] = { children : [], connect : [] };
-
-                        lo_matrix[lc_parent].children.push(la.slice(0, i).join(po_object.target.path.sperator));
-                    }
-*/
-
-
-//                console.dir(lo_matrix);
 /*
                 Visualization.HierarchicalEdgeBundling("#mecsim_global_content", {
                     id   : "messageflow",
@@ -150,29 +139,6 @@ $(document).ready(function() {
             id   : "graphtest",
             //data : { test : { children : ["subtest1", "subtest2"] }, subtest1 : { connect : ["subtest2"] }, subtest2 : {} },
             data : {
-                "traffic/car/agentcar 7" : { "children":["traffic/car/agentcar 7/agent"], "connect":[] },
-                "traffic/car/agentcar 7/agent" : { "children":[], "connect":["traffic/car/agentcar 5","traffic/car/agentcar 1","traffic/car/agentcar 0"] },
-
-                "traffic/car/agentcar 6" : { "children":["traffic/car/agentcar 6/agent"], "connect":[]},
-                "traffic/car/agentcar 6/agent" : { "children":[], "connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},
-
-                "traffic/car/agentcar 5" : { "children":["traffic/car/agentcar 5/agent"], "connect":["traffic/car/agentcar 5/agent"]},
-                "traffic/car/agentcar 5/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1","traffic/car/agentcar 5"]},
-
-                "traffic/car/agentcar 4":{"children":["traffic/car/agentcar 4/agent"],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0","traffic/car/agentcar 5"]},
-                "traffic/car/agentcar 4/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0","traffic/car/agentcar 5"]},
-
-                "traffic/car/agentcar 3":{"children":["traffic/car/agentcar 3/agent"],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1"]},
-                "traffic/car/agentcar 3/agent":{"children":[],"connect":["traffic/car/agentcar 0","traffic/car/agentcar 1"]},
-
-                "traffic/car/agentcar 2":{"children":["traffic/car/agentcar 2/agent"],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},
-                "traffic/car/agentcar 2/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},
-
-                "traffic/car/agentcar 1":{"children":[],"connect":["traffic/car/agentcar 1/agent"]},
-                "traffic/car/agentcar 1/agent":{"children":[],"connect":["traffic/car/agentcar 1","traffic/car/agentcar 0"]},
-
-                "traffic/car/agentcar 0":{"children":[],"connect":["traffic/car/agentcar 0/agent"]},
-                "traffic/car/agentcar 0/agent":{"children":[],"connect":["traffic/car/agentcar 0"]}
             }
         });
 */

@@ -47,36 +47,6 @@ public class CLiteral implements ILiteral<Literal>
     private final ITermList m_values = new CTermList();
     private final ITermSet m_annotations = new CTermSet();
 
-    public String toString()
-    {
-        String l_return = (m_negated) ? "~" : "";
-
-        l_return = l_return.concat(m_functor);
-
-        if(!m_values.isEmpty())
-        {
-
-            String l_valueString = "";
-
-            for( ITerm l_term : m_values )
-                l_valueString.concat(l_term.toString() + ",");
-
-            l_return = l_return.concat("(" + l_valueString.substring(0, l_valueString.length() - 1) + ")" );
-        }
-
-        if( !m_annotations.isEmpty() )
-        {
-            String l_annotationString = "";
-
-            for(ITerm l_term : m_annotations )
-                l_annotationString.concat( l_term.toString() + "," );
-
-            l_return = l_return.concat("[" + l_annotationString + "]");
-        }
-
-        return l_return;
-    }
-
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
@@ -200,26 +170,55 @@ public class CLiteral implements ILiteral<Literal>
     @Override
     public Literal getLiteral()
     {
-        return createLiteral( ( m_negated ) ? Literal.LNeg : Literal.LPos,
-                m_functor,
-                this.toString() )
-                .addAnnots(m_annotations);;
+        return createLiteral( toString() );
+        //return createLiteral( ( m_negated ) ? Literal.LNeg : Literal.LPos,
+        //        m_functor,
+        //        m_values )
+        //        .addAnnots( m_annotations );
     }
 
     /**
      * clears values and annotations
      */
-    @Override
     public void clear()
     {
         m_annotations.clear();
         m_values.clear();
     }
 
-    @Override
-    public void update()
+    /**
+     * get string representation for literal
+     *
+     * @return string representation
+     */
+    public String toString()
     {
+        String l_return = ( m_negated ) ? "~" : "";
 
+        l_return = l_return.concat( m_functor );
+
+        if(!m_values.isEmpty())
+        {
+
+            String l_valueString = "";
+
+            for( ITerm l_term : m_values )
+                l_valueString.concat(l_term.toString() + ",");
+
+            l_return = l_return.concat("(" + l_valueString.substring( 0, l_valueString.length() - 1 ) + ")" );
+        }
+
+        if( !m_annotations.isEmpty() )
+        {
+            String l_annotationString = "";
+
+            for(ITerm l_term : m_annotations )
+                l_annotationString.concat( l_term.toString() + "," );
+
+            l_return = l_return.concat("[" + l_annotationString.substring( 0, l_annotationString.length() - 1 ) + "]");
+        }
+
+        return l_return;
     }
 
     /**

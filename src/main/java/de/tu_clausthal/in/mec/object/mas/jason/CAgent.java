@@ -35,6 +35,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;

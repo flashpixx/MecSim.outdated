@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,4 +67,6 @@ public abstract class IBeliefBase<T>
         m_beliefbases.clear();
         m_literals.clear();
     }
+
+    public boolean addAll( final Set<ILiteral<T>> p_literals )
 }

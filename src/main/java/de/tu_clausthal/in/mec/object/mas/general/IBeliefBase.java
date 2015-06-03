@@ -27,10 +27,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-//TODO: DefaultBeliefBase als Interface und abstrakte Klasse (diese umbenennen)
 
 /**
  * agent belief base
+ * @todo DefaultBeliefBase als Interface und abstrakte Klasse (diese umbenennen)
+ * @todo add documentation
+ * @todo equals und Hashcode ueberladen
  */
 public abstract class IBeliefBase<T>
 {
@@ -67,6 +69,7 @@ public abstract class IBeliefBase<T>
 
     /**
      * returns collapsed beliefbase
+     * @todo incomplete
      */
     public IBeliefBase collapseBeliefbase()
     {
@@ -75,11 +78,13 @@ public abstract class IBeliefBase<T>
 
     /**
      * update method for beliefbase
+     * @todo move to CFieldBeliefbase - Binding structure
      */
     public abstract void update();
 
     /**
      * removes all literals of each beliefbase
+     * @todo move to CFieldBeliefbase - Binding structure
      */
     public void clearLiterals()
     {
@@ -94,8 +99,6 @@ public abstract class IBeliefBase<T>
         m_beliefbases.clear();
         m_literals.clear();
     }
-
-    //TODO: equals und Hashcode ueberladen
 
     public boolean addAll(final Set<ILiteral<T>> p_literals)
     {

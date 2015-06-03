@@ -2,6 +2,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 /**
  * Created by marcel on 03.06.15.
+ * @todo add documentation + license
  */
 public abstract class IDefaultLiteral<T> implements ILiteral<T>
 {

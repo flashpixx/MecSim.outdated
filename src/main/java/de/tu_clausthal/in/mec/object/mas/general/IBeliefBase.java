@@ -27,8 +27,8 @@ import java.util.Set;
 
 
 /**
- * belief base of literals
+ * belief base of terms
  */
-public interface IBeliefBase extends Set<ILiteral>
+public interface IBeliefBase extends Set<ITerm>
 {
 }

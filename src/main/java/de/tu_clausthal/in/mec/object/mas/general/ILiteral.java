@@ -24,22 +24,18 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
-import java.util.List;
-import java.util.Set;
-
-
 /**
  * literal interface
  */
-public interface ILiteral
+public interface ILiteral extends ITerm
 {
 
     /**
      * returns the optional annotations
      *
-     * @return annotation literal list
+     * @return annotation term
      */
-    public Set<ILiteral> getAnnotation();
+    public ITermSet getAnnotation();
 
     /**
      * returns the functor / dataset of the literal
@@ -49,10 +45,10 @@ public interface ILiteral
     public IAtom<?> getFunctor();
 
     /**
-     * returns the optional literal list
+     * returns the optional value term
      *
-     * @return value literal list
+     * @return value term
      */
-    public List<ILiteral> getValues();
+    public ITermList getValues();
 
 }

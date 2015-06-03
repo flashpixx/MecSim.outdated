@@ -25,22 +25,18 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.mas.general.*;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CTermList;
 import jason.NoValueException;
-import jason.asSyntax.ASSyntax;
-import jason.asSyntax.ListTerm;
-import jason.asSyntax.Literal;
-import jason.asSyntax.NumberTerm;
-import jason.asSyntax.StringTerm;
-import jason.asSyntax.Term;
+import jason.asSyntax.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -99,6 +95,92 @@ public class CCommon
             return getJavaValue( ( (NumberTerm) p_term ).solve(), p_type );
 
         return getJavaValue( p_term );
+    }
+
+    public static ITerm convertGeneric( final Atom p_atom )
+    {
+        return new IAtom<String>()
+        {
+            @Override
+            public boolean instanceOf(Class<?> p_class)
+            {
+                return String.class.isAssignableFrom( p_class );
+            }
+
+            @Override
+            public String get()
+            {
+                return p_atom.getFunctor();
+            }
+        };
+    }
+
+    public static ITermList convertGeneric(final List<Term> p_termList )
+    {
+        return new CTermList(){{
+            for(final Term l_term : p_termList )
+                add(convertGeneric(l_term));
+        }};
+    }
+
+    public static ITerm convertGeneric( final NumberTerm p_number )
+    {
+        return new IAtom<Double>() {
+
+            @Override
+            public boolean instanceOf(Class<?> p_class)
+            {
+                return Double.class.isAssignableFrom( p_class );
+            }
+
+            @Override
+            public Double get()
+            {
+                try
+                {
+                    return p_number.solve();
+                }
+                catch (final NoValueException l_exception )
+                {
+                    CLogger.error( l_exception );
+                }
+
+                return Double.NaN;
+            };
+        };
+    }
+
+    public static ITerm convertGeneric( final Term p_term )
+    {
+        if(p_term.isAtom())
+            return convertGeneric((Atom) p_term);
+
+        if(p_term.isLiteral())
+        {
+            if( ((Literal)p_term).isNumeric() )
+                return convertGeneric((NumberTerm) p_term);
+
+            final CLiteral l_literal = new CLiteral(((Literal) p_term).getFunctor());
+
+            l_literal.addValue( ((Literal) p_term).getTerms() );
+            l_literal.addAnnotation( ((Literal) p_term).getAnnots() );
+
+            return l_literal;
+        }
+
+
+
+        if( p_term.isList() )
+
+            return new CTermList(){
+                {
+                    for (final Term l_term : (ListTerm) p_term )
+                        add(convertGeneric(l_term));
+
+                }};
+
+
+        throw new IllegalArgumentException(de.tu_clausthal.in.mec.common.CCommon.getResourceString(CCommon.class, "convertgenericfail"));
     }
 
     /**

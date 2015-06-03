@@ -23,17 +23,18 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-
 /**
- * atom interface
+ * term interface
  */
-public interface IAtom<T> extends ITerm
+public interface ITerm
 {
     /**
-     * returns the value of the atom
+     * checks if the generic type of the term matches a class
      *
-     * @return value
+     * @param p_class matching class
+     * @return boolean of checking
+     *
+     * @note use generic_type_class.isAssignableFrom(p_class)
      */
-    public T get();
-
+    public boolean instanceOf( final Class<?> p_class );
 }

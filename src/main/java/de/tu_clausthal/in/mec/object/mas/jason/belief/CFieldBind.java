@@ -27,16 +27,17 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.general.*;
+import de.tu_clausthal.in.mec.object.mas.general.CTermList;
+import de.tu_clausthal.in.mec.object.mas.general.IAtom;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ import java.util.Set;
 /**
  * belief structure to bind object properties
  */
-public class CFieldBind implements IBeliefBase<Literal>
+public class CFieldBind extends IBeliefBase<Literal>
 {
     /**
      * field filter
@@ -58,8 +59,7 @@ public class CFieldBind implements IBeliefBase<Literal>
     /**
      * set with literals
      */
-    private final ITermList m_literals = new CTermList();
-
+    private final ITermCollection m_literals = new CTermList();
 
 
     /**
@@ -73,12 +73,12 @@ public class CFieldBind implements IBeliefBase<Literal>
     /**
      * ctor bind an object
      *
-     * @param p_name name / annotation of the bind object
+     * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind( final String p_name, final Object p_object )
+    public CFieldBind(final String p_name, final Object p_object)
     {
-        this.push( p_name, p_object );
+        this.push(p_name, p_object);
     }
 
     @Override
@@ -87,20 +87,25 @@ public class CFieldBind implements IBeliefBase<Literal>
         m_literals.clear();
     }
 
-    @Override
     public final Set<Literal> getLiterals()
     {
-        return m_literals;
+        return null;
+    }
+
+    @Override
+    public IBeliefBase<Literal> collapse()
+    {
+        return null;
     }
 
     @Override
     public final void update()
     {
         // iterate over all binded objects
-        for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
+        for (final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet())
 
             // iterate over all object fields
-            for ( final Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet() )
+            for (final Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet())
                 try
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
@@ -112,19 +117,17 @@ public class CFieldBind implements IBeliefBase<Literal>
                     );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
-                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
-                    m_literals.add( l_literal );
+                    l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
+                    //m_literals.add( l_literal );
 
-                }
-                catch ( final Exception l_exception )
+                } catch (final Exception l_exception)
                 {
                     CLogger.error(
                             de.tu_clausthal.in.mec.common.CCommon.getResourceString(
                                     this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage()
                             )
                     );
-                }
-                catch ( final Throwable l_throwable )
+                } catch (final Throwable l_throwable)
                 {
                     CLogger.error(
                             de.tu_clausthal.in.mec.common.CCommon.getResourceString(
@@ -137,10 +140,10 @@ public class CFieldBind implements IBeliefBase<Literal>
     /**
      * adds / binds an object
      *
-     * @param p_name name / annotation of the object
+     * @param p_name   name / annotation of the object
      * @param p_object object
      */
-    public final void push( final String p_name, final Object p_object )
+    public final void push(final String p_name, final Object p_object)
     {
         m_bind.put(
                 p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
@@ -156,30 +159,26 @@ public class CFieldBind implements IBeliefBase<Literal>
      *
      * @param p_name name
      */
-    public final void remove( final String p_name )
+    public final void remove(final String p_name)
     {
-        m_bind.remove( p_name );
+        m_bind.remove(p_name);
     }
 
-    @Override
     public ITermSet getAnnotation()
     {
         return null;
     }
 
-    @Override
     public IAtom<?> getFunctor()
     {
         return null;
     }
 
-    @Override
     public ITermList getValues()
     {
         return null;
     }
 
-    @Override
     public boolean instanceOf(Class<?> p_class)
     {
         return false;

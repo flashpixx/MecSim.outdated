@@ -33,15 +33,8 @@ public interface ITerm
      *
      * @param p_class matching class
      * @return boolean of checking
-     *
      * @note use generic_type_class.isAssignableFrom(p_class)
      */
-    public boolean instanceOf( final Class<?> p_class );
+    public boolean instanceOf(final Class<?> p_class);
 
-    /**
-     * convert term to string
-     *
-     * @return
-     */
-    public String toString();
 }

@@ -23,12 +23,18 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import de.tu_clausthal.in.mec.object.mas.general.ITermList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * list for terms
  */
-public class CTermList extends ITermList
+public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
 
+    @Override
+    public boolean instanceOf(final Class<?> p_class)
+    {
+        return List.class.isAssignableFrom(p_class);
+    }
 }

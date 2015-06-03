@@ -49,9 +49,9 @@ public class CLiteral2Number extends DefaultInternalAction
     }
 
     @Override
-    public Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
+    public Object execute(final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args) throws Exception
     {
-        return p_unifier.unifies( p_args[1], new NumberTermImpl( Double.parseDouble( p_args[0].toString() ) ) );
+        return p_unifier.unifies(p_args[1], new NumberTermImpl(Double.parseDouble(p_args[0].toString())));
     }
 
 }

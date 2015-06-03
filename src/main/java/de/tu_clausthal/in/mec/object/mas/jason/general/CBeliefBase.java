@@ -24,10 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import jason.asSyntax.Literal;
-
-import java.util.Map;
 
 /**
  * agent beliefbase
@@ -37,7 +34,7 @@ public class CBeliefBase extends IBeliefBase<Literal>
     @Override
     public IBeliefBase collapse()
     {
-        
+
         return null;
     }
 

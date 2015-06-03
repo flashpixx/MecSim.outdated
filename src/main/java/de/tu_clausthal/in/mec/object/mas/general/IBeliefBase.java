@@ -26,6 +26,8 @@ package de.tu_clausthal.in.mec.object.mas.general;
 import java.util.Map;
 import java.util.Set;
 
+//TODO: DefaultBeliefBase als Interface und abstrakte Klasse (diese umbenennen)
+
 /**
  * agent belief base
  */
@@ -34,7 +36,7 @@ public abstract class IBeliefBase<T>
     /**
      * map of string/beliefbase
      */
-    Map<String,IBeliefBase<T>> m_beliefbases;
+    Map<String, IBeliefBase<T>> m_beliefbases;
     /**
      * set of literals
      */
@@ -58,8 +60,8 @@ public abstract class IBeliefBase<T>
     {
         m_literals.clear();
 
-        for( String l_name : m_beliefbases.keySet() )
-            m_beliefbases.get( l_name ).clearLiterals();
+        for (String l_name : m_beliefbases.keySet())
+            m_beliefbases.get(l_name).clearLiterals();
     }
 
     public void clear()
@@ -68,5 +70,12 @@ public abstract class IBeliefBase<T>
         m_literals.clear();
     }
 
-    public boolean addAll( final Set<ILiteral<T>> p_literals )
+    //TODO: equals und Hashcode ueberladen
+
+    public boolean addAll(final Set<ILiteral<T>> p_literals)
+    {
+        return true;
+    }
+
+    ;
 }

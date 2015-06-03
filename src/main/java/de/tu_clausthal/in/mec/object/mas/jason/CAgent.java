@@ -34,7 +34,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
@@ -42,13 +41,8 @@ import jason.JasonException;
 import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
-import jason.asSemantics.ActionExec;
-import jason.asSemantics.Agent;
+import jason.asSemantics.*;
 import jason.asSemantics.Event;
-import jason.asSemantics.Intention;
-import jason.asSemantics.InternalAction;
-import jason.asSemantics.Message;
-import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PlanLibrary;
@@ -80,15 +74,15 @@ public class CAgent<T> implements IVoidAgent
     {{
 
             // overwrite default internal actions
-            final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
-            put( "jason.stdlib.clone", new CInternalEmpty() );
-            put( "jason.stdlib.wait", l_empty13 );
-            put( "jason.stdlib.create_agent", l_empty13 );
-            put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
-            put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+            final CInternalEmpty l_empty13 = new CInternalEmpty(1, 3);
+            put("jason.stdlib.clone", new CInternalEmpty());
+            put("jason.stdlib.wait", l_empty13);
+            put("jason.stdlib.create_agent", l_empty13);
+            put("jason.stdlib.kill_agent", new CInternalEmpty(1, 1));
+            put("jason.stdlib.stopMAS", new CInternalEmpty(0, 0));
 
             // add own function
-            put( "mecsim.literal2number", new CLiteral2Number() );
+            put("mecsim.literal2number", new CLiteral2Number());
         }};
     /**
      * path seperator
@@ -111,14 +105,18 @@ public class CAgent<T> implements IVoidAgent
      */
     private final IBeliefBase m_beliefs;
     /**
+     * set with cycle objects
+     */
+    private final Set<ICycle> m_cycleobject = new HashSet<>();
+    /**
+     * set with received messages
+     */
+    private final Set<IMessage> m_receivedmessages = new HashSet<>();
+    /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
      */
     private int m_cycle;
-    /**
-     * set with cycle objects
-     */
-    private final Set<ICycle> m_cycleobject = new HashSet<>();
     /**
      * name of the agent
      */
@@ -127,10 +125,6 @@ public class CAgent<T> implements IVoidAgent
      * participant object *
      */
     private CParticipant m_participant;
-    /**
-     * set with received messages
-     */
-    private final Set<IMessage> m_receivedmessages = new HashSet<>();
 
 
     /**
@@ -139,9 +133,9 @@ public class CAgent<T> implements IVoidAgent
      * @param p_asl agent ASL file
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final String p_asl ) throws JasonException
+    public CAgent(final String p_asl) throws JasonException
     {
-        this( null, p_asl, null );
+        this(null, p_asl, null);
     }
 
 
@@ -149,36 +143,36 @@ public class CAgent<T> implements IVoidAgent
      * ctor
      *
      * @param p_namepath name of the agent (full path)
-     * @param p_asl agent ASL file
-     * @param p_bind object that should be bind with the agent
+     * @param p_asl      agent ASL file
+     * @param p_bind     object that should be bind with the agent
      * @throws JasonException throws an Jason exception
      * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
      * and all properties and methods will be bind to the agent with the source "self"
      */
-    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
+    public CAgent(final CPath p_namepath, final String p_asl, final T p_bind) throws JasonException
     {
         m_beliefs = new CBeliefBase();
         m_namepath = p_namepath;
-        if ( ( m_namepath == null ) || ( m_namepath.isEmpty() ) )
-            m_namepath = new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() );
+        if ((m_namepath == null) || (m_namepath.isEmpty()))
+            m_namepath = new CPath(this.getClass().getSimpleName() + "@" + this.hashCode());
 
-        if ( p_bind != null )
+        if (p_bind != null)
         {
-            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
-            m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
-            m_beliefs.addAll(new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
+            m_action.put("set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(c_bindname, p_bind));
+            m_action.put("invoke", new CMethodBind(c_bindname, p_bind));
+            //m_beliefs.addAll(new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
         m_architecture = new CJasonArchitecture();
-        m_architecture.insertAgArch( m_architecture );
+        m_architecture.insertAgArch(m_architecture);
 
         // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
+        m_agent = new CJasonAgent(IEnvironment.getAgentFile(p_asl), m_architecture);
 
         // initialize message system
-        m_participant = new CParticipant( this );
+        m_participant = new CParticipant(this);
     }
 
 
@@ -186,37 +180,36 @@ public class CAgent<T> implements IVoidAgent
      * ctor
      *
      * @param p_namepath name of the agent (full path)
-     * @param p_asl agent ASL file
+     * @param p_asl      agent ASL file
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
+    public CAgent(final CPath p_namepath, final String p_asl) throws JasonException
     {
-        this( p_namepath, p_asl, null );
+        this(p_namepath, p_asl, null);
     }
 
 
     /**
      * ctor
      *
-     * @param p_asl agent ASL file
+     * @param p_asl  agent ASL file
      * @param p_bind object that should be bind with the agent
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final String p_asl, final T p_bind ) throws JasonException
+    public CAgent(final String p_asl, final T p_bind) throws JasonException
     {
-        this( null, p_asl, p_bind );
+        this(null, p_asl, p_bind);
     }
 
     @Override
-    public void addBelief( final String p_name, final Object p_data )
+    public void addBelief(final String p_name, final Object p_data)
     {
         try
         {
-            m_agent.addBel( CCommon.getLiteral( p_name, p_data ) );
-        }
-        catch ( final RevisionFailedException l_exception )
+            m_agent.addBel(CCommon.getLiteral(p_name, p_data));
+        } catch (final RevisionFailedException l_exception)
         {
-            CLogger.error( l_exception );
+            CLogger.error(l_exception);
         }
     }
 
@@ -229,19 +222,19 @@ public class CAgent<T> implements IVoidAgent
     //@Override
     public final String getName()
     {
-        return m_namepath.getPath( c_seperator );
+        return m_namepath.getPath(c_seperator);
     }
 
     @Override
     public final String getSource()
     {
-        return new File( m_agent.getASLSrc() ).getName();
+        return new File(m_agent.getASLSrc()).getName();
     }
 
     @Override
-    public void registerCycle( final ICycle p_cycle )
+    public void registerCycle(final ICycle p_cycle)
     {
-        m_cycleobject.add( p_cycle );
+        m_cycleobject.add(p_cycle);
     }
 
     @Override
@@ -249,26 +242,25 @@ public class CAgent<T> implements IVoidAgent
     {
         m_agent.stopAg();
         m_participant.release();
-        MindInspectorWeb.get().removeAg( m_agent );
+        MindInspectorWeb.get().removeAg(m_agent);
     }
 
     @Override
-    public void removeBelief( final String p_name, final Object p_data )
+    public void removeBelief(final String p_name, final Object p_data)
     {
         try
         {
-            m_agent.delBel( CCommon.getLiteral( p_name, p_data ) );
-        }
-        catch ( final RevisionFailedException l_exception )
+            m_agent.delBel(CCommon.getLiteral(p_name, p_data));
+        } catch (final RevisionFailedException l_exception)
         {
-            CLogger.error( l_exception );
+            CLogger.error(l_exception);
         }
     }
 
     @Override
-    public void unregisterCycle( final ICycle p_cycle )
+    public void unregisterCycle(final ICycle p_cycle)
     {
-        m_cycleobject.remove( p_cycle );
+        m_cycleobject.remove(p_cycle);
     }
 
     /**
@@ -298,22 +290,22 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public final void receiveMessage( final Set<IMessage> p_messages )
+    public final void receiveMessage(final Set<IMessage> p_messages)
     {
         m_receivedmessages.clear();
-        m_receivedmessages.addAll( p_messages );
+        m_receivedmessages.addAll(p_messages);
     }
 
     @Override
-    public void paint( final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height )
+    public void paint(final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height)
     {
 
     }
 
     @Override
-    public final void step( final int p_currentstep, final ILayer p_layer )
+    public final void step(final int p_currentstep, final ILayer p_layer)
     {
-        m_architecture.cycle( p_currentstep );
+        m_architecture.cycle(p_currentstep);
     }
 
     /**
@@ -329,22 +321,21 @@ public class CAgent<T> implements IVoidAgent
     {
 
         @Override
-        public final void act( final ActionExec p_action, final List<ActionExec> p_feedback )
+        public final void act(final ActionExec p_action, final List<ActionExec> p_feedback)
         {
-            final IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
-            if ( l_action != null )
+            final IAction l_action = m_action.get(p_action.getActionTerm().getFunctor());
+            if (l_action != null)
                 try
                 {
-                    l_action.act( m_agent, p_action.getActionTerm() );
-                    p_action.setResult( true );
-                }
-                catch ( final Exception l_exception )
+                    l_action.act(m_agent, p_action.getActionTerm());
+                    p_action.setResult(true);
+                } catch (final Exception l_exception)
                 {
-                    p_action.setFailureReason( ASSyntax.createAtom( "exception" ), l_exception.getMessage() );
-                    p_action.setResult( false );
+                    p_action.setFailureReason(ASSyntax.createAtom("exception"), l_exception.getMessage());
+                    p_action.setResult(false);
                 }
 
-            p_feedback.add( p_action );
+            p_feedback.add(p_action);
         }
 
         @Override
@@ -356,26 +347,26 @@ public class CAgent<T> implements IVoidAgent
         @Override
         public final String getAgName()
         {
-            return m_namepath.getPath( c_seperator );
+            return m_namepath.getPath(c_seperator);
         }
 
         @Override
-        public final void sendMsg( final Message p_message ) throws Exception
+        public final void sendMsg(final Message p_message) throws Exception
         {
-            p_message.setSender( getReceiverPath().toString() );
-            m_participant.sendMessage( new CPath( p_message.getReceiver().split( c_seperator ) ), new CMessage( p_message ) );
+            p_message.setSender(getReceiverPath().toString());
+            m_participant.sendMessage(new CPath(p_message.getReceiver().split(c_seperator)), new CMessage(p_message));
         }
 
         @Override
-        public final void broadcast( final Message p_message ) throws Exception
+        public final void broadcast(final Message p_message) throws Exception
         {
-            final CPath l_path = new CPath( m_namepath );
-            if ( m_namepath.size() > 0 )
+            final CPath l_path = new CPath(m_namepath);
+            if (m_namepath.size() > 0)
                 l_path.removeSuffix();
 
-            p_message.setSender( m_namepath.toString() );
-            p_message.setReceiver( l_path.toString() );
-            m_participant.sendMessage( l_path, new CMessage( p_message ) );
+            p_message.setSender(m_namepath.toString());
+            p_message.setReceiver(l_path.toString());
+            m_participant.sendMessage(l_path, new CMessage(p_message));
         }
 
         /**
@@ -383,20 +374,19 @@ public class CAgent<T> implements IVoidAgent
          *
          * @param p_currentstep current step
          */
-        public final void cycle( final int p_currentstep )
+        public final void cycle(final int p_currentstep)
         {
             // run all register before-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.beforeCycle( p_currentstep, CAgent.this );
+            for (final ICycle l_item : m_cycleobject)
+                l_item.beforeCycle(p_currentstep, CAgent.this);
 
 
             // add the simulationstep belief with the new number and remove the old one
             try
             {
-                m_agent.addBel( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
-                m_agent.delBel( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
-            }
-            catch ( final Exception l_exception )
+                m_agent.addBel(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
+                m_agent.delBel(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
+            } catch (final Exception l_exception)
             {
             }
 
@@ -405,13 +395,13 @@ public class CAgent<T> implements IVoidAgent
             this.updateMessageBeliefs();
 
             // the reasoning cycle must be called within the transition system
-            this.setCycleNumber( m_cycle++ );
+            this.setCycleNumber(m_cycle++);
             this.getTS().reasoningCycle();
 
 
             // run all register after-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.afterCycle( p_currentstep, CAgent.this );
+            for (final ICycle l_item : m_cycleobject)
+                l_item.afterCycle(p_currentstep, CAgent.this);
         }
 
         /**
@@ -419,7 +409,7 @@ public class CAgent<T> implements IVoidAgent
          */
         protected final void updateBindBeliefs()
         {
-            for ( final IBelief l_item : m_beliefs )
+/*            for ( final IBelief l_item : m_beliefs )
             {
                 // remove old belief within the agent
                 for ( final Literal l_literal : l_item.getLiterals() )
@@ -446,6 +436,7 @@ public class CAgent<T> implements IVoidAgent
                     {
                     }
             }
+            */
         }
 
         /**
@@ -453,24 +444,24 @@ public class CAgent<T> implements IVoidAgent
          */
         protected final void updateMessageBeliefs()
         {
-            for ( final IMessage l_msg : m_receivedmessages )
+            for (final IMessage l_msg : m_receivedmessages)
                 try
                 {
 
                     // if message is a message from Jason internal message system
-                    if ( l_msg instanceof CMessage )
+                    if (l_msg instanceof CMessage)
                     {
-                        final Message l_jmsg = ( (Message) l_msg.getData() );
+                        final Message l_jmsg = ((Message) l_msg.getData());
                         final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( c_seperator ) ) ) );
+                        l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_jmsg.getSender()).getPath(c_seperator))));
 
-                        if ( l_jmsg.isTell() )
-                            m_agent.addBel( l_literal );
-                        if ( l_jmsg.isUnTell() )
-                            m_agent.delBel( l_literal );
-                        if ( l_jmsg.isKnownPerformative() )
+                        if (l_jmsg.isTell())
+                            m_agent.addBel(l_literal);
+                        if (l_jmsg.isUnTell())
+                            m_agent.delBel(l_literal);
+                        if (l_jmsg.isKnownPerformative())
                         {
-                            l_literal.addAnnot( BeliefBase.TPercept );
+                            l_literal.addAnnot(BeliefBase.TPercept);
                             this.getTS().getC().addEvent(
                                     new Event(
                                             new Trigger(
@@ -484,12 +475,11 @@ public class CAgent<T> implements IVoidAgent
                     }
 
                     // otherwise message will direct converted
-                    final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
-                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( c_seperator ) ) ) );
-                    m_agent.addBel( l_literal );
+                    final Literal l_literal = CCommon.getLiteral(l_msg.getTitle(), l_msg.getData());
+                    l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
+                    m_agent.addBel(l_literal);
 
-                }
-                catch ( final Exception l_exception )
+                } catch (final Exception l_exception)
                 {
                 }
         }
@@ -510,31 +500,30 @@ public class CAgent<T> implements IVoidAgent
         /**
          * ctor - for building a "blank / empty" agent
          *
-         * @param p_asl ASL file
+         * @param p_asl          ASL file
          * @param p_architecture architecture
          */
-        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
+        public CJasonAgent(final File p_asl, final AgArch p_architecture) throws JasonException
         {
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( new DefaultBeliefBase() );
-            this.setPL( new PlanLibrary() );
+            this.setTS(new TransitionSystem(this, null, null, p_architecture));
+            this.setBB(new DefaultBeliefBase());
+            this.setPL(new PlanLibrary());
             this.initDefaultFunctions();
 
             try
             {
-                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
-                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
+                CReflection.getClassField(this.getClass(), "initialGoals").getSetter().invoke(this, new ArrayList<>());
+                CReflection.getClassField(this.getClass(), "initialBels").getSetter().invoke(this, new ArrayList<>());
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
-            }
-            catch ( final Throwable l_throwable )
+                CReflection.getClassField(this.getClass(), "internalActions").getSetter().invoke(this, c_overwriteaction);
+            } catch (final Throwable l_throwable)
             {
-                CLogger.error( l_throwable );
+                CLogger.error(l_throwable);
             }
 
-            this.load( p_asl.toString() );
-            MindInspectorWeb.get().registerAg( this );
+            this.load(p_asl.toString());
+            MindInspectorWeb.get().registerAg(this);
         }
 
     }

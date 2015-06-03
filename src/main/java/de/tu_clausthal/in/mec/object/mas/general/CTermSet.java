@@ -23,12 +23,18 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import de.tu_clausthal.in.mec.object.mas.general.ITermSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * set for terms
  */
-public class CTermSet extends ITermSet
+public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
 
+    @Override
+    public boolean instanceOf(final Class<?> p_class)
+    {
+        return Set.class.isAssignableFrom(p_class);
+    }
 }

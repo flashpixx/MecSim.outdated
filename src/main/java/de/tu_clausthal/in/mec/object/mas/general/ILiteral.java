@@ -24,8 +24,6 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
-import java.util.Set;
-
 /**
  * literal interface
  */
@@ -36,7 +34,7 @@ public interface ILiteral<T> extends ITerm
      *
      * @return annotation term
      */
-    public ITermSet getAnnotation();
+    public ITermCollection getAnnotation();
 
     /**
      * returns the functor / dataset of the literal
@@ -50,7 +48,7 @@ public interface ILiteral<T> extends ITerm
      *
      * @return value term
      */
-    public ITermList getValues();
+    public ITermCollection getValues();
 
     /**
      * getter for language specific literal
@@ -58,11 +56,4 @@ public interface ILiteral<T> extends ITerm
      * @return literal
      */
     public T getLiteral();
-
-    /**
-     * convert literal to string
-     *
-     * @return
-     */
-    public String toString();
 }

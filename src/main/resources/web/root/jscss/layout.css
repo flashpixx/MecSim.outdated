@@ -216,14 +216,13 @@ select
 
 /******************************** css definitions for radial visualization ************************************************/
 
-/*** start testing ***/
-#graphtest
+#communication
 {
     left: 10em;
     position: relative;
 }
 
-path.graphtest-arc {
+path.communication-arc {
   fill: #fff;
 }
 
@@ -232,31 +231,31 @@ path.graphtest-arc {
 }
 
 
-.graphtest-link {
+.communication-link {
   fill: none;
   stroke: #1f77b4;
   stroke-opacity: .4;
   pointer-events: none;
 }
 
-.graphtest-link.source, .graphtest-link.target {
+.communication-link.source, .communication-link.target {
   stroke-opacity: 1;
   stroke-width: 2px;
 }
 
-.graphtest-node.target {
+.communication-node.target {
   fill: #d62728 !important;
 }
 
-.graphtest-link.source {
+.communication-link.source {
   stroke: #d62728;
 }
 
-.graphtest-node.source {
+.communication-node.source {
   fill: #2ca02c;
 }
 
-.graphtest-link.target {
+.communication-link.target {
   stroke: #2ca02c;
 }
-/*** end testing ***/
+

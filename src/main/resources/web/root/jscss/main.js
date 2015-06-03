@@ -76,7 +76,7 @@ $(document).ready(function() {
         });
 
         // create realtime message-flow websocket access
-        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "graphtest" });
+        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "communication" });
 
         MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) {

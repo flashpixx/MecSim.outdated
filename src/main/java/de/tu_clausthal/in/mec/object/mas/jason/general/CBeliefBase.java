@@ -30,7 +30,6 @@ import java.util.Set;
 
 /**
  * agent beliefbase
- * @todo define correct inheritance
  */
 public class CBeliefBase extends IDefaultBeliefBase<Literal>
 {

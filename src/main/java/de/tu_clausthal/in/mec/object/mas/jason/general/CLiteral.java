@@ -30,10 +30,15 @@ import jason.asSyntax.Term;
 
 /**
  * class for literals
- * @todo add deocumentation
  */
 public class CLiteral extends IDefaultLiteral<Literal>
 {
+    /**
+     * ctor
+     *
+     * @param p_functor the literals functor
+     * @param p_literal the literal itself
+     */
     public CLiteral(String p_functor, Literal p_literal)
     {
         super(p_functor, p_literal);

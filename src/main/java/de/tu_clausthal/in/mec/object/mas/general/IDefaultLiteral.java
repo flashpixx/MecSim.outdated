@@ -48,7 +48,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     private final T m_literal;
 
     /**
-     * ctor
+     * default ctor
      *
      * @param p_functor functor of the literal
      * @param p_literal the original literal

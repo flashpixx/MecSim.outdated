@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -39,12 +40,35 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * map of string/beliefbase
      * each entry represents an inherited beliefbase with its name
      */
-    private Map<String, IDefaultBeliefBase<T>> m_beliefbases;
+    private final Map<String, IDefaultBeliefBase<T>> m_beliefbases;
     /**
      * set of literals representing the top level beliefs,
      * i.e. it does not contain literals of inherited beliefbases
      */
-    private Set<ILiteral<T>> m_literals;
+    private final Set<ILiteral<T>> m_literals;
+
+    /**
+     * ctor - just literals specified
+     *
+     * @param p_literals top level literals
+     */
+    protected IDefaultBeliefBase( Set<ILiteral<T>> p_literals )
+    {
+        m_beliefbases = new HashMap<>();
+        m_literals = p_literals;
+    }
+
+    /**
+     * ctor - literals and inherited beliefbases specified
+     *
+     * @param p_beliefbases inherited beliefbases
+     * @param p_literals top level literals
+     */
+    protected IDefaultBeliefBase( Map<String, IDefaultBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals )
+    {
+        m_beliefbases = p_beliefbases;
+        m_literals = p_literals;
+    }
 
     /**
      * returns the aggregated beliefbase which also contains
@@ -55,7 +79,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         // set for aggregation
         final Set<T> l_beliefbase = new HashSet<>();
 
-        // top level start of recursion
+        // start of recursion on top level
         collapseLiterals(this, l_beliefbase);
 
         return l_beliefbase;
@@ -85,10 +109,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @todo incomplete
      */
-    public IBeliefBase<T> collapseBeliefbase()
-    {
-        return null;
-    }
+    public abstract IBeliefBase<T> collapseBeliefbase();
 
     /**
      * update method for beliefbase

@@ -50,12 +50,8 @@ import java.util.Map;
 /**
  * ui bundle which is responsible for the waypoint-tool settings
  * todo validation
- * todo improve default car settings
  * todo java cleanup (doc, style)
  * todo remove singelton
- * todo rename asl and input
- * todo check if input is correct
- * todo read default tool settings from config
  * todo check for casts
  */
 public class CWaypointEnvironment
@@ -244,7 +240,7 @@ public class CWaypointEnvironment
         Map<String, Boolean> l_factories = new HashMap<>();
 
         for( final EFactoryType l_factory : EFactoryType.values())
-            l_factories.put( l_factory.m_name, l_factory.m_requireASL );
+            l_factories.put( l_factory.m_name, l_factory.m_requireAgentProgram );
 
         return l_factories;
     }
@@ -320,17 +316,17 @@ public class CWaypointEnvironment
         /**
          * variable indicate if this factory type require an agent program
          */
-        private final Boolean m_requireASL;
+        private final boolean m_requireAgentProgram;
 
         /**
          * ctor
          * @param p_name
-         * @param p_requireASL
+         * @param p_requireAgentProgram
          */
-        private EFactoryType( final String p_name, final Boolean p_requireASL )
+        private EFactoryType( final String p_name, final boolean p_requireAgentProgram )
         {
             this.m_name = p_name;
-            this.m_requireASL = p_requireASL;
+            this.m_requireAgentProgram = p_requireAgentProgram;
         }
 
         /**
@@ -407,9 +403,9 @@ public class CWaypointEnvironment
          */
         protected final EFactoryType m_factoryType;
         /**
-         * asl program for agent cars
+         * agent program for agent cars
          */
-        protected final String m_asl;
+        protected final String m_agentProgram;
         /**
          * generator type defines the probability and amount of cars
          */
@@ -512,7 +508,7 @@ public class CWaypointEnvironment
             this.m_wayPointType = EWayPointType.getWaypointTypeByName( "" );;
             this.m_radius = Double.parseDouble( String.valueOf( p_parameter.get( "radius" ) ) );
             this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );;
-            this.m_asl = String.valueOf( p_parameter.get( "agentprogram" ) );
+            this.m_agentProgram = String.valueOf( p_parameter.get( "agentprogram" ) );
             this.m_generatorType = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "generator" ) ) );;
             this.m_carcount = Integer.parseInt( String.valueOf( p_parameter.get( "carcount" ) ) );
             this.m_generatorInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput1" ) ) );
@@ -574,7 +570,7 @@ public class CWaypointEnvironment
                             getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
                             getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
                             new UniformRealDistribution( m_lingerProbInput1, m_lingerProbInput2 ),
-                            m_asl
+                            m_agentProgram
                     );
 
                 default:

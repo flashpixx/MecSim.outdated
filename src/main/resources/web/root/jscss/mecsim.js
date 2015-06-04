@@ -176,6 +176,39 @@ var MecSim = (function (px_modul) {
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    // --- initializing of the UI content ----------------------------------------------------------------------------------------------------------------------
+    px_modul.uiinitialize = function()
+    {
+
+        // initialize the content pane with the three layer structures
+        px_modul.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        px_modul.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        px_modul.ui().accordion().accordion({ active: false, collapsible: true });
+        px_modul.ui().inspector().dialog({ autoOpen: false });
+
+        // initialize websocket log binding
+        px_modul.websocket( "/cconsole/output/log", {
+            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
+            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
+        });
+        px_modul.websocket( "/cconsole/error/log", {
+            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
+            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
+        });
+
+        // initialize inspector binding
+        px_modul.websocket( "/cinspector/show", {
+            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
+            "onmessage" : function( po_event ) {
+                px_modul.ui().inspector().empty();
+                px_modul.ui().inspector().prepend("<p></p>");
+                px_modul.ui().inspector().dialog("open");
+            }
+        });
+
+    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
     return px_modul;
 
 }(MecSim || {}));

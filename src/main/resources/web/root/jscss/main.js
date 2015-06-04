@@ -40,40 +40,13 @@ $(document).ready(function() {
         HelpPanel.init();
 
         // UI instantiation
-        // @todo refactor
-        MecSim.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        MecSim.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        MecSim.ui().accordion().accordion({ active: false, collapsible: true });
-        MecSim.ui().inspector().dialog({ autoOpen: false });
+        MecSim.uiinitialize();
 
         // Editor Panel instantiation
         EditorPanel.bind_ui_actions();
 
         // Simulation Panel instantiation
         SimulationPanel.bind_ui_actions();
-
-        // create logger websockets access
-        MecSim.websocket( "/cconsole/output/log", {
-            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
-            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
-        });
-
-        MecSim.websocket( "/cconsole/error/log", {
-            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
-            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
-        });
-
-        // create inspector websocket access
-        MecSim.websocket( "/cinspector/show", {
-            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
-            "onmessage" : function( po_event ) {
-
-                MecSim.ui().inspector().empty();
-                MecSim.ui().inspector().prepend("<p></p>");
-                MecSim.ui().inspector().dialog("open");
-
-            }
-        });
 
         // create realtime message-flow websocket access
         var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "communication" });

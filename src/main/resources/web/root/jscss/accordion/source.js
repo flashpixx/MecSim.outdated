@@ -24,11 +24,7 @@
  /** todo collection for source-ui ck
  TODO save toolbox in config/web
  TODO histogramm
- TODO read more data
  TODO better error messges
- TODO delete tool
- TODO improve labels for carsettings
- TODO linger probability as slider ?
 
  TODO path waypoints
  TODO source weighting list
@@ -73,8 +69,8 @@ var SourcePanel = ( function (px_module) {
                 MecSim.language("getstaticwaypointlabels", function(){
 
                     //create widget
-                    SourcePanel.settings.obj.widget = Widget.createWidget(
-                        SourcePanel.settings.dom.widget,
+                    SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
+                        SourcePanel.settings.dom.wizardWidget,
                         {
                             name     : SourcePanel.settings.labels.wizardwidget,
                             width    : 850
@@ -131,7 +127,7 @@ var SourcePanel = ( function (px_module) {
 
         //listen to create tool button
         SourcePanel.settings.dom.createTool.button().on("click", function(data){
-            SourcePanel.settings.obj.widget.close();
+            SourcePanel.settings.obj.wizardWidget.close();
         });
     };
 
@@ -139,7 +135,7 @@ var SourcePanel = ( function (px_module) {
     px_module.getDOMElements = function(){
 
         //dom elements (no labels)
-        SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
+        SourcePanel.settings.dom.wizardWidget                    = $("#mecsim_source_wizardWidget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
         SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
@@ -410,10 +406,10 @@ var SourcePanel = ( function (px_module) {
                     SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue, px_value.deleteable);
                 });
 
-                SourcePanel.settings.obj.widget.close();
+                SourcePanel.settings.obj.wizardWidget.close();
                 setTimeout(function(){
                     SourcePanel.settings.obj.wizard.steps("setStep", 0);
-                }, SourcePanel.settings.obj.widget._animationTime);
+                }, SourcePanel.settings.obj.wizardWidget._animationTime);
             }
         }).fail(function(){
             SourcePanel.settings.dom.errorMessage.text(SourcePanel.settings.labels.toolcreationfailed);

@@ -42,10 +42,11 @@ var SourcePanel = ( function (px_module) {
     px_module.settings = {
         labels  :   {},
         dom     :   {
-            label       : {},
-            panel       : $("#mecsim_source_panel"),
-            toolbox     : $("#mecsim_source_toolbox"),
-            createTool  : $("#mecsim_source_createTool")
+            label           : {},
+            panel           : $("#mecsim_source_panel"),
+            toolbox         : $("#mecsim_source_toolbox"),
+            createTool      : $("#mecsim_source_createTool"),
+            targetingButton : $("#mecsim_source_targetingButton")
         },
         obj     :   {}
     };
@@ -68,7 +69,18 @@ var SourcePanel = ( function (px_module) {
                 SourcePanel.getDOMElements();
                 MecSim.language("getstaticwaypointlabels", function(){
 
-                    //create widget
+                    //create targeting widget
+                    SourcePanel.settings.obj.targetingWidget = Widget.createWidget(
+                        SourcePanel.settings.dom.targetingWidget,
+                        {
+                            name    : "Temp Name",
+                            width   : 500,
+                            height  : 250
+                        }
+                    );
+                    SourcePanel.settings.obj.targetingWidget.close();
+
+                    //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
                         SourcePanel.settings.dom.wizardWidget,
                         {
@@ -76,6 +88,7 @@ var SourcePanel = ( function (px_module) {
                             width    : 850
                         }
                     );
+                    SourcePanel.settings.obj.wizardWidget.close();
 
                     //create wizard
                     SourcePanel.settings.obj.wizard = SourcePanel.settings.dom.wizard.steps({
@@ -129,12 +142,18 @@ var SourcePanel = ( function (px_module) {
         SourcePanel.settings.dom.createTool.button().on("click", function(data){
             SourcePanel.settings.obj.wizardWidget.close();
         });
+
+        //listen to configure waypoint path button
+        SourcePanel.settings.dom.targetingButton.button().on("click", function(data){
+            SourcePanel.settings.obj.targetingWidget.close();
+        });
     };
 
     //method to get DOM Elements
     px_module.getDOMElements = function(){
 
         //dom elements (no labels)
+        SourcePanel.settings.dom.targetingWidget                 = $("#mecsim_source_targetingWidget");
         SourcePanel.settings.dom.wizardWidget                    = $("#mecsim_source_wizardWidget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");

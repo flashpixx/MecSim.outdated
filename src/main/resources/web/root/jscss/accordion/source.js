@@ -22,17 +22,28 @@
  */
 
  /** todo collection for source-ui ck
+
+ targeting
+ TODO waypoint list read from java
+ TODO resize widget and hide overflow
+ TODO name/id/lat/long/type/button/path length
+ TODO default target (viewpoint)
+ TODO tabs for makrov editor / weighting matrix
+ TODO markrov editor buttons (reset / show or hide no connected nodes / remove edges /save)
+ TODO makrov editor (see d3.js)
+ TODO weighting matrix
+ TODO relative vs absolute weighting (recalc relativ weighting)
+ TODO java structure (makrov chain, routing)
+
+ wizard
  TODO save toolbox in config/web
  TODO histogramm
  TODO better error messges
 
- TODO path waypoints
- TODO source weighting list
- TODO radial to add waypoints to makrov chain
-
+ feature
  TODO plot distribution -> responsive wizard height
  TODO bounding in minimized mode maybe snap to tab
- TODO layout multiple widgets
+ TODO layout multiple widgets (z index and bounding)
  TODO check last jquery slectors
  TODO distingusish between open and close klick
  **/
@@ -74,11 +85,48 @@ var SourcePanel = ( function (px_module) {
                         SourcePanel.settings.dom.targetingWidget,
                         {
                             name    : "Temp Name",
-                            width   : 500,
-                            height  : 250
+                            width   : 450,
+                            height  : 575
                         }
                     );
                     SourcePanel.settings.obj.targetingWidget.close();
+
+                    //dummy date will be replace in the next commit
+                    var data = [
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Random", "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", ""],
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                        ["Waypoint1", 1, "Path"  , "<input class='mecsim_source_wizardInputSmall' value=" + 1 + "></input>", "<button>edit</button>"],
+                    ];
+
+                    //create waypoint table
+                    SourcePanel.settings.obj.targetingTable = SourcePanel.settings.dom.targetingTable.DataTable( {
+                            "data": data,
+                            "paging": true,
+                            "ordering": false,
+                            "info":     false,
+                            "autoWidth": false,
+                            "columns": [
+                                {"title": "Name"},
+                                {"title": "ID"},
+                                {"title": "Type"},
+                                {"title": "Path Length"},
+                                {"title": ""}
+                            ]
+                    });
+
 
                     //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
@@ -153,7 +201,8 @@ var SourcePanel = ( function (px_module) {
     px_module.getDOMElements = function(){
 
         //dom elements (no labels)
-        SourcePanel.settings.dom.targetingWidget                 = $("#mecsim_source_targetingWidget");
+        SourcePanel.settings.dom.targetingWidget                 = $('#mecsim_source_targetingWidget');
+        SourcePanel.settings.dom.targetingTable                  = $('#mecsim_source_targetingTable');
         SourcePanel.settings.dom.wizardWidget                    = $("#mecsim_source_wizardWidget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");

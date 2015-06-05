@@ -179,6 +179,11 @@ var MecSim = (function (px_modul) {
     // --- initializing of the UI content ----------------------------------------------------------------------------------------------------------------------
     px_modul.uiinitialize = function()
     {
+        // add main layout elements (div structure)
+
+
+
+
 
         // initialize the content pane with the three layer structures
         px_modul.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });

@@ -34,34 +34,34 @@ $(document).ready(function() {
     ).done(function(){
 
         // module instantiation
-        LayerPanel.init();
-        SourcePanel.init();
-        MASPanel.init();
-        HelpPanel.init();
+        //LayerPanel.init();
+        //SourcePanel.init();
+        //MASPanel.init();
+        //HelpPanel.init();
 
         // UI instantiation
         MecSim.uiinitialize();
 
         // Editor Panel instantiation
-        EditorPanel.bind_ui_actions();
+        //EditorPanel.bind_ui_actions();
 
         // Simulation Panel instantiation
-        SimulationPanel.bind_ui_actions();
+        //SimulationPanel.bind_ui_actions();
 
         // create realtime message-flow websocket access
-        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "communication" });
-
+        //var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "communication" });
+        /*
         MecSim.websocket( "/cmessagesystem/flow", {
             "onmessage" : function( po_event ) {
 
-                /** variable to store the tree **/
+                ** variable to store the tree **
                 var lo_tree = {};
 
-                /**
+                **
                  * build from an item (and its separator) the full path within the tree
                  * @param pc_path string with path
                  * @param pc_separator path separator
-                **/
+                **
                 function add2Tree( pc_path, pc_separator )
                 {
                     if (lo_tree[pc_path])
@@ -84,9 +84,9 @@ $(document).ready(function() {
                 };
 
 
-                /**
+                **
                  * iterator of the data for building the tree
-                 **/
+                 **
                 po_event.data.toJSON().cells.forEach( function( po_object ) {
 
                     add2Tree( po_object.source.path, po_object.source.separator );
@@ -101,6 +101,6 @@ $(document).ready(function() {
 
             }
         });
-
+        */
     });
 });

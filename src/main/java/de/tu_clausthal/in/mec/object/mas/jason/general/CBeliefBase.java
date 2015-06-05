@@ -39,7 +39,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     /**
      * ctor - default
      */
-    protected CBeliefBase()
+    public CBeliefBase()
     {
         super();
     }
@@ -48,7 +48,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
      *
      * @param p_literals top level literals
      */
-    protected CBeliefBase(Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase(Set<ILiteral<Literal>> p_literals)
     {
         super(p_literals);
     }
@@ -58,7 +58,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    protected CBeliefBase(Map<String, IDefaultBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase(Map<String, IDefaultBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
     {
         super(p_beliefbases, p_literals);
     }
@@ -73,5 +73,14 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     public IBeliefBase<Literal> collapseBeliefbase()
     {
         return new CBeliefBase( this.collapseLiterals() );
+    }
+
+    @Override
+    public void clear()
+    {
+        m_literals.clear();
+
+        for (String l_name : m_beliefbases.keySet())
+            m_beliefbases.get(l_name).clear();
     }
 }

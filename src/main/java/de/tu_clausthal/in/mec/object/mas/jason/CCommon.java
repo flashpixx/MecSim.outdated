@@ -165,8 +165,6 @@ public class CCommon
 
                 return Double.NaN;
             }
-
-            ;
         };
     }
 

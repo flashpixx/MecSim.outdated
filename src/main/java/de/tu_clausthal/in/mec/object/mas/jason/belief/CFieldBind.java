@@ -72,11 +72,9 @@ public class CFieldBind extends CBeliefBase
     @Override
     public void clear()
     {
-        m_literals.clear();
-        m_bind.clear();
+        super.clear();
 
-        for (String l_name : m_beliefbases.keySet())
-            m_beliefbases.get(l_name).clear();
+        m_bind.clear();
     }
 
     /**

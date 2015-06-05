@@ -50,7 +50,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     /**
      * default ctor
      */
-    protected IDefaultBeliefBase()
+    public IDefaultBeliefBase()
     {
         m_beliefbases = new HashMap<>();
         m_literals = new HashSet<>();
@@ -61,7 +61,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    protected IDefaultBeliefBase(Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase(Set<ILiteral<T>> p_literals)
     {
         m_beliefbases = new HashMap<>();
         m_literals = p_literals;
@@ -73,7 +73,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    protected IDefaultBeliefBase(Map<String, IDefaultBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase(Map<String, IDefaultBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals)
     {
         m_beliefbases = p_beliefbases;
         m_literals = p_literals;

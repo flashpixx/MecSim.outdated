@@ -30,6 +30,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,7 +76,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
     {
-        super( p_position, p_generator, p_factory );
+        super( p_position, p_generator, p_factory, Color.GREEN );
     }
 
     /**

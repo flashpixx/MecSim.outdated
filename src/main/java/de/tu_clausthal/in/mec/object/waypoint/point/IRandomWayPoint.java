@@ -32,6 +32,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,9 +71,9 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * @param p_factory factory
      * @param p_radius radius around the waypoint
      */
-    public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius )
+    public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius, final Color p_color )
     {
-        super( p_position, p_generator, p_factory );
+        super( p_position, p_generator, p_factory, p_color );
         m_radius = p_radius;
         m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
     }

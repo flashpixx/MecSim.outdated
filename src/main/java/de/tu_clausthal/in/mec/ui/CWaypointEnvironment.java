@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
@@ -33,7 +34,9 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeProfile;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -118,6 +121,32 @@ public class CWaypointEnvironment
     public final static CWaypointEnvironment getInstance()
     {
         return s_instance;
+    }
+
+    /**
+     * method to get a list of all waypoints an properties
+     * @deprecated up to now only for testing purpose
+     * @return
+     */
+    private final List<Map<String, Object>> web_static_listwaypoints()
+    {
+        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+
+        List<Map<String, Object>> l_waypointList = new ArrayList<>();
+        int i = 0;
+        for( IWayPoint l_wayPoint : l_waypointLayer){
+            HashMap<String, Object> l_properties = new HashMap<>();
+            l_properties.put( "id", l_wayPoint.toString() );
+            l_properties.put( "redValue", 255);
+            l_properties.put( "greenValue", 0);
+            l_properties.put( "blueValue", 0 );
+            l_properties.put( "name",   i );
+            l_properties.put( "type", l_wayPoint instanceof CCarRandomWayPoint ? "random" : "path" );
+            l_waypointList.add( l_properties );
+            i++;
+        }
+
+        return l_waypointList;
     }
 
     /**

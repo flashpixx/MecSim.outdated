@@ -186,6 +186,16 @@ select
     margin-top: 50px;
 }
 
+/******************************** css definitions for mecsim_tageting ************************************************/
+
+.mecsim_source_targetingName{
+    text-align: center;
+    width: 150px;
+    height: 15px;
+    resize: none;
+}
+
+
 /******************************** css definitions for mecsim_widget ************************************************/
 
 .ui-resizable-helper{
@@ -258,4 +268,3 @@ path.communication-arc {
 .communication-link.target {
   stroke: #2ca02c;
 }
-

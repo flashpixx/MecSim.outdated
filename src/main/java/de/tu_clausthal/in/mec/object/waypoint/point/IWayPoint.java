@@ -54,13 +54,6 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
     public boolean hasFactoryGenerator();
 
     /**
-     * returns all neighbor of this node
-     *
-     * @return neighbors of this node
-     */
-    public Collection<GeoPosition> getNeighbor();
-
-    /**
      * returns a list of geoposition, which represent a path from this waypoint
      *
      * @return collection with tupel of geoposition

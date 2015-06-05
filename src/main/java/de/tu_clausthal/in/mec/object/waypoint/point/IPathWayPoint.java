@@ -42,6 +42,8 @@ import java.util.Set;
 
 /**
  * waypoint class to describe a route
+ * @deprecated will be refactored in a few commits (because another adjacency structure is needed)
+ * otherwise it is not possible to create different routes for two different waypoints
  */
 public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPointBase<T, P, N>
 {
@@ -89,7 +91,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         return m_adjacency;
     }
 
-    @Override
     public Collection<GeoPosition> getNeighbor()
     {
         final Collection<GeoPosition> l_neighbor = new HashSet<>();

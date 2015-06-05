@@ -137,10 +137,12 @@ public class CWaypointEnvironment
         for( IWayPoint l_wayPoint : l_waypointLayer){
             HashMap<String, Object> l_properties = new HashMap<>();
             l_properties.put( "id", l_wayPoint.toString() );
-            l_properties.put( "redValue", 255);
-            l_properties.put( "greenValue", 0);
-            l_properties.put( "blueValue", 0 );
-            l_properties.put( "name",   i );
+
+            Color l_color = l_wayPoint.getColor();
+            l_properties.put( "redValue", l_color.getRed());
+            l_properties.put( "greenValue", l_color.getGreen());
+            l_properties.put( "blueValue", l_color.getBlue() );
+            l_properties.put( "name", l_wayPoint.getName() + i );
             l_properties.put( "type", l_wayPoint instanceof CCarRandomWayPoint ? "random" : "path" );
             l_waypointList.add( l_properties );
             i++;

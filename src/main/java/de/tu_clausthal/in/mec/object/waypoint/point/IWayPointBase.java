@@ -142,6 +142,18 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
+    public final String getName()
+    {
+        return m_name;
+    }
+
+    @Override
+    public final Color getColor()
+    {
+        return m_color;
+    }
+
+    @Override
     public boolean hasFactoryGenerator()
     {
         return ( m_generator != null ) && ( m_factory != null );

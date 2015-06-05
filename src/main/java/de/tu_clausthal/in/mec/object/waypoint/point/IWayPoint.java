@@ -30,6 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -45,6 +46,18 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
      * @return geoposition of the source
      */
     public GeoPosition getPosition();
+
+    /**
+     * method to get the name of this source
+     * @return
+     */
+    public String getName();
+
+    /**
+     * method to get the color of this source
+     * @return
+     */
+    public Color getColor();
 
     /**
      * checks if a generator and factory exists

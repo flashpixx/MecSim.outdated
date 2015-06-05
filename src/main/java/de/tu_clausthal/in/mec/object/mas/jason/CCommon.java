@@ -29,6 +29,8 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.mas.general.CTermList;
 import de.tu_clausthal.in.mec.object.mas.general.IAtom;
 import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import jason.NoValueException;
 import jason.asSyntax.*;
 import org.apache.commons.lang3.StringUtils;
@@ -118,7 +120,13 @@ public class CCommon
         };
     }
 
-    public static ITermList convertGeneric(final List<Term> p_termList)
+    /**
+     * converts a list of terms into a TermList
+     *
+     * @param p_termList list of terms
+     * @return converted TermList
+     */
+    public static ITermCollection convertGeneric( final List<Term> p_termList )
     {
         return new CTermList()
         {{
@@ -127,6 +135,12 @@ public class CCommon
             }};
     }
 
+    /**
+     * converts a NumberTerm into a Double Atom
+     *
+     * @param p_number NumberTerm
+     * @return Double Atom
+     */
     public static ITerm convertGeneric(final NumberTerm p_number)
     {
         return new IAtom<Double>()
@@ -156,31 +170,31 @@ public class CCommon
         };
     }
 
+    /**
+     * converts a term into a generic ITerm
+     *
+     * @param p_term original term
+     * @return converted generic term
+     */
     public static ITerm convertGeneric(final Term p_term)
     {
-        if (p_term.isAtom())
-            return convertGeneric((Atom) p_term);
+        if ( p_term.isAtom() )
+            return convertGeneric( ( Atom ) p_term );
 
-        if (p_term.isLiteral())
+        if ( p_term.isLiteral() )
         {
-            if (((Literal) p_term).isNumeric())
-                return convertGeneric((NumberTerm) p_term);
+            if ( ( ( Literal ) p_term ).isNumeric() )
+                return convertGeneric( ( NumberTerm ) p_term);
 
-            //           final CLiteral l_literal = new CLiteral(((Literal) p_term).getFunctor());
-
-            //           l_literal.addValue( ((Literal) p_term).getTerms() );
-            //           l_literal.addAnnotation( ((Literal) p_term).getAnnots() );
-
-            return null;
+            return new CLiteral( ( Literal ) p_term );
         }
 
-
-        if (p_term.isList())
+        if ( p_term.isList() )
 
             return new CTermList()
             {
                 {
-                    for (final Term l_term : (ListTerm) p_term)
+                    for ( final Term l_term : ( ListTerm ) p_term )
                         add(convertGeneric(l_term));
 
                 }

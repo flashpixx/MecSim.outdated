@@ -36,11 +36,28 @@ import java.util.Set;
  */
 public class CBeliefBase extends IDefaultBeliefBase<Literal>
 {
+    /**
+     * ctor - default
+     */
+    protected CBeliefBase()
+    {
+        super();
+    }
+    /**
+     * ctor - just literals specified
+     *
+     * @param p_literals top level literals
+     */
     protected CBeliefBase(Set<ILiteral<Literal>> p_literals)
     {
         super(p_literals);
     }
-
+    /**
+     * ctor - literals and inherited beliefbases specified
+     *
+     * @param p_beliefbases inherited beliefbases
+     * @param p_literals top level literals
+     */
     protected CBeliefBase(Map<String, IDefaultBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
     {
         super(p_beliefbases, p_literals);
@@ -56,15 +73,5 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     public IBeliefBase<Literal> collapseBeliefbase()
     {
         return new CBeliefBase( this.collapseLiterals() );
-    }
-
-    /**
-     * method for updating the agents beliefbase,
-     * i.e. read and store the values of binded objects
-     */
-    @Override
-    public void update()
-    {
-
     }
 }

@@ -40,12 +40,21 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * map of string/beliefbase
      * each entry represents an inherited beliefbase with its name
      */
-    private final Map<String, IDefaultBeliefBase<T>> m_beliefbases;
+    protected final Map<String, IDefaultBeliefBase<T>> m_beliefbases;
     /**
      * set of literals representing the top level beliefs,
      * i.e. it does not contain literals of inherited beliefbases
      */
-    private final Set<ILiteral<T>> m_literals;
+    protected final Set<ILiteral<T>> m_literals;
+
+    /**
+     * default ctor
+     */
+    protected IDefaultBeliefBase()
+    {
+        m_beliefbases = new HashMap<>();
+        m_literals = new HashSet<>();
+    }
 
     /**
      * ctor - just literals specified
@@ -118,28 +127,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * update method for beliefbase
-     * @todo move to CFieldBeliefbase - Binding structure
+     * method for clearing the beliefbase
      */
-    public void update();
+    public abstract void clear();
 
-    /**
-     * removes all literals of each beliefbase
-     * @todo move to CFieldBeliefbase - Binding structure
-     */
-    public void clearLiterals()
-    {
-        m_literals.clear();
-
-        for (String l_name : m_beliefbases.keySet())
-            m_beliefbases.get(l_name).clearLiterals();
-    }
-
-    public void clear()
-    {
-        m_beliefbases.clear();
-        m_literals.clear();
-    }
 
     /**
      * hashcode function based on prime number linear combination

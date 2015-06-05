@@ -27,11 +27,9 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.general.CTermList;
-import de.tu_clausthal.in.mec.object.mas.general.IAtom;
-import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+import de.tu_clausthal.in.mec.object.mas.general.*;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -45,7 +43,7 @@ import java.util.Set;
 /**
  * belief structure to bind object properties
  */
-public class CFieldBind extends IDefaultBeliefBase<Literal>
+public class CFieldBind extends CBeliefBase
 {
     /**
      * field filter
@@ -56,19 +54,6 @@ public class CFieldBind extends IDefaultBeliefBase<Literal>
      * setter handles, so each bind can configurate individual
      */
     private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
-    /**
-     * set with literals
-     */
-    private final ITermCollection m_literals = new CTermList();
-
-
-    /**
-     * ctor - default
-     */
-    public CFieldBind()
-    {
-
-    }
 
     /**
      * ctor bind an object
@@ -81,24 +66,22 @@ public class CFieldBind extends IDefaultBeliefBase<Literal>
         this.push(p_name, p_object);
     }
 
+    /**
+     * clears top level and inherited literals and bindings
+     */
     @Override
-    public final void clear()
+    public void clear()
     {
         m_literals.clear();
+        m_bind.clear();
+
+        for (String l_name : m_beliefbases.keySet())
+            m_beliefbases.get(l_name).clear();
     }
 
-    public final Set<Literal> getLiterals()
-    {
-        return null;
-    }
-
-    @Override
-    public IDefaultBeliefBase<Literal> collapse()
-    {
-        return null;
-    }
-
-    @Override
+    /**
+     * update beliefs by calling getter functions of binded objects
+     */
     public final void update()
     {
         // iterate over all binded objects
@@ -118,7 +101,7 @@ public class CFieldBind extends IDefaultBeliefBase<Literal>
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    //m_literals.add( l_literal );
+                    m_literals.add( (ILiteral) CCommon.convertGeneric( l_literal ) );
 
                 } catch (final Exception l_exception)
                 {

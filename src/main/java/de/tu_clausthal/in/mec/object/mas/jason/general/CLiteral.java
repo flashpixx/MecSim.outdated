@@ -36,12 +36,11 @@ public class CLiteral extends IDefaultLiteral<Literal>
     /**
      * ctor
      *
-     * @param p_functor the literals functor
      * @param p_literal the literal itself
      */
-    public CLiteral(String p_functor, Literal p_literal)
+    public CLiteral(Literal p_literal)
     {
-        super(p_functor, p_literal);
+        super(p_literal.getFunctor(), p_literal);
 
         for (final Term l_term : p_literal.getTerms())
             m_values.add(CCommon.convertGeneric(l_term));

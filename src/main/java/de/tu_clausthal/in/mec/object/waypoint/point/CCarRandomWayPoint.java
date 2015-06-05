@@ -91,6 +91,44 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
         m_scaledimage = m_initializeimage;
     }
 
+    @Override
+    public Collection<IReturnSteppableTarget<ICar>> getTargets()
+    {
+        return m_target;
+    }
+
+    @Override
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
+        if ( m_position == null )
+            return;
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
+                this.iconsize(
+                        p_viewer
+                )
+        );
+
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
+    }
+
+    @Override
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        //if the zoom change calculate the new scaled image
+        if ( p_viewer.getZoom() != m_lastZoom )
+            m_scaledimage = this.getScaledImage(
+                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
+                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
+            );
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
+    }
+
     /**
      * method to scale a buffered image
      *
@@ -107,12 +145,6 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
         l_graphics.drawImage( p_source, 0, 0, p_width, p_height, null );
         l_graphics.dispose();
         return l_newimage;
-    }
-
-    @Override
-    public Collection<IReturnSteppableTarget<ICar>> getTargets()
-    {
-        return m_target;
     }
 
     /**
@@ -148,35 +180,4 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
         return null;
     }
 
-    @Override
-    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
-    {
-        if ( m_position == null )
-            return;
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
-                this.iconsize(
-                        p_viewer
-                )
-        );
-
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
-    }
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        //if the zoom change calculate the new scaled image
-        if ( p_viewer.getZoom() != m_lastZoom )
-            m_scaledimage = this.getScaledImage(
-                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
-                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
-            );
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
-    }
 }

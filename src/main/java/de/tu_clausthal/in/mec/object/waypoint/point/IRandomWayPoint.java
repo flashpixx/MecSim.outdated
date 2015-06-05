@@ -46,13 +46,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
 {
 
     /**
-     * inspector map
-     */
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            putAll( IRandomWayPoint.super.inspect() );
-        }};
-    /**
      * radius around the waypoint *
      */
     private final double m_radius;
@@ -60,6 +53,13 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * random interface
      */
     private final Random m_random = new Random();
+    /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( IRandomWayPoint.super.inspect() );
+        }};
 
 
     /**

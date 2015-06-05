@@ -39,6 +39,14 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
 {
 
     /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * position of the source within the map
+     */
+    protected final GeoPosition m_position;
+    /**
      * factory of this source
      */
     protected final P m_factory;
@@ -53,14 +61,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     {{
             putAll( IWayPointBase.super.inspect() );
         }};
-    /**
-     * position of the source within the map
-     */
-    protected final GeoPosition m_position;
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
 
     /**

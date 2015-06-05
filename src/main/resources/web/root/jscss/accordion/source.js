@@ -623,7 +623,7 @@ var SourcePanel = ( function (px_module) {
                     "autoWidth": false,
                     "aoColumns": [
                         { className: "dt-body-center", "title": "ID", "mDataProp": "id", "visible": false },
-                        { className: "dt-body-center", "title": "", "mDataProp": "icon" },
+                        { className: "dt-body-center", "title": "Tool", "mDataProp": "icon" },
                         { className: "dt-body-center", "title": "Name", "mDataProp": "name" },
                         { className: "dt-body-center", "title": "Typ", "mDataProp": "type" },
                         { className: "dt-body-center", "title": "", "mDataProp": "edit" }

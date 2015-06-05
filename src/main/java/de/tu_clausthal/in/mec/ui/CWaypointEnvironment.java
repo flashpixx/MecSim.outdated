@@ -133,19 +133,19 @@ public class CWaypointEnvironment
         CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
 
         List<Map<String, Object>> l_waypointList = new ArrayList<>();
-        int i = 0;
+
         for( IWayPoint l_wayPoint : l_waypointLayer){
             HashMap<String, Object> l_properties = new HashMap<>();
-            l_properties.put( "id", l_wayPoint.toString() );
 
             Color l_color = l_wayPoint.getColor();
             l_properties.put( "redValue", l_color.getRed());
             l_properties.put( "greenValue", l_color.getGreen());
             l_properties.put( "blueValue", l_color.getBlue() );
-            l_properties.put( "name", l_wayPoint.getName() + i );
+            l_properties.put( "id", l_wayPoint.toString() );
+            l_properties.put( "name", l_wayPoint.getName() );
             l_properties.put( "type", l_wayPoint instanceof CCarRandomWayPoint ? "random" : "path" );
+
             l_waypointList.add( l_properties );
-            i++;
         }
 
         return l_waypointList;
@@ -572,7 +572,13 @@ public class CWaypointEnvironment
          */
         protected final IWayPointBase getWaypoint( GeoPosition p_position )
         {
-            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color, CCommon.getResourceString( this, "defaultwaypointname" ) );
+            return new CCarRandomWayPoint(
+                    p_position,
+                    this.getGenerator(),
+                    this.getFactory(),
+                    m_radius,
+                    m_color,
+                    CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
         }
 
         /**

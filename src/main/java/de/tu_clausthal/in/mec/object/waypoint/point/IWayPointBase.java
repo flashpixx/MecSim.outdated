@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -35,6 +36,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,6 +152,15 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
 
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
+    }
+
+    @Override
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        if ( !this.hasFactoryGenerator() )
+            return null;
+
+        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
     }
 
     /**

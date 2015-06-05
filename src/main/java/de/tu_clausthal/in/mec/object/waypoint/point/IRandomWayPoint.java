@@ -106,14 +106,4 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         return m_inspect;
     }
 
-    @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        if ( !this.hasFactoryGenerator() )
-            return null;
-
-        return m_factory.generate(
-                this.getPath(), m_generator.getCount( p_currentstep )
-        );
-    }
 }

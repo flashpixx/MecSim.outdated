@@ -31,8 +31,8 @@ import java.util.Set;
 
 
 /**
- * Generic default belief base for agents.
- * Each beliefbase can contain further beliefbases.
+ * Generic default beliefbase for agents.
+ * Each beliefbase can contain further inherited beliefbases.
  */
 public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
@@ -52,7 +52,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    protected IDefaultBeliefBase( Set<ILiteral<T>> p_literals )
+    protected IDefaultBeliefBase(Set<ILiteral<T>> p_literals)
     {
         m_beliefbases = new HashMap<>();
         m_literals = p_literals;
@@ -64,7 +64,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    protected IDefaultBeliefBase( Map<String, IDefaultBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals )
+    protected IDefaultBeliefBase(Map<String, IDefaultBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals)
     {
         m_beliefbases = p_beliefbases;
         m_literals = p_literals;
@@ -74,10 +74,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * returns the aggregated beliefbase which also contains
      * the literals of the inherited beliefbases
      */
-    public Set<T> collapseLiterals()
+    public Set<ILiteral<T>> collapseLiterals()
     {
         // set for aggregation
-        final Set<T> l_beliefbase = new HashSet<>();
+        final Set<ILiteral<T>> l_beliefbase = new HashSet<>();
 
         // start of recursion on top level
         collapseLiterals(this, l_beliefbase);
@@ -87,8 +87,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
     /**
      * static method for recursive traversation of beliefbases
-     * to aggregate the literals. It prevents the instantiation of
-     * an aggregation set in every recursion step.
+     * to aggregate literals. It prevents the instantiation of
+     * an aggregation set in each recursion step.
      *
      * @param p_currentBeliefbase beliefbase to add
      * @param p_currentAggregatedSet the current aggregation
@@ -105,17 +105,23 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * returns collapsed beliefbase
-     *
-     * @todo incomplete
+     * returns a collapsed beliefbase
      */
     public abstract IBeliefBase<T> collapseBeliefbase();
+
+    /**
+     * getter for literal set
+     */
+    public Set<ILiteral<T>> getLiterals()
+    {
+        return m_literals;
+    }
 
     /**
      * update method for beliefbase
      * @todo move to CFieldBeliefbase - Binding structure
      */
-    public abstract void update();
+    public void update();
 
     /**
      * removes all literals of each beliefbase

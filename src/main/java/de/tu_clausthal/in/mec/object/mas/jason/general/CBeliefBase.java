@@ -23,16 +23,41 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import jason.asSyntax.Literal;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
- * agent beliefbase
+ * class for agent beliefbase
  */
 public class CBeliefBase extends IDefaultBeliefBase<Literal>
 {
+    protected CBeliefBase(Set<ILiteral<Literal>> p_literals)
+    {
+        super(p_literals);
+    }
+
+    protected CBeliefBase(Map<String, IDefaultBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
+    {
+        super(p_beliefbases, p_literals);
+    }
+
+    /**
+     * returns a single beliefbase containing
+     * the top level and all inherited literals.
+     *
+     * @return aggregated beliefbase
+     */
+    @Override
+    public IBeliefBase<Literal> collapseBeliefbase()
+    {
+        return new CBeliefBase( this.collapseLiterals() );
+    }
+
     /**
      * method for updating the agents beliefbase,
      * i.e. read and store the values of binded objects

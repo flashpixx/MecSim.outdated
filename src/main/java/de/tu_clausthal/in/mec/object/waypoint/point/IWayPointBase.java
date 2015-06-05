@@ -55,15 +55,15 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     /**
      * position of the source within the map
      */
-    protected final GeoPosition m_position;
+    private final GeoPosition m_position;
     /**
      * user defined name of the source (so that users can differ between sources)
      */
-    protected final String m_name;
+    private final String m_name;
     /**
      * color of the source (needed in web-ui)
      */
-    protected final Color m_color;
+    private final Color m_color;
     /**
      * factory of this source
      */
@@ -75,15 +75,15 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     /**
      * image of the waypoint
      */
-    protected final transient BufferedImage m_initializeimage;
+    private final transient BufferedImage m_initializeimage;
     /**
      * last zoom (if the zoom changed the image need to be resized)
      */
-    protected transient int m_lastZoom = 0;
+    private transient int m_lastZoom = 0;
     /**
      * current scaled image
      */
-    protected transient BufferedImage m_scaledimage;
+    private transient BufferedImage m_scaledimage;
     /**
      * inspector map
      */

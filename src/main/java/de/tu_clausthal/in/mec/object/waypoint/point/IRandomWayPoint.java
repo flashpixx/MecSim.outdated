@@ -85,9 +85,9 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         {{
                 add(
                         new ImmutablePair<GeoPosition, GeoPosition>(
-                                m_position, new GeoPosition(
-                                m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
-                                m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
+                                getPosition(), new GeoPosition(
+                                getPosition().getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
+                                getPosition().getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
                         )
                         )
                 );

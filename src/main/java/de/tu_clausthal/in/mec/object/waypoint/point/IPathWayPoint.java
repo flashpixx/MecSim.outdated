@@ -78,7 +78,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
     {
-        super( p_position, p_generator, p_factory, Color.GREEN );
+        super( p_position, p_generator, p_factory, Color.GREEN, "dummy" );
     }
 
     /**

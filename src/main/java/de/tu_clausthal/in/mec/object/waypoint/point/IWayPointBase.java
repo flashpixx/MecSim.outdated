@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
@@ -55,6 +56,14 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * position of the source within the map
      */
     protected final GeoPosition m_position;
+    /**
+     * user defined name of the source (so that users can differ between sources)
+     */
+    protected final String m_name;
+    /**
+     * color of the source (needed in web-ui)
+     */
+    protected final Color m_color;
     /**
      * factory of this source
      */
@@ -94,8 +103,10 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
         m_position = p_position;
         m_generator = null;
         m_factory = null;
+        m_name = CCommon.getResourceString( this, "dummywaypoint" );
+        m_color = Color.CYAN;
 
-        m_initializeimage = this.initializeImage( 20, 34, Color.BLACK );
+        m_initializeimage = this.initializeImage( 20, 34, Color.CYAN );
         m_scaledimage = m_initializeimage;
     }
 
@@ -106,11 +117,13 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * @param p_generator generator
      * @param p_factory factory
      */
-    public IWayPointBase( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color )
+    public IWayPointBase( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {
         m_position = p_position;
         m_generator = p_generator;
         m_factory = p_factory;
+        m_name = p_name;
+        m_color = p_color;
 
         m_initializeimage = this.initializeImage( 20, 34, p_color );
         m_scaledimage = m_initializeimage;

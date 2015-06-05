@@ -570,7 +570,7 @@ public class CWaypointEnvironment
          */
         protected final IWayPointBase getWaypoint( GeoPosition p_position )
         {
-            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color );
+            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color, CCommon.getResourceString( this, "defaultwaypointname" ) );
         }
 
         /**

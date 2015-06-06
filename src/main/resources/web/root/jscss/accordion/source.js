@@ -419,7 +419,7 @@ var SourcePanel = ( function (px_module) {
         $.ajax({
             url     : "/cwaypointenvironment/createtool",
             data    : {
-                "waypointtype"       : SourcePanel.settings.dom.selectFactory.val(),
+                "waypointtype"       : SourcePanel.settings.dom.selectWaypointType.val(),
                 "radius"             : SourcePanel.settings.dom.selectRadius.val(),
                 "factory"            : SourcePanel.settings.dom.selectFactory.val(),
                 "agentprogram"       : SourcePanel.settings.dom.selectAgentProgram.val(),

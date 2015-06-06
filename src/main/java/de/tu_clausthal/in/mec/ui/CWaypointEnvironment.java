@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeNormalDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeProfile;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.waypoint.point.CCarPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
@@ -158,7 +159,7 @@ public class CWaypointEnvironment
 
         test.remove( l_position1 );
         test.remove( l_position4 );
-        test.removeEdge( l_position2, l_position5);
+        test.removeEdge( l_position2, l_position5 );
 
         return test;
     }
@@ -575,7 +576,7 @@ public class CWaypointEnvironment
             int l_greenValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "green" ) ) );
             int l_blueValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "blue" ) ) );
 
-            this.m_wayPointType = EWayPointType.getWaypointTypeByName( "" );;
+            this.m_wayPointType = EWayPointType.getWaypointTypeByName( String.valueOf( p_parameter.get( "waypointtype" ) ) );;
             this.m_radius = Double.parseDouble( String.valueOf( p_parameter.get( "radius" ) ) );
             this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );;
             this.m_agentProgram = String.valueOf( p_parameter.get( "agentprogram" ) );
@@ -611,13 +612,36 @@ public class CWaypointEnvironment
          */
         protected final IWayPointBase getWaypoint( GeoPosition p_position )
         {
-            return new CCarRandomWayPoint(
-                    p_position,
-                    this.getGenerator(),
-                    this.getFactory(),
-                    m_radius,
-                    m_color,
-                    CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+            switch(m_wayPointType){
+                case CarWaypointRandom:
+                    CLogger.out("random");
+                    return new CCarRandomWayPoint(
+                            p_position,
+                            this.getGenerator(),
+                            this.getFactory(),
+                            m_radius,
+                            m_color,
+                            CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+
+                case CayWaypointPath:
+                    CLogger.out("path");
+                    return new CCarPathWayPoint(
+                            p_position,
+                            this.getGenerator(),
+                            this.getFactory(),
+                            m_color,
+                            CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+
+                default:
+                    CLogger.out("default");
+                    return new CCarRandomWayPoint(
+                            p_position,
+                            this.getGenerator(),
+                            this.getFactory(),
+                            m_radius,
+                            m_color,
+                            CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+            }
         }
 
         /**

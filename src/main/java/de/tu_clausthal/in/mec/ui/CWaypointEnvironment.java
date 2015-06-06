@@ -183,7 +183,14 @@ public class CWaypointEnvironment
             l_properties.put( "blueValue", l_color.getBlue() );
             l_properties.put( "id", l_wayPoint.toString() );
             l_properties.put( "name", l_wayPoint.getName() );
-            l_properties.put( "type", l_wayPoint instanceof CCarRandomWayPoint ? "random" : "path" );
+
+            if(l_wayPoint instanceof CCarRandomWayPoint){
+                l_properties.put( "type", "random");
+                l_properties.put( "editable", false );
+            }else{
+                l_properties.put( "type", "path");
+                l_properties.put( "editable", true );
+            }
 
             l_waypointList.add( l_properties );
         }

@@ -33,6 +33,7 @@
  TODO edit table size
 
  targeting
+ TODO make radius configureable
  TODO default target (viewpoint)
  TODO tabs for makrov editor / weighting matrix
  TODO markrov editor buttons (reset / show or hide no connected nodes / remove edges /save)
@@ -614,11 +615,12 @@ var SourcePanel = ( function (px_module) {
             success : function( p_data ){
 
                 p_data.forEach(function(entry){
-                    if(entry.type === "random"){
-                        entry.icon = "<span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
-                        entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
+                    entry.edit = "";
+                    if(entry.editable)
                         entry.edit = "<button>edit</button>";
-                    }
+
+                    entry.icon = "<span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
+                    entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
                 });
 
                 //create waypoint table

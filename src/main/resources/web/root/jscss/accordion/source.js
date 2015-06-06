@@ -23,26 +23,16 @@
 
  /** todo collection for source-ui ck
 
- targeting waypoint table
- TODO waypoint color
- TODO waypoint name (defaultWaypoint#1)
- TODO resize widget and hide overflow
- TODO multilanguage labels (length)
- TODO save / update /reset
- TODO serach field to filter waypoints
- TODO edit table size
-
  targeting
+ TODO multilanguage
+ TODO layout (list - editor - matrix)
+ TODO editor
+ TODO matrix
+ TODO save / update /reset /show /hide (makrov)
  TODO make radius configureable
- TODO default target (viewpoint)
- TODO tabs for makrov editor / weighting matrix
- TODO markrov editor buttons (reset / show or hide no connected nodes / remove edges /save)
- TODO makrov editor (see d3.js)
- TODO weighting matrix
- TODO relative vs absolute weighting (recalc relativ weighting)
- TODO java structure (makrov chain, routing)
- TODO CWeightingMap Refactor (to i need the full waypoint or is geoposition okay -> then there is no need to references)
- TODO might be a good idea to use waypoint geo positions for default data but also allow any other geoposition for targets
+ TODO waypoint number
+ TODO serach field to filter waypoints
+ TODO select menu table length
 
  wizard
  TODO save toolbox in config/web
@@ -83,15 +73,6 @@ var SourcePanel = ( function (px_module) {
             MecSim.ui().content().empty();
             MecSim.ui().content().load("template/source.htm", function(){
 
-                $("#weightTesting").on("click", function(){
-                    $.ajax({
-                        url     : "/cwaypointenvironment/test",
-                        success : function(data){
-                            console.log(data);
-                        }
-                    });
-                });
-
                 MecSim.ui().content().hide();
 
                 //get dom elements and set labels
@@ -102,7 +83,7 @@ var SourcePanel = ( function (px_module) {
                     SourcePanel.settings.obj.targetingWidget = Widget.createWidget(
                         SourcePanel.settings.dom.targetingWidget,
                         {
-                            name    : "Temp Name",
+                            name    : SourcePanel.settings.labels.waypointlist,
                             width   : 450,
                             height  : 600
                         }
@@ -632,11 +613,17 @@ var SourcePanel = ( function (px_module) {
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
+                    "oLanguage": {
+                        "oPaginate": {
+                            "sNext": SourcePanel.settings.labels.next,
+                            "sPrevious": SourcePanel.settings.labels.previous
+                        }
+                    },
                     "aoColumns": [
                         { className: "dt-body-center", "title": "ID", "mDataProp": "id", "visible": false },
-                        { className: "dt-body-center", "title": "Tool", "mDataProp": "icon" },
-                        { className: "dt-body-center", "title": "Name", "mDataProp": "name" },
-                        { className: "dt-body-center", "title": "Typ", "mDataProp": "type" },
+                        { className: "dt-body-center", "title": "", "mDataProp": "icon" },
+                        { className: "dt-body-center", "title": SourcePanel.settings.labels.waypointname, "mDataProp": "name" },
+                        { className: "dt-body-center", "title": SourcePanel.settings.labels.waypointtyp, "mDataProp": "type" },
                         { className: "dt-body-center", "title": "", "mDataProp": "edit" }
                     ]
                 });

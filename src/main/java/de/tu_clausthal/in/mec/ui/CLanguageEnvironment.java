@@ -40,10 +40,11 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> m_dynamicWaypointLabels = new HashMap<String, String>()
     {{
-            put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
             put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
             put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
             put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
+
+            put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
 
             put( "selectyourmean", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourmean" ) );
             put( "selectyourdeviation", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourdeviation" ) );
@@ -52,6 +53,10 @@ public class CLanguageEnvironment
 
             put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
             put( "toolcreationfailed", CCommon.getResourceString( CLanguageEnvironment.class, "toolcreationfailed" ) );
+
+            put( "waypointlist", CCommon.getResourceString( CLanguageEnvironment.class, "waypointlist" ) );
+            put( "waypointname", CCommon.getResourceString( CLanguageEnvironment.class, "waypointname" ) );
+            put( "waypointtyp", CCommon.getResourceString( CLanguageEnvironment.class, "waypointtyp" ) );
     }};
 
     /**

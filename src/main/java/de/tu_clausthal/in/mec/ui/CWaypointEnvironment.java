@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
@@ -56,7 +55,7 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
- * todo validation
+ * todo validation (carsettings)
  * todo java cleanup (doc, style)
  * todo remove singelton
  * todo check for casts
@@ -621,7 +620,6 @@ public class CWaypointEnvironment
         {
             switch(m_wayPointType){
                 case CarWaypointRandom:
-                    CLogger.out("random");
                     return new CCarRandomWayPoint(
                             p_position,
                             this.getGenerator(),
@@ -631,7 +629,6 @@ public class CWaypointEnvironment
                             CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
 
                 case CayWaypointPath:
-                    CLogger.out("path");
                     return new CCarPathWayPoint(
                             p_position,
                             this.getGenerator(),
@@ -640,7 +637,6 @@ public class CWaypointEnvironment
                             CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
 
                 default:
-                    CLogger.out("default");
                     return new CCarRandomWayPoint(
                             p_position,
                             this.getGenerator(),

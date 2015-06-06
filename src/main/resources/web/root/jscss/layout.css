@@ -207,6 +207,7 @@ select
     padding: 5px;
     margin: 5px;
     border: 1px solid #CACACA;
+    overflow: hidden;
 }
 
 .mecsim_widget_widgetHeader{

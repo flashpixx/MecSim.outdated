@@ -23,11 +23,9 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
-import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -35,42 +33,35 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.BiFunction;
 
 
 /**
  * waypoint class to describe a route
- * @deprecated will be refactored in a few commits (because another adjacency structure is needed)
- * otherwise it is not possible to create different routes for two different waypoints
+ * todo check if reflexive routes are a problem
+ * todo do not allow editing chain while simulation is running
  */
 public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPointBase<T, P, N>
 {
 
     /**
-     * adjacency list *
-     */
-    private final CWeightMap m_adjacency = new CWeightMap();
-    /**
      * random interface
      */
     private final Random m_random = new Random();
-
-
     /**
-     * ctor
-     *
-     * @param p_position position
+     * makrov chain to calculate route
      */
-    public IPathWayPoint( final GeoPosition p_position )
-    {
-        super( p_position );
-    }
+    private final CMakrovChain<GeoPosition> m_makrovChain = new CMakrovChain<>();
+    /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( IPathWayPoint.super.inspect() );
+        }};
 
 
     /**
@@ -80,46 +71,16 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      * @param p_generator generator
      * @param p_factory factory
      */
-    public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory )
+    public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {
-        super( p_position, p_generator, p_factory, Color.GREEN, "dummy" );
-    }
-
-    /**
-     * returns the adjacency map
-     *
-     * @return map
-     */
-    public Map<IPathWayPoint<T, P, N>, Double> getAdjacency()
-    {
-        return m_adjacency;
-    }
-
-    public Collection<GeoPosition> getNeighbor()
-    {
-        final Collection<GeoPosition> l_neighbor = new HashSet<>();
-        for ( final IPathWayPoint<T, P, N> l_item : m_adjacency.keySet() )
-            l_neighbor.add( l_item.getPosition() );
-        return l_neighbor;
+        super( p_position, p_generator, p_factory, p_color, p_name );
+        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_makrovChain );
     }
 
     @Override
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
-        // to avoid cycles, each geoposition is stored, on a cycle stop the loop
-        final Set<GeoPosition> l_cycle = new HashSet<>();
         final Collection<Pair<GeoPosition, GeoPosition>> l_path = new LinkedList<>();
-
-        // calculate route points
-        IPathWayPoint<T, P, N> l_start = this;
-        while ( ( l_start != null ) && ( !l_cycle.contains( l_start.getPosition() ) ) )
-        {
-            final IPathWayPoint<T, P, N> l_end = l_start.m_adjacency.getNode( m_random.nextDouble() );
-            l_path.add( new ImmutablePair<>( l_start.getPosition(), l_end.getPosition() ) );
-            l_start = l_end;
-            l_cycle.add( l_start.getPosition() );
-        }
-
         return l_path;
     }
 
@@ -129,49 +90,41 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         return super.inspect();
     }
 
-    @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
-    }
-
     /**
-     * class which is responsible for path creation
-     * todo make generic like before ?
-     * todo method to add a node
-     * todo method to remove a node
-     * todo normalized
-     * todo check for negative values
-     * todo do now allow editing when simulation is running
-     * todo maybe allow more than sqaure size
-     * todo check if reflexive is a problem
-     * only update single node
+     * generic class to create a markov chain
+     * this class also provides a relative and absolute weighting
+     *
+     * @param <T>
      */
-    public static class CMarkrovChain<T> extends HashMap<T, Map<T, MutablePair<Double, Double>>>
+    public static class CMakrovChain<T> extends HashMap<T, Map<T, MutablePair<Double, Double>>>
     {
         /**
          * add node to makrov chain
          *
-         * @param p_position
+         * @param p_node
          */
-        public final void addNode( final T p_position )
+        public final void addNode( final T p_node )
         {
-            this.put( p_position, new HashMap<T, MutablePair<Double, Double>>() );
+            this.put( p_node, new HashMap<T, MutablePair<Double, Double>>() );
             updateRelativeWeighting();
         }
 
         /**
-         * method to add an edge between two nodes
+         * add edge to makrov chain
+         *
          * @param p_start
          * @param p_end
          * @param p_value
          */
-        public final void addEdge( final T p_start, final T p_end, final double p_value)
+        public final void addEdge( final T p_start, final T p_end, final double p_value )
         {
+            if ( p_value < 0 )
+                return;
+
             //create node of does not exist
-            if(!this.containsKey( p_start ))
+            if ( !this.containsKey( p_start ) )
                 this.addNode( p_start );
-            if(!this.containsKey( p_end ))
+            if ( !this.containsKey( p_end ) )
                 this.addNode( p_end );
 
             this.get( p_start ).put( p_end, new MutablePair<>( p_value, p_value ) );
@@ -179,32 +132,34 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
         /**
-         * method to remove an edge
+         * remove edge from makrov chain
+         *
          * @param p_start
          * @param p_end
          */
-        public final void removeEdge( final T p_start, final T p_end)
+        public final void removeEdge( final T p_start, final T p_end )
         {
-            if(this.containsKey( p_start ))
+            if ( this.containsKey( p_start ) )
                 this.get( p_start ).remove( p_end );
 
             updateRelativeWeighting();
         }
 
         /**
-         * method to remove a node from the makrov chain
-         * @param p_position
+         * remove all edges of a node
+         *
+         * @param p_node
          */
-        public final void removeAllNodeEdge( final Object p_position )
+        public final void removeAllNodeEdge( final Object p_node )
         {
             for ( Map<T, MutablePair<Double, Double>> l_in : this.values() )
-                if(l_in.containsKey( p_position ))
-                    l_in.remove( p_position );
+                if ( l_in.containsKey( p_node ) )
+                    l_in.remove( p_node );
 
         }
 
         /**
-         * method to update relative edge weightings for all nodes
+         * update all relative weightings
          */
         public final void updateRelativeWeighting()
         {
@@ -213,19 +168,20 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
         /**
-         * method to update all relative edge weightings of a node
+         * update relative weighting
+         *
          * @param p_edges
          */
-        public final void updateRelativeWeighting( final Map<T, MutablePair<Double, Double>> p_edges)
+        public final void updateRelativeWeighting( final Map<T, MutablePair<Double, Double>> p_edges )
         {
             //calculate the new sum
             double l_sum = 0.0;
-            for( MutablePair l_pair : p_edges.values() )
+            for ( MutablePair l_pair : p_edges.values() )
                 l_sum += (double) l_pair.left;
 
             //update relative weighting
-            for( MutablePair l_pair : p_edges.values() )
-                l_pair.right = (double) l_pair.left / l_sum ;
+            for ( MutablePair l_pair : p_edges.values() )
+                l_pair.right = (double) l_pair.left / l_sum;
         }
 
         @Override
@@ -235,229 +191,70 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         }
 
         @Override
-        public Map<T, MutablePair<Double, Double>> put( final T key, final Map<T, MutablePair<Double, Double>> value )
+        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
         {
-            Map<T, MutablePair<Double, Double>> l_result = super.put( key, value );
+            Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
             updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public void putAll( final Map<? extends T, ? extends Map<T, MutablePair<Double, Double>>> m )
+        public void putAll( final Map<? extends T, ? extends Map<T, MutablePair<Double, Double>>> p_map )
         {
-            super.putAll( m );
+            super.putAll( p_map );
             updateRelativeWeighting();
         }
 
         @Override
-        public Map<T, MutablePair<Double, Double>> putIfAbsent( final T key, final Map<T, MutablePair<Double, Double>> value )
+        public Map<T, MutablePair<Double, Double>> putIfAbsent( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
         {
-            Map<T, MutablePair<Double, Double>> l_result = super.putIfAbsent( key, value );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public Map<T, MutablePair<Double, Double>> remove( final Object key )
-        {
-            Map<T, MutablePair<Double, Double>> l_result = super.remove( key );
-            removeAllNodeEdge(key);
+            Map<T, MutablePair<Double, Double>> l_result = super.putIfAbsent( p_key, p_value );
             updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public boolean remove( final Object key, final Object value )
+        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
         {
-            boolean l_result = super.remove( key, value );
-            removeAllNodeEdge(key);
+            Map<T, MutablePair<Double, Double>> l_result = super.remove( p_key );
+            removeAllNodeEdge( p_key );
             updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public boolean replace( final T key, final Map<T, MutablePair<Double, Double>> oldValue,
-                final Map<T, MutablePair<Double, Double>> newValue )
+        public boolean remove( final Object p_key, final Object p_value )
         {
-            boolean l_result = super.replace( key, oldValue, newValue );
-            removeAllNodeEdge(key);
+            boolean l_result = super.remove( p_key, p_value );
+            removeAllNodeEdge( p_key );
             updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public Map<T, MutablePair<Double, Double>> replace( final T key, final Map<T, MutablePair<Double, Double>> value )
+        public Map<T, MutablePair<Double, Double>> replace( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
         {
-            Map<T, MutablePair<Double, Double>> l_result = super.replace(key, value);
+            Map<T, MutablePair<Double, Double>> l_result = super.replace( p_key, p_value );
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public boolean replace( final T p_key, final Map<T, MutablePair<Double, Double>> p_oldValue,
+                final Map<T, MutablePair<Double, Double>> p_newValue )
+        {
+            boolean l_result = super.replace( p_key, p_oldValue, p_newValue );
+            removeAllNodeEdge( p_key );
             updateRelativeWeighting();
             return l_result;
         }
 
         @Override
         public void replaceAll(
-                final BiFunction<? super T, ? super Map<T, MutablePair<Double, Double>>, ? extends Map<T, MutablePair<Double, Double>>> function )
+                final BiFunction<? super T, ? super Map<T, MutablePair<Double, Double>>, ? extends Map<T, MutablePair<Double, Double>>> p_function )
         {
-            super.replaceAll( function );
+            super.replaceAll( p_function );
             updateRelativeWeighting();
-        }
-    }
-
-    /**
-     * weight map with guarantee of normalized weights in [0,max]
-     */
-    public class CWeightMap extends HashMap<IPathWayPoint<T, P, N>, Double>
-    {
-        /**
-         * map to resolve the buckets for checking *
-         */
-        final Map<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> m_buckets = new HashMap<>();
-        /**
-         * max value *
-         */
-        private final double m_max;
-        /**
-         * serialize version ID *
-         */
-        private static final long serialVersionUID = 1L;
-
-        /**
-         * ctor
-         */
-        public CWeightMap()
-        {
-            m_max = 1;
-        }
-
-        /**
-         * ctor - set the maximum weight
-         *
-         * @param p_max weight
-         */
-        public CWeightMap( final double p_max )
-        {
-            m_max = p_max;
-        }
-
-        /**
-         * update the bucket map
-         */
-        private void bucketupdate()
-        {
-            double l_value = 0;
-            m_buckets.clear();
-            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
-                m_buckets.put( new ImmutablePair<>( l_value, l_value += l_item.getValue() ), l_item.getKey() );
-        }
-
-        /**
-         * maximum value
-         *
-         * @return maximum value
-         */
-        public double getMax()
-        {
-            return m_max;
-        }
-
-        /**
-         * returns the node depends on the weight
-         *
-         * @param p_value weight
-         * @return node or null on empty list
-         */
-        public IPathWayPoint<T, P, N> getNode( final double p_value )
-        {
-            for ( final Map.Entry<ImmutablePair<Double, Double>, IPathWayPoint<T, P, N>> l_item : m_buckets.entrySet() )
-                if ( ( l_item.getKey().getLeft() <= p_value ) && ( p_value < l_item.getKey().getRight() ) )
-                    return l_item.getValue();
-
-            return null;
-        }
-
-        @Override
-        public final int size()
-        {
-            return this.size();
-        }
-
-        @Override
-        public final boolean isEmpty()
-        {
-            return this.isEmpty();
-        }
-
-        @Override
-        public final Double get( final Object p_key )
-        {
-            return this.get( p_key );
-        }
-
-        @Override
-        public final boolean containsKey( final Object p_key )
-        {
-            return this.containsKey( p_key );
-        }
-
-        @Override
-        public final Double put( final IPathWayPoint<T, P, N> p_key, final Double p_value )
-        {
-            final double l_multiplier = m_max - p_value;
-            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
-                l_item.setValue( l_item.getValue() * l_multiplier );
-
-            this.put( p_key, p_value );
-            this.bucketupdate();
-
-            return p_value;
-        }
-
-        @Override
-        public void putAll( final Map<? extends IPathWayPoint<T, P, N>, ? extends Double> m )
-        {
-            this.putAll( m );
-        }
-
-        @Override
-        public Double remove( final Object p_key )
-        {
-            final double l_value = this.remove( p_key );
-
-            final double l_multiplier = l_value / this.size();
-            for ( final Map.Entry<IPathWayPoint<T, P, N>, Double> l_item : this.entrySet() )
-                l_item.setValue( l_item.getValue() + l_value );
-
-            this.bucketupdate();
-            return l_value;
-        }
-
-        @Override
-        public void clear()
-        {
-            this.clear();
-        }
-
-        @Override
-        public final boolean containsValue( final Object p_value )
-        {
-            return this.containsValue( p_value );
-        }
-
-        @Override
-        public Set<IPathWayPoint<T, P, N>> keySet()
-        {
-            return this.keySet();
-        }
-
-        @Override
-        public Collection<Double> values()
-        {
-            return this.values();
-        }
-
-        @Override
-        public Set<Entry<IPathWayPoint<T, P, N>, Double>> entrySet()
-        {
-            return this.entrySet();
         }
     }
 

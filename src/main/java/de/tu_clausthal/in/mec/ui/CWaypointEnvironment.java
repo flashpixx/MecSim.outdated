@@ -133,7 +133,7 @@ public class CWaypointEnvironment
      */
     private final Map<GeoPosition, Map<GeoPosition, MutablePair<Double, Double>>> web_static_test(){
 
-        IPathWayPoint.CMarkrovChain test = new IPathWayPoint.CMarkrovChain();
+        IPathWayPoint.CMakrovChain test = new IPathWayPoint.CMakrovChain();
 
         GeoPosition l_position1 = new GeoPosition( 1.0, 0.0 );
         GeoPosition l_position2 = new GeoPosition( 0.0, 1.0 );

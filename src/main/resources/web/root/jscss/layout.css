@@ -195,6 +195,19 @@ select
     resize: none;
 }
 
+#mecsim_source_waypointListContainer{
+    width: 450px;
+    float:left;
+}
+
+#mecsim_source_waypointConfigContainer{
+    margin-left: 25px;
+    float:left;
+}
+
+#mecsim_source_waypointTabMenu{
+    width:500px;
+}
 
 /******************************** css definitions for mecsim_widget ************************************************/
 

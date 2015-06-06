@@ -24,8 +24,6 @@
  /** todo collection for source-ui ck
 
  targeting
- TODO multilanguage
- TODO layout (list - editor - matrix)
  TODO editor
  TODO matrix
  TODO save / update /reset /show /hide (makrov)
@@ -84,7 +82,7 @@ var SourcePanel = ( function (px_module) {
                         SourcePanel.settings.dom.targetingWidget,
                         {
                             name    : SourcePanel.settings.labels.waypointlist,
-                            width   : 450,
+                            width   : 1000,
                             height  : 600
                         }
                     );
@@ -631,6 +629,8 @@ var SourcePanel = ( function (px_module) {
                 $("textarea").on("change", function(event){$(this).text($(this).val());});
             }
         });
+
+        $( "#mecsim_source_waypointTabMenu" ).tabs();
     };
 
     return px_module;

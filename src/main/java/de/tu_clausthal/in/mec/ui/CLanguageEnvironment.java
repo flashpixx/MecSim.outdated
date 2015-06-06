@@ -96,6 +96,11 @@ public class CLanguageEnvironment
             //wizardstep#4 (customozing)
             put( "#mecsim_source_toolName_label", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
             put( "#mecsim_source_toolColor_label", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
+
+            //waypoint config
+            put( "#mecsim_source_makrovEditor_label", CCommon.getResourceString( CLanguageEnvironment.class, "makroveditor" ) );
+            put( "#mecsim_source_makrovWeighting_label", CCommon.getResourceString( CLanguageEnvironment.class, "makrovweighting" ) );
+            put( "#mecsim_source_waypointSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "waypointsettings" ) );
         }};
 
     /**

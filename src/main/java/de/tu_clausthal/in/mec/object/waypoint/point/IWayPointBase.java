@@ -28,13 +28,17 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
@@ -163,6 +167,24 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     public Map<String, Object> inspect()
     {
         return m_inspect;
+    }
+
+    @Override
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
+        if ( getPosition() == null )
+            return;
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( getPosition(), p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
+                this.iconsize(
+                        p_viewer
+                )
+        );
+
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
     }
 
     @Override

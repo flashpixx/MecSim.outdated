@@ -29,23 +29,14 @@ import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
-import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashSet;
 
 
-/**
- * class with default source implementation for cars
- *
- * @todo symbol painter should be moved to an own structure
- */
-public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
+public class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
      * map with targets
@@ -59,16 +50,15 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
     /**
      * ctor
      *
-     * @param p_position geo position
-     * @param p_generator generator object
-     * @param p_factory factory object
-     * @param p_radius radius
-     * @param p_color color
+     * @param p_position position
+     * @param p_generator generator
+     * @param p_factory factory
+     * @param p_color
+     * @param p_name
      */
-    public CCarRandomWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
-            final Color p_color, final String p_name )
+    public CCarPathWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final Color p_color, final String p_name )
     {
-        super( p_position, p_generator, p_factory, p_radius, p_color, p_name );
+        super( p_position, p_generator, p_factory, p_color, p_name );
     }
 
     @Override
@@ -76,5 +66,4 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
     {
         return m_target;
     }
-
 }

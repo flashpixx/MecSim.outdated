@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.waypoint.point;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -33,7 +34,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.BiFunction;
@@ -43,6 +44,7 @@ import java.util.function.BiFunction;
  * waypoint class to describe a route
  * todo check if reflexive routes are a problem
  * todo do not allow editing chain while simulation is running
+ * todo implement getPath correctly
  */
 public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPointBase<T, P, N>
 {
@@ -80,8 +82,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
-        final Collection<Pair<GeoPosition, GeoPosition>> l_path = new LinkedList<>();
-        return l_path;
+        return new HashSet<Pair<GeoPosition, GeoPosition>>()
+        {{
+              add( new ImmutablePair<GeoPosition, GeoPosition>( getPosition(), new GeoPosition( 51.80135377062704, 10.32871163482666 ) ) );
+            }};
     }
 
     @Override

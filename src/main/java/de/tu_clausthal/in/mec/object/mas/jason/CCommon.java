@@ -26,10 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.mas.general.CTermList;
-import de.tu_clausthal.in.mec.object.mas.general.IAtom;
-import de.tu_clausthal.in.mec.object.mas.general.ITerm;
-import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+import de.tu_clausthal.in.mec.object.mas.general.*;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import jason.NoValueException;
 import jason.asSyntax.*;

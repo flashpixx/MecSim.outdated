@@ -35,4 +35,18 @@ public interface IBeliefBase<T>
      * removes the literals of the top level and the inherited beliefbases
      */
     public void clear();
+
+    /**
+     * adds a language specific literal
+     *
+     * @param p_literal
+     */
+    public abstract void addLiteral( ILiteral p_literal );
+
+    /**
+     * removes a language specific literal
+     *
+     * @param p_literal
+     */
+    public abstract void removeLiteral( ILiteral p_literal );
 }

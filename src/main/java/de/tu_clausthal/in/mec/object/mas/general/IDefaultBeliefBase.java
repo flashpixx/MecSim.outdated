@@ -148,14 +148,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * adds a language specific literal
-     *
-     * @param p_literal
-     */
-    public abstract void addLiteral( T p_literal );
-
-
-    /**
      * hashcode function based on prime number linear combination
      *
      * @return hashcode calculated with prime numbers

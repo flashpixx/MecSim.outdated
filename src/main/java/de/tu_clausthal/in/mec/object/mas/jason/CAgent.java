@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -104,7 +105,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * set with belief binds
      */
-    private final IDefaultBeliefBase m_beliefs;
+    private final CBeliefBase m_beliefs;
     /**
      * set with cycle objects
      */
@@ -126,7 +127,10 @@ public class CAgent<T> implements IVoidAgent
      * participant object *
      */
     private CParticipant m_participant;
-
+    /**
+     * agent object
+     */
+    private Agent m_agent;
 
     /**
      * ctor
@@ -413,32 +417,25 @@ public class CAgent<T> implements IVoidAgent
          */
         protected final void updateBindBeliefs()
         {
-            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases() )
+            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
             {
-                // remove old belief within the agent
-                for ( final ILiteral l_literal : l_beliefbase.getLiterals() )
-                    try
-                    {
-                        m_agent.delBel( l_literal );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                    }
+                if (l_beliefbase instanceof CFieldBind)
+                {
+                    // remove old belief within the agent
+                    for (final ILiteral l_literal : l_beliefbase.getLiterals())
 
-                // clear belief storage and update the entries
-                l_item.clear();
-                l_item.update();
+                        m_beliefs.removeLiteral( l_literal );
 
+                    // clear belief storage and update the entries
+                    l_beliefbase.clear();
+                    ((CFieldBind)l_beliefbase).update();
 
-                // set new belief into the agent
-                for ( final Literal l_literal : l_item.getLiterals() )
-                    try
-                    {
-                        m_agent.addBel( l_literal );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                    }
+                    // set new belief into the agent
+                    for (final ILiteral l_literal : l_beliefbase.getLiterals())
+
+                        m_beliefs.addLiteral(l_literal);
+
+                }
             }
 
         }

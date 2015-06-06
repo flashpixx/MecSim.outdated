@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -129,6 +130,80 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
+    }
+
+    /**
+     * class which is responsible for path creation
+     * todo make generic like before ?
+     * todo method to add a node
+     * todo method to remove a node
+     * todo normalized
+     * todo check for negative values
+     * todo do now allow editing when simulation is running
+     * todo maybe allow more than sqaure size
+     */
+    public class CMarkrovChain
+    {
+        /**
+         * basic storage of the makrov chain
+         */
+        private final Map<GeoPosition, Map<GeoPosition, MutablePair<Double, Double>>> m_makrovChain = new HashMap<>();
+
+
+        /**
+         * add node to makrov chain
+         *
+         * @param p_position
+         * @param p_value
+         */
+        public final void addNode( final GeoPosition p_position, final double p_value )
+        {
+            //set all ingoing edges (for every node add an edge to the new node)
+            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : m_makrovChain.values() )
+                l_in.put( p_position, new MutablePair<>( p_value, p_value ) );
+
+            //set all outgoing edges (add an edge to every existing node)
+            HashMap<GeoPosition, MutablePair<Double, Double>> l_out = new HashMap<>();
+            for ( GeoPosition l_node : m_makrovChain.keySet() )
+                l_out.put( l_node, new MutablePair<>( 1.0, 1.0/ m_makrovChain.size() ) );
+
+            m_makrovChain.put( p_position, l_out );
+            updateRelativeWeighting();
+        }
+
+        /**
+         * method to remove a node from the makrov chain
+         * @param p_position
+         */
+        public final void removeNode( final GeoPosition p_position )
+        {
+            //remove all ingoing edges (for every node remove the edge to this node)
+            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : m_makrovChain.values() ){
+                if(l_in.containsKey( p_position ))
+                    l_in.remove( p_position );
+            }
+
+             //remove all outgoing edges
+            if(m_makrovChain.containsKey( p_position ))
+                m_makrovChain.remove( p_position );
+
+            updateRelativeWeighting();
+        }
+
+        public final void updateRelativeWeighting()
+        {
+            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : m_makrovChain.values() ){
+
+                //calculate the new sum
+                double l_sum = 0.0;
+                for( MutablePair l_pair : l_in.values() )
+                    l_sum += (double) l_pair.left;
+
+                //update relative weighting
+                for( MutablePair l_pair : l_in.values() )
+                    l_pair.right = (double) l_pair.left / l_sum ;
+            }
+        }
     }
 
     /**

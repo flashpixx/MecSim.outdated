@@ -449,9 +449,9 @@ public class CAgent<T> implements IVoidAgent
                         l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_jmsg.getSender()).getPath(c_seperator))));
 
                         if (l_jmsg.isTell())
-                            m_agent.addBel(l_literal);
+                            m_beliefs.addLiteral( CCommon.convertGeneric( l_literal ) );
                         if (l_jmsg.isUnTell())
-                            m_agent.delBel(l_literal);
+                            m_beliefs.removeLiteral(CCommon.convertGeneric(l_literal));
                         if (l_jmsg.isKnownPerformative())
                         {
                             l_literal.addAnnot(BeliefBase.TPercept);
@@ -469,8 +469,8 @@ public class CAgent<T> implements IVoidAgent
 
                     // otherwise message will direct converted
                     final Literal l_literal = CCommon.getLiteral(l_msg.getTitle(), l_msg.getData());
-                    l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
-                    m_agent.addBel(l_literal);
+                    l_literal.addAnnot( ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
+                    m_beliefs.addLiteral( CCommon.convertGeneric( l_literal ) );
 
                 } catch (final Exception l_exception)
                 {

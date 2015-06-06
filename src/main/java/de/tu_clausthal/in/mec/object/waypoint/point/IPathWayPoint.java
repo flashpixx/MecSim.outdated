@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
@@ -37,6 +38,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -142,6 +144,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      * todo check for negative values
      * todo do now allow editing when simulation is running
      * todo maybe allow more than sqaure size
+     * todo check if reflexive is a problem
      * only update single node
      */
     public static class CMarkrovChain<T> extends HashMap<T, Map<T, MutablePair<Double, Double>>>
@@ -150,20 +153,41 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          * add node to makrov chain
          *
          * @param p_position
+         */
+        public final void addNode( final T p_position )
+        {
+            this.put( p_position, new HashMap<T, MutablePair<Double, Double>>() );
+            updateRelativeWeighting();
+        }
+
+        /**
+         * method to add an edge between two nodes
+         * @param p_start
+         * @param p_end
          * @param p_value
          */
-        public final void addNode( final T p_position, final double p_value )
+        public final void addEdge( final T p_start, final T p_end, final double p_value)
         {
-            //set all ingoing edges (for every node add an edge to the new node)
-            for ( Map<T, MutablePair<Double, Double>> l_in : this.values() )
-                l_in.put( p_position, new MutablePair<>( p_value, p_value ) );
+            //create node of does not exist
+            if(!this.containsKey( p_start ))
+                this.addNode( p_start );
+            if(!this.containsKey( p_end ))
+                this.addNode( p_end );
 
-            //set all outgoing edges (add an edge to every existing node)
-            HashMap<T, MutablePair<Double, Double>> l_out = new HashMap<>();
-            for ( T l_node : this.keySet() )
-                l_out.put( l_node, new MutablePair<>( 12.0, 1.0/ this.size() ) );
+            this.get( p_start ).put( p_end, new MutablePair<>( p_value, p_value ) );
+            this.updateRelativeWeighting();
+        }
 
-            this.put( p_position, l_out );
+        /**
+         * method to remove an edge
+         * @param p_start
+         * @param p_end
+         */
+        public final void removeEdge( final T p_start, final T p_end)
+        {
+            if(this.containsKey( p_start ))
+                this.get( p_start ).remove( p_end );
+
             updateRelativeWeighting();
         }
 
@@ -171,19 +195,12 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          * method to remove a node from the makrov chain
          * @param p_position
          */
-        public final void removeNode( final T p_position )
+        public final void removeAllNodeEdge( final Object p_position )
         {
-            //remove all ingoing edges (for every node remove the edge to this node)
-            for ( Map<T, MutablePair<Double, Double>> l_in : this.values() ){
+            for ( Map<T, MutablePair<Double, Double>> l_in : this.values() )
                 if(l_in.containsKey( p_position ))
                     l_in.remove( p_position );
-            }
 
-             //remove all outgoing edges
-            if(this.containsKey( p_position ))
-                this.remove( p_position );
-
-            updateRelativeWeighting();
         }
 
         /**
@@ -244,6 +261,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public Map<T, MutablePair<Double, Double>> remove( final Object key )
         {
             Map<T, MutablePair<Double, Double>> l_result = super.remove( key );
+            removeAllNodeEdge(key);
             updateRelativeWeighting();
             return l_result;
         }
@@ -252,6 +270,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public boolean remove( final Object key, final Object value )
         {
             boolean l_result = super.remove( key, value );
+            removeAllNodeEdge(key);
             updateRelativeWeighting();
             return l_result;
         }
@@ -261,6 +280,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
                 final Map<T, MutablePair<Double, Double>> newValue )
         {
             boolean l_result = super.replace( key, oldValue, newValue );
+            removeAllNodeEdge(key);
             updateRelativeWeighting();
             return l_result;
         }

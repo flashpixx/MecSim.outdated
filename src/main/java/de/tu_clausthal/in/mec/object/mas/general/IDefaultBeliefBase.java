@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,7 +42,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * map of string/beliefbase
      * each entry represents an inherited beliefbase with its name
      */
-    protected final Map<String, IDefaultBeliefBase<T>> m_beliefbases;
+    protected final Map<String, IBeliefBase<T>> m_beliefbases;
     /**
      * set of literals representing the top level beliefs,
      * i.e. it does not contain literals of inherited beliefbases
@@ -73,7 +75,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase(Map<String, IDefaultBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase(Map<String, IBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals)
     {
         m_beliefbases = p_beliefbases;
         m_literals = p_literals;
@@ -102,15 +104,15 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_currentBeliefbase beliefbase to add
      * @param p_currentAggregatedSet the current aggregation
      */
-    private static void collapseLiterals( final IDefaultBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet  )
+    private static void collapseLiterals( final IBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet  )
     {
         // add the current beliefbases' literals to aggregated set
-        for(final ILiteral<?> l_literal : p_currentBeliefbase.m_literals )
+        for(final ILiteral<?> l_literal : p_currentBeliefbase.getLiterals() )
             p_currentAggregatedSet.add(l_literal.getLiteral());
 
         // recursive method call for each inherited beliefbase
-        for( final IDefaultBeliefBase<?> l_bb : p_currentBeliefbase.m_beliefbases.values() )
-            collapseLiterals(l_bb, p_currentAggregatedSet);
+        for( final IBeliefBase<?> l_bb : p_currentBeliefbase.getBeliefbases().values() )
+            collapseLiterals( l_bb, p_currentAggregatedSet );
     }
 
     /**
@@ -127,9 +129,30 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * method for clearing the beliefbase
+     * getter for inherited beliefbases
      */
-    public abstract void clear();
+    public Map<String, IBeliefBase<T>> getBeliefbases()
+    {
+        return m_beliefbases;
+    }
+
+    /**
+     * removes the literals of the top level and the inherited beliefbases
+     */
+    public void clear()
+    {
+        m_literals.clear();
+
+        for (String l_name : m_beliefbases.keySet())
+            m_beliefbases.get(l_name).clear();
+    }
+
+    /**
+     * adds a language specific literal
+     *
+     * @param p_literal
+     */
+    public abstract void addLiteral( T p_literal );
 
 
     /**
@@ -154,5 +177,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public boolean equals(final Object p_object)
     {
         return this.hashCode() == p_object.hashCode();
+    }
+
+    public void addAll( final String p_prefix, final IBeliefBase<T> p_beliefbase )
+    {
+        m_beliefbases.put( StringUtils.join( p_prefix, p_beliefbase.hashCode() ), p_beliefbase);
     }
 }

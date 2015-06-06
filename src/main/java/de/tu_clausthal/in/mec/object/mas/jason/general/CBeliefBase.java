@@ -26,7 +26,9 @@ package de.tu_clausthal.in.mec.object.mas.jason.general;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.Literal;
+import jason.asSyntax.Term;
 
 import java.util.Map;
 import java.util.Set;
@@ -58,7 +60,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public CBeliefBase(Map<String, IDefaultBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase(Map<String, IBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
     {
         super(p_beliefbases, p_literals);
     }
@@ -76,11 +78,8 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     @Override
-    public void clear()
+    public void addLiteral(Literal p_literal)
     {
-        m_literals.clear();
-
-        for (String l_name : m_beliefbases.keySet())
-            m_beliefbases.get(l_name).clear();
+        m_literals.add( new CLiteral( p_literal ) );
     }
 }

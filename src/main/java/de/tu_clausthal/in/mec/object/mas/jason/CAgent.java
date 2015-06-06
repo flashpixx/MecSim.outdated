@@ -29,12 +29,15 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -94,10 +97,6 @@ public class CAgent<T> implements IVoidAgent
      * set with actions of this implementation
      */
     private final Map<String, IAction> m_action = new HashMap<>();
-    /**
-     * Jason agent object
-     */
-    private final Agent m_agent;
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
@@ -162,7 +161,7 @@ public class CAgent<T> implements IVoidAgent
         {
             m_action.put("set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(c_bindname, p_bind));
             m_action.put("invoke", new CMethodBind(c_bindname, p_bind));
-            //m_beliefs.addAll(new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
+            m_beliefs.addAll( "binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( c_bindname, p_bind ) );
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -206,6 +205,8 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addBelief(final String p_name, final Object p_data)
     {
+        m_beliefs.addLiteral( CCommon.getLiteral( p_name, p_data ) );
+/*
         try
         {
             m_agent.addBel(CCommon.getLiteral(p_name, p_data));
@@ -213,6 +214,7 @@ public class CAgent<T> implements IVoidAgent
         {
             CLogger.error(l_exception);
         }
+*/
     }
 
     @Override
@@ -411,10 +413,10 @@ public class CAgent<T> implements IVoidAgent
          */
         protected final void updateBindBeliefs()
         {
-/*            for ( final IBelief l_item : m_beliefs )
+            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases() )
             {
                 // remove old belief within the agent
-                for ( final Literal l_literal : l_item.getLiterals() )
+                for ( final ILiteral l_literal : l_beliefbase.getLiterals() )
                     try
                     {
                         m_agent.delBel( l_literal );
@@ -438,7 +440,7 @@ public class CAgent<T> implements IVoidAgent
                     {
                     }
             }
-            */
+
         }
 
         /**

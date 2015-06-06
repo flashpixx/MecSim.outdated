@@ -132,6 +132,11 @@ public class CCommon
             }};
     }
 
+    public static ILiteral convertGeneric( final Literal p_literal )
+    {
+        return new CLiteral( p_literal );
+    }
+
     /**
      * converts a NumberTerm into a Double Atom
      *

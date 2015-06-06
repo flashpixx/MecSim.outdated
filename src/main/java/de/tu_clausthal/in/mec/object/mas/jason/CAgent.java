@@ -386,17 +386,12 @@ public class CAgent<T> implements IVoidAgent
         {
             // run all register before-cycle object
             for (final ICycle l_item : m_cycleobject)
-                l_item.beforeCycle(p_currentstep, CAgent.this);
+                l_item.beforeCycle( p_currentstep, CAgent.this );
 
 
             // add the simulationstep belief with the new number and remove the old one
-            try
-            {
-                m_agent.addBel(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
-                m_agent.delBel(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
-            } catch (final Exception l_exception)
-            {
-            }
+            m_beliefs.addLiteral( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) ) );
+            m_beliefs.removeLiteral( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) ) );
 
             // run belief updates
             this.updateBindBeliefs();
@@ -419,22 +414,19 @@ public class CAgent<T> implements IVoidAgent
         {
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
             {
-                if (l_beliefbase instanceof CFieldBind)
+                if ( l_beliefbase instanceof CFieldBind )
                 {
                     // remove old belief within the agent
                     for (final ILiteral l_literal : l_beliefbase.getLiterals())
-
                         m_beliefs.removeLiteral( l_literal );
 
                     // clear belief storage and update the entries
-                    l_beliefbase.clear();
+                    ((CFieldBind)l_beliefbase).clear();
                     ((CFieldBind)l_beliefbase).update();
 
                     // set new belief into the agent
                     for (final ILiteral l_literal : l_beliefbase.getLiterals())
-
                         m_beliefs.addLiteral(l_literal);
-
                 }
             }
 

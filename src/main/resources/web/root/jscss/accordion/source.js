@@ -82,6 +82,15 @@ var SourcePanel = ( function (px_module) {
             MecSim.ui().content().empty();
             MecSim.ui().content().load("template/source.htm", function(){
 
+                $("#weightTesting").on("click", function(){
+                    $.ajax({
+                        url     : "/cwaypointenvironment/test",
+                        success : function(data){
+                            console.log(data);
+                        }
+                    });
+                });
+
                 MecSim.ui().content().hide();
 
                 //get dom elements and set labels

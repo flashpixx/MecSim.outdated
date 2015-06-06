@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
@@ -34,9 +35,11 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeProfile;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
+import de.tu_clausthal.in.mec.object.waypoint.point.IPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -124,8 +127,28 @@ public class CWaypointEnvironment
     }
 
     /**
+     * method to test weighting functionality (will be removed in a few commits)
+     * @deprecated
+     * @return
+     */
+    private final Map<GeoPosition, Map<GeoPosition, MutablePair<Double, Double>>> web_static_test(){
+
+        IPathWayPoint.CMarkrovChain test = new IPathWayPoint.CMarkrovChain();
+        GeoPosition l_position = new GeoPosition( 0.0, 1.0 );
+        test.addNode( new GeoPosition( 1.0, 2.0 ), 1.0 );
+        test.addNode( new GeoPosition( 2.0, 3.0 ), 2.0 );
+        test.addNode( new GeoPosition( 3.0, 4.0 ), 3.0 );
+        test.addNode( l_position, 1.0 );
+        test.addNode( new GeoPosition( 4.0, 5.0 ), 4.0 );
+        test.removeNode( l_position );
+        test.addNode( new GeoPosition( 5.0, 6.0 ), 5.0 );
+        test.addNode( new GeoPosition( 6.0, 7.0 ), 6.0 );
+
+        return test;
+    }
+
+    /**
      * method to get a list of all waypoints an properties
-     * @deprecated up to now only for testing purpose
      * @return
      */
     private final List<Map<String, Object>> web_static_listwaypoints()

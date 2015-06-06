@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 
 /**
@@ -141,15 +142,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      * todo check for negative values
      * todo do now allow editing when simulation is running
      * todo maybe allow more than sqaure size
+     * only update single node
      */
-    public class CMarkrovChain
+    public static class CMarkrovChain extends HashMap<GeoPosition, Map<GeoPosition, MutablePair<Double, Double>>>
     {
-        /**
-         * basic storage of the makrov chain
-         */
-        private final Map<GeoPosition, Map<GeoPosition, MutablePair<Double, Double>>> m_makrovChain = new HashMap<>();
-
-
         /**
          * add node to makrov chain
          *
@@ -159,15 +155,15 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public final void addNode( final GeoPosition p_position, final double p_value )
         {
             //set all ingoing edges (for every node add an edge to the new node)
-            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : m_makrovChain.values() )
+            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : this.values() )
                 l_in.put( p_position, new MutablePair<>( p_value, p_value ) );
 
             //set all outgoing edges (add an edge to every existing node)
             HashMap<GeoPosition, MutablePair<Double, Double>> l_out = new HashMap<>();
-            for ( GeoPosition l_node : m_makrovChain.keySet() )
-                l_out.put( l_node, new MutablePair<>( 1.0, 1.0/ m_makrovChain.size() ) );
+            for ( GeoPosition l_node : this.keySet() )
+                l_out.put( l_node, new MutablePair<>( 1.0, 1.0/ this.size() ) );
 
-            m_makrovChain.put( p_position, l_out );
+            this.put( p_position, l_out );
             updateRelativeWeighting();
         }
 
@@ -178,31 +174,111 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public final void removeNode( final GeoPosition p_position )
         {
             //remove all ingoing edges (for every node remove the edge to this node)
-            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : m_makrovChain.values() ){
+            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : this.values() ){
                 if(l_in.containsKey( p_position ))
                     l_in.remove( p_position );
             }
 
              //remove all outgoing edges
-            if(m_makrovChain.containsKey( p_position ))
-                m_makrovChain.remove( p_position );
+            if(this.containsKey( p_position ))
+                this.remove( p_position );
 
             updateRelativeWeighting();
         }
 
+        /**
+         * method to update relative edge weightings for all nodes
+         */
         public final void updateRelativeWeighting()
         {
-            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : m_makrovChain.values() ){
+            for ( Map<GeoPosition, MutablePair<Double, Double>> l_in : this.values() )
+                updateRelativeWeighting( l_in );
+        }
 
-                //calculate the new sum
-                double l_sum = 0.0;
-                for( MutablePair l_pair : l_in.values() )
-                    l_sum += (double) l_pair.left;
+        /**
+         * method to update all relative edge weightings of a node
+         * @param p_edges
+         */
+        public final void updateRelativeWeighting( final Map<GeoPosition, MutablePair<Double, Double>> p_edges)
+        {
+            //calculate the new sum
+            double l_sum = 0.0;
+            for( MutablePair l_pair : p_edges.values() )
+                l_sum += (double) l_pair.left;
 
-                //update relative weighting
-                for( MutablePair l_pair : l_in.values() )
-                    l_pair.right = (double) l_pair.left / l_sum ;
-            }
+            //update relative weighting
+            for( MutablePair l_pair : p_edges.values() )
+                l_pair.right = (double) l_pair.left / l_sum ;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.toString();
+        }
+
+        @Override
+        public Map<GeoPosition, MutablePair<Double, Double>> put( final GeoPosition key, final Map<GeoPosition, MutablePair<Double, Double>> value )
+        {
+            Map<GeoPosition, MutablePair<Double, Double>> l_result = super.put( key, value );
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public void putAll( final Map<? extends GeoPosition, ? extends Map<GeoPosition, MutablePair<Double, Double>>> m )
+        {
+            super.putAll( m );
+            updateRelativeWeighting();
+        }
+
+        @Override
+        public Map<GeoPosition, MutablePair<Double, Double>> putIfAbsent( final GeoPosition key, final Map<GeoPosition, MutablePair<Double, Double>> value )
+        {
+            Map<GeoPosition, MutablePair<Double, Double>> l_result = super.putIfAbsent( key, value );
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public Map<GeoPosition, MutablePair<Double, Double>> remove( final Object key )
+        {
+            Map<GeoPosition, MutablePair<Double, Double>> l_result = super.remove( key );
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public boolean remove( final Object key, final Object value )
+        {
+            boolean l_result = super.remove( key, value );
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public boolean replace( final GeoPosition key, final Map<GeoPosition, MutablePair<Double, Double>> oldValue,
+                final Map<GeoPosition, MutablePair<Double, Double>> newValue )
+        {
+            boolean l_result = super.replace( key, oldValue, newValue );
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public Map<GeoPosition, MutablePair<Double, Double>> replace( final GeoPosition key, final Map<GeoPosition, MutablePair<Double, Double>> value )
+        {
+            Map<GeoPosition, MutablePair<Double, Double>> l_result = super.replace(key, value);
+            updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public void replaceAll(
+                final BiFunction<? super GeoPosition, ? super Map<GeoPosition, MutablePair<Double, Double>>, ? extends Map<GeoPosition, MutablePair<Double, Double>>> function )
+        {
+            super.replaceAll( function );
+            updateRelativeWeighting();
         }
     }
 

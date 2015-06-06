@@ -57,6 +57,7 @@ public class CLanguageEnvironment
             put( "waypointlist", CCommon.getResourceString( CLanguageEnvironment.class, "waypointlist" ) );
             put( "waypointname", CCommon.getResourceString( CLanguageEnvironment.class, "waypointname" ) );
             put( "waypointtyp", CCommon.getResourceString( CLanguageEnvironment.class, "waypointtyp" ) );
+            put( "configuretarget", CCommon.getResourceString( CLanguageEnvironment.class, "configuretarget" ) );
     }};
 
     /**

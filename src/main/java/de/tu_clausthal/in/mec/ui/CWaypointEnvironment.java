@@ -127,43 +127,6 @@ public class CWaypointEnvironment
     }
 
     /**
-     * method to test weighting functionality (will be removed in a few commits)
-     * @deprecated
-     * @return
-     */
-    private final Map<GeoPosition, Map<GeoPosition, MutablePair<Double, Double>>> web_static_test(){
-
-        IPathWayPoint.CMakrovChain test = new IPathWayPoint.CMakrovChain();
-
-        GeoPosition l_position1 = new GeoPosition( 1.0, 0.0 );
-        GeoPosition l_position2 = new GeoPosition( 0.0, 1.0 );
-        GeoPosition l_position3 = new GeoPosition( 1.0, 2.0 );
-        GeoPosition l_position4 = new GeoPosition( 2.0, 3.0 );
-        GeoPosition l_position5 = new GeoPosition( 3.0, 4.0 );
-        GeoPosition l_position6 = new GeoPosition( 4.0, 5.0 );
-        GeoPosition l_position7 = new GeoPosition( 5.0, 6.0 );
-
-        test.addEdge( l_position1, l_position2, 1.0 );
-        test.addEdge( l_position1, l_position3, 2.0 );
-        test.addEdge( l_position1, l_position4, 3.0 );
-
-        test.addEdge( l_position2, l_position3, 1.0 );
-        test.addEdge( l_position2, l_position4, 2.0 );
-        test.addEdge( l_position2, l_position5, 3.0 );
-
-        test.addEdge( l_position3, l_position4, 2.0 );
-        test.addEdge( l_position5, l_position6, 2.0 );
-
-        test.addEdge( l_position7, l_position7, 2.0 );
-
-        test.remove( l_position1 );
-        test.remove( l_position4 );
-        test.removeEdge( l_position2, l_position5 );
-
-        return test;
-    }
-
-    /**
      * method to get a list of all waypoints an properties
      * @return
      */
@@ -184,10 +147,10 @@ public class CWaypointEnvironment
             l_properties.put( "name", l_wayPoint.getName() );
 
             if(l_wayPoint instanceof CCarRandomWayPoint){
-                l_properties.put( "type", "random");
+                l_properties.put( "type", CCommon.getResourceString( this, "waypointrandomtype" ));
                 l_properties.put( "editable", false );
             }else{
-                l_properties.put( "type", "path");
+                l_properties.put( "type", CCommon.getResourceString( this, "waypointtargettype" ));
                 l_properties.put( "editable", true );
             }
 

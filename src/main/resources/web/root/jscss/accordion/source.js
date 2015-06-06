@@ -598,7 +598,7 @@ var SourcePanel = ( function (px_module) {
                 p_data.forEach(function(entry){
                     entry.edit = "";
                     if(entry.editable)
-                        entry.edit = "<button>edit</button>";
+                        entry.edit = "<button>"+ SourcePanel.settings.labels.configuretarget +"</button>";
 
                     entry.icon = "<span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
                     entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";

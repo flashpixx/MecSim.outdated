@@ -13,6 +13,9 @@
 **/
 function Pane( pc_id )
 {
+    if (!classof(pc_id, "string"))
+        throw "ID undefinied";
+
     this.id = pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase();
 }
 
@@ -33,19 +36,24 @@ Pane.prototype.getID = function()
  * @param pc_subid name of the sub structure
  * @return subID
 **/
-Pane.prototype.generateSubID = function( pc_subid )
+Pane.prototype.generateSubID = function( pc_id )
 {
-    return ["mecsim", this.getID, pc_subid.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
+    if (!classof(pc_id, "string"))
+        throw "ID undefinied";
+
+    return ["mecsim", this.getID, pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
 }
 
 
 
 Pane.prototype.getGlobalContent = function()
 {
+    return null;
 }
 
 Pane.prototype.getGlobalCSS = function()
 {
+    return null;
 }
 
 

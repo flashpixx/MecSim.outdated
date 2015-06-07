@@ -181,17 +181,24 @@ var MecSim = (function (px_modul) {
     // --- initializing of the UI content ----------------------------------------------------------------------------------------------------------------------
     px_modul.uiinitialize = function( pa )
     {
-        // add main layout elements (div structure)
-
-
-
-
-
         // initialize the content pane with the three layer structures
         px_modul.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         px_modul.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         px_modul.ui().accordion().accordion({ active: false, collapsible: true });
         px_modul.ui().inspector().dialog({ autoOpen: false });
+
+        // add main layout elements to the HTML body
+        if (Array.isArray(pa))
+            pa.forEach( function(px_item) {
+                if (px_item instanceof Pane)
+                {
+                    if (px_item.getGlobalContent())
+                        jQuery( px_item.getGlobalContent() ).appendTo("body");
+                    if (px_item.getGlobalCSS())
+                        jQuery("body").css( px_item.getGlobalCSS() );
+                }
+            });
+
 
         // initialize websocket log binding
         px_modul.websocket( "/cconsole/output/log", {

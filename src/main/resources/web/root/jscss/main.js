@@ -40,7 +40,7 @@ $(document).ready(function() {
         //HelpPanel.init();
 
         // UI instantiation
-        MecSim.uiinitialize();
+        MecSim.uiinitialize( [new Logger("logger")] );
 
         // Editor Panel instantiation
         //EditorPanel.bind_ui_actions();

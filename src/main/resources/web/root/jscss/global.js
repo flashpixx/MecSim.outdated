@@ -22,6 +22,9 @@
  */
 
 
+ "use strict";
+
+
 /**
  * prototype overload - add startwidth to string
  * @param pc_prefix prefix
@@ -73,3 +76,14 @@ Array.prototype.remove = Array.prototype.remove || function( px_value )
 }
 
 
+/**
+ * global function to get the object-type of a variable
+ *
+ * @param px_value value type
+ * @return class type
+**/
+function classof( px_value, pc_type )
+{
+    return ({}).toString.call( px_value ).match(/\s([a-z|A-Z]+)/)[1].trim().toLowerCase() === pc_type.trim().toLowerCase();
+
+}

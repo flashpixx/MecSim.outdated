@@ -43,6 +43,7 @@ function Pane( pc_id, pa_panel )
 
     this.mc_id       = pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase();
     this.ma_children = [];
+    this.mo_parent   = null;
 }
 
 

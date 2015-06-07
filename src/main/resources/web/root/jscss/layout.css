@@ -194,7 +194,8 @@ select
 }
 
 #mecsim_source_waypointConfigContainer{
-    width: 500;
+    width: 500px;
+    margin-left: 25px;
     float:left;
     background: lightgrey;
 }

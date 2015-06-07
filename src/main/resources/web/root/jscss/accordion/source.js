@@ -643,7 +643,7 @@ var SourcePanel = ( function (px_module) {
             {source: nodes[1], target: nodes[2], left: false, right: true }
         ];
 
-        GraphEditor.create( "#mecsim_source_waypointConfigContainer", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
+        GraphEditor.create( "#graphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
     };
 
     return px_module;

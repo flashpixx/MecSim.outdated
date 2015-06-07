@@ -184,13 +184,13 @@
                 if(!self._mousedown_node || d === self._mousedown_node)
                     return;
 
-                d3.select(self).attr('transform', 'scale(1.1)');
+                d3.select(this).attr('transform', 'scale(1.1)');
             })
             .on('mouseout', function(d) {
                 if(!self._mousedown_node || d === self._mousedown_node)
                     return;
 
-                d3.select(self).attr('transform', '');
+                d3.select(this).attr('transform', '');
             })
             .on('mousedown', function(d) {
                 if(d3.event.ctrlKey) return;
@@ -221,7 +221,7 @@
                     return;
                 }
 
-                d3.select(self).attr('transform', '');
+                d3.select(this).attr('transform', '');
 
                 var source, target, direction;
                 if(self._mousedown_node.id < self._mouseup_node.id) {

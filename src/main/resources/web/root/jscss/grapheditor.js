@@ -96,12 +96,12 @@
         this._lastKeyDown = -1;
 
         this._svg.on('mousedown', this.mousedown.bind(this))
-            .on('mousemove', this.mousemove)
+            .on('mousemove', this.mousemove.bind(this))
             .on('mouseup', this.mouseup.bind(this));
 
         d3.select(window)
-            .on('keydown', this.keydown)
-            .on('keyup', this.keyup);
+            .on('keydown', this.keydown.bind(this))
+            .on('keyup', this.keyup.bind(this));
 
         this.restart();
     };
@@ -193,7 +193,8 @@
                 d3.select(this).attr('transform', '');
             })
             .on('mousedown', function(d) {
-                if(d3.event.ctrlKey) return;
+                if(d3.event.ctrlKey)
+                    return;
 
                 self._mousedown_node = d;
                 if(self._mousedown_node === self._selected_node) self._selected_node = null;
@@ -270,7 +271,7 @@
         if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link)
             return;
 
-        var point = d3.mouse(document.body),
+        var point = d3.mouse(this._svg.node()),
             node = {id: ++this._lastNodeId, reflexive: false};
             node.x = point[0];
             node.y = point[1];
@@ -283,7 +284,7 @@
         if(!this._mousedown_node)
             return;
 
-        this._drag_line.attr('d', 'M' + this._mousedown_node.x + ',' + this._mousedown_node.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1]);
+        this._drag_line.attr('d', 'M' + this._mousedown_node.x + ',' + this._mousedown_node.y + 'L' + d3.mouse(this._svg.node())[0] + ',' + d3.mouse(this._svg.node())[1]);
         this.restart();
     };
 
@@ -299,12 +300,13 @@
     };
 
     px_module.prototype.spliceLinksForNode = function(node) {
+        var self = this;
         var toSplice = this._links.filter(function(l) {
             return (l.source === node || l.target === node);
         });
 
         toSplice.map(function(l) {
-            this._links.splice(this._links.indexOf(l), 1);
+            self._links.splice(self._links.indexOf(l), 1);
         });
     };
 

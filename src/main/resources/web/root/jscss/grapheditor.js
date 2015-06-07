@@ -24,6 +24,7 @@
  //modul to create GraphEditor
  var GraphEditor = ( function (px_module) {
 
+    //ctor
     px_module = function(element, data, options){
 
         data = data || {};
@@ -33,6 +34,7 @@
             return;
         }
 
+        //read options
         var self = this;
         this._div               = element;
         this._data              = data                     || {};
@@ -46,11 +48,21 @@
         this._charge            = options.charge           || -500;
         this._colors            = d3.scale.category10();
 
+        //status saves
+        this._selected_node = null;
+        this._selected_link = null;
+        this._mousedown_link = null;
+        this._mousedown_node = null;
+        this._mouseup_node = null;
+        this._lastKeyDown = -1;
+
+        //create basic svg
         this._svg = d3.select(element)
             .append('svg')
             .attr('width', this._width)
             .attr('height', this._height);
 
+        //create layout
         this._force = d3.layout.force()
             .nodes(this._nodes)
             .links(this._links)
@@ -59,6 +71,7 @@
             .charge(this._charge)
             .on('tick', this.tick.bind(this));
 
+        //create end start arrow
         this._svg.append('svg:defs').append('svg:marker')
                 .attr('id', 'end-arrow')
                 .attr('viewBox', '0 -5 10 10')
@@ -70,6 +83,7 @@
                 .attr('d', 'M0,-5L10,0L0,5')
                 .attr('fill', '#000');
 
+        //create end end arrow
         this._svg.append('svg:defs').append('svg:marker')
                 .attr('id', 'start-arrow')
                 .attr('viewBox', '0 -5 10 10')
@@ -81,43 +95,47 @@
                 .attr('d', 'M10,-5L0,0L10,5')
                 .attr('fill', '#000');
 
+        //create drag line
         this._drag_line = this._svg.append('svg:path')
             .attr('class', 'link dragline hidden')
             .attr('d', 'M0,0L0,0');
 
-        this._path = this._svg.append('svg:g').selectAll('path');
+        //create circle container
         this._circle = this._svg.append('svg:g').selectAll('g');
 
-        this._selected_node = null;
-        this._selected_link = null;
-        this._mousedown_link = null;
-        this._mousedown_node = null;
-        this._mouseup_node = null;
-        this._lastKeyDown = -1;
+        //create path container
+        this._path = this._svg.append('svg:g').selectAll('path');
 
+        //register mouse listener
         this._svg.on('mousedown', this.mousedown.bind(this))
             .on('mousemove', this.mousemove.bind(this))
             .on('mouseup', this.mouseup.bind(this));
 
+        //register key listener
         d3.select(window)
             .on('keydown', this.keydown.bind(this))
             .on('keyup', this.keyup.bind(this));
 
+        //initalisation
         this.restart();
     };
 
+    //static method to create a graph editor
     px_module.create = function(element, data, options){
         return new GraphEditor(element, data, options);
     };
 
+    //reset all mouse variables
     px_module.prototype.resetMouseVars = function() {
         this._mousedown_node = null;
         this._mouseup_node = null;
         this._mousedown_link = null;
     };
 
+    //tick method to print layout
     px_module.prototype.tick = function() {
 
+        //update paths
         this._path.attr('d', function(d) {
             var deltaX = d.target.x - d.source.x,
                 deltaY = d.target.y - d.source.y,
@@ -134,20 +152,25 @@
             return 'M' + sourceX + ',' + sourceY + 'L' + targetX + ',' + targetY;
         });
 
+        //update circles
         this._circle.attr('transform', function(d) {
             return 'translate(' + d.x + ',' + d.y + ')';
         });
     };
 
+    //
     px_module.prototype.restart = function() {
         var self = this;
+
+        //path
         this._path = this._path.data(this._links);
 
+        //update path
         this._path.classed('selected', function(d) { return d === self._selected_link; })
             .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
             .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; });
 
-
+        //enter path
         this._path.enter().append('svg:path')
             .attr('class', 'link')
             .classed('selected', function(d) { return d === self._selected_link; })
@@ -164,14 +187,18 @@
                 self.restart();
             });
 
+        //exit path
         this._path.exit().remove();
 
+        //circle
         this._circle = this._circle.data(this._nodes, function(d) { return d.id; });
 
+        //update circle
         this._circle.selectAll('circle')
             .style('fill', function(d) { return (d === self._selected_node) ? d3.rgb(self._colors(d.id)).brighter().toString() : self._colors(d.id); })
             .classed('reflexive', function(d) { return d.reflexive; });
 
+        //enter circle
         var g = this._circle.enter().append('svg:g');
 
         g.append('svg:circle')
@@ -260,17 +287,20 @@
             .attr('class', 'id')
             .text(function(d) { return d.id; });
 
+        //exit circle
         this._circle.exit().remove();
 
         this._force.start();
     };
 
+    //mouse down listener
     px_module.prototype.mousedown = function() {
         this._svg.classed('active', true);
 
         if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link)
             return;
 
+        //add node
         var point = d3.mouse(this._svg.node()),
             node = {id: ++this._lastNodeId, reflexive: false};
             node.x = point[0];
@@ -280,6 +310,7 @@
         this.restart();
     };
 
+    //mouse move listener
     px_module.prototype.mousemove = function() {
         if(!this._mousedown_node)
             return;
@@ -288,6 +319,7 @@
         this.restart();
     };
 
+    //mouse up listener
     px_module.prototype.mouseup = function() {
         if(this._mousedown_node) {
             this._drag_line
@@ -297,19 +329,10 @@
 
         this._svg.classed('active', false);
         this.resetMouseVars();
+        this.restart();
     };
 
-    px_module.prototype.spliceLinksForNode = function(node) {
-        var self = this;
-        var toSplice = this._links.filter(function(l) {
-            return (l.source === node || l.target === node);
-        });
-
-        toSplice.map(function(l) {
-            self._links.splice(self._links.indexOf(l), 1);
-        });
-    };
-
+    //key down listener
     px_module.prototype.keydown = function() {
         d3.event.preventDefault();
 
@@ -367,6 +390,7 @@
         }
     };
 
+    //key up listener
     px_module.prototype.keyup = function() {
         this._lastKeyDown = -1;
 
@@ -376,6 +400,18 @@
                 .on('touchstart.drag', null);
                 this._svg.classed('ctrl', false);
         }
+    };
+
+    //splice links for nodes
+    px_module.prototype.spliceLinksForNode = function(node) {
+        var self = this;
+        var toSplice = this._links.filter(function(l) {
+            return (l.source === node || l.target === node);
+        });
+
+        toSplice.map(function(l) {
+            self._links.splice(self._links.indexOf(l), 1);
+        });
     };
 
     return px_module;

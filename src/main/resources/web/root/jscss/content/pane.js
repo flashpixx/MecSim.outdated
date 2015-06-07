@@ -51,7 +51,7 @@ function Pane( pc_id )
 **/
 Pane.prototype.getID = function()
 {
-    return this.mc_id;
+    return ["mecsim", this.mc_id].join("_");
 }
 
 /**

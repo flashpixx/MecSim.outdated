@@ -113,7 +113,9 @@ Pane.prototype.generateSubID = function( pc_id )
 **/
 Pane.prototype.getGlobalContent = function()
 {
-    return null;
+    var lc = "";
+    this.ma_children.forEach( function(po_item){ lc.concat(po_item.getGlobalContent()); } );
+    return lc;
 }
 
 /**
@@ -123,7 +125,9 @@ Pane.prototype.getGlobalContent = function()
 **/
 Pane.prototype.getGlobalCSS = function()
 {
-    return null;
+    var lc = "";
+    this.ma_children.forEach( function(po_item){ lc.concat(po_item.getGlobalCSS()); } );
+    return lc;
 }
 
 

@@ -95,13 +95,13 @@
         this._mouseup_node = null;
         this._lastKeyDown = -1;
 
-        this._svg.on('mousedown', this.tick.bind(this))
-            .on('mousemove', this.tick.bind(this))
-            .on('mouseup', this.tick.bind(this));
+        this._svg.on('mousedown', this.mousedown.bind(this))
+            .on('mousemove', this.mousemove)
+            .on('mouseup', this.mouseup.bind(this));
 
         d3.select(window)
-            .on('keydown', this.tick.bind(this))
-            .on('keyup', this.tick.bind(this));
+            .on('keydown', this.keydown)
+            .on('keyup', this.keyup);
 
         this.restart();
     };
@@ -250,7 +250,7 @@
                 self._selected_link = link;
                 self._selected_node = null;
 
-                self._restart();
+                self.restart();
         });
 
         g.append('svg:text')
@@ -270,13 +270,13 @@
         if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link)
             return;
 
-        var point = d3.mouse(this),
+        var point = d3.mouse(document.body),
             node = {id: ++this._lastNodeId, reflexive: false};
             node.x = point[0];
             node.y = point[1];
-            nodes.push(node);
+            this._nodes.push(node);
 
-        this._restart();
+        this.restart();
     };
 
     px_module.prototype.mousemove = function() {
@@ -284,7 +284,7 @@
             return;
 
         this._drag_line.attr('d', 'M' + this._mousedown_node.x + ',' + this._mousedown_node.y + 'L' + d3.mouse(this)[0] + ',' + d3.mouse(this)[1]);
-        this._restart();
+        this.restart();
     };
 
     px_module.prototype.mouseup = function() {
@@ -295,7 +295,7 @@
         }
 
         this._svg.classed('active', false);
-        this._resetMouseVars();
+        this.resetMouseVars();
     };
 
     px_module.prototype.spliceLinksForNode = function(node) {

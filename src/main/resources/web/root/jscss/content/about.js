@@ -41,7 +41,15 @@ About.prototype = Object.create(Pane.prototype);
 
 /**
  * @Overwrite
- **/
+**/
+About.prototype.getName = function()
+{
+    return "About";
+}
+
+/**
+ * @Overwrite
+**/
 About.prototype.getGlobalContent = function()
 {
     return String.raw`<div id = "${this.getID()}" >
@@ -59,3 +67,32 @@ About.prototype.getGlobalContent = function()
         </p >
     </div >`;
 }
+
+
+About.prototype.getContent = function()
+{
+
+            HelpPanel.settings.about_button.on("click", function(){
+
+                $.getJSON( "cconfiguration/get", function( p_data ) {
+                    console.log(p_data);
+                    $("#mecsim_project_name")
+                            .attr("href", p_data.manifest["project-url"])
+                            .text(p_data.manifest["project-name"]);
+
+                    $("#mecsim_license")
+                            .attr("href", p_data.manifest["license-url"])
+                            .text(p_data.manifest["license"]);
+
+                    $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
+                    //$("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
+                    //$("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
+
+                }).done( function() {
+                    $("#mecsim_about").dialog({
+                        width: 500,
+                        modal: true
+                    });
+                });
+
+            });

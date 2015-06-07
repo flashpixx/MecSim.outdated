@@ -33,14 +33,16 @@
 /**
  * ctor of a UI pane
  *
- * @param pc_id internal name of the id
+ * @param pc_id internal name of the ID
+ * @param pc
 **/
-function Pane( pc_id )
+function Pane( pc_id, pa_panel )
 {
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
-    this.mc_id = pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase();
+    this.mc_id       = pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase();
+    this.ma_children = [];
 }
 
 
@@ -114,20 +116,20 @@ Pane.prototype.getMainCSS     = function()
 Pane.prototype.beforeOpenMenu = function()
 {
 }
-
-Pane.prototype.getMenuName = function()
-{
-}
-
-Pane.prototype.getMenuHeader = function()
-{
-}
-
-Pane.prototype.getMenuContent = function()
-{
-}
-
-Pane.prototype.getMenuCSS     = function()
-{
-}
 */
+
+
+Pane.prototype.getName = function()
+{
+    return null;
+}
+
+Pane.prototype.getContent = function()
+{
+    return null;
+}
+
+Pane.prototype.getCSS = function()
+{
+    return null;
+}

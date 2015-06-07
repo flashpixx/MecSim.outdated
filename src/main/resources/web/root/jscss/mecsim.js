@@ -22,6 +22,8 @@
  */
 
 
+"use strict";
+
 /**
  * base modul to represent base algorithms
  * and structure to encapsulate structures
@@ -73,31 +75,31 @@ var MecSim = (function (px_modul) {
          * error logging
          * @param px_message message
          **/
-        error : function( px_message ) { $.ajax({ url : "/clogger/error",         type: "POST",  data : px_message  }); },
+        error : function( px_message ) { console.error(px_message); $.ajax({ url : "/clogger/error",         type: "POST",  data : px_message  }); },
 
         /**
          * debug logging
          * @param px_message message
          **/
-        debug : function( px_message ) { $.ajax({ url : "/clogger/debug",         type: "POST",  data : px_message  }); },
+        debug : function( px_message ) { console.warn(px_message); $.ajax({ url : "/clogger/debug",         type: "POST",  data : px_message  }); },
 
         /**
          * warning logging
          * @param px_message message
          **/
-        warn  : function( px_message ) { $.ajax({ url : "/clogger/warn",          type: "POST",  data : px_message  }); },
+        warn  : function( px_message ) { console.warn(px_message); $.ajax({ url : "/clogger/warn",          type: "POST",  data : px_message  }); },
 
         /**
          * information logging
          * @param px_message message
          **/
-        info  : function( px_message ) { $.ajax({ url : "/clogger/info",          type: "POST",  data : px_message  }); },
+        info  : function( px_message ) { console.info(px_message); $.ajax({ url : "/clogger/info",          type: "POST",  data : px_message  }); },
 
         /**
          * output logging
          * @param px_message message
          **/
-        out   : function( px_message ) { $.ajax({ url : "/clogger/out",           type: "POST",  data : px_message  }); }
+        out   : function( px_message ) { console.log(px_message); $.ajax({ url : "/clogger/out",           type: "POST",  data : px_message  }); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

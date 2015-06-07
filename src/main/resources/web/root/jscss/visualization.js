@@ -22,6 +22,8 @@
  */
 
 
+"use strict";
+
 /**
  * base modul to represent all
  * visualization components

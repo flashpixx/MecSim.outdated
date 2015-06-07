@@ -1,3 +1,10 @@
+"use strict";
+
+// @todo http://tobyho.com/2010/11/22/javascript-constructors-and/
+// @todo http://stackoverflow.com/questions/4012998/what-it-the-significance-of-the-javascript-constructor-property
+// @todo http://javascriptissexy.com/javascript-prototype-in-plain-detailed-language/
+// @todo http://raganwald.com/2014/07/09/javascript-constructor-problem.html
+
 /**
  * ctor of a UI pane
  *

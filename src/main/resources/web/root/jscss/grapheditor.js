@@ -36,6 +36,9 @@
         var self = this;
         this._div               = element;
         this._data              = data                     || {};
+        this._nodes             = data.nodes               || {};
+        this._links             = data.links               || {};
+        this._lastNodeId        = data.lastNodeId          || 0;
         this._width             = options.width            || 500;
         this._height            = options.height           || 500;
         this._background        = options.background       || "white";
@@ -43,20 +46,20 @@
         this._charge            = options.charge           || -500;
         this._colors            = d3.scale.category10();
 
-        var svg = d3.select(element)
+        this._svg = d3.select(element)
             .append('svg')
             .attr('width', this._width)
             .attr('height', this._height);
 
-        var force = d3.layout.force()
-            .nodes(this._data.nodes)
-            .links(this._data.links)
+        this._force = d3.layout.force()
+            .nodes(this._nodes)
+            .links(this._links)
             .size([this._width, this._height])
             .linkDistance(this._linkdistance)
-            .charge(this._charde)
+            .charge(this._charge)
             .on('tick', self.tick);
 
-        svg.append('svg:defs').append('svg:marker')
+        this._svg.append('svg:defs').append('svg:marker')
                 .attr('id', 'end-arrow')
                 .attr('viewBox', '0 -5 10 10')
                 .attr('refX', 6)
@@ -67,7 +70,7 @@
                 .attr('d', 'M0,-5L10,0L0,5')
                 .attr('fill', '#000');
 
-        svg.append('svg:defs').append('svg:marker')
+        this._svg.append('svg:defs').append('svg:marker')
                 .attr('id', 'start-arrow')
                 .attr('viewBox', '0 -5 10 10')
                 .attr('refX', 4)
@@ -78,18 +81,31 @@
                 .attr('d', 'M10,-5L0,0L10,5')
                 .attr('fill', '#000');
 
-        var drag_line = svg.append('svg:path')
-          .attr('class', 'link dragline hidden')
-          .attr('d', 'M0,0L0,0');
+        this._drag_line = this._svg.append('svg:path')
+            .attr('class', 'link dragline hidden')
+            .attr('d', 'M0,0L0,0');
 
-        var path = svg.append('svg:g').selectAll('path'),
-            circle = svg.append('svg:g').selectAll('g');
+        this._path = this._svg.append('svg:g').selectAll('path');
+        this._circle = this._svg.append('svg:g').selectAll('g');
 
-        var selected_node = null,
-            selected_link = null,
-            mousedown_link = null,
-            mousedown_node = null,
-            mouseup_node = null;
+        this._svgselected_node = null;
+        this._svgselected_link = null;
+        this._svgmousedown_link = null;
+        this._svgmousedown_node = null;
+        this._svgmouseup_node = null;
+
+        /**
+        // app starts here
+        this._svg.on('mousedown', mousedown)
+            .on('mousemove', mousemove)
+            .on('mouseup', mouseup);
+
+        d3.select(window)
+            .on('keydown', keydown)
+            .on('keyup', keyup);
+
+        restart();
+        **/
     };
 
     px_module.create = function(element, data, options){

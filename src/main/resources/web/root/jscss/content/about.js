@@ -68,7 +68,7 @@ About.prototype.getGlobalContent = function()
     </div >`;
 }
 
-
+/*
 About.prototype.getContent = function()
 {
 
@@ -96,3 +96,4 @@ About.prototype.getContent = function()
                 });
 
             });
+*/

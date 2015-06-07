@@ -85,7 +85,10 @@ Pane.prototype.setParent = function( po )
 **/
 Pane.prototype.getID = function()
 {
-    return ["mecsim", this.mo_parent ? mo_parent.getID() :  "", this.mc_id].join("_");
+    if (this.mo_parent)
+        return ["mecsim", mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_");
+
+    return ["mecsim", this.mc_id].join("_");
 }
 
 /**
@@ -99,7 +102,7 @@ Pane.prototype.generateSubID = function( pc_id )
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
-    return ["mecsim", this.mc_id, pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
+    return [this.getID(), pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
 }
 
 

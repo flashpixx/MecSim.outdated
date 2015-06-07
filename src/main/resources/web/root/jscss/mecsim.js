@@ -179,7 +179,7 @@ var MecSim = (function (px_modul) {
 
 
     // --- initializing of the UI content ----------------------------------------------------------------------------------------------------------------------
-    px_modul.uiinitialize = function()
+    px_modul.uiinitialize = function( pa )
     {
         // add main layout elements (div structure)
 

@@ -4,6 +4,7 @@
 // @todo http://stackoverflow.com/questions/4012998/what-it-the-significance-of-the-javascript-constructor-property
 // @todo http://javascriptissexy.com/javascript-prototype-in-plain-detailed-language/
 // @todo http://raganwald.com/2014/07/09/javascript-constructor-problem.html
+// @todo http://www.bennadel.com/blog/1566-using-super-constructors-is-critical-in-prototypal-inheritance-in-javascript.htm
 
 /**
  * ctor of a UI pane
@@ -49,6 +50,8 @@ Pane.prototype.getGlobalCSS = function()
 
 
 
+
+/*
 Pane.prototype.beforeShowMainContent = function()
 {
 }
@@ -86,3 +89,4 @@ Pane.prototype.getMenuContent = function()
 Pane.prototype.getMenuCSS     = function()
 {
 }
+*/

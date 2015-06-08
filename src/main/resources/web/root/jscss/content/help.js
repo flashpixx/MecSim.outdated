@@ -102,7 +102,7 @@ Help.prototype.afterDOMAdded = function()
 
             // after adding data - dialog is called
             jQuery(self.generateSubID("dialog", "#")).dialog({
-                width: 500,
+                width: "auto",
                 modal: true
             });
 

@@ -60,174 +60,27 @@
     <script type = "text/javascript" src = "jscss/content/help_about.js" ></script >
     <script type = "text/javascript" src = "jscss/content/simulation_run.js" ></script >
 
-
-    <script type = "text/javascript" src = "jscss/main.js" ></script >
-    <script type = "text/javasctipt" src = "jscss/accordion/simulation.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/layer.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/source.js" ></script >
-    <script type = "text/javascitpt" src = "jscss/accordion/editor.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/mas.js" ></script >
-    <script type = "text/javascript" src = "jscss/accordion/help.js" ></script >
     <link href = "jscss/layout.css" rel = "stylesheet" />
-    <!------------------------------------------------------------------------------------------------------------->
 
+
+    <script language = "javascript" type = "text/javascript" >
+        jQuery(document).ready(function() {
+
+            MecSim.uiinitialize([
+
+                new Inspector( "inspector" ),
+                new Logger( "logger" ),
+                new Pane( "simulation", "Simulation", [ new Run("run", "Run") ] ),
+                new Pane( "help", "Help", [ new About("about", "About") ] )
+
+            ]);
+
+        });
+
+    </script >
 </head >
 
 <body >
-
-<!--
-<div id = "mecsim_global_screen" >
-    <div id = "mecsim_global_menu" >
-        <div id = "mecsim_global_accordion" class = "accordion" >
-
-            <h3 id = "mecsim_simulation_panel" >Simulation</h3 >
-
-            <div id = "mecsim_simulation_panel_content" class = "mecsim_global_sliderSubMenu" >
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_config" >Configuration</button >
-                <br /><br />
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_local" >Local</button >
-                <br /><br />
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_start" >Start</button >
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_stop" >Stop</button >
-                <br /><br />
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_reset" >Reset</button >
-                <br /><br />
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_load" >Load</button >
-                <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_save" >Save</button >
-                <br /><br />
-                <label for = "mecsim_simulation_speed" >Speed: </label >
-                <input type = "text" id = "mecsim_simulation_speed" readonly style = "border:0;" >
-                <br /><br />
-
-                <div id = "mecsim_simulation_speed_slider" ></div >
-            </div >
-
-            <h3 id = "mecsim_layer_panel" >Layer</h3 >
-
-            <div id = "mecsim_layer_panel_content" class = "mecsim_global_sliderSubMenu" >
-                <h3 >Activity & Visibility</h3 >
-
-                <div id = "mecsim_layer_switchUI" ></div >
-                <br /><br />
-
-                <h3 >Click-Order</h3 >
-
-                <div id = "mecsim_layer_clickableUI" ></div >
-            </div >
-
-            <h3 id = "mecsim_source_panel" >Sources</h3 >
-
-            <div id = "mecsim_source_panel_content" class = "mecsim_global_sliderSubMenu" >
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_source_createTool" >Create new Tool</button >
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_source_targetingButton" >Show Waypoint List</button >
-                <h3 >Toolbox</h3 >
-
-                <div id = "mecsim_source_toolbox" ></div >
-            </div >
-
-            <h3 id = "mecsim_editor_panel" >Editor</h3 >
-
-            <div id = "mecsim_editor_panel_content" class = "mecsim_global_sliderSubMenu" >
-                <label for = "mecsim_agent_files" >Select a file</label >
-                <select name = "agentfiles" id = "mecsim_agent_files" ></select >
-                <br />
-                <button id = "mecsim_load_file" class = "template_button mecsim_editor_fixed_width_button" >Load</button >
-                <button id = "mecsim_delete_file" class = "mecsim_editor_fixed_width_button" >Delete</button >
-                <button id = "mecsim_new_file" class = "mecsim_editor_fixed_width_button" >New</button >
-                <button id = "mecsim_save_file" class = "mecsim_editor_fixed_width_button" >Save</button >
-            </div >
-
-            <h3 id = "mecsim_multiagent_panel" >Multi-Agent System</h3 >
-
-            <div id = "mecsim_multiagent_panel_content" class = "mecsim_global_sliderSubMenu" >
-                <button id = "mecsim_mas_jasonmindinspector" class = "mecsim_global_accordeonbutton" >Jason Mindinspector</button >
-                <br />
-                <button id = "mecsim_mas_communication" class = "mecsim_global_accordeonbutton" >Communication</button >
-            </div >
-
-            <h3 id = "mecsim_help_panel" >Help</h3 >
-
-            <div id = "mecsim_help_panel_content" class = "mecsim_global_sliderSubMenu" >
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_about" >About</button >
-                <br /><br />
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_userdoku" >User Dokumentation</button >
-                <br /><br />
-                <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_devdoku" >Developer Dokumentation</button >
-            </div >
-
-        </div >
-    </div >
-
-    <div >
-        <div id = "mecsim_global_screen_right" >
-            <div id = "mecsim_global_content" ></div >
-            <div id = "mecsim_global_log" ></div >
-        </div >
-    </div >
-</div >
-
--- start and stop error messages --
-<div id = "mecsim_stop_error" >
-    <div class = "dialog-error" >
-        <p id = "mecsim_stop_error_text" >
-            <span class = "ui-icon ui-icon-alert" ></span >
-        </p >
-    </div >
-</div >
-
-<div id = "mecsim_start_error" >
-    <div class = "dialog-error" >
-        <p id = "mecsim_start_error_text" >
-            <span class = "ui-icon ui-icon-alert" ></span >
-        </p >
-    </div >
-</div >
-
--- About popup --
-<div id = "mecsim_about" >
-    <a >
-        <p id = "mecsim_about_text" >
-            <span class = "ui-icon ui-icon-info" ></span >
-            <a id = "mecsim_project_name" ></a >
-            <br /><br />
-            <label for = "mecsim_license" >License: </label >
-            <a id = "mecsim_license" ></a >
-            <br />
-            <label for = "mecsim_buildversion" >Buildversion: </label >
-            <a id = "mecsim_buildversion" ></a >
-            <br />
-            !--<label for = "mecsim_buildnumber" >Buildnumber: </label >
-            <a id = "mecsim_buildnumber" ></a>
-            <br />
-            <label for = "mecsim_buildcommit" >Buildcommit: </label >
-            <a id = "mecsim_buildcommit" ></a> --
-        </p >
-</div >
-</div >
-
-
--- form to create new asl file --
-<div id = "mecsim_create_file_form" title = "Create new File" >
-
-    <form >
-        <fieldset >
-            <label for = "new_file" >Enter asl file name:</label >
-            <input type = "text" name = "create_new_file" id = "new_file" >
-            <br />
-            <label for = "mecsim_file_type" >Select a file type:</label >
-            <select name = "file_type" id = "mecsim_file_type" style = "width: 100px;" >
-                <option value = "asl" selected = "selected" >ASL</option >
-                <option value = "goal" >Goal</option >
-            </select >
-        </fieldset >
-    </form >
-</div >
-
--- modal dialog for object inspector --
-<div id = "mecsim_object_inspector" title = "Object Inspector" >
-</div >
--->
-
 </body >
 
 </html >

@@ -67,7 +67,9 @@ Help.prototype.getGlobalContent = function()
 **/
 Help.prototype.getContent = function()
 {
-    return '<button id = "' + this.generateSubID("about") + '" >' + this.getName() + '</button >';
+    return '<button id = "' + this.generateSubID("about") + '" >About</button >' +
+           '<button id = "' + this.generateSubID("userdoc") + '" >Userdocumentation</button >' +
+           '<button id = "' + this.generateSubID("devdoc") + '" >Developerdocumentation</button >';
 }
 
 
@@ -78,7 +80,7 @@ Help.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    // create button & bind action to the button
+    // create about button & bind action to the button
     jQuery(self.generateSubID("about", "#")).button().click( function() {
 
         // click reads JSON data
@@ -105,6 +107,22 @@ Help.prototype.afterDOMAdded = function()
             });
 
         });
+
+    });
+
+    // create documentation button & bind action to button
+    jQuery(self.generateSubID("userdoc", "#")).button().click( function() {
+
+        jQuery.get("/userdoc/", function( px_result ) {
+            jQuery(MecSim.ui().content("#")).empty();
+            jQuery(MecSim.ui().content("#")).append( px_result );
+        });
+
+    });
+
+    jQuery(self.generateSubID("devdoc", "#")).button().click( function() {
+
+        jQuery(MecSim.ui().content("#")).load("template/develdoc.htm");
 
     });
 }

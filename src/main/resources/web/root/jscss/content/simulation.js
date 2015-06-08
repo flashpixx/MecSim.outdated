@@ -26,24 +26,24 @@
 
 
 /**
- * ctor to create the simulation start / stop / reset button
+ * ctor to create the simulation menu
  *
  * @param pc_id ID
  * @param pc_name name of the panel
 **/
-function Run( pc_id, pc_name )
+function Simulation( pc_id, pc_name )
 {
     Pane.call(this, pc_id, pc_name );
 }
 
 /** inheritance call **/
-Run.prototype = Object.create(Pane.prototype);
+Simulation.prototype = Object.create(Pane.prototype);
 
 
 /**
  * @Overwrite
 **/
-Run.prototype.getContent = function()
+Simulation.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("start") + '" >Start</button >' +
            '<button id = "' + this.generateSubID("stop")  + '" >Stop</button >' +
@@ -54,7 +54,7 @@ Run.prototype.getContent = function()
 /**
  * @Overwrite
 **/
-Run.prototype.getGlobalContent = function()
+Simulation.prototype.getGlobalContent = function()
 {
     return '<div id = "' + this.generateSubID("dialog") + '">' +
            '<div class = "dialog-error" > ' +
@@ -69,7 +69,7 @@ Run.prototype.getGlobalContent = function()
 /**
  * @Overwrite
 **/
-Run.prototype.afterDOMAdded = function()
+Simulation.prototype.afterDOMAdded = function()
 {
     var self = this;
 

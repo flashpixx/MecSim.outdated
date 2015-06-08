@@ -57,8 +57,8 @@
     <script type = "text/javascript" src = "jscss/content/pane.js" ></script >
     <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
     <script type = "text/javascript" src = "jscss/content/inspector.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/help_about.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/simulation_run.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/help.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/simulation.js" ></script >
 
     <link href = "jscss/layout.css" rel = "stylesheet" />
 
@@ -70,8 +70,8 @@
 
                 new Inspector( "inspector" ),
                 new Logger( "logger" ),
-                new Pane( "simulation", "Simulation", [ new Run("run", "Run") ] ),
-                new Pane( "help", "Help", [ new About("about", "About") ] )
+                new Simulation("simulation", "Simulation"),
+                new Help("help", "Help")
 
             ]);
 

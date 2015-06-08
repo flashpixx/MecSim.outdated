@@ -26,24 +26,24 @@
 
 
 /**
- * ctor to create the about dialog instance
+ * ctor to create the help menu
  *
  * @param pc_id ID
  * @param pc_name name of the panel
 **/
-function About( pc_id, pc_name )
+function Help( pc_id, pc_name )
 {
     Pane.call(this, pc_id, pc_name );
 }
 
 /** inheritance call **/
-About.prototype = Object.create(Pane.prototype);
+Help.prototype = Object.create(Pane.prototype);
 
 
 /**
  * @Overwrite
 **/
-About.prototype.getGlobalContent = function()
+Help.prototype.getGlobalContent = function()
 {
     return '<div id = "' + this.generateSubID("dialog") + '" >' +
            '<p id = "'   + this.generateSubID("text")   + '" >' +
@@ -65,21 +65,21 @@ About.prototype.getGlobalContent = function()
 /**
  * @Overwrite
 **/
-About.prototype.getContent = function()
+Help.prototype.getContent = function()
 {
-    return '<button id = "' + this.generateSubID("button") + '" >' + this.getName() + '</button >';
+    return '<button id = "' + this.generateSubID("about") + '" >' + this.getName() + '</button >';
 }
 
 
 /**
  * @Overwrite
 **/
-About.prototype.afterDOMAdded = function()
+Help.prototype.afterDOMAdded = function()
 {
     var self = this;
 
     // create button & bind action to the button
-    jQuery(self.generateSubID("button", "#")).button().click( function() {
+    jQuery(self.generateSubID("about", "#")).button().click( function() {
 
         // click reads JSON data
         jQuery.getJSON( "/cconfiguration/get", function( po_data ) {

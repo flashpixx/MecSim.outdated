@@ -107,7 +107,7 @@
         this._circle = this._svg.append('svg:g').selectAll('g');
 
         //create path container
-        this._path = this._svg.append('svg:g').selectAll('mecsim_graphEdiorPath');
+        this._path = this._svg.append('svg:g').selectAll('path');
 
         //register mouse listener
         this._svg.on('mousedown', this.mousedown.bind(this))
@@ -175,7 +175,6 @@
 
         //enter path
         this._path.enter().append('svg:path')
-        .attr('class', 'mecsim_graphEdiorPath')
             .attr('class', 'mecsim_graphEdiorPath link')
             .classed('selected', function(d) { return d === self._selected_link; })
             .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
@@ -206,7 +205,7 @@
         var g = this._circle.enter().append('svg:g');
 
         g.append('svg:circle')
-            .attr('class', 'node')
+            .attr('class', 'mecsim_graphEditorCircle node')
             .attr('r', 12)
             .style('fill', function(d) { return (d === self._selected_node) ? d3.rgb(self._colors(d.id)).brighter().toString() : self._colors(d.id); })
             .style('stroke', function(d) { return d3.rgb(self._colors(d.id)).darker().toString(); })
@@ -288,7 +287,7 @@
         g.append('svg:text')
             .attr('x', 0)
             .attr('y', 4)
-            .attr('class', 'id')
+            .attr('class', 'mecsim_graphEditorCircleID mecsim_graphEditorCircleText')
             .text(function(d) { return d.id; });
 
         //exit circle

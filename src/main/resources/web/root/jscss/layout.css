@@ -246,22 +246,22 @@ select
   stroke-width: 0;
 }
 
-circle.node {
+.mecsim_graphEditorCircle.node {
   stroke-width: 1.5px;
   cursor: pointer;
 }
 
-circle.node.reflexive {
+.mecsim_graphEditorCircle.node.reflexive {
   stroke: #000 !important;
   stroke-width: 2.5px;
 }
 
-text {
+.mecsim_graphEditorCircleText {
   font: 12px sans-serif;
   pointer-events: none;
 }
 
-text.id {
+.mecsim_graphEditorCircleText.mecsim_graphEditorCircleID {
   text-anchor: middle;
   font-weight: bold;
 }

@@ -218,7 +218,6 @@ var MecSim = (function (px_modul) {
                     if (px_item.getName())
                     {
                         jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo("#mecsim_global_accordion");
-
                         if (px_item.getContent())
                             jQuery( px_item.getContent() ).appendTo("#mecsim_global_accordion");
                     }

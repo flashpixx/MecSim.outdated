@@ -28,7 +28,7 @@ $(document).ready(function() {
     // UI instantiation
     MecSim.uiinitialize([
 
-        new Pane("help", [ new About("about") ])
+        new Pane("help", "Help", [ new About("about", "About") ])
 
     ]);
 });

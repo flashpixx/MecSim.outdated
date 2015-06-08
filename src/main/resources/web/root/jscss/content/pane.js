@@ -34,13 +34,17 @@
  * ctor of a UI pane
  *
  * @param pc_id internal name of the ID
- * @param pc
+ * @param pc_name name of the panel
+ * @param pa_panel
 **/
-function Pane( pc_id, pa_panel )
+function Pane( pc_id, pc_name, pa_panel )
 {
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
+    if (!classof(pc_name, "string"))
+        throw "name undefinied";
 
+    this.mc_name     = pc_name;
     this.mc_id       = pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase();
     this.ma_children = [];
     this.mo_parent   = null;
@@ -118,9 +122,9 @@ Pane.prototype.generateSubID = function( pc_id, pc_prefix )
 **/
 Pane.prototype.getGlobalContent = function()
 {
-    var lc = "";
-    this.ma_children.forEach( function(po_item){ lc.concat(po_item.getGlobalContent()); } );
-    return lc;
+    var lc_result = "";
+    this.ma_children.forEach( function(po_item){ lc_result += po_item.getGlobalContent(); } );
+    return lc_result.trim();
 }
 
 /**
@@ -130,9 +134,9 @@ Pane.prototype.getGlobalContent = function()
 **/
 Pane.prototype.getGlobalCSS = function()
 {
-    var lc = "";
-    this.ma_children.forEach( function(po_item){ lc.concat(po_item.getGlobalCSS()); } );
-    return lc;
+    var lc_result = "";
+    this.ma_children.forEach( function(po_item){ lc_result += po_item.getGlobalCSS(); } );
+    return lc_result;
 }
 
 
@@ -171,7 +175,7 @@ Pane.prototype.beforeOpenMenu = function()
 **/
 Pane.prototype.getName = function()
 {
-    return null;
+    return this.mc_name;
 }
 
 /**
@@ -181,7 +185,9 @@ Pane.prototype.getName = function()
 **/
 Pane.prototype.getContent = function()
 {
-    return null;
+    var lc_result = "";
+    this.ma_children.forEach( function(po_item) { lc_result += po_item.getContent(); } );
+    return lc_result.trim();
 }
 
 /**
@@ -191,7 +197,9 @@ Pane.prototype.getContent = function()
 **/
 Pane.prototype.getCSS = function()
 {
-    return null;
+    var lc_result = "";
+    this.ma_children.forEach( function(po_item) { lc_result += po_item.getCSS(); } );
+    return lc_result.trim();
 }
 
 /**
@@ -199,4 +207,5 @@ Pane.prototype.getCSS = function()
 **/
 Pane.prototype.afterDOMAdded = function()
 {
+    this.ma_children.forEach( function(po_item) { po_item.afterDOMAdded(); } );
 }

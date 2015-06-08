@@ -29,23 +29,16 @@
  * ctor to create the about dialog instance
  *
  * @param pc_id ID
+ * @param pc_name name of the panel
 **/
-function About( pc_id )
+function About( pc_id, pc_name )
 {
-    Pane.call(this, pc_id);
+    Pane.call(this, pc_id, pc_name );
 }
 
 /** inheritance call **/
 About.prototype = Object.create(Pane.prototype);
 
-
-/**
- * @Overwrite
-**/
-About.prototype.getName = function()
-{
-    return "About";
-}
 
 /**
  * @Overwrite

@@ -139,4 +139,21 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     {
         return this.hashCode() == p_object.hashCode();
     }
+
+    /**
+     * get the literals string representation
+     */
+    @Override
+    public String toString()
+    {
+        StringBuffer l_stringBuffer = new StringBuffer();
+
+        l_stringBuffer.append( m_functor );
+
+        l_stringBuffer.append( m_values );
+
+        l_stringBuffer.append( m_annotations );
+
+        return l_stringBuffer.toString();
+    }
 }

@@ -134,6 +134,7 @@ public class CCommon
 
     public static ILiteral convertGeneric( final Literal p_literal )
     {
+        System.out.println("want to convert " + p_literal);
         return new CLiteral( p_literal );
     }
 
@@ -143,31 +144,32 @@ public class CCommon
      * @param p_number NumberTerm
      * @return Double Atom
      */
-    public static ITerm convertGeneric(final NumberTerm p_number)
+    public static ITerm convertGeneric( final NumberTerm p_number )
     {
-        return new IAtom<Double>()
+        try
         {
-
-            @Override
-            public boolean instanceOf(Class<?> p_class)
+            return new IAtom<Double>()
             {
-                return Double.class.isAssignableFrom(p_class);
-            }
+                final Double m_value = p_number.solve();
 
-            @Override
-            public Double get()
-            {
-                try
+                @Override
+                public boolean instanceOf(Class<?> p_class)
                 {
-                    return p_number.solve();
-                } catch (final NoValueException l_exception)
-                {
-                    CLogger.error(l_exception);
+                    return Double.class.isAssignableFrom(p_class);
                 }
 
-                return Double.NaN;
-            }
-        };
+                @Override
+                public Double get()
+                {
+                    return m_value;
+                }
+            };
+        } catch (NoValueException l_exception)
+        {
+            CLogger.error(l_exception);
+        }
+
+        return null;
     }
 
     /**
@@ -178,16 +180,14 @@ public class CCommon
      */
     public static ITerm convertGeneric(final Term p_term)
     {
+        if( p_term.isNumeric() )
+            return convertGeneric( ( NumberTerm ) p_term);
+
         if ( p_term.isAtom() )
             return convertGeneric( ( Atom ) p_term );
 
         if ( p_term.isLiteral() )
-        {
-            if ( ( ( Literal ) p_term ).isNumeric() )
-                return convertGeneric( ( NumberTerm ) p_term);
-
             return new CLiteral( ( Literal ) p_term );
-        }
 
         if ( p_term.isList() )
 
@@ -196,9 +196,9 @@ public class CCommon
                 {
                     for ( final Term l_term : ( ListTerm ) p_term )
                         add(convertGeneric(l_term));
-
                 }
             };
+
 
 
         throw new IllegalArgumentException(de.tu_clausthal.in.mec.common.CCommon.getResourceString(CCommon.class, "convertgenericfail"));

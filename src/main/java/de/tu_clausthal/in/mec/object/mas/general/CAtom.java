@@ -72,6 +72,17 @@ public class CAtom<T> implements IAtom<T>
     }
 
     /**
+     * get string representation
+     *
+     * @return atoms string representation
+     */
+    @Override
+    public String toString()
+    {
+        return m_value.toString();
+    }
+
+    /**
      * hashcode method to compare atoms
      *
      * @return the atom's hashcode

@@ -96,14 +96,16 @@
 
     //method to collapse widget
     px_module.prototype.collapse = function(){
+        var self = this;
         if(this._minimizedStatus){
-            this._div.children().not(".mecsim_widget_widgetHeader").show();
-            this._div.animate({width: this._minWidth+"px", height: this._minHeight+"px"}, this._animationTime);
-            this._div.resizable('enable');
+            this._div.animate({width: this._minWidth+"px", height: this._minHeight+"px"}, this._animateEffect, function(){
+                self._div.children().not(".mecsim_widget_widgetHeader").show();
+                self._div.resizable('enable');
+            });
         }else{
+            this._div.resizable('disable');
             this._div.children().not(".mecsim_widget_widgetHeader").hide();
             this._div.animate({width: this._collapseWidth+"px", height: this._collapseHeight+"px"}, this._animationTime);
-            this._div.resizable('disable');
         }
         this._minimizedStatus = !this._minimizedStatus;
     };

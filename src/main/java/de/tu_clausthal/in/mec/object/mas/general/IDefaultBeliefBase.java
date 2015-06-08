@@ -25,10 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -152,6 +149,15 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
+     * adds a collection of generic literals
+     */
+    @Override
+    public void addAllLiterals( final Collection<ILiteral<T>> p_literals )
+    {
+        m_literals.addAll( p_literals );
+    }
+
+    /**
      * removes a language specific literal from the top level literals
      *
      * @param p_literal language specific literal
@@ -179,16 +185,27 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
+     * method to clear top-level literals and optionally the inherited literals
+     *
+     * @param p_recursive set true to clear all inherited literals
+     */
+    public void clearLiterals( final boolean p_recursive )
+    {
+        m_literals.clear();
+
+        if( p_recursive )
+            for (String l_name : m_beliefbases.keySet())
+                m_beliefbases.get(l_name).clearLiterals();
+    }
+
+    /**
      * removes the top-level and the inherited beliefbases' literals
      * i.e. all the inherited beliefbases are preserved empty
      */
     @Override
     public void clearLiterals()
     {
-        m_literals.clear();
-
-        for (String l_name : m_beliefbases.keySet())
-            m_beliefbases.get(l_name).clearLiterals();
+        clearLiterals( true );
     }
 
     /**

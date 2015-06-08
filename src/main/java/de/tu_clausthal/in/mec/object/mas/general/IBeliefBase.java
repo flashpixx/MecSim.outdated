@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import com.graphhopper.coll.MapEntry;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -82,6 +83,11 @@ public interface IBeliefBase<T>
     public void addLiteral( final ILiteral p_literal );
 
     /**
+     * adds a collection of generic literals
+     */
+    public void addAllLiterals( final Collection<ILiteral<T>> p_literals );
+
+    /**
      * removes a generic literal from the top level literals
      *
      * @param p_literal generic literal
@@ -102,4 +108,9 @@ public interface IBeliefBase<T>
      * @param p_beliefbase beliefbase to add
      */
     public void addBeliefbase(final String p_prefix, final IBeliefBase<T> p_beliefbase);
+
+    /**
+     * method to update the beliefbase
+     */
+    public void update();
 }

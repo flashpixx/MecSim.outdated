@@ -68,20 +68,14 @@ public class CFieldBind extends CBeliefBase
     }
 
     /**
-     * clears top-level, inherited and binded literals
-     */
-    @Override
-    public void clear()
-    {
-        super.clear();
-        m_bind.clear();
-    }
-
-    /**
      * update beliefs by calling getter functions of binded objects
      */
+    @Override
     public final void update()
     {
+        // remove old top-level literals
+        clearLiterals( false );
+
         // iterate over all binded objects
         for (final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet())
 

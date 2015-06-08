@@ -79,6 +79,14 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     /**
+     * method to update the beliefbase
+     */
+    @Override
+    public void update()
+    {
+    }
+
+    /**
      * adds a language specific literal to the top-level literals
      *
      * @param p_literal language specific literal

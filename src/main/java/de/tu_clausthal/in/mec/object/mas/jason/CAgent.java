@@ -209,15 +209,6 @@ public class CAgent<T> implements IVoidAgent
     public void addBelief(final String p_name, final Object p_data)
     {
         m_beliefs.addLiteral( CCommon.convertGeneric( CCommon.getLiteral( p_name, p_data ) ) );
-/*
-        try
-        {
-            m_agent.addBel(CCommon.getLiteral(p_name, p_data));
-        } catch (final RevisionFailedException l_exception)
-        {
-            CLogger.error(l_exception);
-        }
-*/
     }
 
     @Override
@@ -413,20 +404,11 @@ public class CAgent<T> implements IVoidAgent
         {
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
             {
-                if ( l_beliefbase instanceof CFieldBind )
-                {
-                    // remove old belief within the agent
-                    for (final ILiteral l_literal : l_beliefbase.getLiterals())
-                        m_beliefs.removeLiteral( l_literal );
+                // update binded beliefs
+                ( ( CFieldBind ) l_beliefbase).update();
 
-                    // clear belief storage and update the entries
-                    ((CFieldBind)l_beliefbase).clear();
-                    ((CFieldBind)l_beliefbase).update();
-
-                    // set new belief into the agent
-                    for (final ILiteral l_literal : l_beliefbase.getLiterals())
-                        m_beliefs.addLiteral(l_literal);
-                }
+                // set new belief into the agent
+                m_beliefs.addAllLiterals( l_beliefbase.getLiterals() );
             }
 
         }

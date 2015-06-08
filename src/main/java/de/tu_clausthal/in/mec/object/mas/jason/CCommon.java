@@ -177,6 +177,8 @@ public class CCommon
      *
      * @param p_term original term
      * @return converted generic term
+     *
+     * @todo convertion is not working correctly yet
      */
     public static ITerm convertGeneric(final Term p_term)
     {

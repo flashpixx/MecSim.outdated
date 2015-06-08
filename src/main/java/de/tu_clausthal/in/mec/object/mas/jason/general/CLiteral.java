@@ -39,6 +39,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
      * ctor
      *
      * @param p_literal the literal itself
+     * @todo fix problem with annotation convertion
      */
     public CLiteral( Literal p_literal )
     {

@@ -59,6 +59,7 @@
         //create basic svg
         this._svg = d3.select(element)
             .append('svg')
+            .attr('class', 'mecsim_graphEditor_svg')
             .attr('width', this._width)
             .attr('height', this._height);
 
@@ -80,6 +81,7 @@
                 .attr('markerHeight', 3)
                 .attr('orient', 'auto')
             .append('svg:path')
+                .attr('class', 'mecsim_graphEdiorPath')
                 .attr('d', 'M0,-5L10,0L0,5')
                 .attr('fill', '#000');
 
@@ -92,19 +94,20 @@
                 .attr('markerHeight', 3)
                 .attr('orient', 'auto')
             .append('svg:path')
+                .attr('class', 'mecsim_graphEdiorPath')
                 .attr('d', 'M10,-5L0,0L10,5')
                 .attr('fill', '#000');
 
         //create drag line
         this._drag_line = this._svg.append('svg:path')
-            .attr('class', 'link dragline hidden')
+            .attr('class', 'mecsim_graphEdiorPath link dragline hidden')
             .attr('d', 'M0,0L0,0');
 
         //create circle container
         this._circle = this._svg.append('svg:g').selectAll('g');
 
         //create path container
-        this._path = this._svg.append('svg:g').selectAll('path');
+        this._path = this._svg.append('svg:g').selectAll('mecsim_graphEdiorPath');
 
         //register mouse listener
         this._svg.on('mousedown', this.mousedown.bind(this))
@@ -172,7 +175,8 @@
 
         //enter path
         this._path.enter().append('svg:path')
-            .attr('class', 'link')
+        .attr('class', 'mecsim_graphEdiorPath')
+            .attr('class', 'mecsim_graphEdiorPath link')
             .classed('selected', function(d) { return d === self._selected_link; })
             .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
             .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; })

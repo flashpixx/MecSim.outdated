@@ -209,7 +209,7 @@ select
 
 /******************************** css definitions for mecsim_grapheditor ++++++++************************************************/
 
-svg {
+.mecsim_graphEditor_svg {
   background-color: #FFF;
   cursor: default;
   -webkit-user-select: none;
@@ -219,30 +219,30 @@ svg {
   user-select: none;
 }
 
-svg:not(.active):not(.ctrl) {
+.mecsim_graphEditor_svg:not(.active):not(.ctrl) {
   cursor: crosshair;
 }
 
-path.link {
+.mecsim_graphEditor_svg:not(.active):not(.ctrl) path.link {
+  cursor: pointer;
+}
+
+.mecsim_graphEdiorPath.link {
   fill: none;
   stroke: #000;
   stroke-width: 4px;
   cursor: default;
 }
 
-svg:not(.active):not(.ctrl) path.link {
-  cursor: pointer;
-}
-
-path.link.selected {
+.mecsim_graphEdiorPath.link.selected {
   stroke-dasharray: 10,2;
 }
 
-path.link.dragline {
+.mecsim_graphEdiorPath.link.dragline {
   pointer-events: none;
 }
 
-path.link.hidden {
+.mecsim_graphEdiorPath.link.hidden {
   stroke-width: 0;
 }
 

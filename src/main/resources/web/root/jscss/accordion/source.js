@@ -22,21 +22,36 @@
  */
 
  /** todo collection for source-ui ck
+
+ targeting waypoint table
+ TODO waypoint color
+ TODO waypoint name (defaultWaypoint#1)
+ TODO resize widget and hide overflow
+ TODO multilanguage labels (length)
+ TODO save / update /reset
+ TODO serach field to filter waypoints
+ TODO edit table size
+
+ targeting
+ TODO default target (viewpoint)
+ TODO tabs for makrov editor / weighting matrix
+ TODO markrov editor buttons (reset / show or hide no connected nodes / remove edges /save)
+ TODO makrov editor (see d3.js)
+ TODO weighting matrix
+ TODO relative vs absolute weighting (recalc relativ weighting)
+ TODO java structure (makrov chain, routing)
+ TODO CWeightingMap Refactor (to i need the full waypoint or is geoposition okay -> then there is no need to references)
+ TODO might be a good idea to use waypoint geo positions for default data but also allow any other geoposition for targets
+
+ wizard
  TODO save toolbox in config/web
  TODO histogramm
- TODO read more data
  TODO better error messges
- TODO delete tool
- TODO improve labels for carsettings
- TODO linger probability as slider ?
 
- TODO path waypoints
- TODO source weighting list
- TODO radial to add waypoints to makrov chain
-
+ feature
  TODO plot distribution -> responsive wizard height
  TODO bounding in minimized mode maybe snap to tab
- TODO layout multiple widgets
+ TODO layout multiple widgets (z index and bounding)
  TODO check last jquery slectors
  TODO distingusish between open and close klick
  **/
@@ -46,10 +61,11 @@ var SourcePanel = ( function (px_module) {
     px_module.settings = {
         labels  :   {},
         dom     :   {
-            label       : {},
-            panel       : $("#mecsim_source_panel"),
-            toolbox     : $("#mecsim_source_toolbox"),
-            createTool  : $("#mecsim_source_createTool")
+            label           : {},
+            panel           : $("#mecsim_source_panel"),
+            toolbox         : $("#mecsim_source_toolbox"),
+            createTool      : $("#mecsim_source_createTool"),
+            targetingButton : $("#mecsim_source_targetingButton")
         },
         obj     :   {}
     };
@@ -72,14 +88,29 @@ var SourcePanel = ( function (px_module) {
                 SourcePanel.getDOMElements();
                 MecSim.language("getstaticwaypointlabels", function(){
 
-                    //create widget
-                    SourcePanel.settings.obj.widget = Widget.createWidget(
-                        SourcePanel.settings.dom.widget,
+                    //create targeting widget
+                    SourcePanel.settings.obj.targetingWidget = Widget.createWidget(
+                        SourcePanel.settings.dom.targetingWidget,
+                        {
+                            name    : "Temp Name",
+                            width   : 450,
+                            height  : 600
+                        }
+                    );
+                    SourcePanel.settings.obj.targetingWidget.close();
+
+                    //create table content
+                    SourcePanel.createWaypointList();
+
+                    //create wizard widget
+                    SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
+                        SourcePanel.settings.dom.wizardWidget,
                         {
                             name     : SourcePanel.settings.labels.wizardwidget,
                             width    : 850
                         }
                     );
+                    SourcePanel.settings.obj.wizardWidget.close();
 
                     //create wizard
                     SourcePanel.settings.obj.wizard = SourcePanel.settings.dom.wizard.steps({
@@ -131,7 +162,12 @@ var SourcePanel = ( function (px_module) {
 
         //listen to create tool button
         SourcePanel.settings.dom.createTool.button().on("click", function(data){
-            SourcePanel.settings.obj.widget.close();
+            SourcePanel.settings.obj.wizardWidget.close();
+        });
+
+        //listen to configure waypoint path button
+        SourcePanel.settings.dom.targetingButton.button().on("click", function(data){
+            SourcePanel.settings.obj.targetingWidget.close();
         });
     };
 
@@ -139,7 +175,9 @@ var SourcePanel = ( function (px_module) {
     px_module.getDOMElements = function(){
 
         //dom elements (no labels)
-        SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
+        SourcePanel.settings.dom.targetingWidget                 = $('#mecsim_source_targetingWidget');
+        SourcePanel.settings.dom.targetingTable                  = $('#mecsim_source_targetingTable');
+        SourcePanel.settings.dom.wizardWidget                    = $("#mecsim_source_wizardWidget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
         SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
@@ -410,10 +448,10 @@ var SourcePanel = ( function (px_module) {
                     SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue, px_value.deleteable);
                 });
 
-                SourcePanel.settings.obj.widget.close();
+                SourcePanel.settings.obj.wizardWidget.close();
                 setTimeout(function(){
                     SourcePanel.settings.obj.wizard.steps("setStep", 0);
-                }, SourcePanel.settings.obj.widget._animationTime);
+                }, SourcePanel.settings.obj.wizardWidget._animationTime);
             }
         }).fail(function(){
             SourcePanel.settings.dom.errorMessage.text(SourcePanel.settings.labels.toolcreationfailed);
@@ -557,6 +595,43 @@ var SourcePanel = ( function (px_module) {
                     foundflag = true;
                 }
             });
+        });
+    };
+
+    //method to build waypoint table
+    px_module.createWaypointList = function(){
+        $.ajax({
+            url     : "/cwaypointenvironment/listwaypoints",
+            success : function( p_data ){
+
+                p_data.forEach(function(entry){
+                    if(entry.type === "random"){
+                        entry.icon = "<span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
+                        entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
+                        entry.edit = "<button>edit</button>";
+                    }
+                });
+
+                //create waypoint table
+                SourcePanel.settings.obj.targetingTable = SourcePanel.settings.dom.targetingTable.DataTable({
+                    "aaData": p_data,
+                    "paging": true,
+                    "ordering": false,
+                    "info":     false,
+                    "searching": false,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "aoColumns": [
+                        { className: "dt-body-center", "title": "ID", "mDataProp": "id", "visible": false },
+                        { className: "dt-body-center", "title": "", "mDataProp": "icon" },
+                        { className: "dt-body-center", "title": "Name", "mDataProp": "name" },
+                        { className: "dt-body-center", "title": "Typ", "mDataProp": "type" },
+                        { className: "dt-body-center", "title": "", "mDataProp": "edit" }
+                    ]
+                });
+
+                $("textarea").on("change", function(event){$(this).text($(this).val());});
+            }
         });
     };
 

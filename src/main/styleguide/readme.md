@@ -11,8 +11,10 @@ The styleguide of the sources are checked with the [Maven Checkstyle Plugin](htt
 
 ## Use Code-Style in IntelliJ
 
+* use _project dependend settings_ under ```Settings/Editor/Code Style/Scheme``
 * remove or rename the current ```codeStyleSettings.xml``` and ```encodings.xml``` in your ```mecsim/.idea``` folder
-* set a symlink of custom MecSim code and encoding style e.g on unix systems ```ln -s <path_to_mecsim_project_directory>/src/main/styleguide/intellij/codeStyleSettings.xml> <path_to_mecsim_project_directory>/.idea```
+* set a symlink of custom MecSim code and encoding style file on unix systems with [ln](http://unixhelp.ed.ac.uk/CGI/man-cgi?ln) /
+on Windows with [mklink](https://technet.microsoft.com/de-de/library/cc753194(v=ws.10).aspx) to the files within the ```.idea``` directory
 * selecting 'Code -> Reformat Code' in your Intellij IDEA menu reformats your code according to the new settings
 
 

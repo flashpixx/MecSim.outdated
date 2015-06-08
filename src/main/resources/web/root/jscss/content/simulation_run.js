@@ -26,45 +26,66 @@
 
 
 /**
- * ctor to create the about dialog instance
+ * ctor to create the simulation start / stop / reset button
  *
  * @param pc_id ID
  * @param pc_name name of the panel
 **/
-function Inspector( pc_id, pc_name )
+function Run( pc_id, pc_name )
 {
     Pane.call(this, pc_id, pc_name );
 }
 
 /** inheritance call **/
-Inspector.prototype = Object.create(Pane.prototype);
+Run.prototype = Object.create(Pane.prototype);
 
 
 /**
  * @Overwrite
 **/
-Inspector.prototype.getGlobalContent = function()
+Run.prototype.getContent = function()
 {
-    return String.raw`<div id = "${this.generateSubID("dialog")}" title = "Object Inspector" >`;
+    return String.raw`<button id = "${this.generateSubID("start")}" >Start</button >
+        <button id = "${this.generateSubID("stop")}" >Stop</button >
+        <button id = "${this.generateSubID("reset")}" >Reset</button >`;
 }
 
 
 /**
  * @Overwrite
 **/
-Inspector.prototype.afterDOMAdded = function()
+Run.prototype.getGlobalContent = function()
+{
+    return String.raw`<div id = "${this.generateSubID("dialog")}" >
+        <div class = "dialog-error" >
+            <p id = "${this.generateSubID("text")}" >
+                <span class = "ui-icon ui-icon-alert" ></span >
+            </p >
+        </div >
+    </div >`;
+}
+
+
+/**
+ * @Overwrite
+**/
+Run.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    MecSim.websocket( "/cinspector/show", {
-        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); },
-        "onmessage" : function( po_event ) {
-            console.log(po_event);
-            /*
-            px_modul.ui().inspector().empty();
-            px_modul.ui().inspector().prepend("<p></p>");
-            px_modul.ui().inspector().dialog("open");
-            */
-        }
+    // create buttons & bind actions to the button
+    ["start", "stop", "reset"].forEach( function(pc_item) {
+
+        jQuery(self.generateSubID(pc_item, "#")).button().click( function() {
+
+            jQuery.ajax("/csimulation/"+pc_item).fail( function( po_data ) {
+
+                jQuery( self.generateSubID("text", "#")   ).text(po_data.responseJSON.error);
+                jQuery( self.generateSubID("dialog", "#") ).dialog();
+
+            });
+
+        });
+
     });
 }

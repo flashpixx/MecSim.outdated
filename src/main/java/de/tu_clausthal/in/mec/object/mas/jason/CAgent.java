@@ -209,7 +209,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addBelief(final String p_name, final Object p_data)
     {
-        m_beliefs.addLiteral( CCommon.getLiteral( p_name, p_data ) );
+        m_beliefs.addLiteral( CCommon.convertGeneric( CCommon.getLiteral( p_name, p_data ) ) );
 /*
         try
         {
@@ -451,7 +451,7 @@ public class CAgent<T> implements IVoidAgent
                         if (l_jmsg.isTell())
                             m_beliefs.addLiteral( CCommon.convertGeneric( l_literal ) );
                         if (l_jmsg.isUnTell())
-                            m_beliefs.removeLiteral(CCommon.convertGeneric(l_literal));
+                            m_beliefs.removeLiteral( CCommon.convertGeneric( l_literal ) );
                         if (l_jmsg.isKnownPerformative())
                         {
                             l_literal.addAnnot(BeliefBase.TPercept);

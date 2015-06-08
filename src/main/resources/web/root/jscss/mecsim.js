@@ -208,10 +208,20 @@ var MecSim = (function (px_modul) {
             pa.forEach( function(px_item) {
                 if (px_item instanceof Pane)
                 {
+                    // global elements
                     if (px_item.getGlobalContent())
                         jQuery( px_item.getGlobalContent() ).appendTo("body");
                     if (px_item.getGlobalCSS())
                         jQuery("body").css( px_item.getGlobalCSS() );
+
+                    // accordion elements
+                    if (px_item.getName())
+                    {
+                        jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo("#mecsim_global_accordion");
+
+                        if (px_item.getContent())
+                            jQuery( px_item.getContent() ).appendTo("#mecsim_global_accordion");
+                    }
 
                     px_item.afterDOMAdded();
                 }

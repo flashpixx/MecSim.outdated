@@ -39,6 +39,8 @@
         this._name              = options.name                      || "Default Widgetname";
         this._resizeable        = options.resizeable === undefined  ? true : options.resizeable;
         this._draggable         = options.draggable === undefined   ? true : options.draggable;
+        this._handle            = options.handle                    || false;
+        this._cancel            = options.cancel                    || false;
         this._animate           = options.animate === undefined     ? true : options.animate;
         this._animateEffect     = options.animateEffect             || "drop";
         this._animationTime     = options.animateTime               || 400;
@@ -74,6 +76,7 @@
         //create widget
         if(this._draggable){
             this._div.draggable({
+                cancel: self._cancel,
                 drag: function(event, ui) {
                     ui.position.top = Math.max( -1*(self._minHeight - self._minOffset), ui.position.top );
                     ui.position.left = Math.max( -1*(self._minWidth - self._minOffset), ui.position.left );

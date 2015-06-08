@@ -84,7 +84,7 @@ var SourcePanel = ( function (px_module) {
                             name        : SourcePanel.settings.labels.waypointlist,
                             width       : 1000,
                             height      : 600,
-                            draggable   : false
+                            cancel      : "#mecsim_source_waypointGraphEditor"
                         }
                     );
                     SourcePanel.settings.obj.targetingWidget.close();

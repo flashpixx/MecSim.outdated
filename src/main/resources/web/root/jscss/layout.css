@@ -193,11 +193,10 @@ select
     float:left;
 }
 
-#mecsim_source_waypointConfigContainer{
+#mecsim_source_waypointGraphEditor{
     width: 500px;
     margin-left: 25px;
     float:left;
-    background: lightgrey;
 }
 
 .mecsim_source_targetingName{

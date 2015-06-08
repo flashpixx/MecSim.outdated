@@ -83,25 +83,26 @@ About.prototype.getContent = function()
 **/
 About.prototype.afterDOMAdded = function()
 {
-    jQuery(this.generateSubID("aboutbutton", "#")).on("click", function() {
+    var self = this;
+    jQuery(self.generateSubID("aboutbutton", "#")).on("click", function() {
 
         jQuery.getJSON( "/cconfiguration/get", function( po_data ) {
 
-            jQuery(this.generateSubID("name", "#"))
+            jQuery(self.generateSubID("name", "#"))
                 .attr("href", po_data.manifest["project-url"])
                 .text(po_data.manifest["project-name"]);
 
-            jQuery(this.generateSubID("license", "#"))
+            jQuery(self.generateSubID("license", "#"))
                 .attr("href", po_data.manifest["license-url"])
                 .text(po_data.manifest["license"]);
 
-            jQuery(this.generateSubID("buildversion", "#"))
+            jQuery(self.generateSubID("buildversion", "#"))
                 .text(po_data.manifest["build-version"]);
 
 
         }).done( function() {
 
-            jQuery(this.generateSubID("aboutbutton", "#")).dialog({
+            jQuery(self.generateSubID("aboutbutton", "#")).dialog({
                 width: 500,
                 modal: true
             });

@@ -198,10 +198,10 @@ var MecSim = (function (px_modul) {
 
 
         // initialize the content pane with the three layer structures
-        px_modul.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        px_modul.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        px_modul.ui().accordion().accordion({ active: false, collapsible: true });
-        px_modul.ui().inspector().dialog({ autoOpen: false });
+        jQuery("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        jQuery("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        jQuery("#mecsim_global_accordion").accordion({ active: false, collapsible: true });
+        //px_modul.ui().inspector().dialog({ autoOpen: false });
 
         // add main layout elements to the HTML body
         if (Array.isArray(pa))

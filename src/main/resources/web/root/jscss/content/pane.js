@@ -137,34 +137,6 @@ Pane.prototype.getGlobalCSS = function()
     return lc_result;
 }
 
-
-
-
-/*
-Pane.prototype.beforeShowMainContent = function()
-{
-}
-
-Pane.prototype.beforeHideMainContent = function()
-{
-}
-
-Pane.prototype.getMainContent = function()
-{
-}
-
-Pane.prototype.getMainCSS     = function()
-{
-}
-
-
-
-Pane.prototype.beforeOpenMenu = function()
-{
-}
-*/
-
-
 /**
  * returns the name of the pane,
  * button or headline name

@@ -53,57 +53,57 @@ MAS.prototype.getContent = function()
 /**
  * @Overwrite
 **/
-Logger.prototype.getGlobalCSS = function()
+MAS.prototype.getGlobalCSS = function()
 {
-    return '#communication' +
+    return this.generateSubID("communicationdiagram", "#") +
            '{' +
-           '    left: 10em;' +
-           '    position: relative;' +
+           'left: 10em;' +
+           'position: relative;' +
            '}' +
 
-           'path.communication-arc' +
+           this.generateSubID("communicationdiagram", "path.")+'-arc' +
            '{' +
-           '    fill: #fff;' +
+           'fill: #fff;' +
            '}' +
 
-           '.graphtest-node' +
+           this.generateSubID("communicationdiagram", ".")+'-node' +
            '{' +
-           '    font-size: 8px;' +
+           'font-size: 8px;' +
            '}' +
 
 
-           '.communication-link' +
+           this.generateSubID("communicationdiagram", ".")+'-link' +
            '{' +
-           '    fill: none;' +
-           '    stroke: #1f77b4;' +
-           '    stroke-opacity: .4;' +
-           '    pointer-events: none;' +
+           'fill: none;' +
+           'stroke: #1f77b4;' +
+           'stroke-opacity: .4;' +
+           'pointer-events: none;' +
            '}' +
 
-           '.communication-link.source, .communication-link.target' +
+           this.generateSubID("communicationdiagram", ".")+'-link.source, ' + this.generateSubID("communicationdiagram", ".")+'-link.target' +
            '{' +
-           '    stroke-opacity: 1;' +
-           '    stroke-width: 2px;' +
+           'stroke-opacity: 1;' +
+           'stroke-width: 2px;' +
            '}' +
 
-           '.communication-node.target' +
+           this.generateSubID("communicationdiagram")+'-node.target' +
            '{' +
-           '    fill: #d62728 !important;' +
+           'fill: #d62728 !important;' +
            '}' +
 
-           '.communication-link.source' +
+           this.generateSubID("communicationdiagram", ".")+'-link.source' +
            '{' +
-           '    stroke: #d62728;' +
+           'stroke: #d62728;' +
            '}' +
 
-           '.communication-node.source' +
+           this.generateSubID("communicationdiagram", ".")+'-node.source' +
            '{' +
-           '    fill: #2ca02c;' +
+           'fill: #2ca02c;' +
            '}' +
 
-           '.communication-link.target' +
+           this.generateSubID("communicationdiagram", ".")+'.-link.target' +
            '{' +
-           '    stroke: #2ca02c;' +
+           'stroke: #2ca02c;' +
            '}';
 }
 
@@ -127,7 +127,7 @@ MAS.prototype.afterDOMAdded = function()
     // communication binding
     jQuery(self.generateSubID("communication", "#")).button().click( function() {
 
-        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id   : "communication" });
+        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id   : this.generateSubID("communicationdiagram") });
 
         MecSim.websocket( "/cmessagesystem/flow", {
 

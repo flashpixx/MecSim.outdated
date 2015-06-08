@@ -201,7 +201,7 @@ var MecSim = (function (px_modul) {
                     if (px_item.getGlobalContent())
                         jQuery( px_item.getGlobalContent() ).appendTo("body");
                     if (px_item.getGlobalCSS())
-                        jQuery("head").append("<style>" + px_item.getGlobalCSS() + "</style" );
+                        jQuery("head").append( '<style type = "text/css">' + px_item.getGlobalCSS() + '</style>' );
 
                     // accordion elements
                     if (px_item.getName())

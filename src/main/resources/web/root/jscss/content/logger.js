@@ -64,18 +64,18 @@ Logger.prototype.afterDOMAdded = function()
 **/
 Logger.prototype.getGlobalCSS = function()
 {
-   return self.generateSubID("error", ".") +
+   return this.generateSubID("error", ".") +
           '{' +
-          ' color: #8C1C00;' +
-          ' display: block;' +
-          ' font-family: monospace;' +
-          ' white-space: nowrap;' +
+          'color: #8C1C00;' +
+          'display: block;' +
+          'font-family: monospace;' +
+          'white-space: nowrap;' +
           '}' +
 
-          self.generateSubID("output", ".") +
+          this.generateSubID("output", ".") +
           '{' +
-          ' display: block;' +
-          ' font-family: monospace;' +
-          ' white-space: nowrap;' +
+          'display: block;' +
+          'font-family: monospace;' +
+          'white-space: nowrap;' +
           '}';
 }

@@ -224,7 +224,7 @@ var MecSim = (function (px_modul) {
         // initialize the content pane with the three layer structures
         jQuery("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         jQuery("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        jQuery("#mecsim_global_accordion").accordion({ active: false, collapsible: true });
+        jQuery("#mecsim_global_accordion").accordion({ active: false, collapsible: true, heightStyle: "content" });
         //px_modul.ui().inspector().dialog({ autoOpen: false });
 
 

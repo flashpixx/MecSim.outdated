@@ -187,7 +187,11 @@ Pane.prototype.getContent = function()
 {
     var lc_result = "";
     this.ma_children.forEach( function(po_item) { lc_result += po_item.getContent(); } );
-    return lc_result.trim();
+    lc_result = lc_result.trim();
+    if (lc_result)
+        return "<span>" + lc_result + "</span>";
+
+    return null;
 }
 
 /**

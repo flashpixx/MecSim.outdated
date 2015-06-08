@@ -40,7 +40,7 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name name of the belief
      * @param p_data belief data
      */
-    public void addBelief( final String p_name, final Object p_data );
+    public void addLiteral(final String p_name, final Object p_data);
 
     /**
      * returns the current cycle
@@ -81,7 +81,7 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name name of the belief
      * @param p_data belief data
      */
-    public void removeBelief( final String p_name, final Object p_data );
+    public void removeLiteral(final String p_name, final Object p_data);
 
     /**
      * unregister a cycle object

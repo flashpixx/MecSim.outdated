@@ -130,7 +130,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     {
         // removes old beliefs
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.removeBelief( l_item.getKey(), l_item.getValue() );
+            p_agent.removeLiteral(l_item.getKey(), l_item.getValue());
         m_beliefcache.clear();
 
         // add new beliefs
@@ -140,7 +140,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
         m_beliefcache.put( "ag_predecessor", this.getPredecessor() );
 
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.addBelief( l_item.getKey(), l_item.getValue() );
+            p_agent.addLiteral(l_item.getKey(), l_item.getValue());
     }
 
     /**

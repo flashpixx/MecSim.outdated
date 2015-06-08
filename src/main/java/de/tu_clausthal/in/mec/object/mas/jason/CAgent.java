@@ -31,26 +31,20 @@ import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
-import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
-import jason.asSemantics.Event;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PlanLibrary;
-import jason.asSyntax.Trigger;
-import jason.bb.BeliefBase;
 import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
@@ -167,8 +161,8 @@ public class CAgent<T> implements IVoidAgent
             m_action.put("invoke", new CMethodBind(c_bindname, p_bind));
 
             // initialize inherited beliefbases
-            m_beliefs.addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
-            m_beliefs.addBeliefbase("message", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase());
+            addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
+            addBeliefbase("message", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase());
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -209,8 +203,35 @@ public class CAgent<T> implements IVoidAgent
         this(null, p_asl, p_bind);
     }
 
+    /**
+     * method for adding a beliefbase into the set of inherited beliefbases
+     *
+     * @param p_name name of the new beliefbase
+     * @param p_beliefbase the beliefbase itself
+     */
+    public void addBeliefbase( final String p_name, final IBeliefBase p_beliefbase )
+    {
+        m_beliefs.addBeliefbase( p_name, p_beliefbase );
+    }
+
+    /**
+     * method for removing a beliefbase from the set of inherited beliefbases
+     *
+     * @param p_name name of the beliefbase
+     */
+    public void removeBeliefbase( final String p_name )
+    {
+        m_beliefs.removeBeliefbase(p_name);
+    }
+
+    /**
+     * adds a literal to the top-level literals
+     *
+     * @param p_name name of the belief
+     * @param p_data belief data
+     */
     @Override
-    public void addBelief(final String p_name, final Object p_data)
+    public void addLiteral( final String p_name, final Object p_data )
     {
         m_beliefs.addLiteral( CCommon.getLiteral(p_name, p_data) );
     }
@@ -247,8 +268,14 @@ public class CAgent<T> implements IVoidAgent
         MindInspectorWeb.get().removeAg(m_agent);
     }
 
+    /**
+     * removes a literal from top-level literals
+     *
+     * @param p_name name of the belief
+     * @param p_data belief data
+     */
     @Override
-    public void removeBelief(final String p_name, final Object p_data)
+    public void removeLiteral( final String p_name, final Object p_data )
     {
         m_beliefs.removeLiteral( CCommon.convertGeneric( CCommon.getLiteral( p_name, p_data ) ) );
     }
@@ -381,7 +408,7 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.removeLiteral( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)) );
 
             // run belief updates
-            this.updateBindBeliefs();
+            this.updateBeliefBases();
 
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);
@@ -397,9 +424,8 @@ public class CAgent<T> implements IVoidAgent
          *
          * @todo perform update just for changed literals/beliefbases
          */
-        protected final void updateBindBeliefs()
+        protected final void updateBeliefBases()
         {
-            // update all the inherited beliefbases
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
                 l_beliefbase.update();
         }

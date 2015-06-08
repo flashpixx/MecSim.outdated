@@ -181,6 +181,22 @@ var MecSim = (function (px_modul) {
     // --- initializing of the UI content ----------------------------------------------------------------------------------------------------------------------
     px_modul.uiinitialize = function( pa )
     {
+        // create basic layout within the body element (three frame structure)
+        jQuery( String.raw`
+            <div id = "mecsim_global_screen" >
+                <div id = "mecsim_global_menu" >
+                    <div id = "mecsim_global_accordion" class = "accordion" />
+                </div>
+                <div >
+                    <div id = "mecsim_global_screen_right" >
+                        <div id = "mecsim_global_content" ></div >
+                        <div id = "mecsim_global_log" ></div >
+                    </div >
+                </div >
+            </div>
+        `).appendTo("body");
+
+
         // initialize the content pane with the three layer structures
         px_modul.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         px_modul.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
@@ -196,10 +212,12 @@ var MecSim = (function (px_modul) {
                         jQuery( px_item.getGlobalContent() ).appendTo("body");
                     if (px_item.getGlobalCSS())
                         jQuery("body").css( px_item.getGlobalCSS() );
+
+                    px_item.afterDOMAdded();
                 }
             });
 
-
+        /*
         // initialize websocket log binding
         px_modul.websocket( "/cconsole/output/log", {
             "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
@@ -219,6 +237,7 @@ var MecSim = (function (px_modul) {
                 px_modul.ui().inspector().dialog("open");
             }
         });
+        */
 
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -32,7 +32,7 @@
 **/
 function About( pc_id )
 {
-    Pane.call(this, pc_id)
+    Pane.call(this, pc_id);
 }
 
 /** inheritance call **/
@@ -68,32 +68,45 @@ About.prototype.getGlobalContent = function()
     </div >`;
 }
 
-/*
+
+/**
+ * @Overwrite
+**/
 About.prototype.getContent = function()
 {
+    return String.raw`<button id = "${this.generateSubID("aboutbutton")}" >About</button >`;
+}
 
-            HelpPanel.settings.about_button.on("click", function(){
 
-                $.getJSON( "cconfiguration/get", function( p_data ) {
-                    console.log(p_data);
-                    $("#mecsim_project_name")
-                            .attr("href", p_data.manifest["project-url"])
-                            .text(p_data.manifest["project-name"]);
+/**
+ * @Overwrite
+**/
+About.prototype.afterDOMAdded = function()
+{
+    jQuery(this.generateSubID("aboutbutton", "#")).on("click", function() {
 
-                    $("#mecsim_license")
-                            .attr("href", p_data.manifest["license-url"])
-                            .text(p_data.manifest["license"]);
+        jQuery.getJSON( "/cconfiguration/get", function( po_data ) {
 
-                    $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
-                    //$("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
-                    //$("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
+            jQuery(this.generateSubID("name", "#"))
+                .attr("href", po_data.manifest["project-url"])
+                .text(po_data.manifest["project-name"]);
 
-                }).done( function() {
-                    $("#mecsim_about").dialog({
-                        width: 500,
-                        modal: true
-                    });
-                });
+            jQuery(this.generateSubID("license", "#"))
+                .attr("href", po_data.manifest["license-url"])
+                .text(po_data.manifest["license"]);
 
+            jQuery(this.generateSubID("buildversion", "#"))
+                .text(po_data.manifest["build-version"]);
+
+
+        }).done( function() {
+
+            jQuery(this.generateSubID("aboutbutton", "#")).dialog({
+                width: 500,
+                modal: true
             });
-*/
+
+        });
+
+    });
+}

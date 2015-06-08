@@ -81,28 +81,30 @@ Pane.prototype.setParent = function( po )
 /**
  * returns the internal ID
  *
- * @return id
+ * @param pc_prefix optional prefix for the result
+ * @return ID
 **/
-Pane.prototype.getID = function()
+Pane.prototype.getID = function( pc_prefix )
 {
     if (this.mo_parent)
         return ["mecsim", mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_");
 
-    return ["mecsim", this.mc_id].join("_");
+    return (pc_prefix || "") + ["mecsim", this.mc_id].join("_");
 }
 
 /**
  * returns a subID of the current pane
  *
  * @param pc_subid name of the sub structure
+ * @param pc_prefix optional prefix for the result
  * @return subID
 **/
-Pane.prototype.generateSubID = function( pc_id )
+Pane.prototype.generateSubID = function( pc_id, pc_prefix )
 {
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
-    return [this.getID(), pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
+    return (pc_prefix || "") + [this.getID(), pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
 }
 
 
@@ -158,17 +160,40 @@ Pane.prototype.beforeOpenMenu = function()
 */
 
 
+/**
+ * returns the name of the pane,
+ * button or headline name
+ *
+ * @return name of the pane item
+**/
 Pane.prototype.getName = function()
 {
     return null;
 }
 
+/**
+ * returns the content of the pane
+ *
+ * @return content
+**/
 Pane.prototype.getContent = function()
 {
     return null;
 }
 
+/**
+ * returns the CSS of the content
+ *
+ * @return CSS content
+**/
 Pane.prototype.getCSS = function()
 {
     return null;
+}
+
+/**
+ * is called after all content is added to the DOM
+**/
+Pane.prototype.afterDOMAdded = function()
+{
 }

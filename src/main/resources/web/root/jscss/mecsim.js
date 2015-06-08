@@ -197,12 +197,6 @@ var MecSim = (function (px_modul) {
         `).appendTo("body");
 
 
-        // initialize the content pane with the three layer structures
-        jQuery("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        jQuery("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        jQuery("#mecsim_global_accordion").accordion({ active: false, collapsible: true });
-        //px_modul.ui().inspector().dialog({ autoOpen: false });
-
         // add main layout elements to the HTML body
         if (Array.isArray(pa))
             pa.forEach( function(px_item) {
@@ -218,8 +212,6 @@ var MecSim = (function (px_modul) {
                     if (px_item.getName())
                     {
                         jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo("#mecsim_global_accordion");
-                        //jQuery(px_item.getID("#")).accordion();
-
                         if (px_item.getContent())
                             jQuery( px_item.getContent() ).appendTo("#mecsim_global_accordion");
                     }
@@ -227,6 +219,14 @@ var MecSim = (function (px_modul) {
                     px_item.afterDOMAdded();
                 }
             });
+
+
+        // initialize the content pane with the three layer structures
+        jQuery("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        jQuery("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        jQuery("#mecsim_global_accordion").accordion({ active: false, collapsible: true });
+        //px_modul.ui().inspector().dialog({ autoOpen: false });
+
 
         /*
         // initialize websocket log binding

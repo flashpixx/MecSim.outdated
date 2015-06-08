@@ -31,60 +31,63 @@ import java.util.Map;
 import java.util.Set;
 
 
-
 /**
- * Generic default beliefbase for agents.
- * Each beliefbase can contain further inherited beliefbases.
+ * generic default beliefbase for software agents, where
+ * each beliefbase can contain further inherited beliefbases
  */
 public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * map of string/beliefbase
-     * each entry represents an inherited beliefbase with its name
+     * each entry represents an inherited beliefbase associated with its name
      */
     protected final Map<String, IBeliefBase<T>> m_beliefbases;
+
     /**
-     * set of literals representing the top level beliefs,
-     * i.e. it does not contain literals of inherited beliefbases
+     * set of literals representing the top-level beliefs,
+     * this set does not contain literals of the inherited beliefbases
      */
     protected final Set<ILiteral<T>> m_literals;
 
     /**
      * default ctor
+     * creates an empty set of top-level literals and
+     * an empty map of inherited beliefbases
      */
     public IDefaultBeliefBase()
     {
-        m_beliefbases = new HashMap<>();
-        m_literals = new HashSet<>();
+        this( new HashMap<>(), new HashSet<>() );
     }
 
     /**
-     * ctor - just literals specified
+     * ctor - just the top-level literals are specified
      *
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase(Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
     {
-        m_beliefbases = new HashMap<>();
-        m_literals = p_literals;
+        this(new HashMap<>(), p_literals);
     }
 
     /**
-     * ctor - literals and inherited beliefbases specified
+     * ctor - top-level literals and inherited beliefbases are specified
      *
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase(Map<String, IBeliefBase<T>> p_beliefbases, Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
     {
-        m_beliefbases = p_beliefbases;
         m_literals = p_literals;
+        m_beliefbases = p_beliefbases;
     }
 
     /**
-     * returns the aggregated beliefbase which also contains
-     * the literals of the inherited beliefbases
+     * collapse method to get a set of literals containing the top-level
+     * and all inherited beliefbases' literals
+     *
+     * @return collapsed set of top-level and inherited literals
      */
+    @Override
     public Set<ILiteral<T>> collapseLiterals()
     {
         // set for aggregation
@@ -102,7 +105,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * an aggregation set in each recursion step.
      *
      * @param p_currentBeliefbase beliefbase to add
-     * @param p_currentAggregatedSet the current aggregation
+     * @param p_currentAggregatedSet the current aggregated set
      */
     private static void collapseLiterals( final IBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet  )
     {
@@ -116,35 +119,49 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * returns a collapsed beliefbase
+     * getter for top-level literal set
+     *
+     * @return set of top-level literals
      */
-    public abstract IBeliefBase<T> collapseBeliefbase();
-
-    /**
-     * getter for literal set
-     */
+    @Override
     public Set<ILiteral<T>> getLiterals()
     {
         return m_literals;
     }
 
     /**
-     * getter for inherited beliefbases
+     * getter for the inherited beliefbases
+     *
+     * @return map of inherited beliefbases and their names
      */
+    @Override
     public Map<String, IBeliefBase<T>> getBeliefbases()
     {
         return m_beliefbases;
     }
 
     /**
-     * removes the literals of the top level and the inherited beliefbases
+     * removes the top-level and the inherited beliefbases' literals
+     * i.e. all the inherited beliefbases are preserved empty
      */
-    public void clear()
+    @Override
+    public void clearLiterals()
     {
         m_literals.clear();
 
         for (String l_name : m_beliefbases.keySet())
-            m_beliefbases.get(l_name).clear();
+            m_beliefbases.get(l_name).clearLiterals();
+    }
+
+    /**
+     * empties the whole beliefbase, i.e. the top-level literals
+     * and all the inherited beliefbases will be removed
+     */
+    @Override
+    public void clear()
+    {
+        m_literals.clear();
+        m_beliefbases.clear();
     }
 
     /**

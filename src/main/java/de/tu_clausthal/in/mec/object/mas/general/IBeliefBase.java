@@ -46,6 +46,8 @@ public interface IBeliefBase<T>
     /**
      * collapse method to get a set of literals containing the top-level
      * and all inherited beliefbases' literals
+     *
+     * @return collapsed set of top-level and inherited literals
      */
     public Set<ILiteral<T>> collapseLiterals();
 
@@ -66,16 +68,21 @@ public interface IBeliefBase<T>
     public void clear();
 
     /**
+     * removes the literals of the top level and the inherited beliefbases
+     */
+    public void clearLiterals();
+
+    /**
      * adds a language specific literal to the top-level literals
      *
      * @param p_literal
      */
-    public abstract void addLiteral( ILiteral p_literal );
+    public abstract void addLiteral( final ILiteral p_literal );
 
     /**
      * removes a language specific literal from the top level literals
      *
      * @param p_literal
      */
-    public abstract void removeLiteral( ILiteral p_literal );
+    public abstract void removeLiteral( final ILiteral p_literal );
 }

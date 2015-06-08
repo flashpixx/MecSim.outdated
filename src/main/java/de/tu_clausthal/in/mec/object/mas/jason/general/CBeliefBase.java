@@ -78,13 +78,13 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     @Override
-    public void addLiteral( ILiteral p_literal )
+    public void addLiteral( final ILiteral p_literal )
     {
         m_literals.add( p_literal );
     }
 
     @Override
-    public void removeLiteral( ILiteral p_literal )
+    public void removeLiteral( final ILiteral p_literal )
     {
         m_literals.remove( p_literal );
     }

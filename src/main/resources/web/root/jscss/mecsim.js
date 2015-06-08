@@ -159,20 +159,23 @@ var MecSim = (function (px_modul) {
      **/
     px_modul.ui = function() {return {
 
-        /** reference to the accordion **/
-        accordion   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_accordion"    : $("#mecsim_global_accordion"); },
-        /** reference to the menu **/
-        menu        : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_menu"         : $("#mecsim_global_menu"); },
-        /** reference to the content area **/
-        content     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_content"      : $("#mecsim_global_content"); },
-        /** reference to the object inspector **/
-        inspector   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_object_inspector"    : $( "#mecsim_object_inspector" ); },
-        /** reference to log area **/
-        log         : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_log"          : $("#mecsim_global_log"); },
         /** reference to the screen area **/
-        screen      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen"       : $("#mecsim_global_screen"); },
+        screen      : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_screen"; },
+        /** reference to the menu **/
+        menu        : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_menu"; },
+        /** reference to the accordion **/
+        accordion   : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_accordion"; },
         /** reference to the menu section of the screen **/
-        screenmenu  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_global_screen_right" : $("#mecsim_global_screen_right"); }
+        screenmenu  : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_screen_right"; },
+        /** reference to the content area **/
+        content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
+        /** reference to log area **/
+        log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
+
+
+        /** reference to the object inspector **/
+        //inspector   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "mecsim_object_inspector"    : jQuery( "#mecsim_object_inspector" ); },
+
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -183,14 +186,14 @@ var MecSim = (function (px_modul) {
     {
         // create basic layout within the body element (three frame structure)
         jQuery( String.raw`
-            <div id = "mecsim_global_screen" >
-                <div id = "mecsim_global_menu" >
-                    <div id = "mecsim_global_accordion" />
+            <div id = "${px_modul.ui().screen()}" >
+                <div id = "${px_modul.ui().menu()}" >
+                    <div id = "${px_modul.ui().accordion()}" />
                 </div>
                 <div >
-                    <div id = "mecsim_global_screen_right" >
-                        <div id = "mecsim_global_content" ></div >
-                        <div id = "mecsim_global_log" ></div >
+                    <div id = "${px_modul.ui().screenmenu()}" >
+                        <div id = "${px_modul.ui().content()}" ></div >
+                        <div id = "${px_modul.ui().log()}" ></div >
                     </div >
                 </div >
             </div>
@@ -211,9 +214,9 @@ var MecSim = (function (px_modul) {
                     // accordion elements
                     if (px_item.getName())
                     {
-                        jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo("#mecsim_global_accordion");
+                        jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo( px_modul.ui().accordion("#") );
                         if (px_item.getContent())
-                            jQuery( px_item.getContent() ).appendTo("#mecsim_global_accordion");
+                            jQuery( px_item.getContent() ).appendTo( px_modul.ui().accordion("#") );
                     }
 
                     px_item.afterDOMAdded();
@@ -222,9 +225,9 @@ var MecSim = (function (px_modul) {
 
 
         // initialize the content pane with the three layer structures
-        jQuery("#mecsim_global_screen").jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        jQuery("#mecsim_global_screen_right").jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
-        jQuery("#mecsim_global_accordion").accordion({ active: false, collapsible: true, heightStyle: "content" });
+        jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        jQuery( px_modul.ui().screenmenu("#") ).jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        jQuery( px_modul.ui().accordion("#") ).accordion({ active: false, collapsible: true, heightStyle: "content" });
         //px_modul.ui().inspector().dialog({ autoOpen: false });
 
 

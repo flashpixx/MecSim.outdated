@@ -29,10 +29,11 @@
  * ctor to create the logger instance
  *
  * @param pc_id ID
+ * @param pc_name name of the panel
 **/
-function Logger( pc_id )
+function Logger( pc_id, pc_name )
 {
-    Pane.call(this, pc_id)
+    Pane.call(this, pc_id, pc_name );
 }
 
 /** inheritance call **/

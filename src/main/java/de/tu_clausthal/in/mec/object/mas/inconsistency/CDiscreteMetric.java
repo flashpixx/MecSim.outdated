@@ -30,9 +30,11 @@ import java.util.Set;
 
 
 /**
- * belief-base metric with bool structure
+ * generic discrete metric
+ *
+ * @see http://mathworld.wolfram.com/DiscreteMetric.html
  */
-public class CBoolBeliefMetric<T extends IAgent> implements IMetric<T>
+public class CDiscreteMetric<T> implements IMetric<T>
 {
 
     @Override
@@ -53,7 +55,7 @@ public class CBoolBeliefMetric<T extends IAgent> implements IMetric<T>
         // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
         //return new Integer( ( ( l_aggregate.size() - p_current.getBeliefs().size() ) + ( l_aggregate.size() - p_other.getBeliefs().size() ) ) );
 
-        return 0;
+        return 1;
 
     }
 }

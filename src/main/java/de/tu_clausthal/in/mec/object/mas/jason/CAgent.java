@@ -57,8 +57,6 @@ import java.util.List;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
- * @todo fix update belief with new belief-base structure
- * @todo fix belief(-base)-bind mechanism on cycle call
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -421,8 +419,6 @@ public class CAgent<T> implements IVoidAgent
 
         /**
          * updates all the inherited beliefbases
-         *
-         * @todo perform update just for changed literals/beliefbases
          */
         protected final void updateBeliefBases()
         {

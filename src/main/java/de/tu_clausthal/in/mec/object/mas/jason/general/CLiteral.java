@@ -30,6 +30,8 @@ import jason.asSyntax.Term;
 
 /**
  * class for literals
+ *
+ * @todo integrate negation symbol
  */
 public class CLiteral extends IDefaultLiteral<Literal>
 {
@@ -38,7 +40,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
      *
      * @param p_literal the literal itself
      */
-    public CLiteral(Literal p_literal)
+    public CLiteral( Literal p_literal )
     {
         super(p_literal.getFunctor(), p_literal);
 

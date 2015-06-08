@@ -47,7 +47,9 @@ Simulation.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("start") + '" >Start</button >' +
            '<button id = "' + this.generateSubID("stop")  + '" >Stop</button >' +
-           '<button id = "' + this.generateSubID("reset") + '" >Reset</button >';
+           '<button id = "' + this.generateSubID("reset") + '" >Reset</button >' +
+           '<button id = "' + this.generateSubID("load") + '" >Load</button ><input type = "file" id = "' + this.generateSubID("loadfile") + '" />' +
+           '<button id = "' + this.generateSubID("save") + '" >Save</button ><input type = "file" id = "' + this.generateSubID("savefile") + '" />';
 }
 
 
@@ -73,7 +75,7 @@ Simulation.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    // create buttons & bind actions to the button
+    // create start/stop/reset buttons & bind actions to the button
     ["start", "stop", "reset"].forEach( function(pc_item) {
 
         jQuery(self.generateSubID(pc_item, "#")).button().click( function() {
@@ -87,5 +89,17 @@ Simulation.prototype.afterDOMAdded = function()
 
         });
 
+    });
+
+    // load/save buttons & bind actions
+    ["load", "save"].forEach( function(pc_item) {
+
+        jQuery( self.generateSubID(pc_item + "file", "#") ).css("opacity", "0");
+        jQuery( self.generateSubID(pc_item, "#") ).button().click( function( po_event ) {
+
+            po_event.preventDefault();
+            jQuery( self.generateSubID(pc_item + "file", "#") ).trigger( "click" );
+
+        });
     });
 }

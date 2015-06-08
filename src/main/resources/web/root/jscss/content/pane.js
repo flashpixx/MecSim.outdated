@@ -46,7 +46,10 @@ function Pane( pc_id, pa_panel )
     this.mo_parent   = null;
 
     if (Array.isArray(pa_panel))
-        pa_panel.forEach( function( po_item ) { this.addChild(po_item); } );
+    {
+        var self = this;
+        pa_panel.forEach( function( po_item ) { self.addChild(po_item); } );
+    }
 }
 
 
@@ -57,7 +60,7 @@ function Pane( pc_id, pa_panel )
 **/
 Pane.prototype.addChild = function( po )
 {
-    if (!classof(po, "pane"))
+    if (!(po instanceof Pane))
         throw "object is not a pane object";
 
     this.ma_children.push(po);
@@ -72,7 +75,7 @@ Pane.prototype.addChild = function( po )
 **/
 Pane.prototype.setParent = function( po )
 {
-    if (!classof(po, "pane"))
+    if (!(po instanceof Pane))
         throw "object is not a pane object";
 
     this.mo_parent = po;
@@ -87,7 +90,7 @@ Pane.prototype.setParent = function( po )
 Pane.prototype.getID = function( pc_prefix )
 {
     if (this.mo_parent)
-        return ["mecsim", mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_");
+        return ["mecsim", this.mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_");
 
     return (pc_prefix || "") + ["mecsim", this.mc_id].join("_");
 }

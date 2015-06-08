@@ -74,7 +74,7 @@ About.prototype.getGlobalContent = function()
 **/
 About.prototype.getContent = function()
 {
-    return String.raw`<button id = "${this.generateSubID("aboutbutton")}" >About</button >`;
+    return String.raw`<button id = "${this.generateSubID("aboutbutton")}" >${this.getName()}</button >`;
 }
 
 

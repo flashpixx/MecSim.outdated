@@ -21,13 +21,14 @@
  * @endcond
  */
 
-// --- JQUERY ----------------------------------------------------------------------------------------------------------
+ "use strict";
+
 $(document).ready(function() {
 
     // UI instantiation
     MecSim.uiinitialize([
 
-        new About("about")
+        new Pane("help", [ new About("about") ])
 
     ]);
 });

@@ -25,6 +25,7 @@
 
 var SimulationPanel = ( function (px_module) {
 
+    px_module.configuration_json_obj = {}
 
     px_module.ui_actions = function() { return {
 
@@ -149,11 +150,21 @@ var SimulationPanel = ( function (px_module) {
         // configure speed of simulation
         SimulationPanel.ui().speed_slider().slider({
             range: "min",
-            value: 1,
-            min: 0,
-            max: 10,
+            value: 25,
+            min: 1,
+            max: 50,
             slide: function( event, ui ) {
                 SimulationPanel.ui().speed_label().val( ui.value );
+                // set thread sleep time
+                MecSim.configuration().get( function(configuration) {
+                    SimulationPanel.configuration_json_obj = configuration;
+                    console.log(SimulationPanel.configuration_json_obj.simulation.threadsleeptime);
+                    SimulationPanel.configuration_json_obj.simulation.threadsleeptime = ui.value;
+                });
+
+                console.log(SimulationPanel.configuration_json_obj);
+                MecSim.configuration().set(SimulationPanel.configuration_json_obj);
+
             }
         });
 

@@ -24,13 +24,7 @@ select
     width: 120px;
 }
 
-/******************************** TODO section *+++++******************************************************************/
-
-/** deprecated? or move to editor section **/
-.CodeMirror
-{
-    height: 75vh;
-}
+/******************************** TODO section ************************************************************************/
 
 /** deprecated for mecsim_source and mecsim_widget, check if needed (effects the tab background and more) **/
 .ui-widget-header{
@@ -42,12 +36,11 @@ select
     text-align: center;
 }
 
-/* depcrecated? */
-#mecsim_global_editor{
-    collapsible: false;
-}
-
 /******************************** class definitions *******************************************************************/
+
+.CodeMirror{
+    height: 100%;
+}
 
 .ui-accordion-content{
     height: 55%;

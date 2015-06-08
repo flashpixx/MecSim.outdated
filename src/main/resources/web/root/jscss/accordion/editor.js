@@ -66,9 +66,8 @@ var EditorPanel = ( function (px_module) {
 
         // add a tab to the editor
         "add_tab" : function() {
-            // TODO: check if file is already open in another tab
             var selected_file = EditorPanel.ui_actions().get_tab_id();
-            $("#tabs ul").append("<li><a href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
+            $("#tabs ul").append("<li><a id='" + EditorPanel.ui_actions().get_tab_id() + "_tab' href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
             $("#tabs").append("<div id='" + EditorPanel.ui_actions().get_tab_id() + "'></div>");
         },
 
@@ -124,7 +123,6 @@ var EditorPanel = ( function (px_module) {
         // add a code mirror object to the editor
         "add_code_mirror" : function() {
             EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
-            //$("#" + EditorPanel.ui_actions().get_tab_id() + "").css("height", "100%");
         }
 
     };}
@@ -161,15 +159,27 @@ var EditorPanel = ( function (px_module) {
 
         // load file
         EditorPanel.ui().load_file_button().button().on("click", function(p_data){
-            EditorPanel.ui_actions().add_tab();
-            $("div#tabs").tabs("refresh");
 
-            var tab_index = $('#tabs a[href="#' + EditorPanel.ui_actions().get_tab_id() + '"]').parent().index();
-            $('#tabs').tabs( "option", "active", tab_index );
-            $("div#tabs").tabs("refresh");
+            if( EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] ) {
 
-            EditorPanel.ui_actions().add_code_mirror();
-            EditorPanel.ui_actions().load_selected_file();
+               // focus tab which is already loaded
+               $("#" + EditorPanel.ui_actions().get_tab_id() + "_tab").trigger("click");
+
+            } else {
+
+                // create new tab and load file content
+                EditorPanel.ui_actions().add_tab();
+                $("div#tabs").tabs("refresh");
+
+                var tab_index = $('#tabs a[href="#' + EditorPanel.ui_actions().get_tab_id() + '"]').parent().index();
+                $('#tabs').tabs( "option", "active", tab_index );
+                $("div#tabs").tabs("refresh");
+
+                EditorPanel.ui_actions().add_code_mirror();
+                EditorPanel.ui_actions().load_selected_file();
+            }
+
+
         });
 
         // delete file

@@ -141,6 +141,28 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
+     * adds a generic literal to the top-level literals
+     *
+     * @param p_literal generic literal
+     */
+    @Override
+    public void addLiteral( final ILiteral p_literal )
+    {
+        m_literals.add( p_literal );
+    }
+
+    /**
+     * removes a language specific literal from the top level literals
+     *
+     * @param p_literal language specific literal
+     */
+    @Override
+    public void removeLiteral( final ILiteral p_literal )
+    {
+        m_literals.remove( p_literal );
+    }
+
+    /**
      * removes the top-level and the inherited beliefbases' literals
      * i.e. all the inherited beliefbases are preserved empty
      */
@@ -188,7 +210,15 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return this.hashCode() == p_object.hashCode();
     }
 
-    public void addAll( final String p_prefix, final IBeliefBase<T> p_beliefbase )
+    /**
+     * method for adding a beliefbase
+     * the prefix gets concatenated by the beliefbases' hashcode
+     *
+     * @param p_prefix prefix for the beliefbase name
+     * @param p_beliefbase beliefbase to add
+     */
+    @Override
+    public void addBeliefbase(final String p_prefix, final IBeliefBase<T> p_beliefbase)
     {
         m_beliefbases.put( StringUtils.join( p_prefix, p_beliefbase.hashCode() ), p_beliefbase);
     }

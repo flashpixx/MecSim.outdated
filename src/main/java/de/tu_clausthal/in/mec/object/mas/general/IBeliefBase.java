@@ -73,16 +73,24 @@ public interface IBeliefBase<T>
     public void clearLiterals();
 
     /**
-     * adds a language specific literal to the top-level literals
+     * adds a generic literal to the top-level literals
      *
-     * @param p_literal
+     * @param p_literal generic literal
      */
-    public abstract void addLiteral( final ILiteral p_literal );
+    public void addLiteral( final ILiteral p_literal );
 
     /**
-     * removes a language specific literal from the top level literals
+     * removes a generic literal from the top level literals
      *
-     * @param p_literal
+     * @param p_literal generic literal
      */
-    public abstract void removeLiteral( final ILiteral p_literal );
+    public void removeLiteral( final ILiteral p_literal );
+
+    /**
+     * method for adding a beliefbase
+     *
+     * @param p_prefix prefix for the beliefbases' name
+     * @param p_beliefbase beliefbase to add
+     */
+    public void addBeliefbase(final String p_prefix, final IBeliefBase<T> p_beliefbase);
 }

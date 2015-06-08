@@ -46,30 +46,31 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
         super();
     }
     /**
-     * ctor - just literals specified
+     * ctor - just the top-level literals are specified
      *
      * @param p_literals top level literals
      */
-    public CBeliefBase(Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase(final Set<ILiteral<Literal>> p_literals)
     {
         super(p_literals);
     }
     /**
-     * ctor - literals and inherited beliefbases specified
+     * ctor - top-level literals and inherited beliefbases are specified
      *
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public CBeliefBase(Map<String, IBeliefBase<Literal>> p_beliefbases, Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase(final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals)
     {
         super(p_beliefbases, p_literals);
     }
 
     /**
-     * returns a single beliefbase containing
-     * the top level and all inherited literals.
+     * collapse method to get an aggregated top-level-beliefbase,
+     * which is the aggregation of the top-level literals and all
+     * the inherited beliefbases' literals.
      *
-     * @return aggregated beliefbase
+     * @return beliefbase containing literals of all inherited beliefbases
      */
     @Override
     public IBeliefBase<Literal> collapseBeliefbase()
@@ -77,15 +78,24 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
         return new CBeliefBase( this.collapseLiterals() );
     }
 
-    @Override
-    public void addLiteral( final ILiteral p_literal )
+    /**
+     * adds a language specific literal to the top-level literals
+     *
+     * @param p_literal language specific literal
+     */
+    public void addLiteral( final Literal p_literal )
     {
-        m_literals.add( p_literal );
+        addLiteral( CCommon.convertGeneric( p_literal ) );
     }
 
-    @Override
-    public void removeLiteral( final ILiteral p_literal )
+    /**
+     * removes a language specific literal from the top level literals
+     *
+     * @param p_literal language specific literal
+     */
+    public void removeLiteral( final Literal p_literal )
     {
-        m_literals.remove( p_literal );
+        removeLiteral( CCommon.convertGeneric( p_literal ) );
     }
+
 }

@@ -45,7 +45,9 @@ Inspector.prototype = Object.create(Pane.prototype);
 **/
 Inspector.prototype.getGlobalContent = function()
 {
-    return String.raw`<div id = "${this.generateSubID("dialog")}" title = "Object Inspector" >`;
+    return String.raw`<div id = "${this.generateSubID("dialog")}" title = "Object Inspector" >
+            <div id = "${this.generateSubID("table")}" ></div>
+        </div>`;
 }
 
 
@@ -54,17 +56,34 @@ Inspector.prototype.getGlobalContent = function()
 **/
 Inspector.prototype.afterDOMAdded = function()
 {
+    /**
+     * function to format a JSON object in a table
+     *
+     * @param po_object JSON object
+     * @return HTML string
+    **/
+    function json2table( po_object )
+    {
+        var lc = "<table>";
+        jQuery.each( po_object, function(pc_key, px_value) {
+            lc += "<tr><th>" + pc_key + "</th><td>" + (px_value instanceof Object ? json2table(px_value) : px_value + "</td></tr>" );
+        });
+        return lc + "</table>";
+    }
+
+
     var self = this;
+
+    jQuery( self.generateSubID("dialog", "#") ).dialog({ autoOpen: false, width: "auto" });
 
     MecSim.websocket( "/cinspector/show", {
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); },
         "onmessage" : function( po_event ) {
-            console.log(po_event);
-            /*
-            px_modul.ui().inspector().empty();
-            px_modul.ui().inspector().prepend("<p></p>");
-            px_modul.ui().inspector().dialog("open");
-            */
+
+            jQuery( self.generateSubID("table", "#") ).empty();
+            jQuery( self.generateSubID("table", "#") ).append( json2table(po_event.data.toJSON()) );
+            jQuery( self.generateSubID("dialog", "#") ).dialog("open");
+
         }
     });
 }

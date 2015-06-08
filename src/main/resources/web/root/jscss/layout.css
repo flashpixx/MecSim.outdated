@@ -25,14 +25,14 @@ select
 }
 
 /******************************** TODO section *+++++******************************************************************/
-
-/** deprecated? or move to editor section **/
+/*
+** deprecated? or move to editor section **
 .CodeMirror
 {
     height: 75vh;
 }
 
-/** deprecated for mecsim_source and mecsim_widget, check if needed (effects the tab background and more) **/
+** deprecated for mecsim_source and mecsim_widget, check if needed (effects the tab background and more) **
 .ui-widget-header{
     margin: 0;
     color: white;
@@ -42,13 +42,13 @@ select
     text-align: center;
 }
 
-/* depcrecated? */
+* depcrecated? *
 #mecsim_global_editor{
     collapsible: false;
 }
-
+*/
 /******************************** class definitions *******************************************************************/
-
+/*
 .ui-accordion-content{
     height: 55%;
 }
@@ -101,9 +101,9 @@ select
 .bootstrap-switch-handle-on.bootstrap-switch-primary{
     background: #008C4F !important;
 }
-
+*/
 /******************************* id definitions ***********************************************************************/
-
+/*
 #mecsim_configuration_tabs{
     height: 100%;
 }
@@ -114,7 +114,7 @@ select
 
 #mecsim_global_menu{
     height: 100%;
-    /*background-color: #ecf0f1;*/
+    *background-color: #ecf0f1;*
     background-image: url(../img/Logo_TUC_de_Web_klein.gif);
     background-position: 50% 97%;
     background-repeat: no-repeat;
@@ -152,9 +152,9 @@ select
     font-size: large;
     color: #008C4F;
 }
-
+*/
 /******************************** css definitions for mecsim_source ************************************************/
-
+/*
 .mecsim_source_toolButton{
     width: 75%;
     text-align: center;
@@ -185,9 +185,9 @@ select
     color: red;
     margin-top: 50px;
 }
-
+*/
 /******************************** css definitions for mecsim_widget ************************************************/
-
+/*
 .ui-resizable-helper{
     border: 1px dotted gray;
 }
@@ -213,9 +213,9 @@ select
     position: absolute;
     right: 0;
 }
-
+*/
 /******************************** css definitions for radial visualization ************************************************/
-
+/*
 #communication
 {
     left: 10em;
@@ -258,4 +258,4 @@ path.communication-arc {
 .communication-link.target {
   stroke: #2ca02c;
 }
-
+*/

@@ -39,6 +39,7 @@ function Logger( pc_id )
 /** inheritance call **/
 Logger.prototype = Object.create(Pane.prototype);
 
+
 /**
  * @Overwrite
 **/
@@ -55,4 +56,27 @@ Logger.prototype.afterDOMAdded = function()
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("output")}">${po_event.data}</span>` ); },
         "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); }
     });
+}
+
+
+/**
+ * @Overwrite
+**/
+Logger.prototype.getGlobalCSS = function()
+{
+   return String.raw`
+        .mecsim_logger_error
+        {
+            color: #8C1C00;
+            display: block;
+            font-family: monospace;
+            white-space: nowrap;
+        }
+
+        .mecsim_logger_output
+        {
+            display: block;
+            font-family: monospace;
+            white-space: nowrap;
+        }`;
 }

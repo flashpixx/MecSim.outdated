@@ -209,7 +209,7 @@ var MecSim = (function (px_modul) {
                     if (px_item.getGlobalContent())
                         jQuery( px_item.getGlobalContent() ).appendTo("body");
                     if (px_item.getGlobalCSS())
-                        jQuery("body").css( px_item.getGlobalCSS() );
+                        jQuery("head").append("<style>" + px_item.getGlobalCSS() + "</style" );
 
                     // accordion elements
                     if (px_item.getName())
@@ -232,16 +232,6 @@ var MecSim = (function (px_modul) {
 
 
         /*
-        // initialize websocket log binding
-        px_modul.websocket( "/cconsole/output/log", {
-            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">"  + po_event.data + "</span>");  },
-            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_output\">" + po_event.data + "</span>"); }
-        });
-        px_modul.websocket( "/cconsole/error/log", {
-            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
-            "onmessage" : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); }
-        });
-
         // initialize inspector binding
         px_modul.websocket( "/cinspector/show", {
             "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },

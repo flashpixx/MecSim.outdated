@@ -179,19 +179,17 @@ var MecSim = (function (px_modul) {
     px_modul.uiinitialize = function( pa )
     {
         // create basic layout within the body element (three frame structure)
-        jQuery( String.raw`
-            <div id = "${px_modul.ui().screen()}" >
-                <div id = "${px_modul.ui().menu()}" >
-                    <div id = "${px_modul.ui().accordion()}" />
-                </div>
-                <div >
-                    <div id = "${px_modul.ui().screenmenu()}" >
-                        <div id = "${px_modul.ui().content()}" ></div >
-                        <div id = "${px_modul.ui().log()}" ></div >
-                    </div >
-                </div >
-            </div>
-        `).appendTo("body");
+        jQuery( '<div id = "' + px_modul.ui().screen()     + '" >' +
+                '<div id = "' + px_modul.ui().menu()       + '" >' +
+                '<div id = "' + px_modul.ui().accordion()  + '" />' +
+                '</div>' +
+                '<div>' +
+                '<div id = "' + px_modul.ui().screenmenu() + '" >' +
+                '<div id = "' + px_modul.ui().content()    + '" ></div >' +
+                '<div id = "' + px_modul.ui().log()        + '" ></div >' +
+                '</div >' +
+                '</div >' +
+                '</div>').appendTo("body");
 
 
         // add main layout elements to the HTML body
@@ -208,7 +206,7 @@ var MecSim = (function (px_modul) {
                     // accordion elements
                     if (px_item.getName())
                     {
-                        jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo( px_modul.ui().accordion("#") );
+                        jQuery( '<h3 id = "' + px_item.getID() + '">' + px_item.getName() + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
                         if (px_item.getContent())
                             jQuery( px_item.getContent() ).appendTo( px_modul.ui().accordion("#") );
                     }

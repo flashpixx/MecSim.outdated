@@ -48,13 +48,13 @@ Logger.prototype.afterDOMAdded = function()
     var self = this;
 
     MecSim.websocket( "/cconsole/output/log", {
-        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("output")}">${po_event.data}</span>` );  },
-        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); }
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("output") + '">' + po_event.data + '</span>' ); },
+        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error")  + '">' + po_event.data + '</span>' ); }
     });
 
     MecSim.websocket( "/cconsole/error/log", {
-        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("output")}">${po_event.data}</span>` ); },
-        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); }
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("output") + '">' + po_event.data + '</span>' ); },
+        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error")  + '">' + po_event.data + '</span>' ); }
     });
 }
 
@@ -64,19 +64,18 @@ Logger.prototype.afterDOMAdded = function()
 **/
 Logger.prototype.getGlobalCSS = function()
 {
-   return String.raw`
-        .mecsim_logger_error
-        {
-            color: #8C1C00;
-            display: block;
-            font-family: monospace;
-            white-space: nowrap;
-        }
+   return '.mecsim_logger_error' +
+          '{' +
+          ' color: #8C1C00;' +
+          ' display: block;' +
+          ' font-family: monospace;' +
+          ' white-space: nowrap;' +
+          '}' +
 
-        .mecsim_logger_output
-        {
-            display: block;
-            font-family: monospace;
-            white-space: nowrap;
-        }`;
+          '.mecsim_logger_output' +
+          '{' +
+          ' display: block;' +
+          ' font-family: monospace;' +
+          ' white-space: nowrap;' +
+          '}';
 }

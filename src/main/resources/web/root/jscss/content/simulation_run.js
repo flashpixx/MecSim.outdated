@@ -45,9 +45,9 @@ Run.prototype = Object.create(Pane.prototype);
 **/
 Run.prototype.getContent = function()
 {
-    return String.raw`<button id = "${this.generateSubID("start")}" >Start</button >
-        <button id = "${this.generateSubID("stop")}" >Stop</button >
-        <button id = "${this.generateSubID("reset")}" >Reset</button >`;
+    return '<button id = "' + this.generateSubID("start") + '" >Start</button >' +
+           '<button id = "' + this.generateSubID("stop")  + '" >Stop</button >' +
+           '<button id = "' + this.generateSubID("reset") + '" >Reset</button >';
 }
 
 
@@ -56,13 +56,13 @@ Run.prototype.getContent = function()
 **/
 Run.prototype.getGlobalContent = function()
 {
-    return String.raw`<div id = "${this.generateSubID("dialog")}" >
-        <div class = "dialog-error" >
-            <p id = "${this.generateSubID("text")}" >
-                <span class = "ui-icon ui-icon-alert" ></span >
-            </p >
-        </div >
-    </div >`;
+    return '<div id = "' + this.generateSubID("dialog") + '">' +
+           '<div class = "dialog-error" > ' +
+           '<p id = "' + this.generateSubID("text") + '" >' +
+           '<span class = "ui-icon ui-icon-alert" ></span >' +
+           '</p >' +
+           '</div >' +
+           '</div >';
 }
 
 

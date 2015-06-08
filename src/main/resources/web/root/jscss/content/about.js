@@ -45,7 +45,7 @@ About.prototype = Object.create(Pane.prototype);
 **/
 About.prototype.getGlobalContent = function()
 {
-    return String.raw`<div id = "${this.getID()}" >
+    return String.raw`<div id = "${this.generateSubID("dialog")}" >
         <p id = "${this.generateSubID("text")}" >
             <a id = "${this.generateSubID("name")}" ></a >
             <br /><br />
@@ -67,7 +67,7 @@ About.prototype.getGlobalContent = function()
 **/
 About.prototype.getContent = function()
 {
-    return String.raw`<button id = "${this.generateSubID("aboutbutton")}" >${this.getName()}</button >`;
+    return String.raw`<button id = "${this.generateSubID("button")}" >${this.getName()}</button >`;
 }
 
 
@@ -77,7 +77,7 @@ About.prototype.getContent = function()
 About.prototype.afterDOMAdded = function()
 {
     var self = this;
-    jQuery(self.generateSubID("aboutbutton", "#")).on("click", function() {
+    jQuery(self.generateSubID("button", "#")).click( function() {
 
         jQuery.getJSON( "/cconfiguration/get", function( po_data ) {
 
@@ -95,7 +95,7 @@ About.prototype.afterDOMAdded = function()
 
         }).done( function() {
 
-            jQuery(self.generateSubID("aboutbutton", "#")).dialog({
+            jQuery(self.generateSubID("dialog", "#")).dialog({
                 width: 500,
                 modal: true
             });

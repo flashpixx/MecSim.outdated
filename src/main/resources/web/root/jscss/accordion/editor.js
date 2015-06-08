@@ -67,7 +67,7 @@ var EditorPanel = ( function (px_module) {
         // add a tab to the editor
         "add_tab" : function() {
             var selected_file = EditorPanel.ui_actions().get_tab_id();
-            $("#tabs ul").append("<li><a id='" + EditorPanel.ui_actions().get_tab_id() + "_tab' href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
+            $("#tabs ul").append("<li id='" + EditorPanel.ui_actions().get_tab_id() + "_li'><a id='" + EditorPanel.ui_actions().get_tab_id() + "_tab' href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
             $("#tabs").append("<div id='" + EditorPanel.ui_actions().get_tab_id() + "'></div>");
         },
 
@@ -184,17 +184,10 @@ var EditorPanel = ( function (px_module) {
 
         // delete file
         EditorPanel.ui().delete_file_button().button().on("click", function(p_data){
-
-            $.ajax({
-                url : "/cagentenvironment/jason/delete",
-                type: "POST",
-                data: { "name" : $("#mecsim_agent_files").val() },
-                success : function( px_data )
-                {
-                    EditorPanel.ui_actions().load_agent_files();
-                }
+            EditorPanel.ui().mecsim_editor_delete_confirmation().dialog({
+                width: 500,
+                modal: true
             });
-
         });
 
         // save file
@@ -213,6 +206,31 @@ var EditorPanel = ( function (px_module) {
                 }
             });
 
+        });
+
+        EditorPanel.ui().mecsim_editor_delete_file_yes().button().on("click", function() {
+
+            $.ajax({
+                url : "/cagentenvironment/jason/delete",
+                type: "POST",
+                data: { "name" : $("#mecsim_agent_files").val() },
+                success : function( px_data )
+                {
+                    EditorPanel.ui_actions().load_agent_files();
+                }
+            });
+
+            // remove tab
+            $("#" + EditorPanel.ui_actions().get_tab_id() + "_li").remove();
+            $("#" + EditorPanel.ui_actions().get_tab_id()).remove();
+            $("#tabs").tabs("refresh");
+
+            EditorPanel.ui().mecsim_editor_delete_confirmation().dialog("close");
+
+        });
+
+        EditorPanel.ui().mecsim_editor_delete_file_no().button().on("click", function() {
+            EditorPanel.ui().mecsim_editor_delete_confirmation().dialog("close");
         });
 
     }
@@ -237,7 +255,13 @@ var EditorPanel = ( function (px_module) {
         /** reference to 'select file type' menu **/
         "select_file_type_menu" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
         /** reference to accordion editor panel h3 element **/
-        "mecsim_editor_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); }
+        "mecsim_editor_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); },
+        /** reference to editor delete confirmation popup **/
+        "mecsim_editor_delete_confirmation"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_confirmation"   : $("#mecsim_editor_delete_confirmation"); },
+        /** reference to editor delete file 'yes' button **/
+        "mecsim_editor_delete_file_yes"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_yes"   : $("#mecsim_editor_delete_file_yes"); },
+        /** reference to editor delete file 'no' button **/
+        "mecsim_editor_delete_file_no"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_no"   : $("#mecsim_editor_delete_file_no"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

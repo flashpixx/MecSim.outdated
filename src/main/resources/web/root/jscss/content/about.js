@@ -77,8 +77,11 @@ About.prototype.getContent = function()
 About.prototype.afterDOMAdded = function()
 {
     var self = this;
-    jQuery(self.generateSubID("button", "#")).click( function() {
 
+    // create button & bind action to the button
+    jQuery(self.generateSubID("button", "#")).button().click( function() {
+
+        // click reads JSON data
         jQuery.getJSON( "/cconfiguration/get", function( po_data ) {
 
             jQuery(self.generateSubID("name", "#"))
@@ -95,6 +98,7 @@ About.prototype.afterDOMAdded = function()
 
         }).done( function() {
 
+            // after adding data - dialog is called
             jQuery(self.generateSubID("dialog", "#")).dialog({
                 width: 500,
                 modal: true

@@ -185,7 +185,7 @@ var MecSim = (function (px_modul) {
         jQuery( String.raw`
             <div id = "mecsim_global_screen" >
                 <div id = "mecsim_global_menu" >
-                    <div id = "mecsim_global_accordion" class = "accordion" />
+                    <div id = "mecsim_global_accordion" />
                 </div>
                 <div >
                     <div id = "mecsim_global_screen_right" >
@@ -218,6 +218,8 @@ var MecSim = (function (px_modul) {
                     if (px_item.getName())
                     {
                         jQuery( String.raw`<h3 id = "${px_item.getID()}">${px_item.getName()}</h3>` ).appendTo("#mecsim_global_accordion");
+                        //jQuery(px_item.getID("#")).accordion();
+
                         if (px_item.getContent())
                             jQuery( px_item.getContent() ).appendTo("#mecsim_global_accordion");
                     }

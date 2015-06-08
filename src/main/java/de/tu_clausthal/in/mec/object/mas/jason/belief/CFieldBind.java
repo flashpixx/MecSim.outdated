@@ -41,7 +41,7 @@ import java.util.Set;
 
 
 /**
- * belief structure to bind object properties
+ * beliefbase structure to bind object properties
  */
 public class CFieldBind extends CBeliefBase
 {
@@ -49,6 +49,7 @@ public class CFieldBind extends CBeliefBase
      * field filter
      */
     private static final CFieldFilter c_filter = new CFieldFilter();
+
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
@@ -61,19 +62,18 @@ public class CFieldBind extends CBeliefBase
      * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind(final String p_name, final Object p_object)
+    public CFieldBind( final String p_name, final Object p_object )
     {
-        this.push(p_name, p_object);
+        this.push( p_name, p_object );
     }
 
     /**
-     * clears top level and inherited literals and bindings
+     * clears top-level, inherited and binded literals
      */
     @Override
     public void clear()
     {
         super.clear();
-
         m_bind.clear();
     }
 
@@ -142,26 +142,17 @@ public class CFieldBind extends CBeliefBase
      */
     public final void remove(final String p_name)
     {
-        m_bind.remove(p_name);
+        m_bind.remove( p_name );
     }
 
-    public ITermCollection getAnnotation()
-    {
-        return null;
-    }
-
-    public IAtom<?> getFunctor()
-    {
-        return null;
-    }
-
-    public ITermCollection getValues()
-    {
-        return null;
-    }
-
+    /**
+     * checks if interface is assignable from given class
+     *
+     * @param p_class class to check
+     * @return true, if check passes
+     */
     public boolean instanceOf(Class<?> p_class)
     {
-        return false;
+        return IBeliefBase.class.isAssignableFrom( p_class );
     }
 }

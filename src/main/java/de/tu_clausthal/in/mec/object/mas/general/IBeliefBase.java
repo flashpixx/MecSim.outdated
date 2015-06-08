@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import com.graphhopper.coll.MapEntry;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -85,6 +87,13 @@ public interface IBeliefBase<T>
      * @param p_literal generic literal
      */
     public void removeLiteral( final ILiteral p_literal );
+
+    /**
+     * removes a beliefbase from inherited beliefbases
+     *
+     * @param p_name beliefbase to remove
+     */
+    public void removeBeliefbase( final String p_name );
 
     /**
      * method for adding a beliefbase

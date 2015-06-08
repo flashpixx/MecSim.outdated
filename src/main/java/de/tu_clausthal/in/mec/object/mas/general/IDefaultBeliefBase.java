@@ -163,6 +163,22 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
+     * removes a beliefbase recursively from inherited beliefbases
+     *
+     * @param p_name beliefbase to remove
+     */
+    @Override
+    public void removeBeliefbase( final String p_name )
+    {
+        // removes specified beliefbase if its inherited
+        m_beliefbases.remove( p_name );
+
+        // recursive call
+        for( IBeliefBase<T> l_beliefbase : m_beliefbases.values() )
+            l_beliefbase.removeBeliefbase( p_name );
+    }
+
+    /**
      * removes the top-level and the inherited beliefbases' literals
      * i.e. all the inherited beliefbases are preserved empty
      */

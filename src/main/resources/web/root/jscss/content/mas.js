@@ -53,6 +53,64 @@ MAS.prototype.getContent = function()
 /**
  * @Overwrite
 **/
+Logger.prototype.getGlobalCSS = function()
+{
+    return '#communication' +
+           '{' +
+           '    left: 10em;' +
+           '    position: relative;' +
+           '}' +
+
+           'path.communication-arc' +
+           '{' +
+           '    fill: #fff;' +
+           '}' +
+
+           '.graphtest-node' +
+           '{' +
+           '    font-size: 8px;' +
+           '}' +
+
+
+           '.communication-link' +
+           '{' +
+           '    fill: none;' +
+           '    stroke: #1f77b4;' +
+           '    stroke-opacity: .4;' +
+           '    pointer-events: none;' +
+           '}' +
+
+           '.communication-link.source, .communication-link.target' +
+           '{' +
+           '    stroke-opacity: 1;' +
+           '    stroke-width: 2px;' +
+           '}' +
+
+           '.communication-node.target' +
+           '{' +
+           '    fill: #d62728 !important;' +
+           '}' +
+
+           '.communication-link.source' +
+           '{' +
+           '    stroke: #d62728;' +
+           '}' +
+
+           '.communication-node.source' +
+           '{' +
+           '    fill: #2ca02c;' +
+           '}' +
+
+           '.communication-link.target' +
+           '{' +
+           '    stroke: #2ca02c;' +
+           '}';
+}
+
+
+/**
+ * @Overwrite
+**/
 MAS.prototype.afterDOMAdded = function()
 {
 
@@ -69,7 +127,7 @@ MAS.prototype.afterDOMAdded = function()
     // communication binding
     jQuery(self.generateSubID("communication", "#")).button().click( function() {
 
-        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling("#mecsim_global_content", { id   : "communication" });
+        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id   : "communication" });
 
         MecSim.websocket( "/cmessagesystem/flow", {
 

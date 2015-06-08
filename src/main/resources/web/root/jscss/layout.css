@@ -83,7 +83,7 @@ select
     top: 10%;
 }
 
-.mecsim_log_error
+.mecsim_logger_error
 {
     color: #8C1C00;
     display: block;
@@ -91,7 +91,7 @@ select
     white-space: nowrap;
 }
 
-.mecsim_log_output
+.mecsim_logger_output
 {
     display: block;
     font-family: monospace;

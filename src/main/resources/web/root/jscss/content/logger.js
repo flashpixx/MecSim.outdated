@@ -31,19 +31,28 @@
  * @param pc_id ID
  * @param pc_name name of the panel
 **/
-function Logger( pc_id, pc_name )
+function Logger( pc_id )
 {
-    Pane.call(this, pc_id, pc_name );
+    Pane.call(this, pc_id );
 }
 
 /** inheritance call **/
 Logger.prototype = Object.create(Pane.prototype);
 
-
 /**
  * @Overwrite
- **/
-Logger.prototype.getGlobalContent = function()
+**/
+Logger.prototype.afterDOMAdded = function()
 {
-    return "<div id=\"blub\">hallo</div>";
+    var self = this;
+
+    MecSim.websocket( "/cconsole/output/log", {
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("output")}">${po_event.data}</span>` );  },
+        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); }
+    });
+
+    MecSim.websocket( "/cconsole/error/log", {
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("output")}">${po_event.data}</span>` ); },
+        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); }
+    });
 }

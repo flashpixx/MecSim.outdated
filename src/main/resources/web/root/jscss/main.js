@@ -28,6 +28,7 @@ $(document).ready(function() {
     // UI instantiation
     MecSim.uiinitialize([
 
+        new Logger("logger", "Logger"),
         new Pane("help", "Help", [ new About("about", "About") ])
 
     ]);

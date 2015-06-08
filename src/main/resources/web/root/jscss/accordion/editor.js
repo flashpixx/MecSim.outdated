@@ -25,6 +25,8 @@
 
 var EditorPanel = ( function (px_module) {
 
+    var save_interval;
+
     px_module.g_editor = {}
 
     px_module.ui_actions = function() { return {
@@ -123,6 +125,26 @@ var EditorPanel = ( function (px_module) {
         // add a code mirror object to the editor
         "add_code_mirror" : function() {
             EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
+        },
+
+        // save current selected file
+        "save_file" : function() {
+
+            var selected_tab_id = $(
+                 '#tabs > div:eq(' + $('#tabs').tabs('option', 'active') + ')'
+            ).get(0).id;
+
+            $.ajax({
+                url : "/cagentenvironment/jason/write",
+                type: "POST",
+                data: { "name" : $("#mecsim_agent_files").val(),
+                "source" : EditorPanel.g_editor[selected_tab_id].getValue(),
+                "data" : EditorPanel.g_editor[selected_tab_id].getValue()},
+                success : function( px_data )
+                {
+                    console.log("file saved");
+                }
+            });
         }
 
     };}
@@ -148,6 +170,13 @@ var EditorPanel = ( function (px_module) {
                 EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
                 EditorPanel.ui_actions().load_selected_file();
 
+                // save current selected file every five seconds
+                save_interval = setInterval(function () {
+                    EditorPanel.ui_actions().save_file();
+                }, 5000);
+
+            } else {
+                clearInterval(save_interval);
             }
         });
 
@@ -179,7 +208,6 @@ var EditorPanel = ( function (px_module) {
                 EditorPanel.ui_actions().load_selected_file();
             }
 
-
         });
 
         // delete file
@@ -190,22 +218,10 @@ var EditorPanel = ( function (px_module) {
             });
         });
 
-        // save file
+        // save file button action
         // TODO: parametrize agent file type (e.g. jason, goal)
         EditorPanel.ui().save_file_button().button().on("click", function(p_data){
-
-            $.ajax({
-                url : "/cagentenvironment/jason/write",
-                type: "POST",
-                data: { "name" : $("#mecsim_agent_files").val(),
-                "source" : EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].getValue(),
-                "data" : EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].getValue()},
-                success : function( px_data )
-                {
-                    console.log("file saved");
-                }
-            });
-
+            EditorPanel.ui_actions().save_file();
         });
 
         EditorPanel.ui().mecsim_editor_delete_file_yes().button().on("click", function() {

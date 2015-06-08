@@ -95,6 +95,11 @@ public interface IBeliefBase<T>
     public void removeLiteral( final ILiteral p_literal );
 
     /**
+     * removes a collection of generic literals
+     */
+    public void removeAllLiterals( final Collection<ILiteral<T>> p_literals );
+
+    /**
      * removes a beliefbase from inherited beliefbases
      *
      * @param p_name beliefbase to remove
@@ -104,10 +109,10 @@ public interface IBeliefBase<T>
     /**
      * method for adding a beliefbase
      *
-     * @param p_prefix prefix for the beliefbases' name
+     * @param p_name beliefbase name
      * @param p_beliefbase beliefbase to add
      */
-    public void addBeliefbase(final String p_prefix, final IBeliefBase<T> p_beliefbase);
+    public void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase);
 
     /**
      * method to update the beliefbase

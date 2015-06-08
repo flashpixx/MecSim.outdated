@@ -77,7 +77,6 @@ public class CAgent<T> implements IVoidAgent
      */
     private static final Map<String, InternalAction> c_overwriteaction = new HashMap<String, InternalAction>()
     {{
-
             // overwrite default internal actions
             final CInternalEmpty l_empty13 = new CInternalEmpty(1, 3);
             put("jason.stdlib.clone", new CInternalEmpty());
@@ -102,7 +101,7 @@ public class CAgent<T> implements IVoidAgent
      */
     private final CJasonArchitecture m_architecture;
     /**
-     * set with belief binds
+     * the agents beliefbase
      */
     private final CBeliefBase m_beliefs;
     /**
@@ -123,7 +122,7 @@ public class CAgent<T> implements IVoidAgent
      */
     private CPath m_namepath;
     /**
-     * participant object *
+     * participant object
      */
     private CParticipant m_participant;
     /**
@@ -156,15 +155,20 @@ public class CAgent<T> implements IVoidAgent
     public CAgent(final CPath p_namepath, final String p_asl, final T p_bind) throws JasonException
     {
         m_beliefs = new CBeliefBase();
+
         m_namepath = p_namepath;
         if ((m_namepath == null) || (m_namepath.isEmpty()))
             m_namepath = new CPath(this.getClass().getSimpleName() + "@" + this.hashCode());
 
         if (p_bind != null)
         {
+            // register possible actions
             m_action.put("set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind(c_bindname, p_bind));
             m_action.put("invoke", new CMethodBind(c_bindname, p_bind));
+
+            // initialize inherited beliefbases
             m_beliefs.addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
+            m_beliefs.addBeliefbase("message", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase());
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -208,7 +212,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addBelief(final String p_name, final Object p_data)
     {
-        m_beliefs.addLiteral( CCommon.convertGeneric( CCommon.getLiteral( p_name, p_data ) ) );
+        m_beliefs.addLiteral( CCommon.getLiteral(p_name, p_data) );
     }
 
     @Override
@@ -246,13 +250,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void removeBelief(final String p_name, final Object p_data)
     {
-        try
-        {
-            m_agent.delBel(CCommon.getLiteral(p_name, p_data));
-        } catch (final RevisionFailedException l_exception)
-        {
-            CLogger.error(l_exception);
-        }
+        m_beliefs.removeLiteral( CCommon.convertGeneric( CCommon.getLiteral( p_name, p_data ) ) );
     }
 
     @Override
@@ -272,9 +270,9 @@ public class CAgent<T> implements IVoidAgent
     }
 
     /**
-     * returns the current belief base of the agent
+     * returns the agents current beliefbase
      *
-     * @return belief base
+     * @return beliefbase
      */
     public final IDefaultBeliefBase getBeliefBase()
     {
@@ -378,19 +376,16 @@ public class CAgent<T> implements IVoidAgent
             for (final ICycle l_item : m_cycleobject)
                 l_item.beforeCycle( p_currentstep, CAgent.this );
 
-
             // add the simulationstep belief with the new number and remove the old one
-            m_beliefs.addLiteral( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) ) );
-            m_beliefs.removeLiteral( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) ) );
+            m_beliefs.addLiteral( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)) );
+            m_beliefs.removeLiteral( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)) );
 
             // run belief updates
             this.updateBindBeliefs();
-            this.updateMessageBeliefs();
 
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);
             this.getTS().reasoningCycle();
-
 
             // run all register after-cycle object
             for (final ICycle l_item : m_cycleobject)
@@ -398,64 +393,15 @@ public class CAgent<T> implements IVoidAgent
         }
 
         /**
-         * updates all beliefs, that will read from the bind objects
+         * updates all the inherited beliefbases
+         *
+         * @todo perform update just for changed literals/beliefbases
          */
         protected final void updateBindBeliefs()
         {
+            // update all the inherited beliefbases
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
-            {
-                // update binded beliefs
-                ( ( CFieldBind ) l_beliefbase).update();
-
-                // set new belief into the agent
-                m_beliefs.addAllLiterals( l_beliefbase.getLiterals() );
-            }
-
-        }
-
-        /**
-         * updates all beliefs that are read from the message queue
-         */
-        protected final void updateMessageBeliefs()
-        {
-            for (final IMessage l_msg : m_receivedmessages)
-                try
-                {
-
-                    // if message is a message from Jason internal message system
-                    if (l_msg instanceof CMessage)
-                    {
-                        final Message l_jmsg = ((Message) l_msg.getData());
-                        final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                        l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_jmsg.getSender()).getPath(c_seperator))));
-
-                        if (l_jmsg.isTell())
-                            m_beliefs.addLiteral( CCommon.convertGeneric( l_literal ) );
-                        if (l_jmsg.isUnTell())
-                            m_beliefs.removeLiteral( CCommon.convertGeneric( l_literal ) );
-                        if (l_jmsg.isKnownPerformative())
-                        {
-                            l_literal.addAnnot(BeliefBase.TPercept);
-                            this.getTS().getC().addEvent(
-                                    new Event(
-                                            new Trigger(
-                                                    Trigger.TEOperator.add, Trigger.TEType.belief, l_literal
-                                            ), Intention.EmptyInt
-                                    )
-                            );
-                        }
-
-                        continue;
-                    }
-
-                    // otherwise message will direct converted
-                    final Literal l_literal = CCommon.getLiteral(l_msg.getTitle(), l_msg.getData());
-                    l_literal.addAnnot( ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
-                    m_beliefs.addLiteral( CCommon.convertGeneric( l_literal ) );
-
-                } catch (final Exception l_exception)
-                {
-                }
+                l_beliefbase.update();
         }
 
     }

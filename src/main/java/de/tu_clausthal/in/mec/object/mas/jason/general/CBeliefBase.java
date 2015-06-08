@@ -79,7 +79,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     /**
-     * method to update the beliefbase
+     * method for updating the beliefbase
      */
     @Override
     public void update()

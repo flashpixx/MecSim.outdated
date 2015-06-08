@@ -73,7 +73,7 @@ public class CFieldBind extends CBeliefBase
     @Override
     public final void update()
     {
-        // remove old top-level literals
+        // remove old top-level literals (false-parameter to just remove the top-level literals)
         clearLiterals( false );
 
         // iterate over all binded objects
@@ -93,7 +93,7 @@ public class CFieldBind extends CBeliefBase
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    m_literals.add( (ILiteral) CCommon.convertGeneric( l_literal ) );
+                    addLiteral( l_literal );
 
                 } catch (final Exception l_exception)
                 {

@@ -171,12 +171,6 @@ var MecSim = (function (px_modul) {
         content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
         /** reference to log area **/
         log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
-
-
-        /** reference to the object inspector **/
-        //inspector   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "mecsim_object_inspector"    : jQuery( "#mecsim_object_inspector" ); },
-
-
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -228,21 +222,6 @@ var MecSim = (function (px_modul) {
         jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         jQuery( px_modul.ui().screenmenu("#") ).jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         jQuery( px_modul.ui().accordion("#") ).accordion({ active: false, collapsible: true, heightStyle: "content" });
-        //px_modul.ui().inspector().dialog({ autoOpen: false });
-
-
-        /*
-        // initialize inspector binding
-        px_modul.websocket( "/cinspector/show", {
-            "onerror"   : function( po_event ) { MecSim.ui().log().prepend("<span class=\"mecsim_log_error\">" + po_event.data + "</span>"); },
-            "onmessage" : function( po_event ) {
-                px_modul.ui().inspector().empty();
-                px_modul.ui().inspector().prepend("<p></p>");
-                px_modul.ui().inspector().dialog("open");
-            }
-        });
-        */
-
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

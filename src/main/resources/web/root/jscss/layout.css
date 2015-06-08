@@ -213,25 +213,17 @@ select
   background-color: #FFF;
   cursor: default;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-
-.mecsim_graphEditor_svg:not(.active):not(.ctrl) {
-  cursor: crosshair;
-}
-
-.mecsim_graphEditor_svg:not(.active):not(.ctrl) path.link {
-  cursor: pointer;
 }
 
 .mecsim_graphEdiorPath.link {
-  fill: none;
   stroke: #000;
   stroke-width: 4px;
+  fill: none;
   cursor: default;
+}
+
+.mecsim_graphEditor_svg:not(.active):not(.ctrl) .mecsim_graphEdiorPath.link {
+  cursor: pointer;
 }
 
 .mecsim_graphEdiorPath.link.selected {
@@ -262,8 +254,8 @@ select
 }
 
 .mecsim_graphEditorCircleText.mecsim_graphEditorCircleID {
-  text-anchor: middle;
   font-weight: bold;
+  text-anchor: middle;
 }
 
 /******************************** css definitions for mecsim_widget ************************************************/

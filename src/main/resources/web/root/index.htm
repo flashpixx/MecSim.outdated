@@ -55,10 +55,11 @@
     <script type = "text/javascript" src = "jscss/widget.js" ></script >
 
     <script type = "text/javascript" src = "jscss/content/pane.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
     <script type = "text/javascript" src = "jscss/content/inspector.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/help.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
     <script type = "text/javascript" src = "jscss/content/simulation.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/mas.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/help.js" ></script >
 
     <link href = "jscss/layout.css" rel = "stylesheet" />
 
@@ -71,6 +72,7 @@
                 new Inspector( "inspector" ),
                 new Logger( "logger" ),
                 new Simulation("simulation", "Simulation"),
+                new MAS("mas", "Multi-Agent System"),
                 new Help("help", "Help")
 
             ]);

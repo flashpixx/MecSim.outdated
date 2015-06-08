@@ -26,7 +26,7 @@
 
 
 /**
- * ctor to create the about dialog instance
+ * ctor to create the inspector dialog instance
  *
  * @param pc_id ID
  * @param pc_name name of the panel

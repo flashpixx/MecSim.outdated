@@ -64,7 +64,7 @@ Logger.prototype.afterDOMAdded = function()
 **/
 Logger.prototype.getGlobalCSS = function()
 {
-   return '.mecsim_logger_error' +
+   return self.generateSubID("error", ".") +
           '{' +
           ' color: #8C1C00;' +
           ' display: block;' +
@@ -72,7 +72,7 @@ Logger.prototype.getGlobalCSS = function()
           ' white-space: nowrap;' +
           '}' +
 
-          '.mecsim_logger_output' +
+          self.generateSubID("output", ".") +
           '{' +
           ' display: block;' +
           ' font-family: monospace;' +

@@ -224,7 +224,7 @@ var MecSim = (function (px_modul) {
             });
 
 
-        // initialize the content pane with the three layer structures
+        // initialize the content pane with the three layer structures - must be called at the end, because of correct layout structure
         jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         jQuery( px_modul.ui().screenmenu("#") ).jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         jQuery( px_modul.ui().accordion("#") ).accordion({ active: false, collapsible: true, heightStyle: "content" });

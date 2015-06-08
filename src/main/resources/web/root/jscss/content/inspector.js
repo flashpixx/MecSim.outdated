@@ -21,16 +21,50 @@
  * @endcond
  */
 
- "use strict";
 
-$(document).ready(function() {
+"use strict";
 
-    // UI instantiation
-    MecSim.uiinitialize([
 
-        new Inspector( "inspector", "Inspector" ),
-        new Logger( "logger", "Logger" ),
-        new Pane( "help", "Help", [ new About("about", "About") ] )
+/**
+ * ctor to create the about dialog instance
+ *
+ * @param pc_id ID
+ * @param pc_name name of the panel
+**/
+function Inspector( pc_id, pc_name )
+{
+    Pane.call(this, pc_id, pc_name );
+}
 
-    ]);
-});
+/** inheritance call **/
+Inspector.prototype = Object.create(Pane.prototype);
+
+
+/**
+ * @Overwrite
+**/
+Inspector.prototype.getGlobalContent = function()
+{
+    return String.raw`<div id = "${self.generateSubID("dialog")}" title = "Object Inspector" >`;
+}
+
+
+/**
+ * @Overwrite
+**/
+Inspector.prototype.afterDOMAdded = function()
+{
+    var self = this;
+
+    MecSim.websocket( "/cinspector/show", {
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( String.raw`<span class="${self.generateSubID("error")}">${po_event.data}</span>` ); },
+        "onmessage" : function( po_event ) {
+            console.log(po_event);
+            /*
+            px_modul.ui().inspector().empty();
+            px_modul.ui().inspector().prepend("<p></p>");
+            px_modul.ui().inspector().dialog("open");
+            */
+        }
+    });
+}

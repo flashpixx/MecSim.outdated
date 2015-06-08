@@ -210,52 +210,55 @@ select
 /******************************** css definitions for mecsim_grapheditor ++++++++************************************************/
 
 .mecsim_graphEditor_svg {
-  background-color: #FFF;
-  cursor: default;
-  -webkit-user-select: none;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #FFF;
+    margin-left: 25px;
+    cursor: default;
+    -webkit-user-select: none;
 }
 
 .mecsim_graphEdiorPath.link {
-  stroke: #000;
-  stroke-width: 4px;
-  fill: none;
-  cursor: default;
+    stroke: #000;
+    stroke-width: 4px;
+    fill: none;
+    cursor: default;
 }
 
 .mecsim_graphEditor_svg:not(.active):not(.ctrl) .mecsim_graphEdiorPath.link {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .mecsim_graphEdiorPath.link.selected {
-  stroke-dasharray: 10,2;
+    stroke-dasharray: 10,2;
 }
 
 .mecsim_graphEdiorPath.link.dragline {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .mecsim_graphEdiorPath.link.hidden {
-  stroke-width: 0;
+    stroke-width: 0;
 }
 
 .mecsim_graphEditorCircle.node {
-  stroke-width: 1.5px;
-  cursor: pointer;
+    stroke-width: 1.5px;
+    cursor: pointer;
 }
 
 .mecsim_graphEditorCircle.node.reflexive {
-  stroke: #000 !important;
-  stroke-width: 2.5px;
+    stroke: #000 !important;
+    stroke-width: 2.5px;
 }
 
 .mecsim_graphEditorCircleText {
-  font: 12px sans-serif;
-  pointer-events: none;
+    font: 12px sans-serif;
+    pointer-events: none;
 }
 
 .mecsim_graphEditorCircleText.mecsim_graphEditorCircleID {
-  font-weight: bold;
-  text-anchor: middle;
+    font-weight: bold;
+    text-anchor: middle;
 }
 
 /******************************** css definitions for mecsim_widget ************************************************/

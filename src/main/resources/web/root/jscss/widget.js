@@ -36,18 +36,20 @@
         var self = this;
 
         this._div               = element;
-        this._name              = options.name             || "Default Widgetname";
-        this._animate           = options.animate          || true;
-        this._animateEffect     = options.animateEffect    || "drop";
-        this._animationTime     = options.animateTime      || 400;
-        this._background        = options.background       || "white";
-        this._width             = options.width            || 750;
-        this._height            = options.height           || 550;
-        this._minWidth          = options.minWidth         || this._width;
-        this._minHeight         = options.minHeight        || this._height;
-        this._collapseWidth     = options.collapseWidth    || 400;
-        this._collapseHeight    = options.collapseHeight   || 20;
-        this._minOffset         = options.minOffSet        || 50;
+        this._name              = options.name                      || "Default Widgetname";
+        this._resizeable        = options.resizeable === undefined  ? true : options.resizeable;
+        this._draggable         = options.draggable === undefined   ? true : options.draggable;
+        this._animate           = options.animate === undefined     ? true : options.animate;
+        this._animateEffect     = options.animateEffect             || "drop";
+        this._animationTime     = options.animateTime               || 400;
+        this._background        = options.background                || "white";
+        this._width             = options.width                     || 750;
+        this._height            = options.height                    || 550;
+        this._minWidth          = options.minWidth                  || this._width;
+        this._minHeight         = options.minHeight                 || this._height;
+        this._collapseWidth     = options.collapseWidth             || 400;
+        this._collapseHeight    = options.collapseHeight            || 20;
+        this._minOffset         = options.minOffSet                 || 50;
 
         this._closedStatus = false;
         this._minimizedStatus = false;
@@ -70,16 +72,21 @@
         );
 
         //create widget
-        this._div.draggable({
-            drag: function(event, ui) {
-                ui.position.top = Math.max( -1*(self._minHeight - self._minOffset), ui.position.top );
-                ui.position.left = Math.max( -1*(self._minWidth - self._minOffset), ui.position.left );
-            }})
-            .resizable({
+        if(this._draggable){
+            this._div.draggable({
+                drag: function(event, ui) {
+                    ui.position.top = Math.max( -1*(self._minHeight - self._minOffset), ui.position.top );
+                    ui.position.left = Math.max( -1*(self._minWidth - self._minOffset), ui.position.left );
+            }});
+        }
+
+        if(this._resizeable){
+            this._div.resizable({
                 animate: this._animate,
                 minWidth: this._minWidth,
                 minHeight: this._minHeight
             });
+        }
     };
 
     //static method to create widget

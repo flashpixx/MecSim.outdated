@@ -81,9 +81,10 @@ var SourcePanel = ( function (px_module) {
                     SourcePanel.settings.obj.targetingWidget = Widget.createWidget(
                         SourcePanel.settings.dom.targetingWidget,
                         {
-                            name    : SourcePanel.settings.labels.waypointlist,
-                            width   : 1000,
-                            height  : 600
+                            name        : SourcePanel.settings.labels.waypointlist,
+                            width       : 1000,
+                            height      : 600,
+                            draggable   : false
                         }
                     );
                     SourcePanel.settings.obj.targetingWidget.close();
@@ -643,7 +644,7 @@ var SourcePanel = ( function (px_module) {
             {source: nodes[1], target: nodes[2], left: false, right: true }
         ];
 
-        GraphEditor.create( "#graphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
+        GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
     };
 
     return px_module;

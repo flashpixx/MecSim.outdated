@@ -337,8 +337,6 @@
 
     //key down listener
     px_module.prototype.keydown = function() {
-        d3.event.preventDefault();
-
         if(this._lastKeyDown !== -1)
             return;
         this._lastKeyDown = d3.event.keyCode;

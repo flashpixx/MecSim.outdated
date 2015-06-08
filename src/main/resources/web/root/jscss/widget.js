@@ -76,7 +76,7 @@
         //create widget
         if(this._draggable){
             this._div.draggable({
-                cancel: self._cancel,
+                cancel: self._cancel + ", input,textarea,button,select,option",
                 drag: function(event, ui) {
                     ui.position.top = Math.max( -1*(self._minHeight - self._minOffset), ui.position.top );
                     ui.position.left = Math.max( -1*(self._minWidth - self._minOffset), ui.position.left );

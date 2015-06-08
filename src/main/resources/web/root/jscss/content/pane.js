@@ -185,21 +185,20 @@ Pane.prototype.getContent = function()
 {
     var lc_result = "";
     this.ma_children.forEach( function(po_item) { lc_result += po_item.getContent(); } );
-    return this.container(lc_result.trim());
+    return lc_result.trim();
 }
 
 
 /**
  * container of the content
  *
- * @param px_content string content
+ * @param pc_prefix string prefix
+ * @param pc_suffix string suffix
  * @return content with container
 **/
-Pane.prototype.container = function( px_content )
+Pane.prototype.getContentWithContainer = function( pc_prefix, pc_suffix )
 {
-    if ((px_content) && (classof(px_content, "string")))
-        return "<span>" + px_content + "<span>";
-    return px_content;
+    return (pc_prefix ? pc_prefix : '<div>') + this.getContent() + (pc_suffix ? pc_suffix : '</div>')
 }
 
 /**

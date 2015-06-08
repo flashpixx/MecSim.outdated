@@ -26,6 +26,7 @@
 var EditorPanel = ( function (px_module) {
 
     var save_interval;
+    var opened_tabs = [];
 
     px_module.g_editor = {}
 
@@ -69,7 +70,7 @@ var EditorPanel = ( function (px_module) {
         // add a tab to the editor
         "add_tab" : function() {
             var selected_file = EditorPanel.ui_actions().get_tab_id();
-            $("#tabs ul").append("<li id='" + EditorPanel.ui_actions().get_tab_id() + "_li'><a id='" + EditorPanel.ui_actions().get_tab_id() + "_tab' href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
+            $("#tabs ul").append("<li id='" + EditorPanel.ui_actions().get_tab_id() + "_li'><a id='" + EditorPanel.ui_actions().get_tab_id() + "_tab' href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a><span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
             $("#tabs").append("<div id='" + EditorPanel.ui_actions().get_tab_id() + "'></div>");
         },
 
@@ -156,19 +157,43 @@ var EditorPanel = ( function (px_module) {
         EditorPanel.ui_actions().initDialog();
         EditorPanel.ui_actions().load_agent_files();
 
+
+
         // initialization of editor panel action
         EditorPanel.ui().mecsim_editor_panel().on("click", function() {
 
             if( MecSim.ui().accordion().accordion( "option", "active" ) ) {
 
                 MecSim.ui().content().empty();
-                EditorPanel.ui_actions().append_tab_div();
-                EditorPanel.ui_actions().add_tab();
-                $("#tabs").tabs();
 
-                // json object that holds all editor instances
-                EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
-                EditorPanel.ui_actions().load_selected_file();
+                // open all files previously opened
+
+                if(opened_tabs.length == 0){
+                    EditorPanel.ui_actions().append_tab_div();
+                    EditorPanel.ui_actions().add_tab();
+                    $("#tabs").tabs();
+
+                    // close icon: removing the tab on click TODO: if last is removed no file can be added anymore
+                    $("#tabs").tabs().delegate( "span.ui-icon-close", "click", function() {
+                    var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+                    $( "#" + panelId ).remove();
+                        $("#tabs").tabs( "refresh" );
+                    });
+
+                    // json object that holds all editor instances
+                    EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
+                    EditorPanel.ui_actions().load_selected_file();
+                } else {
+                    var tab_id;
+                    for(tab_id in opened_tabs){
+                        // TODO: load opened files
+                        //EditorPanel.ui_actions().append_tab_div();
+                        //EditorPanel.ui_actions().add_tab();
+                        //$("#tabs").tabs();
+                    }
+                }
+
+
 
                 // save current selected file every five seconds
                 save_interval = setInterval(function () {
@@ -177,6 +202,7 @@ var EditorPanel = ( function (px_module) {
 
             } else {
                 clearInterval(save_interval);
+                EditorPanel.ui_actions().save_file();
             }
         });
 

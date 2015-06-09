@@ -23,30 +23,37 @@
 
 //"use strict";
 
-// --- MAS PANEL --------------------------------------------------------------------------------------------------
+// --- MAS PANEL -------------------------------------------------------------------------------------------------------
 
-var mecsim_mas,
-    MASPanel = {
+var MASPanel = ( function (px_module) {
 
-        settings: {
-            jasonmindinspector: $("#mecsim_mas_jasonmindinspector").button()
-        },
+    px_module.bind_ui_actions = function() {
 
-        init: function() {
-            mecsim_mas = this.settings;
-            this.bind_ui_actions();
-        },
+        MASPanel.ui().mecsim_multiagent_panel().on("click", function(data){
+            MecSim.ui().content().empty();
+        });
 
-        bind_ui_actions: function() {
+        MASPanel.ui().mecsim_jason_mindinspector_button().button().on("click", function(){
+            MecSim.ui().content().load("template/mindinspector.htm");
+        });
 
-            $("#ui-id-8").on("click", function(data){
-                MecSim.ui().content().empty();
-            });
+    }
 
-            MASPanel.settings.jasonmindinspector.on("click", function(){
-                MecSim.ui().content().load("template/mindinspector.htm");
-            });
+    // --- UI references -----------------------------------------------------------------------------------------------
 
-        }
+    /**
+     * references to static UI components of the MAS panel
+     **/
+    px_module.ui = function() {return {
 
-    };
+        /** reference to mecsim jason mindinspector button **/
+        mecsim_jason_mindinspector_button : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_mas_jasonmindinspector" : $("#mecsim_mas_jasonmindinspector"); },
+        /** reference to mas panel **/
+        mecsim_multiagent_panel : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_multiagent_panel" : $("#mecsim_multiagent_panel"); }
+
+    };}
+    // -----------------------------------------------------------------------------------------------------------------
+
+    return px_module;
+
+}(MASPanel || {}));

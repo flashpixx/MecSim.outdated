@@ -36,9 +36,7 @@ $(document).ready(function() {
     ).done(function(){
 
         // module instantiation
-        LayerPanel.init();
         SourcePanel.init();
-        MASPanel.init();
 
         // UI instantiation
         // @todo refactor
@@ -55,6 +53,14 @@ $(document).ready(function() {
 
         // Help Panel instantiation
         HelpPanel.bind_ui_actions();
+
+        // MAS Panel instantiation
+        MASPanel.bind_ui_actions();
+
+        // Layer Panel instantiation
+        LayerPanel.bind_ui_actions();
+        LayerPanel.ui_actions().list_clickable_layer();
+        LayerPanel.ui_actions().list_static_layer();
 
         // create logger websockets access
         MecSim.websocket( "/cconsole/output/log", {

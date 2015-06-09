@@ -286,25 +286,25 @@ var EditorPanel = ( function (px_module) {
     px_module.ui = function() {return {
 
         /** reference to mecsim agent files select menu **/
-        "mecsim_agent_files" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_agent_files" : $("#mecsim_agent_files"); },
+        mecsim_agent_files                : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_agent_files" : $("#mecsim_agent_files"); },
         /** reference to 'new file' button **/
-        "new_file_button"    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_new_file"    : $("#mecsim_new_file"); },
+        new_file_button                   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_new_file"    : $("#mecsim_new_file"); },
         /** reference to 'load file' button **/
-        "load_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_load_file"   : $("#mecsim_load_file"); },
+        load_file_button                  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_load_file"   : $("#mecsim_load_file"); },
         /** reference to 'delete file' button **/
-        "delete_file_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_delete_file" : $( "#mecsim_delete_file" ); },
+        delete_file_button                : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_delete_file" : $( "#mecsim_delete_file" ); },
         /** reference to 'save file' button **/
-        "save_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
+        save_file_button                  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
         /** reference to 'select file type' menu **/
-        "select_file_type_menu" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
+        select_file_type_menu             : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
         /** reference to accordion editor panel h3 element **/
-        "mecsim_editor_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); },
+        mecsim_editor_panel               : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); },
         /** reference to editor delete confirmation popup **/
-        "mecsim_editor_delete_confirmation"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_confirmation"   : $("#mecsim_editor_delete_confirmation"); },
+        mecsim_editor_delete_confirmation : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_confirmation"   : $("#mecsim_editor_delete_confirmation"); },
         /** reference to editor delete file 'yes' button **/
-        "mecsim_editor_delete_file_yes"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_yes"   : $("#mecsim_editor_delete_file_yes"); },
+        mecsim_editor_delete_file_yes     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_yes"   : $("#mecsim_editor_delete_file_yes"); },
         /** reference to editor delete file 'no' button **/
-        "mecsim_editor_delete_file_no"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_no"   : $("#mecsim_editor_delete_file_no"); }
+        mecsim_editor_delete_file_no      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_no"   : $("#mecsim_editor_delete_file_no"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

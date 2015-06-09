@@ -255,8 +255,9 @@ var MecSim = (function (px_modul) {
             });
         }
 
-        // on startup add TUC logo
+        // on startup add TUC logo and optional scrollbars to the content pane
         jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
+        jQuery("head").append( '<style type = "text/css">' + px_modul.ui().content("#") + '{ overflow: auto; } </style>' );
 
 
         // initialize the content pane with the three layer structures - must be called at the end, because of correct layout structure

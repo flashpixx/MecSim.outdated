@@ -73,8 +73,61 @@ Traffic.prototype.afterDOMAdded = function()
 {
     var self = this;
 
+    // --- create graphweight switches and bind action ---------------------------
+    MecSim.ajax({
 
-    // --- create sortable list, bind actions and fill the data ---------------------------
+        url     : "/ctrafficenvironment/listgraphweight",
+        success : function( px_data ) {
+
+            jQuery.each( px_data, function( pc_key, px_value ) {
+
+                jQuery( self.generateSubID("graphweights", "#") ).append(
+
+                    '<p><label>' + pc_key + '</label>' +
+                    '<input class="' + self.generateSubID("switchgraphweight") + '" type="checkbox" id="'+ self.generateSubID("graphweight_" + px_value.id) + '" name="' + px_value.id + '" ' + (px_value.active ? "checked" : "") + '/>' +
+                    '</p>'
+
+                );
+
+            });
+        }
+
+    }).done(function() {
+
+        // fail closure function to open an error dialog
+        var lx_failclosure = function( po_event ) {
+            return function( po_data ) {
+                jQuery(self.generateSubID("text", "#")).text(po_data.responseJSON.error);
+                jQuery(self.generateSubID("dialog", "#")).dialog();
+            }
+
+        };
+
+        // create switch buttons
+        jQuery( self.generateSubID("switchgraphweight", ".") ).bootstrapSwitch({
+            size           : "mini",
+            onText         : "enable",
+            offText        : "disable",
+            onSwitchChange : function( px_event, pl_state ) {
+
+                MecSim.ajax({
+
+                    url  : "/ctrafficenvironment/enabledisablegraphweight",
+                    data : {
+                        "id"    : jQuery(this).closest("input").attr("name"),
+                        "state" : pl_state
+                    }
+
+                }).fail( lx_failclosure(px_event) );
+
+            }
+        });
+
+
+    });
+
+
+    // --- create sortable list of driving models, bind actions and fill the data ---------------------------
     jQuery( this.generateSubID("drivingmodel", "#") ).sortable({
 
         placeholder: "ui-state-highlight",

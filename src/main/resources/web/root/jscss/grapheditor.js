@@ -37,7 +37,6 @@
         //read options
         var self = this;
         this._div               = element;
-        this._data              = data                     || {};
         this._nodes             = data.nodes               || {};
         this._links             = data.links               || {};
         this._lastNodeId        = data.lastNodeId          || 0;
@@ -187,7 +186,7 @@
         this._path.exit().remove();
 
         //circle
-        this._circle = this._circle.data(this._nodes, function(d) { return d.id; });
+        this._circle = this._circle.data(this._nodes);
 
         //update circle
         this._circle.selectAll('circle')
@@ -291,9 +290,26 @@
 
     //clear data
     px_module.prototype.clear = function(data){
-        console.log("test");
         this._nodes = [];
         this._links = [];
+
+        this.update();
+        
+        this._force.stop();
+
+        this._nodes             = data.nodes               || {};
+        this._links             = data.links               || {};
+        this._lastNodeId        = data.lastNodeId          || 0;
+
+        this._force = d3.layout.force()
+            .nodes(this._nodes)
+            .links(this._links)
+            .size([this._width, this._height])
+            .linkDistance(this._linkdistance)
+            .charge(this._charge)
+            .on('tick', this.tick.bind(this));
+
+        this.resetMouseVars();
         this.update();
     };
 

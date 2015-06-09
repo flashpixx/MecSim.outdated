@@ -55,7 +55,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      */
     protected IDefaultLiteral(final String p_functor, final T p_literal)
     {
-        m_functor = new CAtom<>(p_functor);
+        m_functor = new CStringAtom<>(p_functor);
         m_literal = p_literal;
     }
 
@@ -146,14 +146,6 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     @Override
     public String toString()
     {
-        StringBuffer l_stringBuffer = new StringBuffer();
-
-        l_stringBuffer.append( m_functor );
-
-        l_stringBuffer.append( m_values );
-
-        l_stringBuffer.append( m_annotations );
-
-        return l_stringBuffer.toString();
+        return m_functor.toString() + m_values.toString() + m_annotations.toString();
     }
 }

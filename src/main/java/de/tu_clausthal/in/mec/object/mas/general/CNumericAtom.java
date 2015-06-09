@@ -24,85 +24,27 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 /**
- * generic atom class for agent literals
+ * numeric atom class for agent literals
  */
-public class CAtom<T> implements IAtom<T>
+public class CNumericAtom extends IDefaultAtom<Double>
 {
-    /**
-     * value the atom represents (e.g. string, number)
-     */
-    private final T m_value;
-
-    /**
-     * class of generic type
-     */
-    private Class<T> m_type;
-
     /**
      * ctor
      *
      * @param p_value the atom's value
      */
-    public CAtom(final T p_value)
+    public CNumericAtom(final Double p_value)
     {
-        m_value = p_value;
+        super( p_value );
     }
 
     /**
-     * getter for atom value
+     * returns string representation
      *
-     * @return the atom's value
+     * @return
      */
-    @Override
-    public T get()
-    {
-        return m_value;
+    public String toString() {
+        long l_roundedValue = Math.round( this.get() );
+        return this.get() == (double) l_roundedValue ? String.valueOf(l_roundedValue) : String.valueOf(this.get());
     }
-
-    /**
-     * check for the atom's class type
-     *
-     * @param p_class matching class
-     * @return true if the atom's type is assignable from matching class
-     */
-    @Override
-    public boolean instanceOf(final Class<?> p_class)
-    {
-        return m_type.isAssignableFrom(p_class);
-    }
-
-    /**
-     * get string representation
-     *
-     * @return atoms string representation
-     */
-    @Override
-    public String toString()
-    {
-        return m_value.toString();
-    }
-
-    /**
-     * hashcode method to compare atoms
-     *
-     * @return the atom's hashcode
-     */
-    @Override
-    public final int hashCode()
-    {
-        return m_value.hashCode();
-    }
-
-    /**
-     * method to check equivalence
-     *
-     * @param p_object
-     * @return true if input parameter equals the atom
-     */
-    @Override
-    public final boolean equals(final Object p_object)
-    {
-        return this.hashCode() == p_object.hashCode();
-    }
-
 }

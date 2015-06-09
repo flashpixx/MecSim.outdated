@@ -34,5 +34,4 @@ public interface IAtom<T> extends ITerm
      * @return value
      */
     public T get();
-
 }

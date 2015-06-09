@@ -134,7 +134,6 @@ public class CCommon
 
     public static ILiteral convertGeneric( final Literal p_literal )
     {
-        System.out.println("want to convert " + p_literal);
         return new CLiteral( p_literal );
     }
 
@@ -144,7 +143,7 @@ public class CCommon
      * @param p_number NumberTerm
      * @return Double Atom
      */
-    public static ITerm convertGeneric( final NumberTerm p_number )
+    public static IAtom<Double> convertGeneric( final NumberTerm p_number )
     {
         try
         {
@@ -155,7 +154,7 @@ public class CCommon
                 @Override
                 public boolean instanceOf(Class<?> p_class)
                 {
-                    return Double.class.isAssignableFrom(p_class);
+                    return Double.class.isAssignableFrom( p_class );
                 }
 
                 @Override
@@ -183,7 +182,7 @@ public class CCommon
     public static ITerm convertGeneric(final Term p_term)
     {
         if( p_term.isNumeric() )
-            return convertGeneric( ( NumberTerm ) p_term);
+            return convertGeneric( ( NumberTerm ) p_term );
 
         if ( p_term.isAtom() )
             return convertGeneric( ( Atom ) p_term );

@@ -23,24 +23,14 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
- * generic term list for agent literals
+ * string atom class for agent literals
  */
-public class CTermList extends LinkedList<ITerm> implements ITermCollection
+public class CStringAtom extends IDefaultAtom<String>
 {
-    /**
-     * check for the termlist's class type
-     *
-     * @param p_class matching class
-     * @return true if List is assignable from matching class
-     */
-    @Override
-    public boolean instanceOf(final Class<?> p_class)
-    {
-        return List.class.isAssignableFrom(p_class);
-    }
 
+    protected CStringAtom(final String p_value)
+    {
+        super(p_value);
+    }
 }

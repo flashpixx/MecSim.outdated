@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.general;
 
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import jason.asSyntax.ListTerm;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 
@@ -52,6 +53,6 @@ public class CLiteral extends IDefaultLiteral<Literal>
 //        for (final Term l_term : p_literal.getAnnots())
 //            m_annotations.add(CCommon.convertGeneric(l_term));
 
-        System.out.println("converted " + p_literal + " to " + this);
+        System.out.println("converted " + p_literal + " to " + this.getFunctor().toString() + "(" + this.getValues().toString() + ")");
     }
 }

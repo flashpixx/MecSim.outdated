@@ -75,7 +75,8 @@ Simulation.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    // create start / stop / reset buttons & bind actions to the button
+
+    // --- create start / stop / reset buttons & bind actions to the button ---------------------------
     ["start", "stop", "reset"].forEach( function(pc_item) {
 
         jQuery(self.generateSubID(pc_item, "#")).button().click( function() {
@@ -91,14 +92,16 @@ Simulation.prototype.afterDOMAdded = function()
 
     });
 
-    // reset runs clear on the log layer
+
+    // --- reset runs clear on the log layer ---------------------------
     jQuery(this.generateSubID("reset", "#")).click( function() {
 
         jQuery( MecSim.ui().log("#") ).empty();
 
     });
 
-    // load / save buttons & bind actions
+
+    // --- load / save buttons & bind actions ---------------------------
     ["load", "save"].forEach( function(pc_item) {
 
         jQuery( self.generateSubID(pc_item + "file", "#") ).css("opacity", "0");

@@ -43,25 +43,6 @@ Logger.prototype = Object.create(Pane.prototype);
 /**
  * @Overwrite
 **/
-Logger.prototype.afterDOMAdded = function()
-{
-    var self = this;
-
-    MecSim.websocket( "/cconsole/output/log", {
-        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
-        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("output")  + '">' + po_event.data + '</span>' ); }
-    });
-
-    MecSim.websocket( "/cconsole/error/log", {
-        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
-        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error")  + '">' + po_event.data + '</span>' ); }
-    });
-}
-
-
-/**
- * @Overwrite
-**/
 Logger.prototype.getGlobalCSS = function()
 {
    return this.generateSubID("error", ".") +
@@ -83,4 +64,24 @@ Logger.prototype.getGlobalCSS = function()
           '{' +
           'overflow: auto;' +
           '}';
+}
+
+
+/**
+ * @Overwrite
+**/
+Logger.prototype.afterDOMAdded = function()
+{
+    var self = this;
+
+    // --- bind action to the websocket ---------------------------
+    MecSim.websocket( "/cconsole/output/log", {
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
+        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("output")  + '">' + po_event.data + '</span>' ); }
+    });
+
+    MecSim.websocket( "/cconsole/error/log", {
+        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
+        "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error")  + '">' + po_event.data + '</span>' ); }
+    });
 }

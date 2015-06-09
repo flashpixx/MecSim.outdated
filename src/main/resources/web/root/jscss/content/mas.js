@@ -116,7 +116,8 @@ MAS.prototype.afterDOMAdded = function()
 
     var self = this;
 
-    // Jason mindinspector bind
+
+    // --- Jason mindinspector bind ---------------------------
     jQuery(self.generateSubID("jasonmind", "#")).button().click( function() {
 
         jQuery(MecSim.ui().content("#")).empty();
@@ -125,7 +126,7 @@ MAS.prototype.afterDOMAdded = function()
     });
 
 
-    // communication binding
+    // --- communication binding to the websocket ---------------------------
     jQuery(self.generateSubID("communication", "#")).button().click( function() {
 
         jQuery(MecSim.ui().content("#")).empty();

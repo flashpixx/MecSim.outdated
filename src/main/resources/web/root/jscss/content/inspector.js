@@ -72,6 +72,7 @@ Inspector.prototype.afterDOMAdded = function()
     }
 
 
+    // --- bind action on the websocket ---------------------------
     var self = this;
 
     jQuery( self.generateSubID("dialog", "#") ).dialog({ autoOpen: false, width: "auto" });

@@ -60,38 +60,8 @@ Layer.prototype.getGlobalContent = function()
 **/
 Layer.prototype.getContent = function()
 {
-    var self = this;
-    var lc = "";
-
-    // switch items
-
-
-    // clickable layer
-    lc += '<ul id = "' + this.generateSubID("clickable") + '">';
-    jQuery.ajax({
-
-        url     : "/cosmviewer/listclickablelayer",
-        success : function(px_data) {
-
-            // sort JSON objects depend on "click" property and store the ordered list in an array
-            var la_sorted = [];
-            Object.keys(px_data).sort(function(i,j){ return px_data[i].click ? -1 : 1 }).forEach( function(pc_key) {
-                var lo  = px_data[pc_key];
-                lo.name = pc_key;
-                la_sorted.push(lo);
-            });
-
-
-            // add list items to the DOM
-            jQuery.each( la_sorted, function(pn_key, px_value){
-                jQuery( self.generateSubID("clickable", "#") ).append("<li class='ui-state-default' id="+ px_value.id +">" + px_value.name + "</li>" );
-            });
-
-        }
-    });
-    lc += "</ul>";
-
-    return lc;
+    return '<div id="'  + this.generateSubID("switches")  + '" />' +
+           '<ul id = "' + this.generateSubID("clickable") + '" />';
 }
 
 
@@ -102,7 +72,69 @@ Layer.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    // create bind of the clickable layer
+
+    // --- create switches and bind actions ---------------------------
+    MecSim.ajax({
+
+        url     : "/csimulation/listlayer",
+        success : function( px_data ) {
+
+            jQuery.each( px_data, function( pc_key, px_value ) {
+
+                var lc = '<p><label>' + pc_key + '</label>' +
+                         '<input class="' + self.generateSubID("switchactivity") + '" type="checkbox" id="'+ self.generateSubID("activity_" + px_value.id) + '" name="' + px_value.id + '" ' + (px_value.active ? "checked" : "") + '/>';
+                if (px_value.isviewable)
+                    lc += '<input class="' + self.generateSubID("switchvisibility") + '" type="checkbox" id="'+ self.generateSubID("visibility_"+px_value.id) + '" name="' + px_value.id + '" ' + (px_value.visible ? "checked" : "") + '/>';
+                lc += "</p>";
+
+                jQuery( self.generateSubID("switches", "#") ).append(lc);
+
+            });
+        }
+
+    }).done(function() {
+
+        // fail closure function to open an error dialog
+        var lx_failclosure = function( po_event ) {
+            return function( po_data ) {
+                jQuery(self.generateSubID("text", "#")).text(po_data.responseJSON.error);
+                jQuery(self.generateSubID("dialog", "#")).dialog();
+            }
+
+        };
+
+        // create action bind to both switch types
+        // @todo on fail state must be reset
+        [
+            { url: "/csimulation/disableenablelayer", ontext: "active",  offtext: "inactive",  id: "switchactivity" },
+            { url: "/csimulation/hideshowlayer",      ontext: "visible", offtext: "invisible", id: "switchvisibility" },
+        ].forEach( function( po_item ) {
+
+            jQuery( self.generateSubID(po_item.id, ".") ).bootstrapSwitch({
+                size           : "mini",
+                onText         : po_item.ontext,
+                offText        : po_item.offtext,
+                onSwitchChange : function( px_event, pl_state ) {
+
+                    MecSim.ajax({
+
+                        url  : po_item.url,
+                        data : {
+                            "id"    : jQuery(this).closest("input").attr("name"),
+                            "state" : pl_state
+                        }
+
+                    }).fail( lx_failclosure(px_event) );
+
+                }
+            });
+
+        });
+
+    });
+
+
+    // --- create sortable list, bind actions and fill the data ---------------------------
     jQuery( this.generateSubID("clickable", "#") ).sortable({
 
         placeholder: "ui-state-highlight",
@@ -116,5 +148,29 @@ Layer.prototype.afterDOMAdded = function()
         }
 
     });
+
+    MecSim.ajax({
+
+        url     : "/cosmviewer/listclickablelayer",
+        success : function(px_data) {
+
+            // sort JSON objects depend on "click" property and store the ordered list in an array
+            var la_sorted = [];
+            Object.keys(px_data).sort(function(i,j){ return px_data[i].click ? -1 : 1 }).forEach( function(pc_key) {
+                var lo  = px_data[pc_key];
+                lo.name = pc_key;
+                la_sorted.push(lo);
+            });
+
+            // add list items to the DOM
+            jQuery.each( la_sorted, function(pn_key, px_value){
+                jQuery( self.generateSubID("clickable", "#") ).append("<li class='ui-state-default' id="+ px_value.id +">" + px_value.name + "</li>" );
+            });
+
+        }
+    });
+
+
+
 
 }

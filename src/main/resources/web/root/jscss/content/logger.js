@@ -30,10 +30,11 @@
  *
  * @param pc_id ID
  * @param pc_name name of the panel
+ * @param pa_panel array with child elements
 **/
-function Logger( pc_id )
+function Logger( pc_id, pc_name, pa_panel )
 {
-    Pane.call(this, pc_id );
+    Pane.call(this, pc_id, pc_name, pa_panel );
 }
 
 /** inheritance call **/

@@ -197,8 +197,13 @@ var MecSim = (function (px_modul) {
 
 
     // --- initializing of the UI content ----------------------------------------------------------------------------------------------------------------------
+    var ml_once = false;
     px_modul.uiinitialize = function( pa )
     {
+        if (ml_once)
+            throw "MecSim initializing can run only once";
+        ml_once = true;
+
         // create basic layout within the body element (three frame structure)
         jQuery( '<div id = "' + px_modul.ui().screen()     + '" >' +
                 '<div id = "' + px_modul.ui().menu()       + '" >' +
@@ -215,9 +220,16 @@ var MecSim = (function (px_modul) {
 
         // add main layout elements to the HTML body
         if (Array.isArray(pa))
+        {
+            var lo_ids = new Set();
+
             pa.forEach( function(px_item) {
                 if (px_item instanceof Pane)
                 {
+                    if (lo_ids.has(px_item.getID()))
+                        throw "Pane [" + px_item.getID() + "] exists on the global screen";
+                    lo_ids.add(px_item.getID());
+
                     // global elements
                     if (px_item.getGlobalContent())
                         jQuery( px_item.getGlobalContent() ).appendTo("body");
@@ -239,6 +251,7 @@ var MecSim = (function (px_modul) {
                     px_item.afterDOMAdded();
                 }
             });
+        }
 
         // on startup add TUC logo
         jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );

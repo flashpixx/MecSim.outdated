@@ -35,7 +35,7 @@
  *
  * @param pc_id internal name of the ID
  * @param pc_name name of the panel
- * @param pa_panel
+ * @param pa_panel array with child elements
 **/
 function Pane( pc_id, pc_name, pa_panel )
 {
@@ -65,8 +65,19 @@ Pane.prototype.addChild = function( po )
     if (!(po instanceof Pane))
         throw "object is not a pane object";
 
+    // create deep-copy of the object to test for duplicates
+    var lo_test = Object.create(po);
+    lo_test.setParent(this);
+
+    this.ma_children.forEach( function(po_item) {
+        if (po_item.getID() == lo_test.getID())
+            throw "object ID [" + po.getID() + "] exists within the pane element";
+    });
+
+    // add new element and modify parent
     this.ma_children.push(po);
     po.setParent(this);
+
 }
 
 

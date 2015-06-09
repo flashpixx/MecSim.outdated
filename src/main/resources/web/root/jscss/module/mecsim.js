@@ -255,9 +255,21 @@ var MecSim = (function (px_modul) {
             });
         }
 
-        // on startup add TUC logo and optional scrollbars to the content pane
+
+        // on startup add TUC logo and define global CSS elements
         jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
-        jQuery("head").append( '<style type = "text/css">' + px_modul.ui().content("#") + '{ overflow: auto; } </style>' );
+
+        jQuery("head").append(
+            '<style type = "text/css">' +
+
+            'html, body { height: 100%; width: 100%; margin: 0px; padding: 0px; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; }' +
+            'iframe{ width: 100%; height: 100%; }' +
+            px_modul.ui().logo("#")    + ' { position: absolute; opacity: 0.65; top: 0; bottom: 0; left: 0; right: 0; background: url(img/tuc.svg) no-repeat center; }' +
+            px_modul.ui().menu("#")    + ' { height: 100%; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
+            px_modul.ui().content("#") + ' { overflow: auto; }' +
+
+            '</style>'
+        );
 
 
         // initialize the content pane with the three layer structures - must be called at the end, because of correct layout structure

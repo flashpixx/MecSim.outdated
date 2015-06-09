@@ -59,7 +59,8 @@ Help.prototype.getGlobalContent = function()
            '<label for = "' + this.generateSubID("buildcommit") + '" >Buildcommit: </label >' +
            '<a id = "'      + this.generateSubID("buildcommit") + '" ></a >' +
            '</p >' +
-           '</div >';
+           '</div >' +
+           Pane.prototype.getGlobalContent.call(this);
 }
 
 
@@ -70,7 +71,8 @@ Help.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("about") + '" >About</button >' +
            '<button id = "' + this.generateSubID("userdoc") + '" >Userdocumentation</button >' +
-           '<button id = "' + this.generateSubID("devdoc") + '" >Developerdocumentation</button >';
+           '<button id = "' + this.generateSubID("devdoc") + '" >Developerdocumentation</button >' +
+           Pane.prototype.getContent.call(this);
 }
 
 
@@ -79,7 +81,9 @@ Help.prototype.getContent = function()
 **/
 Help.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
 
     // --- create about button & bind action to the button ---------------------------
     jQuery(self.generateSubID("about", "#")).button().click( function() {

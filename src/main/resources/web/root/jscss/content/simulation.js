@@ -50,7 +50,8 @@ Simulation.prototype.getContent = function()
            '<button id = "' + this.generateSubID("stop")  + '" >Stop</button >' +
            '<button id = "' + this.generateSubID("reset") + '" >Reset</button >' +
            '<button id = "' + this.generateSubID("load") + '" >Load</button ><input type = "file" id = "' + this.generateSubID("loadfile") + '" />' +
-           '<button id = "' + this.generateSubID("save") + '" >Save</button ><input type = "file" id = "' + this.generateSubID("savefile") + '" />';
+           '<button id = "' + this.generateSubID("save") + '" >Save</button ><input type = "file" id = "' + this.generateSubID("savefile") + '" />' +
+           Pane.prototype.getContent.call(this);
 }
 
 
@@ -65,7 +66,8 @@ Simulation.prototype.getGlobalContent = function()
            '<span class = "ui-icon ui-icon-alert" ></span >' +
            '</p >' +
            '</div >' +
-           '</div >';
+           '</div >' +
+           Pane.prototype.getGlobalContent.call(this);
 }
 
 
@@ -74,6 +76,7 @@ Simulation.prototype.getGlobalContent = function()
 **/
 Simulation.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
 

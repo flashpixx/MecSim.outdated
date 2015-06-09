@@ -48,7 +48,8 @@ Inspector.prototype.getGlobalContent = function()
 {
     return '<div id = "' + this.generateSubID("dialog") + '" title = "Object Inspector" >' +
            '<div id = "' + this.generateSubID("table")  + '" ></div>' +
-           '</div>';
+           '</div>' +
+           Pane.prototype.getGlobalContent.call(this);
 }
 
 
@@ -57,6 +58,9 @@ Inspector.prototype.getGlobalContent = function()
 **/
 Inspector.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
+
+
     /**
      * function to format a JSON object in a table
      *

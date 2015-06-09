@@ -64,7 +64,9 @@ Logger.prototype.getGlobalCSS = function()
           MecSim.ui().log("#") +
           '{' +
           'overflow: auto;' +
-          '}';
+          '}' +
+
+          Pane.prototype.getGlobalCSS.call(this);
 }
 
 
@@ -73,6 +75,7 @@ Logger.prototype.getGlobalCSS = function()
 **/
 Logger.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
     // --- bind action to the websocket ---------------------------

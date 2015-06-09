@@ -52,7 +52,8 @@ Traffic.prototype.getGlobalContent = function()
            '<span class = "ui-icon ui-icon-alert" ></span >' +
            '</p >' +
            '</div >' +
-           '</div >';
+           '</div >' +
+           Pane.prototype.getGlobalContent.call(this);
 }
 
 
@@ -62,7 +63,8 @@ Traffic.prototype.getGlobalContent = function()
 Traffic.prototype.getContent = function()
 {
     return '<div id="'  + this.generateSubID("graphweights")  + '" />' +
-           '<ul id = "' + this.generateSubID("drivingmodel") + '" />';
+           '<ul id = "' + this.generateSubID("drivingmodel") + '" />' +
+           Pane.prototype.getContent.call(this);
 }
 
 
@@ -71,6 +73,7 @@ Traffic.prototype.getContent = function()
 **/
 Traffic.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
     // --- create graphweight switches and bind action ---------------------------

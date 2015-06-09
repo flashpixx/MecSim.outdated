@@ -47,9 +47,8 @@ MAS.prototype = Object.create(Pane.prototype);
 MAS.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("jasonmind") + '" >Jason Mindinspector</button >' +
-           '<button id = "' + this.generateSubID("communication") + '" >Message Communication</button >';
-
-    // @todo super.getContent call
+           '<button id = "' + this.generateSubID("communication") + '" >Message Communication</button >' +
+           Pane.prototype.getContent.call(this);
 }
 
 
@@ -107,7 +106,9 @@ MAS.prototype.getGlobalCSS = function()
            this.generateSubID("communicationdiagram", ".")+'.-link.target' +
            '{' +
            'stroke: #2ca02c;' +
-           '}';
+           '}' +
+
+           Pane.prototype.getGlobalCSS.call(this);
 }
 
 
@@ -116,7 +117,7 @@ MAS.prototype.getGlobalCSS = function()
 **/
 MAS.prototype.afterDOMAdded = function()
 {
-
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
 

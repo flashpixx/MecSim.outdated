@@ -46,7 +46,7 @@ Editor.prototype = Object.create(Pane.prototype);
 **/
 Editor.prototype.getGlobalContent = function()
 {
-    return null;
+    return Pane.prototype.getGlobalContent.call(this);;
 }
 
 
@@ -55,7 +55,7 @@ Editor.prototype.getGlobalContent = function()
 **/
 Editor.prototype.getContent = function()
 {
-    return "<p>Editor</p>";
+    return "<p>Editor</p>" + Pane.prototype.getContent.call(this);
 }
 
 
@@ -64,4 +64,5 @@ Editor.prototype.getContent = function()
 **/
 Editor.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
 }

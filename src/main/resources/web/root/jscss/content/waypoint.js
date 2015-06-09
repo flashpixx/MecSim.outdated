@@ -47,7 +47,8 @@ Waypoint.prototype = Object.create(Pane.prototype);
 Waypoint.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("newpreset") + '" >Create new preset</button >' +
-           '<button id = "' + this.generateSubID("list") + '" >Show Waypoint List</button >';
+           '<button id = "' + this.generateSubID("list") + '" >Show Waypoint List</button >' +
+           Pane.prototype.getContent.call(this);
 
     // @todo add default preset list
 }
@@ -58,7 +59,9 @@ Waypoint.prototype.getContent = function()
 **/
 Waypoint.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
     ["newpreset", "list"].forEach( function(pc_item) {
 
         // @todo action bind with button().click( function() {} )

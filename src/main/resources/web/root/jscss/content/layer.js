@@ -52,7 +52,8 @@ Layer.prototype.getGlobalContent = function()
            '<span class = "ui-icon ui-icon-alert" ></span >' +
            '</p >' +
            '</div >' +
-           '</div >';
+           '</div >' +
+           Pane.prototype.getGlobalContent.call(this);
 }
 
 
@@ -62,7 +63,8 @@ Layer.prototype.getGlobalContent = function()
 Layer.prototype.getContent = function()
 {
     return '<div id="'  + this.generateSubID("switches")  + '" />' +
-           '<ul id = "' + this.generateSubID("clickable") + '" />';
+           '<ul id = "' + this.generateSubID("clickable") + '" />' +
+           Pane.prototype.getContent.call(this);
 }
 
 
@@ -71,6 +73,7 @@ Layer.prototype.getContent = function()
 **/
 Layer.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
 

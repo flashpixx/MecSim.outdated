@@ -35,8 +35,6 @@ $(document).ready(function() {
         $.getScript("jscss/accordion/help.js")
     ).done(function(){
 
-        $(".jqx-splitter-collapse-button-horizontal").trigger("click");
-
         // module instantiation
         SourcePanel.init();
 

@@ -35,6 +35,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
@@ -101,10 +102,6 @@ public class CAgent<T> implements IVoidAgent
      */
     private final Set<ICycle> m_cycleobject = new HashSet<>();
     /**
-     * set with received messages
-     */
-    private final Set<IMessage> m_receivedmessages = new HashSet<>();
-    /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
      */
@@ -160,7 +157,7 @@ public class CAgent<T> implements IVoidAgent
 
             // initialize inherited beliefbases
             addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
-            addBeliefbase("message", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase());
+            addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase());
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -310,11 +307,15 @@ public class CAgent<T> implements IVoidAgent
         return m_namepath;
     }
 
+    /**
+     * pass messages to message containing beliefbase
+     *
+     * @param p_messages set of messages
+     */
     @Override
     public final void receiveMessage(final Set<IMessage> p_messages)
     {
-        m_receivedmessages.clear();
-        m_receivedmessages.addAll(p_messages);
+        ( ( CMessageBeliefBase ) m_beliefs.getBeliefbases().get("messages")).receiveMessage( p_messages );
     }
 
     @Override

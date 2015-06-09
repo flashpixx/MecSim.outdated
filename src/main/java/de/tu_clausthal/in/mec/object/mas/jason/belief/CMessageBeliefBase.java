@@ -60,7 +60,7 @@ public class CMessageBeliefBase extends CBeliefBase
      *
      * @param p_messages current incoming messages
      */
-    public final void receiveMessage(final Set<IMessage> p_messages)
+    public final void receiveMessage( final Set<IMessage> p_messages )
     {
         m_receivedmessages.clear();
         m_receivedmessages.addAll(p_messages);

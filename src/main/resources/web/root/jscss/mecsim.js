@@ -207,8 +207,8 @@ var MecSim = (function (px_modul) {
                     if (px_item.getName())
                     {
                         jQuery( '<h3 id = "' + px_item.getID() + '">' + px_item.getName() + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
-                        if (px_item.getContent())
-                            jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
+                        jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
+
                     }
 
                     px_item.afterDOMAdded();

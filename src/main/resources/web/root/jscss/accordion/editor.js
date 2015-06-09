@@ -23,6 +23,8 @@
 
 // --- EDITOR PANEL MODULE ---------------------------------------------------------------------------------------------
 
+//"use strict"
+
 var EditorPanel = ( function (px_module) {
 
     var save_interval;

@@ -59,6 +59,23 @@ var MecSim = (function (px_modul) {
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    // ---- ajax request ---------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * redefined jQuery ajax request, with equal option fields
+     * @see http://api.jquery.com/jquery.ajax/
+     * @param po_option request options
+    **/
+    px_modul.ajax = function( po_options )
+    {
+        var lo_options   = po_options || {};
+        lo_options.type  = "post";
+
+        console.log(lo_options);
+        jQuery.ajax( lo_options );
+    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
     // --- logger structure ------------------------------------------------------------------------------------------------------------------------------------
     /**
      * logger structure to encapsulate functionality of Java logger class
@@ -69,37 +86,37 @@ var MecSim = (function (px_modul) {
          * function to read the logger configuration
          * @param px_success function which is called on read success
          **/
-        get   : function( px_success ) { $.ajax({ url : "/clogger/configuration", type: "POST",  success : px_success }); },
+        get   : function( px_success ) { jQuery.ajax({ url : "/clogger/configuration", type: "post",  success : px_success }); },
 
         /**
          * error logging
          * @param px_message message
          **/
-        error : function( px_message ) { console.error(px_message); $.ajax({ url : "/clogger/error",         type: "POST",  data : px_message  }); },
+        error : function( px_message ) { console.error(px_message); jQuery.ajax({ url : "/clogger/error", type: "post",  data : px_message  }); },
 
         /**
          * debug logging
          * @param px_message message
          **/
-        debug : function( px_message ) { console.warn(px_message); $.ajax({ url : "/clogger/debug",         type: "POST",  data : px_message  }); },
+        debug : function( px_message ) { console.warn(px_message); jQuery.ajax({ url : "/clogger/debug", type: "post",  data : px_message  }); },
 
         /**
          * warning logging
          * @param px_message message
          **/
-        warn  : function( px_message ) { console.warn(px_message); $.ajax({ url : "/clogger/warn",          type: "POST",  data : px_message  }); },
+        warn  : function( px_message ) { console.warn(px_message); jQuery.ajax({ url : "/clogger/warn", type: "post",  data : px_message  }); },
 
         /**
          * information logging
          * @param px_message message
          **/
-        info  : function( px_message ) { console.info(px_message); $.ajax({ url : "/clogger/info",          type: "POST",  data : px_message  }); },
+        info  : function( px_message ) { console.info(px_message); jQuery.ajax({ url : "/clogger/info", type: "post",  data : px_message  }); },
 
         /**
          * output logging
          * @param px_message message
          **/
-        out   : function( px_message ) { console.log(px_message); $.ajax({ url : "/clogger/out",           type: "POST",  data : px_message  }); }
+        out   : function( px_message ) { console.log(px_message); jQuery.ajax({ url : "/clogger/out", type: "post",  data : px_message  }); }
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -115,13 +132,13 @@ var MecSim = (function (px_modul) {
         /** get the configuration
          * @param px_success function which is called on successful reading
          **/
-        get : function( px_success ) { $.ajax({ url : "/cconfiguration/get", type: "POST",  success : px_success }); },
+        get : function( px_success ) { jQuery.ajax({ url : "/cconfiguration/get", type: "post",  success : px_success }); },
 
         /**
          * sets the configuration
          * @param po_data full configuration object
          **/
-        set : function( po_data ) { $.ajax({ url : "/cconfiguration/set", type: "POST",  data : po_data }); },
+        set : function( po_data ) { jQuery.ajax({ url : "/cconfiguration/set", type: "post",  data : po_data }); },
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -136,13 +153,13 @@ var MecSim = (function (px_modul) {
     **/
     px_modul.language = function( pc_group, pc_callback )
     {
-        $.ajax({
+        jQuery.ajax({
             url : "/clanguageenvironment/"+pc_group,
-            type: "GET",
+            type: "post",
             success : function( po_data )
             {
-                $.each(po_data, function(pc_key, pc_text){
-                    $(pc_key).text(pc_text);
+                jQuery.each(po_data, function(pc_key, pc_text){
+                    jQuery(pc_key).text(pc_text);
                 });
 
                 if(pc_callback !== undefined || pc_callback !==null)

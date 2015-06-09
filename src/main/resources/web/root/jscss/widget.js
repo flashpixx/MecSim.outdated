@@ -21,6 +21,8 @@
  * @endcond
  */
 
+"use strict";
+
  //modul to create ui widgets
  var Widget = ( function (px_module) {
 

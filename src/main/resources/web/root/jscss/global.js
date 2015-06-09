@@ -21,6 +21,7 @@
  * @endcond
  */
 
+"use strict";
 
 /**
  * prototype overload - add startwidth to string

@@ -58,6 +58,7 @@ import java.util.List;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
+ * @todo display internal beliefs in agent mind inspector
  */
 public class CAgent<T> implements IVoidAgent
 {

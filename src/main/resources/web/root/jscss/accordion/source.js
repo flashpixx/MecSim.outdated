@@ -594,12 +594,13 @@ var SourcePanel = ( function (px_module) {
             url     : "/cwaypointenvironment/listwaypoints",
             success : function( p_data ){
 
+                //brint data into correct table format
                 p_data.forEach(function(entry){
                     entry.edit = "";
                     if(entry.editable)
                         entry.edit = "<button>"+ SourcePanel.settings.labels.configuretarget +"</button>";
 
-                    entry.icon = "<span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
+                    entry.icon = "<span class='mecsim_source_toolIcon'>" + entry.name.split("#").slice(-1).pop() + "</span><span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
                     entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
                 });
 

@@ -202,8 +202,15 @@ select
 .mecsim_source_targetingName{
     width: 150px;
     height: 15px;
+    margin-top: 5px;
+    padding: 2px 3px;
+    background-color: white;
+    border: 1px solid darkgray;
+    box-shadow: 1px 1px 1px 0 lightgray inset;
     text-align: center;
+    font: -webkit-small-control;
     resize: none;
+    -webkit-appearance: textfield;
 }
 
 /******************************** css definitions for mecsim_grapheditor ++++++++************************************************/

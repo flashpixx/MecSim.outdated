@@ -120,19 +120,12 @@
             .on('keyup', this.keyup.bind(this));
 
         //initalisation
-        this.restart();
+        this.update();
     };
 
     //static method to create a graph editor
     px_module.create = function(element, data, options){
         return new GraphEditor(element, data, options);
-    };
-
-    //reset all mouse variables
-    px_module.prototype.resetMouseVars = function() {
-        this._mousedown_node = null;
-        this._mouseup_node = null;
-        this._mousedown_link = null;
     };
 
     //tick method to print layout
@@ -161,8 +154,8 @@
         });
     };
 
-    //
-    px_module.prototype.restart = function() {
+    //update data
+    px_module.prototype.update = function() {
         var self = this;
 
         //path
@@ -187,7 +180,7 @@
                 else self._selected_link = self._mousedown_link;
                 self._selected_node = null;
 
-                self.restart();
+                self.update();
             });
 
         //exit path
@@ -236,7 +229,7 @@
                     .classed('hidden', false)
                     .attr('d', 'M' + self._mousedown_node.x + ',' + self._mousedown_node.y + 'L' + self._mousedown_node.x + ',' + self._mousedown_node.y);
 
-                self.restart();
+                self.update();
             })
             .on('mouseup', function(d) {
                 if(!self._mousedown_node)
@@ -281,7 +274,7 @@
                 self._selected_link = link;
                 self._selected_node = null;
 
-                self.restart();
+                self.update();
         });
 
         g.append('svg:text')
@@ -296,6 +289,46 @@
         this._force.start();
     };
 
+    //clear data
+    px_module.prototype.clear = function(data){
+        console.log("test");
+        this._nodes = [];
+        this._links = [];
+        this.update();
+    };
+
+
+    //add a node
+    px_module.prototype.addNode = function(){
+        var point = d3.mouse(this._svg.node()),
+            node = {id: ++this._lastNodeId, reflexive: false};
+            node.x = point[0];
+            node.y = point[1];
+
+        this._nodes.push(node);
+
+        this.update();
+    };
+
+    //reset all mouse variables
+    px_module.prototype.resetMouseVars = function() {
+        this._mousedown_node = null;
+        this._mouseup_node = null;
+        this._mousedown_link = null;
+    };
+
+    //splice links for nodes
+    px_module.prototype.spliceLinksForNode = function(node) {
+        var self = this;
+        var toSplice = this._links.filter(function(l) {
+            return (l.source === node || l.target === node);
+        });
+
+        toSplice.map(function(l) {
+            self._links.splice(self._links.indexOf(l), 1);
+        });
+    };
+
     //mouse down listener
     px_module.prototype.mousedown = function() {
         this._svg.classed('active', true);
@@ -303,14 +336,7 @@
         if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link)
             return;
 
-        //add node
-        var point = d3.mouse(this._svg.node()),
-            node = {id: ++this._lastNodeId, reflexive: false};
-            node.x = point[0];
-            node.y = point[1];
-            this._nodes.push(node);
-
-        this.restart();
+        this.addNode();
     };
 
     //mouse move listener
@@ -319,7 +345,7 @@
             return;
 
         this._drag_line.attr('d', 'M' + this._mousedown_node.x + ',' + this._mousedown_node.y + 'L' + d3.mouse(this._svg.node())[0] + ',' + d3.mouse(this._svg.node())[1]);
-        this.restart();
+        this.update();
     };
 
     //mouse up listener
@@ -332,7 +358,7 @@
 
         this._svg.classed('active', false);
         this.resetMouseVars();
-        this.restart();
+        this.update();
     };
 
     //key down listener
@@ -360,7 +386,7 @@
                 }
                 this._selected_link = null;
                 this._selected_node = null;
-                this.restart();
+                this.update();
                 break;
 
             case 66:
@@ -368,7 +394,7 @@
                     this._selected_link.left = true;
                     this._selected_link.right = true;
                 }
-                this.restart();
+                this.update();
                 break;
 
             case 76:
@@ -376,7 +402,7 @@
                     this._selected_link.left = true;
                     this._selected_link.right = false;
                 }
-                this.restart();
+                this.update();
                 break;
 
             case 82:
@@ -386,7 +412,7 @@
                     this._selected_link.left = false;
                     this._selected_link.right = true;
                 }
-                this.restart();
+                this.update();
                 break;
         }
     };
@@ -401,18 +427,6 @@
                 .on('touchstart.drag', null);
                 this._svg.classed('ctrl', false);
         }
-    };
-
-    //splice links for nodes
-    px_module.prototype.spliceLinksForNode = function(node) {
-        var self = this;
-        var toSplice = this._links.filter(function(l) {
-            return (l.source === node || l.target === node);
-        });
-
-        toSplice.map(function(l) {
-            self._links.splice(self._links.indexOf(l), 1);
-        });
     };
 
     return px_module;

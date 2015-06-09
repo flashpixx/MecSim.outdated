@@ -645,7 +645,24 @@ var SourcePanel = ( function (px_module) {
             {source: nodes[1], target: nodes[2], left: false, right: true }
         ];
 
-        GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
+        SourcePanel.settings.obj.graphEditor = GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
+
+        $("#test").on("click", function(){
+
+            var foo = 2;
+
+            var bar = [
+                {id: 3, reflexive: false},
+                {id: 4, reflexive: true }
+            ];
+
+            var lorem = [
+                {source: nodes[0], target: nodes[1], left: false, right: true }
+            ];
+
+            SourcePanel.settings.obj.graphEditor.clear({nodes : bar, links : foo, lastNodeId : lorem});
+        });
+
     };
 
     return px_module;

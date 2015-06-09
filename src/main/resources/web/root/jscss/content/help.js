@@ -122,7 +122,8 @@ Help.prototype.afterDOMAdded = function()
 
     jQuery(self.generateSubID("devdoc", "#")).button().click( function() {
 
-        jQuery(MecSim.ui().content("#")).load("template/develdoc.htm");
+        jQuery(MecSim.ui().content("#")).empty();
+        jQuery(MecSim.ui().content("#")).append( '<iframe id = "devdoku" class = "template" src = "/develdoc/" seamless />' );
 
     });
 }

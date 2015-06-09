@@ -188,6 +188,8 @@ var MecSim = (function (px_modul) {
         content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
         /** reference to log area **/
         log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
+        /** reference to logo area **/
+        logo        : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_logo"; },
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -226,11 +228,18 @@ var MecSim = (function (px_modul) {
                         jQuery( '<h3 id = "' + px_item.getID() + '">' + px_item.getName() + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
                         jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
 
+                        // click on the headline clears the content field and add the TUC logo
+                        jQuery( px_item.getID("#") ).click( function() {
+                            jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
+                        });
                     }
 
                     px_item.afterDOMAdded();
                 }
             });
+
+        // on startup add TUC logo
+        jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
 
 
         // initialize the content pane with the three layer structures - must be called at the end, because of correct layout structure

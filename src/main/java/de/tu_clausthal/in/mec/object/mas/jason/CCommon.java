@@ -99,22 +99,9 @@ public class CCommon
         return getJavaValue(p_term);
     }
 
-    public static ITerm convertGeneric(final Atom p_atom)
+    public static IAtom convertGeneric(final StringTerm p_term)
     {
-        return new IAtom<String>()
-        {
-            @Override
-            public boolean instanceOf(Class<?> p_class)
-            {
-                return String.class.isAssignableFrom(p_class);
-            }
-
-            @Override
-            public String get()
-            {
-                return p_atom.getFunctor();
-            }
-        };
+        return new CStringAtom( clearString( p_term.getString() ) );
     }
 
     /**
@@ -143,26 +130,11 @@ public class CCommon
      * @param p_number NumberTerm
      * @return Double Atom
      */
-    public static IAtom<Double> convertGeneric( final NumberTerm p_number )
+    public static CNumericAtom convertGeneric( final NumberTerm p_number )
     {
         try
         {
-            return new IAtom<Double>()
-            {
-                final Double m_value = p_number.solve();
-
-                @Override
-                public boolean instanceOf(Class<?> p_class)
-                {
-                    return Double.class.isAssignableFrom( p_class );
-                }
-
-                @Override
-                public Double get()
-                {
-                    return m_value;
-                }
-            };
+            return new CNumericAtom(p_number.solve());
         } catch (NoValueException l_exception)
         {
             CLogger.error(l_exception);
@@ -182,7 +154,10 @@ public class CCommon
     public static ITerm convertGeneric(final Term p_term)
     {
         if( p_term.isNumeric() )
-            return convertGeneric( ( NumberTerm ) p_term );
+            return convertGeneric( ( NumberTerm ) p_term);
+
+        if( p_term instanceof StringTermImpl )
+            return convertGeneric( (StringTerm) p_term );
 
         if ( p_term.isAtom() )
             return convertGeneric( ( Atom ) p_term );

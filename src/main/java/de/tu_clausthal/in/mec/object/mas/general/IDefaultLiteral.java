@@ -55,7 +55,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      */
     protected IDefaultLiteral(final String p_functor, final T p_literal)
     {
-        m_functor = new CStringAtom<>(p_functor);
+        m_functor = new CStringAtom(p_functor);
         m_literal = p_literal;
     }
 

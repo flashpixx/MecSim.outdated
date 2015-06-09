@@ -150,7 +150,7 @@ Traffic.prototype.afterDOMAdded = function()
 
             // sort JSON objects depend on "click" property and store the ordered list in an array
             var la_sorted = [];
-            Object.keys(px_data).sort(function(i,j){ return px_data[i].click ? -1 : 1 }).forEach( function(pc_key) {
+            Object.keys(px_data).sort(function(i,j){ return px_data[i].active ? -1 : 1 }).forEach( function(pc_key) {
                 var lo  = px_data[pc_key];
                 lo.name = pc_key;
                 la_sorted.push(lo);

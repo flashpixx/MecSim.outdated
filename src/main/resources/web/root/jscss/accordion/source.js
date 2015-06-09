@@ -661,7 +661,7 @@ var SourcePanel = ( function (px_module) {
                 {source: nodes[0], target: nodes[1], left: false, right: true },
                 {source: nodes[1], target: nodes[2], left: false, right: true }
             ];
-            SourcePanel.settings.obj.graphEditor.clear( {nodes : nodes, links : links, lastNodeId : lastNodeId} );
+            SourcePanel.settings.obj.graphEditor.reload( {nodes : nodes, links : links, lastNodeId : lastNodeId} );
         });
 
     };

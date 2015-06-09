@@ -289,12 +289,12 @@
     };
 
     //clear data
-    px_module.prototype.clear = function(data){
+    px_module.prototype.reload = function(data){
         this._nodes = [];
         this._links = [];
 
         this.update();
-        
+
         this._force.stop();
 
         this._nodes             = data.nodes               || {};

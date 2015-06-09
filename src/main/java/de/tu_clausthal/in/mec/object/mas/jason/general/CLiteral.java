@@ -33,8 +33,6 @@ import java.util.List;
 
 /**
  * class for literals
- *
- * @todo integrate negation symbol
  */
 public class CLiteral extends IDefaultLiteral<Literal>
 {
@@ -46,7 +44,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
     public CLiteral( Literal p_literal )
     {
 
-        super(p_literal.getFunctor(), p_literal);
+        super(p_literal.getFunctor(), p_literal, p_literal.negated() );
 
         if( p_literal.hasTerm() )
             for ( final Term l_term : p_literal.getTerms() )

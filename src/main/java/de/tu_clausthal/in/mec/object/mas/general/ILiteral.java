@@ -30,6 +30,13 @@ package de.tu_clausthal.in.mec.object.mas.general;
 public interface ILiteral<T> extends ITerm
 {
     /**
+     * indicator function for negated literal
+     *
+     * @return
+     */
+    public boolean isNegated();
+
+    /**
      * returns the optional annotations
      *
      * @return annotation term

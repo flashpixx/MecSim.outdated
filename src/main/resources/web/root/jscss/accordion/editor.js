@@ -162,6 +162,7 @@ var EditorPanel = ( function (px_module) {
         // initialization of editor panel action
         EditorPanel.ui().mecsim_editor_panel().on("click", function() {
 
+            // TODO: if another accordion tab is opened, timer goes on
             if( MecSim.ui().accordion().accordion( "option", "active" ) ) {
 
                 MecSim.ui().content().empty();

@@ -158,11 +158,9 @@ var SimulationPanel = ( function (px_module) {
                 // set thread sleep time
                 MecSim.configuration().get( function(configuration) {
                     SimulationPanel.configuration_json_obj = configuration;
-                    console.log(SimulationPanel.configuration_json_obj.simulation.threadsleeptime);
                     SimulationPanel.configuration_json_obj.simulation.threadsleeptime = ui.value;
                 });
 
-                console.log(SimulationPanel.configuration_json_obj);
                 MecSim.configuration().set(SimulationPanel.configuration_json_obj);
 
             }

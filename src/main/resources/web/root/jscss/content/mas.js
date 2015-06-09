@@ -128,6 +128,7 @@ MAS.prototype.afterDOMAdded = function()
     // communication binding
     jQuery(self.generateSubID("communication", "#")).button().click( function() {
 
+        jQuery(MecSim.ui().content("#")).empty();
         var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id   : this.generateSubID("communicationdiagram") });
 
         MecSim.websocket( "/cmessagesystem/flow", {

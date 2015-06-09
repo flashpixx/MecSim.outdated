@@ -99,7 +99,24 @@ public class CCommon
         return getJavaValue(p_term);
     }
 
-    public static IAtom convertGeneric(final StringTerm p_term)
+    /**
+     * converts an atom into a string atom
+     *
+     * @param p_atom atom to convert
+     * @return string atom
+     */
+    public static CStringAtom convertGeneric(final Atom p_atom)
+    {
+        return new CStringAtom( clearString( p_atom.getFunctor() ) );
+    }
+
+    /**
+     * converts a StringTerm into a string atom
+     *
+     * @param p_term string term to convert
+     * @return string atom
+     */
+    public static CStringAtom convertGeneric( final StringTerm p_term )
     {
         return new CStringAtom( clearString( p_term.getString() ) );
     }
@@ -148,16 +165,24 @@ public class CCommon
      *
      * @param p_term original term
      * @return converted generic term
-     *
-     * @todo convertion is not working correctly yet
      */
-    public static ITerm convertGeneric(final Term p_term)
+    public static ITerm convertGeneric( final Term p_term )
     {
+        if( p_term == null )
+            return new ITerm()
+            {
+                @Override
+                public boolean instanceOf(Class<?> p_class)
+                {
+                    return ITerm.class.isAssignableFrom( p_class );
+                }
+            };
+
         if( p_term.isNumeric() )
             return convertGeneric( ( NumberTerm ) p_term);
 
-        if( p_term instanceof StringTermImpl )
-            return convertGeneric( (StringTerm) p_term );
+        if( p_term instanceof StringTerm )
+            return convertGeneric( ( StringTerm ) p_term );
 
         if ( p_term.isAtom() )
             return convertGeneric( ( Atom ) p_term );
@@ -171,11 +196,9 @@ public class CCommon
             {
                 {
                     for ( final Term l_term : ( ListTerm ) p_term )
-                        add(convertGeneric(l_term));
+                        add( convertGeneric( l_term ) );
                 }
             };
-
-
 
         throw new IllegalArgumentException(de.tu_clausthal.in.mec.common.CCommon.getResourceString(CCommon.class, "convertgenericfail"));
     }

@@ -15,7 +15,17 @@ public abstract class IDefaultAtom<T> implements IAtom<T>
      */
     private Class<?> m_type;
 
-    protected IDefaultAtom( final T p_value )
+    /**
+     * default ctor
+     */
+    public IDefaultAtom() { m_value = null; }
+
+    /**
+     * ctor - with value specified
+     *
+     * @param p_value the atoms value
+     */
+    public IDefaultAtom( final T p_value )
     {
         m_value = p_value;
     }

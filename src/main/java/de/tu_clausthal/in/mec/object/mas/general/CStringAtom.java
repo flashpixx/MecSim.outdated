@@ -28,9 +28,8 @@ package de.tu_clausthal.in.mec.object.mas.general;
  */
 public class CStringAtom extends IDefaultAtom<String>
 {
-
     public CStringAtom(final String p_value)
     {
-        super(p_value);
+        super( p_value );
     }
 }

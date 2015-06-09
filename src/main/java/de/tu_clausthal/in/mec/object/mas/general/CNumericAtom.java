@@ -39,9 +39,9 @@ public class CNumericAtom extends IDefaultAtom<Double>
     }
 
     /**
-     * returns string representation
+     * returns the atoms string representation
      *
-     * @return
+     * @return string representation
      */
     public String toString() {
         long l_roundedValue = Math.round( this.get() );

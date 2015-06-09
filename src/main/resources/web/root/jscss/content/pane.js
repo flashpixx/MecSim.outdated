@@ -43,7 +43,7 @@ function Pane( pc_id, pc_name, pa_panel )
         throw "ID undefinied";
 
     this.mc_name     = pc_name || null;
-    this.mc_id       = pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase();
+    this.mc_id       = pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase();
     this.ma_children = [];
     this.mo_parent   = null;
 
@@ -109,7 +109,7 @@ Pane.prototype.generateSubID = function( pc_id, pc_prefix )
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
-    return (pc_prefix || "") + [this.getID(), pc_id.replace(/[^a-z0-9]+|\s+/gmi, "").toLowerCase()].join("_");
+    return (pc_prefix || "") + [this.getID(), pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase()].join("_");
 }
 
 

@@ -80,10 +80,7 @@ Simulation.prototype.afterDOMAdded = function()
 
         jQuery(self.generateSubID(pc_item, "#")).button().click( function() {
 
-            //if (pc_item === "reset")
-            //    jQuery( MecSim.ui().log("#") ).empty();
-
-            jQuery.ajax("/csimulation/"+pc_item).fail( function( po_data ) {
+            MecSim.ajax("/csimulation/"+pc_item).fail( function( po_data ) {
 
                 jQuery( self.generateSubID("text", "#")   ).text(po_data.responseJSON.error);
                 jQuery( self.generateSubID("dialog", "#") ).dialog();

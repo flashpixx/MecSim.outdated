@@ -63,15 +63,17 @@ var MecSim = (function (px_modul) {
     /**
      * redefined jQuery ajax request, with equal option fields
      * @see http://api.jquery.com/jquery.ajax/
-     * @param po_option request options
-    **/
-    px_modul.ajax = function( po_options )
-    {
-        var lo_options   = po_options || {};
-        lo_options.type  = "post";
 
-        console.log(lo_options);
-        jQuery.ajax( lo_options );
+     * @param po_option Ajax request object or URL
+     * @return jQuery Ajax object
+    **/
+    px_modul.ajax = function( px_options )
+    {
+        // in strict mode a deep-copy is needed / string defines the URL
+        var lo_options    = classof(px_options, "string") ? { "url" : px_options } : jQuery.extend( true, {}, px_options );
+        lo_options.method = lo_options.method || "post";
+
+        return jQuery.ajax( lo_options );
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -48,6 +48,8 @@ MAS.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("jasonmind") + '" >Jason Mindinspector</button >' +
            '<button id = "' + this.generateSubID("communication") + '" >Message Communication</button >';
+
+    // @todo super.getContent call
 }
 
 

@@ -1,3 +1,28 @@
+/**
+ * @cond LICENSE
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
+//"use strict";
+
 // --- LAYER PANEL --------------------------------------------------------------------------------------------
 
 var mecsim_layer,
@@ -28,8 +53,8 @@ var mecsim_layer,
                 success : function(px_data){
 
                     // sort JSON objects depend on "click" property and store the ordered list in an array
-                    la_sorted = [];
-                    Object.keys(px_data).sort(function(i,j){ return px_data[i].click ? -1 : 1 }).forEach(function(pc_key){ lo=px_data[pc_key]; lo.name = pc_key; la_sorted.push(lo); });
+                    var la_sorted = [];
+                    Object.keys(px_data).sort(function(i,j){ return px_data[i].click ? -1 : 1 }).forEach(function(pc_key){ var lo=px_data[pc_key]; lo.name = pc_key; la_sorted.push(lo); });
 
                     $.each( la_sorted, function(pn_key, px_value){
                         LayerPanel.settings.clickableUI.append("<li class='ui-state-default' id="+ px_value.id +">" + px_value.name + "</li>" );
@@ -66,7 +91,7 @@ var mecsim_layer,
             }).done(function(){
 
                 // fail closure
-                lx_failClosure = function( px_event ) {
+                var lx_failClosure = function( px_event ) {
                     return function(p_data) {
                         $("#mecsim_stop_error_text").text(p_data.responseJSON.error);
                         $("#mecsim_stop_error").dialog();

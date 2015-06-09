@@ -23,7 +23,7 @@
 
 // --- EDITOR PANEL MODULE ---------------------------------------------------------------------------------------------
 
-//"use strict"
+"use strict";
 
 var EditorPanel = ( function (px_module) {
 
@@ -158,8 +158,6 @@ var EditorPanel = ( function (px_module) {
         EditorPanel.ui().mecsim_agent_files().selectmenu();
         EditorPanel.ui_actions().initDialog();
         EditorPanel.ui_actions().load_agent_files();
-
-
 
         // initialization of editor panel action
         EditorPanel.ui().mecsim_editor_panel().on("click", function() {

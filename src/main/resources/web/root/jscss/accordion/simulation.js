@@ -23,7 +23,7 @@
 
 // --- SIMULATION PANEL MODULE -----------------------------------------------------------------------------------------
 
-"use strict"
+"use strict";
 
 var SimulationPanel = ( function (px_module) {
 

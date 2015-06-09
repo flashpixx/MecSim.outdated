@@ -21,6 +21,8 @@
  * @endcond
  */
 
+"use strict";
+
 // --- JQUERY ----------------------------------------------------------------------------------------------------------
 $(document).ready(function() {
 
@@ -37,7 +39,6 @@ $(document).ready(function() {
         LayerPanel.init();
         SourcePanel.init();
         MASPanel.init();
-        HelpPanel.init();
 
         // UI instantiation
         // @todo refactor
@@ -51,6 +52,9 @@ $(document).ready(function() {
 
         // Simulation Panel instantiation
         SimulationPanel.bind_ui_actions();
+
+        // Help Panel instantiation
+        HelpPanel.bind_ui_actions();
 
         // create logger websockets access
         MecSim.websocket( "/cconsole/output/log", {

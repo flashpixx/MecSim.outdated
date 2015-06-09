@@ -21,67 +21,73 @@
  * @endcond
  */
 
+"use strict";
+
 // --- HELP PANEL ------------------------------------------------------------------------------------------------------
 
-//"use strict"
+var HelpPanel = (function (px_module) {
 
-var mecsim_help,
-    HelpPanel = {
+    px_module.bind_ui_actions = function() {
 
-        settings: {
-            about_button: $("#mecsim_help_about").button(),
-            user_doc_button: $("#mecsim_help_userdoku").button(),
-            developer_doc_button: $("#mecsim_help_devdoku").button()
-        },
+        HelpPanel.ui().help_panel().on("click", function(data){
+            MecSim.ui().content().empty();
+        });
 
-        init: function() {
-            mecsim_help = this.settings;
-            this.bind_ui_actions();
-        },
+        HelpPanel.ui().about_button().button().on("click", function(){
 
-        bind_ui_actions: function() {
+            $.getJSON( "cconfiguration/get", function( p_data ) {
+                $("#mecsim_project_name")
+                        .attr("href", p_data.manifest["project-url"])
+                        .text(p_data.manifest["project-name"]);
 
-            $("#mecsim_help_panel").on("click", function(data){
+                $("#mecsim_license")
+                        .attr("href", p_data.manifest["license-url"])
+                        .text(p_data.manifest["license"]);
+
+                $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
+                $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
+                $("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
+
+            }).done( function() {
+                $("#mecsim_about").dialog({
+                    width: 500,
+                    modal: true
+                });
+            });
+
+        });
+
+        HelpPanel.ui().user_doc_button().button().on("click", function(){
+            $.get("/userdoc/", function( p_result ) {
                 MecSim.ui().content().empty();
+                MecSim.ui().content().append( p_result );
             });
+        });
 
-            HelpPanel.settings.about_button.on("click", function(){
+        HelpPanel.ui().developer_doc_button().button().on("click", function(){
+            MecSim.ui().content().load("template/develdoc.htm");
+        });
 
-                $.getJSON( "cconfiguration/get", function( p_data ) {
-                    console.log(p_data);
-                    $("#mecsim_project_name")
-                            .attr("href", p_data.manifest["project-url"])
-                            .text(p_data.manifest["project-name"]);
+    }
 
-                    $("#mecsim_license")
-                            .attr("href", p_data.manifest["license-url"])
-                            .text(p_data.manifest["license"]);
+    // --- UI references ---------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * references to static UI components
+     **/
+    px_module.ui = function() {return {
 
-                    $("#mecsim_buildversion").text(p_data.manifest["build-version"]);
-                    $("#mecsim_buildnumber").text(p_data.manifest["build-number"]);
-                    $("#mecsim_buildcommit").text(p_data.manifest["build-commit"]);
+        /** reference to about button **/
+        about_button : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_help_about"    : $("#mecsim_help_about"); },
+        /** reference to documentation button **/
+        user_doc_button : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_help_userdoku"    : $("#mecsim_help_userdoku"); },
+        /** reference to developer documentation button **/
+        developer_doc_button : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_help_devdoku"    : $("#mecsim_help_devdoku"); },
+        /** reference to help panel h3 element **/
+        help_panel : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_help_panel"    : $("#mecsim_help_panel"); }
 
-                }).done( function() {
-                    $("#mecsim_about").dialog({
-                        width: 500,
-                        modal: true
-                    });
-                });
+    };}
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            });
+    return px_module;
 
-            HelpPanel.settings.user_doc_button.on("click", function(){
-                $.get("/userdoc/", function( p_result ) {
-                    console.log(p_result);
-                    MecSim.ui().content().empty();
-                    MecSim.ui().content().append( p_result );
-                });
-            });
-
-            HelpPanel.settings.developer_doc_button.on("click", function(){
-                MecSim.ui().content().load("template/develdoc.htm");
-            });
-
-        }
-
-    };
+}(HelpPanel || {}));

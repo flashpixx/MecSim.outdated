@@ -26,7 +26,7 @@
 
 
 /**
- * ctor to create the MAS instance
+ * ctor to create the MAS menu
  *
  * @param pc_id ID
  * @param pc_name name of the panel

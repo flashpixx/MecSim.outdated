@@ -221,14 +221,16 @@ var MecSim = (function (px_modul) {
         // add main layout elements to the HTML body
         if (Array.isArray(pa))
         {
-            var lo_ids = new Set();
+            // create a list with used ID to avoid duplicates - a set is a better choice,
+            // but Java WebKit component does not support the ECMAScript6 specification
+            var lo_ids = [];
 
             pa.forEach( function(px_item) {
                 if (px_item instanceof Pane)
                 {
-                    if (lo_ids.has(px_item.getID()))
+                    if (jQuery.inArray(px_item.getID(), lo_ids) > -1)
                         throw "Pane [" + px_item.getID() + "] exists on the global screen";
-                    lo_ids.add(px_item.getID());
+                    lo_ids.push(px_item.getID());
 
                     // global elements
                     if (px_item.getGlobalContent())

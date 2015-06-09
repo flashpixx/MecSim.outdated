@@ -74,7 +74,7 @@ Layer.prototype.afterDOMAdded = function()
     var self = this;
 
 
-    // --- create switches and bind actions ---------------------------
+    // --- create activity / visibility switches for layer and bind actions ---------------------------
     MecSim.ajax({
 
         url     : "/csimulation/listlayer",
@@ -135,7 +135,7 @@ Layer.prototype.afterDOMAdded = function()
     });
 
 
-    // --- create sortable list, bind actions and fill the data ---------------------------
+    // --- create sortable list for clickable layer, bind actions and fill the data ---------------------------
     jQuery( this.generateSubID("clickable", "#") ).sortable({
 
         placeholder: "ui-state-highlight",
@@ -150,6 +150,7 @@ Layer.prototype.afterDOMAdded = function()
 
     });
 
+    // @todo remove ID attribute to avoid errors
     MecSim.ajax({
 
         url     : "/cosmviewer/listclickablelayer",
@@ -165,13 +166,9 @@ Layer.prototype.afterDOMAdded = function()
 
             // add list items to the DOM
             jQuery.each( la_sorted, function(pn_key, px_value){
-                jQuery( self.generateSubID("clickable", "#") ).append("<li class='ui-state-default' id="+ px_value.id +">" + px_value.name + "</li>" );
+                jQuery( self.generateSubID("clickable", "#") ).append( '<li class="ui-state-default" id="'+ px_value.id + '">' + px_value.name + '</li>' );
             });
 
         }
     });
-
-
-
-
 }

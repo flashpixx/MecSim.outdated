@@ -107,7 +107,7 @@ var Layout = (function (px_modul) {
 
         var la = [];
         if (po_options.label)
-            la.push( '<label for = "' + po_options.id + '" >' + po_options.label + '</label > ' );
+            la.push( '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' );
 
 
         la.push( '<select ' + (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );

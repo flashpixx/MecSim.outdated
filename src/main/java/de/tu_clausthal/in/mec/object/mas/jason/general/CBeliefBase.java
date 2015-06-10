@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.Literal;
-import jason.asSyntax.Term;
 
 import java.util.Map;
 import java.util.Set;
@@ -45,6 +44,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     {
         super();
     }
+
     /**
      * ctor - just the top-level literals are specified
      *
@@ -54,11 +54,12 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     {
         super(p_literals);
     }
+
     /**
      * ctor - top-level literals and inherited beliefbases are specified
      *
      * @param p_beliefbases inherited beliefbases
-     * @param p_literals top level literals
+     * @param p_literals    top level literals
      */
     public CBeliefBase(final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals)
     {
@@ -75,7 +76,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     @Override
     public IBeliefBase<Literal> collapseBeliefbase()
     {
-        return new CBeliefBase( this.collapseLiterals() );
+        return new CBeliefBase(this.collapseLiterals());
     }
 
     /**
@@ -91,9 +92,9 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
      *
      * @param p_literal language specific literal
      */
-    public void addLiteral( final Literal p_literal )
+    public void addLiteral(final Literal p_literal)
     {
-        addLiteral( CCommon.convertGeneric( p_literal ) );
+        addLiteral(CCommon.convertGeneric(p_literal));
     }
 
     /**
@@ -101,9 +102,9 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
      *
      * @param p_literal language specific literal
      */
-    public void removeLiteral( final Literal p_literal )
+    public void removeLiteral(final Literal p_literal)
     {
-        removeLiteral( CCommon.convertGeneric( p_literal ) );
+        removeLiteral(CCommon.convertGeneric(p_literal));
     }
 
 }

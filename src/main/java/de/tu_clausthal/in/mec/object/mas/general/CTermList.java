@@ -39,14 +39,15 @@ public class CTermList extends LinkedList<ITerm> implements ITermCollection
     {
         super();
     }
+
     /**
      * ctor - with initial elements specified
      *
      * @param p_collection collection containing initial elements
      */
-    public CTermList( final Collection<ITerm> p_collection )
+    public CTermList(final Collection<ITerm> p_collection)
     {
-        super( p_collection );
+        super(p_collection);
     }
 
     /**

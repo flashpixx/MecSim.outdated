@@ -107,7 +107,7 @@ public class CCommon
      */
     public static CStringAtom convertGeneric(final Atom p_atom)
     {
-        return new CStringAtom( clearString( p_atom.getFunctor() ) );
+        return new CStringAtom(clearString(p_atom.getFunctor()));
     }
 
     /**
@@ -116,9 +116,9 @@ public class CCommon
      * @param p_term string term to convert
      * @return string atom
      */
-    public static CStringAtom convertGeneric( final StringTerm p_term )
+    public static CStringAtom convertGeneric(final StringTerm p_term)
     {
-        return new CStringAtom( clearString( p_term.getString() ) );
+        return new CStringAtom(clearString(p_term.getString()));
     }
 
     /**
@@ -127,7 +127,7 @@ public class CCommon
      * @param p_termList list of terms
      * @return converted TermList
      */
-    public static ITermCollection convertGeneric( final List<Term> p_termList )
+    public static ITermCollection convertGeneric(final List<Term> p_termList)
     {
         return new CTermList()
         {{
@@ -136,9 +136,9 @@ public class CCommon
             }};
     }
 
-    public static ILiteral convertGeneric( final Literal p_literal )
+    public static ILiteral convertGeneric(final Literal p_literal)
     {
-        return new CLiteral( p_literal );
+        return new CLiteral(p_literal);
     }
 
     /**
@@ -147,7 +147,7 @@ public class CCommon
      * @param p_number NumberTerm
      * @return Double Atom
      */
-    public static CNumericAtom convertGeneric( final NumberTerm p_number )
+    public static CNumericAtom convertGeneric(final NumberTerm p_number)
     {
         try
         {
@@ -166,37 +166,37 @@ public class CCommon
      * @param p_term original term
      * @return converted generic term
      */
-    public static ITerm convertGeneric( final Term p_term )
+    public static ITerm convertGeneric(final Term p_term)
     {
-        if( p_term == null )
+        if (p_term == null)
             return new ITerm()
             {
                 @Override
                 public boolean instanceOf(Class<?> p_class)
                 {
-                    return ITerm.class.isAssignableFrom( p_class );
+                    return ITerm.class.isAssignableFrom(p_class);
                 }
             };
 
-        if( p_term.isNumeric() )
-            return convertGeneric( ( NumberTerm ) p_term);
+        if (p_term.isNumeric())
+            return convertGeneric((NumberTerm) p_term);
 
-        if( p_term instanceof StringTerm )
-            return convertGeneric( ( StringTerm ) p_term );
+        if (p_term instanceof StringTerm)
+            return convertGeneric((StringTerm) p_term);
 
-        if ( p_term.isAtom() )
-            return convertGeneric( ( Atom ) p_term );
+        if (p_term.isAtom())
+            return convertGeneric((Atom) p_term);
 
-        if ( p_term.isLiteral() )
-            return new CLiteral( ( Literal ) p_term );
+        if (p_term.isLiteral())
+            return new CLiteral((Literal) p_term);
 
-        if ( p_term.isList() )
+        if (p_term.isList())
 
             return new CTermList()
             {
                 {
-                    for ( final Term l_term : ( ListTerm ) p_term )
-                        add( convertGeneric( l_term ) );
+                    for (final Term l_term : (ListTerm) p_term)
+                        add(convertGeneric(l_term));
                 }
             };
 

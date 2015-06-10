@@ -23,8 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import jason.asSyntax.Literal;
-
 import java.util.Collection;
 import java.util.Collections;
 
@@ -38,14 +36,6 @@ import java.util.Collections;
 public abstract class IDefaultLiteral<T> implements ILiteral<T>
 {
     /**
-     * negation marker
-     */
-    private Boolean m_negated;
-    /**
-     * the literals functor
-     */
-    private final IAtom<String> m_functor;
-    /**
      * the literal values
      */
     protected final ITermCollection m_values;
@@ -54,27 +44,35 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      */
     protected final ITermCollection m_annotations;
     /**
+     * the literals functor
+     */
+    private final IAtom<String> m_functor;
+    /**
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
     private final T m_literal;
+    /**
+     * negation marker
+     */
+    private Boolean m_negated;
 
     /**
      * ctor - all parameters specified
      *
-     * @param p_functor functor of the literal
-     * @param p_literal the original literal
-     * @param p_collection initial value collection
+     * @param p_functor                   functor of the literal
+     * @param p_literal                   the original literal
+     * @param p_collection                initial value collection
      * @param p_annotationInitialCapacity
      * @param p_annotationLoadFactor
      */
-    public IDefaultLiteral( final String p_functor, final T p_literal, final boolean p_negated,
-                            final Collection<ITerm> p_collection,
-                            final int p_annotationInitialCapacity, final float p_annotationLoadFactor )
+    public IDefaultLiteral(final String p_functor, final T p_literal, final boolean p_negated,
+                           final Collection<ITerm> p_collection,
+                           final int p_annotationInitialCapacity, final float p_annotationLoadFactor)
     {
-        m_functor = new CStringAtom( p_functor );
+        m_functor = new CStringAtom(p_functor);
         m_literal = p_literal;
-        m_values = new CTermList( p_collection );
-        m_annotations = new CTermSet( p_annotationInitialCapacity, p_annotationLoadFactor );
+        m_values = new CTermList(p_collection);
+        m_annotations = new CTermSet(p_annotationInitialCapacity, p_annotationLoadFactor);
         m_negated = p_negated;
     }
 
@@ -85,9 +83,9 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @param p_literal the original literal
      * @param p_negated the negation status
      */
-    public IDefaultLiteral(final String p_functor, final T p_literal, final boolean p_negated )
+    public IDefaultLiteral(final String p_functor, final T p_literal, final boolean p_negated)
     {
-        this( p_functor, p_literal, p_negated, Collections.EMPTY_LIST, 0, (float) 0.75 );
+        this(p_functor, p_literal, p_negated, Collections.EMPTY_LIST, 0, (float) 0.75);
     }
 
     /**
@@ -96,7 +94,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @param p_functor functor of the literal
      * @param p_literal the original literal
      */
-    public IDefaultLiteral(final String p_functor, final T p_literal )
+    public IDefaultLiteral(final String p_functor, final T p_literal)
     {
         this(p_functor, p_literal, false, Collections.EMPTY_LIST, 0, (float) 0.75);
     }
@@ -118,7 +116,10 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @return
      */
     @Override
-    public boolean isNegated() { return m_negated; }
+    public boolean isNegated()
+    {
+        return m_negated;
+    }
 
     /**
      * getter method for the literal functor
@@ -173,7 +174,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     @Override
     public final int hashCode()
     {
-        return   3 * m_negated.hashCode() +
+        return 3 * m_negated.hashCode() +
                 41 * m_functor.hashCode() +
                 43 * m_values.hashCode() +
                 59 * m_annotations.hashCode();
@@ -197,11 +198,14 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     @Override
     public String toString()
     {
-        return ( m_negated ? "~" : "" ) + m_functor.toString() + m_values.toString() + m_annotations.toString();
+        return (m_negated ? "~" : "") + m_functor.toString() + m_values.toString() + m_annotations.toString();
     }
 
     /**
      * negate the literal
      */
-    public void negate() { m_negated = !m_negated; }
+    public void negate()
+    {
+        m_negated = !m_negated;
+    }
 }

@@ -23,8 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.*;
 
 
@@ -53,7 +51,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public IDefaultBeliefBase()
     {
-        this( new HashMap<>(), new HashSet<>() );
+        this(new HashMap<>(), new HashSet<>());
     }
 
     /**
@@ -61,7 +59,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
+    public IDefaultBeliefBase(final Set<ILiteral<T>> p_literals)
     {
         this(new HashMap<>(), p_literals);
     }
@@ -70,12 +68,31 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * ctor - top-level literals and inherited beliefbases are specified
      *
      * @param p_beliefbases inherited beliefbases
-     * @param p_literals top level literals
+     * @param p_literals    top level literals
      */
     public IDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
     {
         m_literals = p_literals;
         m_beliefbases = p_beliefbases;
+    }
+
+    /**
+     * static method for recursive traversation of beliefbases
+     * to aggregate literals. It prevents the instantiation of
+     * an aggregation set in each recursion step.
+     *
+     * @param p_currentBeliefbase    beliefbase to add
+     * @param p_currentAggregatedSet the current aggregated set
+     */
+    private static void collapseLiterals(final IBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet)
+    {
+        // add the current beliefbases' literals to aggregated set
+        for (final ILiteral<?> l_literal : p_currentBeliefbase.getLiterals())
+            p_currentAggregatedSet.add(l_literal.getLiteral());
+
+        // recursive method call for each inherited beliefbase
+        for (final IBeliefBase<?> l_bb : p_currentBeliefbase.getBeliefbases().values())
+            collapseLiterals(l_bb, p_currentAggregatedSet);
     }
 
     /**
@@ -94,25 +111,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         collapseLiterals(this, l_beliefbase);
 
         return l_beliefbase;
-    }
-
-    /**
-     * static method for recursive traversation of beliefbases
-     * to aggregate literals. It prevents the instantiation of
-     * an aggregation set in each recursion step.
-     *
-     * @param p_currentBeliefbase beliefbase to add
-     * @param p_currentAggregatedSet the current aggregated set
-     */
-    private static void collapseLiterals( final IBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet  )
-    {
-        // add the current beliefbases' literals to aggregated set
-        for(final ILiteral<?> l_literal : p_currentBeliefbase.getLiterals() )
-            p_currentAggregatedSet.add(l_literal.getLiteral());
-
-        // recursive method call for each inherited beliefbase
-        for( final IBeliefBase<?> l_bb : p_currentBeliefbase.getBeliefbases().values() )
-            collapseLiterals( l_bb, p_currentAggregatedSet );
     }
 
     /**
@@ -143,16 +141,16 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_literal generic literal
      */
     @Override
-    public void addLiteral( final ILiteral p_literal )
+    public void addLiteral(final ILiteral p_literal)
     {
-        m_literals.add( p_literal );
+        m_literals.add(p_literal);
     }
 
     /**
      * adds a collection of generic literals
      */
     @Override
-    public void addAllLiterals( final Collection<ILiteral<T>> p_literals )
+    public void addAllLiterals(final Collection<ILiteral<T>> p_literals)
     {
         m_literals.addAll(p_literals);
     }
@@ -163,18 +161,18 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_literal language specific literal
      */
     @Override
-    public void removeLiteral( final ILiteral p_literal )
+    public void removeLiteral(final ILiteral p_literal)
     {
-        m_literals.remove( p_literal );
+        m_literals.remove(p_literal);
     }
 
     /**
      * removes a collection of generic literals
      */
     @Override
-    public void removeAllLiterals( final Collection<ILiteral<T>> p_literals )
+    public void removeAllLiterals(final Collection<ILiteral<T>> p_literals)
     {
-        m_literals.remove( p_literals );
+        m_literals.remove(p_literals);
     }
 
     /**
@@ -183,14 +181,14 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_name beliefbase to remove
      */
     @Override
-    public void removeBeliefbase( final String p_name )
+    public void removeBeliefbase(final String p_name)
     {
         // removes specified beliefbase if its inherited
-        m_beliefbases.remove( p_name );
+        m_beliefbases.remove(p_name);
 
         // recursive call
-        for( IBeliefBase<T> l_beliefbase : m_beliefbases.values() )
-            l_beliefbase.removeBeliefbase( p_name );
+        for (IBeliefBase<T> l_beliefbase : m_beliefbases.values())
+            l_beliefbase.removeBeliefbase(p_name);
     }
 
     /**
@@ -198,11 +196,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_recursive set true to clear all inherited literals
      */
-    public void clearLiterals( final boolean p_recursive )
+    public void clearLiterals(final boolean p_recursive)
     {
         m_literals.clear();
 
-        if( p_recursive )
+        if (p_recursive)
             for (String l_name : m_beliefbases.keySet())
                 m_beliefbases.get(l_name).clearLiterals();
     }
@@ -214,7 +212,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void clearLiterals()
     {
-        clearLiterals( true );
+        clearLiterals(true);
     }
 
     /**
@@ -236,7 +234,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public int hashCode()
     {
-        return  61 * m_beliefbases.hashCode() +
+        return 61 * m_beliefbases.hashCode() +
                 79 * m_literals.hashCode();
     }
 
@@ -256,12 +254,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * method for adding a beliefbase
      * the prefix gets concatenated by the beliefbases' hashcode
      *
-     * @param p_name beliefbase name
+     * @param p_name       beliefbase name
      * @param p_beliefbase beliefbase to add
      */
     @Override
     public void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase)
     {
-        m_beliefbases.put( p_name, p_beliefbase);
+        m_beliefbases.put(p_name, p_beliefbase);
     }
 }

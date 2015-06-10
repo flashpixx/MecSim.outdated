@@ -23,15 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import com.graphhopper.coll.MapEntry;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * beliefbase interface
- *
+ * <p>
  * a beliefbase contains beliefs as literals (i.e. the top-level literals)
  * and further inherited beliefbases.
  */
@@ -80,36 +78,36 @@ public interface IBeliefBase<T>
      *
      * @param p_literal generic literal
      */
-    public void addLiteral( final ILiteral p_literal );
+    public void addLiteral(final ILiteral p_literal);
 
     /**
      * adds a collection of generic literals
      */
-    public void addAllLiterals( final Collection<ILiteral<T>> p_literals );
+    public void addAllLiterals(final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a generic literal from the top level literals
      *
      * @param p_literal generic literal
      */
-    public void removeLiteral( final ILiteral p_literal );
+    public void removeLiteral(final ILiteral p_literal);
 
     /**
      * removes a collection of generic literals
      */
-    public void removeAllLiterals( final Collection<ILiteral<T>> p_literals );
+    public void removeAllLiterals(final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a beliefbase from inherited beliefbases
      *
      * @param p_name beliefbase to remove
      */
-    public void removeBeliefbase( final String p_name );
+    public void removeBeliefbase(final String p_name);
 
     /**
      * method for adding a beliefbase
      *
-     * @param p_name beliefbase name
+     * @param p_name       beliefbase name
      * @param p_beliefbase beliefbase to add
      */
     public void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase);

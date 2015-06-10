@@ -25,11 +25,8 @@ package de.tu_clausthal.in.mec.object.mas.jason.general;
 
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
-import jason.asSyntax.ListTerm;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
-
-import java.util.List;
 
 /**
  * class for literals
@@ -41,16 +38,16 @@ public class CLiteral extends IDefaultLiteral<Literal>
      *
      * @param p_literal
      */
-    public CLiteral( Literal p_literal )
+    public CLiteral(Literal p_literal)
     {
 
-        super(p_literal.getFunctor(), p_literal, p_literal.negated() );
+        super(p_literal.getFunctor(), p_literal, p_literal.negated());
 
-        if( p_literal.hasTerm() )
-            for ( final Term l_term : p_literal.getTerms() )
-                m_values.add( CCommon.convertGeneric( l_term ) );
+        if (p_literal.hasTerm())
+            for (final Term l_term : p_literal.getTerms())
+                m_values.add(CCommon.convertGeneric(l_term));
 
-        if( p_literal.hasAnnot() )
+        if (p_literal.hasAnnot())
             for (final Term l_term : p_literal.getAnnots())
                 m_annotations.add(CCommon.convertGeneric(l_term));
 

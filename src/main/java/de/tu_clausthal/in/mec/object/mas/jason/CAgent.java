@@ -158,7 +158,7 @@ public class CAgent<T> implements IVoidAgent
 
             // initialize inherited beliefbases
             addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
-            addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ));
+            addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -202,12 +202,12 @@ public class CAgent<T> implements IVoidAgent
     /**
      * method for adding a beliefbase into the set of inherited beliefbases
      *
-     * @param p_name name of the new beliefbase
+     * @param p_name       name of the new beliefbase
      * @param p_beliefbase the beliefbase itself
      */
-    public void addBeliefbase( final String p_name, final IBeliefBase p_beliefbase )
+    public void addBeliefbase(final String p_name, final IBeliefBase p_beliefbase)
     {
-        m_beliefs.addBeliefbase( p_name, p_beliefbase );
+        m_beliefs.addBeliefbase(p_name, p_beliefbase);
     }
 
     /**
@@ -215,7 +215,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_name name of the beliefbase
      */
-    public void removeBeliefbase( final String p_name )
+    public void removeBeliefbase(final String p_name)
     {
         m_beliefs.removeBeliefbase(p_name);
     }
@@ -227,9 +227,9 @@ public class CAgent<T> implements IVoidAgent
      * @param p_data belief data
      */
     @Override
-    public void addLiteral( final String p_name, final Object p_data )
+    public void addLiteral(final String p_name, final Object p_data)
     {
-        m_beliefs.addLiteral( CCommon.getLiteral(p_name, p_data) );
+        m_beliefs.addLiteral(CCommon.getLiteral(p_name, p_data));
     }
 
     @Override
@@ -271,9 +271,9 @@ public class CAgent<T> implements IVoidAgent
      * @param p_data belief data
      */
     @Override
-    public void removeLiteral( final String p_name, final Object p_data )
+    public void removeLiteral(final String p_name, final Object p_data)
     {
-        m_beliefs.removeLiteral( CCommon.convertGeneric( CCommon.getLiteral( p_name, p_data ) ) );
+        m_beliefs.removeLiteral(CCommon.convertGeneric(CCommon.getLiteral(p_name, p_data)));
     }
 
     @Override
@@ -316,7 +316,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage(final Set<IMessage> p_messages)
     {
-        ( ( CMessageBeliefBase ) m_beliefs.getBeliefbases().get("messages")).receiveMessage( p_messages );
+        ((CMessageBeliefBase) m_beliefs.getBeliefbases().get("messages")).receiveMessage(p_messages);
     }
 
     @Override
@@ -401,14 +401,14 @@ public class CAgent<T> implements IVoidAgent
         {
             // run all register before-cycle object
             for (final ICycle l_item : m_cycleobject)
-                l_item.beforeCycle( p_currentstep, CAgent.this );
+                l_item.beforeCycle(p_currentstep, CAgent.this);
 
             // add the simulationstep belief with the new number and remove the old one
-            m_beliefs.addLiteral( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)) );
-            m_beliefs.removeLiteral( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)) );
+            m_beliefs.addLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
+            m_beliefs.removeLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
 
             // run belief updates
-            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
+            for (final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values())
                 l_beliefbase.update();
 
             // the reasoning cycle must be called within the transition system
@@ -443,8 +443,6 @@ public class CAgent<T> implements IVoidAgent
             this.setBB(new DefaultBeliefBase());
             this.setPL(new PlanLibrary());
             this.initDefaultFunctions();
-
-
 
 
             try

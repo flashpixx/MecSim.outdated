@@ -40,20 +40,20 @@ import java.lang.reflect.Modifier;
 public class CMethodFilter implements CReflection.IMethodFilter
 {
     @Override
-    public boolean filter( final Method p_method )
+    public boolean filter(final Method p_method)
     {
         boolean l_use = true;
-        if ( p_method.isAnnotationPresent( CAgent.class ) )
-            l_use = ( (CAgent) p_method.getAnnotation( CAgent.class ) ).bind();
+        if (p_method.isAnnotationPresent(CAgent.class))
+            l_use = ((CAgent) p_method.getAnnotation(CAgent.class)).bind();
 
-        return l_use && ( !( Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
+        return l_use && (!(Modifier.isAbstract(p_method.getModifiers()) || Modifier.isInterface(p_method.getModifiers()) || (Modifier.isNative(
                 p_method.getModifiers()
-        ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
+        ) || (Modifier.isStatic(p_method.getModifiers())))));
     }
 
 
-    @Retention( RetentionPolicy.RUNTIME )
-    @Target( ElementType.METHOD )
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
     public @interface CAgent
     {
 

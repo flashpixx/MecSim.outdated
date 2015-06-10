@@ -35,16 +35,16 @@ public interface ICycle
      * method is called within the agent-cycle
      *
      * @param p_currentstep current simulation step
-     * @param p_agent agent
+     * @param p_agent       agent
      */
-    public void afterCycle( final int p_currentstep, final IAgent p_agent );
+    public void afterCycle(final int p_currentstep, final IAgent p_agent);
 
     /**
      * method is called within the agent-cycle
      *
      * @param p_currentstep current simulation step
-     * @param p_agent agent
+     * @param p_agent       agent
      */
-    public void beforeCycle( final int p_currentstep, final IAgent p_agent );
+    public void beforeCycle(final int p_currentstep, final IAgent p_agent);
 
 }

@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.CMessage;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
@@ -50,13 +49,13 @@ import java.util.Set;
 public class CMessageBeliefBase extends CBeliefBase
 {
     /**
-     * set with received messages
-     */
-    private final Set<IMessage> m_receivedmessages = new HashSet<>();
-    /**
      * path seperator
      */
     private final static String c_seperator = "::";
+    /**
+     * set with received messages
+     */
+    private final Set<IMessage> m_receivedmessages = new HashSet<>();
     /**
      * transition system for agent cycle
      */
@@ -67,7 +66,7 @@ public class CMessageBeliefBase extends CBeliefBase
      *
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final TransitionSystem p_transitionSystem )
+    public CMessageBeliefBase(final TransitionSystem p_transitionSystem)
     {
         super();
         m_transitionSystem = p_transitionSystem;
@@ -76,24 +75,25 @@ public class CMessageBeliefBase extends CBeliefBase
     /**
      * ctor - just the top-level literals are specified
      *
-     * @param p_literals top level literals
+     * @param p_literals         top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem )
+    public CMessageBeliefBase(final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem)
     {
         super(p_literals);
         m_transitionSystem = p_transitionSystem;
     }
+
     /**
      * ctor - top-level literals and inherited beliefbases are specified
      *
-     * @param p_beliefbases inherited beliefbases
-     * @param p_literals top level literals
+     * @param p_beliefbases      inherited beliefbases
+     * @param p_literals         top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases,
-                               final Set<ILiteral<Literal>> p_literals,
-                               final TransitionSystem p_transitionSystem )
+    public CMessageBeliefBase(final Map<String, IBeliefBase<Literal>> p_beliefbases,
+                              final Set<ILiteral<Literal>> p_literals,
+                              final TransitionSystem p_transitionSystem)
     {
         super(p_beliefbases, p_literals);
         m_transitionSystem = p_transitionSystem;
@@ -104,7 +104,7 @@ public class CMessageBeliefBase extends CBeliefBase
      *
      * @param p_messages current incoming messages
      */
-    public final void receiveMessage( final Set<IMessage> p_messages )
+    public final void receiveMessage(final Set<IMessage> p_messages)
     {
         m_receivedmessages.clear();
         m_receivedmessages.addAll(p_messages);
@@ -129,7 +129,7 @@ public class CMessageBeliefBase extends CBeliefBase
                     if (l_jmsg.isTell())
                         addLiteral(l_literal);
                     if (l_jmsg.isUnTell())
-                        removeLiteral( l_literal );
+                        removeLiteral(l_literal);
                     if (l_jmsg.isKnownPerformative())
                     {
                         l_literal.addAnnot(BeliefBase.TPercept);
@@ -149,7 +149,7 @@ public class CMessageBeliefBase extends CBeliefBase
 
                 // otherwise message will direct converted
                 final Literal l_literal = CCommon.getLiteral(l_msg.getTitle(), l_msg.getData());
-                l_literal.addAnnot( ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
+                l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
                 addLiteral(l_literal);
 
             } catch (final Exception l_exception)

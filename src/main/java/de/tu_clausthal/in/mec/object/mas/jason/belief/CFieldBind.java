@@ -27,7 +27,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.general.*;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSyntax.ASSyntax;
@@ -37,7 +37,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -62,9 +61,9 @@ public class CFieldBind extends CBeliefBase
      * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind( final String p_name, final Object p_object )
+    public CFieldBind(final String p_name, final Object p_object)
     {
-        this.push( p_name, p_object );
+        this.push(p_name, p_object);
     }
 
     /**
@@ -74,7 +73,7 @@ public class CFieldBind extends CBeliefBase
     public final void update()
     {
         // remove old top-level literals (false-parameter to just remove the top-level literals)
-        clearLiterals( false );
+        clearLiterals(false);
 
         // iterate over all binded objects
         for (final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet())
@@ -93,7 +92,7 @@ public class CFieldBind extends CBeliefBase
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    addLiteral( l_literal );
+                    addLiteral(l_literal);
 
                 } catch (final Exception l_exception)
                 {
@@ -136,7 +135,7 @@ public class CFieldBind extends CBeliefBase
      */
     public final void remove(final String p_name)
     {
-        m_bind.remove( p_name );
+        m_bind.remove(p_name);
     }
 
     /**
@@ -147,6 +146,6 @@ public class CFieldBind extends CBeliefBase
      */
     public boolean instanceOf(Class<?> p_class)
     {
-        return IBeliefBase.class.isAssignableFrom( p_class );
+        return IBeliefBase.class.isAssignableFrom(p_class);
     }
 }

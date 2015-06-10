@@ -68,7 +68,7 @@ public interface IAgent extends Painter, IReceiver
      *
      * @param p_cycle cycle object
      */
-    public void registerCycle( final ICycle p_cycle );
+    public void registerCycle(final ICycle p_cycle);
 
     /**
      * release agent call *
@@ -88,6 +88,6 @@ public interface IAgent extends Painter, IReceiver
      *
      * @param p_cycle cycle object
      */
-    public void unregisterCycle( final ICycle p_cycle );
+    public void unregisterCycle(final ICycle p_cycle);
 
 }

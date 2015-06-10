@@ -40,23 +40,23 @@ public class CFieldFilter implements CReflection.IFieldFilter
 {
 
     @Override
-    public final boolean filter( final Field p_field )
+    public final boolean filter(final Field p_field)
     {
         boolean l_use = true;
-        if ( p_field.isAnnotationPresent( CAgent.class ) )
-            l_use = ( (CAgent) p_field.getAnnotation( CAgent.class ) ).bind();
+        if (p_field.isAnnotationPresent(CAgent.class))
+            l_use = ((CAgent) p_field.getAnnotation(CAgent.class)).bind();
 
-        return l_use && ( !( ( Modifier.isStatic( p_field.getModifiers() ) ) || ( Modifier.isInterface(
+        return l_use && (!((Modifier.isStatic(p_field.getModifiers())) || (Modifier.isInterface(
                 p_field.getModifiers()
-        ) ) || ( Modifier.isAbstract( p_field.getModifiers() ) ) ) );
+        )) || (Modifier.isAbstract(p_field.getModifiers()))));
     }
 
 
     /**
      * @todo define an own name
      */
-    @Retention( RetentionPolicy.RUNTIME )
-    @Target( ElementType.FIELD )
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
     public @interface CAgent
     {
         /**

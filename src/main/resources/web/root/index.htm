@@ -59,6 +59,7 @@
     <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
 
     <script type = "text/javascript" src = "jscss/content/simulation.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/configuration.js" ></script >
     <script type = "text/javascript" src = "jscss/content/layer.js" ></script >
 
     <script type = "text/javascript" src = "jscss/content/traffic.js" ></script >
@@ -75,7 +76,7 @@
             MecSim.uiinitialize([
                 new Inspector( "inspector" ),
                 new Logger( "logger" ),
-                new Simulation("simulation", "Simulation"),
+                new Simulation("simulation", "Simulation", [new Configuration("configuration", "Configuration")]),
                 new Layer("layer", "Layer"),
                 new Traffic("traffic", "Traffic Environment"),
                 new Waypoint("waypoint", "Waypoint / Sources"),

@@ -26,27 +26,27 @@
 
 
 /**
- * ctor to create the inspector instance
+ * ctor to create the configuration view
  *
  * @param pc_id ID
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
 **/
-function Inspector( pc_id, pc_name, pa_panel )
+function Configuration( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 }
 
 /** inheritance call **/
-Inspector.prototype = Object.create(Pane.prototype);
+Configuration.prototype = Object.create(Pane.prototype);
 
 
 /**
  * @Overwrite
 **/
-Inspector.prototype.getGlobalContent = function()
+Configuration.prototype.getGlobalContent = function()
 {
-    return '<div id = "' + this.generateSubID("dialog") + '">' +
+    return '<div id = "' + this.generateSubID("dialog") + '" title = "Object Inspector" >' +
            '<div id = "' + this.generateSubID("table")  + '" ></div>' +
            '</div>' +
            Pane.prototype.getGlobalContent.call(this);
@@ -56,40 +56,69 @@ Inspector.prototype.getGlobalContent = function()
 /**
  * @Overwrite
 **/
-Inspector.prototype.afterDOMAdded = function()
+Configuration.prototype.getContent = function()
+{
+    return '<button id = "' + this.generateSubID("configuration") + '" >Configuration</button >' + Pane.prototype.getContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
+Configuration.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
-
-
-    /**
-     * function to format a JSON object in a table
-     *
-     * @param po_object JSON object
-     * @return HTML string
-    **/
-    function json2table( po_object )
-    {
-        var lc = '<table>';
-        jQuery.each( po_object, function(pc_key, px_value) {
-            lc += '<tr><th>' + pc_key + '</th><td>' + (px_value instanceof Object ? json2table(px_value) : px_value + '</td></tr>' );
-        });
-        return lc + '</table>';
-    }
-
-
-    // --- bind action on the websocket ---------------------------
     var self = this;
 
-    jQuery( self.generateSubID("dialog", "#") ).dialog({ autoOpen: false, width: "auto" });
+    // create button and bind action with Ajax call
+    jQuery(self.generateSubID("configuration", "#")).button().click( function() {
 
-    MecSim.websocket( "/cinspector/show", {
-        "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
-        "onmessage" : function( po_event ) {
+        MecSim.ajax({
 
-            jQuery( self.generateSubID("table", "#") ).empty();
-            jQuery( self.generateSubID("table", "#") ).append( json2table(po_event.data.toJSON()) );
-            jQuery( self.generateSubID("dialog", "#") ).dialog("open");
+            url     : "/cconfiguration/get",
+            success : function( po_data ) {
+                self.mo_configuration = po_data;
+            }
 
-        }
+        }).done(function() {
+            self.view();
+        });
+
     });
+
+}
+
+
+/**
+ * creates the view with the configuration data
+**/
+Configuration.prototype.view = function()
+{
+    var self = this;
+    jQuery( MecSim.ui().content("#") ).empty();
+
+    // global /main, ui, simulation, database
+
+    // add tab structure to the content div and create the jQuery definition
+    jQuery( MecSim.ui().content("#") ).append(
+
+        '<div id="' + this.generateSubID("tabs") + '">' +
+
+        '<ul>' +
+        '<li><a href="' + this.generateSubID("general", "#")    + '">General</a></li>' +
+        '<li><a href="' + this.generateSubID("ui", "#")         + '">User Interface</a></li>' +
+        '<li><a href="' + this.generateSubID("simulation", "#") + '">Simulation</a></li>' +
+        '<li><a href="' + this.generateSubID("database", "#")   + '">Database</a></li>' +
+        '</ul>' +
+
+        '<div id="' + this.generateSubID("general") + '">general</div>' +
+        '<div id="' + this.generateSubID("ui") + '">ui</div>' +
+        '<div id="' + this.generateSubID("simulation") + '">simulation</div>' +
+        '<div id="' + this.generateSubID("database") + '">database</div>' +
+
+        '</div>'
+
+    );
+
+    jQuery( this.generateSubID("tabs", "#") ).tabs();
 }

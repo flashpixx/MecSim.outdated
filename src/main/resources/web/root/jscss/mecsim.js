@@ -21,6 +21,7 @@
  * @endcond
  */
 
+"use strict";
 
 /**
  * base modul to represent base algorithms

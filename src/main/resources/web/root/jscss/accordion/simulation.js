@@ -21,10 +21,13 @@
  * @endcond
  */
 
-// --- SIMULATION PANEL MODULE ---------------------------------------------------------------------------------------------
+// --- SIMULATION PANEL MODULE -----------------------------------------------------------------------------------------
+
+"use strict";
 
 var SimulationPanel = ( function (px_module) {
 
+    px_module.configuration_json_obj = {}
 
     px_module.ui_actions = function() { return {
 
@@ -146,14 +149,29 @@ var SimulationPanel = ( function (px_module) {
 
         });
 
+        // clear logger function
+        SimulationPanel.ui().mecsim_clear_logger().button().on("click", function() {
+            console.log("clear logger...");
+            MecSim.ui().log().empty();
+        });
+
         // configure speed of simulation
         SimulationPanel.ui().speed_slider().slider({
             range: "min",
-            value: 1,
-            min: 0,
-            max: 10,
+            value: 25,
+            min: 1,
+            max: 50,
             slide: function( event, ui ) {
                 SimulationPanel.ui().speed_label().val( ui.value );
+                // set thread sleep time
+                MecSim.configuration().get( function(configuration) {
+                    SimulationPanel.configuration_json_obj = configuration;
+                    SimulationPanel.configuration_json_obj.simulation.threadsleeptime = ui.value;
+                });
+
+                console.log("Fido");
+                MecSim.configuration().set(SimulationPanel.configuration_json_obj);
+
             }
         });
 
@@ -221,7 +239,9 @@ var SimulationPanel = ( function (px_module) {
         /** reference to database username **/
         mecsim_config_username: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_username"     : $("#mecsim_config_username"); },
         /** reference to database password **/
-        mecsim_config_password: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_password"     : $("#mecsim_config_password"); }
+        mecsim_config_password: function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_config_password"     : $("#mecsim_config_password"); },
+        /** reference to clear logger button **/
+        mecsim_clear_logger : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_clear_logger"     : $("#mecsim_clear_logger"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

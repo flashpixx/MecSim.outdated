@@ -464,7 +464,7 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        return getResourceBundle( null );
+        return getResourceBundle(null);
     }
 
     /**
@@ -485,7 +485,7 @@ public class CConfiguration
                 l_locale = Locale.ENGLISH;
         }
 
-        Locale.setDefault( l_locale );
+        Locale.setDefault(l_locale);
         return ResourceBundle.getBundle( "language.locals", l_locale, m_reader );
     }
 
@@ -548,7 +548,7 @@ public class CConfiguration
                     CLogger.error( l_exception );
                     return false;
                 }
-        m_configuration.set( "extractmasexamples", false );
+        m_configuration.set("extractmasexamples", false);
 
         return true;
     }
@@ -560,7 +560,7 @@ public class CConfiguration
      */
     public void setConfigDir( final File p_dir )
     {
-        m_location.put( "root", p_dir );
+        m_location.put("root", p_dir);
         this.setDefaultDirectories();
         try
         {
@@ -579,15 +579,17 @@ public class CConfiguration
      */
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException, IllegalArgumentException
     {
-        // convert special dara into individual types
+
+        // convert special data into individual types
         if ( p_input.traverseContainsKey( "ui/geoposition" ) )
             p_input.set(
                     "ui/geoposition", new GeoPosition(
                             p_input.<Double>get( "ui/geoposition/latitude" ), p_input.<Double>get( "ui/geoposition/longitude" )
+                            //51.8089, 10.3412 -> type mismatch between float and double (latitude and longitude)
                     )
             );
 
-        // check allow values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
+        // check allowed values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
         final Set<String> l_errors = new HashSet<>();
 
         for ( final Map.Entry<CPath, Object> l_item : m_configuration )

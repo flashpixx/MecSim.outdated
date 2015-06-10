@@ -21,6 +21,8 @@
  * @endcond
  */
 
+"use strict";
+
 // --- JQUERY ----------------------------------------------------------------------------------------------------------
 $(document).ready(function() {
 
@@ -34,15 +36,12 @@ $(document).ready(function() {
     ).done(function(){
 
         // module instantiation
-        LayerPanel.init();
         SourcePanel.init();
-        MASPanel.init();
-        HelpPanel.init();
 
         // UI instantiation
         // @todo refactor
         MecSim.ui().screen().jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
-        MecSim.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
+        MecSim.ui().screenmenu().jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] }).jqxSplitter('collapse');
         MecSim.ui().accordion().accordion({ active: false, collapsible: true });
         MecSim.ui().inspector().dialog({ autoOpen: false });
 
@@ -51,6 +50,17 @@ $(document).ready(function() {
 
         // Simulation Panel instantiation
         SimulationPanel.bind_ui_actions();
+
+        // Help Panel instantiation
+        HelpPanel.bind_ui_actions();
+
+        // MAS Panel instantiation
+        MASPanel.bind_ui_actions();
+
+        // Layer Panel instantiation
+        LayerPanel.bind_ui_actions();
+        LayerPanel.ui_actions().list_clickable_layer();
+        LayerPanel.ui_actions().list_static_layer();
 
         // create logger websockets access
         MecSim.websocket( "/cconsole/output/log", {

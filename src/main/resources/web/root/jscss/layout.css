@@ -190,13 +190,20 @@ select
 
 #mecsim_source_waypointListContainer{
     width: 475px;
+    margin-top: 25px;
     float:left;
 }
 
-#mecsim_source_waypointGraphEditor{
+#mecsim_source_graphContainer{
     width: 500px;
     margin-left: 15px;
     float:left;
+}
+
+#mecsim_source_graphControl{
+    margin: 10px;
+    margin-left: 25px;
+    float: left;
 }
 
 .mecsim_source_targetingName{

@@ -84,7 +84,7 @@ var SourcePanel = ( function (px_module) {
                         {
                             name        : SourcePanel.settings.labels.waypointlist,
                             width       : 1050,
-                            height      : 550,
+                            height      : 625,
                             cancel      : "#mecsim_source_waypointGraphEditor"
                         }
                     );
@@ -92,23 +92,7 @@ var SourcePanel = ( function (px_module) {
 
                     //create table content
                     SourcePanel.createWaypointList();
-
-                    //default graph data will be deleted in a view commits
-                    var lastNodeId = 2;
-
-                    var nodes = [
-                        {id: 0, reflexive: false},
-                        {id: 1, reflexive: true },
-                        {id: 2, reflexive: false}
-                    ];
-
-                    var links = [
-                        {source: nodes[0], target: nodes[1], left: false, right: true },
-                        {source: nodes[1], target: nodes[2], left: false, right: true }
-                    ];
-
-                    SourcePanel.settings.obj.graphEditor = GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
-
+                    SourcePanel.settings.obj.graphEditor = GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : [], links : [], lastNodeId : 0}, {width: 500} );
 
                     //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
@@ -636,6 +620,7 @@ var SourcePanel = ( function (px_module) {
                     "lengthChange": false,
                     "autoWidth": false,
                     "language": {
+                        "emptyTable": SourcePanel.settings.labels.nodata,
                         "paginate": {
                             "next": SourcePanel.settings.labels.next,
                             "previous": SourcePanel.settings.labels.previous
@@ -684,10 +669,8 @@ var SourcePanel = ( function (px_module) {
                                 }
                             }
 
-                            console.log(nodes);
-                            console.log(links);
-
                             SourcePanel.settings.obj.graphEditor.reload({nodes : nodes, links : links, lastNodeId : lastNodeId});
+                            $("#mecsim_source_currentWaypoint").text(event.target.value);
                         }
                     });
                 });

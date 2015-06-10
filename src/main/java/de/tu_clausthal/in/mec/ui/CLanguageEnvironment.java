@@ -43,6 +43,7 @@ public class CLanguageEnvironment
             put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
             put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
             put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
+            put( "nodata", CCommon.getResourceString( CLanguageEnvironment.class, "nodata" ) );
 
             put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
 
@@ -102,6 +103,8 @@ public class CLanguageEnvironment
             put( "#mecsim_source_makrovEditor_label", CCommon.getResourceString( CLanguageEnvironment.class, "makroveditor" ) );
             put( "#mecsim_source_makrovWeighting_label", CCommon.getResourceString( CLanguageEnvironment.class, "makrovweighting" ) );
             put( "#mecsim_source_waypointSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "waypointsettings" ) );
+            put( "#mecsim_source_saveGraph", CCommon.getResourceString( CLanguageEnvironment.class, "savemakrovchain" ) );
+            put( "#mecsim_source_resetGraph", CCommon.getResourceString( CLanguageEnvironment.class, "resetmakrovchain" ) );
         }};
 
     /**

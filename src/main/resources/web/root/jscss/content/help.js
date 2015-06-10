@@ -73,6 +73,15 @@ Help.prototype.getContent = function()
            '<p><button id = "' + this.generateSubID("userdoc") + '" >Userdocumentation</button ></p>' +
            '<p><button id = "' + this.generateSubID("devdoc") + '" >Developerdocumentation</button ></p>' +
            Pane.prototype.getContent.call(this);
+
+           /*
+           blockquote {
+               text-align: center;
+               margin:0 auto;
+               width:auto;
+               display:table
+           }
+           */
 }
 
 

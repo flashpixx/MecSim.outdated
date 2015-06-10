@@ -46,10 +46,12 @@ Inspector.prototype = Object.create(Pane.prototype);
 **/
 Inspector.prototype.getGlobalContent = function()
 {
-    return '<div id = "' + this.generateSubID("dialog") + '">' +
-           '<div id = "' + this.generateSubID("table")  + '" ></div>' +
-           '</div>' +
-           Pane.prototype.getGlobalContent.call(this);
+    return Layout.dialog({
+        dialog  : this.generateSubID("dialog"),
+        content : this.generateSubID("table"),
+        title   : "Object Inspector"
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
 }
 
 

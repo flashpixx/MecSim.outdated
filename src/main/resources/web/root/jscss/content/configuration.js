@@ -41,17 +41,6 @@ function Configuration( pc_id, pc_name, pa_panel )
 Configuration.prototype = Object.create(Pane.prototype);
 
 
-/**
- * @Overwrite
-**/
-Configuration.prototype.getGlobalContent = function()
-{
-    return '<div id = "' + this.generateSubID("dialog") + '" title = "Object Inspector" >' +
-           '<div id = "' + this.generateSubID("table")  + '" ></div>' +
-           '</div>' +
-           Pane.prototype.getGlobalContent.call(this);
-}
-
 
 /**
  * @Overwrite
@@ -175,4 +164,9 @@ Configuration.prototype.getSelect = function( po_object )
     lc += "</select>";
 
     return lc;
+}
+
+
+Configuration.prototype.getInput = function( po_object )
+{
 }

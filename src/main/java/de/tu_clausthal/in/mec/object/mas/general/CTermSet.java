@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,28 +40,17 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
      */
     public CTermSet()
     {
-        super(0);
+        super( 0 );
     }
 
     /**
-     * ctor - with initial capacity specified
+     * ctor - with initial elements specified
      *
-     * @param p_initialCapacity
+     * @param p_collection collection containing initial elements
      */
-    public CTermSet(final int p_initialCapacity)
+    public CTermSet(final Collection<ITerm> p_collection)
     {
-        super(p_initialCapacity);
-    }
-
-    /**
-     * ctor - with initial capacity and load factor specified
-     *
-     * @param p_initialCapacity
-     * @param p_loadFactor
-     */
-    public CTermSet(final int p_initialCapacity, final float p_loadFactor)
-    {
-        super(p_initialCapacity, p_loadFactor);
+        super( p_collection );
     }
 
     /**

@@ -24,9 +24,14 @@
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultLiteral;
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 /**
  * class for literals
@@ -41,7 +46,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
     public CLiteral(Literal p_literal)
     {
 
-        super(p_literal.getFunctor(), p_literal, p_literal.negated());
+        super(p_literal.getFunctor(), p_literal, p_literal.negated(), new LinkedList<>(), new HashSet<>(4, (float) 0.75));
 
         if (p_literal.hasTerm())
             for (final Term l_term : p_literal.getTerms())

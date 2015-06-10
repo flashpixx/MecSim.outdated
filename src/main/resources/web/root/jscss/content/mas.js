@@ -46,8 +46,8 @@ MAS.prototype = Object.create(Pane.prototype);
 **/
 MAS.prototype.getContent = function()
 {
-    return '<button id = "' + this.generateSubID("jasonmind") + '" >Jason Mindinspector</button >' +
-           '<button id = "' + this.generateSubID("communication") + '" >Message Communication</button >' +
+    return '<p><button id = "' + this.generateSubID("jasonmind") + '" >Jason Mindinspector</button ></p>' +
+           '<p><button id = "' + this.generateSubID("communication") + '" >Message Communication</button ></p>' +
            Pane.prototype.getContent.call(this);
 }
 

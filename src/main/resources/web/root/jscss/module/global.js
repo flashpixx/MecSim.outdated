@@ -62,7 +62,7 @@ String.prototype.clearnull = String.prototype.clearnull || function()
 **/
 String.prototype.toJSON = String.prototype.toJSON || function()
 {
-    return $.parseJSON(this.clearnull());
+    return jQuery.parseJSON(this.clearnull());
 }
 
 
@@ -73,6 +73,19 @@ String.prototype.toJSON = String.prototype.toJSON || function()
 Array.prototype.remove = Array.prototype.remove || function( px_value )
 {
     delete this[ Array.prototype.indexOf.call(this, px_value) ];
+}
+
+
+/**
+ * elementwise convert to build a new array
+ * @param px_value modifier closure
+ * @returns a new array
+**/
+Array.prototype.convert = Array.prototype.convert || function( px_value )
+{
+    var la_result = [];
+    this.forEach( function( px_item ) { la_result.push( px_value(px_item) ); } );
+    return la_result;
 }
 
 

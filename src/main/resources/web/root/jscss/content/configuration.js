@@ -94,10 +94,14 @@ Configuration.prototype.afterDOMAdded = function()
 **/
 Configuration.prototype.view = function()
 {
-    var self = this;
     jQuery( MecSim.ui().content("#") ).empty();
 
     // global /main, ui, simulation, database
+    //console.log(this.mo_configuration);
+
+    // list with IDs to define jQuery elements
+    var la_selects  = [];
+    var la_switches = [];
 
     // add tab structure to the content div and create the jQuery definition
     jQuery( MecSim.ui().content("#") ).append(
@@ -111,7 +115,15 @@ Configuration.prototype.view = function()
         '<li><a href="' + this.generateSubID("database", "#")   + '">Database</a></li>' +
         '</ul>' +
 
-        '<div id="' + this.generateSubID("general") + '">general</div>' +
+        '<div id="' + this.generateSubID("general") + '">' +
+        this.getCheckbox({ id: "config_reset",               label: "Reset Configuration",   list: la_switches,   value: this.mo_configuration.reset }) + '<br/>' +
+        this.getCheckbox({ id: "config_extractmasexample",   label: "Extract agent files",   list: la_switches,   value: this.mo_configuration.extractmasexamples }) + '<br/>' +
+        this.getSelect(  { id: "config_language",            label: "Language",              list: la_selects,
+                       value: this.mo_configuration.language.current,
+                       options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } )
+        }) +
+        '</div>' +
+
         '<div id="' + this.generateSubID("ui") + '">ui</div>' +
         '<div id="' + this.generateSubID("simulation") + '">simulation</div>' +
         '<div id="' + this.generateSubID("database") + '">database</div>' +
@@ -120,5 +132,47 @@ Configuration.prototype.view = function()
 
     );
 
+    // build jQuery elements
     jQuery( this.generateSubID("tabs", "#") ).tabs();
+    la_switches.forEach( function(pc_item) { jQuery( "#"+pc_item ).bootstrapSwitch({ size : "mini" }); });
+    la_selects.forEach( function(pc_item) { jQuery( "#"+pc_item ).selectmenu(); });
+}
+
+
+/**
+ * creates a checkbox with label
+ *
+ * @param po_object Json object with id & label (and optional list to get all IDs)
+ * @return HTML string
+**/
+Configuration.prototype.getCheckbox = function( po_object )
+{
+    var lc_id = this.generateSubID(po_object.id)
+    if (Array.isArray(po_object.list))
+        po_object.list.push(lc_id);
+
+    return '<label for = "' + lc_id + '" >' + po_object.label + '</label > <input id="' + lc_id + '" type="checkbox" '+ (po_object && po_object.value ? "checked" : "") +' />';
+}
+
+
+/**
+ * creates a select menu with label
+ *
+ * @param po_object Json object with id & label (and optional list to get all IDs and options with Json object (ID & label) for the option values)
+ * @return HTML string
+**/
+Configuration.prototype.getSelect = function( po_object )
+{
+    var lc_id = this.generateSubID(po_object.id)
+    if (Array.isArray(po_object.list))
+        po_object.list.push(lc_id);
+
+    var lc = '<label for = "' + lc_id + '" >' + po_object.label + '</label > <select id = "' + lc_id + '">';
+
+    if (Array.isArray(po_object.options))
+        po_object.options.forEach( function(po_item) { lc += '<option id="' + po_item.id + '" ' + (po_object.value && (po_item.id == po_object.value) ? "selected" : "") + '>' + (po_item.label ? po_item.label : po_item.id) + '</option>'; } );
+
+    lc += "</select>";
+
+    return lc;
 }

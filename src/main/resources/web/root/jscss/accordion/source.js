@@ -24,6 +24,7 @@
  /** todo collection for source-ui ck
 
  targeting
+ TODO refactor create waypoint list
  TODO editor
  TODO matrix
  TODO save / update /reset /show /hide (makrov)
@@ -91,6 +92,23 @@ var SourcePanel = ( function (px_module) {
 
                     //create table content
                     SourcePanel.createWaypointList();
+
+                    //default graph data will be deleted in a view commits
+                    var lastNodeId = 2;
+
+                    var nodes = [
+                        {id: 0, reflexive: false},
+                        {id: 1, reflexive: true },
+                        {id: 2, reflexive: false}
+                    ];
+
+                    var links = [
+                        {source: nodes[0], target: nodes[1], left: false, right: true },
+                        {source: nodes[1], target: nodes[2], left: false, right: true }
+                    ];
+
+                    SourcePanel.settings.obj.graphEditor = GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
+
 
                     //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
@@ -596,31 +614,30 @@ var SourcePanel = ( function (px_module) {
 
                 //brint data into correct table format
                 p_data.forEach(function(entry){
-                    entry.edit = "";
-                    if(entry.editable)
-                        entry.edit = "<button>"+ SourcePanel.settings.labels.configuretarget +"</button>";
-
                     entry.icon = "<span class='mecsim_source_toolIcon'>" + entry.name.split("#").slice(-1).pop() + "</span><span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
                     entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
+                    entry.type = entry.type;
+                    entry.edit = "";
+                    if(entry.editable)
+                        entry.edit = "<button id='mecsim_source_editButton' value="+entry.id+">"+ SourcePanel.settings.labels.configuretarget +"</button>";
                 });
 
                 //create waypoint table
-                SourcePanel.settings.obj.targetingTable = SourcePanel.settings.dom.targetingTable.DataTable({
-                    "aaData": p_data,
+                SourcePanel.settings.obj.targetingTable = SourcePanel.settings.dom.targetingTable.dataTable({
+                    "data": p_data,
                     "paging": true,
                     "ordering": false,
                     "info":     false,
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
-                    "oLanguage": {
-                        "oPaginate": {
-                            "sNext": SourcePanel.settings.labels.next,
-                            "sPrevious": SourcePanel.settings.labels.previous
+                    "language": {
+                        "paginate": {
+                            "next": SourcePanel.settings.labels.next,
+                            "previous": SourcePanel.settings.labels.previous
                         }
                     },
-                    "aoColumns": [
-                        { className: "dt-body-center", "title": "ID", "mDataProp": "id", "visible": false },
+                    "columns": [
                         { className: "dt-body-center", "title": "", "mDataProp": "icon" },
                         { className: "dt-body-center", "title": SourcePanel.settings.labels.waypointname, "mDataProp": "name" },
                         { className: "dt-body-center", "title": SourcePanel.settings.labels.waypointtyp, "mDataProp": "type" },
@@ -628,42 +645,45 @@ var SourcePanel = ( function (px_module) {
                     ]
                 });
 
-                $("textarea").on("change", function(event){$(this).text($(this).val());});
+                $("#mecsim_source_editButton").on("click", function(event){
+
+                    //maybe get once ?
+                    $.ajax({
+                        url     : "/cwaypointenvironment/getmakrovchain",
+                        data    : {waypoint : event.target.value},
+                        success : function( px_data ){
+
+                            var nodes = [];
+                            var lastNodeId = 0;
+                            for(var l_node in px_data){
+                                var node = {id: lastNodeId++, reflexive: false, geo: l_node};
+                                nodes.push(node);
+                            }
+
+                            function getNodeByGeo(p_nodes, p_geo){
+                                for(var l_test in p_nodes){
+                                    if(nodes[l_test].geo === p_geo)
+                                        return nodes[l_test];
+                                }
+                            }
+
+                            var links = [];
+                            for(var l_source in px_data){
+                                for(var l_target in px_data[l_source]){
+                                    var link = {source: getNodeByGeo(nodes, l_source), target: getNodeByGeo(nodes, l_target), left: false, right: true };
+                                    links.push(link);
+                                }
+                            }
+
+                            console.log(nodes);
+                            console.log(links);
+
+                            SourcePanel.settings.obj.graphEditor.reload({nodes : nodes, links : links, lastNodeId : lastNodeId});
+                        }
+                    });
+                });
             }
         });
-
-        var lastNodeId = 2;
-
-        var nodes = [
-            {id: 0, reflexive: false},
-            {id: 1, reflexive: true },
-            {id: 2, reflexive: false}
-        ];
-
-        var links = [
-            {source: nodes[0], target: nodes[1], left: false, right: true },
-            {source: nodes[1], target: nodes[2], left: false, right: true }
-        ];
-
-        SourcePanel.settings.obj.graphEditor = GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : nodes, links : links, lastNodeId : lastNodeId}, {width: 500} );
-
-        $("#test").on("click", function(){
-
-            var lastNodeId = 2;
-
-            var nodes = [
-                {id: 0, reflexive: false},
-                {id: 1, reflexive: true },
-                {id: 2, reflexive: false}
-            ];
-
-            var links = [
-                {source: nodes[0], target: nodes[1], left: false, right: true },
-                {source: nodes[1], target: nodes[2], left: false, right: true }
-            ];
-            SourcePanel.settings.obj.graphEditor.reload( {nodes : nodes, links : links, lastNodeId : lastNodeId} );
-        });
-
     };
 
     return px_module;

@@ -23,7 +23,9 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
@@ -59,6 +61,7 @@ import java.util.Map;
  * todo java cleanup (doc, style)
  * todo remove singelton
  * todo check for casts
+ * todo better way to get makrov chain ?
  */
 public class CWaypointEnvironment
 {
@@ -158,6 +161,52 @@ public class CWaypointEnvironment
         }
 
         return l_waypointList;
+    }
+
+    /**
+     * method to get the makrov chain
+     * @param p_data
+     * @return
+     */
+    private final IPathWayPoint.CMakrovChain web_static_getmakrovchain( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "waypoint" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+
+        final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+        final String l_waypoint = String.valueOf( p_data.get( "waypoint" ) );
+
+        for ( final IWayPoint<ICar> l_item : l_layer ){
+            if(l_item.toString().equals( l_waypoint))
+                if(l_item instanceof  IPathWayPoint){
+
+                    //temp adding data to makrov chain for testing purpose
+
+                    IPathWayPoint.CMakrovChain<GeoPosition> l_makrovChain = ( (IPathWayPoint) l_item ).getMakrovChain();
+
+                    GeoPosition l_node1 = new GeoPosition( 1.0, 2.0 );
+                    GeoPosition l_node2 = new GeoPosition( 2.0, 3.0 );
+                    GeoPosition l_node3 = new GeoPosition( 3.0, 4.0 );
+                    GeoPosition l_node4 = new GeoPosition( 4.0, 5.0 );
+                    GeoPosition l_node5 = new GeoPosition( 5.0, 6.0 );
+
+                    l_makrovChain.addEdge( l_node1, l_node3, 1.0 );
+                    l_makrovChain.addEdge( l_node1, l_node4, 2.0 );
+                    l_makrovChain.addEdge( l_node1, l_node5, 3.0 );
+
+                    l_makrovChain.addEdge( l_node2, l_node3, 1.0 );
+                    l_makrovChain.addEdge( l_node2, l_node4, 2.0 );
+                    l_makrovChain.addEdge( l_node2, l_node5, 3.0 );
+
+                    l_makrovChain.addEdge( l_node3, l_node1, 1.0 );
+                    l_makrovChain.addEdge( l_node3, l_node4, 2.0 );
+
+                    return l_makrovChain;
+                }
+
+        }
+
+        return null;
     }
 
     /**

@@ -95,6 +95,14 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     }
 
     /**
+     * get the makrov chain
+     * @return
+     */
+    public final CMakrovChain<GeoPosition> getMakrovChain(){
+        return this.m_makrovChain;
+    }
+
+    /**
      * generic class to create a markov chain
      * this class also provides a relative and absolute weighting
      *

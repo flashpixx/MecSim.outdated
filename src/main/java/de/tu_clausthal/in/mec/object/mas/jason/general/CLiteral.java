@@ -39,7 +39,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
     /**
      * ctor
      *
-     * @param p_literal the literal itself
+     * @param p_literal
      */
     public CLiteral( Literal p_literal )
     {

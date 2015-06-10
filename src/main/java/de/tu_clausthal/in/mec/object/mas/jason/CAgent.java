@@ -408,7 +408,8 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.removeLiteral( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)) );
 
             // run belief updates
-            this.updateBeliefBases();
+            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
+                l_beliefbase.update();
 
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);
@@ -418,16 +419,6 @@ public class CAgent<T> implements IVoidAgent
             for (final ICycle l_item : m_cycleobject)
                 l_item.afterCycle(p_currentstep, CAgent.this);
         }
-
-        /**
-         * updates all the inherited beliefbases
-         */
-        protected final void updateBeliefBases()
-        {
-            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
-                l_beliefbase.update();
-        }
-
     }
 
 

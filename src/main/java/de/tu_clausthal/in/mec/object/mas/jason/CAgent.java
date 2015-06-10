@@ -158,7 +158,7 @@ public class CAgent<T> implements IVoidAgent
 
             // initialize inherited beliefbases
             addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
-            addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase());
+            addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ));
         }
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
@@ -421,7 +421,6 @@ public class CAgent<T> implements IVoidAgent
         }
     }
 
-
     /**
      * class of an own Jason agent to handle Jason stdlib internal action includes
      *
@@ -444,6 +443,9 @@ public class CAgent<T> implements IVoidAgent
             this.setBB(new DefaultBeliefBase());
             this.setPL(new PlanLibrary());
             this.initDefaultFunctions();
+
+
+
 
             try
             {

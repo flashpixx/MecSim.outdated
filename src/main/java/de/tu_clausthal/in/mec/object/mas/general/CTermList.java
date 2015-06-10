@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * generic term list for agent literals
+ * @todo initialzation of list depending on init size and load
  */
 public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {

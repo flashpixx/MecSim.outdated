@@ -28,6 +28,7 @@ import java.util.Set;
 
 /**
  * generic term set for agent literals
+ * @todo initialzation of set depending on init size and load
  */
 public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {

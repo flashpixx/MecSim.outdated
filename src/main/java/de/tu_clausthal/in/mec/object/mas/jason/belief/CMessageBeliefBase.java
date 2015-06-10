@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.CMessage;
@@ -39,6 +41,7 @@ import jason.asSyntax.Trigger;
 import jason.bb.BeliefBase;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -54,6 +57,47 @@ public class CMessageBeliefBase extends CBeliefBase
      * path seperator
      */
     private final static String c_seperator = "::";
+    /**
+     * transition system for agent cycle
+     */
+    private final TransitionSystem m_transitionSystem;
+
+    /**
+     * ctor - with transition system specified
+     *
+     * @param p_transitionSystem agent transition system
+     */
+    public CMessageBeliefBase( final TransitionSystem p_transitionSystem )
+    {
+        super();
+        m_transitionSystem = p_transitionSystem;
+    }
+
+    /**
+     * ctor - just the top-level literals are specified
+     *
+     * @param p_literals top level literals
+     * @param p_transitionSystem agent transition system
+     */
+    public CMessageBeliefBase( final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem )
+    {
+        super(p_literals);
+        m_transitionSystem = p_transitionSystem;
+    }
+    /**
+     * ctor - top-level literals and inherited beliefbases are specified
+     *
+     * @param p_beliefbases inherited beliefbases
+     * @param p_literals top level literals
+     * @param p_transitionSystem agent transition system
+     */
+    public CMessageBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases,
+                               final Set<ILiteral<Literal>> p_literals,
+                               final TransitionSystem p_transitionSystem )
+    {
+        super(p_beliefbases, p_literals);
+        m_transitionSystem = p_transitionSystem;
+    }
 
     /**
      * method for registering incoming messages
@@ -68,8 +112,6 @@ public class CMessageBeliefBase extends CBeliefBase
 
     /**
      * update literals by receiving new messages
-     *
-     * @todo integrate transition system
      */
     @Override
     public void update()
@@ -91,15 +133,15 @@ public class CMessageBeliefBase extends CBeliefBase
                     if (l_jmsg.isKnownPerformative())
                     {
                         l_literal.addAnnot(BeliefBase.TPercept);
-                        /*
-                        this.getTS().getC().addEvent(
+
+                        m_transitionSystem.getC().addEvent(
                                 new Event(
                                         new Trigger(
                                                 Trigger.TEOperator.add, Trigger.TEType.belief, l_literal
                                         ), Intention.EmptyInt
                                 )
                         );
-                        */
+
                     }
 
                     continue;

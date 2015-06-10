@@ -23,15 +23,43 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * generic term set for agent literals
- * @todo initialzation of set depending on init size and load
  */
 public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
+    /**
+     * default ctor
+     */
+    public CTermSet()
+    {
+        super( 0 );
+    }
+    /**
+     * ctor - with initial capacity specified
+     *
+     * @param p_initialCapacity
+     */
+    public CTermSet( final int p_initialCapacity )
+    {
+        super( p_initialCapacity );
+    }
+    /**
+     * ctor - with initial capacity and load factor specified
+     *
+     * @param p_initialCapacity
+     * @param p_loadFactor
+     */
+    public CTermSet( final int p_initialCapacity, final float p_loadFactor )
+    {
+        super( p_initialCapacity, p_loadFactor );
+    }
+
     /**
      * check for the termset's class type
      *

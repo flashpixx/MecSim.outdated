@@ -23,15 +23,32 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * generic term list for agent literals
- * @todo initialzation of list depending on init size and load
  */
 public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
+    /**
+     * default ctor
+     */
+    public CTermList()
+    {
+        super();
+    }
+    /**
+     * ctor - with initial elements specified
+     *
+     * @param p_collection collection containing initial elements
+     */
+    public CTermList( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
+
     /**
      * check for the termlist's class type
      *

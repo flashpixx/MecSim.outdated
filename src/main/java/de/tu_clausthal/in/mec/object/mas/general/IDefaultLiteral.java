@@ -23,17 +23,24 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import jason.asSyntax.Literal;
+
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
+ *
+ * @todo define constructors
  */
 public abstract class IDefaultLiteral<T> implements ILiteral<T>
 {
     /**
      * negation marker
      */
-    private Boolean m_negated = false;
+    private Boolean m_negated;
     /**
      * the literals functor
      */
@@ -41,26 +48,34 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     /**
      * the literal values
      */
-    protected final ITermCollection m_values = new CTermList();
+    protected final ITermCollection m_values;
     /**
      * the literal annotations
      */
-    protected final ITermCollection m_annotations = new CTermSet();
+    protected final ITermCollection m_annotations;
     /**
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
     private final T m_literal;
 
     /**
-     * ctor
+     * ctor - all parameters specified
      *
      * @param p_functor functor of the literal
      * @param p_literal the original literal
+     * @param p_collection initial value collection
+     * @param p_annotationInitialCapacity
+     * @param p_annotationLoadFactor
      */
-    public IDefaultLiteral(final String p_functor, final T p_literal)
+    public IDefaultLiteral( final String p_functor, final T p_literal, final boolean p_negated,
+                            final Collection<ITerm> p_collection,
+                            final int p_annotationInitialCapacity, final float p_annotationLoadFactor )
     {
         m_functor = new CStringAtom( p_functor );
         m_literal = p_literal;
+        m_values = new CTermList( p_collection );
+        m_annotations = new CTermSet( p_annotationInitialCapacity, p_annotationLoadFactor );
+        m_negated = p_negated;
     }
 
     /**
@@ -70,10 +85,20 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @param p_literal the original literal
      * @param p_negated the negation status
      */
-    public IDefaultLiteral(final String p_functor, final T p_literal, final boolean p_negated)
+    public IDefaultLiteral(final String p_functor, final T p_literal, final boolean p_negated )
     {
-        this( p_functor, p_literal );
-        m_negated = p_negated;
+        this( p_functor, p_literal, p_negated, Collections.EMPTY_LIST, 0, (float) 0.75 );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor functor of the literal
+     * @param p_literal the original literal
+     */
+    public IDefaultLiteral(final String p_functor, final T p_literal )
+    {
+        this(p_functor, p_literal, false, Collections.EMPTY_LIST, 0, (float) 0.75);
     }
 
     /**

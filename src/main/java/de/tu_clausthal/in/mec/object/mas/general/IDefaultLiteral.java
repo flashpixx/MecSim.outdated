@@ -76,7 +76,8 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      */
     public IDefaultLiteral(final String p_functor, final T p_literal)
     {
-        this(p_functor, p_literal, new LinkedList<>(), new HashSet<>( 0 ) );
+        this(p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
+        m_values.add(new CNumericAtom( new Double( 2 ) ) );
     }
 
     @Override

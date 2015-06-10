@@ -47,7 +47,7 @@ public class CTermList extends LinkedList<ITerm> implements ITermCollection
      */
     public CTermList(final Collection<ITerm> p_collection)
     {
-        super(p_collection);
+        super( p_collection );
     }
 
     /**

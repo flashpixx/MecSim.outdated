@@ -46,7 +46,9 @@ public class CLiteral extends IDefaultLiteral<Literal>
     public CLiteral(Literal p_literal)
     {
 
-        super(p_literal.getFunctor(), p_literal, p_literal.negated(), new LinkedList<>(), new HashSet<>(4, (float) 0.75));
+        super( p_literal.getFunctor(), p_literal );
+
+        // super(p_literal.getFunctor(), p_literal, new LinkedList<>(), new HashSet<>( 4 ));
 
         if (p_literal.hasTerm())
             for (final Term l_term : p_literal.getTerms())

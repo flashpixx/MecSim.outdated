@@ -26,6 +26,8 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 /**
  * literal interface
+ *
+ * @note closed world assumption, no negation marker needed
  */
 public interface ILiteral<T> extends ITerm
 {

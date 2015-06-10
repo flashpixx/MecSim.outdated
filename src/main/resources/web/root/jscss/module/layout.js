@@ -58,7 +58,7 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : ""),
-                 '<input ',
+                 ' <input ',
                  (po_options.class ? 'class="' + po_options.class + '"' : ""),
                  ' id="' + po_options.id + '"',
                  'type="checkbox" ',
@@ -82,7 +82,7 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : ""),
-                 '<input ',
+                 ' <input ',
                  (po_options.class ? 'class="' + po_options.class + '"' : ""),
                  ' id="' + po_options.id + '" ',
                  'type="text" ',
@@ -93,7 +93,7 @@ var Layout = (function (px_modul) {
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- ------------------------------------------------------------------------------------------------------------------------------------------------------
+    // --- selectbox with label --------------------------------------------------------------------------------------------------------------------------------
     /**
      * creates a select menu with label
      *
@@ -107,7 +107,7 @@ var Layout = (function (px_modul) {
 
         var la = [];
         if (po_options.label)
-            la.push( '<label for = "' + po_options.id + '" >' + po_options.label + '</label >' );
+            la.push( '<label for = "' + po_options.id + '" >' + po_options.label + '</label > ' );
 
 
         la.push( '<select ' + (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );

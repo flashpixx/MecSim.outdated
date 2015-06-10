@@ -86,17 +86,22 @@ Configuration.prototype.view = function()
     jQuery( MecSim.ui().content("#") ).empty();
 
     // global /main, ui, simulation, database
-    //console.log(this.mo_configuration);
+    console.log(this.mo_configuration);
 
     // list with IDs to define jQuery elements
-    var la_selects  = [];
-    var la_switches = [];
+    var lo_elements ={
+        selects  : [],
+        switches : [],
+        spinner  : [],
+        text     : []
+    }
 
     // add tab structure to the content div and create the jQuery definition
     jQuery( MecSim.ui().content("#") ).append(
 
         '<div id="' + this.generateSubID("tabs") + '">' +
 
+        // tabs
         '<ul>' +
         '<li><a href="' + this.generateSubID("general", "#")    + '">General</a></li>' +
         '<li><a href="' + this.generateSubID("ui", "#")         + '">User Interface</a></li>' +
@@ -104,16 +109,26 @@ Configuration.prototype.view = function()
         '<li><a href="' + this.generateSubID("database", "#")   + '">Database</a></li>' +
         '</ul>' +
 
+        // general tab
         '<div id="' + this.generateSubID("general") + '">' +
-        Layout.checkbox({ id: "config_reset",               label: "Reset Configuration",   list: la_switches,   value: this.mo_configuration.reset }) + '<br/>' +
-        Layout.checkbox({ id: "config_extractmasexample",   label: "Extract agent files",   list: la_switches,   value: this.mo_configuration.extractmasexamples }) + '<br/>' +
-        Layout.select(  { id: "config_language",            label: "Language",              list: la_selects,
+        Layout.checkbox({ id: "config_reset",               label: "Reset Configuration",   list: lo_elements.switches,   value: this.mo_configuration.reset }) + '<br/>' +
+        Layout.checkbox({ id: "config_extractmasexample",   label: "Extract agent files",   list: lo_elements.switches,   value: this.mo_configuration.extractmasexamples }) + '<br/>' +
+        Layout.select(  { id: "config_language",            label: "Language",              list: lo_elements.selects,
                        value: this.mo_configuration.language.current,
                        options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } )
         }) +
         '</div>' +
 
-        '<div id="' + this.generateSubID("ui") + '">ui</div>' +
+        // UI tab
+        '<div id="' + this.generateSubID("ui") + '">' +
+        Layout.input({ id: "config_host",              label : "Server Host",                   list: lo_elements.text,      value: this.mo_configuration.ui.server.host }) +
+        Layout.input({ id: "config_port",              label : "Server Port",                   list: lo_elements.spinner,   value: this.mo_configuration.ui.server.port }) +
+        Layout.input({ id: "config_websocket",         label : "Websocket Heartbeat",           list: lo_elements.spinner,   value: this.mo_configuration.ui.server.websocketheartbeat }) +
+        Layout.input({ id: "config_routepaintdelay",   label : "Route Paint Delay in sec",      list: lo_elements.spinner,   value: this.mo_configuration.ui.routepainterdelay }) +
+        '</div>' +
+
+
+
         '<div id="' + this.generateSubID("simulation") + '">simulation</div>' +
         '<div id="' + this.generateSubID("database") + '">database</div>' +
 
@@ -123,8 +138,10 @@ Configuration.prototype.view = function()
 
     // build jQuery elements
     jQuery( this.generateSubID("tabs", "#") ).tabs();
-    la_switches.forEach( function(pc_item) { jQuery( "#"+pc_item ).bootstrapSwitch({ size : "mini", onText : "Yes", offText : "No" }); });
-    la_selects.forEach( function(pc_item) { jQuery( "#"+pc_item ).selectmenu(); });
+    lo_elements.switches.forEach( function(pc_item) { jQuery( "#"+pc_item ).bootstrapSwitch({ size : "mini", onText : "Yes", offText : "No" }); });
+    lo_elements.selects.forEach( function(pc_item) { jQuery( "#"+pc_item ).selectmenu(); });
+    lo_elements.spinner.forEach( function(pc_item) { jQuery( "#"+pc_item ).spinner(); });
+    lo_elements.text.forEach( function(pc_item) { jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 200, minLength: 1 }); });
 }
 
 

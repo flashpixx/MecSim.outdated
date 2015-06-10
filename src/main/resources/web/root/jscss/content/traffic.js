@@ -84,9 +84,15 @@ Traffic.prototype.afterDOMAdded = function()
 
                 jQuery( self.generateSubID("graphweights", "#") ).append(
 
-                    '<p><label>' + pc_key + '</label>' +
-                    '<input class="' + self.generateSubID("switchgraphweight") + '" type="checkbox" id="'+ self.generateSubID("graphweight_" + px_value.id) + '" name="' + px_value.id + '" ' + (px_value.active ? "checked" : "") + '/>' +
-                    '</p>'
+                    "<p>" +
+                    Layout.checkbox({
+                        id    : self.generateSubID("graphweight_" + px_value.id),
+                        class : self.generateSubID("switchgraphweight"),
+                        value : px_value.active,
+                        name  : px_value.id,
+                        label : pc_key
+                    }) +
+                    "</p>"
 
                 );
 

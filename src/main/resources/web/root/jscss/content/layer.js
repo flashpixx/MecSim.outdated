@@ -98,7 +98,7 @@ Layer.prototype.afterDOMAdded = function()
                         value : px_value.visible,
                         name  : px_value.id
                     });
-
+                lc += '</p>';
                 jQuery( self.generateSubID("switches", "#") ).append(lc);
 
             });

@@ -182,7 +182,7 @@ Pane.prototype.getContent = function()
 Pane.prototype.getContentWithContainer = function( pc_prefix, pc_suffix )
 {
     var lc_content = this.getContent();
-    return (pc_prefix ? pc_prefix : '<div>') + ( lc_content ? lc_content : "") + (pc_suffix ? pc_suffix : '</div>')
+    return (pc_prefix ? pc_prefix : '<div class="' + this.generateSubID("content") + '">') + ( lc_content ? lc_content : "") + (pc_suffix ? pc_suffix : '</div>')
 }
 
 /**

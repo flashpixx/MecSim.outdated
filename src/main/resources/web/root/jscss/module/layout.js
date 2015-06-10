@@ -62,7 +62,8 @@ var Layout = (function (px_modul) {
                  (po_options.class ? 'class="' + po_options.class + '"' : ""),
                  ' id="' + po_options.id + '"',
                  'type="checkbox" ',
-                 (po_options.value ? "checked" : ""),
+                 (po_options.value ? "checked " : " "),
+                 (po_options.name ? 'name="' + po_options.name + '"' : ""),
                  ' />'
                ].join("");
     }
@@ -86,7 +87,8 @@ var Layout = (function (px_modul) {
                  (po_options.class ? 'class="' + po_options.class + '"' : ""),
                  ' id="' + po_options.id + '" ',
                  'type="text" ',
-                 (po_options.value ? 'value="' + po_options.value + '"' : ""),
+                 (po_options.value ? 'value="' + po_options.value + '" ' : ""),
+                 (po_options.name ? 'name="' + po_options.name + '"' : ""),
                  ' />'
                ].join("");
     }
@@ -110,7 +112,7 @@ var Layout = (function (px_modul) {
             la.push( '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' );
 
 
-        la.push( '<select ' + (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );
+        la.push( '<select ' + (po_options.name ? 'name="' + po_options.name + '" ' : "") +  (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );
         po_options.options.forEach( function(po_item) {
             la.push( '<option id="' + po_item.id + '" ' + (po_options.value && (po_item.id == po_options.value) ? "selected" : "") + '>' +
                      (po_item.label ? po_item.label : po_item.id) + '</option>'

@@ -41,16 +41,20 @@ function Simulation( pc_id, pc_name, pa_panel )
 Simulation.prototype = Object.create(Pane.prototype);
 
 
+Simulation.prototype.getGlobalCSS = function()
+{
+    return this.generateSubID("content", ".") + "{ display: block; width: 100% }" + Pane.prototype.getGlobalCSS.call(this);
+}
+
 /**
  * @Overwrite
 **/
 Simulation.prototype.getContent = function()
 {
-    return '<button id = "' + this.generateSubID("start") + '" >Start</button >' +
-           '<button id = "' + this.generateSubID("stop")  + '" >Stop</button >' +
-           '<button id = "' + this.generateSubID("reset") + '" >Reset</button >' +
-           '<button id = "' + this.generateSubID("load") + '" >Load</button ><input type = "file" id = "' + this.generateSubID("loadfile") + '" />' +
-           '<button id = "' + this.generateSubID("save") + '" >Save</button ><input type = "file" id = "' + this.generateSubID("savefile") + '" />' +
+    return '<p> <button id = "' + this.generateSubID("start") + '" >Start</button > <button id = "' + this.generateSubID("stop")  + '" >Stop</button > </p>' +
+           '<p> <button id = "' + this.generateSubID("reset") + '" >Reset</button > </p>' +
+           '<p> <button id = "' + this.generateSubID("load") + '" >Load</button > <input type = "file" id = "' + this.generateSubID("loadfile") + '" />' +
+           '<button id = "' + this.generateSubID("save") + '" >Save</button > <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
            Pane.prototype.getContent.call(this);
 }
 

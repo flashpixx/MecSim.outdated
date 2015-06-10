@@ -83,11 +83,21 @@ Layer.prototype.afterDOMAdded = function()
 
             jQuery.each( px_data, function( pc_key, px_value ) {
 
-                var lc = '<p><label>' + pc_key + '</label>' +
-                         '<input class="' + self.generateSubID("switchactivity") + '" type="checkbox" id="'+ self.generateSubID("activity_" + px_value.id) + '" name="' + px_value.id + '" ' + (px_value.active ? "checked" : "") + '/>';
+                var lc = '<p>' + Layout.checkbox({
+                    id    : self.generateSubID("activity_" + px_value.id),
+                    class : self.generateSubID("switchactivity"),
+                    value : px_value.active,
+                    name  : px_value.id,
+                    label : pc_key
+                });
+
                 if (px_value.isviewable)
-                    lc += '<input class="' + self.generateSubID("switchvisibility") + '" type="checkbox" id="'+ self.generateSubID("visibility_"+px_value.id) + '" name="' + px_value.id + '" ' + (px_value.visible ? "checked" : "") + '/>';
-                lc += "</p>";
+                    lc += Layout.checkbox({
+                        id    : self.generateSubID("visibility_"+px_value.id),
+                        class : self.generateSubID("switchvisibility"),
+                        value : px_value.visible,
+                        name  : px_value.id
+                    });
 
                 jQuery( self.generateSubID("switches", "#") ).append(lc);
 

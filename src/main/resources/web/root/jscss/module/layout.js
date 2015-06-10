@@ -36,7 +36,11 @@ var Layout = (function (px_modul) {
     **/
     px_modul.dialog = function( po_options )
     {
-        return '<div id = "' + po_options.dialog + '" ' + (po_options.title ? 'title="' + po_options.title + '"' : "") + '><div id = "' + po_options.content  + '" ></div></div>';
+        return [ '<div id="' + po_options.dialog + '"',
+                 (po_options.title ? 'title="' + po_options.title + '"' : "") + '>',
+                 '<div id= "' + po_options.content  + '">',
+                 '</div></div>'
+               ].join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -45,7 +49,7 @@ var Layout = (function (px_modul) {
     /**
      * creates a checkbox with label
      *
-     * @param po_options Json object in the format { id: -DOM ID-, label : -optional label-, list: -optional array to return ID-, value: -initial value- }
+     * @param po_options Json object in the format { id: -DOM ID-, class: -DOM class-, label : -optional label-, list: -optional array to return ID-, value: -initial value- }
      * @return HTML string
     **/
     px_modul.checkbox = function( po_options )
@@ -53,7 +57,14 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        return (po_options.label ? '<label for = "' + po_options.id + '" >' + po_options.label + '</label >' : "") + '<input id="' + po_options.id + '" type="checkbox" '+ (po_options.value ? "checked" : "") +' />';
+        return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : ""),
+                 '<input ',
+                 (po_options.class ? 'class="' + po_options.class + '"' : ""),
+                 ' id="' + po_options.id + '"',
+                 'type="checkbox" ',
+                 (po_options.value ? "checked" : ""),
+                 ' />'
+               ].join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -62,7 +73,7 @@ var Layout = (function (px_modul) {
     /**
      * creates a textbox with label
      *
-     * @param po_options Json object in the format { id: -DOM ID-, label : -optional label-, value: -optional initializing value- }
+     * @param po_options Json object in the format { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value- }
      * @return HTML string
     **/
     px_modul.input = function( po_options )
@@ -70,7 +81,14 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        return (po_options.label ? '<label for = "' + po_options.id + '" >' + po_options.label + '</label >' : "") + '<input id="' + po_options.id + '" type="text" '+ (po_options.value ? 'value="' + po_options.value + '"' : "") + ' />';
+        return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : ""),
+                 '<input ',
+                 (po_options.class ? 'class="' + po_options.class + '"' : ""),
+                 ' id="' + po_options.id + '" ',
+                 'type="text" ',
+                 (po_options.value ? 'value="' + po_options.value + '"' : ""),
+                 ' />'
+               ].join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -79,7 +97,7 @@ var Layout = (function (px_modul) {
     /**
      * creates a select menu with label
      *
-     * @param po_options Json object { id: -DOM ID-, label : -optional label-, value: -optional initializing value-, options: [{id : -ID-, label : -optional label-}] }
+     * @param po_options Json object { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value-, options: [{id : -ID-, label : -optional label-}] }
      * @return HTML string
     **/
     px_modul.select = function( po_options )
@@ -87,15 +105,20 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        var lc = "";
+        var la = [];
         if (po_options.label)
-            lc += '<label for = "' + po_options.id + '" >' + po_options.label + '</label >';
+            la.push( '<label for = "' + po_options.id + '" >' + po_options.label + '</label >' );
 
-        lc += '<select id="' + po_options.id + '">';
-        po_options.options.forEach( function(po_item) { lc += '<option id="' + po_item.id + '" ' + (po_options.value && (po_item.id == po_options.value) ? "selected" : "") + '>' + (po_item.label ? po_item.label : po_item.id) + '</option>'; } );
-        lc += "</select>";
 
-        return lc;
+        la.push( '<select ' + (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );
+        po_options.options.forEach( function(po_item) {
+            la.push( '<option id="' + po_item.id + '" ' + (po_options.value && (po_item.id == po_options.value) ? "selected" : "") + '>' +
+                     (po_item.label ? po_item.label : po_item.id) + '</option>'
+            );
+        });
+        la.push("</select>");
+
+        return la.join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

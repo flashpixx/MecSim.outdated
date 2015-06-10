@@ -148,6 +148,8 @@ public class CWaypointEnvironment
             l_properties.put( "blueValue", l_color.getBlue() );
             l_properties.put( "id", l_wayPoint.toString() );
             l_properties.put( "name", l_wayPoint.getName() );
+            l_properties.put( "lat", l_wayPoint.getPosition().getLatitude() );
+            l_properties.put( "long", l_wayPoint.getPosition().getLongitude() );
 
             if(l_wayPoint instanceof CCarRandomWayPoint){
                 l_properties.put( "type", CCommon.getResourceString( this, "waypointrandomtype" ));

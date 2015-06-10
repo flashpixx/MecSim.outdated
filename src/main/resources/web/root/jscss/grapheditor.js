@@ -109,8 +109,7 @@
         this._path = this._svg.append('svg:g').selectAll('path');
 
         //register mouse listener
-        this._svg.on('mousedown', this.mousedown.bind(this))
-            .on('mousemove', this.mousemove.bind(this))
+        this._svg.on('mousemove', this.mousemove.bind(this))
             .on('mouseup', this.mouseup.bind(this));
 
         //register key listener
@@ -315,14 +314,14 @@
 
 
     //add a node
-    px_module.prototype.addNode = function(){
-        var point = d3.mouse(this._svg.node()),
-            node = {id: ++this._lastNodeId, reflexive: false};
-            node.x = point[0];
-            node.y = point[1];
+    px_module.prototype.addNode = function(options){
+
+        console.log(this._svg);
+        var node = {id: options.id, reflexive: false, geo: options.geo};
+            node.x = 200;
+            node.y = 200;
 
         this._nodes.push(node);
-
         this.update();
     };
 
@@ -343,16 +342,6 @@
         toSplice.map(function(l) {
             self._links.splice(self._links.indexOf(l), 1);
         });
-    };
-
-    //mouse down listener
-    px_module.prototype.mousedown = function() {
-        this._svg.classed('active', true);
-
-        if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link)
-            return;
-
-        this.addNode();
     };
 
     //mouse move listener

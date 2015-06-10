@@ -83,7 +83,7 @@ var SourcePanel = ( function (px_module) {
                         SourcePanel.settings.dom.targetingWidget,
                         {
                             name        : SourcePanel.settings.labels.waypointlist,
-                            width       : 1025,
+                            width       : 1050,
                             height      : 550,
                             cancel      : "#mecsim_source_waypointGraphEditor"
                         }
@@ -614,12 +614,16 @@ var SourcePanel = ( function (px_module) {
 
                 //brint data into correct table format
                 p_data.forEach(function(entry){
-                    entry.icon = "<span class='mecsim_source_toolIcon'>" + entry.name.split("#").slice(-1).pop() + "</span><span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
+                    var l_waypointNumber = entry.name.split("#").slice(-1).pop();
+                    entry.icon = "<span class='mecsim_source_toolIcon'>" + l_waypointNumber + "</span><span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
                     entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
                     entry.type = entry.type;
                     entry.edit = "";
                     if(entry.editable)
-                        entry.edit = "<button id='mecsim_source_editButton' value="+entry.id+">"+ SourcePanel.settings.labels.configuretarget +"</button>";
+                        entry.edit = "<button class='mecsim_source_editButton' value="+entry.id+">"+ SourcePanel.settings.labels.configuretarget +"</button>";
+
+                    var l_waypointProp = l_waypointNumber + "#" + entry.lat + "#" + entry.long;
+                    entry.add = "<button class='mecsim_source_addButton' value="+l_waypointProp+">"+ SourcePanel.settings.labels.addtarget +"</button>";
                 });
 
                 //create waypoint table
@@ -641,11 +645,16 @@ var SourcePanel = ( function (px_module) {
                         { className: "dt-body-center", "title": "", "mDataProp": "icon" },
                         { className: "dt-body-center", "title": SourcePanel.settings.labels.waypointname, "mDataProp": "name" },
                         { className: "dt-body-center", "title": SourcePanel.settings.labels.waypointtyp, "mDataProp": "type" },
-                        { className: "dt-body-center", "title": "", "mDataProp": "edit" }
+                        { className: "dt-body-center", "title": "", "mDataProp": "edit" },
+                        { className: "dt-body-center", "title": "", "mDataProp": "add" }
                     ]
                 });
 
-                $("#mecsim_source_editButton").on("click", function(event){
+                $(".mecsim_source_addButton").on("click", function(event){
+                    SourcePanel.settings.obj.graphEditor.addNode({id: event.target.value.split("#")[0], reflexive: false, geo: [event.target.value.split("#")[1], event.target.value.split("#")[2]]});
+                });
+
+                $(".mecsim_source_editButton").on("click", function(event){
 
                     //maybe get once ?
                     $.ajax({

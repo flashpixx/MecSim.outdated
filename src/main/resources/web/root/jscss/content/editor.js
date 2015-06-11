@@ -46,12 +46,6 @@ function Editor( pc_id, pc_name, pa_panel )
             reader : "/cagentenvironment/jason/read",
             writer : "/cagentenvironment/jason/write",
             list   : "/cagentenvironment/jason/list"
-        },
-
-        "jason2" : {
-            reader : "/cagentenvironment/jason/read",
-            writer : "/cagentenvironment/jason/write",
-            list   : "/cagentenvironment/jason/list"
         }
 
     }
@@ -102,18 +96,14 @@ Editor.prototype.readFiles = function()
     this.ma_files = [];
     var self = this;
 
-    // @todo https://lostechies.com/joshuaflanagan/2011/10/20/coordinating-multiple-ajax-requests-with-jquery-when/
-    // @todo http://stackoverflow.com/questions/3709597/wait-until-all-jquery-ajax-requests-are-done
-    // @todo http://times.jayliew.com/2012/08/30/jquery-example-array-of-deferreds-and-when-then-codesample/#.VXlKrmS8PGc
-    // @todo http://times.jayliew.com/2012/08/30/jquery-example-array-of-deferreds-and-when-then-codesample/#.VXlKrmS8PGc
-
+    // create Ajax calls
     var la_tasks = [];
     jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
 
-        var lo_task = jQuery.Deferred();
+        var lo_task = new jQuery.Deferred();
         lo_task.done( function( po_data ) {
-
-        } );
+            po_data.config = pc_configkey;
+        });
 
         MecSim.ajax({
             url     :  po_config.list,
@@ -123,17 +113,38 @@ Editor.prototype.readFiles = function()
         la_tasks.push( lo_task.promise() );
     });
 
+
+    // collect results if all calls are finished
     jQuery.when.apply(jQuery, la_tasks).done(
 
         function()
         {
-            console.log(arguments);
+            Array.prototype.slice.call(arguments).forEach( function(px) {
+
+                // on multiple Ajax call px is an array
+                if ((Array.isArray(px)) && (px.length == 3) && (px[1] == "success"))
+                {
+                    Array.prototype.push.apply(
+                        self.ma_files,
+                        px[0].agents.convert( function( pc_file ) { return { name : pc_file, config : px[0].config } } )
+                    );
+                    return;
+                }
+
+                // on single Ajax call px is an object
+                if ((px instanceof Object) && (px.agents) && (px.config))
+                {
+                    Array.prototype.push.apply(
+                        self.ma_files,
+                        px.agents.convert( function( pc_file ) { return { name : pc_file, config : px.config } } )
+                    );
+                    return;
+                }
+            });
+
         }
 
     );
-
-    // Array.prototype.push.apply( self.ma_files, po_data.agents.convert( function( pc_file ) { return { name : pc_file, config : pc_configkey }; } );
-
 
 }
 

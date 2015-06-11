@@ -154,7 +154,7 @@ Layer.prototype.afterDOMAdded = function()
 
             MecSim.ajax({
                 url   : "/cosmviewer/setclickablelayer",
-                data  : {"id": jQuery( self.generateSubID("clickable", "#") ).children("li:first").attr("id")}
+                data  : {"id": jQuery( self.generateSubID("clickable", "#") ).children("li:first").attr("name")}
             });
 
         }
@@ -177,7 +177,7 @@ Layer.prototype.afterDOMAdded = function()
 
             // add list items to the DOM
             jQuery.each( la_sorted, function(pn_key, px_value){
-                jQuery( self.generateSubID("clickable", "#") ).append( '<li class="ui-state-default" id="'+ px_value.id + '">' + px_value.name + '</li>' );
+                jQuery( self.generateSubID("clickable", "#") ).append( '<li class="ui-state-default" id="'+ self.generateSubID("clickable_"+px_value.id) + '" name="' + px_value.id + '">' + px_value.name + '</li>' );
             });
 
         }

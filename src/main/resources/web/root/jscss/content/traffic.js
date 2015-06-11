@@ -142,14 +142,13 @@ Traffic.prototype.afterDOMAdded = function()
 
             MecSim.ajax({
                 url   : "/ctrafficenvironment/setdrivemodel",
-                data  : {"id": jQuery( self.generateSubID("drivingmodel", "#") ).children("li:first").attr("id")}
+                data  : {"id": jQuery( self.generateSubID("drivingmodel", "#") ).children("li:first").attr("name")}
             });
 
         }
 
     });
 
-    // @todo remove ID attribute to avoid errors
     MecSim.ajax({
 
         url     : "/ctrafficenvironment/listdrivemodel",
@@ -165,7 +164,7 @@ Traffic.prototype.afterDOMAdded = function()
 
             // add list items to the DOM
             jQuery.each( la_sorted, function(pn_key, px_value){
-                jQuery( self.generateSubID("drivingmodel", "#") ).append( '<li class="ui-state-default" id="'+ px_value.id + '">' + px_value.name + '</li>' );
+                jQuery( self.generateSubID("drivingmodel", "#") ).append( '<li class="ui-state-default" id="'+ self.generateSubID("drivingmodel_"+px_value.id) + '" name="' + px_value.id + '">' + px_value.name + '</li>' );
             });
 
         }

@@ -37,12 +37,18 @@ function Editor( pc_id, pc_name, pa_panel )
     Pane.call(this, pc_id, pc_name, pa_panel );
 
     // array with all file objects in the structure { name: -filename-, config: -key of the configuration object- }
-    this.mo_files = [];
+    this.ma_files = [];
 
     // set the configuration for all file access
     this.mo_configuration = {
 
         "jason" : {
+            reader : "/cagentenvironment/jason/read",
+            writer : "/cagentenvironment/jason/write",
+            list   : "/cagentenvironment/jason/list"
+        },
+
+        "jason2" : {
             reader : "/cagentenvironment/jason/read",
             writer : "/cagentenvironment/jason/write",
             list   : "/cagentenvironment/jason/list"
@@ -90,24 +96,51 @@ Editor.prototype.afterDOMAdded = function()
 **/
 Editor.prototype.readFiles = function()
 {
+    this.ma_files = [];
     var self = this;
 
+    // @todo https://api.jquery.com/category/deferred-object/
+    // @todo https://api.jquery.com/jquery.when/
+
+    // @todo https://lostechies.com/joshuaflanagan/2011/10/20/coordinating-multiple-ajax-requests-with-jquery-when/
+    // @todo http://stackoverflow.com/questions/3709597/wait-until-all-jquery-ajax-requests-are-done
+    // @todo http://times.jayliew.com/2012/08/30/jquery-example-array-of-deferreds-and-when-then-codesample/#.VXlKrmS8PGc
+    // @todo http://times.jayliew.com/2012/08/30/jquery-example-array-of-deferreds-and-when-then-codesample/#.VXlKrmS8PGc
+
+    var la_tasks = [];
     jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
 
+        var lo_task = jQuery.Deferred();
+
         MecSim.ajax({
-
-            url     : po_config.list,
-            success : function( po_data ) {
-
-                Array.prototype.push.apply( self.mo_files, po_data.agents.convert( function( pc_file ) { return { name : pc_file, config : pc_configkey }; } ) );
-
-            }
-
-        }).done(function() {
-
-            console.log( self.mo_files );
-
+            url     :  po_config.list,
+            success : lo_task.resolve
         });
 
+        la_tasks.push( lo_task.promise() );
     });
+
+    jQuery.when.apply(jQuery, la_tasks).then(
+
+        function()
+        {
+            console.log(arguments);
+        }
+
+    );
+
+    //Array.prototype.push.apply( self.ma_files, po_data.agents.convert( function( pc_file ) { return { name : pc_file, config : pc_configkey }; } ) );
+
+
+}
+
+
+/**
+ * returns a deep-copy of the filelist
+ *
+ * @return array with filelist objects
+**/
+Editor.prototype.getFiles = function()
+{
+    return jQuery.extend( [], this.ma_files );
 }

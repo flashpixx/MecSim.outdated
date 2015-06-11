@@ -99,39 +99,25 @@ Configuration.prototype.buildViewAndBind = function()
             size           : "mini",
             onText         : "Yes",
             offText        : "No",
-            onSwitchChange : function( px_event, pl_state ) {
-
-                var la_keys = jQuery(this).closest("input").attr("id").split("config_");
-                if (la_keys.length != 2)
-                    return;
-
-                MecSim.configuration().set( self.buildObject( la_keys[1].split("_"), pl_state ) );
-
-            }
+            onSwitchChange : function( po_event, pl_state ) { self.updateConfiguration( po_event.target.id, pl_state ); }
         });
 
     });
 
     // selects binds (text / number values)
     lo_elements.selects.forEach( function(pc_item) {
-
         jQuery( "#"+pc_item ).selectmenu({
-
-            select: function( po_event ) {
-
-                var la_keys  = jQuery(this).closest("select").attr("id").split("config_");
-                if (la_keys.length != 2)
-                    return;
-
-                MecSim.configuration().set( self.buildObject( la_keys[1].split("_"), jQuery(this).closest("select").val() ) );
-
-            }
-
+            select: function(po_event, po_ui) { self.updateConfiguration( po_event.target.id, po_ui.item.value ); }
         })
-
     });
 
-    lo_elements.spinner.forEach( function(pc_item) { jQuery( "#"+pc_item ).spinner(); });
+    // spinner binds (number value)
+    lo_elements.spinner.forEach( function(pc_item) {
+        jQuery( "#"+pc_item ).spinner({
+            spin: function( po_event, po_ui ) { self.updateConfiguration( po_event.target.id, po_ui.value ); }
+        })
+    });
+
     lo_elements.text.forEach( function(pc_item) { jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 450 }); });
 
 }
@@ -234,7 +220,21 @@ Configuration.prototype.buildObject = function( pa_keys, px_value )
     var lo = {};
     lo[ pa_keys[0] ] = this.buildObject( pa_keys.slice(1), px_value);
     return lo;
-
 }
 
+
+/**
+ * creates the configuration Ajax request
+ *
+ * @param pc_id element ID
+ * @param px_value element value
+**/
+Configuration.prototype.updateConfiguration = function( pc_id, px_value )
+{
+    var la_keys  = pc_id.split("config_");
+    if (la_keys.length != 2)
+        return;
+
+    MecSim.configuration().set( this.buildObject( la_keys[1].split("_"), px_value ) );
+}
 

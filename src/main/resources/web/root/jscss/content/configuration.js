@@ -118,7 +118,12 @@ Configuration.prototype.buildViewAndBind = function()
         })
     });
 
-    lo_elements.text.forEach( function(pc_item) { jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 450 }); });
+    // text fields (string value)
+    lo_elements.text.forEach( function(pc_item) {
+        jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 450 }).on("change", function( po_event ) {
+            self.updateConfiguration( po_event.target.id, jQuery(this).val() );
+        });
+    });
 
 }
 

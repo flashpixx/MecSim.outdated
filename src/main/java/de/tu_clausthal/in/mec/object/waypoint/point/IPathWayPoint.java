@@ -197,30 +197,23 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             this.updateRelativeWeighting();
         }
 
-        /**
-         * update relative weighting
-         *
-         * @param p_edges
-         */
-        private void updateRelativeWeighting( final Map<T, MutablePair<Double, Double>> p_edges )
-        {
-            //calculate the new sum
-            double l_sum = 0.0;
-            for ( final MutablePair l_pair : p_edges.values() )
-                l_sum += (double) l_pair.left;
-
-            //update relative weighting
-            for ( final MutablePair l_pair : p_edges.values() )
-                l_pair.right = (double) l_pair.left / l_sum;
-        }
 
         /**
          * update all relative weightings
          */
         private void updateRelativeWeighting()
         {
-            for ( final Map<T, MutablePair<Double, Double>> l_in : this.values() )
-                this.updateRelativeWeighting( l_in );
+            for ( final Map<T, MutablePair<Double, Double>> l_edge : this.values() )
+            {
+                //calculate the new sum
+                double l_sum = 0.0;
+                for ( final MutablePair l_pair : l_edge.values() )
+                    l_sum += (double) l_pair.left;
+
+                //update relative weighting
+                for ( final MutablePair l_pair : l_edge.values() )
+                    l_pair.right = (double) l_pair.left / l_sum;
+            }
         }
 
     }

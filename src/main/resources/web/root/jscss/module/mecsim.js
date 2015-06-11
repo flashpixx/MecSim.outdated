@@ -133,14 +133,16 @@ var MecSim = (function (px_modul) {
 
         /** get the configuration
          * @param px_success function which is called on successful reading
+         * @return returns the jQuery Ajax object
          **/
-        get : function( px_success ) { jQuery.ajax({ url : "/cconfiguration/get", type: "post",  success : px_success }); },
+        get : function( px_success ) { return jQuery.ajax({ url : "/cconfiguration/get", type: "post",  success : px_success }); },
 
         /**
          * sets the configuration
          * @param po_data full configuration object
+         * @return returns the jQuery Ajax object
          **/
-        set : function( po_data ) { jQuery.ajax({ url : "/cconfiguration/set", type: "post",  data : po_data }); },
+        set : function( po_data ) { return jQuery.ajax({ url : "/cconfiguration/set", type: "post",  data : po_data }); },
 
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -62,14 +62,9 @@ Configuration.prototype.afterDOMAdded = function()
     // create button and bind action with Ajax call
     jQuery(self.generateSubID("configuration", "#")).button().click( function() {
 
-        MecSim.ajax({
-
-            url     : "/cconfiguration/get",
-            success : function( po_data ) {
-                self.mo_configuration = po_data;
-            }
-
-        }).done(function() {
+        MecSim.configuration().get(
+            function( po_data ) { self.mo_configuration = po_data; }
+        ).done(function() {
             self.view();
         });
 

@@ -172,12 +172,16 @@ Configuration.prototype.buildUIElements = function()
 
         // simulation tab
         '<div id="' + this.generateSubID("simulation") + '">' +
-        '</p>' + Layout.input({    id: this.generateSubID("config_simulation_traffic_cellsampling"),      label : "Cell Sampling in meter",        list: lo_elements.spinner,   value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
-        '</p>' + Layout.input({    id: this.generateSubID("config_simulation_traffic_timesampling"),      label : "Time Sampling in sec",          list: lo_elements.spinner,   value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
-        '</p>' + Layout.input({    id: this.generateSubID("config_simulation_traffic_map_name"),          label : "Map Name",                      list: lo_elements.text,      value: this.mo_configuration.simulation.traffic.map.name })     + '</p>' +
-        '</p>' + Layout.input({    id: this.generateSubID("config_simulation_traffic_map_url"),           label : "Map URL",                       list: lo_elements.text,      value: this.mo_configuration.simulation.traffic.map.url })      + '</p>' +
-        '</p>' + Layout.checkbox({ id: this.generateSubID("config_simulation_traffic_map_reimport"),      label : "Map Reimport",                  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
-        '</p>' + Layout.select(  { id: this.generateSubID("config_simulation_traffic_routing_algorithm"), label : "Routing Algorithm",             list: lo_elements.selects,
+        '</p>'  + Layout.input({    id: this.generateSubID("config_simulation_traffic_cellsampling"),      label : "Cell Sampling in meter",        list: lo_elements.spinner,   value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
+        '</p>'  + Layout.input({    id: this.generateSubID("config_simulation_traffic_timesampling"),      label : "Time Sampling in sec",          list: lo_elements.spinner,   value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
+        '</p>'  + Layout.input({    id: this.generateSubID("config_simulation_traffic_map_name"),          label : "Map Name",                      list: lo_elements.text,      value: this.mo_configuration.simulation.traffic.map.name })     + '</p>' +
+        '</p>'  + Layout.input({    id: this.generateSubID("config_simulation_traffic_map_url"),           label : "Map URL",                       list: lo_elements.text,      value: this.mo_configuration.simulation.traffic.map.url })      + '<br/>' +
+        'OpenStreetMap data (<a href="http://wiki.openstreetmap.org/wiki/PBF_Format">PBF files</a>) is available by <ul>'  +
+        '<li><a href="http://download.geofabrik.de/">GeoFabrik</a></li>' +
+        '</ul>' +
+        '</p>'  +
+        '</p>'  + Layout.checkbox({ id: this.generateSubID("config_simulation_traffic_map_reimport"),      label : "Map Reimport",                  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
+        '</p>'  + Layout.select(  { id: this.generateSubID("config_simulation_traffic_routing_algorithm"), label : "Routing Algorithm",             list: lo_elements.selects,
                        value: this.mo_configuration.simulation.traffic.routing.algorithm,
                        options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } )
         }) +

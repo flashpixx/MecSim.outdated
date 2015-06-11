@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.BiFunction;
 
 
 /**
@@ -50,20 +49,20 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
 {
 
     /**
-     * random interface
-     */
-    private final Random m_random = new Random();
-    /**
-     * makrov chain to calculate route
-     */
-    private final CMakrovChain<GeoPosition> m_makrovChain = new CMakrovChain<>();
-    /**
      * inspector map
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( IPathWayPoint.super.inspect() );
         }};
+    /**
+     * makrov chain to calculate route
+     */
+    private final CMakrovChain<GeoPosition> m_makrovChain = new CMakrovChain<>();
+    /**
+     * random interface
+     */
+    private final Random m_random = new Random();
 
 
     /**
@@ -77,6 +76,16 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     {
         super( p_position, p_generator, p_factory, p_color, p_name );
         m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_makrovChain );
+    }
+
+    /**
+     * get the makrov chain
+     *
+     * @return
+     */
+    public final CMakrovChain<GeoPosition> getMakrovChain()
+    {
+        return this.m_makrovChain;
     }
 
     @Override
@@ -95,14 +104,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     }
 
     /**
-     * get the makrov chain
-     * @return
-     */
-    public final CMakrovChain<GeoPosition> getMakrovChain(){
-        return this.m_makrovChain;
-    }
-
-    /**
      * generic class to create a markov chain
      * this class also provides a relative and absolute weighting
      *
@@ -110,17 +111,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public static class CMakrovChain<T> extends HashMap<T, Map<T, MutablePair<Double, Double>>>
     {
-        /**
-         * add node to makrov chain
-         *
-         * @param p_node
-         */
-        public final void addNode( final T p_node )
-        {
-            this.put( p_node, new HashMap<T, MutablePair<Double, Double>>() );
-            updateRelativeWeighting();
-        }
-
         /**
          * add edge to makrov chain
          *
@@ -133,7 +123,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             if ( p_value < 0 )
                 return;
 
-            //create node of does not exist
+            //create node if does not exist
             if ( !this.containsKey( p_start ) )
                 this.addNode( p_start );
             if ( !this.containsKey( p_end ) )
@@ -141,6 +131,56 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
 
             this.get( p_start ).put( p_end, new MutablePair<>( p_value, p_value ) );
             this.updateRelativeWeighting();
+        }
+
+        /**
+         * add node to makrov chain
+         *
+         * @param p_node
+         */
+        public final void addNode( final T p_node )
+        {
+            this.put( p_node, new HashMap<T, MutablePair<Double, Double>>() );
+            this.updateRelativeWeighting();
+        }
+
+        @Override
+        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
+        {
+            final Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
+            this.updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
+        {
+            final Map<T, MutablePair<Double, Double>> l_result = super.remove( p_key );
+            this.removeAllNodeEdge( p_key );
+            this.updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public boolean remove( final Object p_key, final Object p_value )
+        {
+            final boolean l_result = super.remove( p_key, p_value );
+            this.removeAllNodeEdge( p_key );
+            this.updateRelativeWeighting();
+            return l_result;
+        }
+
+        /**
+         * remove all edges of a node
+         *
+         * @param p_node
+         */
+        public final void removeAllNodeEdge( final Object p_node )
+        {
+            for ( final Map<T, MutablePair<Double, Double>> l_in : this.values() )
+                if ( l_in.containsKey( p_node ) )
+                    l_in.remove( p_node );
+
         }
 
         /**
@@ -154,29 +194,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             if ( this.containsKey( p_start ) )
                 this.get( p_start ).remove( p_end );
 
-            updateRelativeWeighting();
-        }
-
-        /**
-         * remove all edges of a node
-         *
-         * @param p_node
-         */
-        public final void removeAllNodeEdge( final Object p_node )
-        {
-            for ( Map<T, MutablePair<Double, Double>> l_in : this.values() )
-                if ( l_in.containsKey( p_node ) )
-                    l_in.remove( p_node );
-
-        }
-
-        /**
-         * update all relative weightings
-         */
-        public final void updateRelativeWeighting()
-        {
-            for ( Map<T, MutablePair<Double, Double>> l_in : this.values() )
-                updateRelativeWeighting( l_in );
+            this.updateRelativeWeighting();
         }
 
         /**
@@ -184,90 +202,27 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          *
          * @param p_edges
          */
-        public final void updateRelativeWeighting( final Map<T, MutablePair<Double, Double>> p_edges )
+        private void updateRelativeWeighting( final Map<T, MutablePair<Double, Double>> p_edges )
         {
             //calculate the new sum
             double l_sum = 0.0;
-            for ( MutablePair l_pair : p_edges.values() )
+            for ( final MutablePair l_pair : p_edges.values() )
                 l_sum += (double) l_pair.left;
 
             //update relative weighting
-            for ( MutablePair l_pair : p_edges.values() )
+            for ( final MutablePair l_pair : p_edges.values() )
                 l_pair.right = (double) l_pair.left / l_sum;
         }
 
-        @Override
-        public String toString()
+        /**
+         * update all relative weightings
+         */
+        private void updateRelativeWeighting()
         {
-            return this.toString();
+            for ( final Map<T, MutablePair<Double, Double>> l_in : this.values() )
+                this.updateRelativeWeighting( l_in );
         }
 
-        @Override
-        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
-        {
-            Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public void putAll( final Map<? extends T, ? extends Map<T, MutablePair<Double, Double>>> p_map )
-        {
-            super.putAll( p_map );
-            updateRelativeWeighting();
-        }
-
-        @Override
-        public Map<T, MutablePair<Double, Double>> putIfAbsent( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
-        {
-            Map<T, MutablePair<Double, Double>> l_result = super.putIfAbsent( p_key, p_value );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
-        {
-            Map<T, MutablePair<Double, Double>> l_result = super.remove( p_key );
-            removeAllNodeEdge( p_key );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public boolean remove( final Object p_key, final Object p_value )
-        {
-            boolean l_result = super.remove( p_key, p_value );
-            removeAllNodeEdge( p_key );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public Map<T, MutablePair<Double, Double>> replace( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
-        {
-            Map<T, MutablePair<Double, Double>> l_result = super.replace( p_key, p_value );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public boolean replace( final T p_key, final Map<T, MutablePair<Double, Double>> p_oldValue,
-                final Map<T, MutablePair<Double, Double>> p_newValue )
-        {
-            boolean l_result = super.replace( p_key, p_oldValue, p_newValue );
-            removeAllNodeEdge( p_key );
-            updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public void replaceAll(
-                final BiFunction<? super T, ? super Map<T, MutablePair<Double, Double>>, ? extends Map<T, MutablePair<Double, Double>>> p_function )
-        {
-            super.replaceAll( p_function );
-            updateRelativeWeighting();
-        }
     }
 
 }

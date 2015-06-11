@@ -90,10 +90,10 @@ Configuration.prototype.buildViewAndBind = function()
     // build UI tab panel & popup (with click bind)
     jQuery( this.generateSubID("tabs", "#") ).tabs();
     jQuery( this.generateSubID("mappopup", "#") ).webuiPopover({
-        title     : "OSM Download",
+        title     : "OpenStreetMap Datafile Links",
         animation : "fade",
         trigger   : "hover",
-        content   : 'OpenStreetMap data (<a href="http://wiki.openstreetmap.org/wiki/PBF_Format">PBF files</a>) is available by' +
+        content   : '<a href="http://wiki.openstreetmap.org/wiki/PBF_Format">PBF download links</a> for import are available at the following locations' +
                     '<ul>'  +
                     '<li><a href="http://download.geofabrik.de/">GeoFabrik</a></li>' +
                     '<li><a href="http://download.bbbike.org/">BB-Bike</a></li>' +

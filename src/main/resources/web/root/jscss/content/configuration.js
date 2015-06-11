@@ -183,6 +183,7 @@ Configuration.prototype.buildUIElements = function()
         '</p>'  + Layout.input({    id: this.generateSubID("config_simulation_traffic_map_url"),           label : "Map URL",                       list: lo_elements.text,      value: this.mo_configuration.simulation.traffic.map.url })      + '<br/>' +
         'OpenStreetMap data (<a href="http://wiki.openstreetmap.org/wiki/PBF_Format">PBF files</a>) is available by <ul>'  +
         '<li><a href="http://download.geofabrik.de/">GeoFabrik</a></li>' +
+        '<li><a href="http://download.bbbike.org/">BB-Bike</a></li>' +
         '</ul>' +
         '</p>'  +
         '</p>'  + Layout.checkbox({ id: this.generateSubID("config_simulation_traffic_map_reimport"),      label : "Map Reimport",                  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +

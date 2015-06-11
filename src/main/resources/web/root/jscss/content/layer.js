@@ -108,6 +108,7 @@ Layer.prototype.afterDOMAdded = function()
 
         // fail closure function to open an error dialog
         var lx_failclosure = function( po_event ) {
+
             return function( po_data ) {
                 jQuery(self.generateSubID("text", "#")).text(po_data.responseJSON.error);
                 jQuery(self.generateSubID("dialog", "#")).dialog();
@@ -155,7 +156,7 @@ Layer.prototype.afterDOMAdded = function()
             MecSim.ajax({
                 url   : "/cosmviewer/setclickablelayer",
                 data  : {"id": jQuery( self.generateSubID("clickable", "#") ).children("li:first").attr("name")}
-            });
+            }).fail( lx_failclosure(px_event) );
 
         }
 

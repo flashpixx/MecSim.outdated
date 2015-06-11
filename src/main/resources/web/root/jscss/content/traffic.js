@@ -143,7 +143,7 @@ Traffic.prototype.afterDOMAdded = function()
             MecSim.ajax({
                 url   : "/ctrafficenvironment/setdrivemodel",
                 data  : {"id": jQuery( self.generateSubID("drivingmodel", "#") ).children("li:first").attr("name")}
-            });
+            }).fail( lx_failclosure(px_event) );
 
         }
 

@@ -93,14 +93,14 @@ Editor.prototype.afterDOMAdded = function()
 
 /**
  * read all files from the REST-API
+ * @see https://api.jquery.com/category/deferred-object/
+ * @see https://api.jquery.com/jquery.when/
+ * @note handle asynchron calls and create at the done call one array with all data
 **/
 Editor.prototype.readFiles = function()
 {
     this.ma_files = [];
     var self = this;
-
-    // @todo https://api.jquery.com/category/deferred-object/
-    // @todo https://api.jquery.com/jquery.when/
 
     // @todo https://lostechies.com/joshuaflanagan/2011/10/20/coordinating-multiple-ajax-requests-with-jquery-when/
     // @todo http://stackoverflow.com/questions/3709597/wait-until-all-jquery-ajax-requests-are-done
@@ -111,6 +111,9 @@ Editor.prototype.readFiles = function()
     jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
 
         var lo_task = jQuery.Deferred();
+        lo_task.done( function( po_data ) {
+
+        } );
 
         MecSim.ajax({
             url     :  po_config.list,
@@ -120,7 +123,7 @@ Editor.prototype.readFiles = function()
         la_tasks.push( lo_task.promise() );
     });
 
-    jQuery.when.apply(jQuery, la_tasks).then(
+    jQuery.when.apply(jQuery, la_tasks).done(
 
         function()
         {
@@ -129,7 +132,7 @@ Editor.prototype.readFiles = function()
 
     );
 
-    //Array.prototype.push.apply( self.ma_files, po_data.agents.convert( function( pc_file ) { return { name : pc_file, config : pc_configkey }; } ) );
+    // Array.prototype.push.apply( self.ma_files, po_data.agents.convert( function( pc_file ) { return { name : pc_file, config : pc_configkey }; } );
 
 
 }

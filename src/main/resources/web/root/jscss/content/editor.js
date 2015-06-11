@@ -35,6 +35,23 @@
 function Editor( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
+
+    // array with all file objects in the structure { name: -filename-, config: -key of the configuration object- }
+    this.mo_files = [];
+
+    // set the configuration for all file access
+    this.mo_configuration = {
+
+        "jason" : {
+            reader : "/cagentenvironment/jason/read",
+            writer : "/cagentenvironment/jason/write",
+            list   : "/cagentenvironment/jason/list"
+        }
+
+    }
+
+    // read files on initialisation
+    this.readFiles();
 }
 
 /** inheritance call **/
@@ -65,4 +82,32 @@ Editor.prototype.getContent = function()
 Editor.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
+}
+
+
+/**
+ * read all files from the REST-API
+**/
+Editor.prototype.readFiles = function()
+{
+    var self = this;
+
+    jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
+
+        MecSim.ajax({
+
+            url     : po_config.list,
+            success : function( po_data ) {
+
+                Array.prototype.push.apply( self.mo_files, po_data.agents.convert( function( pc_file ) { return { name : pc_file, config : pc_configkey }; } ) );
+
+            }
+
+        }).done(function() {
+
+            console.log( self.mo_files );
+
+        });
+
+    });
 }

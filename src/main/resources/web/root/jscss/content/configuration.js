@@ -65,7 +65,7 @@ Configuration.prototype.afterDOMAdded = function()
         MecSim.configuration().get(
             function( po_data ) { self.mo_configuration = po_data; }
         ).done(function() {
-            self.view();
+            self.buildViewAndBind();
         });
 
     });
@@ -74,23 +74,83 @@ Configuration.prototype.afterDOMAdded = function()
 
 
 /**
- * creates the view with the configuration data
+ * creates the HTML elements and bind the actions
 **/
-Configuration.prototype.view = function()
+Configuration.prototype.buildViewAndBind = function()
 {
     var self = this;
+
+    // build elements and get IDs
     jQuery( MecSim.ui().content("#") ).empty();
+    var lo_elements = this.buildUIElements();
 
-    // global /main, ui, simulation, database
-    //console.log(this.mo_configuration);
+    // build UI tab panel
+    jQuery( this.generateSubID("tabs", "#") ).tabs();
 
-    // list with IDs to define jQuery elements
-    var lo_elements ={
+
+    // the binding depends on the ID name of an element,
+    // split ID on "config_" and on the second element split on the underscore
+    // the array elements return the path of the configuration object
+
+    // switch binds (boolean values)
+    lo_elements.switches.forEach( function(pc_item) {
+
+        jQuery( "#"+pc_item ).bootstrapSwitch({
+            size           : "mini",
+            onText         : "Yes",
+            offText        : "No",
+            onSwitchChange : function( px_event, pl_state ) {
+
+                var la_keys = jQuery(this).closest("input").attr("id").split("config_");
+                if (la_keys.length != 2)
+                    return;
+
+                MecSim.configuration().set( self.buildObject( la_keys[1].split("_"), pl_state ) );
+
+            }
+        });
+
+    });
+
+    // selects binds (text / number values)
+    lo_elements.selects.forEach( function(pc_item) {
+
+        jQuery( "#"+pc_item ).selectmenu({
+
+            select: function( po_event ) {
+
+                var la_keys  = jQuery(this).closest("select").attr("id").split("config_");
+                if (la_keys.length != 2)
+                    return;
+
+                MecSim.configuration().set( self.buildObject( la_keys[1].split("_"), jQuery(this).closest("select").val() ) );
+
+            }
+
+        })
+
+    });
+
+    lo_elements.spinner.forEach( function(pc_item) { jQuery( "#"+pc_item ).spinner(); });
+    lo_elements.text.forEach( function(pc_item) { jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 450 }); });
+
+}
+
+
+/**
+ * builds the UI elements
+ *
+ * @return Json object with arrays of ID names
+**/
+Configuration.prototype.buildUIElements = function()
+{
+    // list with IDs
+    var lo_elements = {
         selects  : [],
         switches : [],
         spinner  : [],
         text     : []
-    }
+    };
 
     // add tab structure to the content div and create the jQuery definition
     jQuery( MecSim.ui().content("#") ).append(
@@ -108,8 +168,8 @@ Configuration.prototype.view = function()
         // general tab
         '<div id="' + this.generateSubID("general") + '">' +
         '<p>' + Layout.checkbox({ id: this.generateSubID("config_reset"),               label: "Reset Configuration",   list: lo_elements.switches,   value: this.mo_configuration.reset })              + '</p>' +
-        '<p>' + Layout.checkbox({ id: this.generateSubID("config_extractmasexample"),   label: "Extract agent files",   list: lo_elements.switches,   value: this.mo_configuration.extractmasexamples }) + '</p>' +
-        '<p>' + Layout.select(  { id: this.generateSubID("config_language"),            label: "Language",              list: lo_elements.selects,
+        '<p>' + Layout.checkbox({ id: this.generateSubID("config_extractmasexamples"),  label: "Extract agent files",   list: lo_elements.switches,   value: this.mo_configuration.extractmasexamples }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("config_language_current"),    label: "Language",              list: lo_elements.selects,
                        value: this.mo_configuration.language.current,
                        options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } )
         }) + '</p>' +
@@ -152,38 +212,16 @@ Configuration.prototype.view = function()
 
     );
 
-    // build jQuery elements - with binding
-    // create binds to the elements, split ID on "config_" and replace underscore to . to get Json object path
-    jQuery( this.generateSubID("tabs", "#") ).tabs();
-
-    // switch binds (boolean values)
-    lo_elements.switches.forEach( function(pc_item) {
-
-        jQuery( "#"+pc_item ).bootstrapSwitch({
-            size           : "mini",
-            onText         : "Yes",
-            offText        : "No",
-            onSwitchChange : function( px_event, pl_state ) {
-
-                var la_keys = jQuery(this).closest("input").attr("id").split("config_");
-                if (la_keys.length != 2)
-                    return;
-
-                MecSim.configuration().set( self.buildObject( la_keys[1].split("_"), pl_state ) );
-
-            }
-        });
-
-    });
-
-
-    lo_elements.selects.forEach( function(pc_item) { jQuery( "#"+pc_item ).selectmenu(); });
-    lo_elements.spinner.forEach( function(pc_item) { jQuery( "#"+pc_item ).spinner(); });
-    lo_elements.text.forEach( function(pc_item) { jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 450 }); });
-
+    return lo_elements;
 }
 
-
+/**
+ * builds a Json object from an array with keys
+ *
+ * @param pa_keys array with key names
+ * @param px_value value of the last key
+ * @return Json object
+**/
 Configuration.prototype.buildObject = function( pa_keys, px_value )
 {
     if (pa_keys.length == 1)

@@ -193,7 +193,7 @@ var MecSim = (function (px_modul) {
         /** reference to log area **/
         log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
         /** reference to logo area **/
-        logo        : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_logo"; },
+        //logo        : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_logo"; },
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -247,9 +247,9 @@ var MecSim = (function (px_modul) {
                         jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
 
                         // click on the headline clears the content field and add the TUC logo
-                        jQuery( px_item.getID("#") ).click( function() {
-                            jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
-                        });
+                        //jQuery( px_item.getID("#") ).click( function() {
+                        //    jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
+                        //});
                     }
 
                     px_item.afterDOMAdded();

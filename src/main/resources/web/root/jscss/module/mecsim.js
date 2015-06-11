@@ -264,7 +264,8 @@ var MecSim = (function (px_modul) {
         jQuery("head").append(
             '<style type = "text/css">' +
 
-            'html, body { height: 100%; width: 100%; margin: 0px; padding: 0px; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; }' +
+            'html, body { height: 100%; width: 100%; margin: 0px; padding: 0px; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
+            'a { text-decoration: none; color:#607D8B; cursor: pointer; }' +
             'iframe{ width: 100%; height: 100%; }' +
             px_modul.ui().menu("#")    + ' { height: 100%; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { overflow: auto; }' +

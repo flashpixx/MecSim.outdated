@@ -42,13 +42,7 @@ function Editor( pc_id, pc_name, pa_panel )
     // set the configuration for all file access
     this.mo_configuration = {
 
-        "jason" : {
-            reader : "/cagentenvironment/jason/read",
-            writer : "/cagentenvironment/jason/write",
-            list   : "/cagentenvironment/jason/list"
-        },
-
-        "xxxxx" : {
+        "Jason" : {
             reader : "/cagentenvironment/jason/read",
             writer : "/cagentenvironment/jason/write",
             list   : "/cagentenvironment/jason/list"
@@ -78,17 +72,9 @@ Editor.prototype.getGlobalContent = function()
 **/
 Editor.prototype.getContent = function()
 {
-    return "<p>Editor</p>" + Pane.prototype.getContent.call(this);
+    return '<div id="' + this.generateSubID("files") + '"></div>' + Pane.prototype.getContent.call(this);
 }
 
-
-/**
- * @Overwrite
-**/
-Editor.prototype.afterDOMAdded = function()
-{
-    Pane.prototype.afterDOMAdded.call(this);
-}
 
 
 /**
@@ -99,7 +85,6 @@ Editor.prototype.afterDOMAdded = function()
 **/
 Editor.prototype.readFiles = function()
 {
-    this.mo_files = {};
     var self = this;
 
     // create Ajax calls
@@ -125,6 +110,9 @@ Editor.prototype.readFiles = function()
 
         function()
         {
+            self.mo_files = {};
+
+            // collapse data
             Array.prototype.slice.call(arguments).forEach( function(px) {
 
                 // on multiple Ajax call px is an array
@@ -149,8 +137,12 @@ Editor.prototype.readFiles = function()
                 }
             });
 
+            // update select box
+            jQuery( self.generateSubID("files", "#") ).empty();
+            jQuery(
+                Layout.selectgroup({ id: self.generateSubID("mas"),  options: self.mo_files })
+            ).appendTo( self.generateSubID("files", "#") );
         }
-
     );
 
 }

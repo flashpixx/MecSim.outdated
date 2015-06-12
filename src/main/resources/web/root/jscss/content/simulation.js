@@ -43,6 +43,9 @@ function Simulation( pc_id, pc_name, pa_panel )
 Simulation.prototype = Object.create(Pane.prototype);
 
 
+/**
+ * @Overload
+**/
 Simulation.prototype.getGlobalCSS = function()
 {
     return this.generateSubID("content", ".") + "{ display: block; width: 100% }" + Pane.prototype.getGlobalCSS.call(this);

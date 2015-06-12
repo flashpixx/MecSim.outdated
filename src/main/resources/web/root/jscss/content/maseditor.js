@@ -68,11 +68,11 @@ MASEditor.prototype = Object.create(Pane.prototype);
 
 
 /**
- * @Overwrite
+ * @Overload
 **/
-MASEditor.prototype.getGlobalContent = function()
+Simulation.prototype.getGlobalCSS = function()
 {
-    return Pane.prototype.getGlobalContent.call(this);;
+    return  ".CodeMirror { border: 1px solid #eee; height: auto; }" + Pane.prototype.getGlobalCSS.call(this);
 }
 
 
@@ -198,7 +198,8 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
 
             // create codemirror instance
             var lo_editor = CodeMirror.fromTextArea( document.getElementById( lc_tabid + "_edit" ), {
-                lineNumbers : true
+                lineNumbers : true,
+                viewportMargin : Infinity
             });
 
             lo_editor.refresh();

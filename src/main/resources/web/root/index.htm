@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<head >
+    <title >MecSim - Traffic Simulation</title >
+    <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8" />
+
+    <!-- CryptoJS https://code.google.com/p/crypto-js/ -->
+    <script type = "text/javascript" src = "jscss/lib/cryptojs-3.1/md5.js" ></script >
+
+    <!-- jQuery https://jquery.com/ -->
+    <script type = "text/javascript" src = "jscss/lib/jquery-2.1.4.min.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jquery.webui-popover.js" ></script >
+    <link href = "jscss/lib/jquery.webui-popover.css" rel = "stylesheet" />
+
+    <!-- jQuery-UI https://jqueryui.com/ -->
+    <script type = "text/javascript" src = "jscss/lib/jquery-ui-1.11.4/jquery-ui.min.js" ></script >
+    <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.min.css" rel = "stylesheet" />
+
+    <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel = "stylesheet" />
+    <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel = "stylesheet" />
+
+    <!-- D3.js http://d3js.org/ -->
+    <script type = "text/javascript" src = "jscss/lib/d3-3.5.5.min.js" ></script >
+
+    <!-- jqWidgets  http://www.jqwidgets.com/ -->
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxcore.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxbuttons.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxsplitter.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxinput.js" ></script >
+    <link href = "jscss/lib/jqwidgets-3.8/jqx.base.css" rel = "stylesheet" />
+    <link href = "jscss/lib/jqwidgets-3.8/jqx.ui-lightness.css" rel = "stylesheet" />
+
+    <!-- Codemirror  http://codemirror.net/ -->
+    <script type = "text/javascript" src = "jscss/lib/codemirror-5.3/lib/codemirror.js" ></script >
+    <link href = "jscss/lib/codemirror-5.3/lib/codemirror.css" rel = "stylesheet" />
+
+    <!-- Bootstrap-Switch  http://www.bootstrap-switch.org/ -->
+    <script type = "text/javascript" src = "jscss/lib/bootstrap-switch.min.js" ></script >
+    <link href = "jscss/lib/bootstrap-switch.min.css" rel = "stylesheet" />
+
+    <!-- Spectrum-Colorpicker http://bgrins.github.io/spectrum/-->
+    <script type = "text/javascript" src = "jscss/lib/spectrum.js" ></script >
+    <link href = "jscss/lib/spectrum.css" rel = "stylesheet" />
+
+    <!-- JQuery-Steps-Wizard http://www.jquery-steps.com/-->
+    <script type = "text/javascript" src = "jscss/lib/jquery-steps.min.js" ></script >
+    <link href = "jscss/lib/jquery-steps.css" rel = "stylesheet" />
+
+
+    <!-- MecSim -->
+    <script type = "text/javascript" src = "jscss/module/global.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/mecsim.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/layout.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/visualization.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/widget.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/pane.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/inspector.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/simulation.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/configuration.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/layer.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/traffic.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/waypoint.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/mas.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/maseditor.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/help.js" ></script >
+
+
+    <script type = "text/javascript" >
+        jQuery(document).ready(function() {
+            MecSim.uiinitialize([
+                new Inspector( "inspector" ),
+                new Logger( "logger" ),
+                new Simulation("simulation", "Simulation", [new Configuration("configuration", "Configuration")]),
+                new Layer("layer", "Layer"),
+                new Traffic("traffic", "Traffic Environment"),
+                new Waypoint("waypoint", "Waypoint / Sources"),
+                new MAS("mas", "Multi-Agent System", [new MASEditor("editor", "Editor")]),
+                new Help("help", "Help")
+            ]);
+        });
+    </script >
+</head >
+
+<body >
+</body >
+
+</html >

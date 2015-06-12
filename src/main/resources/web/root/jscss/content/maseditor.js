@@ -40,6 +40,11 @@ function MASEditor( pc_id, pc_name, pa_panel )
 
     // object with arrays of file objects in the structure { name: -filename-, config: -key of the configuration object- }
     this.mo_files = {};
+    // tab instances
+    this.mo_tabs = null;
+    // object with hash and instances of the current editor
+    //this.mo_instances = {};
+
 
     // set the configuration for all file access
     this.mo_configuration = {
@@ -113,7 +118,7 @@ MASEditor.prototype.readFiles = function()
         {
             self.mo_files = {};
 
-            // collapse data
+            // collapse data into on object
             Array.prototype.slice.call(arguments).forEach( function(px) {
 
                 // on multiple Ajax call px is an array
@@ -139,11 +144,11 @@ MASEditor.prototype.readFiles = function()
 
             // clear div and add a new select box
             jQuery( self.generateSubID("files", "#") ).empty();
-            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agent Files",  options: self.mo_files }) ).appendTo( self.generateSubID("files", "#") );
+            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_files }) ).appendTo( self.generateSubID("files", "#") );
             jQuery( self.generateSubID("agents", "#") ).selectmenu({
                 change : function( po_event, po_ui ) {
-                    console.log( po_ui.item.value );
-                    console.log( po_ui.item.optgroup );
+                    self.buildTabView();
+                    self.addContentTab( po_ui.item.optgroup, po_ui.item.value );
                 }
             });
         }
@@ -163,6 +168,44 @@ MASEditor.prototype.getFiles = function()
 }
 
 
-MASEditor.prototype.readContent = function( pc_group, pc_name, px_result )
+/**
+ * reads the file content and calls the result
+ * function with the data
+ *
+ * @param pc_group option group name
+ * @param pc_agent agent name
+**/
+MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
 {
+    if (!this.mo_tabs)
+        return;
+
+    var self = this;
+    MecSim.ajax({
+
+        url     : this.mo_configuration[pc_group].reader,
+        data    : { "name" : pc_agent },
+        success : function( po_data )
+        {
+
+            self.mo_tabs.find( ".ui-tabs-nav" ).append( pc_agent + " (" + pc_group + ")" );
+            self.mo_tabs.append( '<div id="' + pc_agent + '">' + po_data.source + '</div>' );
+            self.mo_tabs.tabs( "refresh" );
+
+        }
+
+    });
+
+}
+
+
+MASEditor.prototype.buildTabView = function()
+{
+    if( jQuery( this.generateSubID("editor", "#") ).length )
+        return;
+
+    // create tab div within the DOM
+    jQuery( MecSim.ui().content("#") ).empty();
+    jQuery( MecSim.ui().content("#") ).append( '<div id="' + this.generateSubID("editor") + '"></div>' );
+    this.mo_tabs = jQuery( MecSim.ui().content("#") ).tabs();
 }

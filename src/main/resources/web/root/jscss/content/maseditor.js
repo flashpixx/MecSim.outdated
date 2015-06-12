@@ -126,7 +126,6 @@ MASEditor.prototype.readFiles = function()
                     return;
                 }
 
-
                 // on single Ajax call px is an object
                 if ((px instanceof Object) && (px.agents) && (px.config))
                 {
@@ -141,7 +140,12 @@ MASEditor.prototype.readFiles = function()
             // clear div and add a new select box
             jQuery( self.generateSubID("files", "#") ).empty();
             jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  options: self.mo_files }) ).appendTo( self.generateSubID("files", "#") );
-            jQuery( self.generateSubID("agents", "#") ).selectmenu();
+            jQuery( self.generateSubID("agents", "#") ).selectmenu({
+                change : function( po_event, po_ui ) {
+                    console.log( po_ui.item.value );
+                    console.log( po_ui.item.optgroup );
+                }
+            });
         }
     );
 

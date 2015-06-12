@@ -161,3 +161,8 @@ MASEditor.prototype.getFiles = function()
 {
     return jQuery.extend( {}, this.mo_files );
 }
+
+
+MASEditor.prototype.readContent = function( pc_group, pc_name, px_result )
+{
+}

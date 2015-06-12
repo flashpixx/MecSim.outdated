@@ -192,8 +192,6 @@ var MecSim = (function (px_modul) {
         content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
         /** reference to log area **/
         log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
-        /** reference to logo area **/
-        //logo        : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_logo"; },
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -245,11 +243,6 @@ var MecSim = (function (px_modul) {
                     {
                         jQuery( '<h3 id = "' + px_item.getID() + '">' + px_item.getName() + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
                         jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
-
-                        // click on the headline clears the content field and add the TUC logo
-                        //jQuery( px_item.getID("#") ).click( function() {
-                        //    jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
-                        //});
                     }
 
                     px_item.afterDOMAdded();
@@ -263,12 +256,20 @@ var MecSim = (function (px_modul) {
 
         jQuery("head").append(
             '<style type = "text/css">' +
+            // defines HTML / body with 100% height and width for the splitter content
             'html, body { height: 100%; width: 100%; margin: 0px; padding: 0px; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
+            // overwrite the default a tag
             'a { text-decoration: none; color:#607D8B; cursor: pointer; }' +
+            // select needs a width, because jQuery sets it to size = 0
             'select { width: 100px; }' +
+            // resizing iFrame to the full parent element size
             'iframe{ width: 100%; height: 100%; }' +
+            // sets the menu layout
             px_modul.ui().menu("#")    + ' { height: 100%; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
+            // sets the content layout
             px_modul.ui().content("#") + ' { overflow: auto; }' +
+            // sets the log layout
+            px_modul.ui().log("#") + ' { overflow: auto; }' +
             //px_modul.ui().content("#") + '::before { content: " "; opacity: 1; position: absolute; background-image: url(img/tuc_small.gif); background-position: 50% 50%; }' +
 
             '</style>'

@@ -251,9 +251,7 @@ var MecSim = (function (px_modul) {
         }
 
 
-        // on startup add TUC logo and define global CSS elements
-        //jQuery( px_modul.ui().content("#") ).html( '<div id = "' + px_modul.ui().logo() + '" ></div >' );
-
+        // main CSS
         jQuery("head").append(
             '<style type = "text/css">' +
             // defines HTML / body with 100% height and width for the splitter content

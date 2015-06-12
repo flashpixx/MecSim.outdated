@@ -192,7 +192,7 @@ public class CAgentEnvironment
         switch ( m_type )
         {
             case Jason:
-                FileUtils.writeStringToFile( IEnvironment.getAgentFile( this.getAgentName( p_data ) ), (String) p_data.get( "data" ) );
+                FileUtils.writeStringToFile( IEnvironment.getAgentFile( this.getAgentName( p_data ) ), (String) p_data.get( "source" ) );
                 break;
 
             default:

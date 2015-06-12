@@ -60,7 +60,7 @@ function MASEditor( pc_id, pc_name, pa_panel )
     }
 
     // read files on initialisation
-    this.readFiles();
+    this.readAgents();
 }
 
 /** inheritance call **/
@@ -86,12 +86,12 @@ MASEditor.prototype.getContent = function()
 
 
 /**
- * read all files from the REST-API
+ * read all agents from the REST-API
  * @see https://api.jquery.com/category/deferred-object/
  * @see https://api.jquery.com/jquery.when/
  * @note handle asynchron calls and create at the done call one array with all data
 **/
-MASEditor.prototype.readFiles = function()
+MASEditor.prototype.readAgents = function()
 {
     var self = this;
 
@@ -160,6 +160,29 @@ MASEditor.prototype.readFiles = function()
 
 
 /**
+ * write the content or caches the data if the write fails
+ *
+ * @param pc_group option group name
+ * @param pc_agent agent name
+ * @param pc_content content of the agent
+**/
+MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
+{
+
+    MecSim.ajax({
+
+        url     : this.mo_configuration[pc_group].writer,
+        data    : { "name" : pc_agent, "source" : pc_content }
+
+    }).fail( function( po_data ) {
+
+        console.log(po_data);
+
+    });
+}
+
+
+/**
  * returns a deep-copy of the filelist
  *
  * @return array with filelist objects
@@ -196,12 +219,17 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
             self.mo_tabs.find( ".ui-tabs-nav" ).append( '<li><a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +  '</a></li>' );
             self.mo_tabs.append( '<div id="' + lc_tabid + '"><textarea id="' + lc_tabid+ '_edit">' + po_data.source + '</textarea></div>' );
 
-            // create codemirror instance
             var lo_editor = CodeMirror.fromTextArea( document.getElementById( lc_tabid + "_edit" ), {
-                lineNumbers : true,
-                viewportMargin : Infinity
+
+                lineNumbers    : true,
+                viewportMargin : Infinity,
+
             });
 
+            // create editor bind action, on blur (focus lost) the data are written
+            lo_editor.on( "blur", function( po_editor ) { self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); });
+
+            // refresh tab & editor
             lo_editor.refresh();
             self.mo_tabs.tabs( "refresh" );
         }
@@ -211,6 +239,9 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
 }
 
 
+/**
+ * creates the tab view in the content pane if not exists
+**/
 MASEditor.prototype.buildTabView = function()
 {
     if( jQuery( this.generateSubID(this.mc_tabs, "#") ).length )

@@ -42,6 +42,8 @@ function MASEditor( pc_id, pc_name, pa_panel )
     this.mo_files = {};
     // tab instances
     this.mo_tabs = null;
+    // tab ID name
+    this.mc_tabs = "tabs";
     // object with hash and instances of the current editor
     //this.mo_instances = {};
 
@@ -187,11 +189,11 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
         data    : { "name" : pc_agent },
         success : function( po_data )
         {
+            var lc_tabid = self.generateSubID( pc_group+pc_agent);
 
-            self.mo_tabs.find( ".ui-tabs-nav" ).append( pc_agent + " (" + pc_group + ")" );
-            self.mo_tabs.append( '<div id="' + pc_agent + '">' + po_data.source + '</div>' );
+            self.mo_tabs.find( ".ui-tabs-nav" ).append( '<li><a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +  '</a></li>' );
+            self.mo_tabs.append( '<div id="' + lc_tabid + '"><pre>' + po_data.source + '</pre></div>' );
             self.mo_tabs.tabs( "refresh" );
-
         }
 
     });
@@ -201,11 +203,11 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
 
 MASEditor.prototype.buildTabView = function()
 {
-    if( jQuery( this.generateSubID("editor", "#") ).length )
+    if( jQuery( this.generateSubID(this.mc_tabs, "#") ).length )
         return;
 
     // create tab div within the DOM
     jQuery( MecSim.ui().content("#") ).empty();
-    jQuery( MecSim.ui().content("#") ).append( '<div id="' + this.generateSubID("editor") + '"></div>' );
-    this.mo_tabs = jQuery( MecSim.ui().content("#") ).tabs();
+    jQuery( MecSim.ui().content("#") ).append( '<div id="' + this.generateSubID(this.mc_tabs) + '"><ul></ul></div>' );
+    this.mo_tabs = jQuery( this.generateSubID(this.mc_tabs, "#") ).tabs();
 }

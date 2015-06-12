@@ -36,13 +36,19 @@ function Editor( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 
-    // array with all file objects in the structure { name: -filename-, config: -key of the configuration object- }
-    this.ma_files = [];
+    // object with arrays of file objects in the structure { name: -filename-, config: -key of the configuration object- }
+    this.mo_files = {};
 
     // set the configuration for all file access
     this.mo_configuration = {
 
         "jason" : {
+            reader : "/cagentenvironment/jason/read",
+            writer : "/cagentenvironment/jason/write",
+            list   : "/cagentenvironment/jason/list"
+        },
+
+        "xxxxx" : {
             reader : "/cagentenvironment/jason/read",
             writer : "/cagentenvironment/jason/write",
             list   : "/cagentenvironment/jason/list"
@@ -93,7 +99,7 @@ Editor.prototype.afterDOMAdded = function()
 **/
 Editor.prototype.readFiles = function()
 {
-    this.ma_files = [];
+    this.mo_files = {};
     var self = this;
 
     // create Ajax calls
@@ -124,20 +130,21 @@ Editor.prototype.readFiles = function()
                 // on multiple Ajax call px is an array
                 if ((Array.isArray(px)) && (px.length == 3) && (px[1] == "success"))
                 {
-                    Array.prototype.push.apply(
-                        self.ma_files,
-                        px[0].agents.convert( function( pc_file ) { return { name : pc_file, config : px[0].config } } )
-                    );
+                    if (!Array.isArray(self.mo_files[ px[0].config ]))
+                        self.mo_files[ px[0].config ] = [];
+
+                    Array.prototype.push.apply( self.mo_files[ px[0].config ], px[0].agents );
                     return;
                 }
+
 
                 // on single Ajax call px is an object
                 if ((px instanceof Object) && (px.agents) && (px.config))
                 {
-                    Array.prototype.push.apply(
-                        self.ma_files,
-                        px.agents.convert( function( pc_file ) { return { name : pc_file, config : px.config } } )
-                    );
+                    if (!Array.isArray(self.mo_files[px.config]))
+                        self.mo_files[px.config] = [];
+
+                    Array.prototype.push.apply( self.mo_files[px.config], px.agents );
                     return;
                 }
             });
@@ -156,5 +163,5 @@ Editor.prototype.readFiles = function()
 **/
 Editor.prototype.getFiles = function()
 {
-    return jQuery.extend( [], this.ma_files );
+    return jQuery.extend( {}, this.mo_files );
 }

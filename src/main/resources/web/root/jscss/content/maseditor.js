@@ -79,19 +79,6 @@ MASEditor.prototype.getContent = function()
 
 
 /**
- * @Overwrite
-**/
-MASEditor.prototype.afterDOMAdded = function()
-{
-/*
-    jQuery( "#"+pc_item ).selectmenu({
-                select: function(po_event, po_ui) { self.updateConfiguration( po_event.target.id, po_ui.item.value ); }
-            })
-*/
-}
-
-
-/**
  * read all files from the REST-API
  * @see https://api.jquery.com/category/deferred-object/
  * @see https://api.jquery.com/jquery.when/
@@ -151,11 +138,10 @@ MASEditor.prototype.readFiles = function()
                 }
             });
 
-            // update select box
+            // clear div and add a new select box
             jQuery( self.generateSubID("files", "#") ).empty();
-            jQuery(
-                Layout.selectgroup({ id: self.generateSubID("mas"),  options: self.mo_files })
-            ).appendTo( self.generateSubID("files", "#") );
+            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  options: self.mo_files }) ).appendTo( self.generateSubID("files", "#") );
+            jQuery( self.generateSubID("agents", "#") ).selectmenu();
         }
     );
 

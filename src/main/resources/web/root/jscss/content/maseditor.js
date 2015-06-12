@@ -189,10 +189,19 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
         data    : { "name" : pc_agent },
         success : function( po_data )
         {
-            var lc_tabid = self.generateSubID( pc_group+pc_agent);
+            // create DOM ID
+            var lc_tabid = self.generateSubID( pc_group+"_"+pc_agent );
 
+            // create tab and editor instance
             self.mo_tabs.find( ".ui-tabs-nav" ).append( '<li><a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +  '</a></li>' );
-            self.mo_tabs.append( '<div id="' + lc_tabid + '"><pre>' + po_data.source + '</pre></div>' );
+            self.mo_tabs.append( '<div id="' + lc_tabid + '"><textarea id="' + lc_tabid+ '_edit">' + po_data.source + '</textarea></div>' );
+
+            // create codemirror instance
+            var lo_editor = CodeMirror.fromTextArea( document.getElementById( lc_tabid + "_edit" ), {
+                lineNumbers : true
+            });
+
+            lo_editor.refresh();
             self.mo_tabs.tabs( "refresh" );
         }
 

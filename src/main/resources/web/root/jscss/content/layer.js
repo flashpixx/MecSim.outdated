@@ -24,6 +24,8 @@
 
 "use strict";
 
+//@todo fix HTML5 data attributes
+
 
 /**
  * ctor to create the layer menu
@@ -162,7 +164,6 @@ Layer.prototype.afterDOMAdded = function()
 
     });
 
-    // @todo remove ID attribute to avoid errors
     MecSim.ajax({
 
         url     : "/cosmviewer/listclickablelayer",

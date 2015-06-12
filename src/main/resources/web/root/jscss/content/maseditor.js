@@ -24,15 +24,17 @@
 
 "use strict";
 
+//@todo fix HTML5 data attributes
+
 
 /**
- * ctor to create the source editor menu
+ * ctor to create the source editor for MAS files
  *
  * @param pc_id ID
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
 **/
-function Editor( pc_id, pc_name, pa_panel )
+function MASEditor( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 
@@ -55,13 +57,13 @@ function Editor( pc_id, pc_name, pa_panel )
 }
 
 /** inheritance call **/
-Editor.prototype = Object.create(Pane.prototype);
+MASEditor.prototype = Object.create(Pane.prototype);
 
 
 /**
  * @Overwrite
 **/
-Editor.prototype.getGlobalContent = function()
+MASEditor.prototype.getGlobalContent = function()
 {
     return Pane.prototype.getGlobalContent.call(this);;
 }
@@ -70,11 +72,23 @@ Editor.prototype.getGlobalContent = function()
 /**
  * @Overwrite
 **/
-Editor.prototype.getContent = function()
+MASEditor.prototype.getContent = function()
 {
     return '<div id="' + this.generateSubID("files") + '"></div>' + Pane.prototype.getContent.call(this);
 }
 
+
+/**
+ * @Overwrite
+**/
+MASEditor.prototype.afterDOMAdded = function()
+{
+/*
+    jQuery( "#"+pc_item ).selectmenu({
+                select: function(po_event, po_ui) { self.updateConfiguration( po_event.target.id, po_ui.item.value ); }
+            })
+*/
+}
 
 
 /**
@@ -83,7 +97,7 @@ Editor.prototype.getContent = function()
  * @see https://api.jquery.com/jquery.when/
  * @note handle asynchron calls and create at the done call one array with all data
 **/
-Editor.prototype.readFiles = function()
+MASEditor.prototype.readFiles = function()
 {
     var self = this;
 
@@ -153,7 +167,7 @@ Editor.prototype.readFiles = function()
  *
  * @return array with filelist objects
 **/
-Editor.prototype.getFiles = function()
+MASEditor.prototype.getFiles = function()
 {
     return jQuery.extend( {}, this.mo_files );
 }

@@ -257,7 +257,7 @@ var MecSim = (function (px_modul) {
         jQuery("head").append(
             '<style type = "text/css">' +
             // defines HTML / body with 100% height and width for the splitter content
-            'html, body { height: 100%; width: 100%; margin: 0px; padding: 0px; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
+            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
             // overwrite the default a tag
             'a { text-decoration: none; color:#607D8B; cursor: pointer; }' +
             // select needs a width, because jQuery sets it to size = 0
@@ -265,12 +265,12 @@ var MecSim = (function (px_modul) {
             // resizing iFrame to the full parent element size
             'iframe{ width: 100%; height: 100%; }' +
             // sets the menu layout
-            px_modul.ui().menu("#")    + ' { height: 100%; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
-            // sets the content layout
-            px_modul.ui().content("#") + ' { overflow: auto; }' +
+            px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
+            // sets the content layout (with logo)
+            px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(img/tuc.svg); background-repeat: no-repeat; }' +
+            px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
             // sets the log layout
-            px_modul.ui().log("#") + ' { overflow: auto; }' +
-            //px_modul.ui().content("#") + '::before { content: " "; opacity: 1; position: absolute; background-image: url(img/tuc_small.gif); background-position: 50% 50%; }' +
+            px_modul.ui().log("#") + ' { z-index: 0; overflow: auto; }' +
 
             '</style>'
         );

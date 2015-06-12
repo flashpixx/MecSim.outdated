@@ -226,8 +226,8 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
 
             });
 
-            // create editor bind action, on blur (focus lost) the data are written
-            lo_editor.on( "blur", function( po_editor ) { self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); });
+            // create editor bind action, on blur (focus lost) the data are written to the REST-API and the textarea
+            lo_editor.on( "blur", function( po_editor ) { self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); po_editor.save(); });
 
             // refresh tab & editor
             lo_editor.refresh();

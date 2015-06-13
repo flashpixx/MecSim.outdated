@@ -176,7 +176,8 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
 
     }).fail( function( po_data ) {
 
-        console.log(po_data);
+        // @todo cache on fail
+        //console.log(po_data);
 
     });
 }
@@ -205,6 +206,12 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
     if (!this.mo_tabs)
         return;
 
+    // create DOM ID with check if tab existst
+    var lc_tabid = this.generateSubID( pc_group+"_"+pc_agent );
+    if( jQuery( "#"+lc_tabid ).length )
+        return;
+
+
     var self = this;
     MecSim.ajax({
 
@@ -212,12 +219,20 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
         data    : { "name" : pc_agent },
         success : function( po_data )
         {
-            // create DOM ID
-            var lc_tabid = self.generateSubID( pc_group+"_"+pc_agent );
 
             // create tab and editor instance
-            self.mo_tabs.find( ".ui-tabs-nav" ).append( '<li><a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +  '</a></li>' );
-            self.mo_tabs.append( '<div id="' + lc_tabid + '"><textarea id="' + lc_tabid+ '_edit">' + po_data.source + '</textarea></div>' );
+            self.mo_tabs.find( ".ui-tabs-nav" ).append(
+                '<li>' +
+                '<a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +
+                '<span class="ui-icon ui-icon-close" role="presentation"/>' +
+                '</a>' +
+                '</li>'
+            );
+            self.mo_tabs.append(
+                '<div id="' + lc_tabid + '">' +
+                '<textarea id="' + lc_tabid+ '_edit">' + po_data.source + '</textarea>' +
+                '</div>'
+            );
 
             var lo_editor = CodeMirror.fromTextArea( document.getElementById( lc_tabid + "_edit" ), {
 
@@ -229,9 +244,13 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
             // create editor bind action, on blur (focus lost) the data are written to the REST-API and the textarea
             lo_editor.on( "blur", function( po_editor ) { self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); po_editor.save(); });
 
-            // refresh tab & editor
+            // set active tab and refresh tab & editor
+            // @todo set active
             lo_editor.refresh();
+            //self.mo_tabs.tabs( "option", "active", jQuery('#' + self.mc_tabs + ' a[href="#'+lc_tabid+'"]').parent().index() );
             self.mo_tabs.tabs( "refresh" );
+            //console.log('#' + self.mc_tabs + ' a[href="#'+lc_tabid+'"]');
+            //console.log(  jQuery('#' + self.mc_tabs + ' a[href="#'+lc_tabid+'"]').parent().index()  );
         }
 
     });
@@ -247,8 +266,16 @@ MASEditor.prototype.buildTabView = function()
     if( jQuery( this.generateSubID(this.mc_tabs, "#") ).length )
         return;
 
+    var self = this;
+
     // create tab div within the DOM
     jQuery( MecSim.ui().content("#") ).empty();
     jQuery( MecSim.ui().content("#") ).append( '<div id="' + this.generateSubID(this.mc_tabs) + '"><ul></ul></div>' );
     this.mo_tabs = jQuery( this.generateSubID(this.mc_tabs, "#") ).tabs();
+
+    // bind close action
+    this.mo_tabs.delegate( "span.ui-icon-close", "click", function() {
+        jQuery( "#" + jQuery( this ).closest( "li" ).remove().attr( "aria-controls" ) ).remove();
+        self.mo_tabs.tabs( "refresh" );
+    });
 }

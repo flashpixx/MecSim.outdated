@@ -254,6 +254,7 @@ var MecSim = (function (px_modul) {
         // main CSS
         jQuery("head").append(
             '<style type = "text/css">' +
+
             // defines HTML / body with 100% height and width for the splitter content
             'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
             // overwrite the default a tag

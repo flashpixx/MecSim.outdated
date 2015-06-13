@@ -92,7 +92,7 @@ var SourcePanel = ( function (px_module) {
 
                     //create table content
                     SourcePanel.createWaypointList();
-                    SourcePanel.settings.obj.graphEditor = GraphEditor.create( "#mecsim_source_waypointGraphEditor", {nodes : [], links : [], lastNodeId : 0}, {width: 500} );
+                    SourcePanel.settings.obj.graphEditor = new GraphEditor( "#mecsim_source_waypointGraphEditor", {nodes : [], links : [], lastNodeId : 0}, {width: 500} );
 
                     //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(

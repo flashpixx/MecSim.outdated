@@ -223,55 +223,60 @@ select
 /******************************** css definitions for mecsim_grapheditor ++++++++************************************************/
 
 .mecsim_graphEditor_svg {
-    border-style: solid;
-    border-width: 1px;
-    background-color: #FFF;
-    margin-left: 25px;
-    cursor: default;
-    -webkit-user-select: none;
+  background-color: #FFF;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 
-.mecsim_graphEdiorPath.link {
-    stroke: #000;
-    stroke-width: 4px;
-    fill: none;
-    cursor: default;
+.mecsim_graphEditor_svg:not(.active):not(.ctrl) {
+  cursor: crosshair;
 }
 
-.mecsim_graphEditor_svg:not(.active):not(.ctrl) .mecsim_graphEdiorPath.link {
-    cursor: pointer;
+.mecsim_graphEditor_path.link {
+  fill: none;
+  stroke: #000;
+  stroke-width: 4px;
+  cursor: default;
 }
 
-.mecsim_graphEdiorPath.link.selected {
-    stroke-dasharray: 10,2;
+.mecsim_graphEditor_svg:not(.active):not(.ctrl) .mecsim_graphEditor_path.link {
+  cursor: pointer;
 }
 
-.mecsim_graphEdiorPath.link.dragline {
-    pointer-events: none;
+.mecsim_graphEditor_path.link.selected {
+  stroke-dasharray: 10,2;
 }
 
-.mecsim_graphEdiorPath.link.hidden {
-    stroke-width: 0;
+.mecsim_graphEditor_path.link.dragline {
+  pointer-events: none;
 }
 
-.mecsim_graphEditorCircle.node {
-    stroke-width: 1.5px;
-    cursor: pointer;
+.mecsim_graphEditor_path.link.hidden {
+  stroke-width: 0;
 }
 
-.mecsim_graphEditorCircle.node.reflexive {
-    stroke: #000 !important;
-    stroke-width: 2.5px;
+.mecsim_graphEditor_circle.node {
+  stroke-width: 1.5px;
+  cursor: pointer;
 }
 
-.mecsim_graphEditorCircleText {
-    font: 12px sans-serif;
-    pointer-events: none;
+.mecsim_graphEditor_circle.node.reflexive {
+  stroke: #000 !important;
+  stroke-width: 2.5px;
 }
 
-.mecsim_graphEditorCircleText.mecsim_graphEditorCircleID {
-    font-weight: bold;
-    text-anchor: middle;
+.mecsim_graphEditor_circleText {
+  font: 12px sans-serif;
+  pointer-events: none;
+}
+
+.mecsim_graphEditor_circleText.mecsim_graphEditor_circleID {
+  text-anchor: middle;
+  font-weight: bold;
 }
 
 /******************************** css definitions for mecsim_widget ************************************************/

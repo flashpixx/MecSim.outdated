@@ -244,13 +244,12 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
             // create editor bind action, on blur (focus lost) the data are written to the REST-API and the textarea
             lo_editor.on( "blur", function( po_editor ) { self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); po_editor.save(); });
 
-            // set active tab and refresh tab & editor
-            // @todo set active
+            // refresh editor and tab structure
             lo_editor.refresh();
-            //self.mo_tabs.tabs( "option", "active", jQuery('#' + self.mc_tabs + ' a[href="#'+lc_tabid+'"]').parent().index() );
             self.mo_tabs.tabs( "refresh" );
-            //console.log('#' + self.mc_tabs + ' a[href="#'+lc_tabid+'"]');
-            //console.log(  jQuery('#' + self.mc_tabs + ' a[href="#'+lc_tabid+'"]').parent().index()  );
+
+            // set active tab to the last inserted tab
+            self.mo_tabs.tabs({ active: self.mo_tabs.find( ' .ui-state-default' ).size()-1 });
         }
 
     });

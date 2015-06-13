@@ -35,6 +35,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CInternalBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -173,7 +174,7 @@ public class CAgent<T> implements IVoidAgent
         }
 
         // put initial beliefs into an additional generic beliefbase
-      //  addBeliefbase( "internals", new CInternalBeliefBase( CCommon.convertGeneric( m_agent.getInitialBels() ) ) );
+        addBeliefbase( "internals", new CInternalBeliefBase( CCommon.convertGeneric( m_agent.getInitialBels() ) ) );
     }
 
 

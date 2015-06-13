@@ -37,6 +37,7 @@
 function MASEditor( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
+    var self = this;
 
     // object with arrays of file objects in the structure { name: -filename-, config: -key of the configuration object- }
     this.mo_files = {};
@@ -44,23 +45,20 @@ function MASEditor( pc_id, pc_name, pa_panel )
     this.mo_tabs = null;
     // tab ID name
     this.mc_tabs = "tabs";
-    // object with hash and instances of the current editor
-    //this.mo_instances = {};
 
 
     // set the configuration for all agent access
-    this.mo_configuration = {
+    this.mo_configuration = {};
 
-        "Jason" : {
-            reader : "/cagentenvironment/jason/read",
-            writer : "/cagentenvironment/jason/write",
-            list   : "/cagentenvironment/jason/list",
-            create : "/cagentenvironment/jason/create",
-            remove : "/cagentenvironment/jason/delete",
-            check  : "/cagentenvironment/jason/check"
-        }
+    ["Jason"].forEach( function(pc_name) {
 
-    }
+        self.mo_configuration[pc_name] = {};
+        ["read", "write", "list", "create", "remove", "check"].forEach( function(pc_option) {
+            self.mo_configuration[pc_name][pc_option] = ["/cagentenvironment", pc_name.toLowerCase(), pc_option].join("/");
+        });
+
+    });
+
 
     // read files on initialisation
     this.readAgents();
@@ -174,7 +172,7 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
 
     MecSim.ajax({
 
-        url     : this.mo_configuration[pc_group].writer,
+        url     : this.mo_configuration[pc_group].write,
         data    : { "name" : pc_agent, "source" : pc_content }
 
     }).fail( function( po_data ) {
@@ -218,7 +216,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
     var self = this;
     MecSim.ajax({
 
-        url     : this.mo_configuration[pc_group].reader,
+        url     : this.mo_configuration[pc_group].read,
         data    : { "name" : pc_agent },
         success : function( po_data )
         {

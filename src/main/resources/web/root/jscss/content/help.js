@@ -55,8 +55,11 @@ Help.prototype.getGlobalContent = function()
            '<label for = "' + this.generateSubID("license") + '" >License: </label >' +
            '<a id = "'      + this.generateSubID("license") + '" ></a >' +
            '<br />' +
-           '<label for = "' + this.generateSubID("buildversion") + '" >Buildversion: </label >' +
+           '<label for = "' + this.generateSubID("buildversion") + '" >Version: </label >' +
            '<a id = "'      + this.generateSubID("buildversion") + '" ></a >' +
+           '<br />' +
+           '<label for = "' + this.generateSubID("buildnumber") + '" >Buildnumber: </label >' +
+           '<a id = "'      + this.generateSubID("buildnumber") + '" ></a >' +
            '<br />' +
            '<label for = "' + this.generateSubID("buildcommit") + '" >Buildcommit: </label >' +
            '<a id = "'      + this.generateSubID("buildcommit") + '" ></a >' +
@@ -113,6 +116,11 @@ Help.prototype.afterDOMAdded = function()
             jQuery(self.generateSubID("buildversion", "#"))
                 .text(po_data.manifest["build-version"]);
 
+            jQuery(self.generateSubID("buildnumber", "#"))
+                .text(po_data.manifest["build-number"]);
+
+            jQuery(self.generateSubID("buildcommit", "#"))
+                .text(po_data.manifest["build-commit"].substring(0,8));
 
         }).done( function() {
 

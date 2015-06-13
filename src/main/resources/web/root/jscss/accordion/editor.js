@@ -23,12 +23,7 @@
 
 // --- EDITOR PANEL MODULE ---------------------------------------------------------------------------------------------
 
-"use strict";
-
 var EditorPanel = ( function (px_module) {
-
-    var save_interval;
-    var opened_tabs = [];
 
     px_module.g_editor = {}
 
@@ -71,8 +66,9 @@ var EditorPanel = ( function (px_module) {
 
         // add a tab to the editor
         "add_tab" : function() {
+            // TODO: check if file is already open in another tab
             var selected_file = EditorPanel.ui_actions().get_tab_id();
-            $("#tabs ul").append("<li id='" + EditorPanel.ui_actions().get_tab_id() + "_li'><a id='" + EditorPanel.ui_actions().get_tab_id() + "_tab' href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a><span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
+            $("#tabs ul").append("<li><a href='#" + EditorPanel.ui_actions().get_tab_id() + "'>" + $("#mecsim_agent_files").val() + "</a></li>");
             $("#tabs").append("<div id='" + EditorPanel.ui_actions().get_tab_id() + "'></div>");
         },
 
@@ -128,26 +124,7 @@ var EditorPanel = ( function (px_module) {
         // add a code mirror object to the editor
         "add_code_mirror" : function() {
             EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
-        },
-
-        // save current selected file
-        "save_file" : function() {
-
-            var selected_tab_id = $(
-                 '#tabs > div:eq(' + $('#tabs').tabs('option', 'active') + ')'
-            ).get(0).id;
-
-            $.ajax({
-                url : "/cagentenvironment/jason/write",
-                type: "POST",
-                data: { "name" : $("#mecsim_agent_files").val(),
-                "source" : EditorPanel.g_editor[selected_tab_id].getValue(),
-                "data" : EditorPanel.g_editor[selected_tab_id].getValue()},
-                success : function( px_data )
-                {
-                    console.log("file saved");
-                }
-            });
+            //$("#" + EditorPanel.ui_actions().get_tab_id() + "").css("height", "100%");
         }
 
     };}
@@ -162,48 +139,17 @@ var EditorPanel = ( function (px_module) {
         // initialization of editor panel action
         EditorPanel.ui().mecsim_editor_panel().on("click", function() {
 
-            // TODO: if another accordion tab is opened, timer goes on
             if( MecSim.ui().accordion().accordion( "option", "active" ) ) {
 
                 MecSim.ui().content().empty();
+                EditorPanel.ui_actions().append_tab_div();
+                EditorPanel.ui_actions().add_tab();
+                $("#tabs").tabs();
 
-                // open all files previously opened
+                // json object that holds all editor instances
+                EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
+                EditorPanel.ui_actions().load_selected_file();
 
-                if(opened_tabs.length == 0){
-                    EditorPanel.ui_actions().append_tab_div();
-                    EditorPanel.ui_actions().add_tab();
-                    $("#tabs").tabs();
-
-                    // close icon: removing the tab on click TODO: if last is removed no file can be added anymore
-                    $("#tabs").tabs().delegate( "span.ui-icon-close", "click", function() {
-                    var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
-                    $( "#" + panelId ).remove();
-                        $("#tabs").tabs( "refresh" );
-                    });
-
-                    // json object that holds all editor instances
-                    EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] = CodeMirror($("#" + EditorPanel.ui_actions().get_tab_id() + "")[0], {lineNumbers: true});
-                    EditorPanel.ui_actions().load_selected_file();
-                } else {
-                    var tab_id;
-                    for(tab_id in opened_tabs){
-                        // TODO: load opened files
-                        //EditorPanel.ui_actions().append_tab_div();
-                        //EditorPanel.ui_actions().add_tab();
-                        //$("#tabs").tabs();
-                    }
-                }
-
-
-
-                // save current selected file every five seconds
-                save_interval = setInterval(function () {
-                    EditorPanel.ui_actions().save_file();
-                }, 5000);
-
-            } else {
-                clearInterval(save_interval);
-                EditorPanel.ui_actions().save_file();
             }
         });
 
@@ -215,43 +161,19 @@ var EditorPanel = ( function (px_module) {
 
         // load file
         EditorPanel.ui().load_file_button().button().on("click", function(p_data){
+            EditorPanel.ui_actions().add_tab();
+            $("div#tabs").tabs("refresh");
 
-            if( EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()] ) {
+            var tab_index = $('#tabs a[href="#' + EditorPanel.ui_actions().get_tab_id() + '"]').parent().index();
+            $('#tabs').tabs( "option", "active", tab_index );
+            $("div#tabs").tabs("refresh");
 
-               // focus tab which is already loaded
-               $("#" + EditorPanel.ui_actions().get_tab_id() + "_tab").trigger("click");
-
-            } else {
-
-                // create new tab and load file content
-                EditorPanel.ui_actions().add_tab();
-                $("div#tabs").tabs("refresh");
-
-                var tab_index = $('#tabs a[href="#' + EditorPanel.ui_actions().get_tab_id() + '"]').parent().index();
-                $('#tabs').tabs( "option", "active", tab_index );
-                $("div#tabs").tabs("refresh");
-
-                EditorPanel.ui_actions().add_code_mirror();
-                EditorPanel.ui_actions().load_selected_file();
-            }
-
+            EditorPanel.ui_actions().add_code_mirror();
+            EditorPanel.ui_actions().load_selected_file();
         });
 
         // delete file
         EditorPanel.ui().delete_file_button().button().on("click", function(p_data){
-            EditorPanel.ui().mecsim_editor_delete_confirmation().dialog({
-                width: 500,
-                modal: true
-            });
-        });
-
-        // save file button action
-        // TODO: parametrize agent file type (e.g. jason, goal)
-        EditorPanel.ui().save_file_button().button().on("click", function(p_data){
-            EditorPanel.ui_actions().save_file();
-        });
-
-        EditorPanel.ui().mecsim_editor_delete_file_yes().button().on("click", function() {
 
             $.ajax({
                 url : "/cagentenvironment/jason/delete",
@@ -263,17 +185,24 @@ var EditorPanel = ( function (px_module) {
                 }
             });
 
-            // remove tab
-            $("#" + EditorPanel.ui_actions().get_tab_id() + "_li").remove();
-            $("#" + EditorPanel.ui_actions().get_tab_id()).remove();
-            $("#tabs").tabs("refresh");
-
-            EditorPanel.ui().mecsim_editor_delete_confirmation().dialog("close");
-
         });
 
-        EditorPanel.ui().mecsim_editor_delete_file_no().button().on("click", function() {
-            EditorPanel.ui().mecsim_editor_delete_confirmation().dialog("close");
+        // save file
+        // TODO: parametrize agent file type (e.g. jason, goal)
+        EditorPanel.ui().save_file_button().button().on("click", function(p_data){
+
+            $.ajax({
+                url : "/cagentenvironment/jason/write",
+                type: "POST",
+                data: { "name" : $("#mecsim_agent_files").val(),
+                "source" : EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].getValue(),
+                "data" : EditorPanel.g_editor[EditorPanel.ui_actions().get_tab_id()].getValue()},
+                success : function( px_data )
+                {
+                    console.log("file saved");
+                }
+            });
+
         });
 
     }
@@ -286,25 +215,19 @@ var EditorPanel = ( function (px_module) {
     px_module.ui = function() {return {
 
         /** reference to mecsim agent files select menu **/
-        mecsim_agent_files                : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_agent_files" : $("#mecsim_agent_files"); },
+        "mecsim_agent_files" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_agent_files" : $("#mecsim_agent_files"); },
         /** reference to 'new file' button **/
-        new_file_button                   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_new_file"    : $("#mecsim_new_file"); },
+        "new_file_button"    : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_new_file"    : $("#mecsim_new_file"); },
         /** reference to 'load file' button **/
-        load_file_button                  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_load_file"   : $("#mecsim_load_file"); },
+        "load_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_load_file"   : $("#mecsim_load_file"); },
         /** reference to 'delete file' button **/
-        delete_file_button                : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_delete_file" : $( "#mecsim_delete_file" ); },
+        "delete_file_button" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_delete_file" : $( "#mecsim_delete_file" ); },
         /** reference to 'save file' button **/
-        save_file_button                  : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
+        "save_file_button"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_save_file"   : $("#mecsim_save_file"); },
         /** reference to 'select file type' menu **/
-        select_file_type_menu             : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
+        "select_file_type_menu" : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_file_type"   : $("#mecsim_file_type"); },
         /** reference to accordion editor panel h3 element **/
-        mecsim_editor_panel               : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); },
-        /** reference to editor delete confirmation popup **/
-        mecsim_editor_delete_confirmation : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_confirmation"   : $("#mecsim_editor_delete_confirmation"); },
-        /** reference to editor delete file 'yes' button **/
-        mecsim_editor_delete_file_yes     : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_yes"   : $("#mecsim_editor_delete_file_yes"); },
-        /** reference to editor delete file 'no' button **/
-        mecsim_editor_delete_file_no      : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_delete_file_no"   : $("#mecsim_editor_delete_file_no"); }
+        "mecsim_editor_panel"   : function(pc_type) { var lc_type = pc_type || "object";  return lc_type === "id" ? "#mecsim_editor_panel"   : $("#mecsim_editor_panel"); }
     };}
     // -----------------------------------------------------------------------------------------------------------------
 

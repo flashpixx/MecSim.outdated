@@ -48,13 +48,16 @@ function MASEditor( pc_id, pc_name, pa_panel )
     //this.mo_instances = {};
 
 
-    // set the configuration for all file access
+    // set the configuration for all agent access
     this.mo_configuration = {
 
         "Jason" : {
             reader : "/cagentenvironment/jason/read",
             writer : "/cagentenvironment/jason/write",
-            list   : "/cagentenvironment/jason/list"
+            list   : "/cagentenvironment/jason/list",
+            create : "/cagentenvironment/jason/create",
+            remove : "/cagentenvironment/jason/delete",
+            check  : "/cagentenvironment/jason/check"
         }
 
     }

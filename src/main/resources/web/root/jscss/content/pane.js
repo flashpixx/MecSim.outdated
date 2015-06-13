@@ -43,7 +43,7 @@ function Pane( pc_id, pc_name, pa_panel )
     this.mc_name     = pc_name || null;
     this.mc_id       = pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase();
     this.ma_children = [];
-    this.mo_parent   = null;
+    this.mo_parent   = {};
 
     // caches of ID
     this.mo_idcache  = {};
@@ -93,6 +93,7 @@ Pane.prototype.setParent = function( po )
         throw "object is not a pane object";
 
     this.mo_parent = po;
+    this.clearCachedID();
 }
 
 

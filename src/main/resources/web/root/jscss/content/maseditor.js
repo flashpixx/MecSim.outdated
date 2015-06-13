@@ -28,7 +28,7 @@
 
 
 /**
- * ctor to create the source editor for MAS files
+ * ctor to create the source editor for the MAS
  *
  * @param pc_id ID
  * @param pc_name name of the panel
@@ -39,8 +39,8 @@ function MASEditor( pc_id, pc_name, pa_panel )
     Pane.call(this, pc_id, pc_name, pa_panel );
     var self = this;
 
-    // object with arrays of file objects in the structure { name: -filename-, config: -key of the configuration object- }
-    this.mo_files = {};
+    // object with arrays of agent names in the structure { name: -agentname-, config: -key of the configuration object- }
+    this.mo_agents = {};
     // tab instances
     this.mo_tabs = null;
     // tab ID name
@@ -60,7 +60,7 @@ function MASEditor( pc_id, pc_name, pa_panel )
     });
 
 
-    // read files on initialisation
+    // read agents on initialisation
     this.readAgents();
 }
 
@@ -82,7 +82,7 @@ Simulation.prototype.getGlobalCSS = function()
 **/
 MASEditor.prototype.getContent = function()
 {
-    return '<div id="' + this.generateSubID("files") + '"></div>' + Pane.prototype.getContent.call(this);
+    return '<span id="' + this.generateSubID("agentlist") + '"></span>' + Pane.prototype.getContent.call(this);
 }
 
 
@@ -119,7 +119,7 @@ MASEditor.prototype.readAgents = function()
 
         function()
         {
-            self.mo_files = {};
+            self.mo_agents = {};
 
             // collapse data into on object
             Array.prototype.slice.call(arguments).forEach( function(px) {
@@ -127,27 +127,27 @@ MASEditor.prototype.readAgents = function()
                 // on multiple Ajax call px is an array
                 if ((Array.isArray(px)) && (px.length == 3) && (px[1] == "success"))
                 {
-                    if (!Array.isArray(self.mo_files[ px[0].config ]))
-                        self.mo_files[ px[0].config ] = [];
+                    if (!Array.isArray(self.mo_agents[ px[0].config ]))
+                        self.mo_agents[ px[0].config ] = [];
 
-                    Array.prototype.push.apply( self.mo_files[ px[0].config ], px[0].agents );
+                    Array.prototype.push.apply( self.mo_agents[ px[0].config ], px[0].agents );
                     return;
                 }
 
                 // on single Ajax call px is an object
                 if ((px instanceof Object) && (px.agents) && (px.config))
                 {
-                    if (!Array.isArray(self.mo_files[px.config]))
-                        self.mo_files[px.config] = [];
+                    if (!Array.isArray(self.mo_agents[px.config]))
+                        self.mo_agents[px.config] = [];
 
-                    Array.prototype.push.apply( self.mo_files[px.config], px.agents );
+                    Array.prototype.push.apply( self.mo_agents[px.config], px.agents );
                     return;
                 }
             });
 
             // clear div and add a new select box
-            jQuery( self.generateSubID("files", "#") ).empty();
-            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_files }) ).appendTo( self.generateSubID("files", "#") );
+            jQuery( self.generateSubID("agentlist", "#") ).empty();
+            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_agents }) ).appendTo( self.generateSubID("agentlist", "#") );
             jQuery( self.generateSubID("agents", "#") ).selectmenu({
                 change : function( po_event, po_ui ) {
                     self.addTabView();
@@ -189,9 +189,9 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
  *
  * @return array with filelist objects
 **/
-MASEditor.prototype.getFiles = function()
+MASEditor.prototype.getAgents = function()
 {
-    return jQuery.extend( {}, this.mo_files );
+    return jQuery.extend( {}, this.mo_agents );
 }
 
 

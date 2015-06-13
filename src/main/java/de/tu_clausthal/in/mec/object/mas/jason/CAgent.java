@@ -174,7 +174,7 @@ public class CAgent<T> implements IVoidAgent
         }
 
         // put initial beliefs into an additional generic beliefbase
-        addBeliefbase( "internals", new CInternalBeliefBase( CCommon.convertGeneric( m_agent.getInitialBels() ) ) );
+        addBeliefbase( "internals", new CInternalBeliefBase( m_agent ) );
     }
 
 
@@ -415,8 +415,8 @@ public class CAgent<T> implements IVoidAgent
             this.setCycleNumber(m_cycle++);
             this.getTS().reasoningCycle();
 
-            // run belief updates
-            for (final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values())
+            // run beliefbase updates
+            for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
                 l_beliefbase.update();
 
             // run all register after-cycle object

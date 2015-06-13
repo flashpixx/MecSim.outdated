@@ -120,7 +120,7 @@ Help.prototype.afterDOMAdded = function()
                 .text(po_data.manifest["build-number"]);
 
             jQuery(self.generateSubID("buildcommit", "#"))
-                .text(po_data.manifest["build-commit"].substring(0,8));
+                .text(  po_data.manifest["build-commit"] ? po_data.manifest["build-commit"].substring(0,8) : ""  );
 
         }).done( function() {
 

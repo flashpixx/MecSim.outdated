@@ -39,10 +39,14 @@ function Pane( pc_id, pc_name, pa_panel )
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
+    // name ID, children, parent definition
     this.mc_name     = pc_name || null;
     this.mc_id       = pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase();
     this.ma_children = [];
     this.mo_parent   = null;
+
+    // caches of ID
+    this.mo_idcache  = {};
 
     if (Array.isArray(pa_panel))
     {
@@ -91,6 +95,16 @@ Pane.prototype.setParent = function( po )
     this.mo_parent = po;
 }
 
+
+/**
+ * clears the ID cache
+**/
+Pane.prototype.clearCachedID = function()
+{
+    this.mo_idcache = {};
+}
+
+
 /**
  * returns the internal ID
  *
@@ -99,11 +113,18 @@ Pane.prototype.setParent = function( po )
 **/
 Pane.prototype.getID = function( pc_prefix )
 {
-    if (this.mo_parent)
-        return ["mecsim", this.mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_");
+    // check cached value
+    var lc_hash = CryptoJS.MD5( this.mc_id );
+    if (this.mo_idcache[lc_hash])
+        return (pc_prefix || "") + this.mo_idcache[lc_hash];
 
-    return (pc_prefix || "") + ["mecsim", this.mc_id].join("_");
+    // generate value & hash
+    var lc = this.mo_parent ? ["mecsim", this.mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_") : ["mecsim", this.mc_id].join("_");
+    this.mo_idcache[ lc_hash ] = lc;
+
+    return (pc_prefix || "") + lc;
 }
+
 
 /**
  * returns a subID of the current pane
@@ -117,7 +138,16 @@ Pane.prototype.generateSubID = function( pc_id, pc_prefix )
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
-    return (pc_prefix || "") + [this.getID(), pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase()].join("_");
+    // check cached value
+    var lc_hash = CryptoJS.MD5(pc_id);
+    if (this.mo_idcache[lc_hash])
+        return (pc_prefix || "") + this.mo_idcache[lc_hash];
+
+    // generate value & hash
+    var lc = [this.getID(), pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase()].join("_");
+    this.mo_idcache[ lc_hash ] = lc;
+
+    return (pc_prefix || "") + lc;
 }
 
 

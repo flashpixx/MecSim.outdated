@@ -149,8 +149,8 @@ MASEditor.prototype.readAgents = function()
             jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_files }) ).appendTo( self.generateSubID("files", "#") );
             jQuery( self.generateSubID("agents", "#") ).selectmenu({
                 change : function( po_event, po_ui ) {
-                    self.buildTabView();
-                    self.addContentTab( po_ui.item.optgroup, po_ui.item.value );
+                    self.addTabView();
+                    self.addTab( po_ui.item.optgroup, po_ui.item.value );
                 }
             });
         }
@@ -201,7 +201,7 @@ MASEditor.prototype.getFiles = function()
  * @param pc_group option group name
  * @param pc_agent agent name
 **/
-MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
+MASEditor.prototype.addTab = function( pc_group, pc_agent  )
 {
     if (!this.mo_tabs)
         return;
@@ -260,7 +260,7 @@ MASEditor.prototype.addContentTab = function( pc_group, pc_agent  )
 /**
  * creates the tab view in the content pane if not exists
 **/
-MASEditor.prototype.buildTabView = function()
+MASEditor.prototype.addTabView = function()
 {
     if( jQuery( this.generateSubID(this.mc_tabs, "#") ).length )
         return;

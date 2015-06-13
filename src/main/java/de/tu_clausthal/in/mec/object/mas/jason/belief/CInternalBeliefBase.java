@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
+import jason.asSemantics.Agent;
 import jason.asSyntax.Literal;
 
 import java.util.Set;
@@ -36,6 +37,11 @@ import java.util.Set;
 public class CInternalBeliefBase extends CBeliefBase
 {
     /**
+     * agent object
+     */
+    private Agent m_agent;
+
+    /**
      * default ctor
      */
     public CInternalBeliefBase() { super(); }
@@ -46,4 +52,15 @@ public class CInternalBeliefBase extends CBeliefBase
      * @param p_literals
      */
     public CInternalBeliefBase( Set<ILiteral<Literal>> p_literals ) {super(p_literals);}
+
+    @Override
+    public void update()
+    {
+        // clear old literals
+        super.clearLiterals();
+
+        // get actual literals
+        for( final Literal l_literal : m_agent.getBB() )
+            super.addLiteral( l_literal );
+    }
 }

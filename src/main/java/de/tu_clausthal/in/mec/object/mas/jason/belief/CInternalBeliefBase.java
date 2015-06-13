@@ -28,8 +28,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Literal;
 
-import java.util.Set;
-
 /**
  * beliefbase for internal beliefs, i.e. the initial beliefs
  * and beliefs that arise from deduction rules
@@ -56,10 +54,10 @@ public class CInternalBeliefBase extends CBeliefBase
     public void update()
     {
         // clear old literals
-        super.clearLiterals();
+        clearLiterals();
 
         // get actual literals
         for( final Literal l_literal : m_agent.getBB() )
-            super.addLiteral(l_literal);
+            addLiteral( l_literal );
     }
 }

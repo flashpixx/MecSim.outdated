@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -41,6 +42,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
+import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
@@ -59,7 +61,6 @@ import java.util.List;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
- * @todo display internal beliefs in agent mind inspector
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -400,6 +401,7 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
+         * @todo catch RevisionFailedException
          */
         public final void cycle(final int p_currentstep)
         {
@@ -411,13 +413,27 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.addLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
             m_beliefs.removeLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
 
-            // the reasoning cycle must be called within the transition system
-            this.setCycleNumber(m_cycle++);
-            this.getTS().reasoningCycle();
-
             // run beliefbase updates
             for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
                 l_beliefbase.update();
+
+            // clear the agents beliefbase for update step
+            m_agent.getBB().clear();
+
+            // push updated beliefs into the agents beliefbase
+            for(ILiteral l_literal : m_beliefs.collapseBeliefbase().getLiterals())
+                try
+                {
+                    m_agent.addBel( (Literal) l_literal.getLiteral());
+                }
+                catch (RevisionFailedException l_exception)
+                {
+                    l_exception.printStackTrace();
+                }
+
+            // the reasoning cycle must be called within the transition system
+            this.setCycleNumber(m_cycle++);
+            this.getTS().reasoningCycle();
 
             // run all register after-cycle object
             for (final ICycle l_item : m_cycleobject)

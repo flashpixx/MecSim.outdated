@@ -48,8 +48,6 @@ public class CLiteral extends IDefaultLiteral<Literal>
 
         super( p_literal.getFunctor(), p_literal );
 
-        // super(p_literal.getFunctor(), p_literal, new LinkedList<>(), new HashSet<>( 4 ));
-
         if (p_literal.hasTerm())
             for (final Term l_term : p_literal.getTerms())
                 m_values.add(CCommon.convertGeneric(l_term));

@@ -67,6 +67,29 @@ String.prototype.toJSON = String.prototype.toJSON || function()
 
 
 /**
+ * Fowler–Noll–Vo hash function
+ * @see https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#FNV-1a_hash
+ * @see http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
+ *
+ * @return hash value
+**/
+String.prototype.hash = String.prototype.hash || function()
+{
+    var hval = 0x811c9dc5;
+
+    // Strips unicode bits, only the lower 8 bits of the values are used
+    for (var i = 0; i < this.length; i++) {
+        hval = hval ^ (this.charCodeAt(i) & 0xFF);
+        hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
+    }
+
+    var val = hval >>> 0;
+    return ("0000000" + (val >>> 0).toString(16)).substr(-8);
+}
+
+
+
+/**
  * removes an element of an array
  * @param px_value value
 **/

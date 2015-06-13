@@ -106,6 +106,23 @@ Pane.prototype.clearCachedID = function()
 
 
 /**
+ * hash function for IDs with cache
+ * @param pc_search search string
+ * @param pc_value value which is set if the hash is generated
+ * @return cached value
+**/
+Pane.prototype.getCachedID = function( pc_search, pc_value )
+{
+    // check cached value
+    var lc_hash = pc_search.hash();
+    if (!this.mo_idcache[lc_hash])
+        this.mo_idcache[lc_hash] = pc_value;
+
+    return this.mo_idcache[lc_hash];
+}
+
+
+/**
  * returns the internal ID
  *
  * @param pc_prefix optional prefix for the result
@@ -113,16 +130,7 @@ Pane.prototype.clearCachedID = function()
 **/
 Pane.prototype.getID = function( pc_prefix )
 {
-    // check cached value
-    var lc_hash = CryptoJS.MD5( this.mc_id );
-    if (this.mo_idcache[lc_hash])
-        return (pc_prefix || "") + this.mo_idcache[lc_hash];
-
-    // generate value & hash
-    var lc = this.mo_parent ? ["mecsim", this.mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_") : ["mecsim", this.mc_id].join("_");
-    this.mo_idcache[ lc_hash ] = lc;
-
-    return (pc_prefix || "") + lc;
+    return (pc_prefix || "") + this.getCachedID(  this.mc_id,  this.mo_parent ? ["mecsim", this.mo_parent.getID().replace("mecsim_", ""), this.mc_id].join("_") : ["mecsim", this.mc_id].join("_")  );
 }
 
 
@@ -138,16 +146,7 @@ Pane.prototype.generateSubID = function( pc_id, pc_prefix )
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
-    // check cached value
-    var lc_hash = CryptoJS.MD5(pc_id);
-    if (this.mo_idcache[lc_hash])
-        return (pc_prefix || "") + this.mo_idcache[lc_hash];
-
-    // generate value & hash
-    var lc = [this.getID(), pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase()].join("_");
-    this.mo_idcache[ lc_hash ] = lc;
-
-    return (pc_prefix || "") + lc;
+    return (pc_prefix || "") + this.getCachedID(  pc_id,  [this.getID(), pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase()].join("_")  );
 }
 
 

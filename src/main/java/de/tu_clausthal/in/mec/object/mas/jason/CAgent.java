@@ -150,6 +150,17 @@ public class CAgent<T> implements IVoidAgent
         if ((m_namepath == null) || (m_namepath.isEmpty()))
             m_namepath = new CPath(this.getClass().getSimpleName() + "@" + this.hashCode());
 
+        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
+        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
+        m_architecture = new CJasonArchitecture();
+        m_architecture.insertAgArch(m_architecture);
+
+        // build an own agent to handle manual internal actions
+        m_agent = new CJasonAgent(IEnvironment.getAgentFile(p_asl), m_architecture);
+
+        // initialize message system
+        m_participant = new CParticipant(this);
+
         if (p_bind != null)
         {
             // register possible actions
@@ -161,16 +172,8 @@ public class CAgent<T> implements IVoidAgent
             addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
-        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
-        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
-        m_architecture = new CJasonArchitecture();
-        m_architecture.insertAgArch(m_architecture);
-
-        // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent(IEnvironment.getAgentFile(p_asl), m_architecture);
-
-        // initialize message system
-        m_participant = new CParticipant(this);
+        // put initial beliefs into an additional generic beliefbase
+      //  addBeliefbase( "internals", new CInternalBeliefBase( CCommon.convertGeneric( m_agent.getInitialBels() ) ) );
     }
 
 

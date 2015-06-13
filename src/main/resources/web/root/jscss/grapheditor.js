@@ -118,6 +118,7 @@ GraphEditor = function(element, options){
     this.restart();
 };
 
+//update position
 GraphEditor.prototype.tick = function(){
     //update path position
     this._path.attr('d', function(d) {
@@ -142,6 +143,7 @@ GraphEditor.prototype.tick = function(){
     });
 };
 
+//update data
 GraphEditor.prototype.restart = function restart(){
     var self = this;
 
@@ -158,7 +160,7 @@ GraphEditor.prototype.restart = function restart(){
         .classed('selected', function(d) { return d === self._selected_link; })
         .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
         .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; })
-        .on('mousedown', this.mousePathUp.bind(self));
+        .on('mousedown', this.mousePathDown.bind(self));
 
     //exit section (path)
     this._path.exit().remove();
@@ -195,6 +197,7 @@ GraphEditor.prototype.restart = function restart(){
     this._force.start();
 };
 
+//reload data
 GraphEditor.prototype.reload = function reload(options){
     var self = this;
 
@@ -225,12 +228,13 @@ GraphEditor.prototype.reload = function reload(options){
     this.restart();
 };
 
+//add node
 GraphEditor.prototype.addNode = function(options){
     //node settings
     options = options || {};
     var id        = !isNaN(options.id)  ?  options.id : ++this._lastNodeID;
-    var x         = options.x           || this._with/2;
-    var y         = options.y           || this._height/2;
+    var x         = options.x           || this._with/2 + Math.random();
+    var y         = options.y           || this._height/2 + Math.random();
     var reflexive = options.reflexive   || false;
 
     //create node
@@ -242,6 +246,7 @@ GraphEditor.prototype.addNode = function(options){
     this.restart();
 };
 
+//add link
 GraphEditor.prototype.addLink = function(options){
 
     if(!options.source || !options.target)
@@ -267,6 +272,7 @@ GraphEditor.prototype.addLink = function(options){
     this.restart();
 };
 
+//listener mouse down
 GraphEditor.prototype.mousedown = function(){
     //return if ctrl was pressed or a circle or link already selected (prevent multiple selec)
     if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link || !this._mouseMode) return;
@@ -275,6 +281,7 @@ GraphEditor.prototype.mousedown = function(){
     this.addNode({x : point[0], y : point[1]});
 };
 
+//listener mouse move
 GraphEditor.prototype.mousemove = function(){
     //return if dragline was not started on a circle
     if(!this._mousedown_node) return;
@@ -284,6 +291,7 @@ GraphEditor.prototype.mousemove = function(){
     this.restart();
 };
 
+//listener mouse up
 GraphEditor.prototype.mouseup = function(){
     //hide drag line (defa)
     if(this._mousedown_node) {
@@ -295,6 +303,7 @@ GraphEditor.prototype.mouseup = function(){
     this.resetMouseVars();
 };
 
+//listener mouse down (circle)
 GraphEditor.prototype.mouseCircleDown = function(d){
     if(d3.event.ctrlKey) return;
 
@@ -316,6 +325,7 @@ GraphEditor.prototype.mouseCircleDown = function(d){
     this.restart();
 };
 
+//listener mouse up (circle)
 GraphEditor.prototype.mouseCircleUp = function(d){
     if(!this._mousedown_node) return;
 
@@ -348,7 +358,8 @@ GraphEditor.prototype.mouseCircleUp = function(d){
     this.addLink({source : source, target : target, left : left, right : right});
 };
 
-GraphEditor.prototype.mousePathUp = function(d){
+//listener mouse down (path)
+GraphEditor.prototype.mousePathDown = function(d){
 
     //if ctrl is pressed return
     if(d3.event.ctrlKey) return;
@@ -365,6 +376,7 @@ GraphEditor.prototype.mousePathUp = function(d){
     this.restart();
 };
 
+//listener key down
 GraphEditor.prototype.keydown = function(){
 
     //general
@@ -429,6 +441,7 @@ GraphEditor.prototype.keydown = function(){
     }
 };
 
+//listener key up
 GraphEditor.prototype.keyup = function(){
     this._lastKeyDown = -1;
 
@@ -441,6 +454,7 @@ GraphEditor.prototype.keyup = function(){
     }
 };
 
+//delete all links of a node
 GraphEditor.prototype.spliceLinksForNode = function(node){
     var self = this;
 
@@ -455,6 +469,7 @@ GraphEditor.prototype.spliceLinksForNode = function(node){
     });
 };
 
+//reset mouse variables
 GraphEditor.prototype.resetMouseVars = function(){
     this._mousedown_node = null;
     this._mouseup_node = null;

@@ -92,7 +92,13 @@ var SourcePanel = ( function (px_module) {
 
                     //create table content
                     SourcePanel.createWaypointList();
-                    SourcePanel.settings.obj.graphEditor = new GraphEditor( "#mecsim_source_waypointGraphEditor", {nodes : [], links : [], lastNodeId : 0}, {width: 500} );
+                    SourcePanel.settings.obj.graphEditor = new GraphEditor(
+                        "#mecsim_source_waypointGraphEditor",
+                        {
+                            onAddNode : SourcePanel.onAddNode,
+                            onAddLink : SourcePanel.onAddLink
+                        }
+                    );
 
                     //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
@@ -638,7 +644,6 @@ var SourcePanel = ( function (px_module) {
 
                 $(".mecsim_source_addButton").on("click", function(event){
                     SourcePanel.settings.obj.graphEditor.addNode({id: event.target.value.split("#")[0], reflexive: false, geo: [event.target.value.split("#")[1], event.target.value.split("#")[2]]});
-                    console.log(SourcePanel.settings.obj.graphEditor);
                 });
 
                 $(".mecsim_source_editButton").on("click", function(event){
@@ -686,6 +691,16 @@ var SourcePanel = ( function (px_module) {
                 SourcePanel.settings.dom.currentWaypoint.text(event.target.value);
             }
         });
+    };
+
+    //will be called when a node was added
+    px_module.onAddNode = function(node){
+        console.log(node);
+    };
+
+    //will be called when a link was added
+    px_module.onAddLink = function(link){
+        console.log(link);
     };
 
     return px_module;

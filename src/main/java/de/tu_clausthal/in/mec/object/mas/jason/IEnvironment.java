@@ -71,7 +71,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @note should throw exception on syntax error
-     * @bug does not work correctly
+     * @bug does not work correctly - exception is not thrown
      */
     public static void checkAgentFileSyntax( final String p_agentname )
     {

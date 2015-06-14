@@ -58,7 +58,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     /**
      * makrov chain to calculate route
      */
-    private final CMakrovChain<GeoPosition> m_makrovChain = new CMakrovChain<>();
+    private final CMakrovChain<IWayPoint> m_makrovChain = new CMakrovChain<>();
     /**
      * random interface
      */
@@ -75,6 +75,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {
         super( p_position, p_generator, p_factory, p_color, p_name );
+        m_makrovChain.addNode( this );
         m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_makrovChain );
     }
 
@@ -83,7 +84,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      *
      * @return
      */
-    public final CMakrovChain<GeoPosition> getMakrovChain()
+    public final CMakrovChain<IWayPoint> getMakrovChain()
     {
         return this.m_makrovChain;
     }

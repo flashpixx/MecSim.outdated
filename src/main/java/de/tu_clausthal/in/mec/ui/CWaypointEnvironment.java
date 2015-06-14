@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
@@ -42,6 +41,9 @@ import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -82,19 +84,19 @@ public class CWaypointEnvironment
      */
     protected final Map<String, Object> m_defaultProperties = new HashMap<String, Object>()
     {{
-            put("waypointtype", EWayPointType.CarWaypointRandom.m_name);
-            put("radius", 0.75);
-            put("factory", EFactoryType.DefaultCarFactory.m_name);
-            put("agentprogram", "");
-            put("generator", EDistributionType.Normal.m_name);
-            put("carcount", 1);
-            put("generatorinput1", 5);
-            put("generatorinput2", 1);
+            put( "waypointtype", EWayPointType.CarWaypointRandom.m_name );
+            put( "radius", 0.75 );
+            put( "factory", EFactoryType.DefaultCarFactory.m_name );
+            put( "agentprogram", "" );
+            put( "generator", EDistributionType.Normal.m_name );
+            put( "carcount", 1 );
+            put( "generatorinput1", 5 );
+            put( "generatorinput2", 1 );
             put( "speedprob", EDistributionType.Normal.m_name );
             put( "speedprobinput1", 50 );
             put( "speedprobinput2", 25 );
             put( "maxspeedprob", EDistributionType.Normal.m_name );
-            put( "maxspeedprobinput1", 250);
+            put( "maxspeedprobinput1", 250 );
             put( "maxspeedprobinput2", 50 );
             put( "accprob", EDistributionType.Normal.m_name );
             put( "accprobinput1", 20 );
@@ -102,13 +104,13 @@ public class CWaypointEnvironment
             put( "decprob", EDistributionType.Normal.m_name );
             put( "decprobinput1", 20 );
             put( "decprobinput2", 5 );
-            put( "lingerprobinput1", 0);
-            put( "lingerprobinput2", 1);
-            put("name", CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ));
-            put("red", 255);
-            put("green", 0);
-            put("blue", 0);
-    }};
+            put( "lingerprobinput1", 0 );
+            put( "lingerprobinput2", 1 );
+            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ) );
+            put( "red", 255 );
+            put( "green", 0 );
+            put( "blue", 0 );
+        }};
 
 
     /**
@@ -131,6 +133,7 @@ public class CWaypointEnvironment
 
     /**
      * method to get a list of all waypoints an properties
+     *
      * @return
      */
     private final List<Map<String, Object>> web_static_listwaypoints()
@@ -139,23 +142,27 @@ public class CWaypointEnvironment
 
         List<Map<String, Object>> l_waypointList = new ArrayList<>();
 
-        for( IWayPoint l_wayPoint : l_waypointLayer){
+        for ( IWayPoint l_wayPoint : l_waypointLayer )
+        {
             HashMap<String, Object> l_properties = new HashMap<>();
 
             Color l_color = l_wayPoint.getColor();
-            l_properties.put( "redValue", l_color.getRed());
-            l_properties.put( "greenValue", l_color.getGreen());
+            l_properties.put( "redValue", l_color.getRed() );
+            l_properties.put( "greenValue", l_color.getGreen() );
             l_properties.put( "blueValue", l_color.getBlue() );
             l_properties.put( "id", l_wayPoint.toString() );
             l_properties.put( "name", l_wayPoint.getName() );
             l_properties.put( "lat", l_wayPoint.getPosition().getLatitude() );
             l_properties.put( "long", l_wayPoint.getPosition().getLongitude() );
 
-            if(l_wayPoint instanceof CCarRandomWayPoint){
-                l_properties.put( "type", CCommon.getResourceString( this, "waypointrandomtype" ));
+            if ( l_wayPoint instanceof CCarRandomWayPoint )
+            {
+                l_properties.put( "type", CCommon.getResourceString( this, "waypointrandomtype" ) );
                 l_properties.put( "editable", false );
-            }else{
-                l_properties.put( "type", CCommon.getResourceString( this, "waypointtargettype" ));
+            }
+            else
+            {
+                l_properties.put( "type", CCommon.getResourceString( this, "waypointtargettype" ) );
                 l_properties.put( "editable", true );
             }
 
@@ -166,49 +173,41 @@ public class CWaypointEnvironment
     }
 
     /**
-     * method to get the makrov chain
      * @param p_data
      * @return
      */
-    private final IPathWayPoint.CMakrovChain web_static_getmakrovchain( final Map<String, Object> p_data )
+    private final List<Triple<String, String, List<Pair<String, Double>>>> web_static_getmakrovchain( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "waypoint" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
 
+
         final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
         final String l_waypoint = String.valueOf( p_data.get( "waypoint" ) );
+        final List<Triple<String, String, List<Pair<String, Double>>>> l_return = new ArrayList<>();
 
-        for ( final IWayPoint<ICar> l_item : l_layer ){
-            if(l_item.toString().equals( l_waypoint))
-                if(l_item instanceof  IPathWayPoint){
+        //get specified waypoint
+        for ( final IWayPoint<ICar> l_item : l_layer )
+        {
+            if ( l_item.toString().equals( l_waypoint ) ){
+                if ( l_item instanceof IPathWayPoint ){
 
-                    //temp adding data to makrov chain for testing purpose
+                    //add makrov chain to return (reference, id , links, costs)
+                    IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_item ).getMakrovChain();
 
-                    IPathWayPoint.CMakrovChain<GeoPosition> l_makrovChain = ( (IPathWayPoint) l_item ).getMakrovChain();
+                    for ( final Map.Entry<IWayPoint, Map<IWayPoint, MutablePair<Double, Double>>> l_node : l_makrovChain.entrySet() )
+                    {
+                        List<Pair<String, Double>> l_edges = new ArrayList<>();
+                        for ( Map.Entry<IWayPoint, MutablePair<Double, Double>> l_edge : l_node.getValue().entrySet() )
+                            l_edges.add( new MutablePair<String, Double>( l_edge.getKey().toString(), l_edge.getValue().getRight() ) );
 
-                    GeoPosition l_node1 = new GeoPosition( 1.0, 2.0 );
-                    GeoPosition l_node2 = new GeoPosition( 2.0, 3.0 );
-                    GeoPosition l_node3 = new GeoPosition( 3.0, 4.0 );
-                    GeoPosition l_node4 = new GeoPosition( 4.0, 5.0 );
-                    GeoPosition l_node5 = new GeoPosition( 5.0, 6.0 );
-
-                    l_makrovChain.addEdge( l_node1, l_node3, 1.0 );
-                    l_makrovChain.addEdge( l_node1, l_node4, 2.0 );
-                    l_makrovChain.addEdge( l_node1, l_node5, 3.0 );
-
-                    l_makrovChain.addEdge( l_node2, l_node3, 1.0 );
-                    l_makrovChain.addEdge( l_node2, l_node4, 2.0 );
-                    l_makrovChain.addEdge( l_node2, l_node5, 3.0 );
-
-                    l_makrovChain.addEdge( l_node3, l_node1, 1.0 );
-                    l_makrovChain.addEdge( l_node3, l_node4, 2.0 );
-
-                    return l_makrovChain;
+                        l_return.add( new MutableTriple<>( l_node.getKey().toString(), l_node.getKey().getName(), l_edges ) );
+                    }
                 }
-
+            }
         }
 
-        return null;
+        return l_return;
     }
 
     /**
@@ -233,14 +232,15 @@ public class CWaypointEnvironment
     {
 
         Map<String, Map<String, Object>> l_tools = new HashMap<>();
-        for (Map.Entry<String, CTool> l_tool : m_toolbox.entrySet()) {
+        for ( Map.Entry<String, CTool> l_tool : m_toolbox.entrySet() )
+        {
             Map<String, Object> l_properties = new HashMap<>();
             l_properties.put( "redValue", l_tool.getValue().m_color.getRed() );
             l_properties.put( "greenValue", l_tool.getValue().m_color.getGreen() );
             l_properties.put( "blueValue", l_tool.getValue().m_color.getBlue() );
-            l_properties.put( "deleteable", l_tool.getValue().m_deleteable);
+            l_properties.put( "deleteable", l_tool.getValue().m_deleteable );
 
-            l_tools.put(l_tool.getKey(), l_properties);
+            l_tools.put( l_tool.getKey(), l_properties );
         }
 
         return l_tools;
@@ -253,15 +253,18 @@ public class CWaypointEnvironment
      */
     private final Map<String, Map<String, Object>> web_static_createtool( final Map<String, Object> p_data )
     {
-        for(String l_parameter : m_defaultProperties.keySet()){
+        for ( String l_parameter : m_defaultProperties.keySet() )
+        {
 
             //check for expected parameters
-            if( !p_data.containsKey( l_parameter )){
+            if ( !p_data.containsKey( l_parameter ) )
+            {
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtoolconfiguration" ) );
             }
 
             //check if tool already exist
-            if(m_toolbox.containsKey( p_data.get( "name" ) )){
+            if ( m_toolbox.containsKey( p_data.get( "name" ) ) )
+            {
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
             }
         }
@@ -277,7 +280,7 @@ public class CWaypointEnvironment
         l_properties.put( "redValue", l_newTool.m_color.getRed() );
         l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
         l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
-        l_properties.put( "deleteable", l_newTool.m_deleteable);
+        l_properties.put( "deleteable", l_newTool.m_deleteable );
 
         l_tools.put( l_newTool.m_name, l_properties );
 
@@ -292,12 +295,13 @@ public class CWaypointEnvironment
      */
     private final boolean web_static_deletetool( final Map<String, Object> p_data )
     {
-        if(!p_data.containsKey( "toolname" ))
+        if ( !p_data.containsKey( "toolname" ) )
             return false;
 
         String l_toolname = String.valueOf( p_data.get( "toolname" ) );
 
-        if(m_toolbox.containsKey( l_toolname ) && !l_toolname.equals( CCommon.getResourceString( this, "defaulttoolname" ) )){
+        if ( m_toolbox.containsKey( l_toolname ) && !l_toolname.equals( CCommon.getResourceString( this, "defaulttoolname" ) ) )
+        {
             m_selectedTool = m_toolbox.get( CCommon.getResourceString( this, "defaulttoolname" ) );
             m_toolbox.remove( l_toolname );
             return true;
@@ -315,7 +319,7 @@ public class CWaypointEnvironment
     {
         List<String> l_waypointtypes = new ArrayList<>();
 
-        for( final EWayPointType l_waypoint : EWayPointType.values())
+        for ( final EWayPointType l_waypoint : EWayPointType.values() )
             l_waypointtypes.add( l_waypoint.m_name );
 
         return l_waypointtypes;
@@ -330,7 +334,7 @@ public class CWaypointEnvironment
     {
         Map<String, Boolean> l_factories = new HashMap<>();
 
-        for( final EFactoryType l_factory : EFactoryType.values())
+        for ( final EFactoryType l_factory : EFactoryType.values() )
             l_factories.put( l_factory.m_name, l_factory.m_requireAgentProgram );
 
         return l_factories;
@@ -345,7 +349,7 @@ public class CWaypointEnvironment
     {
         List<String> l_distributions = new ArrayList<>();
 
-        for( final EDistributionType l_distribution : EDistributionType.values())
+        for ( final EDistributionType l_distribution : EDistributionType.values() )
             l_distributions.add( l_distribution.m_name );
 
         return l_distributions;
@@ -411,6 +415,7 @@ public class CWaypointEnvironment
 
         /**
          * ctor
+         *
          * @param p_name
          * @param p_requireAgentProgram
          */
@@ -422,6 +427,7 @@ public class CWaypointEnvironment
 
         /**
          * method to get factory type by name
+         *
          * @param p_name
          * @return
          */
@@ -453,6 +459,7 @@ public class CWaypointEnvironment
 
         /**
          * ctor
+         *
          * @param p_name
          */
         private EDistributionType( final String p_name )
@@ -462,6 +469,7 @@ public class CWaypointEnvironment
 
         /**
          * method to get distribution type by name
+         *
          * @param p_name
          * @return
          */
@@ -588,19 +596,24 @@ public class CWaypointEnvironment
 
         /**
          * ctor
+         *
          * @param p_parameter
          */
-        protected CTool( final Map<String, Object> p_parameter){
+        protected CTool( final Map<String, Object> p_parameter )
+        {
 
             int l_redValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "red" ) ) );
             int l_greenValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "green" ) ) );
             int l_blueValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "blue" ) ) );
 
-            this.m_wayPointType = EWayPointType.getWaypointTypeByName( String.valueOf( p_parameter.get( "waypointtype" ) ) );;
+            this.m_wayPointType = EWayPointType.getWaypointTypeByName( String.valueOf( p_parameter.get( "waypointtype" ) ) );
+            ;
             this.m_radius = Double.parseDouble( String.valueOf( p_parameter.get( "radius" ) ) );
-            this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );;
+            this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );
+            ;
             this.m_agentProgram = String.valueOf( p_parameter.get( "agentprogram" ) );
-            this.m_generatorType = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "generator" ) ) );;
+            this.m_generatorType = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "generator" ) ) );
+            ;
             this.m_carcount = Integer.parseInt( String.valueOf( p_parameter.get( "carcount" ) ) );
             this.m_generatorInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput1" ) ) );
             this.m_generatorInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput2" ) ) );
@@ -619,7 +632,7 @@ public class CWaypointEnvironment
             this.m_decProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "decprobinput2" ) ) );
             this.m_lingerProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput1" ) ) );
             this.m_lingerProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput2" ) ) );
-            this.m_color = new Color(l_redValue, l_greenValue, l_blueValue);
+            this.m_color = new Color( l_redValue, l_greenValue, l_blueValue );
             this.m_name = (String) p_parameter.get( "name" );
             this.m_deleteable = m_name.equals( m_defaultProperties.get( "name" ) ) ? false : true;
         }
@@ -632,7 +645,8 @@ public class CWaypointEnvironment
          */
         protected final IWayPointBase getWaypoint( GeoPosition p_position )
         {
-            switch(m_wayPointType){
+            switch ( m_wayPointType )
+            {
                 case CarWaypointRandom:
                     return new CCarRandomWayPoint(
                             p_position,
@@ -640,7 +654,10 @@ public class CWaypointEnvironment
                             this.getFactory(),
                             m_radius,
                             m_color,
-                            CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+                            CCommon.getResourceString( this, "defaultwaypointname" ) + CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped(
+                                    "Car WayPoints"
+                            ).size()
+                    );
 
                 case CayWaypointPath:
                     return new CCarPathWayPoint(
@@ -648,7 +665,10 @@ public class CWaypointEnvironment
                             this.getGenerator(),
                             this.getFactory(),
                             m_color,
-                            CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+                            CCommon.getResourceString( this, "defaultwaypointname" ) + CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped(
+                                    "Car WayPoints"
+                            ).size()
+                    );
 
                 default:
                     return new CCarRandomWayPoint(
@@ -657,7 +677,10 @@ public class CWaypointEnvironment
                             this.getFactory(),
                             m_radius,
                             m_color,
-                            CCommon.getResourceString( this, "defaultwaypointname" )+CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size() );
+                            CCommon.getResourceString( this, "defaultwaypointname" ) + CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped(
+                                    "Car WayPoints"
+                            ).size()
+                    );
             }
         }
 
@@ -677,8 +700,8 @@ public class CWaypointEnvironment
                             getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
                             getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
                             getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            new UniformRealDistribution(m_lingerProbInput1, m_lingerProbInput2)
-                            );
+                            new UniformRealDistribution( m_lingerProbInput1, m_lingerProbInput2 )
+                    );
 
                 case DefaultAgentCarFactory:
                     return new CDistributionAgentCarFactory(
@@ -730,15 +753,16 @@ public class CWaypointEnvironment
 
         /**
          * method which returns a distribution with settings from the ui
+         *
          * @param p_distribution
          * @param p_distributionInput1
          * @param p_distributionInput2
          * @return
          */
-        protected final AbstractRealDistribution getDistribution(EDistributionType p_distribution, double p_distributionInput1, double p_distributionInput2)
+        protected final AbstractRealDistribution getDistribution( EDistributionType p_distribution, double p_distributionInput1, double p_distributionInput2 )
         {
 
-            switch( p_distribution )
+            switch ( p_distribution )
             {
                 case Uniform:
                     return new UniformRealDistribution( p_distributionInput1, p_distributionInput2 );

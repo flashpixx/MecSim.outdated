@@ -169,6 +169,7 @@ var SourcePanel = ( function (px_module) {
         //dom elements (no labels)
         SourcePanel.settings.dom.targetingWidget                 = $('#mecsim_source_targetingWidget');
         SourcePanel.settings.dom.targetingTable                  = $('#mecsim_source_targetingTable');
+        SourcePanel.settings.dom.currentWaypoint                 = $("#mecsim_source_currentWaypoint");
         SourcePanel.settings.dom.wizardWidget                    = $("#mecsim_source_wizardWidget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
@@ -637,43 +638,52 @@ var SourcePanel = ( function (px_module) {
 
                 $(".mecsim_source_addButton").on("click", function(event){
                     SourcePanel.settings.obj.graphEditor.addNode({id: event.target.value.split("#")[0], reflexive: false, geo: [event.target.value.split("#")[1], event.target.value.split("#")[2]]});
+                    console.log(SourcePanel.settings.obj.graphEditor);
                 });
 
                 $(".mecsim_source_editButton").on("click", function(event){
+                    SourcePanel.loadMakrovChain(event.target.value);
+                });
+            }
+        });
+    };
 
-                    //maybe get once ?
-                    $.ajax({
-                        url     : "/cwaypointenvironment/getmakrovchain",
-                        data    : {waypoint : event.target.value},
-                        success : function( px_data ){
+    //load a special makrov chain
+    px_module.loadMakrovChain = function(p_waypoint){
+        $.ajax({
+            url     : "/cwaypointenvironment/getmakrovchain",
+            data    : {waypoint : p_waypoint},
+            success : function( px_data ){
 
-                            var nodes = [];
-                            var lastNodeId = 0;
-                            for(var l_node in px_data){
-                                var node = {id: lastNodeId++, reflexive: false, geo: l_node};
-                                nodes.push(node);
-                            }
+                function getNodeByRef(p_nodes, p_ref){
+                    for(var l_node in p_nodes){
+                        if(p_nodes[l_node].reference === p_ref){
+                            return p_nodes[l_node];
+                        }
+                    }
+                }
 
-                            function getNodeByGeo(p_nodes, p_geo){
-                                for(var l_test in p_nodes){
-                                    if(nodes[l_test].geo === p_geo)
-                                        return nodes[l_test];
-                                }
-                            }
+                var nodes = [];
+                px_data.forEach(function(l_node){
+                    //split for id (in further commits it will be stored seperatly)
+                    var number = l_node.middle.split("#").slice(-1).pop();
+                    var node = {id : number, reference : l_node.left};
+                    nodes.push(node);
+                });
 
-                            var links = [];
-                            for(var l_source in px_data){
-                                for(var l_target in px_data[l_source]){
-                                    var link = {source: getNodeByGeo(nodes, l_source), target: getNodeByGeo(nodes, l_target), left: false, right: true };
-                                    links.push(link);
-                                }
-                            }
-
-                            SourcePanel.settings.obj.graphEditor.reload({nodes : nodes, links : links, lastNodeId : lastNodeId});
-                            $("#mecsim_source_currentWaypoint").text(event.target.value);
+                var links = [];
+                px_data.forEach(function(l_node){
+                    l_node.right.forEach(function(l_edge){
+                        for(var l_ref in l_edge){
+                            var test = getNodeByRef(nodes, l_node.left);
+                            var link = {source: getNodeByRef(nodes, l_node.left), target: getNodeByRef(nodes, l_ref), left: false, right: true };
+                            links.push(link);
                         }
                     });
                 });
+
+                SourcePanel.settings.obj.graphEditor.reload({nodes : nodes, links : links});
+                SourcePanel.settings.dom.currentWaypoint.text(event.target.value);
             }
         });
     };

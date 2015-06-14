@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
@@ -71,6 +72,10 @@ public class CWaypointEnvironment
      * singelton instance
      */
     private static final CWaypointEnvironment s_instance = new CWaypointEnvironment();
+    /**
+     * waypoint layer to edit makrov chain
+     */
+    private static final CCarWayPointLayer m_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
     /**
      * selected tool for the waypoint layer
      */
@@ -132,6 +137,22 @@ public class CWaypointEnvironment
     }
 
     /**
+     * get waypoint by reference
+     * @param p_reference
+     * @return
+     */
+    public final static IWayPoint getWaypointByReference( final String p_reference)
+    {
+        for ( final IWayPoint<ICar> l_item : m_waypointLayer ){
+            if ( l_item.toString().equals( p_reference ) ){
+                return l_item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * method to get a list of all waypoints an properties
      *
      * @return
@@ -182,32 +203,43 @@ public class CWaypointEnvironment
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
 
 
-        final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-        final String l_waypoint = String.valueOf( p_data.get( "waypoint" ) );
         final List<Triple<String, String, List<Pair<String, Double>>>> l_return = new ArrayList<>();
+        IWayPoint l_waypoint = getWaypointByReference( String.valueOf( p_data.get( "waypoint" ) ) );
 
-        //get specified waypoint
-        for ( final IWayPoint<ICar> l_item : l_layer )
-        {
-            if ( l_item.toString().equals( l_waypoint ) ){
-                if ( l_item instanceof IPathWayPoint ){
+        if(l_waypoint instanceof IPathWayPoint){
+            IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
 
-                    //add makrov chain to return (reference, id , links, costs)
-                    IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_item ).getMakrovChain();
+            //build makrov result
+            for ( final Map.Entry<IWayPoint, Map<IWayPoint, MutablePair<Double, Double>>> l_node : l_makrovChain.entrySet() ) {
+                List<Pair<String, Double>> l_edges = new ArrayList<>();
+                for ( Map.Entry<IWayPoint, MutablePair<Double, Double>> l_edge : l_node.getValue().entrySet() )
+                    l_edges.add( new MutablePair<String, Double>( l_edge.getKey().toString(), l_edge.getValue().getRight() ) );
 
-                    for ( final Map.Entry<IWayPoint, Map<IWayPoint, MutablePair<Double, Double>>> l_node : l_makrovChain.entrySet() )
-                    {
-                        List<Pair<String, Double>> l_edges = new ArrayList<>();
-                        for ( Map.Entry<IWayPoint, MutablePair<Double, Double>> l_edge : l_node.getValue().entrySet() )
-                            l_edges.add( new MutablePair<String, Double>( l_edge.getKey().toString(), l_edge.getValue().getRight() ) );
-
-                        l_return.add( new MutableTriple<>( l_node.getKey().toString(), l_node.getKey().getName(), l_edges ) );
-                    }
-                }
+                l_return.add( new MutableTriple<>( l_node.getKey().toString(), l_node.getKey().getName(), l_edges ) );
             }
         }
 
         return l_return;
+    }
+
+    /**
+     *
+     * @param p_data
+     */
+    private final void web_static_addnode( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "waypoint" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+        if ( !p_data.containsKey( "node" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+
+        IWayPoint l_waypoint = getWaypointByReference( String.valueOf( p_data.get( "waypoint" ) ) );
+        IWayPoint l_node = getWaypointByReference( String.valueOf( p_data.get( "node" ) ) );
+
+        if(l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_node != null){
+            IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
+            l_makrovChain.addNode( l_node );
+        }
     }
 
     /**

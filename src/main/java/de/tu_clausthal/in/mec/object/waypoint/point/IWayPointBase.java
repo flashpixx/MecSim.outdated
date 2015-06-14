@@ -96,21 +96,21 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
             putAll( IWayPointBase.super.inspect() );
         }};
 
-
     /**
-     * ctor - source is a target only
-     *
-     * @param p_position geoposition
+     * ctor for empty waypoints
+     * @param p_position
+     * @param p_color
+     * @param p_name
      */
-    public IWayPointBase( final GeoPosition p_position )
+    public IWayPointBase( final GeoPosition p_position, final Color p_color, final String p_name  )
     {
         m_position = p_position;
         m_generator = null;
         m_factory = null;
-        m_name = CCommon.getResourceString( this, "dummywaypoint" );
-        m_color = Color.CYAN;
+        m_name = p_name;
+        m_color = p_color;
 
-        m_initializeimage = this.initializeImage( 20, 34, Color.CYAN );
+        m_initializeimage = this.initializeImage( 20, 34, p_color );
         m_scaledimage = m_initializeimage;
     }
 

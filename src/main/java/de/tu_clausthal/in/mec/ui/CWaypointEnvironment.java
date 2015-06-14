@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.ui;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
@@ -37,6 +36,7 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
+import de.tu_clausthal.in.mec.object.waypoint.point.CDummyWaypoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
@@ -52,7 +52,6 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,13 +138,16 @@ public class CWaypointEnvironment
 
     /**
      * get waypoint by reference
+     *
      * @param p_reference
      * @return
      */
-    public final static IWayPoint getWaypointByReference( final String p_reference)
+    public final static IWayPoint getWaypointByReference( final String p_reference )
     {
-        for ( final IWayPoint<ICar> l_item : m_waypointLayer ){
-            if ( l_item.toString().equals( p_reference ) ){
+        for ( final IWayPoint<ICar> l_item : m_waypointLayer )
+        {
+            if ( l_item.toString().equals( p_reference ) )
+            {
                 return l_item;
             }
         }
@@ -207,11 +209,13 @@ public class CWaypointEnvironment
         final List<Triple<String, String, List<Pair<String, Double>>>> l_return = new ArrayList<>();
         IWayPoint l_waypoint = getWaypointByReference( String.valueOf( p_data.get( "waypoint" ) ) );
 
-        if(l_waypoint instanceof IPathWayPoint){
+        if ( l_waypoint instanceof IPathWayPoint )
+        {
             IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
 
             //build makrov result
-            for ( final Map.Entry<IWayPoint, Map<IWayPoint, MutablePair<Double, Double>>> l_node : l_makrovChain.entrySet() ) {
+            for ( final Map.Entry<IWayPoint, Map<IWayPoint, MutablePair<Double, Double>>> l_node : l_makrovChain.entrySet() )
+            {
                 List<Pair<String, Double>> l_edges = new ArrayList<>();
                 for ( Map.Entry<IWayPoint, MutablePair<Double, Double>> l_edge : l_node.getValue().entrySet() )
                     l_edges.add( new MutablePair<String, Double>( l_edge.getKey().toString(), l_edge.getValue().getRight() ) );
@@ -224,7 +228,6 @@ public class CWaypointEnvironment
     }
 
     /**
-     *
      * @param p_data
      */
     private final void web_static_addnode( final Map<String, Object> p_data )
@@ -237,17 +240,17 @@ public class CWaypointEnvironment
         IWayPoint l_waypoint = getWaypointByReference( String.valueOf( p_data.get( "waypoint" ) ) );
         IWayPoint l_node = getWaypointByReference( String.valueOf( p_data.get( "node" ) ) );
 
-        if(l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_node != null){
+        if ( l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_node != null )
+        {
             IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
             l_makrovChain.addNode( l_node );
         }
     }
 
     /**
-     *
      * @param p_data
      */
-    private final void web_static_addlink( final Map<String, Object> p_data)
+    private final void web_static_addlink( final Map<String, Object> p_data )
     {
         if ( !p_data.containsKey( "waypoint" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
@@ -262,7 +265,8 @@ public class CWaypointEnvironment
         IWayPoint l_start = getWaypointByReference( String.valueOf( p_data.get( "start" ) ) );
         IWayPoint l_end = getWaypointByReference( String.valueOf( p_data.get( "end" ) ) );
 
-        if(l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_start != null && l_end != null){
+        if ( l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_start != null && l_end != null )
+        {
             IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
             l_makrovChain.addEdge( l_start, l_end, Double.parseDouble( String.valueOf( p_data.get( "weight" ) ) ) );
         }
@@ -418,6 +422,7 @@ public class CWaypointEnvironment
      */
     protected enum EWayPointType
     {
+        DummyWaypoint( CCommon.getResourceString( EWayPointType.class, "dummywaypoint" ) ),
         CarWaypointRandom( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
         CayWaypointPath( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
 
@@ -705,6 +710,12 @@ public class CWaypointEnvironment
         {
             switch ( m_wayPointType )
             {
+                case DummyWaypoint:
+                    return new CDummyWaypoint(
+                            p_position,
+                            m_color,
+                            CCommon.getResourceString( this, "defaultwaypointname" ) + CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped("Car WayPoints" ).size()  );
+
                 case CarWaypointRandom:
                     return new CCarRandomWayPoint(
                             p_position,

@@ -92,13 +92,7 @@ var SourcePanel = ( function (px_module) {
 
                     //create table content
                     SourcePanel.createWaypointList();
-                    SourcePanel.settings.obj.graphEditor = new GraphEditor(
-                        "#mecsim_source_waypointGraphEditor",
-                        {
-                            onAddNode : SourcePanel.onAddNode,
-                            onAddLink : SourcePanel.onAddLink
-                        }
-                    );
+                    SourcePanel.settings.obj.graphEditor = new GraphEditor("#mecsim_source_waypointGraphEditor",{ onAddLink : SourcePanel.onAddLink});
 
                     //create wizard widget
                     SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
@@ -606,15 +600,12 @@ var SourcePanel = ( function (px_module) {
                 //brint data into correct table format
                 p_data.forEach(function(entry){
                     var l_waypointNumber = entry.name.split("#").slice(-1).pop();
+                    var editValue = entry.editable ? entry.id : "";
+                    var addValue = entry.id + "#" + entry.name;
                     entry.icon = "<span class='mecsim_source_toolIcon'>" + l_waypointNumber + "</span><span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
-                    entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
-                    entry.type = entry.type;
-                    entry.edit = "";
-                    if(entry.editable)
-                        entry.edit = "<button class='mecsim_source_editButton' value="+entry.id+">"+ SourcePanel.settings.labels.configuretarget +"</button>";
-
-                    var l_waypointProp = l_waypointNumber + "#" + entry.lat + "#" + entry.long;
-                    entry.add = "<button class='mecsim_source_addButton' value="+l_waypointProp+">"+ SourcePanel.settings.labels.addtarget +"</button>";
+                    entry.name = "<textarea class='mecsim_source_targetingName'>" + entry.name + "</textarea>";
+                    entry.edit = entry.editable ? "<button class='mecsim_source_editButton' value=" + editValue + ">" + SourcePanel.settings.labels.configuretarget + "</button>" : "";
+                    entry.add = "<button class='mecsim_source_addButton' value=" + addValue + ">" + SourcePanel.settings.labels.addtarget + "</button>";
                 });
 
                 //create waypoint table
@@ -642,9 +633,7 @@ var SourcePanel = ( function (px_module) {
                     ]
                 });
 
-                $(".mecsim_source_addButton").on("click", function(event){
-                    SourcePanel.settings.obj.graphEditor.addNode({id: event.target.value.split("#")[0], reflexive: false, geo: [event.target.value.split("#")[1], event.target.value.split("#")[2]]});
-                });
+                $(".mecsim_source_addButton").on("click", SourcePanel.addNode);
 
                 $(".mecsim_source_editButton").on("click", function(event){
                     SourcePanel.loadMakrovChain(event.target.value);
@@ -688,14 +677,28 @@ var SourcePanel = ( function (px_module) {
                 });
 
                 SourcePanel.settings.obj.graphEditor.reload({nodes : nodes, links : links});
-                SourcePanel.settings.dom.currentWaypoint.text(event.target.value);
+                SourcePanel.settings.dom.currentWaypoint.text(p_waypoint);
+                SourcePanel.settings.obj.currentWaypoint = p_waypoint;
             }
         });
     };
 
-    //will be called when a node was added
-    px_module.onAddNode = function(node){
-        console.log(node);
+    //add special node
+    px_module.addNode = function(event){
+        var l_ref = event.target.value.split("#")[0];
+        var l_id = event.target.value.split("#")[2];
+        SourcePanel.settings.obj.graphEditor.addNode({id: l_id, reflexive: false, ref: l_ref});
+
+        $.ajax({
+            url     : "/cwaypointenvironment/addnode",
+            data    : {
+                "waypoint" : SourcePanel.settings.obj.currentWaypoint,
+                "node"     : l_ref
+            },
+            success : function( px_data ){
+                console.log("success");
+            }
+        });
     };
 
     //will be called when a link was added

@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;

@@ -71,9 +71,9 @@ MASEditor.prototype = Object.create(Pane.prototype);
 MASEditor.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
-        dialog  : this.generateSubID("dialog"),
-        content : this.generateSubID("text"),
-        title   : "Agent Information"
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("content"),
+        title     : "Agent Action"
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -125,7 +125,22 @@ MASEditor.prototype.afterDOMAdded = function()
 
     // bind button action
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
-        console.log("new agent");
+
+
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            width   : "auto",
+            modal   : true,
+            buttons : {
+
+                Create : function() {
+                    jQuery(this).dialog("close");
+                },
+
+                Cancel : function() { jQuery(this).dialog("close"); }
+
+            }
+        });
+
     });
 
     jQuery( this.generateSubID("remove", "#") ).button().click( function() {

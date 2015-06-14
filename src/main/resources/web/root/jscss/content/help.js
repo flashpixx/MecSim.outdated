@@ -48,24 +48,24 @@ Help.prototype = Object.create(Pane.prototype);
 **/
 Help.prototype.getGlobalContent = function()
 {
-    return '<div id = "' + this.generateSubID("dialog") + '" >' +
-           '<p id = "'   + this.generateSubID("text")   + '" >' +
-           '<a id = "'   + this.generateSubID("name")   + '" ></a >' +
-           '<br /><br />' +
-           '<label for = "' + this.generateSubID("license") + '" >License: </label >' +
-           '<a id = "'      + this.generateSubID("license") + '" ></a >' +
-           '<br />' +
-           '<label for = "' + this.generateSubID("buildversion") + '" >Version: </label >' +
-           '<a id = "'      + this.generateSubID("buildversion") + '" ></a >' +
-           '<br />' +
-           '<label for = "' + this.generateSubID("buildnumber") + '" >Buildnumber: </label >' +
-           '<a id = "'      + this.generateSubID("buildnumber") + '" ></a >' +
-           '<br />' +
-           '<label for = "' + this.generateSubID("buildcommit") + '" >Buildcommit: </label >' +
-           '<a id = "'      + this.generateSubID("buildcommit") + '" ></a >' +
-           '</p >' +
-           '</div >' +
-           Pane.prototype.getGlobalContent.call(this);
+    return Layout.dialog({
+
+        id      : this.generateSubID("dialog"),
+        content : '<a id = "'   + this.generateSubID("name")   + '" ></a >' +
+                  '<br /><br />' +
+                  '<label for = "' + this.generateSubID("license") + '" >License: </label >' +
+                  '<a id = "'      + this.generateSubID("license") + '" ></a >' +
+                  '<br />' +
+                  '<label for = "' + this.generateSubID("buildversion") + '" >Version: </label >' +
+                  '<a id = "'      + this.generateSubID("buildversion") + '" ></a >' +
+                  '<br />' +
+                  '<label for = "' + this.generateSubID("buildnumber") + '" >Buildnumber: </label >' +
+                  '<a id = "'      + this.generateSubID("buildnumber") + '" ></a >' +
+                  '<br />' +
+                  '<label for = "' + this.generateSubID("buildcommit") + '" >Buildcommit: </label >' +
+                  '<a id = "'      + this.generateSubID("buildcommit") + '" ></a >'
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
 }
 
 

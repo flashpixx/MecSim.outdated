@@ -49,9 +49,9 @@ Layer.prototype = Object.create(Pane.prototype);
 Layer.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
-        dialog  : this.generateSubID("dialog"),
-        content : this.generateSubID("text"),
-        title   : "Information"
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("text"),
+        title     : "Information"
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }

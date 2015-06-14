@@ -669,7 +669,6 @@ var SourcePanel = ( function (px_module) {
                 px_data.forEach(function(l_node){
                     l_node.right.forEach(function(l_edge){
                         for(var l_ref in l_edge){
-                            var test = getNodeByRef(nodes, l_node.left);
                             var link = {source: getNodeByRef(nodes, l_node.left), target: getNodeByRef(nodes, l_ref), left: false, right: true };
                             links.push(link);
                         }
@@ -704,7 +703,7 @@ var SourcePanel = ( function (px_module) {
     //will be called when a link was added
     px_module.onAddLink = function(link){
         var source = link.source.reference;
-        var target = link.source.reference;
+        var target = link.target.reference;
 
         $.ajax({
             url     : "/cwaypointenvironment/addlink",

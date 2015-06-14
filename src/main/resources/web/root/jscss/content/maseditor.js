@@ -126,11 +126,17 @@ MASEditor.prototype.afterDOMAdded = function()
     // bind new-agent button action
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
 
-        // set content
+        // set dialog content
         jQuery(self.generateSubID("content", "#")).empty().append(
+            Layout.select({
 
+                id      : self.generateSubID("agenttype"),
+                label   : "Agent Type",
+                options : Object.keys( self.mo_configuration )
 
+            })
         );
+        jQuery(self.generateSubID("agenttype", "#")).selectmenu();
 
 
         // open dialog

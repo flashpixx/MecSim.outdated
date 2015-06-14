@@ -100,7 +100,7 @@ Help.prototype.afterDOMAdded = function()
 
 
     // --- create about button & bind action to the button ---------------------------
-    jQuery(self.generateSubID("about", "#")).button().click( function() {
+    jQuery(this.generateSubID("about", "#")).button().click( function() {
 
         // click reads JSON data
         jQuery.getJSON( "/cconfiguration/get", function( po_data ) {

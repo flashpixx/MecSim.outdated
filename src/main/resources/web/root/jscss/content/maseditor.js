@@ -59,9 +59,6 @@ function MASEditor( pc_id, pc_name, pa_panel )
 
     });
 
-
-    // read agents on initialisation
-    this.readAgents();
 }
 
 /** inheritance call **/
@@ -69,9 +66,23 @@ MASEditor.prototype = Object.create(Pane.prototype);
 
 
 /**
+ * @Overwrite
+**/
+MASEditor.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        dialog  : this.generateSubID("dialog"),
+        content : this.generateSubID("text"),
+        title   : "Agent Information"
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
+
+/**
  * @Overload
 **/
-Simulation.prototype.getGlobalCSS = function()
+MASEditor.prototype.getGlobalCSS = function()
 {
     return  ".CodeMirror { border: 1px solid #eee; height: auto; }" + Pane.prototype.getGlobalCSS.call(this);
 }
@@ -82,7 +93,62 @@ Simulation.prototype.getGlobalCSS = function()
 **/
 MASEditor.prototype.getContent = function()
 {
-    return '<span id="' + this.generateSubID("agentlist") + '"></span>' + Pane.prototype.getContent.call(this);
+    return '<span id="' + this.generateSubID("agentlist") + '"></span>' +
+    '<p><button id = "' + this.generateSubID("new") + '" >New Agent</button ></p>' +
+    '<p><button id = "' + this.generateSubID("remove") + '" >Remove Agent</button ></p>' +
+    '<p><button id = "' + this.generateSubID("check") + '" >Check Agent</button ></p>' +
+    Pane.prototype.getContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
+MASEditor.prototype.afterDOMAdded = function()
+{
+    var self = this;
+
+    // bind reading action
+    this.readAgents();
+
+
+    // function to read agent select menu
+    var lx_selectdata = function()
+    {
+        var lo_selected = jQuery( self.generateSubID("agentlist", "#") +" option:selected" );
+        return {
+            value : lo_selected.val(),
+            group : lo_selected.closest("optgroup").attr("label")
+        };
+    }
+
+
+    // bind button action
+    jQuery( this.generateSubID("new", "#") ).button().click( function() {
+        console.log("new agent");
+    });
+
+    jQuery( this.generateSubID("remove", "#") ).button().click( function() {
+        console.log("remove agent");
+    });
+
+    jQuery( this.generateSubID("check", "#") ).button().click( function() {
+
+        var lo = lx_selectdata();
+        MecSim.ajax({
+            url     : self.mo_configuration[lo.group].check,
+            data    : { "name" : lo.value  },
+        }).fail(function( po ) {
+
+            console.log(po);
+
+        }).done(function() {
+
+            console.log("ok");
+
+        });
+
+    });
 }
 
 
@@ -147,7 +213,7 @@ MASEditor.prototype.readAgents = function()
 
             // clear div and add a new select box
             jQuery( self.generateSubID("agentlist", "#") ).empty();
-            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_agents }) ).appendTo( self.generateSubID("agentlist", "#") );
+            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_agents  }) ).appendTo( self.generateSubID("agentlist", "#") );
             jQuery( self.generateSubID("agents", "#") ).selectmenu({
                 change : function( po_event, po_ui ) {
                     self.addTabView();

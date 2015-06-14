@@ -155,9 +155,13 @@ var Layout = (function (px_modul) {
 
         la.push( '<select ' + (po_options.name ? 'name="' + po_options.name + '" ' : "") +  (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );
         jQuery.each( po_options.options, function( pc_key, pa_values ) {
-            la.push( '<optgroup label="' + pc_key + '">' );
+            if (pc_key.length > 0)
+                la.push( '<optgroup label="' + pc_key + '">' );
+
             pa_values.forEach( function( px_item ) { la.push( lx_buildItem(px_item, po_options.value) ); } );
-            la.push( '</optgroup>' );
+
+            if (pc_key.length > 0)
+                la.push( '</optgroup>' );
         });
         la.push("</select>");
 

@@ -292,6 +292,27 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
 
 
 /**
+ * creates a new agent
+ *
+ * @param pc_group option group name
+ * @param pc_agent agent name
+**/
+MASEditor.prototype.createAgent = function( pc_group, pc_agent )
+{
+    MecSim.ajax({
+
+        url     : this.mo_configuration[pc_group].write,
+        data    : { "name" : pc_agent }
+
+    }).fail( function( po_data ) {
+
+        // @todo show error dialog
+
+    });
+}
+
+
+/**
  * returns a deep-copy of the filelist
  *
  * @return array with filelist objects

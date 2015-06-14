@@ -125,10 +125,7 @@ MAS.prototype.afterDOMAdded = function()
 
     // --- Jason mindinspector bind ---------------------------
     jQuery(self.generateSubID("jasonmind", "#")).button().click( function() {
-
-        jQuery(MecSim.ui().content("#")).empty();
-        jQuery(MecSim.ui().content("#")).append( '<iframe id = "mindinspector" class = "template" src = "http://localhost:3272" seamless />' );
-
+        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "mindinspector" class = "template" src = "http://localhost:3272" seamless />' );
     });
 
 

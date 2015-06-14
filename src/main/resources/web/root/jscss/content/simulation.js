@@ -106,9 +106,7 @@ Simulation.prototype.afterDOMAdded = function()
 
     // --- reset runs clear on the log layer ---------------------------
     jQuery(this.generateSubID("reset", "#")).click( function() {
-
         jQuery( MecSim.ui().log("#") ).empty();
-
     });
 
 

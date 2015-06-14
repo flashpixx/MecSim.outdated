@@ -123,10 +123,17 @@ MASEditor.prototype.afterDOMAdded = function()
     }
 
 
-    // bind button action
+    // bind new-agent button action
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
 
+        // set content
+        jQuery(self.generateSubID("content", "#")).empty().append(
 
+
+        );
+
+
+        // open dialog
         jQuery(self.generateSubID("dialog", "#")).dialog({
             width   : "auto",
             modal   : true,
@@ -143,10 +150,14 @@ MASEditor.prototype.afterDOMAdded = function()
 
     });
 
+
+    // bind agent-remove button action
     jQuery( this.generateSubID("remove", "#") ).button().click( function() {
         console.log("remove agent");
     });
 
+
+    // bind agent-check button action
     jQuery( this.generateSubID("check", "#") ).button().click( function() {
 
         var lo = lx_selectdata();

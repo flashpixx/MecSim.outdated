@@ -90,8 +90,7 @@ Inspector.prototype.afterDOMAdded = function()
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
         "onmessage" : function( po_event ) {
 
-            jQuery( self.generateSubID("table", "#") ).empty();
-            jQuery( self.generateSubID("table", "#") ).append( json2table(po_event.data.toJSON()) );
+            jQuery( self.generateSubID("table", "#") ).empty().append( json2table(po_event.data.toJSON()) );
             jQuery( self.generateSubID("dialog", "#") ).dialog("open");
 
         }

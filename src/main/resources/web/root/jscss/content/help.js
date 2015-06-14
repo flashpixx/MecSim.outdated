@@ -138,16 +138,12 @@ Help.prototype.afterDOMAdded = function()
     jQuery(self.generateSubID("userdoc", "#")).button().click( function() {
 
         jQuery.get("/userdoc/", function( px_result ) {
-            jQuery(MecSim.ui().content("#")).empty();
-            jQuery(MecSim.ui().content("#")).append( px_result );
+            jQuery(MecSim.ui().content("#")).empty().append( px_result );
         });
 
     });
 
     jQuery(self.generateSubID("devdoc", "#")).button().click( function() {
-
-        jQuery(MecSim.ui().content("#")).empty();
-        jQuery(MecSim.ui().content("#")).append( '<iframe id = "devdoku" class = "template" src = "/develdoc/" seamless />' );
-
+        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "devdoku" class = "template" src = "/develdoc/" seamless />' );
     });
 }

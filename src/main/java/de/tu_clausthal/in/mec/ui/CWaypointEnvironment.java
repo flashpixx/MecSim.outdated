@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
@@ -51,6 +52,7 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -238,6 +240,29 @@ public class CWaypointEnvironment
         if(l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_node != null){
             IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
             l_makrovChain.addNode( l_node );
+        }
+    }
+
+    private final void web_static_addlink( final Map<String, Object> p_data)
+    {
+        if ( !p_data.containsKey( "waypoint" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+        if ( !p_data.containsKey( "start" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+        if ( !p_data.containsKey( "end" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+        if ( !p_data.containsKey( "weight" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidwaypoint" ) );
+
+        IWayPoint l_waypoint = getWaypointByReference( String.valueOf( p_data.get( "waypoint" ) ) );
+        IWayPoint l_start = getWaypointByReference( String.valueOf( p_data.get( "start" ) ) );
+        IWayPoint l_end = getWaypointByReference( String.valueOf( p_data.get( "end" ) ) );
+
+        if(l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_start != null && l_end != null){
+            IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
+            l_makrovChain.addEdge( l_start, l_end, Double.parseDouble( String.valueOf( p_data.get( "weight" ) ) ) );
+        }else{
+            CLogger.out("fail");
         }
     }
 

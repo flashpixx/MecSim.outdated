@@ -703,7 +703,21 @@ var SourcePanel = ( function (px_module) {
 
     //will be called when a link was added
     px_module.onAddLink = function(link){
-        console.log(link);
+        var source = link.source.reference;
+        var target = link.source.reference;
+
+        $.ajax({
+            url     : "/cwaypointenvironment/addlink",
+            data    : {
+                "waypoint"  : SourcePanel.settings.obj.currentWaypoint,
+                "start"     : source,
+                "end"       : target,
+                "weight"    : 1.0
+            },
+            success : function( px_data ){
+                console.log("success");
+            }
+        });
     };
 
     return px_module;

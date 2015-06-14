@@ -221,6 +221,13 @@ GraphEditor.prototype.reload = function reload(options){
 
 //add node
 GraphEditor.prototype.addNode = function(options){
+
+    //temp disable multiple ids
+    for(var l_node in this._nodes){
+        if(this._nodes[l_node].id === options.id)
+            return;
+    }
+
     //create node
     options = options || {};
     var node        = {};
@@ -373,7 +380,6 @@ GraphEditor.prototype.mousePathDown = function(d){
 GraphEditor.prototype.keydown = function(){
 
     //general
-    d3.event.preventDefault();
     if(this._lastKeyDown !== -1) return;
     this._lastKeyDown = d3.event.keyCode;
 

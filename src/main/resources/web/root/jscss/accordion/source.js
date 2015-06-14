@@ -686,16 +686,13 @@ var SourcePanel = ( function (px_module) {
     px_module.addNode = function(event){
         var l_ref = event.target.value.split("#")[0];
         var l_id = event.target.value.split("#")[2];
-        SourcePanel.settings.obj.graphEditor.addNode({id: l_id, reflexive: false, ref: l_ref});
+        SourcePanel.settings.obj.graphEditor.addNode({id: l_id, reflexive: false, reference: l_ref});
 
         $.ajax({
             url     : "/cwaypointenvironment/addnode",
             data    : {
                 "waypoint" : SourcePanel.settings.obj.currentWaypoint,
                 "node"     : l_ref
-            },
-            success : function( px_data ){
-                console.log("success");
             }
         });
     };
@@ -712,9 +709,6 @@ var SourcePanel = ( function (px_module) {
                 "start"     : source,
                 "end"       : target,
                 "weight"    : 1.0
-            },
-            success : function( px_data ){
-                console.log("success");
             }
         });
     };

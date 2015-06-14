@@ -243,6 +243,10 @@ public class CWaypointEnvironment
         }
     }
 
+    /**
+     *
+     * @param p_data
+     */
     private final void web_static_addlink( final Map<String, Object> p_data)
     {
         if ( !p_data.containsKey( "waypoint" ) )
@@ -261,8 +265,6 @@ public class CWaypointEnvironment
         if(l_waypoint instanceof IPathWayPoint && l_waypoint != null && l_start != null && l_end != null){
             IPathWayPoint.CMakrovChain<IWayPoint> l_makrovChain = ( (IPathWayPoint) l_waypoint ).getMakrovChain();
             l_makrovChain.addEdge( l_start, l_end, Double.parseDouble( String.valueOf( p_data.get( "weight" ) ) ) );
-        }else{
-            CLogger.out("fail");
         }
     }
 

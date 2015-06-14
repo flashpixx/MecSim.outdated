@@ -47,7 +47,7 @@ function MASEditor( pc_id, pc_name, pa_panel )
     this.mc_tabs = "tabs";
 
 
-    // set the configuration for all agent access
+    // --- set the configuration for all agent access ----------------------------------------------------------------------------------------------------------
     this.mo_configuration = {};
 
     ["Jason"].forEach( function(pc_name) {
@@ -58,7 +58,7 @@ function MASEditor( pc_id, pc_name, pa_panel )
         });
 
     });
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 /** inheritance call **/
@@ -112,7 +112,7 @@ MASEditor.prototype.afterDOMAdded = function()
     this.readAgents();
 
 
-    // function to read agent select menu
+    // --- function to read agent select menu ------------------------------------------------------------------------------------------------------------------
     var lx_selectdata = function()
     {
         var lo_selected = jQuery( self.generateSubID("agentlist", "#") +" option:selected" );
@@ -121,9 +121,10 @@ MASEditor.prototype.afterDOMAdded = function()
             group : lo_selected.closest("optgroup").attr("label")
         };
     }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // bind new-agent button action
+    // --- bind new-agent button action ------------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
 
         // set dialog content
@@ -165,15 +166,21 @@ MASEditor.prototype.afterDOMAdded = function()
         });
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // bind agent-remove button action
+    // --- bind agent-remove button action ---------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("remove", "#") ).button().click( function() {
-        console.log("remove agent");
+
+        // set dialog content
+        jQuery(self.generateSubID("content", "#")).empty().append( "<p>Should the agent [] be deleted</p>" );
+
+
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // bind agent-check button action
+    // --- bind agent-check button action ----------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("check", "#") ).button().click( function() {
 
         var lo = lx_selectdata();
@@ -191,6 +198,7 @@ MASEditor.prototype.afterDOMAdded = function()
         });
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 
@@ -204,7 +212,7 @@ MASEditor.prototype.readAgents = function()
 {
     var self = this;
 
-    // create Ajax calls for each agent-language-type
+    // --- create Ajax calls for each agent-language-type ------------------------------------------------------------------------------------------------------
     var la_tasks = [];
     jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
 
@@ -220,9 +228,10 @@ MASEditor.prototype.readAgents = function()
 
         la_tasks.push( lo_task.promise() );
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // collect results of all agent-language-types if all calls are finished
+    // --- collect results of all agent-language-types if all calls are finished -------------------------------------------------------------------------------
     jQuery.when.apply(jQuery, la_tasks).done(
 
         function()
@@ -264,7 +273,7 @@ MASEditor.prototype.readAgents = function()
             });
         }
     );
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 
@@ -345,6 +354,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
         return;
 
 
+    // --- build the tab view ----------------------------------------------------------------------------------------------------------------------------------
     var self = this;
     MecSim.ajax({
 
@@ -386,7 +396,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
         }
 
     });
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 

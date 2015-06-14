@@ -102,6 +102,21 @@ MASEditor.prototype.getContent = function()
 
 
 /**
+ * returns a Json object with the selected agent data
+ *
+ * @return Json object
+**/
+MASEditor.prototype.getSelectedAgent = function()
+{
+    var lo_selected = jQuery( this.generateSubID("agentlist", "#") +" option:selected" );
+    return {
+        value : lo_selected.val(),
+        group : lo_selected.closest("optgroup").attr("label")
+    };
+}
+
+
+/**
  * @Overwrite
 **/
 MASEditor.prototype.afterDOMAdded = function()
@@ -110,18 +125,6 @@ MASEditor.prototype.afterDOMAdded = function()
 
     // bind reading action
     this.readAgents();
-
-
-    // --- function to read agent select menu ------------------------------------------------------------------------------------------------------------------
-    var lx_selectdata = function()
-    {
-        var lo_selected = jQuery( self.generateSubID("agentlist", "#") +" option:selected" );
-        return {
-            value : lo_selected.val(),
-            group : lo_selected.closest("optgroup").attr("label")
-        };
-    }
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     // --- bind new-agent button action ------------------------------------------------------------------------------------------------------------------------
@@ -172,8 +175,26 @@ MASEditor.prototype.afterDOMAdded = function()
     // --- bind agent-remove button action ---------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("remove", "#") ).button().click( function() {
 
+        var lo = self.getSelectedAgent();
+
         // set dialog content
-        jQuery(self.generateSubID("content", "#")).empty().append( "<p>Should the agent [] be deleted</p>" );
+        jQuery( self.generateSubID("content", "#") ).empty().append( "<p>Should the [" + lo.group + "] agent [" + lo.value + "] be deleted?</p>" );
+
+         // open dialog
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            width   : "auto",
+            modal   : true,
+            buttons : {
+
+                Remove : function() {
+                    self.removeAgent( lo.group, lo.value );
+                    jQuery(this).dialog("close");
+                },
+
+                Cancel : function() { jQuery(this).dialog("close"); }
+
+            }
+        });
 
 
     });
@@ -183,7 +204,7 @@ MASEditor.prototype.afterDOMAdded = function()
     // --- bind agent-check button action ----------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("check", "#") ).button().click( function() {
 
-        var lo = lx_selectdata();
+        var lo = self.getSelectedAgent();
         MecSim.ajax({
             url     : self.mo_configuration[lo.group].check,
             data    : { "name" : lo.value  },
@@ -326,6 +347,42 @@ MASEditor.prototype.createAgent = function( pc_group, pc_agent )
 
 
 /**
+ * removes a new agent
+ *
+ * @param pc_group option group name
+ * @param pc_agent agent name
+**/
+MASEditor.prototype.removeAgent = function( pc_group, pc_agent )
+{
+    var self = this;
+
+    MecSim.ajax({
+
+        url     : this.mo_configuration[pc_group].remove,
+        data    : { "name" : pc_agent },
+        success : function() {
+
+            self.readAgents();
+
+            // remove an existing tab
+            var lc_tabid = self.generateSubID( pc_group+"_"+pc_agent );
+            jQuery( "#"+lc_tabid ).remove();
+            jQuery( "#"+lc_tabid+"_nav" ).remove();
+
+            self.mo_tabs.tabs( "refresh" );
+            self.mo_tabs.tabs({ active: 0 });
+
+        }
+
+    }).fail( function( po_data ) {
+
+        // @todo show error dialog
+        //console.log(po_data);
+
+    });
+}
+
+/**
  * returns a deep-copy of the filelist
  *
  * @return array with filelist objects
@@ -365,7 +422,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
 
             // create tab and editor instance
             self.mo_tabs.find( ".ui-tabs-nav" ).append(
-                '<li>' +
+                '<li id="' + lc_tabid + '_nav' + '">' +
                 '<a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +
                 '<span class="ui-icon ui-icon-close" role="presentation"/>' +
                 '</a>' +
@@ -411,8 +468,7 @@ MASEditor.prototype.addTabView = function()
     var self = this;
 
     // create tab div within the DOM
-    jQuery( MecSim.ui().content("#") ).empty();
-    jQuery( MecSim.ui().content("#") ).append( '<div id="' + this.generateSubID(this.mc_tabs) + '"><ul></ul></div>' );
+    jQuery( MecSim.ui().content("#") ).empty().append( '<div id="' + this.generateSubID(this.mc_tabs) + '"><ul></ul></div>' );
     this.mo_tabs = jQuery( this.generateSubID(this.mc_tabs, "#") ).tabs();
 
     // bind close action

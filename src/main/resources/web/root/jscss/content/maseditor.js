@@ -155,6 +155,7 @@ MASEditor.prototype.afterDOMAdded = function()
             buttons : {
 
                 Create : function() {
+                    self.createAgent( jQuery(self.generateSubID("agenttype", "#")).val(), jQuery(self.generateSubID("agentname", "#")).val() );
                     jQuery(this).dialog("close");
                 },
 
@@ -203,7 +204,7 @@ MASEditor.prototype.readAgents = function()
 {
     var self = this;
 
-    // create Ajax calls
+    // create Ajax calls for each agent-language-type
     var la_tasks = [];
     jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
 
@@ -221,7 +222,7 @@ MASEditor.prototype.readAgents = function()
     });
 
 
-    // collect results if all calls are finished
+    // collect results of all agent-language-types if all calls are finished
     jQuery.when.apply(jQuery, la_tasks).done(
 
         function()
@@ -276,7 +277,6 @@ MASEditor.prototype.readAgents = function()
 **/
 MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
 {
-
     MecSim.ajax({
 
         url     : this.mo_configuration[pc_group].write,
@@ -299,14 +299,18 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
 **/
 MASEditor.prototype.createAgent = function( pc_group, pc_agent )
 {
+    var self = this;
+
     MecSim.ajax({
 
-        url     : this.mo_configuration[pc_group].write,
-        data    : { "name" : pc_agent }
+        url     : this.mo_configuration[pc_group].create,
+        data    : { "name" : pc_agent },
+        success : function() { self.readAgents(); }
 
     }).fail( function( po_data ) {
 
         // @todo show error dialog
+        //console.log(po_data);
 
     });
 }

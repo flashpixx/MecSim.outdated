@@ -89,7 +89,7 @@ Configuration.prototype.buildViewAndBind = function()
     jQuery( MecSim.ui().content("#") ).empty();
     var lo_elements = this.buildUIElements();
 
-    // build UI tab panel & popup (with click bind)
+    // --- build UI tab panel & popup (with click bind) --------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("tabs", "#") ).tabs();
     jQuery( this.generateSubID("mappopup", "#") ).webuiPopover({
         title     : "OpenStreetMap Datafile Links",
@@ -101,7 +101,10 @@ Configuration.prototype.buildViewAndBind = function()
                     '<li><a href="http://download.bbbike.org/">BB-Bike</a></li>' +
                     '</ul>'
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+    // --- bindings --------------------------------------------------------------------------------------------------------------------------------------------
     // the binding depends on the ID name of an element,
     // split ID on "config_" and on the second element split on the underscore
     // the array elements return the path of the configuration object
@@ -138,7 +141,7 @@ Configuration.prototype.buildViewAndBind = function()
             self.updateConfiguration( po_event.target.id, jQuery(this).val() );
         });
     });
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 
@@ -157,7 +160,7 @@ Configuration.prototype.buildUIElements = function()
         text     : []
     };
 
-    // add tab structure to the content div and create the jQuery definition
+    // --- add tab structure to the content div and create the jQuery definition -------------------------------------------------------------------------------
     jQuery( MecSim.ui().content("#") ).append(
 
         '<div id="' + this.generateSubID("tabs") + '">' +
@@ -210,6 +213,7 @@ Configuration.prototype.buildUIElements = function()
         '</div>'
 
     );
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     return lo_elements;
 }

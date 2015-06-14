@@ -123,13 +123,14 @@ MAS.prototype.afterDOMAdded = function()
     var self = this;
 
 
-    // --- Jason mindinspector bind ---------------------------
+    // --- Jason mindinspector bind ----------------------------------------------------------------------------------------------------------------------------
     jQuery(self.generateSubID("jasonmind", "#")).button().click( function() {
         jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "mindinspector" class = "template" src = "http://localhost:3272" seamless />' );
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- communication binding to the websocket ---------------------------
+    // --- communication binding to the websocket --------------------------------------------------------------------------------------------------------------
     jQuery(self.generateSubID("communication", "#")).button().click( function() {
 
         jQuery(MecSim.ui().content("#")).empty();
@@ -188,5 +189,6 @@ MAS.prototype.afterDOMAdded = function()
         });
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }

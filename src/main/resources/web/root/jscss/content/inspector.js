@@ -65,6 +65,7 @@ Inspector.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
 
 
+    // --- inner function --------------------------------------------------------------------------------------------------------------------------------------
     /**
      * function to format a JSON object in a table
      *
@@ -79,9 +80,10 @@ Inspector.prototype.afterDOMAdded = function()
         });
         return lc + '</table>';
     }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- bind action on the websocket ---------------------------
+    // --- bind action on the websocket ------------------------------------------------------------------------------------------------------------------------
     var self = this;
 
     jQuery( self.generateSubID("dialog", "#") ).dialog({ autoOpen: false, width: "auto" });
@@ -95,4 +97,5 @@ Inspector.prototype.afterDOMAdded = function()
 
         }
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

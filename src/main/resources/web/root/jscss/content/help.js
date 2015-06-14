@@ -99,7 +99,7 @@ Help.prototype.afterDOMAdded = function()
     var self = this;
 
 
-    // --- create about button & bind action to the button ---------------------------
+    // --- create about button & bind action to the button -----------------------------------------------------------------------------------------------------
     jQuery(this.generateSubID("about", "#")).button().click( function() {
 
         // click reads JSON data
@@ -133,8 +133,10 @@ Help.prototype.afterDOMAdded = function()
         });
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // --- create documentation button & bind action to button ---------------------------
+
+    // --- create documentation button & bind action to button -------------------------------------------------------------------------------------------------
     jQuery(self.generateSubID("userdoc", "#")).button().click( function() {
 
         jQuery.get("/userdoc/", function( px_result ) {
@@ -146,4 +148,5 @@ Help.prototype.afterDOMAdded = function()
     jQuery(self.generateSubID("devdoc", "#")).button().click( function() {
         jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "devdoku" class = "template" src = "/develdoc/" seamless />' );
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

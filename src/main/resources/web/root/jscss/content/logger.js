@@ -80,7 +80,7 @@ Logger.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
-    // --- bind action to the websocket ---------------------------
+    // --- bind action to the websocket ------------------------------------------------------------------------------------------------------------------------
     MecSim.websocket( "/cconsole/output/log", {
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
         "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("output")  + '">' + po_event.data + '</span>' ); }
@@ -90,4 +90,5 @@ Logger.prototype.afterDOMAdded = function()
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
         "onmessage" : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error")  + '">' + po_event.data + '</span>' ); }
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

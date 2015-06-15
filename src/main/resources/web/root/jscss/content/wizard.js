@@ -28,7 +28,7 @@
 
 
 /**
- * ctor to create the a wizard
+ * ctor to create the wizard
  *
  * @param pc_id ID
  * @param pc_name name of the panel

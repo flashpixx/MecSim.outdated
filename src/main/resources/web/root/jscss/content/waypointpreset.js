@@ -28,7 +28,7 @@
 
 
 /**
- * ctor to create the configuration view
+ * ctor to create the preset wizard
  *
  * @param pc_id ID
  * @param pc_name name of the panel

@@ -67,27 +67,6 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     /**
-     * collapse method to get an aggregated top-level-beliefbase,
-     * which is the aggregation of the top-level literals and all
-     * the inherited beliefbases' literals.
-     *
-     * @return beliefbase containing literals of all inherited beliefbases
-     */
-    @Override
-    public IBeliefBase<Literal> collapseBeliefbase()
-    {
-        return new CBeliefBase(this.collapseLiterals());
-    }
-
-    /**
-     * method for updating the beliefbase
-     */
-    @Override
-    public void update()
-    {
-    }
-
-    /**
      * adds a language specific literal to the top-level literals
      *
      * @param p_literal language specific literal
@@ -107,4 +86,12 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
         removeLiteral(CCommon.convertGeneric(p_literal));
     }
 
+    @Override
+    public IBeliefBase<Literal> collapseBeliefbase()
+    {
+        return new CBeliefBase(this.collapseLiterals());
+    }
+
+    @Override
+    public void update() { }
 }

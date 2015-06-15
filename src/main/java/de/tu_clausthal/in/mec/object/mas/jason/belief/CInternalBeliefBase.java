@@ -31,6 +31,8 @@ import jason.asSyntax.Literal;
 /**
  * beliefbase for internal beliefs, i.e. the initial beliefs
  * and beliefs that arise from deduction rules
+ *
+ * @todo
  */
 public class CInternalBeliefBase extends CBeliefBase
 {

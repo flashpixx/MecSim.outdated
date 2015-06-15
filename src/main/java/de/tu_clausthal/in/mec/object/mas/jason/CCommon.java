@@ -35,11 +35,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 /**
  * common method for Jason
@@ -122,20 +118,26 @@ public class CCommon
     }
 
     /**
-     * converts a list of terms into a TermList
+     * converts a jason specific set of literals to a generic one
      *
-     * @param p_termList list of terms
-     * @return converted TermList
+     * @param p_literals set of jason-specific literals
+     * @return converted Set of generic literals
      */
-    public static ITermCollection convertGeneric(final List<Term> p_termList)
+    public static Set<ILiteral<Literal>> convertGeneric(final List<Literal> p_literals)
     {
-        return new CTermList()
+        return new HashSet<ILiteral<Literal>>()
         {{
-                for (final Term l_term : p_termList)
-                    add(convertGeneric(l_term));
+                for( final Literal l_literal : p_literals )
+                    add( new CLiteral( l_literal ) );
             }};
     }
 
+    /**
+     * converts a Jason-specific Literal into a generic Literal
+     *
+     * @param p_literal Jason-specific literal
+     * @return generic form
+     */
     public static ILiteral convertGeneric(final Literal p_literal)
     {
         return new CLiteral(p_literal);

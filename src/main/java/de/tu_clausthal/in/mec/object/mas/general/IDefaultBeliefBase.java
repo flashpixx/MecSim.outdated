@@ -96,102 +96,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * collapse method to get a set of literals containing the top-level
-     * and all inherited beliefbases' literals
-     *
-     * @return collapsed set of top-level and inherited literals
-     */
-    @Override
-    public Set<ILiteral<T>> collapseLiterals()
-    {
-        // set for aggregation
-        final Set<ILiteral<T>> l_beliefbase = new HashSet<>();
-
-        // start of recursion on top level
-        collapseLiterals(this, l_beliefbase);
-
-        return l_beliefbase;
-    }
-
-    /**
-     * getter for top-level literal set
-     *
-     * @return set of top-level literals
-     */
-    @Override
-    public Set<ILiteral<T>> getLiterals()
-    {
-        return m_literals;
-    }
-
-    /**
-     * getter for the inherited beliefbases
-     *
-     * @return map of inherited beliefbases and their names
-     */
-    @Override
-    public Map<String, IBeliefBase<T>> getBeliefbases()
-    {
-        return m_beliefbases;
-    }
-
-    /**
-     * adds a generic literal to the top-level literals
-     *
-     * @param p_literal generic literal
-     */
-    @Override
-    public void addLiteral(final ILiteral p_literal)
-    {
-        m_literals.add(p_literal);
-    }
-
-    /**
-     * adds a collection of generic literals
-     */
-    @Override
-    public void addAllLiterals(final Collection<ILiteral<T>> p_literals)
-    {
-        m_literals.addAll(p_literals);
-    }
-
-    /**
-     * removes a language specific literal from the top level literals
-     *
-     * @param p_literal language specific literal
-     */
-    @Override
-    public void removeLiteral(final ILiteral p_literal)
-    {
-        m_literals.remove(p_literal);
-    }
-
-    /**
-     * removes a collection of generic literals
-     */
-    @Override
-    public void removeAllLiterals(final Collection<ILiteral<T>> p_literals)
-    {
-        m_literals.remove(p_literals);
-    }
-
-    /**
-     * removes a beliefbase recursively from inherited beliefbases
-     *
-     * @param p_name beliefbase to remove
-     */
-    @Override
-    public void removeBeliefbase(final String p_name)
-    {
-        // removes specified beliefbase if its inherited
-        m_beliefbases.remove(p_name);
-
-        // recursive call
-        for (IBeliefBase<T> l_beliefbase : m_beliefbases.values())
-            l_beliefbase.removeBeliefbase(p_name);
-    }
-
-    /**
      * method to clear top-level literals and optionally the inherited literals
      *
      * @param p_recursive set true to clear all inherited literals
@@ -206,19 +110,99 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * removes the top-level and the inherited beliefbases' literals
-     * i.e. all the inherited beliefbases stay preserved empty
+     * fills up a stack with Iterator-objects on ILiterals
+     *
+     * @param p_current current beliefbase with top-level-literals to iterate over
+     * @param p_stack current stack
+     * @param <N> the literal type
      */
+    private static <N> void collapseIterator(final IBeliefBase<N> p_current, final Stack<Iterator<ILiteral<N>>> p_stack)
+    {
+        // push iterator object on top-level-literals
+        p_stack.push(p_current.getLiterals().iterator());
+
+        // recursive call for all inherited beliefbases
+        for( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases().values() )
+            collapseIterator( l_beliefbase, p_stack);
+    }
+
+    /**
+     * recursive method to fill up a stack with Iterator-objects
+     *
+     * @return iterator stack
+     */
+    private Stack<Iterator<ILiteral<T>>> collapseIterator()
+    {
+        final Stack<Iterator<ILiteral<T>>> l_stack = new Stack<>();
+        collapseIterator(this, l_stack);
+        return l_stack;
+    }
+
+    @Override
+    public Set<ILiteral<T>> collapseLiterals()
+    {
+        // set for aggregation
+        final Set<ILiteral<T>> l_beliefbase = new HashSet<>();
+
+        // start of recursion on top level
+        collapseLiterals(this, l_beliefbase);
+
+        return l_beliefbase;
+    }
+
+    @Override
+    public Set<ILiteral<T>> getLiterals()
+    {
+        return m_literals;
+    }
+
+    @Override
+    public Map<String, IBeliefBase<T>> getBeliefbases()
+    {
+        return m_beliefbases;
+    }
+
+    @Override
+    public void addLiteral(final ILiteral p_literal)
+    {
+        m_literals.add(p_literal);
+    }
+
+    @Override
+    public void addAllLiterals(final Collection<ILiteral<T>> p_literals)
+    {
+        m_literals.addAll(p_literals);
+    }
+
+    @Override
+    public void removeLiteral(final ILiteral p_literal)
+    {
+        m_literals.remove(p_literal);
+    }
+
+    @Override
+    public void removeAllLiterals(final Collection<ILiteral<T>> p_literals)
+    {
+        m_literals.remove(p_literals);
+    }
+
+    @Override
+    public void removeBeliefbase(final String p_name)
+    {
+        // removes specified beliefbase if its inherited
+        m_beliefbases.remove(p_name);
+
+        // recursive call
+        for (IBeliefBase<T> l_beliefbase : m_beliefbases.values())
+            l_beliefbase.removeBeliefbase(p_name);
+    }
+
     @Override
     public void clearLiterals()
     {
         clearLiterals(true);
     }
 
-    /**
-     * empties the whole beliefbase, i.e. the top-level literals
-     * and all the inherited beliefbases will be removed
-     */
     @Override
     public void clear()
     {
@@ -226,11 +210,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         m_beliefbases.clear();
     }
 
-    /**
-     * hashcode function based on prime number linear combination
-     *
-     * @return hashcode calculated with prime numbers
-     */
     @Override
     public int hashCode()
     {
@@ -238,28 +217,56 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                 79 * m_literals.hashCode();
     }
 
-    /**
-     * method for equivalence check
-     *
-     * @param p_object
-     * @return true if beliefbase equals a given object
-     */
     @Override
     public boolean equals(final Object p_object)
     {
         return this.hashCode() == p_object.hashCode();
     }
 
-    /**
-     * method for adding a beliefbase
-     * the prefix gets concatenated by the beliefbases' hashcode
-     *
-     * @param p_name       beliefbase name
-     * @param p_beliefbase beliefbase to add
-     */
     @Override
     public void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase)
     {
         m_beliefbases.put(p_name, p_beliefbase);
+    }
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return new Iterator<T>()
+        {
+            /**
+             * iterator stack
+             */
+            private final Stack<Iterator<ILiteral<T>>> m_stack = collapseIterator();
+
+            @Override
+            public boolean hasNext()
+            {
+                // if the stack is empty, we have nothing to iterate over
+                if( m_stack.isEmpty() )
+                    return false;
+
+                // return true, if the top element of the stack has a next element
+                if( m_stack.peek().hasNext() )
+                    return true;
+
+                // the top element has no next element, so it can be removed
+                m_stack.pop();
+
+                // recursive call
+                return this.hasNext();
+            }
+
+            /**
+             * returns next element of the top iterator
+             *
+             * @return successor element
+             */
+            @Override
+            public T next()
+            {
+                return m_stack.peek().next().getLiteral();
+            }
+        };
     }
 }

@@ -33,7 +33,7 @@ import java.util.Set;
  * a beliefbase contains beliefs as literals (i.e. the top-level literals)
  * and further inherited beliefbases.
  */
-public interface IBeliefBase<T>
+public interface IBeliefBase<T> extends Iterable<T>
 {
     /**
      * collapse method to get an aggregated top-level-beliefbase,

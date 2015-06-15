@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CInternalBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
@@ -170,7 +171,7 @@ public class CAgent<T> implements IVoidAgent
             m_action.put("invoke", new CMethodBind(c_bindname, p_bind));
 
             // initialize inherited beliefbases
-            addBeliefbase("binding", new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind(c_bindname, p_bind));
+            addBeliefbase("binding", new CBindingBeliefBase(c_bindname, p_bind));
             addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
@@ -421,10 +422,10 @@ public class CAgent<T> implements IVoidAgent
             m_agent.getBB().clear();
 
             // push updated beliefs into the agents beliefbase
-            for(ILiteral l_literal : m_beliefs.collapseBeliefbase().getLiterals())
+            for( final Literal l_literal : m_beliefs )
                 try
                 {
-                    m_agent.addBel( (Literal) l_literal.getLiteral() );
+                    m_agent.addBel( l_literal );
                 }
                 catch (RevisionFailedException l_exception)
                 {

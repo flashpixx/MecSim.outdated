@@ -42,7 +42,7 @@ import java.util.Map;
 /**
  * beliefbase structure to bind object properties
  */
-public class CFieldBind extends CBeliefBase
+public class CBindingBeliefBase extends CBeliefBase
 {
     /**
      * field filter
@@ -61,7 +61,7 @@ public class CFieldBind extends CBeliefBase
      * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind(final String p_name, final Object p_object)
+    public CBindingBeliefBase(final String p_name, final Object p_object)
     {
         this.push(p_name, p_object);
     }

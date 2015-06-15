@@ -45,7 +45,6 @@ function Configuration( pc_id, pc_name, pa_panel )
 Configuration.prototype = Object.create(Pane.prototype);
 
 
-
 /**
  * @Overwrite
 **/

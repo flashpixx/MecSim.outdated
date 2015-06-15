@@ -43,6 +43,15 @@ function Waypoint( pc_id, pc_name, pa_panel )
 Waypoint.prototype = Object.create(Pane.prototype);
 
 
+
+/**
+ * @Overwrite
+**/
+Pane.prototype.getGlobalCSS = function()
+{
+}
+
+
 /**
  * @Overwrite
 **/

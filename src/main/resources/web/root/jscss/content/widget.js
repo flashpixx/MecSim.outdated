@@ -55,6 +55,7 @@ function Widget( pc_id, pc_name, pa_panel, po_options )
     this.mn_collapseWidth     = lo_options.collapsewidth             || this.mn_width;
     this.mn_collapseHeight    = lo_options.collapseheight            || 15;
     this.ml_hidedefault       = lo_options.hidedefault === undefined ? true : lo_options.hidedefault;
+    this.mn_minoffset         = lo_options.minoffset                 || 50;
 }
 
 /** inheritance call **/
@@ -141,8 +142,8 @@ Widget.prototype.afterDOMAdded = function()
         jQuery( this.generateSubID("widget", "#") ).draggable({
             cancel: self.ml_cancel + ", input,textarea,button,select,option",
             drag: function(event, ui) {
-                ui.position.top = Math.max(  -1*(self.mn_minHeight - self._minOffset), ui.position.top );
-                ui.position.left = Math.max( -1*(self.mn_minWidth  - self._minOffset), ui.position.left );
+                ui.position.top = Math.max(  -1*(self.mn_minHeight - self.mn_minoffset), ui.position.top );
+                ui.position.left = Math.max( -1*(self.mn_minWidth  - self.mn_minoffset), ui.position.left );
         }});
 
     if (this.ml_resizeable)

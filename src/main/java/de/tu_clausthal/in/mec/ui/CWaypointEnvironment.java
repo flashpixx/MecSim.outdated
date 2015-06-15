@@ -179,15 +179,15 @@ public class CWaypointEnvironment
             l_properties.put( "lat", l_wayPoint.getPosition().getLatitude() );
             l_properties.put( "long", l_wayPoint.getPosition().getLongitude() );
 
-            if ( l_wayPoint instanceof CCarRandomWayPoint )
-            {
-                l_properties.put( "type", CCommon.getResourceString( this, "waypointrandomtype" ) );
-                l_properties.put( "editable", false );
-            }
-            else
+            if ( l_wayPoint instanceof CCarPathWayPoint )
             {
                 l_properties.put( "type", CCommon.getResourceString( this, "waypointtargettype" ) );
                 l_properties.put( "editable", true );
+            }
+            else
+            {
+                l_properties.put( "type", CCommon.getResourceString( this, "waypointrandomtype" ) );
+                l_properties.put( "editable", false );
             }
 
             l_waypointList.add( l_properties );

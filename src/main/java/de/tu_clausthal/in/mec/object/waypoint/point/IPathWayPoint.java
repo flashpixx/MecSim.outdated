@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
@@ -92,10 +93,42 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
-        return new HashSet<Pair<GeoPosition, GeoPosition>>()
-        {{
-              add( new ImmutablePair<GeoPosition, GeoPosition>( getPosition(), new GeoPosition( 51.80135377062704, 10.32871163482666 ) ) );
-            }};
+        HashSet<Pair<GeoPosition, GeoPosition>> l_path = new HashSet<>();
+
+        //falls kein eintrag mehr da ist fahre zu default und breche ab
+
+        //inital position
+        Map<IWayPoint, MutablePair<Double, Double>> l_currentNode = m_makrovChain.get( this );
+        GeoPosition l_currentPosition = this.getPosition();
+        GeoPosition l_default = new GeoPosition( 51.80135377062704, 10.32871163482666 );
+        GeoPosition l_newPosition;
+
+        //check for circles and path length
+        for (int i=1; i<m_makrovChain.size(); i++){
+            double l_random = m_random.nextDouble();
+
+            // current node has no outgoing edges add a path to default target and return
+            if(l_currentNode.size() <= 0){
+                CLogger.out(l_path.size());
+                l_path.add( new ImmutablePair<>( l_currentPosition, l_default ) );
+                return l_path;
+            }
+
+            //calculate new edge
+            for ( final Map.Entry<IWayPoint, MutablePair<Double, Double>> l_node : l_currentNode.entrySet() ) {
+                if(l_random >= l_node.getValue().getRight()){
+                    l_random = l_random - l_node.getValue().getRight();
+                }else{
+                    l_newPosition = l_node.getKey().getPosition();
+                    l_path.add( new ImmutablePair<>( l_currentPosition, l_newPosition ) );
+                    l_currentNode = m_makrovChain.get( l_node.getKey() );
+                    l_currentPosition = l_newPosition;
+                    break;
+                }
+            }
+        }
+
+        return l_path;
     }
 
     @Override

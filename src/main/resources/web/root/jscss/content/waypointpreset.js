@@ -139,9 +139,8 @@ WaypointPreset.prototype.afterDOMAdded = function()
     Wizard.prototype.afterDOMAdded.call(this);
 
     jQuery( this.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
-
-    //this.mo_elements.selects.forEach(  function( pc_id )  { jQuery( self.generateSubID(pc_id, "#") ).selectmenu(); });
-    //this.mo_elements.spinners.forEach( function( pc_id ) { jQuery( self.generateSubID(pc_id, "#") ).spinner(); });
-    //this.mo_elements.texts.forEach(    function( pc_id ) { jQuery( self.generateSubID(pc_id, "#") ).jqxInput({ height: 25, width: 50 }); });
+    this.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
+    this.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
+    this.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
 }
 

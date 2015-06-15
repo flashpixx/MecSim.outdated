@@ -38,6 +38,14 @@
 function WaypointPreset( pc_id, pc_name, pa_panel, po_options )
 {
     Wizard.call(this, pc_id, pc_name, pa_panel, po_options );
+
+    // list with IDs
+    this.mo_elements = {
+        selects  : [],
+        text     : [],
+        slider   : [],
+        spinner  : []
+    };
 }
 
 /** inheritance call **/
@@ -49,34 +57,25 @@ WaypointPreset.prototype = Object.create(Wizard.prototype);
 **/
 WaypointPreset.prototype.getContent = function()
 {
-
-    // list with IDs
-    var lo_elements = {
-        selects  : [],
-        text     : [],
-        slider   : [],
-        spinner  : []
-    };
-
     return Wizard.prototype.getContent.call( this,
 
         // first step - general data
         '<h3 id="' + this.generateSubID("factory") + '" />' +
         '<section>' +
-        '<p>' + Layout.select(  { id: this.generateSubID("type"),      list: lo_elements.select }) + '</p>' +
-        '<p>' + Layout.input(   { id: this.generateSubID("radius"),    list: lo_elements.text })   + '</p>' +
-        '<p>' + Layout.select(  { id: this.generateSubID("factory"),   list: lo_elements.select }) + '</p>' +
-        '<p>' + Layout.select(  { id: this.generateSubID("agent"),     list: lo_elements.select }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("type"),      list: this.mo_elements.select }) + '</p>' +
+        '<p>' + Layout.input(   { id: this.generateSubID("radius"),    list: this.mo_elements.text })   + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("factory"),   list: this.mo_elements.select }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("agent"),     list: this.mo_elements.select }) + '</p>' +
         '</section >' +
 
 
         // second step - generator settings
         '<h3 id="' + this.generateSubID("generator") + '" />' +
         '<section>' +
-        '<p>' + Layout.select( { id: this.generateSubID("distribution"),              list: lo_elements.select })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("distribution_bound_left"),   list: lo_elements.text })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("distribution_bound_right"),  list: lo_elements.text })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                  list: lo_elements.spinner }) + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("distribution"),              list: this.mo_elements.select })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("distribution_bound_left"),   list: this.mo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("distribution_bound_right"),  list: this.mo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                  list: this.mo_elements.spinner }) + '</p>' +
         '</section >' +
 
 
@@ -86,35 +85,35 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("speed") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("speed_distribution"),              list: lo_elements.select })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speed_distribution_bound_left"),   list: lo_elements.text })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speed_distribution_bound_right"),  list: lo_elements.text })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("speed_distribution"),              list: this.mo_elements.select })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speed_distribution_bound_left"),   list: this.mo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speed_distribution_bound_right"),  list: this.mo_elements.text })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("maxspeed") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("maxspeed_distribution"),              list: lo_elements.select })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeed_distribution_bound_left"),   list: lo_elements.text })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeed_distribution_bound_right"),  list: lo_elements.text })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("maxspeed_distribution"),              list: this.mo_elements.select })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeed_distribution_bound_left"),   list: this.mo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeed_distribution_bound_right"),  list: this.mo_elements.text })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("acceleration") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("acceleration_distribution"),              list: lo_elements.select })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("acceleration_distribution_bound_left"),   list: lo_elements.text })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("acceleration_distribution_bound_right"),  list: lo_elements.text })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("acceleration_distribution"),              list: this.mo_elements.select })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("acceleration_distribution_bound_left"),   list: this.mo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("acceleration_distribution_bound_right"),  list: this.mo_elements.text })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("deceleration") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("deceleration_distribution"),              list: lo_elements.select })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("deceleration_distribution_bound_left"),   list: lo_elements.text })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("deceleration_distribution_bound_right"),  list: lo_elements.text })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("deceleration_distribution"),              list: this.mo_elements.select })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("deceleration_distribution_bound_left"),   list: this.mo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("deceleration_distribution_bound_right"),  list: this.mo_elements.text })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("linger") + '" />' +
         '<div>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("linger_value"),   list: lo_elements.text })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("linger_value"),   list: this.mo_elements.text })    + '</p>' +
         '</div>' +
 
         '</section >' +
@@ -123,10 +122,25 @@ WaypointPreset.prototype.getContent = function()
         // forth step - customizing settings
         '<h3 id="' + this.generateSubID("custom") + '" />' +
         '<section>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("name"),    list: lo_elements.text }) + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("name"),    list: this.mo_elements.text }) + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("color") })                           + '</p>' +
         '<p id="' + this.generateSubID("error") + '"></p>'                                    +
         '</section >'
     );
+}
+
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.afterDOMAdded = function()
+{
+    var self = this;
+    Wizard.prototype.afterDOMAdded.call(this);
+
+    jQuery( this.generateSubID("carsettings", "#") ).accordion();
+    //this.mo_elements.selects.forEach( function( pc_id ) { jQuery( self.generateSubID(pc_id, "#") ).selectmenu(); });
+    //this.mo_elements.spinner.forEach( function( pc_id ) { jQuery( self.generateSubID(pc_id, "#") ).spinner(); });
+    //this.mo_elements.text.forEach(    function( pc_id ) { jQuery( self.generateSubID(pc_id, "#") ).jqxInput({ height: 25, width: 50 }); });
 }
 

@@ -74,8 +74,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to initialize source-ui
     px_module.init = function() {
-        "use strict";
-
         //get labels and build the toolbox
         SourcePanel.getLabels();
         SourcePanel.buildToolbox();
@@ -176,7 +174,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to get DOM Elements
     px_module.getDOMElements = function(){
-        "use strict";
         //dom elements (no labels)
         SourcePanel.settings.dom.targetingWidget                 = $('#mecsim_source_targetingWidget');
         SourcePanel.settings.dom.targetingTable                  = $('#mecsim_source_targetingTable');
@@ -224,7 +221,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to get source-ui related labels which are dynamic
     px_module.getLabels = function(){
-        "use strict";
         $.ajax({
             url     : "/clanguageenvironment/getdynamicwaypointlabels",
             success : function( px_data ){
@@ -238,7 +234,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to create toolbox
     px_module.buildToolbox = function(){
-        "use strict";
         $.ajax({
             url     : "/cwaypointenvironment/listtools",
             success : function( data ){
@@ -251,7 +246,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to listen to toolbutton
     px_module.listenToolButton = function(event){
-        "use strict";
         $.ajax({
             url     : "/cwaypointenvironment/settool",
             data    : {"toolname": event.data.toolname}
@@ -260,7 +254,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to create a toolbutton
     px_module.createToolButton = function(toolname, redValue, greenValue, blueValue, deleteable){
-        "use strict";
         $("<button></button>")
             .text(toolname)
             .attr("class", "mecsim_source_toolButton")
@@ -278,7 +271,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to delete a tool
     px_module.deleteToolButton = function(event){
-        "use strict";
         $.ajax({
             url     : "/cwaypointenvironment/deletetool",
             data    : {"toolname": event.target.parentNode.value},
@@ -292,8 +284,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to build up the wizard content
     px_module.buildContent = function() {
-        "use strict";
-
         SourcePanel.getDOMElements();
 
         //create selectmenu with waypoint types
@@ -376,7 +366,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to validate if the current wizard step is valide
     px_module.validateWizardStep = function(event , currentIndex, newIndex) {
-        "use strict";
 
         function validateDistributionInput(distribution, distributionInput1, distributionInput2){
             if( isNaN(distributionInput1) || isNaN(distributionInput2) )
@@ -417,7 +406,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to finish the last wizard step
     px_module.finishWizard = function(){
-        "use strict";
         $.ajax({
             url     : "/cwaypointenvironment/createtool",
             data    : {
@@ -471,7 +459,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to update waypoint settings
     px_module.updateWaypointSettings = function(){
-        "use strict";
         if(SourcePanel.settings.dom.selectWaypointType.val() === "Auto Wegpunkt (Zufall)" || SourcePanel.settings.dom.selectWaypointType.val() === "random car waypoint"){
             SourcePanel.settings.dom.selectRadius.attr('disabled', false);
         }else{
@@ -481,7 +468,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to update factory settings
     px_module.updateFactorySettings = function(){
-        "use strict";
         if($("#mecsim_source_selectFactory option:selected").attr("requireAgent") === "true"){
             SourcePanel.settings.dom.selectAgentProgram.attr('disabled', false);
         }else{
@@ -491,7 +477,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to update generator settings
     px_module.updateGeneratorSettings = function(){
-        "use strict";
         SourcePanel.updateLabels(
             SourcePanel.settings.dom.selectGenerator.val(),
             [
@@ -519,7 +504,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to update car settings
     px_module.updateCarSettings = function(event){
-        "use strict";
         var l_element1, l_element2, l_element3, l_element4;
         switch(event.target.id){
 
@@ -591,7 +575,6 @@ var SourcePanel = ( function (px_module) {
 
     //generic method to upate labels
     px_module.updateLabels = function(checkElement, options){
-        "use strict";
         var foundflag = false;
 
         options.forEach(function(p_option){
@@ -614,7 +597,6 @@ var SourcePanel = ( function (px_module) {
 
     //method to build waypoint table
     px_module.createWaypointList = function(){
-        "use strict";
         $.ajax({
             url     : "/cwaypointenvironment/listwaypoints",
             success : function( p_data ){

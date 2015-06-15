@@ -109,9 +109,11 @@ Wizard.prototype.init = function()
  * @param po_event event
  * @param pn_current current step
  * @param pn_next next step
+ * @return true / false to enter next step
 **/
 Wizard.prototype.validatestep = function( po_event , pn_current, pn_next )
 {
+    return true;
 }
 
 /**

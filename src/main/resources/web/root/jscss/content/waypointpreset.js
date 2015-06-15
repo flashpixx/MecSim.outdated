@@ -54,19 +54,42 @@ WaypointPreset.prototype.getContent = function()
     var lo_elements = {
         selects  : [],
         text     : [],
-        slider   : []
+        slider   : [],
+        spinner  : []
     };
 
     return Wizard.prototype.getContent.call( this,
 
+        // first step - general data
         '<h3 id="' + this.generateSubID("factory") + '" />' +
         '<section>' +
         '<p>' + Layout.select(  { id: this.generateSubID("type"),      list: lo_elements.select }) + '</p>' +
         '<p>' + Layout.input(   { id: this.generateSubID("radius"),    list: lo_elements.text })   + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubID("factory"),   list: lo_elements.select }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubID("agent"),     list: lo_elements.select }) + '</p>' +
-        '</section >'
+        '</section >' +
 
+
+        // second step - generator settings
+        '<h3 id="' + this.generateSubID("generator") + '" />' +
+        '<section>' +
+        '<p>' + Layout.select( { id: this.generateSubID("distribution"),              list: lo_elements.select })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("distribution_bound_left"),   list: lo_elements.spinner }) + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("distribution_bound_right"),  list: lo_elements.spinner }) + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                  list: lo_elements.spinner }) + '</p>' +
+        '</section >' +
+
+
+        // third step - car settings
+        '<h3 id="' + this.generateSubID("car") + '" />' +
+        '<section>' +
+        '</section >' +
+
+
+        // forth step - customizing settings
+        '<h3 id="' + this.generateSubID("custom") + '" />' +
+        '<section>' +
+        '</section >'
     );
 }
 

@@ -66,9 +66,7 @@ Widget.prototype = Object.create(Pane.prototype);
 **/
 Widget.prototype.getGlobalCSS = function()
 {
-    return '.ui-resizable-helper{ border: 1px dotted gray; }' +
-
-           this.generateSubID("widget", "#") +
+    return this.generateSubID("widget", "#") +
            '{' +
            '    position: absolute;' +
            '    padding: 5px;' +

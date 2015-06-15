@@ -70,10 +70,3 @@ WaypointPreset.prototype.getContent = function()
     );
 }
 
-/**
- * @Overwrite
-**/
-WaypointPreset.prototype.afterDOMAdded = function()
-{
-    Wizard.prototype.afterDOMAdded.call(this);
-}

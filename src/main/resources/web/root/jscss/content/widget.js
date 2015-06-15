@@ -33,34 +33,30 @@
  * @param pc_id ID
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
+ * @param po_options configuration options
 **/
-function Widget( pc_id, pc_name, pa_panel, options )
+function Widget( pc_id, pc_name, pa_panel, po_options )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 
-    //settings
-    var self = this;
+    var lo_options            = po_options || {};
+    this.ml_resizeable        = !lo_options.resizeable  ? true : lo_options.resizeable;
+    this.ml_draggable         = !lo_options.draggable   ? true : lo_options.draggable;
+    this.ml_cancel            = lo_options.cancel                    || false;
+    this.ml_animate           = !lo_options.animate     ? true : lo_options.animate;
+    this.mc_animateEffect     = lo_options.animateeffect             || "drop";
+    this.mn_animationTime     = lo_options.animatetime               || 400;
+    this.mc_background        = lo_options.background                || "white";
+    this.mc_sizeunit          = lo_options.mc_sizeunit               || "px";
+    this.mn_width             = lo_options.width                     || 750;
+    this.mn_height            = lo_options.height                    || 550;
+    this.mn_minWidth          = lo_options.minWidth                  || this.mn_width;
+    this.mn_minHeight         = lo_options.minHeight                 || this.mn_height;
+    this.mn_collapseWidth     = lo_options.collapsewidth             || 400;
+    this.mn_collapseHeight    = lo_options.collapseheight            || 20;
 
-    var lo_options          = options || {};
-    this._name              = lo_options.name                      || "Default Widgetname";
-    this._resizeable        = !lo_options.resizeable  ? true : lo_options.resizeable;
-    this._draggable         = !lo_options.draggable   ? true : lo_options.draggable;
-    this._handle            = lo_options.handle                    || false;
-    this._cancel            = lo_options.cancel                    || false;
-    this._animate           = !lo_options.animate     ? true : lo_options.animate;
-    this._animateEffect     = lo_options.animateEffect             || "drop";
-    this._animationTime     = lo_options.animateTime               || 400;
-    this._background        = lo_options.background                || "white";
-    this._width             = lo_options.width                     || 750;
-    this._height            = lo_options.height                    || 550;
-    this._minWidth          = lo_options.minWidth                  || this._width;
-    this._minHeight         = lo_options.minHeight                 || this._height;
-    this._collapseWidth     = lo_options.collapseWidth             || 400;
-    this._collapseHeight    = lo_options.collapseHeight            || 20;
-    this._minOffset         = lo_options.minOffSet                 || 50;
-
-    this._closedStatus = false;
-    this._minimizedStatus = false;
+    this.ml_closedStatus      = false;
+    this.ml_minimizedStatus   = false;
 }
 
 /** inheritance call **/
@@ -81,9 +77,9 @@ Widget.prototype.getCSS = function()
            '    margin: 5px;' +
            '    border: 1px solid #CACACA;' +
            '    overflow: hidden;' +
-           ["    width: ", this._width, ";"].join("") +
-           ["    height: ", this._height, ";"].join("") +
-           ["    background: ", this._background, ";"].join("") +
+           ["    width: ",  this.mn_width,  this.mc_sizeunit, ";"].join("") +
+           ["    height: ", this.mn_height, this.mc_sizeunit, ";"].join("") +
+           ["    background: ", this.mc_background, ";"].join("") +
            '}' +
 
            this.generateSubID("header", ".") +
@@ -107,16 +103,19 @@ Widget.prototype.getCSS = function()
 
 /**
  * @Overwrite
+ *
+ * @param pc_content optional content
 **/
-Widget.prototype.getContent = function()
+Widget.prototype.getContent = function(pc_content)
 {
     return '<div id="' + this.generateSubID("widget") + '">' +
            '<h3 class="' + this.generateSubID("header") + '">' +
-           '<span>' + this._name + '</span>' +
+           '<span>' + this.mc_name + '</span>' +
            '<span class = "' + this.generateSubID("button") + '">' +
            '<button id="' + this.generateSubID("collapsebutton") + '"></button>' +
            '<button id="' + this.generateSubID("closebutton") + '"></button>' +
            '</span>' +
+           (pc_content ? pc_content : "") +
            '</div>';
 }
 
@@ -126,51 +125,73 @@ Widget.prototype.getContent = function()
 **/
 Widget.prototype.afterDOMAdded = function()
 {
+    // create window buttons with action bind
     jQuery( this.generateSubID("collapsebutton", "#") ).button( { icons : { primary: "ui-icon-newwin"},     text: false }).click( this.collapse );
     jQuery( this.generateSubID("closebutton", "#") ).button(    { icons : { primary: "ui-icon-closethick"}, text: false }).click( this.close );
 
-    //create widget
-    if (this._draggable)
+    // resize / collcapse / dragable action bind
+    if (this.ml_draggable)
         jQuery( this.generateSubID("widget", "#") ).draggable({
-            cancel: self._cancel + ", input,textarea,button,select,option",
+            cancel: self.ml_cancel + ", input,textarea,button,select,option",
             drag: function(event, ui) {
-                ui.position.top = Math.max( -1*(self._minHeight - self._minOffset), ui.position.top );
-                ui.position.left = Math.max( -1*(self._minWidth - self._minOffset), ui.position.left );
+                ui.position.top = Math.max(  -1*(self.mn_minHeight - self._minOffset), ui.position.top );
+                ui.position.left = Math.max( -1*(self.mn_minWidth  - self._minOffset), ui.position.left );
         }});
 
-    if (this._resizeable)
+    if (this.ml_resizeable)
         jQuery( this.generateSubID("widget", "#") ).resizable({
-            animate: this._animate,
-            minWidth: this._minWidth,
-            minHeight: this._minHeight
+            animate   : this.ml_animate,
+            minWidth  : this.mn_minWidth,
+            minHeight : this.mn_minHeight
         });
 }
 
 
-//method to collapse widget
+/**
+ * collapse action
+**/
 Widget.prototype.collapse = function(){
     var self = this;
-    if(this._minimizedStatus){
-        this._div.animate({width: this._minWidth+"px", height: this._minHeight+"px"}, this._animateEffect, function(){
-            self._div.children().not(this.generateSubID("header", ".")).show();
-            self._div.resizable('enable');
-        });
-    }else{
+    if(this.ml_minimizedStatus)
+
+        jQuery( this.generateSubID("widget", "#") ).animate(
+            {
+                width  : this.mn_minWidth  + this.mc_sizeunit,
+                height : this.mn_minHeight + this.mc_sizeunit
+            },
+            this.mc_animateEffect,
+            function(){
+                self._div.children().not(this.generateSubID("header", ".")).show();
+                self._div.resizable('enable');
+            }
+        );
+
+    else
+    {
         this._div.resizable('disable');
         this._div.children().not(this.generateSubID("header", ".")).hide();
-        this._div.animate({width: this._collapseWidth+"px", height: this._collapseHeight+"px"}, this._animationTime);
+        this._div.animate(
+            {
+                width  : this.mn_collapseWidth  + this.mc_sizeunit,
+                height : this.mn_collapseHeight + this.mc_sizeunit
+            },
+            this.mn_animationTime
+        );
     }
-    this._minimizedStatus = !this._minimizedStatus;
+
+    this.ml_minimizedStatus = !this.ml_minimizedStatus;
 };
 
-//method to close widget
+/**
+ * close action
+**/
 Widget.prototype.close = function()
 {
-    if(this._closedStatus)
-        this._div.show(this._animateEffect, this._animationTime);
+    if(this.ml_closedStatus)
+        this._div.show(this.mc_animateEffect, this.mn_animationTime);
     else
-        this._div.hide(this._animateEffect, this._animationTime);
+        this._div.hide(this.mc_animateEffect, this.mn_animationTime);
 
-    this._closedStatus = !this._closedStatus;
+    this.ml_closedStatus = !this.ml_closedStatus;
 };
 

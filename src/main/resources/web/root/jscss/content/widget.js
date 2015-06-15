@@ -47,13 +47,13 @@ function Widget( pc_id, pc_name, pa_panel, po_options )
     this.mc_animateEffect     = lo_options.animateeffect             || "drop";
     this.mn_animationTime     = lo_options.animatetime               || 400;
     this.mc_background        = lo_options.background                || "white";
-    this.mc_sizeunit          = lo_options.mc_sizeunit               || "%";
-    this.mn_width             = lo_options.width                     || 75;
-    this.mn_height            = lo_options.height                    || 95;
+    this.mc_sizeunit          = lo_options.mc_sizeunit               || "px";
+    this.mn_width             = lo_options.width                     || 550;
+    this.mn_height            = lo_options.height                    || 600;
     this.mn_minWidth          = lo_options.minWidth                  || this.mn_width;
     this.mn_minHeight         = lo_options.minHeight                 || this.mn_height;
     this.mn_collapseWidth     = lo_options.collapsewidth             || this.mn_width;
-    this.mn_collapseHeight    = lo_options.collapseheight            || 5;
+    this.mn_collapseHeight    = lo_options.collapseheight            || 15;
     this.ml_hidedefault       = lo_options.hidedefault === undefined ? true : lo_options.hidedefault;
 }
 
@@ -133,7 +133,8 @@ Widget.prototype.afterDOMAdded = function()
     if (this.ml_hidedefault)
         jQuery( this.generateSubID("widget", "#") ).hide();
 
-    jQuery( this.generateSubID("collapsebutton", "#") ).button( { icons : { primary: "ui-icon-newwin"},     text: false }).click( Widget.prototype.collapse.bind(this) );
+    var ll_collapsed = false;
+    jQuery( this.generateSubID("collapsebutton", "#") ).button( { icons : { primary: "ui-icon-newwin"},     text: false }).click( function() { if (ll_collapsed) self.collapse(); else self.expand(); ll_collapsed = !ll_collapsed; } );
     jQuery( this.generateSubID("closebutton", "#") ).button(    { icons : { primary: "ui-icon-closethick"}, text: false }).click( Widget.prototype.hide.bind(this) );
 
     // resize / collcapse / dragable action bind

@@ -162,6 +162,7 @@ Widget.prototype.collapse = function()
     var self = this;
     var lo   = jQuery( this.generateSubID("widget", "#") );
 
+
     lo.animate(
         {
             width  : this.mn_minWidth  + this.mc_sizeunit,
@@ -170,8 +171,8 @@ Widget.prototype.collapse = function()
         this.mc_animateEffect,
         function()
         {
-            lo.children().not( self.generateSubID("header", ".") ).show();
-            lo.resizable('enable');
+            lo.children().not( self.generateSubID("header", "#") ).show();
+            lo.resizable("enable");
         }
     );
 };
@@ -181,8 +182,8 @@ Widget.prototype.collapse = function()
 **/
 Widget.prototype.expand = function()
 {
-    jQuery( this.generateSubID("widget", "#") ).resizable('disable');
-    jQuery( this.generateSubID("widget", "#") ).children().not(this.generateSubID("header", ".")).hide();
+    jQuery( this.generateSubID("widget", "#") ).resizable("disable");
+    jQuery( this.generateSubID("widget", "#") ).children().not(this.generateSubID("header", "#")).hide();
     jQuery( this.generateSubID("widget", "#") ).animate(
         {
             width  : this.mn_collapseWidth  + this.mc_sizeunit,

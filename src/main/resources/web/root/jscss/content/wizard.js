@@ -79,7 +79,6 @@ Wizard.prototype.afterDOMAdded = function()
         bodyTag          : this.mo_configuration.bodytag,
         transitionEffect : this.mo_configuration.transition,
         stepsOrientation : this.mo_configuration.orientation,
-        //autoFocus        : true,
 
         onInit           : this.init,
         onStepChanging   : this.validatestep,

@@ -96,6 +96,11 @@ Widget.prototype.getGlobalCSS = function()
            '    right: 0;' +
            '}' +
 
+           this.generateSubID("helper", ".") +
+           '{' +
+           '    border: 2px dotted #AAA;' +
+           '}' +
+
            Pane.prototype.getGlobalCSS.call(this);
 }
 
@@ -148,6 +153,7 @@ Widget.prototype.afterDOMAdded = function()
 
     if (this.ml_resizeable)
         jQuery( this.generateSubID("widget", "#") ).resizable({
+            helper    : this.generateSubID("helper"),
             animate   : this.ml_animate,
             minWidth  : this.mn_minWidth,
             minHeight : this.mn_minHeight

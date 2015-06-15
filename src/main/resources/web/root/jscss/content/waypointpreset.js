@@ -59,7 +59,7 @@ WaypointPreset.prototype.getContent = function()
 
     return Wizard.prototype.getContent.call( this,
 
-        '<h3 id="' + this.generateSubID("factory") + '">blub</h3>' +
+        '<h3 id="' + this.generateSubID("factory") + '" />' +
         '<section>' +
         '<p>' + Layout.select(  { id: this.generateSubID("type"),      list: lo_elements.select }) + '</p>' +
         '<p>' + Layout.input(   { id: this.generateSubID("radius"),    list: lo_elements.text })   + '</p>' +

@@ -47,13 +47,13 @@ function Widget( pc_id, pc_name, pa_panel, po_options )
     this.mc_animateEffect     = lo_options.animateeffect             || "drop";
     this.mn_animationTime     = lo_options.animatetime               || 400;
     this.mc_background        = lo_options.background                || "white";
-    this.mc_sizeunit          = lo_options.mc_sizeunit               || "px";
-    this.mn_width             = lo_options.width                     || 750;
-    this.mn_height            = lo_options.height                    || 550;
+    this.mc_sizeunit          = lo_options.mc_sizeunit               || "%";
+    this.mn_width             = lo_options.width                     || 75;
+    this.mn_height            = lo_options.height                    || 95;
     this.mn_minWidth          = lo_options.minWidth                  || this.mn_width;
     this.mn_minHeight         = lo_options.minHeight                 || this.mn_height;
-    this.mn_collapseWidth     = lo_options.collapsewidth             || 400;
-    this.mn_collapseHeight    = lo_options.collapseheight            || 20;
+    this.mn_collapseWidth     = lo_options.collapsewidth             || this.mn_width;
+    this.mn_collapseHeight    = lo_options.collapseheight            || 5;
     this.ml_hidedefault       = lo_options.hidedefault === undefined ? true : lo_options.hidedefault;
 }
 
@@ -68,7 +68,7 @@ Widget.prototype.getGlobalCSS = function()
 {
     return '.ui-resizable-helper{ border: 1px dotted gray; }' +
 
-           this.generateSubID("default", ".") +
+           this.generateSubID("widget", "#") +
            '{' +
            '    position: absolute;' +
            '    padding: 5px;' +
@@ -80,7 +80,7 @@ Widget.prototype.getGlobalCSS = function()
            ["    background: ", this.mc_background, ";"].join("") +
            '}' +
 
-           this.generateSubID("header", ".") +
+           this.generateSubID("header", "#") +
            '{' +
            '    margin: 0;' +
            '    color: white;' +
@@ -91,7 +91,7 @@ Widget.prototype.getGlobalCSS = function()
            '    margin-bottom: 10px;' +
            '}' +
 
-           this.generateSubID("button", ".") +
+           this.generateSubID("button", "#") +
            '{' +
            '    position: absolute;' +
            '    right: 0;' +
@@ -109,9 +109,9 @@ Widget.prototype.getGlobalCSS = function()
 Widget.prototype.getContent = function( pc_content )
 {
     return '<div id="' + this.generateSubID("widget") + '">' +
-           '<h3 class="' + this.generateSubID("header") + '">' +
+           '<h3 id="' + this.generateSubID("header") + '">' +
            '<span>' + this.mc_name + '</span>' +
-           '<span class = "' + this.generateSubID("button") + '">' +
+           '<span id = "' + this.generateSubID("button") + '">' +
            '<button id="' + this.generateSubID("collapsebutton") + '"></button>' +
            '<button id="' + this.generateSubID("closebutton") + '"></button>' +
            '</span>' +

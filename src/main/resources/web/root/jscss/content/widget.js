@@ -113,6 +113,7 @@ Widget.prototype.getContent = function( pc_content )
            '<button id="' + this.generateSubID("collapsebutton") + '"></button>' +
            '<button id="' + this.generateSubID("closebutton") + '"></button>' +
            '</span>' +
+           '</h3>' +
            (pc_content ? pc_content : "") +
            '</div>' +
            Pane.prototype.getContent.call(this);
@@ -208,4 +209,3 @@ Widget.prototype.show = function()
 {
     jQuery( this.generateSubID("widget", "#") ).show(this.mc_animateEffect, this.mn_animationTime);
 };
-

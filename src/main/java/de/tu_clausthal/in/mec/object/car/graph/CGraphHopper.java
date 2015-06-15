@@ -123,6 +123,7 @@ public class CGraphHopper extends GraphHopper
             FileUtils.deleteQuietly( l_graphlocation );
 
         // convert OSM or load the graph
+        CConfiguration.getInstance().get().<Boolean>set( "simulation/traffic/map/reimport", false );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResourceString( this, "notloaded" ) );

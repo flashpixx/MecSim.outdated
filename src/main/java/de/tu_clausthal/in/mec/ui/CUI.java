@@ -54,6 +54,8 @@ import java.util.Map;
  *
  * @see https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
+ *
+ * @todo undock structure works correct once
  */
 public class CUI extends Application
 {
@@ -159,8 +161,6 @@ public class CUI extends Application
      * @param p_title title
      * @param p_node node
      * @return tab
-     *
-     * @bug closable is disable, because the library ControlsFX creates a NPE on the close event - so can be activated at a new library release version
      */
     private Tab createTab( final String p_title, final Node p_node )
     {
@@ -169,7 +169,7 @@ public class CUI extends Application
         l_tab.setId( p_title );
         l_tab.setText( p_title );
         l_tab.setContent( p_node );
-        l_tab.setClosable( false );
+        l_tab.setClosable( true );
         l_tab.setOnClosed( m_tabcloseevent );
         m_tabpane.getTabs().add( l_tab );
 

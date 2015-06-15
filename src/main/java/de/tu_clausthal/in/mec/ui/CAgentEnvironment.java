@@ -117,26 +117,6 @@ public class CAgentEnvironment
     }
 
     /**
-     * UI method - delete an agent
-     *
-     * @param p_data input data
-     */
-    private final void web_static_delete( final Map<String, Object> p_data )
-    {
-        if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-
-        switch ( m_type )
-        {
-            case Jason:
-                FileUtils.deleteQuietly( IEnvironment.getAgentFile( this.getAgentName( p_data ) ) );
-                break;
-
-            default:
-        }
-    }
-
-    /**
      * UI method - returns a list of all agents
      *
      * @return agent list
@@ -178,6 +158,26 @@ public class CAgentEnvironment
     }
 
     /**
+     * UI method - delete an agent
+     *
+     * @param p_data input data
+     */
+    private final void web_static_remove( final Map<String, Object> p_data )
+    {
+        if ( CSimulation.getInstance().isRunning() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
+
+        switch ( m_type )
+        {
+            case Jason:
+                FileUtils.deleteQuietly( IEnvironment.getAgentFile( this.getAgentName( p_data ) ) );
+                break;
+
+            default:
+        }
+    }
+
+    /**
      * UI method - writes the content to the agent file
      *
      * @param p_data input data
@@ -192,7 +192,7 @@ public class CAgentEnvironment
         switch ( m_type )
         {
             case Jason:
-                FileUtils.writeStringToFile( IEnvironment.getAgentFile( this.getAgentName( p_data ) ), (String) p_data.get( "data" ) );
+                FileUtils.writeStringToFile( IEnvironment.getAgentFile( this.getAgentName( p_data ) ), (String) p_data.get( "source" ) );
                 break;
 
             default:

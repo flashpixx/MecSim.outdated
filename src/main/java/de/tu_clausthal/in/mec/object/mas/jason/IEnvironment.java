@@ -71,6 +71,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @note should throw exception on syntax error
+     * @bug does not work correctly - exception is not thrown
      */
     public static void checkAgentFileSyntax( final String p_agentname )
     {
@@ -112,7 +113,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * @return existing file object
      *
      * @note must support a agent filename as file with extension and without extension
-     * @todo add ASL build-in files with the resource directory
      */
     public static File getAgentFile( final String p_agentname )
     {
@@ -126,8 +126,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
-     *
-     * @todo add ASL build-in files with the resource directory
      */
     public static String[] getAgentFiles()
     {

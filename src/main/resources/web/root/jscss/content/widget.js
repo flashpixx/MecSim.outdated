@@ -28,7 +28,7 @@
 
 
 /**
- * ctor to create the configuration view
+ * ctor to create the widget
  *
  * @param pc_id ID
  * @param pc_name name of the panel
@@ -40,10 +40,10 @@ function Widget( pc_id, pc_name, pa_panel, po_options )
     Pane.call(this, pc_id, pc_name, pa_panel );
 
     var lo_options            = po_options || {};
-    this.ml_resizeable        = !lo_options.resizeable  ? true : lo_options.resizeable;
-    this.ml_draggable         = !lo_options.draggable   ? true : lo_options.draggable;
+    this.ml_resizeable        = lo_options.resizeable === undefined  ? true : lo_options.resizeable;
+    this.ml_draggable         = lo_options.draggable === undefined   ? true : lo_options.draggable;
     this.ml_cancel            = lo_options.cancel                    || false;
-    this.ml_animate           = !lo_options.animate     ? true : lo_options.animate;
+    this.ml_animate           = lo_options.animate === undefined     ? true : lo_options.animate;
     this.mc_animateEffect     = lo_options.animateeffect             || "drop";
     this.mn_animationTime     = lo_options.animatetime               || 400;
     this.mc_background        = lo_options.background                || "white";
@@ -54,9 +54,7 @@ function Widget( pc_id, pc_name, pa_panel, po_options )
     this.mn_minHeight         = lo_options.minHeight                 || this.mn_height;
     this.mn_collapseWidth     = lo_options.collapsewidth             || 400;
     this.mn_collapseHeight    = lo_options.collapseheight            || 20;
-
-    this.ml_closedStatus      = false;
-    this.ml_minimizedStatus   = false;
+    this.ml_hidedefault       = lo_options.hidedefault === undefined ? true : lo_options.hidedefault;
 }
 
 /** inheritance call **/
@@ -66,7 +64,7 @@ Widget.prototype = Object.create(Pane.prototype);
 /**
  * @Overwrite
 **/
-Widget.prototype.getCSS = function()
+Widget.prototype.getGlobalCSS = function()
 {
     return '.ui-resizable-helper{ border: 1px dotted gray; }' +
 
@@ -97,7 +95,9 @@ Widget.prototype.getCSS = function()
            '{' +
            '    position: absolute;' +
            '    right: 0;' +
-           '}';
+           '}' +
+
+           Pane.prototype.getGlobalCSS.call(this);
 }
 
 
@@ -106,7 +106,7 @@ Widget.prototype.getCSS = function()
  *
  * @param pc_content optional content
 **/
-Widget.prototype.getContent = function(pc_content)
+Widget.prototype.getContent = function( pc_content )
 {
     return '<div id="' + this.generateSubID("widget") + '">' +
            '<h3 class="' + this.generateSubID("header") + '">' +
@@ -116,7 +116,8 @@ Widget.prototype.getContent = function(pc_content)
            '<button id="' + this.generateSubID("closebutton") + '"></button>' +
            '</span>' +
            (pc_content ? pc_content : "") +
-           '</div>';
+           '</div>' +
+           Pane.prototype.getContent.call(this);
 }
 
 
@@ -125,9 +126,15 @@ Widget.prototype.getContent = function(pc_content)
 **/
 Widget.prototype.afterDOMAdded = function()
 {
+    Pane.prototype.afterDOMAdded.call(this);
+
     // create window buttons with action bind
-    jQuery( this.generateSubID("collapsebutton", "#") ).button( { icons : { primary: "ui-icon-newwin"},     text: false }).click( this.collapse );
-    jQuery( this.generateSubID("closebutton", "#") ).button(    { icons : { primary: "ui-icon-closethick"}, text: false }).click( this.close );
+    var self = this;
+    if (this.ml_hidedefault)
+        jQuery( this.generateSubID("widget", "#") ).hide();
+
+    jQuery( this.generateSubID("collapsebutton", "#") ).button( { icons : { primary: "ui-icon-newwin"},     text: false }).click( Widget.prototype.collapse.bind(this) );
+    jQuery( this.generateSubID("closebutton", "#") ).button(    { icons : { primary: "ui-icon-closethick"}, text: false }).click( Widget.prototype.hide.bind(this) );
 
     // resize / collcapse / dragable action bind
     if (this.ml_draggable)
@@ -150,48 +157,55 @@ Widget.prototype.afterDOMAdded = function()
 /**
  * collapse action
 **/
-Widget.prototype.collapse = function(){
+Widget.prototype.collapse = function()
+{
     var self = this;
-    if(this.ml_minimizedStatus)
+    var lo   = jQuery( this.generateSubID("widget", "#") );
 
-        jQuery( this.generateSubID("widget", "#") ).animate(
-            {
-                width  : this.mn_minWidth  + this.mc_sizeunit,
-                height : this.mn_minHeight + this.mc_sizeunit
-            },
-            this.mc_animateEffect,
-            function(){
-                self._div.children().not(this.generateSubID("header", ".")).show();
-                self._div.resizable('enable');
-            }
-        );
-
-    else
-    {
-        this._div.resizable('disable');
-        this._div.children().not(this.generateSubID("header", ".")).hide();
-        this._div.animate(
-            {
-                width  : this.mn_collapseWidth  + this.mc_sizeunit,
-                height : this.mn_collapseHeight + this.mc_sizeunit
-            },
-            this.mn_animationTime
-        );
-    }
-
-    this.ml_minimizedStatus = !this.ml_minimizedStatus;
+    lo.animate(
+        {
+            width  : this.mn_minWidth  + this.mc_sizeunit,
+            height : this.mn_minHeight + this.mc_sizeunit
+        },
+        this.mc_animateEffect,
+        function()
+        {
+            lo.children().not( self.generateSubID("header", ".") ).show();
+            lo.resizable('enable');
+        }
+    );
 };
 
 /**
- * close action
+ * expand action
 **/
-Widget.prototype.close = function()
+Widget.prototype.expand = function()
 {
-    if(this.ml_closedStatus)
-        this._div.show(this.mc_animateEffect, this.mn_animationTime);
-    else
-        this._div.hide(this.mc_animateEffect, this.mn_animationTime);
+    jQuery( this.generateSubID("widget", "#") ).resizable('disable');
+    jQuery( this.generateSubID("widget", "#") ).children().not(this.generateSubID("header", ".")).hide();
+    jQuery( this.generateSubID("widget", "#") ).animate(
+        {
+            width  : this.mn_collapseWidth  + this.mc_sizeunit,
+            height : this.mn_collapseHeight + this.mc_sizeunit
+        },
+        this.mn_animationTime
+    );
+}
 
-    this.ml_closedStatus = !this.ml_closedStatus;
+
+/**
+ * hide action
+**/
+Widget.prototype.hide = function()
+{
+    jQuery( this.generateSubID("widget", "#") ).hide(this.mc_animateEffect, this.mn_animationTime);
+}
+
+/**
+ * show action
+**/
+Widget.prototype.show = function()
+{
+    jQuery( this.generateSubID("widget", "#") ).show(this.mc_animateEffect, this.mn_animationTime);
 };
 

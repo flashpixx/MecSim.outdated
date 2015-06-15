@@ -28,66 +28,52 @@
 
 
 /**
- * ctor to create the waypoint menu
+ * ctor to create the configuration view
  *
  * @param pc_id ID
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
+ * @param po_options configuration options
 **/
-function Waypoint( pc_id, pc_name, pa_panel )
+function WaypointPreset( pc_id, pc_name, pa_panel, po_options )
 {
-    Pane.call(this, pc_id, pc_name, pa_panel );
-
-    this.mo_wizardpreset = new WaypointPreset( "preset", "Preset Wizard" );
-    this.mo_wizardpreset.setParent(this);
+    Wizard.call(this, pc_id, pc_name, pa_panel, po_options );
 }
 
 /** inheritance call **/
-Waypoint.prototype = Object.create(Pane.prototype);
-
+WaypointPreset.prototype = Object.create(Wizard.prototype);
 
 
 /**
  * @Overwrite
 **/
-Waypoint.prototype.getGlobalCSS = function()
+WaypointPreset.prototype.getContent = function()
 {
-    return this.mo_wizardpreset.getGlobalCSS() + Pane.prototype.getGlobalCSS.call(this);
+
+    // list with IDs
+    var lo_elements = {
+        selects  : [],
+        text     : [],
+        slider   : []
+    };
+
+    return Wizard.prototype.getContent.call( this,
+
+        '<h3 id="' + this.generateSubID("factory") + '">blub</h3>' +
+        '<section>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("type"),      list: lo_elements.select }) + '</p>' +
+        '<p>' + Layout.input(   { id: this.generateSubID("radius"),    list: lo_elements.text })   + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("factory"),   list: lo_elements.select }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("agent"),     list: lo_elements.select }) + '</p>' +
+        '</section >'
+
+    );
 }
 
-
 /**
  * @Overwrite
 **/
-Waypoint.prototype.getGlobalContent = function()
+WaypointPreset.prototype.afterDOMAdded = function()
 {
-    jQuery( MecSim.ui().content("#") ).append(this.mo_wizardpreset.getContent());
-
-    return Pane.prototype.getGlobalContent.call(this);
-}
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.getContent = function()
-{
-    return '<button id = "' + this.generateSubID("newpreset") + '" >Create new preset</button >' +
-           '<button id = "' + this.generateSubID("list") + '" >Show Waypoint List</button >' +
-           Pane.prototype.getContent.call(this);
-}
-
-
-
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.afterDOMAdded = function()
-{
-    Pane.prototype.afterDOMAdded.call(this);
-    this.mo_wizardpreset.afterDOMAdded();
-
-    var self = this;
-    jQuery( this.generateSubID("newpreset", "#") ).button().click( function() { self.mo_wizardpreset.show(); } );
-
+    Wizard.prototype.afterDOMAdded.call(this);
 }

@@ -36,26 +36,26 @@ public interface ILiteral<T> extends ITerm
      *
      * @return annotation term
      */
-    public ITermCollection getAnnotation();
+    ITermCollection getAnnotation();
 
     /**
      * returns the functor / dataset of the literal
      *
      * @return function data
      */
-    public IAtom<?> getFunctor();
+    IAtom<?> getFunctor();
 
     /**
      * returns the optional value term
      *
      * @return value term
      */
-    public ITermCollection getValues();
+    ITermCollection getValues();
 
     /**
      * getter for language specific literal
      *
      * @return literal
      */
-    public T getLiteral();
+    T getLiteral();
 }

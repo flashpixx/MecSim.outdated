@@ -41,6 +41,7 @@ public class CInternalBeliefBase extends CBeliefBase
 
     /**
      * ctor with agent specified
+     * reads in the initial beliefs from the agent
      *
      * @param p_agent
      */
@@ -56,7 +57,7 @@ public class CInternalBeliefBase extends CBeliefBase
         // clear old literals
         clearLiterals();
 
-        // get actual literals
+        // read current literals out of the agent
         for( final Literal l_literal : m_agent.getBB() )
             addLiteral( l_literal );
     }

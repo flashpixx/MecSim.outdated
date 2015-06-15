@@ -296,7 +296,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     /**
      * interface for finishing *
      */
-    public static interface IFinish
+    public interface IFinish
     {
 
         /**
@@ -304,7 +304,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
          *
          * @return finish flag
          */
-        public boolean isFinish();
+        boolean isFinish();
 
     }
 

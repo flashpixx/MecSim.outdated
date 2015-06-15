@@ -35,12 +35,12 @@ public interface ITerm
      * @return boolean of checking
      * @note use generic_type_class.isAssignableFrom(p_class)
      */
-    public boolean instanceOf(final Class<?> p_class);
+    boolean instanceOf(final Class<?> p_class);
 
     /**
      * Returns a string representation of the object.
      *
      * @return string representation
      */
-    public String toString();
+    String toString();
 }

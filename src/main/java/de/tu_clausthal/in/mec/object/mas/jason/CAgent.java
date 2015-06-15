@@ -174,7 +174,7 @@ public class CAgent<T> implements IVoidAgent
             addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
-        // put initial beliefs into an additional generic beliefbase
+        // put initial internal beliefs into an additional generic beliefbase
         addBeliefbase( "internals", new CInternalBeliefBase( m_agent ) );
     }
 
@@ -401,7 +401,7 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         * @todo catch RevisionFailedException
+         * @todo handle catched RevisionFailedException
          */
         public final void cycle(final int p_currentstep)
         {
@@ -424,7 +424,7 @@ public class CAgent<T> implements IVoidAgent
             for(ILiteral l_literal : m_beliefs.collapseBeliefbase().getLiterals())
                 try
                 {
-                    m_agent.addBel( (Literal) l_literal.getLiteral());
+                    m_agent.addBel( (Literal) l_literal.getLiteral() );
                 }
                 catch (RevisionFailedException l_exception)
                 {

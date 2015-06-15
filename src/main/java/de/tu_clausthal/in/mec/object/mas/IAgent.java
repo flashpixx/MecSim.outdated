@@ -40,40 +40,40 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name name of the belief
      * @param p_data belief data
      */
-    public void addLiteral(final String p_name, final Object p_data);
+    void addLiteral(final String p_name, final Object p_data);
 
     /**
      * returns the current cycle
      *
      * @return cycle number
      */
-    public int getCycle();
+    int getCycle();
 
     /**
      * returns the name of the agent
      *
      * @return name of the agent
      */
-    public String getName();
+    String getName();
 
     /**
      * returns the source / file of the agent
      *
      * @return source
      */
-    public String getSource();
+    String getSource();
 
     /**
      * register a cycle object
      *
      * @param p_cycle cycle object
      */
-    public void registerCycle(final ICycle p_cycle);
+    void registerCycle(final ICycle p_cycle);
 
     /**
      * release agent call *
      */
-    public void release();
+    void release();
 
     /**
      * removes a belief
@@ -81,13 +81,13 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name name of the belief
      * @param p_data belief data
      */
-    public void removeLiteral(final String p_name, final Object p_data);
+    void removeLiteral(final String p_name, final Object p_data);
 
     /**
      * unregister a cycle object
      *
      * @param p_cycle cycle object
      */
-    public void unregisterCycle(final ICycle p_cycle);
+    void unregisterCycle(final ICycle p_cycle);
 
 }

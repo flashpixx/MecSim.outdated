@@ -38,6 +38,6 @@ public interface IInspector
      *
      * @return map with name and value
      */
-    public Map<String, Object> inspect();
+    Map<String, Object> inspect();
 
 }

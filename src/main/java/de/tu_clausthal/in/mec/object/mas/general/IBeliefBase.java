@@ -42,7 +42,7 @@ public interface IBeliefBase<T>
      *
      * @return beliefbase containing literals of all inherited beliefbases
      */
-    public IBeliefBase<T> collapseBeliefbase();
+    IBeliefBase<T> collapseBeliefbase();
 
     /**
      * collapse method to get a set of literals containing the top-level
@@ -50,59 +50,59 @@ public interface IBeliefBase<T>
      *
      * @return collapsed set of top-level and inherited literals
      */
-    public Set<ILiteral<T>> collapseLiterals();
+    Set<ILiteral<T>> collapseLiterals();
 
     /**
      * getter for top-level literal set
      */
-    public Set<ILiteral<T>> getLiterals();
+    Set<ILiteral<T>> getLiterals();
 
     /**
      * getter for the inherited beliefbases
      */
-    public Map<String, IBeliefBase<T>> getBeliefbases();
+    Map<String, IBeliefBase<T>> getBeliefbases();
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
      * and all the inherited beliefbases will be removed
      */
-    public void clear();
+    void clear();
 
     /**
      * removes the literals of the top level and the inherited beliefbases
      */
-    public void clearLiterals();
+    void clearLiterals();
 
     /**
      * adds a generic literal to the top-level literals
      *
      * @param p_literal generic literal
      */
-    public void addLiteral(final ILiteral p_literal);
+    void addLiteral(final ILiteral p_literal);
 
     /**
      * adds a collection of generic literals
      */
-    public void addAllLiterals(final Collection<ILiteral<T>> p_literals);
+    void addAllLiterals(final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a generic literal from the top level literals
      *
      * @param p_literal generic literal
      */
-    public void removeLiteral(final ILiteral p_literal);
+    void removeLiteral(final ILiteral p_literal);
 
     /**
      * removes a collection of generic literals
      */
-    public void removeAllLiterals(final Collection<ILiteral<T>> p_literals);
+    void removeAllLiterals(final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a beliefbase from inherited beliefbases
      *
      * @param p_name beliefbase to remove
      */
-    public void removeBeliefbase(final String p_name);
+    void removeBeliefbase(final String p_name);
 
     /**
      * method for adding a beliefbase
@@ -110,10 +110,10 @@ public interface IBeliefBase<T>
      * @param p_name       beliefbase name
      * @param p_beliefbase beliefbase to add
      */
-    public void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase);
+    void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase);
 
     /**
      * method to update the beliefbase
      */
-    public void update();
+    void update();
 }

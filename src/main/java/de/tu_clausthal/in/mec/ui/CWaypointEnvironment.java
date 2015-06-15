@@ -206,7 +206,7 @@ public class CWaypointEnvironment
 
         //create tool
         CTool l_newTool = new CTool( p_data );
-        this.m_selectedTool = l_newTool;
+        m_selectedTool = l_newTool;
         this.m_toolbox.put( l_newTool.m_name, l_newTool );
 
         //return data
@@ -307,7 +307,7 @@ public class CWaypointEnvironment
          *
          * @param p_name
          */
-        private EWayPointType( final String p_name )
+        EWayPointType(final String p_name)
         {
             this.m_name = p_name;
         }
@@ -352,7 +352,7 @@ public class CWaypointEnvironment
          * @param p_name
          * @param p_requireAgentProgram
          */
-        private EFactoryType( final String p_name, final boolean p_requireAgentProgram )
+        EFactoryType(final String p_name, final boolean p_requireAgentProgram)
         {
             this.m_name = p_name;
             this.m_requireAgentProgram = p_requireAgentProgram;
@@ -393,7 +393,7 @@ public class CWaypointEnvironment
          * ctor
          * @param p_name
          */
-        private EDistributionType( final String p_name )
+        EDistributionType(final String p_name)
         {
             this.m_name = p_name;
         }
@@ -534,11 +534,11 @@ public class CWaypointEnvironment
             int l_greenValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "green" ) ) );
             int l_blueValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "blue" ) ) );
 
-            this.m_wayPointType = EWayPointType.getWaypointTypeByName( "" );;
+            this.m_wayPointType = EWayPointType.getWaypointTypeByName( "" );
             this.m_radius = Double.parseDouble( String.valueOf( p_parameter.get( "radius" ) ) );
-            this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );;
+            this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );
             this.m_agentProgram = String.valueOf( p_parameter.get( "agentprogram" ) );
-            this.m_generatorType = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "generator" ) ) );;
+            this.m_generatorType = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "generator" ) ) );
             this.m_carcount = Integer.parseInt( String.valueOf( p_parameter.get( "carcount" ) ) );
             this.m_generatorInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput1" ) ) );
             this.m_generatorInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput2" ) ) );

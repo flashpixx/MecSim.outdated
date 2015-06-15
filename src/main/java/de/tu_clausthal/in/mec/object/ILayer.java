@@ -39,20 +39,20 @@ public interface ILayer extends ISteppable, Serializable
      *
      * @return index value of ordering (need not be unique)
      */
-    public int getCalculationIndex();
+    int getCalculationIndex();
 
     /**
      * checks activity of the layer
      *
      * @return boolean of activity
      */
-    public boolean isActive();
+    boolean isActive();
 
     /**
      * activates / deactivates the layer
      *
      * @param p_active activity
      */
-    public void setActive( final boolean p_active );
+    void setActive(final boolean p_active);
 
 }

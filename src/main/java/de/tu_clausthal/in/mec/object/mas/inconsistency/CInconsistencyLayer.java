@@ -277,7 +277,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         /**
          * use stochastic algorithm
          **/
-        Stochastic;
+        Stochastic
     }
 
 

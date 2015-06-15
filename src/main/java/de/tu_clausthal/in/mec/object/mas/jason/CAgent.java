@@ -31,15 +31,18 @@ import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CInternalBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
+import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.*;
@@ -58,7 +61,6 @@ import java.util.List;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
- * @todo display internal beliefs in agent mind inspector
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -150,6 +152,17 @@ public class CAgent<T> implements IVoidAgent
         if ((m_namepath == null) || (m_namepath.isEmpty()))
             m_namepath = new CPath(this.getClass().getSimpleName() + "@" + this.hashCode());
 
+        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
+        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
+        m_architecture = new CJasonArchitecture();
+        m_architecture.insertAgArch(m_architecture);
+
+        // build an own agent to handle manual internal actions
+        m_agent = new CJasonAgent(IEnvironment.getAgentFile(p_asl), m_architecture);
+
+        // initialize message system
+        m_participant = new CParticipant(this);
+
         if (p_bind != null)
         {
             // register possible actions
@@ -161,16 +174,8 @@ public class CAgent<T> implements IVoidAgent
             addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
-        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
-        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
-        m_architecture = new CJasonArchitecture();
-        m_architecture.insertAgArch(m_architecture);
-
-        // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent(IEnvironment.getAgentFile(p_asl), m_architecture);
-
-        // initialize message system
-        m_participant = new CParticipant(this);
+        // put initial internal beliefs into an additional generic beliefbase
+        addBeliefbase( "internals", new CInternalBeliefBase( m_agent ) );
     }
 
 
@@ -396,6 +401,7 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
+         * @todo handle catched RevisionFailedException
          */
         public final void cycle(final int p_currentstep)
         {
@@ -407,9 +413,23 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.addLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
             m_beliefs.removeLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
 
-            // run belief updates
-            for (final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values())
+            // run beliefbase updates
+            for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
                 l_beliefbase.update();
+
+            // clear the agents beliefbase for update step
+            m_agent.getBB().clear();
+
+            // push updated beliefs into the agents beliefbase
+            for(ILiteral l_literal : m_beliefs.collapseBeliefbase().getLiterals())
+                try
+                {
+                    m_agent.addBel( (Literal) l_literal.getLiteral() );
+                }
+                catch (RevisionFailedException l_exception)
+                {
+                    l_exception.printStackTrace();
+                }
 
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);

@@ -190,7 +190,7 @@ var MecSim = (function (px_modul) {
         /** reference to the content area **/
         content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
         /** reference to log area **/
-        log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
+        log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; }
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

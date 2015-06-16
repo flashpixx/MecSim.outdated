@@ -72,10 +72,10 @@ WaypointPreset.prototype.getContent = function()
         // second step - generator settings
         '<h3 id="' + this.generateSubID("basegeneratorhead") + '" />' +
         '<section>' +
-        '<p>' + Layout.select( { id: this.generateSubID("basedistribution"),            label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                    label: " ",   list: this.mo_elements.spinners }) + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("basedistribution"),            class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundright"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",   list: this.mo_elements.spinners }) + '</p>' +
         '</section >' +
 
 
@@ -85,9 +85,9 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("speedhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("speeddistribution"),            label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("speeddistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
@@ -100,15 +100,15 @@ WaypointPreset.prototype.getContent = function()
         '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("accelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("decelerationhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("decelerationdistribution"),            label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("decelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("lingerhead") + '" />' +
@@ -155,6 +155,45 @@ WaypointPreset.prototype.afterDOMAdded = function()
         },
 
         function() {
+
+            MecSim.ajax({
+                url     : "/cwaypointenvironment/listdistribution",
+                success : function( pa_data ) { pa_data.forEach( function(pc_item) {
+
+                    jQuery("<option></option>")
+                        .attr("value", pc_item)
+                        .text(pc_item)
+                        .appendTo(self.generateSubID("distribution", "."));
+                });}
+            });
+
+            MecSim.ajax({
+                url     : "/cwaypointenvironment/listfactories",
+                success : function( po_data ){ jQuery.each( po_data, function( pc_key, pl_value ) {
+
+                    jQuery(self.generateSubID("factory", "#"))
+                        .append( jQuery("<option></option>")
+                            .attr("value", pc_key)
+                            .attr("requireagent", pl_value)
+                            .text(pc_key)
+                        );
+
+                }); }
+            });
+
+            MecSim.ajax({
+                url     : "/cwaypointenvironment/listwaypointtypes",
+                success : function( pa_data ) { pa_data.forEach(function( pc_data ) {
+
+                   jQuery(self.generateSubID("type", "#"))
+                        .append( jQuery("<option></option>")
+                            .attr("value", pc_data)
+                            .text(pc_data)
+                        );
+
+                }); }
+            });
+
             Wizard.prototype.afterDOMAdded.call(self);
 
             jQuery( self.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
@@ -164,4 +203,3 @@ WaypointPreset.prototype.afterDOMAdded = function()
         }
     );
 }
-

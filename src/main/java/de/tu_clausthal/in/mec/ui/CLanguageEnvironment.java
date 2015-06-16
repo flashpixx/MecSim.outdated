@@ -61,32 +61,6 @@ public class CLanguageEnvironment
             put( "configuretarget", CCommon.getResourceString( CLanguageEnvironment.class, "configuretarget" ) );
             put( "addtarget", CCommon.getResourceString( CLanguageEnvironment.class, "addtarget" ) );
     }};
-
-    private static final Map<String, String> m_waypointpreset = new HashMap<String, String>()
-    {{
-            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
-
-            put( "id_factoryhead", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
-            put( "id_basegeneratorhead", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
-            put( "id_carhead", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
-            put( "id_customhead", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
-
-            put( "label_type", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
-            put( "label_radius", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
-            put( "label_factory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
-            put( "label_agent", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
-
-            put( "label_carcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
-
-            put( "id_speedhead", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
-            put( "id_maxspeedhead", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
-            put( "id_accelerationhead", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
-            put( "id_decelerationhead", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
-            put( "id_lingerhead", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
-
-            //put( "label_");
-            put( "label_linger", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
-        }};
     /**
      * static waypoint labels
      */
@@ -131,22 +105,43 @@ public class CLanguageEnvironment
             put( "#mecsim_source_saveGraph", CCommon.getResourceString( CLanguageEnvironment.class, "savemakrovchain" ) );
             put( "#mecsim_source_resetGraph", CCommon.getResourceString( CLanguageEnvironment.class, "resetmakrovchain" ) );
         }};
-    /*
-    private final Map<String, String> web_static_getdynamicwaypointlabels()
-    {
-        return m_dynamicWaypointLabels;
-    }
+    private static final Map<String, String> m_waypointpreset = new HashMap<String, String>()
+    {{
+            // window title
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
 
-    /**
-     * method to read waypoint specific labels and resource strings
-     *
-     * @return
-     *
-    private final Map<String, String> web_static_getstaticwaypointlabels()
-    {
-        return m_staticWaypointLabels;
-    }
-     */
+            // wizard step header
+            put( "id_factoryhead", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
+            put( "id_basegeneratorhead", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
+            put( "id_carhead", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
+            put( "id_customhead", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+
+            // wizard first step
+            put( "label_type", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
+            put( "label_radius", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
+            put( "label_factory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
+            put( "label_agent", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
+
+            // wizard second step
+            put( "label_carcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
+
+            // wizard third step
+            put( "id_speedhead", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
+            put( "id_maxspeedhead", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
+            put( "id_accelerationhead", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
+            put( "id_decelerationhead", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
+            put( "id_lingerhead", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
+
+            put( "label_linger", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
+
+            // wizard fourth step
+            put( "label_name", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
+            put( "label_color", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
+
+            // general structure
+            //put( "class_distribution_");
+        }};
+
     private final Map<String, String> web_static_waypointpreset()
     {
         return m_waypointpreset;

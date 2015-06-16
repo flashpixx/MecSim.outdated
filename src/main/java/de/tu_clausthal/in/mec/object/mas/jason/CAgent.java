@@ -177,8 +177,8 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.add("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
-        // put initial internal beliefs into an additional generic beliefbase
-        m_beliefs.add("internals", new CInternalBeliefBase(m_agent));
+        // put initial internal beliefs into top-level beliefbase
+        m_beliefs.getLiterals().addAll( CCommon.convertGeneric( m_agent.getInitialBels() ) );
     }
 
 
@@ -422,13 +422,6 @@ public class CAgent<T> implements IVoidAgent
             for (final ICycle l_item : m_cycleobject)
                 l_item.beforeCycle(p_currentstep, CAgent.this);
 
-            // run beliefbase updates
-            m_beliefs.update();
-
-            // add the simulationstep belief with the new number and remove the old one
-//            m_beliefs.add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
-//            m_beliefs.remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
-
             // clear the agents beliefbase for update step
             m_agent.getBB().clear();
 
@@ -448,6 +441,21 @@ public class CAgent<T> implements IVoidAgent
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);
             this.getTS().reasoningCycle();
+
+            // run beliefbase updates
+            m_beliefs.update();
+
+            // get updated internal beliefs after agent reasoning cycle
+            m_beliefs.getLiterals().clear();
+
+            // add the simulationstep belief with the new number and remove the old one
+            m_beliefs.getLiterals().add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
+//            m_beliefs.getLiterals().remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
+
+            m_beliefs.getLiterals().addAll( CCommon.convertGeneric(m_agent.getBB()) );
+
+            for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
+                m_beliefs.getLiterals().retainAll(l_beliefbase.getLiterals());
 
             // run all register after-cycle object
             for (final ICycle l_item : m_cycleobject)

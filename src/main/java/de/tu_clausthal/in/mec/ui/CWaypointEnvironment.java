@@ -40,9 +40,8 @@ import java.util.Map;
  */
 public class CWaypointEnvironment
 {
-
     /**
-     * default properties
+     * map with default properties
      */
     private final static Map<String, Object> c_defaultproperties = new HashMap<String, Object>()
     {{
@@ -88,6 +87,7 @@ public class CWaypointEnvironment
                             }}
                 );
         }};
+
     /**
      * map with factory names
      */
@@ -96,8 +96,9 @@ public class CWaypointEnvironment
             for ( final EFactoryType l_factory : EFactoryType.values() )
                 put( l_factory.m_name, l_factory.m_requireAgentProgram );
         }};
+
     /**
-     * label values of UI
+     * static label for UI
      */
     private static final Map<String, String> c_label = new HashMap<String, String>()
     {{

@@ -140,6 +140,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
         "/cwaypointenvironment/label",
 
+        // set static labels
         function( pc_key, pc_value ) {
             var la = pc_key.split("_");
 
@@ -154,8 +155,10 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 jQuery( 'label[for="' + self.generateSubID(la[1]) + '"]' ).text(pc_value);
         },
 
+        // set dynamic content, action binds and layout after finishing language labels
         function() {
 
+            // read distribution list
             MecSim.ajax({
                 url     : "/cwaypointenvironment/listdistribution",
                 success : function( po_data ) {
@@ -169,6 +172,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 }
             });
 
+            // read factory list
             MecSim.ajax({
                 url     : "/cwaypointenvironment/listfactories",
                 success : function( po_data ){ jQuery.each( po_data, function( pc_key, pl_value ) {
@@ -183,6 +187,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 }); }
             });
 
+            // read waypoint types
             MecSim.ajax({
                 url     : "/cwaypointenvironment/listwaypointtypes",
                 success : function( pa_data ) { pa_data.forEach(function( pc_data ) {
@@ -196,6 +201,8 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 }); }
             });
 
+
+            // --- initialize layout ---
             Wizard.prototype.afterDOMAdded.call(self);
 
             // set accordion for wizard step four

@@ -136,7 +136,6 @@ WaypointPreset.prototype.getContent = function()
 WaypointPreset.prototype.afterDOMAdded = function()
 {
     var self = this;
-
     MecSim.language(
 
         this.mc_id,
@@ -148,6 +147,8 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             if (la[0] === "id")
                 jQuery( self.generateSubID(la[1], "#") ).text(pc_value);
+            if (la[0] === "label")
+                jQuery( 'label[for="' + self.generateSubID(la[1]) + '"]' ).text(pc_value);
         },
 
         function() {

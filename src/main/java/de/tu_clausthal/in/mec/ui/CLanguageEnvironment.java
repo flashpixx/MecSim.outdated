@@ -67,6 +67,19 @@ public class CLanguageEnvironment
             put( "id_generator", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
             put( "id_car", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
             put( "id_custom", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+
+            put( "label_type", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
+            put( "label_radius", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
+            put( "label_factory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
+            put( "label_agent", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
+
+            put( "label_carcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
+
+            put( "id_speed", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
+            put( "id_maxspeed", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
+            put( "id_acceleration", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
+            put( "id_deceleration", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
+            put( "id_linger", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
         }};
     /**
      * static waypoint labels

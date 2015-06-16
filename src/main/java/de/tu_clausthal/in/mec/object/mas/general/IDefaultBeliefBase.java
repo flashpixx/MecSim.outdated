@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 
 import java.util.*;
 
@@ -93,6 +94,13 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    public void update()
+    {
+        for (final IBeliefBase l_beliefbase : m_beliefbases.values() )
+            l_beliefbase.update();
+    }
+
+    @Override
     public boolean addAll(String p_path, Collection<ILiteral<T>> p_literals)
     {
         return this.addAll(new CPath(p_path), p_literals);
@@ -127,6 +135,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public boolean remove(String p_path)
     {
         return this.remove(new CPath(p_path));
+    }
+
+    public boolean remove(final CPath p_path, final ILiteral<T> p_literal )
+    {
+        return this.get( p_path ).getLiterals().remove( p_literal );
     }
 
     /**

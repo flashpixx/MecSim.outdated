@@ -153,11 +153,5 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
     /**
      * method to update the beliefbase
      */
-    public void update(final CPath p_path);
-
-    /**
-     * method to update the beliefbase
-     */
-    public void update(final String p_path);
-
+    public void update();
 }

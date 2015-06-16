@@ -65,7 +65,4 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     {
         super(p_beliefbases, p_literals);
     }
-
-    @Override
-    public void update() { }
 }

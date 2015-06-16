@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
@@ -72,6 +73,8 @@ public class CBindingBeliefBase extends CBeliefBase
     @Override
     public final void update()
     {
+        super.update();
+
         // remove old literals
         this.clear();
 
@@ -92,7 +95,7 @@ public class CBindingBeliefBase extends CBeliefBase
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    this.add( CCommon.convertGeneric( l_literal ) );
+                    this.add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
 
                 } catch (final Exception l_exception)
                 {

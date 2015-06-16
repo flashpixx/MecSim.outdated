@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSemantics.Agent;
@@ -56,10 +57,12 @@ public class CInternalBeliefBase extends CBeliefBase
     @Override
     public void update()
     {
+        super.update();
+
         // clear old literals
         this.clear();
 
         // push agent beliefs into set of top-level literals
-        addAll( CCommon.convertGeneric( m_agent.getBB() ) );
+        addAll(CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
     }
 }

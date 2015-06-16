@@ -31,6 +31,7 @@ import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -62,6 +63,7 @@ import java.util.List;
  *
  * @tparam T typ of binding objects
  * @todo error in cycle step, synchronize agent and generic beliefbase correctly
+ * @todo remove internal beliefbase and put literals on top-level
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -214,13 +216,25 @@ public class CAgent<T> implements IVoidAgent
     /**
      * adds a literal to the top-level literals
      *
-     * @param p_name name of the belief
+     * @param p_path name of the belief
      * @param p_data belief data
      */
     @Override
-    public void addLiteral(final String p_name, final Object p_data)
+    public void addLiteral(final CPath p_path, final Object p_data)
     {
-        m_beliefs.add(CCommon.convertGeneric( CCommon.getLiteral(p_name, p_data)));
+        m_beliefs.add(p_path.getSubPath(0, p_path.size() - 1), CCommon.convertGeneric(CCommon.getLiteral(p_path.getSuffix(), p_data)));
+    }
+
+    /**
+     * adds a literal to the top-level literals
+     *
+     * @param p_path path of beliefbase with literal name as last element
+     * @param p_data belief data
+     */
+    @Override
+    public void addLiteral(final String p_path, final Object p_data)
+    {
+        this.addLiteral(new CPath(p_path), p_data);
     }
 
     @Override
@@ -256,16 +270,29 @@ public class CAgent<T> implements IVoidAgent
     }
 
     /**
-     * removes a literal from top-level literals
+     * removes a literal from specified beliefbase
      *
-     * @param p_name name of the belief
+     * @param p_path path to beliefbase with literal name as last element
      * @param p_data belief data
      */
     @Override
-    public void removeLiteral(final String p_name, final Object p_data)
+    public void removeLiteral(final CPath p_path, final Object p_data)
     {
-        m_beliefs.remove(CCommon.convertGeneric(CCommon.getLiteral(p_name, p_data)));
+        m_beliefs.get(p_path.getSubPath(0, p_path.size()-1)).getLiterals().remove(CCommon.convertGeneric(CCommon.getLiteral(p_path.getSuffix(), p_data)));
     }
+
+    /**
+     * removes a literal from specified beliefbase
+     *
+     * @param p_path path to beliefbase with literal name as last element
+     * @param p_data belief data
+     */
+    @Override
+    public void removeLiteral(final String p_path, final Object p_data)
+    {
+        this.removeLiteral(new CPath(p_path), p_data);
+    }
+
 
     @Override
     public void unregisterCycle(final ICycle p_cycle)
@@ -307,7 +334,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage(final Set<IMessage> p_messages)
     {
-        ((CMessageBeliefBase) m_beliefs.getInherited().get("messages")).receiveMessage(p_messages);
+        ((CMessageBeliefBase) m_beliefs.getBeliefbases().get("messages")).receiveMessage(p_messages);
     }
 
     @Override
@@ -396,22 +423,21 @@ public class CAgent<T> implements IVoidAgent
                 l_item.beforeCycle(p_currentstep, CAgent.this);
 
             // run beliefbase updates
-            for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getInherited().values() )
-                l_beliefbase.update();
+            m_beliefs.update();
 
             // add the simulationstep belief with the new number and remove the old one
-            m_beliefs.add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
-            m_beliefs.remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
+//            m_beliefs.add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
+//            m_beliefs.remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
 
             // clear the agents beliefbase for update step
             m_agent.getBB().clear();
 
             // push updated beliefs into the agents beliefbase
             // generic beliefbase and agent beliefbase are now synchronized
-            for( final Literal l_literal : m_beliefs )
+            for( final ILiteral<Literal> l_literal : m_beliefs )
                 try
                 {
-                    m_agent.addBel( l_literal );
+                    m_agent.addBel( l_literal.getLiteral() );
                 }
                 catch (RevisionFailedException l_exception)
                 {

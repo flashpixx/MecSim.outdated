@@ -136,21 +136,28 @@ WaypointPreset.prototype.getContent = function()
 WaypointPreset.prototype.afterDOMAdded = function()
 {
     var self = this;
-    Wizard.prototype.afterDOMAdded.call(this);
 
-    jQuery( this.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
-    this.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
-    this.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
-    this.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
+    MecSim.language(
 
-    MecSim.language( this.mc_id, function( pc_key, pc_value ) {
-        var la = pc_key.split("_");
-        if (la.length != 2)
-            return;
+        this.mc_id,
 
-        if (la[0] === "id")
-            console.log(jQuery( self.generateSubID(la[1], "#") ) );
-            //.html(pc_value);
-     } );
+        function( pc_key, pc_value ) {
+            var la = pc_key.split("_");
+            if (la.length != 2)
+                return;
+
+            if (la[0] === "id")
+                jQuery( self.generateSubID(la[1], "#") ).text(pc_value);
+        },
+
+        function() {
+            Wizard.prototype.afterDOMAdded.call(self);
+
+            jQuery( self.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
+            self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
+            self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
+            self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
+        }
+    );
 }
 

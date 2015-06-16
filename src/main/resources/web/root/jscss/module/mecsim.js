@@ -155,8 +155,9 @@ var MecSim = (function (px_modul) {
      * @note the keys of the returned json object are the labels of the DOM elements
      * @param pc_group the group label, that matches the URL part
      * @param px_callback callback function which is run with each value
+     * @param px_finish callback function which is called on finishing the success
     **/
-    px_modul.language = function( pc_group, px_callback )
+    px_modul.language = function( pc_group, px_callback, px_finish )
     {
         jQuery.ajax({
             url : "/clanguageenvironment/"+pc_group,
@@ -164,6 +165,8 @@ var MecSim = (function (px_modul) {
             success : function( po_data )
             {
                 jQuery.each(po_data, px_callback);
+                if (classof(px_finish, "function"))
+                    px_finish();
             }
         });
     }

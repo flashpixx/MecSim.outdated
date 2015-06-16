@@ -61,7 +61,13 @@ public class CLanguageEnvironment
             put( "configuretarget", CCommon.getResourceString( CLanguageEnvironment.class, "configuretarget" ) );
             put( "addtarget", CCommon.getResourceString( CLanguageEnvironment.class, "addtarget" ) );
     }};
-
+    private static final Map<String, String> m_preset = new HashMap<String, String>()
+    {{
+            put( "id_factory", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
+            put( "id_generator", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
+            put( "id_car", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
+            put( "id_custom", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+        }};
     /**
      * static waypoint labels
      */
@@ -107,6 +113,11 @@ public class CLanguageEnvironment
             put( "#mecsim_source_resetGraph", CCommon.getResourceString( CLanguageEnvironment.class, "resetmakrovchain" ) );
         }};
 
+    private final Map<String, String> web_static_getdynamicwaypointlabels()
+    {
+        return m_dynamicWaypointLabels;
+    }
+
     /**
      * method to read waypoint specific labels and resource strings
      *
@@ -117,9 +128,9 @@ public class CLanguageEnvironment
         return m_staticWaypointLabels;
     }
 
-    private final Map<String, String> web_static_getdynamicwaypointlabels()
+    private final Map<String, String> web_static_preset()
     {
-        return m_dynamicWaypointLabels;
+        return m_preset;
     }
 
 }

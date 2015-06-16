@@ -143,6 +143,14 @@ WaypointPreset.prototype.afterDOMAdded = function()
     this.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
     this.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
 
-    //MecSim.language( );
+    MecSim.language( this.mc_id, function( pc_key, pc_value ) {
+        var la = pc_key.split("_");
+        if (la.length != 2)
+            return;
+
+        if (la[0] === "id")
+            console.log(jQuery( self.generateSubID(la[1], "#") ) );
+            //.html(pc_value);
+     } );
 }
 

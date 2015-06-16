@@ -114,7 +114,7 @@ Widget.prototype.getContent = function( pc_content )
 {
     return '<div id="' + this.generateSubID("widget") + '">' +
            '<h3 id="' + this.generateSubID("header") + '">' +
-           '<span>' + this.mc_name + '</span>' +
+           '<span id="' + this.generateSubID("title") + '">' + this.mc_name + '</span>' +
            '<span id = "' + this.generateSubID("button") + '">' +
            '<button id="' + this.generateSubID("collapsebutton") + '"></button>' +
            '<button id="' + this.generateSubID("closebutton") + '"></button>' +
@@ -216,3 +216,14 @@ Widget.prototype.show = function()
 {
     jQuery( this.generateSubID("widget", "#") ).show(this.mc_animateEffect, this.mn_animationTime);
 };
+
+
+/**
+ * changes the title text
+ *
+ * @param pc_title title text
+**/
+Widget.prototype.setTitle = function( pc_title )
+{
+    jQuery( this.generateSubID("title", "#") ).text(pc_title);
+}

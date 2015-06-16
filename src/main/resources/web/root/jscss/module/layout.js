@@ -32,15 +32,20 @@ var Layout = (function (px_modul) {
     // --- dialog div content ----------------------------------------------------------------------------------------------------------------------------------
     /**
      * creates a dialog div structure
-     * @param po_options Json object in the format { id: -DOM ID of the dialog-, contentid: -DOM ID of the content-, content: -dialog content-, title: -optional title- }
+     * @param po_options Json object in the format { id: -DOM ID of the dialog-, outer/innerclass: -DOM class-, contentid: -DOM ID of the content-, content: -dialog content-, title: -optional title- }
     **/
     px_modul.dialog = function( po_options )
     {
         return [ '<div id="' + po_options.id + '"',
-                 (po_options.title ? 'title="' + po_options.title + '"' : "") + '>',
-                 '<div ' + (po_options.contentid ? 'id= "' + po_options.contentid + '"' : "")  + '>',
+                 (po_options.title ? 'title="' + po_options.title + '"' : ""),
+                 (po_options.outerclass ? 'class="' + po_options.outerclass + '"' : "") + '>',
+
+                 '<div ' + (po_options.contentid ? 'id= "' + po_options.contentid + '"' : ""),
+                 (po_options.innerclass ? 'class="' + po_options.innerclass + '"' : "") + '>',
                  (po_options.content ? po_options.content : ""),
-                 '</div></div>'
+                 '</div>',
+
+                 '</div>'
                ].join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

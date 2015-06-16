@@ -38,7 +38,7 @@ function Waypoint( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 
-    this.mo_wizardpreset = new WaypointPreset( "preset", "Preset Wizard" );
+    this.mo_wizardpreset = new WaypointPreset( "waypointpreset" );
     this.mo_wizardpreset.setParent(this);
 }
 

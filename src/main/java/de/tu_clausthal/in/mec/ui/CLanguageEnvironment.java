@@ -37,7 +37,7 @@ public class CLanguageEnvironment
 
     /**
      * dynamic waypoint labels
-     */
+     *
     private static final Map<String, String> m_dynamicWaypointLabels = new HashMap<String, String>()
     {{
             put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
@@ -61,8 +61,11 @@ public class CLanguageEnvironment
             put( "configuretarget", CCommon.getResourceString( CLanguageEnvironment.class, "configuretarget" ) );
             put( "addtarget", CCommon.getResourceString( CLanguageEnvironment.class, "addtarget" ) );
     }};
-    private static final Map<String, String> m_preset = new HashMap<String, String>()
+     */
+    private static final Map<String, String> m_waypointpreset = new HashMap<String, String>()
     {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
+
             put( "id_factory", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
             put( "id_generator", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
             put( "id_car", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
@@ -80,10 +83,13 @@ public class CLanguageEnvironment
             put( "id_acceleration", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
             put( "id_deceleration", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
             put( "id_linger", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
+
+            //put( "label_");
+            put( "label_lingervalue", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
         }};
     /**
      * static waypoint labels
-     */
+     *
     private static final Map<String, String> m_staticWaypointLabels = new HashMap<String, String>()
     {{
             //general wizard labels
@@ -135,15 +141,15 @@ public class CLanguageEnvironment
      * method to read waypoint specific labels and resource strings
      *
      * @return
-     */
+     *
     private final Map<String, String> web_static_getstaticwaypointlabels()
     {
         return m_staticWaypointLabels;
     }
-
-    private final Map<String, String> web_static_preset()
+     */
+    private final Map<String, String> web_static_waypointpreset()
     {
-        return m_preset;
+        return m_waypointpreset;
     }
 
 }

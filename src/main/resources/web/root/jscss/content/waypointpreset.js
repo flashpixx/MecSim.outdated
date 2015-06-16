@@ -92,9 +92,9 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("maxspeed"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),    class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundleft"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundright"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +

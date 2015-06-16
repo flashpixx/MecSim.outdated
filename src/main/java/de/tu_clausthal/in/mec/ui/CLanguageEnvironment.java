@@ -119,6 +119,7 @@ public class CLanguageEnvironment
             // wizard first step
             put( "label_type", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
             put( "label_radius", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
+            put( "label_basedistribution", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
             put( "label_factory", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
             put( "label_agent", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
 
@@ -133,13 +134,15 @@ public class CLanguageEnvironment
             put( "id_lingerhead", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
 
             put( "label_linger", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
+            put( "label_speeddistribution", CCommon.getResourceString( CLanguageEnvironment.class, "selectspeedprob" ) );
+            put( "label_maxspeeddistribution", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxspeedprob" ) );
+            put( "label_accelerationdistribution", CCommon.getResourceString( CLanguageEnvironment.class, "selectaccprob" ) );
+            put( "label_decelerationdistribution", CCommon.getResourceString( CLanguageEnvironment.class, "selectdecprob" ) );
 
             // wizard fourth step
             put( "label_name", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
             put( "label_color", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
 
-            // general structure
-            //put( "class_distribution_");
         }};
 
     private final Map<String, String> web_static_waypointpreset()

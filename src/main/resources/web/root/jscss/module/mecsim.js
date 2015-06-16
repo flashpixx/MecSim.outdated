@@ -154,20 +154,16 @@ var MecSim = (function (px_modul) {
      * language access for setting text elements
      * @note the keys of the returned json object are the labels of the DOM elements
      * @param pc_group the group label, that matches the URL part
+     * @param px_callback callback function which is run with each value
     **/
-    px_modul.language = function( pc_group, pc_callback )
+    px_modul.language = function( pc_group, px_callback )
     {
         jQuery.ajax({
             url : "/clanguageenvironment/"+pc_group,
             type: "post",
             success : function( po_data )
             {
-                jQuery.each(po_data, function(pc_key, pc_text){
-                    jQuery(pc_key).text(pc_text);
-                });
-
-                if(pc_callback !== undefined || pc_callback !==null)
-                    pc_callback();
+                jQuery.each(po_data, px_callback);
             }
         });
     }

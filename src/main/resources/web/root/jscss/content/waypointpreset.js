@@ -142,5 +142,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
     this.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
     this.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
     this.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
+
+    //MecSim.language( );
 }
 

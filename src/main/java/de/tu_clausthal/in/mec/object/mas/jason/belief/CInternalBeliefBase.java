@@ -32,7 +32,7 @@ import jason.asSyntax.Literal;
  * beliefbase for internal beliefs, i.e. the initial beliefs
  * and beliefs that arise from deduction rules
  *
- * @todo
+ * @todo in update-method: add just literals which are not in other beliefbases
  */
 public class CInternalBeliefBase extends CBeliefBase
 {
@@ -57,10 +57,9 @@ public class CInternalBeliefBase extends CBeliefBase
     public void update()
     {
         // clear old literals
-        clearLiterals();
+        this.clear();
 
-        // read current literals out of the agent
-        for( final Literal l_literal : m_agent.getBB() )
-            addLiteral( l_literal );
+        // push agent beliefs into set of top-level literals
+        addAll( CCommon.convertGeneric( m_agent.getBB() ) );
     }
 }

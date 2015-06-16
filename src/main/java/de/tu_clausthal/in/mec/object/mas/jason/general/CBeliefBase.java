@@ -66,32 +66,6 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
         super(p_beliefbases, p_literals);
     }
 
-    /**
-     * adds a language specific literal to the top-level literals
-     *
-     * @param p_literal language specific literal
-     */
-    public void addLiteral(final Literal p_literal)
-    {
-        add(CCommon.convertGeneric(p_literal));
-    }
-
-    /**
-     * removes a language specific literal from the top level literals
-     *
-     * @param p_literal language specific literal
-     */
-    public void removeLiteral(final Literal p_literal)
-    {
-        removeLiteral(CCommon.convertGeneric(p_literal));
-    }
-
-    @Override
-    public IBeliefBase<Literal> collapse()
-    {
-        return new CBeliefBase(this.collapseLiterals());
-    }
-
     @Override
     public void update() { }
 }

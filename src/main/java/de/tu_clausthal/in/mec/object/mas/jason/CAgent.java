@@ -171,12 +171,12 @@ public class CAgent<T> implements IVoidAgent
             m_action.put("invoke", new CMethodBind(c_bindname, p_bind));
 
             // initialize inherited beliefbases
-            addBeliefbase("binding", new CBindingBeliefBase(c_bindname, p_bind));
-            addBeliefbase("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
+            m_beliefs.add("binding", new CBindingBeliefBase(c_bindname, p_bind));
+            m_beliefs.add("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
 
         // put initial internal beliefs into an additional generic beliefbase
-        addBeliefbase( "internals", new CInternalBeliefBase( m_agent ) );
+        m_beliefs.add("internals", new CInternalBeliefBase(m_agent));
     }
 
 
@@ -206,25 +206,10 @@ public class CAgent<T> implements IVoidAgent
     }
 
     /**
-     * method for adding a beliefbase into the set of inherited beliefbases
-     *
-     * @param p_name       name of the new beliefbase
-     * @param p_beliefbase the beliefbase itself
+     * getter for generic beliefbase
+     * @return generic beliefbase
      */
-    public void addBeliefbase(final String p_name, final IBeliefBase p_beliefbase)
-    {
-        m_beliefs.addBeliefbase(p_name, p_beliefbase);
-    }
-
-    /**
-     * method for removing a beliefbase from the set of inherited beliefbases
-     *
-     * @param p_name name of the beliefbase
-     */
-    public void removeBeliefbase(final String p_name)
-    {
-        m_beliefs.removeBeliefbase(p_name);
-    }
+    public IBeliefBase getBeliefs() { return m_beliefs; }
 
     /**
      * adds a literal to the top-level literals
@@ -235,7 +220,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addLiteral(final String p_name, final Object p_data)
     {
-        m_beliefs.addLiteral(CCommon.getLiteral(p_name, p_data));
+        m_beliefs.add(CCommon.convertGeneric( CCommon.getLiteral(p_name, p_data)));
     }
 
     @Override
@@ -279,7 +264,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void removeLiteral(final String p_name, final Object p_data)
     {
-        m_beliefs.removeLiteral(CCommon.convertGeneric(CCommon.getLiteral(p_name, p_data)));
+        m_beliefs.remove(CCommon.convertGeneric(CCommon.getLiteral(p_name, p_data)));
     }
 
     @Override
@@ -415,8 +400,8 @@ public class CAgent<T> implements IVoidAgent
                 l_beliefbase.update();
 
             // add the simulationstep belief with the new number and remove the old one
-            m_beliefs.addLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
-            m_beliefs.removeLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
+            m_beliefs.add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
+            m_beliefs.remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
 
             // clear the agents beliefbase for update step
             m_agent.getBB().clear();

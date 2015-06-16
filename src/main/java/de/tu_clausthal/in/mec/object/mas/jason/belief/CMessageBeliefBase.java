@@ -110,9 +110,6 @@ public class CMessageBeliefBase extends CBeliefBase
         m_receivedmessages.addAll(p_messages);
     }
 
-    /**
-     * update literals by receiving new messages
-     */
     @Override
     public void update()
     {
@@ -127,9 +124,9 @@ public class CMessageBeliefBase extends CBeliefBase
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_jmsg.getSender()).getPath(c_seperator))));
 
                     if (l_jmsg.isTell())
-                        addLiteral(l_literal);
+                        add(CCommon.convertGeneric(l_literal));
                     if (l_jmsg.isUnTell())
-                        removeLiteral(l_literal);
+                        remove(CCommon.convertGeneric(l_literal));
                     if (l_jmsg.isKnownPerformative())
                     {
                         l_literal.addAnnot(BeliefBase.TPercept);
@@ -150,7 +147,7 @@ public class CMessageBeliefBase extends CBeliefBase
                 // otherwise message will direct converted
                 final Literal l_literal = CCommon.getLiteral(l_msg.getTitle(), l_msg.getData());
                 l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
-                addLiteral(l_literal);
+                add(CCommon.convertGeneric( l_literal ) );
 
             } catch (final Exception l_exception)
             {

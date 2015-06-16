@@ -42,7 +42,7 @@ public class CWaypointEnvironment
 {
 
     /**
-     * default properties (which also defines the the expected parameters)
+     * default properties
      */
     private final static Map<String, Object> c_defaultproperties = new HashMap<String, Object>()
     {{
@@ -73,7 +73,11 @@ public class CWaypointEnvironment
             put( "green", 0 );
             put( "blue", 0 );
         }};
-    protected final static Map<String, Map<String, String>> c_distribution = new HashMap<String, Map<String, String>>()
+
+    /**
+     * map with distribution names
+     */
+    private final static Map<String, Map<String, String>> c_distribution = new HashMap<String, Map<String, String>>()
     {{
             for ( final EDistributionType l_distribution : EDistributionType.values() )
                 put(
@@ -84,6 +88,17 @@ public class CWaypointEnvironment
                             }}
                 );
         }};
+    /**
+     * map with factory names
+     */
+    private final static Map<String, Boolean> c_factories = new HashMap<String, Boolean>()
+    {{
+            for ( final EFactoryType l_factory : EFactoryType.values() )
+                put( l_factory.m_name, l_factory.m_requireAgentProgram );
+        }};
+    /**
+     * label values of UI
+     */
     private static final Map<String, String> c_label = new HashMap<String, String>()
     {{
             // window title
@@ -123,6 +138,7 @@ public class CWaypointEnvironment
             put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolcolor" ) );
 
         }};
+
     /**
      * waypoint layer to edit makrov chain
      */
@@ -156,12 +172,7 @@ public class CWaypointEnvironment
      */
     private final Map<String, Boolean> web_static_listfactories()
     {
-        Map<String, Boolean> l_factories = new HashMap<>();
-
-        for ( final EFactoryType l_factory : EFactoryType.values() )
-            l_factories.put( l_factory.m_name, l_factory.m_requireAgentProgram );
-
-        return l_factories;
+        return c_factories;
     }
 
     /**
@@ -239,7 +250,7 @@ public class CWaypointEnvironment
     /**
      * enum for generator type
      */
-    protected enum EDistributionType
+    private enum EDistributionType
     {
         Normal(
                 CCommon.getResourceString( EDistributionType.class, "normaldistribution" ), CCommon.getResourceString(

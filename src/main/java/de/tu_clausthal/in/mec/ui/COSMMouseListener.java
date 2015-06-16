@@ -24,11 +24,8 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
-import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
-import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -89,6 +86,7 @@ class COSMMouseListener extends PanMouseInputListener
 
         switch ( l_viewer.getCurrentClickableLayer() )
         {
+            /*
             case Sources:
                 final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
                 boolean l_isfound = false;
@@ -110,7 +108,7 @@ class COSMMouseListener extends PanMouseInputListener
                             )
                     );
                 break;
-
+            */
 
             case ForbiddenEdges:
 

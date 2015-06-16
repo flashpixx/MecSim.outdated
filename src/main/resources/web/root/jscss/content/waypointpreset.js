@@ -138,7 +138,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
     var self = this;
     MecSim.language(
 
-        this.mc_id,
+        "/cwaypointenvironment/label",
 
         function( pc_key, pc_value ) {
             var la = pc_key.split("_");
@@ -158,13 +158,15 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             MecSim.ajax({
                 url     : "/cwaypointenvironment/listdistribution",
-                success : function( pa_data ) { pa_data.forEach( function(pc_item) {
-
-                    jQuery("<option></option>")
-                        .attr("value", pc_item)
-                        .text(pc_item)
-                        .appendTo(self.generateSubID("distribution", "."));
-                });}
+                success : function( po_data ) {
+                    jQuery.each( po_data, function( pc_key, po_object ) {
+                        jQuery("<option></option>")
+                            .attr("value", pc_key)
+                            .attr("data-bound", JSON.stringify(po_object))
+                            .text(pc_key)
+                            .appendTo(self.generateSubID("distribution", "."));
+                    });
+                }
             });
 
             MecSim.ajax({
@@ -197,9 +199,23 @@ WaypointPreset.prototype.afterDOMAdded = function()
             Wizard.prototype.afterDOMAdded.call(self);
 
             jQuery( self.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
+            jQuery( self.generateSubID("color", "#") ).spectrum({
+                showPaletteOnly: true,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                color: '#008C4F',
+                palette: [
+                    ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+                    ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+                    ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"]
+                ]
+            });
+
             self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
             self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
             self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
+
         }
     );
 }

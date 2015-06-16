@@ -106,7 +106,7 @@ public class CBootstrap
         p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( new CLanguageEnvironment() );
-        p_server.registerObject( CWaypointEnvironment.getInstance() );
+        p_server.registerObject( new CWaypointEnvironment() );
         p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
     }

@@ -61,7 +61,7 @@ Waypoint.prototype.getGlobalCSS = function()
 **/
 Waypoint.prototype.getGlobalContent = function()
 {
-    jQuery( MecSim.ui().content("#") ).append(this.mo_wizardpreset.getContent());
+    jQuery( MecSim.ui().static("#") ).append(this.mo_wizardpreset.getContent());
 
     return Pane.prototype.getGlobalContent.call(this);
 }
@@ -88,6 +88,9 @@ Waypoint.prototype.afterDOMAdded = function()
     this.mo_wizardpreset.afterDOMAdded();
 
     var self = this;
-    jQuery( this.generateSubID("newpreset", "#") ).button().click( function() { self.mo_wizardpreset.show(); } );
+    jQuery( this.generateSubID("newpreset", "#") ).button().click( function() {
+        jQuery(MecSim.ui().content("#")).empty();
+        self.mo_wizardpreset.show();
+    });
 
 }

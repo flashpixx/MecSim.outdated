@@ -158,9 +158,6 @@ Pane.prototype.generateSubID = function( pc_id, pc_prefix )
 **/
 Pane.prototype.getGlobalContent = function()
 {
-    // add clipboard div
-    jQuery('<div id=' + this.generateSubID("clipboard") + '"></div>').appendTo("body");
-
     var lc_result = "";
     this.ma_children.forEach( function(po_item){ lc_result += po_item.getGlobalContent(); } );
     return lc_result.trim();
@@ -232,30 +229,6 @@ Pane.prototype.getCSS = function()
 **/
 Pane.prototype.afterDOMAdded = function()
 {
-    // hide clipboad
-    jQuery( this.generateSubID("clipboard", "#") ).hide();
     this.ma_children.forEach( function(po_item) { po_item.afterDOMAdded(); } );
-}
-
-
-/**
- * moves DOM elements to clipboard div
- *
- * @param DOM ID
-**/
-Pane.prototype.toClipboard = function( pc_id )
-{
-    jQuery(pc_id).detach().appendTo( this.generateSubID("clipboard", "#") );
-}
-
-
-/**
- * moves clipboard content to DOM element
- *
- * @param DOM ID
-**/
-Pane.prototype.fromClipboard = function( pc_id )
-{
-    jQuery(this.generateSubID("clipboard", "#") + " .children .first").detach().appendTo( pc_id );
 }
 

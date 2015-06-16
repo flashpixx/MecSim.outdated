@@ -189,6 +189,8 @@ var MecSim = (function (px_modul) {
         screenmenu  : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_screen_right"; },
         /** reference to the content area **/
         content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
+        /** reference to a static (hidden) content area **/
+        static      : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_static"; },
         /** reference to log area **/
         log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; }
     };}
@@ -210,7 +212,10 @@ var MecSim = (function (px_modul) {
                 '</div>' +
                 '<div>' +
                 '<div id = "' + px_modul.ui().screenmenu() + '" >' +
+                '<div>' +
+                '<div id = "' + px_modul.ui().static()    + '" ></div >' +
                 '<div id = "' + px_modul.ui().content()    + '" ></div >' +
+                '</div>' +
                 '<div id = "' + px_modul.ui().log()        + '" ></div >' +
                 '</div >' +
                 '</div >' +
@@ -267,6 +272,8 @@ var MecSim = (function (px_modul) {
             // sets the content layout (with logo)
             px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(img/tuc.svg); background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
+            /** sets the static content layout **/
+            px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +
             // sets the log layout
             px_modul.ui().log("#") + ' { z-index: 0; overflow: auto; }' +
 

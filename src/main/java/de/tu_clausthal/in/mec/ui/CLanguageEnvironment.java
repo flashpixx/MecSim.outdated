@@ -37,7 +37,7 @@ public class CLanguageEnvironment
 
     /**
      * dynamic waypoint labels
-     *
+     */
     private static final Map<String, String> m_dynamicWaypointLabels = new HashMap<String, String>()
     {{
             put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
@@ -61,15 +61,15 @@ public class CLanguageEnvironment
             put( "configuretarget", CCommon.getResourceString( CLanguageEnvironment.class, "configuretarget" ) );
             put( "addtarget", CCommon.getResourceString( CLanguageEnvironment.class, "addtarget" ) );
     }};
-     */
+
     private static final Map<String, String> m_waypointpreset = new HashMap<String, String>()
     {{
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
 
-            put( "id_factory", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
-            put( "id_generator", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
-            put( "id_car", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
-            put( "id_custom", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+            put( "id_factoryhead", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
+            put( "id_basegeneratorhead", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
+            put( "id_carhead", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
+            put( "id_customhead", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
 
             put( "label_type", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
             put( "label_radius", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
@@ -78,18 +78,18 @@ public class CLanguageEnvironment
 
             put( "label_carcount", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
 
-            put( "id_speed", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
-            put( "id_maxspeed", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
-            put( "id_acceleration", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
-            put( "id_deceleration", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
-            put( "id_linger", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
+            put( "id_speedhead", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
+            put( "id_maxspeedhead", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
+            put( "id_accelerationhead", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
+            put( "id_decelerationhead", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
+            put( "id_lingerhead", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
 
             //put( "label_");
-            put( "label_lingervalue", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
+            put( "label_linger", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
         }};
     /**
      * static waypoint labels
-     *
+     */
     private static final Map<String, String> m_staticWaypointLabels = new HashMap<String, String>()
     {{
             //general wizard labels
@@ -131,7 +131,7 @@ public class CLanguageEnvironment
             put( "#mecsim_source_saveGraph", CCommon.getResourceString( CLanguageEnvironment.class, "savemakrovchain" ) );
             put( "#mecsim_source_resetGraph", CCommon.getResourceString( CLanguageEnvironment.class, "resetmakrovchain" ) );
         }};
-
+    /*
     private final Map<String, String> web_static_getdynamicwaypointlabels()
     {
         return m_dynamicWaypointLabels;

@@ -60,7 +60,7 @@ WaypointPreset.prototype.getContent = function()
     return Wizard.prototype.getContent.call( this,
 
         // first step - general data
-        '<h3 id="' + this.generateSubID("factory") + '" />' +
+        '<h3 id="' + this.generateSubID("factoryhead") + '" />' +
         '<section>' +
         '<p>' + Layout.select(  { id: this.generateSubID("type"),     label: " ",   list: this.mo_elements.selects }) + '</p>' +
         '<p>' + Layout.input(   { id: this.generateSubID("radius"),   label: " ",   list: this.mo_elements.texts })   + '</p>' +
@@ -70,7 +70,7 @@ WaypointPreset.prototype.getContent = function()
 
 
         // second step - generator settings
-        '<h3 id="' + this.generateSubID("basegenerator") + '" />' +
+        '<h3 id="' + this.generateSubID("basegeneratorhead") + '" />' +
         '<section>' +
         '<p>' + Layout.select( { id: this.generateSubID("basedistribution"),            label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
@@ -80,47 +80,47 @@ WaypointPreset.prototype.getContent = function()
 
 
         // third step - car settings
-        '<h3 id="' + this.generateSubID("car") + '" />' +
+        '<h3 id="' + this.generateSubID("carhead") + '" />' +
         '<section><div id="' + this.generateSubID("carsettings") + '">' +
 
-        '<h4 id="' + this.generateSubID("speed") + '" />' +
+        '<h4 id="' + this.generateSubID("speedhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("speeddistribution"),            label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
-        '<h4 id="' + this.generateSubID("maxspeed") + '" />' +
+        '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("maxspeed"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
-        '<h4 id="' + this.generateSubID("acceleration") + '" />' +
+        '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("accelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
-        '<h4 id="' + this.generateSubID("deceleration") + '" />' +
+        '<h4 id="' + this.generateSubID("decelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("decelerationdistribution"),            label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundleft"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundright"),  label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
-        '<h4 id="' + this.generateSubID("linger") + '" />' +
+        '<h4 id="' + this.generateSubID("lingerhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("lingervalue"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("linger"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '</div></section >' +
 
 
         // forth step - customizing settings
-        '<h3 id="' + this.generateSubID("custom") + '" />' +
+        '<h3 id="' + this.generateSubID("customhead") + '" />' +
         '<section>' +
         '<p>' + Layout.input(  { id: this.generateSubID("name"),    label: " ",   list: this.mo_elements.texts }) + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("color"),   label: " " })                                 + '</p>' +

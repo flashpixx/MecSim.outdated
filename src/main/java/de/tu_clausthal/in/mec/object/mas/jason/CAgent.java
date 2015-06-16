@@ -31,7 +31,6 @@ import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -62,6 +61,7 @@ import java.util.List;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
+ * @todo error in cycle step, synchronize agent and generic beliefbase correctly
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -322,7 +322,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage(final Set<IMessage> p_messages)
     {
-        ((CMessageBeliefBase) m_beliefs.getBeliefbases().get("messages")).receiveMessage(p_messages);
+        ((CMessageBeliefBase) m_beliefs.getInherited().get("messages")).receiveMessage(p_messages);
     }
 
     @Override
@@ -410,18 +410,19 @@ public class CAgent<T> implements IVoidAgent
             for (final ICycle l_item : m_cycleobject)
                 l_item.beforeCycle(p_currentstep, CAgent.this);
 
+            // run beliefbase updates
+            for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getInherited().values() )
+                l_beliefbase.update();
+
             // add the simulationstep belief with the new number and remove the old one
             m_beliefs.addLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep)));
             m_beliefs.removeLiteral(ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1)));
-
-            // run beliefbase updates
-            for( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases().values() )
-                l_beliefbase.update();
 
             // clear the agents beliefbase for update step
             m_agent.getBB().clear();
 
             // push updated beliefs into the agents beliefbase
+            // generic beliefbase and agent beliefbase are now synchronized
             for( final Literal l_literal : m_beliefs )
                 try
                 {
@@ -432,6 +433,7 @@ public class CAgent<T> implements IVoidAgent
                     l_exception.printStackTrace();
                 }
 
+            // run agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);
             this.getTS().reasoningCycle();

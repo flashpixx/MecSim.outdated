@@ -73,7 +73,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
      */
     public void addLiteral(final Literal p_literal)
     {
-        addLiteral(CCommon.convertGeneric(p_literal));
+        add(CCommon.convertGeneric(p_literal));
     }
 
     /**
@@ -87,7 +87,7 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     @Override
-    public IBeliefBase<Literal> collapseBeliefbase()
+    public IBeliefBase<Literal> collapse()
     {
         return new CBeliefBase(this.collapseLiterals());
     }

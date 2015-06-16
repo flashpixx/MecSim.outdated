@@ -23,12 +23,17 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
+
 import java.util.*;
 
 
 /**
  * generic default beliefbase for software agents, where
  * each beliefbase can contain further inherited beliefbases
+ *
+ * @todo clearLiterals to clear and add remove method
  */
 public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
@@ -76,37 +81,123 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         m_beliefbases = p_beliefbases;
     }
 
+    @Override
+    public boolean add(final ILiteral p_literal)
+    {
+        return m_literals.add(p_literal);
+    }
+
+    @Override
+    public boolean add(final CPath p_path, final ILiteral<T> p_literal)
+    {
+        return this.get( p_path ).add( p_literal );
+    }
+
+    @Override
+    public boolean add(final String p_path, final ILiteral<T> p_literal)
+    {
+        return this.add( new CPath( p_path ), p_literal );
+    }
+
+    @Override
+    public boolean add(final String p_name, final IBeliefBase<T> p_beliefbase)
+    {
+        return m_beliefbases.put( p_name, p_beliefbase ) == null;
+    }
+
+    @Override
+    public IBeliefBase get(final String p_name)
+    {
+        return m_beliefbases.get( p_name );
+    }
+
+    @Override
+    public IBeliefBase get( final CPath p_path )
+    {
+        // if depth of path equals 1, return inherited beliefbase
+        if( p_path.size() == 1 )
+        {
+            final IBeliefBase l_beliefbase = m_beliefbases.get( p_path.get(0) );
+
+            // throw exception if beliefbase was not found
+            if( l_beliefbase == null )
+                throw new IllegalArgumentException(CCommon.getResourceString(this, "pathnotfound", p_path));
+
+            return l_beliefbase;
+        }
+
+        // otherwise start recursion with inherited beliefbase
+        return this.get( p_path.get( 0 ) ).get(p_path.getSubPath(1));
+    }
+
+    @Override
+    public boolean add(final CPath p_path, final String p_name, final IBeliefBase<T> p_beliefbase)
+    {
+        return this.get( p_path ).getInherited().put( p_name, p_beliefbase ) == null;
+    }
+
+    @Override
+    public boolean add(String p_path, String p_name, IBeliefBase<T> p_beliefbase)
+    {
+        return this.get( new CPath( p_path ) ).add( p_name, p_beliefbase );
+    }
+
+    @Override
+    public boolean addAll(final Collection<ILiteral<T>> p_literals)
+    {
+        return m_literals.addAll(p_literals);
+    }
+
+    @Override
+    public boolean addAll(String p_path, Collection<ILiteral<T>> p_literals)
+    {
+        return this.get( new CPath( p_path ) ).addAll(p_literals);
+    }
+
+    @Override
+    public boolean addAll(CPath p_path, Collection<ILiteral<T>> p_literals)
+    {
+        return this.get( p_path ).addAll( p_literals );
+    }
+
+    @Override
+    public void clear()
+    {
+        m_literals.clear();
+
+        for (String l_name : m_beliefbases.keySet())
+            m_beliefbases.get(l_name).clear();
+    }
+
+    @Override
+    public Set<ILiteral<T>> collapse()
+    {
+        // set for aggregation
+        final Set<ILiteral<T>> l_beliefbase = new HashSet<>();
+
+        // start of recursion on top level
+        collapse(this, l_beliefbase);
+
+        return l_beliefbase;
+    }
+
     /**
      * static method for recursive traversation of beliefbases
      * to aggregate literals. It prevents the instantiation of
      * an aggregation set in each recursion step.
      *
-     * @param p_currentBeliefbase    beliefbase to add
-     * @param p_currentAggregatedSet the current aggregated set
+     * @param p_current    beliefbase to add
+     * @param p_aggregated the current aggregated set
      */
-    private static void collapseLiterals(final IBeliefBase<?> p_currentBeliefbase, final Set p_currentAggregatedSet)
+    private static void collapse(final IBeliefBase<?> p_current, final Set p_aggregated)
     {
         // add the current beliefbases' literals to aggregated set
-        for (final ILiteral<?> l_literal : p_currentBeliefbase.getLiterals())
-            p_currentAggregatedSet.add(l_literal.getLiteral());
+        for (final ILiteral<?> l_literal : p_current.getTopLevelLiterals())
+            p_aggregated.add(l_literal.getLiteral());
 
         // recursive method call for each inherited beliefbase
-        for (final IBeliefBase<?> l_bb : p_currentBeliefbase.getBeliefbases().values())
-            collapseLiterals(l_bb, p_currentAggregatedSet);
-    }
-
-    /**
-     * method to clear top-level literals and optionally the inherited literals
-     *
-     * @param p_recursive set true to clear all inherited literals
-     */
-    public void clearLiterals(final boolean p_recursive)
-    {
-        m_literals.clear();
-
-        if (p_recursive)
-            for (String l_name : m_beliefbases.keySet())
-                m_beliefbases.get(l_name).clearLiterals();
+        for (final IBeliefBase<?> l_bb : p_current.getInherited().values())
+            collapse(l_bb, p_aggregated);
     }
 
     /**
@@ -119,10 +210,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     private static <N> void collapseIterator(final IBeliefBase<N> p_current, final Stack<Iterator<ILiteral<N>>> p_stack)
     {
         // push iterator object on top-level-literals
-        p_stack.push(p_current.getLiterals().iterator());
+        p_stack.push(p_current.getTopLevelLiterals().iterator());
 
         // recursive call for all inherited beliefbases
-        for( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases().values() )
+        for( final IBeliefBase<N> l_beliefbase : p_current.getInherited().values() )
             collapseIterator( l_beliefbase, p_stack);
     }
 
@@ -138,50 +229,22 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_stack;
     }
 
-    @Override
-    public Set<ILiteral<T>> collapseLiterals()
-    {
-        // set for aggregation
-        final Set<ILiteral<T>> l_beliefbase = new HashSet<>();
 
-        // start of recursion on top level
-        collapseLiterals(this, l_beliefbase);
-
-        return l_beliefbase;
-    }
 
     @Override
-    public Set<ILiteral<T>> getLiterals()
+    public Set<ILiteral<T>> get()
     {
         return m_literals;
     }
 
     @Override
-    public Map<String, IBeliefBase<T>> getBeliefbases()
+    public Map<String, IBeliefBase<T>> getInherited()
     {
         return m_beliefbases;
     }
 
     @Override
-    public void addLiteral(final ILiteral p_literal)
-    {
-        m_literals.add(p_literal);
-    }
-
-    @Override
-    public void addAllLiterals(final Collection<ILiteral<T>> p_literals)
-    {
-        m_literals.addAll(p_literals);
-    }
-
-    @Override
-    public void removeLiteral(final ILiteral p_literal)
-    {
-        m_literals.remove(p_literal);
-    }
-
-    @Override
-    public void removeAllLiterals(final Collection<ILiteral<T>> p_literals)
+    public void remove(final Collection<ILiteral<T>> p_literals)
     {
         m_literals.remove(p_literals);
     }
@@ -198,16 +261,9 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public void clearLiterals()
+    public boolean remove( final ILiteral<T> p_literal )
     {
-        clearLiterals(true);
-    }
-
-    @Override
-    public void clear()
-    {
-        m_literals.clear();
-        m_beliefbases.clear();
+        return m_literals.remove(p_literal);
     }
 
     @Override

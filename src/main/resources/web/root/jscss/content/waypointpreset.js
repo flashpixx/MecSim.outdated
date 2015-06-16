@@ -73,8 +73,8 @@ WaypointPreset.prototype.getContent = function()
         '<h3 id="' + this.generateSubID("basegeneratorhead") + '" />' +
         '<section>' +
         '<p>' + Layout.select( { id: this.generateSubID("basedistribution"),            class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionboundright"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionleft"),                                                        label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionright"),                                                       label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",   list: this.mo_elements.spinners }) + '</p>' +
         '</section >' +
 
@@ -86,29 +86,29 @@ WaypointPreset.prototype.getContent = function()
         '<h4 id="' + this.generateSubID("speedhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("speeddistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),    class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundleft"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeedboundright"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionleft"),                                             label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionright"),                                            label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("accelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("decelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("decelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundleft"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionboundright"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("lingerhead") + '" />' +
@@ -198,7 +198,9 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             Wizard.prototype.afterDOMAdded.call(self);
 
+            // set accordion for wizard step four
             jQuery( self.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
+            // set color picker
             jQuery( self.generateSubID("color", "#") ).spectrum({
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
@@ -212,10 +214,19 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 ]
             });
 
+            // set jQuery element definition
             self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
             self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
             self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
 
+            // set distribution binds
+            jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) {
+
+                var lo_bound     = jQuery(po_ui.item.element).data("bound");
+                jQuery( 'label[for="' + po_event.target.id + 'left"]' ).text(lo_bound.left);
+                jQuery( 'label[for="' + po_event.target.id + 'right"]' ).text(lo_bound.right);
+
+            });
         }
     );
 }

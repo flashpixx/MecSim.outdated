@@ -121,7 +121,7 @@ public interface IBeliefBase<T> extends Iterable<T>
      *
      * @param p_literal generic literal to remove
      */
-    public void remove(final ILiteral<T> p_literal);
+    public boolean remove(final ILiteral<T> p_literal);
 
     /**
      * removes a generic literal from a specified beliefbase
@@ -129,7 +129,7 @@ public interface IBeliefBase<T> extends Iterable<T>
      * @param p_path path to specific beliefbase
      * @param p_literal generic literal to remove
      */
-    public void remove(final CPath p_path, final ILiteral<T> p_literal);
+    public boolean remove(final CPath p_path, final ILiteral<T> p_literal);
 
     /**
      * removes a generic literal from a specified beliefbase
@@ -137,14 +137,14 @@ public interface IBeliefBase<T> extends Iterable<T>
      * @param p_path path to specific beliefbase
      * @param p_literal generic literal to remove
      */
-    public void remove(final String p_path, final ILiteral<T> p_literal);
+    public boolean remove(final String p_path, final ILiteral<T> p_literal);
 
     /**
      * removes a collection of generic literals from top-level literals
      *
      * @param p_literals generic literals to remove
      */
-    public void remove(final Collection<ILiteral<T>> p_literals);
+    public boolean removeAll(final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a collection of generic literals from a specified beliefbase
@@ -152,7 +152,7 @@ public interface IBeliefBase<T> extends Iterable<T>
      * @param p_path path to specific beliefbase
      * @param p_literals generic literals to remove
      */
-    public void remove(final CPath p_path, final Collection<ILiteral<T>> p_literals);
+    public boolean removeAll(final CPath p_path, final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a collection of generic literals from a specified beliefbase
@@ -160,14 +160,14 @@ public interface IBeliefBase<T> extends Iterable<T>
      * @param p_path path to specific beliefbase
      * @param p_literals generic literals to remove
      */
-    public void remove(final String p_path, final Collection<ILiteral<T>> p_literals);
+    public boolean removeAll(final String p_path, final Collection<ILiteral<T>> p_literals);
 
     /**
      * removes a beliefbase from inherited beliefbases
      *
      * @param p_name name of beliefbase to remove
      */
-    public void remove(final String p_name);
+    public boolean remove(final String p_name);
 
     /**
      * removes a beliefbase from a specified beliefbase
@@ -175,7 +175,7 @@ public interface IBeliefBase<T> extends Iterable<T>
      * @param p_path path to a specific beliefbase
      * @param p_name name of beliefbase to remove
      */
-    public void remove(final CPath p_path, final String p_name);
+    public boolean remove(final CPath p_path, final String p_name);
 
     /**
      * removes a beliefbase from a specified beliefbase
@@ -183,7 +183,7 @@ public interface IBeliefBase<T> extends Iterable<T>
      * @param p_path path to a specific beliefbase
      * @param p_name name of beliefbase to remove
      */
-    public void remove(final String p_path, final String p_name);
+    public boolean remove(final String p_path, final String p_name);
 
     /**
      * get beliefbase with specified name

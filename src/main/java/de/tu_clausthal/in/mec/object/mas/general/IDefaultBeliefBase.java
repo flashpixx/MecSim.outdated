@@ -32,8 +32,6 @@ import java.util.*;
 /**
  * generic default beliefbase for software agents, where
  * each beliefbase can contain further inherited beliefbases
- *
- * @todo clearLiterals to clear and add remove method
  */
 public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
@@ -106,6 +104,60 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    public boolean remove(final ILiteral<T> p_literal)
+    {
+        return m_literals.remove( p_literal );
+    }
+
+    @Override
+    public boolean remove(final CPath p_path, final ILiteral<T> p_literal)
+    {
+        return this.get(p_path).remove(p_literal);
+    }
+
+    @Override
+    public boolean remove(final String p_path, final ILiteral<T> p_literal)
+    {
+        return this.get(p_path).remove(p_literal);
+    }
+
+    @Override
+    public boolean removeAll(final Collection<ILiteral<T>> p_literals)
+    {
+        return m_literals.removeAll( p_literals );
+    }
+
+    @Override
+    public boolean removeAll(final CPath p_path, final Collection<ILiteral<T>> p_literals)
+    {
+        return this.get(p_path).removeAll(p_literals);
+    }
+
+    @Override
+    public boolean removeAll(String p_path, Collection<ILiteral<T>> p_literals)
+    {
+        return this.get(p_path).removeAll(p_literals);
+    }
+
+    @Override
+    public boolean remove(String p_name)
+    {
+        return m_beliefbases.remove(p_name) != null;
+    }
+
+    @Override
+    public boolean remove(CPath p_path, String p_name)
+    {
+        return this.get(p_path).remove(p_name);
+    }
+
+    @Override
+    public boolean remove(String p_path, String p_name)
+    {
+        return this.get(p_path).remove(p_name);
+    }
+
+    @Override
     public IBeliefBase get(final String p_name)
     {
         return m_beliefbases.get( p_name );
@@ -158,6 +210,18 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public boolean addAll(CPath p_path, Collection<ILiteral<T>> p_literals)
     {
         return this.get( p_path ).addAll( p_literals );
+    }
+
+    @Override
+    public Set<ILiteral<T>> getTopLevelLiterals()
+    {
+        return m_literals;
+    }
+
+    @Override
+    public Map<String, IBeliefBase<T>> getInherited()
+    {
+        return m_beliefbases;
     }
 
     @Override
@@ -229,62 +293,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_stack;
     }
 
-
-
-    @Override
-    public Set<ILiteral<T>> get()
-    {
-        return m_literals;
-    }
-
-    @Override
-    public Map<String, IBeliefBase<T>> getInherited()
-    {
-        return m_beliefbases;
-    }
-
-    @Override
-    public void remove(final Collection<ILiteral<T>> p_literals)
-    {
-        m_literals.remove(p_literals);
-    }
-
-    @Override
-    public void removeBeliefbase(final String p_name)
-    {
-        // removes specified beliefbase if its inherited
-        m_beliefbases.remove(p_name);
-
-        // recursive call
-        for (IBeliefBase<T> l_beliefbase : m_beliefbases.values())
-            l_beliefbase.removeBeliefbase(p_name);
-    }
-
-    @Override
-    public boolean remove( final ILiteral<T> p_literal )
-    {
-        return m_literals.remove(p_literal);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return 61 * m_beliefbases.hashCode() +
-                79 * m_literals.hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object p_object)
-    {
-        return this.hashCode() == p_object.hashCode();
-    }
-
-    @Override
-    public void addBeliefbase(final String p_name, final IBeliefBase<T> p_beliefbase)
-    {
-        m_beliefbases.put(p_name, p_beliefbase);
-    }
-
     @Override
     public Iterator<T> iterator()
     {
@@ -324,5 +332,18 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                 return m_stack.peek().next().getLiteral();
             }
         };
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return 61 * m_beliefbases.hashCode() +
+                79 * m_literals.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object p_object)
+    {
+        return this.hashCode() == p_object.hashCode();
     }
 }

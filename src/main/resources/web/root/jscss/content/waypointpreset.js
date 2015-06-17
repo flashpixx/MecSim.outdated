@@ -267,7 +267,7 @@ WaypointPreset.prototype.finish = function()
     [ "basedistribution", "speeddistribution", "maxspeeddistribution",
       "accelerationdistribution", "decelerationdistribution"
     ].forEach( function( pc_key ) {
-        lo[pc_key] = {
+        lo[pc_key.replace("distribution", "")] = {
             distribution : jQuery(self.generateSubID(pc_key, "#")).val(),
             left         : Number.parseFloat(jQuery(self.generateSubID(pc_key+"left", "#")).val()),
             right        : Number.parseFloat(jQuery(self.generateSubID(pc_key+"right", "#")).val())
@@ -282,7 +282,7 @@ WaypointPreset.prototype.finish = function()
         data    : lo,
         success : function()
         {
-            console.log("ok");
+            //console.log(lo);
         }
 
     }).fail( function(po_data) {

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
@@ -51,24 +52,24 @@ public class CWaypointEnvironment
      */
     private final static Map<String, Object> c_defaultproperties = new HashMap<String, Object>()
     {{
-            put( "waypointtype", EWayPointType.CarWaypointRandom.m_name );
+            put( "waypointtype", EWayPoint.CarWaypointRandom.m_name );
             put( "radius", 0.75 );
-            put( "factory", EFactoryType.DefaultCarFactory.m_name );
+            put( "factory", EFactory.DefaultCarFactory.m_name );
             put( "agentprogram", "" );
-            put( "generator", EDistributionType.Normal.m_name );
+            put( "generator", EDistribution.Normal.m_name );
             put( "carcount", 1 );
             put( "generatorinput1", 5 );
             put( "generatorinput2", 1 );
-            put( "speedprob", EDistributionType.Normal.m_name );
+            put( "speedprob", EDistribution.Normal.m_name );
             put( "speedprobinput1", 50 );
             put( "speedprobinput2", 25 );
-            put( "maxspeedprob", EDistributionType.Normal.m_name );
+            put( "maxspeedprob", EDistribution.Normal.m_name );
             put( "maxspeedprobinput1", 250 );
             put( "maxspeedprobinput2", 50 );
-            put( "accprob", EDistributionType.Normal.m_name );
+            put( "accprob", EDistribution.Normal.m_name );
             put( "accprobinput1", 20 );
             put( "accprobinput2", 5 );
-            put( "decprob", EDistributionType.Normal.m_name );
+            put( "decprob", EDistribution.Normal.m_name );
             put( "decprobinput1", 20 );
             put( "decprobinput2", 5 );
             put( "lingerprobinput1", 0 );
@@ -84,7 +85,7 @@ public class CWaypointEnvironment
      */
     private final static Map<String, Map<String, String>> c_distribution = new HashMap<String, Map<String, String>>()
     {{
-            for ( final EDistributionType l_distribution : EDistributionType.values() )
+            for ( final EDistribution l_distribution : EDistribution.values() )
                 put(
                         l_distribution.toString(), new HashMap()
                         {{
@@ -100,7 +101,7 @@ public class CWaypointEnvironment
      */
     private final static Map<String, Map<String, Object>> c_factory = new HashMap<String, Map<String, Object>>()
     {{
-            for ( final EFactoryType l_factory : EFactoryType.values() )
+            for ( final EFactory l_factory : EFactory.values() )
                 put(
                         l_factory.toString(), new HashMap()
                         {{
@@ -158,7 +159,7 @@ public class CWaypointEnvironment
     private final static Map<String, String> c_waypointtype = new HashMap<String, String>()
     {{
 
-            for ( final EWayPointType l_waypoint : EWayPointType.values() )
+            for ( final EWayPoint l_waypoint : EWayPoint.values() )
                 put( l_waypoint.toString(), l_waypoint.name() );
         }};
 
@@ -225,16 +226,23 @@ public class CWaypointEnvironment
      */
     private final void web_static_set( final Map<String, Object> p_data )
     {
+        final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
+/*
+        final EWayPoint l_type             = EWayPoint.valueOf( l_data.<String>get( "type" ) );
+        final EFactory l_factory           = EFactory.valueOf( l_data.<String>get( "factory" ) );
+        final EDistribution l_acceleration = EDistribution.valueOf( l_data.<String>get( "acceleration/distribution" ) );
+*/
+        System.out.println( l_data );
     }
 
 
     /**
      * enum for waypoint types
      */
-    private enum EWayPointType
+    private enum EWayPoint
     {
-        CarWaypointRandom( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
-        CayWaypointPath( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
+        CarWaypointRandom( CCommon.getResourceString( EWayPoint.class, "carwaypointrandom" ) ),
+        CayWaypointPath( CCommon.getResourceString( EWayPoint.class, "carwaypointpath" ) );
 
         /**
          * name of this waypoint type
@@ -246,7 +254,7 @@ public class CWaypointEnvironment
          *
          * @param p_name language dependend name
          */
-        private EWayPointType( final String p_name )
+        private EWayPoint( final String p_name )
         {
             this.m_name = p_name;
         }
@@ -272,10 +280,10 @@ public class CWaypointEnvironment
     /**
      * enum for factory type
      */
-    private enum EFactoryType
+    private enum EFactory
     {
-        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false ),
-        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ), true );
+        DefaultCarFactory( CCommon.getResourceString( EFactory.class, "defaultcarfactory" ), false ),
+        DefaultAgentCarFactory( CCommon.getResourceString( EFactory.class, "defaultagentcarfactory" ), true );
 
         /**
          * name of this factory type
@@ -292,7 +300,7 @@ public class CWaypointEnvironment
          * @param p_name language depended name of the factory
          * @param p_requireAgent boolean flag that an agent-program is required
          */
-        private EFactoryType( final String p_name, final boolean p_requireAgent )
+        private EFactory( final String p_name, final boolean p_requireAgent )
         {
             this.m_name = p_name;
             this.m_requireAgent = p_requireAgent;
@@ -312,7 +320,7 @@ public class CWaypointEnvironment
                 //case DefaultAgentCarFactory:
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EFactoryType.class, "unkownfactory" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EFactory.class, "unkownfactory" ) );
             }
         }
 
@@ -338,27 +346,27 @@ public class CWaypointEnvironment
     /**
      * enum for generator type
      */
-    private enum EDistributionType
+    private enum EDistribution
     {
         Normal(
-                CCommon.getResourceString( EDistributionType.class, "normaldistribution" ), CCommon.getResourceString(
-                EDistributionType.class, "normaldistributionleft"
-        ), CCommon.getResourceString( EDistributionType.class, "normaldistributionright" )
+                CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
+                EDistribution.class, "normaldistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
         ),
         Uniform(
-                CCommon.getResourceString( EDistributionType.class, "uniformdistribution" ), CCommon.getResourceString(
-                EDistributionType.class, "uniformdistributionleft"
-        ), CCommon.getResourceString( EDistributionType.class, "uniformdistributionright" )
+                CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
+                EDistribution.class, "uniformdistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
         ),
         Exponential(
-                CCommon.getResourceString( EDistributionType.class, "exponentialdistribution" ), CCommon.getResourceString(
-                EDistributionType.class, "exponentialdistributionleft"
-        ), CCommon.getResourceString( EDistributionType.class, "exponentialdistributionright" )
+                CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
+                EDistribution.class, "exponentialdistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "exponentialdistributionright" )
         ),
         Profile(
-                CCommon.getResourceString( EDistributionType.class, "profiledistribution" ), CCommon.getResourceString(
-                EDistributionType.class, "profiledistributionleft"
-        ), CCommon.getResourceString( EDistributionType.class, "profiledistributionright" )
+                CCommon.getResourceString( EDistribution.class, "profiledistribution" ), CCommon.getResourceString(
+                EDistribution.class, "profiledistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "profiledistributionright" )
         );
 
         /**
@@ -378,7 +386,7 @@ public class CWaypointEnvironment
          * @param p_left lower / first deviation language depend name
          * @param p_right higher / second deviation language depend name
          */
-        private EDistributionType( final String p_name, final String p_left, final String p_right )
+        private EDistribution( final String p_name, final String p_left, final String p_right )
         {
             m_name = p_name;
             m_boundname = new ImmutablePair<>( p_left, p_right );
@@ -405,7 +413,7 @@ public class CWaypointEnvironment
                     return new ExponentialDistribution( p_left, p_right );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EDistributionType.class, "unkowndistribution" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unkowndistribution" ) );
             }
         }
 

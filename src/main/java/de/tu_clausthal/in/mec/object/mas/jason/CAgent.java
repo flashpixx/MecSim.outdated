@@ -422,35 +422,35 @@ public class CAgent<T> implements IVoidAgent
             for (final ICycle l_item : m_cycleobject)
                 l_item.beforeCycle(p_currentstep, CAgent.this);
 
-            // clear the agents beliefbase for update step
-            m_agent.getBB().clear();
 
+            // clear the agents beliefbase for update step
             // push updated beliefs into the agents beliefbase
             // generic beliefbase and agent beliefbase are now synchronized
+            // add the simulationstep belief with the new number and remove the old one
+            m_agent.getBB().clear();
+            m_beliefs.update();
+
+            m_beliefs.getLiterals().add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
+            m_beliefs.getLiterals().remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
+
             for( final ILiteral<Literal> l_literal : m_beliefs )
                 try
                 {
                     m_agent.addBel( l_literal.getLiteral() );
-                }
-                catch (RevisionFailedException l_exception)
+                } catch ( final RevisionFailedException l_exception )
                 {
-                    l_exception.printStackTrace();
+                    CLogger.error( l_exception );
                 }
+
 
             // run agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber(m_cycle++);
             this.getTS().reasoningCycle();
 
-            // run beliefbase updates
-            m_beliefs.update();
 
             // get updated internal beliefs after agent reasoning cycle
             m_beliefs.getLiterals().clear();
-
-            // add the simulationstep belief with the new number and remove the old one
-            m_beliefs.getLiterals().add(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep))));
-//            m_beliefs.getLiterals().remove(CCommon.convertGeneric( ASSyntax.createLiteral("g_simulationstep", ASSyntax.createNumber(p_currentstep - 1 ))));
 
             m_beliefs.getLiterals().addAll( CCommon.convertGeneric(m_agent.getBB()) );
 

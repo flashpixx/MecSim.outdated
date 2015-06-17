@@ -165,7 +165,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                     jQuery.each( po_data, function( pc_key, po_object ) {
                         jQuery("<option></option>")
                             .attr("value", po_object.id)
-                            .attr("data-bound", JSON.stringify(po_object))
+                            .attr("data-bound", JSON.stringify({left : po_object.left, right : po_object.right}))
                             .text(pc_key)
                             .appendTo(self.generateSubID("distribution", "."));
                     });
@@ -195,8 +195,6 @@ WaypointPreset.prototype.afterDOMAdded = function()
                             .attr("value", pc_id)
                             .text(pc_key)
                             .appendTo(self.generateSubID("type", "#"));
-                        );
-
                 }); }
             });
 

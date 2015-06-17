@@ -24,8 +24,16 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
+import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -143,6 +151,10 @@ public class CWaypointEnvironment
             put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolcolor" ) );
 
         }};
+
+    /**
+     * map with name and ID
+     */
     private final static Map<String, String> c_waypointtype = new HashMap<String, String>()
     {{
 
@@ -156,20 +168,30 @@ public class CWaypointEnvironment
     //private static final CCarWayPointLayer m_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
 
     /**
+     * returns a waypoint which the current settings
+     *
+     * @param p_position geoposition of the waypoint
+     * @return waypoint
+     */
+    public final IWayPointBase getWaypoint( final GeoPosition p_position )
+    {
+        return null;
+    }
+
+    /**
      * returns all static label information
      *
-     * @return map with labels
+     * @return map with static labels
      */
     private final Map<String, String> web_static_label()
     {
         return c_label;
     }
 
-
     /**
      * list all possible distribution types
      *
-     * @return map with names of distribution
+     * @return map with names of distribution and IDs
      */
     private final Map<String, Map<String, String>> web_static_listdistribution()
     {
@@ -179,7 +201,7 @@ public class CWaypointEnvironment
     /**
      * list all possible factory types
      *
-     * @return
+     * @return map with language name and map of ID and required-agent-program flag
      */
     private final Map<String, Map<String, Object>> web_static_listfactory()
     {
@@ -189,7 +211,7 @@ public class CWaypointEnvironment
     /**
      * list all possible waypoint types
      *
-     * @return
+     * @return map with language name and ID
      */
     private final Map<String, String> web_static_listwaypointtype()
     {
@@ -213,11 +235,21 @@ public class CWaypointEnvironment
         /**
          * ctor
          *
-         * @param p_name
+         * @param p_name language dependend name
          */
         private EWayPointType( final String p_name )
         {
             this.m_name = p_name;
+        }
+
+        /**
+         * returns the waypoint of the current settings
+         *
+         * @return waypoint
+         */
+        public final IWayPoint<?> get()
+        {
+            return null;
         }
 
         @Override
@@ -240,7 +272,6 @@ public class CWaypointEnvironment
          * name of this factory type
          */
         private final String m_name;
-
         /**
          * variable indicate if this factory type require an agent program
          */
@@ -249,8 +280,8 @@ public class CWaypointEnvironment
         /**
          * ctor
          *
-         * @param p_name
-         * @param p_requireAgent
+         * @param p_name language depended name of the factory
+         * @param p_requireAgent boolean flag that an agent-program is required
          */
         private EFactoryType( final String p_name, final boolean p_requireAgent )
         {
@@ -258,6 +289,29 @@ public class CWaypointEnvironment
             this.m_requireAgent = p_requireAgent;
         }
 
+        /**
+         * returns the factory with the current settings
+         *
+         * @return factory
+         */
+        public final IFactory<?> get()
+        {
+            switch ( this )
+            {
+                //case DefaultCarFactory:
+
+                //case DefaultAgentCarFactory:
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( this, "unkownfactory" ) );
+            }
+        }
+
+        /**
+         * returns the boolean flag if an agent program is required for the factory
+         *
+         * @return agent-program-require boolean flag
+         */
         public boolean getRequireAgent()
         {
             return m_requireAgent;
@@ -298,6 +352,9 @@ public class CWaypointEnvironment
         ), CCommon.getResourceString( EDistributionType.class, "profiledistributionright" )
         );
 
+        /**
+         * tupel of bound / deviation names
+         */
         private final Pair<String, String> m_boundname;
         /**
          * name of this distribution type
@@ -308,16 +365,43 @@ public class CWaypointEnvironment
         /**
          * ctor
          *
-         * @param p_name
+         * @param p_name language depend name,
+         * @param p_left lower / first deviation language depend name
+         * @param p_right higher / second deviation language depend name
          */
-        private EDistributionType( final String p_name, final String m_left, final String m_right )
+        private EDistributionType( final String p_name, final String p_left, final String p_right )
         {
             m_name = p_name;
-            m_boundname = new ImmutablePair<>( m_left, m_right );
+            m_boundname = new ImmutablePair<>( p_left, p_right );
         }
 
         /**
-         * @return
+         * returns a distribution object
+         *
+         * @param p_left lower / first deviation
+         * @param p_right higher / second deviation
+         * @return distribution
+         */
+        public final AbstractRealDistribution get( final double p_left, final double p_right )
+        {
+            switch ( this )
+            {
+                case Uniform:
+                    return new UniformRealDistribution( p_left, p_right );
+
+                case Normal:
+                    return new NormalDistribution( p_left, p_right );
+
+                case Exponential:
+                    return new ExponentialDistribution( p_left, p_right );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( this, "unkowndistribution" ) );
+            }
+        }
+
+        /**
+         * @return bound name values
          */
         public Pair<String, String> getBoundNames()
         {
@@ -329,6 +413,8 @@ public class CWaypointEnvironment
         {
             return m_name;
         }
+
+
     }
 
 }

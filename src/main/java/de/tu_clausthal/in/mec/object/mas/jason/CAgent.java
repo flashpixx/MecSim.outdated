@@ -103,7 +103,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * the agents beliefbase
      */
-    private final CBeliefBase m_beliefs;
+    private final CBeliefBase m_beliefs = new CBeliefBase();
     /**
      * set with cycle objects
      */
@@ -150,8 +150,6 @@ public class CAgent<T> implements IVoidAgent
      */
     public CAgent(final CPath p_namepath, final String p_asl, final T p_bind) throws JasonException
     {
-        m_beliefs = new CBeliefBase();
-
         m_namepath = p_namepath;
         if ((m_namepath == null) || (m_namepath.isEmpty()))
             m_namepath = new CPath(this.getClass().getSimpleName() + "@" + this.hashCode());

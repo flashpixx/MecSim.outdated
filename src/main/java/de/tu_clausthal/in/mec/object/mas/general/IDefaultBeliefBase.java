@@ -23,9 +23,13 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
+import org.apache.commons.collections4.MultiMap;
+import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.util.*;
 
@@ -47,6 +51,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         return m_literals;
     }
+
+
 
     @Override
     public void clear(CPath p_path)
@@ -88,7 +94,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public boolean addAll(CPath p_path, Collection<ILiteral<T>> p_literals)
+    public boolean addAll(final CPath p_path, final Collection<ILiteral<T>> p_literals)
     {
         return this.get(p_path).getLiterals().addAll(p_literals);
     }
@@ -143,16 +149,21 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
+     * set with literals and beliefbases
+     */
+    protected final SetMultimap<String, Object> m_objects = HashMultimap.create();
+
+    /**
      * map of string/beliefbase
      * each entry represents an inherited beliefbase associated with its name
      */
-    protected final Map<String, IBeliefBase<T>> m_beliefbases;
+//    protected final Map<String, IBeliefBase<T>> m_beliefbases;
 
     /**
      * set of literals representing the top-level beliefs,
      * this set does not contain literals of the inherited beliefbases
      */
-    protected final Set<ILiteral<T>> m_literals;
+//    protected final Set<ILiteral<T>> m_literals;
 
     /**
      * default ctor
@@ -182,15 +193,24 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public IDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
     {
+        for (final )
+
         m_literals = p_literals;
         m_beliefbases = p_beliefbases;
     }
 
+    /**
+     *
+     * @param p_path path to beliefbase
+     * @return
+     *
+     * @todo add new beliefbase instead of throwing an exception
+     */
     @Override
-    public IBeliefBase get( final CPath p_path )
+    private Collection<Object> get( final CPath p_path )
     {
         if(p_path.isEmpty())
-            return this;
+            return this.m_objects.values();
 
         // if depth of path equals 1, return inherited beliefbase
         if( p_path.size() == 1 )
@@ -211,8 +231,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void clear()
     {
-        m_literals.clear();
-        m_beliefbases.clear();
+        m_objects.clear();
     }
 
     @Override
@@ -304,8 +323,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public int hashCode()
     {
-        return  61 * m_beliefbases.hashCode() +
-                79 * m_literals.hashCode();
+        return  m_objects.hashCode();
     }
 
     @Override

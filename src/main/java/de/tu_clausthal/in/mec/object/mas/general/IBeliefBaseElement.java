@@ -23,39 +23,11 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-
 /**
- * literal interface
- *
- * @note closed world assumption, no negation marker needed
+ * interface for beliefbase elements
+ * i.e. literals and beliefbases, because a single beliefbase
+ * can contain literals and beliefbases
  */
-public interface ILiteral<T> extends ITerm, IBeliefBaseElement
+public interface IBeliefBaseElement
 {
-    /**
-     * returns the optional annotations
-     *
-     * @return annotation term
-     */
-    public ITermCollection getAnnotation();
-
-    /**
-     * returns the functor / dataset of the literal
-     *
-     * @return function data
-     */
-    public IAtom<?> getFunctor();
-
-    /**
-     * getter for language specific literal
-     *
-     * @return literal
-     */
-    public T getLiteral();
-
-    /**
-     * returns the optional value term
-     *
-     * @return value term
-     */
-    public ITermCollection getValues();
 }

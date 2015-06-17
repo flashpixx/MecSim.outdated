@@ -36,7 +36,7 @@ import java.util.Set;
  * a beliefbase contains beliefs as literals (i.e. the top-level literals)
  * and further inherited beliefbases.
  */
-public interface IBeliefBase<T> extends ITerm, Iterable<ILiteral<T>>
+public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
 {
     /**
      * adds generic literal to specified path (i.e. the path to an inherited beliefbase)
@@ -135,6 +135,8 @@ public interface IBeliefBase<T> extends ITerm, Iterable<ILiteral<T>>
     public Map<String, IBeliefBase<T>> getBeliefbases();
 
     public Collection<ILiteral<T>> getLiterals();
+
+    public Collection<ILiteral<T>> getLiterals( final CPath p_path );
 
     /**
      * removes a generic literal from a specified beliefbase

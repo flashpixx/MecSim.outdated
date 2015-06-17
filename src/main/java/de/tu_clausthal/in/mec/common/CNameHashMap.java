@@ -172,6 +172,34 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     }
 
     /**
+     * returns a value or a default
+     *
+     * @param p_path path of the value
+     * @param p_default default
+     * @tparam T type
+     * @return value
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T getOrDefault( final CPath p_path, final Object p_default )
+    {
+        return this.traverseContainsKey( p_path ) ? this.<T>get( p_path ) : (T) p_default;
+    }
+
+    /**
+     * returns a value or a default
+     *
+     * @param p_path path of the value
+     * @param p_default default
+     * @return value
+     *
+     * @tparam T type
+     */
+    public <T> T getOrDefault( final String p_path, final Object p_default )
+    {
+        return this.getOrDefault( new CPath( p_path ), p_default );
+    }
+
+    /**
      * recrusive traversion with an serial iterator
      *
      * @return iterator

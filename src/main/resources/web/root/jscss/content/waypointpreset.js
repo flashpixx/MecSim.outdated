@@ -121,7 +121,9 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("lingerhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("linger"),   label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("lingerdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '</div></section >' +
@@ -254,7 +256,6 @@ WaypointPreset.prototype.finish = function()
     [
       { id: "color",    isnumber : false},
       { id: "name",     isnumber : false},
-      { id: "linger",   isnumber : true},
       { id: "carcount", isnumber : true},
       { id: "type",     isnumber : false},
       { id: "radius",   isnumber : true},
@@ -265,7 +266,7 @@ WaypointPreset.prototype.finish = function()
     });
 
     [ "basedistribution", "speeddistribution", "maxspeeddistribution",
-      "accelerationdistribution", "decelerationdistribution"
+      "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
     ].forEach( function( pc_key ) {
         lo[pc_key.replace("distribution", "")] = {
             distribution : jQuery(self.generateSubID(pc_key, "#")).val(),
@@ -282,7 +283,7 @@ WaypointPreset.prototype.finish = function()
         data    : lo,
         success : function()
         {
-            //console.log(lo);
+            console.log(lo);
         }
 
     }).fail( function(po_data) {

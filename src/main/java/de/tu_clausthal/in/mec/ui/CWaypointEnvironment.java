@@ -25,6 +25,8 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
@@ -141,7 +143,7 @@ public class CWaypointEnvironment
             put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "decsettingslabel" ) );
             put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "lingerersettingslabel" ) );
 
-            put( "label_linger", CCommon.getResourceString( CWaypointEnvironment.class, "selectlingerprob" ) );
+            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectlingerprob" ) );
             put( "label_speeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectspeedprob" ) );
             put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectmaxspeedprob" ) );
             put( "label_accelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectaccprob" ) );
@@ -227,12 +229,32 @@ public class CWaypointEnvironment
     private final void web_static_set( final Map<String, Object> p_data )
     {
         final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
-/*
-        final EWayPoint l_type             = EWayPoint.valueOf( l_data.<String>get( "type" ) );
-        final EFactory l_factory           = EFactory.valueOf( l_data.<String>get( "factory" ) );
-        final EDistribution l_acceleration = EDistribution.valueOf( l_data.<String>get( "acceleration/distribution" ) );
-*/
-        System.out.println( l_data );
+
+        final EWayPoint l_type = EWayPoint.valueOf( l_data.<String>getOrDefault( "type", "" ) );
+        EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
+
+                EDistribution.valueOf( l_data.<String>getOrDefault( "speed/distribution", "" ) ).get(
+                        l_data.<Float>get( "speed/left" ), l_data.<Float>get(
+                                "speed/right"
+                        )
+                ),
+                EDistribution.valueOf( l_data.<String>getOrDefault( "maxspeed/distribution", "" ) ).get(
+                        l_data.<Float>get( "maxspeed/left" ), l_data.<Float>get( "maxspeed/right" )
+                ),
+                EDistribution.valueOf( l_data.<String>getOrDefault( "acceleration/distribution", "" ) ).get(
+                        l_data.<Float>get( "acceleration/left" ), l_data.<Float>get( "acceleration/right" )
+                ),
+                EDistribution.valueOf( l_data.<String>getOrDefault( "deceleration/distribution", "" ) ).get(
+                        l_data.<Float>get( "deceleration/left" ), l_data.<Float>get( "deceleration/right" )
+                ),
+                EDistribution.valueOf( l_data.<String>getOrDefault( "linger/distribution", "" ) ).get(
+                        l_data.<Float>get( "linger/left" ), l_data.<Float>get(
+                                "linger/right"
+                        )
+                ),
+                l_data.<String>getOrDefault( "agent", "" )
+        );
+
     }
 
 
@@ -309,15 +331,24 @@ public class CWaypointEnvironment
         /**
          * returns the factory with the current settings
          *
+         * @param p_data array with all parameters (depend on factory call)
          * @return factory
          */
-        public final IFactory<?> get()
+        public final IFactory<?> get( final Object... p_data )
         {
             switch ( this )
             {
-                //case DefaultCarFactory:
+                case DefaultCarFactory:
+                    return new CDistributionDefaultCarFactory(
+                            (AbstractRealDistribution) p_data[0], (AbstractRealDistribution) p_data[1], (AbstractRealDistribution) p_data[2],
+                            (AbstractRealDistribution) p_data[3], (AbstractRealDistribution) p_data[4]
+                    );
 
-                //case DefaultAgentCarFactory:
+                case DefaultAgentCarFactory:
+                    return new CDistributionAgentCarFactory(
+                            (AbstractRealDistribution) p_data[0], (AbstractRealDistribution) p_data[1], (AbstractRealDistribution) p_data[2],
+                            (AbstractRealDistribution) p_data[3], (AbstractRealDistribution) p_data[4], (String) p_data[5]
+                    );
 
                 default:
                     throw new IllegalStateException( CCommon.getResourceString( EFactory.class, "unkownfactory" ) );
@@ -368,6 +399,7 @@ public class CWaypointEnvironment
                 EDistribution.class, "profiledistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "profiledistributionright" )
         );
+
 
         /**
          * tupel of bound / deviation names

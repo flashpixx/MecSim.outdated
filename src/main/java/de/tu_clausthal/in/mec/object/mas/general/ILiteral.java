@@ -46,16 +46,16 @@ public interface ILiteral<T> extends ITerm
     public IAtom<?> getFunctor();
 
     /**
-     * returns the optional value term
-     *
-     * @return value term
-     */
-    public ITermCollection getValues();
-
-    /**
      * getter for language specific literal
      *
      * @return literal
      */
     public T getLiteral();
+
+    /**
+     * returns the optional value term
+     *
+     * @return value term
+     */
+    public ITermCollection getValues();
 }

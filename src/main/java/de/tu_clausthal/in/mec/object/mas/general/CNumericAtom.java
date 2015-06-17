@@ -33,9 +33,9 @@ public class CNumericAtom extends IDefaultAtom<Double>
      *
      * @param p_value the atom's value
      */
-    public CNumericAtom(final Double p_value)
+    public CNumericAtom( final Double p_value )
     {
-        super(p_value);
+        super( p_value );
     }
 
     /**
@@ -45,7 +45,7 @@ public class CNumericAtom extends IDefaultAtom<Double>
      */
     public String toString()
     {
-        long l_roundedValue = Math.round(this.get());
-        return this.get() == (double) l_roundedValue ? String.valueOf(l_roundedValue) : String.valueOf(this.get());
+        long l_roundedValue = Math.round( this.get() );
+        return this.get() == (double) l_roundedValue ? String.valueOf( l_roundedValue ) : String.valueOf( this.get() );
     }
 }

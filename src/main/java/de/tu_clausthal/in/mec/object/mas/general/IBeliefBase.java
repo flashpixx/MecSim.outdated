@@ -24,11 +24,11 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * beliefbase interface
@@ -36,11 +36,16 @@ import java.util.Set;
  * a beliefbase contains beliefs as literals (i.e. the top-level literals)
  * and further inherited beliefbases.
  */
-public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
+public interface IBeliefBase<T> extends ITerm, Iterable<ILiteral<T>>
 {
-    public Map<String, IBeliefBase<T>> getBeliefbases();
-
-    public Collection<ILiteral<T>> getLiterals();
+    /**
+     * adds generic literal to specified path (i.e. the path to an inherited beliefbase)
+     *
+     * @param p_path path to specific beliefbase
+     * @param p_literal literal to add
+     * @return true if addition was successful
+     */
+    public boolean add( final CPath p_path, final ILiteral<T> p_literal );
 
     /**
      * adds generic literal to specified path (i.e. the path to an inherited beliefbase)
@@ -49,16 +54,7 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
      * @param p_literal literal to add
      * @return true if addition was successful
      */
-    public boolean add(final CPath p_path, final ILiteral<T> p_literal);
-
-    /**
-     * adds generic literal to specified path (i.e. the path to an inherited beliefbase)
-     *
-     * @param p_path path to specific beliefbase
-     * @param p_literal literal to add
-     * @return true if addition was successful
-     */
-    public boolean add(final String p_path, final ILiteral<T> p_literal);
+    public boolean add( final String p_path, final ILiteral<T> p_literal );
 
     /**
      * adds a beliefbase to the set of inherited beliefbases
@@ -67,7 +63,7 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
      * @param p_beliefbase beliefbase to add
      * @return true if no beliefbase was overwritten
      */
-    public boolean add(final String p_path, final IBeliefBase<T> p_beliefbase);
+    public boolean add( final String p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
      * adds generic beliefbase into a specified beliefbase
@@ -76,7 +72,7 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
      * @param p_beliefbase beliefbase to add
      * @return true if addition was successful
      */
-    public boolean add(final CPath p_path, final IBeliefBase<T> p_beliefbase);
+    public boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
      * adds a collection of generic literals to a specified inherited beliefbase
@@ -84,7 +80,7 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
      * @param p_path path to specific beliefbase
      * @param p_literals literals to add
      */
-    public boolean addAll(final CPath p_path, final Collection<ILiteral<T>> p_literals);
+    public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals );
 
     /**
      * adds a collection of generic literals to a specified inherited beliefbase
@@ -92,21 +88,33 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
      * @param p_path path to specific beliefbase
      * @param p_literals literals to add
      */
-    public boolean addAll(final String p_path, final Collection<ILiteral<T>> p_literals);
+    public boolean addAll( final String p_path, final Collection<ILiteral<T>> p_literals );
 
     /**
-     * removes a generic literal from a specified beliefbase
-     *
-     * @param p_path path to specific beliefbase
+     * empties the whole beliefbase, i.e. the top-level literals
+     * and all the literals in inherited beliefbases will be removed
      */
-    public boolean remove(final CPath p_path);
+    public void clear();
 
     /**
-     * removes a generic literal from a specified beliefbase
-     *
-     * @param p_path path to specific beliefbase
+     * empties the whole beliefbase, i.e. the top-level literals
+     * and all the literals in inherited beliefbases will be removed
      */
-    public boolean remove(final String p_path);
+    public void clear( final CPath p_path );
+
+    /**
+     * empties the whole beliefbase, i.e. the top-level literals
+     * and all the literals in inherited beliefbases will be removed
+     */
+    public void clear( final String p_path );
+
+    /**
+     * collapse method to get a set of literals containing the top-level
+     * and all inherited beliefbases' literals
+     *
+     * @return collapsed set of top-level and inherited literals
+     */
+    public Set<ILiteral<T>> collapse();
 
     /**
      * get beliefbase with specified name
@@ -124,31 +132,23 @@ public interface IBeliefBase<T> extends Iterable<ILiteral<T>>
      */
     public IBeliefBase get( final CPath p_path );
 
-    /**
-     * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases will be removed
-     */
-    public void clear();
+    public Map<String, IBeliefBase<T>> getBeliefbases();
+
+    public Collection<ILiteral<T>> getLiterals();
 
     /**
-     * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases will be removed
-     */
-    public void clear(final CPath p_path);
-
-    /**
-     * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases will be removed
-     */
-    public void clear(final String p_path);
-
-    /**
-     * collapse method to get a set of literals containing the top-level
-     * and all inherited beliefbases' literals
+     * removes a generic literal from a specified beliefbase
      *
-     * @return collapsed set of top-level and inherited literals
+     * @param p_path path to specific beliefbase
      */
-    public Set<ILiteral<T>> collapse();
+    public boolean remove( final CPath p_path );
+
+    /**
+     * removes a generic literal from a specified beliefbase
+     *
+     * @param p_path path to specific beliefbase
+     */
+    public boolean remove( final String p_path );
 
     /**
      * method to update the beliefbase

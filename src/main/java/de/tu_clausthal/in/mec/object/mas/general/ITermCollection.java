@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import java.util.Collection;
 
+
 /**
  * interface for term collection
  */

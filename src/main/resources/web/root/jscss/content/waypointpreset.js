@@ -189,12 +189,12 @@ WaypointPreset.prototype.afterDOMAdded = function()
             // read waypoint types
             MecSim.ajax({
                 url     : "/cwaypointenvironment/listwaypointtype",
-                success : function( pa_data ) { pa_data.forEach(function( pc_data ) {
-
-                   jQuery(self.generateSubID("type", "#"))
-                        .append( jQuery("<option></option>")
-                            .attr("value", pc_data)
-                            .text(pc_data)
+                success : function( po_data ) {
+                    jQuery.each( po_data, function( pc_key, pc_id ) {
+                        jQuery("<option></option>")
+                            .attr("value", pc_id)
+                            .text(pc_key)
+                            .appendTo(self.generateSubID("type", "#"));
                         );
 
                 }); }

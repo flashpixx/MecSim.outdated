@@ -27,9 +27,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -92,7 +90,7 @@ public class CWaypointEnvironment
     /**
      * map with factory names
      */
-    private final static Map<String, Map<String, Object>> c_factories = new HashMap<String, Map<String, Object>>()
+    private final static Map<String, Map<String, Object>> c_factory = new HashMap<String, Map<String, Object>>()
     {{
             for ( final EFactoryType l_factory : EFactoryType.values() )
                 put(
@@ -103,7 +101,6 @@ public class CWaypointEnvironment
                             }}
                 );
         }};
-
     /**
      * static label for UI
      */
@@ -146,6 +143,12 @@ public class CWaypointEnvironment
             put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolcolor" ) );
 
         }};
+    private final static Map<String, String> c_waypointtype = new HashMap<String, String>()
+    {{
+
+            for ( final EWayPointType l_waypoint : EWayPointType.values() )
+                put( l_waypoint.toString(), l_waypoint.name() );
+        }};
 
     /**
      * waypoint layer to edit makrov chain
@@ -180,23 +183,17 @@ public class CWaypointEnvironment
      */
     private final Map<String, Map<String, Object>> web_static_listfactory()
     {
-        return c_factories;
+        return c_factory;
     }
 
     /**
      * list all possible waypoint types
      *
      * @return
-     * @todo refactor
      */
-    private final List<String> web_static_listwaypointtype()
+    private final Map<String, String> web_static_listwaypointtype()
     {
-        List<String> l_waypointtypes = new ArrayList<>();
-
-        for ( final EWayPointType l_waypoint : EWayPointType.values() )
-            l_waypointtypes.add( l_waypoint.m_name );
-
-        return l_waypointtypes;
+        return c_waypointtype;
     }
 
 

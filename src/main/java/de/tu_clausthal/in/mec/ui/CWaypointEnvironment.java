@@ -303,7 +303,7 @@ public class CWaypointEnvironment
                 //case DefaultAgentCarFactory:
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( this, "unkownfactory" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EFactoryType.class, "unkownfactory" ) );
             }
         }
 
@@ -396,7 +396,7 @@ public class CWaypointEnvironment
                     return new ExponentialDistribution( p_left, p_right );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( this, "unkowndistribution" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EDistributionType.class, "unkowndistribution" ) );
             }
         }
 

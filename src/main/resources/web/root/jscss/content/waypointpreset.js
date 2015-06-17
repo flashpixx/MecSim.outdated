@@ -234,3 +234,35 @@ WaypointPreset.prototype.afterDOMAdded = function()
         }
     );
 }
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.finish = function()
+{
+    // collect wizard options
+    var self = this;
+    var lo   = {};
+    [
+      "color", "name", "linger", "carcount",
+      "type", "radius", "factory", "agent"
+    ].forEach( function( pc_key ) {
+        lo[pc_key] = jQuery(self.generateSubID(pc_key, "#")).val();
+    });
+
+    console.log(lo);
+
+    // send Ajax request for creating preset
+    /*
+    MecSim.ajax({
+
+        url     : "/cwaypointenvironment/set",
+        data    : lo,
+        success : function()
+        {
+            console.log("ok");
+        }
+
+    }).fail( function(po_data) { console.log("fail"); } )
+    */
+}

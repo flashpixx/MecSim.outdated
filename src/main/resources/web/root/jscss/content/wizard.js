@@ -71,6 +71,7 @@ Wizard.prototype.getContent = function( pc_content )
 **/
 Wizard.prototype.afterDOMAdded = function()
 {
+    var self = this;
     Widget.prototype.afterDOMAdded.call(this);
 
     jQuery( this.generateSubID("content", "#") ).steps({
@@ -80,9 +81,10 @@ Wizard.prototype.afterDOMAdded = function()
         transitionEffect : this.mo_configuration.transition,
         stepsOrientation : this.mo_configuration.orientation,
 
-        onInit           : this.init,
-        onStepChanging   : this.validatestep,
-        onFinished       : this.finish,
+        // closure function are needed, because the wizard overwrite the functions
+        onInit           : function() { self.init() },
+        onStepChanging   : function( po_event , pn_current, pn_next ) { return self.validatestep(po_event , pn_current, pn_next); },
+        onFinished       : function() { self.finish(); }
 
         /*
         labels: {

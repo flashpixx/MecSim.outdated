@@ -168,6 +168,11 @@ WaypointPreset.prototype.afterDOMAdded = function()
         // set dynamic content, action binds and layout after finishing language labels
         function() {
 
+            Wizard.prototype.afterDOMAdded.call(self);
+
+
+            // --- data content read via ajax ---
+
             // read distribution list
             MecSim.ajax({
                 url     : "/cwaypointenvironment/listdistribution",
@@ -223,7 +228,6 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
 
             // --- initialize layout ---
-            Wizard.prototype.afterDOMAdded.call(self);
 
             // set accordion for wizard step four
             jQuery( self.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });

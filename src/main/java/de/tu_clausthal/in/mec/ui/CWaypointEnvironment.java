@@ -225,7 +225,6 @@ public class CWaypointEnvironment
      */
     private final void web_static_set( final Map<String, Object> p_data )
     {
-
     }
 
 

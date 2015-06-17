@@ -55,21 +55,16 @@ WaypointPreset.prototype = Object.create(Wizard.prototype);
 /**
  * @Overwrite
 **/
-WaypointPreset.prototype.getGlobalContent = function()
+WaypointPreset.prototype.getContent = function()
 {
-    return Layout.dialog({
+    // add manual error dialog
+    jQuery(Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("text"),
         title     : "Information"
-    }) +
-    Wizard.prototype.getGlobalContent.call(this);
-}
+    })).appendTo("body");
 
-/**
- * @Overwrite
-**/
-WaypointPreset.prototype.getContent = function()
-{
+    // add wizard content
     return Wizard.prototype.getContent.call( this,
 
         // first step - general data

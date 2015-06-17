@@ -32,10 +32,7 @@ import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
-import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.action.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CInternalBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
@@ -95,6 +92,10 @@ public class CAgent<T> implements IVoidAgent
      * set with actions of this implementation
      */
     private final Map<String, IAction> m_action = new HashMap<>();
+    /**
+     * mapping from functor to path
+     */
+    private final Map<String, CPath> m_mapping = new HashMap<>();
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
@@ -176,6 +177,9 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.add("binding", new CBindingBeliefBase(c_bindname, p_bind));
             m_beliefs.add("messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase(m_agent.getTS()));
         }
+
+        // register beliefbase-mapper with individual mapping
+        c_overwriteaction.put( "mecsim.beliefbasemapper", new CBeliefBaseMapper( m_mapping ) );
 
         // put initial internal beliefs into top-level beliefbase
         m_beliefs.getLiterals().addAll( CCommon.convertGeneric( m_agent.getInitialBels() ) );
@@ -414,7 +418,6 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         * @todo handle catched RevisionFailedException
          */
         public final void cycle(final int p_currentstep)
         {
@@ -425,7 +428,6 @@ public class CAgent<T> implements IVoidAgent
 
             // clear the agents beliefbase for update step
             // push updated beliefs into the agents beliefbase
-            // generic beliefbase and agent beliefbase are now synchronized
             // add the simulationstep belief with the new number and remove the old one
             m_agent.getBB().clear();
             m_beliefs.update();

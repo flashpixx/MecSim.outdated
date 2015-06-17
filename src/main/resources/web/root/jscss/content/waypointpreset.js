@@ -179,6 +179,10 @@ WaypointPreset.prototype.afterDOMAdded = function()
                             .text(pc_key)
                             .appendTo(self.generateSubID("distribution", "."));
                     });
+
+                    // set first item selected and update menu
+                    jQuery(self.generateSubID("distribution", ".")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("distribution", ".")).selectmenu("refresh");
                 }
             });
 
@@ -193,6 +197,10 @@ WaypointPreset.prototype.afterDOMAdded = function()
                             .text(pc_key)
                             .appendTo(self.generateSubID("factory", "#"));
                     });
+
+                    // set first item selected and update menu
+                    jQuery(self.generateSubID("factory", "#")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("factory", "#")).selectmenu("refresh");
                 }
             });
 
@@ -205,7 +213,12 @@ WaypointPreset.prototype.afterDOMAdded = function()
                             .attr("value", pc_id)
                             .text(pc_key)
                             .appendTo(self.generateSubID("type", "#"));
-                }); }
+                    });
+
+                    // set first item selected and update menu
+                    jQuery(self.generateSubID("type", "#")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("type", "#")).selectmenu("refresh");
+                }
             });
 
 
@@ -228,10 +241,6 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 ]
             });
 
-            // set jQuery element definition
-            self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
-            self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner(); });
-            self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
 
             // set distribution binds
             jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) {
@@ -241,6 +250,13 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 jQuery( 'label[for="' + po_event.target.id + 'right"]' ).text(lo_bound.right);
 
             });
+
+            // set jQuery element definition
+            self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
+            self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner() });
+            self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
+
+
         }
     );
 }

@@ -171,6 +171,23 @@ WaypointPreset.prototype.afterDOMAdded = function()
             Wizard.prototype.afterDOMAdded.call(self);
 
 
+            // --- function for updating distribution label ---
+
+            /**
+             * sets the labels of an select menu
+             *
+             * @param pc_id ID of the select menu
+             * @param px_option data bound options
+            **/
+            var lx_labelDistribution = function( pc_id, px_option)
+            {
+                var lo_bound = jQuery(px_option).data("bound");
+                jQuery( 'label[for="' + pc_id + 'left"]' ).text(lo_bound.left);
+                jQuery( 'label[for="' + pc_id + 'right"]' ).text(lo_bound.right);
+            }
+
+
+
             // --- data content read via ajax ---
 
             // read distribution list
@@ -186,7 +203,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                     });
 
                     // set first item selected and update menu
-                    jQuery(self.generateSubID("distribution", ".")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("distribution", ".")+" option:first-child").attr("selected", "selected").each( function() { lx_labelDistribution( jQuery(this).parent().attr("id"), jQuery(this) ); });
                     jQuery(self.generateSubID("distribution", ".")).selectmenu("refresh");
                 }
             });
@@ -247,13 +264,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
 
             // set distribution binds
-            jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) {
-
-                var lo_bound     = jQuery(po_ui.item.element).data("bound");
-                jQuery( 'label[for="' + po_event.target.id + 'left"]' ).text(lo_bound.left);
-                jQuery( 'label[for="' + po_event.target.id + 'right"]' ).text(lo_bound.right);
-
-            });
+            jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) { lx_labelDistribution(po_event.target.id, po_ui.item.element); });
 
             // set jQuery element definition
             self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });

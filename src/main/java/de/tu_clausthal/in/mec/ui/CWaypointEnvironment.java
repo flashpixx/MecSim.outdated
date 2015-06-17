@@ -218,6 +218,11 @@ public class CWaypointEnvironment
         return c_waypointtype;
     }
 
+    /**
+     * set method of the UI data
+     *
+     * @param p_data input data
+     */
     private final void web_static_set( final Map<String, Object> p_data )
     {
 

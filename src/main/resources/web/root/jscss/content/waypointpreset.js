@@ -55,6 +55,19 @@ WaypointPreset.prototype = Object.create(Wizard.prototype);
 /**
  * @Overwrite
 **/
+WaypointPreset.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("text"),
+        title     : "Information"
+    }) +
+    Wizard.prototype.getGlobalContent.call(this);
+}
+
+/**
+ * @Overwrite
+**/
 WaypointPreset.prototype.getContent = function()
 {
     return Wizard.prototype.getContent.call( this,
@@ -244,16 +257,30 @@ WaypointPreset.prototype.finish = function()
     var self = this;
     var lo   = {};
     [
-      "color", "name", "linger", "carcount",
-      "type", "radius", "factory", "agent"
-    ].forEach( function( pc_key ) {
-        lo[pc_key] = jQuery(self.generateSubID(pc_key, "#")).val();
+      { id: "color",    isnumber : false},
+      { id: "name",     isnumber : false},
+      { id: "linger",   isnumber : true},
+      { id: "carcount", isnumber : true},
+      { id: "type",     isnumber : false},
+      { id: "radius",   isnumber : true},
+      { id: "factory",  isnumber : false},
+      { id: "agent",    isnumber : false}
+    ].forEach( function( po_object ) {
+        lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
 
-    console.log(lo);
+    [ "basedistribution", "speeddistribution", "maxspeeddistribution",
+      "accelerationdistribution", "decelerationdistribution"
+    ].forEach( function( pc_key ) {
+        lo[pc_key] = {
+            distribution : jQuery(self.generateSubID(pc_key, "#")).val(),
+            left         : Number.parseFloat(jQuery(self.generateSubID(pc_key+"left", "#")).val()),
+            right        : Number.parseFloat(jQuery(self.generateSubID(pc_key+"right", "#")).val())
+        };
+    });
+
 
     // send Ajax request for creating preset
-    /*
     MecSim.ajax({
 
         url     : "/cwaypointenvironment/set",
@@ -263,6 +290,10 @@ WaypointPreset.prototype.finish = function()
             console.log("ok");
         }
 
-    }).fail( function(po_data) { console.log("fail"); } )
-    */
+    }).fail( function(po_data) {
+
+        jQuery( self.generateSubID("text", "#")   ).text(po_data.responseJSON.error);
+        jQuery( self.generateSubID("dialog", "#") ).dialog();
+
+    });
 }

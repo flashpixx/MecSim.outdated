@@ -80,10 +80,11 @@ public class CWaypointEnvironment
     {{
             for ( final EDistributionType l_distribution : EDistributionType.values() )
                 put(
-                        l_distribution.m_name, new HashMap()
+                        l_distribution.toString(), new HashMap()
                         {{
                                 put( "left", l_distribution.getBoundNames().getLeft() );
                                 put( "right", l_distribution.getBoundNames().getRight() );
+                                put( "id", l_distribution.name() );
                             }}
                 );
         }};
@@ -91,10 +92,16 @@ public class CWaypointEnvironment
     /**
      * map with factory names
      */
-    private final static Map<String, Boolean> c_factories = new HashMap<String, Boolean>()
+    private final static Map<String, Map<String, Object>> c_factories = new HashMap<String, Map<String, Object>>()
     {{
             for ( final EFactoryType l_factory : EFactoryType.values() )
-                put( l_factory.m_name, l_factory.m_requireAgentProgram );
+                put(
+                        l_factory.toString(), new HashMap()
+                        {{
+                                put( "agentprogram", l_factory.getRequireAgent() );
+                                put( "id", l_factory.name() );
+                            }}
+                );
         }};
 
     /**
@@ -171,7 +178,7 @@ public class CWaypointEnvironment
      *
      * @return
      */
-    private final Map<String, Boolean> web_static_listfactories()
+    private final Map<String, Map<String, Object>> web_static_listfactory()
     {
         return c_factories;
     }
@@ -180,8 +187,9 @@ public class CWaypointEnvironment
      * list all possible waypoint types
      *
      * @return
+     * @todo refactor
      */
-    private final List<String> web_static_listwaypointtypes()
+    private final List<String> web_static_listwaypointtype()
     {
         List<String> l_waypointtypes = new ArrayList<>();
 
@@ -215,6 +223,12 @@ public class CWaypointEnvironment
             this.m_name = p_name;
         }
 
+        @Override
+        public String toString()
+        {
+            return m_name;
+        }
+
     }
 
     /**
@@ -233,19 +247,32 @@ public class CWaypointEnvironment
         /**
          * variable indicate if this factory type require an agent program
          */
-        private final boolean m_requireAgentProgram;
+        private final boolean m_requireAgent;
 
         /**
          * ctor
          *
          * @param p_name
-         * @param p_requireAgentProgram
+         * @param p_requireAgent
          */
-        private EFactoryType( final String p_name, final boolean p_requireAgentProgram )
+        private EFactoryType( final String p_name, final boolean p_requireAgent )
         {
             this.m_name = p_name;
-            this.m_requireAgentProgram = p_requireAgentProgram;
+            this.m_requireAgent = p_requireAgent;
         }
+
+        public boolean getRequireAgent()
+        {
+            return m_requireAgent;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_name;
+        }
+
+
     }
 
     /**
@@ -298,6 +325,12 @@ public class CWaypointEnvironment
         public Pair<String, String> getBoundNames()
         {
             return m_boundname;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_name;
         }
     }
 

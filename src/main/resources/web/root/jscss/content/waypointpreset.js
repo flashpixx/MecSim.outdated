@@ -164,7 +164,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 success : function( po_data ) {
                     jQuery.each( po_data, function( pc_key, po_object ) {
                         jQuery("<option></option>")
-                            .attr("value", pc_key)
+                            .attr("value", po_object.id)
                             .attr("data-bound", JSON.stringify(po_object))
                             .text(pc_key)
                             .appendTo(self.generateSubID("distribution", "."));
@@ -174,22 +174,21 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             // read factory list
             MecSim.ajax({
-                url     : "/cwaypointenvironment/listfactories",
-                success : function( po_data ){ jQuery.each( po_data, function( pc_key, pl_value ) {
-
-                    jQuery(self.generateSubID("factory", "#"))
-                        .append( jQuery("<option></option>")
-                            .attr("value", pc_key)
-                            .attr("requireagent", pl_value)
+                url     : "/cwaypointenvironment/listfactory",
+                success : function( po_data ) {
+                    jQuery.each( po_data, function( pc_key, po_object ) {
+                        jQuery("<option></option>")
+                            .attr("value", po_object.id)
+                            .attr("requireagent", po_object.agentprogram)
                             .text(pc_key)
-                        );
-
-                }); }
+                            .appendTo(self.generateSubID("factory", "#"));
+                    });
+                }
             });
 
             // read waypoint types
             MecSim.ajax({
-                url     : "/cwaypointenvironment/listwaypointtypes",
+                url     : "/cwaypointenvironment/listwaypointtype",
                 success : function( pa_data ) { pa_data.forEach(function( pc_data ) {
 
                    jQuery(self.generateSubID("type", "#"))

@@ -52,6 +52,16 @@ public class CLanguageEnvironment
             put( "communication", CCommon.getResourceString( CLanguageEnvironment.class, "mascommunication" ) );
         }};
     /**
+     * labels of the MAS menu
+     */
+    private static final Map<String, String> c_maseditor = new HashMap<String, String>()
+    {{
+            put( "new", CCommon.getResourceString( CLanguageEnvironment.class, "maseditornew" ) );
+            put( "remove", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorremove" ) );
+            put( "check", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorcheck" ) );
+
+        }};
+    /**
      * labels of the simulation menu
      */
     private static final Map<String, String> c_simulation = new HashMap<String, String>()
@@ -90,6 +100,16 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_mas()
     {
         return c_mas;
+    }
+
+    /**
+     * returns all static label for the MAS editor
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_maseditor()
+    {
+        return c_maseditor;
     }
 
     /**

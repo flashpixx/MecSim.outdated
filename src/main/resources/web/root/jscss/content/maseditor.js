@@ -94,9 +94,9 @@ MASEditor.prototype.getGlobalCSS = function()
 MASEditor.prototype.getContent = function()
 {
     return '<span id="' + this.generateSubID("agentlist") + '"></span>' +
-    '<p><button id = "' + this.generateSubID("new") + '" >New Agent</button ></p>' +
-    '<p><button id = "' + this.generateSubID("remove") + '" >Remove Agent</button ></p>' +
-    '<p><button id = "' + this.generateSubID("check") + '" >Check Agent</button ></p>' +
+    '<p><button id = "' + this.generateSubID("new") + '" ></button ></p>' +
+    '<p><button id = "' + this.generateSubID("remove") + '" ></button ></p>' +
+    '<p><button id = "' + this.generateSubID("check") + '" ></button ></p>' +
     Pane.prototype.getContent.call(this);
 }
 
@@ -122,6 +122,8 @@ MASEditor.prototype.getSelectedAgent = function()
 MASEditor.prototype.afterDOMAdded = function()
 {
     var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/maseditor", target : this });
 
     // bind reading action
     this.readAgents();

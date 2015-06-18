@@ -86,12 +86,7 @@ Simulation.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
-    MecSim.language({
-
-        url    : "/clanguageenvironment/simulation",
-        target : this
-
-    });
+    MecSim.language({ url : "/clanguageenvironment/simulation", target : this });
 
 
     // --- create start / stop / reset buttons & bind actions to the button ------------------------------------------------------------------------------------

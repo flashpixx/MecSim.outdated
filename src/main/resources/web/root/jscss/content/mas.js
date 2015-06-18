@@ -48,8 +48,8 @@ MAS.prototype = Object.create(Pane.prototype);
 **/
 MAS.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("jasonmind") + '" >Jason Mindinspector</button ></p>' +
-           '<p><button id = "' + this.generateSubID("communication") + '" >Message Communication</button ></p>' +
+    return '<p><button id = "' + this.generateSubID("jasonmind") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("communication") + '" ></button ></p>' +
            Pane.prototype.getContent.call(this);
 }
 
@@ -121,6 +121,8 @@ MAS.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/mas", target : this });
 
 
     // --- Jason mindinspector bind ----------------------------------------------------------------------------------------------------------------------------

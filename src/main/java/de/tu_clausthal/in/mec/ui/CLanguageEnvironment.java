@@ -35,6 +35,23 @@ import java.util.Map;
 public class CLanguageEnvironment
 {
     /**
+     * labels of the help menu
+     */
+    private static final Map<String, String> c_help = new HashMap<String, String>()
+    {{
+            put( "about", CCommon.getResourceString( CLanguageEnvironment.class, "helpabout" ) );
+            put( "userdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpuserdoc" ) );
+            put( "devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpdevdoc" ) );
+        }};
+    /**
+     * labels of the MAS menu
+     */
+    private static final Map<String, String> c_mas = new HashMap<String, String>()
+    {{
+            put( "jasonmind", CCommon.getResourceString( CLanguageEnvironment.class, "masjasonmind" ) );
+            put( "communication", CCommon.getResourceString( CLanguageEnvironment.class, "mascommunication" ) );
+        }};
+    /**
      * labels of the simulation menu
      */
     private static final Map<String, String> c_simulation = new HashMap<String, String>()
@@ -44,9 +61,28 @@ public class CLanguageEnvironment
             put( "reset", CCommon.getResourceString( CLanguageEnvironment.class, "simulationreset" ) );
             put( "load", CCommon.getResourceString( CLanguageEnvironment.class, "simulationload" ) );
             put( "save", CCommon.getResourceString( CLanguageEnvironment.class, "simulationsave" ) );
-            put( "dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "dialogtitle" ) );
+            put( "dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "simulationdialogtitle" ) );
         }};
 
+    /**
+     * returns all static label for the MAS
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_help()
+    {
+        return c_help;
+    }
+
+    /**
+     * returns all static label for the MAS
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_mas()
+    {
+        return c_mas;
+    }
 
     /**
      * returns all static label for the simulation

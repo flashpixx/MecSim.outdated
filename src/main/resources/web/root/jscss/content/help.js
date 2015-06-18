@@ -74,9 +74,9 @@ Help.prototype.getGlobalContent = function()
 **/
 Help.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("about") + '" >About</button ></p>' +
-           '<p><button id = "' + this.generateSubID("userdoc") + '" >Userdocumentation</button ></p>' +
-           '<p><button id = "' + this.generateSubID("devdoc") + '" >Developerdocumentation</button ></p>' +
+    return '<p><button id = "' + this.generateSubID("about") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("userdoc") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("devdoc") + '" ></button ></p>' +
            Pane.prototype.getContent.call(this);
 
            /*
@@ -97,6 +97,8 @@ Help.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/help", target : this });
 
 
     // --- create about button & bind action to the button -----------------------------------------------------------------------------------------------------

@@ -44,6 +44,7 @@ public class CDummyWaypoint<T, P extends IFactory<T>, N extends IGenerator> exte
     /**
      * ctor
      * @param p_position
+     * @param p_name
      */
     public CDummyWaypoint( final GeoPosition p_position, final Color p_color, final String p_name   )
     {

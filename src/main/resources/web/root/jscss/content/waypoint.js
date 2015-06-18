@@ -72,7 +72,7 @@ Waypoint.prototype.getGlobalContent = function()
 Waypoint.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("newpreset") + '" >Create new preset</button >' +
-           '<button id = "' + this.generateSubID("list") + '" >Show Waypoint List</button >' +
+           '<button id = "' + this.generateSubID("list") + '" ></button >' +
            Pane.prototype.getContent.call(this);
 }
 
@@ -85,6 +85,9 @@ Waypoint.prototype.getContent = function()
 Waypoint.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
+
+    MecSim.language({ url : "/clanguageenvironment/waypoint", target : this });
+
     this.mo_wizardpreset.afterDOMAdded();
 
     var self = this;

@@ -80,20 +80,14 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
             // key element of literals is the functor
             final String l_key = l_literal.getFunctor().toString();
 
-            // get beliefbase-elements with same key
-            final Map<Class<?>, Set<? super IBeliefBaseElement>> l_beliefbaseElements =
-                    m_elements.get( l_key ) != null ?
-                            m_elements.get( l_key ) :
-                            m_elements.put( l_key, new HashMap<>() );
+            // create new map-entry if necessary
+            m_elements.putIfAbsent( l_key, new HashMap<>() );
 
-            // get inner literals with same key
-            final Set<? super IBeliefBaseElement> l_innerLiterals =
-                    l_beliefbaseElements.get(ILiteral.class) != null ?
-                            l_beliefbaseElements.get(ILiteral.class) :
-                            l_beliefbaseElements.put( ILiteral.class, new HashSet<>() );
+            // create new inner map-entry if necessary
+            m_elements.get( l_key ).putIfAbsent( ILiteral.class, new HashSet<>() );
 
-            // add current literal to the set
-            l_innerLiterals.add(l_literal);
+            // add current literal to inner literals
+            m_elements.get( l_key ).get( ILiteral.class ).add( l_literal );
         }
     }
 

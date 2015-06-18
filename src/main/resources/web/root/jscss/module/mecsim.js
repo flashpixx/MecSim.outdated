@@ -271,7 +271,7 @@ var MecSim = (function (px_modul) {
             // select needs a width, because jQuery sets it to size = 0
             'select { width: 100px; }' +
             // resizing iFrame to the full parent element size
-            'iframe{ width: 100%; height: 100%; }' +
+            'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // sets the menu layout
             px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)

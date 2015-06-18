@@ -160,6 +160,38 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_innerLiterals.add( p_literal );
     }
 
+    /**
+     * Adds a new beliefbase into specified path. The last element in path has to be the name
+     * of the new beliefbase. Beliefbases with the same name will be overwritten.
+     *
+     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
+     * @param p_beliefbase beliefbase to add
+     * @return true if addition was successful
+     */
+    @Override
+    public void add( final CPath p_path, final IBeliefBase p_beliefbase )
+    {
+        // in order to add a beliefbase, a name (i.e. last element in path) must be specified
+        if( p_path.isEmpty() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
+
+        // if path contains a single element, this element has to be the name of the new beliefbase
+        if ( p_path.size() == 1 )
+        {
+            m_elements.put(p_path.get(0), new HashMap()
+            {{
+                    put(IBeliefBase.class, new HashSet()
+                    {{
+                            add(p_beliefbase);
+                        }});
+                }});
+            return;
+        }
+
+        // if the path contains more than one element, go down the hierarchy and add the beliefbase
+        this.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).add( p_path.getSuffix(), p_beliefbase );
+    }
+
     @Override
     public boolean add( final CPath p_path, final ILiteral<T> p_literal )
     {
@@ -241,29 +273,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // recursive call in inherited beliefbase with shortened path
         return ( ( IBeliefBase ) l_beliefbase.iterator().next() );
-    }
-
-    /**
-     * adds a new beliefbase
-     *
-     * @param p_path path to specific beliefbase with name of new beliefbase as last element
-     * @param p_beliefbase beliefbase to add
-     * @return
-     */
-    @Override
-    public boolean add( final CPath p_path, final IBeliefBase p_beliefbase )
-    {
-        // to add a beliefbase a name (i.e. last element in path) must be specified
-        if( p_path.isEmpty() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
-
-        // if path contains a single element, this element is the name of the new beliefbase
-        if ( p_path.size() == 1 )
-        {
-
-        }
-
-        this.get( p_path ).getOrDefault( ILiteral.class, new HashSet<>() ).add( p_literal );
     }
 
     @Override

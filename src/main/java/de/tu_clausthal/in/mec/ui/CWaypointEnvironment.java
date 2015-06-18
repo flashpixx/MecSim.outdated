@@ -50,39 +50,6 @@ import java.util.Map;
 public class CWaypointEnvironment
 {
     /**
-     * map with default properties
-     */
-    private final static Map<String, Object> c_defaultproperties = new HashMap<String, Object>()
-    {{
-            put( "waypointtype", EWayPoint.CarWaypointRandom.m_name );
-            put( "radius", 0.75 );
-            put( "factory", EFactory.DefaultCarFactory.m_name );
-            put( "agentprogram", "" );
-            put( "generator", EDistribution.Normal.m_name );
-            put( "carcount", 1 );
-            put( "generatorinput1", 5 );
-            put( "generatorinput2", 1 );
-            put( "speedprob", EDistribution.Normal.m_name );
-            put( "speedprobinput1", 50 );
-            put( "speedprobinput2", 25 );
-            put( "maxspeedprob", EDistribution.Normal.m_name );
-            put( "maxspeedprobinput1", 250 );
-            put( "maxspeedprobinput2", 50 );
-            put( "accprob", EDistribution.Normal.m_name );
-            put( "accprobinput1", 20 );
-            put( "accprobinput2", 5 );
-            put( "decprob", EDistribution.Normal.m_name );
-            put( "decprobinput1", 20 );
-            put( "decprobinput2", 5 );
-            put( "lingerprobinput1", 0 );
-            put( "lingerprobinput2", 1 );
-            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ) );
-            put( "red", 255 );
-            put( "green", 0 );
-            put( "blue", 0 );
-        }};
-
-    /**
      * map with distribution names
      */
     private final static Map<String, Map<String, String>> c_distribution = new HashMap<String, Map<String, String>>()

@@ -146,12 +146,12 @@ WaypointPreset.prototype.getContent = function()
 WaypointPreset.prototype.afterDOMAdded = function()
 {
     var self = this;
-    MecSim.language(
+    MecSim.language({
 
-        "/cwaypointenvironment/label",
+        url : "/cwaypointenvironment/label",
 
         // set static labels
-        function( pc_key, pc_value ) {
+        each : function( pc_key, pc_value ) {
             var la = pc_key.split("_");
 
             if ((la.length == 1) && (la[0] === "name"))
@@ -166,7 +166,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
         },
 
         // set dynamic content, action binds and layout after finishing language labels
-        function() {
+        finish : function() {
 
             Wizard.prototype.afterDOMAdded.call(self);
 
@@ -267,13 +267,13 @@ WaypointPreset.prototype.afterDOMAdded = function()
             jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) { lx_labelDistribution(po_event.target.id, po_ui.item.element); });
 
             // set jQuery element definition
-            self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu(); });
+            self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu({ width: 150 }); });
             self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner() });
-            self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 50 }); });
+            self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 150 }); });
 
 
         }
-    );
+    });
 }
 
 /**

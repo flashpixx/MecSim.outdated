@@ -23,12 +23,39 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
- * class which is responsible for multi language support in the web ui
+ * class which is responsible for multi language support in the UI
  */
 public class CLanguageEnvironment
 {
+    /**
+     * labels of the simulation menu
+     */
+    private static final Map<String, String> c_simulation = new HashMap<String, String>()
+    {{
+            put( "start", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstart" ) );
+            put( "stop", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstop" ) );
+            put( "reset", CCommon.getResourceString( CLanguageEnvironment.class, "simulationreset" ) );
+            put( "load", CCommon.getResourceString( CLanguageEnvironment.class, "simulationload" ) );
+            put( "save", CCommon.getResourceString( CLanguageEnvironment.class, "simulationsave" ) );
+            put( "dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "dialogtitle" ) );
+        }};
 
 
+    /**
+     * returns all static label for the simulation
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_simulation()
+    {
+        return c_simulation;
+    }
 
 }

@@ -56,10 +56,10 @@ Simulation.prototype.getGlobalCSS = function()
 **/
 Simulation.prototype.getContent = function()
 {
-    return '<p> <button id = "' + this.generateSubID("start") + '" >Start</button > <button id = "' + this.generateSubID("stop")  + '" >Stop</button > </p>' +
-           '<p> <button id = "' + this.generateSubID("reset") + '" >Reset</button > </p>' +
-           '<p> <button id = "' + this.generateSubID("load") + '" >Load</button > <input type = "file" id = "' + this.generateSubID("loadfile") + '" />' +
-           '<button id = "' + this.generateSubID("save") + '" >Save</button > <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
+    return '<p> <button id = "' + this.generateSubID("start") + '" ></button > <button id = "' + this.generateSubID("stop")  + '" ></button > </p>' +
+           '<p> <button id = "' + this.generateSubID("reset") + '" ></button > </p>' +
+           '<p> <button id = "' + this.generateSubID("load") + '" ></button > <input type = "file" id = "' + this.generateSubID("loadfile") + '" />' +
+           '<button id = "' + this.generateSubID("save") + '" ></button > <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
            Pane.prototype.getContent.call(this);
 }
 
@@ -72,7 +72,7 @@ Simulation.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("text"),
-        title     : "Information"
+        title     : this.generateSubID("dialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -85,6 +85,13 @@ Simulation.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
+    MecSim.language({
+
+        url    : "/clanguageenvironment/simulation",
+        target : this
+
+    });
 
 
     // --- create start / stop / reset buttons & bind actions to the button ------------------------------------------------------------------------------------

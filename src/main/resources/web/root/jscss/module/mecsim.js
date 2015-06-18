@@ -152,20 +152,26 @@ var MecSim = (function (px_modul) {
     // --- language access -------------------------------------------------------------------------------------------------------------------------------------
     /**
      * language access for setting text elements
-     * @param pc_url the URL for reading
-     * @param px_callback callback function which is run with each value
-     * @param px_finish callback function which is called on finishing the success
+     * @param po_options Json configuration object with the structure
+     * { url: -map<string,string> with the translating strings-, each: -optional function that is called on each pair-, finish: -option function that is called after all pairs are finished-, target: -optional pane element to set translation automatically- }
+     * @return ajax request object
     **/
-    px_modul.language = function( pc_url, px_callback, px_finish )
+    px_modul.language = function(po_options)
     {
-        jQuery.ajax({
-            url : pc_url,
+        return jQuery.ajax({
+            url : po_options.url,
             type: "post",
             success : function( po_data )
             {
-                jQuery.each(po_data, px_callback);
-                if (classof(px_finish, "function"))
-                    px_finish();
+                if ((po_options.each) || (po_options.finish))
+                {
+                    if (po_options.each)
+                        jQuery.each(po_data, po_options.each);
+                    if (po_options.finish)
+                        po_options.finish();
+                }
+                else if (po_options.target)
+                    jQuery.each(po_data, function(pc_id, pc_translation) { jQuery(po_options.target.generateSubID(pc_id, "#")).text(pc_translation); });
             }
         });
     }

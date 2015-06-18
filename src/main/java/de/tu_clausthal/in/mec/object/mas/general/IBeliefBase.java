@@ -65,17 +65,19 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public boolean add( final String p_path, final ILiteral<T> p_literal );
 
     /**
-     * adds a beliefbase to the set of inherited beliefbases
+     * Adds a new beliefbase into specified path. The last element in path has to be the name
+     * of the new beliefbase. Beliefbases with the same name will be overwritten.
      *
-     * @param p_path path to beliefbase with name of the new beliefbase as last element
+     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
      * @param p_beliefbase beliefbase to add
      */
     public void add( final String p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
-     * adds generic beliefbase into a specified beliefbase
+     * Adds a new beliefbase into specified path. The last element in path has to be the name
+     * of the new beliefbase. Beliefbases with the same name will be overwritten.
      *
-     * @param p_path path to specific beliefbase with name of new beliefbase as last element
+     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
      * @param p_beliefbase beliefbase to add
      */
     public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase );

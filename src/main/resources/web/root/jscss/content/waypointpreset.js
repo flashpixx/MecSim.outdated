@@ -67,27 +67,34 @@ WaypointPreset.prototype.getContent = function()
     // add wizard content
     return Wizard.prototype.getContent.call( this,
 
-        // first step - general data
+        // step - general data
         '<h3 id="' + this.generateSubID("factoryhead") + '" />' +
-        '<section>' +
-        '<p>' + Layout.select(  { id: this.generateSubID("type"),     label: " ",   list: this.mo_elements.selects }) + '</p>' +
-        '<p>' + Layout.input(   { id: this.generateSubID("radius"),   label: " ",   list: this.mo_elements.texts })   + '</p>' +
+        '<section><div id="' + this.generateSubID("factorysettings") + '">' +
+
+        '<h4 id="' + this.generateSubID("factorysettingshead") + '" />' +
+        '<div>' +
         '<p>' + Layout.select(  { id: this.generateSubID("factory"),  label: " ",   list: this.mo_elements.selects }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubID("agent"),    label: " ",   list: this.mo_elements.selects }) + '</p>' +
-        '</section >' +
+        '</div>' +
 
+        '<h4 id="' + this.generateSubID("waypointsettingshead") + '" />' +
+        '<div>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("type"),     label: " ",   list: this.mo_elements.selects }) + '</p>' +
+        '<p>' + Layout.input(   { id: this.generateSubID("radius"),   label: " ",   list: this.mo_elements.texts })   + '</p>' +
+        '</div>' +
 
-        // second step - generator settings
-        '<h3 id="' + this.generateSubID("generatorhead") + '" />' +
-        '<section>' +
+        '<h4 id="' + this.generateSubID("generatorsettingshead") + '" />' +
+        '<div>' +
+        '<p>' + Layout.input(   { id: this.generateSubID("carcount"), label: " ",   list: this.mo_elements.spinners }) + '</p>' +
         '<p>' + Layout.select( { id: this.generateSubID("generatordistribution"),       class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionright"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",   list: this.mo_elements.spinners }) + '</p>' +
-        '</section >' +
+        '</div>' +
+
+        '</div></section >' +
 
 
-        // third step - car settings
+        // step - car settings
         '<h3 id="' + this.generateSubID("carhead") + '" />' +
         '<section><div id="' + this.generateSubID("carsettings") + '">' +
 
@@ -129,7 +136,7 @@ WaypointPreset.prototype.getContent = function()
         '</div></section >' +
 
 
-        // forth step - customizing settings
+        // step - customizing settings
         '<h3 id="' + this.generateSubID("customhead") + '" />' +
         '<section>' +
         '<p>' + Layout.input(  { id: this.generateSubID("name"),    label: " ",   list: this.mo_elements.texts }) + '</p>' +
@@ -228,7 +235,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             // read waypoint types
             MecSim.ajax({
-                url     : "/cwaypointenvironment/listwaypointtype",
+                url     : "/cwaypointenvironment/listwaypoint",
                 success : function( po_data ) {
                     jQuery.each( po_data, function( pc_key, pc_id ) {
                         jQuery("<option></option>")
@@ -246,8 +253,11 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             // --- initialize layout ---
 
-            // set accordion for wizard step four
+            // set accordion for wizard steps
             jQuery( self.generateSubID("carsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
+            jQuery( self.generateSubID("generatorsettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
+            jQuery( self.generateSubID("factorysettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
+
             // set color picker
             jQuery( self.generateSubID("color", "#") ).spectrum({
                 showPaletteOnly: true,

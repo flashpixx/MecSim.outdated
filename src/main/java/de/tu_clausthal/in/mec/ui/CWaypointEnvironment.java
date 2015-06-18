@@ -25,11 +25,15 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
-import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
@@ -38,6 +42,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,6 +85,15 @@ public class CWaypointEnvironment
                 );
         }};
     /**
+     * map with name and ID
+     */
+    private final static Map<String, String> c_generator = new HashMap<String, String>()
+    {{
+
+            for ( final EGenerator l_generator : EGenerator.values() )
+                put( l_generator.toString(), l_generator.name() );
+        }};
+    /**
      * static label for UI
      */
     private static final Map<String, String> c_label = new HashMap<String, String>()
@@ -94,6 +108,8 @@ public class CWaypointEnvironment
             put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcustomizing" ) );
 
             // wizard first step
+            put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "factorysettingshead" ) );
+            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "waypointsettingshead" ) );
             put( "label_type", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointtype" ) );
             put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointradius" ) );
             put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
@@ -102,6 +118,7 @@ public class CWaypointEnvironment
 
             // wizard second step
             put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourcarcount" ) );
+            put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "generatorsettingshead" ) );
 
             // wizard third step
             put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "speedsettingslabel" ) );
@@ -121,31 +138,38 @@ public class CWaypointEnvironment
             put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolcolor" ) );
 
         }};
-
     /**
      * map with name and ID
      */
-    private final static Map<String, String> c_waypointtype = new HashMap<String, String>()
+    private final static Map<String, String> c_waypoint = new HashMap<String, String>()
     {{
 
             for ( final EWayPoint l_waypoint : EWayPoint.values() )
                 put( l_waypoint.toString(), l_waypoint.name() );
         }};
+    /**
+     * map with objects, which are created by the UI call
+     **/
+    private final Map<String, Object> m_currentsetting = new HashMap<>();
+
 
     /**
-     * waypoint layer to edit makrov chain
-     */
-    //private static final CCarWayPointLayer m_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-
-    /**
-     * returns a waypoint which the current settings
+     * creates a waypoint
      *
      * @param p_position geoposition of the waypoint
-     * @return waypoint
      */
-    public final IWayPointBase getWaypoint( final GeoPosition p_position )
+    public final void setWaypoint( final GeoPosition p_position )
     {
-        return null;
+        CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
+                (IWayPoint) EWayPoint.valueOf( (String) m_currentsetting.get( "type" ) ).get(
+                        p_position,
+                        null,
+                        (IFactory) m_currentsetting.get( "factory" ),
+                        (Double) m_currentsetting.get( "radius" ),
+                        (Color) m_currentsetting.get( "color" ),
+                        (String) m_currentsetting.get( "name" )
+                )
+        );
     }
 
     /**
@@ -179,13 +203,23 @@ public class CWaypointEnvironment
     }
 
     /**
+     * list all possible generator types
+     *
+     * @return map with language name and ID
+     */
+    private final Map<String, String> web_static_listgenerator()
+    {
+        return c_generator;
+    }
+
+    /**
      * list all possible waypoint types
      *
      * @return map with language name and ID
      */
-    private final Map<String, String> web_static_listwaypointtype()
+    private final Map<String, String> web_static_listwaypoint()
     {
-        return c_waypointtype;
+        return c_waypoint;
     }
 
     /**
@@ -195,39 +229,52 @@ public class CWaypointEnvironment
      */
     private final void web_static_set( final Map<String, Object> p_data )
     {
+        // create travable map
+        m_currentsetting.clear();
         final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
-/*
-        final EWayPoint l_type = EWayPoint.valueOf( l_data.<String>getOrDefault( "type", "" ) );
 
-        EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
 
-                EDistribution.valueOf( l_data.<String>getOrDefault( "speed/distribution", "" ) ).get(
-                        l_data.<Float>get( "speed/left" ), l_data.<Float>get(
-                                "speed/right"
-                        )
-                ),
-                EDistribution.valueOf( l_data.<String>getOrDefault( "maxspeed/distribution", "" ) ).get(
-                        l_data.<Float>get( "maxspeed/left" ), l_data.<Float>get( "maxspeed/right" )
-                ),
-                EDistribution.valueOf( l_data.<String>getOrDefault( "acceleration/distribution", "" ) ).get(
-                        l_data.<Float>get( "acceleration/left" ), l_data.<Float>get( "acceleration/right" )
-                ),
-                EDistribution.valueOf( l_data.<String>getOrDefault( "deceleration/distribution", "" ) ).get(
-                        l_data.<Float>get( "deceleration/left" ), l_data.<Float>get( "deceleration/right" )
-                ),
-                EDistribution.valueOf( l_data.<String>getOrDefault( "linger/distribution", "" ) ).get(
-                        l_data.<Float>get( "linger/left" ), l_data.<Float>get(
-                                "linger/right"
-                        )
-                ),
-                l_data.<String>getOrDefault( "agent", "" )
+        // create items from the UI data and set internal properties
+        m_currentsetting.put( "color", Color.WHITE );
+        m_currentsetting.put( "name", l_data.<String>getOrDefault( "name", "" ) );
+        m_currentsetting.put( "radius", l_data.<Double>get( "radius" ) );
+        m_currentsetting.put( "carcount", l_data.<Integer>getOrDefault( "carcount", 0 ) );
+        m_currentsetting.put( "type", EWayPoint.valueOf( l_data.<String>getOrDefault( "type", "" ) ) );
+        m_currentsetting.put(
+                "factory",
+                EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
+
+                        EDistribution.valueOf( l_data.<String>getOrDefault( "speed/distribution", "" ) ).get(
+                                l_data.<Float>get( "speed/left" ), l_data.<Float>get(
+                                        "speed/right"
+                                )
+                        ),
+                        EDistribution.valueOf( l_data.<String>getOrDefault( "maxspeed/distribution", "" ) ).get(
+                                l_data.<Float>get( "maxspeed/left" ), l_data.<Float>get( "maxspeed/right" )
+                        ),
+                        EDistribution.valueOf( l_data.<String>getOrDefault( "acceleration/distribution", "" ) ).get(
+                                l_data.<Float>get( "acceleration/left" ), l_data.<Float>get( "acceleration/right" )
+                        ),
+                        EDistribution.valueOf( l_data.<String>getOrDefault( "deceleration/distribution", "" ) ).get(
+                                l_data.<Float>get( "deceleration/left" ), l_data.<Float>get( "deceleration/right" )
+                        ),
+                        EDistribution.valueOf( l_data.<String>getOrDefault( "linger/distribution", "" ) ).get(
+                                l_data.<Float>get( "linger/left" ), l_data.<Float>get(
+                                        "linger/right"
+                                )
+                        ),
+                        l_data.<String>getOrDefault( "agent", "" )
+                )
         );
-*/
+        //m_currentsetting.put( "generator",
+
+        //                      );
+
     }
 
 
     /**
-     * enum for waypoint types
+     * enum for waypoints
      */
     private enum EWayPoint
     {
@@ -260,9 +307,13 @@ public class CWaypointEnvironment
          */
         public final IWayPoint<?> get( final Object... p_data )
         {
+
             switch ( this )
             {
 
+                case CarWaypointRandom:
+                    return new CCarRandomWayPoint(
+                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String)p_data[5] );
 
                 default:
                     throw new IllegalStateException( CCommon.getResourceString( EWayPoint.class, "unkownwaypoint" ) );
@@ -278,7 +329,7 @@ public class CWaypointEnvironment
     }
 
     /**
-     * enum for factory type
+     * enum for factories
      */
     private enum EFactory
     {
@@ -354,8 +405,46 @@ public class CWaypointEnvironment
 
     }
 
+
     /**
-     * enum for generator type
+     * generator enum
+     */
+    private enum EGenerator
+    {
+        TimeDistribution( CCommon.getResourceString( EGenerator.class, "timedistribution" ) );
+
+        /**
+         * name of this generator
+         */
+        private final String m_text;
+
+
+        /**
+         * ctor
+         *
+         * @param p_text language depended text
+         */
+        private EGenerator( final String p_text )
+        {
+            m_text = p_text;
+        }
+
+        public final IGenerator get( final Object... p_data )
+        {
+            return null;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
+        }
+
+
+    }
+
+    /**
+     * enum for distributions
      */
     private enum EDistribution
     {
@@ -376,12 +465,6 @@ public class CWaypointEnvironment
                 CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
                 EDistribution.class, "exponentialdistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "exponentialdistributionright" )
-        ),
-        /** profile / histogram structure **/
-        Profile(
-                CCommon.getResourceString( EDistribution.class, "profiledistribution" ), CCommon.getResourceString(
-                EDistribution.class, "profiledistributionleft"
-        ), CCommon.getResourceString( EDistribution.class, "profiledistributionright" )
         );
 
 

@@ -23,25 +23,64 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-import org.apache.commons.math3.distribution.ExponentialDistribution;
+
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * creates a time-exponential distribution generator
+ * generator of a static number of objects with a time-exponential function
  */
-public class CTimeExponentialDistribution extends ITimeDistribution
+public class CTimeDistribution extends IInspectorDefault implements IGenerator
 {
+    /**
+     * number of objects *
+     */
+    private final int m_count;
+    /**
+     * distribution *
+     */
+    private final AbstractRealDistribution m_distribution;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap()
+    {{
+            putAll( CTimeDistribution.super.inspect() );
+        }};
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
+
 
     /**
      * ctor
      *
+     * @param p_distribution distribution object
      * @param p_count number of objects
-     * @param p_mean mean value
-     * @param p_deviation deviation value
      */
-    public CTimeExponentialDistribution( final int p_count, final double p_mean, final double p_deviation )
+    public CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
     {
-        super( new ExponentialDistribution( p_mean, p_deviation ), p_count );
+        m_count = p_count;
+        m_distribution = p_distribution;
     }
 
+
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        if ( m_distribution == null )
+            return 0;
+        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
 }

@@ -31,23 +31,13 @@ import java.util.Set;
 
 
 /**
- * beliefbase interface
- * <p>
- * a beliefbase contains beliefs as literals (i.e. the top-level literals)
- * and further inherited beliefbases.
+ * The beliefbase interface for generic beliefbases. A single beliefbase contains beliefs
+ * as literals (the top-level literals) and further inherited beliefbases.
  */
 public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
 {
     /**
-     * adds generic literal to beliefbase
-     *
-     * @param p_literal literal to add
-     * @return true if addition was successful
-     */
-    public boolean add( final ILiteral<T> p_literal );
-
-    /**
-     * adds generic literal to specified path (i.e. the path to an inherited beliefbase)
+     * adds a literal to specified path (i.e. the path to an inherited beliefbase)
      *
      * @param p_path path to specific beliefbase
      * @param p_literal literal to add
@@ -83,49 +73,50 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
-     * adds a collection of generic literals to a specified inherited beliefbase
+     * adds a collection of literals into an inherited beliefbase specified by a path
      *
-     * @param p_path path to specific beliefbase
+     * @param p_path path to beliefbase
      * @param p_literals literals to add
      */
     public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals );
 
     /**
-     * adds a collection of generic literals to a specified inherited beliefbase
+     * adds a collection of literals into an inherited beliefbase specified by a path
      *
-     * @param p_path path to specific beliefbase
+     * @param p_path path to beliefbase
      * @param p_literals literals to add
      */
     public boolean addAll( final String p_path, final Collection<ILiteral<T>> p_literals );
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases will be removed
+     * and all the literals in inherited beliefbases
      */
     public void clear();
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases will be removed
+     * and all the literals in inherited beliefbases
      */
     public void clear( final CPath p_path );
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases will be removed
+     * and all the literals in inherited beliefbases
      */
     public void clear( final String p_path );
 
     /**
      * collapse method to get a set of literals containing the top-level
-     * and all inherited beliefbases' literals
+     * and all the inherited beliefbases' literals
      *
+     * @param p_path path to beliefbase
      * @return collapsed set of top-level and inherited literals
      */
-    public Set<ILiteral<T>> collapse();
+    public Set<ILiteral<T>> collapse( final CPath p_path );
 
     /**
-     * get beliefbase with specified name
+     * gets a beliefbase with position and name specified in path
      *
      * @param p_path path with name of the beliefbase as last element
      * @return specified beliefbase or null, if it was not found
@@ -133,35 +124,45 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public IBeliefBase get( final String p_path );
 
     /**
-     * get beliefbase with specified path
+     * gets a beliefbase with position and name specified in path
      *
-     * @param p_path path to beliefbase
-     * @return specified beliefbase or null
+     * @param p_path path with name of the beliefbase as last element
+     * @return specified beliefbase or null, if it was not found
      */
     public IBeliefBase get( final CPath p_path );
 
-    public Map<String, IBeliefBase<T>> getBeliefbases();
+    /**
+     * get a map of all inherited beliefbases with their names
+     *
+     * @param p_path path to beliefbase
+     * @return map of beliefbases
+     */
+    public Map<String, IBeliefBase<T>> getBeliefbases( final CPath p_path );
 
-    public Collection<ILiteral<T>> getLiterals();
-
+    /**
+     * get a collection of the top-level literals
+     *
+     * @param p_path path to beliefbase
+     * @return collection of top-level literals
+     */
     public Collection<ILiteral<T>> getLiterals( final CPath p_path );
 
     /**
-     * removes a generic literal from a specified beliefbase
+     * removes an inherited beliefbase
      *
-     * @param p_path path to specific beliefbase
+     * @param p_path path to beliefbase with name as last element
      */
     public boolean remove( final CPath p_path );
 
     /**
-     * removes a generic literal from a specified beliefbase
+     * removes an inherited beliefbase
      *
-     * @param p_path path to specific beliefbase
+     * @param p_path path to beliefbase with name as last element
      */
     public boolean remove( final String p_path );
 
     /**
-     * method to update the beliefbase
+     * updates the beliefbase
      */
     public void update();
 }

@@ -108,7 +108,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
     }
 
-    @Override
     public Map<String, IBeliefBase<T>> getBeliefbases()
     {
         return new HashMap() {{
@@ -118,6 +117,14 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    public Map<String, IBeliefBase<T>> getBeliefbases( CPath p_path )
+    {
+        if ( p_path.isEmpty() )
+
+
+        final Map l_beliefbases = this.get( p_path ).getBeliefbases();
+    }
+
     public Collection<ILiteral<T>> getLiterals()
     {
         return new HashSet(){{

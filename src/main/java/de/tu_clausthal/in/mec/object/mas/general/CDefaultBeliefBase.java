@@ -76,19 +76,8 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // generate map-entries for literals
         for ( final ILiteral<T> l_literal : p_literals )
-        {
-            // key element of literals is the functor
-            final String l_key = l_literal.getFunctor().toString();
+            this.add(l_literal);
 
-            // create new map-entry if necessary
-            m_elements.putIfAbsent( l_key, new HashMap<>() );
-
-            // create new inner map-entry if necessary
-            m_elements.get( l_key ).putIfAbsent( ILiteral.class, new HashSet<>() );
-
-            // add current literal to inner literals
-            m_elements.get( l_key ).get( ILiteral.class ).add( l_literal );
-        }
     }
 
     @Override
@@ -142,7 +131,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @return true if addition was successful
      */
     @Override
-    public boolean addLiteral( final ILiteral<T> p_literal )
+    public boolean add( final ILiteral<T> p_literal )
     {
         // set literals functor as key
         final String l_key = p_literal.getFunctor().toString();
@@ -152,17 +141,24 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // if there is no inner-map with same key, generate new map-entry and put literal into it
         if( l_innerMap == null )
-            return m_elements.put( l_key, new HashMap<>() ).put( ILiteral.class, new HashSet<>() ).add( p_literal );
+            return m_elements.put( l_key, new HashMap<>() )
+                             .put( ILiteral.class, new HashSet() {{ add( p_literal ); }} ) == null;
 
         // get literals with same key from inner-map
         final Set<? super IBeliefBaseElement> l_innerLiterals = l_innerMap.get( ILiteral.class );
 
         // if there are no literals with same key, generate new set and put literal into it
         if( l_innerLiterals == null )
-            return l_innerMap.put( ILiteral.class, new HashSet<>() ).add( p_literal );
+            return l_innerMap.put( ILiteral.class, new HashSet() {{ add( p_literal ); }} ) == null;
 
         // if there are literals with same key, just add current literal to this set
         return l_innerLiterals.add( p_literal );
+    }
+
+    @Override
+    public boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    {
+        return this.get( p_path ).add( p_literal );
     }
 
     @Override
@@ -266,12 +262,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public boolean add(CPath p_path, ILiteral<T> p_literal)
-    {
-        return false;
-    }
-
-    @Override
     public boolean add( final String p_path, final ILiteral<T> p_literal )
     {
         return this.add( new CPath( p_path ), p_literal );
@@ -295,6 +285,12 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         return this.addAll( new CPath( p_path ), p_literals );
     }
 
+    /**
+     *
+     * @return
+     *
+     * @todo concatenate path for unification
+     */
     @Override
     public Set<ILiteral<T>> collapse()
     {

@@ -39,6 +39,14 @@ import java.util.Set;
 public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
 {
     /**
+     * adds generic literal to beliefbase
+     *
+     * @param p_literal literal to add
+     * @return true if addition was successful
+     */
+    public boolean add( final ILiteral<T> p_literal );
+
+    /**
      * adds generic literal to specified path (i.e. the path to an inherited beliefbase)
      *
      * @param p_path path to specific beliefbase

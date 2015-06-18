@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 
 import java.util.*;
 
@@ -33,7 +34,7 @@ import java.util.*;
  * generic default beliefbase for software agents, where
  * each beliefbase can contain further inherited beliefbases
  */
-public class CDefaultBeliefBase<T> implements IBeliefBase<T>
+public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * structure for beliefbase elements (i.e. literals and inherited beliefbases)
@@ -42,10 +43,8 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
     /**
      * default ctor
-     * creates an empty set of top-level literals and
-     * an empty map of inherited beliefbases
      */
-    public CDefaultBeliefBase()
+    public IDefaultBeliefBase()
     {
         this(new HashMap<>(), new HashSet<>());
     }
@@ -55,7 +54,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    public CDefaultBeliefBase(final Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase(final Set<ILiteral<T>> p_literals)
     {
         this(new HashMap<>(), p_literals);
     }
@@ -66,7 +65,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public CDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
     {
         // generate map-entries for beliefbases
         for ( final String l_key : p_beliefbases.keySet() )
@@ -83,13 +82,13 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public IBeliefBase get( final String p_path )
+    public IBeliefBase<T> get( final String p_path )
     {
         return this.get( new CPath( p_path ) );
     }
 
     @Override
-    public IBeliefBase get( final CPath p_path )
+    public IBeliefBase<T> get( final CPath p_path )
     {
         if ( p_path.isEmpty() )
             return this;
@@ -102,10 +101,53 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         // get beliefbase with name matching the specified first path-element
         final Set<? super IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
         if( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_path ) );
+            throw new IllegalArgumentException( p_path.toString() );
 
         // recursive call in inherited beliefbase with shortened path
         return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
+    }
+
+    /**
+     *
+     * @param p_path path with name of the beliefbase as last element
+     * @param p_beliefbase default beliefbase
+     * @return
+     *
+     * @warning untested
+     */
+    public IBeliefBase<T> getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    {
+        if ( p_path.isEmpty() )
+            return this;
+
+        // if there are no beliefbase-elements with specified key
+        if ( m_elements.get( p_path.get( 0 ) ) == null )
+
+            // generate new map-entry and put a new beliefbase into it
+            m_elements.put( p_path.get( 0 ), new HashMap() {{
+                put( IBeliefBase.class, new HashSet() {{
+                    add( p_path.size() == 1 ?
+                            p_beliefbase : new IDefaultBeliefBase<T>(){} );
+                }});
+            }});
+
+        // get map of beliefbase-elements by first path-element
+        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_beliefBaseElements = m_elements.get( p_path.get( 0 ) );
+
+        // if there is no beliefbase in beliefbase-elements
+        if ( l_beliefBaseElements.get( IBeliefBase.class ) == null )
+
+            // add new beliefbase into beliefbase-elements
+            l_beliefBaseElements.put( IBeliefBase.class, new HashSet() {{
+                add( p_path.size() == 1 ?
+                        p_beliefbase : new IDefaultBeliefBase<T>(){} );
+            }} );
+
+        // get beliefbase with name matching the specified first path-element
+        final Set<? super IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
+
+        // step down one level and do recursion
+        return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).getOrDefault( p_path.getSubPath( 1 ), p_beliefbase );
     }
 
     @Override
@@ -211,7 +253,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @todo construct new beliefbases when path is unknown
      */
     @Override
-    public void add( final CPath p_path, final IBeliefBase p_beliefbase )
+    public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         // in order to add a beliefbase, a name (i.e. last element in path) must be specified
         if( p_path.isEmpty() )
@@ -220,7 +262,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         // if path contains a single element, this element has to be the name of the new beliefbase
         if ( p_path.size() == 1 )
         {
-            m_elements.put(p_path.get(0), new HashMap()
+            m_elements.put( p_path.get(0), new HashMap()
             {{
                     put(IBeliefBase.class, new HashSet()
                     {{
@@ -426,7 +468,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         // if path is empty, do collapse on inherited beliefbases
         if ( p_path.isEmpty() )
             return new HashSet<ILiteral<T>>() {{
-                for ( final ILiteral<T> l_literal : CDefaultBeliefBase.this )
+                for ( final ILiteral<T> l_literal : IDefaultBeliefBase.this )
                     add( l_literal );
             }};
 

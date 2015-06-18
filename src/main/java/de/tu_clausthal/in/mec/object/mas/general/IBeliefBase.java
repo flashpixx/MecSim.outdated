@@ -140,6 +140,17 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public IBeliefBase get( final CPath p_path );
 
     /**
+     * gets a beliefbase with position and name specified in path
+     * if there is no beliefbase or the path is unknown, the path
+     * will be constructed with a default beliefbase
+     *
+     * @param p_path path with name of the beliefbase as last element
+     * @param p_beliefbase default beliefbase
+     * @return specified or default beliefbase
+     */
+    public IBeliefBase getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase );
+
+    /**
      * get a map of all inherited beliefbases with their names
      *
      * @param p_path path to beliefbase

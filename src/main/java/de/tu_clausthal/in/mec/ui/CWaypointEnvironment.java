@@ -58,8 +58,8 @@ public class CWaypointEnvironment
                 put(
                         l_distribution.toString(), new HashMap()
                         {{
-                                put( "left", l_distribution.getBoundNames().getLeft() );
-                                put( "right", l_distribution.getBoundNames().getRight() );
+                                put( "left", l_distribution.getDeviationText().getLeft() );
+                                put( "right", l_distribution.getDeviationText().getRight() );
                                 put( "id", l_distribution.name() );
                             }}
                 );
@@ -230,22 +230,26 @@ public class CWaypointEnvironment
      */
     private enum EWayPoint
     {
+        /**
+         * random car waypoint
+         **/
         CarWaypointRandom( CCommon.getResourceString( EWayPoint.class, "carwaypointrandom" ) ),
+        /** path waypoint **/
         CayWaypointPath( CCommon.getResourceString( EWayPoint.class, "carwaypointpath" ) );
 
         /**
          * name of this waypoint type
          */
-        private final String m_name;
+        private final String m_text;
 
         /**
          * ctor
          *
-         * @param p_name language dependend name
+         * @param p_text language dependend name
          */
-        private EWayPoint( final String p_name )
+        private EWayPoint( final String p_text )
         {
-            this.m_name = p_name;
+            this.m_text = p_text;
         }
 
         /**
@@ -253,15 +257,21 @@ public class CWaypointEnvironment
          *
          * @return waypoint
          */
-        public final IWayPoint<?> get()
+        public final IWayPoint<?> get( final Object... p_data )
         {
-            return null;
+            switch ( this )
+            {
+
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EWayPoint.class, "unkownwaypoint" ) );
+            }
         }
 
         @Override
         public String toString()
         {
-            return m_name;
+            return m_text;
         }
 
     }
@@ -271,27 +281,29 @@ public class CWaypointEnvironment
      */
     private enum EFactory
     {
+        /** default car factory **/
         DefaultCarFactory( CCommon.getResourceString( EFactory.class, "defaultcarfactory" ), false ),
+        /** default agent-car factory **/
         DefaultAgentCarFactory( CCommon.getResourceString( EFactory.class, "defaultagentcarfactory" ), true );
 
-        /**
-         * name of this factory type
-         */
-        private final String m_name;
         /**
          * variable indicate if this factory type require an agent program
          */
         private final boolean m_requireAgent;
+        /**
+         * name of this factory type
+         */
+        private final String m_text;
 
         /**
          * ctor
          *
-         * @param p_name language depended name of the factory
+         * @param p_text language depended name of the factory
          * @param p_requireAgent boolean flag that an agent-program is required
          */
-        private EFactory( final String p_name, final boolean p_requireAgent )
+        private EFactory( final String p_text, final boolean p_requireAgent )
         {
-            this.m_name = p_name;
+            this.m_text = p_text;
             this.m_requireAgent = p_requireAgent;
         }
 
@@ -335,7 +347,7 @@ public class CWaypointEnvironment
         @Override
         public String toString()
         {
-            return m_name;
+            return m_text;
         }
 
 
@@ -346,21 +358,25 @@ public class CWaypointEnvironment
      */
     private enum EDistribution
     {
+        /** normal distribution **/
         Normal(
                 CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
                 EDistribution.class, "normaldistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
         ),
+        /** uniform distribution **/
         Uniform(
                 CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
                 EDistribution.class, "uniformdistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
         ),
+        /** exponential distribution **/
         Exponential(
                 CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
                 EDistribution.class, "exponentialdistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "exponentialdistributionright" )
         ),
+        /** profile / histogram structure **/
         Profile(
                 CCommon.getResourceString( EDistribution.class, "profiledistribution" ), CCommon.getResourceString(
                 EDistribution.class, "profiledistributionleft"
@@ -371,24 +387,24 @@ public class CWaypointEnvironment
         /**
          * tupel of bound / deviation names
          */
-        private final Pair<String, String> m_boundname;
+        private final Pair<String, String> m_deviation;
         /**
          * name of this distribution type
          */
-        private final String m_name;
+        private final String m_text;
 
 
         /**
          * ctor
          *
-         * @param p_name language depend name,
+         * @param p_text language depend name,
          * @param p_left lower / first deviation language depend name
          * @param p_right higher / second deviation language depend name
          */
-        private EDistribution( final String p_name, final String p_left, final String p_right )
+        private EDistribution( final String p_text, final String p_left, final String p_right )
         {
-            m_name = p_name;
-            m_boundname = new ImmutablePair<>( p_left, p_right );
+            m_text = p_text;
+            m_deviation = new ImmutablePair<>( p_left, p_right );
         }
 
         /**
@@ -419,15 +435,15 @@ public class CWaypointEnvironment
         /**
          * @return bound name values
          */
-        public Pair<String, String> getBoundNames()
+        public Pair<String, String> getDeviationText()
         {
-            return m_boundname;
+            return m_deviation;
         }
 
         @Override
         public String toString()
         {
-            return m_name;
+            return m_text;
         }
 
 

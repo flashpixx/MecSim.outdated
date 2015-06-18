@@ -79,13 +79,14 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("waypointsettingshead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select(  { id: this.generateSubID("type"),     label: " ",   list: this.mo_elements.selects }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("waypoint"), label: " ",   list: this.mo_elements.selects }) + '</p>' +
         '<p>' + Layout.input(   { id: this.generateSubID("radius"),   label: " ",   list: this.mo_elements.texts })   + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("generatorsettingshead") + '" />' +
         '<div>' +
-        '<p>' + Layout.input(   { id: this.generateSubID("carcount"), label: " ",   list: this.mo_elements.spinners }) + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("generatortyp"),                                                                label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",    list: this.mo_elements.spinners }) + '</p>' +
         '<p>' + Layout.select( { id: this.generateSubID("generatordistribution"),       class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionright"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
@@ -241,12 +242,29 @@ WaypointPreset.prototype.afterDOMAdded = function()
                         jQuery("<option></option>")
                             .attr("value", pc_id)
                             .text(pc_key)
-                            .appendTo(self.generateSubID("type", "#"));
+                            .appendTo(self.generateSubID("waypoint", "#"));
                     });
 
                     // set first item selected and update menu
-                    jQuery(self.generateSubID("type", "#")+" option:first-child").attr("selected", "selected");
-                    jQuery(self.generateSubID("type", "#")).selectmenu("refresh");
+                    jQuery(self.generateSubID("waypoint", "#")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("waypoint", "#")).selectmenu("refresh");
+                }
+            });
+
+            // read generator types
+            MecSim.ajax({
+                url     : "/cwaypointenvironment/listgenerator",
+                success : function( po_data ) {
+                    jQuery.each( po_data, function( pc_key, pc_id ) {
+                        jQuery("<option></option>")
+                            .attr("value", pc_id)
+                            .text(pc_key)
+                            .appendTo(self.generateSubID("generatortyp", "#"));
+                    });
+
+                    // set first item selected and update menu
+                    jQuery(self.generateSubID("generatortyp", "#")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("generatortyp", "#")).selectmenu("refresh");
                 }
             });
 
@@ -295,13 +313,13 @@ WaypointPreset.prototype.finish = function()
     var self = this;
     var lo   = {};
     [
-      { id: "color",    isnumber : false},
-      { id: "name",     isnumber : false},
-      { id: "carcount", isnumber : true},
-      { id: "type",     isnumber : false},
-      { id: "radius",   isnumber : true},
-      { id: "factory",  isnumber : false},
-      { id: "agent",    isnumber : false}
+      { id: "color",        isnumber : false},
+      { id: "name",         isnumber : false},
+      { id: "carcount",     isnumber : true},
+      { id: "generatortyp", isnumber : false},
+      { id: "radius",       isnumber : true},
+      { id: "factory",      isnumber : false},
+      { id: "agent",        isnumber : false}
     ].forEach( function( po_object ) {
         lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });

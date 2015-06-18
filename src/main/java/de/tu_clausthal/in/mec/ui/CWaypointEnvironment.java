@@ -101,37 +101,44 @@ public class CWaypointEnvironment
             // window title
             put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "title" ) );
 
+
             // wizard step header
             put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "headfactorysetting" ) );
-            put( "id_generatorhead", CCommon.getResourceString( CWaypointEnvironment.class, "headgeneratorsetting" ) );
             put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcarsetting" ) );
             put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcustomizing" ) );
 
+
             // wizard first step
             put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "factorysettingshead" ) );
-            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "waypointsettingshead" ) );
-            put( "label_type", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointtype" ) );
-            put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointradius" ) );
-            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
             put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourfactory" ) );
             put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "selectyouragentprogram" ) );
 
-            // wizard second step
-            put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourcarcount" ) );
+            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "waypointsettingshead" ) );
+            put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointtype" ) );
+            put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointradius" ) );
+
             put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "generatorsettingshead" ) );
+            put( "label_generatortyp", CCommon.getResourceString( CWaypointEnvironment.class, "labelgeneratortyp" ) );
+            put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourcarcount" ) );
+            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
+
 
             // wizard third step
             put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "speedsettingslabel" ) );
-            put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "maxspeedsettingslabel" ) );
-            put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "accsettingslabel" ) );
-            put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "decsettingslabel" ) );
-            put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "lingerersettingslabel" ) );
-
-            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectlingerprob" ) );
             put( "label_speeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectspeedprob" ) );
+
+            put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "maxspeedsettingslabel" ) );
             put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectmaxspeedprob" ) );
+
+            put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "accsettingslabel" ) );
             put( "label_accelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectaccprob" ) );
+
+            put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "decsettingslabel" ) );
             put( "label_decelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectdecprob" ) );
+
+            put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "lingerersettingslabel" ) );
+            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectlingerprob" ) );
+
 
             // wizard fourth step
             put( "label_name", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolnamelabel" ) );
@@ -144,7 +151,7 @@ public class CWaypointEnvironment
     private final static Map<String, String> c_waypoint = new HashMap<String, String>()
     {{
 
-            for ( final EWayPoint l_waypoint : EWayPoint.values() )
+            for ( final EWaypoint l_waypoint : EWaypoint.values() )
                 put( l_waypoint.toString(), l_waypoint.name() );
         }};
     /**
@@ -161,7 +168,7 @@ public class CWaypointEnvironment
     public final void setWaypoint( final GeoPosition p_position )
     {
         CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
-                (IWayPoint) EWayPoint.valueOf( (String) m_currentsetting.get( "type" ) ).get(
+                (IWayPoint) EWaypoint.valueOf( (String) m_currentsetting.get( "type" ) ).get(
                         p_position,
                         null,
                         (IFactory) m_currentsetting.get( "factory" ),
@@ -239,7 +246,7 @@ public class CWaypointEnvironment
         m_currentsetting.put( "name", l_data.<String>getOrDefault( "name", "" ) );
         m_currentsetting.put( "radius", l_data.<Double>get( "radius" ) );
         m_currentsetting.put( "carcount", l_data.<Integer>getOrDefault( "carcount", 0 ) );
-        m_currentsetting.put( "type", EWayPoint.valueOf( l_data.<String>getOrDefault( "type", "" ) ) );
+        m_currentsetting.put( "type", EWaypoint.valueOf( l_data.<String>getOrDefault( "type", "" ) ) );
         m_currentsetting.put(
                 "factory",
                 EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
@@ -266,9 +273,7 @@ public class CWaypointEnvironment
                         l_data.<String>getOrDefault( "agent", "" )
                 )
         );
-        //m_currentsetting.put( "generator",
-
-        //                      );
+        m_currentsetting.put( "generator", EGenerator.valueOf( l_data.<String>getOrDefault( "generatortyp", "" ) ) );
 
     }
 
@@ -276,14 +281,14 @@ public class CWaypointEnvironment
     /**
      * enum for waypoints
      */
-    private enum EWayPoint
+    private enum EWaypoint
     {
         /**
          * random car waypoint
          **/
-        CarWaypointRandom( CCommon.getResourceString( EWayPoint.class, "carwaypointrandom" ) ),
+        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) ),
         /** path waypoint **/
-        CayWaypointPath( CCommon.getResourceString( EWayPoint.class, "carwaypointpath" ) );
+        CayWaypointPath( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
 
         /**
          * name of this waypoint type
@@ -295,7 +300,7 @@ public class CWaypointEnvironment
          *
          * @param p_text language dependend name
          */
-        private EWayPoint( final String p_text )
+        private EWaypoint( final String p_text )
         {
             this.m_text = p_text;
         }
@@ -316,7 +321,7 @@ public class CWaypointEnvironment
                             (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String)p_data[5] );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EWayPoint.class, "unkownwaypoint" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unkownwaypoint" ) );
             }
         }
 

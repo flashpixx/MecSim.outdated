@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.waypoint.point;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -47,6 +46,13 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
 {
 
     /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( IRandomWayPoint.super.inspect() );
+        }};
+    /**
      * radius around the waypoint *
      */
     private final double m_radius;
@@ -54,13 +60,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * random interface
      */
     private final Random m_random = new Random();
-    /**
-     * inspector map
-     */
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            putAll( IRandomWayPoint.super.inspect() );
-        }};
 
 
     /**
@@ -70,6 +69,8 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * @param p_generator generator
      * @param p_factory factory
      * @param p_radius radius around the waypoint
+     * @param p_color color
+     * @param p_name name
      */
     public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius, final Color p_color, final String p_name )
     {

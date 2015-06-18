@@ -72,6 +72,8 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      * @param p_position position
      * @param p_generator generator
      * @param p_factory factory
+     * @param p_color color
+     * @param p_name name
      */
     public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {

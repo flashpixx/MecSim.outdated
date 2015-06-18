@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
@@ -53,18 +52,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
 {
 
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * position of the source within the map
-     */
-    private final GeoPosition m_position;
-    /**
-     * user defined name of the source (so that users can differ between sources)
-     */
-    private final String m_name;
-    /**
      * color of the source (needed in web-ui)
      */
     private final Color m_color;
@@ -81,20 +68,32 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      */
     private final transient BufferedImage m_initializeimage;
     /**
-     * last zoom (if the zoom changed the image need to be resized)
-     */
-    private transient int m_lastZoom = 0;
-    /**
-     * current scaled image
-     */
-    private transient BufferedImage m_scaledimage;
-    /**
      * inspector map
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( IWayPointBase.super.inspect() );
         }};
+    /**
+     * last zoom (if the zoom changed the image need to be resized)
+     */
+    private transient int m_lastZoom = 0;
+    /**
+     * user defined name of the source (so that users can differ between sources)
+     */
+    private final String m_name;
+    /**
+     * position of the source within the map
+     */
+    private final GeoPosition m_position;
+    /**
+     * current scaled image
+     */
+    private transient BufferedImage m_scaledimage;
+    /**
+     * serialize version ID *
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * ctor for empty waypoints
@@ -120,6 +119,8 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * @param p_position position
      * @param p_generator generator
      * @param p_factory factory
+     * @param p_color color
+     * @param p_name name
      */
     public IWayPointBase( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {
@@ -161,53 +162,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     public boolean hasFactoryGenerator()
     {
         return ( m_generator != null ) && ( m_factory != null );
-    }
-
-    @Override
-    public Map<String, Object> inspect()
-    {
-        return m_inspect;
-    }
-
-    @Override
-    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
-    {
-        if ( getPosition() == null )
-            return;
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( getPosition(), p_viewer.getZoom() );
-        final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
-                this.iconsize(
-                        p_viewer
-                )
-        );
-
-        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
-    }
-
-    @Override
-    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
-    {
-        //if the zoom change calculate the new scaled image
-        if ( p_viewer.getZoom() != m_lastZoom )
-            m_scaledimage = this.getScaledImage(
-                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
-                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
-            );
-
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
-        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
-    }
-
-    @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        if ( !this.hasFactoryGenerator() )
-            return null;
-
-        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
     }
 
     /**
@@ -259,5 +213,52 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
         }
 
         return null;
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
+
+    @Override
+    public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
+    {
+        if ( getPosition() == null )
+            return;
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( getPosition(), p_viewer.getZoom() );
+        final Ellipse2D l_circle = new Ellipse2D.Double(
+                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
+                this.iconsize(
+                        p_viewer
+                )
+        );
+
+        if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
+            CSimulation.getInstance().getUIComponents().getInspector().set( this );
+    }
+
+    @Override
+    public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
+    {
+        //if the zoom change calculate the new scaled image
+        if ( p_viewer.getZoom() != m_lastZoom )
+            m_scaledimage = this.getScaledImage(
+                    m_initializeimage, (int) ( m_initializeimage.getWidth() * this.iconscale( p_viewer ) ),
+                    (int) ( m_initializeimage.getHeight() * this.iconscale( p_viewer ) )
+            );
+
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
+        p_graphic.drawImage( m_scaledimage, (int) l_point.getX() - m_scaledimage.getWidth() / 2, (int) l_point.getY() - m_scaledimage.getHeight(), null );
+    }
+
+    @Override
+    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        if ( !this.hasFactoryGenerator() )
+            return null;
+
+        return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
     }
 }

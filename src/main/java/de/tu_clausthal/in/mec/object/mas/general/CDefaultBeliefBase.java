@@ -141,8 +141,11 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // if there is no inner-map with same key, generate new map-entry and put literal into it
         if( l_innerMap == null )
-            return m_elements.put( l_key, new HashMap<>() )
-                             .put( ILiteral.class, new HashSet() {{ add( p_literal ); }} ) == null;
+            return m_elements.put( l_key, new HashMap() {{
+                        put( ILiteral.class, new HashSet() {{
+                            add( p_literal );
+                        }} );
+                    }} ) == null;
 
         // get literals with same key from inner-map
         final Set<? super IBeliefBaseElement> l_innerLiterals = l_innerMap.get( ILiteral.class );

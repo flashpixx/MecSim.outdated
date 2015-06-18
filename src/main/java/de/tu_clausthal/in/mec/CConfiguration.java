@@ -576,6 +576,7 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
+     * @bug ui path not stored
      */
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException, IllegalArgumentException
     {
@@ -619,8 +620,8 @@ public class CConfiguration
             }
 
         // copy ui/web datasets complete
-        if ( p_input.traverseContainsKey( "ui/web" ) )
-            m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
+        //if ( p_input.traverseContainsKey( "ui/web" ) )
+        //    m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
 
         if ( !l_errors.isEmpty() )
             throw new IllegalArgumentException( StringUtils.join( l_errors, "\n" ) );

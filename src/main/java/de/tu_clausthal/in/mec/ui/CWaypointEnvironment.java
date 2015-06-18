@@ -85,18 +85,18 @@ public class CWaypointEnvironment
     private static final Map<String, String> c_label = new HashMap<String, String>()
     {{
             // window title
-            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "wizardwidget" ) );
+            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "title" ) );
 
             // wizard step header
-            put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "factorysettings" ) );
-            put( "id_basegeneratorhead", CCommon.getResourceString( CWaypointEnvironment.class, "generatorsettings" ) );
-            put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "carsettings" ) );
-            put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "customizing" ) );
+            put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "headfactorysetting" ) );
+            put( "id_generatorhead", CCommon.getResourceString( CWaypointEnvironment.class, "headgeneratorsetting" ) );
+            put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcarsetting" ) );
+            put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcustomizing" ) );
 
             // wizard first step
             put( "label_type", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointtype" ) );
             put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointradius" ) );
-            put( "label_basedistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
+            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
             put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourfactory" ) );
             put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "selectyouragentprogram" ) );
 
@@ -196,8 +196,9 @@ public class CWaypointEnvironment
     private final void web_static_set( final Map<String, Object> p_data )
     {
         final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
-
+/*
         final EWayPoint l_type = EWayPoint.valueOf( l_data.<String>getOrDefault( "type", "" ) );
+
         EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
 
                 EDistribution.valueOf( l_data.<String>getOrDefault( "speed/distribution", "" ) ).get(
@@ -221,7 +222,7 @@ public class CWaypointEnvironment
                 ),
                 l_data.<String>getOrDefault( "agent", "" )
         );
-
+*/
     }
 
 

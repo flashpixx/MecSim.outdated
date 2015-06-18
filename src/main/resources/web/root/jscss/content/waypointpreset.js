@@ -78,11 +78,11 @@ WaypointPreset.prototype.getContent = function()
 
 
         // second step - generator settings
-        '<h3 id="' + this.generateSubID("basegeneratorhead") + '" />' +
+        '<h3 id="' + this.generateSubID("generatorhead") + '" />' +
         '<section>' +
-        '<p>' + Layout.select( { id: this.generateSubID("basedistribution"),            class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionleft"),                                                        label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("basedistributionright"),                                                       label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("generatordistribution"),       class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionright"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",   list: this.mo_elements.spinners }) + '</p>' +
         '</section >' +
 
@@ -281,7 +281,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
 **/
 WaypointPreset.prototype.finish = function()
 {
-    // collect wizard options
+    // collect wizard options and build Json structure
     var self = this;
     var lo   = {};
     [
@@ -296,7 +296,7 @@ WaypointPreset.prototype.finish = function()
         lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
 
-    [ "basedistribution", "speeddistribution", "maxspeeddistribution",
+    [ "generatordistribution", "speeddistribution", "maxspeeddistribution",
       "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
     ].forEach( function( pc_key ) {
         lo[pc_key.replace("distribution", "")] = {
@@ -314,7 +314,12 @@ WaypointPreset.prototype.finish = function()
         data    : lo,
         success : function()
         {
-            console.log(lo);
+            // store configuration persistent
+            var lo_store = {ui : {web : {waypointpreset : {} } } };
+            lo_store.ui.web.waypointpreset[lo.name] = lo;
+
+            //MecSim.configuration().set( lo_store );
+            self.hide();
         }
 
     }).fail( function(po_data) {

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
 /**
  * metric interface of the inconsistency structure
+ *
  * @see http://en.wikipedia.org/wiki/Metric_space
  */
 public interface IMetric<T>

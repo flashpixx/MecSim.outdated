@@ -51,8 +51,6 @@ import java.util.List;
  */
 public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
 {
-    /** unit converting for traffic structure **/
-    private final transient CUnitConvert m_unit = new CUnitConvert();
     /**
      * data structure - not serializable
      */
@@ -61,6 +59,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * driving model
      */
     private EDrivingModel m_drivemodel = EDrivingModel.AgentNagelSchreckenberg;
+    /**
+     * unit converting for traffic structure
+     **/
+    private final transient CUnitConvert m_unit = new CUnitConvert();
     /**
      * graph
      */
@@ -159,13 +161,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
-     * returns the unit converting object
-     *
-     * @return unit converter
-     */
-    public CUnitConvert getUnitConvert() { return m_unit; }
-
-    /**
      * returns a graph weight
      *
      * @param p_weight weight name
@@ -174,6 +169,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
     {
         return m_graph.<T>getWeight( p_weight );
+    }
+
+    /**
+     * returns the unit converting object
+     *
+     * @return unit converter
+     */
+    public CUnitConvert getUnitConvert()
+    {
+        return m_unit;
     }
 
     /**

@@ -99,8 +99,8 @@ public class CNagelSchreckenberg implements IDriveModel
             p_car.setCurrentSpeed(
                     Math.max(
                             c_minimalspeed, p_car.getCurrentSpeed() - (int) p_layer.getUnitConvert().getAccelerationToSpeed(
-                            p_car.getDeceleration()
-                    )
+                                    p_car.getDeceleration()
+                            )
                     )
             );
     }

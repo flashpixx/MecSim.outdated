@@ -176,8 +176,9 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      *
      * @param p_path path of the value
      * @param p_default default
-     * @tparam T type
      * @return value
+     *
+     * @tparam T type
      */
     @SuppressWarnings( "unchecked" )
     public <T> T getOrDefault( final CPath p_path, final Object p_default )

@@ -41,30 +41,18 @@ import java.util.Collection;
 public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, Serializable
 {
     /**
-     * returns the position
-     *
-     * @return geoposition of the source
-     */
-    public GeoPosition getPosition();
-
-    /**
-     * method to get the name of this source
-     * @return
-     */
-    public String getName();
-
-    /**
      * method to get the color of this source
+     *
      * @return
      */
     public Color getColor();
 
     /**
-     * checks if a generator and factory exists
+     * method to get the name of this source
      *
-     * @return boolean flag of existance
+     * @return
      */
-    public boolean hasFactoryGenerator();
+    public String getName();
 
     /**
      * returns a list of geoposition, which represent a path from this waypoint
@@ -72,5 +60,19 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
      * @return collection with tupel of geoposition
      */
     public Collection<Pair<GeoPosition, GeoPosition>> getPath();
+
+    /**
+     * returns the position
+     *
+     * @return geoposition of the source
+     */
+    public GeoPosition getPosition();
+
+    /**
+     * checks if a generator and factory exists
+     *
+     * @return boolean flag of existance
+     */
+    public boolean hasFactoryGenerator();
 
 }

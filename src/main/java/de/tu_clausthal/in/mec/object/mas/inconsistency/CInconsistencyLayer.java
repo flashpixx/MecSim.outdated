@@ -44,6 +44,7 @@ import java.util.Map;
 
 /**
  * layer with inconsistence data
+ *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
 public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
@@ -178,7 +179,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     }
 
     /**
-     *
      * @bug matrix allocation chan be create a memory overflow if it is possible
      * update existing matrix object
      */

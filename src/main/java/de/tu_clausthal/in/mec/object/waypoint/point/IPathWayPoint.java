@@ -106,21 +106,27 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         GeoPosition l_newPosition;
 
         //check for circles and path length
-        for (int i=1; i<m_makrovChain.size(); i++){
+        for ( int i = 1; i < m_makrovChain.size(); i++ )
+        {
             double l_random = m_random.nextDouble();
 
             // current node has no outgoing edges add a path to default target and return
-            if(l_currentNode.size() <= 0){
-                CLogger.out(l_path.size());
+            if ( l_currentNode.size() <= 0 )
+            {
+                CLogger.out( l_path.size() );
                 l_path.add( new ImmutablePair<>( l_currentPosition, l_default ) );
                 return l_path;
             }
 
             //calculate new edge
-            for ( final Map.Entry<IWayPoint, MutablePair<Double, Double>> l_node : l_currentNode.entrySet() ) {
-                if(l_random >= l_node.getValue().getRight()){
+            for ( final Map.Entry<IWayPoint, MutablePair<Double, Double>> l_node : l_currentNode.entrySet() )
+            {
+                if ( l_random >= l_node.getValue().getRight() )
+                {
                     l_random = l_random - l_node.getValue().getRight();
-                }else{
+                }
+                else
+                {
                     l_newPosition = l_node.getKey().getPosition();
                     l_path.add( new ImmutablePair<>( l_currentPosition, l_newPosition ) );
                     l_currentNode = m_makrovChain.get( l_node.getKey() );

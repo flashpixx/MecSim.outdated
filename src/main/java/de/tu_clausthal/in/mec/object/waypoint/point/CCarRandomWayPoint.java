@@ -63,7 +63,8 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
      * @param p_name name
      */
     public CCarRandomWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
-            final Color p_color, final String p_name )
+            final Color p_color, final String p_name
+    )
     {
         super( p_position, p_generator, p_factory, p_radius, p_color, p_name );
     }

@@ -27,7 +27,6 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.graph.CEdge;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -74,11 +73,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @CFieldFilter.CAgent( bind = false )
     private boolean m_endreached;
     /**
-     * reference to the graph
-     */
-    @CFieldFilter.CAgent( bind = false )
-    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-    /**
      * inspector map
      */
     @CFieldFilter.CAgent( bind = false )
@@ -86,6 +80,11 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     {{
             putAll( CDefaultCar.super.inspect() );
         }};
+    /**
+     * reference to the graph
+     */
+    @CFieldFilter.CAgent( bind = false )
+    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
     /**
      * linger probability value
      */
@@ -454,7 +453,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             try
             {
                 m_layer.getGraph().getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
-                m_layer.getGraph().getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
+                m_layer.getGraph().getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject(
+                        this, m_route.get( m_routeindex + l_speed ).getRight()
+                );
                 m_routeindex += l_speed;
             }
             catch ( final IllegalAccessException l_exception )

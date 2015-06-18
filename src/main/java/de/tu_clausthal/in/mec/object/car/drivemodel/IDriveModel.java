@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.car.drivemodel;
 
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 import java.io.Serializable;
 

@@ -97,11 +97,12 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
 
     /**
      * ctor for empty waypoints
+     *
      * @param p_position
      * @param p_color
      * @param p_name
      */
-    public IWayPointBase( final GeoPosition p_position, final Color p_color, final String p_name  )
+    public IWayPointBase( final GeoPosition p_position, final Color p_color, final String p_name )
     {
         m_position = p_position;
         m_generator = null;
@@ -141,9 +142,9 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public final GeoPosition getPosition()
+    public final Color getColor()
     {
-        return m_position;
+        return m_color;
     }
 
     @Override
@@ -153,9 +154,9 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
-    public final Color getColor()
+    public final GeoPosition getPosition()
     {
-        return m_color;
+        return m_position;
     }
 
     @Override

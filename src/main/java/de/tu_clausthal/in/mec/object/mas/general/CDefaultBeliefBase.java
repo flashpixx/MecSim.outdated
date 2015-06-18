@@ -108,21 +108,18 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
     }
 
-    public Map<String, IBeliefBase<T>> getBeliefbases()
-    {
-        return new HashMap() {{
-            for ( final Map.Entry<String, Map<Class<?>, Set<? super IBeliefBaseElement>>> l_item : m_elements.entrySet() )
-                put( l_item.getKey(), l_item.getValue().get( IBeliefBase.class ).iterator().next() );
-        }};
-    }
-
     @Override
     public Map<String, IBeliefBase<T>> getBeliefbases( CPath p_path )
     {
+        // if path is empty, return all the top-level beliefbases
         if ( p_path.isEmpty() )
+            return new HashMap() {{
+                for ( final Map.Entry<String, Map<Class<?>, Set<? super IBeliefBaseElement>>> l_item : m_elements.entrySet() )
+                    put( l_item.getKey(), l_item.getValue().get( IBeliefBase.class ).iterator().next() );
+            }};
 
-
-        final Map l_beliefbases = this.get( p_path ).getBeliefbases();
+        // else go down the hierarchy and do self call
+        return this.get( p_path ).getBeliefbases( CPath.EMPTY );
     }
 
     public Collection<ILiteral<T>> getLiterals()
@@ -144,7 +141,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         try
         {
-            return this.get( p_path ).getLiterals();
+            return this.get( p_path ).getLiterals( CPath.EMPTY );
         }
         catch ( IllegalArgumentException l_exception )
         {
@@ -255,7 +252,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // try to remove the beliefbase which name equals the suffix of the path
         final String l_suffix = p_path.getSuffix();
-        if ( l_beliefbase.getBeliefbases().remove( l_suffix ) != null )
+        if ( l_beliefbase.getBeliefbases( CPath.EMPTY ).remove( l_suffix ) != null )
             return true;
 
         return false;
@@ -273,11 +270,11 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         boolean l_match = false;
 
         // remove literals which functor equals the methods argument p_functor
-        for ( final ILiteral<T> l_literal : l_beliefbase.getLiterals() )
+        for ( final ILiteral<T> l_literal : l_beliefbase.getLiterals( CPath.EMPTY ) )
             if ( l_literal.getFunctor().equals( p_functor ) )
             {
                 l_match = true;
-                l_result = l_result && l_beliefbase.getLiterals().remove( l_literal );
+                l_result = l_result && l_beliefbase.getLiterals( CPath.EMPTY ).remove( l_literal );
             }
 
         return l_result && l_match;
@@ -291,7 +288,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
     public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
-        return this.get( p_path ).getLiterals().remove( p_literal );
+        return this.get( p_path ).getLiterals( CPath.EMPTY ).remove( p_literal );
     }
 
     public boolean remove( final String p_path, final ILiteral<T> p_literal )
@@ -302,7 +299,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void update()
     {
-        this.getBeliefbases().values().forEach(de.tu_clausthal.in.mec.object.mas.general.IBeliefBase::update);
+        this.getBeliefbases( CPath.EMPTY ).values().forEach(de.tu_clausthal.in.mec.object.mas.general.IBeliefBase::update);
     }
 
     @Override
@@ -333,10 +330,10 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     private static <N> void collapseIterator( final IBeliefBase<N> p_current, final Stack<Iterator<ILiteral<N>>> p_stack )
     {
         // push iterator object on top-level-literals
-        p_stack.push( p_current.getLiterals().iterator() );
+        p_stack.push( p_current.getLiterals( CPath.EMPTY ).iterator() );
 
         // recursive call for all inherited beliefbases
-        for ( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases().values() )
+        for ( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases( CPath.EMPTY ).values() )
             collapseIterator( l_beliefbase, p_stack );
     }
 
@@ -408,7 +405,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals )
     {
-        return this.get( p_path ).getLiterals().addAll(p_literals);
+        return this.get( p_path ).getLiterals( CPath.EMPTY ).addAll(p_literals);
     }
 
     @Override
@@ -424,14 +421,16 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @todo concatenate path for unification
      */
     @Override
-    public Set<ILiteral<T>> collapse()
+    public Set<ILiteral<T>> collapse( final CPath p_path )
     {
-        return new HashSet<ILiteral<T>>()
-        {
-            {
+        // if path is empty, do collapse on inherited beliefbases
+        if ( p_path.isEmpty() )
+            return new HashSet<ILiteral<T>>() {{
                 for ( final ILiteral<T> l_literal : CDefaultBeliefBase.this )
                     add( l_literal );
-            }
-        };
+            }};
+
+        // go down the hierarchy and do collapse
+        return this.get( p_path ).collapse( CPath.EMPTY );
     }
 }

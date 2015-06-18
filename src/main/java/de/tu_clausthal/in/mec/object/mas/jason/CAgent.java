@@ -29,12 +29,11 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.*;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CInternalBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -317,7 +316,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return beliefbase
      */
-    public final IDefaultBeliefBase getBeliefBase()
+    public final CDefaultBeliefBase getBeliefBase()
     {
         return m_beliefs;
     }

@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import com.graphhopper.coll.MapEntry;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 
@@ -34,7 +33,7 @@ import java.util.*;
  * generic default beliefbase for software agents, where
  * each beliefbase can contain further inherited beliefbases
  */
-public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
+public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * structure for beliefbase elements (i.e. literals and inherited beliefbases)
@@ -46,7 +45,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * creates an empty set of top-level literals and
      * an empty map of inherited beliefbases
      */
-    public IDefaultBeliefBase()
+    public CDefaultBeliefBase()
     {
         this(new HashMap<>(), new HashSet<>());
     }
@@ -57,7 +56,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
+    public CDefaultBeliefBase(final Set<ILiteral<T>> p_literals)
     {
         this(new HashMap<>(), p_literals);
     }
@@ -68,8 +67,9 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals )
+    public CDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
     {
+        //todo: init m_elements
     }
 
     /**
@@ -89,11 +89,75 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
             collapseIterator( l_beliefbase, p_stack );
     }
 
-    @Override
-    public boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    /**
+     * adds a literal to a beliefbase
+     *
+     * @param p_literal literal to add
+     * @return true if addition was successful
+     *
+     * @todo catch exception and construct new beliefbases
+     */
+    public boolean addLiteral( final ILiteral<T> p_literal )
     {
-        // @todo traversierung
+        return m_elements.get( p_literal.getFunctor() ).get( ILiteral.class ).add( p_literal );
+    }
+
+    private IBeliefBase getOrSet( final CPath p_path )
+    {
+        if ( p_path.isEmpty() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
+
+        // get map of beliefbase-elements by first path-element
+        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_element = m_elements.get( p_path.get( 0 ) );
+
+        // if no key was found, create a new map-entry and insert a new beliefbase
+        if (l_element == null)
+
+            m_elements.put(p_path.get( 0 ), new HashMap<>())
+                .put(IBeliefBase.class, new HashSet() {{
+                    add(new CDefaultBeliefBase<T>());
+                }}
+                );
+
+
+            // get beliefbase with name matching the specified first path-element
+            final Set<? super IBeliefBaseElement> l_beliefbase = l_element.get( IBeliefBase.class );
+            if( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_name ) );
+
+        }
+
+        // recursive call in inherited beliefbase with shortened path
+        return ( ( IBeliefBase ) l_beliefbase.iterator().next() );
+    }
+
+    /**
+     * adds a new beliefbase
+     *
+     * @param p_path path to specific beliefbase with name of new beliefbase as last element
+     * @param p_beliefbase beliefbase to add
+     * @return
+     */
+    @Override
+    public boolean add( final CPath p_path, final IBeliefBase p_beliefbase )
+    {
+        // to add a beliefbase a name (i.e. last element in path) must be specified
+        if( p_path.isEmpty() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
+
+        // if path contains a single element, this element is the name of the new beliefbase
+        if ( p_path.size() == 1 )
+        {
+
+        }
+
         this.get( p_path ).getOrDefault( ILiteral.class, new HashSet<>() ).add( p_literal );
+    }
+
+    @Override
+    public boolean add(CPath p_path, ILiteral<T> p_literal)
+    {
+        return false;
     }
 
     @Override
@@ -106,15 +170,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public boolean add( final String p_path, final IBeliefBase<T> p_beliefbase )
     {
         return this.add(new CPath(p_path), p_beliefbase);
-    }
-
-    @Override
-    public boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
-    {
-        if ( p_path.isEmpty() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
-
-        return this.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).getBeliefbases().put( p_path.getSuffix(), p_beliefbase ) != null;
     }
 
     @Override
@@ -153,7 +208,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return new HashSet<ILiteral<T>>()
         {
             {
-                for ( final ILiteral<T> l_literal : IDefaultBeliefBase.this )
+                for ( final ILiteral<T> l_literal : CDefaultBeliefBase.this )
                     add( l_literal );
             }
         };
@@ -182,8 +237,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_path path to beliefbase
      * @return specified beliefbase
-     *
-     * @todo new exception class PathNotFoundException which contains the last found beliefbase
      */
     @Override
     public IBeliefBase get( final CPath p_path )
@@ -191,20 +244,18 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         if ( p_path.isEmpty() )
             return this;
 
-        // get map of beliefbase elements via first elements in path
-        // or return the empty set if nothing can be found
+        // get map of beliefbase-elements by first path-element
         final Map<Class<?>, Set<? super IBeliefBaseElement>> l_element = m_elements.get( p_path.get( 0 ) );
         if ( l_element == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_path ) );
 
         // get beliefbase with name matching the specified first path-element
-        // or return the empty set if no such beliefbase can be found
         final Set<? super IBeliefBaseElement> l_beliefbase = l_element.get( IBeliefBase.class );
         if( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_path ) );
 
         // recursive call in inherited beliefbase with shortened path
-        return ( ( IBeliefBase ) l_beliefbase.iterator().next() );
+        return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
     }
 
     /**

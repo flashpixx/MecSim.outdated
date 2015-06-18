@@ -70,9 +70,11 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // generate map-entries for beliefbases
         for ( final String l_key : p_beliefbases.keySet() )
-            m_elements.put( l_key, new HashMap<>() )
-                      .put(IBeliefBase.class, new HashSet())
-                      .add(p_beliefbases.get(l_key));;
+            m_elements.put( l_key, new HashMap() {{
+                put(IBeliefBase.class, new HashSet() {{
+                    add(p_beliefbases.get(l_key));
+                }});
+            }} );
 
         // generate map-entries for literals
         for ( final ILiteral<T> l_literal : p_literals )
@@ -93,12 +95,12 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
             return this;
 
         // get map of beliefbase-elements by first path-element
-        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_element = m_elements.get( p_path.get( 0 ) );
-        if ( l_element == null )
+        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_beliefBaseElements = m_elements.get( p_path.get( 0 ) );
+        if ( l_beliefBaseElements == null )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_path ) );
 
         // get beliefbase with name matching the specified first path-element
-        final Set<? super IBeliefBaseElement> l_beliefbase = l_element.get( IBeliefBase.class );
+        final Set<? super IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
         if( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_path ) );
 

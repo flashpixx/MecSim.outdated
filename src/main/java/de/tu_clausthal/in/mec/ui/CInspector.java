@@ -47,18 +47,7 @@ public class CInspector
 
     public CInspector()
     {
-        // set via reflection the inspector
-        try
-        {
-            if ( CSimulation.getInstance().getUIComponents().getInspector() == null )
-                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_inspector" ).getSetter().invoke(
-                        CSimulation.getInstance().getUIComponents(), this
-                );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
+        CSimulation.getInstance().getUIComponents().add( "inspector", this );
     }
 
 

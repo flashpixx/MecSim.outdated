@@ -28,7 +28,9 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.DefaultWaypointRenderer;
@@ -237,7 +239,7 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
         );
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
+            CSimulation.getInstance().getUIComponents().<CInspector>get( "inspector" ).set( this );
     }
 
     @Override

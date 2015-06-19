@@ -254,19 +254,7 @@ public class CUI extends Application
     @Override
     public final void start( final Stage p_stage ) throws Exception
     {
-        // set via reflection the UI
-        try
-        {
-            if ( CSimulation.getInstance().getUIComponents().getUI() == null )
-                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_ui" ).getSetter().invoke(
-                        CSimulation.getInstance().getUIComponents(), this
-                );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
-
+        CSimulation.getInstance().getUIComponents().add( "ui", this );
         this.stageInitialization( p_stage );
         this.stageLayoutInitialization( p_stage );
         CBootstrap.afterStageInit( this );

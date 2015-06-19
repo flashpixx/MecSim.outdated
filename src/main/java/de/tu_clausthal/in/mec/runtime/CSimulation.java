@@ -422,58 +422,29 @@ public class CSimulation
      */
     public class CUIComponents
     {
-        /**
-         * inspector
-         */
-        private final CInspector m_inspector = null;
-        /**
-         * UI
-         */
-        private final CUI m_ui = null;
-        /**
-         * HTTP server
-         */
-        private final CServer m_webserver = null;
+        private final Map<String,Object> m_elements = new HashMap<>();
 
-        /**
-         * returns a boolean for existing UI
-         *
-         * @return UI exists
-         */
-        public boolean exists()
+        public final void add( final String p_name, final Object p_object )
         {
-            return ( m_ui != null ) && ( m_webserver != null ) && ( m_inspector != null );
+            if (m_elements.containsKey( p_name.toLowerCase() ))
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "exists", p_name ) );
+
+            m_elements.put( p_name.toLowerCase(), p_object );
         }
 
-        /**
-         * returns the inspector
-         *
-         * @return inspector
-         */
-        public CInspector getInspector()
+        public final <T> T get( final String p_name )
         {
-            return m_inspector;
+            return (T)m_elements.get( p_name.toLowerCase() );
         }
 
-        /**
-         * returns the UI
-         *
-         * @return UI
-         */
-        public CUI getUI()
+        public final boolean exists()
         {
-            return m_ui;
+            return !m_elements.isEmpty();
         }
 
-        /**
-         * returns the HTTP server
-         *
-         * @return null or server
-         */
-        public CServer getWebServer()
+        public final boolean exists( final String p_name )
         {
-            return m_webserver;
+            return m_elements.containsKey( p_name.toLowerCase() );
         }
-
     }
 }

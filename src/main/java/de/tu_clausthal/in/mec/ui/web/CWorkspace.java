@@ -62,22 +62,12 @@ public class CWorkspace extends CBrowser
     public CWorkspace()
     {
         super( EMenu.BackForward );
+
         this.load(
                 "http://" + CConfiguration.getInstance().get().<String>get( c_httphost ) + ":" + CConfiguration.getInstance().get().<Integer>get( c_httpport )
         );
 
-        // set via reflection the server
-        try
-        {
-            if ( CSimulation.getInstance().getUIComponents().getWebServer() == null )
-                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_webserver" ).getSetter().invoke(
-                        CSimulation.getInstance().getUIComponents(), m_server
-                );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
+        CSimulation.getInstance().getUIComponents().add( "server", m_server );
     }
 
 }

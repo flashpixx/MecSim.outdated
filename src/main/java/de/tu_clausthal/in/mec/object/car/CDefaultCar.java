@@ -30,8 +30,10 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -348,13 +350,13 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
         {
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
+            CSimulation.getInstance().getUIComponents().<CInspector>get( "inspector" ).set( this );
 
             final Stroke l_stroke = new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{1}, 0 );
             final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_route = new LinkedList<>();
             l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
             l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintFadeLine( l_route );
+            CSimulation.getInstance().getUIComponents().<CUI>get("ui").<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintFadeLine( l_route );
         }
     }
 

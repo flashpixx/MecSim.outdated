@@ -25,9 +25,15 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 
 /**
@@ -46,7 +52,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public IDefaultBeliefBase()
     {
-        this(new HashMap<>(), new HashSet<>());
+        this( new HashMap<>(), new HashSet<>() );
     }
 
     /**
@@ -54,9 +60,9 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase(final Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
     {
-        this(new HashMap<>(), p_literals);
+        this( new HashMap<>(), p_literals );
     }
 
     /**
@@ -65,20 +71,188 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbases inherited beliefbases
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals)
+    public IDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals )
     {
         // generate map-entries for beliefbases
         for ( final String l_key : p_beliefbases.keySet() )
-            m_elements.put( l_key, new HashMap() {{
-                put(IBeliefBase.class, new HashSet() {{
-                    add(p_beliefbases.get(l_key));
-                }});
-            }} );
+            m_elements.put(
+                    l_key, new HashMap()
+                    {{
+                            put(
+                                    IBeliefBase.class, new HashSet()
+                                    {{
+                                            add( p_beliefbases.get( l_key ) );
+                                        }}
+                            );
+                        }}
+            );
 
         // generate map-entries for literals
         for ( final ILiteral<T> l_literal : p_literals )
-            this.add(l_literal);
+            this.add( CPath.EMPTY, l_literal );
 
+    }
+
+    /**
+     * fills up a stack with Iterator-objects on ILiterals
+     *
+     * @param p_current current beliefbase with top-level-literals to iterate over
+     * @param p_stack current stack
+     * @param <N> the literal type
+     */
+    private static <N> void collapseIterator( final IBeliefBase<N> p_current, final Stack<Iterator<ILiteral<N>>> p_stack )
+    {
+        // push iterator object on top-level-literals
+        p_stack.push( p_current.getLiterals( CPath.EMPTY ).iterator() );
+
+        // recursive call for all inherited beliefbases
+        for ( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases( CPath.EMPTY ).values() )
+            collapseIterator( l_beliefbase, p_stack );
+    }
+
+    @Override
+    public boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    {
+        // if path is not empty, go down the hierarchy and do recursive call
+        if ( !p_path.isEmpty() )
+            return this.getOrDefault(
+                    p_path.getSubPath( 0, 1 ), new IDefaultBeliefBase<T>()
+                    {
+                    }
+            ).add( p_path.getSubPath( 1 ), p_literal );
+
+
+        // set literals functor as key
+        final String l_key = p_literal.getFunctor().toString();
+
+        // get inner-map with same key
+        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_innerMap = m_elements.get( l_key );
+
+        // if there is no inner-map with same key, generate new map-entry and put literal into it
+        if ( l_innerMap == null )
+            return m_elements.put(
+                    l_key, new HashMap()
+                    {{
+                            put(
+                                    ILiteral.class, new HashSet()
+                                    {{
+                                            add( p_literal );
+                                        }}
+                            );
+                        }}
+            ) == null;
+
+        // get literals with same key from inner-map
+        final Set<? super IBeliefBaseElement> l_innerLiterals = l_innerMap.get( ILiteral.class );
+
+        // if there are no literals with same key, generate new set and put literal into it
+        if ( l_innerLiterals == null )
+            return l_innerMap.put(
+                    ILiteral.class, new HashSet()
+                    {{
+                            add( p_literal );
+                        }}
+            ) == null;
+
+        // if there are literals with same key, just add current literal to this set
+        return l_innerLiterals.add( p_literal );
+
+    }
+
+    @Override
+    public boolean add( final String p_path, final ILiteral<T> p_literal )
+    {
+        return this.add( new CPath( p_path ), p_literal );
+    }
+
+    @Override
+    public void add( final String p_path, final IBeliefBase<T> p_beliefbase )
+    {
+        this.add( new CPath( p_path ), p_beliefbase );
+    }
+
+    /**
+     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
+     * @param p_beliefbase beliefbase to add
+     * @todo construct new beliefbases when path is unknown
+     */
+    @Override
+    public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    {
+        // a name (i.e. last element in path) must be specified to add a new beliefbase
+        if ( p_path.isEmpty() )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
+
+        // if path contains more than one element, go down the hierarchy
+        if ( p_path.size() > 1 )
+            this.getOrDefault(
+                    p_path.getSubPath( 0, 1 ), new IDefaultBeliefBase<T>()
+                    {
+                    }
+            ).add( p_path.getSubPath( 1 ), p_beliefbase );
+
+        // if path contains a single element, push new beliefbase
+        m_elements.put(
+                p_path.get( 0 ), new HashMap()
+                {{
+                        put(
+                                IBeliefBase.class, new HashSet()
+                                {{
+                                        add( p_beliefbase );
+                                    }}
+                        );
+                    }}
+        );
+    }
+
+    @Override
+    public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals )
+    {
+        return this.get( p_path ).getLiterals( CPath.EMPTY ).addAll( p_literals );
+    }
+
+    @Override
+    public boolean addAll( String p_path, Collection<ILiteral<T>> p_literals )
+    {
+        return this.addAll( new CPath( p_path ), p_literals );
+    }
+
+    @Override
+    public void clear()
+    {
+        m_elements.clear();
+    }
+
+    @Override
+    public void clear( CPath p_path )
+    {
+        this.get( p_path ).clear();
+    }
+
+    @Override
+    public void clear( String p_path )
+    {
+        this.clear( new CPath( p_path ) );
+    }
+
+    /**
+     * @return
+     *
+     * @todo concatenate path for unification
+     */
+    @Override
+    public Set<ILiteral<T>> collapse( final CPath p_path )
+    {
+        // if path is empty, do collapse on inherited beliefbases
+        if ( p_path.isEmpty() )
+            return new HashSet<ILiteral<T>>()
+            {{
+                    for ( final ILiteral<T> l_literal : IDefaultBeliefBase.this )
+                        add( l_literal );
+                }};
+
+        // go down the hierarchy and do collapse
+        return this.get( p_path ).collapse( CPath.EMPTY );
     }
 
     @Override
@@ -100,54 +274,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // get beliefbase with name matching the specified first path-element
         final Set<? super IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
-        if( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
+        if ( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
             throw new IllegalArgumentException( p_path.toString() );
 
         // recursive call in inherited beliefbase with shortened path
-        return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
-    }
+        return ( (IBeliefBase) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
 
-    /**
-     *
-     * @param p_path path with name of the beliefbase as last element
-     * @param p_beliefbase default beliefbase
-     * @return
-     *
-     * @warning untested
-     */
-    public IBeliefBase<T> getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase )
-    {
-        if ( p_path.isEmpty() )
-            return this;
-
-        // if there are no beliefbase-elements with specified key
-        if ( m_elements.get( p_path.get( 0 ) ) == null )
-
-            // generate new map-entry and put a new beliefbase into it
-            m_elements.put( p_path.get( 0 ), new HashMap() {{
-                put( IBeliefBase.class, new HashSet() {{
-                    add( p_path.size() == 1 ?
-                            p_beliefbase : new IDefaultBeliefBase<T>(){} );
-                }});
-            }});
-
-        // get map of beliefbase-elements by first path-element
-        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_beliefBaseElements = m_elements.get( p_path.get( 0 ) );
-
-        // if there is no beliefbase in beliefbase-elements
-        if ( l_beliefBaseElements.get( IBeliefBase.class ) == null )
-
-            // add new beliefbase into beliefbase-elements
-            l_beliefBaseElements.put( IBeliefBase.class, new HashSet() {{
-                add( p_path.size() == 1 ?
-                        p_beliefbase : new IDefaultBeliefBase<T>(){} );
-            }} );
-
-        // get beliefbase with name matching the specified first path-element
-        final Set<? super IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
-
-        // step down one level and do recursion
-        return ( ( IBeliefBase ) l_beliefbase.iterator().next() ).getOrDefault( p_path.getSubPath( 1 ), p_beliefbase );
     }
 
     @Override
@@ -155,21 +287,15 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // if path is empty, return all the top-level beliefbases
         if ( p_path.isEmpty() )
-            return new HashMap() {{
-                for ( final Map.Entry<String, Map<Class<?>, Set<? super IBeliefBaseElement>>> l_item : m_elements.entrySet() )
-                    put( l_item.getKey(), l_item.getValue().get( IBeliefBase.class ).iterator().next() );
-            }};
+            return new HashMap()
+            {{
+                    for ( final Map.Entry<String, Map<Class<?>, Set<? super IBeliefBaseElement>>> l_item : m_elements.entrySet() )
+                        put( l_item.getKey(), l_item.getValue().get( IBeliefBase.class ).iterator().next() );
+                }};
 
         // else go down the hierarchy and do self call
         return this.get( p_path ).getBeliefbases( CPath.EMPTY );
-    }
 
-    public Collection<ILiteral<T>> getLiterals()
-    {
-        return new HashSet(){{
-            for ( final Map<Class<?>, Set<? super IBeliefBaseElement>> l_value : m_elements.values() )
-                addAll( l_value.get(ILiteral.class) );
-        }};
     }
 
     /**
@@ -192,94 +318,62 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * add literal to current beliefbase
-     *
-     * @param p_literal literal to add
-     * @return true if addition was successful
-     */
-    @Override
-    public boolean add( final ILiteral<T> p_literal )
-    {
-        // set literals functor as key
-        final String l_key = p_literal.getFunctor().toString();
-
-        // get inner-map with same key
-        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_innerMap = m_elements.get( l_key );
-
-        // if there is no inner-map with same key, generate new map-entry and put literal into it
-        if( l_innerMap == null )
-            return m_elements.put( l_key, new HashMap() {{
-                        put( ILiteral.class, new HashSet() {{
-                            add( p_literal );
-                        }} );
-                    }} ) == null;
-
-        // get literals with same key from inner-map
-        final Set<? super IBeliefBaseElement> l_innerLiterals = l_innerMap.get( ILiteral.class );
-
-        // if there are no literals with same key, generate new set and put literal into it
-        if( l_innerLiterals == null )
-            return l_innerMap.put( ILiteral.class, new HashSet() {{ add( p_literal ); }} ) == null;
-
-        // if there are literals with same key, just add current literal to this set
-        return l_innerLiterals.add( p_literal );
-    }
-
-    /**
-     *
-     * @param p_path path to specific beliefbase
-     * @param p_literal literal to add
+     * @param p_path path with name of the beliefbase as last element
+     * @param p_beliefbase default beliefbase
      * @return
      *
-     * @todo construct new beliefbases when path is unknown
+     * @warning untested
      */
-    @Override
-    public boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    public IBeliefBase<T> getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
-        return this.get( p_path ).add( p_literal );
-    }
+        if ( p_path.isEmpty() )
+            return this;
 
-    @Override
-    public boolean add( final String p_path, final ILiteral<T> p_literal )
-    {
-        return this.add( new CPath( p_path ), p_literal );
-    }
+        // if there are no beliefbase-elements with specified key
+        if ( m_elements.get( p_path.get( 0 ) ) == null )
 
-    /**
-     *
-     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
-     * @param p_beliefbase beliefbase to add
-     *
-     * @todo construct new beliefbases when path is unknown
-     */
-    @Override
-    public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
-    {
-        // in order to add a beliefbase, a name (i.e. last element in path) must be specified
-        if( p_path.isEmpty() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
-
-        // if path contains a single element, this element has to be the name of the new beliefbase
-        if ( p_path.size() == 1 )
-        {
-            m_elements.put( p_path.get(0), new HashMap()
-            {{
-                    put(IBeliefBase.class, new HashSet()
+            // generate new map-entry and put a new beliefbase into it
+            m_elements.put(
+                    p_path.get( 0 ), new HashMap()
                     {{
-                            add(p_beliefbase);
-                        }});
-                }});
-            return;
-        }
+                            put(
+                                    IBeliefBase.class, new HashSet()
+                                    {{
+                                            add(
+                                                    p_path.size() == 1 ?
+                                                            p_beliefbase : new IDefaultBeliefBase<T>()
+                                                    {
+                                                    }
+                                            );
+                                        }}
+                            );
+                        }}
+            );
 
-        // if the path contains more than one element, go down the hierarchy and add the beliefbase
-        this.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).add( p_path.getSuffix(), p_beliefbase );
-    }
+        // get map of beliefbase-elements by first path-element
+        final Map<Class<?>, Set<? super IBeliefBaseElement>> l_beliefBaseElements = m_elements.get( p_path.get( 0 ) );
 
-    @Override
-    public void add( final String p_path, final IBeliefBase<T> p_beliefbase )
-    {
-        this.add(new CPath(p_path), p_beliefbase);
+        // if there is no beliefbase in beliefbase-elements
+        if ( l_beliefBaseElements.get( IBeliefBase.class ) == null )
+
+            // add new beliefbase into beliefbase-elements
+            l_beliefBaseElements.put(
+                    IBeliefBase.class, new HashSet()
+                    {{
+                            add(
+                                    p_path.size() == 1 ?
+                                            p_beliefbase : new IDefaultBeliefBase<T>()
+                                    {
+                                    }
+                            );
+                        }}
+            );
+
+        // get beliefbase with name matching the specified first path-element
+        final Set<? super IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
+
+        // step down one level and do recursion
+        return ( (IBeliefBase) l_beliefbase.iterator().next() ).getOrDefault( p_path.getSubPath( 1 ), p_beliefbase );
     }
 
     @Override
@@ -300,83 +394,55 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return false;
     }
 
-    public boolean remove( final CPath p_path, final String p_functor )
-    {
-        // go down the hierarchy and get last beliefbase
-        final IBeliefBase<T> l_beliefbase = this.get( p_path );
-
-        // result becomes false, if there the removal fails
-        boolean l_result = true;
-
-        // match becomes true, if there is at least one literal that should be removed
-        boolean l_match = false;
-
-        // remove literals which functor equals the methods argument p_functor
-        for ( final ILiteral<T> l_literal : l_beliefbase.getLiterals( CPath.EMPTY ) )
-            if ( l_literal.getFunctor().equals( p_functor ) )
-            {
-                l_match = true;
-                l_result = l_result && l_beliefbase.getLiterals( CPath.EMPTY ).remove( l_literal );
-            }
-
-        return l_result && l_match;
-    }
-
     @Override
     public boolean remove( String p_path )
     {
         return this.remove( new CPath( p_path ) );
     }
 
-    public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
-    {
-        return this.get( p_path ).getLiterals( CPath.EMPTY ).remove( p_literal );
-    }
-
-    public boolean remove( final String p_path, final ILiteral<T> p_literal )
-    {
-        return this.remove( new CPath( p_path ), p_literal );
-    }
-
     @Override
     public void update()
     {
-        this.getBeliefbases( CPath.EMPTY ).values().forEach(de.tu_clausthal.in.mec.object.mas.general.IBeliefBase::update);
-    }
-
-    @Override
-    public void clear()
-    {
-        m_elements.clear();
-    }
-
-    @Override
-    public void clear( CPath p_path )
-    {
-        this.get(p_path).clear();
-    }
-
-    @Override
-    public void clear( String p_path )
-    {
-        this.clear( new CPath( p_path ) );
+        this.getBeliefbases( CPath.EMPTY ).values().forEach( de.tu_clausthal.in.mec.object.mas.general.IBeliefBase::update );
     }
 
     /**
-     * fills up a stack with Iterator-objects on ILiterals
+     * recursive method to fill up a stack with Iterator-objects
      *
-     * @param p_current current beliefbase with top-level-literals to iterate over
-     * @param p_stack current stack
-     * @param <N> the literal type
+     * @return iterator stack
      */
-    private static <N> void collapseIterator( final IBeliefBase<N> p_current, final Stack<Iterator<ILiteral<N>>> p_stack )
+    private Stack<Iterator<ILiteral<T>>> collapseIterator()
     {
-        // push iterator object on top-level-literals
-        p_stack.push( p_current.getLiterals( CPath.EMPTY ).iterator() );
+        final Stack<Iterator<ILiteral<T>>> l_stack = new Stack<>();
+        collapseIterator( this, l_stack );
+        return l_stack;
+    }
 
-        // recursive call for all inherited beliefbases
-        for ( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases( CPath.EMPTY ).values() )
-            collapseIterator( l_beliefbase, p_stack );
+    /**
+     *
+     * @return
+     *
+     * @todo add path to literals for unification
+     */
+    public Collection<ILiteral<T>> getLiterals()
+    {
+        return new HashSet()
+        {{
+                for ( final Map<Class<?>, Set<? super IBeliefBaseElement>> l_value : m_elements.values() )
+                    addAll( l_value.get( ILiteral.class ) );
+            }};
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return m_elements.hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
     }
 
     @Override
@@ -420,59 +486,35 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         };
     }
 
-    /**
-     * recursive method to fill up a stack with Iterator-objects
-     *
-     * @return iterator stack
-     */
-    private Stack<Iterator<ILiteral<T>>> collapseIterator()
+    public boolean remove( final CPath p_path, final String p_functor )
     {
-        final Stack<Iterator<ILiteral<T>>> l_stack = new Stack<>();
-        collapseIterator( this, l_stack );
-        return l_stack;
+        // go down the hierarchy and get last beliefbase
+        final IBeliefBase<T> l_beliefbase = this.get( p_path );
+
+        // result becomes false, if there the removal fails
+        boolean l_result = true;
+
+        // match becomes true, if there is at least one literal that should be removed
+        boolean l_match = false;
+
+        // remove literals which functor equals the methods argument p_functor
+        for ( final ILiteral<T> l_literal : l_beliefbase.getLiterals( CPath.EMPTY ) )
+            if ( l_literal.getFunctor().equals( p_functor ) )
+            {
+                l_match = true;
+                l_result = l_result && l_beliefbase.getLiterals( CPath.EMPTY ).remove( l_literal );
+            }
+
+        return l_result && l_match;
     }
 
-    @Override
-    public int hashCode()
+    public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
-        return m_elements.hashCode();
+        return this.get( p_path ).getLiterals( CPath.EMPTY ).remove( p_literal );
     }
 
-    @Override
-    public boolean equals( final Object p_object )
+    public boolean remove( final String p_path, final ILiteral<T> p_literal )
     {
-        return this.hashCode() == p_object.hashCode();
-    }
-
-    @Override
-    public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals )
-    {
-        return this.get( p_path ).getLiterals( CPath.EMPTY ).addAll(p_literals);
-    }
-
-    @Override
-    public boolean addAll( String p_path, Collection<ILiteral<T>> p_literals )
-    {
-        return this.addAll( new CPath( p_path ), p_literals );
-    }
-
-    /**
-     *
-     * @return
-     *
-     * @todo concatenate path for unification
-     */
-    @Override
-    public Set<ILiteral<T>> collapse( final CPath p_path )
-    {
-        // if path is empty, do collapse on inherited beliefbases
-        if ( p_path.isEmpty() )
-            return new HashSet<ILiteral<T>>() {{
-                for ( final ILiteral<T> l_literal : IDefaultBeliefBase.this )
-                    add( l_literal );
-            }};
-
-        // go down the hierarchy and do collapse
-        return this.get( p_path ).collapse( CPath.EMPTY );
+        return this.remove( new CPath( p_path ), p_literal );
     }
 }

@@ -136,7 +136,6 @@ public class CAgent<T> implements IVoidAgent
         this(null, p_asl, null);
     }
 
-
     /**
      * ctor
      *

@@ -37,15 +37,8 @@ import java.util.Set;
 public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
 {
     /**
-     * adds a literal into top-level
-     *
-     * @param p_literal literal to add
-     * @return true if addition was successful
-     */
-    public boolean add( final ILiteral<T> p_literal );
-
-    /**
      * adds a literal to specified path (i.e. the path to an inherited beliefbase)
+     * If the path is unknown, it will be constructed.
      *
      * @param p_path path to specific beliefbase
      * @param p_literal literal to add
@@ -140,17 +133,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public IBeliefBase get( final CPath p_path );
 
     /**
-     * gets a beliefbase with position and name specified in path
-     * if there is no beliefbase or the path is unknown, the path
-     * will be constructed with a default beliefbase
-     *
-     * @param p_path path with name of the beliefbase as last element
-     * @param p_beliefbase default beliefbase
-     * @return specified or default beliefbase
-     */
-    public IBeliefBase getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase );
-
-    /**
      * get a map of all inherited beliefbases with their names
      *
      * @param p_path path to beliefbase
@@ -165,6 +147,17 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @return collection of top-level literals
      */
     public Collection<ILiteral<T>> getLiterals( final CPath p_path );
+
+    /**
+     * gets a beliefbase with position and name specified in path
+     * if there is no beliefbase or the path is unknown, the path
+     * will be constructed with a default beliefbase
+     *
+     * @param p_path path with name of the beliefbase as last element
+     * @param p_beliefbase default beliefbase
+     * @return specified or default beliefbase
+     */
+    public IBeliefBase getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
      * removes an inherited beliefbase

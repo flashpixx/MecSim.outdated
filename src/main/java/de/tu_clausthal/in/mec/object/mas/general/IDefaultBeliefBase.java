@@ -422,14 +422,19 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @return
      *
-     * @todo add path to literals for unification
+     * @todo add path as prefix to literals for unification
      */
     public Collection<ILiteral<T>> getLiterals()
     {
         return new HashSet()
         {{
                 for ( final Map<Class<?>, Set<? super IBeliefBaseElement>> l_value : m_elements.values() )
-                    addAll( l_value.get( ILiteral.class ) );
+                {
+                    final Set l_set = l_value.get( ILiteral.class );
+
+                    if ( l_set != null)
+                        addAll( l_set );
+                }
             }};
     }
 

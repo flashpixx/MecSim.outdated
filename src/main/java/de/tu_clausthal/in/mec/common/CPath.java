@@ -39,6 +39,11 @@ import java.util.List;
 public class CPath implements Iterable<CPath>
 {
     /**
+     * empty path
+     **/
+    public static final CPath EMPTY = new CPath();
+
+    /**
      * list with path parts *
      */
     private List<String> m_path = new ArrayList<>();

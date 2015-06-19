@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
@@ -42,7 +43,7 @@ import java.util.Map;
 /**
  * beliefbase structure to bind object properties
  */
-public class CFieldBind extends CBeliefBase
+public class CBindingBeliefBase extends CBeliefBase
 {
     /**
      * field filter
@@ -61,7 +62,7 @@ public class CFieldBind extends CBeliefBase
      * @param p_name   name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind(final String p_name, final Object p_object)
+    public CBindingBeliefBase(final String p_name, final Object p_object)
     {
         this.push(p_name, p_object);
     }
@@ -72,8 +73,10 @@ public class CFieldBind extends CBeliefBase
     @Override
     public final void update()
     {
-        // remove old top-level literals (false-parameter to just remove the top-level literals)
-        clearLiterals(false);
+        super.update();
+
+        // remove old literals
+        this.clear();
 
         // iterate over all binded objects
         for (final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet())
@@ -92,7 +95,7 @@ public class CFieldBind extends CBeliefBase
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    addLiteral(l_literal);
+                    this.add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
 
                 } catch (final Exception l_exception)
                 {
@@ -133,7 +136,7 @@ public class CFieldBind extends CBeliefBase
      *
      * @param p_name name
      */
-    public final void remove(final String p_name)
+    public final void removeBinding(final String p_name)
     {
         m_bind.remove(p_name);
     }

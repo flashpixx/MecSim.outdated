@@ -23,7 +23,10 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * default generic literal class for agent beliefs
@@ -34,10 +37,6 @@ import java.util.*;
  */
 public abstract class IDefaultLiteral<T> implements ILiteral<T>
 {
-    /**
-     * the literal values
-     */
-    protected final ITermCollection m_values;
     /**
      * the literal annotations
      */
@@ -50,19 +49,24 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
     private final T m_literal;
+    /**
+     * the literal values
+     */
+    protected final ITermCollection m_values;
 
     /**
      * ctor - all parameters specified
      *
-     * @param p_functor                   functor of the literal
-     * @param p_literal                   the original literal
-     * @param p_valueList                 initial list of values
-     * @param p_annotationList            initial set of annotations
+     * @param p_functor functor of the literal
+     * @param p_literal the original literal
+     * @param p_valueList initial list of values
+     * @param p_annotationList initial set of annotations
      */
     public IDefaultLiteral( final String p_functor, final T p_literal,
-                            final List<ITerm> p_valueList, final Set<ITerm> p_annotationList )
+            final List<ITerm> p_valueList, final Set<ITerm> p_annotationList
+    )
     {
-        m_functor = new CStringAtom(p_functor);
+        m_functor = new CStringAtom( p_functor );
         m_literal = p_literal;
         m_values = new CTermList( p_valueList );
         m_annotations = new CTermSet( p_annotationList );
@@ -74,10 +78,9 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @param p_functor functor of the literal
      * @param p_literal the original literal
      */
-    public IDefaultLiteral(final String p_functor, final T p_literal)
+    public IDefaultLiteral( final String p_functor, final T p_literal )
     {
-        this(p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
-        m_values.add(new CNumericAtom( new Double( 2 ) ) );
+        this( p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
     }
 
     @Override
@@ -93,33 +96,27 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     }
 
     @Override
-    public ITermCollection getValues()
-    {
-        return m_values;
-    }
-
-    @Override
     public T getLiteral()
     {
         return m_literal;
     }
 
     @Override
-    public boolean instanceOf(final Class<?> p_class)
+    public ITermCollection getValues()
     {
-        return ILiteral.class.isAssignableFrom(p_class);
+        return m_values;
     }
 
     @Override
     public final int hashCode()
     {
-        return  41 * m_functor.hashCode() +
-                43 * m_values.hashCode() +
-                59 * m_annotations.hashCode();
+        return 41 * m_functor.hashCode() +
+               43 * m_values.hashCode() +
+               59 * m_annotations.hashCode();
     }
 
     @Override
-    public final boolean equals(final Object p_object)
+    public final boolean equals( final Object p_object )
     {
         return this.hashCode() == p_object.hashCode();
     }
@@ -128,6 +125,12 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     public String toString()
     {
         return m_functor.toString() + m_values.toString() + m_annotations.toString();
+    }
+
+    @Override
+    public boolean instanceOf( final Class<?> p_class )
+    {
+        return ILiteral.class.isAssignableFrom( p_class );
     }
 
 }

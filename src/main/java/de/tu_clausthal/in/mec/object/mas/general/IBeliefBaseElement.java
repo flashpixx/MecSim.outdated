@@ -23,12 +23,11 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.Collection;
-
-
 /**
- * interface for term collection
+ * interface for beliefbase elements
+ * i.e. literals and beliefbases, because a single beliefbase
+ * can contain literals and beliefbases
  */
-public interface ITermCollection extends ITerm, Collection<ITerm>
+public interface IBeliefBaseElement
 {
 }

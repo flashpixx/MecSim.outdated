@@ -21,14 +21,48 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
-import java.util.Collection;
-
+import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
+import jason.asSemantics.Agent;
+import jason.asSyntax.Literal;
 
 /**
- * interface for term collection
+ * beliefbase for internal beliefs, i.e. the initial beliefs
+ * and beliefs that arise from deduction rules
+ *
+ * @todo in update-method: add just literals which are not in other beliefbases
  */
-public interface ITermCollection extends ITerm, Collection<ITerm>
+public class CInternalBeliefBase extends CBeliefBase
 {
+    /**
+     * agent object
+     */
+    private final Agent m_agent;
+
+    /**
+     * ctor with agent specified
+     * reads in the initial beliefs from the agent
+     *
+     * @param p_agent
+     */
+    public CInternalBeliefBase( final Agent p_agent )
+    {
+        super( CCommon.convertGeneric( p_agent.getInitialBels() ) );
+        m_agent = p_agent;
+    }
+
+    @Override
+    public void update()
+    {
+        super.update();
+
+        // clear old literals
+        this.clear();
+
+        // push agent beliefs into set of top-level literals
+        addAll(CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
+    }
 }

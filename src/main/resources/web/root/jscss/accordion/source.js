@@ -56,7 +56,10 @@ var SourcePanel = ( function (px_module) {
 
     //method to initialize source-ui
     px_module.init = function() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> temp
         //get labels and build the toolbox
         SourcePanel.getLabels();
         SourcePanel.buildToolbox();
@@ -137,7 +140,10 @@ var SourcePanel = ( function (px_module) {
 
     //method to get DOM Elements
     px_module.getDOMElements = function(){
+<<<<<<< HEAD
 
+=======
+>>>>>>> temp
         //dom elements (no labels)
         SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
@@ -246,7 +252,10 @@ var SourcePanel = ( function (px_module) {
 
     //method to build up the wizard content
     px_module.buildContent = function() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> temp
         SourcePanel.getDOMElements();
 
         //create selectmenu with waypoint types
@@ -440,7 +449,10 @@ var SourcePanel = ( function (px_module) {
 
     //method to update generator settings
     px_module.updateGeneratorSettings = function(){
+<<<<<<< HEAD
 
+=======
+>>>>>>> temp
         SourcePanel.updateLabels(
             SourcePanel.settings.dom.selectGenerator.val(),
             [
@@ -468,7 +480,10 @@ var SourcePanel = ( function (px_module) {
 
     //method to update car settings
     px_module.updateCarSettings = function(event){
+<<<<<<< HEAD
 
+=======
+>>>>>>> temp
         var l_element1, l_element2, l_element3, l_element4;
         switch(event.target.id){
 
@@ -560,6 +575,46 @@ var SourcePanel = ( function (px_module) {
         });
     };
 
+<<<<<<< HEAD
+=======
+    //method to build waypoint table
+    px_module.createWaypointList = function(){
+        $.ajax({
+            url     : "/cwaypointenvironment/listwaypoints",
+            success : function( p_data ){
+
+                p_data.forEach(function(entry){
+                    if(entry.type === "random"){
+                        entry.icon = "<span class='mecsim_source_toolIcon' style='background-color: rgb("+ entry.redValue +","+ entry.greenValue +","+ entry.blueValue +");'></span>";
+                        entry.name = "<textarea class='mecsim_source_targetingName'>"+ entry.name +"</textarea>";
+                        entry.edit = "<button>edit</button>";
+                    }
+                });
+
+                //create waypoint table
+                SourcePanel.settings.obj.targetingTable = SourcePanel.settings.dom.targetingTable.DataTable({
+                    "aaData": p_data,
+                    "paging": true,
+                    "ordering": false,
+                    "info":     false,
+                    "searching": false,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "aoColumns": [
+                        { className: "dt-body-center", "title": "ID", "mDataProp": "id", "visible": false },
+                        { className: "dt-body-center", "title": "", "mDataProp": "icon" },
+                        { className: "dt-body-center", "title": "Name", "mDataProp": "name" },
+                        { className: "dt-body-center", "title": "Typ", "mDataProp": "type" },
+                        { className: "dt-body-center", "title": "", "mDataProp": "edit" }
+                    ]
+                });
+
+                $("textarea").on("change", function(event){$(this).text($(this).val());});
+            }
+        });
+    };
+
+>>>>>>> temp
     return px_module;
 
 }(SourcePanel || {}));

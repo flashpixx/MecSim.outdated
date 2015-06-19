@@ -24,8 +24,11 @@
 package de.tu_clausthal.in.mec.object.mas;
 
 
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
+
+import java.awt.peer.CanvasPeer;
 
 
 /**
@@ -35,12 +38,21 @@ public interface IAgent extends Painter, IReceiver
 {
 
     /**
-     * adds new belief
+     * adds a new belief to specified beliefbase
      *
-     * @param p_name name of the belief
+     * @param p_path path of beliefbase with literals name as last element
      * @param p_data belief data
      */
-    public void addLiteral(final String p_name, final Object p_data);
+    public void addLiteral(final String p_path, final Object p_data);
+
+
+    /**
+     * adds a new belief to specified beliefbase
+     *
+     * @param p_path path of beliefbase with literals name as last element
+     * @param p_data belief data
+     */
+    public void addLiteral(final CPath p_path, final Object p_data);
 
     /**
      * returns the current cycle
@@ -76,12 +88,20 @@ public interface IAgent extends Painter, IReceiver
     public void release();
 
     /**
-     * removes a belief
+     * removes a belief from specified beliefbase
      *
-     * @param p_name name of the belief
+     * @param p_path path to beliefbase with literals name as last element
      * @param p_data belief data
      */
-    public void removeLiteral(final String p_name, final Object p_data);
+    public void removeLiteral(final String p_path, final Object p_data);
+
+    /**
+     * removes a belief from specified beliefbase
+     *
+     * @param p_path path to beliefbase with literals name as last element
+     * @param p_data belief data
+     */
+    public void removeLiteral(final CPath p_path, final Object p_data);
 
     /**
      * unregister a cycle object

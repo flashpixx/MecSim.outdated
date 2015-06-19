@@ -30,13 +30,13 @@ import de.tu_clausthal.in.mec.object.mas.general.*;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import jason.NoValueException;
 import jason.asSyntax.*;
+import jason.bb.BeliefBase;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.*;
-
 
 /**
  * common method for Jason
@@ -161,6 +161,20 @@ public class CCommon
         }
 
         return null;
+    }
+
+    /**
+     * converts a beliefbase into a set of generic literals
+     *
+     * @param p_beliefbase original beliefbase
+     * @return set of generic literals
+     */
+    public static Set<ILiteral<Literal>> convertGeneric( final BeliefBase p_beliefbase )
+    {
+        return new HashSet<ILiteral<Literal>>(){{
+            for (final Literal l_literal : p_beliefbase)
+                add(convertGeneric( l_literal) );
+        }};
     }
 
     /**

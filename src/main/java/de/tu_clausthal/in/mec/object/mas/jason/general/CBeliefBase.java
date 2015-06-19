@@ -27,7 +27,6 @@ import de.tu_clausthal.in.mec.object.mas.general.CTermSet;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.Literal;
 
 import java.util.Map;
@@ -66,46 +65,4 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     {
         super(p_beliefbases, p_literals);
     }
-
-    /**
-     * collapse method to get an aggregated top-level-beliefbase,
-     * which is the aggregation of the top-level literals and all
-     * the inherited beliefbases' literals.
-     *
-     * @return beliefbase containing literals of all inherited beliefbases
-     */
-    @Override
-    public IBeliefBase<Literal> collapseBeliefbase()
-    {
-        return new CBeliefBase(this.collapseLiterals());
-    }
-
-    /**
-     * method for updating the beliefbase
-     */
-    @Override
-    public void update()
-    {
-    }
-
-    /**
-     * adds a language specific literal to the top-level literals
-     *
-     * @param p_literal language specific literal
-     */
-    public void addLiteral(final Literal p_literal)
-    {
-        addLiteral(CCommon.convertGeneric(p_literal));
-    }
-
-    /**
-     * removes a language specific literal from the top level literals
-     *
-     * @param p_literal language specific literal
-     */
-    public void removeLiteral(final Literal p_literal)
-    {
-        removeLiteral(CCommon.convertGeneric(p_literal));
-    }
-
 }

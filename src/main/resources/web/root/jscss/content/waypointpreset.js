@@ -318,7 +318,8 @@ WaypointPreset.prototype.finish = function()
       { id: "generator",    isnumber : false},
       { id: "radius",       isnumber : true},
       { id: "factory",      isnumber : false},
-      { id: "agent",        isnumber : false}
+      { id: "agent",        isnumber : false},
+      { id: "waypoint",     isnumber : false}
     ].forEach( function( po_object ) {
         lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CJasonAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
@@ -154,7 +155,7 @@ public class CWaypointEnvironment
     /**
      * map with objects, which are created by the UI call
      **/
-    private final Map<String, Object> m_currentsetting = new HashMap<>();
+    private final Map<String, Object> m_currentsettings = new HashMap<>();
 
 
     /**
@@ -188,20 +189,20 @@ public class CWaypointEnvironment
     @SuppressWarnings( "unchecked" )
     public final void setWaypoint( final GeoPosition p_position )
     {
-        if ( m_currentsetting.isEmpty() )
+        System.out.println( m_currentsettings );
+        if ( m_currentsettings.isEmpty() )
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
-        /*
+
         CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
-                (IWayPoint) EWaypoint.valueOf( (String) m_currentsetting.get( "type" ) ).get(
+                (IWayPoint) EWaypoint.valueOf( (String) m_currentsettings.get( "waypoint" ) ).get(
                         p_position,
-                        (IGenerator) m_currentsetting.get( "generator" ),
-                        (IFactory) m_currentsetting.get( "factory" ),
-                        (Double) m_currentsetting.get( "radius" ),
-                        (Color) m_currentsetting.get( "color" ),
-                        (String) m_currentsetting.get( "name" )
+                        (IGenerator) m_currentsettings.get( "generator" ),
+                        (IFactory) m_currentsettings.get( "factory" ),
+                        (Double) m_currentsettings.get( "radius" ),
+                        (Color) m_currentsettings.get( "color" ),
+                        (String) m_currentsettings.get( "name" )
                 )
         );
-        */
     }
 
     /**
@@ -262,13 +263,15 @@ public class CWaypointEnvironment
     private final void web_static_set( final Map<String, Object> p_data )
     {
         // create travable map and clear cached settings
-        m_currentsetting.clear();
+        m_currentsettings.clear();
         final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
 
 
         // create items from the UI data and set internal properties
-        m_currentsetting.put( "name", l_data.<String>get( "name" ) );
-        m_currentsetting.put(
+        m_currentsettings.put( "name", l_data.<String>get( "name" ) );
+        m_currentsettings.put( "waypoint", l_data.<String>get( "waypoint" ) );
+        m_currentsettings.put( "radius", l_data.<Number>get( "radius" ).doubleValue() );
+        m_currentsettings.put(
                 "color", new Color(
                         l_data.<Number>get( "color/red" ).intValue(),
                         l_data.<Number>get( "color/green" ).intValue(),
@@ -277,10 +280,10 @@ public class CWaypointEnvironment
                 )
         );
 
-        m_currentsetting.put(
+        m_currentsettings.put(
                 "factory",
                 EFactory.valueOf( l_data.<String>get( "factory" ) ).get(
-                        l_data.<Number>get( "speed" ).doubleValue(),
+                        l_data.<Number>get( "speedfactor" ).doubleValue(),
                         this.createDistribution( l_data.get( "distribution/maxspeed" ) ),
                         this.createDistribution( l_data.get( "distribution/acceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/deceleration" ) ),
@@ -289,7 +292,7 @@ public class CWaypointEnvironment
                 )
         );
 
-        m_currentsetting.put(
+        m_currentsettings.put(
                 "generator",
                 EGenerator.valueOf( l_data.<String>getOrDefault( "generator", "" ) ).get(
 
@@ -298,7 +301,6 @@ public class CWaypointEnvironment
 
                 )
         );
-
     }
 
 

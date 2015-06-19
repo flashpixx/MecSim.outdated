@@ -99,18 +99,16 @@ WaypointPreset.prototype.getContent = function()
         '<h3 id="' + this.generateSubID("carhead") + '" />' +
         '<section><div id="' + this.generateSubID("carsettings") + '">' +
 
-        '<h4 id="' + this.generateSubID("speedhead") + '" />' +
-        '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("speeddistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speeddistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '</div>' +
-
         '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),    class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionleft"),                                             label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionright"),                                            label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '</div>' +
+
+        '<h4 id="' + this.generateSubID("speedhead") + '" />' +
+        '<div>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speedfactor"),                                                          label: " ",   list: this.mo_elements.spinners })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +
@@ -313,19 +311,19 @@ WaypointPreset.prototype.finish = function()
     var self = this;
     var lo   = { distribution : {} };
     [
-      { id: "color",     isnumber : false},
-      { id: "name",      isnumber : false},
-      { id: "carcount",  isnumber : true},
-      { id: "generator", isnumber : false},
-      { id: "radius",    isnumber : true},
-      { id: "factory",   isnumber : false},
-      { id: "agent",     isnumber : false}
+      { id: "color",        isnumber : false},
+      { id: "name",         isnumber : false},
+      { id: "speedfactor",  isnumber : true},
+      { id: "carcount",     isnumber : true},
+      { id: "generator",    isnumber : false},
+      { id: "radius",       isnumber : true},
+      { id: "factory",      isnumber : false},
+      { id: "agent",        isnumber : false}
     ].forEach( function( po_object ) {
         lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
 
-    [ "generatordistribution", "speeddistribution", "maxspeeddistribution",
-      "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
+    [ "generatordistribution", "maxspeeddistribution", "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
     ].forEach( function( pc_key ) {
         lo.distribution[pc_key.replace("distribution", "")] = {
             distribution : jQuery(self.generateSubID(pc_key, "#")).val(),

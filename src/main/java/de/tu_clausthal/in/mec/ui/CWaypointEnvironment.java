@@ -151,7 +151,6 @@ public class CWaypointEnvironment
      */
     private final static Map<String, String> c_waypoint = new HashMap<String, String>()
     {{
-
             for ( final EWaypoint l_waypoint : EWaypoint.values() )
                 put( l_waypoint.toString(), l_waypoint.name() );
         }};
@@ -179,12 +178,16 @@ public class CWaypointEnvironment
      *
      * @param p_position geoposition of the waypoint
      */
+    @SuppressWarnings( "unchecked" )
     public final void setWaypoint( final GeoPosition p_position )
     {
+        if ( m_currentsetting.isEmpty() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
+
         CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
                 (IWayPoint) EWaypoint.valueOf( (String) m_currentsetting.get( "type" ) ).get(
                         p_position,
-                        null,
+                        (IGenerator) m_currentsetting.get( "generator" ),
                         (IFactory) m_currentsetting.get( "factory" ),
                         (Double) m_currentsetting.get( "radius" ),
                         (Color) m_currentsetting.get( "color" ),
@@ -244,13 +247,13 @@ public class CWaypointEnvironment
     }
 
     /**
-     * set method of the UI data
+     * creates the current settings of
      *
      * @param p_data input data
      */
     private final void web_static_set( final Map<String, Object> p_data )
     {
-        // create travable map
+        // create travable map and clear cached settings
         m_currentsetting.clear();
         final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
 
@@ -324,6 +327,7 @@ public class CWaypointEnvironment
          *
          * @return waypoint
          */
+        @SuppressWarnings( "unchecked" )
         public final IWayPoint<?> get( final Object... p_data )
         {
 
@@ -384,6 +388,7 @@ public class CWaypointEnvironment
          * @param p_data array with all parameters (depend on factory call)
          * @return factory
          */
+        @SuppressWarnings( "unchecked" )
         public final IFactory<?> get( final Object... p_data )
         {
             switch ( this )
@@ -455,6 +460,7 @@ public class CWaypointEnvironment
          * @param p_data input data
          * @return generator object
          */
+        @SuppressWarnings( "unchecked" )
         public final IGenerator get( final Object... p_data )
         {
             switch ( this )

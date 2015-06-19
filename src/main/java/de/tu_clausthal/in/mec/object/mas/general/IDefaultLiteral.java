@@ -96,6 +96,12 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     }
 
     @Override
+    public void setFunctor(String p_functor)
+    {
+
+    }
+
+    @Override
     public T getLiteral()
     {
         return m_literal;

@@ -74,18 +74,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public IDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals )
     {
         // generate map-entries for beliefbases
-        for ( final String l_key : p_beliefbases.keySet() )
-            m_elements.put(
-                    l_key, new HashMap()
-                    {{
-                            put(
-                                    IBeliefBase.class, new HashSet()
-                                    {{
-                                            add( p_beliefbases.get( l_key ) );
-                                        }}
-                            );
-                        }}
-            );
+        for ( final IBeliefBase<T> l_beliefbase : p_beliefbases.values() )
+            this.add(CPath.EMPTY, l_beliefbase );
 
         // generate map-entries for literals
         for ( final ILiteral<T> l_literal : p_literals )
@@ -115,12 +105,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // if path is not empty, go down the hierarchy and do recursive call
         if ( !p_path.isEmpty() )
-            return this.getOrDefault(
-                    p_path.getSubPath( 0, 1 ), new IDefaultBeliefBase<T>()
-                    {
-                    }
-            ).add( p_path.getSubPath( 1 ), p_literal );
-
+            return this.getOrDefault( p_path, new IDefaultBeliefBase<T>() {} ).add( CPath.EMPTY, p_literal );
 
         // set literals functor as key
         final String l_key = p_literal.getFunctor().toString();
@@ -166,33 +151,26 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public void add( final String p_path, final IBeliefBase<T> p_beliefbase )
+    public boolean add( final String p_path, final IBeliefBase<T> p_beliefbase )
     {
-        this.add( new CPath( p_path ), p_beliefbase );
+        return this.add( new CPath( p_path ), p_beliefbase );
     }
 
-    /**
-     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
-     * @param p_beliefbase beliefbase to add
-     * @todo construct new beliefbases when path is unknown
-     */
     @Override
-    public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    public boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
 
-        // if path contains more than one element, go down the hierarchy
+        // if path contains more than one element, go down the hierarchy and do recursive call
         if ( p_path.size() > 1 )
-            this.getOrDefault(
-                    p_path.getSubPath( 0, 1 ), new IDefaultBeliefBase<T>()
-                    {
-                    }
-            ).add( p_path.getSubPath( 1 ), p_beliefbase );
+            return this.getOrDefault(
+                    p_path.getSubPath(0, p_path.size() - 1), new IDefaultBeliefBase<T>() { }
+            ).add( p_path.getSuffix(), p_beliefbase );
 
         // if path contains a single element, push new beliefbase
-        m_elements.put(
+        return m_elements.put(
                 p_path.get( 0 ), new HashMap()
                 {{
                         put(
@@ -202,7 +180,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                                     }}
                         );
                     }}
-        );
+        ) == null;
     }
 
     @Override

@@ -334,6 +334,12 @@ WaypointPreset.prototype.finish = function()
         };
     });
 
+    // replace color-text to an object
+    //var lo_color = { red: 0, green: 0, blue: 0};
+    var la_color = lo.color.replace(/rgb|\)|\(/g, "").split(",");
+    lo.color = { red : Number.parseInt(la_color[0]), green : Number.parseInt(la_color[1]), blue : Number.parseInt(la_color[2]) };
+
+console.log(lo);
 
     // send Ajax request for creating preset
     MecSim.ajax({

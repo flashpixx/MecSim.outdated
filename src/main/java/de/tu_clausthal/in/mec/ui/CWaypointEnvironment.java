@@ -242,37 +242,47 @@ public class CWaypointEnvironment
 
 
         // create items from the UI data and set internal properties
-        m_currentsetting.put( "color", Color.WHITE );
         m_currentsetting.put( "name", l_data.<String>getOrDefault( "name", "" ) );
-        m_currentsetting.put( "radius", l_data.<Double>get( "radius" ) );
-        m_currentsetting.put( "carcount", l_data.<Integer>getOrDefault( "carcount", 0 ) );
-        m_currentsetting.put( "type", EWaypoint.valueOf( l_data.<String>getOrDefault( "type", "" ) ) );
+        m_currentsetting.put(
+                "color", new Color(
+                        l_data.<Number>get( "color/red" ).intValue(),
+                        l_data.<Number>get( "color/green" ).intValue(),
+                        l_data.<Number>get( "color/blue" ).intValue(),
+                        0
+                )
+        );
+
         m_currentsetting.put(
                 "factory",
                 EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
 
                         EDistribution.valueOf( l_data.<String>getOrDefault( "speed/distribution", "" ) ).get(
-                                l_data.<Float>get( "speed/left" ), l_data.<Float>get(
+                                l_data.<Number>get( "speed/left" ).doubleValue(), l_data.<Number>get(
                                         "speed/right"
-                                )
+                                ).doubleValue()
                         ),
                         EDistribution.valueOf( l_data.<String>getOrDefault( "maxspeed/distribution", "" ) ).get(
-                                l_data.<Float>get( "maxspeed/left" ), l_data.<Float>get( "maxspeed/right" )
+                                l_data.<Number>get( "maxspeed/left" ).doubleValue(),
+                                l_data.<Number>get( "maxspeed/right" ).doubleValue()
                         ),
                         EDistribution.valueOf( l_data.<String>getOrDefault( "acceleration/distribution", "" ) ).get(
-                                l_data.<Float>get( "acceleration/left" ), l_data.<Float>get( "acceleration/right" )
+                                l_data.<Number>get( "acceleration/left" ).doubleValue(),
+                                l_data.<Number>get( "acceleration/right" ).doubleValue()
                         ),
                         EDistribution.valueOf( l_data.<String>getOrDefault( "deceleration/distribution", "" ) ).get(
-                                l_data.<Float>get( "deceleration/left" ), l_data.<Float>get( "deceleration/right" )
+                                l_data.<Number>get( "deceleration/left" ).doubleValue(),
+                                l_data.<Number>get( "deceleration/right" ).doubleValue()
                         ),
                         EDistribution.valueOf( l_data.<String>getOrDefault( "linger/distribution", "" ) ).get(
-                                l_data.<Float>get( "linger/left" ), l_data.<Float>get(
-                                        "linger/right"
-                                )
+                                l_data.<Number>get( "linger/left" ).doubleValue(),
+                                l_data.<Number>get( "linger/right" ).doubleValue()
                         ),
-                        l_data.<String>getOrDefault( "agent", "" )
+                        l_data.<String>get( "agent" )
                 )
         );
+
+        m_currentsetting.put( "radius", new Double( l_data.<Number>getOrDefault( "radius", 0 ).doubleValue() ) );
+        m_currentsetting.put( "carcount", new Integer( l_data.<Number>getOrDefault( "carcount", 0 ).intValue() ) );
         m_currentsetting.put( "generator", EGenerator.valueOf( l_data.<String>getOrDefault( "generatortyp", "" ) ) );
 
     }

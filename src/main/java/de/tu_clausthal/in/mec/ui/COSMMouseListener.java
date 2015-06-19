@@ -101,16 +101,12 @@ class COSMMouseListener extends PanMouseInputListener
                         break;
                     }
 
-                //if ( !l_isfound )
-                //l_layer.add(
-                            /*
-                            CWaypointEnvironment.getInstance().m_selectedTool.getWaypoint(
-                                    l_viewer.getViewpointGeoPosition(
-                                            p_event.getPoint()
-                                    )
+                if ( !l_isfound )
+                    CSimulation.getInstance().getStorage().<CWaypointEnvironment>get( "waypoint" ).setWaypoint(
+                            l_viewer.getViewpointGeoPosition(
+                                    p_event.getPoint()
                             )
-                            */
-                //);
+                    );
                 break;
 
 

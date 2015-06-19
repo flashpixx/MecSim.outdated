@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
-import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
@@ -50,8 +49,6 @@ import java.util.Map;
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
- *
- * @todo full refactor
  */
 public class CWaypointEnvironment
 {
@@ -159,6 +156,16 @@ public class CWaypointEnvironment
      **/
     private final Map<String, Object> m_currentsetting = new HashMap<>();
 
+
+    /**
+     * ctor to define the waypoint environment
+     */
+    public CWaypointEnvironment()
+    {
+        CSimulation.getInstance().getStorage().add( "waypoint", this );
+    }
+
+
     /**
      * creates from a map object an distribution object
      *
@@ -181,6 +188,7 @@ public class CWaypointEnvironment
     @SuppressWarnings( "unchecked" )
     public final void setWaypoint( final GeoPosition p_position )
     {
+        /*
         if ( m_currentsetting.isEmpty() )
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
 
@@ -194,6 +202,8 @@ public class CWaypointEnvironment
                         (String) m_currentsetting.get( "name" )
                 )
         );
+        */
+        System.out.println( m_currentsetting );
     }
 
     /**

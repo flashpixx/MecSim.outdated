@@ -189,7 +189,6 @@ public class CWaypointEnvironment
     @SuppressWarnings( "unchecked" )
     public final void setWaypoint( final GeoPosition p_position )
     {
-        System.out.println( m_currentsettings );
         if ( m_currentsettings.isEmpty() )
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
 
@@ -275,8 +274,7 @@ public class CWaypointEnvironment
                 "color", new Color(
                         l_data.<Number>get( "color/red" ).intValue(),
                         l_data.<Number>get( "color/green" ).intValue(),
-                        l_data.<Number>get( "color/blue" ).intValue(),
-                        0
+                        l_data.<Number>get( "color/blue" ).intValue()
                 )
         );
 

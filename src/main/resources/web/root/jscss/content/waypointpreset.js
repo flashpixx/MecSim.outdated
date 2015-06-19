@@ -46,6 +46,9 @@ function WaypointPreset( pc_id, pc_name, pa_panel, po_options )
         sliders   : [],
         spinners  : []
     };
+
+    // reference of colorpicker (for closing after finish)
+    this.mo_colorpicker = null;
 }
 
 /** inheritance call **/
@@ -275,7 +278,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
             jQuery( self.generateSubID("factorysettings", "#") ).accordion({ header: "h4", collapsible: true, heightStyle: "content", active: false });
 
             // set color picker
-            jQuery( self.generateSubID("color", "#") ).spectrum({
+            self.mo_colorpicker = jQuery( self.generateSubID("color", "#") ).spectrum({
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
                 togglePaletteMoreText: 'more',
@@ -337,7 +340,6 @@ WaypointPreset.prototype.finish = function()
     var la_color = lo.color.replace(/rgb|\)|\(/g, "").split(",");
     lo.color = { red : Number.parseInt(la_color[0]), green : Number.parseInt(la_color[1]), blue : Number.parseInt(la_color[2]) };
 
-console.log(lo);
 
     // send Ajax request for creating preset
     MecSim.ajax({
@@ -350,7 +352,9 @@ console.log(lo);
             var lo_store = {ui : {web : {waypointpreset : {} } } };
             lo_store.ui.web.waypointpreset[lo.name] = lo;
 
-            //MecSim.configuration().set( lo_store );
+            // @todo add persistent storage
+
+            self.mo_colorpicker.hide();
             self.hide();
         }
 

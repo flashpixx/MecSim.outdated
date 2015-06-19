@@ -168,7 +168,6 @@ public class CWaypointEnvironment
      */
     private AbstractRealDistribution createDistribution( final CNameHashMap.CImmutable p_object )
     {
-        System.out.println();
         return EDistribution.valueOf( p_object.<String>getOrDefault( "distribution", "" ) ).get(
                 p_object.<Number>get( "left" ).doubleValue(),
                 p_object.<Number>get( "right" ).doubleValue()
@@ -257,7 +256,7 @@ public class CWaypointEnvironment
 
 
         // create items from the UI data and set internal properties
-        m_currentsetting.put( "name", l_data.<String>getOrDefault( "name", "" ) );
+        m_currentsetting.put( "name", l_data.<String>get( "name" ) );
         m_currentsetting.put(
                 "color", new Color(
                         l_data.<Number>get( "color/red" ).intValue(),
@@ -266,10 +265,10 @@ public class CWaypointEnvironment
                         0
                 )
         );
-/*
+
         m_currentsetting.put(
                 "factory",
-                EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
+                EFactory.valueOf( l_data.<String>get( "factory" ) ).get(
 
                         this.createDistribution( l_data.get( "distribution/speed" ) ),
                         this.createDistribution( l_data.get( "distribution/maxspeed" ) ),
@@ -284,14 +283,12 @@ public class CWaypointEnvironment
                 "generator",
                 EGenerator.valueOf( l_data.<String>getOrDefault( "generator", "" ) ).get(
 
-                    this.createDistribution( l_data.get( "generator" ) ),
-                    l_data.<Number>getOrDefault( "carcount", 0 ).intValue()
+                        this.createDistribution( l_data.get( "distribution/generator" ) ),
+                        l_data.<Number>get( "carcount" ).intValue()
 
                 )
         );
-*/
 
-        this.createDistribution( l_data.get( "distribution/generator" ) );
     }
 
 

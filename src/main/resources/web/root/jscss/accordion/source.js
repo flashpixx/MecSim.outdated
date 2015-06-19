@@ -59,7 +59,11 @@ var SourcePanel = ( function (px_module) {
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         //get labels and build the toolbox
         SourcePanel.getLabels();
         SourcePanel.buildToolbox();
@@ -143,7 +147,11 @@ var SourcePanel = ( function (px_module) {
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         //dom elements (no labels)
         SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
@@ -255,7 +263,11 @@ var SourcePanel = ( function (px_module) {
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         SourcePanel.getDOMElements();
 
         //create selectmenu with waypoint types
@@ -452,7 +464,11 @@ var SourcePanel = ( function (px_module) {
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         SourcePanel.updateLabels(
             SourcePanel.settings.dom.selectGenerator.val(),
             [
@@ -483,7 +499,11 @@ var SourcePanel = ( function (px_module) {
 <<<<<<< HEAD
 
 =======
+<<<<<<< HEAD
 >>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         var l_element1, l_element2, l_element3, l_element4;
         switch(event.target.id){
 
@@ -614,7 +634,11 @@ var SourcePanel = ( function (px_module) {
         });
     };
 
+<<<<<<< HEAD
 >>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
     return px_module;
 
 }(SourcePanel || {}));

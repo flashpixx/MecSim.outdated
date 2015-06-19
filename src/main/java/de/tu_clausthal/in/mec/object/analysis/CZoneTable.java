@@ -136,7 +136,7 @@ public class CZoneTable<T, S>
     public interface CValidation<V, W>
     {
 
-        public boolean validate( V p_zone, W p_input );
+        boolean validate(V p_zone, W p_input);
 
     }
 

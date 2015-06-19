@@ -436,7 +436,7 @@ public class CCommon
             return "{}";
 
         try (
-                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
+                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream()
         )
         {
             new ObjectMapper().configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false ).writer().writeValue( l_stream, p_data );

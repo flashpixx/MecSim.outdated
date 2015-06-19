@@ -437,6 +437,7 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
+         * @todo handle catched RevisionFailedException
          */
         public final void cycle( final int p_currentstep )
         {

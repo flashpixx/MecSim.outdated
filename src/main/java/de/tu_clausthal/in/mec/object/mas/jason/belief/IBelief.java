@@ -38,18 +38,18 @@ public interface IBelief
     /**
      * clear all literals *
      */
-    public void clear();
+    void clear();
 
     /**
      * get non-atom literals
      *
      * @return non-atom literals
      */
-    public Set<Literal> getLiterals();
+    Set<Literal> getLiterals();
 
     /**
      * update the literals *
      */
-    public void update();
+    void update();
 
 }

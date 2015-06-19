@@ -198,7 +198,7 @@ public class CSimulation
 
         try (
                 FileInputStream l_stream = new FileInputStream( p_input );
-                ObjectInputStream l_input = new ObjectInputStream( l_stream );
+                ObjectInputStream l_input = new ObjectInputStream( l_stream )
         )
         {
 
@@ -317,7 +317,7 @@ public class CSimulation
 
         try (
                 FileOutputStream l_stream = new FileOutputStream( p_output );
-                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
+                ObjectOutputStream l_output = new ObjectOutputStream( l_stream )
         )
         {
             //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
@@ -354,7 +354,7 @@ public class CSimulation
         if ( !p_data.containsKey( "state" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
 
-        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( (boolean) p_data.get( "state" ) );
+        m_world.get( this.getLayerName( p_data ) ).setActive((boolean) p_data.get("state"));
     }
 
     /**

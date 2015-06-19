@@ -36,14 +36,14 @@ public interface ILiteral<T> extends ITerm, IBeliefBaseElement
      *
      * @return annotation term
      */
-    public ITermCollection getAnnotation();
+    ITermCollection getAnnotation();
 
     /**
      * returns the functor / dataset of the literal
      *
      * @return function data
      */
-    public IAtom<?> getFunctor();
+    IAtom<?> getFunctor();
 
     /**
      * getter for language specific literal

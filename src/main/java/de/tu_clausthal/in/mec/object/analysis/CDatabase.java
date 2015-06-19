@@ -108,7 +108,7 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
         ) == null ? p_tablename : CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) + p_tablename;
 
         try (
-                final Connection l_connect = m_datasource.getConnection();
+                final Connection l_connect = m_datasource.getConnection()
         )
         {
             final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );

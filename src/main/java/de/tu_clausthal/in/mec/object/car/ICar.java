@@ -44,13 +44,13 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      *
      * @return number (greater than zero) in m/sec^2
      */
-    public int getAcceleration();
+    int getAcceleration();
 
     /**
      * returns the current speed of the car
      * @return speed in km/h
      */
-    public int getCurrentSpeed();
+    int getCurrentSpeed();
 
 
     /**
@@ -58,49 +58,49 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      *
      * @param p_speed speed value in km/h
      */
-    public void setCurrentSpeed( int p_speed ) throws IllegalArgumentException;
+    void setCurrentSpeed(int p_speed) throws IllegalArgumentException;
 
     /**
      * define an individual deceleration
      *
      * @return number (greater than zero) in m/sec^2
      */
-    public int getDeceleration();
+    int getDeceleration();
 
     /**
      * get current edge object on the graph
      *
      * @return edge
      */
-    public EdgeIteratorState getEdge();
+    EdgeIteratorState getEdge();
 
     /**
      * returns the current geo position of the car
      *
      * @return geoposition
      */
-    public GeoPosition getGeoposition();
+    GeoPosition getGeoposition();
 
     /**
      * returns a probability for lingering
      *
      * @return double value in [0,1]
      */
-    public double getLingerProbability();
+    double getLingerProbability();
 
     /**
      * returns the maximum speed of the car
      *
      * @return speed value in km/h
      */
-    public int getMaximumSpeed();
+    int getMaximumSpeed();
 
     /**
      * returns the current predecessor of the car and the distance
      *
      * @return predecessor car object and its distance in m
      */
-    public Map<Double, ICar> getPredecessor();
+    Map<Double, ICar> getPredecessor();
 
     /**
      * returns the current predecessor of the car and the distance
@@ -108,13 +108,13 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      * @param p_count number of predecessors
      * @return predecessor car object and its distance in meter
      */
-    public Map<Double, ICar> getPredecessor( int p_count );
+    Map<Double, ICar> getPredecessor(int p_count);
 
     /**
      * boolean method, that returns true, if the car has reached its end
      *
      * @return boolean for reaching the end
      */
-    public boolean hasEndReached();
+    boolean hasEndReached();
 
 }

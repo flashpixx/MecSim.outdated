@@ -41,25 +41,25 @@ public interface IMessage<T> extends Serializable
      *
      * @return data
      */
-    public T getData();
+    T getData();
 
     /**
      * returns the source of the message
      */
-    public CPath getSource();
+    CPath getSource();
 
     /**
      * a name if the message
      *
      * @return name
      */
-    public String getTitle();
+    String getTitle();
 
     /**
      * decrements the time-to-live value and returns the decrement value and on zero the message is discarded
      *
      * @return current value
      */
-    public int ttl();
+    int ttl();
 
 }

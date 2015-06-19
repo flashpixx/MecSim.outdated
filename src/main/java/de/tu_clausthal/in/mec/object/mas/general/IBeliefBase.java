@@ -93,7 +93,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * empties the whole beliefbase, i.e. the top-level literals
      * and all the literals in inherited beliefbases
      */
-    public void clear();
+    void clear();
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
@@ -176,5 +176,5 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     /**
      * updates the beliefbase
      */
-    public void update();
+    void update();
 }

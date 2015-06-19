@@ -39,6 +39,6 @@ public interface IMetric<T>
      * @param p_second second object
      * @return double metric
      */
-    public double calculate(final T p_first, final T p_second);
+    double calculate(final T p_first, final T p_second);
 
 }

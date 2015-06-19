@@ -43,5 +43,5 @@ public interface ITerm
      *
      * @return string representation
      */
-    public String toString();
+    String toString();
 }

@@ -69,6 +69,7 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
     /**
      * ctor
      *
+     * @bug remove speed distribution and change it to value
      * @param p_speed distribution of speed
      * @param p_maxspeed distribution of max-speed
      * @param p_acceleration distribution of acceleration
@@ -92,6 +93,9 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
 
 
     @Override
+    /**
+     * @bug remove speed sample call -> change it to (0,1] * maxspeed
+     */
     protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
     {
         try

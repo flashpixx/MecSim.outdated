@@ -260,6 +260,7 @@ public class CWaypointEnvironment
      * creates the current settings of
      *
      * @param p_data input data
+     * @todo remove speed distribution -> set value
      */
     private final void web_static_set( final Map<String, Object> p_data )
     {
@@ -282,7 +283,6 @@ public class CWaypointEnvironment
         m_currentsetting.put(
                 "factory",
                 EFactory.valueOf( l_data.<String>get( "factory" ) ).get(
-
                         this.createDistribution( l_data.get( "distribution/speed" ) ),
                         this.createDistribution( l_data.get( "distribution/maxspeed" ) ),
                         this.createDistribution( l_data.get( "distribution/acceleration" ) ),

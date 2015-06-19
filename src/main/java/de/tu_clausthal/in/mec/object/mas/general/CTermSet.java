@@ -24,9 +24,9 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 
 /**
  * generic term set for agent literals
@@ -48,7 +48,7 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
      *
      * @param p_collection collection containing initial elements
      */
-    public CTermSet(final Collection<ITerm> p_collection)
+    public CTermSet( final Collection<ITerm> p_collection )
     {
         super( p_collection );
     }
@@ -60,8 +60,8 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
      * @return true if Set is assignable from matching class
      */
     @Override
-    public boolean instanceOf(final Class<?> p_class)
+    public boolean instanceOf( final Class<?> p_class )
     {
-        return Set.class.isAssignableFrom(p_class);
+        return Set.class.isAssignableFrom( p_class );
     }
 }

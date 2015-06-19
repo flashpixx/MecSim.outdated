@@ -29,7 +29,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral<T> extends ITerm
+public interface ILiteral<T> extends ITerm, IBeliefBaseElement
 {
     /**
      * returns the optional annotations
@@ -46,16 +46,16 @@ public interface ILiteral<T> extends ITerm
     IAtom<?> getFunctor();
 
     /**
-     * returns the optional value term
-     *
-     * @return value term
-     */
-    ITermCollection getValues();
-
-    /**
      * getter for language specific literal
      *
      * @return literal
      */
-    T getLiteral();
+    public T getLiteral();
+
+    /**
+     * returns the optional value term
+     *
+     * @return value term
+     */
+    public ITermCollection getValues();
 }

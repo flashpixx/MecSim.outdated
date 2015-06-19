@@ -21,14 +21,53 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.jason.action;
 
-import java.util.Collection;
+import de.tu_clausthal.in.mec.common.CPath;
+import jason.asSemantics.DefaultInternalAction;
+import jason.asSemantics.TransitionSystem;
+import jason.asSemantics.Unifier;
+import jason.asSyntax.Term;
 
+import java.util.Map;
 
 /**
- * interface for term collection
+ * class for internal action for mapping literals to beliefbases
+ * based on the literals functor
  */
-public interface ITermCollection extends ITerm, Collection<ITerm>
+public class CBeliefBaseMapper extends DefaultInternalAction
 {
+    /**
+     * map which contains functor-path mapping
+     * to locate literals in inherited beliefbases
+     */
+    final Map<String, CPath> m_mapping;
+
+    /**
+     * ctor with initial mapping
+     *
+     * @param p_mapping
+     */
+    public CBeliefBaseMapper( final Map<String,CPath> p_mapping )
+    {
+        m_mapping = p_mapping;
+    }
+
+    @Override
+    public int getMinArgs()
+    {
+        return 2;
+    }
+
+    @Override
+    public int getMaxArgs()
+    {
+        return 2;
+    }
+
+    @Override
+    public Object execute(final TransitionSystem ts, final Unifier un, final Term[] args) throws Exception
+    {
+        return m_mapping.put(args[0].toString(), new CPath(args[1].toString()));
+    }
 }

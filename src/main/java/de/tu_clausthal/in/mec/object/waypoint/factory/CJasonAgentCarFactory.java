@@ -48,7 +48,7 @@ import java.util.Map;
 /**
  * class to generate Jason cars with a distribution of the attributes
  */
-public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
+public class CJasonAgentCarFactory extends CDefaultCarFactory
 {
     /**
      * name of the ASL file
@@ -59,7 +59,7 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CDistributionAgentCarFactory.super.inspect() );
+            putAll( CJasonAgentCarFactory.super.inspect() );
         }};
     /**
      * serialize version ID *
@@ -69,25 +69,25 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
     /**
      * ctor
      *
-     * @param p_speed distribution of speed
+     * @param p_speedfactor [0,1] initial speed factor of max speed
      * @param p_maxspeed distribution of max-speed
      * @param p_acceleration distribution of acceleration
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
      * @param p_asl agent name
      */
-    public CDistributionAgentCarFactory( final AbstractRealDistribution p_speed, final AbstractRealDistribution p_maxspeed,
+    public CJasonAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
             final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
             final String p_asl
     )
     {
-        super( p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
+        super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
 
         if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
         this.m_aslname = p_asl;
 
-        m_inspect.put( CCommon.getResourceString( CDistributionAgentCarFactory.class, "factoryasl" ), m_aslname );
+        m_inspect.put( CCommon.getResourceString( CJasonAgentCarFactory.class, "factoryasl" ), m_aslname );
     }
 
 
@@ -96,9 +96,16 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
     {
         try
         {
+            final int l_maxspeed = (int) m_maxspeed.sample();
             return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
-                    "agentcar %inc%", m_aslname, p_cells, (int) m_speed.sample(), (int) m_maxspeed.sample(), (int) m_acceleration.sample(),
-                    (int) m_deceleration.sample(), m_lingerdistribution.sample()
+                    p_cells,
+                    (int) ( l_maxspeed * m_speedfactor ),
+                    l_maxspeed,
+                    (int) m_acceleration.sample(),
+                    (int) m_deceleration.sample(),
+                    m_lingerdistribution.sample(),
+                    "agentcar %inc%",
+                    m_aslname
             );
         }
         catch ( final JasonException l_exception )

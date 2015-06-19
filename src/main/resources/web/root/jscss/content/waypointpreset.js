@@ -85,7 +85,7 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("generatorsettingshead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("generatortyp"),                                                                label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("generator"),                                                                   label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",    list: this.mo_elements.spinners }) + '</p>' +
         '<p>' + Layout.select( { id: this.generateSubID("generatordistribution"),       class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
@@ -259,12 +259,12 @@ WaypointPreset.prototype.afterDOMAdded = function()
                         jQuery("<option></option>")
                             .attr("value", pc_id)
                             .text(pc_key)
-                            .appendTo(self.generateSubID("generatortyp", "#"));
+                            .appendTo(self.generateSubID("generator", "#"));
                     });
 
                     // set first item selected and update menu
-                    jQuery(self.generateSubID("generatortyp", "#")+" option:first-child").attr("selected", "selected");
-                    jQuery(self.generateSubID("generatortyp", "#")).selectmenu("refresh");
+                    jQuery(self.generateSubID("generator", "#")+" option:first-child").attr("selected", "selected");
+                    jQuery(self.generateSubID("generator", "#")).selectmenu("refresh");
                 }
             });
 
@@ -311,15 +311,15 @@ WaypointPreset.prototype.finish = function()
 {
     // collect wizard options and build Json structure
     var self = this;
-    var lo   = {};
+    var lo   = { distribution : {} };
     [
-      { id: "color",        isnumber : false},
-      { id: "name",         isnumber : false},
-      { id: "carcount",     isnumber : true},
-      { id: "generatortyp", isnumber : false},
-      { id: "radius",       isnumber : true},
-      { id: "factory",      isnumber : false},
-      { id: "agent",        isnumber : false}
+      { id: "color",     isnumber : false},
+      { id: "name",      isnumber : false},
+      { id: "carcount",  isnumber : true},
+      { id: "generator", isnumber : false},
+      { id: "radius",    isnumber : true},
+      { id: "factory",   isnumber : false},
+      { id: "agent",     isnumber : false}
     ].forEach( function( po_object ) {
         lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
@@ -327,7 +327,7 @@ WaypointPreset.prototype.finish = function()
     [ "generatordistribution", "speeddistribution", "maxspeeddistribution",
       "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
     ].forEach( function( pc_key ) {
-        lo[pc_key.replace("distribution", "")] = {
+        lo.distribution[pc_key.replace("distribution", "")] = {
             distribution : jQuery(self.generateSubID(pc_key, "#")).val(),
             left         : Number.parseFloat(jQuery(self.generateSubID(pc_key+"left", "#")).val()),
             right        : Number.parseFloat(jQuery(self.generateSubID(pc_key+"right", "#")).val())
@@ -335,7 +335,6 @@ WaypointPreset.prototype.finish = function()
     });
 
     // replace color-text to an object
-    //var lo_color = { red: 0, green: 0, blue: 0};
     var la_color = lo.color.replace(/rgb|\)|\(/g, "").split(",");
     lo.color = { red : Number.parseInt(la_color[0]), green : Number.parseInt(la_color[1]), blue : Number.parseInt(la_color[2]) };
 

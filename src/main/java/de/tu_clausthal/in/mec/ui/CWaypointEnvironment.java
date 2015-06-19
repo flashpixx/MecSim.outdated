@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFacto
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
@@ -159,6 +160,20 @@ public class CWaypointEnvironment
      **/
     private final Map<String, Object> m_currentsetting = new HashMap<>();
 
+    /**
+     * creates from a map object an distribution object
+     *
+     * @param p_object map object
+     * @return distribution object
+     */
+    private AbstractRealDistribution createDistribution( final CNameHashMap.CImmutable p_object )
+    {
+        System.out.println();
+        return EDistribution.valueOf( p_object.<String>getOrDefault( "distribution", "" ) ).get(
+                p_object.<Number>get( "left" ).doubleValue(),
+                p_object.<Number>get( "right" ).doubleValue()
+        );
+    }
 
     /**
      * creates a waypoint
@@ -251,40 +266,32 @@ public class CWaypointEnvironment
                         0
                 )
         );
-
+/*
         m_currentsetting.put(
                 "factory",
                 EFactory.valueOf( l_data.<String>getOrDefault( "factory", "" ) ).get(
 
-                        EDistribution.valueOf( l_data.<String>getOrDefault( "speed/distribution", "" ) ).get(
-                                l_data.<Number>get( "speed/left" ).doubleValue(), l_data.<Number>get(
-                                        "speed/right"
-                                ).doubleValue()
-                        ),
-                        EDistribution.valueOf( l_data.<String>getOrDefault( "maxspeed/distribution", "" ) ).get(
-                                l_data.<Number>get( "maxspeed/left" ).doubleValue(),
-                                l_data.<Number>get( "maxspeed/right" ).doubleValue()
-                        ),
-                        EDistribution.valueOf( l_data.<String>getOrDefault( "acceleration/distribution", "" ) ).get(
-                                l_data.<Number>get( "acceleration/left" ).doubleValue(),
-                                l_data.<Number>get( "acceleration/right" ).doubleValue()
-                        ),
-                        EDistribution.valueOf( l_data.<String>getOrDefault( "deceleration/distribution", "" ) ).get(
-                                l_data.<Number>get( "deceleration/left" ).doubleValue(),
-                                l_data.<Number>get( "deceleration/right" ).doubleValue()
-                        ),
-                        EDistribution.valueOf( l_data.<String>getOrDefault( "linger/distribution", "" ) ).get(
-                                l_data.<Number>get( "linger/left" ).doubleValue(),
-                                l_data.<Number>get( "linger/right" ).doubleValue()
-                        ),
+                        this.createDistribution( l_data.get( "distribution/speed" ) ),
+                        this.createDistribution( l_data.get( "distribution/maxspeed" ) ),
+                        this.createDistribution( l_data.get( "distribution/acceleration" ) ),
+                        this.createDistribution( l_data.get( "distribution/deceleration" ) ),
+                        this.createDistribution( l_data.get( "distribution/linger" ) ),
                         l_data.<String>get( "agent" )
                 )
         );
 
-        m_currentsetting.put( "radius", new Double( l_data.<Number>getOrDefault( "radius", 0 ).doubleValue() ) );
-        m_currentsetting.put( "carcount", new Integer( l_data.<Number>getOrDefault( "carcount", 0 ).intValue() ) );
-        m_currentsetting.put( "generator", EGenerator.valueOf( l_data.<String>getOrDefault( "generatortyp", "" ) ) );
+        m_currentsetting.put(
+                "generator",
+                EGenerator.valueOf( l_data.<String>getOrDefault( "generator", "" ) ).get(
 
+                    this.createDistribution( l_data.get( "generator" ) ),
+                    l_data.<Number>getOrDefault( "carcount", 0 ).intValue()
+
+                )
+        );
+*/
+
+        this.createDistribution( l_data.get( "distribution/generator" ) );
     }
 
 
@@ -331,7 +338,7 @@ public class CWaypointEnvironment
                             (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String)p_data[5] );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unkownwaypoint" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unknownwaypoint" ) );
             }
         }
 
@@ -397,7 +404,7 @@ public class CWaypointEnvironment
                     );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EFactory.class, "unkownfactory" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EFactory.class, "unknownfactory" ) );
             }
         }
 
@@ -444,9 +451,23 @@ public class CWaypointEnvironment
             m_text = p_text;
         }
 
+
+        /**
+         * returns the generator object
+         *
+         * @param p_data input data
+         * @return generator object
+         */
         public final IGenerator get( final Object... p_data )
         {
-            return null;
+            switch ( this )
+            {
+                case TimeDistribution:
+                    return new CTimeDistribution( (AbstractRealDistribution) p_data[0], (Integer) p_data[1] );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EGenerator.class, "unknowgenerator" ) );
+            }
         }
 
         @Override
@@ -527,7 +548,7 @@ public class CWaypointEnvironment
                     return new ExponentialDistribution( p_left, p_right );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unkowndistribution" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
             }
         }
 

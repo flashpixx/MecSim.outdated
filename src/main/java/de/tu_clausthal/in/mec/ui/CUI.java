@@ -26,8 +26,6 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -184,7 +182,7 @@ public class CUI extends Application
      * @tparam T node type
      */
     @SuppressWarnings( "unchecked" )
-    public final <T extends Node> T getTyped( final String p_name )
+    public final <T extends Node> T get( final String p_name )
     {
         return (T) m_content.get( p_name );
     }

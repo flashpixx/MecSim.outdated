@@ -33,10 +33,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.runtime.core.CMainLoop;
 import de.tu_clausthal.in.mec.runtime.message.CMessageSystem;
-import de.tu_clausthal.in.mec.ui.CInspector;
-import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
-import de.tu_clausthal.in.mec.ui.web.CServer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -422,8 +419,18 @@ public class CSimulation
      */
     public class CUIComponents
     {
+        /**
+         * map with (lower-case) names and elements
+         */
         private final Map<String,Object> m_elements = new HashMap<>();
 
+        /**
+         * adds an element
+         *
+         * @param p_name name of the object
+         * @param p_object object
+         * @warning existing elements are not allowed and throws an exception
+         */
         public final void add( final String p_name, final Object p_object )
         {
             if (m_elements.containsKey( p_name.toLowerCase() ))
@@ -432,19 +439,38 @@ public class CSimulation
             m_elements.put( p_name.toLowerCase(), p_object );
         }
 
-        public final <T> T get( final String p_name )
-        {
-            return (T)m_elements.get( p_name.toLowerCase() );
-        }
-
+        /**
+         * check the map has existing elements
+         *
+         * @return existence flag
+         */
         public final boolean exists()
         {
             return !m_elements.isEmpty();
         }
 
+        /**
+         * check if an object exists
+         *
+         * @param p_name name of the object
+         * @return existence flag
+         */
         public final boolean exists( final String p_name )
         {
             return m_elements.containsKey( p_name.toLowerCase() );
+        }
+
+        /**
+         * returns the type based object
+         *
+         * @param p_name name of the object
+         * @return object
+         *
+         * @tparam T type of the object
+         */
+        public final <T> T get( final String p_name )
+        {
+            return (T)m_elements.get( p_name.toLowerCase() );
         }
     }
 }

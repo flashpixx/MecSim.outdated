@@ -107,7 +107,7 @@ public class CBootstrap
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( new CLanguageEnvironment() );
         p_server.registerObject( new CWaypointEnvironment() );
-        p_server.registerObject( CSimulation.getInstance().getUIComponents().<CUI>get("ui").<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
+        p_server.registerObject( CSimulation.getInstance().getUIComponents().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent() );
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
     }
 
@@ -144,7 +144,7 @@ public class CBootstrap
      */
     public static void beforeStageShutdown( final CUI p_ui )
     {
-        p_ui.<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().setConfiguration();
+        p_ui.<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().setConfiguration();
     }
 
     /**
@@ -164,7 +164,7 @@ public class CBootstrap
     public static void onSimulationReset( final CSimulation p_simulation )
     {
         if ( p_simulation.getUIComponents().exists() )
-            p_simulation.getUIComponents().<CUI>get("ui").<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().resetConfiguration();
+            p_simulation.getUIComponents().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().resetConfiguration();
 
     }
 

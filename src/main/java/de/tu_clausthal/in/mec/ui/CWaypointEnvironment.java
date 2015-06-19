@@ -25,8 +25,8 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CDefaultCarFactory;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CJasonAgentCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
@@ -188,9 +188,10 @@ public class CWaypointEnvironment
     @SuppressWarnings( "unchecked" )
     public final void setWaypoint( final GeoPosition p_position )
     {
+        /*
         if ( m_currentsetting.isEmpty() )
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
-        /*
+
         CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
                 (IWayPoint) EWaypoint.valueOf( (String) m_currentsetting.get( "type" ) ).get(
                         p_position,
@@ -202,6 +203,7 @@ public class CWaypointEnvironment
                 )
         );
         */
+        System.out.println( m_currentsetting );
     }
 
     /**
@@ -280,7 +282,8 @@ public class CWaypointEnvironment
         m_currentsetting.put(
                 "factory",
                 EFactory.valueOf( l_data.<String>get( "factory" ) ).get(
-                        l_data.<Number>get( "speed" ).doubleValue(),
+
+                        this.createDistribution( l_data.get( "distribution/speed" ) ),
                         this.createDistribution( l_data.get( "distribution/maxspeed" ) ),
                         this.createDistribution( l_data.get( "distribution/acceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/deceleration" ) ),
@@ -401,33 +404,15 @@ public class CWaypointEnvironment
             switch ( this )
             {
                 case DefaultCarFactory:
-                    return new CDefaultCarFactory(
-                            // maxspeed factor
-                            (Double) p_data[0],
-                            // maxspeed distribution
-                            (AbstractRealDistribution) p_data[1],
-                            // acceleration distribution
-                            (AbstractRealDistribution) p_data[2],
-                            // deceleration distribution
-                            (AbstractRealDistribution) p_data[3],
-                            // linger distribution
-                            (AbstractRealDistribution) p_data[4]
+                    return new CDistributionDefaultCarFactory(
+                            (AbstractRealDistribution) p_data[0], (AbstractRealDistribution) p_data[1], (AbstractRealDistribution) p_data[2],
+                            (AbstractRealDistribution) p_data[3], (AbstractRealDistribution) p_data[4]
                     );
 
                 case DefaultAgentCarFactory:
-                    return new CJasonAgentCarFactory(
-                            // maxspeed factor
-                            (Double) p_data[0],
-                            // maxspeed distribution
-                            (AbstractRealDistribution) p_data[1],
-                            // acceleration distribution
-                            (AbstractRealDistribution) p_data[2],
-                            // deceleration distribution
-                            (AbstractRealDistribution) p_data[3],
-                            // linger distribution
-                            (AbstractRealDistribution) p_data[4],
-                            // Jason name
-                            (String) p_data[5]
+                    return new CDistributionAgentCarFactory(
+                            (AbstractRealDistribution) p_data[0], (AbstractRealDistribution) p_data[1], (AbstractRealDistribution) p_data[2],
+                            (AbstractRealDistribution) p_data[3], (AbstractRealDistribution) p_data[4], (String) p_data[5]
                     );
 
                 default:

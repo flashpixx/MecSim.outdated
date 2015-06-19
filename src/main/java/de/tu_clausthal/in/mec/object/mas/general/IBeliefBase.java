@@ -117,6 +117,11 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Set<ILiteral<T>> collapse( final CPath p_path );
 
     /**
+     * getter for beliefbase elements
+     */
+    public Map getElements();
+
+    /**
      * gets a beliefbase with position and name specified in path
      *
      * @param p_path path with name of the beliefbase as last element

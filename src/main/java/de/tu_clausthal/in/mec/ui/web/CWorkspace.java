@@ -25,9 +25,7 @@ package de.tu_clausthal.in.mec.ui.web;
 
 
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 
@@ -67,7 +65,7 @@ public class CWorkspace extends CBrowser
                 "http://" + CConfiguration.getInstance().get().<String>get( c_httphost ) + ":" + CConfiguration.getInstance().get().<Integer>get( c_httpport )
         );
 
-        CSimulation.getInstance().getUIComponents().add( "server", m_server );
+        CSimulation.getInstance().getStorage().add( "server", m_server );
     }
 
 }

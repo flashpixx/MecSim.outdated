@@ -24,9 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.web.CSocketStorage;
 import de.tu_clausthal.in.mec.ui.web.CWebSocket;
@@ -47,7 +45,7 @@ public class CInspector
 
     public CInspector()
     {
-        CSimulation.getInstance().getUIComponents().add( "inspector", this );
+        CSimulation.getInstance().getStorage().add( "inspector", this );
     }
 
 

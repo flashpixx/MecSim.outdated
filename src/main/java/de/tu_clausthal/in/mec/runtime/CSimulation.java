@@ -81,7 +81,7 @@ public class CSimulation
     /**
      * UI components
      */
-    private CUIComponents m_uicomponents = new CUIComponents();
+    private CStorage m_storage = new CStorage();
     /**
      * world of the simulation
      */
@@ -155,11 +155,11 @@ public class CSimulation
     }
 
     /**
-     * returns the UI components
+     * returns the storage
      */
-    public CUIComponents getUIComponents()
+    public CStorage getStorage()
     {
-        return m_uicomponents;
+        return m_storage;
     }
 
     /**
@@ -415,9 +415,9 @@ public class CSimulation
     }
 
     /**
-     * UI components bundle
+     * peristent storage
      */
-    public class CUIComponents
+    public class CStorage
     {
         /**
          * map with (lower-case) names and elements

@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CBoolBeliefMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
@@ -96,14 +97,14 @@ public class CBootstrap
 
         // register objects
         p_server.registerObject( CConsole.getError( "error" ) );
-        p_server.registerObject( CConsole.getOutput( "output" ) );
+        //p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );
         p_server.registerObject( CConfiguration.getInstance() );
         p_server.registerObject( CLogger.getInstance() );
         p_server.registerObject( new CInspector() );
 
-        p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
+        p_server.registerObject( new CAgentEnvironment( EAgentLanguages.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( new CLanguageEnvironment() );
         p_server.registerObject( new CWaypointEnvironment() );

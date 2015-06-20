@@ -27,14 +27,11 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import jason.JasonException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -53,7 +50,11 @@ public class CAgentCarFactory extends CDefaultCarFactory
     /**
      * name of the agent
      */
-    private String m_agent;
+    private final String m_agent;
+    /**
+     * agent type
+     */
+    private final EAgentLanguages m_agenttype;
     /**
      * inspect data
      */
@@ -75,10 +76,11 @@ public class CAgentCarFactory extends CDefaultCarFactory
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
      * @param p_agent agent name
+     * @param p_agenttype agent type definition
      */
     public CAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
             final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
-            final String p_agent
+            final String p_agent, final EAgentLanguages p_agenttype
     )
     {
         super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
@@ -86,7 +88,9 @@ public class CAgentCarFactory extends CDefaultCarFactory
         if ( ( p_agent == null ) || ( p_agent.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "agentnotnull" ) );
         m_agent = p_agent;
+        m_agenttype = p_agenttype;
         m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagent" ), m_agent );
+        m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagenttype" ), m_agenttype );
     }
 
 
@@ -96,18 +100,26 @@ public class CAgentCarFactory extends CDefaultCarFactory
         try
         {
             final int l_maxspeed = (int) m_maxspeed.sample();
-            return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
-                    p_cells,
-                    (int) ( l_maxspeed * m_speedfactor ),
-                    l_maxspeed,
-                    (int) m_acceleration.sample(),
-                    (int) m_deceleration.sample(),
-                    m_lingerdistribution.sample(),
-                    "agentcar %inc%",
-                    m_agent
-            );
+
+            switch ( m_agenttype )
+            {
+                case Jason:
+
+                    return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
+                            p_cells,
+                            (int) ( l_maxspeed * m_speedfactor ),
+                            l_maxspeed,
+                            (int) m_acceleration.sample(),
+                            (int) m_deceleration.sample(),
+                            m_lingerdistribution.sample(),
+                            "agentcar %inc%",
+                            m_agent
+                    );
+
+                default:
+            }
         }
-        catch ( final JasonException l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }
@@ -126,9 +138,11 @@ public class CAgentCarFactory extends CDefaultCarFactory
      * @param p_stream stream
      * @throws java.io.IOException throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
+     * @bug not working
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
+        /*
         p_stream.defaultReadObject();
 
         // read the ASL file from the stream
@@ -154,6 +168,7 @@ public class CAgentCarFactory extends CDefaultCarFactory
         catch ( final Exception l_exception )
         {
         }
+        */
     }
 
     /**
@@ -161,6 +176,7 @@ public class CAgentCarFactory extends CDefaultCarFactory
      *
      * @param p_stream stream
      * @throws IOException throws the exception on loading data
+     * @bug incomplete
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.io.FileUtils;
@@ -49,14 +50,14 @@ public class CAgentEnvironment
     /**
      * type of the MAS name *
      */
-    private final EType m_type;
+    private final EAgentLanguages m_type;
 
     /**
      * ctor
      *
      * @param p_type MAS type
      */
-    public CAgentEnvironment( final EType p_type )
+    public CAgentEnvironment( final EAgentLanguages p_type )
     {
         m_type = p_type;
         switch ( m_type )
@@ -207,18 +208,6 @@ public class CAgentEnvironment
     private final String web_uribase()
     {
         return m_baseuri;
-    }
-
-
-    /**
-     * MAS types *
-     */
-    public enum EType
-    {
-        /**
-         * Jason value *
-         */
-        Jason
     }
 
 }

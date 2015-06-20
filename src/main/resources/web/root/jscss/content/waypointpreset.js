@@ -340,6 +340,12 @@ WaypointPreset.prototype.finish = function()
     var la_color = lo.color.replace(/rgb|\)|\(/g, "").split(",");
     lo.color = { red : Number.parseInt(la_color[0]), green : Number.parseInt(la_color[1]), blue : Number.parseInt(la_color[2]) };
 
+    // replace agent to detect
+    lo.agent = {
+        agent : jQuery(this.generateSubID("agent", "#")).val(),
+        type  : jQuery(this.generateSubID("agent", "#")+ " :selected").closest("optgroup").attr("label")
+    };
+
 
     // send Ajax request for creating preset
     MecSim.ajax({

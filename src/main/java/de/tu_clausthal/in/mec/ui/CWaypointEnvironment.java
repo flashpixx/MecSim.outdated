@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDefaultCarFactory;
@@ -265,7 +266,6 @@ public class CWaypointEnvironment
         m_currentsettings.clear();
         final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
 
-
         // create items from the UI data and set internal properties
         m_currentsettings.put( "name", l_data.<String>get( "name" ) );
         m_currentsettings.put( "waypoint", l_data.<String>get( "waypoint" ) );
@@ -286,7 +286,8 @@ public class CWaypointEnvironment
                         this.createDistribution( l_data.get( "distribution/acceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/deceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/linger" ) ),
-                        l_data.<String>get( "agent" )
+                        l_data.<String>get( "agent/agent" ),
+                        EAgentLanguages.valueOf( l_data.<String>get( "agent/type" ) )
                 )
         );
 
@@ -299,6 +300,7 @@ public class CWaypointEnvironment
 
                 )
         );
+
     }
 
 
@@ -426,8 +428,10 @@ public class CWaypointEnvironment
                             (AbstractRealDistribution) p_data[3],
                             // linger distribution
                             (AbstractRealDistribution) p_data[4],
-                            // Jason name
-                            (String) p_data[5]
+                            // agent name
+                            (String) p_data[5],
+                            // agent type
+                            (EAgentLanguages) p_data[6]
                     );
 
                 default:

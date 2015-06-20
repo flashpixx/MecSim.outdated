@@ -224,7 +224,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                     jQuery.each( po_data, function( pc_key, po_object ) {
                         jQuery("<option></option>")
                             .attr("value", po_object.id)
-                            .attr("requireagent", po_object.agentprogram)
+                            .attr("requireagent", po_object.requireagent)
                             .text(pc_key)
                             .appendTo(self.generateSubID("factory", "#"));
                     });
@@ -364,4 +364,16 @@ WaypointPreset.prototype.finish = function()
         jQuery( self.generateSubID("dialog", "#") ).dialog();
 
     });
+}
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.show = function()
+{
+    // update agent list
+    jQuery( this.generateSubID("agent", "#") ).empty().append( Layout.opentiongroup( this.getElements().mecsim_mas_editor.getAgents() ) );
+
+    // super call
+    Widget.prototype.show.call(this);
 }

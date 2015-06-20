@@ -134,7 +134,7 @@ var Layout = (function (px_modul) {
      * @param px_select value which should be selected by default
      * @return option HTML string
     **/
-    var lx_buildItem = function( px, px_select )
+    px_modul.option = function( px, px_select )
     {
         if (classof(px, "string"))
             return lx_basetag("option", {
@@ -161,7 +161,7 @@ var Layout = (function (px_modul) {
 
         var la = [];
         if (po_options.options)
-            po_options.options.forEach( function(px_item) { la.push( lx_buildItem(px_item, po_options.value) ); } );
+            po_options.options.forEach( function(px_item) { la.push( px_modul.option(px_item, po_options.value) ); } );
 
         return (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + ' ' +
                 lx_basetag("select", {
@@ -177,10 +177,36 @@ var Layout = (function (px_modul) {
 
 
     // --- selectbox with label and option groups --------------------------------------------------------------------------------------------------------------
+
+    /**
+     * creates the option group items
+     *
+     * @param po { -grouplabel- : [{id : -ID-, label : -optional label-}] }
+     * @param px_value selected vaöue
+     * @return option group HTML string
+    **/
+    px_modul.opentiongroup = function( po, px_value )
+    {
+        var la = [];
+
+        jQuery.each( po, function( pc_key, pa_values ) {
+            if (pc_key.length > 0)
+                la.push( '<optgroup label="' + pc_key + '">' );
+
+            pa_values.forEach( function( px_item ) { la.push( px_modul.option(px_item, px_value) ); } );
+
+            if (pc_key.length > 0)
+                la.push( '</optgroup>' );
+        });
+
+        return la.join("");
+    }
+
+
     /**
      * creates a select menu with label
      *
-     * @param po_options Json object { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value-, options: { -grouplabel- : [{id : -ID-, label : -optional label-}] } }
+     * @param po_options Json object { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value-, options: -see optiongrouo function- }
      * @return HTML string
     **/
     px_modul.selectgroup = function( po_options )
@@ -188,25 +214,13 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        var la = [];
-        if (po_options.options)
-            jQuery.each( po_options.options, function( pc_key, pa_values ) {
-                if (pc_key.length > 0)
-                    la.push( '<optgroup label="' + pc_key + '">' );
-
-                pa_values.forEach( function( px_item ) { la.push( lx_buildItem(px_item, po_options.value) ); } );
-
-                if (pc_key.length > 0)
-                    la.push( '</optgroup>' );
-            });
-
         return (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + ' ' +
                 lx_basetag("select", {
 
                     id      : po_options.id,
                     class   : po_options.class,
                     addon   : po_options.name ? 'name="' + po_options.name + '"' : '',
-                    content : la.join("")
+                    content : po_options.options ? px_modul.opentiongroup(po_options.options, po_options.value) : ""
 
         });
     }

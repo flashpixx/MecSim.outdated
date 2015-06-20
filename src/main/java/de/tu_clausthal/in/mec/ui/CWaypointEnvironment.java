@@ -78,7 +78,7 @@ public class CWaypointEnvironment
                 put(
                         l_factory.toString(), new HashMap()
                         {{
-                                put( "agentprogram", l_factory.getRequireAgent() );
+                                put( "requireagent", l_factory.getRequireAgent() );
                                 put( "id", l_factory.name() );
                             }}
                 );

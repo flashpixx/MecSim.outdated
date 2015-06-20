@@ -53,7 +53,14 @@ function Pane( pc_id, pc_name, pa_panel )
         var self = this;
         pa_panel.forEach( function( po_item ) { self.addChild(po_item); } );
     }
+
+    // adds the element to the static context
+    Pane.elements[this.getID()] = this;
 }
+
+
+/** global static object for define all elements **/
+Pane.elements    = {};
 
 
 /**
@@ -79,6 +86,19 @@ Pane.prototype.addChild = function( po )
     this.ma_children.push(po);
     po.setParent(this);
 
+    // add child to the static context
+    Pane.elements[po.getID()] = po;
+}
+
+
+/**
+ * returns all elements
+ *
+ * @return object elements
+**/
+Pane.prototype.getElements = function()
+{
+    return Pane.elements;
 }
 
 
@@ -231,4 +251,3 @@ Pane.prototype.afterDOMAdded = function()
 {
     this.ma_children.forEach( function(po_item) { po_item.afterDOMAdded(); } );
 }
-

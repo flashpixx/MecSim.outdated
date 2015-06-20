@@ -26,8 +26,8 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CDefaultCarFactory;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CJasonAgentCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
@@ -415,7 +415,7 @@ public class CWaypointEnvironment
                     );
 
                 case DefaultAgentCarFactory:
-                    return new CJasonAgentCarFactory(
+                    return new CAgentCarFactory(
                             // maxspeed factor
                             (Double) p_data[0],
                             // maxspeed distribution

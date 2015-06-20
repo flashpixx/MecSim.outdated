@@ -48,6 +48,7 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
 
     /**
      * reference to the graph
+     * @bug reset on simulation loading
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
     /**

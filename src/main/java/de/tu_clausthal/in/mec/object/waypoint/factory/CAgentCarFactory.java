@@ -48,18 +48,18 @@ import java.util.Map;
 /**
  * class to generate Jason cars with a distribution of the attributes
  */
-public class CJasonAgentCarFactory extends CDefaultCarFactory
+public class CAgentCarFactory extends CDefaultCarFactory
 {
     /**
-     * name of the ASL file
+     * name of the agent
      */
-    private String m_aslname;
+    private String m_agent;
     /**
      * inspect data
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CJasonAgentCarFactory.super.inspect() );
+            putAll( CAgentCarFactory.super.inspect() );
         }};
     /**
      * serialize version ID *
@@ -74,20 +74,19 @@ public class CJasonAgentCarFactory extends CDefaultCarFactory
      * @param p_acceleration distribution of acceleration
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
-     * @param p_asl agent name
+     * @param p_agent agent name
      */
-    public CJasonAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
+    public CAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
             final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
-            final String p_asl
+            final String p_agent
     )
     {
         super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
 
-        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
-        this.m_aslname = p_asl;
-
-        m_inspect.put( CCommon.getResourceString( CJasonAgentCarFactory.class, "factoryasl" ), m_aslname );
+        if ( ( p_agent == null ) || ( p_agent.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "agentnotnull" ) );
+        m_agent = p_agent;
+        m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagent" ), m_agent );
     }
 
 
@@ -105,7 +104,7 @@ public class CJasonAgentCarFactory extends CDefaultCarFactory
                     (int) m_deceleration.sample(),
                     m_lingerdistribution.sample(),
                     "agentcar %inc%",
-                    m_aslname
+                    m_agent
             );
         }
         catch ( final JasonException l_exception )
@@ -133,7 +132,7 @@ public class CJasonAgentCarFactory extends CDefaultCarFactory
         p_stream.defaultReadObject();
 
         // read the ASL file from the stream
-        final String l_aslname = m_aslname;
+        final String l_aslname = m_agent;
         final String l_asldata = (String) p_stream.readObject();
         File l_output = IEnvironment.getAgentFile( l_aslname );
 
@@ -146,8 +145,8 @@ public class CJasonAgentCarFactory extends CDefaultCarFactory
                 l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
                 for ( int i = 1; l_output.exists(); i++ )
                 {
-                    m_aslname = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
-                    l_output = IEnvironment.getAgentFile( m_aslname );
+                    m_agent = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
+                    l_output = IEnvironment.getAgentFile( m_agent );
                 }
                 FileUtils.write( l_output, l_asldata );
             }
@@ -168,6 +167,6 @@ public class CJasonAgentCarFactory extends CDefaultCarFactory
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslname ).toString() ) ) ) );
+        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_agent ).toString() ) ) ) );
     }
 }

@@ -36,8 +36,6 @@ import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -57,14 +55,18 @@ public class CWaypointEnvironment
     /**
      * map with distribution names
      */
-    private final static Map<String, Map<String, String>> c_distribution = new HashMap<String, Map<String, String>>()
+    private final static Map<String, Object> c_distribution = new HashMap<String, Object>()
     {{
             for ( final EDistribution l_distribution : EDistribution.values() )
                 put(
                         l_distribution.toString(), new HashMap()
                         {{
-                                put( "left", l_distribution.getDeviationText().getLeft() );
-                                put( "right", l_distribution.getDeviationText().getRight() );
+                                put( "firstmomentum", CCommon.getMap( "label", l_distribution.getFirstMomentum(), "used", l_distribution.hasFirstMomentum() ) );
+                                put(
+                                        "secondmomentum", CCommon.getMap(
+                                                "label", l_distribution.getSecondMomentum(), "used", l_distribution.hasSecondMomentum()
+                                        )
+                                );
                                 put( "id", l_distribution.name() );
                             }}
                 );
@@ -177,8 +179,8 @@ public class CWaypointEnvironment
     private AbstractRealDistribution createDistribution( final CNameHashMap.CImmutable p_object )
     {
         return EDistribution.valueOf( p_object.<String>getOrDefault( "distribution", "" ) ).get(
-                p_object.<Number>get( "left" ).doubleValue(),
-                p_object.<Number>get( "right" ).doubleValue()
+                p_object.<Number>get( "firstmomentum" ).doubleValue(),
+                p_object.<Number>get( "secondmomentum" ).doubleValue()
         );
     }
 
@@ -220,7 +222,7 @@ public class CWaypointEnvironment
      *
      * @return map with names of distribution and IDs
      */
-    private final Map<String, Map<String, String>> web_static_listdistribution()
+    private final Map<String, Object> web_static_listdistribution()
     {
         return c_distribution;
     }
@@ -532,14 +534,18 @@ public class CWaypointEnvironment
         Exponential(
                 CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
                 EDistribution.class, "exponentialdistributionleft"
-        ), CCommon.getResourceString( EDistribution.class, "exponentialdistributionright" )
+        )
         );
 
 
         /**
-         * tupel of bound / deviation names
-         */
-        private final Pair<String, String> m_deviation;
+         * left / lower / first momentum description
+         **/
+        private final String m_firstmomentum;
+        /**
+         * right / higher / second momentum description
+         **/
+        private final String m_secondmomentum;
         /**
          * name of this distribution type
          */
@@ -550,34 +556,46 @@ public class CWaypointEnvironment
          * ctor
          *
          * @param p_text language depend name,
-         * @param p_left lower / first deviation language depend name
-         * @param p_right higher / second deviation language depend name
+         * @param p_firstmomentum lower / first momentum language depend name
          */
-        private EDistribution( final String p_text, final String p_left, final String p_right )
+        private EDistribution( final String p_text, final String p_firstmomentum )
+        {
+            this( p_text, p_firstmomentum, null);
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_text language depend name,
+         * @param p_firstmomentum lower / first momentum language depend name
+         * @param p_secondmomentum higher / second momentum language depend name
+         */
+        private EDistribution( final String p_text, final String p_firstmomentum, final String p_secondmomentum )
         {
             m_text = p_text;
-            m_deviation = new ImmutablePair<>( p_left, p_right );
+            m_firstmomentum = p_firstmomentum;
+            m_secondmomentum = p_secondmomentum;
         }
 
         /**
          * returns a distribution object
          *
-         * @param p_left lower / first deviation
-         * @param p_right higher / second deviation
+         * @param p_firstmomentum lower / first momentum
+         * @param p_secondmomentum higher / second momentum
          * @return distribution
          */
-        public final AbstractRealDistribution get( final double p_left, final double p_right )
+        public final AbstractRealDistribution get( final double p_firstmomentum, final double p_secondmomentum )
         {
             switch ( this )
             {
                 case Uniform:
-                    return new UniformRealDistribution( p_left, p_right );
+                    return new UniformRealDistribution( p_firstmomentum, p_secondmomentum );
 
                 case Normal:
-                    return new NormalDistribution( p_left, p_right );
+                    return new NormalDistribution( p_firstmomentum, p_secondmomentum );
 
                 case Exponential:
-                    return new ExponentialDistribution( p_left, p_right );
+                    return new ExponentialDistribution( p_firstmomentum );
 
                 default:
                     throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
@@ -585,11 +603,43 @@ public class CWaypointEnvironment
         }
 
         /**
-         * @return bound name values
+         * returns the label of the first momentum
+         *
+         * @return label
          */
-        public Pair<String, String> getDeviationText()
+        public final String getFirstMomentum()
         {
-            return m_deviation;
+            return m_firstmomentum;
+        }
+
+        /**
+         * returns the label of the second momentum
+         *
+         * @return label
+         */
+        public final String getSecondMomentum()
+        {
+            return m_secondmomentum;
+        }
+
+        /**
+         * returns bool value that a first momentum is used
+         *
+         * @return flag
+         */
+        public final boolean hasFirstMomentum()
+        {
+            return m_firstmomentum != null;
+        }
+
+        /**
+         * returns bool value that a second momentum is used
+         *
+         * @return flag
+         */
+        public final boolean hasSecondMomentum()
+        {
+            return m_secondmomentum != null;
         }
 
         @Override

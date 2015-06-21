@@ -91,8 +91,8 @@ WaypointPreset.prototype.getContent = function()
         '<p>' + Layout.select( { id: this.generateSubID("generator"),                                                                   label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("carcount"),                                                                    label: " ",    list: this.mo_elements.spinners }) + '</p>' +
         '<p>' + Layout.select( { id: this.generateSubID("generatordistribution"),       class: this.generateSubID("distribution"),      label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionleft"),                                                   label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionright"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionfirstmomentum"),                                          label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("generatordistributionsecondmomentum"),                                         label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '</div></section >' +
@@ -104,35 +104,35 @@ WaypointPreset.prototype.getContent = function()
 
         '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),    class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionleft"),                                             label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionright"),                                            label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),                class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionfirstmomentum"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionsecondmomentum"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("speedhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speedfactor"),                                                          label: " ",   list: this.mo_elements.spinners })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speedfactor"),                                                                      label: " ",   list: this.mo_elements.spinners })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("accelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionfirstmomentum"),                                            label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("accelerationdistributionsecondmomentum"),                                           label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("decelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("decelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionfirstmomentum"),                                            label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("decelerationdistributionsecondmomentum"),                                           label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("lingerhead") + '" />' +
         '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("lingerdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionleft"),                                                     label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionright"),                                                    label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.select( { id: this.generateSubID("lingerdistribution"),                  class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionfirstmomentum"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionsecondmomentum"),                                                 label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '</div>' +
 
         '</div></section >' +
@@ -191,8 +191,24 @@ WaypointPreset.prototype.afterDOMAdded = function()
             var lx_labelDistribution = function( pc_id, px_option)
             {
                 var lo_bound = jQuery(px_option).data("bound");
-                jQuery( 'label[for="' + pc_id + 'left"]' ).text(lo_bound.left);
-                jQuery( 'label[for="' + pc_id + 'right"]' ).text(lo_bound.right);
+
+                // show / hide call
+                ["firstmomentum", "secondmomentum"].forEach( function(pc_label) {
+
+                    // set label
+                    jQuery( 'label[for="' + pc_id + pc_label + '"]' ).text(lo_bound[pc_label].label)
+
+                    // hide / show momentums
+                    if (lo_bound[pc_label].used)
+                    {
+                        jQuery( 'label[for="' + pc_id + pc_label + '"]' ).show();
+                        jQuery( '#' + pc_id + pc_label ).show();
+                    } else {
+                        jQuery( 'label[for="' + pc_id + pc_label + '"]' ).hide();
+                        jQuery( '#' + pc_id + pc_label ).hide();
+                    }
+
+                });
             }
 
 
@@ -206,7 +222,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                     jQuery.each( po_data, function( pc_key, po_object ) {
                         jQuery("<option></option>")
                             .attr("value", po_object.id)
-                            .attr("data-bound", JSON.stringify({left : po_object.left, right : po_object.right}))
+                            .attr("data-bound", JSON.stringify({firstmomentum : po_object.firstmomentum, secondmomentum : po_object.secondmomentum}))
                             .text(pc_key)
                             .appendTo(self.generateSubID("distribution", "."));
                     });
@@ -224,7 +240,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
                     jQuery.each( po_data, function( pc_key, po_object ) {
                         jQuery("<option></option>")
                             .attr("value", po_object.id)
-                            .attr("requireagent", po_object.requireagent)
+                            .attr("data-requireagent", po_object.requireagent)
                             .text(pc_key)
                             .appendTo(self.generateSubID("factory", "#"));
                     });
@@ -305,6 +321,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
     });
 }
 
+
 /**
  * @Overwrite
 **/
@@ -330,9 +347,9 @@ WaypointPreset.prototype.finish = function()
     [ "generatordistribution", "maxspeeddistribution", "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
     ].forEach( function( pc_key ) {
         lo.distribution[pc_key.replace("distribution", "")] = {
-            distribution : jQuery(self.generateSubID(pc_key, "#")).val(),
-            left         : Number.parseFloat(jQuery(self.generateSubID(pc_key+"left", "#")).val()),
-            right        : Number.parseFloat(jQuery(self.generateSubID(pc_key+"right", "#")).val())
+            distribution   : jQuery(self.generateSubID(pc_key, "#")).val(),
+            firstmomentum  : Number.parseFloat(jQuery(self.generateSubID(pc_key+"firstmomentum", "#")).val()),
+            secondmomentum : Number.parseFloat(jQuery(self.generateSubID(pc_key+"secondmomentum", "#")).val())
         };
     });
 
@@ -377,9 +394,30 @@ WaypointPreset.prototype.finish = function()
 **/
 WaypointPreset.prototype.show = function()
 {
-    // update agent list
+    // update agent list and set the first one on default
     jQuery( this.generateSubID("agent", "#") ).empty().append( Layout.opentiongroup( this.getElements().mecsim_mas_editor.getAgents() ) );
+    jQuery( this.generateSubID("agent", "#") +" option:first-child").attr("selected", "selected");
+    jQuery( this.generateSubID("agent", "#") ).selectmenu("refresh");
 
     // super call
     Widget.prototype.show.call(this);
+}
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next )
+{
+    switch (pn_current)
+    {
+
+        //case 0 :
+            //console.log( jQuery( this.generateSubID("agent", "#") ).val() );
+            //console.log( jQuery( this.generateSubID("factory", "#") + " option:selected" ).data("requireagent") && );
+        //    return false;
+
+
+    }
+
+    return false;
 }

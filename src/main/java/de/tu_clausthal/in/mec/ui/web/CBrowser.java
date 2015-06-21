@@ -75,7 +75,7 @@ public class CBrowser extends GridPane
     public CBrowser( final EMenu p_menu )
     {
         super();
-
+        m_webview.getEngine().setJavaScriptEnabled( true );
         GridPane.setConstraints( m_webview, 0, 1, this.setMenuBar( p_menu ), 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS );
         this.getChildren().add( m_webview );
     }

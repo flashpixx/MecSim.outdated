@@ -102,18 +102,6 @@ WaypointPreset.prototype.getContent = function()
         '<h3 id="' + this.generateSubID("carhead") + '" />' +
         '<section><div id="' + this.generateSubID("carsettings") + '">' +
 
-        '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
-        '<div>' +
-        '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),                class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionfirstmomentum"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionsecondmomentum"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
-        '</div>' +
-
-        '<h4 id="' + this.generateSubID("speedhead") + '" />' +
-        '<div>' +
-        '<p>' + Layout.input(  { id: this.generateSubID("speedfactor"),                                                                      label: " ",   list: this.mo_elements.spinners })    + '</p>' +
-        '</div>' +
-
         '<h4 id="' + this.generateSubID("accelerationhead") + '" />' +
         '<div>' +
         '<p>' + Layout.select( { id: this.generateSubID("accelerationdistribution"),            class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
@@ -133,6 +121,18 @@ WaypointPreset.prototype.getContent = function()
         '<p>' + Layout.select( { id: this.generateSubID("lingerdistribution"),                  class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionfirstmomentum"),                                                  label: " ",   list: this.mo_elements.texts })    + '</p>' +
         '<p>' + Layout.input(  { id: this.generateSubID("lingerdistributionsecondmomentum"),                                                 label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '</div>' +
+
+        '<h4 id="' + this.generateSubID("maxspeedhead") + '" />' +
+        '<div>' +
+        '<p>' + Layout.select( { id: this.generateSubID("maxspeeddistribution"),                class: this.generateSubID("distribution"),   label: " ",   list: this.mo_elements.selects })  + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionfirstmomentum"),                                                label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("maxspeeddistributionsecondmomentum"),                                               label: " ",   list: this.mo_elements.texts })    + '</p>' +
+        '</div>' +
+
+        '<h4 id="' + this.generateSubID("speedhead") + '" />' +
+        '<div>' +
+        '<p>' + Layout.input(  { id: this.generateSubID("speedfactor"),                                                                      label: " ",   list: this.mo_elements.spinners })    + '</p>' +
         '</div>' +
 
         '</div></section >' +
@@ -344,8 +344,7 @@ WaypointPreset.prototype.finish = function()
         lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
 
-    [ "generatordistribution", "maxspeeddistribution", "accelerationdistribution", "decelerationdistribution", "lingerdistribution"
-    ].forEach( function( pc_key ) {
+    [ "generatordistribution", "maxspeeddistribution", "accelerationdistribution", "decelerationdistribution", "lingerdistribution" ].forEach( function( pc_key ) {
         lo.distribution[pc_key.replace("distribution", "")] = {
             distribution   : jQuery(self.generateSubID(pc_key, "#")).val(),
             firstmomentum  : Number.parseFloat(jQuery(self.generateSubID(pc_key+"firstmomentum", "#")).val()),
@@ -457,16 +456,20 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
     switch (pn_current)
     {
 
+        // first step
         case 0 :
             var lx = null;
 
             // check random waypoint & radius
-            lx_setErrorLabelCSS( this.generateSubID("radius") );
-            lx = Number.parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
-            if ( ((isNaN(lx))) || (lx <= 0) )
+            if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
             {
-                lx_setErrorLabelCSS( this.generateSubID("radius"), true );
-                return false;
+                lx_setErrorLabelCSS( this.generateSubID("radius") );
+                lx = Number.parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
+                if ( ((isNaN(lx))) || (lx <= 0) )
+                {
+                    lx_setErrorLabelCSS( this.generateSubID("radius"), true );
+                    return false;
+                }
             }
 
             // check car count
@@ -490,9 +493,29 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
             return true;
 
 
+        // second step
         case 1 :
 
+            // check max speed distribution
+            [ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].forEach( function( pc_key ) {
+                lx_setErrorLabelCSS( self.generateSubID(pc_key) );
+                if (!lx_checkDistribution(pc_key))
+                {
+                    lx_setErrorLabelCSS( self.generateSubID(pc_key), true );
+                    return false;
+                }
+            });
 
+            // check speed factor
+            lx_setErrorLabelCSS( this.generateSubID("speedfactor") );
+            lx = Number.parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
+            if ( ((isNaN(lx))) || (lx < 0) || (lx > 100) )
+            {
+                lx_setErrorLabelCSS( this.generateSubID("speedfactor"), true );;
+                return false;
+            }
+
+            return true;
 
     }
 

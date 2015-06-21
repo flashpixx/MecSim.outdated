@@ -127,7 +127,7 @@ public class CWaypointEnvironment
 
             // wizard third step
             put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "speedsettingslabel" ) );
-            put( "label_speeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectspeedprob" ) );
+            put( "label_speedfactor", CCommon.getResourceString( CWaypointEnvironment.class, "selectspeedprob" ) );
 
             put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "maxspeedsettingslabel" ) );
             put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectmaxspeedprob" ) );

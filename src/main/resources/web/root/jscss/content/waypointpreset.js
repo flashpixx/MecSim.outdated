@@ -341,26 +341,29 @@ WaypointPreset.prototype.finish = function()
       { id: "agent",        isnumber : false},
       { id: "waypoint",     isnumber : false}
     ].forEach( function( po_object ) {
-        lo[po_object.id] = po_object.isnumber ? Number.parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
+        lo[po_object.id] = po_object.isnumber ? parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
 
     [ "generatordistribution", "maxspeeddistribution", "accelerationdistribution", "decelerationdistribution", "lingerdistribution" ].forEach( function( pc_key ) {
         lo.distribution[pc_key.replace("distribution", "")] = {
             distribution   : jQuery(self.generateSubID(pc_key, "#")).val(),
-            firstmomentum  : Number.parseFloat(jQuery(self.generateSubID(pc_key+"firstmomentum", "#")).val()),
-            secondmomentum : Number.parseFloat(jQuery(self.generateSubID(pc_key+"secondmomentum", "#")).val())
+            firstmomentum  : parseFloat(jQuery(self.generateSubID(pc_key+"firstmomentum", "#")).val()),
+            secondmomentum : parseFloat(jQuery(self.generateSubID(pc_key+"secondmomentum", "#")).val())
         };
     });
 
     // replace color-text to an object
     var la_color = lo.color.replace(/rgb|\)|\(/g, "").split(",");
-    lo.color = { red : Number.parseInt(la_color[0]), green : Number.parseInt(la_color[1]), blue : Number.parseInt(la_color[2]) };
+    lo.color = { red : parseInt(la_color[0]), green : parseInt(la_color[1]), blue : parseInt(la_color[2]) };
 
     // replace agent to detect
     lo.agent = {
         agent : jQuery(this.generateSubID("agent", "#")).val(),
         type  : jQuery(this.generateSubID("agent", "#")+ " :selected").closest("optgroup").attr("label")
     };
+
+    // scale speed factor
+    lo.speedfactor = lo.speedfactor/100;
 
 
     // send Ajax request for creating preset
@@ -421,8 +424,8 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
     **/
     var lx_checkDistribution = function( pc )
     {
-        var ln_first  = Number.parseFloat(jQuery( self.generateSubID(pc+"firstmomentum", "#") ).val());
-        var ln_second = Number.parseFloat(jQuery( self.generateSubID(pc+"secondmomentum", "#") ).val());
+        var ln_first  = parseFloat(jQuery( self.generateSubID(pc+"firstmomentum", "#") ).val());
+        var ln_second = parseFloat(jQuery( self.generateSubID(pc+"secondmomentum", "#") ).val());
 
         switch (jQuery( self.generateSubID(pc, "#") ).val())
         {
@@ -458,14 +461,15 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
         // first step
         case 0 :
-            var lx = null;
+
+            var ln = -1;
 
             // check random waypoint & radius
             if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
             {
                 lx_setErrorLabelCSS( this.generateSubID("radius") );
-                lx = Number.parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
-                if ( ((isNaN(lx))) || (lx <= 0) )
+                ln = parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
+                if ( ((isNaN(ln))) || (ln <= 0) )
                 {
                     lx_setErrorLabelCSS( this.generateSubID("radius"), true );
                     return false;
@@ -474,10 +478,10 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check car count
             lx_setErrorLabelCSS( this.generateSubID("carcount") );
-            lx = Number.parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
-            if ( ((isNaN(lx))) || (lx <= 0) )
+            ln = parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
+            if ( ((isNaN(ln))) || (ln <= 0) )
             {
-                lx_setErrorLabelCSS( this.generateSubID("carcount"), true );;
+                lx_setErrorLabelCSS( this.generateSubID("carcount"), true );
                 return false;
             }
 
@@ -508,7 +512,7 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check speed factor
             lx_setErrorLabelCSS( this.generateSubID("speedfactor") );
-            lx = Number.parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
+            lx = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
             if ( ((isNaN(lx))) || (lx < 0) || (lx > 100) )
             {
                 lx_setErrorLabelCSS( this.generateSubID("speedfactor"), true );;

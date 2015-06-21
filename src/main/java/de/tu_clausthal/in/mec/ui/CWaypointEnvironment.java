@@ -314,9 +314,7 @@ public class CWaypointEnvironment
         /**
          * random car waypoint
          **/
-        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) ),
-        /** path waypoint **/
-        CayWaypointPath( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
+        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) );
 
         /**
          * name of this waypoint type

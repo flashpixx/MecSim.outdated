@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.point;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
@@ -139,6 +140,8 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
         {
             m_inspect.putAll( m_generator.inspect() );
             m_inspect.putAll( m_factory.inspect() );
+            m_inspect.put( CCommon.getResourceString( IWayPointBase.class, "name" ), m_name );
+            m_inspect.put( CCommon.getResourceString( IWayPointBase.class, "color" ), "#" + Integer.toHexString( m_color.getRGB() ).substring( 2 ) );
         }
     }
 

@@ -317,6 +317,13 @@ WaypointPreset.prototype.afterDOMAdded = function()
             self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 150 }); });
 
 
+            // set default values - distribution defaults are set in the Ajax call
+            jQuery( self.generateSubID("name", "#") ).val("-Name-");
+            jQuery( self.generateSubID("radius", "#") ).val(0.5);
+            jQuery( self.generateSubID("carcount", "#") ).val(3);
+            jQuery( self.generateSubID("speedfactor", "#") ).val(95);
+            jQuery( self.generateSubID("color", "#") ).val("rgb(0,140,49)");
+
         }
     });
 }
@@ -431,7 +438,7 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         {
 
             case "Uniform" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first < ln_second) && (ln_first >= 0);
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first < ln_second) && (ln_first >= 0) && (ln_first != ln_second);
 
             case "Normal" :
                 return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second > 0) && (ln_first > 0);
@@ -462,7 +469,7 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         // first step
         case 0 :
 
-            var ln = -1;
+            var ln = null;
 
             // check random waypoint & radius
             if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
@@ -500,6 +507,8 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         // second step
         case 1 :
 
+            var ln = null;
+
             // check max speed distribution
             [ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].forEach( function( pc_key ) {
                 lx_setErrorLabelCSS( self.generateSubID(pc_key) );
@@ -512,8 +521,8 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check speed factor
             lx_setErrorLabelCSS( this.generateSubID("speedfactor") );
-            lx = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
-            if ( ((isNaN(lx))) || (lx < 0) || (lx > 100) )
+            ln = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
+            if ( ((isNaN(ln))) || (ln < 0) || (ln > 100) )
             {
                 lx_setErrorLabelCSS( this.generateSubID("speedfactor"), true );;
                 return false;

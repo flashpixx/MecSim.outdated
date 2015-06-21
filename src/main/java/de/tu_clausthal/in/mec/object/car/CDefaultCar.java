@@ -113,6 +113,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     /**
      * ctor to create the initial values
+     * @see https://en.wikipedia.org/wiki/Orders_of_magnitude_(acceleration)
      *
      * @param p_route driving route
      * @param p_speed initial speed
@@ -139,9 +140,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
         if ( m_maxspeed > 350 )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
-        if ( ( m_acceleration < 1 ) || ( m_acceleration > m_maxspeed / 4 ) )
+        if ( ( m_acceleration < 1 ) || ( m_acceleration > 20 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationincorrect" ) );
-        if ( ( m_deceleration < 1 ) || ( m_deceleration > m_maxspeed / 4 ) )
+        if ( ( m_deceleration < 1 ) || ( m_deceleration > 20 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationincorrect" ) );
         if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );

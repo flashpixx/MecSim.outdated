@@ -408,13 +408,90 @@ WaypointPreset.prototype.show = function()
 **/
 WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next )
 {
+    // call for previous step is always okay
+    if (pn_current > pn_next)
+        return true;
+
+    var self = this;
+
+
+    /**
+     * function for distribution check
+     * @param pc distribution name
+     * @return bool if values are okay
+    **/
+    var lx_checkDistribution = function( pc )
+    {
+        var ln_first  = Number.parseFloat(jQuery( self.generateSubID(pc+"firstmomentum", "#") ).val());
+        var ln_second = Number.parseFloat(jQuery( self.generateSubID(pc+"secondmomentum", "#") ).val());
+
+        switch (jQuery( self.generateSubID(pc, "#") ).val())
+        {
+
+            case "Uniform" :
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first < ln_second) && (ln_first >= 0);
+
+            case "Normal" :
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second > 0) && (ln_first > 0);
+
+            case "Exponential" :
+                return (!isNaN(ln_first)) && (ln_first > 0);
+
+        }
+
+        return false;
+    }
+
+    /**
+     * sets the CSS error element
+     * @param pc_select DOM selector
+     * @return pl_error true / false for set error
+    **/
+    var lx_setErrorLabelCSS = function( pc_selector, pl_error )
+    {
+        jQuery( 'label[for="' + pc_selector + '"]').css( "background-color", pl_error ? "#ff0000" : "" );
+    }
+
+
+    // check wizard steps
     switch (pn_current)
     {
 
-        //case 0 :
-            //console.log( jQuery( this.generateSubID("agent", "#") ).val() );
-            //console.log( jQuery( this.generateSubID("factory", "#") + " option:selected" ).data("requireagent") && );
-        //    return false;
+        case 0 :
+            var lx = null;
+
+            // check random waypoint & radius
+            lx_setErrorLabelCSS( this.generateSubID("radius") );
+            lx = Number.parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
+            if ( ((isNaN(lx))) || (lx <= 0) )
+            {
+                lx_setErrorLabelCSS( this.generateSubID("radius"), true );
+                return false;
+            }
+
+            // check car count
+            lx_setErrorLabelCSS( this.generateSubID("carcount") );
+            lx = Number.parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
+            if ( ((isNaN(lx))) || (lx <= 0) )
+            {
+                lx_setErrorLabelCSS( this.generateSubID("carcount"), true );;
+                return false;
+            }
+
+            // check generator distribution
+            lx_setErrorLabelCSS( this.generateSubID("generatordistribution") );
+            if (!lx_checkDistribution("generatordistribution"))
+            {
+                lx_setErrorLabelCSS( this.generateSubID("generatordistribution"), true );
+                return false;
+            }
+
+            // agent need not to be checked, because the value is also set by default
+            return true;
+
+
+        case 1 :
+
 
 
     }

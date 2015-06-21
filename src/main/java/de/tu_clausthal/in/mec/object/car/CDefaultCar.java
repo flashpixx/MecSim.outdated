@@ -346,7 +346,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         final int l_zoom = this.iconsize( p_viewer );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom * 2, l_zoom * 2
+                l_point.getX() - p_viewer.getViewportBounds().getX() - l_zoom,
+                l_point.getY() - p_viewer.getViewportBounds().getY() - l_zoom,
+                l_zoom * 2, l_zoom * 2
         );
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )

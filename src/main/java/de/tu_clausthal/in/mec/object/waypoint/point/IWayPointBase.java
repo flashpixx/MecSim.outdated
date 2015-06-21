@@ -226,15 +226,15 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
-        if ( getPosition() == null )
+        if ( m_position == null )
             return;
 
-        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( getPosition(), p_viewer.getZoom() );
+        final int l_zoom = this.iconsize( p_viewer );
+        final Point2D l_point = p_viewer.getTileFactory().geoToPixel( m_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), this.iconsize( p_viewer ),
-                this.iconsize(
-                        p_viewer
-                )
+                l_point.getX() - p_viewer.getViewportBounds().getX() - l_zoom,
+                l_point.getY() - p_viewer.getViewportBounds().getY() - l_zoom,
+                l_zoom * 2, l_zoom * 2
         );
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )

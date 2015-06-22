@@ -86,14 +86,18 @@ Inspector.prototype.afterDOMAdded = function()
     // --- bind action on the websocket ------------------------------------------------------------------------------------------------------------------------
     var self = this;
 
-    jQuery( self.generateSubID("dialog", "#") ).dialog({ autoOpen: false, width: "auto" });
+    var lo_dialog = jQuery( self.generateSubID("dialog", "#") ).dialog({
+        autoOpen : false,
+        width    : "auto",
+        close    : function() { jQuery(this).dialog( "close" ); }
+    });
 
     MecSim.websocket( "/cinspector/show", {
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
         "onmessage" : function( po_event ) {
 
             jQuery( self.generateSubID("table", "#") ).empty().append( json2table(po_event.data.toJSON()) );
-            jQuery( self.generateSubID("dialog", "#") ).dialog("open");
+            lo_dialog.dialog("open");
 
         }
     });

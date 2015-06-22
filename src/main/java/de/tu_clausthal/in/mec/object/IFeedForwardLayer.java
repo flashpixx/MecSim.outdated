@@ -67,10 +67,6 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      * flag for visibility
      */
     protected boolean m_visible = true;
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * method is run, after all objects are finished

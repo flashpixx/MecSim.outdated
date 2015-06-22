@@ -59,10 +59,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
      * flag for visibility
      */
     protected boolean m_visible = true;
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * method which is called after the object step method is called
@@ -131,8 +128,8 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
         if ( CSimulation.getInstance().getStorage().exists() )
             CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
                        .removePainter(
-                    (Painter) this
-            );
+                               (Painter) this
+                       );
     }
 
     @Override

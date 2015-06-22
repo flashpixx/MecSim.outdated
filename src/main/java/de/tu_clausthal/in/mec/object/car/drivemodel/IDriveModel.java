@@ -32,6 +32,7 @@ import java.io.Serializable;
 /**
  * drive interface for driving models
  */
+@SuppressWarnings( "serial" )
 public interface IDriveModel extends Serializable
 {
 

@@ -36,13 +36,9 @@ import java.util.Stack;
  *
  * @warning map within map should be converted with copy-ctor
  */
+@SuppressWarnings( "serial" )
 public class CNameHashMap extends HashMap<String, Object> implements Iterable<Map.Entry<CPath, Object>>
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-
     /**
      * ctor
      */
@@ -306,12 +302,6 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      */
     public static class CImmutable extends CNameHashMap
     {
-        /**
-         * serialize version ID *
-         */
-        private static final long serialVersionUID = 1L;
-
-
         /**
          * ctor
          */

@@ -37,6 +37,7 @@ import java.util.Set;
  *
  * @tparam T any object type
  */
+@SuppressWarnings( "serial" )
 public interface IFactory<T> extends IInspector, Serializable
 {
 

@@ -345,7 +345,8 @@ public class CWaypointEnvironment
 
                 case CarWaypointRandom:
                     return new CCarRandomWayPoint(
-                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String)p_data[5] );
+                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String) p_data[5]
+                    );
 
                 default:
                     throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unknownwaypoint" ) );
@@ -365,9 +366,13 @@ public class CWaypointEnvironment
      */
     private enum EFactory
     {
-        /** default car factory **/
+        /**
+         * default car factory
+         **/
         DefaultCarFactory( CCommon.getResourceString( EFactory.class, "defaultcarfactory" ), false ),
-        /** default agent-car factory **/
+        /**
+         * default agent-car factory
+         **/
         DefaultAgentCarFactory( CCommon.getResourceString( EFactory.class, "defaultagentcarfactory" ), true );
 
         /**
@@ -516,19 +521,25 @@ public class CWaypointEnvironment
      */
     private enum EDistribution
     {
-        /** normal distribution **/
+        /**
+         * normal distribution
+         **/
         Normal(
                 CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
                 EDistribution.class, "normaldistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
         ),
-        /** uniform distribution **/
+        /**
+         * uniform distribution
+         **/
         Uniform(
                 CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
                 EDistribution.class, "uniformdistributionleft"
         ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
         ),
-        /** exponential distribution **/
+        /**
+         * exponential distribution
+         **/
         Exponential(
                 CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
                 EDistribution.class, "exponentialdistributionleft"
@@ -558,7 +569,7 @@ public class CWaypointEnvironment
          */
         private EDistribution( final String p_text, final String p_firstmomentum )
         {
-            this( p_text, p_firstmomentum, null);
+            this( p_text, p_firstmomentum, null );
         }
 
         /**

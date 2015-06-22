@@ -57,6 +57,7 @@ import java.util.jar.Manifest;
 /**
  * singleton class for configuration with a Json file
  */
+@SuppressWarnings( "serial" )
 public class CConfiguration
 {
     /**

@@ -46,10 +46,7 @@ public class CNagelSchreckenberg implements IDriveModel
      * random object for linger probability *
      */
     private final Random m_random = new Random();
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * checks the acceleration and increment the speed

@@ -47,14 +47,10 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
     /**
      * inspect data
      */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
             putAll( CTimeDistribution.super.inspect() );
         }};
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
 
     /**

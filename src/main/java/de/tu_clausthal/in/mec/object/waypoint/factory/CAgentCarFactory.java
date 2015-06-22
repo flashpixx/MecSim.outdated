@@ -62,10 +62,7 @@ public class CAgentCarFactory extends CDefaultCarFactory
     {{
             putAll( CAgentCarFactory.super.inspect() );
         }};
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * ctor

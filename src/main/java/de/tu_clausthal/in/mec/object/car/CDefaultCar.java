@@ -113,7 +113,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
     /**
      * ctor to create the initial values
-     * @see https://en.wikipedia.org/wiki/Orders_of_magnitude_(acceleration)
      *
      * @param p_route driving route
      * @param p_speed initial speed
@@ -121,6 +120,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * @param p_acceleration acceleration
      * @param p_deceleration decceleration
      * @param p_lingerprobability linger probability
+     * @see https://en.wikipedia.org/wiki/Orders_of_magnitude_(acceleration)
      */
     public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
             final int p_deceleration, final double p_lingerprobability

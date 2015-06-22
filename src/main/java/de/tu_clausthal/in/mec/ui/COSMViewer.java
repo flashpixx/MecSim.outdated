@@ -55,6 +55,7 @@ import java.util.Map;
  * @see https://github.com/msteiger/jxmapviewer2
  * @see https://today.java.net/pub/a/today/2007/10/30/building-maps-into-swing-app-with-jxmapviewer.html
  */
+@SuppressWarnings( "serial" )
 public class COSMViewer extends JXMapViewer
 {
     /**
@@ -69,10 +70,7 @@ public class COSMViewer extends JXMapViewer
      * compounend painter
      */
     private CompoundPainter<JXMapViewer> m_painter = new CompoundPainter<>();
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * ctor with loading configuration defaults and listener definition

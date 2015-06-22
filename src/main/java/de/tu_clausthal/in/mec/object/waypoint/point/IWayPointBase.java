@@ -92,10 +92,7 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * current scaled image
      */
     private transient BufferedImage m_scaledimage;
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * ctor for empty waypoints

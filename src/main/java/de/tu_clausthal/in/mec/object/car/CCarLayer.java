@@ -68,10 +68,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * graph
      */
     private transient CGraphHopper m_graph = new CGraphHopper( m_unit.getCellSize() );
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     @Override
     public final void afterStepObject( final int p_currentstep, final ICar p_object )
@@ -115,8 +112,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         if ( CSimulation.getInstance().getStorage().exists() )
             CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
                        .removePainter(
-                    (Painter) this
-            );
+                               (Painter) this
+                       );
     }
 
     @Override

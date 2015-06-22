@@ -351,7 +351,7 @@ public class CSimulation
         if ( !p_data.containsKey( "state" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
 
-        ( (ILayer) m_world.get( this.getLayerName( p_data ) ) ).setActive( (boolean) p_data.get( "state" ) );
+        m_world.get( this.getLayerName( p_data ) ).setActive( (boolean) p_data.get( "state" ) );
     }
 
     /**
@@ -422,7 +422,7 @@ public class CSimulation
         /**
          * map with (lower-case) names and elements
          */
-        private final Map<String,Object> m_elements = new HashMap<>();
+        private final Map<String, Object> m_elements = new HashMap<>();
 
         /**
          * adds an element
@@ -433,7 +433,7 @@ public class CSimulation
          */
         public final void add( final String p_name, final Object p_object )
         {
-            if (m_elements.containsKey( p_name.toLowerCase() ))
+            if ( m_elements.containsKey( p_name.toLowerCase() ) )
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "exists", p_name ) );
 
             m_elements.put( p_name.toLowerCase(), p_object );
@@ -470,7 +470,7 @@ public class CSimulation
          */
         public final <T> T get( final String p_name )
         {
-            return (T)m_elements.get( p_name.toLowerCase() );
+            return (T) m_elements.get( p_name.toLowerCase() );
         }
     }
 }

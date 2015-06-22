@@ -36,10 +36,6 @@ import de.tu_clausthal.in.mec.object.car.ICar;
  */
 public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
     @Override
     public final void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )

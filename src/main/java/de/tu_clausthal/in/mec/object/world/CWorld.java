@@ -42,16 +42,14 @@ import java.util.Set;
 /**
  * world layer collection
  */
+@SuppressWarnings( "serial" )
 public class CWorld implements Map<String, ILayer>, Serializable
 {
     /**
      * map with layer
      */
     private final Map<String, ILayer> m_layer = new HashMap<>();
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * creates a list with the layer objects depends on the ordering value

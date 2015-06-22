@@ -29,18 +29,49 @@
  **/
 var Layout = (function (px_modul) {
 
+    /**
+     * function creates a tag with attributes
+     *
+     * @param pc_tag tag name without brackets
+     * @param po_option Json object options in the structure { id: -DOM ID-, class: -DOM class-, addon: -any additional attribute values-, content: -content of the tag- }
+    **/
+    var lx_basetag = function( pc_tag, po_options )
+    {
+        return [[
+            '<'+pc_tag,
+            po_options.id ? 'id="' + po_options.id + '"' : "",
+            po_options.class ? 'class="' + po_options.class + '"' : "",
+            po_options.addon ? po_options.addon : "",
+            '>',
+         ].join(" "),
+         po_options.content ? po_options.content : "",
+         '</' + pc_tag + '>'
+         ].join("");
+    }
+
+
+
     // --- dialog div content ----------------------------------------------------------------------------------------------------------------------------------
     /**
      * creates a dialog div structure
-     * @param po_options Json object in the format { dialog: -DOM ID of the dialog-, content: -DOM ID of the content-, title: -optional title- }
+     * @param po_options Json object in the format { id: -DOM ID of the dialog-, outer/innerclass: -DOM class-, contentid: -DOM ID of the content-, content: -dialog content-, title: -optional title- }
     **/
     px_modul.dialog = function( po_options )
     {
-        return [ '<div id="' + po_options.dialog + '"',
-                 (po_options.title ? 'title="' + po_options.title + '"' : "") + '>',
-                 '<div id= "' + po_options.content  + '">',
-                 '</div></div>'
-               ].join("");
+        return lx_basetag("div", {
+
+            class   : po_options.outerclass,
+            id      : po_options.id,
+            title   : po_options.title ? 'title="' + po_options.title + '"' : null,
+
+            content : lx_basetag("div", {
+
+                class   : po_options.innerclass,
+                id      : po_options.contentid,
+                content : po_options.content
+
+            })
+        });
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -57,14 +88,14 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : ""),
-                 ' <input ',
-                 (po_options.class ? 'class="' + po_options.class + '"' : ""),
-                 ' id="' + po_options.id + '"',
-                 'type="checkbox" ',
-                 (po_options.value ? "checked " : " "),
-                 (po_options.name ? 'name="' + po_options.name + '"' : ""),
-                 ' />'
+        return [ po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "",
+                 lx_basetag( "input", {
+
+                    id    : po_options.id,
+                    class : po_options.class,
+                    addon : ['type="checkbox"', po_options.value ? "checked " : "", po_options.name ? 'name="' + po_options.name + '"' : ""].join(" "),
+
+                 })
                ].join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -82,14 +113,14 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : ""),
-                 ' <input ',
-                 (po_options.class ? 'class="' + po_options.class + '"' : ""),
-                 ' id="' + po_options.id + '" ',
-                 'type="text" ',
-                 (po_options.value ? 'value="' + po_options.value + '" ' : ""),
-                 (po_options.name ? 'name="' + po_options.name + '"' : ""),
-                 ' />'
+        return [ po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "",
+                 lx_basetag( "input", {
+
+                    id    : po_options.id,
+                    class : po_options.class,
+                    addon : ['type="text"', po_options.value ? 'value="' + po_options.value + '"' : "", po_options.name ? 'name="' + po_options.name + '"' : ""].join(" ")
+
+                 })
                ].join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,12 +134,18 @@ var Layout = (function (px_modul) {
      * @param px_select value which should be selected by default
      * @return option HTML string
     **/
-    var lx_buildItem = function( px, px_select )
+    px_modul.option = function( px, px_select )
     {
         if (classof(px, "string"))
-            return '<option value="' + px + '" ' + (px_select && px == px_select ? 'selected' : '') + '>' + px + '</option>';
+            return lx_basetag("option", {
+                addon   : ['value="' + px + '"', px_select && px == px_select ? 'selected' : ''].join(" "),
+                content : px
+            });
 
-        return '<option value="' + px.id + '" ' + (px_select && px.id == px_select ? 'selected' : '') + '>' + (px.label ? px.label : px.id)  + '</option>';
+        return lx_basetag("option", {
+            addon   : ['value="' + px.id + '"', px_select && px.id == px_select ? 'selected' : ''].join(" "),
+            content : px.label ? px.label : px.id
+        });
     }
 
     /**
@@ -123,24 +160,53 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         var la = [];
-        if (po_options.label)
-            la.push( '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' );
+        if (po_options.options)
+            po_options.options.forEach( function(px_item) { la.push( px_modul.option(px_item, po_options.value) ); } );
 
+        return (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + ' ' +
+                lx_basetag("select", {
 
-        la.push( '<select ' + (po_options.name ? 'name="' + po_options.name + '" ' : "") +  (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );
-        po_options.options.forEach( function(px_item) { la.push( lx_buildItem(px_item, po_options.value) ); } );
-        la.push("</select>");
+                    id      : po_options.id,
+                    class   : po_options.class,
+                    addon   : po_options.name ? 'name="' + po_options.name + '"' : '',
+                    content : la.join("")
 
-        return la.join("");
+        });
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     // --- selectbox with label and option groups --------------------------------------------------------------------------------------------------------------
+
+    /**
+     * creates the option group items
+     *
+     * @param po { -grouplabel- : [{id : -ID-, label : -optional label-}] }
+     * @param px_value selected vaöue
+     * @return option group HTML string
+    **/
+    px_modul.opentiongroup = function( po, px_value )
+    {
+        var la = [];
+
+        jQuery.each( po, function( pc_key, pa_values ) {
+            if (pc_key.length > 0)
+                la.push( '<optgroup label="' + pc_key + '">' );
+
+            pa_values.forEach( function( px_item ) { la.push( px_modul.option(px_item, px_value) ); } );
+
+            if (pc_key.length > 0)
+                la.push( '</optgroup>' );
+        });
+
+        return la.join("");
+    }
+
+
     /**
      * creates a select menu with label
      *
-     * @param po_options Json object { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value-, options: { -grouplabel- : [{id : -ID-, label : -optional label-}] } }
+     * @param po_options Json object { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value-, options: -see optiongrouo function- }
      * @return HTML string
     **/
     px_modul.selectgroup = function( po_options )
@@ -148,20 +214,15 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        var la = [];
-        if (po_options.label)
-            la.push( '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' );
+        return (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + ' ' +
+                lx_basetag("select", {
 
+                    id      : po_options.id,
+                    class   : po_options.class,
+                    addon   : po_options.name ? 'name="' + po_options.name + '"' : '',
+                    content : po_options.options ? px_modul.opentiongroup(po_options.options, po_options.value) : ""
 
-        la.push( '<select ' + (po_options.name ? 'name="' + po_options.name + '" ' : "") +  (po_options.class ? 'class="' + po_options.class + '"' : "") + ' id="' + po_options.id + '">' );
-        jQuery.each( po_options.options, function( pc_key, pa_values ) {
-            la.push( '<optgroup label="' + pc_key + '">' );
-            pa_values.forEach( function( px_item ) { la.push( lx_buildItem(px_item, po_options.value) ); } );
-            la.push( '</optgroup>' );
         });
-        la.push("</select>");
-
-        return la.join("");
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

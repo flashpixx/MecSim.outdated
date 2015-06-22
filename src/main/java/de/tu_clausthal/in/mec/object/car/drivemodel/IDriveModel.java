@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.car.drivemodel;
 
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 import java.io.Serializable;
 
@@ -33,6 +32,7 @@ import java.io.Serializable;
 /**
  * drive interface for driving models
  */
+@SuppressWarnings( "serial" )
 public interface IDriveModel extends Serializable
 {
 

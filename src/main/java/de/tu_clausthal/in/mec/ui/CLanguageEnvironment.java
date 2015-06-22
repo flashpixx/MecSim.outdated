@@ -30,81 +30,106 @@ import java.util.Map;
 
 
 /**
- * class which is responsible for multi language support in the web ui
+ * class which is responsible for multi language support in the UI
  */
 public class CLanguageEnvironment
 {
-
     /**
-     * dynamic waypoint labels
+     * labels of the help menu
      */
-    private static final Map<String, String> m_dynamicWaypointLabels = new HashMap<String, String>()
+    private static final Map<String, String> c_help = new HashMap<String, String>()
     {{
-            put( "wizardwidget", CCommon.getResourceString( CLanguageEnvironment.class, "wizardwidget" ) );
-            put( "previous", CCommon.getResourceString( CLanguageEnvironment.class, "previous" ) );
-            put( "next", CCommon.getResourceString( CLanguageEnvironment.class, "next" ) );
-            put( "finish", CCommon.getResourceString( CLanguageEnvironment.class, "finish" ) );
-
-            put( "selectyourmean", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourmean" ) );
-            put( "selectyourdeviation", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourdeviation" ) );
-            put( "selectyourlowerbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourlowerbound" ) );
-            put( "selectyourupperbound", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourupperbound" ) );
-
-            put( "selecttoolnamevalue", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamevalue" ) );
-            put( "toolcreationfailed", CCommon.getResourceString( CLanguageEnvironment.class, "toolcreationfailed" ) );
-    }};
-
+            put( "about", CCommon.getResourceString( CLanguageEnvironment.class, "helpabout" ) );
+            put( "userdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpuserdoc" ) );
+            put( "devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpdevdoc" ) );
+        }};
     /**
-     * static waypoint labels
+     * labels of the MAS menu
      */
-    private static final Map<String, String> m_staticWaypointLabels = new HashMap<String, String>()
+    private static final Map<String, String> c_mas = new HashMap<String, String>()
     {{
-            //general wizard labels
-            put( "#mesim_source_factorySettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "factorysettings" ) );
-            put( "#mesim_source_generatorSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "generatorsettings" ) );
-            put( "#mesim_source_carSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "carsettings" ) );
-            put( "#mesim_source_customizing_label", CCommon.getResourceString( CLanguageEnvironment.class, "customizing" ) );
+            put( "jasonmind", CCommon.getResourceString( CLanguageEnvironment.class, "masjasonmind" ) );
+            put( "communication", CCommon.getResourceString( CLanguageEnvironment.class, "mascommunication" ) );
+        }};
+    /**
+     * labels of the MAS menu
+     */
+    private static final Map<String, String> c_maseditor = new HashMap<String, String>()
+    {{
+            put( "new", CCommon.getResourceString( CLanguageEnvironment.class, "maseditornew" ) );
+            put( "remove", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorremove" ) );
+            put( "check", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorcheck" ) );
 
-            //wizardstep#1 (factory settings)
-            put( "#mecsim_source_selectWaypointType_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointtype" ) );
-            put( "#mecsim_source_waypointRadius_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectwaypointradius" ) );
-            put( "#mecsim_source_selectFactory_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourfactory" ) );
-            put( "#mecsim_source_selectAgentProgram_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyouragentprogram" ) );
-
-            //wizardstep#2 (generator settings)
-            put( "#mecsim_source_selectGenerator_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourgenerator" ) );
-            put( "#mecsim_source_generatorInputCarcount_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectyourcarcount" ) );
-
-            //wizardstep#3 (car settings)
-            put( "#mecsim_source_speedSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "speedsettingslabel" ) );
-            put( "#mecsim_source_selectSpeedProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectspeedprob" ) );
-            put( "#mecsim_source_maxSpeedSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "maxspeedsettingslabel" ) );
-            put( "#mecsim_source_selectMaxSpeedProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectmaxspeedprob" ) );
-            put( "#mecsim_source_accSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "accsettingslabel" ) );
-            put( "#mecsim_source_selectAccProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectaccprob" ) );
-            put( "#mecsim_source_decSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "decsettingslabel" ) );
-            put( "#mecsim_source_selectDecProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectdecprob" ) );
-            put( "#mecsim_source_lingerSettings_label", CCommon.getResourceString( CLanguageEnvironment.class, "lingerersettingslabel" ) );
-            put( "#mecsim_source_selectLingerProb_label", CCommon.getResourceString( CLanguageEnvironment.class, "selectlingerprob" ) );
-
-            //wizardstep#4 (customozing)
-            put( "#mecsim_source_toolName_label", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolnamelabel" ) );
-            put( "#mecsim_source_toolColor_label", CCommon.getResourceString( CLanguageEnvironment.class, "selecttoolcolor" ) );
+        }};
+    /**
+     * labels of the simulation menu
+     */
+    private static final Map<String, String> c_simulation = new HashMap<String, String>()
+    {{
+            put( "start", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstart" ) );
+            put( "stop", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstop" ) );
+            put( "reset", CCommon.getResourceString( CLanguageEnvironment.class, "simulationreset" ) );
+            put( "load", CCommon.getResourceString( CLanguageEnvironment.class, "simulationload" ) );
+            put( "save", CCommon.getResourceString( CLanguageEnvironment.class, "simulationsave" ) );
+            put( "dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "simulationdialogtitle" ) );
+        }};
+    /**
+     * labels of the waypoint menu
+     */
+    private static final Map<String, String> c_waypoint = new HashMap<String, String>()
+    {{
+            put( "newpreset", CCommon.getResourceString( CLanguageEnvironment.class, "waypointnewpreset" ) );
+            put( "list", CCommon.getResourceString( CLanguageEnvironment.class, "waypointlist" ) );
         }};
 
     /**
-     * method to read waypoint specific labels and resource strings
+     * returns all static label for the MAS
      *
-     * @return
+     * @return map with static labels
      */
-    private final Map<String, String> web_static_getstaticwaypointlabels()
+    private final Map<String, String> web_static_help()
     {
-        return m_staticWaypointLabels;
+        return c_help;
     }
 
-    private final Map<String, String> web_static_getdynamicwaypointlabels()
+    /**
+     * returns all static label for the MAS
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_mas()
     {
-        return m_dynamicWaypointLabels;
+        return c_mas;
+    }
+
+    /**
+     * returns all static label for the MAS editor
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_maseditor()
+    {
+        return c_maseditor;
+    }
+
+    /**
+     * returns all static label for the simulation
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_simulation()
+    {
+        return c_simulation;
+    }
+
+    /**
+     * returns all static label for the MAS
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_waypoint()
+    {
+        return c_waypoint;
     }
 
 }

@@ -34,10 +34,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
  */
 public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
     @Override
     public final void afterStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object

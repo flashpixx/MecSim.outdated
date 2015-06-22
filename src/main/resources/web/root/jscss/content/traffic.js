@@ -49,9 +49,9 @@ Traffic.prototype = Object.create(Pane.prototype);
 Traffic.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
-        dialog  : this.generateSubID("dialog"),
-        content : this.generateSubID("text"),
-        title   : "Information"
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("text"),
+        title     : "Information"
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -76,7 +76,7 @@ Traffic.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
-    // --- create graphweight switches and bind action ---------------------------
+    // --- create graphweight switches and bind action ---------------------------------------------------------------------------------------------------------
     MecSim.ajax({
 
         url     : "/ctrafficenvironment/listgraphweight",
@@ -134,9 +134,10 @@ Traffic.prototype.afterDOMAdded = function()
 
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- create sortable list of driving models, bind actions and fill the data ---------------------------
+    // --- create sortable list of driving models, bind actions and fill the data ------------------------------------------------------------------------------
     jQuery( this.generateSubID("drivingmodel", "#") ).sortable({
 
         placeholder: "ui-state-highlight",
@@ -171,5 +172,5 @@ Traffic.prototype.afterDOMAdded = function()
 
         }
     });
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

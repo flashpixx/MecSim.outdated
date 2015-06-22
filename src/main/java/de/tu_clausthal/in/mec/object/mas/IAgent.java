@@ -49,14 +49,11 @@ public interface IAgent extends Painter, IReceiver
     /**
      * adds a new belief to specified beliefbase
      *
-     * @param p_path path of beliefbase with literals name as last element
+     * @param p_name path of beliefbase with literals name as last element
      * @param p_data belief data
      */
-<<<<<<< HEAD
-    void addLiteral(final String p_name, final Object p_data);
-=======
-    public void addLiteral(final CPath p_path, final Object p_data);
->>>>>>> temp-branch
+    void addLiteral(final CPath p_name, final Object p_data);
+
 
     /**
      * returns the current cycle
@@ -105,11 +102,7 @@ public interface IAgent extends Painter, IReceiver
      * @param p_path path to beliefbase with literals name as last element
      * @param p_data belief data
      */
-<<<<<<< HEAD
-    void removeLiteral(final String p_name, final Object p_data);
-=======
     public void removeLiteral(final CPath p_path, final Object p_data);
->>>>>>> temp-branch
 
     /**
      * unregister a cycle object

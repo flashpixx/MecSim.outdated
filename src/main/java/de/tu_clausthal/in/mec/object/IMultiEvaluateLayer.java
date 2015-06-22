@@ -45,10 +45,7 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
      * list of data items
      */
     protected final Queue<T> m_data = new ConcurrentLinkedQueue<>();
-    /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
+
 
     @Override
     public int getCalculationIndex()

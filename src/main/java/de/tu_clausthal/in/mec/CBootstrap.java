@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CDiscreteMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
@@ -94,7 +95,7 @@ public class CBootstrap
         p_server.registerVirtualDirectory( "web/documentation/developer", "index.htm", "/develdoc/" );
 
 
-        // registerObject objects
+        // register objects
         p_server.registerObject( CConsole.getError( "error" ) );
         p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
@@ -103,11 +104,11 @@ public class CBootstrap
         p_server.registerObject( CLogger.getInstance() );
         p_server.registerObject( new CInspector() );
 
-        p_server.registerObject( new CAgentEnvironment( CAgentEnvironment.EType.Jason ) );
+        p_server.registerObject( new CAgentEnvironment( EAgentLanguages.Jason ) );
         p_server.registerObject( new CTrafficEnvironment() );
         p_server.registerObject( new CLanguageEnvironment() );
-        p_server.registerObject( CWaypointEnvironment.getInstance() );
-        p_server.registerObject( CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent() );
+        p_server.registerObject( new CWaypointEnvironment() );
+        p_server.registerObject( CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent() );
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
     }
 
@@ -144,7 +145,7 @@ public class CBootstrap
      */
     public static void beforeStageShutdown( final CUI p_ui )
     {
-        p_ui.<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().setConfiguration();
+        p_ui.<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().setConfiguration();
     }
 
     /**
@@ -163,8 +164,8 @@ public class CBootstrap
      */
     public static void onSimulationReset( final CSimulation p_simulation )
     {
-        if ( p_simulation.getUIComponents().exists() )
-            p_simulation.getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().resetConfiguration();
+        if ( p_simulation.getStorage().exists() )
+            p_simulation.getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().resetConfiguration();
 
     }
 

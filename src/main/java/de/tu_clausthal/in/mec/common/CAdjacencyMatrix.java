@@ -59,7 +59,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
     private final String m_rowname;
 
 
-
     /**
      * ctor
      */

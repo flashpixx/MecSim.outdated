@@ -35,10 +35,6 @@ public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
      * flag for activity
      */
     protected boolean m_active = true;
-    /**
-     * serialize version ID *
-     */
-    static final long serialVersionUID = 1L;
 
     @Override
     public int getCalculationIndex()

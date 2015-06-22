@@ -38,7 +38,7 @@ import java.util.Map;
 /**
  * class for generating cars with a distribution of the attributes
  */
-public class CDistributionDefaultCarFactory extends ICarFactory
+public class CDefaultCarFactory extends ICarFactory
 {
     /**
      * acceleration *
@@ -53,7 +53,7 @@ public class CDistributionDefaultCarFactory extends ICarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CDistributionDefaultCarFactory.super.inspect() );
+            putAll( CDefaultCarFactory.super.inspect() );
         }};
     /**
      * max-speed distribution *
@@ -66,35 +66,38 @@ public class CDistributionDefaultCarFactory extends ICarFactory
     /**
      * speed distribution
      */
-    protected final AbstractRealDistribution m_speed;
+    protected final Double m_speedfactor;
 
 
     /**
      * ctor
      *
-     * @param p_speed distribution of speed
+     * @param p_speedfactor [0,1] initial speed factor of max speed
      * @param p_maxspeed distribution of max-speed
      * @param p_acceleration distribution of acceleration
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
      */
-    public CDistributionDefaultCarFactory( final AbstractRealDistribution p_speed, final AbstractRealDistribution p_maxspeed,
+    public CDefaultCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
             final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution
     )
     {
         super();
 
-        m_speed = p_speed;
+        if ( ( p_speedfactor <= 0 ) || ( p_speedfactor > 1 ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "speedfactorrange", p_speedfactor ) );
+
+        m_speedfactor = p_speedfactor;
         m_maxspeed = p_maxspeed;
         m_acceleration = p_acceleration;
         m_deceleration = p_deceleration;
         m_lingerdistribution = p_lingerdistribution;
 
-        m_inspect.put( CCommon.getResourceString( CDistributionDefaultCarFactory.class, "speed" ), m_speed );
-        m_inspect.put( CCommon.getResourceString( CDistributionDefaultCarFactory.class, "maxspeed" ), m_maxspeed );
-        m_inspect.put( CCommon.getResourceString( CDistributionDefaultCarFactory.class, "acceleration" ), m_acceleration );
-        m_inspect.put( CCommon.getResourceString( CDistributionDefaultCarFactory.class, "deceleration" ), m_deceleration );
-        m_inspect.put( CCommon.getResourceString( CDistributionDefaultCarFactory.class, "linger" ), m_lingerdistribution );
+        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "speed" ), m_speedfactor );
+        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "maxspeed" ), m_maxspeed );
+        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "acceleration" ), m_acceleration );
+        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "deceleration" ), m_deceleration );
+        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "linger" ), m_lingerdistribution );
     }
 
     @Override
@@ -102,8 +105,13 @@ public class CDistributionDefaultCarFactory extends ICarFactory
     {
         try
         {
+            final int l_maxspeed = (int) m_maxspeed.sample();
             return new de.tu_clausthal.in.mec.object.car.CDefaultCar(
-                    p_cells, (int) m_speed.sample(), (int) m_maxspeed.sample(), (int) m_acceleration.sample(), (int) m_deceleration.sample(),
+                    p_cells,
+                    (int) ( l_maxspeed * m_speedfactor ),
+                    l_maxspeed,
+                    (int) m_acceleration.sample(),
+                    (int) m_deceleration.sample(),
                     m_lingerdistribution.sample()
             );
         }

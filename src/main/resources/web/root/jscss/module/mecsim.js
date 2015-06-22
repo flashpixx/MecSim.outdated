@@ -152,22 +152,26 @@ var MecSim = (function (px_modul) {
     // --- language access -------------------------------------------------------------------------------------------------------------------------------------
     /**
      * language access for setting text elements
-     * @note the keys of the returned json object are the labels of the DOM elements
-     * @param pc_group the group label, that matches the URL part
+     * @param po_options Json configuration object with the structure
+     * { url: -map<string,string> with the translating strings-, each: -optional function that is called on each pair-, finish: -option function that is called after all pairs are finished-, target: -optional pane element to set translation automatically- }
+     * @return ajax request object
     **/
-    px_modul.language = function( pc_group, pc_callback )
+    px_modul.language = function(po_options)
     {
-        jQuery.ajax({
-            url : "/clanguageenvironment/"+pc_group,
+        return jQuery.ajax({
+            url : po_options.url,
             type: "post",
             success : function( po_data )
             {
-                jQuery.each(po_data, function(pc_key, pc_text){
-                    jQuery(pc_key).text(pc_text);
-                });
-
-                if(pc_callback !== undefined || pc_callback !==null)
-                    pc_callback();
+                if ((po_options.each) || (po_options.finish))
+                {
+                    if (po_options.each)
+                        jQuery.each(po_data, po_options.each);
+                    if (po_options.finish)
+                        po_options.finish();
+                }
+                else if (po_options.target)
+                    jQuery.each(po_data, function(pc_id, pc_translation) { jQuery(po_options.target.generateSubID(pc_id, "#")).text(pc_translation); });
             }
         });
     }
@@ -190,8 +194,10 @@ var MecSim = (function (px_modul) {
         screenmenu  : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_screen_right"; },
         /** reference to the content area **/
         content     : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_content"; },
+        /** reference to a static (hidden) content area **/
+        static      : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_static"; },
         /** reference to log area **/
-        log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; },
+        log         : function(pc_prefix) { return (pc_prefix ? pc_prefix : "") + "mecsim_global_log"; }
     };}
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -211,7 +217,10 @@ var MecSim = (function (px_modul) {
                 '</div>' +
                 '<div>' +
                 '<div id = "' + px_modul.ui().screenmenu() + '" >' +
+                '<div>' +
+                '<div id = "' + px_modul.ui().static()    + '" ></div >' +
                 '<div id = "' + px_modul.ui().content()    + '" ></div >' +
+                '</div>' +
                 '<div id = "' + px_modul.ui().log()        + '" ></div >' +
                 '</div >' +
                 '</div >' +
@@ -262,12 +271,14 @@ var MecSim = (function (px_modul) {
             // select needs a width, because jQuery sets it to size = 0
             'select { width: 100px; }' +
             // resizing iFrame to the full parent element size
-            'iframe{ width: 100%; height: 100%; }' +
+            'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // sets the menu layout
             px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)
             px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(img/tuc.svg); background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
+            /** sets the static content layout **/
+            px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +
             // sets the log layout
             px_modul.ui().log("#") + ' { z-index: 0; overflow: auto; }' +
 

@@ -27,14 +27,11 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import jason.JasonException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -48,46 +45,49 @@ import java.util.Map;
 /**
  * class to generate Jason cars with a distribution of the attributes
  */
-public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
+public class CAgentCarFactory extends CDefaultCarFactory
 {
     /**
-     * name of the ASL file
+     * name of the agent
      */
-    private String m_aslname;
+    private final String m_agent;
+    /**
+     * agent type
+     */
+    private final EAgentLanguages m_agenttype;
     /**
      * inspect data
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CDistributionAgentCarFactory.super.inspect() );
+            putAll( CAgentCarFactory.super.inspect() );
         }};
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * ctor
      *
-     * @param p_speed distribution of speed
+     * @param p_speedfactor [0,1] initial speed factor of max speed
      * @param p_maxspeed distribution of max-speed
      * @param p_acceleration distribution of acceleration
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
-     * @param p_asl agent name
+     * @param p_agent agent name
+     * @param p_agenttype agent type definition
      */
-    public CDistributionAgentCarFactory( final AbstractRealDistribution p_speed, final AbstractRealDistribution p_maxspeed,
+    public CAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
             final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
-            final String p_asl
+            final String p_agent, final EAgentLanguages p_agenttype
     )
     {
-        super( p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
+        super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
 
-        if ( ( p_asl == null ) || ( p_asl.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "aslnotnull" ) );
-        this.m_aslname = p_asl;
-
-        m_inspect.put( CCommon.getResourceString( CDistributionAgentCarFactory.class, "factoryasl" ), m_aslname );
+        if ( ( p_agent == null ) || ( p_agent.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "agentnotnull" ) );
+        m_agent = p_agent;
+        m_agenttype = p_agenttype;
+        m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagent" ), m_agent );
+        m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagenttype" ), m_agenttype );
     }
 
 
@@ -96,12 +96,27 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
     {
         try
         {
-            return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
-                    "agentcar %inc%", m_aslname, p_cells, (int) m_speed.sample(), (int) m_maxspeed.sample(), (int) m_acceleration.sample(),
-                    (int) m_deceleration.sample(), m_lingerdistribution.sample()
-            );
+            final int l_maxspeed = (int) m_maxspeed.sample();
+
+            switch ( m_agenttype )
+            {
+                case Jason:
+
+                    return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
+                            p_cells,
+                            (int) ( l_maxspeed * m_speedfactor ),
+                            l_maxspeed,
+                            (int) m_acceleration.sample(),
+                            (int) m_deceleration.sample(),
+                            m_lingerdistribution.sample(),
+                            "agentcar %inc%",
+                            m_agent
+                    );
+
+                default:
+            }
         }
-        catch ( final JasonException l_exception )
+        catch ( final Exception l_exception )
         {
             CLogger.error( l_exception );
         }
@@ -120,13 +135,15 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
      * @param p_stream stream
      * @throws java.io.IOException throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
+     * @bug not working
      */
     private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
+        /*
         p_stream.defaultReadObject();
 
         // read the ASL file from the stream
-        final String l_aslname = m_aslname;
+        final String l_aslname = m_agent;
         final String l_asldata = (String) p_stream.readObject();
         File l_output = IEnvironment.getAgentFile( l_aslname );
 
@@ -139,8 +156,8 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
                 l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
                 for ( int i = 1; l_output.exists(); i++ )
                 {
-                    m_aslname = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
-                    l_output = IEnvironment.getAgentFile( m_aslname );
+                    m_agent = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
+                    l_output = IEnvironment.getAgentFile( m_agent );
                 }
                 FileUtils.write( l_output, l_asldata );
             }
@@ -148,6 +165,7 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
         catch ( final Exception l_exception )
         {
         }
+        */
     }
 
     /**
@@ -155,12 +173,13 @@ public class CDistributionAgentCarFactory extends CDistributionDefaultCarFactory
      *
      * @param p_stream stream
      * @throws IOException throws the exception on loading data
+     * @bug incomplete
      */
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_aslname ).toString() ) ) ) );
+        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_agent ).toString() ) ) ) );
     }
 }

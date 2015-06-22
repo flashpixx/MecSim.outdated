@@ -23,10 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
-<<<<<<< HEAD
-=======
+
 import de.tu_clausthal.in.mec.common.CPath;
->>>>>>> temp-branch
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSemantics.Agent;
@@ -35,11 +33,8 @@ import jason.asSyntax.Literal;
 /**
  * beliefbase for internal beliefs, i.e. the initial beliefs
  * and beliefs that arise from deduction rules
-<<<<<<< HEAD
-=======
  *
  * @todo in update-method: add just literals which are not in other beliefbases
->>>>>>> temp-branch
  */
 public class CInternalBeliefBase extends CBeliefBase
 {
@@ -63,14 +58,6 @@ public class CInternalBeliefBase extends CBeliefBase
     @Override
     public void update()
     {
-<<<<<<< HEAD
-        // clear old literals
-        clearLiterals();
-
-        // read current literals out of the agent
-        for( final Literal l_literal : m_agent.getBB() )
-            addLiteral( l_literal );
-=======
         super.update();
 
         // clear old literals
@@ -78,6 +65,5 @@ public class CInternalBeliefBase extends CBeliefBase
 
         // push agent beliefs into set of top-level literals
         addAll(CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
->>>>>>> temp-branch
     }
 }

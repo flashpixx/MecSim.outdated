@@ -25,13 +25,13 @@ package de.tu_clausthal.in.mec.object.waypoint.point;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,18 +69,16 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      * @param p_generator generator
      * @param p_factory factory
      * @param p_radius radius around the waypoint
+     * @param p_color color
+     * @param p_name name
      */
-    public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius )
+    public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius, final Color p_color,
+            final String p_name
+    )
     {
-        super( p_position, p_generator, p_factory );
+        super( p_position, p_generator, p_factory, p_color, p_name );
         m_radius = p_radius;
         m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
-    }
-
-    @Override
-    public Collection<GeoPosition> getNeighbor()
-    {
-        return null;
     }
 
     @Override
@@ -90,9 +88,9 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         {{
                 add(
                         new ImmutablePair<GeoPosition, GeoPosition>(
-                                m_position, new GeoPosition(
-                                m_position.getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
-                                m_position.getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
+                                getPosition(), new GeoPosition(
+                                getPosition().getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
+                                getPosition().getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
                         )
                         )
                 );
@@ -105,14 +103,4 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
         return m_inspect;
     }
 
-    @Override
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        if ( !this.hasFactoryGenerator() )
-            return null;
-
-        return m_factory.generate(
-                this.getPath(), m_generator.getCount( p_currentstep )
-        );
-    }
 }

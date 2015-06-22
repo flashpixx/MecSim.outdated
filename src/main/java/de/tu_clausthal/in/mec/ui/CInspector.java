@@ -24,9 +24,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.web.CSocketStorage;
 import de.tu_clausthal.in.mec.ui.web.CWebSocket;
@@ -47,18 +45,7 @@ public class CInspector
 
     public CInspector()
     {
-        // set via reflection the inspector
-        try
-        {
-            if ( CSimulation.getInstance().getUIComponents().getInspector() == null )
-                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_inspector" ).getSetter().invoke(
-                        CSimulation.getInstance().getUIComponents(), this
-                );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
+        CSimulation.getInstance().getStorage().add( "inspector", this );
     }
 
 

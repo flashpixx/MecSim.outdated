@@ -48,8 +48,8 @@ MAS.prototype = Object.create(Pane.prototype);
 **/
 MAS.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("jasonmind") + '" >Jason Mindinspector</button ></p>' +
-           '<p><button id = "' + this.generateSubID("communication") + '" >Message Communication</button ></p>' +
+    return '<p><button id = "' + this.generateSubID("jasonmind") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("communication") + '" ></button ></p>' +
            Pane.prototype.getContent.call(this);
 }
 
@@ -122,17 +122,17 @@ MAS.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
+    MecSim.language({ url : "/clanguageenvironment/mas", target : this });
 
-    // --- Jason mindinspector bind ---------------------------
+
+    // --- Jason mindinspector bind ----------------------------------------------------------------------------------------------------------------------------
     jQuery(self.generateSubID("jasonmind", "#")).button().click( function() {
-
-        jQuery(MecSim.ui().content("#")).empty();
-        jQuery(MecSim.ui().content("#")).append( '<iframe id = "mindinspector" class = "template" src = "http://localhost:3272" seamless />' );
-
+        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "mindinspector" class = "template" src = "http://localhost:3272" seamless />' );
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- communication binding to the websocket ---------------------------
+    // --- communication binding to the websocket --------------------------------------------------------------------------------------------------------------
     jQuery(self.generateSubID("communication", "#")).button().click( function() {
 
         jQuery(MecSim.ui().content("#")).empty();
@@ -191,5 +191,6 @@ MAS.prototype.afterDOMAdded = function()
         });
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }

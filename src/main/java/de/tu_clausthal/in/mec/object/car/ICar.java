@@ -48,6 +48,7 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
 
     /**
      * returns the current speed of the car
+     *
      * @return speed in km/h
      */
     int getCurrentSpeed();

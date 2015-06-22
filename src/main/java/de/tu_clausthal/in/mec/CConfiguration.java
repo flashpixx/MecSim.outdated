@@ -57,6 +57,7 @@ import java.util.jar.Manifest;
 /**
  * singleton class for configuration with a Json file
  */
+@SuppressWarnings( "serial" )
 public class CConfiguration
 {
     /**
@@ -464,7 +465,7 @@ public class CConfiguration
      */
     public ResourceBundle getResourceBundle()
     {
-        return getResourceBundle(null);
+        return getResourceBundle( null );
     }
 
     /**
@@ -485,7 +486,7 @@ public class CConfiguration
                 l_locale = Locale.ENGLISH;
         }
 
-        Locale.setDefault(l_locale);
+        Locale.setDefault( l_locale );
         return ResourceBundle.getBundle( "language.locals", l_locale, m_reader );
     }
 
@@ -548,7 +549,7 @@ public class CConfiguration
                     CLogger.error( l_exception );
                     return false;
                 }
-        m_configuration.set("extractmasexamples", false);
+        m_configuration.set( "extractmasexamples", false );
 
         return true;
     }
@@ -560,7 +561,7 @@ public class CConfiguration
      */
     public void setConfigDir( final File p_dir )
     {
-        m_location.put("root", p_dir);
+        m_location.put( "root", p_dir );
         this.setDefaultDirectories();
         try
         {
@@ -576,6 +577,7 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
+     * @bug ui path not stored
      */
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException, IllegalArgumentException
     {
@@ -619,8 +621,8 @@ public class CConfiguration
             }
 
         // copy ui/web datasets complete
-        if ( p_input.traverseContainsKey( "ui/web" ) )
-            m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
+        //if ( p_input.traverseContainsKey( "ui/web" ) )
+        //    m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
 
         if ( !l_errors.isEmpty() )
             throw new IllegalArgumentException( StringUtils.join( l_errors, "\n" ) );

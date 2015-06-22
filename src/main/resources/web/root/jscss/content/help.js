@@ -48,24 +48,24 @@ Help.prototype = Object.create(Pane.prototype);
 **/
 Help.prototype.getGlobalContent = function()
 {
-    return '<div id = "' + this.generateSubID("dialog") + '" >' +
-           '<p id = "'   + this.generateSubID("text")   + '" >' +
-           '<a id = "'   + this.generateSubID("name")   + '" ></a >' +
-           '<br /><br />' +
-           '<label for = "' + this.generateSubID("license") + '" >License: </label >' +
-           '<a id = "'      + this.generateSubID("license") + '" ></a >' +
-           '<br />' +
-           '<label for = "' + this.generateSubID("buildversion") + '" >Version: </label >' +
-           '<a id = "'      + this.generateSubID("buildversion") + '" ></a >' +
-           '<br />' +
-           '<label for = "' + this.generateSubID("buildnumber") + '" >Buildnumber: </label >' +
-           '<a id = "'      + this.generateSubID("buildnumber") + '" ></a >' +
-           '<br />' +
-           '<label for = "' + this.generateSubID("buildcommit") + '" >Buildcommit: </label >' +
-           '<a id = "'      + this.generateSubID("buildcommit") + '" ></a >' +
-           '</p >' +
-           '</div >' +
-           Pane.prototype.getGlobalContent.call(this);
+    return Layout.dialog({
+
+        id      : this.generateSubID("dialog"),
+        content : '<a id = "'   + this.generateSubID("name")   + '" ></a >' +
+                  '<br /><br />' +
+                  '<label for = "' + this.generateSubID("license") + '" >License: </label >' +
+                  '<a id = "'      + this.generateSubID("license") + '" ></a >' +
+                  '<br />' +
+                  '<label for = "' + this.generateSubID("buildversion") + '" >Version: </label >' +
+                  '<a id = "'      + this.generateSubID("buildversion") + '" ></a >' +
+                  '<br />' +
+                  '<label for = "' + this.generateSubID("buildnumber") + '" >Buildnumber: </label >' +
+                  '<a id = "'      + this.generateSubID("buildnumber") + '" ></a >' +
+                  '<br />' +
+                  '<label for = "' + this.generateSubID("buildcommit") + '" >Buildcommit: </label >' +
+                  '<a id = "'      + this.generateSubID("buildcommit") + '" ></a >'
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
 }
 
 
@@ -74,9 +74,9 @@ Help.prototype.getGlobalContent = function()
 **/
 Help.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("about") + '" >About</button ></p>' +
-           '<p><button id = "' + this.generateSubID("userdoc") + '" >Userdocumentation</button ></p>' +
-           '<p><button id = "' + this.generateSubID("devdoc") + '" >Developerdocumentation</button ></p>' +
+    return '<p><button id = "' + this.generateSubID("about") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("userdoc") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("devdoc") + '" ></button ></p>' +
            Pane.prototype.getContent.call(this);
 
            /*
@@ -98,9 +98,11 @@ Help.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
+    MecSim.language({ url : "/clanguageenvironment/help", target : this });
 
-    // --- create about button & bind action to the button ---------------------------
-    jQuery(self.generateSubID("about", "#")).button().click( function() {
+
+    // --- create about button & bind action to the button -----------------------------------------------------------------------------------------------------
+    jQuery(this.generateSubID("about", "#")).button().click( function() {
 
         // click reads JSON data
         jQuery.getJSON( "/cconfiguration/get", function( po_data ) {
@@ -133,21 +135,20 @@ Help.prototype.afterDOMAdded = function()
         });
 
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // --- create documentation button & bind action to button ---------------------------
+
+    // --- create documentation button & bind action to button -------------------------------------------------------------------------------------------------
     jQuery(self.generateSubID("userdoc", "#")).button().click( function() {
 
         jQuery.get("/userdoc/", function( px_result ) {
-            jQuery(MecSim.ui().content("#")).empty();
-            jQuery(MecSim.ui().content("#")).append( px_result );
+            jQuery(MecSim.ui().content("#")).empty().append( px_result );
         });
 
     });
 
     jQuery(self.generateSubID("devdoc", "#")).button().click( function() {
-
-        jQuery(MecSim.ui().content("#")).empty();
-        jQuery(MecSim.ui().content("#")).append( '<iframe id = "devdoku" class = "template" src = "/develdoc/" seamless />' );
-
+        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "devdoku" class = "template" src = "/develdoc/" seamless />' );
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

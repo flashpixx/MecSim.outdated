@@ -31,6 +31,7 @@ import java.io.Serializable;
 /**
  * distribution interface to define the amount of objects that should be generated
  */
+@SuppressWarnings( "serial" )
 public interface IGenerator extends IInspector, Serializable
 {
 

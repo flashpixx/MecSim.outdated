@@ -89,9 +89,10 @@ public class CGraphHopper extends GraphHopper
 
     /**
      * ctor
+     *
      * @param p_cellsize cellsize in meter for sampling
      */
-    public CGraphHopper( final int p_cellsize  )
+    public CGraphHopper( final int p_cellsize )
     {
         this( "CAR", p_cellsize );
     }

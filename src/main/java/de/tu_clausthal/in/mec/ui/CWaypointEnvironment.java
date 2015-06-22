@@ -24,18 +24,17 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionAgentCarFactory;
-import de.tu_clausthal.in.mec.object.waypoint.factory.CDistributionDefaultCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CAgentCarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.factory.CDefaultCarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
-import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeExponentialDistribution;
-import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeNormalDistribution;
-import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeProfile;
-import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeUniformDistribution;
+import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
-import de.tu_clausthal.in.mec.object.waypoint.point.IWayPointBase;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
@@ -44,626 +43,621 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 /**
  * ui bundle which is responsible for the waypoint-tool settings
- * todo validation
- * todo java cleanup (doc, style)
- * todo remove singelton
- * todo check for casts
  */
 public class CWaypointEnvironment
 {
     /**
-     * singelton instance
+     * map with distribution names
      */
-    private static final CWaypointEnvironment s_instance = new CWaypointEnvironment();
-    /**
-     * selected tool for the waypoint layer
-     */
-    protected static CTool m_selectedTool;
-    /**
-     * toolbox - to save different tool settings
-     */
-    protected final Map<String, CTool> m_toolbox = new HashMap<>();
-    /**
-     * default properties (which also defines the the expected parameters)
-     */
-    protected final Map<String, Object> m_defaultProperties = new HashMap<String, Object>()
+    private final static Map<String, Object> c_distribution = new HashMap<String, Object>()
     {{
-            put("waypointtype", EWayPointType.CarWaypointRandom.m_name);
-            put("radius", 0.75);
-            put("factory", EFactoryType.DefaultCarFactory.m_name);
-            put("agentprogram", "");
-            put("generator", EDistributionType.Normal.m_name);
-            put("carcount", 1);
-            put("generatorinput1", 5);
-            put("generatorinput2", 1);
-            put( "speedprob", EDistributionType.Normal.m_name );
-            put( "speedprobinput1", 50 );
-            put( "speedprobinput2", 25 );
-            put( "maxspeedprob", EDistributionType.Normal.m_name );
-            put( "maxspeedprobinput1", 250);
-            put( "maxspeedprobinput2", 50 );
-            put( "accprob", EDistributionType.Normal.m_name );
-            put( "accprobinput1", 20 );
-            put( "accprobinput2", 5 );
-            put( "decprob", EDistributionType.Normal.m_name );
-            put( "decprobinput1", 20 );
-            put( "decprobinput2", 5 );
-            put( "lingerprobinput1", 0);
-            put( "lingerprobinput2", 1);
-            put("name", CCommon.getResourceString( CWaypointEnvironment.class, "defaulttoolname" ));
-            put("red", 255);
-            put("green", 0);
-            put("blue", 0);
-    }};
+            for ( final EDistribution l_distribution : EDistribution.values() )
+                put(
+                        l_distribution.toString(), new HashMap()
+                        {{
+                                put( "firstmomentum", CCommon.getMap( "label", l_distribution.getFirstMomentum(), "used", l_distribution.hasFirstMomentum() ) );
+                                put(
+                                        "secondmomentum", CCommon.getMap(
+                                                "label", l_distribution.getSecondMomentum(), "used", l_distribution.hasSecondMomentum()
+                                        )
+                                );
+                                put( "id", l_distribution.name() );
+                            }}
+                );
+        }};
+
+    /**
+     * map with factory names
+     */
+    private final static Map<String, Map<String, Object>> c_factory = new HashMap<String, Map<String, Object>>()
+    {{
+            for ( final EFactory l_factory : EFactory.values() )
+                put(
+                        l_factory.toString(), new HashMap()
+                        {{
+                                put( "requireagent", l_factory.getRequireAgent() );
+                                put( "id", l_factory.name() );
+                            }}
+                );
+        }};
+    /**
+     * map with name and ID
+     */
+    private final static Map<String, String> c_generator = new HashMap<String, String>()
+    {{
+
+            for ( final EGenerator l_generator : EGenerator.values() )
+                put( l_generator.toString(), l_generator.name() );
+        }};
+    /**
+     * static label for UI
+     */
+    private static final Map<String, String> c_label = new HashMap<String, String>()
+    {{
+            // window title
+            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "title" ) );
+
+
+            // wizard step header
+            put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "headfactorysetting" ) );
+            put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcarsetting" ) );
+            put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcustomizing" ) );
+
+
+            // wizard first step
+            put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "factorysettingshead" ) );
+            put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourfactory" ) );
+            put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "selectyouragentprogram" ) );
+
+            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "waypointsettingshead" ) );
+            put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointtype" ) );
+            put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointradius" ) );
+
+            put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "generatorsettingshead" ) );
+            put( "label_generatortyp", CCommon.getResourceString( CWaypointEnvironment.class, "labelgeneratortyp" ) );
+            put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourcarcount" ) );
+            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
+
+
+            // wizard third step
+            put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "speedsettingslabel" ) );
+            put( "label_speedfactor", CCommon.getResourceString( CWaypointEnvironment.class, "selectspeedprob" ) );
+
+            put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "maxspeedsettingslabel" ) );
+            put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectmaxspeedprob" ) );
+
+            put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "accsettingslabel" ) );
+            put( "label_accelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectaccprob" ) );
+
+            put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "decsettingslabel" ) );
+            put( "label_decelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectdecprob" ) );
+
+            put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "lingerersettingslabel" ) );
+            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectlingerprob" ) );
+
+
+            // wizard fourth step
+            put( "label_name", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolnamelabel" ) );
+            put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolcolor" ) );
+
+        }};
+    /**
+     * map with name and ID
+     */
+    private final static Map<String, String> c_waypoint = new HashMap<String, String>()
+    {{
+            for ( final EWaypoint l_waypoint : EWaypoint.values() )
+                put( l_waypoint.toString(), l_waypoint.name() );
+        }};
+    /**
+     * map with objects, which are created by the UI call
+     **/
+    private final Map<String, Object> m_currentsettings = new HashMap<>();
 
 
     /**
-     * ctor which create a default tool
+     * ctor to define the waypoint environment
      */
-    private CWaypointEnvironment()
+    public CWaypointEnvironment()
     {
-        this.web_static_createtool( m_defaultProperties );
+        CSimulation.getInstance().getStorage().add( "waypoint", this );
     }
 
+
     /**
-     * getter
+     * creates from a map object an distribution object
      *
-     * @return
+     * @param p_object map object
+     * @return distribution object
      */
-    public final static CWaypointEnvironment getInstance()
+    private AbstractRealDistribution createDistribution( final CNameHashMap.CImmutable p_object )
     {
-        return s_instance;
+        return EDistribution.valueOf( p_object.<String>getOrDefault( "distribution", "" ) ).get(
+                p_object.<Number>get( "firstmomentum" ).doubleValue(),
+                p_object.<Number>get( "secondmomentum" ).doubleValue()
+        );
     }
 
     /**
-     * method to get a list of all waypoints an properties
-     * @deprecated up to now only for testing purpose
-     * @return
-     */
-    private final List<Map<String, Object>> web_static_listwaypoints()
-    {
-        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-
-        List<Map<String, Object>> l_waypointList = new ArrayList<>();
-        int i = 0;
-        for( IWayPoint l_wayPoint : l_waypointLayer){
-            HashMap<String, Object> l_properties = new HashMap<>();
-            l_properties.put( "id", l_wayPoint.toString() );
-            l_properties.put( "redValue", 255);
-            l_properties.put( "greenValue", 0);
-            l_properties.put( "blueValue", 0 );
-            l_properties.put( "name",   i );
-            l_properties.put( "type", l_wayPoint instanceof CCarRandomWayPoint ? "random" : "path" );
-            l_waypointList.add( l_properties );
-            i++;
-        }
-
-        return l_waypointList;
-    }
-
-    /**
-     * method to set a new tool selected
+     * creates a waypoint
      *
-     * @param p_data
+     * @param p_position geoposition of the waypoint
      */
-    private final void web_static_settool( final Map<String, Object> p_data )
+    @SuppressWarnings( "unchecked" )
+    public final void setWaypoint( final GeoPosition p_position )
     {
-        if ( !p_data.containsKey( "toolname" ) || !m_toolbox.containsKey( p_data.get( "toolname" ) ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtool" ) );
+        if ( m_currentsettings.isEmpty() )
+            throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
 
-        m_selectedTool = m_toolbox.get( p_data.get( "toolname" ) );
+        CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
+                (IWayPoint) EWaypoint.valueOf( (String) m_currentsettings.get( "waypoint" ) ).get(
+                        p_position,
+                        (IGenerator) m_currentsettings.get( "generator" ),
+                        (IFactory) m_currentsettings.get( "factory" ),
+                        (Double) m_currentsettings.get( "radius" ),
+                        (Color) m_currentsettings.get( "color" ),
+                        (String) m_currentsettings.get( "name" )
+                )
+        );
     }
 
     /**
-     * list all possible tools
+     * returns all static label information
      *
-     * @return
+     * @return map with static labels
      */
-    private final Map<String, Map<String, Object>> web_static_listtools()
+    private final Map<String, String> web_static_label()
     {
-
-        Map<String, Map<String, Object>> l_tools = new HashMap<>();
-        for (Map.Entry<String, CTool> l_tool : m_toolbox.entrySet()) {
-            Map<String, Object> l_properties = new HashMap<>();
-            l_properties.put( "redValue", l_tool.getValue().m_color.getRed() );
-            l_properties.put( "greenValue", l_tool.getValue().m_color.getGreen() );
-            l_properties.put( "blueValue", l_tool.getValue().m_color.getBlue() );
-            l_properties.put( "deleteable", l_tool.getValue().m_deleteable);
-
-            l_tools.put(l_tool.getKey(), l_properties);
-        }
-
-        return l_tools;
+        return c_label;
     }
 
     /**
-     * method to create a new tool
+     * list all possible distribution types
      *
-     * @param p_data
+     * @return map with names of distribution and IDs
      */
-    private final Map<String, Map<String, Object>> web_static_createtool( final Map<String, Object> p_data )
+    private final Map<String, Object> web_static_listdistribution()
     {
-        for(String l_parameter : m_defaultProperties.keySet()){
-
-            //check for expected parameters
-            if( !p_data.containsKey( l_parameter )){
-                throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidtoolconfiguration" ) );
-            }
-
-            //check if tool already exist
-            if(m_toolbox.containsKey( p_data.get( "name" ) )){
-                throw new IllegalArgumentException( CCommon.getResourceString( this, "novalidname" ) );
-            }
-        }
-
-        //create tool
-        CTool l_newTool = new CTool( p_data );
-        m_selectedTool = l_newTool;
-        this.m_toolbox.put( l_newTool.m_name, l_newTool );
-
-        //return data
-        Map<String, Map<String, Object>> l_tools = new HashMap<>();
-        Map<String, Object> l_properties = new HashMap<>();
-        l_properties.put( "redValue", l_newTool.m_color.getRed() );
-        l_properties.put( "greenValue", l_newTool.m_color.getGreen() );
-        l_properties.put( "blueValue", l_newTool.m_color.getBlue() );
-        l_properties.put( "deleteable", l_newTool.m_deleteable);
-
-        l_tools.put( l_newTool.m_name, l_properties );
-
-        return l_tools;
-    }
-
-    /**
-     * method to delete a tool
-     *
-     * @param p_data
-     * @return
-     */
-    private final boolean web_static_deletetool( final Map<String, Object> p_data )
-    {
-        if(!p_data.containsKey( "toolname" ))
-            return false;
-
-        String l_toolname = String.valueOf( p_data.get( "toolname" ) );
-
-        if(m_toolbox.containsKey( l_toolname ) && !l_toolname.equals( CCommon.getResourceString( this, "defaulttoolname" ) )){
-            m_selectedTool = m_toolbox.get( CCommon.getResourceString( this, "defaulttoolname" ) );
-            m_toolbox.remove( l_toolname );
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * list all possible waypoint types
-     *
-     * @return
-     */
-    private final List<String> web_static_listwaypointtypes()
-    {
-        List<String> l_waypointtypes = new ArrayList<>();
-
-        for( final EWayPointType l_waypoint : EWayPointType.values())
-            l_waypointtypes.add( l_waypoint.m_name );
-
-        return l_waypointtypes;
+        return c_distribution;
     }
 
     /**
      * list all possible factory types
      *
-     * @return
+     * @return map with language name and map of ID and required-agent-program flag
      */
-    private final Map<String, Boolean> web_static_listfactories()
+    private final Map<String, Map<String, Object>> web_static_listfactory()
     {
-        Map<String, Boolean> l_factories = new HashMap<>();
-
-        for( final EFactoryType l_factory : EFactoryType.values())
-            l_factories.put( l_factory.m_name, l_factory.m_requireAgentProgram );
-
-        return l_factories;
+        return c_factory;
     }
 
     /**
      * list all possible generator types
      *
-     * @return
+     * @return map with language name and ID
      */
-    private final List<String> web_static_listdistribution()
+    private final Map<String, String> web_static_listgenerator()
     {
-        List<String> l_distributions = new ArrayList<>();
-
-        for( final EDistributionType l_distribution : EDistributionType.values())
-            l_distributions.add( l_distribution.m_name );
-
-        return l_distributions;
+        return c_generator;
     }
 
     /**
-     * enum for waypoint types
+     * list all possible waypoint types
+     *
+     * @return map with language name and ID
      */
-    protected enum EWayPointType
+    private final Map<String, String> web_static_listwaypoint()
     {
-        CarWaypointRandom( CCommon.getResourceString( EWayPointType.class, "carwaypointrandom" ) ),
-        CayWaypointPath( CCommon.getResourceString( EWayPointType.class, "carwaypointpath" ) );
+        return c_waypoint;
+    }
+
+    /**
+     * creates the current settings of
+     *
+     * @param p_data input data
+     */
+    private final void web_static_set( final Map<String, Object> p_data )
+    {
+        // create travable map and clear cached settings
+        m_currentsettings.clear();
+        final CNameHashMap.CImmutable l_data = new CNameHashMap.CImmutable( p_data );
+
+        // create items from the UI data and set internal properties
+        m_currentsettings.put( "name", l_data.<String>get( "name" ) );
+        m_currentsettings.put( "waypoint", l_data.<String>get( "waypoint" ) );
+        m_currentsettings.put( "radius", l_data.<Number>get( "radius" ).doubleValue() );
+        m_currentsettings.put(
+                "color", new Color(
+                        l_data.<Number>get( "color/red" ).intValue(),
+                        l_data.<Number>get( "color/green" ).intValue(),
+                        l_data.<Number>get( "color/blue" ).intValue()
+                )
+        );
+
+        m_currentsettings.put(
+                "factory",
+                EFactory.valueOf( l_data.<String>get( "factory" ) ).get(
+                        l_data.<Number>get( "speedfactor" ).doubleValue(),
+                        this.createDistribution( l_data.get( "distribution/maxspeed" ) ),
+                        this.createDistribution( l_data.get( "distribution/acceleration" ) ),
+                        this.createDistribution( l_data.get( "distribution/deceleration" ) ),
+                        this.createDistribution( l_data.get( "distribution/linger" ) ),
+                        l_data.<String>get( "agent/agent" ),
+                        EAgentLanguages.valueOf( l_data.<String>get( "agent/type" ) )
+                )
+        );
+
+        m_currentsettings.put(
+                "generator",
+                EGenerator.valueOf( l_data.<String>getOrDefault( "generator", "" ) ).get(
+
+                        this.createDistribution( l_data.get( "distribution/generator" ) ),
+                        l_data.<Number>get( "carcount" ).intValue()
+
+                )
+        );
+
+    }
+
+
+    /**
+     * enum for waypoints
+     */
+    private enum EWaypoint
+    {
+        /**
+         * random car waypoint
+         **/
+        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) );
 
         /**
          * name of this waypoint type
          */
-        private final String m_name;
+        private final String m_text;
 
         /**
          * ctor
          *
-         * @param p_name
+         * @param p_text language dependend name
          */
-        EWayPointType(final String p_name)
+        private EWaypoint( final String p_text )
         {
-            this.m_name = p_name;
+            this.m_text = p_text;
         }
 
         /**
-         * method to get waypoint type by name
+         * returns the waypoint of the current settings
          *
-         * @param p_name
-         * @return
+         * @return waypoint
          */
-        private static final EWayPointType getWaypointTypeByName( final String p_name )
+        @SuppressWarnings( "unchecked" )
+        public final IWayPoint<?> get( final Object... p_data )
         {
-            for ( final EWayPointType l_waypoint : EWayPointType.values() )
+
+            switch ( this )
             {
-                if ( l_waypoint.m_name.equals( p_name ) )
-                    return l_waypoint;
+
+                case CarWaypointRandom:
+                    return new CCarRandomWayPoint(
+                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String) p_data[5]
+                    );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unknownwaypoint" ) );
             }
-            return EWayPointType.CarWaypointRandom;
         }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
+        }
+
     }
 
     /**
-     * enum for factory type
+     * enum for factories
      */
-    protected enum EFactoryType
+    private enum EFactory
     {
-        DefaultCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultcarfactory" ), false ),
-        DefaultAgentCarFactory( CCommon.getResourceString( EFactoryType.class, "defaultagentcarfactory" ), true );
-
         /**
-         * name of this factory type
-         */
-        private final String m_name;
+         * default car factory
+         **/
+        DefaultCarFactory( CCommon.getResourceString( EFactory.class, "defaultcarfactory" ), false ),
+        /**
+         * default agent-car factory
+         **/
+        DefaultAgentCarFactory( CCommon.getResourceString( EFactory.class, "defaultagentcarfactory" ), true );
 
         /**
          * variable indicate if this factory type require an agent program
          */
-        private final boolean m_requireAgentProgram;
+        private final boolean m_requireAgent;
+        /**
+         * name of this factory type
+         */
+        private final String m_text;
 
         /**
          * ctor
-         * @param p_name
-         * @param p_requireAgentProgram
+         *
+         * @param p_text language depended name of the factory
+         * @param p_requireAgent boolean flag that an agent-program is required
          */
-        EFactoryType(final String p_name, final boolean p_requireAgentProgram)
+        private EFactory( final String p_text, final boolean p_requireAgent )
         {
-            this.m_name = p_name;
-            this.m_requireAgentProgram = p_requireAgentProgram;
+            this.m_text = p_text;
+            this.m_requireAgent = p_requireAgent;
         }
 
         /**
-         * method to get factory type by name
-         * @param p_name
-         * @return
+         * returns the factory with the current settings
+         *
+         * @param p_data array with all parameters (depend on factory call)
+         * @return factory
          */
-        protected static final EFactoryType getFactoryTypeByName( final String p_name )
+        @SuppressWarnings( "unchecked" )
+        public final IFactory<?> get( final Object... p_data )
         {
-            for ( final EFactoryType l_factory : EFactoryType.values() )
+            switch ( this )
             {
-                if ( l_factory.m_name.equals( p_name ) )
-                    return l_factory;
+                case DefaultCarFactory:
+                    return new CDefaultCarFactory(
+                            // maxspeed factor
+                            (Double) p_data[0],
+                            // maxspeed distribution
+                            (AbstractRealDistribution) p_data[1],
+                            // acceleration distribution
+                            (AbstractRealDistribution) p_data[2],
+                            // deceleration distribution
+                            (AbstractRealDistribution) p_data[3],
+                            // linger distribution
+                            (AbstractRealDistribution) p_data[4]
+                    );
+
+                case DefaultAgentCarFactory:
+                    return new CAgentCarFactory(
+                            // maxspeed factor
+                            (Double) p_data[0],
+                            // maxspeed distribution
+                            (AbstractRealDistribution) p_data[1],
+                            // acceleration distribution
+                            (AbstractRealDistribution) p_data[2],
+                            // deceleration distribution
+                            (AbstractRealDistribution) p_data[3],
+                            // linger distribution
+                            (AbstractRealDistribution) p_data[4],
+                            // agent name
+                            (String) p_data[5],
+                            // agent type
+                            (EAgentLanguages) p_data[6]
+                    );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EFactory.class, "unknownfactory" ) );
             }
-            return EFactoryType.DefaultCarFactory;
         }
+
+        /**
+         * returns the boolean flag if an agent program is required for the factory
+         *
+         * @return agent-program-require boolean flag
+         */
+        public boolean getRequireAgent()
+        {
+            return m_requireAgent;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
+        }
+
+
+    }
+
+
+    /**
+     * generator enum
+     */
+    private enum EGenerator
+    {
+        TimeDistribution( CCommon.getResourceString( EGenerator.class, "timedistribution" ) );
+
+        /**
+         * name of this generator
+         */
+        private final String m_text;
+
+
+        /**
+         * ctor
+         *
+         * @param p_text language depended text
+         */
+        private EGenerator( final String p_text )
+        {
+            m_text = p_text;
+        }
+
+
+        /**
+         * returns the generator object
+         *
+         * @param p_data input data
+         * @return generator object
+         */
+        @SuppressWarnings( "unchecked" )
+        public final IGenerator get( final Object... p_data )
+        {
+            switch ( this )
+            {
+                case TimeDistribution:
+                    return new CTimeDistribution( (AbstractRealDistribution) p_data[0], (Integer) p_data[1] );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EGenerator.class, "unknowgenerator" ) );
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
+        }
+
+
     }
 
     /**
-     * enum for generator type
+     * enum for distributions
      */
-    protected enum EDistributionType
+    private enum EDistribution
     {
-        Normal( CCommon.getResourceString( EDistributionType.class, "normaldistribution" ) ),
-        Uniform( CCommon.getResourceString( EDistributionType.class, "uniformdistribution" ) ),
-        Exponential( CCommon.getResourceString( EDistributionType.class, "exponentialdistribution" ) ),
-        Profile( CCommon.getResourceString( EDistributionType.class, "profiledistribution" ) );
+        /**
+         * normal distribution
+         **/
+        Normal(
+                CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
+                EDistribution.class, "normaldistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
+        ),
+        /**
+         * uniform distribution
+         **/
+        Uniform(
+                CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
+                EDistribution.class, "uniformdistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
+        ),
+        /**
+         * exponential distribution
+         **/
+        Exponential(
+                CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
+                EDistribution.class, "exponentialdistributionleft"
+        )
+        );
 
+
+        /**
+         * left / lower / first momentum description
+         **/
+        private final String m_firstmomentum;
+        /**
+         * right / higher / second momentum description
+         **/
+        private final String m_secondmomentum;
         /**
          * name of this distribution type
          */
-        private final String m_name;
+        private final String m_text;
+
 
         /**
          * ctor
-         * @param p_name
+         *
+         * @param p_text language depend name,
+         * @param p_firstmomentum lower / first momentum language depend name
          */
-        EDistributionType(final String p_name)
+        private EDistribution( final String p_text, final String p_firstmomentum )
         {
-            this.m_name = p_name;
+            this( p_text, p_firstmomentum, null );
         }
-
-        /**
-         * method to get distribution type by name
-         * @param p_name
-         * @return
-         */
-        private static final EDistributionType getDistributionTypeByName( final String p_name )
-        {
-            for ( final EDistributionType l_generator : EDistributionType.values() )
-            {
-                if ( l_generator.m_name.equals( p_name ) )
-                    return l_generator;
-            }
-            return EDistributionType.Uniform;
-        }
-    }
-
-    /**
-     * class which is able to deliver a waypoint threw configerable settings
-     */
-    protected class CTool
-    {
-        /**
-         * type of waypoint (random/path)
-         */
-        protected final EWayPointType m_wayPointType;
-        /**
-         * radius for random target
-         */
-        protected final double m_radius;
-        /**
-         * factory type (which car should be produced)
-         */
-        protected final EFactoryType m_factoryType;
-        /**
-         * agent program for agent cars
-         */
-        protected final String m_agentProgram;
-        /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_generatorType;
-        /**
-         * amount of cars that should be generated under a special probability
-         */
-        protected final int m_carcount;
-        /**
-         * generatorInput1 (lower bound or mean)
-         */
-        protected final double m_generatorInput1;
-        /**
-         * generatorInput2 (upper bound or deviation)
-         */
-        protected final double m_generatorInput2;
-        /**
-         * histrogram for profile generators
-         */
-        protected final int[] m_histrogram;
-        /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_speedProb;
-        /**
-         * generatorInput1 (lower bound or mean)
-         */
-        protected final double m_speedProbInput1;
-        /**
-         * generatorInput2 (upper bound or deviation)
-         */
-        protected final double m_speedProbInput2;
-        /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_maxSpeedProb;
-        /**
-         * generatorInput1 (lower bound or mean)
-         */
-        protected final double m_maxSpeedProbInput1;
-        /**
-         * generatorInput2 (upper bound or deviation)
-         */
-        protected final double m_maxSpeedProbInput2;
-        /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_accProb;
-        /**
-         * generatorInput1 (lower bound or mean)
-         */
-        protected final double m_accProbInput1;
-        /**
-         * generatorInput2 (upper bound or deviation)
-         */
-        protected final double m_accProbInput2;
-        /**
-         * generator type defines the probability and amount of cars
-         */
-        protected final EDistributionType m_decProb;
-        /**
-         * generatorInput1 (lower bound or mean)
-         */
-        protected final double m_decProbInput1;
-        /**
-         * generatorInput2 (upper bound or deviation)
-         */
-        protected final double m_decProbInput2;
-        /**
-         * generatorInput1 (lower bound or mean)
-         */
-        protected final double m_lingerProbInput1;
-        /**
-         * generatorInput2 (upper bound or deviation)
-         */
-        protected final double m_lingerProbInput2;
-        /**
-         * name of the tool
-         */
-        protected final String m_name;
-        /**
-         * color of the waypoint
-         */
-        protected final Color m_color;
-        /**
-         * indicates if this tool is deleteable
-         */
-        protected final boolean m_deleteable;
 
         /**
          * ctor
-         * @param p_parameter
+         *
+         * @param p_text language depend name,
+         * @param p_firstmomentum lower / first momentum language depend name
+         * @param p_secondmomentum higher / second momentum language depend name
          */
-        protected CTool( final Map<String, Object> p_parameter){
-
-            int l_redValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "red" ) ) );
-            int l_greenValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "green" ) ) );
-            int l_blueValue = (int) Double.parseDouble( String.valueOf( p_parameter.get( "blue" ) ) );
-
-            this.m_wayPointType = EWayPointType.getWaypointTypeByName( "" );
-            this.m_radius = Double.parseDouble( String.valueOf( p_parameter.get( "radius" ) ) );
-            this.m_factoryType = EFactoryType.getFactoryTypeByName( String.valueOf( p_parameter.get( "factory" ) ) );
-            this.m_agentProgram = String.valueOf( p_parameter.get( "agentprogram" ) );
-            this.m_generatorType = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "generator" ) ) );
-            this.m_carcount = Integer.parseInt( String.valueOf( p_parameter.get( "carcount" ) ) );
-            this.m_generatorInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput1" ) ) );
-            this.m_generatorInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "generatorinput2" ) ) );
-            this.m_histrogram = new int[]{};
-            this.m_speedProb = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "speedprob" ) ) );
-            this.m_speedProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "speedprobinput1" ) ) );
-            this.m_speedProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "speedprobinput2" ) ) );
-            this.m_maxSpeedProb = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "maxspeedprob" ) ) );
-            this.m_maxSpeedProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "maxspeedprobinput1" ) ) );
-            this.m_maxSpeedProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "maxspeedprobinput2" ) ) );
-            this.m_accProb = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "accprob" ) ) );
-            this.m_accProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "accprobinput1" ) ) );
-            this.m_accProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "accprobinput2" ) ) );
-            this.m_decProb = EDistributionType.getDistributionTypeByName( String.valueOf( p_parameter.get( "decprob" ) ) );
-            this.m_decProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "decprobinput1" ) ) );
-            this.m_decProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "decprobinput2" ) ) );
-            this.m_lingerProbInput1 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput1" ) ) );
-            this.m_lingerProbInput2 = Double.parseDouble( String.valueOf( p_parameter.get( "lingerprobinput2" ) ) );
-            this.m_color = new Color(l_redValue, l_greenValue, l_blueValue);
-            this.m_name = (String) p_parameter.get( "name" );
-            this.m_deleteable = m_name.equals( m_defaultProperties.get( "name" ) ) ? false : true;
+        private EDistribution( final String p_text, final String p_firstmomentum, final String p_secondmomentum )
+        {
+            m_text = p_text;
+            m_firstmomentum = p_firstmomentum;
+            m_secondmomentum = p_secondmomentum;
         }
 
         /**
-         * method which returns a waypoint with settings from the ui
+         * returns a distribution object
          *
-         * @param p_position position of the waypoint
-         * @return configured waypoint
+         * @param p_firstmomentum lower / first momentum
+         * @param p_secondmomentum higher / second momentum
+         * @return distribution
          */
-        protected final IWayPointBase getWaypoint( GeoPosition p_position )
+        public final AbstractRealDistribution get( final double p_firstmomentum, final double p_secondmomentum )
         {
-            return new CCarRandomWayPoint( p_position, this.getGenerator(), this.getFactory(), m_radius, m_color );
-        }
-
-        /**
-         * method which returns a factory with settings from the ui
-         *
-         * @return configured factory
-         */
-        protected final ICarFactory getFactory()
-        {
-
-            switch ( m_factoryType )
-            {
-                case DefaultCarFactory:
-                    return new CDistributionDefaultCarFactory(
-                            getDistribution( m_speedProb, m_speedProbInput1, m_speedProbInput2 ),
-                            getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
-                            getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
-                            getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            new UniformRealDistribution(m_lingerProbInput1, m_lingerProbInput2)
-                            );
-
-                case DefaultAgentCarFactory:
-                    return new CDistributionAgentCarFactory(
-                            getDistribution( m_speedProb, m_speedProbInput1, m_speedProbInput2 ),
-                            getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
-                            getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
-                            getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            new UniformRealDistribution( m_lingerProbInput1, m_lingerProbInput2 ),
-                            m_agentProgram
-                    );
-
-                default:
-                    return new CDistributionDefaultCarFactory(
-                            getDistribution( m_speedProb, m_speedProbInput1, m_speedProbInput2 ),
-                            getDistribution( m_maxSpeedProb, m_maxSpeedProbInput1, m_maxSpeedProbInput2 ),
-                            getDistribution( m_accProb, m_accProbInput1, m_accProbInput2 ),
-                            getDistribution( m_decProb, m_decProbInput1, m_decProbInput2 ),
-                            new UniformRealDistribution( m_lingerProbInput1, m_lingerProbInput2 )
-                    );
-            }
-        }
-
-        /**
-         * method which returns a generator with settings from the ui
-         *
-         * @return configured generator
-         */
-        protected final IGenerator getGenerator()
-        {
-
-            switch ( m_generatorType )
+            switch ( this )
             {
                 case Uniform:
-                    return new CTimeUniformDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
+                    return new UniformRealDistribution( p_firstmomentum, p_secondmomentum );
 
                 case Normal:
-                    return new CTimeNormalDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
+                    return new NormalDistribution( p_firstmomentum, p_secondmomentum );
 
                 case Exponential:
-                    return new CTimeExponentialDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
-
-                case Profile:
-                    return new CTimeProfile( m_histrogram );
+                    return new ExponentialDistribution( p_firstmomentum );
 
                 default:
-                    return new CTimeUniformDistribution( m_carcount, m_generatorInput1, m_generatorInput2 );
+                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
             }
         }
 
         /**
-         * method which returns a distribution with settings from the ui
-         * @param p_distribution
-         * @param p_distributionInput1
-         * @param p_distributionInput2
-         * @return
+         * returns the label of the first momentum
+         *
+         * @return label
          */
-        protected final AbstractRealDistribution getDistribution(EDistributionType p_distribution, double p_distributionInput1, double p_distributionInput2)
+        public final String getFirstMomentum()
         {
-
-            switch( p_distribution )
-            {
-                case Uniform:
-                    return new UniformRealDistribution( p_distributionInput1, p_distributionInput2 );
-
-                case Normal:
-                    return new NormalDistribution( p_distributionInput1, p_distributionInput2 );
-
-                case Exponential:
-                    return new ExponentialDistribution( p_distributionInput1, p_distributionInput2 );
-
-                default:
-                    return new UniformRealDistribution( p_distributionInput1, p_distributionInput2 );
-            }
+            return m_firstmomentum;
         }
+
+        /**
+         * returns the label of the second momentum
+         *
+         * @return label
+         */
+        public final String getSecondMomentum()
+        {
+            return m_secondmomentum;
+        }
+
+        /**
+         * returns bool value that a first momentum is used
+         *
+         * @return flag
+         */
+        public final boolean hasFirstMomentum()
+        {
+            return m_firstmomentum != null;
+        }
+
+        /**
+         * returns bool value that a second momentum is used
+         *
+         * @return flag
+         */
+        public final boolean hasSecondMomentum()
+        {
+            return m_secondmomentum != null;
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
+        }
+
+
     }
+
 }

@@ -21,75 +21,49 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.waypoint.generator;
+package de.tu_clausthal.in.mec.object.waypoint.point;
+
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
+import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
+import org.jxmapviewer.viewer.GeoPosition;
+
+import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
 
 
-import de.tu_clausthal.in.mec.ui.IInspectorDefault;
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
-
-import java.util.HashMap;
-import java.util.Map;
-
-
-/**
- * generator of a static number of objects with a time-exponential function
- */
-public abstract class ITimeDistribution extends IInspectorDefault implements IGenerator
+public class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
-     * number of objects *
+     * map with targets
      */
-    private final int m_count;
-    /**
-     * distribution *
-     */
-    private final AbstractRealDistribution m_distribution;
-    /**
-     * inspect data
-     */
-    private final Map<String, Object> m_inspect = new HashMap()
+    private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            putAll( ITimeDistribution.super.inspect() );
+            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
 
-
-    /**
-     * default ctor
-     */
-    private ITimeDistribution()
-    {
-        m_distribution = null;
-        m_count = 0;
-    }
 
     /**
      * ctor
      *
-     * @param p_distribution distribution object
-     * @param p_count number of objects
+     * @param p_position position
+     * @param p_generator generator
+     * @param p_factory factory
+     * @param p_color
+     * @param p_name
      */
-    protected ITimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
+    public CCarPathWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final Color p_color, final String p_name )
     {
-        m_count = p_count;
-        m_distribution = p_distribution;
-    }
-
-
-    @Override
-    public int getCount( final int p_currentStep )
-    {
-        if ( m_distribution == null )
-            return 0;
-        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+        super( p_position, p_generator, p_factory, p_color, p_name );
     }
 
     @Override
-    public Map<String, Object> inspect()
+    public Collection<IReturnSteppableTarget<ICar>> getTargets()
     {
-        return m_inspect;
+        return m_target;
     }
 }

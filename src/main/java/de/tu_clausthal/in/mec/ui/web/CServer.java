@@ -164,6 +164,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     /**
      * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
      */
+    @SuppressWarnings( "unchecked" )
     private String getMimeType( final URL p_url )
     {
         final Collection l_types = m_mimetype.getMimeTypes( p_url );

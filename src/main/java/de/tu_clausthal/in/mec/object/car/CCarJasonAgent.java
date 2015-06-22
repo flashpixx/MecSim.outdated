@@ -74,43 +74,44 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     /**
      * ctor
      *
-     * @param p_objectname name of the object within the simulation
-     * @param p_agent ASL / agent name
      * @param p_route driving route
      * @param p_speed initial speed
      * @param p_maxspeed maximum speed
      * @param p_acceleration acceleration
      * @param p_deceleration decceleration
      * @param p_lingerprobability linger probability
+     * @param p_objectname name of the object within the simulation
+     * @param p_agent ASL / agent name     *
      * @throws JasonException throws on Jason error
      */
-    public CCarJasonAgent( final String p_objectname, final String p_agent, final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed,
-            final int p_maxspeed, final int p_acceleration, final int p_deceleration, final double p_lingerprobability
+    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
+            final int p_deceleration, final double p_lingerprobability, final String p_objectname, final String p_agent
     ) throws JasonException
 
     {
         this(
+                p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability,
                 p_objectname, new HashSet<String>()
                 {{
                         add( p_agent );
-                    }}, p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability
+                    }}
         );
     }
 
 
     /**
-     * @param p_objectname name of the object within the simulation
-     * @param p_agent set with ASL / agent name
      * @param p_route driving route
      * @param p_speed initial speed
      * @param p_maxspeed maximum speed
      * @param p_acceleration acceleration
      * @param p_deceleration decceleration
      * @param p_lingerprobability linger probability
+     * @param p_objectname name of the object within the simulation
+     * @param p_agent set with ASL / agent name
      * @throws JasonException throws on Jason error
      */
-    public CCarJasonAgent( final String p_objectname, final Set<String> p_agent, final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed,
-            final int p_maxspeed, final int p_acceleration, final int p_deceleration, final double p_lingerprobability
+    public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
+            final int p_deceleration, final double p_lingerprobability, final String p_objectname, final Set<String> p_agent
     ) throws JasonException
     {
         super( p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability );

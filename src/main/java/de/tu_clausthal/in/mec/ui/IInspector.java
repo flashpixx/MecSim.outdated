@@ -30,6 +30,7 @@ import java.util.Map;
 /**
  * global interface to read information about a simulation object
  */
+@SuppressWarnings( "serial" )
 public interface IInspector
 {
 

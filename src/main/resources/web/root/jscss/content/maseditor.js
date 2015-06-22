@@ -47,7 +47,7 @@ function MASEditor( pc_id, pc_name, pa_panel )
     this.mc_tabs = "tabs";
 
 
-    // set the configuration for all agent access
+    // --- set the configuration for all agent access ----------------------------------------------------------------------------------------------------------
     this.mo_configuration = {};
 
     ["Jason"].forEach( function(pc_name) {
@@ -58,10 +58,7 @@ function MASEditor( pc_id, pc_name, pa_panel )
         });
 
     });
-
-
-    // read agents on initialisation
-    this.readAgents();
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 /** inheritance call **/
@@ -69,9 +66,23 @@ MASEditor.prototype = Object.create(Pane.prototype);
 
 
 /**
+ * @Overwrite
+**/
+MASEditor.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("content"),
+        title     : "Agent Action"
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
+
+/**
  * @Overload
 **/
-Simulation.prototype.getGlobalCSS = function()
+MASEditor.prototype.getGlobalCSS = function()
 {
     return  ".CodeMirror { border: 1px solid #eee; height: auto; }" + Pane.prototype.getGlobalCSS.call(this);
 }
@@ -82,7 +93,135 @@ Simulation.prototype.getGlobalCSS = function()
 **/
 MASEditor.prototype.getContent = function()
 {
-    return '<span id="' + this.generateSubID("agentlist") + '"></span>' + Pane.prototype.getContent.call(this);
+    return '<span id="' + this.generateSubID("agentlist") + '"></span>' +
+    '<p><button id = "' + this.generateSubID("new") + '" ></button ></p>' +
+    '<p><button id = "' + this.generateSubID("remove") + '" ></button ></p>' +
+    '<p><button id = "' + this.generateSubID("check") + '" ></button ></p>' +
+    Pane.prototype.getContent.call(this);
+}
+
+
+/**
+ * returns a Json object with the selected agent data
+ *
+ * @return Json object
+**/
+MASEditor.prototype.getSelectedAgent = function()
+{
+    var lo_selected = jQuery( this.generateSubID("agentlist", "#") +" option:selected" );
+    return {
+        value : lo_selected.val(),
+        group : lo_selected.closest("optgroup").attr("label")
+    };
+}
+
+
+/**
+ * @Overwrite
+**/
+MASEditor.prototype.afterDOMAdded = function()
+{
+    var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/maseditor", target : this });
+
+    // bind reading action
+    this.readAgents();
+
+
+    // --- bind new-agent button action ------------------------------------------------------------------------------------------------------------------------
+    jQuery( this.generateSubID("new", "#") ).button().click( function() {
+
+        // set dialog content
+        jQuery(self.generateSubID("content", "#")).empty().append(
+            "<p>" +
+            Layout.select({
+
+                id      : self.generateSubID("agenttype"),
+                label   : "Agent Type",
+                options : Object.keys( self.mo_configuration )
+
+            }) +
+            "</p><p>" +
+            Layout.input({
+
+                id: self.generateSubID("agentname"),
+                label : "Agent Name"
+
+            }) +
+            "</p>"
+        );
+        jQuery(self.generateSubID("agenttype", "#")).selectmenu();
+
+
+        // open dialog
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            width   : "auto",
+            modal   : true,
+            buttons : {
+
+                Create : function() {
+                    self.createAgent( jQuery(self.generateSubID("agenttype", "#")).val(), jQuery(self.generateSubID("agentname", "#")).val() );
+                    jQuery(this).dialog("close");
+                },
+
+                Cancel : function() { jQuery(this).dialog("close"); }
+
+            }
+        });
+
+    });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- bind agent-remove button action ---------------------------------------------------------------------------------------------------------------------
+    jQuery( this.generateSubID("remove", "#") ).button().click( function() {
+
+        var lo = self.getSelectedAgent();
+
+        // set dialog content
+        jQuery( self.generateSubID("content", "#") ).empty().append( "<p>Should the [" + lo.group + "] agent [" + lo.value + "] be deleted?</p>" );
+
+         // open dialog
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            width   : "auto",
+            modal   : true,
+            buttons : {
+
+                Remove : function() {
+                    self.removeAgent( lo.group, lo.value );
+                    jQuery(this).dialog("close");
+                },
+
+                Cancel : function() { jQuery(this).dialog("close"); }
+
+            }
+        });
+
+
+    });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- bind agent-check button action ----------------------------------------------------------------------------------------------------------------------
+    jQuery( this.generateSubID("check", "#") ).button().click( function() {
+
+        var lo = self.getSelectedAgent();
+        MecSim.ajax({
+            url     : self.mo_configuration[lo.group].check,
+            data    : { "name" : lo.value  },
+        }).fail(function( po ) {
+
+            console.log(po);
+
+        }).done(function() {
+
+            console.log("ok");
+
+        });
+
+    });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 
@@ -96,7 +235,7 @@ MASEditor.prototype.readAgents = function()
 {
     var self = this;
 
-    // create Ajax calls
+    // --- create Ajax calls for each agent-language-type ------------------------------------------------------------------------------------------------------
     var la_tasks = [];
     jQuery.each(this.mo_configuration, function( pc_configkey, po_config ) {
 
@@ -112,9 +251,10 @@ MASEditor.prototype.readAgents = function()
 
         la_tasks.push( lo_task.promise() );
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // collect results if all calls are finished
+    // --- collect results of all agent-language-types if all calls are finished -------------------------------------------------------------------------------
     jQuery.when.apply(jQuery, la_tasks).done(
 
         function()
@@ -147,7 +287,7 @@ MASEditor.prototype.readAgents = function()
 
             // clear div and add a new select box
             jQuery( self.generateSubID("agentlist", "#") ).empty();
-            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_agents }) ).appendTo( self.generateSubID("agentlist", "#") );
+            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_agents  }) ).appendTo( self.generateSubID("agentlist", "#") );
             jQuery( self.generateSubID("agents", "#") ).selectmenu({
                 change : function( po_event, po_ui ) {
                     self.addTabView();
@@ -156,7 +296,7 @@ MASEditor.prototype.readAgents = function()
             });
         }
     );
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 
@@ -169,7 +309,6 @@ MASEditor.prototype.readAgents = function()
 **/
 MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
 {
-
     MecSim.ajax({
 
         url     : this.mo_configuration[pc_group].write,
@@ -183,6 +322,67 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
     });
 }
 
+
+/**
+ * creates a new agent
+ *
+ * @param pc_group option group name
+ * @param pc_agent agent name
+**/
+MASEditor.prototype.createAgent = function( pc_group, pc_agent )
+{
+    var self = this;
+
+    MecSim.ajax({
+
+        url     : this.mo_configuration[pc_group].create,
+        data    : { "name" : pc_agent },
+        success : function() { self.readAgents(); }
+
+    }).fail( function( po_data ) {
+
+        // @todo show error dialog
+        //console.log(po_data);
+
+    });
+}
+
+
+/**
+ * removes a new agent
+ *
+ * @param pc_group option group name
+ * @param pc_agent agent name
+**/
+MASEditor.prototype.removeAgent = function( pc_group, pc_agent )
+{
+    var self = this;
+
+    MecSim.ajax({
+
+        url     : this.mo_configuration[pc_group].remove,
+        data    : { "name" : pc_agent },
+        success : function() {
+
+            self.readAgents();
+
+            // remove an existing tab
+            var lc_tabid = self.generateSubID( pc_group+"_"+pc_agent );
+            jQuery( "#"+lc_tabid ).remove();
+            jQuery( "#"+lc_tabid+"_nav" ).remove();
+
+            self.mo_tabs.tabs( "refresh" );
+            self.mo_tabs.tabs({ active: 0 });
+
+        }
+
+    }).fail( function( po_data ) {
+
+        // @todo show error dialog
+        //console.log(po_data);
+
+    });
+}
 
 /**
  * returns a deep-copy of the filelist
@@ -213,6 +413,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
         return;
 
 
+    // --- build the tab view ----------------------------------------------------------------------------------------------------------------------------------
     var self = this;
     MecSim.ajax({
 
@@ -223,7 +424,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
 
             // create tab and editor instance
             self.mo_tabs.find( ".ui-tabs-nav" ).append(
-                '<li>' +
+                '<li id="' + lc_tabid + '_nav' + '">' +
                 '<a href="#' + lc_tabid + '">'  + pc_agent+ ' (' + pc_group + ')' +
                 '<span class="ui-icon ui-icon-close" role="presentation"/>' +
                 '</a>' +
@@ -254,7 +455,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
         }
 
     });
-
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
 
@@ -269,8 +470,7 @@ MASEditor.prototype.addTabView = function()
     var self = this;
 
     // create tab div within the DOM
-    jQuery( MecSim.ui().content("#") ).empty();
-    jQuery( MecSim.ui().content("#") ).append( '<div id="' + this.generateSubID(this.mc_tabs) + '"><ul></ul></div>' );
+    jQuery( MecSim.ui().content("#") ).empty().append( '<div id="' + this.generateSubID(this.mc_tabs) + '"><ul></ul></div>' );
     this.mo_tabs = jQuery( this.generateSubID(this.mc_tabs, "#") ).tabs();
 
     // bind close action

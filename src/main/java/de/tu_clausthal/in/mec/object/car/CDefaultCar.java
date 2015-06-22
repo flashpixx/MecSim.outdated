@@ -27,12 +27,13 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.graph.CEdge;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -74,11 +75,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @CFieldFilter.CAgent( bind = false )
     private boolean m_endreached;
     /**
-     * reference to the graph
-     */
-    @CFieldFilter.CAgent( bind = false )
-    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-    /**
      * inspector map
      */
     @CFieldFilter.CAgent( bind = false )
@@ -86,6 +82,11 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     {{
             putAll( CDefaultCar.super.inspect() );
         }};
+    /**
+     * reference to the graph
+     */
+    @CFieldFilter.CAgent( bind = false )
+    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
     /**
      * linger probability value
      */
@@ -119,6 +120,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * @param p_acceleration acceleration
      * @param p_deceleration decceleration
      * @param p_lingerprobability linger probability
+     * @see https://en.wikipedia.org/wiki/Orders_of_magnitude_(acceleration)
      */
     public CDefaultCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
             final int p_deceleration, final double p_lingerprobability
@@ -138,9 +140,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "speedtolow" ) );
         if ( m_maxspeed > 350 )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "maxspeedtohigh" ) );
-        if ( ( m_acceleration < 1 ) || ( m_acceleration > m_maxspeed / 4 ) )
+        if ( ( m_acceleration < 1 ) || ( m_acceleration > 20 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "accelerationincorrect" ) );
-        if ( ( m_deceleration < 1 ) || ( m_deceleration > m_maxspeed / 4 ) )
+        if ( ( m_deceleration < 1 ) || ( m_deceleration > 20 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "decelerationincorrect" ) );
         if ( ( m_lingerprobability < 0 ) || ( m_lingerprobability > 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CDefaultCar.class, "lingerprobabilityincorrect" ) );
@@ -344,18 +346,20 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         final int l_zoom = this.iconsize( p_viewer );
         final Point2D l_point = p_viewer.getTileFactory().geoToPixel( l_position, p_viewer.getZoom() );
         final Ellipse2D l_circle = new Ellipse2D.Double(
-                l_point.getX() - p_viewer.getViewportBounds().getX(), l_point.getY() - p_viewer.getViewportBounds().getY(), l_zoom * 2, l_zoom * 2
+                l_point.getX() - p_viewer.getViewportBounds().getX() - l_zoom,
+                l_point.getY() - p_viewer.getViewportBounds().getY() - l_zoom,
+                l_zoom * 2, l_zoom * 2
         );
 
         if ( l_circle.contains( p_event.getX(), p_event.getY() ) )
         {
-            CSimulation.getInstance().getUIComponents().getInspector().set( this );
+            CSimulation.getInstance().getStorage().<CInspector>get( "inspector" ).set( this );
 
             final Stroke l_stroke = new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[]{1}, 0 );
             final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_route = new LinkedList<>();
             l_route.addAll( this.getRouteLine( 0, m_routeindex, Color.GREEN, l_stroke ) );
             l_route.addAll( this.getRouteLine( m_routeindex, m_route.size(), Color.CYAN, l_stroke ) );
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().paintFadeLine( l_route );
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().paintFadeLine( l_route );
         }
     }
 
@@ -454,7 +458,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             try
             {
                 m_layer.getGraph().getEdge( m_route.get( m_routeindex ).getLeft() ).removeObject( this );
-                m_layer.getGraph().getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject( this, m_route.get( m_routeindex + l_speed ).getRight() );
+                m_layer.getGraph().getEdge( m_route.get( m_routeindex + l_speed ).getLeft() ).setObject(
+                        this, m_route.get( m_routeindex + l_speed ).getRight()
+                );
                 m_routeindex += l_speed;
             }
             catch ( final IllegalAccessException l_exception )

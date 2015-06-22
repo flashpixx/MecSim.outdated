@@ -37,15 +37,13 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
     @Override
-    public final void afterStepObject( final int p_currentstep, final IWayPoint<ICar> p_object
-    )
+    public final void afterStepObject( final int p_currentstep, final IWayPoint<ICar> p_object )
     {
 
     }
 
     @Override
-    public final void beforeStepObject( final int p_currentstep, final IWayPoint<ICar> p_object
-    )
+    public final void beforeStepObject( final int p_currentstep, final IWayPoint<ICar> p_object )
     {
 
     }

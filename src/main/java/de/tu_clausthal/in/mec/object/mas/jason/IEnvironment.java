@@ -58,10 +58,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      */
     private static final String c_filesuffix = ".asl";
     /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     private transient CBrowser m_mindinspector;
@@ -71,6 +67,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @note should throw exception on syntax error
+     * @bug does not work correctly - exception is not thrown
      */
     public static void checkAgentFileSyntax(final String p_agentname)
     {
@@ -109,7 +106,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * @param p_agentname agent name
      * @return existing file object
      * @note must support a agent filename as file with extension and without extension
-     * @todo add ASL build-in files with the resource directory
      */
     public static File getAgentFile(final String p_agentname)
     {
@@ -123,7 +119,10 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
+<<<<<<< HEAD
      * @todo add ASL build-in files with the resource directory
+=======
+>>>>>>> upstream/master
      */
     public static String[] getAgentFiles()
     {

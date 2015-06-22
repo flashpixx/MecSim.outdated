@@ -40,6 +40,8 @@ import javafx.scene.web.WebView;
 /**
  * create a plain browser component to show any URL
  *
+ * @todo add popup handler https://docs.oracle.com/javase/8/javafx/embedded-browser-tutorial/pop-up.htm / https://docs.oracle.com/javase/8/javafx/embedded-browser-tutorial/overview.htm
+ * / http://controlsfx.bitbucket.org/org/controlsfx/control/PopOver.html
  * @see http://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
  * @see http://dammsebastian.blogspot.de/2012/06/javafx-20-layout-panes-gridpane.html
  */
@@ -75,7 +77,6 @@ public class CBrowser extends GridPane
     public CBrowser( final EMenu p_menu )
     {
         super();
-
         GridPane.setConstraints( m_webview, 0, 1, this.setMenuBar( p_menu ), 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS );
         this.getChildren().add( m_webview );
     }

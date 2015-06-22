@@ -136,6 +136,7 @@ will be set with ```{<index number>}```
   * ```o``` (JSON) object
   * ```n``` numeric
   * ```c``` character / string
+* JavaScript parent function reference should be stored in a variable with ```var self = this```
 
 
 ## Do's and Don'ts

@@ -31,6 +31,7 @@ import java.io.Serializable;
 /**
  * interface of the layer
  */
+@SuppressWarnings( "serial" )
 public interface ILayer extends ISteppable, Serializable
 {
 

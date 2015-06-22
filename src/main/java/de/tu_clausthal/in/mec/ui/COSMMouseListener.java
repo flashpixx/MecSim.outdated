@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.ui;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -74,10 +75,6 @@ class COSMMouseListener extends PanMouseInputListener
         return Math.sqrt( p_xval * p_xval + p_yval * p_yval ) <= s_clickradius;
     }
 
-    /**
-     * @bug incomplete - error messages
-     * @bug remove singleton & public property
-     */
     @Override
     public void mouseClicked( final MouseEvent p_event )
     {
@@ -87,40 +84,45 @@ class COSMMouseListener extends PanMouseInputListener
 
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
 
-        switch ( l_viewer.getCurrentClickableLayer() )
+        try
         {
-            case Sources:
-                final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-                boolean l_isfound = false;
+            switch ( l_viewer.getCurrentClickableLayer() )
+            {
+                case Sources:
+                    final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+                    boolean l_isfound = false;
 
-                for ( final IWayPoint<ICar> l_item : l_layer )
-                    if ( isinBall( p_event.getPoint(), l_viewer.convertGeoPositionToPoint( l_item.getPosition() ) ) )
-                    {
-                        l_isfound = true;
-                        l_layer.remove( l_item );
-                        break;
-                    }
+                    for ( final IWayPoint<ICar> l_item : l_layer )
+                        if ( isinBall( p_event.getPoint(), l_viewer.convertGeoPositionToPoint( l_item.getPosition() ) ) )
+                        {
+                            l_isfound = true;
+                            l_layer.remove( l_item );
+                            break;
+                        }
 
-                if ( !l_isfound )
-                    l_layer.add(
-                            CWaypointEnvironment.m_selectedTool.getWaypoint(
-                                    l_viewer.getViewpointGeoPosition(
-                                            p_event.getPoint()
-                                    )
-                            )
-                    );
-                break;
+                    if ( !l_isfound )
+                        CSimulation.getInstance().getStorage().<CWaypointEnvironment>get( "waypoint" ).setWaypoint(
+                                l_viewer.getViewpointGeoPosition(
+                                        p_event.getPoint()
+                                )
+                        );
+                    break;
 
 
-            case ForbiddenEdges:
+                case ForbiddenEdges:
 
-                // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
-                CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().<CForbiddenEdges>getWeight(
-                        CGraphHopper.EWeight.ForbiddenEdges
-                ).swap();
+                    // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
+                    CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().<CForbiddenEdges>getWeight(
+                            CGraphHopper.EWeight.ForbiddenEdges
+                    ).swap();
 
-                l_viewer.repaint();
-                break;
+                    l_viewer.repaint();
+                    break;
+            }
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.out( l_exception );
         }
 
     }

@@ -49,9 +49,9 @@ Inspector.prototype = Object.create(Pane.prototype);
 Inspector.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
-        dialog  : this.generateSubID("dialog"),
-        content : this.generateSubID("table"),
-        title   : "Object Inspector"
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("table"),
+        title     : "Object Inspector"
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -65,6 +65,7 @@ Inspector.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
 
 
+    // --- inner function --------------------------------------------------------------------------------------------------------------------------------------
     /**
      * function to format a JSON object in a table
      *
@@ -79,9 +80,10 @@ Inspector.prototype.afterDOMAdded = function()
         });
         return lc + '</table>';
     }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // --- bind action on the websocket ---------------------------
+    // --- bind action on the websocket ------------------------------------------------------------------------------------------------------------------------
     var self = this;
 
     jQuery( self.generateSubID("dialog", "#") ).dialog({ autoOpen: false, width: "auto" });
@@ -90,10 +92,10 @@ Inspector.prototype.afterDOMAdded = function()
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
         "onmessage" : function( po_event ) {
 
-            jQuery( self.generateSubID("table", "#") ).empty();
-            jQuery( self.generateSubID("table", "#") ).append( json2table(po_event.data.toJSON()) );
+            jQuery( self.generateSubID("table", "#") ).empty().append( json2table(po_event.data.toJSON()) );
             jQuery( self.generateSubID("dialog", "#") ).dialog("open");
 
         }
     });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

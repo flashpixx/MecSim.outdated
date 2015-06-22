@@ -24,25 +24,59 @@
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 
-import org.apache.commons.math3.distribution.UniformRealDistribution;
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- * creates a time-uniform distribution generator
+ * generator of a static number of objects with a time-exponential function
  */
-public class CTimeUniformDistribution extends ITimeDistribution
+public class CTimeDistribution extends IInspectorDefault implements IGenerator
 {
+    /**
+     * number of objects *
+     */
+    private final int m_count;
+    /**
+     * distribution *
+     */
+    private final AbstractRealDistribution m_distribution;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( CTimeDistribution.super.inspect() );
+        }};
+
 
     /**
      * ctor
      *
+     * @param p_distribution distribution object
      * @param p_count number of objects
-     * @param p_lower lower-bound value
-     * @param p_upper upper-bound value
      */
-    public CTimeUniformDistribution( final int p_count, final double p_lower, final double p_upper )
+    public CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
     {
-        super( new UniformRealDistribution( p_lower, p_upper ), p_count );
+        m_count = p_count;
+        m_distribution = p_distribution;
     }
 
+
+    @Override
+    public int getCount( final int p_currentStep )
+    {
+        if ( m_distribution == null )
+            return 0;
+        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+    }
+
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
 }

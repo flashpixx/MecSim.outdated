@@ -37,6 +37,15 @@ import java.util.Map;
  */
 public class CTrafficEnvironment
 {
+    /**
+     * map with drivingmodels
+     */
+    private final Map<String, Object> m_drivingmodel = new HashMap<>();
+    /**
+     * map with weights
+     */
+    private final Map<String, Object> m_weight = new HashMap<>();
+
 
     /**
      * UI method - enable graph weight
@@ -67,11 +76,10 @@ public class CTrafficEnvironment
     private final Map<String, Object> web_static_listdrivemodel()
     {
         final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-        final Map<String, Object> l_models = new HashMap<>();
         for ( final CCarLayer.EDrivingModel l_item : CCarLayer.EDrivingModel.values() )
-            l_models.put( l_item.toString(), CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ), "id", l_item.name() ) );
+            m_drivingmodel.put( l_item.toString(), CCommon.getMap( "active", l_layer.getDrivingModel().equals( l_item ), "id", l_item.name() ) );
 
-        return l_models;
+        return m_drivingmodel;
     }
 
     /**
@@ -82,12 +90,10 @@ public class CTrafficEnvironment
     private final Map<String, Object> web_static_listgraphweight()
     {
         final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-        final Map<String, Object> l_return = new HashMap<>();
-
         for ( final CGraphHopper.EWeight l_item : CGraphHopper.EWeight.values() )
-            l_return.put( l_item.toString(), CCommon.getMap( "active", l_layer.isActiveWeight( l_item ), "id", l_item.name() ) );
+            m_weight.put( l_item.toString(), CCommon.getMap( "active", l_layer.isActiveWeight( l_item ), "id", l_item.name() ) );
 
-        return l_return;
+        return m_weight;
     }
 
     /**

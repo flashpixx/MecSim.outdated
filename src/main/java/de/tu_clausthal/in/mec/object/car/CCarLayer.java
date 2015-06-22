@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.CUI;
 import org.jxmapviewer.painter.Painter;
 
 import java.io.IOException;
@@ -51,8 +52,6 @@ import java.util.List;
  */
 public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
 {
-    /** unit converting for traffic structure **/
-    private final transient CUnitConvert m_unit = new CUnitConvert();
     /**
      * data structure - not serializable
      */
@@ -62,13 +61,14 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private EDrivingModel m_drivemodel = EDrivingModel.AgentNagelSchreckenberg;
     /**
+     * unit converting for traffic structure
+     **/
+    private final transient CUnitConvert m_unit = new CUnitConvert();
+    /**
      * graph
      */
     private transient CGraphHopper m_graph = new CGraphHopper( m_unit.getCellSize() );
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
+
 
     @Override
     public final void afterStepObject( final int p_currentstep, final ICar p_object )
@@ -81,8 +81,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         }
 
         // repaint the OSM viewer (supress flickering)
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
     }
 
     @Override
@@ -100,8 +100,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void onDeserializationComplete()
     {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().addPainter(
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter().addPainter(
                     (Painter) this
             );
     }
@@ -109,10 +109,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void onDeserializationInitialization()
     {
-        if ( CSimulation.getInstance().getUIComponents().exists() )
-            CSimulation.getInstance().getUIComponents().getUI().<CSwingWrapper<COSMViewer>>getTyped( "OSM" ).getComponent().getCompoundPainter().removePainter(
-                    (Painter) this
-            );
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
+                       .removePainter(
+                               (Painter) this
+                       );
     }
 
     @Override
@@ -159,13 +160,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
-     * returns the unit converting object
-     *
-     * @return unit converter
-     */
-    public CUnitConvert getUnitConvert() { return m_unit; }
-
-    /**
      * returns a graph weight
      *
      * @param p_weight weight name
@@ -174,6 +168,16 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
     {
         return m_graph.<T>getWeight( p_weight );
+    }
+
+    /**
+     * returns the unit converting object
+     *
+     * @return unit converter
+     */
+    public CUnitConvert getUnitConvert()
+    {
+        return m_unit;
     }
 
     /**

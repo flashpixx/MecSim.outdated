@@ -21,27 +21,16 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.waypoint.generator;
-
-import org.apache.commons.math3.distribution.ExponentialDistribution;
+package de.tu_clausthal.in.mec.object.mas;
 
 
 /**
- * creates a time-exponential distribution generator
+ * enum type of MAS languages
  */
-public class CTimeExponentialDistribution extends ITimeDistribution
+public enum EAgentLanguages
 {
-
     /**
-     * ctor
-     *
-     * @param p_count number of objects
-     * @param p_mean mean value
-     * @param p_deviation deviation value
+     * Jason value *
      */
-    public CTimeExponentialDistribution( final int p_count, final double p_mean, final double p_deviation )
-    {
-        super( new ExponentialDistribution( p_mean, p_deviation ), p_count );
-    }
-
+    Jason
 }

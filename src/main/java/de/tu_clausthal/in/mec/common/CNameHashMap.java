@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec.common;
 
 
-import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,13 +36,9 @@ import java.util.Stack;
  *
  * @warning map within map should be converted with copy-ctor
  */
+@SuppressWarnings( "serial" )
 public class CNameHashMap extends HashMap<String, Object> implements Iterable<Map.Entry<CPath, Object>>
 {
-    /**
-     * serialize version ID *
-     */
-    private static final long serialVersionUID = 1L;
-
     /**
      * ctor
      */
@@ -59,14 +54,13 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * @param p_data map
      */
     @SuppressWarnings( "unchecked" )
-    public CNameHashMap( final Map<String, Object> p_data ) throws IOException, ClassNotFoundException
+    public CNameHashMap( final Map<String, Object> p_data )
     {
         super();
         for ( Map.Entry<String, Object> l_item : p_data.entrySet() )
             this.put(
-                    CCommon.deepCopy( l_item.getKey() ), ( l_item.getValue() instanceof Map ) ? new CNameHashMap( (Map) l_item.getValue() ) : CCommon.deepCopy(
-                            l_item.getValue()
-                    )
+                    l_item.getKey(),
+                    l_item.getValue() instanceof Map ? new CNameHashMap( (Map) l_item.getValue() ) : l_item.getValue()
             );
     }
 
@@ -86,6 +80,8 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
             return null;
 
         final Object l_return = p_map.get( p_path.get( 0 ) );
+        if ( p_path.size() == 1 )
+            return (T) l_return;
         if ( l_return instanceof Map )
             return (T) get( p_path.getSubPath( 1 ), (Map) l_return );
 
@@ -169,6 +165,35 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     public final <T> T get( final String p_path )
     {
         return this.<T>get( new CPath( p_path ) );
+    }
+
+    /**
+     * returns a value or a default
+     *
+     * @param p_path path of the value
+     * @param p_default default
+     * @return value
+     *
+     * @tparam T type
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T getOrDefault( final CPath p_path, final Object p_default )
+    {
+        return this.traverseContainsKey( p_path ) ? this.<T>get( p_path ) : (T) p_default;
+    }
+
+    /**
+     * returns a value or a default
+     *
+     * @param p_path path of the value
+     * @param p_default default
+     * @return value
+     *
+     * @tparam T type
+     */
+    public <T> T getOrDefault( final String p_path, final Object p_default )
+    {
+        return this.getOrDefault( new CPath( p_path ), p_default );
     }
 
     /**
@@ -278,12 +303,6 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     public static class CImmutable extends CNameHashMap
     {
         /**
-         * serialize version ID *
-         */
-        private static final long serialVersionUID = 1L;
-
-
-        /**
          * ctor
          */
         public CImmutable()
@@ -301,7 +320,10 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         {
             super();
             for ( final Map.Entry<? extends String, ?> l_item : p_data.entrySet() )
-                this.put( l_item.getKey(), l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
+                this.put(
+                        l_item.getKey(),
+                        l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue()
+                );
         }
 
         @Override
@@ -316,7 +338,10 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
         public final void putAll( final Map<? extends String, ?> p_map )
         {
             for ( final Map.Entry<? extends String, ?> l_item : p_map.entrySet() )
-                this.put( l_item.getKey(), l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue() );
+                this.put(
+                        l_item.getKey(),
+                        l_item.getValue() instanceof Map ? new CImmutable( (Map) l_item.getValue() ) : l_item.getValue()
+                );
         }
 
         @Override

@@ -41,8 +41,6 @@ import java.util.Set;
 
 /**
  * message handler class
- *
- * @bug counting incomplete
  */
 public class CMessageSystem implements IVoidSteppable
 {

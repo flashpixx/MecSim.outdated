@@ -37,11 +37,34 @@
 function Waypoint( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
+
+    this.mo_wizardpreset = new WaypointPreset( "waypointpreset" );
+    this.mo_wizardpreset.setParent(this);
 }
 
 /** inheritance call **/
 Waypoint.prototype = Object.create(Pane.prototype);
 
+
+
+/**
+ * @Overwrite
+**/
+Waypoint.prototype.getGlobalCSS = function()
+{
+    return this.mo_wizardpreset.getGlobalCSS() + Pane.prototype.getGlobalCSS.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
+Waypoint.prototype.getGlobalContent = function()
+{
+    jQuery( MecSim.ui().static("#") ).append(this.mo_wizardpreset.getContent());
+
+    return Pane.prototype.getGlobalContent.call(this);
+}
 
 /**
  * @Overwrite
@@ -49,11 +72,11 @@ Waypoint.prototype = Object.create(Pane.prototype);
 Waypoint.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("newpreset") + '" >Create new preset</button >' +
-           '<button id = "' + this.generateSubID("list") + '" >Show Waypoint List</button >' +
+           '<button id = "' + this.generateSubID("list") + '" ></button >' +
            Pane.prototype.getContent.call(this);
-
-    // @todo add default preset list
 }
+
+
 
 
 /**
@@ -62,13 +85,15 @@ Waypoint.prototype.getContent = function()
 Waypoint.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
+
+    MecSim.language({ url : "/clanguageenvironment/waypoint", target : this });
+
+    this.mo_wizardpreset.afterDOMAdded();
+
     var self = this;
-
-    ["newpreset", "list"].forEach( function(pc_item) {
-
-        // @todo action bind with button().click( function() {} )
-        jQuery( self.generateSubID( pc_item, "#" ) ).button();
-
+    jQuery( this.generateSubID("newpreset", "#") ).button().click( function() {
+        jQuery(MecSim.ui().content("#")).empty();
+        self.mo_wizardpreset.show();
     });
 
 }

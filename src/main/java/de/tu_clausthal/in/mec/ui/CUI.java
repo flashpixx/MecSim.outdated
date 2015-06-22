@@ -26,8 +26,6 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
-import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -52,6 +50,7 @@ import java.util.Map;
 /**
  * JavaFX application
  *
+ * @bug undock structure does not work correct
  * @see https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
  */
@@ -159,8 +158,6 @@ public class CUI extends Application
      * @param p_title title
      * @param p_node node
      * @return tab
-     *
-     * @bug closable is disable, because the library ControlsFX creates a NPE on the close event - so can be activated at a new library release version
      */
     private Tab createTab( final String p_title, final Node p_node )
     {
@@ -169,7 +166,7 @@ public class CUI extends Application
         l_tab.setId( p_title );
         l_tab.setText( p_title );
         l_tab.setContent( p_node );
-        l_tab.setClosable( false );
+        l_tab.setClosable( true );
         l_tab.setOnClosed( m_tabcloseevent );
         m_tabpane.getTabs().add( l_tab );
 
@@ -185,7 +182,7 @@ public class CUI extends Application
      * @tparam T node type
      */
     @SuppressWarnings( "unchecked" )
-    public final <T extends Node> T getTyped( final String p_name )
+    public final <T extends Node> T get( final String p_name )
     {
         return (T) m_content.get( p_name );
     }
@@ -255,19 +252,7 @@ public class CUI extends Application
     @Override
     public final void start( final Stage p_stage ) throws Exception
     {
-        // set via reflection the UI
-        try
-        {
-            if ( CSimulation.getInstance().getUIComponents().getUI() == null )
-                CReflection.getClassField( CSimulation.getInstance().getUIComponents().getClass(), "m_ui" ).getSetter().invoke(
-                        CSimulation.getInstance().getUIComponents(), this
-                );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
-
+        CSimulation.getInstance().getStorage().add( "ui", this );
         this.stageInitialization( p_stage );
         this.stageLayoutInitialization( p_stage );
         CBootstrap.afterStageInit( this );

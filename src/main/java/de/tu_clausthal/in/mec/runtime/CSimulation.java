@@ -33,10 +33,7 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.runtime.core.CMainLoop;
 import de.tu_clausthal.in.mec.runtime.message.CMessageSystem;
-import de.tu_clausthal.in.mec.ui.CInspector;
-import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
-import de.tu_clausthal.in.mec.ui.web.CServer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,7 +81,7 @@ public class CSimulation
     /**
      * UI components
      */
-    private CUIComponents m_uicomponents = new CUIComponents();
+    private CStorage m_storage = new CStorage();
     /**
      * world of the simulation
      */
@@ -158,11 +155,11 @@ public class CSimulation
     }
 
     /**
-     * returns the UI components
+     * returns the storage
      */
-    public CUIComponents getUIComponents()
+    public CStorage getStorage()
     {
-        return m_uicomponents;
+        return m_storage;
     }
 
     /**
@@ -418,62 +415,62 @@ public class CSimulation
     }
 
     /**
-     * UI components bundle
+     * peristent storage
      */
-    public class CUIComponents
+    public class CStorage
     {
         /**
-         * inspector
+         * map with (lower-case) names and elements
          */
-        private final CInspector m_inspector = null;
-        /**
-         * UI
-         */
-        private final CUI m_ui = null;
-        /**
-         * HTTP server
-         */
-        private final CServer m_webserver = null;
+        private final Map<String, Object> m_elements = new HashMap<>();
 
         /**
-         * returns a boolean for existing UI
+         * adds an element
          *
-         * @return UI exists
+         * @param p_name name of the object
+         * @param p_object object
+         * @warning existing elements are not allowed and throws an exception
          */
-        public boolean exists()
+        public final void add( final String p_name, final Object p_object )
         {
-            return ( m_ui != null ) && ( m_webserver != null ) && ( m_inspector != null );
+            if ( m_elements.containsKey( p_name.toLowerCase() ) )
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "exists", p_name ) );
+
+            m_elements.put( p_name.toLowerCase(), p_object );
         }
 
         /**
-         * returns the inspector
+         * check the map has existing elements
          *
-         * @return inspector
+         * @return existence flag
          */
-        public CInspector getInspector()
+        public final boolean exists()
         {
-            return m_inspector;
+            return !m_elements.isEmpty();
         }
 
         /**
-         * returns the UI
+         * check if an object exists
          *
-         * @return UI
+         * @param p_name name of the object
+         * @return existence flag
          */
-        public CUI getUI()
+        public final boolean exists( final String p_name )
         {
-            return m_ui;
+            return m_elements.containsKey( p_name.toLowerCase() );
         }
 
         /**
-         * returns the HTTP server
+         * returns the type based object
          *
-         * @return null or server
+         * @param p_name name of the object
+         * @return object
+         *
+         * @tparam T type of the object
          */
-        public CServer getWebServer()
+        public final <T> T get( final String p_name )
         {
-            return m_webserver;
+            return (T) m_elements.get( p_name.toLowerCase() );
         }
-
     }
 }

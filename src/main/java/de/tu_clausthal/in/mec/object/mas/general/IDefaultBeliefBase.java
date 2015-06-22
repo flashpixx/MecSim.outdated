@@ -390,9 +390,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void update()
     {
-        for( final Map<Class<?>, Set<? super IBeliefBaseElement>> l_innerMap : m_elements.values() )
-            for ( final IBeliefBase l_beliefbase : l_innerMap.values() )
-            this.getBeliefbases( CPath.EMPTY ).values().forEach( de.tu_clausthal.in.mec.object.mas.general.IBeliefBase::update );
+        this.getBeliefbases( CPath.EMPTY ).values().forEach( de.tu_clausthal.in.mec.object.mas.general.IBeliefBase::update );
     }
 
     /**

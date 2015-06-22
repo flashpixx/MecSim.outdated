@@ -137,7 +137,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
         @Override
         public void serialize( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator, final SerializerProvider p_serializer
-        ) throws IOException, JsonProcessingException
+        ) throws IOException
         {
             p_generator.writeStartObject();
             p_generator.writeArrayFieldStart( "cells" );

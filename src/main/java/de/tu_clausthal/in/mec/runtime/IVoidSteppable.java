@@ -38,6 +38,6 @@ public interface IVoidSteppable extends ISteppable
      * @param p_currentstep current step value
      * @param p_layer layer on which is the object push or null
      */
-    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception;
+    void step(final int p_currentstep, final ILayer p_layer) throws Exception;
 
 }

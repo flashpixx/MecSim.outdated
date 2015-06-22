@@ -111,7 +111,7 @@ public class CUnitConvert
      */
     public final int getSpeedToCell( final int p_speed )
     {
-        return (int) ( p_speed * m_celltimestep );
+        return p_speed * m_celltimestep;
     }
 
     /**

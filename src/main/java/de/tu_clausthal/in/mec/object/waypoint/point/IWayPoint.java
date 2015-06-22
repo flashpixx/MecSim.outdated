@@ -45,26 +45,26 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
      *
      * @return neighbors of this node
      */
-    public Collection<GeoPosition> getNeighbor();
+    Collection<GeoPosition> getNeighbor();
 
     /**
      * returns a list of geoposition, which represent a path from this waypoint
      *
      * @return collection with tupel of geoposition
      */
-    public Collection<Pair<GeoPosition, GeoPosition>> getPath();
+    Collection<Pair<GeoPosition, GeoPosition>> getPath();
 
     /**
      * returns the position
      *
      * @return geoposition of the source
      */
-    public GeoPosition getPosition();
+    GeoPosition getPosition();
 
     /**
      * checks if a generator and factory exists
      *
      * @return boolean flag of existance
      */
-    public boolean hasFactoryGenerator();
+    boolean hasFactoryGenerator();
 }

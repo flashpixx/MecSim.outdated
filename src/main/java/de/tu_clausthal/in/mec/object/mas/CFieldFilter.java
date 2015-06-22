@@ -44,7 +44,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
     {
         boolean l_use = true;
         if (p_field.isAnnotationPresent(CAgent.class))
-            l_use = ((CAgent) p_field.getAnnotation(CAgent.class)).bind();
+            l_use = p_field.getAnnotation(CAgent.class).bind();
 
         return l_use && (!((Modifier.isStatic(p_field.getModifiers())) || (Modifier.isInterface(
                 p_field.getModifiers()
@@ -64,7 +64,7 @@ public class CFieldFilter implements CReflection.IFieldFilter
          *
          * @return true if the field is bind
          */
-        public boolean bind() default true;
+        boolean bind() default true;
 
     }
 

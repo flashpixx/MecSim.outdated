@@ -276,7 +276,7 @@ public class CReflection
          * @param p_field field object
          * @return true field will be added, false field will be ignored
          */
-        public boolean filter( final Field p_field );
+        boolean filter(final Field p_field);
     }
 
 
@@ -292,7 +292,7 @@ public class CReflection
          * @param p_method method object
          * @return true field will be added, false method will be ignored
          */
-        public boolean filter( final Method p_method );
+        boolean filter(final Method p_method);
     }
 
 
@@ -647,7 +647,7 @@ public class CReflection
                 throw new IllegalArgumentException( CCommon.getResourceString( this, "notfile", p_jar ) );
 
             try (
-                    final JarFile l_jar = new JarFile( p_jar );
+                    final JarFile l_jar = new JarFile( p_jar )
             )
             {
                 for ( final Enumeration<JarEntry> l_entry = l_jar.entries(); l_entry.hasMoreElements(); )

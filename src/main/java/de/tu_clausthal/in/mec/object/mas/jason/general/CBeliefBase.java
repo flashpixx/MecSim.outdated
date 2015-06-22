@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
+import de.tu_clausthal.in.mec.object.mas.general.CTermSet;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;

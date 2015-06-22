@@ -21,59 +21,49 @@
  * @endcond
  */
 
-//"use strict"; TODO: global strict mode does not work
-
  /** todo collection for source-ui ck
-
- targeting waypoint table
- TODO waypoint color
- TODO waypoint name (defaultWaypoint#1)
- TODO resize widget and hide overflow
- TODO multilanguage labels (length)
- TODO save / update /reset
- TODO serach field to filter waypoints
- TODO edit table size
-
- targeting
- TODO default target (viewpoint)
- TODO tabs for makrov editor / weighting matrix
- TODO markrov editor buttons (reset / show or hide no connected nodes / remove edges /save)
- TODO makrov editor (see d3.js)
- TODO weighting matrix
- TODO relative vs absolute weighting (recalc relativ weighting)
- TODO java structure (makrov chain, routing)
- TODO CWeightingMap Refactor (to i need the full waypoint or is geoposition okay -> then there is no need to references)
- TODO might be a good idea to use waypoint geo positions for default data but also allow any other geoposition for targets
-
- wizard
  TODO save toolbox in config/web
  TODO histogramm
+ TODO read more data
  TODO better error messges
+ TODO delete tool
+ TODO improve labels for carsettings
+ TODO linger probability as slider ?
 
- feature
+ TODO path waypoints
+ TODO source weighting list
+ TODO radial to add waypoints to makrov chain
+
  TODO plot distribution -> responsive wizard height
  TODO bounding in minimized mode maybe snap to tab
- TODO layout multiple widgets (z index and bounding)
+ TODO layout multiple widgets
  TODO check last jquery slectors
  TODO distingusish between open and close klick
  **/
+
 var SourcePanel = ( function (px_module) {
 
     px_module.settings = {
-
         labels  :   {},
         dom     :   {
-            label           : {},
-            panel           : $("#mecsim_source_panel"),
-            toolbox         : $("#mecsim_source_toolbox"),
-            createTool      : $("#mecsim_source_createTool"),
-            targetingButton : $("#mecsim_source_targetingButton")
+            label       : {},
+            panel       : $("#mecsim_source_panel"),
+            toolbox     : $("#mecsim_source_toolbox"),
+            createTool  : $("#mecsim_source_createTool")
         },
         obj     :   {}
     };
 
     //method to initialize source-ui
     px_module.init = function() {
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+>>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         //get labels and build the toolbox
         SourcePanel.getLabels();
         SourcePanel.buildToolbox();
@@ -89,29 +79,14 @@ var SourcePanel = ( function (px_module) {
                 SourcePanel.getDOMElements();
                 MecSim.language("getstaticwaypointlabels", function(){
 
-                    //create targeting widget
-                    SourcePanel.settings.obj.targetingWidget = Widget.createWidget(
-                        SourcePanel.settings.dom.targetingWidget,
-                        {
-                            name    : "Temp Name",
-                            width   : 450,
-                            height  : 600
-                        }
-                    );
-                    SourcePanel.settings.obj.targetingWidget.close();
-
-                    //create table content
-                    SourcePanel.createWaypointList();
-
-                    //create wizard widget
-                    SourcePanel.settings.obj.wizardWidget = Widget.createWidget(
-                        SourcePanel.settings.dom.wizardWidget,
+                    //create widget
+                    SourcePanel.settings.obj.widget = Widget.createWidget(
+                        SourcePanel.settings.dom.widget,
                         {
                             name     : SourcePanel.settings.labels.wizardwidget,
                             width    : 850
                         }
                     );
-                    SourcePanel.settings.obj.wizardWidget.close();
 
                     //create wizard
                     SourcePanel.settings.obj.wizard = SourcePanel.settings.dom.wizard.steps({
@@ -163,21 +138,22 @@ var SourcePanel = ( function (px_module) {
 
         //listen to create tool button
         SourcePanel.settings.dom.createTool.button().on("click", function(data){
-            SourcePanel.settings.obj.wizardWidget.close();
-        });
-
-        //listen to configure waypoint path button
-        SourcePanel.settings.dom.targetingButton.button().on("click", function(data){
-            SourcePanel.settings.obj.targetingWidget.close();
+            SourcePanel.settings.obj.widget.close();
         });
     };
 
     //method to get DOM Elements
     px_module.getDOMElements = function(){
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+>>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         //dom elements (no labels)
-        SourcePanel.settings.dom.targetingWidget                 = $('#mecsim_source_targetingWidget');
-        SourcePanel.settings.dom.targetingTable                  = $('#mecsim_source_targetingTable');
-        SourcePanel.settings.dom.wizardWidget                    = $("#mecsim_source_wizardWidget");
+        SourcePanel.settings.dom.widget                          = $("#mecsim_source_widget");
         SourcePanel.settings.dom.wizard                          = $("#mecsim_source_wizard");
         SourcePanel.settings.dom.selectWaypointType              = $("#mecsim_source_selectWaypointType");
         SourcePanel.settings.dom.selectRadius                    = $("#mecsim_source_waypointRadius");
@@ -284,6 +260,14 @@ var SourcePanel = ( function (px_module) {
 
     //method to build up the wizard content
     px_module.buildContent = function() {
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+>>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         SourcePanel.getDOMElements();
 
         //create selectmenu with waypoint types
@@ -447,10 +431,10 @@ var SourcePanel = ( function (px_module) {
                     SourcePanel.createToolButton(pc_key, px_value.redValue, px_value.greenValue, px_value.blueValue, px_value.deleteable);
                 });
 
-                SourcePanel.settings.obj.wizardWidget.close();
+                SourcePanel.settings.obj.widget.close();
                 setTimeout(function(){
                     SourcePanel.settings.obj.wizard.steps("setStep", 0);
-                }, SourcePanel.settings.obj.wizardWidget._animationTime);
+                }, SourcePanel.settings.obj.widget._animationTime);
             }
         }).fail(function(){
             SourcePanel.settings.dom.errorMessage.text(SourcePanel.settings.labels.toolcreationfailed);
@@ -477,6 +461,14 @@ var SourcePanel = ( function (px_module) {
 
     //method to update generator settings
     px_module.updateGeneratorSettings = function(){
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+>>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         SourcePanel.updateLabels(
             SourcePanel.settings.dom.selectGenerator.val(),
             [
@@ -504,6 +496,14 @@ var SourcePanel = ( function (px_module) {
 
     //method to update car settings
     px_module.updateCarSettings = function(event){
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+>>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
         var l_element1, l_element2, l_element3, l_element4;
         switch(event.target.id){
 
@@ -595,6 +595,8 @@ var SourcePanel = ( function (px_module) {
         });
     };
 
+<<<<<<< HEAD
+=======
     //method to build waypoint table
     px_module.createWaypointList = function(){
         $.ajax({
@@ -632,6 +634,11 @@ var SourcePanel = ( function (px_module) {
         });
     };
 
+<<<<<<< HEAD
+>>>>>>> temp
+=======
+>>>>>>> temp-branch
+>>>>>>> temp-branch
     return px_module;
 
 }(SourcePanel || {}));

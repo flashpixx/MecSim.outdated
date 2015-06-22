@@ -52,40 +52,44 @@ public interface IAgent extends Painter, IReceiver
      * @param p_path path of beliefbase with literals name as last element
      * @param p_data belief data
      */
+<<<<<<< HEAD
+    void addLiteral(final String p_name, final Object p_data);
+=======
     public void addLiteral(final CPath p_path, final Object p_data);
+>>>>>>> temp-branch
 
     /**
      * returns the current cycle
      *
      * @return cycle number
      */
-    public int getCycle();
+    int getCycle();
 
     /**
      * returns the name of the agent
      *
      * @return name of the agent
      */
-    public String getName();
+    String getName();
 
     /**
      * returns the source / file of the agent
      *
      * @return source
      */
-    public String getSource();
+    String getSource();
 
     /**
      * register a cycle object
      *
      * @param p_cycle cycle object
      */
-    public void registerCycle(final ICycle p_cycle);
+    void registerCycle(final ICycle p_cycle);
 
     /**
      * release agent call *
      */
-    public void release();
+    void release();
 
     /**
      * removes a belief from specified beliefbase
@@ -101,13 +105,17 @@ public interface IAgent extends Painter, IReceiver
      * @param p_path path to beliefbase with literals name as last element
      * @param p_data belief data
      */
+<<<<<<< HEAD
+    void removeLiteral(final String p_name, final Object p_data);
+=======
     public void removeLiteral(final CPath p_path, final Object p_data);
+>>>>>>> temp-branch
 
     /**
      * unregister a cycle object
      *
      * @param p_cycle cycle object
      */
-    public void unregisterCycle(final ICycle p_cycle);
+    void unregisterCycle(final ICycle p_cycle);
 
 }

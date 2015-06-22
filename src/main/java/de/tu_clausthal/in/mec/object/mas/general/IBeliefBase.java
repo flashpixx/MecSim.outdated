@@ -62,7 +62,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @param p_path path to a specific beliefbase with name of new beliefbase as last element
      * @param p_beliefbase beliefbase to add
      */
-    public void add( final String p_path, final IBeliefBase<T> p_beliefbase );
+    public boolean add( final String p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
      * Adds a new beliefbase into specified path. The last element in path has to be the name
@@ -71,7 +71,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @param p_path path to a specific beliefbase with name of new beliefbase as last element
      * @param p_beliefbase beliefbase to add
      */
-    public void add( final CPath p_path, final IBeliefBase<T> p_beliefbase );
+    public boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
      * adds a collection of literals into an inherited beliefbase specified by a path
@@ -93,7 +93,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * empties the whole beliefbase, i.e. the top-level literals
      * and all the literals in inherited beliefbases
      */
-    public void clear();
+    void clear();
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
@@ -115,6 +115,11 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @return collapsed set of top-level and inherited literals
      */
     public Set<ILiteral<T>> collapse( final CPath p_path );
+
+    /**
+     * getter for beliefbase elements
+     */
+    public Map getElements();
 
     /**
      * gets a beliefbase with position and name specified in path
@@ -176,5 +181,5 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     /**
      * updates the beliefbase
      */
-    public void update();
+    void update();
 }

@@ -38,7 +38,7 @@ public interface IPercept<T>
      *
      * @return data (key-value pair)
      */
-    public Map<String, Object> get();
+    Map<String, Object> get();
 
     /**
      * returns the normalized intensity of the object
@@ -47,13 +47,13 @@ public interface IPercept<T>
      * @return intensity value in [0,1] (0 = not receivable,
      * 1 = always reveivable [infinity intensity])
      */
-    public double getIntensity();
+    double getIntensity();
 
     /**
      * returns the position of the perceptable object
      *
      * @return position
      */
-    public T getPosition();
+    T getPosition();
 
 }

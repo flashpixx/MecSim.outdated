@@ -1,236 +1,90 @@
-<?xml version="1.0" ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns = "http://www.w3.org/1999/xhtml" >
+<!DOCTYPE html>
 
-    <head >
+<head >
+    <title >MecSim - Traffic Simulation</title >
+    <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8" />
 
-        <title >MecSim - Traffic Simulation</title >
+    <!-- jQuery https://jquery.com/ -->
+    <script type = "text/javascript" src = "jscss/lib/jquery-2.1.4.min.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jquery.webui-popover.js" ></script >
+    <link href = "jscss/lib/jquery.webui-popover.css" rel = "stylesheet" />
 
-        <!-- jQuery https://jquery.com/ ------------------------------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/jquery-2.1.3.min.js" ></script >
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- jQuery-UI https://jqueryui.com/ -->
+    <script type = "text/javascript" src = "jscss/lib/jquery-ui-1.11.4/jquery-ui.min.js" ></script >
+    <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.min.css" rel = "stylesheet" />
 
-        <!-- jQuery-UI https://jqueryui.com/ -------------------------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/jquery-ui-1.11.4/jquery-ui.min.js" ></script >
-        <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.min.css" rel = "stylesheet" />
+    <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel = "stylesheet" />
+    <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel = "stylesheet" />
 
-        <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.theme.min.css" rel = "stylesheet" />
-        <link href = "jscss/lib/jquery-ui-1.11.4/jquery-ui.structure.min.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- D3.js http://d3js.org/ -->
+    <script type = "text/javascript" src = "jscss/lib/d3-3.5.5.min.js" ></script >
 
-        <!-- D3.js http://d3js.org/ ----------------------------------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/d3-3.5.5.min.js" ></script >
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- jqWidgets  http://www.jqwidgets.com/ -->
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxcore.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxbuttons.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxsplitter.js" ></script >
+    <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.8/jqxinput.js" ></script >
+    <link href = "jscss/lib/jqwidgets-3.8/jqx.base.css" rel = "stylesheet" />
+    <link href = "jscss/lib/jqwidgets-3.8/jqx.ui-lightness.css" rel = "stylesheet" />
 
-        <!-- jqWidgets  http://www.jqwidgets.com/ --------------------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.7.1/jqxcore.js" ></script >
-        <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.7.1/jqxbuttons.js" ></script >
-        <script type = "text/javascript" src = "jscss/lib/jqwidgets-3.7.1/jqxsplitter.js" ></script >
-        <link href = "jscss/lib/jqwidgets-3.7.1/jqx.base.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- Codemirror  http://codemirror.net/ -->
+    <script type = "text/javascript" src = "jscss/lib/codemirror-5.3/lib/codemirror.js" ></script >
+    <link href = "jscss/lib/codemirror-5.3/lib/codemirror.css" rel = "stylesheet" />
 
-        <!-- jquery-dataTables https://www.datatables.net/ ------------------------------------------------------------>
-        <script type = "text/javascript" src = "jscss/lib/DataTables-1.10.6/media/js/jquery.dataTables.min.js" ></script >
-        <link href = "jscss/lib/DataTables-1.10.6/media/css/jquery.dataTables.min.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- Bootstrap-Switch  http://www.bootstrap-switch.org/ -->
+    <script type = "text/javascript" src = "jscss/lib/bootstrap-switch.min.js" ></script >
+    <link href = "jscss/lib/bootstrap-switch.min.css" rel = "stylesheet" />
 
-        <!-- Codemirror  http://codemirror.net/ ---------------------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/codemirror-5.1/lib/codemirror.js" ></script >
-        <link href = "jscss/lib/codemirror-5.1/lib/codemirror.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- Spectrum-Colorpicker http://bgrins.github.io/spectrum/-->
+    <script type = "text/javascript" src = "jscss/lib/spectrum.js" ></script >
+    <link href = "jscss/lib/spectrum.css" rel = "stylesheet" />
 
-        <!-- Bootstrap-Switch  http://www.bootstrap-switch.org/ ------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/bootstrap-switch.min.js" ></script >
-        <link href = "jscss/lib/bootstrap-switch.min.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- JQuery-Steps-Wizard http://www.jquery-steps.com/-->
+    <script type = "text/javascript" src = "jscss/lib/jquery-steps.min.js" ></script >
+    <link href = "jscss/lib/jquery-steps.css" rel = "stylesheet" />
 
-        <!-- Spectrum-Colorpicker http://bgrins.github.io/spectrum/---------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/spectrum.js" ></script >
-        <link href = "jscss/lib/spectrum.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
 
-        <!-- JQuery-Steps-Wizard http://www.jquery-steps.com/---------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/lib/jquery-steps.min.js" ></script >
-        <link href = "jscss/lib/jquery-steps.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <!-- MecSim -->
+    <script type = "text/javascript" src = "jscss/module/global.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/mecsim.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/layout.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/visualization.js" ></script >
+    <script type = "text/javascript" src = "jscss/module/widget.js" ></script >
 
-        <!-- MecSim: OUR STUFF ---------------------------------------------------------------------------------------->
-        <script type = "text/javascript" src = "jscss/global.js" ></script >
-        <script type = "text/javascript" src = "jscss/mecsim.js" ></script >
-        <script type = "text/javascript" src = "jscss/visualization.js" ></script >
-        <script type = "text/javascript" src = "jscss/widget.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/pane.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/inspector.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
 
-        <script type = "text/javascript" src = "jscss/main.js" ></script >
-        <script type = "text/javascript" src = "jscss/accordion/simulation.js" ></script >
-        <script type = "text/javascript" src = "jscss/accordion/layer.js" ></script >
-        <script type = "text/javascript" src = "jscss/accordion/source.js" ></script >
-        <script type = "text/javascript" src = "jscss/accordion/editor.js" ></script >
-        <script type = "text/javascript" src = "jscss/accordion/mas.js" ></script >
-        <script type = "text/javascript" src = "jscss/accordion/help.js" ></script >
-        <link href = "jscss/layout.css" rel = "stylesheet" />
-        <!------------------------------------------------------------------------------------------------------------->
+    <script type = "text/javascript" src = "jscss/content/simulation.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/configuration.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/layer.js" ></script >
 
-    </head >
+    <script type = "text/javascript" src = "jscss/content/traffic.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/waypoint.js" ></script >
 
-    <body >
+    <script type = "text/javascript" src = "jscss/content/mas.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/maseditor.js" ></script >
 
-        <div id = "mecsim_global_screen" >
-            <div id = "mecsim_global_menu" >
-                <div id = "mecsim_global_accordion" class = "accordion" >
+    <script type = "text/javascript" src = "jscss/content/help.js" ></script >
 
-                    <h3 id = "mecsim_simulation_panel" >Simulation</h3 >
 
-                    <div id = "mecsim_simulation_panel_content" class = "mecsim_global_sliderSubMenu" >
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_config" >Configuration</button >
-                        <br /><br />
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_local" >Local</button >
-                        <br /><br />
-                        <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_start" >Start</button >
-                        <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_stop" >Stop</button >
-                        <br /><br />
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_simulation_reset" >Reset</button >
-                        <br /><br />
-                        <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_load" >Load</button >
-                        <button class = "mecsim_global_accordeonbutton_half" id = "mecsim_simulation_save" >Save</button >
-                        <br /><br />
-                        <label for = "mecsim_simulation_speed" >Speed: </label >
-                        <input type = "text" id = "mecsim_simulation_speed" readonly style = "border:0;" >
-                        <br /><br />
-                        <div id = "mecsim_simulation_speed_slider" ></div >
-                        <br/><br/>
-                        <button class="mecsim_global_accordeonbutton" id="mecsim_clear_logger">Clear Logger</button>
-                    </div >
+    <script type = "text/javascript" >
+        jQuery(document).ready(function() {
+            MecSim.uiinitialize([
+                new Inspector( "inspector" ),
+                new Logger( "logger" ),
+                new Simulation("simulation", "Simulation", [new Configuration("configuration", "Configuration")]),
+                new Layer("layer", "Layer"),
+                new Traffic("traffic", "Traffic Environment"),
+                new Waypoint("waypoint", "Waypoint / Sources"),
+                new MAS("mas", "Multi-Agent System", [new MASEditor("editor", "Editor")]),
+                new Help("help", "Help")
+            ]);
+        });
+    </script >
+</head >
 
-                    <h3 id = "mecsim_layer_panel" >Layer</h3 >
-
-                    <div id = "mecsim_layer_panel_content" class = "mecsim_global_sliderSubMenu" >
-                        <h3 >Activity & Visibility</h3 >
-
-                        <div id = "mecsim_layer_switchUI" ></div >
-                        <br /><br />
-
-                        <h3 >Click-Order</h3 >
-
-                        <div id = "mecsim_layer_clickableUI" ></div >
-                    </div >
-
-                    <h3 id = "mecsim_source_panel" >Sources</h3 >
-
-                    <div id = "mecsim_source_panel_content" class = "mecsim_global_sliderSubMenu" >
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_source_createTool" >Create new Tool</button >
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_source_targetingButton" >Show Waypoint List</button >
-                        <h3 >Toolbox</h3 >
-
-                        <div id = "mecsim_source_toolbox" ></div >
-                    </div >
-
-                    <h3 id = "mecsim_editor_panel" >Editor</h3 >
-
-                    <div id = "mecsim_editor_panel_content" class = "mecsim_global_sliderSubMenu" >
-                        <label for = "mecsim_agent_files" >Select a file</label >
-                        <select name = "agentfiles" id = "mecsim_agent_files" ></select >
-                        <br />
-                        <button id = "mecsim_load_file" class = "template_button mecsim_editor_fixed_width_button" >Load</button >
-                        <button id = "mecsim_delete_file" class = "mecsim_editor_fixed_width_button" >Delete</button >
-                        <button id = "mecsim_new_file" class = "mecsim_editor_fixed_width_button" >New</button >
-                        <button id = "mecsim_save_file" class = "mecsim_editor_fixed_width_button" >Save</button >
-                    </div >
-
-                    <h3 id = "mecsim_multiagent_panel" >Multi-Agent System</h3 >
-
-                    <div id = "mecsim_multiagent_panel_content" class = "mecsim_global_sliderSubMenu" >
-                        <button id = "mecsim_mas_jasonmindinspector" class = "mecsim_global_accordeonbutton" >Jason Mindinspector</button >
-                        <br />
-                        <button id = "mecsim_mas_communication" class = "mecsim_global_accordeonbutton" >Communication</button >
-                    </div >
-
-                    <h3 id = "mecsim_help_panel" >Help</h3 >
-
-                    <div id = "mecsim_help_panel_content" class = "mecsim_global_sliderSubMenu" >
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_about" >About</button >
-                        <br /><br />
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_userdoku" >User Dokumentation</button >
-                        <br /><br />
-                        <button class = "mecsim_global_accordeonbutton" id = "mecsim_help_devdoku" >Developer Dokumentation</button >
-                    </div >
-
-                </div >
-            </div >
-
-            <div >
-                <div id = "mecsim_global_screen_right" >
-                    <div id = "mecsim_global_content" ></div >
-                    <div id = "mecsim_global_log" ></div >
-                </div >
-            </div >
-        </div >
-
-        <!-- start and stop error messages -->
-        <div id = "mecsim_stop_error" >
-            <div class = "dialog-error" >
-                <p id = "mecsim_stop_error_text" >
-                    <span class = "ui-icon ui-icon-alert" ></span >
-                </p >
-            </div >
-        </div >
-
-        <div id = "mecsim_start_error" >
-            <div class = "dialog-error" >
-                <p id = "mecsim_start_error_text" >
-                    <span class = "ui-icon ui-icon-alert" ></span >
-                </p >
-            </div >
-        </div >
-
-        <!-- About popup -->
-        <div id = "mecsim_about" >
-            <a >
-                <p id = "mecsim_about_text" >
-                    <span class = "ui-icon ui-icon-info" ></span >
-                    <a id = "mecsim_project_name" ></a >
-                    <br /><br />
-                    <label for = "mecsim_license" >License: </label >
-                    <a id = "mecsim_license" ></a >
-                    <br />
-                    <label for = "mecsim_buildversion" >Build version: </label >
-                    <a id = "mecsim_buildversion" ></a >
-                    <br />
-                    <label for = "mecsim_buildnumber" >Build number: </label >
-                    <a id = "mecsim_buildnumber" ></a>
-                    <br />
-                    <label for = "mecsim_buildcommit" >Build commit: </label >
-                    <a id = "mecsim_buildcommit" ></a>
-                </p >
-        </div >
-        </div >
-
-        <!-- form to create new asl file -->
-        <div id = "mecsim_create_file_form" title = "Create new File" >
-
-            <form >
-                <fieldset >
-                    <label for = "new_file" >Enter asl file name:</label >
-                    <input type = "text" name = "create_new_file" id = "new_file" >
-                    <br />
-                    <label for = "mecsim_file_type" >Select a file type:</label >
-                    <select name = "file_type" id = "mecsim_file_type" style = "width: 100px;" >
-                        <option value = "asl" selected = "selected" >ASL</option >
-                        <option value = "goal" >Goal</option >
-                    </select >
-                </fieldset >
-            </form >
-        </div >
-
-        <!-- modal dialog for object inspector -->
-        <div id = "mecsim_object_inspector" title = "Object Inspector" >
-        </div >
-
-        <!-- modal dialog for delete file confirmation -->
-        <div id="mecsim_editor_delete_confirmation" title="Confirm File Deletion">
-            <p>Do you really want to delete the file?</p>
-            <button id="mecsim_editor_delete_file_yes">Yes</button>
-            <button id="mecsim_editor_delete_file_no">No</button>
-        </div>
-
-    </body >
+<body >
+</body >
 
 </html >

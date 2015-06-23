@@ -534,9 +534,10 @@ WaypointPreset.prototype.setDistribution = function( pc_id, pc_value, px_firstmo
 {
     jQuery( this.generateSubID(  pc_id+"firstmomentum", "#") ).val(  px_firstmomentum ? px_firstmomentum : "");
     jQuery( this.generateSubID(  pc_id+"secondmomentum", "#") ).val( px_secondmomentum ? px_secondmomentum : "");
+
     jQuery( this.generateSubID(  pc_id, "#") ).val(pc_value).selectmenu("refresh");
 
-    this.setLabelOfDistribution( pc_id, jQuery(this.generateSubID( pc_id, "#")+ " :selected" ).data("bound") );
+    //this.setLabelOfDistribution( pc_id, jQuery(this.generateSubID( pc_id, "#")+ " :selected" ).data("bound") );
 }
 
 

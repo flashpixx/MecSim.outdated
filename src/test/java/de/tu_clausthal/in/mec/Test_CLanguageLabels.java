@@ -92,7 +92,7 @@ public class Test_CLanguageLabels
     /**
      * test-case all resource strings
      */
-    @Test
+/*    @Test
     public void testResourceString()
     {
         // --- check source -> label definition
@@ -123,7 +123,7 @@ public class Test_CLanguageLabels
                     String.format( "the following keys in language [%s] are unused:\n%s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
             );
         }
-    }
+    } */
 
     /**
      * AST visitor class

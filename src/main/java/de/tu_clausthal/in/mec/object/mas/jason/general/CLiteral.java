@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultLiteral;
 import de.tu_clausthal.in.mec.object.mas.general.ITerm;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
@@ -45,8 +46,15 @@ public class CLiteral extends IDefaultLiteral<Literal>
      */
     public CLiteral(Literal p_literal)
     {
+        this( p_literal, CPath.EMPTY );
+    }
 
-        super( p_literal.getFunctor(), p_literal );
+    /**
+     * ctor with path specified
+     */
+    public CLiteral( final Literal p_literal, final CPath p_path )
+    {
+        super( ( p_path.isEmpty() ? "" : p_path.toString() + "/" ) + p_literal.getFunctor(), p_literal );
 
         if( p_literal.hasTerm() )
             for( final Term l_term : p_literal.getTerms() )
@@ -55,6 +63,5 @@ public class CLiteral extends IDefaultLiteral<Literal>
         if( p_literal.hasAnnot() )
             for( final Term l_term : p_literal.getAnnots() )
                 m_annotations.add( CCommon.convertGeneric( l_term ) );
-
     }
 }

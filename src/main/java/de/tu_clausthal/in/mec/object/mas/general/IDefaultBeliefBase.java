@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -175,7 +176,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
+            throw new IllegalArgumentException();
+//            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
 
         // if path contains more than one element, go down the hierarchy and do recursive call
         if ( p_path.size() > 1 )
@@ -270,12 +272,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         // get map of beliefbase-elements by first path-element
         final Map<Class<?>, Set<IBeliefBaseElement>> l_beliefBaseElements = m_elements.get( p_path.get( 0 ) );
         if ( l_beliefBaseElements == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathnotfound", p_path ) );
+            return null;
 
         // get beliefbase with name matching the specified first path-element
         final Set<IBeliefBaseElement> l_beliefbase = l_beliefBaseElements.get( IBeliefBase.class );
         if ( ( l_beliefbase == null ) || ( l_beliefbase.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString(this, "pathnotfound", p_path));
+            return null;
 
         // recursive call in inherited beliefbase with shortened path
         return ( (IBeliefBase) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
@@ -298,6 +300,13 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
     }
 
+    /**
+     *
+     * @param p_path path to beliefbase
+     * @return
+     *
+     * @todo iterator function does not work correctly
+     */
     @Override
     public Collection<ILiteral<T>> getLiterals( final CPath p_path )
     {
@@ -344,13 +353,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_bb == null ? null : (IBeliefBase<T>) l_bb.iterator().next();
     }
 
-    /**
-     * returns top level literals with specified key (i.e. the functor of the literals)
-     *
-     * @param p_name literals functor
-     * @return set of literals, or null if nothing was found
-     */
-    private Set<ILiteral<T>> getTopLiterals( final String p_name )
+    @Override
+    public Set<ILiteral<T>> getTopLiterals( final String p_name )
     {
         final Set<IBeliefBaseElement> l_beliefbaseElements = this.getElements( p_name, ILiteral.class );
 
@@ -359,6 +363,29 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                 add( (ILiteral<T>) l_beliefbaseElement );
         }};
     }
+
+    @Override
+    public Set<ILiteral<T>> getTopLiterals( )
+    {
+        final Set<ILiteral<T>> l_return = new HashSet<ILiteral<T>>( );
+
+        for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : m_elements.values() )
+        {
+            Set<IBeliefBaseElement> l_elements = l_innerMap.get( ILiteral.class );
+
+            if ( l_elements != null )
+                for ( final IBeliefBaseElement l_innerLiteral : l_elements )
+                    l_return.add( (ILiteral) l_innerLiteral );
+        }
+
+        return l_return;
+    }
+
+    public Set<ILiteral<T>> getTopLiterals( final CPath p_path)
+    {
+        return this.get( p_path ).getTopLiterals();
+    }
+
 
     private void addTopElement( final String p_name, final Class<?> p_class, final Set<IBeliefBaseElement> p_element )
     {
@@ -476,7 +503,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public int hashCode()
     {
-        return m_elements.hashCode();
+        return m_elements.values().hashCode();
     }
 
     @Override

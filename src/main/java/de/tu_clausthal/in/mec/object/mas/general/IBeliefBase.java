@@ -154,6 +154,28 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Collection<ILiteral<T>> getLiterals( final CPath p_path );
 
     /**
+     * returns top level literals with specified key
+     *
+     * @param p_name
+     * @return
+     */
+    public Set<ILiteral<T>> getTopLiterals( final String p_name );
+
+    /**
+     * returns top level literals
+     *
+     * @return
+     */
+    public Set<ILiteral<T>> getTopLiterals( );
+
+    /**
+     * returns top level literals
+     *
+     * @return
+     */
+    public Set<ILiteral<T>> getTopLiterals( final CPath p_path);
+
+    /**
      * gets a beliefbase with position and name specified in path
      * if there is no beliefbase or the path is unknown, the path
      * will be constructed with a default beliefbase

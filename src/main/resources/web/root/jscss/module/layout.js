@@ -187,8 +187,10 @@ var Layout = (function (px_modul) {
     **/
     px_modul.opentiongroup = function( po, px_value )
     {
-        var la = [];
+        if (jQuery.isEmptyObject(po))
+            return
 
+        var la = [];
         jQuery.each( po, function( pc_key, pa_values ) {
             if (pc_key.length > 0)
                 la.push( '<optgroup label="' + pc_key + '">' );
@@ -209,18 +211,21 @@ var Layout = (function (px_modul) {
      * @param po_options Json object { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value-, options: -see optiongrouo function- }
      * @return HTML string
     **/
-    px_modul.selectgroup = function( po_options )
+    px_modul.selectgroup = function( po )
     {
-        if (Array.isArray(po_options.list))
-            po_options.list.push(po_options.id);
+        if (jQuery.isEmptyObject(po))
+            return;
 
-        return (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + ' ' +
+        if (Array.isArray(po.list))
+            po.list.push(po.id);
+
+        return (po.label ? '<label for="' + po.id + '" >' + po.label + '</label >' : "") + ' ' +
                 lx_basetag("select", {
 
-                    id      : po_options.id,
-                    class   : po_options.class,
-                    addon   : po_options.name ? 'name="' + po_options.name + '"' : '',
-                    content : po_options.options ? px_modul.opentiongroup(po_options.options, po_options.value) : ""
+                    id      : po.id,
+                    class   : po.class,
+                    addon   : po.name ? 'name="' + po.name + '"' : '',
+                    content : po.options ? px_modul.opentiongroup(po.options, po.value) : ""
 
         });
     }

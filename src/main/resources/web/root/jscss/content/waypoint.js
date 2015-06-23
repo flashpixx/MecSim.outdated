@@ -77,8 +77,6 @@ Waypoint.prototype.getContent = function()
 }
 
 
-
-
 /**
  * @Overwrite
 **/
@@ -93,8 +91,6 @@ Waypoint.prototype.afterDOMAdded = function()
     var self = this;
     jQuery( this.generateSubID("newpreset", "#") ).button().click( function() {
         jQuery(MecSim.ui().content("#")).empty();
-        self.mo_wizardpreset.reset();
         self.mo_wizardpreset.show();
     });
-
 }

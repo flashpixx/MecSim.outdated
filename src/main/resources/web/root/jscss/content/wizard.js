@@ -48,6 +48,8 @@ function Wizard( pc_id, pc_name, pa_panel, po_options )
 
         transition  : lo_options.transition  || "slideLeft",
         orientation : lo_options.orientation || "vertical",
+
+        cancel      : lo_options.cancel ? lo_options.cancel : false
     };
 }
 
@@ -75,8 +77,8 @@ Wizard.prototype.afterDOMAdded = function()
 
     this.mo_wizard = jQuery( this.generateSubID("content", "#") ).steps({
 
-        //enableCancelButton : this.mo_configuration.cancel != null,
-        //onCanceled         : function( po_event ) { if (self.mo_configuration.cancel) self.mo_configuration.cancel(po_event); }
+        enableCancelButton : this.mo_configuration.cancel,
+        onCanceled         : function( po_event ) { self.cancel(po_event); },
 
 
         headerTag          : this.mo_configuration.headertag,
@@ -103,9 +105,10 @@ Wizard.prototype.afterDOMAdded = function()
 
 
 /**
- * reset wizard
+ * cancel action, is called on the cancel button click
+ * @param po_event event
 **/
-Wizard.prototype.reset = function()
+Wizard.prototype.cancel = function(po_event)
 {
 }
 

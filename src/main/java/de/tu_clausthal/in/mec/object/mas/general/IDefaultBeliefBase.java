@@ -445,6 +445,9 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         // go down the hierarchy and get the last beliefbase
         final IBeliefBase<T> l_beliefbase = this.get( p_path.getSubPath( 0, p_path.size() - 1 ) );
 
+        if( l_beliefbase == null )
+            return false;
+
         // try to get beliefbase elements with same key
         final Map<Class<?>, Set<IBeliefBaseElement>> l_beliefbaseElements =
                 ((IDefaultBeliefBase<T>) l_beliefbase).getElements().get( p_path.getSuffix() );
@@ -456,7 +459,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public boolean remove( String p_path )
+    public boolean remove( final String p_path )
     {
         return this.remove( new CPath( p_path ) );
     }

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -38,7 +39,7 @@ public class Test_IDefaultBeliefBase
     }
 
     @Test
-    public void testGetBeliefbase()
+    public void testAddGetBeliefbase()
     {
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
 
@@ -69,7 +70,7 @@ public class Test_IDefaultBeliefBase
     }
 
     @Test
-    public void testAddLiteral( )
+    public void testAddGetLiteral( )
     {
         // generate testset and literal
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
@@ -91,5 +92,38 @@ public class Test_IDefaultBeliefBase
         assertTrue( l_beliefbase.getTopLiterals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral ) );
         assertTrue( l_beliefbase.getTopLiterals( new CPath( "aa3" ) ).contains( l_testLiteral ) );
         assertTrue( l_beliefbase.getTopLiterals( new CPath( "aa4/bb1/cc1" ) ).contains( l_testLiteral ) );
+    }
+
+    @Test
+    public void testRemoveLiteral()
+    {
+        // todo
+    }
+
+    @Test
+    public void testRemoveBeliefbase()
+    {
+        final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
+        final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
+
+        // add to some existing paths
+        l_beliefbase.add( new CPath( "aa3" ), l_testBeliefbase );
+        l_beliefbase.add( new CPath( "aa1/bb1" ), l_testBeliefbase );
+        l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
+
+        // add to some non-existing paths
+        l_beliefbase.add( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
+
+        assertFalse( l_beliefbase.remove( CPath.EMPTY ) );
+        assertTrue( l_beliefbase.remove( new CPath( "aa3" ) ) );
+        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ) ) );
+        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1" ) ) );
+        assertTrue( l_beliefbase.remove( new CPath( "aa4/bb2/cc3/dd4" ) ) );
+    }
+
+    @Test
+    public void testIterator()
+    {
+        // todo
     }
 }

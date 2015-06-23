@@ -201,6 +201,15 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public boolean remove( final String p_path );
 
     /**
+     * remove method for specific literal
+     *
+     * @param p_path path to beliefbase
+     * @param p_literal literal to remove
+     * @return true, if removal was successful
+     */
+    public boolean remove( final CPath p_path, final ILiteral<T> p_literal );
+
+    /**
      * updates the beliefbase
      */
     void update();

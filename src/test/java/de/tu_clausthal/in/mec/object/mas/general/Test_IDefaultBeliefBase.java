@@ -66,7 +66,7 @@ public class Test_IDefaultBeliefBase
     public void testAddEmptyPath()
     {
         final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
-        l_beliefbase.add( CPath.EMPTY, new IDefaultBeliefBase<Literal>(  ){} );
+        l_beliefbase.add( CPath.EMPTY, new IDefaultBeliefBase<Literal>(){} );
     }
 
     @Test
@@ -97,7 +97,23 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testRemoveLiteral()
     {
-        // todo
+        final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
+
+        // create new beliefbase to add
+        final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
+        final CLiteral l_testLiteral = new CLiteral( ASSyntax.createLiteral( "test" ) );
+        l_testBeliefbase.add( CPath.EMPTY, l_testLiteral );
+
+        l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
+
+        // check if remove method returns true
+        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral ) );
+
+        // check if literal was removed
+        assertFalse( l_beliefbase.getTopLiterals( new CPath( "aa1/bb1/cc1/dd1" ) ).contains( l_testLiteral ) );
+
+        // check if beliefbase is still existing
+        assertEquals( l_beliefbase.get( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
     }
 
     @Test
@@ -119,10 +135,22 @@ public class Test_IDefaultBeliefBase
         assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ) ) );
         assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1" ) ) );
         assertTrue( l_beliefbase.remove( new CPath( "aa4/bb2/cc3/dd4" ) ) );
+
+        // check if beliefbases were removed
+        assertEquals( l_beliefbase.get( "aa3" ), null );
+        assertEquals( l_beliefbase.get( "aa1/bb1/cc1/dd1" ), null );
+        assertEquals( l_beliefbase.get( "aa1/bb1" ), null );
+        assertEquals( l_beliefbase.get( "aa4/bb2/cc3/dd4" ), null );
     }
 
     @Test
     public void testIterator()
+    {
+        // todo
+    }
+
+    @Test
+    public void testCollapse()
     {
         // todo
     }

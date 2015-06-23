@@ -577,6 +577,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_result && l_match;
     }
 
+    @Override
     public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
         return ((IDefaultBeliefBase<T>) this.get( p_path )).getElements().get(p_literal.getFunctor()).get( ILiteral.class ).remove(p_literal);

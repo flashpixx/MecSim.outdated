@@ -61,20 +61,11 @@ public class Test_IDefaultBeliefBase
         assertEquals( l_beliefbase.get( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testAddEmptyPath()
     {
         final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
-
-        try
-        {
-            l_beliefbase.add( CPath.EMPTY, new IDefaultBeliefBase<Literal>(  ){} );
-            fail("expected empty path exception");
-        }
-        catch(IllegalArgumentException l_exception)
-        {
-            // test passed
-        }
+        l_beliefbase.add( CPath.EMPTY, new IDefaultBeliefBase<Literal>(  ){} );
     }
 
     @Test

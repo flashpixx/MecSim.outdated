@@ -176,8 +176,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
-            throw new IllegalArgumentException();
-//            throw new IllegalArgumentException( CCommon.getResourceString( this, "emptypath" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString( IDefaultBeliefBase.class, "emptypath" ) );
 
         // if path contains more than one element, go down the hierarchy and do recursive call
         if ( p_path.size() > 1 )

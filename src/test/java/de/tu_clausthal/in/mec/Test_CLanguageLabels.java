@@ -92,7 +92,7 @@ public class Test_CLanguageLabels
     /**
      * test-case all resource strings
      */
-/*    @Test
+    @Test
     public void testResourceString()
     {
         // --- check source -> label definition
@@ -119,11 +119,12 @@ public class Test_CLanguageLabels
         {
             final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle( l_language ).keySet();
             l_labels.removeAll( m_labels );
+
             assertTrue(
-                    String.format( "the following keys in language [%s] are unused:\n%s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
+                    String.format( "the following keys in language [%s] are unused: %s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
             );
         }
-    } */
+    }
 
     /**
      * AST visitor class

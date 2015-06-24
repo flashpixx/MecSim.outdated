@@ -73,14 +73,7 @@ public class CLanguageEnvironment
             put( "save", CCommon.getResourceString( CLanguageEnvironment.class, "simulationsave" ) );
             put( "dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "simulationdialogtitle" ) );
         }};
-    /**
-     * labels of the waypoint menu
-     */
-    private static final Map<String, String> c_waypoint = new HashMap<String, String>()
-    {{
-            put( "newpreset", CCommon.getResourceString( CLanguageEnvironment.class, "waypointnewpreset" ) );
-            put( "list", CCommon.getResourceString( CLanguageEnvironment.class, "waypointlist" ) );
-        }};
+
 
     /**
      * returns all static label for the MAS
@@ -120,16 +113,6 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_simulation()
     {
         return c_simulation;
-    }
-
-    /**
-     * returns all static label for the MAS
-     *
-     * @return map with static labels
-     */
-    private final Map<String, String> web_static_waypoint()
-    {
-        return c_waypoint;
     }
 
 }

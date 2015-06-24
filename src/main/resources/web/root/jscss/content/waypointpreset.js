@@ -160,22 +160,8 @@ WaypointPreset.prototype.afterDOMAdded = function()
     var self = this;
     MecSim.language({
 
-        url : "/cwaypointenvironment/label",
-
-        // set static labels
-        each : function( pc_key, pc_value ) {
-            var la = pc_key.split("_");
-
-            if ((la.length == 1) && (la[0] === "name"))
-                self.setTitle( pc_value );
-
-            if (la.length != 2)
-                return;
-            if (la[0] === "id")
-                jQuery( self.generateSubID(la[1], "#") ).text(pc_value);
-            if (la[0] === "label")
-                jQuery( self.getLabelSelector( self.generateSubID(la[1]) ) ).text(pc_value);
-        },
+        url    : "/cwaypointenvironment/labelpresetwizard",
+        target : this,
 
         // set dynamic content, action binds and layout after finishing language labels
         finish : function() {

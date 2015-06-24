@@ -96,9 +96,17 @@ public class CWaypointEnvironment
                 put( l_generator.toString(), l_generator.name() );
         }};
     /**
-     * static label for UI
+     * static label for main menu UI
      */
-    private static final Map<String, String> c_label = new HashMap<String, String>()
+    private static final Map<String, String> c_labelmainmenu = new HashMap<String, String>()
+    {{
+            put( "id_newpreset", CCommon.getResourceString( CWaypointEnvironment.class, "mainmenu_id_newpreset" ) );
+            put( "id_listpreset", CCommon.getResourceString( CWaypointEnvironment.class, "mainmenu_id_listpreset" ) );
+        }};
+    /**
+     * static label for preset wizard UI
+     */
+    private static final Map<String, String> c_labelpresetwizard = new HashMap<String, String>()
     {{
             // window title
             put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_name" ) );
@@ -216,13 +224,23 @@ public class CWaypointEnvironment
     }
 
     /**
-     * returns all static label information
+     * returns all static label information for main menu
      *
      * @return map with static labels
      */
-    private final Map<String, String> web_static_label()
+    private final Map<String, String> web_static_labelmainmenu()
     {
-        return c_label;
+        return c_labelmainmenu;
+    }
+
+    /**
+     * returns all static label information for wizard
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_labelpresetwizard()
+    {
+        return c_labelpresetwizard;
     }
 
     /**

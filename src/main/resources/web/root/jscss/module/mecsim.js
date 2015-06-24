@@ -161,17 +161,29 @@ var MecSim = (function (px_modul) {
         return jQuery.ajax({
             url : po_options.url,
             type: "post",
+
             success : function( po_data )
             {
-                if ((po_options.each) || (po_options.finish))
-                {
-                    if (po_options.each)
-                        jQuery.each(po_data, po_options.each);
-                    if (po_options.finish)
-                        po_options.finish();
-                }
-                else if (po_options.target)
-                    jQuery.each(po_data, function(pc_id, pc_translation) { jQuery(po_options.target.generateSubID(pc_id, "#")).text(pc_translation); });
+                if (po_options.each)
+                    jQuery.each(po_data, po_options.each);
+
+                else if (po_options.target instanceof Pane)
+                    jQuery.each(po_data, function(pc_id, pc_translation) {
+                       var la = pc_id.split("_");
+
+                        if ((la.length == 1) && (la[0] === "name"))
+                            po_options.target.setTitle( pc_translation );
+
+                        if (la.length != 2)
+                            return;
+                        if (la[0] === "id")
+                            jQuery( po_options.target.generateSubID(la[1], "#") ).text( pc_translation );
+                        if (la[0] === "label")
+                            jQuery( 'label[for="' + po_options.target.generateSubID(la[1]) + '"]' ).text( pc_translation );
+                    });
+
+                if (po_options.finish)
+                    po_options.finish();
             }
         });
     }

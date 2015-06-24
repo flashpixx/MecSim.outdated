@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseElement;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
@@ -40,6 +41,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -463,10 +465,11 @@ public class CAgent<T> implements IVoidAgent
                     )
             );
 
-            for ( final ILiteral<Literal> l_literal : m_beliefs )
+            for ( final IBeliefBaseElement l_element : m_beliefs )
                 try
                 {
-                    m_agent.addBel( l_literal.getLiteral() );
+                    if( l_element instanceof CLiteral )
+                        m_agent.addBel( ( (CLiteral) l_element).getLiteral());
                 }
                 catch ( final RevisionFailedException l_exception )
                 {

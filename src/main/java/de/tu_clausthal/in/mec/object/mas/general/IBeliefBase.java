@@ -108,15 +108,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public void clear( final String p_path );
 
     /**
-     * collapse method to get a set of literals containing the top-level
-     * and all the inherited beliefbases' literals
-     *
-     * @param p_path path to beliefbase
-     * @return collapsed set of top-level and inherited literals
-     */
-    public Set<ILiteral<T>> collapse( final CPath p_path );
-
-    /**
      * gets a beliefbase with position and name specified in path
      *
      * @param p_path path with name of the beliefbase as last element
@@ -150,7 +141,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     /**
      * getter for beliefbase elements
      */
-    public Map getElements();
+    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements();
 
     /**
      * get inherited literals
@@ -166,15 +157,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @return collection of all inherited literals
      */
     public Set<ILiteral<T>> getLiterals( final CPath p_path );
-
-    /**
-     * get literals of specified beliefbase up to max depth
-     *
-     * @param p_path path to beliefbase
-     * @param p_maxDepth maximal depth
-     * @return
-     */
-    public Set<ILiteral<T>> getLiterals( final CPath p_path, final int p_maxDepth );
 
     /**
      * gets a beliefbase with position and name specified in path

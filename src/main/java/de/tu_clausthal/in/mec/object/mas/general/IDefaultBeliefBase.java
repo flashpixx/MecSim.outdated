@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import com.graphhopper.coll.MapEntry;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 
@@ -68,15 +69,15 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     /**
      * ctor - top-level literals and inherited beliefbases are specified
      *
-     * @param p_beliefbases inherited beliefbases
+     * @param p_inheritedBeliefbases inherited beliefbases with paths
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_beliefbases, final Set<ILiteral<T>> p_literals )
+    public IDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_inheritedBeliefbases, final Set<ILiteral<T>> p_literals )
     {
         // generate map-entries for beliefbases
-        if ( p_beliefbases != null )
-            for ( final IBeliefBase<T> l_beliefbase : p_beliefbases.values() )
-                this.add( CPath.EMPTY, l_beliefbase );
+        if ( p_inheritedBeliefbases != null )
+            for ( final Map.Entry<String, IBeliefBase<T>> l_beliefbase : p_inheritedBeliefbases.entrySet() )
+                this.add( new CPath( l_beliefbase.getKey() ), l_beliefbase.getValue() );
 
         // generate map-entries for literals
         if ( p_literals != null )
@@ -85,19 +86,20 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * fills up a stack with Iterator-objects on ILiterals
+     * fills up a stack with Iterator-objects on beliefbase elements
      *
      * @param p_current current beliefbase with top-level-literals to iterate over
      * @param p_stack current stack
-     * @param <N> the literal type
      */
     private static <N> void collapseIterator( final IBeliefBase<N> p_current, final Stack<Iterator<ILiteral<N>>> p_stack )
     {
-        // push iterator object on top-level literals
-        p_stack.push( p_current.getLiterals( CPath.EMPTY, 0 ).iterator() );
+        // push iterator object on top-level beliefbase elements
+        p_stack.push( p_current.getLiterals().iterator() );
+
+        final Map<String, IBeliefBase<N>> l_inheritedBeliefbases = p_current.getBeliefbases();
 
         // recursive call for all inherited beliefbases
-        for ( final IBeliefBase<N> l_beliefbase : p_current.getBeliefbases( CPath.EMPTY ).values() )
+        for ( final IBeliefBase l_beliefbase : l_inheritedBeliefbases.values() )
             collapseIterator( l_beliefbase, p_stack );
     }
 
@@ -233,26 +235,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         this.clear( new CPath( p_path ) );
     }
 
-    /**
-     * @return
-     *
-     * @todo concatenate path for unification
-     */
-    @Override
-    public Set<ILiteral<T>> collapse( final CPath p_path )
-    {
-        // if path is empty, do collapse on inherited beliefbases
-        if ( p_path.isEmpty() )
-            return new HashSet<ILiteral<T>>()
-            {{
-                    for ( final ILiteral<T> l_literal : IDefaultBeliefBase.this )
-                        add( l_literal );
-                }};
-
-        // go down the hierarchy and do collapse
-        return this.get( p_path ).collapse( CPath.EMPTY );
-    }
-
     @Override
     public IBeliefBase<T> get( final String p_path )
     {
@@ -276,7 +258,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
             return null;
 
         // recursive call in inherited beliefbase with shortened path
-        return ( (IBeliefBase) l_beliefbase.iterator().next() ).get( p_path.getSubPath( 1 ) );
+        return ( (IBeliefBase) l_beliefbase.iterator().next() ).get(p_path.getSubPath(1));
     }
 
     @Override
@@ -308,13 +290,37 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return m_elements;
     }
 
+    public Set<ILiteral<T>> getLiterals()
+    {
+        return this.getLiterals( CPath.EMPTY );
+    }
+
+    @Override
+    public Map<String, IBeliefBase<T>> getBeliefbases()
+    {
+        return this.getBeliefbases( CPath.EMPTY );
+    }
+
     /**
+     *
+     * @param p_path path to beliefbase
      * @return
      *
      * @todo add path as prefix to literals for unification
      */
-    public Collection<ILiteral<T>> getLiterals()
+    public Set<ILiteral<T>> getLiterals( final CPath p_path )
     {
+        // if path is not empty, go down the hierarchy and do self call
+        if( !p_path.isEmpty() )
+        {
+            final IBeliefBase<T> l_beliefbase = this.get( p_path );
+            if ( l_beliefbase == null )
+                return Collections.EMPTY_SET;
+
+            return l_beliefbase.getLiterals( CPath.EMPTY );
+        }
+
+        // return top-level literals
         return new HashSet()
         {{
                 for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_value : m_elements.values() )
@@ -324,60 +330,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                     if ( l_set != null )
                         addAll( l_set );
                 }
-            }};
-    }
-
-    /**
-     * @param p_path path to beliefbase
-     * @return
-     */
-    @Override
-    public Set<ILiteral<T>> getLiterals( final CPath p_path )
-    {
-        return this.getLiterals( p_path, Integer.MAX_VALUE );
-    }
-
-    @Override
-    public Map<String, IBeliefBase<T>> getBeliefbases()
-    {
-        return this.getBeliefbases( CPath.EMPTY );
-    }
-
-    public Set<ILiteral<T>> getLiterals( final CPath p_path, final int p_maxDepth )
-    {
-        if ( p_maxDepth < 0 )
-            return Collections.EMPTY_SET;
-
-        // go down the hierarchy and do self call
-        if( !p_path.isEmpty() )
-        {
-            final IBeliefBase<T> l_beliefbase = this.get( p_path );
-            if ( l_beliefbase == null )
-                return Collections.EMPTY_SET;
-
-            return l_beliefbase.getLiterals( CPath.EMPTY, p_maxDepth );
-        }
-
-        return new HashSet<ILiteral<T>>()
-        {{
-                for ( final IBeliefBase<T> l_inheritedBeliefbase : m_elements.values() )
-                    addAll( l_inheritedBeliefbase.getLiterals() );
-            }};
-
-        // return top-level literals
-        if ( p_maxDepth == 0 )
-        {
-            return new HashSet<ILiteral<T>>() {{
-                for ( final IBeliefBase<T> l_inheritedBeliefbase : l_beliefbase.getBeliefbases().values() )
-                    addAll( l_inheritedBeliefbase.getLiterals() );
-            }};
-        }
-
-        // todo: return literals up to max depth
-        return new HashSet<ILiteral<T>>()
-        {{
-                for ( final ILiteral<T> l_literal : l_beliefbase )
-                    add( l_literal );
             }};
     }
 
@@ -479,13 +431,13 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public boolean remove( final String p_path )
     {
-        return this.remove( new CPath( p_path ) );
+        return this.remove(new CPath(p_path));
     }
 
     @Override
     public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
-        return ( (IDefaultBeliefBase<T>) this.get( p_path ) ).getElements().get( p_literal.getFunctor() ).get( ILiteral.class ).remove( p_literal );
+        return ( (IDefaultBeliefBase<T>) this.get( p_path ) ).getElements().get( p_literal.getFunctor() ).get( ILiteral.class ).remove(p_literal);
     }
 
     @Override
@@ -519,7 +471,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     private Stack<Iterator<ILiteral<T>>> collapseIterator()
     {
         final Stack<Iterator<ILiteral<T>>> l_stack = new Stack<>();
-        collapseIterator( this, l_stack );
+        collapseIterator(this, l_stack);
         return l_stack;
     }
 
@@ -575,6 +527,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return m_elements.toString();
     }
 
+    /**
+     * iterator method over beliefbase elements
+     *
+     * @return
+     */
     @Override
     public Iterator<ILiteral<T>> iterator()
     {

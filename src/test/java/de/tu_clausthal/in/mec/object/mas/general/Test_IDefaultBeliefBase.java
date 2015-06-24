@@ -6,15 +6,9 @@ import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 
 /**
@@ -40,6 +34,20 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( "aa2/bb1/cc1/dd1", new CLiteral( ASSyntax.createLiteral( "test2" ) ) );
 
         return l_beliefbase;
+    }
+
+    @Test
+    public void testGetMethods()
+    {
+        final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
+
+        // non existing beliefbases should return null
+        assertEquals( l_beliefbase.get( "a" ), null );
+        assertEquals( l_beliefbase.get( "xxx/ab" ), null );
+
+        // non existing literals should return empty set
+        assertEquals(l_beliefbase.getLiterals(new CPath("x")), Collections.EMPTY_SET);
+        assertEquals( l_beliefbase.getLiterals( new CPath( "xxx/yyy") ), Collections.EMPTY_SET );
     }
 
     @Test
@@ -152,15 +160,34 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testIterator()
     {
-        // todo
+        final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
+        final Map<CPath, ILiteral<Literal>> l_literals = new HashMap(){{
+            put( new CPath("aa1"), new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
+            put(new CPath("aa2/bb1/cc1/dd1"), new CLiteral(ASSyntax.createLiteral("test2")));
+            put(CPath.EMPTY, new CLiteral(ASSyntax.createLiteral("test3")));
+        }};
+
+        // add some literals
+        for (final Map.Entry<CPath,ILiteral<Literal>> l_entry : l_literals.entrySet())
+            l_beliefbase.add( l_entry.getKey(), l_entry.getValue() );
+
+        // build literal set with iterator
+        final Set<ILiteral<Literal>> l_beliefbaseElements = new HashSet<ILiteral<Literal>>(){{
+            for (final ILiteral<Literal> l_element : l_beliefbase)
+                add( l_element );
+        }};
+
+        // both sets have to be equal
+        assertEquals( l_beliefbaseElements, new HashSet( l_literals.values() ));
     }
 
     @Test
     public void testCollapse()
     {
+/*
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
 
-        final Set<ILiteral<Literal>> l_collapsed = l_beliefbase.collapse( CPath.EMPTY );
+        final Set<ILiteral<Literal>> l_collapsed = l_beliefbase.getLiterals( CPath.EMPTY );
 
         assertTrue( l_collapsed.containsAll(
                             new HashSet<ILiteral<Literal>>(){{
@@ -169,5 +196,6 @@ public class Test_IDefaultBeliefBase
                             }}
                     )
         );
+        */
     }
 }

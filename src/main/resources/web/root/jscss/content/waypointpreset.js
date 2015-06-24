@@ -174,7 +174,7 @@ WaypointPreset.prototype.afterDOMAdded = function()
             if (la[0] === "id")
                 jQuery( self.generateSubID(la[1], "#") ).text(pc_value);
             if (la[0] === "label")
-                jQuery( 'label[for="' + self.generateSubID(la[1]) + '"]' ).text(pc_value);
+                jQuery( self.getLabelSelector( self.generateSubID(la[1]) ) ).text(pc_value);
         },
 
         // set dynamic content, action binds and layout after finishing language labels
@@ -295,7 +295,7 @@ WaypointPreset.prototype.finish = function()
 **/
 WaypointPreset.prototype.setErrorLabelCSS = function( pc_selector, pl_error )
 {
-    jQuery( 'label[for="' + pc_selector + '"]').css( "background-color", pl_error ? "#ff0000" : "" );
+    jQuery(pc_selector).css( "background-color", pl_error ? "#ff0000" : "" );
     return pl_error;
 }
 
@@ -325,10 +325,10 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         {
 
             case "Uniform" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first != ln_second) && (ln_first < ln_second) === true;
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first < ln_second)  === true;
 
             case "Normal" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second > 0) && (ln_first > 0) === true;
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second >= 0) && (ln_first > 0) === true;
 
             case "Exponential" :
                 return (!isNaN(ln_first)) && (ln_first > 0) === true;
@@ -351,22 +351,22 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
             // check random waypoint & radius
             if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
             {
-                this.setErrorLabelCSS( this.generateSubID("radius") );
+                this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("radius") ) );
                 ln = parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
                 if ( ((isNaN(ln))) || (ln <= 0) )
-                    return !this.setErrorLabelCSS( this.generateSubID("radius"), true );
+                    return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("radius") ), true );
             }
 
             // check car count
-            this.setErrorLabelCSS( this.generateSubID("carcount") );
+            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("carcount") ) );
             ln = parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
             if ( ((isNaN(ln))) || (ln <= 0) )
-                return !this.setErrorLabelCSS( this.generateSubID("carcount"), true );
+                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("carcount") ), true );
 
             // check generator distribution
-            this.setErrorLabelCSS( this.generateSubID("generatordistribution") );
+            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
             if (!lx_checkDistribution("generatordistribution"))
-                return !this.setErrorLabelCSS( this.generateSubID("generatordistribution"), true );
+                return this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ), true );
 
             // agent need not to be checked, because the value is also set by default
             return true;
@@ -378,17 +378,16 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
             var ln = null;
 
             // check max speed distribution
-            [ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].forEach( function( pc_key ) {
-                self.setErrorLabelCSS( self.generateSubID(pc_key) );
-                if (!lx_checkDistribution(pc_key))
-                    return !self.setErrorLabelCSS( self.generateSubID(pc_key), true );
-            });
+            if ([ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].some( function( pc_key ) {
+                return self.setErrorLabelCSS( self.getLabelSelector( self.generateSubID(pc_key)+"-button" ), !lx_checkDistribution(pc_key) );
+            }))
+                return false;
 
             // check speed factor
-            this.setErrorLabelCSS( this.generateSubID("speedfactor") );
+            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
             ln = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
             if ( ((isNaN(ln))) || (ln < 0) || (ln > 100) )
-                return !this.setErrorLabelCSS( this.generateSubID("speedfactor"), true );;
+                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("speedfactor") ), true );;
 
             return true;
 
@@ -403,13 +402,21 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 **/
 WaypointPreset.prototype.validatefinish = function( po_event, pn_current )
 {
-    this.setErrorLabelCSS( this.generateSubID("name") );
-    if (jQuery(this.generateSubID("name", "#")).val())
-        return !this.setErrorLabelCSS( this.generateSubID("name"), true );
-
-    return false;
+    var lc_name = jQuery(this.generateSubID("name", "#")).val();
+    return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("name") ), !(lc_name && lc_name.length > 0 === true) );
 }
 
+
+/**
+ * returns a jQuery label selector of an DOM ID
+ *
+ * @param pc_id
+ * @return label selector
+**/
+WaypointPreset.prototype.getLabelSelector = function(pc_id)
+{
+    return 'label[for="' + pc_id+ '"]';
+}
 
 
 /**
@@ -455,9 +462,9 @@ WaypointPreset.prototype.reset = function()
 
         // set default values
         self.setDistribution("generatordistribution",    "Exponential", 0.25);
-        self.setDistribution("maxspeeddistribution",     "Normal",      120, 40);
-        self.setDistribution("accelerationdistribution", "Normal",      10,   4);
-        self.setDistribution("decelerationdistribution", "Normal",      10,   4);
+        self.setDistribution("maxspeeddistribution",     "Normal",      120,  10);
+        self.setDistribution("accelerationdistribution", "Normal",      10,   0.5);
+        self.setDistribution("decelerationdistribution", "Normal",      10,   0.5);
         self.setDistribution("lingerdistribution",       "Uniform",     0,    1);
 
     });
@@ -557,7 +564,7 @@ WaypointPreset.prototype.setLabelOfDistribution = function( pc_id, po_bound )
     // show / hide call
     ["firstmomentum", "secondmomentum"].forEach( function(pc_labelsuffix) {
 
-        var lc_label = 'label[for="' + pc_id + pc_labelsuffix + '"]';
+        var lc_label = self.getLabelSelector( pc_id + pc_labelsuffix );
         var lc_id    = "#" + pc_id + pc_labelsuffix;
 
         // set label

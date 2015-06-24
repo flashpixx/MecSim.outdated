@@ -105,9 +105,10 @@ public class Test_IDefaultBeliefBase
 
         // create new beliefbase to add
         final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
+
+        // add some test literals
         final CLiteral l_testLiteral = new CLiteral( ASSyntax.createLiteral( "test" ) );
         l_testBeliefbase.add( CPath.EMPTY, l_testLiteral );
-
         l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
 
         // check if remove method returns true

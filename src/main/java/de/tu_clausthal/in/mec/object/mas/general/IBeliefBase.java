@@ -117,11 +117,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Set<ILiteral<T>> collapse( final CPath p_path );
 
     /**
-     * getter for beliefbase elements
-     */
-    public Map getElements();
-
-    /**
      * gets a beliefbase with position and name specified in path
      *
      * @param p_path path with name of the beliefbase as last element
@@ -138,7 +133,14 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public IBeliefBase get( final CPath p_path );
 
     /**
-     * get a map of all inherited beliefbases with their names
+     * get a map of all inherited beliefbases with names
+     *
+     * @return map of beliefbases
+     */
+    public Map<String, IBeliefBase<T>> getBeliefbases();
+
+    /**
+     * get a map of all inherited beliefbases with names from specified beliefbase
      *
      * @param p_path path to beliefbase
      * @return map of beliefbases
@@ -146,12 +148,44 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Map<String, IBeliefBase<T>> getBeliefbases( final CPath p_path );
 
     /**
-     * get a collection of the top-level literals
+     * getter for beliefbase elements
+     */
+    public Map getElements();
+
+    /**
+     * get inherited literals
+     *
+     * @return collection of all inherited literals
+     */
+    public Set<ILiteral<T>> getLiterals();
+
+    /**
+     * get inherited literals of specified beliefbase
      *
      * @param p_path path to beliefbase
-     * @return collection of top-level literals
+     * @return collection of all inherited literals
      */
-    public Collection<ILiteral<T>> getLiterals( final CPath p_path );
+    public Set<ILiteral<T>> getLiterals( final CPath p_path );
+
+    /**
+     * get literals of specified beliefbase up to max depth
+     *
+     * @param p_path path to beliefbase
+     * @param p_maxDepth maximal depth
+     * @return
+     */
+    public Set<ILiteral<T>> getLiterals( final CPath p_path, final int p_maxDepth );
+
+    /**
+     * gets a beliefbase with position and name specified in path
+     * if there is no beliefbase or the path is unknown, the path
+     * will be constructed with a default beliefbase
+     *
+     * @param p_path path with name of the beliefbase as last element
+     * @param p_beliefbase default beliefbase
+     * @return specified or default beliefbase
+     */
+    public IBeliefBase getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase );
 
     /**
      * returns top level literals with specified key
@@ -166,25 +200,14 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      *
      * @return
      */
-    public Set<ILiteral<T>> getTopLiterals( );
+    public Set<ILiteral<T>> getTopLiterals();
 
     /**
      * returns top level literals
      *
      * @return
      */
-    public Set<ILiteral<T>> getTopLiterals( final CPath p_path);
-
-    /**
-     * gets a beliefbase with position and name specified in path
-     * if there is no beliefbase or the path is unknown, the path
-     * will be constructed with a default beliefbase
-     *
-     * @param p_path path with name of the beliefbase as last element
-     * @param p_beliefbase default beliefbase
-     * @return specified or default beliefbase
-     */
-    public IBeliefBase getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase );
+    public Set<ILiteral<T>> getTopLiterals( final CPath p_path );
 
     /**
      * removes an inherited beliefbase

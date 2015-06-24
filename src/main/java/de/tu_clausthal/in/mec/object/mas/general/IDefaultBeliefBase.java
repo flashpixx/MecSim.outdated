@@ -497,6 +497,20 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_beliefbase;
     }
 
+    @Override
+    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements(String p_path)
+    {
+        return this.getElements( new CPath(p_path) );
+    }
+
+    @Override
+    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements(CPath p_path)
+    {
+        final IBeliefBase l_beliefbase = this.get(p_path);
+
+        return l_beliefbase == null ? null : l_beliefbase.getElements();
+    }
+
     /**
      * returns beliefbase with specified key (i.e. name of the beliefbase)
      *

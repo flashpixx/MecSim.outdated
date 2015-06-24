@@ -26,7 +26,7 @@ public class Test_IDefaultBeliefBase
         final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
 
         // add some inherited beliefbases
-        l_beliefbase.add( new CPath( "aa1" ), new IDefaultBeliefBase<Literal>(  ){} );
+        l_beliefbase.add( "aa1", new IDefaultBeliefBase<Literal>(  ){} );
         l_beliefbase.add( new CPath( "aa2/bb1/cc1/dd1" ), new IDefaultBeliefBase<Literal>(  ){} );
 
         // add some literals
@@ -179,6 +179,31 @@ public class Test_IDefaultBeliefBase
 
         // both sets have to be equal
         assertEquals( l_beliefbaseElements, new HashSet( l_literals.values() ));
+    }
+
+    @Test
+    public void testClear()
+    {
+        final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
+
+        // check if there are beliefbases before removing
+        assertTrue(l_beliefbase.get("aa2/bb1/cc1/dd1") != null);
+        assertTrue(l_beliefbase.get("aa2/bb1/cc1") != null);
+        assertTrue(l_beliefbase.get("aa2") != null);
+
+        // check if there are non existing
+        assertTrue(l_beliefbase.get("xxx") == null);
+        assertEquals(l_beliefbase.get("xxx"), null);
+
+        // do clear
+        l_beliefbase.clear( "aa2/bb1" );
+
+        // check if beliefbases were removed
+        assertEquals( l_beliefbase.get( "aa2/bb1/cc1/dd1" ), null );
+        assertEquals( l_beliefbase.get( "aa2/bb1/cc1" ), null );
+
+        // this beliefbase must not be removed
+        assertTrue(l_beliefbase.get("aa2/bb1") != null);
     }
 
     @Test

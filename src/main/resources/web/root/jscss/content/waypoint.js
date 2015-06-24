@@ -77,8 +77,6 @@ Waypoint.prototype.getContent = function()
 }
 
 
-
-
 /**
  * @Overwrite
 **/
@@ -95,5 +93,4 @@ Waypoint.prototype.afterDOMAdded = function()
         jQuery(MecSim.ui().content("#")).empty();
         self.mo_wizardpreset.show();
     });
-
 }

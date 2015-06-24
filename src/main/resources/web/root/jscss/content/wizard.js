@@ -47,8 +47,9 @@ function Wizard( pc_id, pc_name, pa_panel, po_options )
         bodytag     : lo_options.bodytag     || "section",
 
         transition  : lo_options.transition  || "slideLeft",
-        orientation : lo_options.orientation || "vertical"
+        orientation : lo_options.orientation || "vertical",
 
+        cancel      : lo_options.cancel ? lo_options.cancel : false
     };
 }
 
@@ -74,17 +75,22 @@ Wizard.prototype.afterDOMAdded = function()
     var self = this;
     Widget.prototype.afterDOMAdded.call(this);
 
-    jQuery( this.generateSubID("content", "#") ).steps({
+    this.mo_wizard = jQuery( this.generateSubID("content", "#") ).steps({
 
-        headerTag        : this.mo_configuration.headertag,
-        bodyTag          : this.mo_configuration.bodytag,
-        transitionEffect : this.mo_configuration.transition,
-        stepsOrientation : this.mo_configuration.orientation,
+        enableCancelButton : this.mo_configuration.cancel,
+        onCanceled         : function( po_event ) { self.cancel(po_event); },
+
+
+        headerTag          : this.mo_configuration.headertag,
+        bodyTag            : this.mo_configuration.bodytag,
+        transitionEffect   : this.mo_configuration.transition,
+        stepsOrientation   : this.mo_configuration.orientation,
 
         // closure function are needed, because the wizard overwrite the functions
-        onInit           : function() { self.init() },
-        onStepChanging   : function( po_event , pn_current, pn_next ) { return self.validatestep(po_event , pn_current, pn_next); },
-        onFinished       : function() { self.finish(); }
+        onInit             : function() { self.init() },
+        onStepChanging     : function( po_event , pn_current, pn_next ) { return self.validatestep(po_event , pn_current, pn_next); },
+        onFinishing        : function( po_event, pn_current ) { return self.validatefinish(po_event, pn_current); },
+        onFinished         : function() { self.finish(); }
 
         /*
         labels: {
@@ -99,11 +105,21 @@ Wizard.prototype.afterDOMAdded = function()
 
 
 /**
+ * cancel action, is called on the cancel button click
+ * @param po_event event
+**/
+Wizard.prototype.cancel = function(po_event)
+{
+}
+
+
+/**
  * wizard initializing to read data
 **/
 Wizard.prototype.init = function()
 {
 }
+
 
 /**
  * is called on every step
@@ -114,6 +130,18 @@ Wizard.prototype.init = function()
  * @return true / false to enter next step
 **/
 Wizard.prototype.validatestep = function( po_event , pn_current, pn_next )
+{
+    return true;
+}
+
+
+/**
+ * is called after finishing
+ * @param po_event event
+ * @param pn_current current step
+ * @return true / false to enter finished state
+**/
+Wizard.prototype.validatefinish = function( po_event, pn_current )
 {
     return true;
 }

@@ -37,7 +37,9 @@
 **/
 function WaypointPreset( pc_id, pc_name, pa_panel, po_options )
 {
-    Wizard.call(this, pc_id, pc_name, pa_panel, po_options );
+    var lo_options    = jQuery.extend(true, {}, po_options);
+    lo_options.cancel = true;
+    Wizard.call(this, pc_id, pc_name, pa_panel, lo_options );
 
     // list with IDs
     this.mo_elements = {
@@ -47,8 +49,9 @@ function WaypointPreset( pc_id, pc_name, pa_panel, po_options )
         spinners  : []
     };
 
-    // reference of colorpicker (for closing after finish)
+    // reference of colorpicker (for closing after finish) and agent menu for refreshing
     this.mo_colorpicker = null;
+    this.mo_agentmenu   = null
 }
 
 /** inheritance call **/
@@ -179,113 +182,6 @@ WaypointPreset.prototype.afterDOMAdded = function()
 
             Wizard.prototype.afterDOMAdded.call(self);
 
-
-            // --- function for updating distribution label ---
-
-            /**
-             * sets the labels of an select menu
-             *
-             * @param pc_id ID of the select menu
-             * @param px_option data bound options
-            **/
-            var lx_labelDistribution = function( pc_id, px_option)
-            {
-                var lo_bound = jQuery(px_option).data("bound");
-
-                // show / hide call
-                ["firstmomentum", "secondmomentum"].forEach( function(pc_label) {
-
-                    // set label
-                    jQuery( 'label[for="' + pc_id + pc_label + '"]' ).text(lo_bound[pc_label].label)
-
-                    // hide / show momentums
-                    if (lo_bound[pc_label].used)
-                    {
-                        jQuery( 'label[for="' + pc_id + pc_label + '"]' ).show();
-                        jQuery( '#' + pc_id + pc_label ).show();
-                    } else {
-                        jQuery( 'label[for="' + pc_id + pc_label + '"]' ).hide();
-                        jQuery( '#' + pc_id + pc_label ).hide();
-                    }
-
-                });
-            }
-
-
-
-            // --- data content read via ajax ---
-
-            // read distribution list
-            MecSim.ajax({
-                url     : "/cwaypointenvironment/listdistribution",
-                success : function( po_data ) {
-                    jQuery.each( po_data, function( pc_key, po_object ) {
-                        jQuery("<option></option>")
-                            .attr("value", po_object.id)
-                            .attr("data-bound", JSON.stringify({firstmomentum : po_object.firstmomentum, secondmomentum : po_object.secondmomentum}))
-                            .text(pc_key)
-                            .appendTo(self.generateSubID("distribution", "."));
-                    });
-
-                    // set first item selected and update menu
-                    jQuery(self.generateSubID("distribution", ".")+" option:first-child").attr("selected", "selected").each( function() { lx_labelDistribution( jQuery(this).parent().attr("id"), jQuery(this) ); });
-                    jQuery(self.generateSubID("distribution", ".")).selectmenu("refresh");
-                }
-            });
-
-            // read factory list
-            MecSim.ajax({
-                url     : "/cwaypointenvironment/listfactory",
-                success : function( po_data ) {
-                    jQuery.each( po_data, function( pc_key, po_object ) {
-                        jQuery("<option></option>")
-                            .attr("value", po_object.id)
-                            .attr("data-requireagent", po_object.requireagent)
-                            .text(pc_key)
-                            .appendTo(self.generateSubID("factory", "#"));
-                    });
-
-                    // set first item selected and update menu
-                    jQuery(self.generateSubID("factory", "#")+" option:first-child").attr("selected", "selected");
-                    jQuery(self.generateSubID("factory", "#")).selectmenu("refresh");
-                }
-            });
-
-            // read waypoint types
-            MecSim.ajax({
-                url     : "/cwaypointenvironment/listwaypoint",
-                success : function( po_data ) {
-                    jQuery.each( po_data, function( pc_key, pc_id ) {
-                        jQuery("<option></option>")
-                            .attr("value", pc_id)
-                            .text(pc_key)
-                            .appendTo(self.generateSubID("waypoint", "#"));
-                    });
-
-                    // set first item selected and update menu
-                    jQuery(self.generateSubID("waypoint", "#")+" option:first-child").attr("selected", "selected");
-                    jQuery(self.generateSubID("waypoint", "#")).selectmenu("refresh");
-                }
-            });
-
-            // read generator types
-            MecSim.ajax({
-                url     : "/cwaypointenvironment/listgenerator",
-                success : function( po_data ) {
-                    jQuery.each( po_data, function( pc_key, pc_id ) {
-                        jQuery("<option></option>")
-                            .attr("value", pc_id)
-                            .text(pc_key)
-                            .appendTo(self.generateSubID("generator", "#"));
-                    });
-
-                    // set first item selected and update menu
-                    jQuery(self.generateSubID("generator", "#")+" option:first-child").attr("selected", "selected");
-                    jQuery(self.generateSubID("generator", "#")).selectmenu("refresh");
-                }
-            });
-
-
             // --- initialize layout ---
 
             // set accordion for wizard steps
@@ -307,23 +203,16 @@ WaypointPreset.prototype.afterDOMAdded = function()
                 ]
             });
 
-
             // set distribution binds
-            jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) { lx_labelDistribution(po_event.target.id, po_ui.item.element); });
+            jQuery(self.generateSubID("distribution", ".")).on('selectmenuchange', function( po_event, po_ui ) { self.setLabelOfDistribution(po_event.target.id, po_ui.item.element.data("bound")); });
 
             // set jQuery element definition
             self.mo_elements.selects.forEach(  function( pc_id ) { jQuery( "#"+pc_id ).selectmenu({ width: 150 }); });
             self.mo_elements.spinners.forEach( function( pc_id ) { jQuery( "#"+pc_id ).spinner() });
             self.mo_elements.texts.forEach(    function( pc_id ) { jQuery( "#"+pc_id ).jqxInput({ height: 25, width: 150 }); });
 
-
-            // set default values - distribution defaults are set in the Ajax call
-            jQuery( self.generateSubID("name", "#") ).val("-Name-");
-            jQuery( self.generateSubID("radius", "#") ).val(0.5);
-            jQuery( self.generateSubID("carcount", "#") ).val(3);
-            jQuery( self.generateSubID("speedfactor", "#") ).val(95);
-            jQuery( self.generateSubID("color", "#") ).val("rgb(0,140,49)");
-
+            self.mo_agentmenu = jQuery( self.generateSubID("agent") );
+            self.reset();
         }
     });
 }
@@ -398,19 +287,6 @@ WaypointPreset.prototype.finish = function()
     });
 }
 
-/**
- * @Overwrite
-**/
-WaypointPreset.prototype.show = function()
-{
-    // update agent list and set the first one on default
-    jQuery( this.generateSubID("agent", "#") ).empty().append( Layout.opentiongroup( this.getElements().mecsim_mas_editor.getAgents() ) );
-    jQuery( this.generateSubID("agent", "#") +" option:first-child").attr("selected", "selected");
-    jQuery( this.generateSubID("agent", "#") ).selectmenu("refresh");
-
-    // super call
-    Widget.prototype.show.call(this);
-}
 
 /**
  * @Overwrite
@@ -422,7 +298,6 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         return true;
 
     var self = this;
-
 
     /**
      * function for distribution check
@@ -533,4 +408,169 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
     }
 
     return false;
+}
+
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.cancel = function()
+{
+    this.hide();
+}
+
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.show = function()
+{
+    this.reset();
+    Wizard.prototype.show.call(this);
+}
+
+
+/**
+ * resets the wizard form data to the default values
+**/
+WaypointPreset.prototype.reset = function()
+{
+    var self       = this;
+    var lx_setData = function( pc_url, px_success ) { MecSim.ajax({ url : pc_url, success : px_success }); }
+
+    // --- data content read via ajax ---
+
+    // read distribution list
+    lx_setData( "/cwaypointenvironment/listdistribution", function( po_data )
+    {
+        jQuery(self.generateSubID("distribution", ".")).empty();
+        jQuery.each( po_data, function( pc_key, po_object ) {
+            jQuery("<option></option>")
+                .attr("value", po_object.id)
+                .attr("data-bound", JSON.stringify({firstmomentum : po_object.firstmomentum, secondmomentum : po_object.secondmomentum}))
+                .text(pc_key)
+                .appendTo(self.generateSubID("distribution", "."));
+        });
+
+        // set default values
+        self.setDistribution("generatordistribution",    "Exponential", 0.25);
+        self.setDistribution("maxspeeddistribution",     "Normal",      120, 40);
+        self.setDistribution("accelerationdistribution", "Normal",      10,   4);
+        self.setDistribution("decelerationdistribution", "Normal",      10,   4);
+        self.setDistribution("lingerdistribution",       "Uniform",     0,    1);
+
+    });
+
+
+    // read factory list
+    lx_setData( "/cwaypointenvironment/listfactory", function( po_data )
+    {
+        jQuery(self.generateSubID("factory", "#")).empty();
+        jQuery.each( po_data, function( pc_key, po_object ) {
+            jQuery("<option></option>")
+                .attr("value", po_object.id)
+                .attr("data-requireagent", po_object.requireagent)
+                .text(pc_key)
+                .appendTo(self.generateSubID("factory", "#"));
+        });
+
+        // set first item selected and update menu
+        jQuery(self.generateSubID("factory", "#")+" option:first-child").attr("selected", "selected");
+        jQuery(self.generateSubID("factory", "#")).selectmenu("refresh");
+    });
+
+    // read waypoint types
+    lx_setData( "/cwaypointenvironment/listwaypoint", function( po_data )
+    {
+        jQuery(self.generateSubID("waypoint", "#")).empty();
+        jQuery.each( po_data, function( pc_key, pc_id ) {
+            jQuery("<option></option>")
+                .attr("value", pc_id)
+                .text(pc_key)
+                .appendTo(self.generateSubID("waypoint", "#"));
+        });
+
+        // set first item selected and update menu
+        jQuery(self.generateSubID("waypoint", "#")+" option:first-child").attr("selected", "selected");
+        jQuery(self.generateSubID("waypoint", "#")).selectmenu("refresh");
+    });
+
+    // read generator types
+    lx_setData( "/cwaypointenvironment/listgenerator", function( po_data ) {
+        jQuery(self.generateSubID("generator", "#")).empty();
+        jQuery.each( po_data, function( pc_key, pc_id ) {
+            jQuery("<option></option>")
+                .attr("value", pc_id)
+                .text(pc_key)
+                .appendTo(self.generateSubID("generator", "#"));
+        });
+
+        // set first item selected and update menu
+        jQuery(self.generateSubID("generator", "#")+" option:first-child").attr("selected", "selected");
+        jQuery(self.generateSubID("generator", "#")).selectmenu("refresh");
+    });
+
+    // update agent list and set the first one on default
+    jQuery( this.generateSubID("agent", "#") ).empty().append( Layout.opentiongroup( this.getElements().mecsim_mas_editor.getAgents() ) );
+    jQuery( this.generateSubID("agent", "#") +" option:first-child").attr("selected", "selected");
+    this.mo_agentmenu.selectmenu("refresh");
+
+    // set default values - distribution defaults are set in the Ajax call
+    jQuery( self.generateSubID("name", "#") ).val("-Name-");
+    jQuery( self.generateSubID("radius", "#") ).val(0.5);
+    jQuery( self.generateSubID("carcount", "#") ).val(3);
+    jQuery( self.generateSubID("speedfactor", "#") ).val(95);
+    jQuery( self.generateSubID("color", "#") ).val("rgb(0,140,49)");
+}
+
+
+/**
+ * sets the distribution value
+ *
+ * @param pc_id DOM ID
+ * @param pc_value value
+ * @param px_firstmomentum
+ * @param px_secondmomentum
+**/
+WaypointPreset.prototype.setDistribution = function( pc_id, pc_value, px_firstmomentum, px_secondmomentum )
+{
+    jQuery( this.generateSubID(  pc_id+"firstmomentum", "#") ).val(  px_firstmomentum !== undefined  ? px_firstmomentum : "");
+    jQuery( this.generateSubID(  pc_id+"secondmomentum", "#") ).val( px_secondmomentum !== undefined ? px_secondmomentum : "");
+
+    // fire label set manually, because event is not received to set the labels
+    Layout.optionbyvalue( this.generateSubID( pc_id , "#"), pc_value );
+    this.setLabelOfDistribution( this.generateSubID(pc_id), jQuery(this.generateSubID( pc_id, "#")+ " :selected" ).data("bound") );
+}
+
+
+/**
+ * sets the labels of an select menu
+ *
+ * @param pc_id ID of the select menu (full-qualified label without #)
+ * @param po_bound Json bound object
+**/
+WaypointPreset.prototype.setLabelOfDistribution = function( pc_id, po_bound )
+{
+    var self = this;
+
+    // show / hide call
+    ["firstmomentum", "secondmomentum"].forEach( function(pc_labelsuffix) {
+
+        var lc_label = 'label[for="' + pc_id + pc_labelsuffix + '"]';
+        var lc_id    = "#" + pc_id + pc_labelsuffix;
+
+        // set label
+        jQuery( lc_label ).text(po_bound[pc_labelsuffix].label);
+
+        // hide / show momentums
+        if (po_bound[pc_labelsuffix].used)
+        {
+            jQuery( lc_label ).show();
+            jQuery( lc_id ).show();
+        } else {
+            jQuery( lc_label ).hide();
+            jQuery( lc_id ).hide();
+        }
+
+    });
 }

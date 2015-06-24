@@ -88,7 +88,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         if ( p_literals != null )
             for ( final ILiteral<T> l_literal : p_literals )
                 this.add( CPath.EMPTY, l_literal );
-
     }
 
     /**

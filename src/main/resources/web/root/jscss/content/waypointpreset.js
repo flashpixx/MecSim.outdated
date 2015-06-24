@@ -289,6 +289,18 @@ WaypointPreset.prototype.finish = function()
 
 
 /**
+ * sets the CSS error element
+ * @param pc_select DOM selector
+ * @return pl_error true / false for set error
+**/
+WaypointPreset.prototype.setErrorLabelCSS = function( pc_selector, pl_error )
+{
+    jQuery( 'label[for="' + pc_selector + '"]').css( "background-color", pl_error ? "#ff0000" : "" );
+    return pl_error;
+}
+
+
+/**
  * @Overwrite
 **/
 WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next )
@@ -313,27 +325,17 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         {
 
             case "Uniform" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first < ln_second) && (ln_first >= 0) && (ln_first != ln_second);
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first != ln_second) && (ln_first < ln_second) === true;
 
             case "Normal" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second > 0) && (ln_first > 0);
+                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second > 0) && (ln_first > 0) === true;
 
             case "Exponential" :
-                return (!isNaN(ln_first)) && (ln_first > 0);
+                return (!isNaN(ln_first)) && (ln_first > 0) === true;
 
         }
 
         return false;
-    }
-
-    /**
-     * sets the CSS error element
-     * @param pc_select DOM selector
-     * @return pl_error true / false for set error
-    **/
-    var lx_setErrorLabelCSS = function( pc_selector, pl_error )
-    {
-        jQuery( 'label[for="' + pc_selector + '"]').css( "background-color", pl_error ? "#ff0000" : "" );
     }
 
 
@@ -349,31 +351,22 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
             // check random waypoint & radius
             if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
             {
-                lx_setErrorLabelCSS( this.generateSubID("radius") );
+                this.setErrorLabelCSS( this.generateSubID("radius") );
                 ln = parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
                 if ( ((isNaN(ln))) || (ln <= 0) )
-                {
-                    lx_setErrorLabelCSS( this.generateSubID("radius"), true );
-                    return false;
-                }
+                    return !this.setErrorLabelCSS( this.generateSubID("radius"), true );
             }
 
             // check car count
-            lx_setErrorLabelCSS( this.generateSubID("carcount") );
+            this.setErrorLabelCSS( this.generateSubID("carcount") );
             ln = parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
             if ( ((isNaN(ln))) || (ln <= 0) )
-            {
-                lx_setErrorLabelCSS( this.generateSubID("carcount"), true );
-                return false;
-            }
+                return !this.setErrorLabelCSS( this.generateSubID("carcount"), true );
 
             // check generator distribution
-            lx_setErrorLabelCSS( this.generateSubID("generatordistribution") );
+            this.setErrorLabelCSS( this.generateSubID("generatordistribution") );
             if (!lx_checkDistribution("generatordistribution"))
-            {
-                lx_setErrorLabelCSS( this.generateSubID("generatordistribution"), true );
-                return false;
-            }
+                return !this.setErrorLabelCSS( this.generateSubID("generatordistribution"), true );
 
             // agent need not to be checked, because the value is also set by default
             return true;
@@ -386,22 +379,16 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check max speed distribution
             [ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].forEach( function( pc_key ) {
-                lx_setErrorLabelCSS( self.generateSubID(pc_key) );
+                self.setErrorLabelCSS( self.generateSubID(pc_key) );
                 if (!lx_checkDistribution(pc_key))
-                {
-                    lx_setErrorLabelCSS( self.generateSubID(pc_key), true );
-                    return false;
-                }
+                    return !self.setErrorLabelCSS( self.generateSubID(pc_key), true );
             });
 
             // check speed factor
-            lx_setErrorLabelCSS( this.generateSubID("speedfactor") );
+            this.setErrorLabelCSS( this.generateSubID("speedfactor") );
             ln = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
             if ( ((isNaN(ln))) || (ln < 0) || (ln > 100) )
-            {
-                lx_setErrorLabelCSS( this.generateSubID("speedfactor"), true );;
-                return false;
-            }
+                return !this.setErrorLabelCSS( this.generateSubID("speedfactor"), true );;
 
             return true;
 
@@ -409,6 +396,20 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
     return false;
 }
+
+
+/**
+ * @Overwrite
+**/
+WaypointPreset.prototype.validatefinish = function( po_event, pn_current )
+{
+    this.setErrorLabelCSS( this.generateSubID("name") );
+    if (jQuery(this.generateSubID("name", "#")).val())
+        return !this.setErrorLabelCSS( this.generateSubID("name"), true );
+
+    return false;
+}
+
 
 
 /**
@@ -516,7 +517,7 @@ WaypointPreset.prototype.reset = function()
     this.mo_agentmenu.selectmenu("refresh");
 
     // set default values - distribution defaults are set in the Ajax call
-    jQuery( self.generateSubID("name", "#") ).val("-Name-");
+    jQuery( self.generateSubID("name", "#") ).val("");
     jQuery( self.generateSubID("radius", "#") ).val(0.5);
     jQuery( self.generateSubID("carcount", "#") ).val(3);
     jQuery( self.generateSubID("speedfactor", "#") ).val(95);

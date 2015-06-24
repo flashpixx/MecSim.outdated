@@ -101,50 +101,58 @@ public class CWaypointEnvironment
     private static final Map<String, String> c_label = new HashMap<String, String>()
     {{
             // window title
-            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "title" ) );
+            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_name" ) );
 
 
             // wizard step header
-            put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "headfactorysetting" ) );
-            put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcarsetting" ) );
-            put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "headcustomizing" ) );
+            put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_id_factoryhead" ) );
+            put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_id_carhead" ) );
+            put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_id_customhead" ) );
 
 
             // wizard first step
-            put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "factorysettingshead" ) );
-            put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourfactory" ) );
-            put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "selectyouragentprogram" ) );
+            put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_id_factorysettingshead" ) );
+            put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_id_label_factory" ) );
+            put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_id_agent" ) );
 
-            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "waypointsettingshead" ) );
-            put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointtype" ) );
-            put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "selectwaypointradius" ) );
+            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_id_waypointsettingshead" ) );
+            put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_label_waypoint" ) );
+            put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_label_radius" ) );
 
-            put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "generatorsettingshead" ) );
-            put( "label_generatortyp", CCommon.getResourceString( CWaypointEnvironment.class, "labelgeneratortyp" ) );
-            put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourcarcount" ) );
-            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectyourgenerator" ) );
+            put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_id_generatorsettingshead" ) );
+            put( "label_generatortyp", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_label_generatortyp" ) );
+            put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_label_carcount" ) );
+            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_firststep_label_generatordistribution" ) );
 
 
             // wizard third step
-            put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "speedsettingslabel" ) );
-            put( "label_speedfactor", CCommon.getResourceString( CWaypointEnvironment.class, "selectspeedprob" ) );
+            put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_id_speedhead" ) );
+            put( "label_speedfactor", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_label_speedfactor" ) );
 
-            put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "maxspeedsettingslabel" ) );
-            put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectmaxspeedprob" ) );
+            put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_id_maxspeedhead" ) );
+            put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_label_maxspeeddistribution" ) );
 
-            put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "accsettingslabel" ) );
-            put( "label_accelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectaccprob" ) );
+            put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_id_acceleration" ) );
+            put(
+                    "label_accelerationdistribution", CCommon.getResourceString(
+                            CWaypointEnvironment.class, "wizard_secondstep_label_accelerationdistribution"
+                    )
+            );
 
-            put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "decsettingslabel" ) );
-            put( "label_decelerationdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectdecprob" ) );
+            put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_id_deceleration" ) );
+            put(
+                    "label_decelerationdistribution", CCommon.getResourceString(
+                            CWaypointEnvironment.class, "wizard_secondstep_label_decelerationdistribution"
+                    )
+            );
 
-            put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "lingerersettingslabel" ) );
-            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "selectlingerprob" ) );
+            put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_id_linger" ) );
+            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_secondstep_label_lingerdistribution" ) );
 
 
             // wizard fourth step
-            put( "label_name", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolnamelabel" ) );
-            put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "selecttoolcolor" ) );
+            put( "label_name", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_thirdstep_label_name" ) );
+            put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "wizard_thirdstep_label_color" ) );
 
         }};
     /**

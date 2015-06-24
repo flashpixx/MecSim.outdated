@@ -39,26 +39,26 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_help = new HashMap<String, String>()
     {{
-            put( "about", CCommon.getResourceString( CLanguageEnvironment.class, "helpabout" ) );
-            put( "userdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpuserdoc" ) );
-            put( "devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpdevdoc" ) );
+            put( "id_about", CCommon.getResourceString( CLanguageEnvironment.class, "helpabout" ) );
+            put( "id_userdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpuserdoc" ) );
+            put( "id_devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "helpdevdoc" ) );
         }};
     /**
      * labels of the MAS menu
      */
     private static final Map<String, String> c_mas = new HashMap<String, String>()
     {{
-            put( "jasonmind", CCommon.getResourceString( CLanguageEnvironment.class, "masjasonmind" ) );
-            put( "communication", CCommon.getResourceString( CLanguageEnvironment.class, "mascommunication" ) );
+            put( "id_jasonmind", CCommon.getResourceString( CLanguageEnvironment.class, "masjasonmind" ) );
+            put( "id_communication", CCommon.getResourceString( CLanguageEnvironment.class, "mascommunication" ) );
         }};
     /**
      * labels of the MAS menu
      */
     private static final Map<String, String> c_maseditor = new HashMap<String, String>()
     {{
-            put( "new", CCommon.getResourceString( CLanguageEnvironment.class, "maseditornew" ) );
-            put( "remove", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorremove" ) );
-            put( "check", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorcheck" ) );
+            put( "id_new", CCommon.getResourceString( CLanguageEnvironment.class, "maseditornew" ) );
+            put( "id_remove", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorremove" ) );
+            put( "id_check", CCommon.getResourceString( CLanguageEnvironment.class, "maseditorcheck" ) );
 
         }};
     /**
@@ -66,12 +66,12 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_simulation = new HashMap<String, String>()
     {{
-            put( "start", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstart" ) );
-            put( "stop", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstop" ) );
-            put( "reset", CCommon.getResourceString( CLanguageEnvironment.class, "simulationreset" ) );
-            put( "load", CCommon.getResourceString( CLanguageEnvironment.class, "simulationload" ) );
-            put( "save", CCommon.getResourceString( CLanguageEnvironment.class, "simulationsave" ) );
-            put( "dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "simulationdialogtitle" ) );
+            put( "id_start", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstart" ) );
+            put( "id_stop", CCommon.getResourceString( CLanguageEnvironment.class, "simulationstop" ) );
+            put( "id_reset", CCommon.getResourceString( CLanguageEnvironment.class, "simulationreset" ) );
+            put( "id_load", CCommon.getResourceString( CLanguageEnvironment.class, "simulationload" ) );
+            put( "id_save", CCommon.getResourceString( CLanguageEnvironment.class, "simulationsave" ) );
+            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "simulationdialogtitle" ) );
         }};
 
 

@@ -127,6 +127,20 @@ var Layout = (function (px_modul) {
 
 
     // --- selectbox with label --------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * set option by value name
+     *
+     * @param pc_id DOM ID / selector of the select menu
+     * @param pc_value value that should be set
+    **/
+    px_modul.optionbyvalue = function( pc_id, pc_value )
+    {
+        jQuery( pc_id + " option").removeAttr("selected");
+        jQuery( pc_id + ' option[value="'+pc_value+'"]').attr("selected", "selected");
+        jQuery( pc_id ).val(pc_value).selectmenu("refresh").change();
+    }
+
     /**
      * function to build option item
      *

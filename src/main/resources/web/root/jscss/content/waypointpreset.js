@@ -453,10 +453,12 @@ WaypointPreset.prototype.reset = function()
         });
 
         // set default values
-        jQuery(self.generateSubID("distribution", ".")+" option:first-child").attr("selected", "selected").each( function() { self.setLabelOfDistribution( jQuery(this).parent().attr("id"), jQuery(this).data("bound") ); });
-        jQuery(self.generateSubID("distribution", ".")).selectmenu("refresh");
+        self.setDistribution("generatordistribution",    "Exponential", 0.25);
+        self.setDistribution("maxspeeddistribution",     "Normal",      120, 40);
+        self.setDistribution("accelerationdistribution", "Normal",      10,   4);
+        self.setDistribution("decelerationdistribution", "Normal",      10,   4);
+        self.setDistribution("lingerdistribution",       "Uniform",     0,    1);
 
-        self.setDistribution("generatordistribution", "Exponential", 0.25);
     });
 
 
@@ -532,37 +534,42 @@ WaypointPreset.prototype.reset = function()
 **/
 WaypointPreset.prototype.setDistribution = function( pc_id, pc_value, px_firstmomentum, px_secondmomentum )
 {
-    jQuery( this.generateSubID(  pc_id+"firstmomentum", "#") ).val(  px_firstmomentum ? px_firstmomentum : "");
-    jQuery( this.generateSubID(  pc_id+"secondmomentum", "#") ).val( px_secondmomentum ? px_secondmomentum : "");
+    jQuery( this.generateSubID(  pc_id+"firstmomentum", "#") ).val(  px_firstmomentum !== undefined  ? px_firstmomentum : "");
+    jQuery( this.generateSubID(  pc_id+"secondmomentum", "#") ).val( px_secondmomentum !== undefined ? px_secondmomentum : "");
 
-    jQuery( this.generateSubID(  pc_id, "#") ).val(pc_value).selectmenu("refresh");
-
-    //this.setLabelOfDistribution( pc_id, jQuery(this.generateSubID( pc_id, "#")+ " :selected" ).data("bound") );
+    // fire label set manually, because event is not received to set the labels
+    Layout.optionbyvalue( this.generateSubID( pc_id , "#"), pc_value );
+    this.setLabelOfDistribution( this.generateSubID(pc_id), jQuery(this.generateSubID( pc_id, "#")+ " :selected" ).data("bound") );
 }
 
 
 /**
  * sets the labels of an select menu
  *
- * @param pc_id ID of the select menu
+ * @param pc_id ID of the select menu (full-qualified label without #)
  * @param po_bound Json bound object
 **/
 WaypointPreset.prototype.setLabelOfDistribution = function( pc_id, po_bound )
 {
+    var self = this;
+
     // show / hide call
-    ["firstmomentum", "secondmomentum"].forEach( function(pc_label) {
+    ["firstmomentum", "secondmomentum"].forEach( function(pc_labelsuffix) {
+
+        var lc_label = 'label[for="' + pc_id + pc_labelsuffix + '"]';
+        var lc_id    = "#" + pc_id + pc_labelsuffix;
 
         // set label
-        jQuery( 'label[for="' + pc_id + pc_label + '"]' ).text(po_bound[pc_label].label)
+        jQuery( lc_label ).text(po_bound[pc_labelsuffix].label);
 
         // hide / show momentums
-        if (po_bound[pc_label].used)
+        if (po_bound[pc_labelsuffix].used)
         {
-            jQuery( 'label[for="' + pc_id + pc_label + '"]' ).show();
-            jQuery( '#' + pc_id + pc_label ).show();
+            jQuery( lc_label ).show();
+            jQuery( lc_id ).show();
         } else {
-            jQuery( 'label[for="' + pc_id + pc_label + '"]' ).hide();
-            jQuery( '#' + pc_id + pc_label ).hide();
+            jQuery( lc_label ).hide();
+            jQuery( lc_id ).hide();
         }
 
     });

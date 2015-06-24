@@ -299,7 +299,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).getLiterals( CPath.EMPTY ).remove(
+        m_beliefs.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).getLiterals().remove(
                 CCommon.convertGeneric(
                         CCommon.getLiteral(
                                 p_path.getSuffix(), p_data
@@ -488,7 +488,7 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.getLiterals().addAll( CCommon.convertGeneric( m_agent.getBB() ) );
 
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases( CPath.EMPTY ).values() )
-                m_beliefs.getLiterals().retainAll( l_beliefbase.getLiterals( CPath.EMPTY ) );
+                m_beliefs.getLiterals().retainAll( l_beliefbase.getLiterals() );
 
             // run all register after-cycle object
             for ( final ICycle l_item : m_cycleobject )

@@ -75,17 +75,6 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     }
 
     /**
-     * copy ctor with path specified
-     *
-     * @param p_path literal path as prefix
-     * @param p_literal literal to copy
-     */
-    public IDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal )
-    {
-        this( ( p_path.isEmpty() ? "" : p_path.toString() + "/" ) + p_literal.getFunctor().toString(), p_literal.getLiteral(), (CTermList) p_literal.getValues(), (CTermSet) p_literal.getAnnotation() );
-    }
-
-    /**
      * ctor
      *
      * @param p_functor functor of the literal

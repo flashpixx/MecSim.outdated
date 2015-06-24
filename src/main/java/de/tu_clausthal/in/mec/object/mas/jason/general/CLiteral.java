@@ -54,7 +54,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
      */
     public CLiteral( final Literal p_literal, final CPath p_path )
     {
-        super( ( p_path.isEmpty() ? "" : p_path.toString() + "/" ) + p_literal.getFunctor(), p_literal );
+        super( ( p_path.toString() + "/" ) + p_literal.getFunctor(), p_literal );
 
         if( p_literal.hasTerm() )
             for( final Term l_term : p_literal.getTerms() )

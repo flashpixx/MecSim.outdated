@@ -163,18 +163,10 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     /**
      * get inherited literals of specified beliefbase
      *
-     * @param p_path path to beliefbase
+     * @param p_prefix literals prefix (e.g. the path)
      * @return collection of all inherited literals
      */
-    public Set<ILiteral<T>> getLiterals( final CPath p_path );
-
-    /**
-     * get inherited literals of specified beliefbase
-     *
-     * @param p_path path to beliefbase
-     * @return collection of all inherited literals
-     */
-    public Set<ILiteral<T>> getLiterals( final String p_path );
+    public Set<ILiteral<T>> getLiterals( final String p_prefix );
 
     /**
      * gets a beliefbase with position and name specified in path

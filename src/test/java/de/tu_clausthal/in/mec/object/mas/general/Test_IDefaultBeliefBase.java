@@ -45,9 +45,12 @@ public class Test_IDefaultBeliefBase
         assertEquals( l_beliefbase.get( "a" ), null );
         assertEquals( l_beliefbase.get( "xxx/ab" ), null );
 
+        l_beliefbase.add("x", new IDefaultBeliefBase<Literal>(  ){});
+        l_beliefbase.add("xxx/yyy", new IDefaultBeliefBase<Literal>(  ){});
+
         // non existing literals should return empty set
-        assertEquals(l_beliefbase.getLiterals(new CPath("x")), Collections.EMPTY_SET);
-        assertEquals( l_beliefbase.getLiterals( new CPath( "xxx/yyy") ), Collections.EMPTY_SET );
+        assertEquals(l_beliefbase.get("x").getLiterals(), Collections.EMPTY_SET);
+        assertEquals( l_beliefbase.get("xxx/yyy").getLiterals(), Collections.EMPTY_SET );
     }
 
     @Test
@@ -166,6 +169,11 @@ public class Test_IDefaultBeliefBase
             put(new CPath("aa2/bb1/cc1/dd1"), new CLiteral(ASSyntax.createLiteral("test2")));
             put(CPath.EMPTY, new CLiteral(ASSyntax.createLiteral("test3")));
         }};
+        final Set<ILiteral<Literal>> l_initial = new HashSet(){{
+            for (final Map.Entry<CPath, ILiteral<Literal>> l_entry : l_literals.entrySet())
+                add( new CLiteral( l_entry.getValue().getLiteral(), l_entry.getKey() ));
+        }};
+
 
         // add some literals
         for (final Map.Entry<CPath,ILiteral<Literal>> l_entry : l_literals.entrySet())
@@ -178,7 +186,7 @@ public class Test_IDefaultBeliefBase
         }};
 
         // both sets have to be equal
-        assertEquals( l_beliefbaseElements, new HashSet( l_literals.values() ));
+        assertEquals( l_beliefbaseElements, l_initial);
     }
 
     @Test
@@ -201,9 +209,6 @@ public class Test_IDefaultBeliefBase
         // check if beliefbases were removed
         assertEquals( l_beliefbase.get( "aa2/bb1/cc1/dd1" ), null );
         assertEquals( l_beliefbase.get( "aa2/bb1/cc1" ), null );
-
-        // literals also have to be removed
-        assertEquals( l_beliefbase.getLiterals( new CPath( "aa2/bb1/cc1/dd1" ) ), Collections.EMPTY_SET );
 
         // this beliefbase must not be removed
         assertTrue(l_beliefbase.get("aa2/bb1") != null);

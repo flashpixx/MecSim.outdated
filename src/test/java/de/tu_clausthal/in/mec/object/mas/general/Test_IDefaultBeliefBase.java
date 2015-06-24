@@ -202,6 +202,9 @@ public class Test_IDefaultBeliefBase
         assertEquals( l_beliefbase.get( "aa2/bb1/cc1/dd1" ), null );
         assertEquals( l_beliefbase.get( "aa2/bb1/cc1" ), null );
 
+        // literals also have to be removed
+        assertEquals( l_beliefbase.getLiterals( new CPath( "aa2/bb1/cc1/dd1" ) ), Collections.EMPTY_SET );
+
         // this beliefbase must not be removed
         assertTrue(l_beliefbase.get("aa2/bb1") != null);
     }

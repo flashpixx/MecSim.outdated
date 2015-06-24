@@ -164,33 +164,27 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    // todo: change order of if-constructs
     public boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
             throw new IllegalArgumentException( CCommon.getResourceString( IDefaultBeliefBase.class, "emptypath" ) );
 
-        // if path contains more than one element, go down the hierarchy and do recursive call
-        if ( p_path.size() > 1 )
-            return this.getOrDefault(
-                    p_path.getSubPath( 0, p_path.size() - 1 ), new IDefaultBeliefBase<T>()
-                    {
-                    }
-            ).add( p_path.getSuffix(), p_beliefbase );
+        if (p_path.size()==1)
+            return m_elements.put(
+                    p_path.get( 0 ), new HashMap()
+                    {{
+                            put(
+                                    IBeliefBase.class, new HashSet()
+                                    {{
+                                            add( p_beliefbase );
+                                        }}
+                            );
+                        }}
+            ) == null;
 
-        // if path contains a single element, push new beliefbase
-        return m_elements.put(
-                p_path.get( 0 ), new HashMap()
-                {{
-                        put(
-                                IBeliefBase.class, new HashSet()
-                                {{
-                                        add( p_beliefbase );
-                                    }}
-                        );
-                    }}
-        ) == null;
+        // if path contains more than one element, go down the hierarchy and do recursive call
+        return this.getOrDefault( p_path.getSubPath( 0, p_path.size() - 1 ), new IDefaultBeliefBase<T>(){}).add( p_path.getSuffix(), p_beliefbase );
     }
 
     @Override
@@ -290,6 +284,13 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return m_elements;
     }
 
+    @Override
+    public Set<ILiteral<T>> getLiterals(String p_path)
+    {
+        return this.getLiterals(new CPath(p_path));
+    }
+
+    @Override
     public Set<ILiteral<T>> getLiterals()
     {
         return this.getLiterals( CPath.EMPTY );

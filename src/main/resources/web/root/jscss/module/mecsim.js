@@ -171,8 +171,8 @@ var MecSim = (function (px_modul) {
                     jQuery.each(po_data, function(pc_id, pc_translation) {
                        var la = pc_id.split("_");
 
-                        if ((la.length == 1) && (la[0] === "name"))
-                            po_options.target.setTitle( pc_translation );
+                        //if ((la.length == 1) && (la[0] === "name"))
+                        //    po_options.target.setTitle( pc_translation );
 
                         if (la.length != 2)
                             return;

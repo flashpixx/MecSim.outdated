@@ -39,6 +39,7 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_help = new HashMap<String, String>()
     {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_name" ) );
             put( "id_about", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_about" ) );
             put( "id_userdoc", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_userdoc" ) );
             put( "id_devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_devdoc" ) );
@@ -48,6 +49,7 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_mas = new HashMap<String, String>()
     {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_name" ) );
             put( "id_jasonmind", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_jasonmind" ) );
             put( "id_communication", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_communication" ) );
         }};
@@ -66,6 +68,7 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_simulation = new HashMap<String, String>()
     {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_name" ) );
             put( "id_start", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_start" ) );
             put( "id_stop", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_stop" ) );
             put( "id_reset", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_reset" ) );
@@ -73,7 +76,14 @@ public class CLanguageEnvironment
             put( "id_save", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_save" ) );
             put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_dialogtitle" ) );
         }};
-
+    /**
+     * labels of the simulation menu
+     */
+    private static final Map<String, String> c_traffic = new HashMap<String, String>()
+    {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_name" ) );
+            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_dialogtitle" ) );
+        }};
 
     /**
      * returns all static label for the MAS
@@ -113,6 +123,16 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_simulation()
     {
         return c_simulation;
+    }
+
+    /**
+     * returns all static label for the traffic menu
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_traffic()
+    {
+        return c_traffic;
     }
 
 }

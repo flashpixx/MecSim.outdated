@@ -306,30 +306,24 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_path path to beliefbase
      * @return
-     *
-     * @todo add path as prefix to literals for unification
      */
+    @Override
     public Set<ILiteral<T>> getLiterals( final CPath p_path )
     {
-        // if path is not empty, go down the hierarchy and do self call
-        if( !p_path.isEmpty() )
-        {
-            final IBeliefBase<T> l_beliefbase = this.get( p_path );
-            if ( l_beliefbase == null )
-                return Collections.EMPTY_SET;
+        final IBeliefBase<T> l_beliefbase = this.get( p_path );
+        if ( l_beliefbase == null )
+            return Collections.EMPTY_SET;
 
-            return l_beliefbase.getLiterals( CPath.EMPTY );
-        }
-
-        // return top-level literals
+        // return top-level literals with path as prefix
         return new HashSet()
         {{
-                for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_value : m_elements.values() )
+                for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : l_beliefbase.getElements().values() )
                 {
-                    final Set l_set = l_value.get( ILiteral.class );
+                    final Set<IBeliefBaseElement> l_set = l_innerMap.get( ILiteral.class );
 
                     if ( l_set != null )
-                        addAll( l_set );
+                        for ( final IBeliefBaseElement l_element : l_set )
+                            add( new IDefaultLiteral<T>( p_path, (ILiteral) l_element ) {} );
                 }
             }};
     }

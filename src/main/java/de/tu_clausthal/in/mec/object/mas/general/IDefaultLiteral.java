@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import de.tu_clausthal.in.mec.common.CPath;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -70,6 +72,17 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
         m_literal = p_literal;
         m_values = new CTermList( p_valueList );
         m_annotations = new CTermSet( p_annotationList );
+    }
+
+    /**
+     * copy ctor with path specified
+     *
+     * @param p_path literal path as prefix
+     * @param p_literal literal to copy
+     */
+    public IDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal )
+    {
+        this( ( p_path.isEmpty() ? "" : p_path.toString() + "/" ) + p_literal.getFunctor().toString(), p_literal.getLiteral(), (CTermList) p_literal.getValues(), (CTermSet) p_literal.getAnnotation() );
     }
 
     /**

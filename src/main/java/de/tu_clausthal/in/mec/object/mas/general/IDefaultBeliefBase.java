@@ -77,7 +77,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         // generate map-entries for beliefbases
         if ( p_inheritedBeliefbases != null )
             for ( final Map.Entry<String, IBeliefBase<T>> l_beliefbase : p_inheritedBeliefbases.entrySet() )
-                this.add( new CPath( l_beliefbase.getKey() ), l_beliefbase.getValue() );
+                this.add( l_beliefbase.getKey(), l_beliefbase.getValue() );
 
         // generate map-entries for literals
         if ( p_literals != null )
@@ -88,23 +88,21 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public boolean add( final CPath p_path, final ILiteral<T> p_literal )
     {
-        // if path is not empty, go down the hierarchy and do recursive call
-        if ( !p_path.isEmpty() )
-            return this.getOrDefault(
-                    p_path, new IDefaultBeliefBase<T>()
-            {
-            }
-            ).add( CPath.EMPTY, p_literal );
+        // get inherited beliefbase
+        final IBeliefBase<T> l_beliefbase = this.getOrDefault(
+                p_path, new IDefaultBeliefBase<T>()
+        {
+        }
+        );
 
-        // set literals functor as key
+        // get beliefbase elements and inner-map with specified key
         final String l_key = p_literal.getFunctor().toString();
-
-        // get inner-map with same key
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = m_elements.get( l_key );
+        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_beliefbase.getElements();
+        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get( l_key );
 
         // if there is no inner-map with same key, generate new map-entry and put literal into it
         if ( l_innerMap == null )
-            return m_elements.put(
+            return l_elements.put(
                     l_key, new HashMap()
                     {{
                             put(
@@ -423,7 +421,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         m_elements.put( p_name, l_innerMap );
 
         // get beliefbase elements
-        final Set<IBeliefBaseElement> l_data = l_innerMap.getOrDefault(p_class, new HashSet<IBeliefBaseElement>());
+        final Set<IBeliefBaseElement> l_data = l_innerMap.getOrDefault( p_class, new HashSet<IBeliefBaseElement>() );
         if ( IBeliefBase.class.equals( p_class ) )
             l_data.clear();
 
@@ -456,7 +454,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements(String p_path)
     {
-        return this.getElements( new CPath(p_path) );
+        return this.getElements( new CPath( p_path ) );
     }
 
     @Override

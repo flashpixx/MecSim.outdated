@@ -299,7 +299,7 @@ public class CCommon
     @SuppressWarnings("unchecked")
     public static Literal getLiteral(final String p_name, final Object p_data)
     {
-        return ASSyntax.createLiteral(getLiteralName(p_name), getTerm(p_data));
+        return ASSyntax.createLiteral( getLiteralName(p_name), getTerm(p_data) );
     }
 
 
@@ -324,7 +324,7 @@ public class CCommon
         for (int i = 0; i < l_parts.length; i++)
             l_parts[i] = (i == 0 ? l_parts[i].substring(0, 1).toLowerCase() : l_parts[i].substring(0, 1).toUpperCase()) + l_parts[i].substring(1);
 
-        return StringUtils.join(l_parts).replaceAll("\\W", "");
+        return StringUtils.join(l_parts); //.replaceAll("\\W", "");
     }
 
     /**

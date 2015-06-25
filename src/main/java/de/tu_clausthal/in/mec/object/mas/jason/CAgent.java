@@ -240,7 +240,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.add( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
+        m_beliefs.add( CCommon.convertGeneric( CCommon.getLiteral( p_path.toString(), p_data ) ) );
     }
 
     @Override
@@ -296,13 +296,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).literals().remove(
-                CCommon.convertGeneric(
-                        CCommon.getLiteral(
-                                p_path.getSuffix(), p_data
-                        )
-                )
-        );
+        m_beliefs.remove( CPath.EMPTY, CCommon.convertGeneric( CCommon.getLiteral( p_path.toString(), p_data ) ) );
     }
 
     @Override
@@ -436,9 +430,13 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
+         *
+         * @todo read beliefs and store them in beliefbase in beforeCycle
          */
         public final void cycle( final int p_currentstep )
         {
+            m_beliefs.remove( "simulation" );
+
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )
                 l_item.beforeCycle( p_currentstep, CAgent.this );
@@ -450,7 +448,6 @@ public class CAgent<T> implements IVoidAgent
             m_agent.getBB().clear();
             m_beliefs.update();
 
-            m_beliefs.remove( "simulation" );
             m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation/step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             for ( final ILiteral<Literal> l_literal : m_beliefs )

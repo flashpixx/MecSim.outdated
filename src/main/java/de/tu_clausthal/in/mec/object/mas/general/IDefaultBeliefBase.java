@@ -479,7 +479,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
-        return ( (IDefaultBeliefBase<T>) this.get( p_path ) ).getElements().get( p_literal.getFunctor() ).get( ILiteral.class ).remove( p_literal );
+        final IBeliefBase<T> l_beliefbase = this.get( p_path );
+        if ( l_beliefbase == null )
+            return false;
+
+        l_beliefbase.getElements().remove( p_literal.getFunctor().toString() );
+        return true;
     }
 
     @Override

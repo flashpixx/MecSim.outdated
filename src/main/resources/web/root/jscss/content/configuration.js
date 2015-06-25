@@ -38,7 +38,7 @@ function Configuration( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 
-    this.mc_idseperator = "id_";
+    this.mc_idseperator = "sep_";
 }
 
 /** inheritance call **/
@@ -50,7 +50,7 @@ Configuration.prototype = Object.create(Pane.prototype);
 **/
 Configuration.prototype.getContent = function()
 {
-    return '<button id = "' + this.generateSubID("configuration") + '" >Configuration</button >' + Pane.prototype.getContent.call(this);
+    return '<button id = "' + this.getID() + '" ></button >' + Pane.prototype.getContent.call(this);
 }
 
 
@@ -61,6 +61,8 @@ Configuration.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/configurationlabel", target : this });
 
     // create button and bind action with Ajax call
     jQuery(self.generateSubID("configuration", "#")).button().click( function() {
@@ -174,48 +176,64 @@ Configuration.prototype.buildUIElements = function()
 
         // general tab
         '<div id="' + this.generateSubID("general") + '">' +
-        '<p>' + Layout.checkbox({ id: this.generateSubID(this.mc_idseperator+"reset"),               label: "Reset Configuration",   list: lo_elements.switches,   value: this.mo_configuration.reset })              + '</p>' +
-        '<p>' + Layout.checkbox({ id: this.generateSubID(this.mc_idseperator+"extractmasexamples"),  label: "Extract agent files",   list: lo_elements.switches,   value: this.mo_configuration.extractmasexamples }) + '</p>' +
-        '<p>' + Layout.select(  { id: this.generateSubID(this.mc_idseperator+"language_current"),    label: "Language",              list: lo_elements.selects,    value: this.mo_configuration.language.current,   options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) + '</p>' +
+        '<p>' + Layout.checkbox({ id: this.generateSubIDElements("reset"),               label: " ",   list: lo_elements.switches,   value: this.mo_configuration.reset })              + '</p>' +
+        '<p>' + Layout.checkbox({ id: this.generateSubIDElements("extractmasexamples"),  label: " ",   list: lo_elements.switches,   value: this.mo_configuration.extractmasexamples }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubIDElements("language_current"),    label: " ",   list: lo_elements.selects,    value: this.mo_configuration.language.current,   options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) + '</p>' +
         '</div>' +
 
         // UI tab
         '<div id="' + this.generateSubID("ui") + '">' +
-        '<p>' + Layout.input({ id: this.generateSubID(this.mc_idseperator+"ui_server_host"),                 label : "Server Host",                   list: lo_elements.texts,      value: this.mo_configuration.ui.server.host })               + '</p>' +
-        '<p>' + Layout.input({ id: this.generateSubID(this.mc_idseperator+"ui_server_port"),                 label : "Server Port",                   list: lo_elements.spinners,   value: this.mo_configuration.ui.server.port })               + '</p>' +
-        '<p>' + Layout.input({ id: this.generateSubID(this.mc_idseperator+"ui_server_websocketheartbeat"),   label : "Websocket Heartbeat",           list: lo_elements.spinners,   value: this.mo_configuration.ui.server.websocketheartbeat }) + '</p>' +
-        '<p>' + Layout.input({ id: this.generateSubID(this.mc_idseperator+"ui_routepainterdelay"),           label : "Route Paint Delay in sec",      list: lo_elements.spinners,   value: this.mo_configuration.ui.routepainterdelay })         + '</p>' +
+        '<p>' + Layout.input({ id: this.generateSubIDElements("ui_server_host"),                 label : " ",  list: lo_elements.texts,      value: this.mo_configuration.ui.server.host })               + '</p>' +
+        '<p>' + Layout.input({ id: this.generateSubIDElements("ui_server_port"),                 label : " ",  list: lo_elements.spinners,   value: this.mo_configuration.ui.server.port })               + '</p>' +
+        '<p>' + Layout.input({ id: this.generateSubIDElements("ui_server_websocketheartbeat"),   label : " ",  list: lo_elements.spinners,   value: this.mo_configuration.ui.server.websocketheartbeat }) + '</p>' +
+        '<p>' + Layout.input({ id: this.generateSubIDElements("ui_routepainterdelay"),           label : " ",  list: lo_elements.spinners,   value: this.mo_configuration.ui.routepainterdelay })         + '</p>' +
         '</div>' +
 
 
         // simulation tab
         '<div id="' + this.generateSubID("simulation") + '">' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"simulation_traffic_cellsampling"),      label : "Cell Sampling in meter",        list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"simulation_traffic_timesampling"),      label : "Time Sampling in sec",          list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"simulation_traffic_map_name"),          label : "Map Name",                      list: lo_elements.texts,     value: this.mo_configuration.simulation.traffic.map.name })     + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"simulation_traffic_map_url"),           label : "Map URL",                       list: lo_elements.texts,     value: this.mo_configuration.simulation.traffic.map.url })      + ' <a id="' + this.generateSubID("mappopup") + '">Download Information</a></p>' +
-        '<p>' + Layout.checkbox({ id: this.generateSubID(this.mc_idseperator+"simulation_traffic_map_reimport"),      label : "Map Reimport",                  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
-        '<p>' + Layout.select(  { id: this.generateSubID(this.mc_idseperator+"simulation_traffic_routing_algorithm"), label : "Routing Algorithm",             list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("simulation_traffic_cellsampling"),      label : " ",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("simulation_traffic_timesampling"),      label : " ",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("simulation_traffic_map_name"),          label : " ",  list: lo_elements.texts,     value: this.mo_configuration.simulation.traffic.map.name })     + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("simulation_traffic_map_url"),           label : " ",  list: lo_elements.texts,     value: this.mo_configuration.simulation.traffic.map.url })      + ' <a id="' + this.generateSubID("mappopup") + '">Download Information</a></p>' +
+        '<p>' + Layout.checkbox({ id: this.generateSubIDElements("simulation_traffic_map_reimport"),      label : " ",  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubIDElements("simulation_traffic_routing_algorithm"), label : " ",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
         '</div>' +
 
 
         // database tab
         '<div id="' + this.generateSubID("database") + '">' +
-        '<p>' + Layout.checkbox({ id: this.generateSubID(this.mc_idseperator+"database_active"),       label : "Activity",                     list: lo_elements.switches,  value: this.mo_configuration.database.active })      + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"database_driver"),       label : "Driver Name (JDBC Classname)", list: lo_elements.texts,     value: this.mo_configuration.database.driver })      + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"database_url"),          label : "URL",                          list: lo_elements.texts,     value: this.mo_configuration.database.url })         + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"database_username"),     label : "Username",                     list: lo_elements.texts,     value: this.mo_configuration.database.username })    + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"database_password"),     label : "Password",                     list: lo_elements.texts,     value: this.mo_configuration.database.password })    + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubID(this.mc_idseperator+"database_tableprefix"),  label : "Tableprefix",                  list: lo_elements.texts,     value: this.mo_configuration.database.tableprefix }) + '</p>' +
+        '<p>' + Layout.checkbox({ id: this.generateSubIDElements("database_active"),       label : " ",  list: lo_elements.switches,  value: this.mo_configuration.database.active })      + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("database_driver"),       label : " ",  list: lo_elements.texts,     value: this.mo_configuration.database.driver })      + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("database_url"),          label : " ",  list: lo_elements.texts,     value: this.mo_configuration.database.url })         + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("database_username"),     label : " ",  list: lo_elements.texts,     value: this.mo_configuration.database.username })    + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("database_password"),     label : " ",  list: lo_elements.texts,     value: this.mo_configuration.database.password })    + '</p>' +
+        '<p>' + Layout.input({    id: this.generateSubIDElements("database_tableprefix"),  label : " ",  list: lo_elements.texts,     value: this.mo_configuration.database.tableprefix }) + '</p>' +
         '</div>' +
 
         '</div>'
 
     );
+
+    MecSim.language({ url : "/clanguageenvironment/configurationelements", target : this, idgenerator: this.generateSubIDElements });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     return lo_elements;
 }
+
+
+/**
+ * adapted generator function for DOM IDs of the configuration elements
+ *
+ * @param pc_id DOM ID name
+ * @param pc_prefix prefix
+ * @return ID
+**/
+Configuration.prototype.generateSubIDElements = function(pc_id, pc_prefix)
+{
+    return this.generateSubID( this.mc_idseperator + pc_id, pc_prefix );
+}
+
 
 /**
  * builds a Json object from an array with keys

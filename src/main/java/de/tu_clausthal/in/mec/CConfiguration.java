@@ -69,14 +69,6 @@ public class CConfiguration
      */
     private static final CConfiguration c_instance = new CConfiguration();
     /**
-     * static label for UI elements
-     */
-    private static final Map<String, String> c_label = new HashMap<String, String>()
-    {{
-            //put();
-
-        }};
-    /**
      * name of the main package
      */
     private static final String c_mainpackage = "de.tu_clausthal.in.mec";

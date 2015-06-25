@@ -35,6 +35,58 @@ import java.util.Map;
 public class CLanguageEnvironment
 {
     /**
+     * labels of the simulation menu
+     */
+    private static final Map<String, String> c_configurationelements = new HashMap<String, String>()
+    {{
+            put( "label_reset", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_reset" ) );
+            put( "label_extractmasexamples", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_extractmasexample" ) );
+            put( "label_language_current", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_language_current" ) );
+            put( "label_ui_server_host", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_ui_server_host" ) );
+            put( "label_ui_server_port", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_ui_server_port" ) );
+            put(
+                    "label_ui_server_websocketheartbeat", CCommon.getResourceString(
+                            CLanguageEnvironment.class, "ui_configuration_ui_server_websocketheartbeat"
+                    )
+            );
+            put( "label_ui_routepainterdelay", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_ui_routepainterdelay" ) );
+            put(
+                    "label_simulation_traffic_cellsampling", CCommon.getResourceString(
+                            CLanguageEnvironment.class, "ui_configuration_simulation_traffic_cellsampling"
+                    )
+            );
+            put(
+                    "label_simulation_traffic_timesampling", CCommon.getResourceString(
+                            CLanguageEnvironment.class, "ui_configuration_simulation_traffic_timesampling"
+                    )
+            );
+            put( "label_simulation_traffic_map_name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_name" ) );
+            put( "label_simulation_traffic_map_url", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_url" ) );
+            put(
+                    "label_simulation_traffic_map_reimport", CCommon.getResourceString(
+                            CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_reimport"
+                    )
+            );
+            put(
+                    "label_simulation_traffic_routing_algorithm", CCommon.getResourceString(
+                            CLanguageEnvironment.class, "ui_configuration_simulation_traffic_routing_algorithm"
+                    )
+            );
+            put( "label_database_active", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_active" ) );
+            put( "label_database_driver", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_driver" ) );
+            put( "label_database_url", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_url" ) );
+            put( "label_database_username", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_username" ) );
+            put( "label_database_password", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_password" ) );
+            put( "label_database_tableprefix", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_tableprefix" ) );
+        }};
+    /**
+     * labels of the simulation menu
+     */
+    private static final Map<String, String> c_configurationlabel = new HashMap<String, String>()
+    {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_name" ) );
+        }};
+    /**
      * labels of the help menu
      */
     private static final Map<String, String> c_help = new HashMap<String, String>()
@@ -99,6 +151,26 @@ public class CLanguageEnvironment
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_name" ) );
             put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_dialogtitle" ) );
         }};
+
+    /**
+     * returns all dynamic label for the configuration menu
+     *
+     * @return map with dynamic labels
+     */
+    private final Map<String, String> web_static_configurationelements()
+    {
+        return c_configurationelements;
+    }
+
+    /**
+     * returns all static label for the configuration menu
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_configurationlabel()
+    {
+        return c_configurationlabel;
+    }
 
     /**
      * returns all static label for the MAS
@@ -169,5 +241,4 @@ public class CLanguageEnvironment
     {
         return c_traffic;
     }
-
 }

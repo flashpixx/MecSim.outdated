@@ -127,7 +127,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
 
     @Override
     @CMethodFilter.CAgent( bind = false )
-    // @todo: put beliefs in new beliefbase, e.g. simulation
     public void beforeCycle( final int p_currentstep, final IAgent p_agent )
     {
         // removes old beliefs
@@ -136,8 +135,8 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
 
         // refresh belief cache
         m_beliefcache.clear();
-        m_beliefcache.put( "position", this.getCurrentPosition() );
-        m_beliefcache.put( "predecessor", this.getPredecessor() );
+        m_beliefcache.put( "simulation/position", this.getCurrentPosition() );
+        m_beliefcache.put( "simulation/predecessor", this.getPredecessor() );
 
         // synchronize agent beliefbase
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )

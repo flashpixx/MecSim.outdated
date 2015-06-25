@@ -299,7 +299,7 @@ public class CCommon
     @SuppressWarnings("unchecked")
     public static Literal getLiteral(final String p_name, final Object p_data)
     {
-        return ASSyntax.createLiteral( getLiteralName(p_name), getTerm(p_data) );
+        return ASSyntax.createLiteral( p_name, getTerm(p_data) );
     }
 
 

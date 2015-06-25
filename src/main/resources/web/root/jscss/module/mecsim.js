@@ -260,15 +260,15 @@ var MecSim = (function (px_modul) {
                         jQuery("head").append( '<style type = "text/css">' + px_item.getGlobalCSS() + '</style>' );
 
                     // accordion elements
-                    if (px_item.isHidden())
-                        return;
+                    if (!px_item.isHidden())
+                    {
+                        var lc = px_item.getName();
+                        if (!lc)
+                            lc = "";
 
-                    var lc = px_item.getName();
-                    if (!lc)
-                        lc = "";
-
-                    jQuery( '<h3 id = "' + px_item.getID() + '">' + lc + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
-                    jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
+                        jQuery( '<h3 id = "' + px_item.getID() + '">' + lc + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
+                        jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
+                    }
 
                     px_item.afterDOMAdded();
                 }

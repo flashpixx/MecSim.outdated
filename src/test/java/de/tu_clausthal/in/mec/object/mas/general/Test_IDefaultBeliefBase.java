@@ -26,7 +26,7 @@ public class Test_IDefaultBeliefBase
         final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
 
         // add some inherited beliefbases
-        l_beliefbase.add( "aa1", new IDefaultBeliefBase<Literal>(  ){} );
+        l_beliefbase.add( new CPath( "aa1" ), new IDefaultBeliefBase<Literal>(){} );
         l_beliefbase.add( new CPath( "aa2/bb1/cc1/dd1" ), new IDefaultBeliefBase<Literal>(  ){} );
 
         // add some literals

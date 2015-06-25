@@ -138,34 +138,34 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public boolean add( final String p_path, final IBeliefBase<T> p_beliefbase )
+    public Set<IBeliefBaseElement> add( final String p_path, final IBeliefBase<T> p_beliefbase )
     {
-        return this.add(new CPath(p_path), p_beliefbase);
+        return this.add(new CPath( p_path ), p_beliefbase);
     }
 
     @Override
-    public boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    public Set<IBeliefBaseElement> add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
             throw new IllegalArgumentException( CCommon.getResourceString( IDefaultBeliefBase.class, "emptypath" ) );
 
         // get beliefbase or construct new ones
-        final IBeliefBase<T> l_inherited = this.getOrDefault( p_path.getSubPath( 0, p_path.size() - 1 ),
-                new IDefaultBeliefBase<T>(){});
+        final IBeliefBase<T> l_inherited = this.getOrDefault(
+                p_path.getSubPath( 0, p_path.size() - 1 ),
+                new IDefaultBeliefBase<T>()
+                {
+                }
+        );
 
-        // push beliefbase into specified path
-        return l_inherited.getElements().put(
-                p_path.getSuffix(), new HashMap()
-                {{
-                        put(
-                                IBeliefBase.class, new HashSet()
-                                {{
-                                        add( p_beliefbase );
-                                    }}
-                        );
-                    }}
-        ) == null;
+        // get inner map of beliefbase elements
+        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_inherited.getElements();
+        if ( !l_elements.keySet().contains( p_path.getSuffix() ) )
+            l_elements.put( p_path.getSuffix(), new HashMap<Class<?>, Set<IBeliefBaseElement>>() );
+        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get( p_path.getSuffix() );
+
+        // push beliefbase into inner map
+        return l_innerMap.put( IBeliefBase.class, new HashSet<IBeliefBaseElement>(){{ add( p_beliefbase ); }} );
     }
 
     @Override

@@ -431,7 +431,7 @@ public class CAgent<T> implements IVoidAgent
          *
          * @param p_currentstep current step
          *
-         * @todo read beliefs and store them in beliefbase in beforeCycle
+         * @todo beliefs which are generated in reasoning cycle are not in agent beliefbase
          */
         public final void cycle( final int p_currentstep )
         {
@@ -449,7 +449,6 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.update();
 
             m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation/step", ASSyntax.createNumber( p_currentstep ) ) ) );
-
             for ( final ILiteral<Literal> l_literal : m_beliefs )
                 try
                 {
@@ -468,7 +467,6 @@ public class CAgent<T> implements IVoidAgent
 
             // get updated internal beliefs after agent reasoning cycle
             m_beliefs.clear();
-
             m_beliefs.addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
 
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.beliefbases( CPath.EMPTY ).values() )

@@ -45,6 +45,13 @@ public class CLanguageEnvironment
             put( "id_devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_devdoc" ) );
         }};
     /**
+     * object inspector
+     */
+    private static final Map<String, String> c_inspector = new HashMap<String, String>()
+    {{
+            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_inspector_dialogtitle" ) );
+        }};
+    /**
      * labels of the layer menu
      */
     private static final Map<String, String> c_layer = new HashMap<String, String>()
@@ -101,6 +108,16 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_help()
     {
         return c_help;
+    }
+
+    /**
+     * returns all static label for the object inspector
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_inspector()
+    {
+        return c_inspector;
     }
 
     /**

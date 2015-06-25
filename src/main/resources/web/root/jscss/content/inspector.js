@@ -51,7 +51,7 @@ Inspector.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("table"),
-        title     : "Object Inspector"
+        title     : this.generateSubID("dialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -63,6 +63,8 @@ Inspector.prototype.getGlobalContent = function()
 Inspector.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
+
+    MecSim.language({ url : "/clanguageenvironment/inspector", target : this });
 
 
     // --- inner function --------------------------------------------------------------------------------------------------------------------------------------

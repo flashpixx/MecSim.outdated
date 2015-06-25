@@ -73,7 +73,6 @@ import java.util.Set;
  *
  * @tparam T typ of binding objects
  * @todo error in cycle step, synchronize agent and generic beliefbase correctly
- * @todo remove internal beliefbase and put literals on top-level
  */
 public class CAgent<T> implements IVoidAgent
 {
@@ -439,7 +438,6 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         * @todo handle catched RevisionFailedException
          */
         public final void cycle( final int p_currentstep )
         {
@@ -465,11 +463,10 @@ public class CAgent<T> implements IVoidAgent
                     )
             );
 
-            for ( final IBeliefBaseElement l_element : m_beliefs )
+            for ( final ILiteral<Literal> l_literal : m_beliefs )
                 try
                 {
-                    if( l_element instanceof CLiteral )
-                        m_agent.addBel( ( (CLiteral) l_element).getLiteral());
+                        m_agent.addBel( l_literal.getLiteral() );
                 }
                 catch ( final RevisionFailedException l_exception )
                 {

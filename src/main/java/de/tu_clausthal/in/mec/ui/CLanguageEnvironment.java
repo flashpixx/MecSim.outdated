@@ -35,7 +35,7 @@ import java.util.Map;
 public class CLanguageEnvironment
 {
     /**
-     * labels of the simulation menu
+     * labels of the configuration elements
      */
     private static final Map<String, String> c_configurationelements = new HashMap<String, String>()
     {{
@@ -80,11 +80,22 @@ public class CLanguageEnvironment
             put( "label_database_tableprefix", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database_tableprefix" ) );
         }};
     /**
-     * labels of the simulation menu
+     * labels of the configuration menu
+     */
+    private static final Map<String, String> c_configurationheader = new HashMap<String, String>()
+    {{
+            put( "id_general", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_general" ) );
+            put( "id_ui", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_ui" ) );
+            put( "id_simulation", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_simulation" ) );
+            put( "id_database", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_database" ) );
+        }};
+    /**
+     * labels of the configuration header
      */
     private static final Map<String, String> c_configurationlabel = new HashMap<String, String>()
     {{
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_name" ) );
+            put( "id_mappopup", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_mappopup" ) );
         }};
     /**
      * labels of the help menu
@@ -160,6 +171,16 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_configurationelements()
     {
         return c_configurationelements;
+    }
+
+    /**
+     * returns all static label for the configuration menu
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_configurationheader()
+    {
+        return c_configurationheader;
     }
 
     /**

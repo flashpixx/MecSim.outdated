@@ -450,22 +450,13 @@ public class CAgent<T> implements IVoidAgent
             m_agent.getBB().clear();
             m_beliefs.update();
 
-            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) ) );
-            m_beliefs.remove(
-                    CPath.EMPTY,
-                    CCommon.convertGeneric(
-                            ASSyntax.createLiteral(
-                                    "g_simulationstep", ASSyntax.createNumber(
-                                            p_currentstep - 1
-                                    )
-                            )
-                    )
-            );
+            m_beliefs.remove( "simulation" );
+            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation/step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             for ( final ILiteral<Literal> l_literal : m_beliefs )
                 try
                 {
-                        m_agent.addBel( l_literal.getLiteral() );
+                    m_agent.addBel( l_literal.getLiteral() );
                 }
                 catch ( final RevisionFailedException l_exception )
                 {

@@ -95,7 +95,7 @@ public class CBindingBeliefBase extends CBeliefBase
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    this.add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+                    this.add( CCommon.convertGeneric( l_literal ) );
 
                 } catch (final Exception l_exception)
                 {

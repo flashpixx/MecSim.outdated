@@ -92,7 +92,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     private static <N> void collapseIterator( final IBeliefBase<N> p_current, final CPath p_currentPath, final Stack<Iterator<ILiteral<N>>> p_stack )
     {
         // push iterator object on top-level beliefbase elements
-        p_stack.push( p_current.prefixedLiterals( p_currentPath.toString() ).iterator() );
+        p_stack.push( p_current.prefixedLiterals( p_currentPath.isEmpty() ? "" : p_currentPath.toString() + "/" ).iterator() );
 
         final Map<String, IBeliefBase<N>> l_inheritedBeliefbases = p_current.beliefbases();
 
@@ -113,7 +113,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                     ).getOrDefault( l_deepPath.getSubPath( 0, l_deepPath.size() - 1 ), new IDefaultBeliefBase<T>(){});
 
         // get beliefbase elements and inner-map with specified key
-        final String l_key = "/" + l_deepPath.getSuffix();
+        final String l_key = l_deepPath.getSuffix();
         final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_beliefbase.getElements();
         final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get( l_key );
 

@@ -95,6 +95,7 @@ public class Test_IDefaultBeliefBase
 
         // push literal into top-level set
         l_beliefbase.add( CPath.EMPTY, l_testLiteral );
+        l_beliefbase.add( l_testLiteral2 );
 
         // push literal into some existing inherited beliefbase
         l_beliefbase.add( "aa1", l_testLiteral );
@@ -107,6 +108,7 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( new CLiteral( ASSyntax.createLiteral( "xxx/yyy/zzz/test3" ) ) );
 
         assertTrue( l_beliefbase.literals().contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.literals().contains( l_testLiteral2 ) );
         assertTrue( l_beliefbase.literals( "aa1" ).contains( l_testLiteral ) );
         assertTrue( l_beliefbase.literals( "aa2/bb1" ).contains( l_testLiteral ) );
         assertTrue( l_beliefbase.literals( "aa3" ).contains( l_testLiteral ) );

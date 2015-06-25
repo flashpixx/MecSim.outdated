@@ -355,7 +355,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        ( (CMessageBeliefBase) m_beliefs.getBeliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
+        ( (CMessageBeliefBase) m_beliefs.beliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
     }
 
     @Override
@@ -483,7 +483,7 @@ public class CAgent<T> implements IVoidAgent
 
             m_beliefs.addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
 
-            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases( CPath.EMPTY ).values() )
+            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.beliefbases( CPath.EMPTY ).values() )
                 m_beliefs.literals().retainAll( l_beliefbase.literals() );
 
             // run all register after-cycle object

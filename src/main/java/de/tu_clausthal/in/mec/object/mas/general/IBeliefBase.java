@@ -56,6 +56,14 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public boolean add( final String p_path, final ILiteral<T> p_literal );
 
     /**
+     * adds a literal, the path can be part of the literals functor
+     *
+     * @param p_literal literal to add with path in functor
+     * @return true if addition was successful
+     */
+    public boolean add ( final ILiteral<T> p_literal );
+
+    /**
      * Adds a new beliefbase into specified path. The last element in path has to be the name
      * of the new beliefbase. Beliefbases with the same name will be overwritten.
      *
@@ -162,11 +170,13 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( final CPath p_path );
 
     /**
-     * get inherited literals
+     * get beliefbase elements by name and class
      *
-     * @return collection of all inherited literals
+     * @param p_name
+     * @param p_class
+     * @return
      */
-    public Set<ILiteral<T>> getLiterals();
+    public Set<IBeliefBaseElement> getElements( final String p_name, final Class<?> p_class );
 
     /**
      * get inherited literals of specified beliefbase
@@ -174,7 +184,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @param p_prefix literals prefix (e.g. the path)
      * @return collection of all inherited literals
      */
-    public Set<ILiteral<T>> getLiterals( final String p_prefix );
+    public Set<ILiteral<T>> prefixedLiterals( final String p_prefix );
 
     /**
      * gets a beliefbase with position and name specified in path
@@ -193,21 +203,21 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @param p_name
      * @return
      */
-    public Set<ILiteral<T>> getTopLiterals( final String p_name );
+    public Set<ILiteral<T>> literals( final String p_name );
 
     /**
      * returns top level literals
      *
      * @return
      */
-    public Set<ILiteral<T>> getTopLiterals();
+    public Set<ILiteral<T>> literals();
 
     /**
      * returns top level literals
      *
      * @return
      */
-    public Set<ILiteral<T>> getTopLiterals( final CPath p_path );
+    public Set<ILiteral<T>> literals( final CPath p_path );
 
     /**
      * removes an inherited beliefbase

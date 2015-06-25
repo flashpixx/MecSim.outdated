@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseElement;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
@@ -41,7 +40,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -298,7 +296,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).getLiterals().remove(
+        m_beliefs.get( p_path.getSubPath( 0, p_path.size() - 1 ) ).literals().remove(
                 CCommon.convertGeneric(
                         CCommon.getLiteral(
                                 p_path.getSuffix(), p_data
@@ -452,8 +450,9 @@ public class CAgent<T> implements IVoidAgent
             m_agent.getBB().clear();
             m_beliefs.update();
 
-            m_beliefs.getLiterals().add( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) ) );
-            m_beliefs.getLiterals().remove(
+            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) ) );
+            m_beliefs.remove(
+                    CPath.EMPTY,
                     CCommon.convertGeneric(
                             ASSyntax.createLiteral(
                                     "g_simulationstep", ASSyntax.createNumber(
@@ -480,12 +479,12 @@ public class CAgent<T> implements IVoidAgent
 
 
             // get updated internal beliefs after agent reasoning cycle
-            m_beliefs.getLiterals().clear();
+            m_beliefs.clear();
 
-            m_beliefs.getLiterals().addAll( CCommon.convertGeneric( m_agent.getBB() ) );
+            m_beliefs.addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
 
             for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.getBeliefbases( CPath.EMPTY ).values() )
-                m_beliefs.getLiterals().retainAll( l_beliefbase.getLiterals() );
+                m_beliefs.literals().retainAll( l_beliefbase.literals() );
 
             // run all register after-cycle object
             for ( final ICycle l_item : m_cycleobject )

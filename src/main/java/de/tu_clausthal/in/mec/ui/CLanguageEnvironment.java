@@ -96,6 +96,7 @@ public class CLanguageEnvironment
     {{
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_name" ) );
             put( "id_mappopup", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_mappopup" ) );
+            put( "mappopup_content", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_mappopup_content" ) );
         }};
     /**
      * labels of the help menu

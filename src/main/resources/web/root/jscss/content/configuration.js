@@ -93,14 +93,12 @@ Configuration.prototype.buildViewAndBind = function()
     // --- build UI tab panel & popup (with click bind) --------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("tabs", "#") ).tabs();
     jQuery( this.generateSubID("mappopup", "#") ).webuiPopover({
-        title     : "OpenStreetMap Datafile Links",
+        title     : "OpenStreetMap",
         animation : "fade",
         trigger   : "hover",
-        content   : '<a href="http://wiki.openstreetmap.org/wiki/PBF_Format">PBF download links</a> for import are available at the following locations' +
-                    '<ul>'  +
-                    '<li><a href="http://download.geofabrik.de/">GeoFabrik</a></li>' +
-                    '<li><a href="http://download.bbbike.org/">BB-Bike</a></li>' +
-                    '</ul>'
+        type      : "async",
+        url       : "/clanguageenvironment/configurationlabel",
+        content   : function( po_data ) { return po_data.mappopup_content; }
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -215,12 +213,12 @@ Configuration.prototype.buildUIElements = function()
 
     );
 
+    // webui-popover-content / -title
+
     MecSim.language({ url : "/clanguageenvironment/configurationlabel",    target : this });
     MecSim.language({ url : "/clanguageenvironment/configurationelements", target : this, idgenerator : this.generateSubIDElements });
     MecSim.language({ url : "/clanguageenvironment/configurationheader",   target : this, idgenerator : this.generateSubIDHeader   });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //jQuery('label[for="mecsim_simulation_configuration_sep_language_current-button"]').text("xxxxx");
 
     return lo_elements;
 }

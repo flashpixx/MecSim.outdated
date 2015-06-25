@@ -176,3 +176,13 @@ Traffic.prototype.afterDOMAdded = function()
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
+
+
+/**
+ * @Overwrite
+**/
+Traffic.prototype.setName = function(pc)
+{
+    this.mc_name = pc;
+    jQuery( this.getID("#") ).append(this.mc_name);
+}

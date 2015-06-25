@@ -171,8 +171,8 @@ var MecSim = (function (px_modul) {
                     jQuery.each(po_data, function(pc_id, pc_translation) {
                        var la = pc_id.split("_");
 
-                        //if ((la.length == 1) && (la[0] === "name"))
-                        //    po_options.target.setTitle( pc_translation );
+                        if ((la.length == 1) && (la[0] === "name"))
+                            po_options.target.setName( pc_translation );
 
                         if (la.length != 2)
                             return;
@@ -260,17 +260,20 @@ var MecSim = (function (px_modul) {
                         jQuery("head").append( '<style type = "text/css">' + px_item.getGlobalCSS() + '</style>' );
 
                     // accordion elements
-                    if (px_item.getName())
-                    {
-                        jQuery( '<h3 id = "' + px_item.getID() + '">' + px_item.getName() + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
-                        jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
-                    }
+                    if (px_item.isHidden())
+                        return;
+
+                    var lc = px_item.getName();
+                    if (!lc)
+                        lc = "";
+
+                    jQuery( '<h3 id = "' + px_item.getID() + '">' + lc + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
+                    jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
 
                     px_item.afterDOMAdded();
                 }
             });
         }
-
 
         // main CSS
         jQuery("head").append(

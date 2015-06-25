@@ -91,7 +91,6 @@ public class CWaypointEnvironment
      */
     private final static Map<String, String> c_generator = new HashMap<String, String>()
     {{
-
             for ( final EGenerator l_generator : EGenerator.values() )
                 put( l_generator.toString(), l_generator.name() );
         }};
@@ -100,6 +99,7 @@ public class CWaypointEnvironment
      */
     private static final Map<String, String> c_labelmainmenu = new HashMap<String, String>()
     {{
+            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypoint_name" ) );
             put( "id_newpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_newpreset" ) );
             put( "id_listpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_listpreset" ) );
         }};

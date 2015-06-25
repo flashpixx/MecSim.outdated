@@ -45,6 +45,14 @@ public class CLanguageEnvironment
             put( "id_devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_devdoc" ) );
         }};
     /**
+     * labels of the layer menu
+     */
+    private static final Map<String, String> c_layer = new HashMap<String, String>()
+    {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_layer_name" ) );
+            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_layer_dialogtitle" ) );
+        }};
+    /**
      * labels of the MAS menu
      */
     private static final Map<String, String> c_mas = new HashMap<String, String>()
@@ -93,6 +101,16 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_help()
     {
         return c_help;
+    }
+
+    /**
+     * returns all static label for the layer menu
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_layer()
+    {
+        return c_layer;
     }
 
     /**

@@ -103,3 +103,12 @@ Inspector.prototype.afterDOMAdded = function()
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
+
+
+/**
+ * @Overwrite
+**/
+Inspector.prototype.isHidden = function()
+{
+    return true;
+}

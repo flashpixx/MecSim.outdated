@@ -51,7 +51,7 @@ Layer.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("text"),
-        title     : "Information"
+        title     : this.generateSubID("dialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -75,6 +75,8 @@ Layer.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/layer", target : this });
 
 
     // --- create activity / visibility switches for layer and bind actions ------------------------------------------------------------------------------------
@@ -186,4 +188,13 @@ Layer.prototype.afterDOMAdded = function()
         }
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+}
+
+/**
+ * @Overwrite
+**/
+Layer.prototype.setName = function(pc)
+{
+    this.mc_name = pc;
+    jQuery( this.getID("#") ).append(this.mc_name);
 }

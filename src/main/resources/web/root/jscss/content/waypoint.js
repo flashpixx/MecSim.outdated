@@ -94,3 +94,13 @@ Waypoint.prototype.afterDOMAdded = function()
         self.mo_wizardpreset.show();
     });
 }
+
+
+/**
+ * @Overwrite
+**/
+Waypoint.prototype.setName = function(pc)
+{
+    this.mc_name = pc;
+    jQuery( this.getID("#") ).append(this.mc_name);
+}

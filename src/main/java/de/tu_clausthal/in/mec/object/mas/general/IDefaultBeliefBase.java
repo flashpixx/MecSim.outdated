@@ -239,24 +239,17 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public Map<String, IBeliefBase<T>> getBeliefbases( CPath p_path )
     {
-        // if path is empty, return all the top-level beliefbases
-        if ( p_path.isEmpty() )
-            return new HashMap()
-            {{
-                    for ( final Map.Entry<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_item : m_elements.entrySet() )
-                    {
-                        final Set<IBeliefBaseElement> l_inheritedTopLevelBeliefbase = l_item.getValue().get( IBeliefBase.class );
-
-                        if ( l_inheritedTopLevelBeliefbase != null )
-                            put( l_item.getKey(), l_item.getValue().get( IBeliefBase.class ).iterator().next() );
-                    }
-                }};
-
+        // get inherited beliefbase
         final IBeliefBase<T> l_beliefbase = this.get( p_path );
 
-        // else go down the hierarchy and do self call
-        return l_beliefbase == null ? Collections.EMPTY_MAP : l_beliefbase.getBeliefbases( CPath.EMPTY );
-
+        // return top-level beliefbases if existing
+        return l_beliefbase == null ?
+                Collections.EMPTY_MAP :
+                new HashMap<String, IBeliefBase<T>>(){{
+                    for ( final Map.Entry<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_element : m_elements.entrySet() )
+                        if ( l_element.getValue().get( IBeliefBase.class ) != null )
+                            put( l_element.getKey(), (IBeliefBase<T>) l_element.getValue().get( IBeliefBase.class ).iterator().next() );
+                }};
     }
 
     @Override

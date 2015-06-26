@@ -118,6 +118,7 @@ MASMessageFlow.prototype.getGlobalCSS = function()
 **/
 MASMessageFlow.prototype.afterDOMAdded = function()
 {
+    var self = this;
     MecSim.language({ url : "/clanguageenvironment/mascommunicate", target : this });
 
 
@@ -125,8 +126,14 @@ MASMessageFlow.prototype.afterDOMAdded = function()
 
         jQuery(MecSim.ui().content("#")).empty();
 
+        /**
+        jQuery(MecSim.ui().content("#")).on("empty",function(){
+            console.log("----->>>>> clear content");
+        });
+        **/
 
-        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id   : this.generateSubID("communicationdiagram") });
+
+        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id : self.generateSubID("communicationdiagram") });
 
         MecSim.websocket( "/cmessagesystem/flow", {
 

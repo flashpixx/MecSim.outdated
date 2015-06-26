@@ -28,36 +28,34 @@
 
 
 /**
- * ctor to create the MAS menu
+ * ctor to create the MAS message flow view
  *
  * @param pc_id ID
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
 **/
-function MAS( pc_id, pc_name, pa_panel )
+function MASMessageFlow( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
 }
 
 /** inheritance call **/
-MAS.prototype = Object.create(Pane.prototype);
+MASMessageFlow.prototype = Object.create(Pane.prototype);
 
 
 /**
  * @Overwrite
 **/
-MAS.prototype.getContent = function()
+MASMessageFlow.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("jasonmind") + '" ></button ></p>' +
-           '<p><button id = "' + this.generateSubID("communication") + '" ></button ></p>' +
-           Pane.prototype.getContent.call(this);
+    return '<button id = "' + this.getID() + '" ></button >' + Pane.prototype.getContent.call(this);
 }
 
 
 /**
  * @Overwrite
 **/
-MAS.prototype.getGlobalCSS = function()
+MASMessageFlow.prototype.getGlobalCSS = function()
 {
     return this.generateSubID("communicationdiagram", "#") +
            '{' +
@@ -114,28 +112,20 @@ MAS.prototype.getGlobalCSS = function()
 }
 
 
+
 /**
  * @Overwrite
 **/
-MAS.prototype.afterDOMAdded = function()
+MASMessageFlow.prototype.afterDOMAdded = function()
 {
-    Pane.prototype.afterDOMAdded.call(this);
-    var self = this;
-
-    MecSim.language({ url : "/clanguageenvironment/mas", target : this });
+    MecSim.language({ url : "/clanguageenvironment/mascommunicate", target : this });
 
 
-    // --- Jason mindinspector bind ----------------------------------------------------------------------------------------------------------------------------
-    jQuery(self.generateSubID("jasonmind", "#")).button().click( function() {
-        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "mindinspector" class = "template" src = "http://localhost:3272" seamless />' );
-    });
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- communication binding to the websocket --------------------------------------------------------------------------------------------------------------
-    jQuery(self.generateSubID("communication", "#")).button().click( function() {
+    jQuery(this.getID("#")).button().click( function() {
 
         jQuery(MecSim.ui().content("#")).empty();
+
+
         var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id   : this.generateSubID("communicationdiagram") });
 
         MecSim.websocket( "/cmessagesystem/flow", {
@@ -191,16 +181,4 @@ MAS.prototype.afterDOMAdded = function()
         });
 
     });
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-}
-
-
-/**
- * @Overwrite
-**/
-MAS.prototype.setName = function(pc)
-{
-    this.mc_name = pc;
-    jQuery( this.getID("#") ).append(this.mc_name);
 }

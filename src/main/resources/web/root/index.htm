@@ -50,24 +50,29 @@
     <script type = "text/javascript" src = "jscss/module/layout.js" ></script >
     <script type = "text/javascript" src = "jscss/module/visualization.js" ></script >
 
+
     <script type = "text/javascript" src = "jscss/content/pane.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/inspector.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/logger.js" ></script >
-
-    <script type = "text/javascript" src = "jscss/content/simulation.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/configuration.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/layer.js" ></script >
-
-    <script type = "text/javascript" src = "jscss/content/traffic.js" ></script >
     <script type = "text/javascript" src = "jscss/content/widget.js" ></script >
     <script type = "text/javascript" src = "jscss/content/wizard.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/waypointpreset.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/waypoint.js" ></script >
 
-    <script type = "text/javascript" src = "jscss/content/mas.js" ></script >
-    <script type = "text/javascript" src = "jscss/content/maseditor.js" ></script >
 
-    <script type = "text/javascript" src = "jscss/content/help.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/main/inspector.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/main/logger.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/main/simulation.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/main/configuration.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/main/layer.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/traffic/traffic.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/traffic/waypoint.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/traffic/waypointpreset.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/mas/mas.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/mas/maseditor.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/mas/masjasonmind.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/mas/masmessageflow.js" ></script >
+
+    <script type = "text/javascript" src = "jscss/content/main/help.js" ></script >
 
 
     <script type = "text/javascript" >
@@ -75,11 +80,11 @@
             MecSim.uiinitialize([
                 new Inspector( "inspector" ),
                 new Logger( "logger" ),
-                new Simulation("simulation", [new Configuration("configuration", "Configuration")]),
+                new Simulation("simulation", [new Configuration("configuration")]),
                 new Layer("layer"),
                 new Traffic("traffic"),
                 new Waypoint("waypoint"),
-                new MAS("mas", [new MASEditor("editor", "Editor")]),
+                new MAS("mas", [new MASJasonMind("inspector"), new MASMessageFlow("message"), new MASEditor("editor")]),
                 new Help("help")
             ]);
         });

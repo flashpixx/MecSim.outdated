@@ -82,13 +82,13 @@ Waypoint.prototype.getContent = function()
 **/
 Waypoint.prototype.afterDOMAdded = function()
 {
-    Pane.prototype.afterDOMAdded.call(this);
+    var self = this;
 
+    Pane.prototype.afterDOMAdded.call(this);
+    this.mo_wizardpreset.afterDOMAdded();
     MecSim.language({ url : "/cwaypointenvironment/labelmainmenu", target : this });
 
-    this.mo_wizardpreset.afterDOMAdded();
-
-    var self = this;
+    jQuery( this.generateSubID("listpreset", "#") ).button();
     jQuery( this.generateSubID("newpreset", "#") ).button().click( function() {
         jQuery(MecSim.ui().content("#")).empty();
         self.mo_wizardpreset.show();

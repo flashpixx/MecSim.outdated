@@ -51,7 +51,7 @@ Inspector.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("table"),
-        title     : "Object Inspector"
+        title     : this.generateSubID("dialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -63,6 +63,8 @@ Inspector.prototype.getGlobalContent = function()
 Inspector.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
+
+    MecSim.language({ url : "/clanguageenvironment/inspector", target : this });
 
 
     // --- inner function --------------------------------------------------------------------------------------------------------------------------------------
@@ -95,11 +97,19 @@ Inspector.prototype.afterDOMAdded = function()
     MecSim.websocket( "/cinspector/show", {
         "onerror"   : function( po_event ) { jQuery(MecSim.ui().log("#")).prepend( '<span class="' + self.generateSubID("error") + '">' + po_event.data + '</span>' ); },
         "onmessage" : function( po_event ) {
-
             jQuery( self.generateSubID("table", "#") ).empty().append( json2table(po_event.data.toJSON()) );
             lo_dialog.dialog("open");
 
         }
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+}
+
+
+/**
+ * @Overwrite
+**/
+Inspector.prototype.isHidden = function()
+{
+    return true;
 }

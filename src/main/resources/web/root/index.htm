@@ -75,12 +75,12 @@
             MecSim.uiinitialize([
                 new Inspector( "inspector" ),
                 new Logger( "logger" ),
-                new Simulation("simulation", "Simulation", [new Configuration("configuration", "Configuration")]),
-                new Layer("layer", "Layer"),
-                new Traffic("traffic", "Traffic Environment"),
-                new Waypoint("waypoint", "Waypoint / Sources"),
-                new MAS("mas", "Multi-Agent System", [new MASEditor("editor", "Editor")]),
-                new Help("help", "Help")
+                new Simulation("simulation", [new Configuration("configuration", "Configuration")]),
+                new Layer("layer"),
+                new Traffic("traffic"),
+                new Waypoint("waypoint"),
+                new MAS("mas", [new MASEditor("editor", "Editor")]),
+                new Help("help")
             ]);
         });
     </script >

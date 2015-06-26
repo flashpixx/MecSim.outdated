@@ -152,3 +152,13 @@ Help.prototype.afterDOMAdded = function()
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
+
+
+/**
+ * @Overwrite
+**/
+Help.prototype.setName = function(pc)
+{
+    this.mc_name = pc;
+    jQuery( this.getID("#") ).append(this.mc_name);
+}

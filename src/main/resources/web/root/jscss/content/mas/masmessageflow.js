@@ -130,12 +130,20 @@ MASMessageFlow.prototype.afterDOMAdded = function()
         jQuery(MecSim.ui().content("#")).empty().on( "empty", self.close.bind(self) );
 
         self.mo_visualization = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id : self.generateSubID("communicationdiagram") });
-        self.mo_socket        = MecSim.websocket( "/cmessagesystem/flow", { "onmessage" : self.onmessage.bind(self) });
+        self.mo_socket        = MecSim.websocket( "/cmessagesystem/flow", {
+
+            "onmessage" : self.onmessage.bind(self),
+            "onerror"   : self.close.bind(self)
+
+        });
 
     });
 }
 
 
+/**
+ * close the websocket
+**/
 MASMessageFlow.prototype.close = function()
 {
     if (!this.mo_socket)
@@ -145,6 +153,11 @@ MASMessageFlow.prototype.close = function()
 }
 
 
+/**
+ * websocket message callback
+ *
+ * @param po_event websocket message
+**/
 MASMessageFlow.prototype.onmessage = function( po_event )
 {
     if (!this.mo_visualization)

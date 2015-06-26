@@ -37,6 +37,9 @@
 function MASMessageFlow( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
+
+    this.mo_visualization = null;
+    this.mo_socket        = null;
 }
 
 /** inheritance call **/
@@ -124,68 +127,71 @@ MASMessageFlow.prototype.afterDOMAdded = function()
 
     jQuery(this.getID("#")).button().click( function() {
 
-        jQuery(MecSim.ui().content("#")).empty();
+        jQuery(MecSim.ui().content("#")).empty().on( "empty", self.close.bind(self) );
 
-        /**
-        jQuery(MecSim.ui().content("#")).on("empty",function(){
-            console.log("----->>>>> clear content");
-        });
-        **/
-
-
-        var lo_agentcommunication = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id : self.generateSubID("communicationdiagram") });
-
-        MecSim.websocket( "/cmessagesystem/flow", {
-
-            "onmessage" : function( po_event ) {
-
-                /** variable to store the tree **/
-                var lo_tree = {};
-
-                /**
-                 * build from an item (and its separator) the full path within the tree
-                 * @param pc_path string with path
-                 * @param pc_separator path separator
-                **/
-                function add2Tree( pc_path, pc_separator )
-                {
-                    if (lo_tree[pc_path])
-                        return;
-
-                    // array.slice(x,y) is definied as [x,y)
-                    for( var i=1, la = pc_path.split(pc_separator), ln_length = la.length+1; i < ln_length; ++i )
-                    {
-                        var lc_parent = la.slice(0, i-1).join(pc_separator);
-                        if (!lo_tree[lc_parent])
-                            lo_tree[lc_parent] =  { children : new Set(), connect : new Set() };
-
-                        lo_tree[lc_parent].children.add( la.slice(0, i).join(pc_separator) );
-                    }
-
-                    // add child if not exists
-                    if (!lo_tree[pc_path])
-                        lo_tree[pc_path] =  { children : new Set(), connect : new Set() };
-                };
-
-
-                /**
-                 * iterator of the data for building the tree
-                **/
-                po_event.data.toJSON().cells.forEach( function( po_object ) {
-
-                    add2Tree( po_object.source.path, po_object.source.separator );
-                    add2Tree( po_object.target.path, po_object.target.separator );
-
-                    lo_tree[po_object.source.path].connect.add( po_object.target.path );
-
-                });
-
-                // update visualization
-                lo_agentcommunication(lo_tree);
-
-            }
-
-        });
+        self.mo_visualization = Visualization.HierarchicalEdgeBundling( MecSim.ui().content("#"), { id : self.generateSubID("communicationdiagram") });
+        self.mo_socket        = MecSim.websocket( "/cmessagesystem/flow", { "onmessage" : self.onmessage.bind(self) });
 
     });
+}
+
+
+MASMessageFlow.prototype.close = function()
+{
+    if (!this.mo_socket)
+        return;
+
+    this.mo_socket.close();
+}
+
+
+MASMessageFlow.prototype.onmessage = function( po_event )
+{
+    if (!this.mo_visualization)
+        return;
+
+    /** variable to store the tree **/
+    var lo_tree = {};
+
+    /**
+     * build from an item (and its separator) the full path within the tree
+     * @param pc_path string with path
+     * @param pc_separator path separator
+    **/
+    function add2Tree( pc_path, pc_separator )
+    {
+        if (lo_tree[pc_path])
+            return;
+
+        // array.slice(x,y) is definied as [x,y)
+        for( var i=1, la = pc_path.split(pc_separator), ln_length = la.length+1; i < ln_length; ++i )
+        {
+            var lc_parent = la.slice(0, i-1).join(pc_separator);
+            if (!lo_tree[lc_parent])
+                lo_tree[lc_parent] =  { children : new Set(), connect : new Set() };
+
+            lo_tree[lc_parent].children.add( la.slice(0, i).join(pc_separator) );
+        }
+
+        // add child if not exists
+        if (!lo_tree[pc_path])
+            lo_tree[pc_path] =  { children : new Set(), connect : new Set() };
+    };
+
+
+    /**
+     * iterator of the data for building the tree
+    **/
+    po_event.data.toJSON().cells.forEach( function( po_object ) {
+
+        add2Tree( po_object.source.path, po_object.source.separator );
+        add2Tree( po_object.target.path, po_object.target.separator );
+
+        lo_tree[po_object.source.path].connect.add( po_object.target.path );
+
+    });
+
+    // update visualization
+    this.mo_visualization(lo_tree);
+
 }

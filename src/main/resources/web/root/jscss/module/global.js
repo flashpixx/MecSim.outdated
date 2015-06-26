@@ -130,4 +130,4 @@ function classof( px_value, pc_type )
  * add an empty trigger to the empty function
 **/
 jQuery.fn.raw_empty = jQuery.fn.empty;
-jQuery.fn.empty    = function(){ return this.raw_empty().trigger( "empty" ) }
+jQuery.fn.empty    = function(){ return this.raw_empty().trigger( "empty", this ) }

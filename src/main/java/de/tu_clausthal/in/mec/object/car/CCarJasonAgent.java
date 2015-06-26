@@ -127,6 +127,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
 
     @Override
     @CMethodFilter.CAgent( bind = false )
+    // todo: removeLiterals does not work here
     public void beforeCycle( final int p_currentstep, final IAgent p_agent )
     {
         // removes old beliefs

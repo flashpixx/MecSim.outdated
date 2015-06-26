@@ -296,7 +296,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.remove( CPath.EMPTY, CCommon.convertGeneric( CCommon.getLiteral( p_path.toString(), p_data ) ) );
+        m_beliefs.remove(CPath.EMPTY, CCommon.convertGeneric(CCommon.getLiteral(p_path.toString(), p_data)));
     }
 
     @Override
@@ -349,7 +349,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        ( (CMessageBeliefBase) m_beliefs.beliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
+        ( (CMessageBeliefBase) m_beliefs.beliefbases(CPath.EMPTY).get( "messages" ) ).receiveMessage( p_messages );
     }
 
     @Override
@@ -436,19 +436,18 @@ public class CAgent<T> implements IVoidAgent
         public final void cycle( final int p_currentstep )
         {
             m_beliefs.remove( "simulation" );
+            m_beliefs.add(CCommon.convertGeneric(ASSyntax.createLiteral("simulation/step", ASSyntax.createNumber(p_currentstep))));
 
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )
                 l_item.beforeCycle( p_currentstep, CAgent.this );
 
-
-            // clear the agents beliefbase for update step
-            // push updated beliefs into the agents beliefbase
-            // add the simulationstep belief with the new number and remove the old one
-            m_agent.getBB().clear();
+            // refresh generic beliefbase
             m_beliefs.update();
 
-            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation/step", ASSyntax.createNumber( p_currentstep ) ) ) );
+            // synchronize agent beliefbase
+            m_agent.getBB().clear();
+
             for ( final ILiteral<Literal> l_literal : m_beliefs )
                 try
                 {
@@ -467,9 +466,9 @@ public class CAgent<T> implements IVoidAgent
 
             // get updated internal beliefs after agent reasoning cycle
             m_beliefs.clear();
-            m_beliefs.addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
+            m_beliefs.addAll(CPath.EMPTY, CCommon.convertGeneric(m_agent.getBB()));
 
-            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.beliefbases( CPath.EMPTY ).values() )
+            for ( final IBeliefBase<Literal> l_beliefbase : m_beliefs.beliefbases(CPath.EMPTY).values() )
                 m_beliefs.literals().retainAll( l_beliefbase.literals() );
 
             // run all register after-cycle object

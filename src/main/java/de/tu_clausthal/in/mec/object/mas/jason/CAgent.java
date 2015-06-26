@@ -294,7 +294,7 @@ public class CAgent<T> implements IVoidAgent
      * @param p_path path to beliefbase with literal name as last element
      * @param p_data belief data
      *
-     * @todo this method is not working correctly
+     * @todo this method is not working correctly with exact literal (limit to its functor)
      */
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
@@ -434,8 +434,6 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         *
-         * @todo beliefs which are generated in reasoning cycle are not in agent beliefbase
          */
         public final void cycle( final int p_currentstep )
         {

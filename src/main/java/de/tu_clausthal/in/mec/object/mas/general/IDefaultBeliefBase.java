@@ -109,8 +109,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // get inherited beliefbase
         final IBeliefBase<T> l_beliefbase =
-                this.getOrDefault( p_path, new IDefaultBeliefBase<T>(){}
-                    ).getOrDefault( l_deepPath.getSubPath( 0, l_deepPath.size() - 1 ), new IDefaultBeliefBase<T>(){});
+                this.getOrDefault( p_path.append( l_deepPath.getSubPath( 0, l_deepPath.size() - 1 ) ), new IDefaultBeliefBase<T>(){});
 
         // get beliefbase elements and inner-map with specified key
         final String l_key = l_deepPath.getSuffix();
@@ -483,8 +482,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         if ( l_beliefbase == null )
             return false;
 
-        l_beliefbase.getElements().remove( p_literal.getFunctor().toString() );
-        return true;
+        final Set<IBeliefBaseElement> l_literals = l_beliefbase.get( CPath.EMPTY, p_literal.getFunctor().toString(), ILiteral.class );
+        if ( l_literals == null )
+            return false;
+
+        return l_literals.remove( p_literal );
     }
 
     @Override
@@ -621,26 +623,30 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
             }};
     }
 
-    public boolean remove( final CPath p_path, final String p_functor )
+    @Override
+    public Set<IBeliefBaseElement> get( final CPath p_path, final String p_key, final Class p_class )
     {
         // go down the hierarchy and get last beliefbase
         final IBeliefBase<T> l_beliefbase = this.get( p_path );
+        if ( l_beliefbase == null || !l_beliefbase.getElements().containsKey( p_key ) )
+            return null;
 
-        // result becomes false, if there the removal fails
-        boolean l_result = true;
+        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_beliefbase.getElements().get( p_key );
+        if ( !l_innerMap.containsKey( p_class ) )
+            return null;
 
-        // match becomes true, if there is at least one literal that should be removed
-        boolean l_match = false;
+        return l_innerMap.get( p_class );
+    }
 
-        // remove literals which functor equals the methods argument p_functor
-        for ( final ILiteral<T> l_literal : l_beliefbase.literals() )
-            if ( l_literal.getFunctor().equals( p_functor ) )
-            {
-                l_match = true;
-                l_result = l_result && l_beliefbase.literals().remove( l_literal );
-            }
+    public boolean remove( final CPath p_path, final String p_key, final Class p_class )
+    {
+        final Set<IBeliefBaseElement> p_elements = this.get( p_path, p_key, p_class );
 
-        return l_result && l_match;
+        if ( p_elements == null )
+            return false;
+
+        p_elements.clear();
+        return true;
     }
 
     public boolean remove( final String p_path, final ILiteral<T> p_literal )

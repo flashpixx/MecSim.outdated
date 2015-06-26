@@ -132,6 +132,16 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public IBeliefBase get( final CPath p_path );
 
     /**
+     * getter for beliefbase elements
+     *
+     * @param p_path path to beliefbase with beliefbase elements
+     * @param p_key key of beliefbase elements
+     * @param p_class class of beliefbase elements
+     * @return
+     */
+    public Set<IBeliefBaseElement> get( final CPath p_path, final String p_key, final Class p_class );
+
+    /**
      * get a map of all inherited beliefbases with names
      *
      * @return map of beliefbases

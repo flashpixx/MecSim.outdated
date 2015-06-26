@@ -134,7 +134,7 @@ public class Test_IDefaultBeliefBase
         assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral ) );
 
         // check if literal was removed
-        assertFalse( l_beliefbase.literals( new CPath( "aa1/bb1/cc1/dd1" ) ).contains( l_testLiteral ) );
+        assertFalse( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral ) );
 
         // check if beliefbase is still existing
         assertEquals( l_beliefbase.get( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );

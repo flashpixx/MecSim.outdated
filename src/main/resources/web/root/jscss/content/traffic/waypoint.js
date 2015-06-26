@@ -73,6 +73,7 @@ Waypoint.prototype.getContent = function()
 {
     return '<button id = "' + this.generateSubID("newpreset") + '" ></button ><br/>' +
            '<button id = "' + this.generateSubID("listpreset") + '" ></button ><br/>' +
+           '<div id="' + this.generateSubID("list")  + '"></div>' +
            Pane.prototype.getContent.call(this);
 }
 
@@ -103,4 +104,24 @@ Waypoint.prototype.setName = function(pc)
 {
     this.mc_name = pc;
     jQuery( this.getID("#") ).append(this.mc_name);
+}
+
+
+/**
+ * adds a new preset
+ *
+ * @param po preset Json object
+**/
+Waypoint.prototype.addPreset = function( po )
+{
+}
+
+
+/**
+ * removes a preset
+ *
+ * @param pc preset name
+**/
+Waypoint.prototype.removePreset = function( px )
+{
 }

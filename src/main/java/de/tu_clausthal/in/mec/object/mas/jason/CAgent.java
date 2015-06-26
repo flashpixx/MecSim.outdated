@@ -293,11 +293,14 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_path path to beliefbase with literal name as last element
      * @param p_data belief data
+     *
+     * @todo this method is not working correctly
      */
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
+        // m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
+        m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), p_path.getSuffix(), ILiteral.class );
     }
 
     @Override

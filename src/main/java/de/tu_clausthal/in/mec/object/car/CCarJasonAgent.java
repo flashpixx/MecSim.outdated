@@ -132,7 +132,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     {
         // removes old beliefs
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.removeLiteral( CPath.EMPTY, l_item.getKey() );
+            p_agent.removeLiteral( l_item.getKey(), l_item.getValue() );
 
         // refresh belief cache
         m_beliefcache.clear();

@@ -51,7 +51,7 @@ Traffic.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("text"),
-        title     : "Information"
+        title     : this.generateSubID("dialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -75,6 +75,8 @@ Traffic.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
+    MecSim.language({ url : "/clanguageenvironment/traffic", target : this });
 
     // --- create graphweight switches and bind action ---------------------------------------------------------------------------------------------------------
     MecSim.ajax({
@@ -173,4 +175,14 @@ Traffic.prototype.afterDOMAdded = function()
         }
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+}
+
+
+/**
+ * @Overwrite
+**/
+Traffic.prototype.setName = function(pc)
+{
+    this.mc_name = pc;
+    jQuery( this.getID("#") ).append(this.mc_name);
 }

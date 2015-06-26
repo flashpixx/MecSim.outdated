@@ -31,16 +31,16 @@
  * ctor of a UI pane
  *
  * @param pc_id internal name of the ID
- * @param pc_name name of the panel
- * @param pa_panel array with child elements
+ * @param px name of the panel or array with subpanels
+ * @param pa array with subpanels
 **/
-function Pane( pc_id, pc_name, pa_panel )
+function Pane( pc_id, px, pa )
 {
     if (!classof(pc_id, "string"))
         throw "ID undefinied";
 
     // name ID, children, parent definition
-    this.mc_name     = pc_name || null;
+    this.mc_name     = classof(px, "string") ? px : null;
     this.mc_id       = pc_id.replace(/[^a-z0-9_]+|\s+/gmi, "").toLowerCase();
     this.ma_children = [];
     this.mo_parent   = null;
@@ -48,10 +48,13 @@ function Pane( pc_id, pc_name, pa_panel )
     // caches of ID
     this.mo_idcache  = {};
 
-    if (Array.isArray(pa_panel))
+    // read subpanels if exists
+    if ((px) || (pa))
     {
         var self = this;
-        pa_panel.forEach( function( po_item ) { self.addChild(po_item); } );
+        var la   = Array.isArray(px) ? px : pa;
+        if (la)
+            la.forEach( function( po_item ) { self.addChild(po_item); } );
     }
 
     // adds the element to the static context
@@ -207,6 +210,15 @@ Pane.prototype.getName = function()
 }
 
 /**
+ * changes the name
+**/
+Pane.prototype.setName = function(pc)
+{
+    this.mc_name = pc;
+    jQuery( this.getID("#") ).text(this.mc_name);
+}
+
+/**
  * returns the content of the pane
  *
  * @return content
@@ -250,4 +262,15 @@ Pane.prototype.getCSS = function()
 Pane.prototype.afterDOMAdded = function()
 {
     this.ma_children.forEach( function(po_item) { po_item.afterDOMAdded(); } );
+}
+
+
+/**
+ * method to set up the item hidden within the menu
+ *
+ * @return hidden boolean flag
+**/
+Pane.prototype.isHidden = function()
+{
+    return false;
 }

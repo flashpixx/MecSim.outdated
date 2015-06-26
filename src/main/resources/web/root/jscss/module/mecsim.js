@@ -153,7 +153,12 @@ var MecSim = (function (px_modul) {
     /**
      * language access for setting text elements
      * @param po_options Json configuration object with the structure
-     * { url: -map<string,string> with the translating strings-, each: -optional function that is called on each pair-, finish: -option function that is called after all pairs are finished-, target: -optional pane element to set translation automatically- }
+     * { url: -map<string,string> with the translating strings-,
+     *   each: -optional function that is called on each pair-,
+     *   finish: -option function that is called after all pairs are finished-,
+     *   target: -optional pane element to set translation automatically-,
+     *   idgenerator : -optional generator function within the target for generating ID names-
+     * }
      * @return ajax request object
     **/
     px_modul.language = function(po_options)
@@ -161,17 +166,35 @@ var MecSim = (function (px_modul) {
         return jQuery.ajax({
             url : po_options.url,
             type: "post",
+
             success : function( po_data )
             {
-                if ((po_options.each) || (po_options.finish))
+                if (po_options.each)
+                    jQuery.each(po_data, po_options.each);
+
+                else if (po_options.target instanceof Pane)
                 {
-                    if (po_options.each)
-                        jQuery.each(po_data, po_options.each);
-                    if (po_options.finish)
-                        po_options.finish();
+                    var lx_generator = po_options.idgenerator ? po_options.idgenerator : po_options.target.generateSubID;
+
+                    jQuery.each(po_data, function(pc_id, pc_translation) {
+                       var la = pc_id.split("_");
+
+                        if ((la.length == 1) && (la[0] === "name"))
+                        {
+                            po_options.target.setName( pc_translation );
+                            return;
+                        }
+
+                        la[1] = la.slice(1).join("_");
+                        if (la[0] === "id")
+                            jQuery( lx_generator.call(po_options.target, la[1], "#") ).text( pc_translation );
+                        if (la[0] === "label")
+                            jQuery( 'label[for="' + lx_generator.call(po_options.target, la[1]) + '"]' ).text( pc_translation );
+                    });
                 }
-                else if (po_options.target)
-                    jQuery.each(po_data, function(pc_id, pc_translation) { jQuery(po_options.target.generateSubID(pc_id, "#")).text(pc_translation); });
+
+                if (po_options.finish)
+                    po_options.finish();
             }
         });
     }
@@ -248,9 +271,13 @@ var MecSim = (function (px_modul) {
                         jQuery("head").append( '<style type = "text/css">' + px_item.getGlobalCSS() + '</style>' );
 
                     // accordion elements
-                    if (px_item.getName())
+                    if (!px_item.isHidden())
                     {
-                        jQuery( '<h3 id = "' + px_item.getID() + '">' + px_item.getName() + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
+                        var lc = px_item.getName();
+                        if (!lc)
+                            lc = "";
+
+                        jQuery( '<h3 id = "' + px_item.getID() + '">' + lc + '</h3>' ).appendTo( px_modul.ui().accordion("#") );
                         jQuery( px_item.getContentWithContainer() ).appendTo( px_modul.ui().accordion("#") );
                     }
 
@@ -258,7 +285,6 @@ var MecSim = (function (px_modul) {
                 }
             });
         }
-
 
         // main CSS
         jQuery("head").append(

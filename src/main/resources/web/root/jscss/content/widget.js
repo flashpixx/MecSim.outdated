@@ -219,11 +219,10 @@ Widget.prototype.show = function()
 
 
 /**
- * changes the title text
- *
- * @param pc_title title text
+ * @Overwrite
 **/
-Widget.prototype.setTitle = function( pc_title )
+Widget.prototype.setName = function( pc )
 {
-    jQuery( this.generateSubID("title", "#") ).text(pc_title);
+    Pane.prototype.setName.call(this, pc);
+    jQuery( this.generateSubID("title", "#") ).text(this.mc_name);
 }

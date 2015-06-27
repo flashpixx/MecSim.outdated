@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 /**
  * string atom class for agent literals
+ * @todo documentation
  */
 public class CStringAtom extends IDefaultAtom<String>
 {

@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
@@ -34,6 +35,7 @@ import java.util.Set;
 
 /**
  * class for agent beliefbase
+ * @todo create generic call and move it to the mas/general package
  */
 public class CBeliefBase extends IDefaultBeliefBase<Literal>
 {
@@ -64,5 +66,17 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     public CBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals )
     {
         super( p_beliefbases, p_literals );
+    }
+
+    /**
+     *
+     * @param p_path
+     * @return
+     * @todo fix implementation
+     */
+    @Override
+    public Set<ILiteral<Literal>> literals( final CPath... p_path )
+    {
+        return null;
     }
 }

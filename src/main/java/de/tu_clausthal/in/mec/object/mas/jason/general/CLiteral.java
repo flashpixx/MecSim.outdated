@@ -32,6 +32,7 @@ import jason.asSyntax.Term;
 
 /**
  * class for literals
+ * @todo move class to belief package - after moving CBeliefBase
  */
 public class CLiteral extends IDefaultLiteral<Literal>
 {
@@ -40,7 +41,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
      *
      * @param p_literal
      */
-    public CLiteral( Literal p_literal )
+    public CLiteral( final Literal p_literal )
     {
         this( p_literal, CPath.EMPTY );
     }

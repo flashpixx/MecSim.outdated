@@ -38,10 +38,4 @@ public interface ITerm
      */
     public boolean instanceOf( final Class<?> p_class );
 
-    /**
-     * Returns a string representation of the object.
-     *
-     * @return string representation
-     */
-    String toString();
 }

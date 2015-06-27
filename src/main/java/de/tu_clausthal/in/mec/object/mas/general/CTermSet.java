@@ -53,12 +53,6 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
         super( p_collection );
     }
 
-    /**
-     * check for the termset's class type
-     *
-     * @param p_class matching class
-     * @return true if Set is assignable from matching class
-     */
     @Override
     public boolean instanceOf( final Class<?> p_class )
     {

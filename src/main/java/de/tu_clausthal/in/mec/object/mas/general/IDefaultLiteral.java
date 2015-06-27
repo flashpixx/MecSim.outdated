@@ -90,7 +90,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
     }
 
     @Override
-    public IAtom<?> getFunctor()
+    public IAtom<String> getFunctor()
     {
         return m_functor;
     }

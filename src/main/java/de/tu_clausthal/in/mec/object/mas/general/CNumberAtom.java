@@ -26,26 +26,16 @@ package de.tu_clausthal.in.mec.object.mas.general;
 /**
  * numeric atom class for agent literals
  */
-public class CNumericAtom extends IDefaultAtom<Double>
+public class CNumberAtom extends IDefaultAtom<Number>
 {
     /**
      * ctor
      *
      * @param p_value the atom's value
      */
-    public CNumericAtom( final Double p_value )
+    public CNumberAtom( final Number p_value )
     {
         super( p_value );
     }
 
-    /**
-     * returns the atoms string representation
-     *
-     * @return string representation
-     */
-    public String toString()
-    {
-        long l_roundedValue = Math.round( this.get() );
-        return this.get() == (double) l_roundedValue ? String.valueOf( l_roundedValue ) : String.valueOf( this.get() );
-    }
 }

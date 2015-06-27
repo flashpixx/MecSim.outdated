@@ -26,7 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.mas.general.CNumericAtom;
+import de.tu_clausthal.in.mec.object.mas.general.CNumberAtom;
 import de.tu_clausthal.in.mec.object.mas.general.CStringAtom;
 import de.tu_clausthal.in.mec.object.mas.general.CTermList;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
@@ -133,11 +133,11 @@ public class CCommon
      * @param p_number NumberTerm
      * @return Double Atom
      */
-    public static CNumericAtom convertGeneric( final NumberTerm p_number )
+    public static CNumberAtom convertGeneric( final NumberTerm p_number )
     {
         try
         {
-            return new CNumericAtom( p_number.solve() );
+            return new CNumberAtom( p_number.solve() );
         }
         catch ( NoValueException l_exception )
         {

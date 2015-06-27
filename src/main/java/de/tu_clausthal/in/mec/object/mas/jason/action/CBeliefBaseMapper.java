@@ -31,6 +31,7 @@ import jason.asSyntax.Term;
 
 import java.util.Map;
 
+
 /**
  * class for internal action for mapping literals to beliefbases
  * based on the literals functor
@@ -48,7 +49,7 @@ public class CBeliefBaseMapper extends DefaultInternalAction
      *
      * @param p_mapping
      */
-    public CBeliefBaseMapper( final Map<String,CPath> p_mapping )
+    public CBeliefBaseMapper( final Map<String, CPath> p_mapping )
     {
         m_mapping = p_mapping;
     }
@@ -66,8 +67,8 @@ public class CBeliefBaseMapper extends DefaultInternalAction
     }
 
     @Override
-    public Object execute(final TransitionSystem ts, final Unifier un, final Term[] args) throws Exception
+    public Object execute( final TransitionSystem ts, final Unifier un, final Term[] args ) throws Exception
     {
-        return m_mapping.put(args[0].toString(), new CPath(args[1].toString()));
+        return m_mapping.put( args[0].toString(), new CPath( args[1].toString() ) );
     }
 }

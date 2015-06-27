@@ -272,7 +272,7 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      */
     public final <T> void set( final CPath p_path, final T p_value )
     {
-        set(p_path, 0, p_value, this);
+        set( p_path, 0, p_value, this );
     }
 
     /**

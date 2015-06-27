@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
@@ -59,68 +58,32 @@ public class CBindingBeliefBase extends CBeliefBase
     /**
      * ctor bind an object
      *
-     * @param p_name   name / annotation of the bind object
+     * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CBindingBeliefBase(final String p_name, final Object p_object)
+    public CBindingBeliefBase( final String p_name, final Object p_object )
     {
-        this.push(p_name, p_object);
+        this.push( p_name, p_object );
     }
 
     /**
-     * update beliefs by calling getter functions of binded objects
+     * checks if interface is assignable from given class
+     *
+     * @param p_class class to check
+     * @return true, if check passes
      */
-    @Override
-    public final void update()
+    public boolean instanceOf( Class<?> p_class )
     {
-        super.update();
-
-        // remove old literals
-        this.clear();
-
-        // iterate over all binded objects
-        for (final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet())
-
-            // iterate over all object fields
-            for (final Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet())
-                try
-                {
-                    // invoke / call the getter of the object field - field name will be the belief name, return value
-                    // of the getter invoke call is set for the belief value
-                    final Literal l_literal = CCommon.getLiteral(
-                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
-                                    l_item.getValue().getLeft()
-                            )
-                    );
-
-                    // add the annotation to the belief and push it to the main list for reading later (within the agent)
-                    l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(l_item.getKey())));
-                    this.add( CCommon.convertGeneric( l_literal ) );
-
-                } catch (final Exception l_exception)
-                {
-                    CLogger.error(
-                            de.tu_clausthal.in.mec.common.CCommon.getResourceString(
-                                    this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage()
-                            )
-                    );
-                } catch (final Throwable l_throwable)
-                {
-                    CLogger.error(
-                            de.tu_clausthal.in.mec.common.CCommon.getResourceString(
-                                    this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage()
-                            )
-                    );
-                }
+        return IBeliefBase.class.isAssignableFrom( p_class );
     }
 
     /**
      * adds / binds an object
      *
-     * @param p_name   name / annotation of the object
+     * @param p_name name / annotation of the object
      * @param p_object object
      */
-    public final void push(final String p_name, final Object p_object)
+    public final void push( final String p_name, final Object p_object )
     {
         m_bind.put(
                 p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
@@ -136,19 +99,57 @@ public class CBindingBeliefBase extends CBeliefBase
      *
      * @param p_name name
      */
-    public final void removeBinding(final String p_name)
+    public final void removeBinding( final String p_name )
     {
-        m_bind.remove(p_name);
+        m_bind.remove( p_name );
     }
 
     /**
-     * checks if interface is assignable from given class
-     *
-     * @param p_class class to check
-     * @return true, if check passes
+     * update beliefs by calling getter functions of binded objects
      */
-    public boolean instanceOf(Class<?> p_class)
+    @Override
+    public final void update()
     {
-        return IBeliefBase.class.isAssignableFrom(p_class);
+        super.update();
+
+        // remove old literals
+        this.clear();
+
+        // iterate over all binded objects
+        for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
+
+            // iterate over all object fields
+            for ( final Map.Entry<String, CReflection.CGetSet> l_fieldref : l_item.getValue().getRight().entrySet() )
+                try
+                {
+                    // invoke / call the getter of the object field - field name will be the belief name, return value
+                    // of the getter invoke call is set for the belief value
+                    final Literal l_literal = CCommon.getLiteral(
+                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
+                                    l_item.getValue().getLeft()
+                            )
+                    );
+
+                    // add the annotation to the belief and push it to the main list for reading later (within the agent)
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
+                    this.add( CCommon.convertGeneric( l_literal ) );
+
+                }
+                catch ( final Exception l_exception )
+                {
+                    CLogger.error(
+                            de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                                    this, "getter", l_item.getKey(), l_fieldref.getKey(), l_exception.getMessage()
+                            )
+                    );
+                }
+                catch ( final Throwable l_throwable )
+                {
+                    CLogger.error(
+                            de.tu_clausthal.in.mec.common.CCommon.getResourceString(
+                                    this, "getter", l_item.getKey(), l_fieldref.getKey(), l_throwable.getMessage()
+                            )
+                    );
+                }
     }
 }

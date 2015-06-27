@@ -40,7 +40,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -293,7 +292,6 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_path path to beliefbase with literal name as last element
      * @param p_data belief data
-     *
      * @todo this method is not working correctly with exact literal (limit to its functor)
      */
     @Override
@@ -353,7 +351,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        ( (CMessageBeliefBase) m_beliefs.beliefbases(CPath.EMPTY).get( "messages" ) ).receiveMessage( p_messages );
+        ( (CMessageBeliefBase) m_beliefs.beliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
     }
 
     @Override
@@ -438,7 +436,7 @@ public class CAgent<T> implements IVoidAgent
         public final void cycle( final int p_currentstep )
         {
             m_beliefs.remove( CPath.EMPTY, "step", ILiteral.class );
-            m_beliefs.add(CCommon.convertGeneric(ASSyntax.createLiteral("step", ASSyntax.createNumber(p_currentstep))));
+            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )
@@ -466,7 +464,7 @@ public class CAgent<T> implements IVoidAgent
 
             // get updated internal beliefs after agent reasoning cycle
             m_beliefs.clear();
-            m_beliefs.addAll(CPath.EMPTY, CCommon.convertGeneric(m_agent.getBB()));
+            m_beliefs.addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
 
             // run all register after-cycle object
             for ( final ICycle l_item : m_cycleobject )

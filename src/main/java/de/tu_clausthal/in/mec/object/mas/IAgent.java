@@ -28,8 +28,6 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
 
-import java.awt.peer.CanvasPeer;
-
 
 /**
  * interface of an agent
@@ -43,7 +41,7 @@ public interface IAgent extends Painter, IReceiver
      * @param p_path path of beliefbase with literals name as last element
      * @param p_data belief data
      */
-    public void addLiteral(final String p_path, final Object p_data);
+    public void addLiteral( final String p_path, final Object p_data );
 
 
     /**
@@ -52,7 +50,7 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name path of beliefbase with literals name as last element
      * @param p_data belief data
      */
-    void addLiteral(final CPath p_name, final Object p_data);
+    void addLiteral( final CPath p_name, final Object p_data );
 
 
     /**
@@ -81,7 +79,7 @@ public interface IAgent extends Painter, IReceiver
      *
      * @param p_cycle cycle object
      */
-    void registerCycle(final ICycle p_cycle);
+    void registerCycle( final ICycle p_cycle );
 
     /**
      * release agent call *
@@ -94,7 +92,7 @@ public interface IAgent extends Painter, IReceiver
      * @param p_path path to beliefbase with literals name as last element
      * @param p_data belief data
      */
-    public void removeLiteral(final String p_path, final Object p_data);
+    public void removeLiteral( final String p_path, final Object p_data );
 
     /**
      * removes a belief from specified beliefbase
@@ -102,13 +100,13 @@ public interface IAgent extends Painter, IReceiver
      * @param p_path path to beliefbase with literals name as last element
      * @param p_data belief data
      */
-    public void removeLiteral(final CPath p_path, final Object p_data);
+    public void removeLiteral( final CPath p_path, final Object p_data );
 
     /**
      * unregister a cycle object
      *
      * @param p_cycle cycle object
      */
-    void unregisterCycle(final ICycle p_cycle);
+    void unregisterCycle( final ICycle p_cycle );
 
 }

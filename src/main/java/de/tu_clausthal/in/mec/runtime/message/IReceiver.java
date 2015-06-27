@@ -46,6 +46,6 @@ public interface IReceiver
      *
      * @param p_messages set of messages
      */
-    void receiveMessage(final Set<IMessage> p_messages);
+    void receiveMessage( final Set<IMessage> p_messages );
 
 }

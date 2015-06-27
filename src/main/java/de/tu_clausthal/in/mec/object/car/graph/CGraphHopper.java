@@ -124,7 +124,7 @@ public class CGraphHopper extends GraphHopper
             FileUtils.deleteQuietly( l_graphlocation );
 
         // convert OSM or load the graph
-        CConfiguration.getInstance().get().set("simulation/traffic/map/reimport", false);
+        CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
@@ -463,7 +463,7 @@ public class CGraphHopper extends GraphHopper
          *
          * @param p_text text representation
          */
-        EWeight(final String p_text)
+        EWeight( final String p_text )
         {
             m_text = p_text;
         }

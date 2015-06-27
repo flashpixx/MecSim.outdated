@@ -274,7 +274,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
          * @param p_text text representation
          * @param p_model model instance
          */
-        EDrivingModel(final String p_text, final IDriveModel p_model)
+        EDrivingModel( final String p_text, final IDriveModel p_model )
         {
             m_text = p_text;
             m_model = p_model;

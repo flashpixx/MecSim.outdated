@@ -194,7 +194,7 @@ public class CUI extends Application
      */
     private void stageInitialization( final Stage p_stage )
     {
-        setUserAgentStylesheet(null);
+        setUserAgentStylesheet( null );
         if ( m_stage == null )
             m_stage = p_stage;
 

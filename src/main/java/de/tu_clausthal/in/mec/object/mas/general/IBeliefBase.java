@@ -61,7 +61,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @param p_literal literal to add with path in functor
      * @return true if addition was successful
      */
-    public boolean add ( final ILiteral<T> p_literal );
+    public boolean add( final ILiteral<T> p_literal );
 
     /**
      * Adds a new beliefbase into specified path. The last element in path has to be the name
@@ -96,6 +96,29 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @param p_literals literals to add
      */
     public boolean addAll( final String p_path, final Collection<ILiteral<T>> p_literals );
+
+    /**
+     * get a map of all inherited beliefbases with names
+     *
+     * @return map of beliefbases
+     */
+    public Map<String, IBeliefBase<T>> beliefbases();
+
+    /**
+     * get a map of all inherited beliefbases with names from specified beliefbase
+     *
+     * @param p_path path to beliefbase
+     * @return map of beliefbases
+     */
+    public Map<String, IBeliefBase<T>> beliefbases( final CPath p_path );
+
+    /**
+     * get a map of all inherited beliefbases with names from specified beliefbase
+     *
+     * @param p_path path to beliefbase
+     * @return map of beliefbases
+     */
+    public Map<String, IBeliefBase<T>> beliefbases( final String p_path );
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
@@ -142,29 +165,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Set<IBeliefBaseElement> get( final CPath p_path, final String p_key, final Class p_class );
 
     /**
-     * get a map of all inherited beliefbases with names
-     *
-     * @return map of beliefbases
-     */
-    public Map<String, IBeliefBase<T>> beliefbases();
-
-    /**
-     * get a map of all inherited beliefbases with names from specified beliefbase
-     *
-     * @param p_path path to beliefbase
-     * @return map of beliefbases
-     */
-    public Map<String, IBeliefBase<T>> beliefbases( final CPath p_path );
-
-    /**
-     * get a map of all inherited beliefbases with names from specified beliefbase
-     *
-     * @param p_path path to beliefbase
-     * @return map of beliefbases
-     */
-    public Map<String, IBeliefBase<T>> beliefbases( final String p_path );
-
-    /**
      * getter for beliefbase elements
      */
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements();
@@ -187,14 +187,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @return
      */
     public Set<IBeliefBaseElement> getElements( final String p_name, final Class<?> p_class );
-
-    /**
-     * get inherited literals of specified beliefbase
-     *
-     * @param p_prefix literals prefix (e.g. the path)
-     * @return collection of all inherited literals
-     */
-    public Set<ILiteral<T>> prefixedLiterals( final String p_prefix );
 
     /**
      * gets a beliefbase with position and name specified in path
@@ -228,6 +220,14 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @return
      */
     public Set<ILiteral<T>> literals( final CPath p_path );
+
+    /**
+     * get inherited literals of specified beliefbase
+     *
+     * @param p_prefix literals prefix (e.g. the path)
+     * @return collection of all inherited literals
+     */
+    public Set<ILiteral<T>> prefixedLiterals( final String p_prefix );
 
     /**
      * removes an inherited beliefbase

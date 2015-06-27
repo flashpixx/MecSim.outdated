@@ -238,7 +238,7 @@ public class CMessageSystem implements IVoidSteppable
         /**
          * is called on a message push
          */
-        void onPushMessage(final CPath p_pathreceiver, final IMessage<?> p_message);
+        void onPushMessage( final CPath p_pathreceiver, final IMessage<?> p_message );
 
         /**
          * is called on register
@@ -246,7 +246,7 @@ public class CMessageSystem implements IVoidSteppable
          * @param p_path path of the object
          * @param p_receiver receiver
          */
-        void onRegister(final CPath p_path, final IParticipant p_receiver);
+        void onRegister( final CPath p_path, final IParticipant p_receiver );
 
         /**
          * is called on unregister
@@ -254,7 +254,7 @@ public class CMessageSystem implements IVoidSteppable
          * @param p_path path of the object
          * @param p_receiver receiver
          */
-        void onUnregister(final CPath p_path, final IParticipant p_receiver);
+        void onUnregister( final CPath p_path, final IParticipant p_receiver );
 
     }
 }

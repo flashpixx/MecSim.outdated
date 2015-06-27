@@ -35,10 +35,10 @@ public interface IMetric<T>
     /**
      * calculates the metric value between two objects
      *
-     * @param p_first  first object
+     * @param p_first first object
      * @param p_second second object
      * @return double metric
      */
-    double calculate(final T p_first, final T p_second);
+    double calculate( final T p_first, final T p_second );
 
 }

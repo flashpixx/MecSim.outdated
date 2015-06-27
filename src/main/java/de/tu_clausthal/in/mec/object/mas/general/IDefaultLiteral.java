@@ -23,8 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import de.tu_clausthal.in.mec.common.CPath;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;

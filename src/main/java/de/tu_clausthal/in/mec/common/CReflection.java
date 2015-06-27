@@ -276,7 +276,7 @@ public class CReflection
          * @param p_field field object
          * @return true field will be added, false field will be ignored
          */
-        boolean filter(final Field p_field);
+        boolean filter( final Field p_field );
     }
 
 
@@ -292,7 +292,7 @@ public class CReflection
          * @param p_method method object
          * @return true field will be added, false method will be ignored
          */
-        boolean filter(final Method p_method);
+        boolean filter( final Method p_method );
     }
 
 

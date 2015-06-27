@@ -23,8 +23,6 @@
 
 package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
-import de.tu_clausthal.in.mec.object.mas.IAgent;
-
 /**
  * generic discrete metric
  *
@@ -34,10 +32,11 @@ public class CDiscreteMetric<T> implements IMetric<T>
 {
 
     @Override
-    public double calculate(final T p_first, final T p_second)
+    public double calculate( final T p_first, final T p_second )
     {
         // equal objects create zero value
-        if (p_first.equals(p_second)) return 0;
+        if ( p_first.equals( p_second ) )
+            return 0;
 
 
         // create aggregate belief-base

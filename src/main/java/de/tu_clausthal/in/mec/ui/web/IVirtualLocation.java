@@ -39,7 +39,7 @@ public interface IVirtualLocation
      * @param p_session HTTP session
      * @return any return data
      */
-    <T> T get(final NanoHTTPD.IHTTPSession p_session) throws Throwable;
+    <T> T get( final NanoHTTPD.IHTTPSession p_session ) throws Throwable;
 
     /**
      * returns an markdown renderer or nul
@@ -52,6 +52,6 @@ public interface IVirtualLocation
      * @param p_uri input URI
      * @return machting boolean
      */
-    boolean match(final String p_uri);
+    boolean match( final String p_uri );
 
 }

@@ -69,14 +69,15 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * @note should throw exception on syntax error
      * @bug does not work correctly - exception is not thrown
      */
-    public static void checkAgentFileSyntax(final String p_agentname)
+    public static void checkAgentFileSyntax( final String p_agentname )
     {
         try
         {
-            Agent.create(new AgArch(), Agent.class.getName(), null, getAgentFile(p_agentname).toString(), null);
-        } catch (final Exception l_exception)
+            Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
+        }
+        catch ( final Exception l_exception )
         {
-            throw new IllegalStateException(CCommon.getResourceString(IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage()));
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
         }
     }
 
@@ -85,16 +86,17 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @return file object
+     *
      * @throws IOException throws IO exception on file creating error
      */
-    public static File createAgentFile(final String p_agentname) throws IOException
+    public static File createAgentFile( final String p_agentname ) throws IOException
     {
-        if ((p_agentname == null) || (p_agentname.isEmpty()))
-            throw new IllegalArgumentException(CCommon.getResourceString(IEnvironment.class, "aslempty"));
+        if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        final File l_asl = CConfiguration.getInstance().getLocation("mas", p_agentname + c_filesuffix);
-        if (l_asl.exists())
-            throw new IllegalStateException(CCommon.getResourceString(IEnvironment.class, "aslexist"));
+        final File l_asl = CConfiguration.getInstance().getLocation( "mas", p_agentname + c_filesuffix );
+        if ( l_asl.exists() )
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "aslexist" ) );
 
         l_asl.createNewFile();
         return l_asl;
@@ -105,32 +107,34 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @return existing file object
+     *
      * @note must support a agent filename as file with extension and without extension
      */
-    public static File getAgentFile(final String p_agentname)
+    public static File getAgentFile( final String p_agentname )
     {
-        if ((p_agentname == null) || (p_agentname.isEmpty()))
-            throw new IllegalArgumentException(CCommon.getResourceString(IEnvironment.class, "aslempty"));
+        if ( ( p_agentname == null ) || ( p_agentname.isEmpty() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( IEnvironment.class, "aslempty" ) );
 
-        return CConfiguration.getInstance().getLocation("mas", p_agentname.endsWith(c_filesuffix) ? p_agentname : p_agentname + c_filesuffix);
+        return CConfiguration.getInstance().getLocation( "mas", p_agentname.endsWith( c_filesuffix ) ? p_agentname : p_agentname + c_filesuffix );
     }
 
     /**
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
-<<<<<<< HEAD
+     * <<<<<<< HEAD
+     *
      * @todo add ASL build-in files with the resource directory
-=======
->>>>>>> upstream/master
+     * =======
+     * >>>>>>> upstream/master
      */
     public static String[] getAgentFiles()
     {
         final List<String> l_list = new LinkedList<>();
-        for (final String l_file : CConfiguration.getInstance().getLocation("mas").list(new WildcardFileFilter("*" + c_filesuffix)))
-            l_list.add(new File(l_file).getName().replace(c_filesuffix, ""));
+        for ( final String l_file : CConfiguration.getInstance().getLocation( "mas" ).list( new WildcardFileFilter( "*" + c_filesuffix ) ) )
+            l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
 
-        return CCommon.convertCollectionToArray(String[].class, l_list);
+        return CCommon.convertCollectionToArray( String[].class, l_list );
     }
 
     /**
@@ -155,28 +159,28 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
     @Override
     public final void release()
     {
-        for (final IAgent l_agent : m_data)
+        for ( final IAgent l_agent : m_data )
             l_agent.release();
         m_data.clear();
     }
 
     @Override
-    public final void step(final int p_currentstep, final ILayer p_layer)
+    public final void step( final int p_currentstep, final ILayer p_layer )
     {
         // mindinspector needs to load if there exists agents
-        if ((m_mindinspector != null) && (m_data.size() > 0))
-            m_mindinspector.load("http://localhost:3272");
+        if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
+            m_mindinspector.load( "http://localhost:3272" );
     }
 
     /**
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
+     * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      * @bug UI frame
      */
-    private void readObject(final ObjectInputStream p_stream) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 

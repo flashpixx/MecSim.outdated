@@ -351,7 +351,7 @@ public class CSimulation
         if ( !p_data.containsKey( "state" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "state" ) );
 
-        m_world.get( this.getLayerName( p_data ) ).setActive((boolean) p_data.get("state"));
+        m_world.get( this.getLayerName( p_data ) ).setActive( (boolean) p_data.get( "state" ) );
     }
 
     /**

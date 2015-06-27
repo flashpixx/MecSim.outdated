@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSemantics.Agent;
-import jason.asSyntax.Literal;
+
 
 /**
  * beliefbase for internal beliefs, i.e. the initial beliefs
@@ -64,6 +64,6 @@ public class CInternalBeliefBase extends CBeliefBase
         this.clear();
 
         // push agent beliefs into set of top-level literals
-        addAll(CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
+        addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
     }
 }

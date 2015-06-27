@@ -54,6 +54,6 @@ public interface ILayer extends ISteppable, Serializable
      *
      * @param p_active activity
      */
-    void setActive(final boolean p_active);
+    void setActive( final boolean p_active );
 
 }

@@ -67,11 +67,16 @@ public class CConfiguration
     /**
      * singleton instance variable
      */
+
     private static final CConfiguration c_instance = new CConfiguration();
     /**
      * name of the main package
      */
     private static final String c_mainpackage = "de.tu_clausthal.in.mec";
+    /**
+     * user configuration name
+     */
+    private static final String c_userconfiguration = "user";
     /**
      * configuration map
      */
@@ -80,8 +85,10 @@ public class CConfiguration
             // flag for resetting the full configuration - accessible within the UI
             put( "reset", false );
 
+
             // extract all MAS files from the Jar to the home path (should be run once) - accessible within the UI
             put( "extractmasexamples", true );
+
 
             // language data - accessible within the UI
             put(
@@ -100,7 +107,8 @@ public class CConfiguration
                         }}
             );
 
-            // ui data
+
+            // UI data
             put(
                     "ui", new CNameHashMap.CImmutable()
                     {{
@@ -126,9 +134,6 @@ public class CConfiguration
                                             put( "websocketheartbeat", 5 );
                                         }}
                             );
-
-                            // web UI interface configuration
-                            put( "web", new CNameHashMap.CImmutable() );
                         }}
             );
 
@@ -202,6 +207,10 @@ public class CConfiguration
                             put( "password", null );
                         }}
             );
+
+
+            // web UI interface configuration
+            put( c_userconfiguration, new CNameHashMap.CImmutable() );
 
 
             // manifest data
@@ -587,7 +596,6 @@ public class CConfiguration
             p_input.set(
                     "ui/geoposition", new GeoPosition(
                             p_input.<Double>get( "ui/geoposition/latitude" ), p_input.<Double>get( "ui/geoposition/longitude" )
-                            //51.8089, 10.3412 -> type mismatch between float and double (latitude and longitude)
                     )
             );
 
@@ -619,10 +627,6 @@ public class CConfiguration
                 if ( l_valid )
                     m_configuration.set( l_item.getKey(), l_data );
             }
-
-        // copy ui/web datasets complete
-        //if ( p_input.traverseContainsKey( "ui/web" ) )
-        //    m_configuration.set( "ui/web", p_input.get( "ui/web" ) );
 
         if ( !l_errors.isEmpty() )
             throw new IllegalArgumentException( StringUtils.join( l_errors, "\n" ) );

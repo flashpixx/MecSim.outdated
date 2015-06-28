@@ -112,9 +112,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_literals;
     }
 
-    /**
-     * @todo fix ctor call
-     */
     @Override
     public boolean add( final CPath p_path, final ILiteral<T> p_literal )
     {
@@ -183,12 +180,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return this.add(CPath.EMPTY, p_literal);
     }
 
-    /**
-     * @todo fix code
-     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
-     * @param p_beliefbase beliefbase to add
-     * @return
-     */
     @Override
     public Set<IBeliefBaseElement> add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
@@ -219,13 +210,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         );
     }
 
-
-    /**
-     * @todo fix call
-     * @param p_path path to beliefbase
-     * @param p_literals literals to add
-     * @return
-     */
     @Override
     public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals )
     {
@@ -348,10 +332,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * @param p_path path with name of the beliefbase as last element
-     * @param p_beliefbase default beliefbase
-     * @return
-     * @todo fix call
+     * gets specified beliefbase if available, or default beliefbase if not available
+     *
+     * @param p_path path with name of the beliefbase as its last element
+     * @param p_beliefbase default beliefbase, will be returned if the specified path cannot be found
+     * @return specified beliefbase if path exists, otherwise the default beliefbase
      */
     public IBeliefBase<T> getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {

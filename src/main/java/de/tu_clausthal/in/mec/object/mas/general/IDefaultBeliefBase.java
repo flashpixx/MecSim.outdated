@@ -162,7 +162,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * @todo documentation is missing
+     * adds a literal to the beliefbase
+     *
      * @param p_literal literal to add with path in functor
      * @return
      */
@@ -324,10 +325,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * @todo documentation is missing
-     * @param p_name
-     * @param p_class
-     * @return
+     * returns top-level beliefbase elements
+     *
+     * @param p_name elements key (functor for literals, name for beliefbase)
+     * @param p_class elements class
+     * @return set of top-level beliefbase elements
      */
     public Set<IBeliefBaseElement> getElements( final String p_name, final Class<?> p_class )
     {
@@ -376,9 +378,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
 
     /**
-     * @todo documentation is missing
-     * @param p_path
-     * @return
+     * get inherited top-level literals
+     *
+     * @param p_path path to inherited beliefbase
+     * @return top-level literals
      */
     public Set<ILiteral<T>> literals( final CPath p_path )
     {
@@ -472,10 +475,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * @todo documentation is missing
-     * @param p_name
-     * @param p_class
-     * @param p_element
+     * adds a set of beliefbase elements on top-level
+     *
+     * @param p_name name of the elements as key
+     * @param p_class class of the elements
+     * @param p_element the elements themselves
      */
     private void addTopElement( final String p_name, final Class<?> p_class, final Set<IBeliefBaseElement> p_element )
     {
@@ -606,12 +610,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
 
     /**
-     * @todo documentation is missing
+     * removes specified beliefbase elements from a beliefbase
      *
-     * @param p_path
-     * @param p_key
-     * @param p_class
-     * @return
+     * @param p_path path to beliefbase
+     * @param p_key elements name as key
+     * @param p_class class of elements
+     * @return true, if removal was successful
      */
     public boolean remove( final CPath p_path, final String p_key, final Class p_class )
     {

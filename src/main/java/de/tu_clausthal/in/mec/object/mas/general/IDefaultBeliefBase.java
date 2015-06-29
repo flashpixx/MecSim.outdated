@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -179,7 +180,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public boolean add( final ILiteral<T> p_literal )
     {
-        return this.add( CPath.EMPTY, p_literal );
+        return this.add(CPath.EMPTY, p_literal);
     }
 
     @Override
@@ -230,31 +231,28 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_success;
     }
 
-    /**
-     *
-     *
-     * @param p_path path to beliefbase
-     * @return
-     *
-     * @todo iterate over p_path
-     */
     @Override
     public Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path )
     {
-        final CPath l_path = ( p_path == null || p_path.length == 0 ) ? CPath.EMPTY : p_path[ 0 ];
+        if ( p_path == null )
+            return null;
 
-        // get inherited beliefbase
-        final IBeliefBase<T> l_beliefbase = this.get( l_path );
+        // fill the resulting map with top-level beliefbases
+        final Map<String, IBeliefBase<T>> l_result = new HashMap<>();
+        for ( final CPath l_path : p_path )
+        {
+            // get inherited beliefbase
+            final IBeliefBase<T> l_beliefbase = this.get( l_path );
+            if ( l_beliefbase == null )
+                continue;
 
-        // return top-level getBeliefbases if existing
-        return l_beliefbase == null ?
-                null :
-                new HashMap<String, IBeliefBase<T>>()
-                {{
-                        for ( final Map.Entry<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_element : m_elements.entrySet() )
-                            if ( l_element.getValue().get( IBeliefBase.class ) != null )
-                                put( l_element.getKey(), (IBeliefBase<T>) l_element.getValue().get( IBeliefBase.class ).iterator().next() );
-                    }};
+            // iteration over beliefbase-elements
+            for ( final Map.Entry<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_element : l_beliefbase.getElements().entrySet() )
+                if ( l_element.getValue().containsKey( IBeliefBase.class ) )
+                    l_result.put( l_element.getKey(), (IBeliefBase<T>) l_element.getValue().get(IBeliefBase.class).iterator().next() );
+        }
+
+        return l_result;
     }
 
     @Override

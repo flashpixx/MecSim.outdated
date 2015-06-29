@@ -113,12 +113,12 @@ public class Test_CLanguageLabels
             return;
         }
 
+
         // --- check label -> property definition
         for ( final String l_language : CConfiguration.getInstance().get().<List<String>>get( "language/allow" ) )
         {
             final Set<String> l_labels = CConfiguration.getInstance().getResourceBundle( l_language ).keySet();
             l_labels.removeAll( m_labels );
-
             assertTrue(
                     String.format( "the following keys in language [%s] are unused: %s", l_language, StringUtils.join( l_labels, ", " ) ), l_labels.isEmpty()
             );

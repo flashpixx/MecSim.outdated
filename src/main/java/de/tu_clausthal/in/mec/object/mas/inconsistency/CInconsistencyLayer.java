@@ -211,7 +211,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
         }
 
-
         // get the stationary probility with eigen decomposition
         final DoubleMatrix1D l_eigenvector;
         switch ( m_algorithm )
@@ -265,13 +264,11 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return true;
     }
 
-
     @Override
     public final String toString()
     {
         return CCommon.getResourceString( this, "name" );
     }
-
 
     /**
      * numeric algorithm structure

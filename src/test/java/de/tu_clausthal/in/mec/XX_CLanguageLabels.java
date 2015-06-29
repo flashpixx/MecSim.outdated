@@ -55,7 +55,7 @@ import static org.junit.Assert.fail;
 /**
  * test all resource strings
  */
-public class Test_CLanguageLabels
+public class XX_CLanguageLabels
 {
     /**
      * set with all labels *

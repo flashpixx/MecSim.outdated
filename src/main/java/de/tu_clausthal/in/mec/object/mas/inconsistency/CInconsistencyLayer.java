@@ -195,29 +195,24 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         // get key list of map for addressing elements in the correct order
         final ArrayList<T> l_keys = new ArrayList<T>( m_data.keySet() );
 
-        // calculate matrix and build metric value
+        // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
         for ( int i = 0; i < l_keys.size(); ++i )
         {
             final T l_item = l_keys.get( i );
-            for ( int j = i; j < l_keys.size(); ++j )
+            for ( int j = i + 1; j < l_keys.size(); ++j )
             {
-                // set epsilon slope for preventing periodic markov chains
-                if ( i == j )
-                {
-                    l_matrix.set( i, i, m_epsilon );
-                    continue;
-                }
-
                 final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
                 l_matrix.set( i, j, l_value );
                 l_matrix.set( j, i, l_value );
             }
 
-            // create markow-chain (normalize row)
+            // row-wise normalization for getting probabilities
             l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
-        }
 
+            // set epsilon slope for preventing periodic markov chains
+            l_matrix.set(i, i, m_epsilon);
+        }
 
         // get the eigenvector for largest eigenvalue
         final DoubleMatrix1D l_eigenvector = this.getStationaryDistribution( l_matrix );

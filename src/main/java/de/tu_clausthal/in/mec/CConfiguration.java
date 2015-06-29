@@ -74,6 +74,10 @@ public class CConfiguration
      */
     private static final String c_mainpackage = "de.tu_clausthal.in.mec";
     /**
+     * list of MAS files for extracting
+     */
+    private static final String[] c_masfiles = new String[]{"car_default.asl", "car_emergency.asl", "car_scramble.asl"};
+    /**
      * user configuration name
      */
     private static final String c_userconfiguration = "user";
@@ -548,7 +552,7 @@ public class CConfiguration
 
         // extract MAS files to the home directory
         if ( m_configuration.get( "extractmasexamples" ) )
-            for ( final String l_mas : new String[]{"scramble.asl"} )
+            for ( final String l_mas : c_masfiles )
                 try
                 {
                     FileUtils.copyURLToFile( CCommon.getResourceURL( "mas/" + l_mas ), new File( m_location.get( "mas" ) + File.separator + l_mas ) );

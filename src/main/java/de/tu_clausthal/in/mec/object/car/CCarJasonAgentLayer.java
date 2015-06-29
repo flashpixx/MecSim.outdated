@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.object.car;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
@@ -52,8 +53,11 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     @Override
     public boolean remove( final Object p_object )
     {
+        if ( ! (p_object instanceof IAgent) )
+            return false;
+
         return super.remove( p_object ) &&
-               m_inconsistencyLayer.remove( p_object );
+               m_inconsistencyLayer.remove( (IAgent) p_object );
     }
 
     @Override

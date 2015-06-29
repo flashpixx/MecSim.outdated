@@ -182,8 +182,8 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
 
             // initialize inherited beliefbases
-            m_beliefs.add( "binding", new CBindingBeliefBase( c_bindname, p_bind ) );
-            m_beliefs.add( "messages", new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
+            m_beliefs.add( new CPath("binding"), new CBindingBeliefBase( c_bindname, p_bind ) );
+            m_beliefs.add( new CPath("messages"), new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
         }
 
         // register beliefbase-mapper with individual mapping

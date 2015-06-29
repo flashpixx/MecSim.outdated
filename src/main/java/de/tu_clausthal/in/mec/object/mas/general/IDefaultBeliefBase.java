@@ -106,6 +106,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         final Set<ILiteral<T>> l_literals = new HashSet<ILiteral<T>>();
 
+        l_literals.addAll( this.literals( CPath.EMPTY ) );
+
         for ( int i = 0; i < p_path.length; ++i )
             l_literals.addAll(this.literals(p_path[i]));
 

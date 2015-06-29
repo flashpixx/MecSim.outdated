@@ -49,6 +49,7 @@ import java.util.Map;
  */
 public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 {
+    private static final String c_invokeName = "inconsistency";
     /**
      * algebra object
      */
@@ -164,12 +165,15 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_object new object
      */
-    public void add( final T p_object )
+    public boolean add( final T p_object )
     {
         if ( ( p_object == null ) || ( m_data.containsKey( p_object ) ) )
-            return;
+            return false;
 
         m_data.put( p_object, new Double( 0 ) );
+        p_object.addAction( c_invokeName, new CBind( p_object ) );
+
+        return true;
     }
 
     @Override
@@ -253,9 +257,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_object removing object
      */
-    public void remove( final T p_object )
+    public boolean remove( final T p_object )
     {
+        p_object.removeAction( c_invokeName );
+
         m_data.remove( p_object );
+        return true;
     }
 
 
@@ -312,6 +319,5 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             final Double l_value = m_data.get( m_bind );
             return l_value == null ? 0 : l_value.doubleValue();
         }
-
     }
 }

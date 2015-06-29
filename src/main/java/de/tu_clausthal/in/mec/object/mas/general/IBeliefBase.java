@@ -31,8 +31,8 @@ import java.util.Set;
 
 
 /**
- * The beliefbase interface for generic beliefbases. A single beliefbase contains beliefs
- * as literals (the top-level literals) and further inherited beliefbases.
+ * The beliefbase interface for generic getBeliefbases. A single beliefbase contains beliefs
+ * as literals (the top-level literals) and further inherited getBeliefbases.
  */
 public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
 {
@@ -54,7 +54,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      */
     public boolean add( final ILiteral<T> p_literal );
 
-
     /**
      * Adds a new beliefbase into specified path. The last element in path has to be the name
      * of the new beliefbase. Beliefbases with the same name will be overwritten.
@@ -72,35 +71,23 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      */
     public boolean addAll( final CPath p_path, final Collection<ILiteral<T>> p_literals );
 
-
     /**
-     * get a map of all inherited beliefbases with names
-     *
-     * @return map of beliefbases
-     *
-     * @todo rename -> styleguide
-     */
-    public Map<String, IBeliefBase<T>> beliefbases();
-
-    /**
-     * get a map of all inherited beliefbases with names from specified beliefbase
+     * get a map of all inherited getBeliefbases with names from specified beliefbase
      *
      * @param p_path path to beliefbase
-     * @return map of beliefbases
-     *
-     * @todo rename -> styleguide
+     * @return map of getBeliefbases
      */
-    public Map<String, IBeliefBase<T>> beliefbases( final CPath p_path );
+    public Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path );
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases
+     * and all the literals in inherited getBeliefbases
      */
     void clear();
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited beliefbases
+     * and all the literals in inherited getBeliefbases
      */
     public void clear( final CPath p_path );
 

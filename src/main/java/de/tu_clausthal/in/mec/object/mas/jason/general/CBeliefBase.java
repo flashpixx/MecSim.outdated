@@ -58,9 +58,9 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
     }
 
     /**
-     * ctor - top-level literals and inherited beliefbases are specified
+     * ctor - top-level literals and inherited getBeliefbases are specified
      *
-     * @param p_beliefbases inherited beliefbases
+     * @param p_beliefbases inherited getBeliefbases
      * @param p_literals top level literals
      */
     public CBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals )

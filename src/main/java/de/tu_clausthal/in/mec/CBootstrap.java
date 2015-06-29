@@ -123,7 +123,7 @@ public class CBootstrap
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
-        p_simulation.getWorld().put( "Agent Inconsistency", new CInconsistencyLayer<CAgent>( new CDiscreteMetric<CAgent>() ) );
+        p_simulation.getWorld().put( "Jason Car Inconsistency", new CInconsistencyLayer<CAgent>( new CDiscreteMetric<CAgent>() ) );
 
     }
 

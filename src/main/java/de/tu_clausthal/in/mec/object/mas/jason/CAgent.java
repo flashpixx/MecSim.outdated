@@ -135,6 +135,10 @@ public class CAgent<T> implements IVoidAgent
      * participant object
      */
     private CParticipant m_participant;
+    /**
+     * method bind
+     */
+    private final CMethodBind m_methodBind;
 
     /**
      * ctor
@@ -175,13 +179,15 @@ public class CAgent<T> implements IVoidAgent
         // initialize message system
         m_participant = new CParticipant( this );
 
+        m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
+
         if ( p_bind != null )
         {
             // register possible actions
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
-            m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
+            m_action.put( "invoke", m_methodBind );
 
-            // initialize inherited beliefbases
+            // initialize inherited getBeliefbases
             m_beliefs.add( new CPath("binding"), new CBindingBeliefBase( c_bindname, p_bind ) );
             m_beliefs.add( new CPath("messages"), new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
         }
@@ -220,12 +226,23 @@ public class CAgent<T> implements IVoidAgent
         this( null, p_asl, p_bind );
     }
 
-    /**
-     * adds a literal to the top-level literals
-     *
-     * @param p_path path of beliefbase with literal name as last element
-     * @param p_data belief data
-     */
+    public void addAction( final String p_name, final Object p_object )
+    {
+        if ( m_methodBind == null )
+            return;
+
+        m_methodBind.push( p_name, p_object );
+    }
+
+    public void removeAction( final String p_name )
+    {
+        if ( m_methodBind == null )
+            return;
+
+        m_methodBind.remove( p_name );
+    }
+
+
     @Override
     public void addLiteral( final String p_path, final Object p_data )
     {
@@ -352,7 +369,7 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        ( (CMessageBeliefBase) m_beliefs.beliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
+        ( (CMessageBeliefBase) m_beliefs.getBeliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
     }
 
     @Override

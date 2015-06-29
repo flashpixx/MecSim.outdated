@@ -33,14 +33,14 @@ import java.util.Map;
 
 
 /**
- * class for internal action for mapping literals to beliefbases
+ * class for internal action for mapping literals to getBeliefbases
  * based on the literals functor
  */
 public class CBeliefBaseMapper extends DefaultInternalAction
 {
     /**
      * map which contains functor-path mapping
-     * to locate literals in inherited beliefbases
+     * to locate literals in inherited getBeliefbases
      */
     final Map<String, CPath> m_mapping;
 

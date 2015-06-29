@@ -109,4 +109,21 @@ public interface IAgent extends Painter, IReceiver
      */
     void unregisterCycle( final ICycle p_cycle );
 
+    /**
+     *
+     * @param p_name
+     * @param p_object
+     *
+     * @todo docu
+     */
+    public void addAction( final String p_name, final Object p_object );
+
+    /**
+     *
+     * @param p_name
+     *
+     * @todo docu
+     */
+    public void removeAction( final String p_name );
+
 }

@@ -86,9 +86,9 @@ public class CMessageBeliefBase extends CBeliefBase
     }
 
     /**
-     * ctor - top-level literals and inherited beliefbases are specified
+     * ctor - top-level literals and inherited getBeliefbases are specified
      *
-     * @param p_beliefbases inherited beliefbases
+     * @param p_beliefbases inherited getBeliefbases
      * @param p_literals top level literals
      * @param p_transitionSystem agent transition system
      */

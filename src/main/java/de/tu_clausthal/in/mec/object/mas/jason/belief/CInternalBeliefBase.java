@@ -34,7 +34,7 @@ import jason.asSemantics.Agent;
  * beliefbase for internal beliefs, i.e. the initial beliefs
  * and beliefs that arise from deduction rules
  *
- * @todo in update-method: add just literals which are not in other beliefbases
+ * @todo in update-method: add just literals which are not in other getBeliefbases
  */
 public class CInternalBeliefBase extends CBeliefBase
 {

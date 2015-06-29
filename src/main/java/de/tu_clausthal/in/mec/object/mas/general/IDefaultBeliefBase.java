@@ -103,7 +103,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Set<ILiteral<T>> literals(CPath... p_path)
+    public Set<ILiteral<T>> getLiterals(CPath... p_path)
     {
         final Set<ILiteral<T>> l_literals = new HashSet<ILiteral<T>>();
 
@@ -208,7 +208,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_innerMap.put(
                 IBeliefBase.class, new HashSet<IBeliefBaseElement>()
                 {{
-                        add( p_beliefbase );
+                        add(p_beliefbase);
                     }}
         );
     }
@@ -235,7 +235,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path )
     {
         if ( p_path == null )
-            return null;
+            return this.getBeliefbases( CPath.EMPTY );
 
         // fill the resulting map with top-level beliefbases
         final Map<String, IBeliefBase<T>> l_result = new HashMap<>();
@@ -295,7 +295,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         if ( l_beliefbase == null || !l_beliefbase.getElements().containsKey( p_key ) )
             return null;
 
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_beliefbase.getElements().get(p_key);
+        // get beliefbase-elements of given name and class
+        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_beliefbase.getElements().get( p_key );
         if ( !l_innerMap.containsKey( p_class ) )
             return null;
 
@@ -308,7 +309,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return m_elements;
     }
 
-    @Override
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( String p_path )
     {
         return this.getElements( new CPath( p_path ) );

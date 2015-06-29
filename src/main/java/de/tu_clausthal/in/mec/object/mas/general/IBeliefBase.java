@@ -118,11 +118,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     /**
      * getter for beliefbase elements with path specified
      */
-    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( final String p_path );
-
-    /**
-     * getter for beliefbase elements with path specified
-     */
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( final CPath p_path );
 
 
@@ -143,7 +138,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      *
      * @return
      */
-    public Set<ILiteral<T>> literals( final CPath... p_path );
+    public Set<ILiteral<T>> getLiterals( final CPath... p_path );
 
     /**
      * get inherited literals of specified beliefbase

@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -92,6 +93,7 @@ public class CAgent<T> implements IVoidAgent
 
             // add own function
             put( "mecsim.literal2number", new CLiteral2Number() );
+            put( "mecsim.removeBelief", new CBeliefRemove() );
         }};
     /**
      * path seperator

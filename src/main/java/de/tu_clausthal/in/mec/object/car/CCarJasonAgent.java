@@ -144,7 +144,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
         m_beliefcache.put(
                 "ag_position", this.getCurrentPosition()
         );
-        m_beliefcache.put( "ag_predecessor", this.getPredecessor() );
+        m_beliefcache.put( "ag_predecessor", this.getPredecessorWithName( 5 ) );
 
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
             p_agent.addBelief( l_item.getKey(), l_item.getValue() );
@@ -168,7 +168,33 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
         // add agent to layer and internal set
         CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
         m_agents.add( l_agent );
+    }
 
+    /**
+     * returns the predecessor with name for communication
+     *
+     * @param p_count number of predecessors
+     * @return map with distance and map with name and can communicate
+     */
+    private Map<Double, Map<String, Object>> getPredecessorWithName( final int p_count )
+    {
+        final Map<Double, Map<String, Object>> l_predecessor = new HashMap<>();
+
+        for ( final Map.Entry<Double, ICar> l_item : this.getPredecessor( p_count ).entrySet() )
+        {
+            final ICar l_car = l_item.getValue();
+            final boolean l_isagent = l_car instanceof CCarJasonAgent;
+
+            l_predecessor.put(
+                    l_item.getKey(),
+                    CCommon.getMap(
+                            "name", l_isagent ? ( (CCarJasonAgent) l_car ).getReceiverPath().toString() : l_car.toString(),
+                            "isagent", l_isagent
+                    )
+            );
+        }
+
+        return l_predecessor;
     }
 
     @Override

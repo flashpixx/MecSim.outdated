@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
@@ -93,6 +94,7 @@ public class CAgent<T> implements IVoidAgent
 
             // add own function
             put( "mecsim.literal2number", new CLiteral2Number() );
+            put( "mecsim.removeBelief", new CBeliefRemove() );
         }};
     /**
      * path seperator
@@ -450,11 +452,12 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
+         * @todo prevent '/' in literal functor
          */
         public final void cycle( final int p_currentstep )
         {
             m_beliefs.remove( CPath.EMPTY, "step", ILiteral.class );
-            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "step", ASSyntax.createNumber( p_currentstep ) ) ) );
+            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation/step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )

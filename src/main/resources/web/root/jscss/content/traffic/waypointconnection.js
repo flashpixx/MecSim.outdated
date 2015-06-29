@@ -28,79 +28,16 @@
 
 
 /**
- * ctor to create the waypoint menu
+ * ctor to create the waypoint connection widget
  *
  * @param pc_id ID
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
 **/
-function Waypoint( pc_id, pc_name, pa_panel )
+function WaypointConnection( pc_id, pc_name, pa_panel )
 {
-    Pane.call(this, pc_id, pc_name, pa_panel );
-
-    this.mo_wizardpreset = new WaypointPreset( "waypointpreset" );
-    this.mo_wizardpreset.setParent(this);
+    Widget.call(this, pc_id, pc_name, pa_panel, lo_options );
 }
 
 /** inheritance call **/
-Waypoint.prototype = Object.create(Pane.prototype);
-
-
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.getGlobalCSS = function()
-{
-    return this.mo_wizardpreset.getGlobalCSS() + Pane.prototype.getGlobalCSS.call(this);
-}
-
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.getGlobalContent = function()
-{
-    jQuery( MecSim.ui().static("#") ).append(this.mo_wizardpreset.getContent());
-
-    return Pane.prototype.getGlobalContent.call(this);
-}
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.getContent = function()
-{
-    return '<button id = "' + this.generateSubID("newpreset") + '" ></button ><br/>' +
-           '<button id = "' + this.generateSubID("listpreset") + '" ></button ><br/>' +
-           Pane.prototype.getContent.call(this);
-}
-
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.afterDOMAdded = function()
-{
-    Pane.prototype.afterDOMAdded.call(this);
-
-    MecSim.language({ url : "/cwaypointenvironment/labelmainmenu", target : this });
-
-    this.mo_wizardpreset.afterDOMAdded();
-
-    var self = this;
-    jQuery( this.generateSubID("newpreset", "#") ).button().click( function() {
-        jQuery(MecSim.ui().content("#")).empty();
-        self.mo_wizardpreset.show();
-    });
-}
-
-
-/**
- * @Overwrite
-**/
-Waypoint.prototype.setName = function(pc)
-{
-    this.mc_name = pc;
-    jQuery( this.getID("#") ).append(this.mc_name);
-}
+WaypointConnection.prototype = Object.create(Widget.prototype);

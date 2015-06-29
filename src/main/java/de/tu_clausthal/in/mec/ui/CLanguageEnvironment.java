@@ -109,7 +109,7 @@ public class CLanguageEnvironment
             put( "id_devdoc", CCommon.getResourceString( CLanguageEnvironment.class, "ui_help_devdoc" ) );
         }};
     /**
-     * object inspector
+     * labels of the object inspector
      */
     private static final Map<String, String> c_inspector = new HashMap<String, String>()
     {{
@@ -129,11 +129,16 @@ public class CLanguageEnvironment
     private static final Map<String, String> c_mas = new HashMap<String, String>()
     {{
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_name" ) );
-            put( "id_jasonmind", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_jasonmind" ) );
-            put( "id_communication", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_communication" ) );
         }};
     /**
-     * labels of the MAS menu
+     * labels of the MAS Jasonmind menu
+     */
+    private static final Map<String, String> c_mascommunicate = new HashMap<String, String>()
+    {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_communication" ) );
+        }};
+    /**
+     * labels of the MAS editor menu
      */
     private static final Map<String, String> c_maseditor = new HashMap<String, String>()
     {{
@@ -141,6 +146,13 @@ public class CLanguageEnvironment
             put( "id_remove", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editorremove" ) );
             put( "id_check", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editorcheck" ) );
 
+        }};
+    /**
+     * labels of the MAS mind inspector menu
+     */
+    private static final Map<String, String> c_masmind = new HashMap<String, String>()
+    {{
+            put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_jasonmind" ) );
         }};
     /**
      * labels of the simulation menu
@@ -156,7 +168,7 @@ public class CLanguageEnvironment
             put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_dialogtitle" ) );
         }};
     /**
-     * labels of the simulation menu
+     * labels of the traffic menu
      */
     private static final Map<String, String> c_traffic = new HashMap<String, String>()
     {{
@@ -235,6 +247,16 @@ public class CLanguageEnvironment
     }
 
     /**
+     * returns all static label for the MAS communicator
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_mascommunicate()
+    {
+        return c_mascommunicate;
+    }
+
+    /**
      * returns all static label for the MAS editor
      *
      * @return map with static labels
@@ -242,6 +264,16 @@ public class CLanguageEnvironment
     private final Map<String, String> web_static_maseditor()
     {
         return c_maseditor;
+    }
+
+    /**
+     * returns all static label for the MAS mind inspectorr
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_masmind()
+    {
+        return c_masmind;
     }
 
     /**

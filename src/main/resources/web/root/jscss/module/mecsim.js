@@ -37,6 +37,7 @@ var MecSim = (function (px_modul) {
      *
      * @param pc_wspath path of the websocket (can set relative to the window location)
      * @param po_options object with onmessage, onerror, onopen and onclose functions to bind functions direct
+     * @returns websocket
      **/
     px_modul.websocket = function( pc_wspath, po_options )
     {
@@ -55,6 +56,8 @@ var MecSim = (function (px_modul) {
             lo_socket.onmessage = lo_options.onmessage || null;
             lo_socket.onerror   = lo_options.onerror   || null;
         }
+
+        return lo_socket;
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -290,14 +293,6 @@ var MecSim = (function (px_modul) {
         jQuery("head").append(
             '<style type = "text/css">' +
 
-            // defines HTML / body with 100% height and width for the splitter content
-            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
-            // overwrite the default a tag
-            'a { text-decoration: none; color:#607D8B; cursor: pointer; }' +
-            // select needs a width, because jQuery sets it to size = 0
-            'select { width: 100px; }' +
-            // resizing iFrame to the full parent element size
-            'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // sets the menu layout
             px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)
@@ -307,6 +302,20 @@ var MecSim = (function (px_modul) {
             px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +
             // sets the log layout
             px_modul.ui().log("#") + ' { z-index: 0; overflow: auto; }' +
+
+
+            // --- set default CSS definition ---
+
+            // defines HTML / body with 100% height and width for the splitter content
+            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
+            // overwrite the default a tag
+            'a { text-decoration: none; color:#607D8B; cursor: pointer; }' +
+            // select needs a width, because jQuery sets it to size = 0
+            'select { width: 100px; }' +
+            // resizing iFrame to the full parent element size
+            'iframe{ width: 100%; height: 100%; position: absolute; }' +
+            // jQuery button is set to a minimale size
+            '.ui-button { min-height: 2em; min-width: 50px; padding: 0.5em; }' +
 
             '</style>'
         );

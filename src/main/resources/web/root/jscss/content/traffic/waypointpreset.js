@@ -258,8 +258,7 @@ WaypointPreset.prototype.finish = function()
             // store configuration persistent
             var lo_store = {ui : {web : {waypointpreset : {} } } };
             lo_store.ui.web.waypointpreset[lo.name] = lo;
-
-            // @todo add persistent storage
+            self.getElements().mecsim_waypoint.addPreset( lo );
 
             self.mo_colorpicker.hide();
             self.hide();

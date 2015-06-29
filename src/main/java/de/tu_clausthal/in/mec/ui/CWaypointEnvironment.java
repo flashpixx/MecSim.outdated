@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
+import de.tu_clausthal.in.mec.object.waypoint.point.CCarPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -340,7 +341,11 @@ public class CWaypointEnvironment
         /**
          * random car waypoint
          **/
-        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) );
+        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) ),
+        /**
+         * path car waypoint
+         */
+        CarWaypointPah( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
 
         /**
          * name of this waypoint type
@@ -368,6 +373,10 @@ public class CWaypointEnvironment
 
             switch ( this )
             {
+                case CarWaypointPah:
+                    return new CCarPathWayPoint(
+                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Color) p_data[4], (String) p_data[5]
+                    );
 
                 case CarWaypointRandom:
                     return new CCarRandomWayPoint(

@@ -49,7 +49,7 @@ var Visualization = (function (px_modul) {
         **/
         function traverse( pc_key, po_object, po_parent )
         {
-            var lo_tree = po_object || $.extend( {}, po_data[pc_key] );
+            var lo_tree = po_object || jQuery.extend( true, {}, po_data[pc_key] );
 
             var la_children = [];
             if (lo_tree.children)
@@ -73,13 +73,13 @@ var Visualization = (function (px_modul) {
         lx_root = lx_root[0];
 
         // build tree
-        $.each(po_data, function(lc_key, lx_value) {
+        jQuery.each(po_data, function(lc_key, lx_value) {
             if (!lo_node[lc_key])
                 lo_node[lc_key] = traverse(lc_key, lx_value, lo_node[lc_key]);
         });
 
         // get the root-node and a blank-node on top with a empty key
-        lo_root = { children : [lo_node[lx_root]], key : "" };
+        var lo_root = { children : [lo_node[lx_root]], key : "" };
         lo_node[lx_root].parent = lo_root;
         return { root : lo_root, nodes : lo_node };
     }
@@ -100,7 +100,7 @@ var Visualization = (function (px_modul) {
          * traverses the node tree and adds link structure
          * @param po_node tree node
         **/
-        $.each( po_nodes, function( lc_key, lo_value )
+        jQuery.each( po_nodes, function( lc_key, lo_value )
         {
             if (lo_value.connect)
                 lo_value.connect.forEach( function(lc_connect) { la_links.push({ source : po_objects[lc_key], target : po_objects[lc_connect] }); } );

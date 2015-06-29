@@ -123,3 +123,11 @@ function classof( px_value, pc_type )
     return ({}).toString.call( px_value ).match(/\s([a-z|A-Z]+)/)[1].trim().toLowerCase() === pc_type.trim().toLowerCase();
 
 }
+
+
+/**
+ * @Overload
+ * add an empty trigger to the empty function
+**/
+jQuery.fn.raw_empty = jQuery.fn.empty;
+jQuery.fn.empty    = function(){ return this.raw_empty().trigger( "empty", this ) }

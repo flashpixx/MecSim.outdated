@@ -34,6 +34,8 @@ import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.message.IMessage;
+import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -49,7 +51,7 @@ import java.util.Set;
  *
  * @bug refactor ctor (reduce parameter)
  */
-public class CCarJasonAgent extends CDefaultCar implements ICycle
+public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
 {
     /**
      * agent object *
@@ -69,7 +71,11 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     {{
             putAll( CCarJasonAgent.super.inspect() );
         }};
-
+    /**
+     * internal receiver path
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private final CPath m_objectpath;
 
     /**
      * ctor
@@ -117,9 +123,9 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     ) throws JasonException
     {
         super( p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability );
-        final CPath l_path = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
+        m_objectpath = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
         for ( final String l_item : p_agent )
-            this.bind( l_path, l_item );
+            this.bind( l_item );
     }
 
     @Override
@@ -138,8 +144,10 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
 
         // refresh belief cache
         m_beliefcache.clear();
+
+        // add new beliefs
         m_beliefcache.put( "position", this.getCurrentPosition() );
-        m_beliefcache.put( "predecessor", this.getPredecessor() );
+        m_beliefcache.put( "predecessor", this.getPredecessorWithName( 5 ) );
 
         // synchronize agent beliefbase
         for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
@@ -149,15 +157,14 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
     /**
      * binds an agent with the name
      *
-     * @param p_objectname name of the object (for message system)
      * @param p_asl ASL / agent name
      * @throws JasonException throws on Jason error
      */
     @CMethodFilter.CAgent( bind = false )
-    private void bind( final CPath p_objectname, final String p_asl ) throws JasonException
+    private void bind( final String p_asl ) throws JasonException
     {
         final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent = new de.tu_clausthal.in.mec.object.mas.jason.CAgent(
-                p_objectname.append( p_asl ), p_asl, this
+                m_objectpath.append( p_asl ), p_asl, this
         );
         m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
         l_agent.registerCycle( this );
@@ -165,6 +172,44 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle
         // add agent to layer and internal set
         CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
         m_agents.add( l_agent );
+    }
+
+    /**
+     * returns the predecessor with name for communication
+     *
+     * @param p_count number of predecessors
+     * @return map with distance and map with name and can communicate
+     */
+    private Map<Double, Map<String, Object>> getPredecessorWithName( final int p_count )
+    {
+        final Map<Double, Map<String, Object>> l_predecessor = new HashMap<>();
+
+        for ( final Map.Entry<Double, ICar> l_item : this.getPredecessor( p_count ).entrySet() )
+        {
+            final ICar l_car = l_item.getValue();
+            final boolean l_isagent = l_car instanceof CCarJasonAgent;
+
+            l_predecessor.put(
+                    l_item.getKey(),
+                    CCommon.getMap(
+                            "name", l_isagent ? ( (CCarJasonAgent) l_car ).getReceiverPath().toString() : l_car.toString(),
+                            "isagent", l_isagent
+                    )
+            );
+        }
+
+        return l_predecessor;
+    }
+
+    @Override
+    public CPath getReceiverPath()
+    {
+        return m_objectpath;
+    }
+
+    @Override
+    public void receiveMessage( final Set<IMessage> p_messages )
+    {
 
     }
 

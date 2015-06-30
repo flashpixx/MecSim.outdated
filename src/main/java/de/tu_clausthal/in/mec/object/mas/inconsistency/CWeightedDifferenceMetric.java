@@ -42,7 +42,7 @@ public class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<
 
         final int l_intersectionSize = l_set.size();
 
-        return new Double( ( ( l_set.size() - l_firstLiterals.size() ) +
-                             ( l_set.size() - l_secondLiterals.size() ) ) * l_unionSize / l_intersectionSize );
+        return new Double( ( ( l_unionSize - l_firstLiterals.size() ) +
+                             ( l_unionSize - l_secondLiterals.size() ) ) * l_unionSize / l_intersectionSize );
     }
 }

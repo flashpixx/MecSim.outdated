@@ -165,8 +165,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         final IBeliefBase<T> l_beliefbase =
                 this.getOrDefault(
                         p_path.append( l_deepPath.getSubPath( 0, l_deepPath.size() - 1 ) ), new CDefaultBeliefBase<T>()
-                        {
-                        }
                 );
 
         // get beliefbase elements and inner-map with specified key
@@ -241,8 +239,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         final IBeliefBase<T> l_inherited = this.getOrDefault(
                 p_path.getSubPath(0, p_path.size() - 1),
                 new CDefaultBeliefBase<T>()
-                {
-                }
         );
 
         // get inner map of beliefbase elements
@@ -268,8 +264,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         // get inherited beliefbase, construct a new one if path is unknown
         IBeliefBase<T> l_innerBeliefBase = this.getOrDefault(
                 p_path, new CDefaultBeliefBase<T>()
-                {
-                }
         );
 
         // add every literal to beliefbase
@@ -399,8 +393,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
                                         l_pathElement.equals( p_path ) ?
                                                 p_beliefbase :
                                                 new CDefaultBeliefBase<T>()
-                                                {
-                                                }
                                 );
                             }}
                 );

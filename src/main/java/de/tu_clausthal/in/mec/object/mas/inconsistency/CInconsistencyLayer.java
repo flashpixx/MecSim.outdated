@@ -185,7 +185,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     }
 
     /**
-     * @bug matrix allocation chan be create a memory overflow if it is possible
+     * @bug matrix allocation can be create a memory overflow if it is possible
      * update existing matrix object
      */
     @Override

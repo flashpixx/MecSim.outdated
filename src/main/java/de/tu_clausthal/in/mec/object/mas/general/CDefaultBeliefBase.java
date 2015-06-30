@@ -42,7 +42,7 @@ import java.util.Stack;
  * generic default beliefbase for software agents, where
  * each beliefbase can contain further inherited getBeliefbases
  */
-public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
+public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * structure for beliefbase elements (i.e. literals and inherited getBeliefbases)
@@ -52,7 +52,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     /**
      * default ctor
      */
-    public IDefaultBeliefBase()
+    public CDefaultBeliefBase()
     {
         this( null, null );
     }
@@ -62,7 +62,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
+    public CDefaultBeliefBase(final Set<ILiteral<T>> p_literals)
     {
         this( null, p_literals );
     }
@@ -73,7 +73,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_inheritedBeliefbases inherited getBeliefbases with paths
      * @param p_literals top level literals
      */
-    public IDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_inheritedBeliefbases, final Set<ILiteral<T>> p_literals )
+    public CDefaultBeliefBase(final Map<String, IBeliefBase<T>> p_inheritedBeliefbases, final Set<ILiteral<T>> p_literals)
     {
         // generate map-entries for getBeliefbases
         if ( p_inheritedBeliefbases != null )
@@ -164,7 +164,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         // get inherited beliefbase
         final IBeliefBase<T> l_beliefbase =
                 this.getOrDefault(
-                        p_path.append( l_deepPath.getSubPath( 0, l_deepPath.size() - 1 ) ), new IDefaultBeliefBase<T>()
+                        p_path.append( l_deepPath.getSubPath( 0, l_deepPath.size() - 1 ) ), new CDefaultBeliefBase<T>()
                         {
                         }
                 );
@@ -235,12 +235,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
-            throw new IllegalArgumentException( CCommon.getResourceString( IDefaultBeliefBase.class, "emptypath" ) );
+            throw new IllegalArgumentException( CCommon.getResourceString( CDefaultBeliefBase.class, "emptypath" ) );
 
         // get beliefbase or construct new ones
         final IBeliefBase<T> l_inherited = this.getOrDefault(
                 p_path.getSubPath(0, p_path.size() - 1),
-                new IDefaultBeliefBase<T>()
+                new CDefaultBeliefBase<T>()
                 {
                 }
         );
@@ -267,7 +267,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // get inherited beliefbase, construct a new one if path is unknown
         IBeliefBase<T> l_innerBeliefBase = this.getOrDefault(
-                p_path, new IDefaultBeliefBase<T>()
+                p_path, new CDefaultBeliefBase<T>()
                 {
                 }
         );
@@ -383,12 +383,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         if ( p_path.isEmpty() )
             return this;
 
-        IDefaultBeliefBase<T> l_currentBeliefbase = this;
+        CDefaultBeliefBase<T> l_currentBeliefbase = this;
 
         for ( final CPath l_pathElement : p_path )
         {
             // get next inherited beliefbase
-            final IDefaultBeliefBase<T> l_nextBeliefbase = (IDefaultBeliefBase) l_currentBeliefbase.getBeliefbase( l_pathElement.getSuffix() );
+            final CDefaultBeliefBase<T> l_nextBeliefbase = (CDefaultBeliefBase) l_currentBeliefbase.getBeliefbase( l_pathElement.getSuffix() );
 
             // if no such beliefbase exists, create a new one
             if ( l_nextBeliefbase == null )
@@ -398,7 +398,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                                 add(
                                         l_pathElement.equals( p_path ) ?
                                                 p_beliefbase :
-                                                new IDefaultBeliefBase<T>()
+                                                new CDefaultBeliefBase<T>()
                                                 {
                                                 }
                                 );
@@ -406,7 +406,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                 );
 
             // go down the hierarchy
-            l_currentBeliefbase = (IDefaultBeliefBase) l_currentBeliefbase.getBeliefbase( l_pathElement.getSuffix() );
+            l_currentBeliefbase = (CDefaultBeliefBase) l_currentBeliefbase.getBeliefbase( l_pathElement.getSuffix() );
         }
 
         return l_currentBeliefbase;

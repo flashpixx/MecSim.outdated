@@ -1,7 +1,6 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
@@ -24,11 +23,11 @@ public class Test_IDefaultBeliefBase
      */
     private IBeliefBase<Literal> generateTestset()
     {
-        final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
+        final IBeliefBase<Literal> l_beliefbase = new CDefaultBeliefBase<Literal>(  ){};
 
         // add some inherited getBeliefbases
-        l_beliefbase.add( new CPath( "aa1" ), new IDefaultBeliefBase<Literal>(){} );
-        l_beliefbase.add( new CPath( "aa2/bb1/cc1/dd1" ), new IDefaultBeliefBase<Literal>(  ){} );
+        l_beliefbase.add( new CPath( "aa1" ), new CDefaultBeliefBase() );
+        l_beliefbase.add( new CPath( "aa2/bb1/cc1/dd1" ), new CDefaultBeliefBase<Literal>(  ){} );
 
         // add some literals
         l_beliefbase.add( new CPath( "aa1" ), new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
@@ -46,8 +45,8 @@ public class Test_IDefaultBeliefBase
         assertEquals( l_beliefbase.get( new CPath( "a" ) ), null );
         assertEquals(l_beliefbase.get(new CPath("xxx/ab")), null);
 
-        final IBeliefBase<Literal> testbase1 = new IDefaultBeliefBase<Literal>(  ){};
-        final IBeliefBase<Literal> testbase2 = new IDefaultBeliefBase<Literal>(  ){};
+        final IBeliefBase<Literal> testbase1 = new CDefaultBeliefBase<Literal>(  ){};
+        final IBeliefBase<Literal> testbase2 = new CDefaultBeliefBase<Literal>(  ){};
 
         l_beliefbase.add( new CPath( "x" ), testbase1);
         l_beliefbase.add( new CPath( "xxx/yyy" ), testbase2);
@@ -67,7 +66,7 @@ public class Test_IDefaultBeliefBase
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
 
         // create new beliefbase to add
-        final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
+        final IBeliefBase<Literal> l_testBeliefbase = new CDefaultBeliefBase();
 
         // add to some existing paths
         l_beliefbase.add( new CPath( "aa3" ), l_testBeliefbase );
@@ -87,8 +86,8 @@ public class Test_IDefaultBeliefBase
     @Test(expected = IllegalArgumentException.class)
     public void testAddEmptyPath()
     {
-        final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
-        l_beliefbase.add( CPath.EMPTY, new IDefaultBeliefBase<Literal>(){} );
+        final IBeliefBase<Literal> l_beliefbase = new CDefaultBeliefBase<Literal>(  ){};
+        l_beliefbase.add( CPath.EMPTY, new CDefaultBeliefBase() );
     }
 
     @Test
@@ -155,7 +154,7 @@ public class Test_IDefaultBeliefBase
     public void testRemoveBeliefbase()
     {
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
-        final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
+        final IBeliefBase<Literal> l_testBeliefbase = new CDefaultBeliefBase();
 
         // add to some existing paths
         l_beliefbase.add( new CPath( "aa3" ), l_testBeliefbase );
@@ -190,7 +189,7 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testIterator()
     {
-        final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
+        final IBeliefBase<Literal> l_beliefbase = new CDefaultBeliefBase<Literal>(  ){};
         final Set<ILiteral<Literal>> l_initial = new HashSet(){{
             add( new CLiteral( ASSyntax.createLiteral( "test1" ), new CPath("aa1") ) );
             add( new CLiteral(ASSyntax.createLiteral("test2"), new CPath("aa2/bb1/cc1/dd1") ) );

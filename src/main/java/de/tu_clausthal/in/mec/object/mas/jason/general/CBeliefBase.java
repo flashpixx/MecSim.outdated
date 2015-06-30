@@ -23,9 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
-import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.IDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import jason.asSyntax.Literal;
 
@@ -37,7 +36,7 @@ import java.util.Set;
  * class for agent beliefbase
  * @todo create generic call and move it to the mas/general package
  */
-public class CBeliefBase extends IDefaultBeliefBase<Literal>
+public class CBeliefBase extends CDefaultBeliefBase<Literal>
 {
     /**
      * ctor - default

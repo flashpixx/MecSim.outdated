@@ -190,8 +190,8 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "invoke", m_methodBind );
 
             // initialize inherited getBeliefbases
-            m_beliefs.add( new CPath("binding"), new CBindingBeliefBase( c_bindname, p_bind ) );
-            m_beliefs.add( new CPath("messages"), new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
+            m_beliefs.add( new CPath( "binding" ), new CBindingBeliefBase( c_bindname, p_bind ) );
+            m_beliefs.add( new CPath( "messages" ), new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
         }
 
         // register beliefbase-mapper with individual mapping
@@ -456,8 +456,8 @@ public class CAgent<T> implements IVoidAgent
          */
         public final void cycle( final int p_currentstep )
         {
-            m_beliefs.remove( CPath.EMPTY, "step", ILiteral.class );
-            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation/step", ASSyntax.createNumber( p_currentstep ) ) ) );
+            m_beliefs.remove( new CPath( "simulation" ), "step", ILiteral.class );
+            m_beliefs.add( new CPath( "simulation" ), CCommon.convertGeneric( ASSyntax.createLiteral( "step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )

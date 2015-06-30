@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.IDefaultLiteral;
+import de.tu_clausthal.in.mec.object.mas.general.CDefaultLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
@@ -34,7 +34,7 @@ import jason.asSyntax.Term;
  * class for literals
  * @todo move class to belief package - after moving CBeliefBase
  */
-public class CLiteral extends IDefaultLiteral<Literal>
+public class CLiteral extends CDefaultLiteral<Literal>
 {
     /**
      * ctor
@@ -51,7 +51,7 @@ public class CLiteral extends IDefaultLiteral<Literal>
      */
     public CLiteral( final Literal p_literal, final CPath p_path )
     {
-        super( ( p_path.isEmpty() ? "" : p_path.toString() + "/" ) + p_literal.getFunctor(), p_literal );
+        super( p_path.append( p_literal.getFunctor() ).toString(), p_literal );
 
         if ( p_literal.hasTerm() )
             for ( final Term l_term : p_literal.getTerms() )

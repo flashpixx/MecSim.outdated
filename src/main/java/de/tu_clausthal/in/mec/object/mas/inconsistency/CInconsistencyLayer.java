@@ -26,11 +26,13 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
@@ -89,7 +91,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_metric = p_metric;
         m_algorithm = EAlgorithm.QRDecomposition;
         m_iteration = 0;
-        m_epsilon = 0;
+        m_epsilon = 0.001;
         m_updatestep = 1;
     }
 
@@ -208,15 +210,29 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             }
 
             // row-wise normalization for getting probabilities
-            l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
+            final double l_norm = c_algebra.norm2( l_matrix.viewRow( i ) );
+            if ( l_norm != 0 )
+                l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 
             // set epsilon slope for preventing periodic markov chains
             l_matrix.set(i, i, m_epsilon);
         }
 
-        // get the eigenvector with largest corresponding eigenvalue
-        final DoubleMatrix1D l_eigenvector = this.getStationaryDistribution( l_matrix );
-        l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
+        System.out.println(l_matrix);
+
+        final DoubleMatrix1D l_eigenvector;
+        if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
+            l_eigenvector = new DenseDoubleMatrix1D( m_data.size() );
+        else
+        {
+            // get the eigenvector for largest eigenvalue
+            l_eigenvector = this.getStationaryDistribution( l_matrix );
+
+            // normalize vector to get the stationary distribution
+            l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
+        }
+
+        System.out.println(l_eigenvector);
 
         // set inconsistency value for each entry
         for ( int i = 0; i < l_keys.size(); ++i )
@@ -267,13 +283,11 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return true;
     }
 
-
     @Override
     public final String toString()
     {
         return CCommon.getResourceString( this, "name" );
     }
-
 
     /**
      * numeric algorithm structure
@@ -320,6 +334,58 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         {
             final Double l_value = m_data.get( m_bind );
             return l_value == null ? 0 : l_value.doubleValue();
+        }
+    }
+
+
+    /**
+     * enum with metric values
+     */
+    private enum EMetric
+    {
+        /** discrete metric **/
+        Discrete( CCommon.getResourceString( EMetric.class, "discrete" )),
+        /**
+         * symmetric difference metric
+         */
+        SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) );
+        /**
+         * language based name of the metric
+         */
+        private final String m_text;
+
+        /**
+         * ctor
+         * @param p_text language based metric name
+         */
+        private EMetric( final String p_text )
+        {
+            m_text = p_text;
+        }
+
+        /**
+         * returns a metric instance
+         * @return
+         */
+        public IMetric<?> get( final CPath... p_paths )
+        {
+            switch ( this )
+            {
+                case Discrete:
+                    return new CDiscreteMetric<>( p_paths );
+
+                case SymmetricDifference:
+                    return new CSymmetricDifferenceMetric<>( p_paths );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ));
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
         }
     }
 }

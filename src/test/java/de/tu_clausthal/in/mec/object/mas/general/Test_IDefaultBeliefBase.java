@@ -49,8 +49,8 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( new CPath( "xxx/yyy" ), new IDefaultBeliefBase<Literal>(  ){});
 
         // non existing literals should return empty set
-        assertEquals(l_beliefbase.get( new CPath( "x" ) ).literals(), Collections.EMPTY_SET );
-        assertEquals( l_beliefbase.get( new CPath( "xxx/yyy" ) ).literals(), Collections.EMPTY_SET );
+        assertEquals(l_beliefbase.get( new CPath( "x" ) ).getLiterals(), Collections.EMPTY_SET );
+        assertEquals( l_beliefbase.get( new CPath( "xxx/yyy" ) ).getLiterals(), Collections.EMPTY_SET );
     }
 
     @Test
@@ -95,26 +95,26 @@ public class Test_IDefaultBeliefBase
 
         // push literal into top-level set
         l_beliefbase.add( CPath.EMPTY, l_testLiteral );
-        l_beliefbase.add( l_testLiteral2 );
+        l_beliefbase.add( CPath.EMPTY, l_testLiteral2 );
 
         // push literal into some existing inherited beliefbase
         l_beliefbase.add( new CPath( "aa1" ), l_testLiteral );
         l_beliefbase.add( new CPath( "aa2/bb1" ), l_testLiteral );
-        l_beliefbase.add( new CLiteral( ASSyntax.createLiteral( "aa2/bb1/test2" ) ) );
+        l_beliefbase.add( CPath.EMPTY, new CLiteral( ASSyntax.createLiteral( "aa2/bb1/test2" ) ) );
 
         // push literal into some non-existing inherited beliefbase
         l_beliefbase.add( new CPath( "aa3" ), l_testLiteral );
         l_beliefbase.add( new CPath( "aa4/bb1/cc1" ), l_testLiteral );
-        l_beliefbase.add( new CLiteral( ASSyntax.createLiteral( "xxx/yyy/zzz/test3" ) ) );
+        l_beliefbase.add( CPath.EMPTY, new CLiteral( ASSyntax.createLiteral( "xxx/yyy/zzz/test3" ) ) );
 
-        assertTrue( l_beliefbase.literals().contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals().contains( l_testLiteral2 ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa1" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa3" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa4/bb1/cc1" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral2 ) );
-        assertTrue( l_beliefbase.literals( new CPath( "xxx/yyy/zzz" ) ).contains( l_testLiteral3 ) );
+        assertTrue( l_beliefbase.getLiterals( CPath.EMPTY ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( CPath.EMPTY ).contains( l_testLiteral2 ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa1" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa3" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa4/bb1/cc1" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral2 ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "xxx/yyy/zzz" ) ).contains( l_testLiteral3 ) );
     }
 
     @Test
@@ -122,22 +122,18 @@ public class Test_IDefaultBeliefBase
     {
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
 
-        // create new beliefbase to add
-        final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
-
         // add some test literals
         final CLiteral l_testLiteral = new CLiteral( ASSyntax.createLiteral( "test" ) );
-        l_testBeliefbase.add( CPath.EMPTY, l_testLiteral );
-        l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
+        l_beliefbase.add( CPath.EMPTY, l_testLiteral );
+        l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral );
 
-        // check if remove method returns true
-        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral ) );
+        assertTrue( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral )  );
+
+        l_beliefbase.remove( CPath.EMPTY, l_testLiteral );
+        l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral );
 
         // check if literal was removed
         assertFalse( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral ) );
-
-        // check if beliefbase is still existing
-        assertEquals( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ), l_testBeliefbase );
     }
 
     @Test
@@ -154,38 +150,33 @@ public class Test_IDefaultBeliefBase
         // add to some non-existing paths
         l_beliefbase.add( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
 
-        // test return values of remove function
-        assertFalse( l_beliefbase.remove( CPath.EMPTY ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa3" ) ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ) ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1" ) ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa4/bb2/cc3/dd4" ) ) );
+        l_beliefbase.remove( new CPath( "aa3" ), l_testBeliefbase );
+        l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
+        l_beliefbase.remove( new CPath( "aa1/bb1" ), l_testBeliefbase );
+        l_beliefbase.remove( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
 
         // check if getBeliefbases were correctly removed
-        assertEquals( l_beliefbase.get( new CPath( "aa3" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa1/bb1" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa4/bb2/cc3/dd4" ) ), null );
+        assertTrue( l_beliefbase.get( new CPath( "aa3" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa1/bb1" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa4/bb2/cc3/dd4" ) ) == null );
     }
 
     @Test
     public void testIterator()
     {
         final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
-        final Map<CPath, ILiteral<Literal>> l_literals = new HashMap(){{
-            put( new CPath("aa1"), new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
-            put(new CPath("aa2/bb1/cc1/dd1"), new CLiteral(ASSyntax.createLiteral("test2")));
-            put(CPath.EMPTY, new CLiteral(ASSyntax.createLiteral("test3")));
-        }};
         final Set<ILiteral<Literal>> l_initial = new HashSet(){{
-            for (final Map.Entry<CPath, ILiteral<Literal>> l_entry : l_literals.entrySet())
-                add( new CLiteral( l_entry.getValue().getLiteral(), l_entry.getKey() ));
+            add( new CLiteral( ASSyntax.createLiteral( "test1" ), new CPath("aa1") ) );
+            add( new CLiteral(ASSyntax.createLiteral("test2"), new CPath("aa2/bb1/cc1/dd1") ) );
+            add( new CLiteral(ASSyntax.createLiteral("test3"), CPath.EMPTY ) );
+            add( new CLiteral(ASSyntax.createLiteral("test4"), CPath.EMPTY ) );
         }};
 
-
-        // add some literals
-        for (final Map.Entry<CPath,ILiteral<Literal>> l_entry : l_literals.entrySet())
-            l_beliefbase.add( l_entry.getKey(), l_entry.getValue() );
+        l_beliefbase.add( CPath.EMPTY, new CLiteral( ASSyntax.createLiteral( "test3" ) ) );
+        l_beliefbase.add( CPath.EMPTY, new CLiteral( ASSyntax.createLiteral( "test4" ) ) );
+        l_beliefbase.add( new CPath("aa1"), new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
+        l_beliefbase.add( new CPath( "aa2/bb1/cc1/dd1" ), new CLiteral( ASSyntax.createLiteral( "test2" ) ) );
 
         // build literal set with iterator
         final Set<ILiteral<Literal>> l_beliefbaseElements = new HashSet<ILiteral<Literal>>(){{
@@ -204,19 +195,20 @@ public class Test_IDefaultBeliefBase
 
         // check if there are getBeliefbases before removing
         assertTrue(l_beliefbase.get(new CPath( "aa2/bb1/cc1/dd1" ) ) != null);
-        assertTrue(l_beliefbase.get(new CPath( "aa2/bb1/cc1" ) ) != null);
-        assertTrue(l_beliefbase.get( new CPath( "aa2" ) ) != null);
+        assertTrue(l_beliefbase.get( new CPath( "aa2/bb1/cc1" ) ) != null );
+        assertTrue(l_beliefbase.get( new CPath( "aa2" ) ) != null );
 
         // check if there are non existing
         assertTrue(l_beliefbase.get( new CPath( "xxx" ) ) == null);
-        assertEquals(l_beliefbase.get( new CPath( "xxx" ) ), null);
+        assertEquals( l_beliefbase.get( new CPath( "xxx" ) ), null );
 
         // do clear
         l_beliefbase.clear( new CPath( "aa2/bb1" ) );
+        assertFalse( l_beliefbase == null );
 
         // check if getBeliefbases were removed
-        assertEquals( l_beliefbase.get( new CPath( "aa2/bb1/cc1/dd1" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa2/bb1/cc1" ) ), null );
+        assertTrue( l_beliefbase.get( new CPath( "aa2/bb1/cc1/dd1" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa2/bb1/cc1" ) ) == null );
 
         // this beliefbase must not be removed
         assertTrue(l_beliefbase.get( new CPath( "aa2/bb1" ) ) != null);

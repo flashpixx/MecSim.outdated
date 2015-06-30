@@ -25,9 +25,11 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -84,39 +86,77 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                 this.add( l_literal );
     }
 
+    @Override
+    public boolean add( final CPath p_path, final IBeliefBaseElement p_element )
+    {
+        if ( p_element instanceof ILiteral )
+            return this.add( p_path, (ILiteral) p_element );
+
+        if ( p_element instanceof IBeliefBase )
+            return this.add( p_path, (IBeliefBase) p_element );
+
+        return false;
+    }
+
     /**
      * fills up a stack with Iterator-objects on beliefbase elements
      *
      * @param p_current current beliefbase with top-level-literals to iterate over
      * @param p_stack current stack
      */
-    private static <N> void collapseIterator( final IBeliefBase<N> p_current, final CPath p_currentPath, final Stack<Iterator<ILiteral<N>>> p_stack )
+    private static <N> void collapseIterator( final IBeliefBase<N> p_current, final CPath p_currentPath, final Stack<Pair<CPath, Iterator<ILiteral<N>>>> p_stack )
     {
         // push iterator object on top-level beliefbase elements
-        p_stack.push( p_current.prefixedLiterals( p_currentPath.isEmpty() ? "" : p_currentPath.toString() + "/" ).iterator() );
+        p_stack.push( new ImmutablePair<CPath, Iterator<ILiteral<N>>>( p_currentPath, p_current.getLiterals( CPath.EMPTY ).iterator() ) );
 
-        final Map<String, IBeliefBase<N>> l_inheritedBeliefbases = p_current.getBeliefbases();
-
-        // recursive call for all inherited getBeliefbases
+        // recursive call for all inherited beliefbases
+        final Map<String, IBeliefBase<N>> l_inheritedBeliefbases = p_current.getBeliefbases(CPath.EMPTY);
         for ( final Map.Entry<String, IBeliefBase<N>> l_beliefbase : l_inheritedBeliefbases.entrySet() )
             collapseIterator( l_beliefbase.getValue(), p_currentPath.append( l_beliefbase.getKey() ), p_stack );
     }
 
     @Override
-    public Set<ILiteral<T>> getLiterals(CPath... p_path)
+    public Set<ILiteral<T>> getLiterals( final CPath... p_path )
     {
+        if ( p_path == null || p_path.length == 0 )
+            return new HashSet<ILiteral<T>>(){{
+                for ( final ILiteral<T> l_literal : this )
+                    add( l_literal );
+            }};
+
+        // step through path array and add top-level literals
         final Set<ILiteral<T>> l_literals = new HashSet<ILiteral<T>>();
-
-        l_literals.addAll( this.literals( CPath.EMPTY ) );
-
         for ( int i = 0; i < p_path.length; ++i )
-            l_literals.addAll(this.literals(p_path[i]));
+        {
+            final IBeliefBase<T> l_beliefBase = this.get( p_path[ i ] );
+            if ( l_beliefBase == null )
+                continue;
+
+            for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : l_beliefBase.getElements( CPath.EMPTY ).values() )
+            {
+                // get top-level literals if existing
+                final Set<IBeliefBaseElement> l_elements = l_innerMap.get( ILiteral.class );
+                if ( l_elements == null )
+                    continue;
+
+                // add them to returning literal set
+                for ( final IBeliefBaseElement l_literal : l_elements )
+                    l_literals.add( (ILiteral) l_literal );
+            }
+        }
 
         return l_literals;
     }
 
-    @Override
-    public boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    /**
+     * adds a literal to beliefbase with specified path. If path is non-existing
+     * it will be constructed.
+     *
+     * @param p_path path to beliefbase
+     * @param p_literal literal to add
+     * @return true, if addition was successful
+     */
+    private boolean add( final CPath p_path, final ILiteral<T> p_literal )
     {
         // further path can be specified in literals functor
         final CPath l_deepPath = new CPath( p_literal.getFunctor().toString() );
@@ -131,10 +171,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // get beliefbase elements and inner-map with specified key
         final String l_key = l_deepPath.getSuffix();
-        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_beliefbase.getElements();
+        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_beliefbase.getElements( CPath.EMPTY );
         final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get( l_key );
 
-        final ILiteral<T> l_literal = new IDefaultLiteral<T>(
+        final ILiteral<T> l_literal = new CDefaultLiteral<T>(
                 l_key, p_literal.getLiteral(),
                 (CTermList) p_literal.getValues(), (CTermSet) p_literal.getAnnotation()
         )
@@ -173,18 +213,25 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * adds a literal to the beliefbase
+     * adds a literal to top-level elements
      *
      * @param p_literal literal to add with path in functor
      * @return
      */
-    public boolean add( final ILiteral<T> p_literal )
+    private boolean add( final ILiteral<T> p_literal )
     {
-        return this.add(CPath.EMPTY, p_literal);
+        return this.add( CPath.EMPTY, p_literal );
     }
 
-    @Override
-    public Set<IBeliefBaseElement> add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    /**
+     * Adds a beliefbase to specified path. The name of the new beliefbase
+     * has to be the last element in variable path.
+     *
+     * @param p_path path with name as last element
+     * @param p_beliefbase beliefbase to add
+     * @return true if addition was successful
+     */
+    private boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
@@ -199,18 +246,20 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         );
 
         // get inner map of beliefbase elements
-        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_inherited.getElements();
+        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_inherited.getElements( CPath.EMPTY );
         if ( !l_elements.keySet().contains( p_path.getSuffix() ) )
             l_elements.put( p_path.getSuffix(), new HashMap<Class<?>, Set<IBeliefBaseElement>>() );
         final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get( p_path.getSuffix() );
 
         // push beliefbase into inner map
-        return l_innerMap.put(
+        l_innerMap.put(
                 IBeliefBase.class, new HashSet<IBeliefBaseElement>()
                 {{
-                        add(p_beliefbase);
+                        add( p_beliefbase );
                     }}
         );
+
+        return true;
     }
 
     @Override
@@ -235,7 +284,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     public Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path )
     {
         if ( p_path == null )
-            return this.getBeliefbases( CPath.EMPTY );
+            return Collections.EMPTY_MAP;
 
         // fill the resulting map with top-level beliefbases
         final Map<String, IBeliefBase<T>> l_result = new HashMap<>();
@@ -247,7 +296,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                 continue;
 
             // iteration over beliefbase-elements
-            for ( final Map.Entry<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_element : l_beliefbase.getElements().entrySet() )
+            for ( final Map.Entry<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_element : l_beliefbase.getElements( CPath.EMPTY ).entrySet() )
                 if ( l_element.getValue().containsKey( IBeliefBase.class ) )
                     l_result.put( l_element.getKey(), (IBeliefBase<T>) l_element.getValue().get(IBeliefBase.class).iterator().next() );
         }
@@ -255,16 +304,28 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_result;
     }
 
-    @Override
     public void clear()
     {
         m_elements.clear();
     }
 
     @Override
-    public void clear( CPath p_path )
+    public void clear( final CPath... p_path )
     {
-        this.get( p_path ).clear();
+        // if nothing is specified, everything will be cleared
+        if ( p_path == null || p_path.length == 0 )
+        {
+            m_elements.clear();
+            return;
+        }
+
+        // clear beliefbases with specified paths
+        for ( final CPath l_path : p_path )
+        {
+            final IBeliefBase l_beliefBase = this.get( l_path );
+            if ( l_beliefBase != null )
+                l_beliefBase.clear();
+        }
     }
 
     @Override
@@ -292,18 +353,17 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         // go down the hierarchy and get last beliefbase
         final IBeliefBase<T> l_beliefbase = this.get(p_path);
-        if ( l_beliefbase == null || !l_beliefbase.getElements().containsKey( p_key ) )
+        if ( l_beliefbase == null || !l_beliefbase.getElements( CPath.EMPTY ).containsKey( p_key ) )
             return null;
 
         // get beliefbase-elements of given name and class
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_beliefbase.getElements().get( p_key );
+        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_beliefbase.getElements( CPath.EMPTY ).get( p_key );
         if ( !l_innerMap.containsKey( p_class ) )
             return null;
 
         return l_innerMap.get( p_class );
     }
 
-    @Override
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements()
     {
         return m_elements;
@@ -317,9 +377,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( CPath p_path )
     {
-        final IBeliefBase l_beliefbase = this.get( p_path );
+        if ( p_path.isEmpty() )
+            return m_elements;
 
-        return l_beliefbase == null ? null : l_beliefbase.getElements();
+        final IBeliefBase l_beliefbase = this.get( p_path );
+        return l_beliefbase == null ? Collections.EMPTY_MAP : l_beliefbase.getElements( CPath.EMPTY );
     }
 
     /**
@@ -375,63 +437,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_currentBeliefbase;
     }
 
-
-    /**
-     * get inherited top-level literals
-     *
-     * @param p_path path to inherited beliefbase
-     * @return top-level literals
-     */
-    public Set<ILiteral<T>> literals( final CPath p_path )
-    {
-        final IBeliefBase<T> l_beliefBase = this.get( p_path );
-
-        if ( l_beliefBase == null )
-            return null;
-
-        return new HashSet<ILiteral<T>>()
-        {{
-                for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : l_beliefBase.getElements().values() )
-                {
-                    final Set<IBeliefBaseElement> l_elements = l_innerMap.get( ILiteral.class );
-
-                    if ( l_elements != null )
-                        for ( final IBeliefBaseElement l_literal : l_elements )
-                            add( (ILiteral) l_literal );
-                }
-            }};
-    }
-
-    @Override
-    public Set<ILiteral<T>> prefixedLiterals( final String p_prefix )
-    {
-        // return top-level literals with prefix
-        return new HashSet()
-        {{
-                for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : m_elements.values() )
-                {
-                    final Set<IBeliefBaseElement> l_innerSet = l_innerMap.get( ILiteral.class );
-
-                    if ( l_innerSet != null )
-                        for ( final IBeliefBaseElement l_element : l_innerSet )
-                        {
-                            final ILiteral<T> l_literal = (ILiteral<T>) l_element;
-
-                            add(
-                                    new IDefaultLiteral<T>(
-                                            p_prefix + l_literal.getFunctor().toString(), l_literal.getLiteral(),
-                                            (CTermList) l_literal.getValues(), (CTermSet) l_literal.getAnnotation()
-                                    )
-                                    {
-                                    }
-                            );
-                        }
-                }
-            }};
-    }
-
-    @Override
-    public boolean remove( final CPath p_path )
+    public boolean remove( final CPath p_path, final IBeliefBase p_beliefbase )
     {
         // if nothing is specified, nothing can be removed
         if ( p_path.isEmpty() )
@@ -439,32 +445,19 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // go down the hierarchy and get the last beliefbase
         final IBeliefBase<T> l_beliefbase = this.get( p_path.getSubPath( 0, p_path.size() - 1 ) );
-
         if ( l_beliefbase == null )
             return false;
 
-        // try to get beliefbase elements with same key
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_beliefbaseElements =
-                ( (IDefaultBeliefBase<T>) l_beliefbase ).getElements().get( p_path.getSuffix() );
-        if ( l_beliefbaseElements == null )
-            return false;
-
-        // remove specified beliefbase
-        return l_beliefbaseElements.remove( IBeliefBase.class ) != null;
+        return l_beliefbase.getElements( CPath.EMPTY, p_path.getSuffix(), IBeliefBase.class ).remove( p_beliefbase );
     }
 
-    @Override
     public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
         final IBeliefBase<T> l_beliefbase = this.get( p_path );
         if ( l_beliefbase == null )
             return false;
 
-        final Set<IBeliefBaseElement> l_literals = l_beliefbase.get(CPath.EMPTY, p_literal.getFunctor().toString(), ILiteral.class);
-        if ( l_literals == null )
-            return false;
-
-        return l_literals.remove( p_literal );
+        return l_beliefbase.getElements( CPath.EMPTY, p_literal.getFunctor().toString(), ILiteral.class ).remove( p_literal );
     }
 
     @Override
@@ -502,11 +495,23 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @return iterator stack
      */
-    private Stack<Iterator<ILiteral<T>>> collapseIterator()
+    private Stack<Pair<CPath, Iterator<ILiteral<T>>>> collapseIterator()
     {
-        final Stack<Iterator<ILiteral<T>>> l_stack = new Stack<>();
+        final Stack<Pair<CPath, Iterator<ILiteral<T>>>> l_stack = new Stack<>();
         collapseIterator( this, CPath.EMPTY, l_stack );
         return l_stack;
+    }
+
+    @Override
+    public boolean remove( final CPath p_path, final IBeliefBaseElement p_element )
+    {
+        if ( p_element instanceof ILiteral )
+            this.remove( p_path, (ILiteral) p_element );
+
+        if ( p_element instanceof IBeliefBase )
+            this.remove( p_path, (IBeliefBase) p_element );
+
+        return false;
     }
 
     /**
@@ -517,8 +522,8 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     private IBeliefBase<T> getBeliefbase( final String p_name )
     {
-        final Set<IBeliefBaseElement> l_bb = this.getElements( p_name, IBeliefBase.class );
-        return l_bb == null ? null : (IBeliefBase<T>) l_bb.iterator().next();
+        final Set<IBeliefBaseElement> l_bb = this.getElements( CPath.EMPTY, p_name, IBeliefBase.class );
+        return ( l_bb == null || l_bb.isEmpty() ) ? null : (IBeliefBase) l_bb.iterator().next();
     }
 
     /**
@@ -528,24 +533,16 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_class class of beliefbase elements
      * @return set of beliefbase elements, or null if nothing was found
      */
+    @Override
     public Set<IBeliefBaseElement> getElements( final CPath p_path, final String p_name, final Class<?> p_class )
     {
         final IBeliefBase<T> l_beliefbase = this.get( p_path );
-
         if ( l_beliefbase == null )
             return null;
 
-        // get possible beliefbase elements by name
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_beliefbase.getElements().get( p_name );
-        if ( l_innerMap == null )
-            return null;
-
-        // get specific elements by class
-        final Set<IBeliefBaseElement> l_innerSet = l_innerMap.get( p_class );
-        if ( ( l_innerSet == null ) || ( l_innerSet.isEmpty() ) )
-            return null;
-
-        return l_innerSet;
+        return (Set<IBeliefBaseElement>) l_beliefbase.getElements( CPath.EMPTY )
+                           .getOrDefault( p_name, Collections.EMPTY_MAP )
+                           .getOrDefault( p_class, Collections.EMPTY_SET );
     }
 
     @Override
@@ -574,7 +571,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
             /**
              * iterator stack
              */
-            private final Stack<Iterator<ILiteral<T>>> m_stack = collapseIterator();
+            private final Stack<Pair<CPath,Iterator<ILiteral<T>>>> m_stack = collapseIterator();
 
             @Override
             public boolean hasNext()
@@ -584,7 +581,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
                     return false;
 
                 // return true, if the top element of the stack has a next element
-                if ( m_stack.peek().hasNext() )
+                if ( m_stack.peek().getRight().hasNext() )
                     return true;
 
                 // the top element has no next element, so it can be removed
@@ -602,7 +599,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
             @Override
             public ILiteral<T> next()
             {
-                return m_stack.peek().next();
+                return new CDefaultLiteral<T>( m_stack.peek().getLeft(), m_stack.peek().getRight().next() );
             }
         };
     }
@@ -618,9 +615,9 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public boolean remove( final CPath p_path, final String p_key, final Class p_class )
     {
-        final Set<IBeliefBaseElement> p_elements = this.get( p_path, p_key, p_class );
+        final Set<IBeliefBaseElement> p_elements = this.getElements( p_path, p_key, p_class );
 
-        if ( p_elements == null )
+        if ( p_elements.isEmpty() )
             return false;
 
         p_elements.clear();

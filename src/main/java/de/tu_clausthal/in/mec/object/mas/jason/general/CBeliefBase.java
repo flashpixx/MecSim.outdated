@@ -68,15 +68,4 @@ public class CBeliefBase extends IDefaultBeliefBase<Literal>
         super( p_beliefbases, p_literals );
     }
 
-    /**
-     *
-     * @param p_path
-     * @return
-     * @todo fix implementation
-     */
-    @Override
-    public Set<ILiteral<Literal>> literals( final CPath... p_path )
-    {
-        return null;
-    }
 }

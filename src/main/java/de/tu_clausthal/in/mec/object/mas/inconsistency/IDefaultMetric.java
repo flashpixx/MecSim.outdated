@@ -25,43 +25,43 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
- * generic discrete metric
- *
- * @see http://mathworld.wolfram.com/DiscreteMetric.html
+ * default metric with an optional set of path values
  */
-public class CDiscreteMetric<T> extends IDefaultMetric<T>
+public abstract class IDefaultMetric<T> implements IMetric<T>
 {
+    /**
+     * set with paths
+     */
+    protected final Set<CPath> m_paths = new HashSet<>();
 
     /**
      * ctor
      *
-     * @param p_paths path list
+     * @param p_paths for reading agent value
      */
-    public CDiscreteMetric( final CPath... p_paths )
+    public IDefaultMetric( final CPath... p_paths )
     {
-        super( p_paths );
+        if (p_paths != null)
+            m_paths.addAll( Arrays.asList( p_paths ) );
     }
 
     /**
      * copy-ctor
      *
-     * @param p_metric metric
+     * @param p_metric default metric
      */
-    public CDiscreteMetric( final IDefaultMetric<T> p_metric )
+    public IDefaultMetric( final IDefaultMetric<T> p_metric )
     {
-        super( p_metric );
+        m_paths.addAll( p_metric.m_paths );
     }
 
     @Override
-    public double calculate( final T p_first, final T p_second )
-    {
-        // equal objects create zero value
-        if ( p_first.equals( p_second ) )
-            return 0;
-
-        return 1;
-    }
+    public abstract double calculate( final T p_first, final T p_second );
 
 }

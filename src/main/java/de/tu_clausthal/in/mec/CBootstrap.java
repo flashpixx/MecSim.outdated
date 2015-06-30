@@ -29,8 +29,8 @@ import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
-import de.tu_clausthal.in.mec.object.mas.inconsistency.CDiscreteMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -97,7 +97,7 @@ public class CBootstrap
 
         // register objects
         p_server.registerObject( CConsole.getError( "error" ) );
-        p_server.registerObject( CConsole.getOutput( "output" ) );
+        // p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );
         p_server.registerObject( CConfiguration.getInstance() );
@@ -122,8 +122,11 @@ public class CBootstrap
         p_simulation.getWorld().put( "Database", new CDatabase() );
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
-        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
-        p_simulation.getWorld().put( "Jason Car Inconsistency", new CInconsistencyLayer<CAgent>( new CDiscreteMetric<CAgent>() ) );
+
+        // build layer first and set linkage between layer via ctor, because world is not initialized yet
+        final CInconsistencyLayer l_inconsistency = new CInconsistencyLayer<CAgent>( new CSymmetricDifferenceMetric<CAgent>() );
+        p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistency );
+        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistency ) );
 
     }
 

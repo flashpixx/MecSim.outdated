@@ -24,32 +24,35 @@
 package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * generic discrete metric
- *
- * @see http://mathworld.wolfram.com/DiscreteMetric.html
+ * metric on collections returns the size of symmetric difference
  */
-public class CDiscreteMetric<T> extends IDefaultMetric<T>
+public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
 {
-
     /**
      * ctor
      *
      * @param p_paths path list
      */
-    public CDiscreteMetric( final CPath... p_paths )
+    public CSymmetricDifferenceMetric( final CPath... p_paths )
     {
         super( p_paths );
     }
 
     /**
-     * copy-ctor
+     * copy ctor
      *
      * @param p_metric metric
      */
-    public CDiscreteMetric( final IDefaultMetric<T> p_metric )
+    public CSymmetricDifferenceMetric( final IDefaultMetric<T> p_metric )
     {
         super( p_metric );
     }
@@ -61,7 +64,26 @@ public class CDiscreteMetric<T> extends IDefaultMetric<T>
         if ( p_first.equals( p_second ) )
             return 0;
 
-        return 1;
+        final Set<ILiteral<?>> l_firstLiterals = new HashSet<>();
+        final Set<ILiteral<?>> l_secondLiterals = new HashSet<>();
+
+
+        for ( final CPath l_path : m_paths )
+        {
+            l_firstLiterals.addAll( p_first.getBeliefs().getLiterals( l_path ) );
+            l_secondLiterals.addAll( p_second.getBeliefs().getLiterals( l_path ) );
+        }
+
+
+        // create aggregate belief-base
+        final Set<ILiteral<?>> l_aggregate = new HashSet<ILiteral<?>>()
+        {{
+                addAll( l_firstLiterals );
+                addAll( l_secondLiterals );
+            }};
+
+        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
+        return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
     }
 
 }

@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -152,54 +153,40 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     private boolean add(final CPath p_path, final ILiteral<T> p_literal)
     {
-        // further path can be specified in literals functor
-        final CPath l_deepPath = new CPath(p_literal.getFunctor().toString());
+        final String l_key = p_literal.getFunctor().toString();
 
-        // get inherited beliefbase
-        final IBeliefBase<T> l_beliefbase =
-                this.getOrDefault(
-                        p_path.append(l_deepPath.getSubPath(0, l_deepPath.size() - 1)), new CDefaultBeliefBase<T>()
-                );
+        if (p_path.isEmpty())
+        {
+            // case 1: there are no beliefbase elements with specified key
+            if ( !m_elements.containsKey( l_key ) )
+                return m_elements.put( l_key, new HashMap<Class<?>, Set<IBeliefBaseElement>>(){{
+                    put(ILiteral.class, new HashSet<IBeliefBaseElement>(){{
+                        add(p_literal);
+                    }});
+                }} ) == null;
 
-        // get beliefbase elements and inner-map with specified key
-        final String l_key = l_deepPath.getSuffix();
-        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_beliefbase.getElements(CPath.EMPTY);
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get(l_key);
+            // case 2: there are no literals with specified key
+            Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = m_elements.get(l_key);
+            if (!l_innerMap.containsKey(ILiteral.class))
+                return l_innerMap.put( ILiteral.class, new HashSet<IBeliefBaseElement>(){{
+                    add(p_literal);
+                }} ) == null;
 
-        final ILiteral<T> l_literal = new CDefaultLiteral<T>(
-                l_key, p_literal.getLiteral(),
-                (CTermList) p_literal.getValues(), (CTermSet) p_literal.getAnnotation()
-        );
+            // case 3: there are already literals with the same key
+            return l_innerMap.get(ILiteral.class).add(p_literal);
+        }
 
-        // if there is no inner-map with same key, generate new map-entry and put literal into it
-        if (l_innerMap == null)
-            return l_elements.put(
-                    l_key, new HashMap()
-                    {{
-                            put(
-                                    ILiteral.class, new HashSet()
-                                    {{
-                                            add(l_literal);
-                                        }}
-                            );
-                        }}
-            ) == null;
+        // get or set inherited beliefbases
+        IBeliefBase<T> l_current = this;
+        for ( final CPath l_subPath : p_path )
+        {
+            if ( l_current.getElements(CPath.EMPTY, l_subPath.getSuffix(), IBeliefBase.class ).size() != 1 )
+                l_current.add( new CPath( l_subPath.getSuffix()), new CDefaultBeliefBase<T>() );
 
-        // get literals with same key from inner-map
-        final Set<IBeliefBaseElement> l_innerLiterals = l_innerMap.get(ILiteral.class);
+            l_current = l_current.get( new CPath( l_subPath.getSuffix() ) );
+        }
 
-        // if there are no literals with same key, generate new set and put literal into it
-        if (l_innerLiterals == null)
-            return l_innerMap.put(
-                    ILiteral.class, new HashSet()
-                    {{
-                            add(l_literal);
-                        }}
-            ) == null;
-
-        // if there are literals with same key, just add current literal to this set
-        return l_innerLiterals.add(l_literal);
-
+        return l_current.add(CPath.EMPTY, p_literal);
     }
 
     /**
@@ -227,27 +214,39 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         if (p_path.isEmpty())
             throw new IllegalArgumentException(CCommon.getResourceString(CDefaultBeliefBase.class, "emptypath"));
 
-        // get beliefbase or construct new ones
-        final IBeliefBase<T> l_inherited = this.getOrDefault(
-                p_path.getSubPath(0, p_path.size() - 1),
-                new CDefaultBeliefBase<T>()
-        );
+        if ( p_path.size() == 1 )
+        {
+            final String l_key = p_path.getSuffix().toString();
 
-        // get inner map of beliefbase elements
-        final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> l_elements = l_inherited.getElements(CPath.EMPTY);
-        if (!l_elements.keySet().contains(p_path.getSuffix()))
-            l_elements.put(p_path.getSuffix(), new HashMap<Class<?>, Set<IBeliefBaseElement>>());
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = l_elements.get(p_path.getSuffix());
+            // case 1: there are no beliefbase elements with same key
+            if ( !m_elements.containsKey(l_key) )
+                return m_elements.put(l_key, new HashMap<Class<?>, Set<IBeliefBaseElement>>(){{
+                    put(IBeliefBase.class, new HashSet<IBeliefBaseElement>(){{
+                        add( p_beliefbase );
+                    }});
+                }}) == null;
 
-        // push beliefbase into inner map
-        l_innerMap.put(
-                IBeliefBase.class, new HashSet<IBeliefBaseElement>()
-                {{
-                        add(p_beliefbase);
-                    }}
-        );
+            // case 2: there are already beliefbase elements with same key (beliefbase with same key gets overwritten)
+            m_elements.get(l_key).put(IBeliefBase.class, new HashSet<IBeliefBaseElement>(){{
+                add( p_beliefbase );
+            }});
 
-        return true;
+            return true;
+        }
+
+        // if path size is greater than one, go down hierarchy and add new beliefbases if non-existing
+        IBeliefBase<T> l_current = this;
+        for ( final CPath l_subpath : p_path.getSubPath( 0, p_path.size() - 1 ) )
+        {
+            final String l_key = l_subpath.getSuffix();
+
+            if ( l_current.getElements(CPath.EMPTY, l_key, IBeliefBase.class).size() != 1 )
+                l_current.add(new CPath( l_key ), new CDefaultBeliefBase<>());
+
+            l_current = l_current.get( new CPath( l_key ) );
+        }
+
+        return l_current.add( new CPath( p_path.getSuffix() ), p_beliefbase );
     }
 
     @Override
@@ -356,31 +355,8 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         if (p_path.isEmpty())
             return this;
 
-        CDefaultBeliefBase<T> l_currentBeliefbase = this;
-
-        for (final CPath l_pathElement : p_path)
-        {
-            // get next inherited beliefbase
-            final CDefaultBeliefBase<T> l_nextBeliefbase = (CDefaultBeliefBase) l_currentBeliefbase.getBeliefbase(l_pathElement.getSuffix());
-
-            // if no such beliefbase exists, create a new one
-            if (l_nextBeliefbase == null)
-                l_currentBeliefbase.addTopElement(
-                        l_pathElement.getSuffix(), IBeliefBase.class, new HashSet<IBeliefBaseElement>()
-                        {{
-                                add(
-                                        l_pathElement.equals(p_path) ?
-                                                p_beliefbase :
-                                                new CDefaultBeliefBase<T>()
-                                );
-                            }}
-                );
-
-            // go down the hierarchy
-            l_currentBeliefbase = (CDefaultBeliefBase) l_currentBeliefbase.getBeliefbase(l_pathElement.getSuffix());
-        }
-
-        return l_currentBeliefbase;
+        final IBeliefBase<T> l_return = this.get( p_path );
+        return l_return == null ? p_beliefbase : l_return;
     }
 
     private boolean remove(final CPath p_path, final IBeliefBase p_beliefbase)

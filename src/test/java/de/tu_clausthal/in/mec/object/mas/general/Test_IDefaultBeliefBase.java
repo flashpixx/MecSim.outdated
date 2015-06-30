@@ -138,16 +138,16 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add(new CPath( "aa1/bb1/cc1/dd1"), l_testLiteral);
 
         // check if literal exists before removal
-        assertTrue(l_beliefbase.get(CPath.EMPTY, l_testLiteral.getFunctor().toString(), ILiteral.class).contains(l_testLiteral));
-        assertTrue(l_beliefbase.get(new CPath("aa1/bb1/cc1/dd1"), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral )  );
+        assertTrue(l_beliefbase.getElements(CPath.EMPTY, l_testLiteral.getFunctor().toString(), ILiteral.class).contains(l_testLiteral));
+        assertTrue(l_beliefbase.getElements(new CPath("aa1/bb1/cc1/dd1"), l_testLiteral.getFunctor().toString(), ILiteral.class).contains( l_testLiteral )  );
 
         // remove the literal
         l_beliefbase.remove( CPath.EMPTY, l_testLiteral);
         l_beliefbase.remove(new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral );
 
         // check for correct removal
-        assertFalse(l_beliefbase.get(CPath.EMPTY, l_testLiteral.getFunctor().toString(), ILiteral.class).contains(l_testLiteral));
-        assertFalse(l_beliefbase.get(new CPath("aa1/bb1/cc1/dd1"), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral ) );
+        assertFalse(l_beliefbase.getElements(CPath.EMPTY, l_testLiteral.getFunctor().toString(), ILiteral.class).contains(l_testLiteral));
+        assertFalse(l_beliefbase.getElements(new CPath("aa1/bb1/cc1/dd1"), l_testLiteral.getFunctor().toString(), ILiteral.class).contains( l_testLiteral ) );
     }
 
     @Test
@@ -165,10 +165,10 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add(new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase);
 
         // check for correct addition
-        assertTrue(l_beliefbase.get(CPath.EMPTY, "aa3", IBeliefBase.class).contains(l_testBeliefbase));
-        assertTrue(l_beliefbase.get(new CPath("aa1"), "bb1", IBeliefBase.class).contains(l_testBeliefbase));
-        assertTrue(l_beliefbase.get(new CPath("aa1/bb1/cc1"), "dd1", IBeliefBase.class).contains(l_testBeliefbase));
-        assertTrue(l_beliefbase.get(new CPath("aa4/bb2/cc3"), "dd4", IBeliefBase.class).contains(l_testBeliefbase));
+        assertTrue(l_beliefbase.getElements(CPath.EMPTY, "aa3", IBeliefBase.class).contains(l_testBeliefbase));
+        assertTrue(l_beliefbase.getElements(new CPath("aa1"), "bb1", IBeliefBase.class).contains(l_testBeliefbase));
+        assertTrue(l_beliefbase.getElements(new CPath("aa1/bb1/cc1"), "dd1", IBeliefBase.class).contains(l_testBeliefbase));
+        assertTrue(l_beliefbase.getElements(new CPath("aa4/bb2/cc3"), "dd4", IBeliefBase.class).contains(l_testBeliefbase));
 
         l_beliefbase.remove(new CPath("aa3"), l_testBeliefbase);
         l_beliefbase.remove(new CPath("aa1/bb1/cc1/dd1"), l_testBeliefbase);
@@ -180,10 +180,10 @@ public class Test_IDefaultBeliefBase
         assertTrue(l_beliefbase.get(new CPath("aa1/bb1/cc1/dd1")) == null);
         assertTrue(l_beliefbase.get(new CPath("aa1/bb1")) == null);
         assertTrue(l_beliefbase.get(new CPath("aa4/bb2/cc3/dd4")) == null);
-        assertFalse(l_beliefbase.get(CPath.EMPTY, "aa3", IBeliefBase.class).contains(l_testBeliefbase));
-        assertFalse(l_beliefbase.get(new CPath("aa1"), "bb1", IBeliefBase.class).contains(l_testBeliefbase));
-        assertFalse(l_beliefbase.get(new CPath("aa1/bb1/cc1"), "dd1", IBeliefBase.class).contains(l_testBeliefbase));
-        assertFalse(l_beliefbase.get(new CPath("aa4/bb2/cc3"), "dd4", IBeliefBase.class).contains(l_testBeliefbase));
+        assertFalse(l_beliefbase.getElements(CPath.EMPTY, "aa3", IBeliefBase.class).contains(l_testBeliefbase));
+        assertFalse(l_beliefbase.getElements(new CPath("aa1"), "bb1", IBeliefBase.class).contains(l_testBeliefbase));
+        assertFalse(l_beliefbase.getElements(new CPath("aa1/bb1/cc1"), "dd1", IBeliefBase.class).contains(l_testBeliefbase));
+        assertFalse(l_beliefbase.getElements(new CPath("aa4/bb2/cc3"), "dd4", IBeliefBase.class).contains(l_testBeliefbase));
     }
 
     @Test

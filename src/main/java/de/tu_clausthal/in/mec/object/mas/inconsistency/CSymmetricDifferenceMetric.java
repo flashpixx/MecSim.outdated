@@ -31,7 +31,6 @@ public class CSymmetricDifferenceMetric<T extends IAgent> implements IMetric<T>
                 addAll( l_secondLiterals );
             }};
 
-
         // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
         return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
     }

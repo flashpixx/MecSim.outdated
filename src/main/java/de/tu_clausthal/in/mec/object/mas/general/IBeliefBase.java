@@ -37,31 +37,14 @@ import java.util.Set;
 public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
 {
     /**
-     * adds a literal to specified path (i.e. the path to an inherited beliefbase)
-     * If the path is unknown, it will be constructed.
+     * adds a beliefbase-element to specified path (i.e. the path to an inherited beliefbase)
+     * If the path is non-existing, it will be constructed.
      *
-     * @param p_path path to specific beliefbase
-     * @param p_literal literal to add
+     * @param p_path path for addition
+     * @param p_element element to add
      * @return true if addition was successful
      */
-    public boolean add( final CPath p_path, final ILiteral<T> p_literal );
-
-    /**
-     * adds a literal, the path can be part of the literals functor
-     *
-     * @param p_literal literal to add with path in functor
-     * @return true if addition was successful
-     */
-    public boolean add( final ILiteral<T> p_literal );
-
-    /**
-     * Adds a new beliefbase into specified path. The last element in path has to be the name
-     * of the new beliefbase. Beliefbases with the same name will be overwritten.
-     *
-     * @param p_path path to a specific beliefbase with name of new beliefbase as last element
-     * @param p_beliefbase beliefbase to add
-     */
-    public Set<IBeliefBaseElement> add( final CPath p_path, final IBeliefBase<T> p_beliefbase );
+    public boolean add( final CPath p_path, final IBeliefBaseElement p_element );
 
     /**
      * adds a collection of literals into an inherited beliefbase specified by a path
@@ -83,14 +66,7 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * empties the whole beliefbase, i.e. the top-level literals
      * and all the literals in inherited getBeliefbases
      */
-    void clear();
-
-    /**
-     * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited getBeliefbases
-     */
-    public void clear( final CPath p_path );
-
+    public void clear( final CPath... p_path );
 
     /**
      * gets a beliefbase with position and name specified in path
@@ -109,11 +85,6 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * @return
      */
     public Set<IBeliefBaseElement> get( final CPath p_path, final String p_key, final Class p_class );
-
-    /**
-     * getter for beliefbase elements
-     */
-    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements();
 
     /**
      * getter for beliefbase elements with path specified
@@ -141,29 +112,12 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public Set<ILiteral<T>> getLiterals( final CPath... p_path );
 
     /**
-     * get inherited literals of specified beliefbase
+     * removes specified beliefbase-element
      *
-     * @param p_prefix literals prefix (e.g. the path)
-     * @return collection of all inherited literals
+     * @param p_path path beliefbase-element
+     * @param p_element element to remove
      */
-    public Set<ILiteral<T>> prefixedLiterals( final String p_prefix );
-
-    /**
-     * removes an inherited beliefbase
-     *
-     * @param p_path path to beliefbase with name as last element
-     */
-    public boolean remove( final CPath p_path );
-
-
-    /**
-     * remove method for specific literal
-     *
-     * @param p_path path to beliefbase
-     * @param p_literal literal to remove
-     * @return true, if removal was successful
-     */
-    public boolean remove( final CPath p_path, final ILiteral<T> p_literal );
+    public boolean remove( final CPath p_path, final IBeliefBaseElement p_element );
 
     /**
      * updates the beliefbase

@@ -208,7 +208,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             }
 
             // row-wise normalization for getting probabilities
-            l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
+            final double l_norm = c_algebra.norm2( l_matrix.viewRow( i ) );
+            if ( l_norm != 0 )
+                l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 
             // set epsilon slope for preventing periodic markov chains
             l_matrix.set(i, i, m_epsilon);

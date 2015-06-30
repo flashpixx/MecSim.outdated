@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
@@ -89,7 +90,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_metric = p_metric;
         m_algorithm = EAlgorithm.QRDecomposition;
         m_iteration = 0;
-        m_epsilon = 0;
+        m_epsilon = 0.001;
         m_updatestep = 1;
     }
 
@@ -218,11 +219,17 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 
         System.out.println(l_matrix);
 
-        // get the eigenvector for largest eigenvalue
-        final DoubleMatrix1D l_eigenvector = this.getStationaryDistribution( l_matrix );
+        final DoubleMatrix1D l_eigenvector;
+        if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
+            l_eigenvector = new DenseDoubleMatrix1D( m_data.size() );
+        else
+        {
+            // get the eigenvector for largest eigenvalue
+            l_eigenvector = this.getStationaryDistribution( l_matrix );
 
-        // normalize vector to get the stationary distribution
-        l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
+            // normalize vector to get the stationary distribution
+            l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
+        }
 
         // set inconsistency value for each entry
         for ( int i = 0; i < l_keys.size(); ++i )

@@ -40,7 +40,7 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
      */
     public CTermSet()
     {
-        super( 0 );
+        super(0);
     }
 
     /**
@@ -48,14 +48,14 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
      *
      * @param p_collection collection containing initial elements
      */
-    public CTermSet( final Collection<ITerm> p_collection )
+    public CTermSet(final Collection<ITerm> p_collection)
     {
-        super( p_collection );
+        super(p_collection);
     }
 
     @Override
-    public boolean instanceOf( final Class<?> p_class )
+    public boolean instanceOf(final Class<?> p_class)
     {
-        return Set.class.isAssignableFrom( p_class );
+        return Set.class.isAssignableFrom(p_class);
     }
 }

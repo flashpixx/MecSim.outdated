@@ -75,7 +75,7 @@ public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric
         }
 
 
-        // create aggregate belief-base
+        // get union
         final Set<ILiteral<?>> l_aggregate = new HashSet<ILiteral<?>>()
         {{
                 addAll( l_firstLiterals );

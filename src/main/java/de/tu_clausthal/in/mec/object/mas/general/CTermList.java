@@ -46,16 +46,16 @@ public class CTermList extends LinkedList<ITerm> implements ITermCollection
      *
      * @param p_collection collection containing initial elements
      */
-    public CTermList( final Collection<ITerm> p_collection )
+    public CTermList(final Collection<ITerm> p_collection)
     {
-        super( p_collection );
+        super(p_collection);
     }
 
 
     @Override
-    public boolean instanceOf( final Class<?> p_class )
+    public boolean instanceOf(final Class<?> p_class)
     {
-        return List.class.isAssignableFrom( p_class );
+        return List.class.isAssignableFrom(p_class);
     }
 
 }

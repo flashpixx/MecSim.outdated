@@ -139,7 +139,9 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         if ( l_methodname.isEmpty() )
             return;
 
-        m_virtuallocation.add( new CVirtualDynamicMethod( m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
+        m_virtuallocation.add( new CVirtualDynamicMethod( m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + toURLFormat(
+                l_methodname
+        ) ) );
     }
 
     /**
@@ -158,7 +160,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         if ( l_methodname.isEmpty() )
             return;
 
-        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + l_methodname ) );
+        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + toURLFormat( l_methodname ) ) );
     }
 
     /**
@@ -194,7 +196,7 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         {
             final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
             if ( l_data instanceof String )
-                l_uribase = l_data.toString().toLowerCase();
+                l_uribase = toURLFormat( l_data.toString() );
 
             if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
             {
@@ -209,6 +211,18 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
         }
 
         return l_uribase;
+    }
+
+    /**
+     * converts a Java string to the URL specification
+     * @warning only lower-case chars, number and underscore are allowed
+     *
+     * @param p_raw Java raw string
+     * @return modfied string
+     */
+    private static String toURLFormat( final String p_raw )
+    {
+        return p_raw.toLowerCase().replaceAll( "[^a-z0-9_]", "" );
     }
 
     /**

@@ -75,7 +75,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * metric object to create the value of two objects
      **/
-    private final IMetric<T> m_metric;
+    private IMetric<T> m_metric;
     /**
      * update of the metric values
      */
@@ -232,7 +232,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
         }
 
-        System.out.println(l_eigenvector);
+        System.out.println( l_eigenvector );
 
         // set inconsistency value for each entry
         for ( int i = 0; i < l_keys.size(); ++i )
@@ -282,6 +282,27 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_data.remove( p_object );
         return true;
     }
+
+    /**
+     * sets the metric
+     *
+     * @param p_metric metric
+     */
+    public final void setMetric( final IMetric<T> p_metric )
+    {
+        m_metric = p_metric;
+    }
+
+    /**
+     * gets the current metric
+     *
+     * @return get metric
+     */
+    public final IMetric<T> getMetric()
+    {
+        return m_metric;
+    }
+
 
     @Override
     public final String toString()
@@ -337,55 +358,4 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         }
     }
 
-
-    /**
-     * enum with metric values
-     */
-    private enum EMetric
-    {
-        /** discrete metric **/
-        Discrete( CCommon.getResourceString( EMetric.class, "discrete" )),
-        /**
-         * symmetric difference metric
-         */
-        SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) );
-        /**
-         * language based name of the metric
-         */
-        private final String m_text;
-
-        /**
-         * ctor
-         * @param p_text language based metric name
-         */
-        private EMetric( final String p_text )
-        {
-            m_text = p_text;
-        }
-
-        /**
-         * returns a metric instance
-         * @return
-         */
-        public IMetric<?> get( final CPath... p_paths )
-        {
-            switch ( this )
-            {
-                case Discrete:
-                    return new CDiscreteMetric<>( p_paths );
-
-                case SymmetricDifference:
-                    return new CSymmetricDifferenceMetric<>( p_paths );
-
-                default:
-                    throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ));
-            }
-        }
-
-        @Override
-        public String toString()
-        {
-            return m_text;
-        }
-    }
 }

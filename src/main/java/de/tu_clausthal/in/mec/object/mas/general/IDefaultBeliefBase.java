@@ -448,14 +448,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         if ( l_beliefbase == null )
             return false;
 
-        // try to get beliefbase elements with same key
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_beliefbaseElements =
-                ( (IBeliefBase) l_beliefbase ).getElements( CPath.EMPTY );
-        if ( ( l_beliefbaseElements == null ) || l_beliefbaseElements.isEmpty() )
-            return false;
-
-        // remove specified beliefbase
-        return l_beliefbaseElements.remove( IBeliefBase.class, p_beliefbase );
+        return l_beliefbase.getElements( CPath.EMPTY, p_path.getSuffix(), IBeliefBase.class ).remove( p_beliefbase );
     }
 
     public boolean remove( final CPath p_path, final ILiteral<T> p_literal )

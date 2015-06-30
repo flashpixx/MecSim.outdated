@@ -127,6 +127,11 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( CPath.EMPTY, l_testLiteral );
         l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral );
 
+        assertTrue( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral )  );
+
+        l_beliefbase.remove( CPath.EMPTY, l_testLiteral );
+        l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral );
+
         // check if literal was removed
         assertFalse( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral ) );
     }
@@ -145,18 +150,16 @@ public class Test_IDefaultBeliefBase
         // add to some non-existing paths
         l_beliefbase.add( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
 
-        // test return values of remove function
-        assertFalse( l_beliefbase.remove( CPath.EMPTY, l_testBeliefbase ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa3" ), l_testBeliefbase ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1" ), l_testBeliefbase ) );
-        assertTrue( l_beliefbase.remove( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase ) );
+        l_beliefbase.remove( new CPath( "aa3" ), l_testBeliefbase );
+        l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
+        l_beliefbase.remove( new CPath( "aa1/bb1" ), l_testBeliefbase );
+        l_beliefbase.remove( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
 
         // check if getBeliefbases were correctly removed
-        assertEquals( l_beliefbase.get( new CPath( "aa3" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa1/bb1" ) ), null );
-        assertEquals( l_beliefbase.get( new CPath( "aa4/bb2/cc3/dd4" ) ), null );
+        assertTrue( l_beliefbase.get( new CPath( "aa3" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa1/bb1" ) ) == null );
+        assertTrue( l_beliefbase.get( new CPath( "aa4/bb2/cc3/dd4" ) ) == null );
     }
 
     @Test

@@ -32,6 +32,7 @@ import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
@@ -333,6 +334,58 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         {
             final Double l_value = m_data.get( m_bind );
             return l_value == null ? 0 : l_value.doubleValue();
+        }
+    }
+
+
+    /**
+     * enum with metric values
+     */
+    private enum EMetric
+    {
+        /** discrete metric **/
+        Discrete( CCommon.getResourceString( EMetric.class, "discrete" )),
+        /**
+         * symmetric difference metric
+         */
+        SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) );
+        /**
+         * language based name of the metric
+         */
+        private final String m_text;
+
+        /**
+         * ctor
+         * @param p_text language based metric name
+         */
+        private EMetric( final String p_text )
+        {
+            m_text = p_text;
+        }
+
+        /**
+         * returns a metric instance
+         * @return
+         */
+        public IMetric<?> get( final CPath... p_paths )
+        {
+            switch ( this )
+            {
+                case Discrete:
+                    return new CDiscreteMetric<>( p_paths );
+
+                case SymmetricDifference:
+                    return new CSymmetricDifferenceMetric<>( p_paths );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ));
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
         }
     }
 }

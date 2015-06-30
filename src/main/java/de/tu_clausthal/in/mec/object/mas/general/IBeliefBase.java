@@ -47,6 +47,16 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
     public boolean add( final CPath p_path, final IBeliefBaseElement p_element );
 
     /**
+     * get beliefbase-elements
+     *
+     * @param p_path
+     * @param p_name
+     * @param p_class
+     * @return
+     */
+    public Set<IBeliefBaseElement> getElements( final CPath p_path, final String p_name, final Class<?> p_class );
+
+    /**
      * adds a collection of literals into an inherited beliefbase specified by a path
      *
      * @param p_path path to beliefbase

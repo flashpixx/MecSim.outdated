@@ -122,22 +122,13 @@ public class Test_IDefaultBeliefBase
     {
         final IBeliefBase<Literal> l_beliefbase= this.generateTestset();
 
-        // create new beliefbase to add
-        final IBeliefBase<Literal> l_testBeliefbase = new IDefaultBeliefBase<Literal>(){};
-
         // add some test literals
         final CLiteral l_testLiteral = new CLiteral( ASSyntax.createLiteral( "test" ) );
-        l_testBeliefbase.add( CPath.EMPTY, l_testLiteral );
-        l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
-
-        // check if remove method returns true
-        assertTrue( l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral ) );
+        l_beliefbase.add( CPath.EMPTY, l_testLiteral );
+        l_beliefbase.add( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral );
 
         // check if literal was removed
         assertFalse( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ), l_testLiteral.getFunctor().toString(), ILiteral.class ).contains( l_testLiteral ) );
-
-        // check if beliefbase is still existing
-        assertEquals( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ), l_testBeliefbase );
     }
 
     @Test
@@ -201,20 +192,16 @@ public class Test_IDefaultBeliefBase
 
         // check if there are getBeliefbases before removing
         assertTrue(l_beliefbase.get(new CPath( "aa2/bb1/cc1/dd1" ) ) != null);
-        assertTrue(l_beliefbase.get(new CPath( "aa2/bb1/cc1" ) ) != null);
-        assertTrue(l_beliefbase.get( new CPath( "aa2" ) ) != null);
+        assertTrue(l_beliefbase.get( new CPath( "aa2/bb1/cc1" ) ) != null );
+        assertTrue(l_beliefbase.get( new CPath( "aa2" ) ) != null );
 
         // check if there are non existing
         assertTrue(l_beliefbase.get( new CPath( "xxx" ) ) == null);
         assertEquals( l_beliefbase.get( new CPath( "xxx" ) ), null );
 
-        System.out.println( l_beliefbase );
-
         // do clear
         l_beliefbase.clear( new CPath( "aa2/bb1" ) );
         assertFalse( l_beliefbase == null );
-
-        System.out.println(l_beliefbase);
 
         // check if getBeliefbases were removed
         assertTrue( l_beliefbase.get( new CPath( "aa2/bb1/cc1/dd1" ) ) == null );

@@ -312,20 +312,19 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void clear( final CPath... p_path )
     {
+        // if nothing is specified, everything will be cleared
         if ( p_path == null || p_path.length == 0 )
+        {
+            m_elements.clear();
             return;
+        }
 
+        // clear beliefbases with specified paths
         for ( final CPath l_path : p_path )
         {
-            if ( l_path.isEmpty() )
-            {
-                m_elements.clear();
-                continue;
-            }
-
             final IBeliefBase l_beliefBase = this.get( l_path );
             if ( l_beliefBase != null )
-                l_beliefBase.clear( CPath.EMPTY );
+                l_beliefBase.clear();
         }
     }
 

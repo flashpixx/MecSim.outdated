@@ -29,8 +29,6 @@ import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
-import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.object.mas.inconsistency.CDiscreteMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
@@ -48,8 +46,6 @@ import de.tu_clausthal.in.mec.ui.CWaypointEnvironment;
 import de.tu_clausthal.in.mec.ui.web.CMarkdownRenderer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
-
-import java.util.Set;
 
 
 /**
@@ -126,9 +122,11 @@ public class CBootstrap
         p_simulation.getWorld().put( "Database", new CDatabase() );
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
-        final CInconsistencyLayer l_inconsistencyLayer = new CInconsistencyLayer<CAgent>( new CSymmetricDifferenceMetric<CAgent>() );
-        p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistencyLayer );
-        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistencyLayer ) );
+
+        // build layer first and set linkage between layer via ctor, because world is not initialized yet
+        final CInconsistencyLayer l_inconsistency = new CInconsistencyLayer<CAgent>( new CSymmetricDifferenceMetric<CAgent>() );
+        p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistency );
+        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistency ) );
 
     }
 

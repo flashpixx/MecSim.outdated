@@ -21,8 +21,8 @@ public class CSymmetricDifferenceMetric<T extends IAgent> implements IMetric<T>
         if ( p_first.equals( p_second ) )
             return 0;
 
-        final Set<ILiteral<?>> l_firstLiterals = p_first.getBeliefs().getLiterals();
-        final Set<ILiteral<?>> l_secondLiterals = p_second.getBeliefs().getLiterals();
+        final Set<ILiteral<?>> l_firstLiterals = p_first.getBeliefs().getLiterals( CPath.EMPTY );
+        final Set<ILiteral<?>> l_secondLiterals = p_second.getBeliefs().getLiterals( CPath.EMPTY );
 
         // create aggregate belief-base
         final Set<ILiteral<?>> l_aggregate = new HashSet<ILiteral<?>>()

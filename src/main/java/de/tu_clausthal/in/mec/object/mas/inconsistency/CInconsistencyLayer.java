@@ -87,7 +87,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     public CInconsistencyLayer( final IMetric<T> p_metric )
     {
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.Numeric;
+        m_algorithm = EAlgorithm.QRDecomposition;
         m_iteration = 0;
         m_epsilon = 0;
         m_updatestep = 1;
@@ -106,7 +106,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     )
     {
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.Stochastic;
+        m_algorithm = EAlgorithm.FixpointIteration;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
         m_updatestep = 1;
@@ -195,44 +195,49 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         // get key list of map for addressing elements in the correct order
         final ArrayList<T> l_keys = new ArrayList<T>( m_data.keySet() );
 
-        // calculate matrix and build metric value
+        // calculate markov chain transition matrix
         final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
         for ( int i = 0; i < l_keys.size(); ++i )
         {
             final T l_item = l_keys.get( i );
-            for ( int j = i; j < l_keys.size(); ++j )
+            for ( int j = i + 1; j < l_keys.size(); ++j )
             {
                 final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
                 l_matrix.set( i, j, l_value );
                 l_matrix.set( j, i, l_value );
             }
 
-            // create markow-chain (normalize row)
+            // row-wise normalization for getting probabilities
             l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
+
+            // set epsilon slope for preventing periodic markov chains
+            l_matrix.set(i, i, m_epsilon);
         }
 
-        // get the stationary probility with eigen decomposition
-        final DoubleMatrix1D l_eigenvector;
-        switch ( m_algorithm )
-        {
-            case Stochastic:
-                l_eigenvector = getPerronFrobenius( l_matrix, m_iteration );
-                break;
+        // get the eigenvector for largest eigenvalue
+        final DoubleMatrix1D l_eigenvector = this.getStationaryDistribution( l_matrix );
 
-            case Numeric:
-                l_eigenvector = getLargestEigenvector( l_matrix );
-
-            default:
-                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algorithm" ) );
-        }
-
-        // normalize vector (to probabilites)
+        // normalize vector to get the stationary distribution
         l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
-
 
         // set inconsistency value for each entry
         for ( int i = 0; i < l_keys.size(); ++i )
             m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
+    }
+
+    private DoubleMatrix1D getStationaryDistribution( final DoubleMatrix2D p_matrix )
+    {
+        switch ( m_algorithm )
+        {
+            case FixpointIteration:
+                return getPerronFrobenius( p_matrix, m_iteration );
+
+            case QRDecomposition:
+                return getLargestEigenvector( p_matrix );
+
+            default:
+                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algorithm" ) );
+        }
     }
 
     /**
@@ -245,7 +250,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     private double getMetricValue( final T p_first, final T p_second )
     {
         if ( p_first.equals( p_second ) )
-            return m_epsilon;
+            return 0;
 
         return m_metric.calculate( p_first, p_second );
     }
@@ -278,11 +283,11 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         /**
          * use numeric algorithm
          **/
-        Numeric,
+        QRDecomposition,
         /**
          * use stochastic algorithm
          **/
-        Stochastic
+        FixpointIteration
     }
 
 

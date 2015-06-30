@@ -39,13 +39,12 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
  */
 public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
-    private final CInconsistencyLayer m_inconsistencyLayer = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" );
+    private final CInconsistencyLayer m_inconsistencyLayer =
+            CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" );
 
     @Override
     public boolean add( final CAgent<CDefaultCar> p_value )
     {
-
-
         return super.add( p_value ) &&
                m_inconsistencyLayer.add( p_value );
     }
@@ -53,9 +52,6 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     @Override
     public boolean remove( final Object p_object )
     {
-        if ( ! (p_object instanceof IAgent) )
-            return false;
-
         return super.remove( p_object ) &&
                m_inconsistencyLayer.remove( (IAgent) p_object );
     }

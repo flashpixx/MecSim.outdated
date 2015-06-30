@@ -13,6 +13,27 @@ import java.util.Set;
  */
 public class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
 {
+    /**
+     * ctor
+     *
+     * @param p_paths path list
+     */
+    public CWeightedDifferenceMetric( final CPath... p_paths )
+    {
+        super( p_paths );
+    }
+
+
+    /**
+     * copy-ctor
+     *
+     * @param p_metric metric
+     */
+    public CWeightedDifferenceMetric( final IDefaultMetric<T> p_metric )
+    {
+        super( p_metric );
+    }
+
     @Override
     public double calculate( final T p_first, final T p_second )
     {

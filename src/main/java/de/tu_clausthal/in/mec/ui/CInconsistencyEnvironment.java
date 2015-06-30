@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CDiscreteMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CWeightedDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.IMetric;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
@@ -121,7 +122,9 @@ public class CInconsistencyEnvironment
         /**
          * symmetric difference metric
          */
-        SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) );
+        SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) ),
+        /** weighted difference metric **/
+        WeightedDifference( CCommon.getResourceString( EMetric.class, "weighteddifference" ) );
         /**
          * language based name of the metric
          */
@@ -151,6 +154,9 @@ public class CInconsistencyEnvironment
             if ( p_metric instanceof CSymmetricDifferenceMetric )
                 return SymmetricDifference;
 
+            if (p_metric instanceof CWeightedDifferenceMetric)
+                return WeightedDifference;
+
             throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ) );
         }
 
@@ -168,6 +174,9 @@ public class CInconsistencyEnvironment
 
                 case SymmetricDifference:
                     return new CSymmetricDifferenceMetric<>( p_paths );
+
+                case WeightedDifference:
+                    return new CWeightedDifferenceMetric<>( p_paths );
 
                 default:
                     throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ) );

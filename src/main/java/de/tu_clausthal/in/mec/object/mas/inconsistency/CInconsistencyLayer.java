@@ -214,6 +214,8 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_matrix.set(i, i, m_epsilon);
         }
 
+        System.out.println(l_matrix);
+
         // get the eigenvector for largest eigenvalue
         final DoubleMatrix1D l_eigenvector = this.getStationaryDistribution( l_matrix );
 

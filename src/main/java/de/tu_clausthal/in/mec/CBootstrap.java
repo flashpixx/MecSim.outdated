@@ -29,8 +29,10 @@ import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CDiscreteMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -46,6 +48,8 @@ import de.tu_clausthal.in.mec.ui.CWaypointEnvironment;
 import de.tu_clausthal.in.mec.ui.web.CMarkdownRenderer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
+
+import java.util.Set;
 
 
 /**
@@ -97,7 +101,7 @@ public class CBootstrap
 
         // register objects
         p_server.registerObject( CConsole.getError( "error" ) );
-        p_server.registerObject( CConsole.getOutput( "output" ) );
+        // p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );
         p_server.registerObject( CConfiguration.getInstance() );
@@ -122,8 +126,9 @@ public class CBootstrap
         p_simulation.getWorld().put( "Database", new CDatabase() );
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
-        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
-        p_simulation.getWorld().put( "Jason Car Inconsistency", new CInconsistencyLayer<CAgent>( new CDiscreteMetric<CAgent>() ) );
+        final CInconsistencyLayer l_inconsistencyLayer = new CInconsistencyLayer<CAgent>( new CSymmetricDifferenceMetric<CAgent>() );
+        p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistencyLayer );
+        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistencyLayer ) );
 
     }
 

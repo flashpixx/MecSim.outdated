@@ -29,8 +29,10 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
+import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 
@@ -39,8 +41,12 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
  */
 public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
-    private final CInconsistencyLayer m_inconsistencyLayer =
-            CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" );
+    private final CInconsistencyLayer m_inconsistencyLayer;
+
+    public CCarJasonAgentLayer( final CInconsistencyLayer p_inconsistencyLayer )
+    {
+        m_inconsistencyLayer = p_inconsistencyLayer;
+    }
 
     @Override
     public boolean add( final CAgent<CDefaultCar> p_value )

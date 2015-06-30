@@ -38,20 +38,6 @@ public class CDiscreteMetric<T> implements IMetric<T>
         if ( p_first.equals( p_second ) )
             return 0;
 
-
-        // create aggregate belief-base
-        /*
-        final Set<N> l_aggregate = new HashSet<N>()
-        {{
-                addAll( p_current.getBeliefs() );
-                addAll( p_other.getBeliefs() );
-            }};
-        */
-
-        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
-        //return new Integer( ( ( l_aggregate.size() - p_current.getBeliefs().size() ) + ( l_aggregate.size() - p_other.getBeliefs().size() ) ) );
-
         return 1;
-
     }
 }

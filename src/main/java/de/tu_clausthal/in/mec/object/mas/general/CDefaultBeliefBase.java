@@ -176,10 +176,11 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
             return l_innerMap.get(ILiteral.class).add(p_literal);
         }
 
-        // get or set inherited beliefbases
+        // go down the hierarchy
         IBeliefBase<T> l_current = this;
         for ( final CPath l_subPath : p_path )
         {
+            // if non-existing, create new beliefbase
             if ( l_current.getElements(CPath.EMPTY, l_subPath.getSuffix(), IBeliefBase.class ).size() != 1 )
                 l_current.add( new CPath( l_subPath.getSuffix()), new CDefaultBeliefBase<T>() );
 

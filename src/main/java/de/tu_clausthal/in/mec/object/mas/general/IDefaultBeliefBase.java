@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -103,14 +104,31 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Set<ILiteral<T>> getLiterals(CPath... p_path)
+    public Set<ILiteral<T>> getLiterals( final CPath... p_path )
     {
+        if ( p_path == null || p_path.length == 0 )
+            this.getLiterals( CPath.EMPTY );
+
+        // step through path array and add top-level literals
         final Set<ILiteral<T>> l_literals = new HashSet<ILiteral<T>>();
-
-        l_literals.addAll( this.literals( CPath.EMPTY ) );
-
         for ( int i = 0; i < p_path.length; ++i )
-            l_literals.addAll(this.literals(p_path[i]));
+        {
+            final IBeliefBase<T> l_beliefBase = this.get( p_path[ i ] );
+            if ( l_beliefBase == null )
+                continue;
+
+            for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : l_beliefBase.getElements().values() )
+            {
+                // get top-level literals if existing
+                final Set<IBeliefBaseElement> l_elements = l_innerMap.get( ILiteral.class );
+                if ( l_elements == null )
+                    continue;
+
+                // add them to returning literal set
+                for ( final IBeliefBaseElement l_literal : l_elements )
+                    l_literals.add( (ILiteral) l_literal );
+            }
+        }
 
         return l_literals;
     }
@@ -180,7 +198,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public boolean add( final ILiteral<T> p_literal )
     {
-        return this.add(CPath.EMPTY, p_literal);
+        return this.add( CPath.EMPTY, p_literal );
     }
 
     @Override
@@ -373,33 +391,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         }
 
         return l_currentBeliefbase;
-    }
-
-
-    /**
-     * get inherited top-level literals
-     *
-     * @param p_path path to inherited beliefbase
-     * @return top-level literals
-     */
-    public Set<ILiteral<T>> literals( final CPath p_path )
-    {
-        final IBeliefBase<T> l_beliefBase = this.get( p_path );
-
-        if ( l_beliefBase == null )
-            return null;
-
-        return new HashSet<ILiteral<T>>()
-        {{
-                for ( final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap : l_beliefBase.getElements().values() )
-                {
-                    final Set<IBeliefBaseElement> l_elements = l_innerMap.get( ILiteral.class );
-
-                    if ( l_elements != null )
-                        for ( final IBeliefBaseElement l_literal : l_elements )
-                            add( (ILiteral) l_literal );
-                }
-            }};
     }
 
     @Override

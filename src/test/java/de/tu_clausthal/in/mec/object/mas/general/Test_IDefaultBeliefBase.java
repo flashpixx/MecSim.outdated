@@ -49,7 +49,7 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( new CPath( "xxx/yyy" ), new IDefaultBeliefBase<Literal>(  ){});
 
         // non existing literals should return empty set
-        assertEquals(l_beliefbase.get( new CPath( "x" ) ).literals(), Collections.EMPTY_SET );
+        assertEquals(l_beliefbase.get( new CPath( "x" ) ).getLiterals(), Collections.EMPTY_SET );
         assertEquals( l_beliefbase.get( new CPath( "xxx/yyy" ) ).literals(), Collections.EMPTY_SET );
     }
 

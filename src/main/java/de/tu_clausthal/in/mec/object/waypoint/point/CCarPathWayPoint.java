@@ -43,22 +43,22 @@ public class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGenerato
      */
     private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
+            add(CSimulation.getInstance().getWorld().<CCarLayer>getTyped("Cars"));
         }};
 
 
     /**
      * ctor
      *
-     * @param p_position position
+     * @param p_position  position
      * @param p_generator generator
-     * @param p_factory factory
+     * @param p_factory   factory
      * @param p_color
      * @param p_name
      */
-    public CCarPathWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final Color p_color, final String p_name )
+    public CCarPathWayPoint(final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final Color p_color, final String p_name)
     {
-        super( p_position, p_generator, p_factory, p_color, p_name );
+        super(p_position, p_generator, p_factory, p_color, p_name);
     }
 
     @Override

@@ -38,14 +38,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILayer, IVoidSteppable, Collection<T>
 {
     /**
-     * flag for activity
-     */
-    protected boolean m_active = true;
-    /**
      * list of data items
      */
     protected final Queue<T> m_data = new ConcurrentLinkedQueue<>();
-
+    /**
+     * flag for activity
+     */
+    protected boolean m_active = true;
 
     @Override
     public int getCalculationIndex()
@@ -60,7 +59,7 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     }
 
     @Override
-    public final void setActive( final boolean p_active )
+    public final void setActive(final boolean p_active)
     {
         m_active = p_active;
     }
@@ -68,7 +67,7 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     @Override
     public void release()
     {
-        for ( final ISteppable l_item : m_data )
+        for (final ISteppable l_item : m_data)
             l_item.release();
     }
 
@@ -85,9 +84,9 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     }
 
     @Override
-    public final boolean contains( final Object p_object )
+    public final boolean contains(final Object p_object)
     {
-        return m_data.contains( p_object );
+        return m_data.contains(p_object);
     }
 
     @Override
@@ -103,45 +102,45 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     }
 
     @Override
-    public final <S> S[] toArray( final S[] p_value )
+    public final <S> S[] toArray(final S[] p_value)
     {
-        return m_data.toArray( p_value );
+        return m_data.toArray(p_value);
     }
 
     @Override
-    public final boolean add( final T p_value )
+    public final boolean add(final T p_value)
     {
-        return m_data.add( p_value );
+        return m_data.add(p_value);
     }
 
     @Override
-    public final boolean remove( final Object p_object )
+    public final boolean remove(final Object p_object)
     {
-        return m_data.remove( p_object );
+        return m_data.remove(p_object);
     }
 
     @Override
-    public final boolean containsAll( final Collection<?> p_collection )
+    public final boolean containsAll(final Collection<?> p_collection)
     {
-        return m_data.containsAll( p_collection );
+        return m_data.containsAll(p_collection);
     }
 
     @Override
-    public final boolean addAll( final Collection<? extends T> p_collection )
+    public final boolean addAll(final Collection<? extends T> p_collection)
     {
-        return m_data.addAll( p_collection );
+        return m_data.addAll(p_collection);
     }
 
     @Override
-    public final boolean removeAll( final Collection<?> p_collection )
+    public final boolean removeAll(final Collection<?> p_collection)
     {
-        return m_data.removeAll( p_collection );
+        return m_data.removeAll(p_collection);
     }
 
     @Override
-    public final boolean retainAll( final Collection<?> p_collection )
+    public final boolean retainAll(final Collection<?> p_collection)
     {
-        return m_data.retainAll( p_collection );
+        return m_data.retainAll(p_collection);
     }
 
     @Override
@@ -151,7 +150,7 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     }
 
     @Override
-    public void step( final int p_currentstep, final ILayer p_layer )
+    public void step(final int p_currentstep, final ILayer p_layer)
     {
     }
 

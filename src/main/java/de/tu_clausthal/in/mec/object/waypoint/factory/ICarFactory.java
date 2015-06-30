@@ -33,11 +33,7 @@ import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -51,23 +47,22 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      *
      * @bug reset on simulation loading
      */
-    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
+    private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped("Cars").getGraph();
 
 
     @Override
-    public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
+    public Set<ICar> generate(final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count)
     {
-        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
+        final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells(p_waypoints);
         final Set<ICar> l_set = new HashSet<>();
 
-        for ( int i = 0; i < p_count; i++ )
+        for (int i = 0; i < p_count; i++)
             try
             {
-                l_set.add( this.getCar( l_cells ) );
-            }
-            catch ( final Exception l_exception )
+                l_set.add(this.getCar(l_cells));
+            } catch (final Exception l_exception)
             {
-                CLogger.error( l_exception );
+                CLogger.error(l_exception);
             }
         return l_set;
     }
@@ -78,14 +73,14 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      * @param p_waypoints waypoint pair list
      * @return cell list
      */
-    protected final ArrayList<Pair<EdgeIteratorState, Integer>> generateRouteCells( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints )
+    protected final ArrayList<Pair<EdgeIteratorState, Integer>> generateRouteCells(final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints)
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = new ArrayList<>();
-        for ( final Pair<GeoPosition, GeoPosition> l_point : p_waypoints )
+        for (final Pair<GeoPosition, GeoPosition> l_point : p_waypoints)
         {
-            final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( l_point.getLeft(), l_point.getRight(), 1 );
-            if ( l_route.size() > 0 )
-                l_cells.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
+            final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes(l_point.getLeft(), l_point.getRight(), 1);
+            if (l_route.size() > 0)
+                l_cells.addAll(m_graph.getRouteCells(l_route.get(0)));
         }
 
         return l_cells;
@@ -97,7 +92,7 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      * @param p_cells cell list
      * @return car object
      */
-    protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
+    protected ICar getCar(final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells)
     {
         return null;
     }

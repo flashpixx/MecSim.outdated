@@ -23,8 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import jason.asSyntax.Literal;
 
@@ -34,6 +34,7 @@ import java.util.Set;
 
 /**
  * class for agent beliefbase
+ *
  * @todo create generic call and move it to the mas/general package
  */
 public class CBeliefBase extends CDefaultBeliefBase<Literal>
@@ -51,20 +52,20 @@ public class CBeliefBase extends CDefaultBeliefBase<Literal>
      *
      * @param p_literals top level literals
      */
-    public CBeliefBase( final Set<ILiteral<Literal>> p_literals )
+    public CBeliefBase(final Set<ILiteral<Literal>> p_literals)
     {
-        super( p_literals );
+        super(p_literals);
     }
 
     /**
      * ctor - top-level literals and inherited getBeliefbases are specified
      *
      * @param p_beliefbases inherited getBeliefbases
-     * @param p_literals top level literals
+     * @param p_literals    top level literals
      */
-    public CBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals )
+    public CBeliefBase(final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals)
     {
-        super( p_beliefbases, p_literals );
+        super(p_beliefbases, p_literals);
     }
 
 }

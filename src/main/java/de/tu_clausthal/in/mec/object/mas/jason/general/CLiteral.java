@@ -32,6 +32,7 @@ import jason.asSyntax.Term;
 
 /**
  * class for literals
+ *
  * @todo move class to belief package - after moving CBeliefBase
  */
 public class CLiteral extends CDefaultLiteral<Literal>
@@ -41,24 +42,24 @@ public class CLiteral extends CDefaultLiteral<Literal>
      *
      * @param p_literal
      */
-    public CLiteral( final Literal p_literal )
+    public CLiteral(final Literal p_literal)
     {
-        this( p_literal, CPath.EMPTY );
+        this(p_literal, CPath.EMPTY);
     }
 
     /**
      * ctor with path specified
      */
-    public CLiteral( final Literal p_literal, final CPath p_path )
+    public CLiteral(final Literal p_literal, final CPath p_path)
     {
-        super( p_path.append( p_literal.getFunctor() ).toString(), p_literal );
+        super(p_path.append(p_literal.getFunctor()).toString(), p_literal);
 
-        if ( p_literal.hasTerm() )
-            for ( final Term l_term : p_literal.getTerms() )
-                m_values.add( CCommon.convertGeneric( l_term ) );
+        if (p_literal.hasTerm())
+            for (final Term l_term : p_literal.getTerms())
+                m_values.add(CCommon.convertGeneric(l_term));
 
-        if ( p_literal.hasAnnot() )
-            for ( final Term l_term : p_literal.getAnnots() )
-                m_annotations.add( CCommon.convertGeneric( l_term ) );
+        if (p_literal.hasAnnot())
+            for (final Term l_term : p_literal.getAnnots())
+                m_annotations.add(CCommon.convertGeneric(l_term));
     }
 }

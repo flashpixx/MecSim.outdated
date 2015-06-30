@@ -30,19 +30,13 @@ import org.apache.commons.collections4.MultiMap;
 import org.apache.commons.collections4.map.MultiValueMap;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
  * world layer collection
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings("serial")
 public class CWorld implements Map<String, ILayer>, Serializable
 {
     /**
@@ -56,22 +50,22 @@ public class CWorld implements Map<String, ILayer>, Serializable
      *
      * @return list of layer
      */
-    @SuppressWarnings( value = "unchecked" )
+    @SuppressWarnings(value = "unchecked")
     public final List<ILayer> getOrderedLayer()
     {
 
         final MultiMap<Integer, ILayer> l_order = new MultiValueMap<>();
-        for ( final ILayer l_layer : m_layer.values() )
-            l_order.put( l_layer.getCalculationIndex(), l_layer );
+        for (final ILayer l_layer : m_layer.values())
+            l_order.put(l_layer.getCalculationIndex(), l_layer);
 
         // get key values and sort it
         final Object[] l_sortkeys = l_order.keySet().toArray();
-        Arrays.sort( l_sortkeys );
+        Arrays.sort(l_sortkeys);
 
         // build the list of the layer
         final List<ILayer> l_list = new LinkedList<>();
-        for ( final Object l_key : l_sortkeys )
-            l_list.addAll( (Collection<ILayer>) l_order.get( l_key ) );
+        for (final Object l_key : l_sortkeys)
+            l_list.addAll((Collection<ILayer>) l_order.get(l_key));
 
         return l_list;
     }
@@ -81,14 +75,13 @@ public class CWorld implements Map<String, ILayer>, Serializable
      *
      * @param p_key key
      * @return casted value
-     *
      * @tparam T value type
      */
-    @SuppressWarnings( "unchecked" )
-    public final <T extends ILayer> T getTyped( final Object p_key )
+    @SuppressWarnings("unchecked")
+    public final <T extends ILayer> T getTyped(final Object p_key)
     {
-        final ILayer l_layer = m_layer.get( p_key );
-        CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
+        final ILayer l_layer = m_layer.get(p_key);
+        CLogger.warn(CCommon.getResourceString(this, "warning", l_layer.toString()), l_layer == null);
         return (T) l_layer;
     }
 
@@ -105,41 +98,41 @@ public class CWorld implements Map<String, ILayer>, Serializable
     }
 
     @Override
-    public final boolean containsKey( final Object p_key )
+    public final boolean containsKey(final Object p_key)
     {
-        return m_layer.containsKey( p_key );
+        return m_layer.containsKey(p_key);
     }
 
     @Override
-    public final boolean containsValue( final Object p_value )
+    public final boolean containsValue(final Object p_value)
     {
-        return m_layer.containsValue( p_value );
+        return m_layer.containsValue(p_value);
     }
 
     @Override
-    public final ILayer get( final Object p_key )
+    public final ILayer get(final Object p_key)
     {
-        final ILayer l_layer = m_layer.get( p_key );
-        CLogger.warn( CCommon.getResourceString( this, "warning", l_layer.toString() ), l_layer == null );
+        final ILayer l_layer = m_layer.get(p_key);
+        CLogger.warn(CCommon.getResourceString(this, "warning", l_layer.toString()), l_layer == null);
         return l_layer;
     }
 
     @Override
-    public final ILayer put( final String p_key, final ILayer p_value )
+    public final ILayer put(final String p_key, final ILayer p_value)
     {
-        return m_layer.put( p_key, p_value );
+        return m_layer.put(p_key, p_value);
     }
 
     @Override
-    public final ILayer remove( final Object p_key )
+    public final ILayer remove(final Object p_key)
     {
-        return m_layer.remove( p_key );
+        return m_layer.remove(p_key);
     }
 
     @Override
-    public final void putAll( final Map<? extends String, ? extends ILayer> p_value )
+    public final void putAll(final Map<? extends String, ? extends ILayer> p_value)
     {
-        m_layer.putAll( p_value );
+        m_layer.putAll(p_value);
     }
 
     @Override

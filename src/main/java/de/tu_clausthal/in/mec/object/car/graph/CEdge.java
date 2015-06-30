@@ -33,13 +33,7 @@ import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.apache.commons.math3.exception.NonMonotonicSequenceException;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -78,27 +72,27 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * map with object-2-position in forward direction
      */
-    private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
+    private final Map<N, Integer> m_objects = Collections.synchronizedMap(new HashMap<>());
 
 
     /**
      * ctor create the samples
      *
      * @param p_edgestate edge
-     * @param p_cellsize samplling size of a cell
+     * @param p_cellsize  samplling size of a cell
      */
-    public CEdge( final EdgeIteratorState p_edgestate, final int p_cellsize )
+    public CEdge(final EdgeIteratorState p_edgestate, final int p_cellsize)
     {
         m_edgeid = p_edgestate.getEdge();
         m_edgelength = p_edgestate.getDistance();
 
 
         final ArrayList<N> l_initlist = new ArrayList<>();
-        for ( int i = 0; i < (int) Math.ceil(
+        for (int i = 0; i < (int) Math.ceil(
                 m_edgelength / p_cellsize
         ); i++
                 )
-            l_initlist.add( null );
+            l_initlist.add(null);
         m_cells = (N[]) l_initlist.toArray();
         m_additionalinformation = (T[]) l_initlist.toArray();
         m_cellgeoposition = new GeoPosition[m_cells.length];
@@ -106,25 +100,24 @@ public class CEdge<N, T> implements Comparable<CEdge>
         // create a spline interpolation for cell sampling of the geoposition
         // get edge geoposition and convert data in arrays, run spline interpolation
         // catch number exceptions and calculate for each cell the geoposition
-        final PointListArray l_list = this.filterPointList( p_edgestate.fetchWayGeometry( 2 ), 0.01 );
+        final PointListArray l_list = this.filterPointList(p_edgestate.fetchWayGeometry(2), 0.01);
 
         try
         {
 
             final UnivariateInterpolator l_interpolator = l_list.size() < 3 ? new LinearInterpolator() : new SplineInterpolator();
-            final UnivariateFunction l_function = l_interpolator.interpolate( l_list.getX(), l_list.getY() );
-            final double l_increment = ( l_list.getX( l_list.size() - 1 ) - l_list.getX( 0 ) ) / m_cells.length;
-            for ( int i = 0; i < m_cells.length; i++ )
-                m_cellgeoposition[i] = new GeoPosition( l_list.getX( 0 ) + i * l_increment, l_function.value( l_list.getX( 0 ) + i * l_increment ) );
+            final UnivariateFunction l_function = l_interpolator.interpolate(l_list.getX(), l_list.getY());
+            final double l_increment = (l_list.getX(l_list.size() - 1) - l_list.getX(0)) / m_cells.length;
+            for (int i = 0; i < m_cells.length; i++)
+                m_cellgeoposition[i] = new GeoPosition(l_list.getX(0) + i * l_increment, l_function.value(l_list.getX(0) + i * l_increment));
 
-        }
-        catch ( final NonMonotonicSequenceException l_exception )
+        } catch (final NonMonotonicSequenceException l_exception)
         {
 
-            final double l_xincrement = ( l_list.getX( l_list.size() - 1 ) - l_list.getX( 0 ) ) / m_cells.length;
-            final double l_yincrement = ( l_list.getY( l_list.size() - 1 ) - l_list.getY( 0 ) ) / m_cells.length;
-            for ( int i = 0; i < m_cells.length; i++ )
-                m_cellgeoposition[i] = new GeoPosition( l_list.getX( 0 ) + i * l_xincrement, l_list.getY( 0 ) + i * l_yincrement );
+            final double l_xincrement = (l_list.getX(l_list.size() - 1) - l_list.getX(0)) / m_cells.length;
+            final double l_yincrement = (l_list.getY(l_list.size() - 1) - l_list.getY(0)) / m_cells.length;
+            for (int i = 0; i < m_cells.length; i++)
+                m_cellgeoposition[i] = new GeoPosition(l_list.getX(0) + i * l_xincrement, l_list.getY(0) + i * l_yincrement);
         }
     }
 
@@ -133,9 +126,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_listener listener collection
      */
-    public final void addListener( final Collection<IAction<N, T>> p_listener )
+    public final void addListener(final Collection<IAction<N, T>> p_listener)
     {
-        m_listener.addAll( p_listener );
+        m_listener.addAll(p_listener);
     }
 
     /**
@@ -143,9 +136,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_listener listener
      */
-    public final void addListener( final IAction<N, T> p_listener )
+    public final void addListener(final IAction<N, T> p_listener)
     {
-        m_listener.add( p_listener );
+        m_listener.add(p_listener);
     }
 
     /**
@@ -154,19 +147,19 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final void clear()
     {
         m_objects.clear();
-        synchronized ( m_cells )
+        synchronized (m_cells)
         {
-            for ( int i = 0; i < m_cells.length; i++ )
+            for (int i = 0; i < m_cells.length; i++)
                 m_cells[i] = null;
         }
     }
 
     @Override
-    public final int compareTo( final CEdge p_edgelink )
+    public final int compareTo(final CEdge p_edgelink)
     {
-        if ( m_edgeid > p_edgelink.m_edgeid )
+        if (m_edgeid > p_edgelink.m_edgeid)
             return 1;
-        if ( m_edgeid < p_edgelink.m_edgeid )
+        if (m_edgeid < p_edgelink.m_edgeid)
             return -1;
 
         return 0;
@@ -179,42 +172,42 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @return contains boolean
      */
 
-    public final boolean contains( final N p_object )
+    public final boolean contains(final N p_object)
     {
-        return m_objects.containsKey( p_object );
+        return m_objects.containsKey(p_object);
     }
 
     /**
      * filter point list to create a list of points which stores monoton increase points
      *
-     * @param p_input input point list
+     * @param p_input   input point list
      * @param p_epsilon epsilon value of the monotonic increase
      * @return point list array
      */
-    private final PointListArray filterPointList( final PointList p_input, final double p_epsilon )
+    private final PointListArray filterPointList(final PointList p_input, final double p_epsilon)
     {
         final ArrayList<Double> l_x = new ArrayList<>();
         final ArrayList<Double> l_y = new ArrayList<>();
 
-        l_x.add( p_input.getLatitude( 0 ) );
-        l_y.add( p_input.getLongitude( 0 ) );
+        l_x.add(p_input.getLatitude(0));
+        l_y.add(p_input.getLongitude(0));
 
         // convert point list to arrays and beware static increase
-        for ( int i = 1; i < p_input.size() - 1; i++ )
-            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs(
+        for (int i = 1; i < p_input.size() - 1; i++)
+            if ((Math.abs(l_x.get(l_x.size() - 1) - p_input.getLatitude(i)) >= p_epsilon) && (Math.abs(
                     l_y.get(
                             l_y.size() - 1
-                    ) - p_input.getLongitude( i )
-            ) >= p_epsilon ) )
+                    ) - p_input.getLongitude(i)
+            ) >= p_epsilon))
             {
-                l_x.add( p_input.getLatitude( i ) );
-                l_y.add( p_input.getLongitude( i ) );
+                l_x.add(p_input.getLatitude(i));
+                l_y.add(p_input.getLongitude(i));
             }
 
-        l_x.add( p_input.getLatitude( p_input.size() - 1 ) );
-        l_y.add( p_input.getLongitude( p_input.size() - 1 ) );
+        l_x.add(p_input.getLatitude(p_input.size() - 1));
+        l_y.add(p_input.getLongitude(p_input.size() - 1));
 
-        return new PointListArray( l_x, l_y );
+        return new PointListArray(l_x, l_y);
     }
 
     /**
@@ -222,7 +215,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @return data element
      */
-    public final T getAdditionalInformation( final int p_position )
+    public final T getAdditionalInformation(final int p_position)
     {
         return m_additionalinformation[p_position];
     }
@@ -261,7 +254,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_index index of the cell (if index is less than 0, the position is defined from the back)
      * @return geoposition at the index
      */
-    public final GeoPosition getGeoPositions( final int p_index )
+    public final GeoPosition getGeoPositions(final int p_index)
     {
         return p_index < 0 ? m_cellgeoposition[m_cellgeoposition.length + p_index] : m_cellgeoposition[p_index];
     }
@@ -272,10 +265,10 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_object object
      * @return geoposition or null
      */
-    public final GeoPosition getGeoposition( final N p_object )
+    public final GeoPosition getGeoposition(final N p_object)
     {
-        final Integer l_position = m_objects.get( p_object );
-        if ( l_position == null )
+        final Integer l_position = m_objects.get(p_object);
+        if (l_position == null)
             return null;
 
         return m_cellgeoposition[l_position.intValue()];
@@ -297,7 +290,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_position position index
      * @return object or null
      */
-    public final N getObject( final int p_position )
+    public final N getObject(final int p_position)
     {
         return m_cells[p_position];
     }
@@ -308,9 +301,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_object object
      * @return position
      */
-    public final Integer getPosition( final N p_object )
+    public final Integer getPosition(final N p_object)
     {
-        return m_objects.get( p_object );
+        return m_objects.get(p_object);
     }
 
     @Override
@@ -320,9 +313,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     @Override
-    public final boolean equals( final Object p_object )
+    public final boolean equals(final Object p_object)
     {
-        if ( p_object instanceof CEdge )
+        if (p_object instanceof CEdge)
             return this.hashCode() == p_object.hashCode();
 
         return false;
@@ -344,7 +337,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_position position index
      * @return empty for empty
      */
-    public final boolean isEmpty( final int p_position )
+    public final boolean isEmpty(final int p_position)
     {
         return m_cells[p_position] == null;
     }
@@ -355,9 +348,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_listener listener
      * @return remove bool flag
      */
-    public final boolean removeListener( final IAction<N, T> p_listener )
+    public final boolean removeListener(final IAction<N, T> p_listener)
     {
-        return m_listener.remove( p_listener );
+        return m_listener.remove(p_listener);
     }
 
     /**
@@ -366,9 +359,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * @param p_listener listener collection
      * @return remove bool flag
      */
-    public final boolean removeListener( final Collection<IAction<N, T>> p_listener )
+    public final boolean removeListener(final Collection<IAction<N, T>> p_listener)
     {
-        return m_listener.removeAll( p_listener );
+        return m_listener.removeAll(p_listener);
     }
 
     /**
@@ -376,14 +369,14 @@ public class CEdge<N, T> implements Comparable<CEdge>
      *
      * @param p_object object
      */
-    public final void removeObject( final N p_object )
+    public final void removeObject(final N p_object)
     {
-        if ( !m_objects.containsKey( p_object ) )
+        if (!m_objects.containsKey(p_object))
             return;
 
-        synchronized ( m_cells )
+        synchronized (m_cells)
         {
-            m_cells[m_objects.remove( p_object )] = null;
+            m_cells[m_objects.remove(p_object)] = null;
         }
     }
 
@@ -391,9 +384,9 @@ public class CEdge<N, T> implements Comparable<CEdge>
      * sets an element into the additional array
      *
      * @param p_position position
-     * @param p_object object
+     * @param p_object   object
      */
-    public final void setAdditionalInformation( final int p_position, final T p_object )
+    public final void setAdditionalInformation(final int p_position, final T p_object)
     {
         m_additionalinformation[p_position] = p_object;
     }
@@ -401,28 +394,28 @@ public class CEdge<N, T> implements Comparable<CEdge>
     /**
      * sets an object on the edge position
      *
-     * @param p_object object
+     * @param p_object   object
      * @param p_position position index
      * @throws IllegalAccessException throws exception on emptyness
      */
-    public final void setObject( final N p_object, final int p_position ) throws IllegalAccessException
+    public final void setObject(final N p_object, final int p_position) throws IllegalAccessException
     {
-        if ( !this.isEmpty( p_position ) )
-            throw new IllegalAccessException( CCommon.getResourceString( this, "emptyposition" ) );
+        if (!this.isEmpty(p_position))
+            throw new IllegalAccessException(CCommon.getResourceString(this, "emptyposition"));
 
         // if the object exists on the edge, it will be moved
-        synchronized ( m_cells )
+        synchronized (m_cells)
         {
-            if ( m_objects.containsKey( p_object ) )
-                m_cells[m_objects.get( p_object )] = null;
+            if (m_objects.containsKey(p_object))
+                m_cells[m_objects.get(p_object)] = null;
 
             m_cells[p_position] = p_object;
         }
-        m_objects.put( p_object, p_position );
+        m_objects.put(p_object, p_position);
 
         // call listener
-        for ( final IAction l_action : m_listener )
-            l_action.actionPerformed( this, p_position, p_object );
+        for (final IAction l_action : m_listener)
+            l_action.actionPerformed(this, p_position, p_object);
     }
 
     /**
@@ -447,18 +440,18 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * @param p_xpoints list with x values
          * @param p_ypoints list with y values
          */
-        public PointListArray( final ArrayList<Double> p_xpoints, final ArrayList<Double> p_ypoints ) throws IllegalArgumentException
+        public PointListArray(final ArrayList<Double> p_xpoints, final ArrayList<Double> p_ypoints) throws IllegalArgumentException
         {
 
-            if ( ( p_xpoints.size() != p_ypoints.size() ) || ( p_xpoints.size() < 2 ) )
-                throw new IllegalArgumentException( CCommon.getResourceString( this, "pointerror" ) );
+            if ((p_xpoints.size() != p_ypoints.size()) || (p_xpoints.size() < 2))
+                throw new IllegalArgumentException(CCommon.getResourceString(this, "pointerror"));
 
             m_xpoints = new double[p_xpoints.size()];
             m_ypoints = new double[p_ypoints.size()];
-            for ( int i = 0; i < p_xpoints.size(); i++ )
+            for (int i = 0; i < p_xpoints.size(); i++)
             {
-                m_xpoints[i] = p_xpoints.get( i );
-                m_ypoints[i] = p_ypoints.get( i );
+                m_xpoints[i] = p_xpoints.get(i);
+                m_ypoints[i] = p_ypoints.get(i);
             }
         }
 
@@ -480,7 +473,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * @param p_index index of the value
          * @return value
          */
-        public final double getX( final int p_index )
+        public final double getX(final int p_index)
         {
             return m_xpoints[p_index];
         }
@@ -503,7 +496,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * @param p_index index of the value
          * @return value
          */
-        public final double getY( final int p_index )
+        public final double getY(final int p_index)
         {
             return m_ypoints[p_index];
         }

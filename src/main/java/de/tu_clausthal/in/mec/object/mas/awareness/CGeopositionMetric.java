@@ -45,14 +45,14 @@ public class CGeopositionMetric implements IMetric<GeoPosition>
 
 
     @Override
-    public double getDistance( final ISensor<GeoPosition> p_sensor, final IPercept<GeoPosition> p_perceptable )
+    public double getDistance(final ISensor<GeoPosition> p_sensor, final IPercept<GeoPosition> p_perceptable)
     {
-        final double l_alpha = Math.pow( Math.sin( ( p_sensor.getPosition().getLatitude() - p_perceptable.getPosition().getLatitude() ) * c_radiant / 2 ), 2 ) +
-                               Math.pow(
-                                       Math.sin( ( p_sensor.getPosition().getLongitude() - p_perceptable.getPosition().getLongitude() ) * c_radiant / 2 ), 2
-                               ) *
-                               Math.cos( p_sensor.getPosition().getLatitude() ) * Math.cos( p_perceptable.getPosition().getLatitude() );
+        final double l_alpha = Math.pow(Math.sin((p_sensor.getPosition().getLatitude() - p_perceptable.getPosition().getLatitude()) * c_radiant / 2), 2) +
+                Math.pow(
+                        Math.sin((p_sensor.getPosition().getLongitude() - p_perceptable.getPosition().getLongitude()) * c_radiant / 2), 2
+                ) *
+                        Math.cos(p_sensor.getPosition().getLatitude()) * Math.cos(p_perceptable.getPosition().getLatitude());
 
-        return 1000 * c_earthradius * 2 * Math.atan2( Math.sqrt( l_alpha ), Math.sqrt( l_alpha ) );
+        return 1000 * c_earthradius * 2 * Math.atan2(Math.sqrt(l_alpha), Math.sqrt(l_alpha));
     }
 }

@@ -34,10 +34,10 @@ public interface IMetric<T>
     /**
      * returns the distance between sensor and perceptable object
      *
-     * @param p_sensor sensor
+     * @param p_sensor      sensor
      * @param p_perceptable perceptable
      * @return distance value
      */
-    double getDistance( final ISensor<T> p_sensor, final IPercept<T> p_perceptable );
+    double getDistance(final ISensor<T> p_sensor, final IPercept<T> p_perceptable);
 
 }

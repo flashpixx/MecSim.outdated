@@ -31,7 +31,7 @@ import java.io.Serializable;
 /**
  * distribution interface to define the amount of objects that should be generated
  */
-@SuppressWarnings( "serial" )
+@SuppressWarnings("serial")
 public interface IGenerator extends IInspector, Serializable
 {
 
@@ -41,6 +41,6 @@ public interface IGenerator extends IInspector, Serializable
      * @param p_currentStep current step
      * @return number of objects
      */
-    int getCount( final int p_currentStep );
+    int getCount(final int p_currentStep);
 
 }

@@ -44,7 +44,7 @@ public interface ISensor<T>
      * @param p_percept perceptable object
      * @return boolean
      */
-    boolean isPerceptable( final IPercept<T> p_percept );
+    boolean isPerceptable(final IPercept<T> p_percept);
 
 
     /**
@@ -52,6 +52,6 @@ public interface ISensor<T>
      *
      * @param p_percept perception
      */
-    void receive( final IPercept<T> p_percept );
+    void receive(final IPercept<T> p_percept);
 
 }

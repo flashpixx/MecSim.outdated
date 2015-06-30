@@ -62,13 +62,13 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
     public CDatabase()
     {
         m_active = m_connectable;
-        if ( !m_connectable )
+        if (!m_connectable)
             return;
 
-        m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
-        m_datasource.setUrl( CConfiguration.getInstance().get().<String>get( "database/url" ) );
-        m_datasource.setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
-        m_datasource.setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
+        m_datasource.setDriverClassName(CConfiguration.getInstance().get().<String>get("database/driver"));
+        m_datasource.setUrl(CConfiguration.getInstance().get().<String>get("database/url"));
+        m_datasource.setUsername(CConfiguration.getInstance().get().<String>get("database/username"));
+        m_datasource.setPassword(CConfiguration.getInstance().get().<String>get("database/password"));
 
         this.createTableIfNotExists(
                 "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)",
@@ -83,9 +83,9 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
      */
     private static boolean isConnectable()
     {
-        final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
-        final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
-        if ( ( l_driver == null ) || ( !l_driver.isEmpty() ) || ( l_url != null ) || ( !l_url.isEmpty() ) )
+        final String l_driver = CConfiguration.getInstance().get().<String>get("database/driver");
+        final String l_url = CConfiguration.getInstance().get().<String>get("database/url");
+        if ((l_driver == null) || (!l_driver.isEmpty()) || (l_url != null) || (!l_url.isEmpty()))
             return false;
 
         return CConfiguration.getInstance().get().<Boolean>get(
@@ -96,33 +96,32 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
     /**
      * creates the table structure
      *
-     * @param p_tablename table name without prefix (will append automatically)
-     * @param p_createsql create sql without "create >tablename<"
+     * @param p_tablename  table name without prefix (will append automatically)
+     * @param p_createsql  create sql without "create >tablename<"
      * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
      * @todo check database independence
      */
-    private void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
+    private void createTableIfNotExists(final String p_tablename, final String p_createsql, final String[] p_altertable)
     {
         final String l_table = CConfiguration.getInstance().get().<String>get(
                 "database/tableprefix"
-        ) == null ? p_tablename : CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) + p_tablename;
+        ) == null ? p_tablename : CConfiguration.getInstance().get().<String>get("database/tableprefix") + p_tablename;
 
         try (
                 final Connection l_connect = m_datasource.getConnection()
         )
         {
-            final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );
-            if ( !l_result.next() )
+            final ResultSet l_result = l_connect.getMetaData().getTables(null, null, l_table, new String[]{"TABLE"});
+            if (!l_result.next())
             {
-                l_connect.createStatement().execute( "create table " + l_table + " " + p_createsql );
-                for ( final String l_item : p_altertable )
-                    l_connect.createStatement().execute( "alter table " + l_table + " " + l_item );
+                l_connect.createStatement().execute("create table " + l_table + " " + p_createsql);
+                for (final String l_item : p_altertable)
+                    l_connect.createStatement().execute("alter table " + l_table + " " + l_item);
             }
             l_result.close();
-        }
-        catch ( final Exception l_exception )
+        } catch (final Exception l_exception)
         {
-            CLogger.error( l_exception );
+            CLogger.error(l_exception);
         }
     }
 
@@ -135,7 +134,7 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
     @Override
     public final String toString()
     {
-        return CCommon.getResourceString( this, "name" );
+        return CCommon.getResourceString(this, "name");
     }
 
     /**
@@ -150,7 +149,7 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
         }
 
         @Override
-        public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+        public final void step(final int p_currentstep, final ILayer p_layer) throws Exception
         {
         }
     }

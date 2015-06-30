@@ -32,11 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -50,7 +46,7 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( IRandomWayPoint.super.inspect() );
+            putAll(IRandomWayPoint.super.inspect());
         }};
     /**
      * radius around the waypoint *
@@ -65,20 +61,20 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     /**
      * ctor
      *
-     * @param p_position geoposition of the waypoint
+     * @param p_position  geoposition of the waypoint
      * @param p_generator generator
-     * @param p_factory factory
-     * @param p_radius radius around the waypoint
-     * @param p_color color
-     * @param p_name name
+     * @param p_factory   factory
+     * @param p_radius    radius around the waypoint
+     * @param p_color     color
+     * @param p_name      name
      */
-    public IRandomWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius, final Color p_color,
-            final String p_name
+    public IRandomWayPoint(final GeoPosition p_position, final N p_generator, final P p_factory, final double p_radius, final Color p_color,
+                           final String p_name
     )
     {
-        super( p_position, p_generator, p_factory, p_color, p_name );
+        super(p_position, p_generator, p_factory, p_color, p_name);
         m_radius = p_radius;
-        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_radius );
+        m_inspect.put(CCommon.getResourceString(IRandomWayPoint.class, "radius"), m_radius);
     }
 
     @Override

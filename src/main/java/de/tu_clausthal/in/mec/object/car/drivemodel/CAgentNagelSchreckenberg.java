@@ -38,16 +38,16 @@ public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
 {
 
     @Override
-    public final void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
+    public final void update(final int p_currentstep, final CCarLayer p_layer, final ICar p_car)
     {
         // if car is an agent-car the agent gets full control over the car - we check only the precessor to avoid collisions
-        if ( p_car instanceof CCarJasonAgent )
+        if (p_car instanceof CCarJasonAgent)
         {
-            this.checkCollision( p_layer, p_car );
+            this.checkCollision(p_layer, p_car);
             return;
         }
 
         // otherwise call super method
-        super.update( p_currentstep, p_layer, p_car );
+        super.update(p_currentstep, p_layer, p_car);
     }
 }

@@ -55,10 +55,10 @@ public class CZoneTable<T, S>
      *
      * @param p_validate validation object
      */
-    public CZoneTable( final CValidation<T, S> p_validate )
+    public CZoneTable(final CValidation<T, S> p_validate)
     {
-        if ( p_validate == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "validation" ) );
+        if (p_validate == null)
+            throw new IllegalArgumentException(CCommon.getResourceString(this, "validation"));
 
         m_validation = p_validate;
     }
@@ -76,12 +76,12 @@ public class CZoneTable<T, S>
      *
      * @param p_data data values
      */
-    public final void count( final T p_data )
+    public final void count(final T p_data)
     {
-        for ( final Pair<S, Integer> l_item : m_zones.values() )
-            if ( m_validation.validate( p_data, l_item.getLeft() ) )
+        for (final Pair<S, Integer> l_item : m_zones.values())
+            if (m_validation.validate(p_data, l_item.getLeft()))
             {
-                l_item.getRight().valueOf( l_item.getRight().intValue() + 1 );
+                l_item.getRight().valueOf(l_item.getRight().intValue() + 1);
                 return;
             }
     }
@@ -94,8 +94,8 @@ public class CZoneTable<T, S>
     public final Map<String, Integer> getTable()
     {
         final Map<String, Integer> l_table = new HashMap<>();
-        for ( final Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet() )
-            l_table.put( l_item.getKey(), l_item.getValue().getRight() );
+        for (final Map.Entry<String, Pair<S, Integer>> l_item : m_zones.entrySet())
+            l_table.put(l_item.getKey(), l_item.getValue().getRight());
         return l_table;
     }
 
@@ -103,11 +103,11 @@ public class CZoneTable<T, S>
      * adds a new zone with the elements
      *
      * @param p_zonename unique zone name
-     * @param p_data zone dat
+     * @param p_data     zone dat
      */
-    public final void put( final String p_zonename, final S p_data )
+    public final void put(final String p_zonename, final S p_data)
     {
-        m_zones.put( p_zonename, new ImmutablePair<S, Integer>( p_data, new Integer( 0 ) ) );
+        m_zones.put(p_zonename, new ImmutablePair<S, Integer>(p_data, new Integer(0)));
     }
 
     /**
@@ -115,9 +115,9 @@ public class CZoneTable<T, S>
      *
      * @param p_zonename zone name
      */
-    public final void remove( final String p_zonename )
+    public final void remove(final String p_zonename)
     {
-        m_zones.remove( p_zonename );
+        m_zones.remove(p_zonename);
     }
 
     /**
@@ -125,8 +125,8 @@ public class CZoneTable<T, S>
      */
     public final void reset()
     {
-        for ( final Pair<S, Integer> l_item : m_zones.values() )
-            l_item.getRight().valueOf( 0 );
+        for (final Pair<S, Integer> l_item : m_zones.values())
+            l_item.getRight().valueOf(0);
     }
 
 
@@ -136,7 +136,7 @@ public class CZoneTable<T, S>
     public interface CValidation<V, W>
     {
 
-        boolean validate( V p_zone, W p_input );
+        boolean validate(V p_zone, W p_input);
 
     }
 

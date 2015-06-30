@@ -51,10 +51,10 @@ public class CMessage implements IMessage<Message>
      *
      * @param p_message Jason message
      */
-    public CMessage( final Message p_message )
+    public CMessage(final Message p_message)
     {
-        if ( p_message == null )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "notnull" ) );
+        if (p_message == null)
+            throw new IllegalArgumentException(CCommon.getResourceString(this, "notnull"));
 
         m_data = p_message;
     }
@@ -68,7 +68,7 @@ public class CMessage implements IMessage<Message>
     @Override
     public final CPath getSource()
     {
-        return new CPath( m_data.getSender() );
+        return new CPath(m_data.getSender());
     }
 
     @Override

@@ -45,10 +45,10 @@ public abstract class IDefaultMetric<T> implements IMetric<T>
      *
      * @param p_paths for reading agent value
      */
-    public IDefaultMetric( final CPath... p_paths )
+    public IDefaultMetric(final CPath... p_paths)
     {
         if (p_paths != null)
-            m_paths.addAll( Arrays.asList( p_paths ) );
+            m_paths.addAll(Arrays.asList(p_paths));
     }
 
     /**
@@ -56,12 +56,12 @@ public abstract class IDefaultMetric<T> implements IMetric<T>
      *
      * @param p_metric default metric
      */
-    public IDefaultMetric( final IDefaultMetric<T> p_metric )
+    public IDefaultMetric(final IDefaultMetric<T> p_metric)
     {
-        m_paths.addAll( p_metric.m_paths );
+        m_paths.addAll(p_metric.m_paths);
     }
 
     @Override
-    public abstract double calculate( final T p_first, final T p_second );
+    public abstract double calculate(final T p_first, final T p_second);
 
 }

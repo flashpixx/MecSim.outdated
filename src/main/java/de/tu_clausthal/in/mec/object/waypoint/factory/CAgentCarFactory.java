@@ -60,51 +60,51 @@ public class CAgentCarFactory extends CDefaultCarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CAgentCarFactory.super.inspect() );
+            putAll(CAgentCarFactory.super.inspect());
         }};
 
 
     /**
      * ctor
      *
-     * @param p_speedfactor [0,1] initial speed factor of max speed
-     * @param p_maxspeed distribution of max-speed
-     * @param p_acceleration distribution of acceleration
-     * @param p_deceleration distribution of deceleration
+     * @param p_speedfactor        [0,1] initial speed factor of max speed
+     * @param p_maxspeed           distribution of max-speed
+     * @param p_acceleration       distribution of acceleration
+     * @param p_deceleration       distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
-     * @param p_agent agent name
-     * @param p_agenttype agent type definition
+     * @param p_agent              agent name
+     * @param p_agenttype          agent type definition
      */
-    public CAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
-            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
-            final String p_agent, final EAgentLanguages p_agenttype
+    public CAgentCarFactory(final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
+                            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
+                            final String p_agent, final EAgentLanguages p_agenttype
     )
     {
-        super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
+        super(p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution);
 
-        if ( ( p_agent == null ) || ( p_agent.isEmpty() ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "agentnotnull" ) );
+        if ((p_agent == null) || (p_agent.isEmpty()))
+            throw new IllegalArgumentException(CCommon.getResourceString(this, "agentnotnull"));
         m_agent = p_agent;
         m_agenttype = p_agenttype;
-        m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagent" ), m_agent );
-        m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagenttype" ), m_agenttype );
+        m_inspect.put(CCommon.getResourceString(CAgentCarFactory.class, "factoryagent"), m_agent);
+        m_inspect.put(CCommon.getResourceString(CAgentCarFactory.class, "factoryagenttype"), m_agenttype);
     }
 
 
     @Override
-    protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
+    protected ICar getCar(final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells)
     {
         try
         {
             final int l_maxspeed = (int) m_maxspeed.sample();
 
-            switch ( m_agenttype )
+            switch (m_agenttype)
             {
                 case Jason:
 
                     return new de.tu_clausthal.in.mec.object.car.CCarJasonAgent(
                             p_cells,
-                            (int) ( l_maxspeed * m_speedfactor ),
+                            (int) (l_maxspeed * m_speedfactor),
                             l_maxspeed,
                             (int) m_acceleration.sample(),
                             (int) m_deceleration.sample(),
@@ -115,10 +115,9 @@ public class CAgentCarFactory extends CDefaultCarFactory
 
                 default:
             }
-        }
-        catch ( final Exception l_exception )
+        } catch (final Exception l_exception)
         {
-            CLogger.error( l_exception );
+            CLogger.error(l_exception);
         }
         return null;
     }
@@ -133,11 +132,11 @@ public class CAgentCarFactory extends CDefaultCarFactory
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws java.io.IOException throws exception on reading
+     * @throws java.io.IOException    throws exception on reading
      * @throws ClassNotFoundException throws on deserialization
      * @bug not working
      */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    private void readObject(final ObjectInputStream p_stream) throws IOException, ClassNotFoundException
     {
         /*
         p_stream.defaultReadObject();
@@ -175,11 +174,11 @@ public class CAgentCarFactory extends CDefaultCarFactory
      * @throws IOException throws the exception on loading data
      * @bug incomplete
      */
-    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
+    private void writeObject(final ObjectOutputStream p_stream) throws IOException
     {
         p_stream.defaultWriteObject();
 
         // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_agent ).toString() ) ) ) );
+        p_stream.writeObject(new String(Files.readAllBytes(Paths.get(IEnvironment.getAgentFile(m_agent).toString()))));
     }
 }

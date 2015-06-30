@@ -52,17 +52,17 @@ public class CBeliefRemove extends DefaultInternalAction
     }
 
     @Override
-    public Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
+    public Object execute(final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args) throws Exception
     {
-        if ( !p_args[0].isLiteral() )
+        if (!p_args[0].isLiteral())
             return false;
 
-        for ( final Iterator<Literal> l_iterator = p_transitionsystem.getAg().getBB().getCandidateBeliefs( (Literal) p_args[0], p_unifier );
-              l_iterator.hasNext(); )
+        for (final Iterator<Literal> l_iterator = p_transitionsystem.getAg().getBB().getCandidateBeliefs((Literal) p_args[0], p_unifier);
+             l_iterator.hasNext(); )
         {
             final Literal l_literal = l_iterator.next();
-            if ( !l_literal.isRule() )
-                p_transitionsystem.getAg().delBel( l_literal );
+            if (!l_literal.isRule())
+                p_transitionsystem.getAg().delBel(l_literal);
         }
 
         return true;

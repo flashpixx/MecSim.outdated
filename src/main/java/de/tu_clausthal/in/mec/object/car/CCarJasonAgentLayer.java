@@ -25,15 +25,10 @@ package de.tu_clausthal.in.mec.object.car;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
-import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
-import de.tu_clausthal.in.mec.object.world.CWorld;
-import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 
 /**
@@ -43,34 +38,34 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
     private final CInconsistencyLayer m_inconsistencyLayer;
 
-    public CCarJasonAgentLayer( final CInconsistencyLayer p_inconsistencyLayer )
+    public CCarJasonAgentLayer(final CInconsistencyLayer p_inconsistencyLayer)
     {
         m_inconsistencyLayer = p_inconsistencyLayer;
     }
 
     @Override
-    public boolean add( final CAgent<CDefaultCar> p_value )
+    public boolean add(final CAgent<CDefaultCar> p_value)
     {
-        return super.add( p_value ) &&
-               m_inconsistencyLayer.add( p_value );
+        return super.add(p_value) &&
+                m_inconsistencyLayer.add(p_value);
     }
 
     @Override
-    public boolean remove( final Object p_object )
+    public boolean remove(final Object p_object)
     {
-        return super.remove( p_object ) &&
-               m_inconsistencyLayer.remove( (IAgent) p_object );
+        return super.remove(p_object) &&
+                m_inconsistencyLayer.remove((IAgent) p_object);
     }
 
     @Override
-    public final void afterStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
+    public final void afterStepObject(final int p_currentstep, final CAgent<CDefaultCar> p_object
     )
     {
 
     }
 
     @Override
-    public final void beforeStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
+    public final void beforeStepObject(final int p_currentstep, final CAgent<CDefaultCar> p_object
     )
     {
 
@@ -85,6 +80,6 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     @Override
     public final String toString()
     {
-        return CCommon.getResourceString( this, "name" );
+        return CCommon.getResourceString(this, "name");
     }
 }

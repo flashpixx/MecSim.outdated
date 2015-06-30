@@ -35,10 +35,6 @@ import com.graphhopper.util.EdgeIteratorState;
 public class CSpeedUp implements IWeighting
 {
     /**
-     * active flag *
-     */
-    private boolean m_active = false;
-    /**
      * flag encoder for edge data
      */
     private final FlagEncoder m_encoder;
@@ -46,6 +42,10 @@ public class CSpeedUp implements IWeighting
      * max speed value *
      */
     private final double m_maxSpeed;
+    /**
+     * active flag *
+     */
+    private boolean m_active = false;
 
 
     /**
@@ -53,23 +53,23 @@ public class CSpeedUp implements IWeighting
      *
      * @param p_encoder encoder
      */
-    public CSpeedUp( final FlagEncoder p_encoder )
+    public CSpeedUp(final FlagEncoder p_encoder)
     {
         this.m_encoder = p_encoder;
         this.m_maxSpeed = p_encoder.getMaxSpeed();
     }
 
     @Override
-    public final double getMinWeight( final double p_weight )
+    public final double getMinWeight(final double p_weight)
     {
         return p_weight / m_maxSpeed;
     }
 
     @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight(final EdgeIteratorState p_edge, final boolean p_reverse)
     {
-        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
-        if ( l_speed == 0 )
+        final double l_speed = p_reverse ? m_encoder.getReverseSpeed(p_edge.getFlags()) : m_encoder.getSpeed(p_edge.getFlags());
+        if (l_speed == 0)
             return Double.POSITIVE_INFINITY;
         return p_edge.getDistance() / l_speed;
     }
@@ -81,7 +81,7 @@ public class CSpeedUp implements IWeighting
     }
 
     @Override
-    public final void setActive( final boolean p_value )
+    public final void setActive(final boolean p_value)
     {
         m_active = p_value;
     }

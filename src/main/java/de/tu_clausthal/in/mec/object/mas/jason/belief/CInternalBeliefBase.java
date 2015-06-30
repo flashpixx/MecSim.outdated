@@ -49,9 +49,9 @@ public class CInternalBeliefBase extends CBeliefBase
      *
      * @param p_agent
      */
-    public CInternalBeliefBase( final Agent p_agent )
+    public CInternalBeliefBase(final Agent p_agent)
     {
-        super( CCommon.convertGeneric( p_agent.getInitialBels() ) );
+        super(CCommon.convertGeneric(p_agent.getInitialBels()));
         m_agent = p_agent;
     }
 
@@ -64,6 +64,6 @@ public class CInternalBeliefBase extends CBeliefBase
         this.clear();
 
         // push agent beliefs into set of top-level literals
-        addAll( CPath.EMPTY, CCommon.convertGeneric( m_agent.getBB() ) );
+        addAll(CPath.EMPTY, CCommon.convertGeneric(m_agent.getBB()));
     }
 }

@@ -49,13 +49,6 @@ public class CDefaultCarFactory extends ICarFactory
      */
     protected final AbstractRealDistribution m_deceleration;
     /**
-     * inspector map
-     */
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            putAll( CDefaultCarFactory.super.inspect() );
-        }};
-    /**
      * max-speed distribution *
      */
     protected final AbstractRealDistribution m_lingerdistribution;
@@ -67,25 +60,32 @@ public class CDefaultCarFactory extends ICarFactory
      * speed distribution
      */
     protected final Double m_speedfactor;
+    /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll(CDefaultCarFactory.super.inspect());
+        }};
 
 
     /**
      * ctor
      *
-     * @param p_speedfactor [0,1] initial speed factor of max speed
-     * @param p_maxspeed distribution of max-speed
-     * @param p_acceleration distribution of acceleration
-     * @param p_deceleration distribution of deceleration
+     * @param p_speedfactor        [0,1] initial speed factor of max speed
+     * @param p_maxspeed           distribution of max-speed
+     * @param p_acceleration       distribution of acceleration
+     * @param p_deceleration       distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
      */
-    public CDefaultCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
-            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution
+    public CDefaultCarFactory(final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
+                              final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution
     )
     {
         super();
 
-        if ( ( p_speedfactor <= 0 ) || ( p_speedfactor > 1 ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "speedfactorrange", p_speedfactor ) );
+        if ((p_speedfactor <= 0) || (p_speedfactor > 1))
+            throw new IllegalArgumentException(CCommon.getResourceString(this, "speedfactorrange", p_speedfactor));
 
         m_speedfactor = p_speedfactor;
         m_maxspeed = p_maxspeed;
@@ -93,31 +93,30 @@ public class CDefaultCarFactory extends ICarFactory
         m_deceleration = p_deceleration;
         m_lingerdistribution = p_lingerdistribution;
 
-        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "speed" ), m_speedfactor );
-        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "maxspeed" ), m_maxspeed );
-        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "acceleration" ), m_acceleration );
-        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "deceleration" ), m_deceleration );
-        m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "linger" ), m_lingerdistribution );
+        m_inspect.put(CCommon.getResourceString(CDefaultCarFactory.class, "speed"), m_speedfactor);
+        m_inspect.put(CCommon.getResourceString(CDefaultCarFactory.class, "maxspeed"), m_maxspeed);
+        m_inspect.put(CCommon.getResourceString(CDefaultCarFactory.class, "acceleration"), m_acceleration);
+        m_inspect.put(CCommon.getResourceString(CDefaultCarFactory.class, "deceleration"), m_deceleration);
+        m_inspect.put(CCommon.getResourceString(CDefaultCarFactory.class, "linger"), m_lingerdistribution);
     }
 
     @Override
-    protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
+    protected ICar getCar(final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells)
     {
         try
         {
             final int l_maxspeed = (int) m_maxspeed.sample();
             return new de.tu_clausthal.in.mec.object.car.CDefaultCar(
                     p_cells,
-                    (int) ( l_maxspeed * m_speedfactor ),
+                    (int) (l_maxspeed * m_speedfactor),
                     l_maxspeed,
                     (int) m_acceleration.sample(),
                     (int) m_deceleration.sample(),
                     m_lingerdistribution.sample()
             );
-        }
-        catch ( final Exception l_exception )
+        } catch (final Exception l_exception)
         {
-            CLogger.error( l_exception );
+            CLogger.error(l_exception);
         }
         return null;
     }

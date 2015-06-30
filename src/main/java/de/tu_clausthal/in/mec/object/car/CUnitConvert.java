@@ -45,11 +45,11 @@ public class CUnitConvert
     /**
      * cell size in meter
      */
-    private final int m_cellsize = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/cellsampling" );
+    private final int m_cellsize = CConfiguration.getInstance().get().<Integer>get("simulation/traffic/cellsampling");
     /**
      * timestep in seconds
      */
-    private final int m_timestep = CConfiguration.getInstance().get().<Integer>get( "simulation/traffic/timesampling" );
+    private final int m_timestep = CConfiguration.getInstance().get().<Integer>get("simulation/traffic/timesampling");
     /**
      * meter which can be moved at one timestep
      */
@@ -57,7 +57,7 @@ public class CUnitConvert
     /**
      * number of cells which can be moved at one timestep
      */
-    private final int m_celltimestep = (int) Math.floor( m_distancetimestep / m_cellsize );
+    private final int m_celltimestep = (int) Math.floor(m_distancetimestep / m_cellsize);
 
 
     /**
@@ -66,9 +66,9 @@ public class CUnitConvert
      * @param p_acceleration acceleration or deceleration in m/sec^2
      * @return speed change in km/h
      */
-    public final double getAccelerationToSpeed( final double p_acceleration )
+    public final double getAccelerationToSpeed(final double p_acceleration)
     {
-        return ( p_acceleration * c_MsInKmh * m_timestep );
+        return (p_acceleration * c_MsInKmh * m_timestep);
     }
 
     /**
@@ -87,7 +87,7 @@ public class CUnitConvert
      * @param p_cells cell number
      * @return meter value
      */
-    public final double getCellToMeter( final int p_cells )
+    public final double getCellToMeter(final int p_cells)
     {
         return p_cells * m_cellsize;
     }
@@ -98,9 +98,9 @@ public class CUnitConvert
      * @param p_distance distance in meter
      * @return speed in km/h
      */
-    public final int getSpeedOfDistance( final double p_distance )
+    public final int getSpeedOfDistance(final double p_distance)
     {
-        return (int) ( p_distance / m_timestep * c_MsInKmh );
+        return (int) (p_distance / m_timestep * c_MsInKmh);
     }
 
     /**
@@ -109,7 +109,7 @@ public class CUnitConvert
      * @param p_speed speed in km/h
      * @return amount of cells / timestep
      */
-    public final int getSpeedToCell( final int p_speed )
+    public final int getSpeedToCell(final int p_speed)
     {
         return p_speed * m_celltimestep;
     }
@@ -121,7 +121,7 @@ public class CUnitConvert
      * @param p_speed speed in km/h
      * @return meter
      */
-    public final double getSpeedToDistance( final int p_speed )
+    public final double getSpeedToDistance(final int p_speed)
     {
         return p_speed * c_kmhInMs * m_timestep;
     }

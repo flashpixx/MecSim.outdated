@@ -59,7 +59,7 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      *
      * @param p_speed speed value in km/h
      */
-    void setCurrentSpeed( int p_speed ) throws IllegalArgumentException;
+    void setCurrentSpeed(int p_speed) throws IllegalArgumentException;
 
     /**
      * define an individual deceleration
@@ -109,7 +109,7 @@ public interface ICar extends Painter<COSMViewer>, IVoidSteppable
      * @param p_count number of predecessors
      * @return predecessor car object and its distance in meter
      */
-    Map<Double, ICar> getPredecessor( int p_count );
+    Map<Double, ICar> getPredecessor(int p_count);
 
     /**
      * boolean method, that returns true, if the car has reached its end

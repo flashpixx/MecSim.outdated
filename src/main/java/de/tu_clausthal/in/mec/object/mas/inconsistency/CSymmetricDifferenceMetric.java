@@ -27,7 +27,6 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,9 +41,9 @@ public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric
      *
      * @param p_paths path list
      */
-    public CSymmetricDifferenceMetric( final CPath... p_paths )
+    public CSymmetricDifferenceMetric(final CPath... p_paths)
     {
-        super( p_paths );
+        super(p_paths);
     }
 
     /**
@@ -52,38 +51,38 @@ public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric
      *
      * @param p_metric metric
      */
-    public CSymmetricDifferenceMetric( final IDefaultMetric<T> p_metric )
+    public CSymmetricDifferenceMetric(final IDefaultMetric<T> p_metric)
     {
-        super( p_metric );
+        super(p_metric);
     }
 
     @Override
-    public double calculate( final T p_first, final T p_second )
+    public double calculate(final T p_first, final T p_second)
     {
         // equal objects create zero value
-        if ( p_first.equals( p_second ) )
+        if (p_first.equals(p_second))
             return 0;
 
         final Set<ILiteral<?>> l_firstLiterals = new HashSet<>();
         final Set<ILiteral<?>> l_secondLiterals = new HashSet<>();
 
 
-        for ( final CPath l_path : m_paths )
+        for (final CPath l_path : m_paths)
         {
-            l_firstLiterals.addAll( p_first.getBeliefs().getLiterals( l_path ) );
-            l_secondLiterals.addAll( p_second.getBeliefs().getLiterals( l_path ) );
+            l_firstLiterals.addAll(p_first.getBeliefs().getLiterals(l_path));
+            l_secondLiterals.addAll(p_second.getBeliefs().getLiterals(l_path));
         }
 
 
         // get union
         final Set<ILiteral<?>> l_aggregate = new HashSet<ILiteral<?>>()
         {{
-                addAll( l_firstLiterals );
-                addAll( l_secondLiterals );
+                addAll(l_firstLiterals);
+                addAll(l_secondLiterals);
             }};
 
         // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
-        return new Double( ( ( l_aggregate.size() - l_firstLiterals.size() ) + ( l_aggregate.size() - l_secondLiterals.size() ) ) );
+        return new Double(((l_aggregate.size() - l_firstLiterals.size()) + (l_aggregate.size() - l_secondLiterals.size())));
     }
 
 }

@@ -35,13 +35,13 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
 {
 
     /**
-     * active flag *
-     */
-    private boolean m_active = false;
-    /**
      * GraphHopper weight object *
      */
     private final T m_weight;
+    /**
+     * active flag *
+     */
+    private boolean m_active = false;
 
 
     /**
@@ -49,7 +49,7 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
      *
      * @param p_weight weight object
      */
-    public CWeightingWrapper( final T p_weight )
+    public CWeightingWrapper(final T p_weight)
     {
         m_weight = p_weight;
     }
@@ -61,22 +61,22 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
      * @param p_weight weight object
      * @param p_active active flag
      */
-    public CWeightingWrapper( final T p_weight, final boolean p_active )
+    public CWeightingWrapper(final T p_weight, final boolean p_active)
     {
         m_weight = p_weight;
         m_active = p_active;
     }
 
     @Override
-    public final double getMinWeight( final double p_weight )
+    public final double getMinWeight(final double p_weight)
     {
-        return m_weight.getMinWeight( p_weight );
+        return m_weight.getMinWeight(p_weight);
     }
 
     @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public final double calcWeight(final EdgeIteratorState p_edge, final boolean p_reverse)
     {
-        return m_weight.calcWeight( p_edge, p_reverse );
+        return m_weight.calcWeight(p_edge, p_reverse);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
     }
 
     @Override
-    public final void setActive( final boolean p_value )
+    public final void setActive(final boolean p_value)
     {
         m_active = p_value;
     }

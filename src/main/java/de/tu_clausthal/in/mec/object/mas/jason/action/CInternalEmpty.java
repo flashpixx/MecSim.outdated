@@ -67,23 +67,23 @@ public class CInternalEmpty extends DefaultInternalAction
      * @param p_min minimum of arguments
      * @param p_max maximum of arguments
      */
-    public CInternalEmpty( final int p_min, final int p_max )
+    public CInternalEmpty(final int p_min, final int p_max)
     {
-        this( p_min, p_max, true );
+        this(p_min, p_max, true);
     }
 
 
     /**
      * ctor
      *
-     * @param p_min minimum of arguments
-     * @param p_max maximum of arguments
+     * @param p_min    minimum of arguments
+     * @param p_max    maximum of arguments
      * @param p_result result value
      */
-    public CInternalEmpty( final int p_min, final int p_max, final boolean p_result )
+    public CInternalEmpty(final int p_min, final int p_max, final boolean p_result)
     {
-        m_minimumarguments = Math.abs( p_min );
-        m_maximumarguments = Math.abs( p_max );
+        m_minimumarguments = Math.abs(p_min);
+        m_maximumarguments = Math.abs(p_max);
         m_result = p_result;
     }
 
@@ -93,9 +93,9 @@ public class CInternalEmpty extends DefaultInternalAction
      *
      * @param p_result result value
      */
-    public CInternalEmpty( final boolean p_result )
+    public CInternalEmpty(final boolean p_result)
     {
-        this( 0, 0, p_result );
+        this(0, 0, p_result);
     }
 
 
@@ -112,7 +112,7 @@ public class CInternalEmpty extends DefaultInternalAction
     }
 
     @Override
-    public final Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
+    public final Object execute(final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args) throws Exception
     {
         return m_result;
     }

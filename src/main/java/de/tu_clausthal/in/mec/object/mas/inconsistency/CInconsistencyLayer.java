@@ -183,7 +183,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     }
 
     /**
-     * @bug matrix allocation chan be create a memory overflow if it is possible
+     * @bug matrix allocation can be create a memory overflow if it is possible
      * update existing matrix object
      */
     @Override
@@ -214,10 +214,8 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_matrix.set(i, i, m_epsilon);
         }
 
-        // get the eigenvector for largest eigenvalue
+        // get the eigenvector with largest corresponding eigenvalue
         final DoubleMatrix1D l_eigenvector = this.getStationaryDistribution( l_matrix );
-
-        // normalize vector to get the stationary distribution
         l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
 
         // set inconsistency value for each entry

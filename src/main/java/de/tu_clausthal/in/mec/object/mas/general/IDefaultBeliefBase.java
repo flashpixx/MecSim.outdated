@@ -106,13 +106,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public Set<ILiteral<T>> getLiterals( final CPath... p_path )
     {
-        if ( p_path == null )
-            return new HashSet<ILiteral<T>>(){{
-                for ( final ILiteral<T> l_literal : this )
-                    add( l_literal );
-            }};
-
-        if ( p_path.length == 0 )
+        if ( p_path == null || p_path.length == 0 )
             return new HashSet<ILiteral<T>>(){{
                 for ( final ILiteral<T> l_literal : this )
                     add( l_literal );

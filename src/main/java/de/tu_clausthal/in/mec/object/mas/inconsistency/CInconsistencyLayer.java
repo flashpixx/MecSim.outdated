@@ -231,6 +231,8 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
         }
 
+        System.out.println(l_eigenvector);
+
         // set inconsistency value for each entry
         for ( int i = 0; i < l_keys.size(); ++i )
             m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );

@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.CConsole;
+import de.tu_clausthal.in.mec.ui.CInconsistencyEnvironment;
 import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.CLanguageEnvironment;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -110,6 +111,7 @@ public class CBootstrap
         p_server.registerObject( new CWaypointEnvironment() );
         p_server.registerObject( CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent() );
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
+        p_server.registerObject( new CInconsistencyEnvironment( "Jason Car Inconsistency" ) );
     }
 
     /**

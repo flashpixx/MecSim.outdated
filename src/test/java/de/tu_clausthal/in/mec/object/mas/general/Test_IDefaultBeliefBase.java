@@ -50,7 +50,7 @@ public class Test_IDefaultBeliefBase
 
         // non existing literals should return empty set
         assertEquals(l_beliefbase.get( new CPath( "x" ) ).getLiterals(), Collections.EMPTY_SET );
-        assertEquals( l_beliefbase.get( new CPath( "xxx/yyy" ) ).literals(), Collections.EMPTY_SET );
+        assertEquals( l_beliefbase.get( new CPath( "xxx/yyy" ) ).getLiterals(), Collections.EMPTY_SET );
     }
 
     @Test
@@ -107,14 +107,14 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( new CPath( "aa4/bb1/cc1" ), l_testLiteral );
         l_beliefbase.add( new CLiteral( ASSyntax.createLiteral( "xxx/yyy/zzz/test3" ) ) );
 
-        assertTrue( l_beliefbase.literals().contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals().contains( l_testLiteral2 ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa1" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa3" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa4/bb1/cc1" ) ).contains( l_testLiteral ) );
-        assertTrue( l_beliefbase.literals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral2 ) );
-        assertTrue( l_beliefbase.literals( new CPath( "xxx/yyy/zzz" ) ).contains( l_testLiteral3 ) );
+        assertTrue( l_beliefbase.getLiterals( CPath.EMPTY ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( CPath.EMPTY ).contains( l_testLiteral2 ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa1" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa3" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa4/bb1/cc1" ) ).contains( l_testLiteral ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "aa2/bb1" ) ).contains( l_testLiteral2 ) );
+        assertTrue( l_beliefbase.getLiterals( new CPath( "xxx/yyy/zzz" ) ).contains( l_testLiteral3 ) );
     }
 
     @Test
@@ -172,20 +172,17 @@ public class Test_IDefaultBeliefBase
     public void testIterator()
     {
         final IBeliefBase<Literal> l_beliefbase = new IDefaultBeliefBase<Literal>(  ){};
-        final Map<CPath, ILiteral<Literal>> l_literals = new HashMap(){{
-            put( new CPath("aa1"), new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
-            put(new CPath("aa2/bb1/cc1/dd1"), new CLiteral(ASSyntax.createLiteral("test2")));
-            put(CPath.EMPTY, new CLiteral(ASSyntax.createLiteral("test3")));
-        }};
         final Set<ILiteral<Literal>> l_initial = new HashSet(){{
-            for (final Map.Entry<CPath, ILiteral<Literal>> l_entry : l_literals.entrySet())
-                add( new CLiteral( l_entry.getValue().getLiteral(), l_entry.getKey() ));
+            add( new CLiteral( ASSyntax.createLiteral( "test1" ), new CPath("aa1") ) );
+            add( new CLiteral(ASSyntax.createLiteral("test2"), new CPath("aa2/bb1/cc1/dd1") ) );
+            add( new CLiteral(ASSyntax.createLiteral("test3"), CPath.EMPTY ) );
+            add( new CLiteral(ASSyntax.createLiteral("test4"), CPath.EMPTY ) );
         }};
 
-
-        // add some literals
-        for (final Map.Entry<CPath,ILiteral<Literal>> l_entry : l_literals.entrySet())
-            l_beliefbase.add( l_entry.getKey(), l_entry.getValue() );
+        l_beliefbase.add( CPath.EMPTY, new CLiteral( ASSyntax.createLiteral( "test3" ) ) );
+        l_beliefbase.add( CPath.EMPTY, new CLiteral( ASSyntax.createLiteral( "test4" ) ) );
+        l_beliefbase.add( new CPath("aa1"), new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
+        l_beliefbase.add( new CPath( "aa2/bb1/cc1/dd1" ), new CLiteral( ASSyntax.createLiteral( "test2" ) ) );
 
         // build literal set with iterator
         final Set<ILiteral<Literal>> l_beliefbaseElements = new HashSet<ILiteral<Literal>>(){{

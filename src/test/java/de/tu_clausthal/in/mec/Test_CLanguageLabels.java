@@ -155,7 +155,7 @@ public class Test_CLanguageLabels
             final Class<?> l_class;
             try
             {
-                l_class = Class.forName( p_classname );
+                l_class = this.getClass().getClassLoader().loadClass( p_classname );
             }
             catch ( final ClassNotFoundException l_exception )
             {

@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
+import de.tu_clausthal.in.mec.common.CPath;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +37,7 @@ import java.util.Set;
  *
  * @todo define constructors for TermSets and TermLists
  */
-public abstract class IDefaultLiteral<T> implements ILiteral<T>
+public class CDefaultLiteral<T> implements ILiteral<T>
 {
     /**
      * the literal annotations
@@ -62,7 +64,7 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @param p_valueList initial list of values
      * @param p_annotationList initial set of annotations
      */
-    public IDefaultLiteral( final String p_functor, final T p_literal,
+    public CDefaultLiteral( final String p_functor, final T p_literal,
             final List<ITerm> p_valueList, final Set<ITerm> p_annotationList
     )
     {
@@ -78,9 +80,15 @@ public abstract class IDefaultLiteral<T> implements ILiteral<T>
      * @param p_functor functor of the literal
      * @param p_literal the original literal
      */
-    public IDefaultLiteral( final String p_functor, final T p_literal )
+    public CDefaultLiteral( final String p_functor, final T p_literal )
     {
         this( p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
+    }
+
+    public CDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal )
+    {
+        this( p_path.append( p_literal.getFunctor().toString() ).toString(), p_literal.getLiteral(),
+              (List) p_literal.getValues(), (Set) p_literal.getAnnotation() );
     }
 
     @Override

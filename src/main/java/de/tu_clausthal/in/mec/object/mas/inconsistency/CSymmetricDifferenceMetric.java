@@ -64,8 +64,16 @@ public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric
         if ( p_first.equals( p_second ) )
             return 0;
 
-        final Set<ILiteral<?>> l_firstLiterals = p_first.getBeliefs().getLiterals( CPath.EMPTY );
-        final Set<ILiteral<?>> l_secondLiterals = p_second.getBeliefs().getLiterals( CPath.EMPTY );
+        final Set<ILiteral<?>> l_firstLiterals = new HashSet<>();
+        final Set<ILiteral<?>> l_secondLiterals = new HashSet<>();
+
+
+        for ( final CPath l_path : m_paths )
+        {
+            l_firstLiterals.addAll( p_first.getBeliefs().getLiterals( l_path ) );
+            l_secondLiterals.addAll( p_second.getBeliefs().getLiterals( l_path ) );
+        }
+
 
         // create aggregate belief-base
         final Set<ILiteral<?>> l_aggregate = new HashSet<ILiteral<?>>()

@@ -48,25 +48,25 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
      */
     private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            add(CSimulation.getInstance().getWorld().<CCarLayer>getTyped("Cars"));
+            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
 
     /**
      * ctor
      *
-     * @param p_position  geo position
+     * @param p_position geo position
      * @param p_generator generator object
-     * @param p_factory   factory object
-     * @param p_radius    radius
-     * @param p_color     color
-     * @param p_name      name
+     * @param p_factory factory object
+     * @param p_radius radius
+     * @param p_color color
+     * @param p_name name
      */
-    public CCarRandomWayPoint(final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
-                              final Color p_color, final String p_name
+    public CCarRandomWayPoint( final GeoPosition p_position, final IGenerator p_generator, final ICarFactory p_factory, final double p_radius,
+            final Color p_color, final String p_name
     )
     {
-        super(p_position, p_generator, p_factory, p_radius, p_color, p_name);
+        super( p_position, p_generator, p_factory, p_radius, p_color, p_name );
     }
 
     @Override

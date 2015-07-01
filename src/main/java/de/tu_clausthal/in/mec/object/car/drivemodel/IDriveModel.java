@@ -32,7 +32,7 @@ import java.io.Serializable;
 /**
  * drive interface for driving models
  */
-@SuppressWarnings("serial")
+@SuppressWarnings( "serial" )
 public interface IDriveModel extends Serializable
 {
 
@@ -40,9 +40,9 @@ public interface IDriveModel extends Serializable
      * updates car
      *
      * @param p_currentstep current step number
-     * @param p_layer       car layer
-     * @param p_car         car object
+     * @param p_layer car layer
+     * @param p_car car object
      */
-    void update(final int p_currentstep, final CCarLayer p_layer, final ICar p_car);
+    void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car );
 
 }

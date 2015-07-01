@@ -33,7 +33,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -50,7 +54,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll(IPathWayPoint.super.inspect());
+            putAll( IPathWayPoint.super.inspect() );
         }};
     /**
      * makrov chain to calculate route
@@ -65,17 +69,17 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     /**
      * ctor
      *
-     * @param p_position  position
+     * @param p_position position
      * @param p_generator generator
-     * @param p_factory   factory
-     * @param p_color     color
-     * @param p_name      name
+     * @param p_factory factory
+     * @param p_color color
+     * @param p_name name
      */
-    public IPathWayPoint(final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name)
+    public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {
-        super(p_position, p_generator, p_factory, p_color, p_name);
-        m_makrovChain.addNode(this);
-        m_inspect.put(CCommon.getResourceString(IRandomWayPoint.class, "radius"), m_makrovChain);
+        super( p_position, p_generator, p_factory, p_color, p_name );
+        m_makrovChain.addNode( this );
+        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_makrovChain );
     }
 
     /**
@@ -96,35 +100,36 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         //falls kein eintrag mehr da ist fahre zu default und breche ab
 
         //inital position
-        Map<IWayPoint, MutablePair<Double, Double>> l_currentNode = m_makrovChain.get(this);
+        Map<IWayPoint, MutablePair<Double, Double>> l_currentNode = m_makrovChain.get( this );
         GeoPosition l_currentPosition = this.getPosition();
-        GeoPosition l_default = new GeoPosition(51.80135377062704, 10.32871163482666);
+        GeoPosition l_default = new GeoPosition( 51.80135377062704, 10.32871163482666 );
         GeoPosition l_newPosition;
 
         //check for circles and path length
-        for (int i = 1; i < m_makrovChain.size(); i++)
+        for ( int i = 1; i < m_makrovChain.size(); i++ )
         {
             double l_random = m_random.nextDouble();
 
             // current node has no outgoing edges add a path to default target and return
-            if (l_currentNode.size() <= 0)
+            if ( l_currentNode.size() <= 0 )
             {
-                CLogger.out(l_path.size());
-                l_path.add(new ImmutablePair<>(l_currentPosition, l_default));
+                CLogger.out( l_path.size() );
+                l_path.add( new ImmutablePair<>( l_currentPosition, l_default ) );
                 return l_path;
             }
 
             //calculate new edge
-            for (final Map.Entry<IWayPoint, MutablePair<Double, Double>> l_node : l_currentNode.entrySet())
+            for ( final Map.Entry<IWayPoint, MutablePair<Double, Double>> l_node : l_currentNode.entrySet() )
             {
-                if (l_random >= l_node.getValue().getRight())
+                if ( l_random >= l_node.getValue().getRight() )
                 {
                     l_random = l_random - l_node.getValue().getRight();
-                } else
+                }
+                else
                 {
                     l_newPosition = l_node.getKey().getPosition();
-                    l_path.add(new ImmutablePair<>(l_currentPosition, l_newPosition));
-                    l_currentNode = m_makrovChain.get(l_node.getKey());
+                    l_path.add( new ImmutablePair<>( l_currentPosition, l_newPosition ) );
+                    l_currentNode = m_makrovChain.get( l_node.getKey() );
                     l_currentPosition = l_newPosition;
                     break;
                 }
@@ -155,18 +160,18 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          * @param p_end
          * @param p_value
          */
-        public final void addEdge(final T p_start, final T p_end, final double p_value)
+        public final void addEdge( final T p_start, final T p_end, final double p_value )
         {
-            if (p_value < 0)
+            if ( p_value < 0 )
                 return;
 
             //create node if does not exist
-            if (!this.containsKey(p_start))
-                this.addNode(p_start);
-            if (!this.containsKey(p_end))
-                this.addNode(p_end);
+            if ( !this.containsKey( p_start ) )
+                this.addNode( p_start );
+            if ( !this.containsKey( p_end ) )
+                this.addNode( p_end );
 
-            this.get(p_start).put(p_end, new MutablePair<>(p_value, p_value));
+            this.get( p_start ).put( p_end, new MutablePair<>( p_value, p_value ) );
             this.updateRelativeWeighting();
         }
 
@@ -175,34 +180,34 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          *
          * @param p_node
          */
-        public final void addNode(final T p_node)
+        public final void addNode( final T p_node )
         {
-            this.put(p_node, new HashMap<T, MutablePair<Double, Double>>());
+            this.put( p_node, new HashMap<T, MutablePair<Double, Double>>() );
             this.updateRelativeWeighting();
         }
 
         @Override
-        public Map<T, MutablePair<Double, Double>> put(final T p_key, final Map<T, MutablePair<Double, Double>> p_value)
+        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
         {
-            final Map<T, MutablePair<Double, Double>> l_result = super.put(p_key, p_value);
-            this.updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public Map<T, MutablePair<Double, Double>> remove(final Object p_key)
-        {
-            final Map<T, MutablePair<Double, Double>> l_result = super.remove(p_key);
-            this.removeAllNodeEdge(p_key);
+            final Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
             this.updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public boolean remove(final Object p_key, final Object p_value)
+        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
         {
-            final boolean l_result = super.remove(p_key, p_value);
-            this.removeAllNodeEdge(p_key);
+            final Map<T, MutablePair<Double, Double>> l_result = super.remove( p_key );
+            this.removeAllNodeEdge( p_key );
+            this.updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public boolean remove( final Object p_key, final Object p_value )
+        {
+            final boolean l_result = super.remove( p_key, p_value );
+            this.removeAllNodeEdge( p_key );
             this.updateRelativeWeighting();
             return l_result;
         }
@@ -212,11 +217,11 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          *
          * @param p_node
          */
-        public final void removeAllNodeEdge(final Object p_node)
+        public final void removeAllNodeEdge( final Object p_node )
         {
-            for (final Map<T, MutablePair<Double, Double>> l_in : this.values())
-                if (l_in.containsKey(p_node))
-                    l_in.remove(p_node);
+            for ( final Map<T, MutablePair<Double, Double>> l_in : this.values() )
+                if ( l_in.containsKey( p_node ) )
+                    l_in.remove( p_node );
 
         }
 
@@ -226,10 +231,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          * @param p_start
          * @param p_end
          */
-        public final void removeEdge(final T p_start, final T p_end)
+        public final void removeEdge( final T p_start, final T p_end )
         {
-            if (this.containsKey(p_start))
-                this.get(p_start).remove(p_end);
+            if ( this.containsKey( p_start ) )
+                this.get( p_start ).remove( p_end );
 
             this.updateRelativeWeighting();
         }
@@ -240,15 +245,15 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         private void updateRelativeWeighting()
         {
-            for (final Map<T, MutablePair<Double, Double>> l_edge : this.values())
+            for ( final Map<T, MutablePair<Double, Double>> l_edge : this.values() )
             {
                 //calculate the new sum
                 double l_sum = 0.0;
-                for (final MutablePair l_pair : l_edge.values())
+                for ( final MutablePair l_pair : l_edge.values() )
                     l_sum += (double) l_pair.left;
 
                 //update relative weighting
-                for (final MutablePair l_pair : l_edge.values())
+                for ( final MutablePair l_pair : l_edge.values() )
                     l_pair.right = (double) l_pair.left / l_sum;
             }
         }

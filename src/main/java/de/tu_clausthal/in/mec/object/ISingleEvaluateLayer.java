@@ -49,7 +49,7 @@ public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
     }
 
     @Override
-    public final void setActive(final boolean p_active)
+    public final void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -61,7 +61,7 @@ public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
     }
 
     @Override
-    public void step(final int p_currentstep, final ILayer p_layer)
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
     }
 }

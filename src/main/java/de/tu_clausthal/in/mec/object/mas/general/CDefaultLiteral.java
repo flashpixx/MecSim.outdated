@@ -44,10 +44,6 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      */
     protected final ITermCollection m_annotations;
     /**
-     * the literal values
-     */
-    protected final ITermCollection m_values;
-    /**
      * the literals functor
      */
     private final IAtom<String> m_functor;
@@ -55,23 +51,27 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
     private final T m_literal;
+    /**
+     * the literal values
+     */
+    protected final ITermCollection m_values;
 
     /**
      * ctor - all parameters specified
      *
-     * @param p_functor        functor of the literal
-     * @param p_literal        the original literal
-     * @param p_valueList      initial list of values
+     * @param p_functor functor of the literal
+     * @param p_literal the original literal
+     * @param p_valueList initial list of values
      * @param p_annotationList initial set of annotations
      */
-    public CDefaultLiteral(final String p_functor, final T p_literal,
-                           final List<ITerm> p_valueList, final Set<ITerm> p_annotationList
+    public CDefaultLiteral( final String p_functor, final T p_literal,
+            final List<ITerm> p_valueList, final Set<ITerm> p_annotationList
     )
     {
-        m_functor = new CStringAtom(p_functor);
+        m_functor = new CStringAtom( p_functor );
         m_literal = p_literal;
-        m_values = new CTermList(p_valueList);
-        m_annotations = new CTermSet(p_annotationList);
+        m_values = new CTermList( p_valueList );
+        m_annotations = new CTermSet( p_annotationList );
     }
 
     /**
@@ -80,15 +80,17 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      * @param p_functor functor of the literal
      * @param p_literal the original literal
      */
-    public CDefaultLiteral(final String p_functor, final T p_literal)
+    public CDefaultLiteral( final String p_functor, final T p_literal )
     {
-        this(p_functor, p_literal, Collections.emptyList(), Collections.emptySet());
+        this( p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
     }
 
-    public CDefaultLiteral(final CPath p_path, final ILiteral<T> p_literal)
+    public CDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal )
     {
-        this(p_path.append(p_literal.getFunctor().toString()).toString(), p_literal.getLiteral(),
-                (List) p_literal.getValues(), (Set) p_literal.getAnnotation());
+        this(
+                p_path.append( p_literal.getFunctor().toString() ).toString(), p_literal.getLiteral(),
+                (List) p_literal.getValues(), (Set) p_literal.getAnnotation()
+        );
     }
 
     @Override
@@ -119,12 +121,12 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     public final int hashCode()
     {
         return 41 * m_functor.hashCode() +
-                43 * m_values.hashCode() +
-                59 * m_annotations.hashCode();
+               43 * m_values.hashCode() +
+               59 * m_annotations.hashCode();
     }
 
     @Override
-    public final boolean equals(final Object p_object)
+    public final boolean equals( final Object p_object )
     {
         return this.hashCode() == p_object.hashCode();
     }
@@ -136,9 +138,9 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     }
 
     @Override
-    public boolean instanceOf(final Class<?> p_class)
+    public boolean instanceOf( final Class<?> p_class )
     {
-        return ILiteral.class.isAssignableFrom(p_class);
+        return ILiteral.class.isAssignableFrom( p_class );
     }
 
 }

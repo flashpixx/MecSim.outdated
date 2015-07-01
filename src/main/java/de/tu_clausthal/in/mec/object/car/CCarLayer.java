@@ -57,38 +57,38 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private final transient List<ICar> m_data = new LinkedList<>();
     /**
-     * unit converting for traffic structure
-     **/
-    private final transient CUnitConvert m_unit = new CUnitConvert();
-    /**
      * driving model
      */
     private EDrivingModel m_drivemodel = EDrivingModel.AgentNagelSchreckenberg;
     /**
+     * unit converting for traffic structure
+     **/
+    private final transient CUnitConvert m_unit = new CUnitConvert();
+    /**
      * graph
      */
-    private transient CGraphHopper m_graph = new CGraphHopper(m_unit.getCellSize());
+    private transient CGraphHopper m_graph = new CGraphHopper( m_unit.getCellSize() );
 
 
     @Override
-    public final void afterStepObject(final int p_currentstep, final ICar p_object)
+    public final void afterStepObject( final int p_currentstep, final ICar p_object )
     {
         // if a car has reached its end, remove it
-        if (p_object.hasEndReached())
+        if ( p_object.hasEndReached() )
         {
-            super.remove(p_object);
+            super.remove( p_object );
             p_object.release();
         }
 
         // repaint the OSM viewer (supress flickering)
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
     }
 
     @Override
-    public final void beforeStepObject(final int p_currentstep, final ICar p_object)
+    public final void beforeStepObject( final int p_currentstep, final ICar p_object )
     {
-        m_drivemodel.getModel().update(p_currentstep, this, p_object);
+        m_drivemodel.getModel().update( p_currentstep, this, p_object );
     }
 
     @Override
@@ -100,8 +100,8 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void onDeserializationComplete()
     {
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().getCompoundPainter().addPainter(
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter().addPainter(
                     (Painter) this
             );
     }
@@ -109,11 +109,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final void onDeserializationInitialization()
     {
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().getCompoundPainter()
-                    .removePainter(
-                            (Painter) this
-                    );
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
+                       .removePainter(
+                               (Painter) this
+                       );
     }
 
     @Override
@@ -124,7 +124,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     @Override
-    public final void step(final int p_currentstep, final ILayer p_layer)
+    public final void step( final int p_currentstep, final ILayer p_layer )
     {
 
     }
@@ -134,9 +134,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_weight weight name
      */
-    public final void enableDisableGraphWeight(final CGraphHopper.EWeight p_weight)
+    public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
     {
-        m_graph.enableDisableWeight(p_weight);
+        m_graph.enableDisableWeight( p_weight );
     }
 
     /**
@@ -165,9 +165,9 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_weight weight name
      * @return weight object or null
      */
-    public final <T extends IWeighting> T getGraphWeight(final CGraphHopper.EWeight p_weight)
+    public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
     {
-        return m_graph.<T>getWeight(p_weight);
+        return m_graph.<T>getWeight( p_weight );
     }
 
     /**
@@ -186,30 +186,30 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @param p_weight weight name
      * @return bool active flag
      */
-    public final boolean isActiveWeight(final CGraphHopper.EWeight p_weight)
+    public final boolean isActiveWeight( final CGraphHopper.EWeight p_weight )
     {
-        return m_graph.isActiveWeight(p_weight);
+        return m_graph.isActiveWeight( p_weight );
     }
 
     @Override
-    public final void push(final Collection<ICar> p_data)
+    public final void push( final Collection<ICar> p_data )
     {
-        super.addAll(p_data);
+        super.addAll( p_data );
     }
 
     /**
      * read call of serialize interface
      *
      * @param p_stream stream
-     * @throws IOException            throws exception on loading the data
+     * @throws IOException throws exception on loading the data
      * @throws ClassNotFoundException throws exception on deserialization error
      * @bug incomplete
      */
-    private void readObject(final ObjectInputStream p_stream) throws IOException, ClassNotFoundException
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
     {
         p_stream.defaultReadObject();
 
-        m_graph = new CGraphHopper(m_unit.getCellSize());
+        m_graph = new CGraphHopper( m_unit.getCellSize() );
         //m_graph.disableWeight();
     }
 
@@ -218,7 +218,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      *
      * @param p_model model
      */
-    public final void setDriveModel(final EDrivingModel p_model)
+    public final void setDriveModel( final EDrivingModel p_model )
     {
         m_drivemodel = p_model;
     }
@@ -226,7 +226,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     @Override
     public final String toString()
     {
-        return CCommon.getResourceString(this, "name");
+        return CCommon.getResourceString( this, "name" );
     }
 
     /**
@@ -236,12 +236,12 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      * @throws IOException throws the exception on loading data
      * @bug incomplete
      */
-    private void writeObject(final ObjectOutputStream p_stream) throws IOException
+    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
         p_stream.defaultWriteObject();
 
         // write active graph weights
-        p_stream.writeObject(m_graph.getActiveWeights());
+        p_stream.writeObject( m_graph.getActiveWeights() );
     }
 
 
@@ -253,11 +253,11 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         /**
          * default Nagel-Schreckenberg model *
          */
-        NagelSchreckenberg(CCommon.getResourceString(EDrivingModel.class, "nagelschreckenberg"), new CNagelSchreckenberg()),
+        NagelSchreckenberg( CCommon.getResourceString( EDrivingModel.class, "nagelschreckenberg" ), new CNagelSchreckenberg() ),
         /**
          * additional Nagel-Schreckenberg model for agents *
          */
-        AgentNagelSchreckenberg(CCommon.getResourceString(EDrivingModel.class, "agentnagelschreckenberg"), new CAgentNagelSchreckenberg());
+        AgentNagelSchreckenberg( CCommon.getResourceString( EDrivingModel.class, "agentnagelschreckenberg" ), new CAgentNagelSchreckenberg() );
 
         /**
          * driving model instance
@@ -271,10 +271,10 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         /**
          * ctor
          *
-         * @param p_text  text representation
+         * @param p_text text representation
          * @param p_model model instance
          */
-        EDrivingModel(final String p_text, final IDriveModel p_model)
+        EDrivingModel( final String p_text, final IDriveModel p_model )
         {
             m_text = p_text;
             m_model = p_model;

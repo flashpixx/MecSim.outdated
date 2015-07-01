@@ -52,20 +52,20 @@ public class CBeliefBase extends CDefaultBeliefBase<Literal>
      *
      * @param p_literals top level literals
      */
-    public CBeliefBase(final Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase( final Set<ILiteral<Literal>> p_literals )
     {
-        super(p_literals);
+        super( p_literals );
     }
 
     /**
      * ctor - top-level literals and inherited getBeliefbases are specified
      *
      * @param p_beliefbases inherited getBeliefbases
-     * @param p_literals    top level literals
+     * @param p_literals top level literals
      */
-    public CBeliefBase(final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals)
+    public CBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals )
     {
-        super(p_beliefbases, p_literals);
+        super( p_beliefbases, p_literals );
     }
 
 }

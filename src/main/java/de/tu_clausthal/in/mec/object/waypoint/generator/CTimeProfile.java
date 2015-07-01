@@ -45,13 +45,13 @@ public class CTimeProfile implements IGenerator
      *
      * @param p_histogram array with histogram
      */
-    public CTimeProfile(final int[] p_histogram)
+    public CTimeProfile( final int[] p_histogram )
     {
         m_histogram = p_histogram;
     }
 
     @Override
-    public int getCount(final int p_currentStep)
+    public int getCount( final int p_currentStep )
     {
         return m_histogram[p_currentStep % m_histogram.length];
     }

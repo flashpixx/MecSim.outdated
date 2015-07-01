@@ -49,7 +49,7 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll(CTimeDistribution.super.inspect());
+            putAll( CTimeDistribution.super.inspect() );
         }};
 
 
@@ -57,9 +57,9 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
      * ctor
      *
      * @param p_distribution distribution object
-     * @param p_count        number of objects
+     * @param p_count number of objects
      */
-    public CTimeDistribution(final AbstractRealDistribution p_distribution, final int p_count)
+    public CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
     {
         m_count = p_count;
         m_distribution = p_distribution;
@@ -67,9 +67,9 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
 
 
     @Override
-    public int getCount(final int p_currentStep)
+    public int getCount( final int p_currentStep )
     {
-        if (m_distribution == null)
+        if ( m_distribution == null )
             return 0;
         return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
     }

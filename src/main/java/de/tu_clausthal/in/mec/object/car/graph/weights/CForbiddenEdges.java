@@ -44,21 +44,21 @@ import java.util.HashSet;
 public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
     /**
-     * stroke definition
+     * active flag *
      */
-    private static final Stroke s_stroke = new BasicStroke(5);
+    private boolean m_active = false;
     /**
      * graph reference
      */
     private final CGraphHopper m_graph;
     /**
-     * active flag *
-     */
-    private boolean m_active = false;
-    /**
      * marked edge to allow mouse-interaction
      */
     private Integer m_reserveedge;
+    /**
+     * stroke definition
+     */
+    private static final Stroke s_stroke = new BasicStroke( 5 );
 
 
     /**
@@ -66,7 +66,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      *
      * @param p_graph reference to graph
      */
-    public CForbiddenEdges(final CGraphHopper p_graph)
+    public CForbiddenEdges( final CGraphHopper p_graph )
     {
         m_graph = p_graph;
     }
@@ -76,10 +76,10 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      */
     public final void add()
     {
-        if (m_reserveedge == null)
+        if ( m_reserveedge == null )
             return;
 
-        this.add(m_reserveedge);
+        this.add( m_reserveedge );
         this.clearReserve();
     }
 
@@ -92,15 +92,15 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     }
 
     @Override
-    public final double getMinWeight(final double p_weight)
+    public final double getMinWeight( final double p_weight )
     {
         return 0;
     }
 
     @Override
-    public final double calcWeight(final EdgeIteratorState p_edge, final boolean p_reverse)
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        return this.contains(p_edge.getEdge()) ? Double.POSITIVE_INFINITY : 0;
+        return this.contains( p_edge.getEdge() ) ? Double.POSITIVE_INFINITY : 0;
     }
 
     @Override
@@ -110,43 +110,43 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     }
 
     @Override
-    public final void setActive(final boolean p_value)
+    public final void setActive( final boolean p_value )
     {
         m_active = p_value;
     }
 
     @Override
-    public void paint(final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height)
+    public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
     {
-        if (!m_active)
+        if ( !m_active )
             return;
 
-        p_graphic.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        p_graphic.setStroke(s_stroke);
+        p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+        p_graphic.setStroke( s_stroke );
 
-        p_graphic.setColor(Color.RED);
-        for (final Integer l_item : this)
-            this.paintLine(p_graphic, p_viewer, l_item);
+        p_graphic.setColor( Color.RED );
+        for ( final Integer l_item : this )
+            this.paintLine( p_graphic, p_viewer, l_item );
 
-        p_graphic.setColor(Color.BLUE);
-        if (m_reserveedge != null)
-            this.paintLine(p_graphic, p_viewer, m_reserveedge);
+        p_graphic.setColor( Color.BLUE );
+        if ( m_reserveedge != null )
+            this.paintLine( p_graphic, p_viewer, m_reserveedge );
     }
 
     /**
      * paints the line
      *
      * @param p_graphic graphic reference
-     * @param p_viewer  viewer reference
-     * @param p_edge    edge ID
+     * @param p_viewer viewer reference
+     * @param p_edge edge ID
      */
-    private void paintLine(final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_edge)
+    private void paintLine( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_edge )
     {
-        final CEdge<?, ?> l_edge = m_graph.getEdge(m_graph.getEdgeIterator(p_edge));
-        final Point2D l_start = p_viewer.convertGeoPositionToPoint(l_edge.getGeoPositions(0));
-        final Point2D l_end = p_viewer.convertGeoPositionToPoint(l_edge.getGeoPositions(-1));
+        final CEdge<?, ?> l_edge = m_graph.getEdge( m_graph.getEdgeIterator( p_edge ) );
+        final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
+        final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
 
-        p_graphic.drawLine((int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY());
+        p_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
     }
 
     /**
@@ -154,10 +154,10 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      */
     public final void remove()
     {
-        if (m_reserveedge == null)
+        if ( m_reserveedge == null )
             return;
 
-        this.remove(m_reserveedge);
+        this.remove( m_reserveedge );
         this.clearReserve();
     }
 
@@ -166,7 +166,7 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      *
      * @param p_edge edge ID
      */
-    public final void reserve(final Integer p_edge)
+    public final void reserve( final Integer p_edge )
     {
         m_reserveedge = p_edge;
     }
@@ -176,13 +176,13 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      */
     public final void swap()
     {
-        if (m_reserveedge == null)
+        if ( m_reserveedge == null )
             return;
 
-        if (this.contains(m_reserveedge))
-            this.remove(m_reserveedge);
+        if ( this.contains( m_reserveedge ) )
+            this.remove( m_reserveedge );
         else
-            this.add(m_reserveedge);
+            this.add( m_reserveedge );
 
         this.clearReserve();
     }
@@ -190,11 +190,11 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     /**
      * removes / adds the reserved edge
      */
-    public final void swap(final Integer p_edge)
+    public final void swap( final Integer p_edge )
     {
-        if (this.contains(p_edge))
-            this.remove(p_edge);
+        if ( this.contains( p_edge ) )
+            this.remove( p_edge );
         else
-            this.add(p_edge);
+            this.add( p_edge );
     }
 }

@@ -37,7 +37,7 @@ import java.util.Set;
  *
  * @tparam T any object type
  */
-@SuppressWarnings("serial")
+@SuppressWarnings( "serial" )
 public interface IFactory<T> extends IInspector, Serializable
 {
 
@@ -45,9 +45,9 @@ public interface IFactory<T> extends IInspector, Serializable
      * factory method to create objects
      *
      * @param p_waypoints waypoint tupel list
-     * @param p_count     number of objects
+     * @param p_count number of objects
      * @return set with objects
      */
-    Set<T> generate(final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count);
+    Set<T> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count );
 
 }

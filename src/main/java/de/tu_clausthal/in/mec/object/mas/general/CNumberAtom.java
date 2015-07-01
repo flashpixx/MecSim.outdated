@@ -33,9 +33,9 @@ public class CNumberAtom extends IDefaultAtom<Number>
      *
      * @param p_value the atom's value
      */
-    public CNumberAtom(final Number p_value)
+    public CNumberAtom( final Number p_value )
     {
-        super(p_value);
+        super( p_value );
     }
 
 }

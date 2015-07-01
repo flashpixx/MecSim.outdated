@@ -6,13 +6,13 @@ package de.tu_clausthal.in.mec.object.mas.general;
 public abstract class IDefaultAtom<T> implements IAtom<T>
 {
     /**
-     * value the atom represents (e.g. string, number)
-     */
-    private final T m_value;
-    /**
      * generic class type
      */
     private Class<?> m_type;
+    /**
+     * value the atom represents (e.g. string, number)
+     */
+    private final T m_value;
 
     /**
      * default ctor
@@ -27,7 +27,7 @@ public abstract class IDefaultAtom<T> implements IAtom<T>
      *
      * @param p_value the atoms value
      */
-    public IDefaultAtom(final T p_value)
+    public IDefaultAtom( final T p_value )
     {
         m_value = p_value;
     }
@@ -61,7 +61,7 @@ public abstract class IDefaultAtom<T> implements IAtom<T>
      * @return true if input parameter equals the atom
      */
     @Override
-    public final boolean equals(final Object p_object)
+    public final boolean equals( final Object p_object )
     {
         return this.hashCode() == p_object.hashCode();
     }
@@ -84,8 +84,8 @@ public abstract class IDefaultAtom<T> implements IAtom<T>
      * @return true if the atom's type is assignable from matching class
      */
     @Override
-    public final boolean instanceOf(final Class<?> p_class)
+    public final boolean instanceOf( final Class<?> p_class )
     {
-        return m_type.isAssignableFrom(p_class);
+        return m_type.isAssignableFrom( p_class );
     }
 }

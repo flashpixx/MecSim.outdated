@@ -67,7 +67,7 @@ public class CMessageBeliefBase extends CBeliefBase
      *
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase(final TransitionSystem p_transitionSystem)
+    public CMessageBeliefBase( final TransitionSystem p_transitionSystem )
     {
         super();
         m_transitionSystem = p_transitionSystem;
@@ -76,28 +76,28 @@ public class CMessageBeliefBase extends CBeliefBase
     /**
      * ctor - just the top-level literals are specified
      *
-     * @param p_literals         top level literals
+     * @param p_literals top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase(final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem)
+    public CMessageBeliefBase( final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem )
     {
-        super(p_literals);
+        super( p_literals );
         m_transitionSystem = p_transitionSystem;
     }
 
     /**
      * ctor - top-level literals and inherited getBeliefbases are specified
      *
-     * @param p_beliefbases      inherited getBeliefbases
-     * @param p_literals         top level literals
+     * @param p_beliefbases inherited getBeliefbases
+     * @param p_literals top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase(final Map<String, IBeliefBase<Literal>> p_beliefbases,
-                              final Set<ILiteral<Literal>> p_literals,
-                              final TransitionSystem p_transitionSystem
+    public CMessageBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases,
+            final Set<ILiteral<Literal>> p_literals,
+            final TransitionSystem p_transitionSystem
     )
     {
-        super(p_beliefbases, p_literals);
+        super( p_beliefbases, p_literals );
         m_transitionSystem = p_transitionSystem;
     }
 
@@ -106,10 +106,10 @@ public class CMessageBeliefBase extends CBeliefBase
      *
      * @param p_messages current incoming messages
      */
-    public final void receiveMessage(final Set<IMessage> p_messages)
+    public final void receiveMessage( final Set<IMessage> p_messages )
     {
         m_receivedmessages.clear();
-        m_receivedmessages.addAll(p_messages);
+        m_receivedmessages.addAll( p_messages );
     }
 
     @Override
@@ -117,23 +117,23 @@ public class CMessageBeliefBase extends CBeliefBase
     {
         super.update();
 
-        for (final IMessage l_msg : m_receivedmessages)
+        for ( final IMessage l_msg : m_receivedmessages )
             try
             {
                 // if message is a message from Jason internal message system
-                if (l_msg instanceof CMessage)
+                if ( l_msg instanceof CMessage )
                 {
-                    final Message l_jmsg = ((Message) l_msg.getData());
+                    final Message l_jmsg = ( (Message) l_msg.getData() );
                     final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                    l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_jmsg.getSender()).getPath(c_seperator))));
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( c_seperator ) ) ) );
 
-                    if (l_jmsg.isTell())
-                        add(CPath.EMPTY, CCommon.convertGeneric(l_literal));
-                    if (l_jmsg.isUnTell())
-                        remove(CPath.EMPTY, CCommon.convertGeneric(l_literal));
-                    if (l_jmsg.isKnownPerformative())
+                    if ( l_jmsg.isTell() )
+                        add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+                    if ( l_jmsg.isUnTell() )
+                        remove( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+                    if ( l_jmsg.isKnownPerformative() )
                     {
-                        l_literal.addAnnot(BeliefBase.TPercept);
+                        l_literal.addAnnot( BeliefBase.TPercept );
 
                         m_transitionSystem.getC().addEvent(
                                 new Event(
@@ -149,11 +149,12 @@ public class CMessageBeliefBase extends CBeliefBase
                 }
 
                 // otherwise message will direct converted
-                final Literal l_literal = CCommon.getLiteral(l_msg.getTitle(), l_msg.getData());
-                l_literal.addAnnot(ASSyntax.createLiteral("source", ASSyntax.createAtom(new CPath(l_msg.getSource()).getPath(c_seperator))));
-                add(CPath.EMPTY, CCommon.convertGeneric(l_literal));
+                final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
+                l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( c_seperator ) ) ) );
+                add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
 
-            } catch (final Exception l_exception)
+            }
+            catch ( final Exception l_exception )
             {
             }
     }

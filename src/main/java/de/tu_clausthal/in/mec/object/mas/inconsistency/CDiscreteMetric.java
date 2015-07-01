@@ -39,9 +39,9 @@ public class CDiscreteMetric<T> extends IDefaultMetric<T>
      *
      * @param p_paths path list
      */
-    public CDiscreteMetric(final CPath... p_paths)
+    public CDiscreteMetric( final CPath... p_paths )
     {
-        super(p_paths);
+        super( p_paths );
     }
 
     /**
@@ -49,16 +49,16 @@ public class CDiscreteMetric<T> extends IDefaultMetric<T>
      *
      * @param p_metric metric
      */
-    public CDiscreteMetric(final IDefaultMetric<T> p_metric)
+    public CDiscreteMetric( final IDefaultMetric<T> p_metric )
     {
-        super(p_metric);
+        super( p_metric );
     }
 
     @Override
-    public double calculate(final T p_first, final T p_second)
+    public double calculate( final T p_first, final T p_second )
     {
         // equal objects create zero value
-        if (p_first.equals(p_second))
+        if ( p_first.equals( p_second ) )
             return 0;
 
         return 1;

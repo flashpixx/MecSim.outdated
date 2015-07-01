@@ -24,7 +24,11 @@
 package de.tu_clausthal.in.mec.object;
 
 
-import de.tu_clausthal.in.mec.runtime.*;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
+import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
+import de.tu_clausthal.in.mec.runtime.ISteppable;
+import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
 import de.tu_clausthal.in.mec.ui.CUI;
@@ -48,6 +52,10 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
 {
 
     /**
+     * flag for activity
+     */
+    protected boolean m_active = true;
+    /**
      * list of finished data
      */
     protected final Queue<T> m_finisheddata = new ConcurrentLinkedDeque<>();
@@ -55,10 +63,6 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      * list unprocessing data items
      */
     protected final Queue<T> m_processingdata = new ConcurrentLinkedDeque<>();
-    /**
-     * flag for activity
-     */
-    protected boolean m_active = true;
     /**
      * flag for visibility
      */
@@ -69,7 +73,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      *
      * @param p_currentstep step number
      */
-    public void afterStepAllObject(final int p_currentstep)
+    public void afterStepAllObject( final int p_currentstep )
     {
     }
 
@@ -77,15 +81,15 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      * method which is called after the object step method is called
      *
      * @param p_currentstep current step
-     * @param p_object      object
+     * @param p_object object
      */
-    public void afterStepObject(final int p_currentstep, final T p_object)
+    public void afterStepObject( final int p_currentstep, final T p_object )
     {
         // push data to the queue
-        if (p_object.isFinish())
-            m_finisheddata.add(p_object);
+        if ( p_object.isFinish() )
+            m_finisheddata.add( p_object );
         else
-            m_processingdata.add(p_object);
+            m_processingdata.add( p_object );
     }
 
     /**
@@ -93,9 +97,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      *
      * @param p_currentstep step number
      */
-    public void beforeStepAllObject(final int p_currentstep)
+    public void beforeStepAllObject( final int p_currentstep )
     {
-        m_processingdata.addAll(m_finisheddata);
+        m_processingdata.addAll( m_finisheddata );
         m_finisheddata.clear();
     }
 
@@ -103,9 +107,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
      * method which is called before the object step method is called
      *
      * @param p_currentstep current step
-     * @param p_object      object
+     * @param p_object object
      */
-    public void beforeStepObject(final int p_currentstep, final T p_object)
+    public void beforeStepObject( final int p_currentstep, final T p_object )
     {
 
     }
@@ -123,7 +127,7 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public final void setActive(final boolean p_active)
+    public final void setActive( final boolean p_active )
     {
         m_active = p_active;
     }
@@ -131,37 +135,37 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     @Override
     public final boolean isVisible()
     {
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
 
         return m_visible;
     }
 
     @Override
-    public final void setVisible(final boolean p_visible)
+    public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
     }
 
     @Override
-    public void paint(final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height)
+    public void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
-        if (!m_visible)
+        if ( !m_visible )
             return;
 
         final Rectangle l_viewportBounds = p_viewer.getViewportBounds();
-        p_graphic.translate(-l_viewportBounds.x, -l_viewportBounds.y);
-        for (final T l_item : this)
-            l_item.paint(p_graphic, p_viewer, p_width, p_height);
+        p_graphic.translate( -l_viewportBounds.x, -l_viewportBounds.y );
+        for ( final T l_item : this )
+            l_item.paint( p_graphic, p_viewer, p_width, p_height );
     }
 
     @Override
     public void release()
     {
-        for (final ISteppable l_item : m_processingdata)
+        for ( final ISteppable l_item : m_processingdata )
             l_item.release();
     }
 
@@ -178,9 +182,9 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public final boolean contains(final Object p_object)
+    public final boolean contains( final Object p_object )
     {
-        return m_processingdata.contains(p_object);
+        return m_processingdata.contains( p_object );
     }
 
     @Override
@@ -196,78 +200,78 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     }
 
     @Override
-    public final <S> S[] toArray(final S[] p_value)
+    public final <S> S[] toArray( final S[] p_value )
     {
-        return m_processingdata.toArray(p_value);
+        return m_processingdata.toArray( p_value );
     }
 
     @Override
-    public final boolean add(final T p_value)
+    public final boolean add( final T p_value )
     {
-        final boolean l_return = m_processingdata.add(p_value);
+        final boolean l_return = m_processingdata.add( p_value );
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
 
         return l_return;
     }
 
     @Override
-    public final boolean remove(final Object p_object)
+    public final boolean remove( final Object p_object )
     {
-        final boolean l_result = m_processingdata.remove(p_object);
+        final boolean l_result = m_processingdata.remove( p_object );
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
 
         return l_result;
     }
 
     @Override
-    public final boolean containsAll(final Collection<?> p_collection)
+    public final boolean containsAll( final Collection<?> p_collection )
     {
-        for (final Object l_item : p_collection)
-            if (!m_processingdata.contains(l_item))
+        for ( final Object l_item : p_collection )
+            if ( !m_processingdata.contains( l_item ) )
                 return false;
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
 
         return true;
     }
 
     @Override
-    public final boolean addAll(final Collection<? extends T> p_collection)
+    public final boolean addAll( final Collection<? extends T> p_collection )
     {
-        final boolean l_return = m_processingdata.addAll(p_collection);
+        final boolean l_return = m_processingdata.addAll( p_collection );
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
 
         return l_return;
     }
 
     @Override
-    public final boolean removeAll(final Collection<?> p_collection)
+    public final boolean removeAll( final Collection<?> p_collection )
     {
-        for (final Object l_item : p_collection)
+        for ( final Object l_item : p_collection )
         {
-            if (m_processingdata.remove(l_item))
+            if ( m_processingdata.remove( l_item ) )
                 continue;
 
             return false;
         }
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
 
         return true;
     }
 
     @Override
-    public final boolean retainAll(final Collection<?> p_collection)
+    public final boolean retainAll( final Collection<?> p_collection )
     {
-        return m_processingdata.retainAll(p_collection);
+        return m_processingdata.retainAll( p_collection );
     }
 
     @Override
@@ -275,12 +279,12 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
     {
         m_processingdata.clear();
 
-        if (CSimulation.getInstance().getStorage().exists())
-            CSimulation.getInstance().getStorage().<CUI>get("ui").<CSwingWrapper<COSMViewer>>get("OSM").getComponent().repaint();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
     }
 
     @Override
-    public void step(final int p_currentstep, final ILayer p_layer)
+    public void step( final int p_currentstep, final ILayer p_layer )
     {
 
     }

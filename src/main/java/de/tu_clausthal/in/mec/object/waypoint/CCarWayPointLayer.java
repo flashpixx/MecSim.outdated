@@ -37,13 +37,13 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
     @Override
-    public final void afterStepObject(final int p_currentstep, final IWayPoint<ICar> p_object)
+    public final void afterStepObject( final int p_currentstep, final IWayPoint<ICar> p_object )
     {
 
     }
 
     @Override
-    public final void beforeStepObject(final int p_currentstep, final IWayPoint<ICar> p_object)
+    public final void beforeStepObject( final int p_currentstep, final IWayPoint<ICar> p_object )
     {
 
     }
@@ -57,12 +57,12 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     @Override
     public final void release()
     {
-        for (final IWayPoint<ICar> l_item : m_data)
+        for ( final IWayPoint<ICar> l_item : m_data )
             l_item.release();
     }
 
     @Override
-    public final void step(final int p_currentstep, final ILayer p_layer)
+    public final void step( final int p_currentstep, final ILayer p_layer )
     {
 
     }
@@ -70,7 +70,7 @@ public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
     @Override
     public final String toString()
     {
-        return CCommon.getResourceString(this, "name");
+        return CCommon.getResourceString( this, "name" );
     }
 
 }

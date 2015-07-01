@@ -35,13 +35,13 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 public class CTrafficJam implements IWeighting
 {
     /**
-     * graph instance
-     */
-    private final CGraphHopper m_graph;
-    /**
      * active flag *
      */
     private boolean m_active = false;
+    /**
+     * graph instance
+     */
+    private final CGraphHopper m_graph;
 
 
     /**
@@ -49,23 +49,23 @@ public class CTrafficJam implements IWeighting
      *
      * @param p_graph graph object
      */
-    public CTrafficJam(final CGraphHopper p_graph)
+    public CTrafficJam( final CGraphHopper p_graph )
     {
         m_graph = p_graph;
     }
 
 
     @Override
-    public final double getMinWeight(final double p_weight)
+    public final double getMinWeight( final double p_weight )
     {
         return 0;
     }
 
 
     @Override
-    public final double calcWeight(final EdgeIteratorState p_edge, final boolean p_reverse)
+    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
-        return m_graph.getEdge(p_edge).getNumberOfObjects();
+        return m_graph.getEdge( p_edge ).getNumberOfObjects();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CTrafficJam implements IWeighting
     }
 
     @Override
-    public final void setActive(final boolean p_value)
+    public final void setActive( final boolean p_value )
     {
         m_active = p_value;
     }

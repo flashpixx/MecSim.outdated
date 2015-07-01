@@ -69,20 +69,14 @@ public class CInconsistencyEnvironment
     {
         return new HashMap<String, Object>()
         {{
+                final IMetric<?,CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
                 for ( final EMetric l_metric : EMetric.values() )
                     put(
                             l_metric.toString(), new HashMap()
                             {{
-                                    put(
-                                            "active", l_metric.equals(
-                                                    EMetric.isa(
-                                                            CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped(
-                                                                    m_layername
-                                                            ).getMetric()
-                                                    )
-                                            )
-                                    );
+                                    put( "active", l_metric.equals( EMetric.isa( l_current ) ) );
                                     put( "id", l_metric.name() );
+                                    put( "selector", l_current.getSelector());
                                 }}
                     );
             }};
@@ -146,7 +140,7 @@ public class CInconsistencyEnvironment
          * @param p_metric metric
          * @return enum type
          */
-        public static EMetric isa( final IMetric<?> p_metric )
+        public static EMetric isa( final IMetric<?,CPath> p_metric )
         {
             if ( p_metric instanceof CDiscreteMetric )
                 return Discrete;
@@ -163,9 +157,9 @@ public class CInconsistencyEnvironment
         /**
          * returns a metric instance
          *
-         * @return
+         * @return metric
          */
-        public IMetric<?> get( final CPath... p_paths )
+        public IMetric<?,CPath> get( final CPath... p_paths )
         {
             switch ( this )
             {

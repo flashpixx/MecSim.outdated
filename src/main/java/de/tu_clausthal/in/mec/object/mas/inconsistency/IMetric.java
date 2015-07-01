@@ -24,12 +24,15 @@
 package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
 
+import java.util.Collection;
+
+
 /**
  * metric interface of the inconsistency structure
  *
  * @see http://en.wikipedia.org/wiki/Metric_space
  */
-public interface IMetric<T>
+public interface IMetric<T, N>
 {
 
     /**
@@ -40,5 +43,13 @@ public interface IMetric<T>
      * @return double metric
      */
     double calculate( final T p_first, final T p_second );
+
+
+    /**
+     * returns the selectors
+     *
+     * @return selector
+     */
+    public Collection<N> getSelector();
 
 }

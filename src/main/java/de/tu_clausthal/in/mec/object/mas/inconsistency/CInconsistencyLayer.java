@@ -32,6 +32,7 @@ import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
@@ -74,7 +75,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * metric object to create the value of two objects
      **/
-    private IMetric<T> m_metric;
+    private IMetric<T,CPath> m_metric;
     /**
      * update of the metric values
      */
@@ -85,7 +86,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_metric object metric
      */
-    public CInconsistencyLayer( final IMetric<T> p_metric )
+    public CInconsistencyLayer( final IMetric<T, CPath> p_metric )
     {
         m_metric = p_metric;
         m_algorithm = EAlgorithm.QRDecomposition;
@@ -102,7 +103,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistencyLayer( final IMetric<T> p_metric, final int p_iteration,
+    public CInconsistencyLayer( final IMetric<T, CPath> p_metric, final int p_iteration,
             final double p_epsilon
     )
     {
@@ -243,7 +244,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @return get metric
      */
-    public final IMetric<T> getMetric()
+    public final IMetric<T,CPath> getMetric()
     {
         return m_metric;
     }
@@ -253,7 +254,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_metric metric
      */
-    public final void setMetric( final IMetric<T> p_metric )
+    public final void setMetric( final IMetric<T,CPath> p_metric )
     {
         m_metric = p_metric;
     }

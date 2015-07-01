@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 import de.tu_clausthal.in.mec.common.CPath;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ import java.util.Set;
 /**
  * default metric with an optional set of path values
  */
-public abstract class IDefaultMetric<T> implements IMetric<T>
+public abstract class IDefaultMetric<T> implements IMetric<T,CPath>
 {
     /**
      * set with paths
@@ -64,4 +65,9 @@ public abstract class IDefaultMetric<T> implements IMetric<T>
     @Override
     public abstract double calculate( final T p_first, final T p_second );
 
+    @Override
+    public final Collection<CPath> getSelector()
+    {
+        return m_paths;
+    }
 }

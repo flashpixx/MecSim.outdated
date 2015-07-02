@@ -46,7 +46,7 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     /**
      * the literals functor
      */
-    private final IAtom<String> m_functor;
+    private IAtom<String> m_functor;
     /**
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
@@ -88,9 +88,15 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     public CDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal )
     {
         this(
-                p_path.append( p_literal.getFunctor().toString() ).toString(), p_literal.getLiteral(),
+                p_path.append( p_literal.getFunctor().toString() ).toString().replace( "/", "_" ), p_literal.getLiteral(),
                 (List) p_literal.getValues(), (Set) p_literal.getAnnotation()
         );
+    }
+
+    @Override
+    public void setFunctor( final String p_functor )
+    {
+        m_functor = new CStringAtom( p_functor );
     }
 
     @Override

@@ -455,8 +455,8 @@ public class CAgent<T> implements IVoidAgent
          */
         public final void cycle( final int p_currentstep )
         {
-            m_beliefs.remove( CPath.EMPTY, "step", ILiteral.class );
-            m_beliefs.add( CPath.EMPTY, CCommon.convertGeneric( ASSyntax.createLiteral( "step", ASSyntax.createNumber( p_currentstep ) ) ) );
+            m_beliefs.remove( new CPath( "simulation" ), "step", ILiteral.class );
+            m_beliefs.add( new CPath( "simulation" ), CCommon.convertGeneric( ASSyntax.createLiteral( "step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )
@@ -486,7 +486,10 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.clear();
             //todo: convert path
             for ( final Literal l_literal : m_agent.getBB() )
-                m_beliefs.add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+            {
+
+                m_beliefs.add( new CPath( l_literal.getFunctor() ), CCommon.convertGeneric( l_literal ) );
+            }
 
             // run all register after-cycle object
             for ( final ICycle l_item : m_cycleobject )

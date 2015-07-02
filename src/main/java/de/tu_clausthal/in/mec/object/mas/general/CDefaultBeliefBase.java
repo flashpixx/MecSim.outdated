@@ -123,7 +123,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public boolean add( final CPath p_path, final IBeliefBaseElement p_element )
+    public final boolean add( final CPath p_path, final IBeliefBaseElement p_element )
     {
         if ( p_element instanceof ILiteral )
             return this.add( p_path, (ILiteral) p_element );
@@ -135,7 +135,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public void clear( final CPath... p_path )
+    public final void clear( final CPath... p_path )
     {
         // if nothing is specified, everything will be cleared
         if ( p_path == null || p_path.length == 0 )
@@ -160,7 +160,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public IBeliefBase<T> get( final CPath p_path )
+    public final IBeliefBase<T> get( final CPath p_path )
     {
         if ( p_path.isEmpty() )
             return this;
@@ -180,7 +180,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path )
+    public final Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path )
     {
         if ( p_path == null )
             return Collections.EMPTY_MAP;
@@ -211,7 +211,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @return set of beliefbase elements, or null if nothing was found
      */
     @Override
-    public Set<IBeliefBaseElement> getElements( final CPath p_path, final String p_name, final Class<?> p_class )
+    public final Set<IBeliefBaseElement> getElements( final CPath p_path, final String p_name, final Class<?> p_class )
     {
         final IBeliefBase<T> l_beliefbase = this.get( p_path );
         if ( l_beliefbase == null )
@@ -223,7 +223,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( final CPath p_path )
+    public final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( final CPath p_path )
     {
         if ( p_path.isEmpty() )
             return m_elements;
@@ -233,7 +233,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Set<ILiteral<T>> getLiterals( final CPath... p_path )
+    public final Set<ILiteral<T>> getLiterals( final CPath... p_path )
     {
         final Set<ILiteral<T>> l_literals = new HashSet<ILiteral<T>>();
         if ( p_path == null || p_path.length == 0 )
@@ -261,7 +261,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbase default beliefbase, will be returned if the specified path cannot be found
      * @return specified beliefbase if path exists, otherwise the default beliefbase
      */
-    public IBeliefBase<T> getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    public final IBeliefBase<T> getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         if ( p_path.isEmpty() )
             return this;
@@ -271,7 +271,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public boolean remove( final CPath p_path, final IBeliefBaseElement p_element )
+    public final boolean remove( final CPath p_path, final IBeliefBaseElement p_element )
     {
         if ( p_element instanceof ILiteral )
             this.remove( p_path, (ILiteral) p_element );
@@ -296,7 +296,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_literal literal to add
      * @return true, if addition was successful
      */
-    private boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    private final boolean add( final CPath p_path, final ILiteral<T> p_literal )
     {
         if ( p_path.isEmpty() )
         {
@@ -342,7 +342,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_beliefbase beliefbase to add
      * @return true if addition was successful
      */
-    private boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
+    private final boolean add( final CPath p_path, final IBeliefBase<T> p_beliefbase )
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
         if ( p_path.isEmpty() )
@@ -353,21 +353,16 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         {
             final String l_key = p_path.getSuffix().toString();
 
-            // case 1: there are no beliefbase elements with same key
+            // add new map-entry if necessary
             if ( !m_elements.containsKey( l_key ) )
-                return m_elements.put(
+                m_elements.put(
                         l_key, new HashMap<Class<?>, Set<IBeliefBaseElement>>()
                         {{
-                                put(
-                                        IBeliefBase.class, new HashSet<IBeliefBaseElement>()
-                                        {{
-                                                add( p_beliefbase );
-                                            }}
-                                );
+                                put( IBeliefBase.class, new HashSet<IBeliefBaseElement>() );
                             }}
-                ) == null;
+                );
 
-            // case 2: there are already beliefbase elements with same key (beliefbase with same key gets overwritten)
+            // push beliefbase into elements (beliefbase with same key gets overwritten)
             m_elements.get( l_key ).put(
                     IBeliefBase.class, new HashSet<IBeliefBaseElement>()
                     {{
@@ -394,30 +389,6 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     /**
-     * adds a set of beliefbase elements on top-level
-     *
-     * @param p_name name of the elements as key
-     * @param p_class class of the elements
-     * @param p_element the elements themselves
-     */
-    private void addTopElement( final String p_name, final Class<?> p_class, final Set<IBeliefBaseElement> p_element )
-    {
-        // get inner map by name, or create a new one
-        final Map<Class<?>, Set<IBeliefBaseElement>> l_innerMap = m_elements.getOrDefault(
-                p_name, new HashMap<Class<?>, Set<IBeliefBaseElement>>()
-        );
-        m_elements.put( p_name, l_innerMap );
-
-        // get beliefbase elements
-        final Set<IBeliefBaseElement> l_data = l_innerMap.getOrDefault( p_class, new HashSet<IBeliefBaseElement>() );
-        if ( IBeliefBase.class.equals( p_class ) )
-            l_data.clear();
-
-        l_data.addAll( p_element );
-        l_innerMap.put( p_class, l_data );
-    }
-
-    /**
      * recursive method to fill up a stack with Iterator-objects
      *
      * @return iterator stack
@@ -429,38 +400,26 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_stack;
     }
 
-    /**
-     * returns beliefbase with specified key (i.e. name of the beliefbase)
-     *
-     * @param p_name name of beliefbase
-     * @return beliefbase, or null if no such beliefbase was found
-     */
-    private IBeliefBase<T> getBeliefbase( final String p_name )
-    {
-        final Set<IBeliefBaseElement> l_bb = this.getElements( CPath.EMPTY, p_name, IBeliefBase.class );
-        return ( l_bb == null || l_bb.isEmpty() ) ? null : (IBeliefBase) l_bb.iterator().next();
-    }
-
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return m_elements.values().hashCode();
     }
 
     @Override
-    public boolean equals( final Object p_object )
+    public final boolean equals( final Object p_object )
     {
         return this.hashCode() == p_object.hashCode();
     }
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return m_elements.toString();
     }
 
     @Override
-    public Iterator<ILiteral<T>> iterator()
+    public final Iterator<ILiteral<T>> iterator()
     {
         return new Iterator<ILiteral<T>>()
         {
@@ -500,7 +459,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         };
     }
 
-    private boolean remove( final CPath p_path, final IBeliefBase p_beliefbase )
+    private final boolean remove( final CPath p_path, final IBeliefBase p_beliefbase )
     {
         // if nothing is specified, nothing can be removed
         if ( p_path.isEmpty() )
@@ -514,7 +473,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         return l_beliefbase.getElements( CPath.EMPTY, p_path.getSuffix(), IBeliefBase.class ).remove( p_beliefbase );
     }
 
-    private boolean remove( final CPath p_path, final ILiteral<T> p_literal )
+    private final boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
         final IBeliefBase<T> l_beliefbase = this.get( p_path );
         if ( l_beliefbase == null )
@@ -531,7 +490,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_class class of elements
      * @return true, if removal was successful
      */
-    public boolean remove( final CPath p_path, final String p_key, final Class p_class )
+    public final boolean remove( final CPath p_path, final String p_key, final Class p_class )
     {
         final Set<IBeliefBaseElement> l_elements = this.getElements( p_path, p_key, p_class );
 

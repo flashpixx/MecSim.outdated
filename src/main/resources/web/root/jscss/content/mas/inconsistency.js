@@ -51,7 +51,9 @@ MASInconsistency.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         title     : "",
-        content   : "-- inconsistency --"
+        content   : Layout.select({
+            label : "metric"
+        })
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }

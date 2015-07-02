@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.object.mas.inconsistency.CWeightedDifferenceMetric
 import de.tu_clausthal.in.mec.object.mas.inconsistency.IMetric;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ import java.util.Map;
  */
 public class CInconsistencyEnvironment
 {
+    /**
+     * map for default labels
+     */
+    private final Map<String, String> m_label = new HashMap<>();
     /**
      * layer name
      */
@@ -54,10 +59,15 @@ public class CInconsistencyEnvironment
      */
     public CInconsistencyEnvironment( final String p_layername )
     {
-        if (!(CSimulation.getInstance().getWorld().get( p_layername ) instanceof CInconsistencyLayer))
+        if ( !( CSimulation.getInstance().getWorld().get( p_layername ) instanceof CInconsistencyLayer ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "layerincorrect", p_layername ) );
 
         m_layername = p_layername;
+        m_label.put(
+                "name", CCommon.getResourceString(
+                        CInconsistencyEnvironment.class, "name", CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername )
+                )
+        );
     }
 
     /**
@@ -69,28 +79,42 @@ public class CInconsistencyEnvironment
     {
         return new HashMap<String, Object>()
         {{
-                final IMetric<?,CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
+                final IMetric<?, CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
                 for ( final EMetric l_metric : EMetric.values() )
                     put(
                             l_metric.toString(), new HashMap()
                             {{
                                     put( "active", l_metric.equals( EMetric.isa( l_current ) ) );
                                     put( "id", l_metric.name() );
-                                    put( "selector", l_current.getSelector());
+                                    put( "selector", l_current.getSelector() );
                                 }}
                     );
             }};
     }
 
     /**
+     * returns all static label information for main menu
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_label()
+    {
+        return m_label;
+    }
+
+    /**
      * UI method - sets the metric on the current layer
      *
      * @param p_data input data
-     * @todo incomplete
      */
     private final void web_static_setMetric( final Map<String, Object> p_data )
     {
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notfound" ) );
 
+        CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).setMetric(
+                EMetric.valueOf( (String) p_data.get( "id" ) ).get( (Collection<CPath>) p_data.get( "path" ) )
+        );
     }
 
     /**
@@ -117,7 +141,9 @@ public class CInconsistencyEnvironment
          * symmetric difference metric
          */
         SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) ),
-        /** weighted difference metric **/
+        /**
+         * weighted difference metric
+         **/
         WeightedDifference( CCommon.getResourceString( EMetric.class, "weighteddifference" ) );
         /**
          * language based name of the metric
@@ -140,7 +166,7 @@ public class CInconsistencyEnvironment
          * @param p_metric metric
          * @return enum type
          */
-        public static EMetric isa( final IMetric<?,CPath> p_metric )
+        public static EMetric isa( final IMetric<?, CPath> p_metric )
         {
             if ( p_metric instanceof CDiscreteMetric )
                 return Discrete;
@@ -148,7 +174,7 @@ public class CInconsistencyEnvironment
             if ( p_metric instanceof CSymmetricDifferenceMetric )
                 return SymmetricDifference;
 
-            if (p_metric instanceof CWeightedDifferenceMetric)
+            if ( p_metric instanceof CWeightedDifferenceMetric )
                 return WeightedDifference;
 
             throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ) );
@@ -157,9 +183,10 @@ public class CInconsistencyEnvironment
         /**
          * returns a metric instance
          *
+         * @param p_paths collection of path
          * @return metric
          */
-        public IMetric<?,CPath> get( final CPath... p_paths )
+        public IMetric<?, CPath> get( final Collection<CPath> p_paths )
         {
             switch ( this )
             {

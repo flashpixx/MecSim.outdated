@@ -58,6 +58,19 @@ import static org.junit.Assert.fail;
 public class Test_CLanguageLabels
 {
     /**
+     * list of all project packages for searching classes
+     *
+     * @note is needed on finding class-calls within other classes e.g. class a.b.c uses y.x.class
+     */
+    private static final Set<String> c_searchpackages = new HashSet<String>()
+    {{
+            for ( String l_package : new String[]{
+                    getPackagePath( "object", "mas", "inconsistency" )
+            } )
+                add( getPackagePath( CConfiguration.getPackage(), l_package ) );
+
+        }};
+    /**
      * set with all labels *
      */
     private final Set<String> m_labels = new HashSet<>();
@@ -65,6 +78,21 @@ public class Test_CLanguageLabels
      * reg expression to extract label data *
      */
     private final Pattern m_language = Pattern.compile( "CCommon.getResourceString.+\\)" );
+
+    /**
+     * method to build a package path
+     *
+     * @param p_names list of package parts
+     * @return full-qualified string
+     */
+    private static String getPackagePath( String... p_names )
+    {
+        String l_return = "";
+        for ( int i = 0; i < p_names.length - 1; i++ )
+            l_return = l_return + p_names[i] + ClassUtils.PACKAGE_SEPARATOR;
+        return l_return + p_names[p_names.length - 1];
+    }
+
 
     /**
      * checks all labels within a Java file
@@ -155,7 +183,7 @@ public class Test_CLanguageLabels
             final Class<?> l_class;
             try
             {
-                l_class = this.getClass().getClassLoader().loadClass( p_classname );
+                l_class = this.getClass( p_classname );
             }
             catch ( final ClassNotFoundException l_exception )
             {
@@ -181,6 +209,51 @@ public class Test_CLanguageLabels
                 }
 
             m_labels.add( CCommon.getResourceStringLabel( l_class, p_label ) );
+        }
+
+        /**
+         * tries to instantiate a class
+         *
+         * @param p_name class name
+         * @return class object
+         *
+         * @throws ClassNotFoundException thrown if class is not found
+         */
+        private Class<?> getClass( final String p_name ) throws ClassNotFoundException
+        {
+            // --- first load try ---
+            try
+            {
+                // try to load class with default behaviour
+                return Class.forName( p_name );
+            }
+            catch ( final ClassNotFoundException l_forname_exception )
+            {
+                // --- second load try ---
+                try
+                {
+                    // try to load class depended on the current classloader
+                    return this.getClass().getClassLoader().loadClass( p_name );
+                }
+                catch ( final ClassNotFoundException l_loader_exception )
+                {
+                    // --- third load try ---
+                    // create a name without package
+                    final String[] l_part = StringUtils.split( p_name, ClassUtils.PACKAGE_SEPARATOR );
+                    final String l_name = l_part[l_part.length - 1];
+
+                    // try to load class within the defined search pathes
+                    for ( final String l_package : c_searchpackages )
+                        try
+                        {
+                            return this.getClass().getClassLoader().loadClass( getPackagePath( l_package, l_name ) );
+                        }
+                        catch ( final ClassNotFoundException l_iterating_exception )
+                        {
+                        }
+                    throw new ClassNotFoundException();
+                }
+            }
         }
 
         /**

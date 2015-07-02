@@ -41,3 +41,32 @@ function MASInconsistency( pc_id, pc_name, pa_panel )
 
 /** inheritance call **/
 MASInconsistency.prototype = Object.create(Pane.prototype);
+
+
+/**
+ * @Overwrite
+**/
+MASInconsistency.prototype.getContent = function()
+{
+    return '<button id = "' + this.getID() + '" ></button >' + Pane.prototype.getContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
+MASInconsistency.prototype.afterDOMAdded = function()
+{
+    console.log(this.mc_id);
+    var self = this;
+    MecSim.language({ url : "/cinconsistencyenvironment/" + this.mc_id + "/label", target : this });
+
+    jQuery(this.getID("#")).button().click( function() {
+
+        MecSim.ajax({
+            url  : "/cinconsistencyenvironment/" + this.mc_id + "/setmetric",
+            data : { id : "SymmetricDifference", path : [] }
+        }).fail( function(po_event) { console.log(po_event.responseJSON); } );
+
+    });
+}

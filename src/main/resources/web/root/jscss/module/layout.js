@@ -62,7 +62,7 @@ var Layout = (function (px_modul) {
 
             class   : po_options.outerclass,
             id      : po_options.id,
-            title   : po_options.title ? 'title="' + po_options.title + '"' : null,
+            addon   : po_options.title === undefined ? null : 'title="' + po_options.title + '"',
 
             content : lx_basetag("div", {
 
@@ -88,7 +88,7 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + " ",
+        return [ (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + " ",
                  lx_basetag( "input", {
 
                     id    : po_options.id,
@@ -113,7 +113,7 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po_options.list))
             po_options.list.push(po_options.id);
 
-        return [ (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' : "") + " ",
+        return [ (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' : "") + " ",
                  lx_basetag( "input", {
 
                     id    : po_options.id,
@@ -177,7 +177,7 @@ var Layout = (function (px_modul) {
         if (po_options.options)
             po_options.options.forEach( function(px_item) { la.push( px_modul.option(px_item, po_options.value) ); } );
 
-        return (po_options.label ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + " " +
+        return (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + " " +
                 lx_basetag("select", {
 
                     id      : po_options.id,
@@ -233,7 +233,7 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po.list))
             po.list.push(po.id);
 
-        return (po.label ? '<label for="' + po.id + '" >' + po.label + '</label >' : "") + " " +
+        return (po.label !== undefined  ? '<label for="' + po.id + '" >' + po.label + '</label >' : "") + " " +
                 lx_basetag("select", {
 
                     id      : po.id,

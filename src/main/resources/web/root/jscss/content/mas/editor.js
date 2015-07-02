@@ -73,7 +73,7 @@ MASEditor.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("content"),
-        title     : "Agent Action"
+        title     : ""
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -115,6 +115,22 @@ MASEditor.prototype.getSelectedAgent = function()
     };
 }
 
+/**
+ * adapted generator function for DOM IDs of the editor
+ *
+ * @param pc_id DOM ID name
+ * @param pc_prefix prefix
+ * @return ID
+**/
+MASEditor.prototype.generateSubIDElements = function(pc_id, pc_prefix)
+{
+    var lc = this.generateSubID(pc_id, pc_prefix);
+    if (["agents"].indexOf(pc_id) > -1)
+        lc += "-button";
+
+    return lc;
+}
+
 
 /**
  * @Overwrite
@@ -123,11 +139,8 @@ MASEditor.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    MecSim.language({ url : "/clanguageenvironment/maseditor", target : this });
-
     // bind reading action
     this.readAgents();
-
 
     // --- bind new-agent button action ------------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
@@ -287,13 +300,16 @@ MASEditor.prototype.readAgents = function()
 
             // clear div and add a new select box
             jQuery( self.generateSubID("agentlist", "#") ).empty();
-            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "Agents",  options: self.mo_agents  }) ).appendTo( self.generateSubID("agentlist", "#") );
+            jQuery( Layout.selectgroup({ id: self.generateSubID("agents"),  label: "",  options: self.mo_agents  }) ).appendTo( self.generateSubID("agentlist", "#") );
             jQuery( self.generateSubID("agents", "#") ).selectmenu({
                 change : function( po_event, po_ui ) {
                     self.addTabView();
                     self.addTab( po_ui.item.optgroup, po_ui.item.value );
                 }
             });
+
+            // set language element
+            MecSim.language({ url : "/clanguageenvironment/maseditor", target : self, idgenerator : self.generateSubIDElements });
         }
     );
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

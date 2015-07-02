@@ -79,14 +79,30 @@
     <script type = "text/javascript" >
         jQuery(document).ready(function() {
             MecSim.uiinitialize([
+
                 new Inspector( "inspector" ),
+
                 new Logger( "logger" ),
-                new Simulation("simulation", [new Configuration("configuration")]),
+
+                new Simulation("simulation", [
+                    new Configuration("configuration")
+                ]),
+
                 new Layer("layer"),
+
                 new Traffic("traffic"),
+
                 new Waypoint("waypoint"),
-                new MAS("mas", [new MASJasonMind("inspector"), new MASMessageFlow("message"), new MASInconsistency("jasoncarinconsistency"), new MASEditor("editor")]),
+
+                new MAS("mas", [
+                    new MASJasonMind("inspector"),
+                    new MASMessageFlow("message"),
+                    new MASInconsistency("jasoncarinconsistency"),
+                    new MASEditor("editor")
+                ]),
+
                 new Help("help")
+
             ]);
         });
     </script >

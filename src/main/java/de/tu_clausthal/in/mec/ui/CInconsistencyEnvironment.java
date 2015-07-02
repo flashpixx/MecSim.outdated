@@ -45,7 +45,10 @@ public class CInconsistencyEnvironment
     /**
      * map for default labels
      */
-    private final Map<String, String> m_label = new HashMap<>();
+    private final Map<String, String> m_label = new HashMap<String, String>()
+    {{
+            put( "title_dialog", CCommon.getResourceString( CInconsistencyEnvironment.class, "dialogtitle" ) );
+        }};
     /**
      * layer name
      */

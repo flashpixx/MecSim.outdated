@@ -113,7 +113,7 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_inspector = new HashMap<String, String>()
     {{
-            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_inspector_dialogtitle" ) );
+            put( "title_dialog", CCommon.getResourceString( CLanguageEnvironment.class, "ui_inspector_dialogtitle" ) );
         }};
     /**
      * labels of the layer menu
@@ -121,7 +121,7 @@ public class CLanguageEnvironment
     private static final Map<String, String> c_layer = new HashMap<String, String>()
     {{
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_layer_name" ) );
-            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_layer_dialogtitle" ) );
+            put( "title_dialog", CCommon.getResourceString( CLanguageEnvironment.class, "ui_layer_dialogtitle" ) );
         }};
     /**
      * labels of the MAS menu
@@ -145,7 +145,8 @@ public class CLanguageEnvironment
             put( "id_new", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editornew" ) );
             put( "id_remove", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editorremove" ) );
             put( "id_check", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editorcheck" ) );
-
+            put( "title_dialog", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editordialogtitle" ) );
+            put( "label_agents", CCommon.getResourceString( CLanguageEnvironment.class, "ui_mas_editoragentlist" ) );
         }};
     /**
      * labels of the MAS mind inspector menu
@@ -165,7 +166,7 @@ public class CLanguageEnvironment
             put( "id_reset", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_reset" ) );
             put( "id_load", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_load" ) );
             put( "id_save", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_save" ) );
-            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_dialogtitle" ) );
+            put( "title_dialog", CCommon.getResourceString( CLanguageEnvironment.class, "ui_simulation_dialogtitle" ) );
         }};
     /**
      * labels of the traffic menu
@@ -173,7 +174,7 @@ public class CLanguageEnvironment
     private static final Map<String, String> c_traffic = new HashMap<String, String>()
     {{
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_name" ) );
-            put( "id_dialogtitle", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_dialogtitle" ) );
+            put( "title_dialog", CCommon.getResourceString( CLanguageEnvironment.class, "ui_traffic_dialogtitle" ) );
         }};
 
     /**

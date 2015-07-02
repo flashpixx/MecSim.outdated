@@ -46,6 +46,20 @@ MASInconsistency.prototype = Object.create(Pane.prototype);
 /**
  * @Overwrite
 **/
+MASInconsistency.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        id        : this.generateSubID("dialog"),
+        title     : "",
+        content   : "-- inconsistency --"
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
 MASInconsistency.prototype.getContent = function()
 {
     return '<button id = "' + this.getID() + '" ></button >' + Pane.prototype.getContent.call(this);
@@ -57,16 +71,20 @@ MASInconsistency.prototype.getContent = function()
 **/
 MASInconsistency.prototype.afterDOMAdded = function()
 {
-    console.log(this.mc_id);
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
+
     MecSim.language({ url : "/cinconsistencyenvironment/" + this.mc_id + "/label", target : this });
 
     jQuery(this.getID("#")).button().click( function() {
 
+        jQuery( self.generateSubID("dialog", "#") ).dialog();
+
+/*
         MecSim.ajax({
             url  : "/cinconsistencyenvironment/" + this.mc_id + "/setmetric",
-            data : { id : "SymmetricDifference", path : [] }
+            data : {}
         }).fail( function(po_event) { console.log(po_event.responseJSON); } );
-
+*/
     });
 }

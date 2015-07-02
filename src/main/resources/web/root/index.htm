@@ -71,6 +71,7 @@
     <script type = "text/javascript" src = "jscss/content/mas/editor.js" ></script >
     <script type = "text/javascript" src = "jscss/content/mas/jasonmind.js" ></script >
     <script type = "text/javascript" src = "jscss/content/mas/messageflow.js" ></script >
+    <script type = "text/javascript" src = "jscss/content/mas/inconsistency.js" ></script >
 
     <script type = "text/javascript" src = "jscss/content/main/help.js" ></script >
 
@@ -84,7 +85,7 @@
                 new Layer("layer"),
                 new Traffic("traffic"),
                 new Waypoint("waypoint"),
-                new MAS("mas", [new MASJasonMind("inspector"), new MASMessageFlow("message"), new MASEditor("editor")]),
+                new MAS("mas", [new MASJasonMind("inspector"), new MASMessageFlow("message"), new MASInconsistency("inconsistency"), new MASEditor("editor")]),
                 new Help("help")
             ]);
         });

@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.object.mas.inconsistency.CWeightedDifferenceMetric
 import de.tu_clausthal.in.mec.object.mas.inconsistency.IMetric;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ import java.util.Map;
  */
 public class CInconsistencyEnvironment
 {
+    /**
+     * map for default labels
+     */
+    private final Map<String, String> m_label = new HashMap<>();
     /**
      * layer name
      */
@@ -58,6 +63,11 @@ public class CInconsistencyEnvironment
             throw new IllegalArgumentException( CCommon.getResourceString( this, "layerincorrect", p_layername ) );
 
         m_layername = p_layername;
+        m_label.put(
+                "name", CCommon.getResourceString(
+                        CInconsistencyEnvironment.class, "name", CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername )
+                )
+        );
     }
 
     /**
@@ -83,14 +93,28 @@ public class CInconsistencyEnvironment
     }
 
     /**
+     * returns all static label information for main menu
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_label()
+    {
+        return m_label;
+    }
+
+    /**
      * UI method - sets the metric on the current layer
      *
      * @param p_data input data
-     * @todo incomplete
      */
     private final void web_static_setMetric( final Map<String, Object> p_data )
     {
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notfound" ) );
 
+        CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).setMetric(
+                EMetric.valueOf( (String) p_data.get( "id" ) ).get( (Collection<CPath>) p_data.get( "path" ) )
+        );
     }
 
     /**
@@ -157,9 +181,10 @@ public class CInconsistencyEnvironment
         /**
          * returns a metric instance
          *
+         * @param p_paths collection of path
          * @return metric
          */
-        public IMetric<?,CPath> get( final CPath... p_paths )
+        public IMetric<?, CPath> get( final Collection<CPath> p_paths )
         {
             switch ( this )
             {

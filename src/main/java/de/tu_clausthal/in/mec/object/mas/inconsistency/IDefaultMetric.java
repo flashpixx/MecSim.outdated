@@ -53,6 +53,17 @@ public abstract class IDefaultMetric<T> implements IMetric<T,CPath>
     }
 
     /**
+     * ctor
+     *
+     * @param p_paths collection of path
+     */
+    public IDefaultMetric( final Collection<CPath> p_paths )
+    {
+        if ( p_paths != null )
+            m_paths.addAll( p_paths );
+    }
+
+    /**
      * copy-ctor
      *
      * @param p_metric default metric

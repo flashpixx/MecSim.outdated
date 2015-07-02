@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
@@ -126,10 +127,11 @@ public class CBootstrap
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
 
         // build layer first and set linkage between layer via ctor, because world is not initialized yet
-        final CInconsistencyLayer l_inconsistency = new CInconsistencyLayer<CAgent>( new CSymmetricDifferenceMetric<CAgent>() );
+        final CInconsistencyLayer l_inconsistency = new CInconsistencyLayer<CAgent>(
+                CCommon.getResourceString( CInconsistencyLayer.class, "jasoncar" ), new CSymmetricDifferenceMetric<CAgent>()
+        );
         p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistency );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistency ) );
-
     }
 
     /**

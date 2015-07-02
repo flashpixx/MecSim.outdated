@@ -25,6 +25,8 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
+import java.util.Collection;
+
 
 /**
  * generic discrete metric
@@ -52,6 +54,16 @@ public class CDiscreteMetric<T> extends IDefaultMetric<T>
     public CDiscreteMetric( final IDefaultMetric<T> p_metric )
     {
         super( p_metric );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_paths collection of path
+     */
+    public CDiscreteMetric( final Collection<CPath> p_paths )
+    {
+        super( p_paths );
     }
 
     @Override

@@ -55,6 +55,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * algebra object
      */
     private static final Algebra c_algebra = new Algebra();
+    /**
+     * name of the invoke definition on agent-invoke-call
+     */
     private static final String c_invokeName = "inconsistency";
     /**
      * algorithm to calculate stationary probability
@@ -77,6 +80,10 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      **/
     private IMetric<T,CPath> m_metric;
     /**
+     * name of the layer
+     */
+    private final String m_name;
+    /**
      * update of the metric values
      */
     private final int m_updatestep;
@@ -84,10 +91,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * ctor - use numeric algorithm
      *
+     * @param p_name language-based name of the layer
      * @param p_metric object metric
      */
-    public CInconsistencyLayer( final IMetric<T, CPath> p_metric )
+    public CInconsistencyLayer( final String p_name, final IMetric<T, CPath> p_metric )
     {
+        m_name = p_name;
         m_metric = p_metric;
         m_algorithm = EAlgorithm.QRDecomposition;
         m_iteration = 0;
@@ -99,14 +108,16 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * ctor - use stochastic algorithm
      *
+     * @param p_name language-based name of the layer
      * @param p_metric object metric
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistencyLayer( final IMetric<T, CPath> p_metric, final int p_iteration,
+    public CInconsistencyLayer( final String p_name, final IMetric<T, CPath> p_metric, final int p_iteration,
             final double p_epsilon
     )
     {
+        m_name = p_name;
         m_metric = p_metric;
         m_algorithm = EAlgorithm.FixpointIteration;
         m_iteration = p_iteration;
@@ -306,7 +317,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     @Override
     public final String toString()
     {
-        return CCommon.getResourceString( this, "name" );
+        return m_name;
     }
 
     /**

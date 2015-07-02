@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,6 +48,15 @@ public class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<
         super( p_paths );
     }
 
+    /**
+     * ctor
+     *
+     * @param p_paths collection of paths
+     */
+    public CWeightedDifferenceMetric( final Collection<CPath> p_paths )
+    {
+        super( p_paths );
+    }
 
     /**
      * copy-ctor

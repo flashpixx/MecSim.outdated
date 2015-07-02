@@ -171,6 +171,7 @@ MASEditor.prototype.afterDOMAdded = function()
         jQuery(self.generateSubID("dialog", "#")).dialog({
             width   : "auto",
             modal   : true,
+            overlay : { background: "black" },
             buttons : {
 
                 Create : function() {
@@ -199,6 +200,7 @@ MASEditor.prototype.afterDOMAdded = function()
         jQuery(self.generateSubID("dialog", "#")).dialog({
             width   : "auto",
             modal   : true,
+            overlay  : { background: "black" },
             buttons : {
 
                 Remove : function() {

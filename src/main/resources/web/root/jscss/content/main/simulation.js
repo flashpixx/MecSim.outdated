@@ -97,7 +97,10 @@ Simulation.prototype.afterDOMAdded = function()
             MecSim.ajax("/csimulation/"+pc_item).fail( function( po_data ) {
 
                 jQuery( self.generateSubID("text", "#")   ).text(po_data.responseJSON.error);
-                jQuery( self.generateSubID("dialog", "#") ).dialog();
+                jQuery(self.generateSubID("dialog", "#")).dialog({
+                    modal    : true,
+                    overlay  : { background: "black" }
+                });
 
             });
 

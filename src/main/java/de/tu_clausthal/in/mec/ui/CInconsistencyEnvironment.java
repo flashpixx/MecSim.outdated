@@ -59,7 +59,7 @@ public class CInconsistencyEnvironment
      */
     public CInconsistencyEnvironment( final String p_layername )
     {
-        if (!(CSimulation.getInstance().getWorld().get( p_layername ) instanceof CInconsistencyLayer))
+        if ( !( CSimulation.getInstance().getWorld().get( p_layername ) instanceof CInconsistencyLayer ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "layerincorrect", p_layername ) );
 
         m_layername = p_layername;
@@ -79,14 +79,14 @@ public class CInconsistencyEnvironment
     {
         return new HashMap<String, Object>()
         {{
-                final IMetric<?,CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
+                final IMetric<?, CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
                 for ( final EMetric l_metric : EMetric.values() )
                     put(
                             l_metric.toString(), new HashMap()
                             {{
                                     put( "active", l_metric.equals( EMetric.isa( l_current ) ) );
                                     put( "id", l_metric.name() );
-                                    put( "selector", l_current.getSelector());
+                                    put( "selector", l_current.getSelector() );
                                 }}
                     );
             }};
@@ -141,7 +141,9 @@ public class CInconsistencyEnvironment
          * symmetric difference metric
          */
         SymmetricDifference( CCommon.getResourceString( EMetric.class, "symmetricdifference" ) ),
-        /** weighted difference metric **/
+        /**
+         * weighted difference metric
+         **/
         WeightedDifference( CCommon.getResourceString( EMetric.class, "weighteddifference" ) );
         /**
          * language based name of the metric
@@ -164,7 +166,7 @@ public class CInconsistencyEnvironment
          * @param p_metric metric
          * @return enum type
          */
-        public static EMetric isa( final IMetric<?,CPath> p_metric )
+        public static EMetric isa( final IMetric<?, CPath> p_metric )
         {
             if ( p_metric instanceof CDiscreteMetric )
                 return Discrete;
@@ -172,7 +174,7 @@ public class CInconsistencyEnvironment
             if ( p_metric instanceof CSymmetricDifferenceMetric )
                 return SymmetricDifference;
 
-            if (p_metric instanceof CWeightedDifferenceMetric)
+            if ( p_metric instanceof CWeightedDifferenceMetric )
                 return WeightedDifference;
 
             throw new IllegalStateException( CCommon.getResourceString( EMetric.class, "unknownmetric" ) );

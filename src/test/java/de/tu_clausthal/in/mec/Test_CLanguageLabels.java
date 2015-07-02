@@ -216,6 +216,7 @@ public class Test_CLanguageLabels
          *
          * @param p_name class name
          * @return class object
+         *
          * @throws ClassNotFoundException thrown if class is not found
          */
         private Class<?> getClass( final String p_name ) throws ClassNotFoundException

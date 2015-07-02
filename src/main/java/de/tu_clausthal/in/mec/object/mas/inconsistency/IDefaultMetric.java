@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * default metric with an optional set of path values
  */
-public abstract class IDefaultMetric<T> implements IMetric<T,CPath>
+public abstract class IDefaultMetric<T> implements IMetric<T, CPath>
 {
     /**
      * set with paths

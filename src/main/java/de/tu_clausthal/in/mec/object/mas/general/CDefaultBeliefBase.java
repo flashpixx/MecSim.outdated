@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.common.CPath;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -104,9 +103,9 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
             {
                 final Set<ILiteral<N>> l_literals = new HashSet<ILiteral<N>>()
                 {{
-                    for ( final IBeliefBaseElement l_item : l_innerMap.get( ILiteral.class ) )
-                        add( (ILiteral<N>) l_item );
-                }};
+                        for ( final IBeliefBaseElement l_item : l_innerMap.get( ILiteral.class ) )
+                            add( (ILiteral<N>) l_item );
+                    }};
 
 
                 p_stack.push(

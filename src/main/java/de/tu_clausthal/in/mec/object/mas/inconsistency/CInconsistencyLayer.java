@@ -78,7 +78,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * metric object to create the value of two objects
      **/
-    private IMetric<T,CPath> m_metric;
+    private IMetric<T, CPath> m_metric;
     /**
      * name of the layer
      */
@@ -255,7 +255,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @return get metric
      */
-    public final IMetric<T,CPath> getMetric()
+    public final IMetric<T, CPath> getMetric()
     {
         return m_metric;
     }
@@ -265,7 +265,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      *
      * @param p_metric metric
      */
-    public final void setMetric( final IMetric<T,CPath> p_metric )
+    public final void setMetric( final IMetric<T, CPath> p_metric )
     {
         m_metric = p_metric;
     }

@@ -439,7 +439,7 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
             var lo_editor = CodeMirror.fromTextArea( document.getElementById( lc_tabid + "_edit" ), {
 
                 lineNumbers    : true,
-                viewportMargin : Infinity,
+                viewportMargin : Infinity
 
             });
 

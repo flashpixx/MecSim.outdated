@@ -37,6 +37,9 @@
 function MASInconsistency( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
+
+    // URL-base
+    this.mc_url = "/cinconsistencyenvironment/" + pc_id;
 }
 
 /** inheritance call **/
@@ -90,7 +93,7 @@ MASInconsistency.prototype.afterDOMAdded = function()
 
     MecSim.language({
 
-        url : "/cinconsistencyenvironment/" + this.mc_id + "/label",
+        url :  this.mc_url + "/label",
         target : this,
         finish : function()
         {
@@ -101,7 +104,16 @@ MASInconsistency.prototype.afterDOMAdded = function()
                 overlay  : { background: "black" },
                 buttons  : {
 
-                    "OK" : function() {}
+                    "OK" : function() {
+
+                        MecSim.ajax({
+
+                            url  : self.mc_url + "/setmetric",
+                            data : {}
+
+                        }).fail( function( po_data ) { console.log(po_data); } );
+
+                    }
 
                 }
             });
@@ -115,7 +127,7 @@ MASInconsistency.prototype.afterDOMAdded = function()
 
         MecSim.ajax({
 
-            url     : "/cinconsistencyenvironment/" + self.mc_id + "/getmetric",
+            url     : self.mc_url + "/getmetric",
             success : function( po_data )
             {
 

@@ -448,7 +448,10 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
             );
             self.mo_tabs.append(
                 '<div id="' + lc_tabid + '">' +
-                '<textarea id="' + lc_tabid+ '_edit">' + po_data.source + '</textarea>' +
+                Layout.area({
+                    id      : lc_tabid+ "_edit",
+                    content : po_data.source
+                }) +
                 '</div>'
             );
 

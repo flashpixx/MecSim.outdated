@@ -49,11 +49,23 @@ MASInconsistency.prototype = Object.create(Pane.prototype);
 MASInconsistency.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
+
         id        : this.generateSubID("dialog"),
         title     : "",
         content   : Layout.select({
-            label : "metric"
+
+            id    : this.generateSubID("metric"),
+            label : ""
+
+        }) +
+
+        Layout.area({
+
+            id    : this.generateSubID("paths"),
+            label : ""
+
         })
+
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -76,17 +88,59 @@ MASInconsistency.prototype.afterDOMAdded = function()
     Pane.prototype.afterDOMAdded.call(this);
     var self = this;
 
-    MecSim.language({ url : "/cinconsistencyenvironment/" + this.mc_id + "/label", target : this });
+    MecSim.language({
 
+        url : "/cinconsistencyenvironment/" + this.mc_id + "/label",
+        target : this,
+        finish : function()
+        {
+
+            jQuery( self.generateSubID("dialog", "#") ).dialog({
+                modal    : true,
+                autoOpen : false,
+                overlay  : { background: "black" },
+                buttons  : {
+
+                    "OK" : function() {}
+
+                }
+            });
+
+        }
+
+    });
+
+    // bind button action
     jQuery(this.getID("#")).button().click( function() {
 
-        jQuery( self.generateSubID("dialog", "#") ).dialog();
-
-/*
         MecSim.ajax({
-            url  : "/cinconsistencyenvironment/" + this.mc_id + "/setmetric",
-            data : {}
-        }).fail( function(po_event) { console.log(po_event.responseJSON); } );
-*/
+
+            url     : "/cinconsistencyenvironment/" + self.mc_id + "/getmetric",
+            success : function( po_data )
+            {
+
+                jQuery( self.generateSubID("metric", "#") ).empty();
+                jQuery( self.generateSubID("paths", "#") ).empty();
+
+                jQuery.each( po_data, function( pc_key, po_value ) {
+
+                    jQuery( Layout.option({
+                        label : pc_key,
+                        id    : po_value.id
+                    },
+                    po_value.active ? po_value.id : null) ).appendTo( self.generateSubID("metric", "#")  );
+
+                    if (po_value.active)
+                        jQuery( po_value.selector.join("\n") ).appendTo( self.generateSubID("path", "#") );
+
+                    jQuery( self.generateSubID("dialog", "#") ).dialog( "open" );
+
+                });
+
+
+            }
+
+        });
+
     });
 }

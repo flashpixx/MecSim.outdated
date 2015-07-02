@@ -126,6 +126,32 @@ var Layout = (function (px_modul) {
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    // --- textarea with label ---------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * creates a textarea with label
+     *
+     * @param po_options Json object in the format { id: -DOM ID-, class: -DOM class-, label : -optional label-, value: -optional initializing value- }
+     * @return HTML string
+    **/
+    px_modul.area = function( po_options )
+    {
+        if (Array.isArray(po_options.list))
+            po_options.list.push(po_options.id);
+
+        return [ (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' : "") + " ",
+                 lx_basetag( "textarea", {
+
+                    id      : po_options.id,
+                    class   : po_options.class,
+                    addon   : po_options.name ? 'name="' + po_options.name + '"' : "",
+                    content : po_options.content ? po_options.content : ""
+
+                 })
+               ].join("");
+    }
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
     // --- selectbox with label --------------------------------------------------------------------------------------------------------------------------------
 
     /**

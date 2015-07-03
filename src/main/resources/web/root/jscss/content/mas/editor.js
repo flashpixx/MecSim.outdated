@@ -70,11 +70,11 @@ MASEditor.prototype = Object.create(Pane.prototype);
 **/
 MASEditor.prototype.getGlobalContent = function()
 {
-    return Layout.dialog({
+    return "<p>" + Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("content"),
         title     : ""
-    }) +
+    }) + "</p>" +
     Pane.prototype.getGlobalContent.call(this);
 }
 

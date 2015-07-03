@@ -34,7 +34,9 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -115,8 +117,13 @@ public class CInconsistencyEnvironment
         if ( !p_data.containsKey( "id" ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "notfound" ) );
 
+        final Set<CPath> l_path = new HashSet<>();
+        if ( p_data.containsKey( "path" ) )
+            for ( final String lc_line : ( (String) p_data.get( "path" ) ).split( "[\\r\\n]+\\s" ) )
+                l_path.add( new CPath( lc_line ) );
+
         CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).setMetric(
-                EMetric.valueOf( (String) p_data.get( "id" ) ).get( (Collection<CPath>) p_data.get( "path" ) )
+                EMetric.valueOf( (String) p_data.get( "id" ) ).get( l_path )
         );
     }
 

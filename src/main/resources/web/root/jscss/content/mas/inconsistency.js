@@ -64,7 +64,7 @@ MASInconsistency.prototype.getGlobalContent = function()
 
         Layout.area({
 
-            id    : this.generateSubID("paths"),
+            id    : this.generateSubID("path"),
             label : ""
 
         })
@@ -104,12 +104,19 @@ MASInconsistency.prototype.afterDOMAdded = function()
                 overlay  : { background: "black" },
                 buttons  : {
 
-                    "OK" : function() {
+                    OK   : function() {
 
                         MecSim.ajax({
 
                             url  : self.mc_url + "/setmetric",
-                            data : {}
+                            data : {
+                                id    : jQuery(self.generateSubID("metric", "#")).val(),
+                                path  : jQuery(self.generateSubID("path", "#")).val()
+                            },
+                            success : function()
+                            {
+                                jQuery( self.generateSubID("dialog", "#") ).dialog("close");
+                            }
 
                         }).fail( function( po_data ) { console.log(po_data); } );
 
@@ -131,8 +138,8 @@ MASInconsistency.prototype.afterDOMAdded = function()
             success : function( po_data )
             {
 
-                jQuery( self.generateSubID("metric", "#") ).empty();
-                jQuery( self.generateSubID("paths", "#") ).empty();
+                jQuery( self.generateSubID("metric", "#") ).find("option").remove().end();
+                jQuery( self.generateSubID("path", "#") ).empty();
 
                 jQuery.each( po_data, function( pc_key, po_value ) {
 
@@ -145,6 +152,8 @@ MASInconsistency.prototype.afterDOMAdded = function()
                     if (po_value.active)
                         jQuery( po_value.selector.join("\n") ).appendTo( self.generateSubID("path", "#") );
 
+                    // @todo selectmenu not working
+                    //jQuery( self.generateSubID("metric", "#") ).selectmenu({ width: 150 });
                     jQuery( self.generateSubID("dialog", "#") ).dialog( "open" );
 
                 });

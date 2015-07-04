@@ -21,46 +21,78 @@
  * @endcond
  */
 
-
-"use strict";
-
-//@todo fix HTML5 data attributes
+package de.tu_clausthal.in.mec.object.mas.general;
 
 
-/**
- * ctor to create the Jason mind inspector
- *
- * @param pc_id ID
- * @param pc_name name of the panel
- * @param pa_panel array with child elements
-**/
-function MASJasonMind( pc_id, pc_name, pa_panel )
-{
-    Pane.call(this, pc_id, pc_name, pa_panel );
-}
-
-/** inheritance call **/
-MASJasonMind.prototype = Object.create(Pane.prototype);
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
- * @Overwrite
-**/
-MASJasonMind.prototype.getContent = function()
+ * default beliefbase
+ * @tparam T literal type
+ */
+public abstract class New_IDefaultBeliefBase<T> implements New_IBeliefBase<ILiteral<T>>
 {
-    return '<p><button id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
-}
+    /**
+     * storage with data
+     */
+    protected final New_CBeliefStorage<ILiteral<T>, New_IPathMask> m_storage = new New_CBeliefStorage<>();
 
 
-/**
- * @Overwrite
-**/
-MASJasonMind.prototype.afterDOMAdded = function()
-{
-    var self = this;
-    MecSim.language({ url : "/clanguageenvironment/masmind", target : this });
+    @Override
+    public void add( final ILiteral<T> p_literal )
+    {
+        m_storage.addElement( p_literal.getFunctor().get(), p_literal );
+    }
 
-    jQuery(this.getID("#")).button().click( function() {
-        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "' + self.generateSubID("inspector") + '" class = "template" src = "http://localhost:3272" seamless />' );
-    });
+
+    @Override
+    public void add( final New_IPathMask p_mask )
+    {
+        m_storage.addMask( p_mask.getName(), p_mask );
+    }
+
+
+    @Override
+    public final New_IPathMask getPathElement( final String p_name )
+    {
+        return new CMask<>( p_name, this );
+    }
+
+
+    /**
+     * mask of a beliefbase
+     * @tparam P type of the beliefbase element
+     */
+    private class CMask<P> implements New_IPathMask
+    {
+        /** name of the mask **/
+        private final String m_name;
+        /** reference of the beliefbase **/
+        private final New_IBeliefBase<P> m_beliefbase;
+
+        /**
+         * ctor
+         *
+         * @param p_name name of the mask
+         */
+        public CMask( final String p_name, final New_IBeliefBase<P> p_beliefbase )
+        {
+            m_name = p_name;
+            m_beliefbase = p_beliefbase;
+        }
+
+        @Override
+        public CPath getFQNPath()
+        {
+            return null;
+        }
+
+        @Override
+        public String getName()
+        {
+            return null;
+        }
+    }
+
 }

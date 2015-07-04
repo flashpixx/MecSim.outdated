@@ -21,46 +21,37 @@
  * @endcond
  */
 
-
-"use strict";
-
-//@todo fix HTML5 data attributes
+package de.tu_clausthal.in.mec.object.mas.general;
 
 
-/**
- * ctor to create the Jason mind inspector
- *
- * @param pc_id ID
- * @param pc_name name of the panel
- * @param pa_panel array with child elements
-**/
-function MASJasonMind( pc_id, pc_name, pa_panel )
+import de.tu_clausthal.in.mec.common.CPath;
+
+
+public interface New_IBeliefBase<T>
 {
-    Pane.call(this, pc_id, pc_name, pa_panel );
-}
 
-/** inheritance call **/
-MASJasonMind.prototype = Object.create(Pane.prototype);
-
-
-/**
- * @Overwrite
-**/
-MASJasonMind.prototype.getContent = function()
-{
-    return '<p><button id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
-}
+    /**
+     * returns a new mask of the belief base
+     *
+     * @param p_name name of the mask
+     * @return mask
+     */
+    public New_IPathMask getPathElement( final String p_name );
 
 
-/**
- * @Overwrite
-**/
-MASJasonMind.prototype.afterDOMAdded = function()
-{
-    var self = this;
-    MecSim.language({ url : "/clanguageenvironment/masmind", target : this });
+    /**
+     * adds a new literal
+     *
+     * @param p_literal literal
+     */
+    public void add( final T p_literal );
 
-    jQuery(this.getID("#")).button().click( function() {
-        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "' + self.generateSubID("inspector") + '" class = "template" src = "http://localhost:3272" seamless />' );
-    });
+
+    /**
+     * adds a new mask
+     *
+     * @param p_mask mask
+     */
+    public void add( final New_IPathMask p_mask );
+
 }

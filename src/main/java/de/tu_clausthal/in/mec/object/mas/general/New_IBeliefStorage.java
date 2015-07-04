@@ -21,46 +21,82 @@
  * @endcond
  */
 
-
-"use strict";
-
-//@todo fix HTML5 data attributes
+package de.tu_clausthal.in.mec.object.mas.general;
 
 
 /**
- * ctor to create the Jason mind inspector
- *
- * @param pc_id ID
- * @param pc_name name of the panel
- * @param pa_panel array with child elements
-**/
-function MASJasonMind( pc_id, pc_name, pa_panel )
+ * interface of a beliefbase storage
+ */
+public interface New_IBeliefStorage<N,M>
 {
-    Pane.call(this, pc_id, pc_name, pa_panel );
-}
 
-/** inheritance call **/
-MASJasonMind.prototype = Object.create(Pane.prototype);
+    /**
+     * checks any element exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean contains( final String p_key );
+
+    /**
+     * check if an element exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean containsElement( final String p_key );
+
+    /**
+     * adds an element
+     *
+     * @param p_key key name
+     * @param p_element element
+     */
+    public void addElement( final String p_key, final N p_element );
 
 
-/**
- * @Overwrite
-**/
-MASJasonMind.prototype.getContent = function()
-{
-    return '<p><button id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
-}
+    /**
+     * removes an element
+     *
+     * @param p_key key name
+     * @param p_element element
+     * @return boolean flag, that the element is removed
+     */
+    public boolean removeElement( final String p_key, final N p_element );
+
+    /**
+     * checks if a mask exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean containsMask( String p_key );
 
 
-/**
- * @Overwrite
-**/
-MASJasonMind.prototype.afterDOMAdded = function()
-{
-    var self = this;
-    MecSim.language({ url : "/clanguageenvironment/masmind", target : this });
+    /**
+     * adds a new mask
+     *
+     * @param p_key key name
+     * @param p_element mask element
+     */
+    public void addMask( final String p_key, final M p_element );
 
-    jQuery(this.getID("#")).button().click( function() {
-        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "' + self.generateSubID("inspector") + '" class = "template" src = "http://localhost:3272" seamless />' );
-    });
+
+    /**
+     * removes a mask
+     *
+     * @param p_key key name
+     * @return boolean flag the element is removed
+     */
+    public boolean removeMask( final String p_key );
+
+
+    /**
+     * removes all elements by its name
+     *
+     * @param p_key key name
+     * @return boolean flag that elements could be removed
+     */
+    public boolean remove( final String p_key );
+
 }

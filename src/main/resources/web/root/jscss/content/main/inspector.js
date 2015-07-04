@@ -51,7 +51,7 @@ Inspector.prototype.getGlobalContent = function()
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
         contentid : this.generateSubID("table"),
-        title     : this.generateSubID("dialogtitle")
+        title     : ""
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }

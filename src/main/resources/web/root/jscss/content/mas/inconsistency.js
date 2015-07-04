@@ -37,6 +37,9 @@
 function MASInconsistency( pc_id, pc_name, pa_panel )
 {
     Pane.call(this, pc_id, pc_name, pa_panel );
+
+    // URL-base
+    this.mc_url = "/cinconsistencyenvironment/" + pc_id;
 }
 
 /** inheritance call **/
@@ -46,9 +49,37 @@ MASInconsistency.prototype = Object.create(Pane.prototype);
 /**
  * @Overwrite
 **/
+MASInconsistency.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+
+        id        : this.generateSubID("dialog"),
+        title     : "",
+        content   : Layout.select({
+
+            id    : this.generateSubID("metric"),
+            label : ""
+
+        }) +
+
+        Layout.area({
+
+            id    : this.generateSubID("path"),
+            label : ""
+
+        })
+
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
 MASInconsistency.prototype.getContent = function()
 {
-    return '<button id = "' + this.getID() + '" ></button >' + Pane.prototype.getContent.call(this);
+    return '<p><button id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
 }
 
 
@@ -57,16 +88,80 @@ MASInconsistency.prototype.getContent = function()
 **/
 MASInconsistency.prototype.afterDOMAdded = function()
 {
-    console.log(this.mc_id);
+    Pane.prototype.afterDOMAdded.call(this);
     var self = this;
-    MecSim.language({ url : "/cinconsistencyenvironment/" + this.mc_id + "/label", target : this });
 
+    MecSim.language({
+
+        url :  this.mc_url + "/label",
+        target : this,
+        finish : function()
+        {
+
+            jQuery( self.generateSubID("dialog", "#") ).dialog({
+                modal    : true,
+                autoOpen : false,
+                overlay  : { background: "black" },
+                buttons  : {
+
+                    OK   : function() {
+
+                        MecSim.ajax({
+
+                            url  : self.mc_url + "/setmetric",
+                            data : {
+                                id    : jQuery(self.generateSubID("metric", "#")).val(),
+                                path  : jQuery(self.generateSubID("path", "#")).val()
+                            },
+                            success : function()
+                            {
+                                jQuery( self.generateSubID("dialog", "#") ).dialog("close");
+                            }
+
+                        }).fail( function( po_data ) { console.log(po_data); } );
+
+                    }
+
+                }
+            });
+
+        }
+
+    });
+
+    // bind button action
     jQuery(this.getID("#")).button().click( function() {
 
         MecSim.ajax({
-            url  : "/cinconsistencyenvironment/" + this.mc_id + "/setmetric",
-            data : { id : "SymmetricDifference", path : [] }
-        }).fail( function(po_event) { console.log(po_event.responseJSON); } );
+
+            url     : self.mc_url + "/getmetric",
+            success : function( po_data )
+            {
+
+                jQuery( self.generateSubID("metric", "#") ).find("option").remove().end();
+                jQuery( self.generateSubID("path", "#") ).empty();
+
+                jQuery.each( po_data, function( pc_key, po_value ) {
+
+                    jQuery( Layout.option({
+                        label : pc_key,
+                        id    : po_value.id
+                    },
+                    po_value.active ? po_value.id : null) ).appendTo( self.generateSubID("metric", "#")  );
+
+                    if (po_value.active)
+                        jQuery( po_value.selector.join("\n") ).appendTo( self.generateSubID("path", "#") );
+
+                    // @todo selectmenu not working
+                    //jQuery( self.generateSubID("metric", "#") ).selectmenu({ width: 150 });
+                    jQuery( self.generateSubID("dialog", "#") ).dialog( "open" );
+
+                });
+
+
+            }
+
+        });
 
     });
 }

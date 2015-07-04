@@ -21,46 +21,30 @@
  * @endcond
  */
 
-
-"use strict";
-
-//@todo fix HTML5 data attributes
+package de.tu_clausthal.in.mec.object.mas.general;
 
 
-/**
- * ctor to create the Jason mind inspector
- *
- * @param pc_id ID
- * @param pc_name name of the panel
- * @param pa_panel array with child elements
-**/
-function MASJasonMind( pc_id, pc_name, pa_panel )
-{
-    Pane.call(this, pc_id, pc_name, pa_panel );
-}
-
-/** inheritance call **/
-MASJasonMind.prototype = Object.create(Pane.prototype);
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
- * @Overwrite
-**/
-MASJasonMind.prototype.getContent = function()
+ * mask of the path
+ */
+public interface New_IPathMask
 {
-    return '<p><button id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
-}
 
+    /**
+     * returns the full path
+     *
+     * @return path
+     */
+    public CPath getFQNPath();
 
-/**
- * @Overwrite
-**/
-MASJasonMind.prototype.afterDOMAdded = function()
-{
-    var self = this;
-    MecSim.language({ url : "/clanguageenvironment/masmind", target : this });
+    /**
+     * returns only the element name
+     *
+     * @return name
+     */
+    public String getName();
 
-    jQuery(this.getID("#")).button().click( function() {
-        jQuery(MecSim.ui().content("#")).empty().append( '<iframe id = "' + self.generateSubID("inspector") + '" class = "template" src = "http://localhost:3272" seamless />' );
-    });
 }

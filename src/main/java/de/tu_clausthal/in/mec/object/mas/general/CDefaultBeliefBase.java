@@ -46,6 +46,11 @@ import java.util.Stack;
 public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
+     * path to beliefbase
+     */
+    private CPath m_path;
+
+    /**
      * structure for beliefbase elements (i.e. literals and inherited getBeliefbases)
      */
     private final Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> m_elements = new HashMap<>();
@@ -55,7 +60,17 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public CDefaultBeliefBase()
     {
-        this( null, null );
+        this( null, null, CPath.EMPTY );
+    }
+
+    /**
+     * ctor with path
+     *
+     * @param p_path
+     */
+    public CDefaultBeliefBase( final CPath p_path )
+    {
+        this(null,null,p_path);
     }
 
     /**
@@ -65,7 +80,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      */
     public CDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
     {
-        this( null, p_literals );
+        this( null, p_literals, CPath.EMPTY );
     }
 
     /**
@@ -74,7 +89,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * @param p_inheritedBeliefbases inherited getBeliefbases with paths
      * @param p_literals top level literals
      */
-    public CDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_inheritedBeliefbases, final Set<ILiteral<T>> p_literals )
+    public CDefaultBeliefBase( final Map<String, IBeliefBase<T>> p_inheritedBeliefbases, final Set<ILiteral<T>> p_literals, final CPath p_path )
     {
         // generate map-entries for getBeliefbases
         if ( p_inheritedBeliefbases != null )
@@ -84,7 +99,9 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
         // generate map-entries for literals
         if ( p_literals != null )
             for ( final ILiteral<T> l_literal : p_literals )
-                this.add( CPath.EMPTY, l_literal );
+                this.add( l_literal );
+
+        m_path = p_path;
     }
 
     /**
@@ -122,13 +139,19 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public final boolean add( final CPath p_path, final IBeliefBaseElement p_element )
+    public CPath getPath()
+    {
+        return m_path;
+    }
+
+    @Override
+    public final boolean add( final IBeliefBaseElement p_element )
     {
         if ( p_element instanceof ILiteral )
-            return this.add( p_path, (ILiteral) p_element );
+            return this.add( (ILiteral) p_element );
 
         if ( p_element instanceof IBeliefBase )
-            return this.add( p_path, (IBeliefBase) p_element );
+            return this.add( (IBeliefBase) p_element );
 
         return false;
     }
@@ -270,6 +293,18 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    public boolean isBeliefbase()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isLiteral()
+    {
+        return false;
+    }
+
+    @Override
     public final boolean remove( final CPath p_path, final IBeliefBaseElement p_element )
     {
         if ( p_element instanceof ILiteral )
@@ -291,13 +326,12 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      * adds a literal to beliefbase with specified path. If path is non-existing
      * it will be constructed.
      *
-     * @param p_path path to beliefbase
      * @param p_literal literal to add
      * @return true, if addition was successful
      */
-    private final boolean add( final CPath p_path, final ILiteral<T> p_literal )
+    private final boolean add( final ILiteral<T> p_literal )
     {
-        if ( p_path.isEmpty() )
+        if ( p_literal.getPath().isEmpty() )
         {
             final String l_key = p_literal.getFunctor().toString();
 
@@ -321,17 +355,20 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 
         // go down the hierarchy
         IBeliefBase<T> l_current = this;
-        for ( final CPath l_subPath : p_path )
+        for ( final CPath l_subPath : p_literal.getPath() )
         {
             // if non-existing, create new beliefbase
             if ( l_current.getElements( CPath.EMPTY, l_subPath.getSuffix(), IBeliefBase.class ).size() != 1 )
-                l_current.add( new CPath( l_subPath.getSuffix() ), new CDefaultBeliefBase<T>() );
+                l_current.add( new CDefaultBeliefBase<T>( new CPath( l_subPath.getSuffix() )) );
 
             l_current = l_current.get( new CPath( l_subPath.getSuffix() ) );
         }
 
-        return l_current.add( CPath.EMPTY, p_literal );
+        return l_current.add( p_literal );
     }
+
+    @Override
+    public final void setPath( final CPath p_path ) { m_path = p_path; }
 
     /**
      * Adds a beliefbase to specified path. The name of the new beliefbase
@@ -379,12 +416,13 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
             // check if a beliefbase with same key is already existing
             final String l_key = l_subpath.getSuffix();
             if ( l_current.getElements( CPath.EMPTY, l_key, IBeliefBase.class ).size() != 1 )
-                l_current.add( new CPath( l_key ), new CDefaultBeliefBase<>() );
+                l_current.add( new CDefaultBeliefBase<>( new CPath( l_key ) ) );
 
             l_current = l_current.get( new CPath( l_key ) );
         }
 
-        return l_current.add( new CPath( p_path.getSuffix() ), p_beliefbase );
+        p_beliefbase.setPath( new CPath( p_path.getSuffix() ) );
+        return l_current.add( p_beliefbase );
     }
 
     /**
@@ -453,7 +491,9 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
             @Override
             public ILiteral<T> next()
             {
-                return new CDefaultLiteral<T>( m_stack.peek().getLeft(), m_stack.peek().getRight().next() );
+                return new CDefaultLiteral<T>(
+                        m_stack.peek().getLeft().toString(),
+                        m_stack.peek().getRight().next().getLiteral() );
             }
         };
     }

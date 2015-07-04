@@ -30,6 +30,8 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.CDefaultLiteral;
+import de.tu_clausthal.in.mec.object.mas.general.CTermList;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
@@ -41,6 +43,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -190,7 +193,7 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "invoke", m_methodBind );
 
             // initialize inherited getBeliefbases
-            m_beliefs.add( new CPath( "binding" ), new CBindingBeliefBase( c_bindname, p_bind ) );
+            m_beliefs.add( new CBindingBeliefBase( c_bindname, p_bind, new CPath( "binding" ) ) );
             m_beliefs.add( new CPath( "messages" ), new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
         }
 
@@ -200,6 +203,9 @@ public class CAgent<T> implements IVoidAgent
         // put initial internal beliefs into top-level beliefbase
         for ( final Literal l_initialBelief : m_agent.getBB() )
             m_beliefs.add( CPath.EMPTY, CCommon.convertGeneric( l_initialBelief ) );
+
+
+
     }
 
 
@@ -456,7 +462,7 @@ public class CAgent<T> implements IVoidAgent
         public final void cycle( final int p_currentstep )
         {
             m_beliefs.remove( new CPath( "simulation" ), "step", ILiteral.class );
-            m_beliefs.add( new CPath( "simulation" ), CCommon.convertGeneric( ASSyntax.createLiteral( "step", ASSyntax.createNumber( p_currentstep ) ) ) );
+            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation_step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
             // run all register before-cycle object
             for ( final ICycle l_item : m_cycleobject )
@@ -488,7 +494,7 @@ public class CAgent<T> implements IVoidAgent
             for ( final Literal l_literal : m_agent.getBB() )
             {
 
-                m_beliefs.add( new CPath( l_literal.getFunctor() ), CCommon.convertGeneric( l_literal ) );
+                m_beliefs.add( new CLiteral( CPath.EMPTY, l_literal, "_" ) );
             }
 
             // run all register after-cycle object

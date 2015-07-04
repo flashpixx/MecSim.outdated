@@ -41,11 +41,10 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * adds a beliefbase-element to specified path (i.e. the path to an inherited beliefbase)
      * If the path is non-existing, it will be constructed.
      *
-     * @param p_path path for addition
      * @param p_element element to add
      * @return true if addition was successful
      */
-    public boolean add( final CPath p_path, final IBeliefBaseElement p_element );
+    public boolean add( final IBeliefBaseElement p_element );
 
     /**
      * empties the whole beliefbase, i.e. the top-level literals
@@ -117,4 +116,17 @@ public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>
      * updates the beliefbase
      */
     public void update();
+
+    /**
+     * getter for path
+     */
+    public CPath getPath();
+
+    /**
+     * setter for path
+     *
+     * @param p_path
+     */
+    public void setPath( final CPath p_path );
+
 }

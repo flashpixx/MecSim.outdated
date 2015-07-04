@@ -30,4 +30,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
  */
 public interface IBeliefBaseElement
 {
+    public boolean isBeliefbase();
+
+    public boolean isLiteral();
 }

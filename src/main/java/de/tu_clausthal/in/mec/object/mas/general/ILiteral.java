@@ -24,6 +24,9 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
+import de.tu_clausthal.in.mec.common.CPath;
+
+
 /**
  * literal interface
  *
@@ -46,13 +49,6 @@ public interface ILiteral<T> extends ITerm, IBeliefBaseElement
     public IAtom<String> getFunctor();
 
     /**
-     * sets functor to specific value
-     *
-     * @param p_functor new functor
-     */
-    public void setFunctor( final String p_functor );
-
-    /**
      * getter for language specific literal
      *
      * @return literal
@@ -65,4 +61,14 @@ public interface ILiteral<T> extends ITerm, IBeliefBaseElement
      * @return value term
      */
     public ITermCollection getValues();
+
+    /**
+     * creates same literal with different functor
+     *
+     * @param p_functor new functor
+     * @return same literal, but different functor
+     */
+    public T create( final String p_functor );
+
+    public CPath getPath();
 }

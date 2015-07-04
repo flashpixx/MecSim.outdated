@@ -62,8 +62,9 @@ public class CBindingBeliefBase extends CBeliefBase
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CBindingBeliefBase( final String p_name, final Object p_object )
+    public CBindingBeliefBase( final String p_name, final Object p_object, final CPath p_path )
     {
+        super( null, null, p_path );
         this.push( p_name, p_object );
     }
 

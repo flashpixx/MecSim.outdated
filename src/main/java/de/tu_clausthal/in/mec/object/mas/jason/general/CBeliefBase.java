@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.general;
 
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
@@ -63,9 +64,9 @@ public class CBeliefBase extends CDefaultBeliefBase<Literal>
      * @param p_beliefbases inherited getBeliefbases
      * @param p_literals top level literals
      */
-    public CBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals )
+    public CBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases, final Set<ILiteral<Literal>> p_literals, final CPath p_path )
     {
-        super( p_beliefbases, p_literals );
+        super( p_beliefbases, p_literals, p_path );
     }
 
 }

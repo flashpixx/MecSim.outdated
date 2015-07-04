@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.CNumberAtom;
 import de.tu_clausthal.in.mec.object.mas.general.CStringAtom;
 import de.tu_clausthal.in.mec.object.mas.general.CTermList;
@@ -121,10 +122,19 @@ public class CCommon
      *
      * @param p_literal Jason-specific literal
      * @return generic form
+     * @todo generic seperator for language specific literals
      */
     public static ILiteral convertGeneric( final Literal p_literal )
     {
-        return new CLiteral( p_literal );
+        final CPath l_path = new CPath( p_literal.getFunctor().split( "_" ) );
+
+        final Literal l_literal = ASSyntax.createLiteral( l_path.getSuffix() );
+        l_literal.addTerms( p_literal.getTerms() );
+        l_literal.addAnnots( p_literal );
+
+        return new CLiteral(
+                p_literal,
+                l_path.getSubPath( 0, l_path.size() - 1 ) );
     }
 
     /**

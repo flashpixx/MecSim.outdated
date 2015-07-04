@@ -25,7 +25,9 @@ package de.tu_clausthal.in.mec.object.mas.jason.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.CDefaultLiteral;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 
@@ -61,5 +63,21 @@ public class CLiteral extends CDefaultLiteral<Literal>
         if ( p_literal.hasAnnot() )
             for ( final Term l_term : p_literal.getAnnots() )
                 m_annotations.add( CCommon.convertGeneric( l_term ) );
+    }
+
+    public CLiteral( final CPath p_path, final Literal p_literal, final String p_splitSeperator
+    )
+    {
+        super( p_path, CCommon.convertGeneric( p_literal ), p_splitSeperator );
+    }
+
+    @Override
+    public Literal create( final String p_functor )
+    {
+        final Literal l_literal = ASSyntax.createLiteral( p_functor );
+        l_literal.addTerms( m_literal.getTerms() );
+        l_literal.addAnnots( m_literal.getAnnots() );
+
+        return l_literal;
     }
 }

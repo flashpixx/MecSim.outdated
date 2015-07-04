@@ -50,11 +50,15 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     /**
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
-    private final T m_literal;
+    protected final T m_literal;
     /**
      * the literal values
      */
     protected final ITermCollection m_values;
+    /**
+     * path in beliefbase
+     */
+    private final CPath m_path;
 
     /**
      * ctor - all parameters specified
@@ -72,6 +76,7 @@ public class CDefaultLiteral<T> implements ILiteral<T>
         m_literal = p_literal;
         m_values = new CTermList( p_valueList );
         m_annotations = new CTermSet( p_annotationList );
+        m_path = CPath.EMPTY;
     }
 
     /**
@@ -85,24 +90,38 @@ public class CDefaultLiteral<T> implements ILiteral<T>
         this( p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
     }
 
-    public CDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal )
+    public CDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal, final String p_splitSeperator )
     {
-        this(
-                p_path.append( p_literal.getFunctor().toString() ).toString().replace( "/", "_" ), p_literal.getLiteral(),
-                (List) p_literal.getValues(), (Set) p_literal.getAnnotation()
-        );
+
+        final CPath l_path = p_path.append( CPath.createSplitPath( p_splitSeperator,
+                                                                   CPath.DEFAULTSEPERATOR,
+                                                                   p_literal.getFunctor().toString() ) );
+
+        m_path = l_path.getSubPath( 0, l_path.size() - 1 );
+        m_functor = new CStringAtom( l_path.getSuffix() );
+        m_literal = p_literal.create( l_path.getPath( p_splitSeperator ) );
+        m_values = p_literal.getValues();
+        m_annotations = p_literal.getAnnotation();
     }
 
-    @Override
-    public void setFunctor( final String p_functor )
-    {
-        m_functor = new CStringAtom( p_functor );
-    }
+    public final CPath getPath() { return m_path; }
 
     @Override
     public ITermCollection getAnnotation()
     {
         return m_annotations;
+    }
+
+    @Override
+    public final boolean isBeliefbase()
+    {
+        return false;
+    }
+
+    @Override
+    public final boolean isLiteral()
+    {
+        return true;
     }
 
     @Override
@@ -121,6 +140,12 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     public ITermCollection getValues()
     {
         return m_values;
+    }
+
+    @Override
+    public T create( final String p_functor )
+    {
+        return this.getLiteral();
     }
 
     @Override

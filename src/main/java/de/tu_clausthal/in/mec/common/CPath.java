@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -43,6 +44,8 @@ public class CPath implements Iterable<CPath>
      **/
     public static final CPath EMPTY = new CPath();
 
+    public static final String DEFAULTSEPERATOR = "/";
+
     /**
      * list with path parts *
      */
@@ -50,8 +53,7 @@ public class CPath implements Iterable<CPath>
     /**
      * separator of the path elements *
      */
-    private String m_separator = "/";
-
+    private String m_separator = DEFAULTSEPERATOR;
 
     /**
      * copy-ctor with arguments
@@ -100,6 +102,20 @@ public class CPath implements Iterable<CPath>
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
+    }
+
+    public static CPath createSplitPath( final String... p_varargs )
+    {
+        if ( p_varargs.length < 3 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
+
+        final List<String> l_pathlist = new LinkedList<>();
+        l_pathlist.add( p_varargs[ 1 ] );
+
+        for ( int i = 2; i < p_varargs.length; ++i )
+            l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[ i ], p_varargs[ 0 ] ) ) );
+
+        return createPath( (String[]) l_pathlist.toArray() );
     }
 
     /**

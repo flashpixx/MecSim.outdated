@@ -32,6 +32,7 @@ import java.util.Set;
 
 /**
  * internal storage of the data
+ * @note not thread-safe
  *
  * @tparam N element type
  * @tparam M mask type
@@ -39,9 +40,9 @@ import java.util.Set;
 public class New_CBeliefStorage<N,M> implements New_IBeliefStorage<N,M>
 {
     /** map with elements **/
-    private Map<String, Set<N>> m_elements = new HashMap<>();
+    protected final Map<String, Set<N>> m_elements = new HashMap<>();
     /** map with masks **/
-    private Map<String, M> m_masks = new HashMap<>();
+    protected final Map<String, M> m_masks = new HashMap<>();
 
 
     @Override

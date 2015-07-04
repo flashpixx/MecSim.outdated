@@ -24,75 +24,79 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
-import de.tu_clausthal.in.mec.common.CPath;
-
-
 /**
- * default beliefbase
- * @tparam T literal type
+ * interface of a beliefbase storage
  */
-public abstract class New_IDefaultBeliefBase<T> implements New_IBeliefBase<ILiteral<T>>
+public interface New_IBeliefStorage<N,M>
 {
-    /**
-     * storage with data
-     */
-    protected final New_CBeliefStorage<ILiteral<T>, New_IPathMask> m_storage = new New_CBeliefStorage<>();
-
-
-    @Override
-    public void add( final ILiteral<T> p_literal )
-    {
-        m_storage.addElement( p_literal.getFunctor().get(), p_literal );
-    }
-
-
-    @Override
-    public void add( final New_IPathMask p_mask )
-    {
-        m_storage.addMask( p_mask.getName(), p_mask );
-    }
-
-
-    @Override
-    public final New_IPathMask getPathElement( final String p_name )
-    {
-        return new CMask<>( p_name, this );
-    }
-
 
     /**
-     * mask of a beliefbase
-     * @tparam P type of the beliefbase element
+     * checks any element exists
+     *
+     * @param p_key key name
+     * @return exist boolean
      */
-    private class CMask<P> implements New_IPathMask
-    {
-        /** name of the mask **/
-        private final String m_name;
-        /** reference of the beliefbase **/
-        private final New_IBeliefBase<P> m_beliefbase;
+    public boolean contains( final String p_key );
 
-        /**
-         * ctor
-         *
-         * @param p_name name of the mask
-         */
-        public CMask( final String p_name, final New_IBeliefBase<P> p_beliefbase )
-        {
-            m_name = p_name;
-            m_beliefbase = p_beliefbase;
-        }
+    /**
+     * check if an element exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean containsElement( final String p_key );
 
-        @Override
-        public CPath getFQNPath()
-        {
-            return null;
-        }
+    /**
+     * adds an element
+     *
+     * @param p_key key name
+     * @param p_element element
+     */
+    public void addElement( final String p_key, final N p_element );
 
-        @Override
-        public String getName()
-        {
-            return null;
-        }
-    }
+
+    /**
+     * removes an element
+     *
+     * @param p_key key name
+     * @param p_element element
+     * @return boolean flag, that the element is removed
+     */
+    public boolean removeElement( final String p_key, final N p_element );
+
+    /**
+     * checks if a mask exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean containsMask( String p_key );
+
+
+    /**
+     * adds a new mask
+     *
+     * @param p_key key name
+     * @param p_element mask element
+     */
+    public void addMask( final String p_key, final M p_element );
+
+
+    /**
+     * removes a mask
+     *
+     * @param p_key key name
+     * @return boolean flag the element is removed
+     */
+    public boolean removeMask( final String p_key );
+
+
+    /**
+     * removes all elements by its name
+     *
+     * @param p_key key name
+     * @return boolean flag that elements could be removed
+     */
+    public boolean remove( final String p_key );
 
 }

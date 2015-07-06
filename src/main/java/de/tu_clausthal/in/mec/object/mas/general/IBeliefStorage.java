@@ -114,4 +114,9 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      */
     public void update();
 
+    /**
+     * clears all elements
+     */
+    public void clear();
+
 }

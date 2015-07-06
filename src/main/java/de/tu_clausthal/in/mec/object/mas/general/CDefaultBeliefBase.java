@@ -29,19 +29,18 @@ import de.tu_clausthal.in.mec.common.CPath;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Stack;
 
 
 /**
  * default beliefbase
  * @tparam T literal type
  */
-public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
+public class CDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * storage with data
      */
-    protected final CBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage = new CBeliefStorage<>();
+    protected final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
     /**
      * reference to the parent
      */
@@ -51,19 +50,42 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     /**
      * ctor - creates an root beliefbase
      */
-    public IDefaultBeliefBase()
+    public CDefaultBeliefBase()
     {
-        this(null);
+        this( null, new CDefaultBeliefStorage<>() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_parent parent element
+     */
+    public CDefaultBeliefBase( final IBeliefBaseMask<T> p_parent )
+    {
+        this( p_parent, new CDefaultBeliefStorage<>() );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_storage storage
+     */
+    public CDefaultBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
+    {
+        this(null, p_storage);
     }
 
     /**
      * ctor - creates a beliefbase and sets the parent
+     *
      * @param p_parent
      */
-    public IDefaultBeliefBase( final IBeliefBaseMask<T> p_parent )
+    public CDefaultBeliefBase( final IBeliefBaseMask<T> p_parent, final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
+        m_storage = p_storage;
         m_parent = p_parent;
     }
+
 
     @Override
     public void add( final ILiteral<T> p_literal )
@@ -113,6 +135,13 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     {
         m_storage.update();
     }
+
+    @Override
+    public void clear()
+    {
+        m_storage.clear();
+    }
+
 
     /**
      * mask of a beliefbase
@@ -242,6 +271,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         public void update()
         {
             m_self.update();
+        }
+
+        @Override
+        public void clear()
+        {
+            m_self.clear();
         }
 
     }

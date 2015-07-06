@@ -81,4 +81,10 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
      */
     public void update();
 
+
+    /**
+     * clears all elements
+     */
+    public void clear();
+
 }

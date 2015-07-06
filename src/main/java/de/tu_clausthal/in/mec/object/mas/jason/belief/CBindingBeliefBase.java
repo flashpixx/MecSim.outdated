@@ -28,6 +28,11 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
+import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefStorage;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
@@ -43,7 +48,7 @@ import java.util.Map;
 /**
  * beliefbase structure to bind object properties
  */
-public class CBindingBeliefBase extends CBeliefBase
+public class CBindingBeliefBase extends CDefaultBeliefBase<Literal>
 {
     /**
      * field filter
@@ -56,28 +61,18 @@ public class CBindingBeliefBase extends CBeliefBase
      */
     private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
 
+
     /**
      * ctor bind an object
      *
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CBindingBeliefBase( final String p_name, final Object p_object, final CPath p_path )
+    public CBindingBeliefBase( final String p_name, final Object p_object )
     {
-        super( null, null, p_path );
         this.push( p_name, p_object );
     }
 
-    /**
-     * checks if interface is assignable from given class
-     *
-     * @param p_class class to check
-     * @return true, if check passes
-     */
-    public boolean instanceOf( Class<?> p_class )
-    {
-        return Old_IBeliefBase.class.isAssignableFrom( p_class );
-    }
 
     /**
      * adds / binds an object
@@ -106,16 +101,35 @@ public class CBindingBeliefBase extends CBeliefBase
         m_bind.remove( p_name );
     }
 
+    @Override
+    public void add( final ILiteral<Literal> p_literal )
+    {
+    }
+
+    @Override
+    public void add( final IBeliefBaseMask<Literal> p_mask )
+    {
+    }
+
+    @Override
+    public void remove( final ILiteral<Literal> p_literal )
+    {
+    }
+
+    @Override
+    public void remove( final IBeliefBaseMask<Literal> p_mask )
+    {
+    }
+
     /**
-     * update beliefs by calling getter functions of binded objects
+     * @todo fix
      */
     @Override
     public final void update()
     {
-        super.update();
-
-        // remove old literals
+        // clear all data and run child updates
         this.clear();
+        super.update();
 
         // iterate over all binded objects
         for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
@@ -135,7 +149,7 @@ public class CBindingBeliefBase extends CBeliefBase
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
 
-                    this.add( CCommon.convertGeneric( l_literal ) );
+                    //-----> this.add( CCommon.convertGeneric( l_literal ) );
                 }
                 catch ( final Exception l_exception )
                 {

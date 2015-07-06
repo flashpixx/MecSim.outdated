@@ -39,7 +39,7 @@ import java.util.Stack;
  * @tparam N element type
  * @tparam M mask type
  */
-public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
+public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
 {
     /** map with elements **/
     protected final Map<String, Set<N>> m_elements = new HashMap<>();
@@ -169,6 +169,13 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     public void update()
     {
 
+    }
+
+    @Override
+    public void clear()
+    {
+        m_elements.clear();
+        m_masks.clear();
     }
 
 }

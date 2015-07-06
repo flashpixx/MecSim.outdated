@@ -46,6 +46,13 @@ public interface IBeliefBaseAction<T>
      */
     public IBeliefBaseMask<T> getParent();
 
+    /**
+     * returns a new mask of the belief base
+     *
+     * @param p_name name of the mask
+     * @return mask
+     */
+    public IBeliefBaseMask<T> createMask( final String p_name );
 
     /**
      * adds a literal in the current structure

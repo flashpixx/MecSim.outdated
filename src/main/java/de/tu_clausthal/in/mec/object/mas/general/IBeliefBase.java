@@ -27,28 +27,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 public interface IBeliefBase<T> extends IBeliefBaseAction<T>
 {
 
-    /**
-     * adds a new literal
-     *
-     * @param p_literal literal
-     */
-    public void add( final ILiteral<T> p_literal );
 
-    /**
-     * adds a new mask
-     *
-     * @note create a full-copy of the mask
-     * @param p_mask mask
-     */
-    public void add( final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * returns a new mask of the belief base
-     *
-     * @param p_name name of the mask
-     * @return mask
-     */
-    public IBeliefBaseMask<T> createMask( final String p_name );
 
 
 

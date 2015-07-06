@@ -172,6 +172,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
+        public IBeliefBaseMask<P> createMask( final String p_name )
+        {
+            return m_self.createMask( p_name );
+        }
+
+        @Override
         public void add( final ILiteral<P> p_literal )
         {
             m_self.add( p_literal );

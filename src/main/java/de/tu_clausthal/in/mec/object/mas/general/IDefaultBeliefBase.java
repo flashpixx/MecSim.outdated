@@ -26,6 +26,9 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
+import java.util.Iterator;
+import java.util.Stack;
+
 
 /**
  * default beliefbase
@@ -36,13 +39,11 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     /**
      * storage with data
      */
-    protected final CBeliefStorage<ILiteral<T>, IBeliefBaseMask> m_storage = new CBeliefStorage<>();
+    protected final CBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage = new CBeliefStorage<>();
     /**
      * reference to the parent
      */
     private final IBeliefBaseMask<T> m_parent;
-
-
 
 
     /**
@@ -93,6 +94,17 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     }
 
 
+    @Override
+    public boolean isEmpty()
+    {
+        return m_storage.isEmpty();
+    }
+
+    @Override
+    public Iterator<ILiteral<T>> iterator()
+    {
+        return null;
+    }
 
     /**
      * mask of a beliefbase
@@ -184,6 +196,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
+        public Iterator<ILiteral<P>> iterator()
+        {
+            return m_self.iterator();
+        }
+
+        @Override
         public void remove( final ILiteral<P> p_literal )
         {
             m_self.remove( p_literal );
@@ -199,6 +217,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         public void remove( final IBeliefBaseMask<P> p_mask )
         {
             m_self.remove( p_mask );
+        }
+
+        @Override
+        public boolean isEmpty()
+        {
+            return m_self.isEmpty();
         }
 
     }

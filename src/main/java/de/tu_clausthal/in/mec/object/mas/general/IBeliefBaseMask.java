@@ -46,4 +46,18 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      */
     public String getName();
 
+    /**
+     * returns the full path
+     *
+     * @return path
+     */
+    public CPath getFQNPath();
+
+    /**
+     * returns the parent of the mask
+     *
+     * @return parent object or null
+     */
+    public IBeliefBaseMask<T> getParent();
+
 }

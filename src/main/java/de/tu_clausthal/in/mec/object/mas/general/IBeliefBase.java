@@ -26,9 +26,4 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 public interface IBeliefBase<T> extends IBeliefBaseAction<T>
 {
-
-
-
-
-
 }

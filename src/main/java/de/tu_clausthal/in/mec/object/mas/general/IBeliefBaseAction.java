@@ -29,22 +29,8 @@ import de.tu_clausthal.in.mec.common.CPath;
 /**
  * interface for equal method names on masks and beliefbases
  */
-public interface IBeliefBaseAction<T>
+public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
 {
-
-    /**
-     * returns the full path
-     *
-     * @return path
-     */
-    public CPath getFQNPath();
-
-    /**
-     * returns the parent of the mask
-     *
-     * @return parent object or null
-     */
-    public IBeliefBaseMask<T> getParent();
 
     /**
      * returns a new mask of the belief base
@@ -81,6 +67,15 @@ public interface IBeliefBaseAction<T>
      * @param p_mask mask
      */
     public void remove( final IBeliefBaseMask<T>  p_mask );
+
+    /**
+     * checks if the structure empty
+     *
+     * @return empty boolean
+     */
+    public boolean isEmpty();
+
+
 
 
 }

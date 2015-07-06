@@ -26,8 +26,10 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 
 /**
@@ -37,7 +39,7 @@ import java.util.Set;
  * @tparam N element type
  * @tparam M mask type
  */
-public class CBeliefStorage<N, M> implements IBeliefStorage<N, M>
+public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
 {
     /** map with elements **/
     protected final Map<String, Set<N>> m_elements = new HashMap<>();
@@ -101,6 +103,41 @@ public class CBeliefStorage<N, M> implements IBeliefStorage<N, M>
     }
 
     @Override
+    public Iterator<N> iterator()
+    {
+        return new Iterator<N>()
+        {
+            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
+            {{
+                for( final Set<N> l_literals : m_elements.values() )
+                    add(l_literals.iterator());
+
+                for( final M l_mask : m_masks.values() )
+                    add( l_mask.iterator() );
+            }};
+
+            @Override
+            public boolean hasNext()
+            {
+                if (m_stack.isEmpty())
+                    return false;
+
+                if (m_stack.peek().hasNext())
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public N next()
+            {
+                return m_stack.peek().next();
+            }
+        };
+    }
+
+    @Override
     public boolean remove( final String p_key )
     {
         return ( m_masks.remove( p_key ) != null ) || ( m_elements.remove( p_key ) != null );
@@ -120,6 +157,12 @@ public class CBeliefStorage<N, M> implements IBeliefStorage<N, M>
     public boolean removeMask( final String p_key )
     {
         return m_masks.remove( p_key ) != null;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return m_elements.isEmpty() && m_masks.isEmpty();
     }
 
 }

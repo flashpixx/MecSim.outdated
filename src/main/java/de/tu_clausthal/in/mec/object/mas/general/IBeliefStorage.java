@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * interface of a beliefbase storage
  */
-public interface IBeliefStorage<N, M>
+public interface IBeliefStorage<N, M> extends Iterable<N>
 {
 
     /**
@@ -101,5 +101,12 @@ public interface IBeliefStorage<N, M>
      * @return boolean flag the element is removed
      */
     public boolean removeMask( final String p_key );
+
+    /**
+     * checks if a storage is empty
+     *
+     * @return empty boolean
+     */
+    public boolean isEmpty();
 
 }

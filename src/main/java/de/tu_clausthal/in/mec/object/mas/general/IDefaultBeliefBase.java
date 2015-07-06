@@ -103,7 +103,7 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
     @Override
     public Iterator<ILiteral<T>> iterator()
     {
-        return null;
+        return m_storage.iterator();
     }
 
     /**

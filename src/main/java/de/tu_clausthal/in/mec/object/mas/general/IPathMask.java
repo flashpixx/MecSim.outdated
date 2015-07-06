@@ -46,4 +46,7 @@ public interface IPathMask
      */
     public String getName();
 
+
+    public IPathMask getParent();
+
 }

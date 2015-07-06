@@ -39,12 +39,6 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
     protected final CBeliefStorage<ILiteral<T>, IPathMask> m_storage = new CBeliefStorage<>();
 
     @Override
-    public final IPathMask getPathElement( final String p_name )
-    {
-        return new CMask<>( p_name, this );
-    }
-
-    @Override
     public void add( final ILiteral<T> p_literal )
     {
         m_storage.addElement( p_literal.getFunctor().get(), p_literal );
@@ -56,16 +50,20 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
         m_storage.addMask( p_mask.getName(), p_mask );
     }
 
+    @Override
+    public final IPathMask getPathElement( final String p_name )
+    {
+        return new CMask<>( p_name, this );
+    }
+
     /**
      * mask of a beliefbase
      * @tparam P type of the beliefbase element
      */
-    private class CMask<P> implements IPathMask, Cloneable
+    private static class CMask<P> implements IPathMask, Cloneable
     {
         /** name of the mask **/
         private final String m_name;
-        /** reference of the beliefbase **/
-        private final IBeliefBase<P> m_beliefbase;
         /** reference to the parent **/
         private final IPathMask m_parent;
 
@@ -74,11 +72,10 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
          * ctor
          *
          * @param p_name       name of the mask
-         * @param p_beliefbase reference to a beliefbase
          */
-        public CMask( final String p_name, final IBeliefBase<P> p_beliefbase )
+        public CMask( final String p_name )
         {
-            this( null, p_name, p_beliefbase );
+            this( null, p_name );
         }
 
         /**
@@ -86,19 +83,26 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
          *
          * @param p_parent parent of the mask
          * @param p_name name of the mask
-         * @param p_beliefbase reference to a beliefbase
          */
-        private CMask( final IPathMask p_parent, final String p_name, final IBeliefBase<P> p_beliefbase )
+        private CMask( final IPathMask p_parent, final String p_name )
         {
             m_name = p_name;
-            m_beliefbase = p_beliefbase;
             m_parent = p_parent;
+        }
+
+        private static void getFQNPath( final IPathMask p_mask, final CPath p_path )
+        {
+            if ( p_mask == null )
+                return;
+
+            p_path.pushfront( p_mask.getName() );
+            getFQNPath( p_mask.getParent(), p_path );
         }
 
         @Override
         protected CMask clone() throws CloneNotSupportedException
         {
-            return new CMask<>( m_parent, m_name, m_beliefbase );
+            return new CMask<>( m_parent, m_name );
         }
 
         /**
@@ -110,20 +114,27 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
          */
         public CMask clone( final IPathMask p_parent ) throws CloneNotSupportedException
         {
-            return new CMask<>( p_parent, m_name, m_beliefbase );
+            return new CMask<>( p_parent, m_name );
         }
-
 
         @Override
         public CPath getFQNPath()
         {
-            return null;
+            final CPath l_path = new CPath();
+            getFQNPath( this, l_path );
+            return l_path;
         }
 
         @Override
         public String getName()
         {
-            return null;
+            return m_name;
+        }
+
+        @Override
+        public IPathMask getParent()
+        {
+            return m_parent;
         }
     }
 

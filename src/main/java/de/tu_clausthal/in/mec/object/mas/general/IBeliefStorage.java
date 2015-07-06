@@ -24,6 +24,9 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
+import java.util.Set;
+
+
 /**
  * interface of a beliefbase storage
  */
@@ -69,6 +72,10 @@ public interface IBeliefStorage<N, M>
      * @return exist boolean
      */
     public boolean containsMask( String p_key );
+
+    public Set<N> getElement( final String p_key );
+
+    public M getMask( final String p_key );
 
     /**
      * removes all elements by its name

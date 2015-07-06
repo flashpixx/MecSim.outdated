@@ -89,6 +89,18 @@ public class CBeliefStorage<N, M> implements IBeliefStorage<N, M>
     }
 
     @Override
+    public Set<N> getElement( final String p_key )
+    {
+        return m_elements.get( p_key );
+    }
+
+    @Override
+    public M getMask( final String p_key )
+    {
+        return m_masks.get( p_key );
+    }
+
+    @Override
     public boolean remove( final String p_key )
     {
         return ( m_masks.remove( p_key ) != null ) || ( m_elements.remove( p_key ) != null );

@@ -48,6 +48,6 @@ public interface IPathMask<T>
      */
     public String getName();
 
-    public IPathMask getParent();
+    public IPathMask<T> getParent();
 
 }

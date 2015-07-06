@@ -30,8 +30,10 @@ import de.tu_clausthal.in.mec.common.CPath;
 /**
  * mask of the path
  */
-public interface IPathMask
+public interface IPathMask<T>
 {
+    public IPathMask<T> clone( final IPathMask<T> p_parent );
+
     /**
      * returns the full path
      *
@@ -45,7 +47,6 @@ public interface IPathMask
      * @return name
      */
     public String getName();
-
 
     public IPathMask getParent();
 

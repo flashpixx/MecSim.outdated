@@ -109,4 +109,9 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      */
     public boolean isEmpty();
 
+    /**
+     * updates all items
+     */
+    public void update();
+
 }

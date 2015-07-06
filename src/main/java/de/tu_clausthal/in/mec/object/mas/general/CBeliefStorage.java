@@ -165,4 +165,10 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
         return m_elements.isEmpty() && m_masks.isEmpty();
     }
 
+    @Override
+    public void update()
+    {
+
+    }
+
 }

@@ -76,6 +76,9 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     public boolean isEmpty();
 
 
-
+    /**
+     * updates all items
+     */
+    public void update();
 
 }

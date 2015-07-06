@@ -108,6 +108,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         return m_storage.iterator();
     }
 
+    @Override
+    public void update()
+    {
+        m_storage.update();
+    }
+
     /**
      * mask of a beliefbase
      * @tparam P type of the beliefbase element
@@ -230,6 +236,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         public boolean isEmpty()
         {
             return m_self.isEmpty();
+        }
+
+        @Override
+        public void update()
+        {
+            m_self.update();
         }
 
     }

@@ -1,7 +1,7 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.junit.Test;

@@ -42,52 +42,55 @@ import java.util.Stack;
  * each beliefbase can contain further inherited getBeliefbases
  *
  * @param <T> language specific literal
+ * @deprecated
  */
-public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
+@Deprecated
+public abstract class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
 {
-    /**
+    /*
+    *//**
      * structure for beliefbase elements (i.e. literals and inherited getBeliefbases)
-     */
+     *//*
     private final Map<String, Map<Class<?>, Set<Old_IBeliefBaseElement>>> m_elements = new HashMap<>();
-    /**
+    *//**
      * path to beliefbase
-     */
+     *//*
     private CPath m_path;
 
-    /**
+    *//**
      * default ctor
-     */
+     *//*
     public Old_CDefaultBeliefBase()
     {
         this( null, null, CPath.EMPTY );
     }
 
-    /**
+    *//**
      * ctor with path
      *
      * @param p_path
-     */
+     *//*
     public Old_CDefaultBeliefBase( final CPath p_path )
     {
         this(null,null,p_path);
     }
 
-    /**
+    *//**
      * ctor - just the top-level literals are specified
      *
      * @param p_literals top level literals
-     */
+     *//*
     public Old_CDefaultBeliefBase( final Set<ILiteral<T>> p_literals )
     {
         this( null, p_literals, CPath.EMPTY );
     }
 
-    /**
+    *//**
      * ctor - top-level literals and inherited getBeliefbases are specified
      *
      * @param p_inheritedBeliefbases inherited getBeliefbases with paths
      * @param p_literals top level literals
-     */
+     *//*
     public Old_CDefaultBeliefBase( final Map<String, Old_IBeliefBase<T>> p_inheritedBeliefbases, final Set<ILiteral<T>> p_literals, final CPath p_path )
     {
         // generate map-entries for getBeliefbases
@@ -103,12 +106,12 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         m_path = p_path;
     }
 
-    /**
+    *//**
      * fills up a stack with Iterator-objects on beliefbase elements
      *
      * @param p_current current beliefbase with top-level-literals to iterate over
      * @param p_stack current stack
-     */
+     *//*
     private static <N> void collapseIterator( final Old_IBeliefBase<N> p_current, final CPath p_currentPath,
             final Stack<Pair<CPath, Iterator<ILiteral<N>>>> p_stack
     )
@@ -218,13 +221,13 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         return l_result;
     }
 
-    /**
+    *//**
      * returns set of beliefbase elements with specified keys
      *
      * @param p_name name of beliefbase elements
      * @param p_class class of beliefbase elements
      * @return set of beliefbase elements, or null if nothing was found
-     */
+     *//*
     @Override
     public final Set<Old_IBeliefBaseElement> getElements( final CPath p_path, final String p_name, final Class<?> p_class )
     {
@@ -269,13 +272,13 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         return l_literals;
     }
 
-    /**
+    *//**
      * gets specified beliefbase if available, or default beliefbase if not available
      *
      * @param p_path path with name of the beliefbase as its last element
      * @param p_beliefbase default beliefbase, will be returned if the specified path cannot be found
      * @return specified beliefbase if path exists, otherwise the default beliefbase
-     */
+     *//*
     public final Old_IBeliefBase<T> getOrDefault( final CPath p_path, final Old_IBeliefBase<T> p_beliefbase )
     {
         if ( p_path.isEmpty() )
@@ -315,13 +318,13 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         this.getBeliefbases().values().forEach( Old_IBeliefBase::update );
     }
 
-    /**
+    *//**
      * adds a literal to beliefbase with specified path. If path is non-existing
      * it will be constructed.
      *
      * @param p_literal literal to add
      * @return true, if addition was successful
-     */
+     *//*
     private final boolean add( final ILiteral<T> p_literal )
     {
         if ( p_literal.getPath().isEmpty() )
@@ -360,14 +363,14 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         return l_current.add( p_literal );
     }
 
-    /**
+    *//**
      * Adds a beliefbase to specified path. The name of the new beliefbase
      * has to be the last element in variable path.
      *
      * @param p_path path with name as last element
      * @param p_beliefbase beliefbase to add
      * @return true if addition was successful
-     */
+     *//*
     private final boolean add( final CPath p_path, final Old_IBeliefBase<T> p_beliefbase )
     {
         // a name (i.e. last element in path) must be specified to add a new beliefbase
@@ -415,11 +418,11 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         return l_current.add( p_beliefbase );
     }
 
-    /**
+    *//**
      * recursive method to fill up a stack with Iterator-objects
      *
      * @return iterator stack
-     */
+     *//*
     private Stack<Pair<CPath, Iterator<ILiteral<T>>>> collapseIterator()
     {
         final Stack<Pair<CPath, Iterator<ILiteral<T>>>> l_stack = new Stack<>();
@@ -462,9 +465,9 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
     {
         return new Iterator<ILiteral<T>>()
         {
-            /**
+            *//**
              * iterator stack
-             */
+             *//*
             private final Stack<Pair<CPath, Iterator<ILiteral<T>>>> m_stack = collapseIterator();
 
             @Override
@@ -485,11 +488,11 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
                 return this.hasNext();
             }
 
-            /**
+            *//**
              * returns next element of the top iterator
              *
              * @return successor element
-             */
+             *//*
             @Override
             public ILiteral<T> next()
             {
@@ -523,14 +526,14 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
         return l_beliefbase.getElements( CPath.EMPTY, p_literal.getFunctor().toString(), ILiteral.class ).remove( p_literal );
     }
 
-    /**
+    *//**
      * removes specified beliefbase elements from a beliefbase
      *
      * @param p_path path to beliefbase
      * @param p_key elements name as key
      * @param p_class class of elements
      * @return true, if removal was successful
-     */
+     *//*
     public final boolean remove( final CPath p_path, final String p_key, final Class p_class )
     {
         final Set<Old_IBeliefBaseElement> l_elements = this.getElements( p_path, p_key, p_class );
@@ -540,5 +543,5 @@ public class Old_CDefaultBeliefBase<T> implements Old_IBeliefBase<T>
 
         l_elements.clear();
         return true;
-    }
+    }*/
 }

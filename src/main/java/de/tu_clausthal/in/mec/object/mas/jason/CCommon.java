@@ -32,7 +32,7 @@ import de.tu_clausthal.in.mec.object.mas.general.CStringAtom;
 import de.tu_clausthal.in.mec.object.mas.general.CTermList;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.ITerm;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import jason.NoValueException;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Atom;
@@ -117,25 +117,6 @@ public class CCommon
             }};
     }
 
-    /**
-     * converts a Jason-specific Literal into a generic Literal
-     *
-     * @param p_literal Jason-specific literal
-     * @return generic form
-     * @todo generic seperator for language specific literals
-     */
-    public static ILiteral convertGeneric( final Literal p_literal )
-    {
-        final CPath l_path = new CPath( p_literal.getFunctor().split( "_" ) );
-
-        final Literal l_literal = ASSyntax.createLiteral( l_path.getSuffix() );
-        l_literal.addTerms( p_literal.getTerms() );
-        l_literal.addAnnots( p_literal );
-
-        return new CLiteral(
-                p_literal,
-                l_path.getSubPath( 0, l_path.size() - 1 ) );
-    }
 
     /**
      * converts a NumberTerm into a Double Atom
@@ -157,20 +138,6 @@ public class CCommon
         return null;
     }
 
-    /**
-     * converts a beliefbase into a set of generic literals
-     *
-     * @param p_beliefbase original beliefbase
-     * @return set of generic literals
-     */
-    public static Set<ILiteral<Literal>> convertGeneric( final BeliefBase p_beliefbase )
-    {
-        return new HashSet<ILiteral<Literal>>()
-        {{
-                for ( final Literal l_literal : p_beliefbase )
-                    add( convertGeneric( l_literal ) );
-            }};
-    }
 
     /**
      * converts a term into a generic ITerm

@@ -27,7 +27,9 @@ package de.tu_clausthal.in.mec.object.mas.general;
  * interface for beliefbase elements
  * i.e. literals and getBeliefbases, because a single beliefbase
  * can contain literals and getBeliefbases
+ * @deprecated
  */
+@Deprecated
 public interface Old_IBeliefBaseElement
 {
     public boolean isBeliefbase();

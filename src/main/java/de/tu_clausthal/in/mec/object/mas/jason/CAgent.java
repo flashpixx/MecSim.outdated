@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.Old_CDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
@@ -41,7 +42,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -116,7 +117,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * the agents beliefbase
      */
-    private final CBeliefBase m_beliefs = new CBeliefBase();
+    private final IBeliefBaseMask<Literal> m_beliefs = null;
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
@@ -328,13 +329,13 @@ public class CAgent<T> implements IVoidAgent
      *
      * @param p_path path to beliefbase with literal name as last element
      * @param p_data belief data
-     * @todo this method is not working correctly with exact literal (limit to its functor)
+     * @todo fix
      */
     @Override
     public void removeLiteral( final CPath p_path, final Object p_data )
     {
         // m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
-        m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), p_path.getSuffix(), ILiteral.class );
+        //m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), p_path.getSuffix(), ILiteral.class );
     }
 
     @Override
@@ -373,11 +374,12 @@ public class CAgent<T> implements IVoidAgent
      * pass messages to message containing beliefbase
      *
      * @param p_messages set of messages
+     * @todo fix
      */
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        ( (CMessageBeliefBase) m_beliefs.getBeliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
+        //( (CMessageBeliefBase) m_beliefs.getBeliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
     }
 
     @Override
@@ -458,7 +460,7 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         * @todo convert inherited beliefs into Jason literals (i.e. simulation/step(..))
+         * @todo fix
          */
         public final void cycle( final int p_currentstep )
         {

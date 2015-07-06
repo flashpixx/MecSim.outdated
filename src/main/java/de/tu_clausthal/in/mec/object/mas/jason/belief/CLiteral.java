@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.jason.general;
+package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.CDefaultLiteral;
@@ -34,27 +34,16 @@ import jason.asSyntax.Term;
 
 /**
  * class for literals
- *
- * @todo move class to belief package - after moving CBeliefBase
  */
 public class CLiteral extends CDefaultLiteral<Literal>
 {
-    /**
-     * ctor
-     *
-     * @param p_literal
-     */
-    public CLiteral( final Literal p_literal )
-    {
-        this( p_literal, CPath.EMPTY );
-    }
 
     /**
      * ctor with path specified
      */
-    public CLiteral( final Literal p_literal, final CPath p_path )
+    public CLiteral( final Literal p_literal )
     {
-        super( p_path.append( p_literal.getFunctor() ).toString(), p_literal );
+        super( p_literal.getFunctor(), p_literal );
 
         if ( p_literal.hasTerm() )
             for ( final Term l_term : p_literal.getTerms() )
@@ -65,19 +54,4 @@ public class CLiteral extends CDefaultLiteral<Literal>
                 m_annotations.add( CCommon.convertGeneric( l_term ) );
     }
 
-    public CLiteral( final CPath p_path, final Literal p_literal, final String p_splitSeperator
-    )
-    {
-        super( p_path, CCommon.convertGeneric( p_literal ), p_splitSeperator );
-    }
-
-    @Override
-    public Literal create( final String p_functor )
-    {
-        final Literal l_literal = ASSyntax.createLiteral( p_functor );
-        l_literal.addTerms( m_literal.getTerms() );
-        l_literal.addAnnots( m_literal.getAnnots() );
-
-        return l_literal;
-    }
 }

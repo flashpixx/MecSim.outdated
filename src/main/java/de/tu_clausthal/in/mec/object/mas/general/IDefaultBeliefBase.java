@@ -26,7 +26,9 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Stack;
 
 
@@ -198,7 +200,12 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
         @Override
         public Iterator<ILiteral<P>> iterator()
         {
-            return m_self.iterator();
+            final CPath l_path = this.getFQNPath();
+            final Set<ILiteral<P>> l_items = new HashSet<>();
+            for ( final ILiteral<P> l_literal : m_self )
+                l_items.add( l_literal.clone( l_path ) );
+
+            return l_items.iterator();
         }
 
         @Override

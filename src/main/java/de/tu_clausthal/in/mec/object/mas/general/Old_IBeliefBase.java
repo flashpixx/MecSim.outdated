@@ -34,7 +34,9 @@ import java.util.Set;
  * as literals (the top-level literals) and further inherited getBeliefbases.
  *
  * @param <T> language specific literal
+ * @deprecated
  */
+@Deprecated
 public interface Old_IBeliefBase<T> extends Old_IBeliefBaseElement, Iterable<ILiteral<T>>
 {
     /**

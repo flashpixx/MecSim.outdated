@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -55,28 +54,17 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      * the literal values
      */
     protected final ITermCollection m_values;
-    /**
-     * path in beliefbase
-     */
-    private final CPath m_path;
+
 
     /**
-     * ctor - all parameters specified
+     * ctor
      *
-     * @param p_functor functor of the literal
-     * @param p_literal the original literal
-     * @param p_valueList initial list of values
-     * @param p_annotationList initial set of annotations
+     * @param p_functor functor
+     * @param p_literal literal
      */
-    public CDefaultLiteral( final String p_functor, final T p_literal,
-            final List<ITerm> p_valueList, final Set<ITerm> p_annotationList
-    )
+    public CDefaultLiteral( final String p_functor, final T p_literal )
     {
-        m_functor = new CStringAtom( p_functor );
-        m_literal = p_literal;
-        m_values = new CTermList( p_valueList );
-        m_annotations = new CTermSet( p_annotationList );
-        m_path = CPath.EMPTY;
+        this( p_functor, p_literal, new CTermList(), new CTermSet() );
     }
 
     /**
@@ -84,27 +72,36 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      *
      * @param p_functor functor of the literal
      * @param p_literal the original literal
+     * @param p_values initial list of values
+     * @param p_annotations initial set of annotations
      */
-    public CDefaultLiteral( final String p_functor, final T p_literal )
+    public CDefaultLiteral( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
     {
-        this( p_functor, p_literal, Collections.emptyList(), Collections.emptySet() );
+        this( new CStringAtom( p_functor ), p_literal, new CTermList( p_values ), new CTermSet( p_annotations ) );
     }
 
-    public CDefaultLiteral( final CPath p_path, final ILiteral<T> p_literal, final String p_splitSeperator )
+    /**
+     * ctor
+     *
+     * @param p_functor functor of the literal
+     * @param p_literal the original literal
+     * @param p_values initial list of values
+     * @param p_annotations initial set of annotations
+     */
+    public CDefaultLiteral( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations )
     {
-
-        final CPath l_path = p_path.append( CPath.createSplitPath( p_splitSeperator,
-                                                                   CPath.DEFAULTSEPERATOR,
-                                                                   p_literal.getFunctor().toString() ) );
-
-        m_path = l_path.getSubPath( 0, l_path.size() - 1 );
-        m_functor = new CStringAtom( l_path.getSuffix() );
-        m_literal = p_literal.create( l_path.getPath( p_splitSeperator ) );
-        m_values = p_literal.getValues();
-        m_annotations = p_literal.getAnnotation();
+        m_functor = p_functor;
+        m_literal = p_literal;
+        m_values = p_values;
+        m_annotations = p_annotations;
     }
 
-    public final CPath getPath() { return m_path; }
+
+    @Override
+    public ILiteral<T> clone( final CPath p_prefix )
+    {
+        return new CDefaultLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations );
+    }
 
     @Override
     public ITermCollection getAnnotation()
@@ -140,12 +137,6 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     public ITermCollection getValues()
     {
         return m_values;
-    }
-
-    @Override
-    public T create( final String p_functor )
-    {
-        return this.getLiteral();
     }
 
     @Override

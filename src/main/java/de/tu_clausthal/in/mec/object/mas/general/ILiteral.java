@@ -34,13 +34,6 @@ import de.tu_clausthal.in.mec.common.CPath;
  */
 public interface ILiteral<T> extends ITerm, Old_IBeliefBaseElement
 {
-    /**
-     * creates same literal with different functor
-     *
-     * @param p_functor new functor
-     * @return same literal, but different functor
-     */
-    public T create( final String p_functor );
 
     /**
      * returns the optional annotations
@@ -63,12 +56,19 @@ public interface ILiteral<T> extends ITerm, Old_IBeliefBaseElement
      */
     public T getLiteral();
 
-    public CPath getPath();
-
     /**
      * returns the optional value term
      *
      * @return value term
      */
     public ITermCollection getValues();
+
+
+    /**
+     * clones the literal
+     *
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
+     */
+    public ILiteral<T> clone( final CPath p_prefix );
 }

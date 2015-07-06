@@ -31,13 +31,36 @@ import de.tu_clausthal.in.mec.common.CPath;
  * default beliefbase
  * @tparam T literal type
  */
-public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
+public abstract class IDefaultBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * storage with data
      */
-    protected final CBeliefStorage<ILiteral<T>, IPathMask> m_storage = new CBeliefStorage<>();
+    protected final CBeliefStorage<ILiteral<T>, IBeliefBaseMask> m_storage = new CBeliefStorage<>();
+    /**
+     * reference to the parent
+     */
+    private final IBeliefBaseMask<T> m_parent;
 
+
+
+
+    /**
+     * ctor - creates an root beliefbase
+     */
+    public IDefaultBeliefBase()
+    {
+        this(null);
+    }
+
+    /**
+     * ctor - creates a beliefbase and sets the parent
+     * @param p_parent
+     */
+    public IDefaultBeliefBase( final IBeliefBaseMask<T> p_parent )
+    {
+        m_parent = p_parent;
+    }
 
     @Override
     public void add( final ILiteral<T> p_literal )
@@ -46,39 +69,86 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
     }
 
     @Override
-    public final IPathMask<T> getPathElement( final String p_name )
+    public void add( final IBeliefBaseMask<T> p_mask )
     {
-        return new CMask<T>();
+        m_storage.addMask( p_mask.getName(), p_mask.clone( m_parent ) );
     }
-    /*
+
     @Override
-    public void add( final IPathMask<T> p_mask )
+    public void remove( final ILiteral<T> p_literal )
     {
-        m_storage.addMask( p_mask.getName(), p_mask.clone( this ) );
+        m_storage.removeElement( p_literal.getFunctor().get(), p_literal );
     }
-    */
+
+    @Override
+    public void remove( final IBeliefBaseMask<T> p_mask )
+    {
+        m_storage.removeMask( p_mask.getName() );
+    }
+
+    @Override
+    public final IBeliefBaseMask<T> createMask( final String p_name )
+    {
+        return new CMask<T>( p_name, m_parent, this );
+    }
+
+
+
     /**
      * mask of a beliefbase
      * @tparam P type of the beliefbase element
      */
-    private class CMask implements IPathMask<T>
+    private static class CMask<P> implements IBeliefBaseMask<P>
     {
+        /**
+         * mask name
+         */
+        private final String m_name;
+        /**
+         * parent name
+         */
+        private final IBeliefBaseMask<P> m_parent;
+        /**
+         * reference to the beliefbase context
+         */
+        private final IBeliefBase<P> m_self;
 
 
-        private void getFQNPath( final IPathMask p_mask, final CPath p_path )
+        /**
+         * private ctpr
+         *
+         * @param p_name name of the mask
+         * @param p_parent reference to the parent mask
+         * @param p_self reference to the beliefbase context
+         */
+        private CMask( final String p_name, final IBeliefBaseMask<P> p_parent, final IBeliefBase<P> p_self )
+        {
+            m_name = p_name;
+            m_parent = p_parent;
+            m_self = p_self;
+        }
+
+        /**
+         * static method to generate FQN path
+         *
+         * @param p_mask curretn path
+         * @param p_path return path
+         * @tparam Q type of the beliefbase elements
+         */
+        private static <Q> void getFQNPath( final IBeliefBaseMask<Q> p_mask, final CPath p_path )
         {
             if ( p_mask == null )
                 return;
 
             p_path.pushfront( p_mask.getName() );
-            this.getFQNPath( p_mask.getParent(), p_path );
+            getFQNPath( p_mask.getParent(), p_path );
         }
 
 
         @Override
-        public IPathMask<T> clone( final IPathMask<T> p_parent )
+        public IBeliefBaseMask<P> clone( final IBeliefBaseMask<P> p_parent )
         {
-            return new CMask( p_parent );
+            return new CMask<>( m_name, p_parent, m_self );
         }
 
         @Override
@@ -96,10 +166,35 @@ public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
         }
 
         @Override
-        public IPathMask<T> getParent()
+        public IBeliefBaseMask<P> getParent()
         {
             return m_parent;
         }
+
+        @Override
+        public void add( final ILiteral<P> p_literal )
+        {
+            m_self.add( p_literal );
+        }
+
+        @Override
+        public void remove( final ILiteral<P> p_literal )
+        {
+            m_self.remove( p_literal );
+        }
+
+        @Override
+        public void add( final IBeliefBaseMask<P> p_mask )
+        {
+            m_self.add( p_mask );
+        }
+
+        @Override
+        public void remove( final IBeliefBaseMask<P> p_mask )
+        {
+            m_self.remove( p_mask );
+        }
+
     }
 
 }

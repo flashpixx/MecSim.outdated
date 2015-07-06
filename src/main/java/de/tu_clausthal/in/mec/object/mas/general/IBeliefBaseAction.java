@@ -23,16 +23,14 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-
 import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
- * mask of the path
+ * interface for equal method names on masks and beliefbases
  */
-public interface IPathMask<T>
+public interface IBeliefBaseAction<T>
 {
-    public IPathMask<T> clone( final IPathMask<T> p_parent );
 
     /**
      * returns the full path
@@ -42,12 +40,40 @@ public interface IPathMask<T>
     public CPath getFQNPath();
 
     /**
-     * returns only the element name
+     * returns the parent of the mask
      *
-     * @return name
+     * @return parent object or null
      */
-    public String getName();
+    public IBeliefBaseMask<T> getParent();
 
-    public IPathMask<T> getParent();
+
+    /**
+     * adds a literal in the current structure
+     *
+     * @param p_literal literal
+     */
+    public void add( final ILiteral<T> p_literal );
+
+    /**
+     * removes a literal in the current structure
+     *
+     * @param p_literal literal
+     */
+    public void remove( final ILiteral<T> p_literal );
+
+    /**
+     * adds a mask into the current structure
+     *
+     * @param p_mask mask
+     */
+    public void add( final IBeliefBaseMask<T>  p_mask );
+
+    /**
+     * removes a mask in the current structure
+     *
+     * @param p_mask mask
+     */
+    public void remove( final IBeliefBaseMask<T>  p_mask );
+
 
 }

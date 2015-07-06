@@ -24,32 +24,26 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
-public interface IBeliefBase<T> extends IBeliefBaseAction<T>
+import de.tu_clausthal.in.mec.common.CPath;
+
+
+/**
+ * mask of the path
+ */
+public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
 {
+    /**
+     * clones the current mask
+     * @param p_parent new parent
+     * @return new mask object
+     */
+    public IBeliefBaseMask<T> clone( final IBeliefBaseMask<T> p_parent );
 
     /**
-     * adds a new literal
+     * returns only the element name
      *
-     * @param p_literal literal
+     * @return name
      */
-    public void add( final ILiteral<T> p_literal );
-
-    /**
-     * adds a new mask
-     *
-     * @note create a full-copy of the mask
-     * @param p_mask mask
-     */
-    public void add( final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * returns a new mask of the belief base
-     *
-     * @param p_name name of the mask
-     * @return mask
-     */
-    public IBeliefBaseMask<T> createMask( final String p_name );
-
-
+    public String getName();
 
 }

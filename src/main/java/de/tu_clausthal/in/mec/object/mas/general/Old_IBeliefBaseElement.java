@@ -23,28 +23,14 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-
-import de.tu_clausthal.in.mec.common.CPath;
-
-
 /**
- * mask of the path
+ * interface for beliefbase elements
+ * i.e. literals and getBeliefbases, because a single beliefbase
+ * can contain literals and getBeliefbases
  */
-public interface New_IPathMask
+public interface Old_IBeliefBaseElement
 {
+    public boolean isBeliefbase();
 
-    /**
-     * returns the full path
-     *
-     * @return path
-     */
-    public CPath getFQNPath();
-
-    /**
-     * returns only the element name
-     *
-     * @return name
-     */
-    public String getName();
-
+    public boolean isLiteral();
 }

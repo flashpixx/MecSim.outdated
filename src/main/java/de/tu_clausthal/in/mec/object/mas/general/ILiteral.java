@@ -32,8 +32,16 @@ import de.tu_clausthal.in.mec.common.CPath;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral<T> extends ITerm, IBeliefBaseElement
+public interface ILiteral<T> extends ITerm, Old_IBeliefBaseElement
 {
+    /**
+     * creates same literal with different functor
+     *
+     * @param p_functor new functor
+     * @return same literal, but different functor
+     */
+    public T create( final String p_functor );
+
     /**
      * returns the optional annotations
      *
@@ -55,20 +63,12 @@ public interface ILiteral<T> extends ITerm, IBeliefBaseElement
      */
     public T getLiteral();
 
+    public CPath getPath();
+
     /**
      * returns the optional value term
      *
      * @return value term
      */
     public ITermCollection getValues();
-
-    /**
-     * creates same literal with different functor
-     *
-     * @param p_functor new functor
-     * @return same literal, but different functor
-     */
-    public T create( final String p_functor );
-
-    public CPath getPath();
 }

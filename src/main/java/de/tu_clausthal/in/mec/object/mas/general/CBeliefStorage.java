@@ -37,38 +37,19 @@ import java.util.Set;
  * @tparam N element type
  * @tparam M mask type
  */
-public class New_CBeliefStorage<N,M> implements New_IBeliefStorage<N,M>
+public class CBeliefStorage<N, M> implements IBeliefStorage<N, M>
 {
     /** map with elements **/
     protected final Map<String, Set<N>> m_elements = new HashMap<>();
     /** map with masks **/
     protected final Map<String, M> m_masks = new HashMap<>();
 
-
-    @Override
-    public boolean contains( final String p_key )
-    {
-        return m_elements.containsKey( p_key ) || m_masks.containsKey( p_key );
-    }
-
-
-    @Override
-    public boolean containsElement( final String p_key )
-    {
-        final Set<N> l_elements = m_elements.get( p_key );
-        if (l_elements == null)
-            return false;
-
-        return !l_elements.isEmpty();
-    }
-
-
     @Override
     public void addElement( final String p_key, final N p_element )
     {
         final Set<N> l_element;
 
-        if (m_elements.containsKey( p_key ))
+        if ( m_elements.containsKey( p_key ) )
             l_element = m_elements.get( p_key );
         else
         {
@@ -79,17 +60,27 @@ public class New_CBeliefStorage<N,M> implements New_IBeliefStorage<N,M>
         l_element.add( p_element );
     }
 
-
     @Override
-    public boolean removeElement( final String p_key, final N p_element )
+    public void addMask( final String p_key, final M p_element )
     {
-        final Set<N> l_element = m_elements.get( p_key );
-        if (l_element == null)
-            return false;
-
-        return l_element.remove( p_element );
+        m_masks.put( p_key, p_element );
     }
 
+    @Override
+    public boolean contains( final String p_key )
+    {
+        return m_elements.containsKey( p_key ) || m_masks.containsKey( p_key );
+    }
+
+    @Override
+    public boolean containsElement( final String p_key )
+    {
+        final Set<N> l_elements = m_elements.get( p_key );
+        if ( l_elements == null )
+            return false;
+
+        return !l_elements.isEmpty();
+    }
 
     @Override
     public boolean containsMask( String p_key )
@@ -97,25 +88,26 @@ public class New_CBeliefStorage<N,M> implements New_IBeliefStorage<N,M>
         return m_masks.containsKey( p_key );
     }
 
-
     @Override
-    public void addMask( final String p_key, final M p_element )
+    public boolean remove( final String p_key )
     {
-        m_masks.put( p_key, p_element );
+        return ( m_masks.remove( p_key ) != null ) || ( m_elements.remove( p_key ) != null );
     }
 
+    @Override
+    public boolean removeElement( final String p_key, final N p_element )
+    {
+        final Set<N> l_element = m_elements.get( p_key );
+        if ( l_element == null )
+            return false;
+
+        return l_element.remove( p_element );
+    }
 
     @Override
     public boolean removeMask( final String p_key )
     {
         return m_masks.remove( p_key ) != null;
-    }
-
-
-    @Override
-    public boolean remove( final String p_key )
-    {
-        return (m_masks.remove( p_key ) != null) || (m_elements.remove( p_key ) != null);
     }
 
 }

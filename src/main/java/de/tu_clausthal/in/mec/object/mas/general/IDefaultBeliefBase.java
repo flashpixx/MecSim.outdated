@@ -24,79 +24,77 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
+import de.tu_clausthal.in.mec.common.CPath;
+
+
 /**
- * interface of a beliefbase storage
+ * default beliefbase
+ * @tparam T literal type
  */
-public interface New_IBeliefStorage<N,M>
+public abstract class IDefaultBeliefBase<T> implements IBeliefBase<ILiteral<T>>
 {
-
     /**
-     * checks any element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
+     * storage with data
      */
-    public boolean contains( final String p_key );
-
-    /**
-     * check if an element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    public boolean containsElement( final String p_key );
-
-    /**
-     * adds an element
-     *
-     * @param p_key key name
-     * @param p_element element
-     */
-    public void addElement( final String p_key, final N p_element );
+    protected final CBeliefStorage<ILiteral<T>, IPathMask> m_storage = new CBeliefStorage<>();
 
 
-    /**
-     * removes an element
-     *
-     * @param p_key key name
-     * @param p_element element
-     * @return boolean flag, that the element is removed
-     */
-    public boolean removeElement( final String p_key, final N p_element );
+    @Override
+    public void add( final ILiteral<T> p_literal )
+    {
+        m_storage.addElement( p_literal.getFunctor().get(), p_literal );
+    }
 
-    /**
-     * checks if a mask exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    public boolean containsMask( String p_key );
+
+    @Override
+    public void add( final IPathMask p_mask )
+    {
+        m_storage.addMask( p_mask.getName(), p_mask );
+    }
+
+
+    @Override
+    public final IPathMask getPathElement( final String p_name )
+    {
+        return new CMask<>( p_name, this );
+    }
 
 
     /**
-     * adds a new mask
-     *
-     * @param p_key key name
-     * @param p_element mask element
+     * mask of a beliefbase
+     * @tparam P type of the beliefbase element
      */
-    public void addMask( final String p_key, final M p_element );
+    private class CMask<P> implements IPathMask
+    {
+        /**
+         * reference of the beliefbase
+         **/
+        private final IBeliefBase<P> m_beliefbase;
+        /** name of the mask **/
+        private final String m_name;
 
+        /**
+         * ctor
+         *
+         * @param p_name name of the mask
+         */
+        public CMask( final String p_name, final IBeliefBase<P> p_beliefbase )
+        {
+            m_name = p_name;
+            m_beliefbase = p_beliefbase;
+        }
 
-    /**
-     * removes a mask
-     *
-     * @param p_key key name
-     * @return boolean flag the element is removed
-     */
-    public boolean removeMask( final String p_key );
+        @Override
+        public CPath getFQNPath()
+        {
+            return null;
+        }
 
-
-    /**
-     * removes all elements by its name
-     *
-     * @param p_key key name
-     * @return boolean flag that elements could be removed
-     */
-    public boolean remove( final String p_key );
+        @Override
+        public String getName()
+        {
+            return null;
+        }
+    }
 
 }

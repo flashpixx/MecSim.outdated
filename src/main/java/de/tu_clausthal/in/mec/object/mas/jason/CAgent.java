@@ -29,11 +29,9 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.CDefaultLiteral;
-import de.tu_clausthal.in.mec.object.mas.general.CTermList;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.Old_CDefaultBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
@@ -194,7 +192,7 @@ public class CAgent<T> implements IVoidAgent
 
             // initialize inherited getBeliefbases
             m_beliefs.add( new CBindingBeliefBase( c_bindname, p_bind, new CPath( "binding" ) ) );
-            m_beliefs.add( new CPath( "messages" ), new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS() ) );
+            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS(), new CPath( "messages" ) ) );
         }
 
         // register beliefbase-mapper with individual mapping
@@ -202,7 +200,7 @@ public class CAgent<T> implements IVoidAgent
 
         // put initial internal beliefs into top-level beliefbase
         for ( final Literal l_initialBelief : m_agent.getBB() )
-            m_beliefs.add( CPath.EMPTY, CCommon.convertGeneric( l_initialBelief ) );
+            m_beliefs.add( CCommon.convertGeneric( l_initialBelief ) );
 
 
 
@@ -257,7 +255,10 @@ public class CAgent<T> implements IVoidAgent
     @Override
     public void addLiteral( final CPath p_path, final Object p_data )
     {
-        m_beliefs.add( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
+        final CPath l_path = p_path;
+        l_path.setSeparator( "_" );
+
+        m_beliefs.add( CCommon.convertGeneric( CCommon.getLiteral( l_path.toString(), p_data ) ) );
     }
 
     /**
@@ -265,7 +266,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return generic beliefbase
      */
-    public IBeliefBase getBeliefs()
+    public Old_IBeliefBase getBeliefs()
     {
         return m_beliefs;
     }
@@ -357,7 +358,7 @@ public class CAgent<T> implements IVoidAgent
      *
      * @return beliefbase
      */
-    public final CDefaultBeliefBase getBeliefBase()
+    public final Old_CDefaultBeliefBase getBeliefBase()
     {
         return m_beliefs;
     }

@@ -24,8 +24,8 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.CMessage;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
@@ -73,6 +73,12 @@ public class CMessageBeliefBase extends CBeliefBase
         m_transitionSystem = p_transitionSystem;
     }
 
+    public CMessageBeliefBase( final TransitionSystem p_transitionSystem, final CPath p_path )
+    {
+        super( null, null, p_path );
+        m_transitionSystem = p_transitionSystem;
+    }
+
     /**
      * ctor - just the top-level literals are specified
      *
@@ -92,12 +98,12 @@ public class CMessageBeliefBase extends CBeliefBase
      * @param p_literals top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final Map<String, IBeliefBase<Literal>> p_beliefbases,
+    public CMessageBeliefBase( final Map<String, Old_IBeliefBase<Literal>> p_beliefbases,
             final Set<ILiteral<Literal>> p_literals,
             final TransitionSystem p_transitionSystem
     )
     {
-        super( p_beliefbases, p_literals );
+        super( p_beliefbases, p_literals, CPath.EMPTY );
         m_transitionSystem = p_transitionSystem;
     }
 
@@ -128,7 +134,7 @@ public class CMessageBeliefBase extends CBeliefBase
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( c_seperator ) ) ) );
 
                     if ( l_jmsg.isTell() )
-                        add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+                        add( CCommon.convertGeneric( l_literal ) );
                     if ( l_jmsg.isUnTell() )
                         remove( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
                     if ( l_jmsg.isKnownPerformative() )
@@ -151,7 +157,7 @@ public class CMessageBeliefBase extends CBeliefBase
                 // otherwise message will direct converted
                 final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
                 l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( c_seperator ) ) ) );
-                add( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+                add( CCommon.convertGeneric( l_literal ) );
 
             }
             catch ( final Exception l_exception )

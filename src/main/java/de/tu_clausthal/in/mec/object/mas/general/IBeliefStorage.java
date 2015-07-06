@@ -24,34 +24,75 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
-import de.tu_clausthal.in.mec.common.CPath;
-
-
-public interface New_IBeliefBase<T>
+/**
+ * interface of a beliefbase storage
+ */
+public interface IBeliefStorage<N, M>
 {
 
     /**
-     * returns a new mask of the belief base
+     * adds an element
      *
-     * @param p_name name of the mask
-     * @return mask
+     * @param p_key key name
+     * @param p_element element
      */
-    public New_IPathMask getPathElement( final String p_name );
-
-
-    /**
-     * adds a new literal
-     *
-     * @param p_literal literal
-     */
-    public void add( final T p_literal );
-
+    public void addElement( final String p_key, final N p_element );
 
     /**
      * adds a new mask
      *
-     * @param p_mask mask
+     * @param p_key key name
+     * @param p_element mask element
      */
-    public void add( final New_IPathMask p_mask );
+    public void addMask( final String p_key, final M p_element );
+
+    /**
+     * checks any element exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean contains( final String p_key );
+
+    /**
+     * check if an element exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean containsElement( final String p_key );
+
+    /**
+     * checks if a mask exists
+     *
+     * @param p_key key name
+     * @return exist boolean
+     */
+    public boolean containsMask( String p_key );
+
+    /**
+     * removes all elements by its name
+     *
+     * @param p_key key name
+     * @return boolean flag that elements could be removed
+     */
+    public boolean remove( final String p_key );
+
+    /**
+     * removes an element
+     *
+     * @param p_key key name
+     * @param p_element element
+     * @return boolean flag, that the element is removed
+     */
+    public boolean removeElement( final String p_key, final N p_element );
+
+    /**
+     * removes a mask
+     *
+     * @param p_key key name
+     * @return boolean flag the element is removed
+     */
+    public boolean removeMask( final String p_key );
 
 }

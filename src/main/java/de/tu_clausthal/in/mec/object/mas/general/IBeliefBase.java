@@ -23,110 +23,30 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import de.tu_clausthal.in.mec.common.CPath;
 
-import java.util.Map;
-import java.util.Set;
-
-
-/**
- * The beliefbase interface for generic getBeliefbases. A single beliefbase contains beliefs
- * as literals (the top-level literals) and further inherited getBeliefbases.
- *
- * @param <T> language specific literal
- */
-public interface IBeliefBase<T> extends IBeliefBaseElement, Iterable<ILiteral<T>>
+public interface IBeliefBase<T>
 {
+
     /**
-     * adds a beliefbase-element to specified path (i.e. the path to an inherited beliefbase)
-     * If the path is non-existing, it will be constructed.
+     * adds a new literal
      *
-     * @param p_element element to add
-     * @return true if addition was successful
+     * @param p_literal literal
      */
-    public boolean add( final IBeliefBaseElement p_element );
+    public void add( final T p_literal );
 
     /**
-     * empties the whole beliefbase, i.e. the top-level literals
-     * and all the literals in inherited getBeliefbases
-     */
-    public void clear( final CPath... p_path );
-
-    /**
-     * gets a beliefbase with position and name specified in path
+     * adds a new mask
      *
-     * @param p_path path with name of the beliefbase as last element
-     * @return specified beliefbase or null, if it was not found
+     * @param p_mask mask
      */
-    public IBeliefBase get( final CPath p_path );
+    public void add( final IPathMask p_mask );
 
     /**
-     * get a map of all inherited getBeliefbases with names from specified beliefbase
+     * returns a new mask of the belief base
      *
-     * @param p_path path to beliefbase
-     * @return map of getBeliefbases
+     * @param p_name name of the mask
+     * @return mask
      */
-    public Map<String, IBeliefBase<T>> getBeliefbases( final CPath... p_path );
-
-    /**
-     * get beliefbase-elements
-     *
-     * @param p_path path to inherited beliefbase
-     * @param p_name key of beliefbase-elements (i.e. literal functor or beliefbase name)
-     * @param p_class class of beliefbase-elements (e.g. ILiteral or IBeliefbase)
-     * @return set of beliefbase-elements with specified attributes
-     */
-    public Set<IBeliefBaseElement> getElements( final CPath p_path, final String p_name, final Class<?> p_class );
-
-    /**
-     * getter for beliefbase elements with path specified
-     *
-     * @param p_path path to inherited beliefbase
-     * @return beliefbase-elements
-     */
-    public Map<String, Map<Class<?>, Set<IBeliefBaseElement>>> getElements( final CPath p_path );
-
-    /**
-     * returns top level literals
-     *
-     * @return top-level literals
-     */
-    public Set<ILiteral<T>> getLiterals( final CPath... p_path );
-
-    /**
-     * gets a beliefbase with position and name specified in path
-     * if there is no beliefbase or the path is unknown, the path
-     * will be constructed with a default beliefbase
-     *
-     * @param p_path path with name of the beliefbase as last element
-     * @param p_beliefbase default beliefbase
-     * @return specified or default beliefbase
-     */
-    public IBeliefBase getOrDefault( final CPath p_path, final IBeliefBase<T> p_beliefbase );
-
-    /**
-     * removes specified beliefbase-element
-     *
-     * @param p_path path beliefbase-element
-     * @param p_element element to remove
-     */
-    public boolean remove( final CPath p_path, final IBeliefBaseElement p_element );
-
-    /**
-     * updates the beliefbase
-     */
-    public void update();
-
-    /**
-     * getter for path
-     */
-    public CPath getPath();
-
-    /**
-     * setter for path
-     *
-     * @param p_path
-     */
-    public void setPath( final CPath p_path );
+    public IPathMask getPathElement( final String p_name );
 
 }

@@ -25,16 +25,16 @@ public class Test_IDefaultBeliefBase
      *
      * @return predefined beliefbase
      */
-    private IBeliefBase<Literal> generateTestset()
+    private Old_IBeliefBase<Literal> generateTestset()
     {
-        final IBeliefBase<Literal> l_beliefbase = new CDefaultBeliefBase<Literal>()
+        final Old_IBeliefBase<Literal> l_beliefbase = new Old_CDefaultBeliefBase<Literal>()
         {
         };
 
         // add some inherited getBeliefbases
-        l_beliefbase.add( new CPath( "aa1" ), new CDefaultBeliefBase() );
+        l_beliefbase.add( new CPath( "aa1" ), new Old_CDefaultBeliefBase() );
         l_beliefbase.add(
-                new CPath( "aa2/bb1/cc1/dd1" ), new CDefaultBeliefBase<Literal>()
+                new CPath( "aa2/bb1/cc1/dd1" ), new Old_CDefaultBeliefBase<Literal>()
                 {
                 }
         );
@@ -49,19 +49,19 @@ public class Test_IDefaultBeliefBase
     @Test( expected = IllegalArgumentException.class )
     public void testAddEmptyPath()
     {
-        final IBeliefBase<Literal> l_beliefbase = new CDefaultBeliefBase<Literal>()
+        final Old_IBeliefBase<Literal> l_beliefbase = new Old_CDefaultBeliefBase<Literal>()
         {
         };
-        l_beliefbase.add( CPath.EMPTY, new CDefaultBeliefBase() );
+        l_beliefbase.add( CPath.EMPTY, new Old_CDefaultBeliefBase() );
     }
 
     @Test
     public void testAddGetBeliefbase()
     {
-        final IBeliefBase<Literal> l_beliefbase = this.generateTestset();
+        final Old_IBeliefBase<Literal> l_beliefbase = this.generateTestset();
 
         // create new beliefbase to add
-        final IBeliefBase<Literal> l_testBeliefbase = new CDefaultBeliefBase();
+        final Old_IBeliefBase<Literal> l_testBeliefbase = new Old_CDefaultBeliefBase();
 
         // add to some existing paths
         l_beliefbase.add( new CPath( "aa3" ), l_testBeliefbase );
@@ -82,7 +82,7 @@ public class Test_IDefaultBeliefBase
     public void testAddGetLiteral()
     {
         // generate testset and literal
-        final IBeliefBase<Literal> l_beliefbase = this.generateTestset();
+        final Old_IBeliefBase<Literal> l_beliefbase = this.generateTestset();
         final CLiteral l_testLiteral = new CLiteral( ASSyntax.createLiteral( "test" ) );
         final CLiteral l_testLiteral2 = new CLiteral( ASSyntax.createLiteral( "test2" ) );
 
@@ -110,7 +110,7 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testClear()
     {
-        final IBeliefBase<Literal> l_beliefbase = this.generateTestset();
+        final Old_IBeliefBase<Literal> l_beliefbase = this.generateTestset();
 
         // check if there are getBeliefbases before removing
         assertTrue( l_beliefbase.get( new CPath( "aa2/bb1/cc1/dd1" ) ) != null );
@@ -154,16 +154,16 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testGetMethods()
     {
-        final IBeliefBase<Literal> l_beliefbase = this.generateTestset();
+        final Old_IBeliefBase<Literal> l_beliefbase = this.generateTestset();
 
         // non existing getBeliefbases should return null
         assertEquals( l_beliefbase.get( new CPath( "a" ) ), null );
         assertEquals( l_beliefbase.get( new CPath( "xxx/ab" ) ), null );
 
-        final IBeliefBase<Literal> testbase1 = new CDefaultBeliefBase<Literal>()
+        final Old_IBeliefBase<Literal> testbase1 = new Old_CDefaultBeliefBase<Literal>()
         {
         };
-        final IBeliefBase<Literal> testbase2 = new CDefaultBeliefBase<Literal>()
+        final Old_IBeliefBase<Literal> testbase2 = new Old_CDefaultBeliefBase<Literal>()
         {
         };
 
@@ -182,7 +182,7 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testIterator()
     {
-        final IBeliefBase<Literal> l_beliefbase = new CDefaultBeliefBase<Literal>()
+        final Old_IBeliefBase<Literal> l_beliefbase = new Old_CDefaultBeliefBase<Literal>()
         {
         };
         final Set<ILiteral<Literal>> l_initial = new HashSet()
@@ -212,8 +212,8 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testRemoveBeliefbase()
     {
-        final IBeliefBase<Literal> l_beliefbase = this.generateTestset();
-        final IBeliefBase<Literal> l_testBeliefbase = new CDefaultBeliefBase();
+        final Old_IBeliefBase<Literal> l_beliefbase = this.generateTestset();
+        final Old_IBeliefBase<Literal> l_testBeliefbase = new Old_CDefaultBeliefBase();
 
         // add to some existing paths
         l_beliefbase.add( new CPath( "aa3" ), l_testBeliefbase );
@@ -224,10 +224,10 @@ public class Test_IDefaultBeliefBase
         l_beliefbase.add( new CPath( "aa4/bb2/cc3/dd4" ), l_testBeliefbase );
 
         // check for correct addition
-        assertTrue( l_beliefbase.getElements( CPath.EMPTY, "aa3", IBeliefBase.class ).contains( l_testBeliefbase ) );
-        assertTrue( l_beliefbase.getElements( new CPath( "aa1" ), "bb1", IBeliefBase.class ).contains( l_testBeliefbase ) );
-        assertTrue( l_beliefbase.getElements( new CPath( "aa1/bb1/cc1" ), "dd1", IBeliefBase.class ).contains( l_testBeliefbase ) );
-        assertTrue( l_beliefbase.getElements( new CPath( "aa4/bb2/cc3" ), "dd4", IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertTrue( l_beliefbase.getElements( CPath.EMPTY, "aa3", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertTrue( l_beliefbase.getElements( new CPath( "aa1" ), "bb1", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertTrue( l_beliefbase.getElements( new CPath( "aa1/bb1/cc1" ), "dd1", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertTrue( l_beliefbase.getElements( new CPath( "aa4/bb2/cc3" ), "dd4", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
 
         l_beliefbase.remove( new CPath( "aa3" ), l_testBeliefbase );
         l_beliefbase.remove( new CPath( "aa1/bb1/cc1/dd1" ), l_testBeliefbase );
@@ -239,10 +239,10 @@ public class Test_IDefaultBeliefBase
         assertTrue( l_beliefbase.get( new CPath( "aa1/bb1/cc1/dd1" ) ) == null );
         assertTrue( l_beliefbase.get( new CPath( "aa1/bb1" ) ) == null );
         assertTrue( l_beliefbase.get( new CPath( "aa4/bb2/cc3/dd4" ) ) == null );
-        assertFalse( l_beliefbase.getElements( CPath.EMPTY, "aa3", IBeliefBase.class ).contains( l_testBeliefbase ) );
-        assertFalse( l_beliefbase.getElements( new CPath( "aa1" ), "bb1", IBeliefBase.class ).contains( l_testBeliefbase ) );
-        assertFalse( l_beliefbase.getElements( new CPath( "aa1/bb1/cc1" ), "dd1", IBeliefBase.class ).contains( l_testBeliefbase ) );
-        assertFalse( l_beliefbase.getElements( new CPath( "aa4/bb2/cc3" ), "dd4", IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertFalse( l_beliefbase.getElements( CPath.EMPTY, "aa3", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertFalse( l_beliefbase.getElements( new CPath( "aa1" ), "bb1", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertFalse( l_beliefbase.getElements( new CPath( "aa1/bb1/cc1" ), "dd1", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
+        assertFalse( l_beliefbase.getElements( new CPath( "aa4/bb2/cc3" ), "dd4", Old_IBeliefBase.class ).contains( l_testBeliefbase ) );
     }
 
     /**
@@ -251,7 +251,7 @@ public class Test_IDefaultBeliefBase
     @Test
     public void testRemoveLiteral()
     {
-        final IBeliefBase<Literal> l_beliefbase = this.generateTestset();
+        final Old_IBeliefBase<Literal> l_beliefbase = this.generateTestset();
 
         // add some test literals
         final CLiteral l_testLiteral = new CLiteral( ASSyntax.createLiteral( "test" ) );

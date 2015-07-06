@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSyntax.ASSyntax;
@@ -76,7 +76,7 @@ public class CBindingBeliefBase extends CBeliefBase
      */
     public boolean instanceOf( Class<?> p_class )
     {
-        return IBeliefBase.class.isAssignableFrom( p_class );
+        return Old_IBeliefBase.class.isAssignableFrom( p_class );
     }
 
     /**
@@ -127,15 +127,15 @@ public class CBindingBeliefBase extends CBeliefBase
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
                     final Literal l_literal = CCommon.getLiteral(
-                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
+                            "binding_" + l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
                                     l_item.getValue().getLeft()
                             )
                     );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
-                    this.add( new CPath( "binding" ), CCommon.convertGeneric( l_literal ) );
 
+                    this.add( CCommon.convertGeneric( l_literal ) );
                 }
                 catch ( final Exception l_exception )
                 {

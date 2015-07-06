@@ -96,7 +96,7 @@ public abstract class New_IDefaultBeliefBase<T> implements New_IBeliefBase<ILite
         }
 
         @Override
-        public CMask clone() throws CloneNotSupportedException
+        protected CMask clone() throws CloneNotSupportedException
         {
             return new CMask<>( m_parent, m_name, m_beliefbase );
         }

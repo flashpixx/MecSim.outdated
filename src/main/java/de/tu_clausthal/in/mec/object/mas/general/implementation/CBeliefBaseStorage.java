@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * storage of beliefbases to address different beliefbases with a name
  */
-public class CBeliefBaseStorage
+public final class CBeliefBaseStorage
 {
     /**
      * map with case-insensitive name and a beliefbase

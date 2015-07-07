@@ -71,7 +71,7 @@ import java.util.Set;
  * @tparam T typ of binding objects
  * @todo error in cycle step, synchronize agent and generic beliefbase correctly
  */
-public class CAgent<T> implements IVoidAgent
+public class CAgent implements IVoidAgent<Literal>
 {
     /**
      * name of the binding beliefbase and its mask
@@ -273,10 +273,11 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public <Literal> void registerMask( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
+    public void registerMask( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
     {
         m_beliefbaserootmask.add( p_mask );
     }
+
 
     @Override
     public final void release()

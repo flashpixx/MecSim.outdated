@@ -32,8 +32,9 @@ import org.jxmapviewer.painter.Painter;
 
 /**
  * interface of an agent
+ * @tparam T literal type
  */
-public interface IAgent extends Painter, IReceiver
+public interface IAgent<T> extends Painter, IReceiver
 {
 
     /**
@@ -70,9 +71,8 @@ public interface IAgent extends Painter, IReceiver
      *
      * @param p_path path in which the mask is added
      * @param p_mask mask
-     * @tparam T type of the mask
      */
-    public <T> void registerMask( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+    public void registerMask( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * release agent call *

@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.common.CPath;
  */
 public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
 {
+
     /**
      * clones the current mask
      *

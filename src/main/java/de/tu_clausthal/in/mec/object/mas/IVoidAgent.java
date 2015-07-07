@@ -29,7 +29,7 @@ import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 /**
  * interface of an agent with void-steppable interface
  */
-public interface IVoidAgent extends IAgent, IVoidSteppable
+public interface IVoidAgent<T> extends IAgent<T>, IVoidSteppable
 {
 
 }

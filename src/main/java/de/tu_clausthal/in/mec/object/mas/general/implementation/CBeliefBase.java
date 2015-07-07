@@ -99,6 +99,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    @SuppressWarnings( "unchecked" )
+    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
+    {
+        return (L) m_storage;
+    }
+
+
+    @Override
     public Iterator<ILiteral<T>> iterator()
     {
         return m_storage.iterator();

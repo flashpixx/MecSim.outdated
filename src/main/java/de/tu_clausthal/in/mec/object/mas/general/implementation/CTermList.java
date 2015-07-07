@@ -21,29 +21,27 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 import de.tu_clausthal.in.mec.object.mas.general.ITerm;
 import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
- * generic term set for agent literals
- *
- * @todo empty set initialization with static EMPTY_SET
+ * generic term list for agent literals
  */
-public class CTermSet extends HashSet<ITerm> implements ITermCollection
+public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
     /**
      * default ctor
      */
-    public CTermSet()
+    public CTermList()
     {
-        super( 0 );
+        super();
     }
 
     /**
@@ -51,14 +49,16 @@ public class CTermSet extends HashSet<ITerm> implements ITermCollection
      *
      * @param p_collection collection containing initial elements
      */
-    public CTermSet( final Collection<ITerm> p_collection )
+    public CTermList( final Collection<ITerm> p_collection )
     {
         super( p_collection );
     }
 
+
     @Override
     public boolean instanceOf( final Class<?> p_class )
     {
-        return Set.class.isAssignableFrom( p_class );
+        return List.class.isAssignableFrom( p_class );
     }
+
 }

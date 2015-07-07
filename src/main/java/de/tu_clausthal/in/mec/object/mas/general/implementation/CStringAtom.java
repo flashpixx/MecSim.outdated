@@ -21,39 +21,22 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
 /**
- * immutable belief storage
+ * string atom class for agent literals
  */
-public class CImmutableBeliefStorage<N,M extends Iterable<N>> extends CBeliefStorage<N,M>
+public class CStringAtom extends IDefaultAtom<String>
 {
-    @Override
-    public final void addMask( final String p_key, final M p_element )
-    {
-    }
 
-    @Override
-    public final boolean remove( final String p_key )
+    /**
+     * ctor
+     *
+     * @param p_value string value
+     */
+    public CStringAtom( final String p_value )
     {
-        return false;
-    }
-
-    @Override
-    public final boolean removeElement( final String p_key, final N p_element )
-    {
-        return false;
-    }
-
-    @Override
-    public final boolean removeMask( final String p_key )
-    {
-        return false;
-    }
-
-    @Override
-    public final void clear()
-    {
+        super( p_value );
     }
 }

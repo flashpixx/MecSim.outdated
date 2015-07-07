@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IAtom;
@@ -37,8 +37,6 @@ import java.util.Set;
  * default generic literal class for agent beliefs
  * a literal consists of a functor, an optional list of values and
  * an optional set of annotations, e.g. speed(50)[source(self)]
- *
- * @todo define constructors for TermSets and TermLists
  */
 public class CLiteral<T> implements ILiteral<T>
 {
@@ -114,18 +112,6 @@ public class CLiteral<T> implements ILiteral<T>
     }
 
     @Override
-    public final boolean isBeliefbase()
-    {
-        return false;
-    }
-
-    @Override
-    public final boolean isLiteral()
-    {
-        return true;
-    }
-
-    @Override
     public IAtom<String> getFunctor()
     {
         return m_functor;
@@ -167,6 +153,18 @@ public class CLiteral<T> implements ILiteral<T>
     public boolean instanceOf( final Class<?> p_class )
     {
         return ILiteral.class.isAssignableFrom( p_class );
+    }
+
+    @Override
+    public final boolean isBeliefbase()
+    {
+        return false;
+    }
+
+    @Override
+    public final boolean isLiteral()
+    {
+        return true;
     }
 
 }

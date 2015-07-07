@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
 import de.tu_clausthal.in.mec.common.CPath;
@@ -37,18 +37,19 @@ import java.util.Set;
 
 /**
  * default beliefbase
+ *
  * @tparam T literal type
  */
 public class CBeliefBase<T> implements IBeliefBase<T>
 {
     /**
-     * storage with data
-     */
-    protected final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
-    /**
      * reference to the parent
      */
     private final IBeliefBaseMask<T> m_parent;
+    /**
+     * storage with data
+     */
+    protected final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
 
 
     /**
@@ -76,7 +77,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      */
     public CBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
-        this(null, p_storage);
+        this( null, p_storage );
     }
 
     /**
@@ -98,57 +99,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public void add( final IBeliefBaseMask<T> p_mask )
-    {
-        m_storage.addMask( p_mask.getName(), p_mask.clone( m_parent ) );
-    }
-
-    @Override
-    public void remove( final ILiteral<T> p_literal )
-    {
-        m_storage.removeElement( p_literal.getFunctor().get(), p_literal );
-    }
-
-    @Override
-    public void remove( final IBeliefBaseMask<T> p_mask )
-    {
-        m_storage.removeMask( p_mask.getName() );
-    }
-
-    @Override
-    public final IBeliefBaseMask<T> createMask( final String p_name )
-    {
-        return new CMask<T>( p_name, m_parent, this );
-    }
-
-
-    @Override
-    public boolean isEmpty()
-    {
-        return m_storage.isEmpty();
-    }
-
-    @Override
     public Iterator<ILiteral<T>> iterator()
     {
         return m_storage.iterator();
     }
 
-    @Override
-    public void update()
-    {
-        m_storage.update();
-    }
-
-    @Override
-    public void clear()
-    {
-        m_storage.clear();
-    }
-
-
     /**
      * mask of a beliefbase
+     *
      * @tparam P type of the beliefbase element
      */
     private static class CMask<P> implements IBeliefBaseMask<P>
@@ -284,5 +242,52 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
     }
+
+    @Override
+    public void add( final IBeliefBaseMask<T> p_mask )
+    {
+        m_storage.addMask( p_mask.getName(), p_mask.clone( m_parent ) );
+    }
+
+    @Override
+    public void remove( final ILiteral<T> p_literal )
+    {
+        m_storage.removeElement( p_literal.getFunctor().get(), p_literal );
+    }
+
+    @Override
+    public void remove( final IBeliefBaseMask<T> p_mask )
+    {
+        m_storage.removeMask( p_mask.getName() );
+    }
+
+    @Override
+    public final IBeliefBaseMask<T> createMask( final String p_name )
+    {
+        return new CMask<T>( p_name, m_parent, this );
+    }
+
+
+    @Override
+    public boolean isEmpty()
+    {
+        return m_storage.isEmpty();
+    }
+
+
+    @Override
+    public void update()
+    {
+        m_storage.update();
+    }
+
+    @Override
+    public void clear()
+    {
+        m_storage.clear();
+    }
+
+
+
 
 }

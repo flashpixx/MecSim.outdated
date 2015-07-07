@@ -21,24 +21,30 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
-
-import de.tu_clausthal.in.mec.object.mas.general.IDefaultAtom;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
 /**
- * numeric atom class for agent literals
+ * class to update an immutable belief storage
  */
-public class CNumberAtom extends IDefaultAtom<Number>
+public abstract class IOneTimeStorage<N, M extends Iterable<N>> extends CImmutableBeliefStorage<N, M>
 {
-    /**
-     * ctor
-     *
-     * @param p_value the atom's value
-     */
-    public CNumberAtom( final Number p_value )
+
+    @Override
+    public final void update()
     {
-        super( p_value );
+        // clear is final at the super, so clearing is run manually
+        m_elements.clear();
+        m_masks.clear();
+
+        super.update();
+        this.updating();
     }
+
+
+    /**
+     * updates the element structure
+     */
+    protected abstract void updating();
 
 }

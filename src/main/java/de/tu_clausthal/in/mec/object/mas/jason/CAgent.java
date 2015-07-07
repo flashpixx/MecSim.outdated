@@ -202,8 +202,6 @@ public class CAgent<T> implements IVoidAgent
         for ( final Literal l_initialBelief : m_agent.getBB() )
             m_beliefs.add( CCommon.convertGeneric( l_initialBelief ) );
 
-
-
     }
 
 

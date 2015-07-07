@@ -26,9 +26,8 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.IOneTimeStorage;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.IOneTimeStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Literal;
 

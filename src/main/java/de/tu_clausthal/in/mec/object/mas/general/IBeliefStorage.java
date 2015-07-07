@@ -50,6 +50,11 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
     public void addMask( final String p_key, final M p_element );
 
     /**
+     * clears all elements
+     */
+    public void clear();
+
+    /**
      * checks any element exists
      *
      * @param p_key key name
@@ -78,6 +83,13 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
     public M getMask( final String p_key );
 
     /**
+     * checks if a storage is empty
+     *
+     * @return empty boolean
+     */
+    public boolean isEmpty();
+
+    /**
      * removes all elements by its name
      *
      * @param p_key key name
@@ -103,20 +115,8 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
     public boolean removeMask( final String p_key );
 
     /**
-     * checks if a storage is empty
-     *
-     * @return empty boolean
-     */
-    public boolean isEmpty();
-
-    /**
      * updates all items
      */
     public void update();
-
-    /**
-     * clears all elements
-     */
-    public void clear();
 
 }

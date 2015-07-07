@@ -31,6 +31,25 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
 {
 
     /**
+     * adds a literal in the current structure
+     *
+     * @param p_literal literal
+     */
+    public void add( final ILiteral<T> p_literal );
+
+    /**
+     * adds a mask into the current structure
+     *
+     * @param p_mask mask
+     */
+    public void add( final IBeliefBaseMask<T> p_mask );
+
+    /**
+     * clears all elements
+     */
+    public void clear();
+
+    /**
      * returns a new mask of the belief base
      *
      * @param p_name name of the mask
@@ -39,11 +58,11 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     public IBeliefBaseMask<T> createMask( final String p_name );
 
     /**
-     * adds a literal in the current structure
+     * checks if the structure empty
      *
-     * @param p_literal literal
+     * @return empty boolean
      */
-    public void add( final ILiteral<T> p_literal );
+    public boolean isEmpty();
 
     /**
      * removes a literal in the current structure
@@ -53,36 +72,15 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     public void remove( final ILiteral<T> p_literal );
 
     /**
-     * adds a mask into the current structure
-     *
-     * @param p_mask mask
-     */
-    public void add( final IBeliefBaseMask<T>  p_mask );
-
-    /**
      * removes a mask in the current structure
      *
      * @param p_mask mask
      */
-    public void remove( final IBeliefBaseMask<T>  p_mask );
-
-    /**
-     * checks if the structure empty
-     *
-     * @return empty boolean
-     */
-    public boolean isEmpty();
-
+    public void remove( final IBeliefBaseMask<T> p_mask );
 
     /**
      * updates all items
      */
     public void update();
-
-
-    /**
-     * clears all elements
-     */
-    public void clear();
 
 }

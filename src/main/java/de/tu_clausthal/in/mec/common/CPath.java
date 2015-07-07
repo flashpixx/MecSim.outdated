@@ -39,13 +39,11 @@ import java.util.List;
  */
 public class CPath implements Iterable<CPath>
 {
+    public static final String DEFAULTSEPERATOR = "/";
     /**
      * empty path
      **/
     public static final CPath EMPTY = new CPath();
-
-    public static final String DEFAULTSEPERATOR = "/";
-
     /**
      * list with path parts *
      */
@@ -110,10 +108,10 @@ public class CPath implements Iterable<CPath>
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         final List<String> l_pathlist = new LinkedList<>();
-        l_pathlist.add( p_varargs[ 1 ] );
+        l_pathlist.add( p_varargs[1] );
 
         for ( int i = 2; i < p_varargs.length; ++i )
-            l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[ i ], p_varargs[ 0 ] ) ) );
+            l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
 
         return createPath( (String[]) l_pathlist.toArray() );
     }

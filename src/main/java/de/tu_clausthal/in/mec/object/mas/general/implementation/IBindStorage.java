@@ -1,4 +1,4 @@
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * binding belief storage
  */
-public abstract class IBindStorage<N,M extends Iterable<N>> extends IOneTimeStorage<N,M>
+public abstract class IBindStorage<N, M extends Iterable<N>> extends IOneTimeStorage<N, M>
 {
     /**
      * field filter

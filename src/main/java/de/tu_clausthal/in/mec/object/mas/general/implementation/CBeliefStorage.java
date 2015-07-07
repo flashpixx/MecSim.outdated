@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
@@ -36,16 +36,20 @@ import java.util.Stack;
 
 /**
  * internal storage of the data
- * @note not thread-safe
  *
+ * @note not thread-safe
  * @tparam N element type
  * @tparam M mask type
  */
 public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
 {
-    /** map with elements **/
+    /**
+     * map with elements
+     **/
     protected final Map<String, Set<N>> m_elements = new HashMap<>();
-    /** map with masks **/
+    /**
+     * map with masks
+     **/
     protected final Map<String, M> m_masks = new HashMap<>();
 
     @Override
@@ -68,6 +72,13 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     public void addMask( final String p_key, final M p_element )
     {
         m_masks.put( p_key, p_element );
+    }
+
+    @Override
+    public void clear()
+    {
+        m_elements.clear();
+        m_masks.clear();
     }
 
     @Override
@@ -105,38 +116,9 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     }
 
     @Override
-    public final Iterator<N> iterator()
+    public final boolean isEmpty()
     {
-        return new Iterator<N>()
-        {
-            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
-            {{
-                for( final Set<N> l_literals : m_elements.values() )
-                    add(l_literals.iterator());
-
-                for( final M l_mask : m_masks.values() )
-                    add( l_mask.iterator() );
-            }};
-
-            @Override
-            public final boolean hasNext()
-            {
-                if (m_stack.isEmpty())
-                    return false;
-
-                if (m_stack.peek().hasNext())
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public final N next()
-            {
-                return m_stack.peek().next();
-            }
-        };
+        return m_elements.isEmpty() && m_masks.isEmpty();
     }
 
     @Override
@@ -162,22 +144,44 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     }
 
     @Override
-    public void clear()
-    {
-        m_elements.clear();
-        m_masks.clear();
-    }
-
-    @Override
-    public final boolean isEmpty()
-    {
-        return m_elements.isEmpty() && m_masks.isEmpty();
-    }
-
-    @Override
     public void update()
     {
 
+    }
+
+    @Override
+    public final Iterator<N> iterator()
+    {
+        return new Iterator<N>()
+        {
+            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
+            {{
+                    for ( final Set<N> l_literals : m_elements.values() )
+                        add( l_literals.iterator() );
+
+                    for ( final M l_mask : m_masks.values() )
+                        add( l_mask.iterator() );
+                }};
+
+            @Override
+            public final boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public final N next()
+            {
+                return m_stack.peek().next();
+            }
+        };
     }
 
 }

@@ -21,30 +21,44 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
+
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * class to update an immutable belief storage
+ * generic term set for agent literals
+ *
+ * @todo empty set initialization with static EMPTY_SET
  */
-public abstract class IOneTimeStorage<N,M extends Iterable<N>> extends CImmutableBeliefStorage<N,M>
+public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
-
-    @Override
-    public final void update()
+    /**
+     * default ctor
+     */
+    public CTermSet()
     {
-        // clear is final at the super, so clearing is run manually
-        m_elements.clear();
-        m_masks.clear();
-
-        super.update();
-        this.updating();
+        super( 0 );
     }
 
-
     /**
-     * updates the element structure
+     * ctor - with initial elements specified
+     *
+     * @param p_collection collection containing initial elements
      */
-    protected abstract void updating();
+    public CTermSet( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
 
+    @Override
+    public boolean instanceOf( final Class<?> p_class )
+    {
+        return Set.class.isAssignableFrom( p_class );
+    }
 }

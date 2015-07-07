@@ -34,17 +34,11 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
 {
     /**
      * clones the current mask
+     *
      * @param p_parent new parent
      * @return new mask object
      */
     public IBeliefBaseMask<T> clone( final IBeliefBaseMask<T> p_parent );
-
-    /**
-     * returns only the element name
-     *
-     * @return name
-     */
-    public String getName();
 
     /**
      * returns the full path
@@ -52,6 +46,13 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @return path
      */
     public CPath getFQNPath();
+
+    /**
+     * returns only the element name
+     *
+     * @return name
+     */
+    public String getName();
 
     /**
      * returns the parent of the mask

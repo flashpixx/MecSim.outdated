@@ -36,6 +36,14 @@ public interface ILiteral<T> extends ITerm, Old_IBeliefBaseElement
 {
 
     /**
+     * clones the literal
+     *
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
+     */
+    public ILiteral<T> clone( final CPath p_prefix );
+
+    /**
      * returns the optional annotations
      *
      * @return annotation term
@@ -62,13 +70,4 @@ public interface ILiteral<T> extends ITerm, Old_IBeliefBaseElement
      * @return value term
      */
     public ITermCollection getValues();
-
-
-    /**
-     * clones the literal
-     *
-     * @param p_prefix add a path to the functor
-     * @return copy of the literal
-     */
-    public ILiteral<T> clone( final CPath p_prefix );
 }

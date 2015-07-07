@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.IBindStorage;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.IBindStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
@@ -77,7 +77,11 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
-                    final Literal l_literal = CCommon.getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
+                    final Literal l_literal = CCommon.getLiteral(
+                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
+                                    l_item.getValue().getLeft()
+                            )
+                    );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );

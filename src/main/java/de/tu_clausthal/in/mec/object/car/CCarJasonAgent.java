@@ -32,11 +32,16 @@ import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.object.mas.ICycle;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.IOneTimeStorage;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
+import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -51,18 +56,13 @@ import java.util.Set;
  *
  * @bug refactor ctor (reduce parameter)
  */
-public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
+public class CCarJasonAgent extends CDefaultCar implements IReceiver
 {
     /**
      * agent object *
      */
     @CFieldFilter.CAgent( bind = false )
     private final Set<de.tu_clausthal.in.mec.object.mas.jason.CAgent> m_agents = new HashSet<>();
-    /**
-     * cache of beliefs to remove it automatically
-     */
-    @CFieldFilter.CAgent( bind = false )
-    private final Map<String, Object> m_beliefcache = new HashMap<>();
     /**
      * inspector map
      */
@@ -76,6 +76,11 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
      */
     @CFieldFilter.CAgent( bind = false )
     private final CPath m_objectpath;
+    /**
+     * traffic environment belief base
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private final IBeliefBase<Literal> m_trafficbeliefbase = new CBeliefBase<>( new CTrafficStorage() );
 
     /**
      * ctor
@@ -166,7 +171,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
                 m_objectpath.append( p_asl ), p_asl, this
         );
         m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
-        l_agent.registerCycle( this );
 
         // add agent to layer and internal set
         CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
@@ -239,5 +243,19 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
         // [0,max-speed] other values are declared as final member
         m_speed = Math.min( Math.max( 0, m_speed ), m_maxspeed );
         super.step( p_currentstep, p_layer );
+    }
+
+
+    private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
+    {
+
+        @Override
+        protected void updating()
+        {
+            /*
+            m_beliefcache.put( "position", this.getCurrentPosition() );
+            m_beliefcache.put( "predecessor", this.getPredecessorWithName( 5 ) );
+            */
+        }
     }
 }

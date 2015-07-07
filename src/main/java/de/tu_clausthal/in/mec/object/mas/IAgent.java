@@ -24,8 +24,6 @@
 package de.tu_clausthal.in.mec.object.mas;
 
 
-import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
 
@@ -35,31 +33,6 @@ import org.jxmapviewer.painter.Painter;
  */
 public interface IAgent extends Painter, IReceiver
 {
-
-    /**
-     * @param p_name
-     * @param p_object
-     * @todo docu
-     */
-    public void addAction( final String p_name, final Object p_object );
-
-    /**
-     * adds a new belief to specified beliefbase
-     *
-     * @param p_path path of beliefbase with literals name as last element
-     * @param p_data belief data
-     */
-    public void addLiteral( final String p_path, final Object p_data );
-
-    /**
-     * adds a new belief to specified beliefbase
-     *
-     * @param p_name path of beliefbase with literals name as last element
-     * @param p_data belief data
-     */
-    void addLiteral( final CPath p_name, final Object p_data );
-
-    public Old_IBeliefBase getBeliefs();
 
     /**
      * returns the current cycle
@@ -83,11 +56,12 @@ public interface IAgent extends Painter, IReceiver
     String getSource();
 
     /**
-     * register a cycle object
+     * register an object for running actions
      *
-     * @param p_cycle cycle object
+     * @param p_name binding name of the action
+     * @param p_object
      */
-    void registerCycle( final ICycle p_cycle );
+    public void registerAction( final String p_name, final Object p_object );
 
     /**
      * release agent call *
@@ -95,32 +69,10 @@ public interface IAgent extends Painter, IReceiver
     void release();
 
     /**
-     * @param p_name
-     * @todo docu
-     */
-    public void removeAction( final String p_name );
-
-    /**
-     * removes a belief from specified beliefbase
+     * unregister an action
      *
-     * @param p_path path to beliefbase with literals name as last element
-     * @param p_data belief data
+     * @param p_name binding name of the action
      */
-    public void removeLiteral( final String p_path, final Object p_data );
-
-    /**
-     * removes a belief from specified beliefbase
-     *
-     * @param p_path path to beliefbase with literals name as last element
-     * @param p_data belief data
-     */
-    public void removeLiteral( final CPath p_path, final Object p_data );
-
-    /**
-     * unregister a cycle object
-     *
-     * @param p_cycle cycle object
-     */
-    void unregisterCycle( final ICycle p_cycle );
+    public void unregisterAction( final String p_name );
 
 }

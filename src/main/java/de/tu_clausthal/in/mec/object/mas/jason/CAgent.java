@@ -27,15 +27,11 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.Old_CDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
@@ -64,7 +60,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,7 +74,19 @@ import java.util.Set;
 public class CAgent<T> implements IVoidAgent
 {
     /**
-     * bind name
+     * name of the binding beliefbase and its mask
+     */
+    private static final String c_beliefbase_bind = "bind";
+    /**
+     * name of the message beliefbase and its mask
+     */
+    private static final String c_beliefbase_message = "message";
+    /**
+     * name of the root beliefbase and its mask
+     */
+    private static final String c_beliefbase_root = "root";
+    /**
+     * bind name of the initial object
      */
     private static final String c_bindname = "self";
     /**
@@ -110,7 +117,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * agent object
      */
-    private Agent m_agent;
+    private final Agent m_agent;
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
@@ -118,16 +125,12 @@ public class CAgent<T> implements IVoidAgent
     /**
      * the agents beliefbases
      */
-    private final CBeliefBaseStorage m_beliefbases = new CBeliefBaseStorage();
+    private final CBeliefBaseStorage<Literal> m_beliefbases = new CBeliefBaseStorage();
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
      */
     private int m_cycle;
-    /**
-     * set with cycle objects
-     */
-    private final Set<ICycle> m_cycleobject = new HashSet<>();
     /**
      * mapping from functor to path
      */
@@ -139,11 +142,11 @@ public class CAgent<T> implements IVoidAgent
     /**
      * name of the agent
      */
-    private CPath m_namepath;
+    private final CPath m_namepath;
     /**
      * participant object
      */
-    private CParticipant m_participant;
+    private final CParticipant m_participant;
 
     /**
      * ctor
@@ -165,13 +168,10 @@ public class CAgent<T> implements IVoidAgent
      * @throws JasonException throws an Jason exception
      * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
      * and all properties and methods will be bind to the agent with the source "self"
-     * @todo fix ctor call
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
-        m_namepath = p_namepath;
-        if ( ( m_namepath == null ) || ( m_namepath.isEmpty() ) )
-            m_namepath = new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() );
+        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ) : p_namepath;
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
@@ -184,7 +184,15 @@ public class CAgent<T> implements IVoidAgent
         // initialize message system
         m_participant = new CParticipant( this );
 
+        // create action bind & beliefbases with tree structure
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
+
+        m_beliefbases.add( c_beliefbase_root, new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
+        m_beliefbases.add( c_beliefbase_message, new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
+        m_beliefbases.add( c_beliefbase_bind, new CBeliefBase<>( new CBindingStorage() ) );
+
+        m_beliefbases.get( c_beliefbase_root ).add( m_beliefbases.get( c_beliefbase_bind ).createMask( c_beliefbase_bind ) );
+        m_beliefbases.get( c_beliefbase_root ).add( m_beliefbases.get( c_beliefbase_message ).createMask( c_beliefbase_message ) );
 
         if ( p_bind != null )
         {
@@ -192,23 +200,8 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
 
-            // create beliefbases
-            m_beliefbases.add( "root", new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
-            m_beliefbases.add( "bind", new CBeliefBase<>( new CBindingStorage() ) );
-            m_beliefbases.add( "message", new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
-
-            // create tree structure
-            m_beliefbases.get( "root" ).add( m_beliefbases.get( "bind" ).createMask( "bind" ) );
-            m_beliefbases.get( "root" ).add( m_beliefbases.get( "message" ).createMask( "message" ) );
+            m_beliefbases.get( c_beliefbase_bind ).<CBindingStorage>getStorage().push( c_bindname, this );
         }
-
-        // register beliefbase-mapper with individual mapping
-        c_overwriteaction.put( "mecsim.beliefbasemapper", new CBeliefBaseMapper( m_mapping ) );
-
-        // put initial internal beliefs into top-level beliefbase
-        for ( final Literal l_initialBelief : m_agent.getBB() )
-            m_beliefs.add( CCommon.convertGeneric( l_initialBelief ) );
-
     }
 
 
@@ -237,43 +230,14 @@ public class CAgent<T> implements IVoidAgent
         this( null, p_asl, p_bind );
     }
 
-    public void addAction( final String p_name, final Object p_object )
-    {
-        if ( m_methodBind == null )
-            return;
-
-        m_methodBind.push( p_name, p_object );
-    }
-
-    @Override
-    public void addLiteral( final String p_path, final Object p_data )
-    {
-        this.addLiteral( new CPath( p_path ), p_data );
-    }
-
     /**
-     * adds a literal to the top-level literals
+     * returns the set of actions
      *
-     * @param p_path name of the belief
-     * @param p_data belief data
+     * @return action set
      */
-    @Override
-    public void addLiteral( final CPath p_path, final Object p_data )
+    public final Map<String, IAction> getActions()
     {
-        final CPath l_path = p_path;
-        l_path.setSeparator( "_" );
-
-        m_beliefs.add( CCommon.convertGeneric( CCommon.getLiteral( l_path.toString(), p_data ) ) );
-    }
-
-    /**
-     * getter for generic beliefbase
-     *
-     * @return generic beliefbase
-     */
-    public Old_IBeliefBase getBeliefs()
-    {
-        return m_beliefs;
+        return m_action;
     }
 
     @Override
@@ -282,7 +246,7 @@ public class CAgent<T> implements IVoidAgent
         return m_cycle;
     }
 
-    //@Override
+    @Override
     public final String getName()
     {
         return m_namepath.getPath( c_seperator );
@@ -295,9 +259,12 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public void registerCycle( final ICycle p_cycle )
+    public void registerAction( final String p_name, final Object p_object )
     {
-        m_cycleobject.add( p_cycle );
+        if ( m_methodBind == null )
+            return;
+
+        m_methodBind.push( p_name, p_object );
     }
 
     @Override
@@ -308,64 +275,13 @@ public class CAgent<T> implements IVoidAgent
         MindInspectorWeb.get().removeAg( m_agent );
     }
 
-    public void removeAction( final String p_name )
+    @Override
+    public void unregisterAction( final String p_name )
     {
         if ( m_methodBind == null )
             return;
 
         m_methodBind.remove( p_name );
-    }
-
-    /**
-     * removes a literal from specified beliefbase
-     *
-     * @param p_path path to beliefbase with literal name as last element
-     * @param p_data belief data
-     */
-    @Override
-    public void removeLiteral( final String p_path, final Object p_data )
-    {
-        this.removeLiteral( new CPath( p_path ), p_data );
-    }
-
-    /**
-     * removes a literal from specified beliefbase
-     *
-     * @param p_path path to beliefbase with literal name as last element
-     * @param p_data belief data
-     * @todo fix
-     */
-    @Override
-    public void removeLiteral( final CPath p_path, final Object p_data )
-    {
-        // m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
-        //m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), p_path.getSuffix(), ILiteral.class );
-    }
-
-    @Override
-    public void unregisterCycle( final ICycle p_cycle )
-    {
-        m_cycleobject.remove( p_cycle );
-    }
-
-    /**
-     * returns the set of actions
-     *
-     * @return action set
-     */
-    public final Map<String, IAction> getActions()
-    {
-        return m_action;
-    }
-
-    /**
-     * returns the agents current beliefbase
-     *
-     * @return beliefbase
-     */
-    public final Old_CDefaultBeliefBase getBeliefBase()
-    {
-        return m_beliefs;
     }
 
     @Override
@@ -378,12 +294,11 @@ public class CAgent<T> implements IVoidAgent
      * pass messages to message containing beliefbase
      *
      * @param p_messages set of messages
-     * @todo fix
      */
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        //( (CMessageBeliefBase) m_beliefs.getBeliefbases( CPath.EMPTY ).get( "messages" ) ).receiveMessage( p_messages );
+        m_beliefbases.get( c_beliefbase_message ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
     @Override
@@ -471,16 +386,13 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.remove( new CPath( "simulation" ), "step", ILiteral.class );
             m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation_step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
-            // run all register before-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.beforeCycle( p_currentstep, CAgent.this );
 
-            // refresh generic beliefbase
-            m_beliefs.update();
+            // update beliefbases
+            m_beliefbases.get( "root" ).update();
 
             // synchronize agent beliefbase
             m_agent.getBB().clear();
-            for ( final ILiteral<Literal> l_literal : m_beliefs )
+            for ( final ILiteral<Literal> l_literal : m_beliefbases.get( "root" ) )
                 try
                 {
                     m_agent.addBel( l_literal.getLiteral() );
@@ -504,9 +416,6 @@ public class CAgent<T> implements IVoidAgent
                 m_beliefs.add( new CLiteral( CPath.EMPTY, l_literal, "_" ) );
             }
 
-            // run all register after-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.afterCycle( p_currentstep, CAgent.this );
         }
     }
 

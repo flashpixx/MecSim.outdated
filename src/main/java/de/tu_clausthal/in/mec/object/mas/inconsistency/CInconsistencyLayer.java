@@ -184,7 +184,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             return false;
 
         m_data.put( p_object, new Double( 0 ) );
-        p_object.addAction( c_invokeName, new CBind( p_object ) );
+        p_object.registerAction( c_invokeName, new CBind( p_object ) );
 
         return true;
     }
@@ -308,7 +308,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      */
     public boolean remove( final T p_object )
     {
-        p_object.removeAction( c_invokeName );
+        p_object.unregisterAction( c_invokeName );
 
         m_data.remove( p_object );
         return true;

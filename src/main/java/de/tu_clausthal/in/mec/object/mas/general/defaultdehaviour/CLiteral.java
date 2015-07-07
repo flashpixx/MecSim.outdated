@@ -21,9 +21,13 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
 
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.general.IAtom;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
 
 import java.util.List;
 import java.util.Set;
@@ -36,7 +40,7 @@ import java.util.Set;
  *
  * @todo define constructors for TermSets and TermLists
  */
-public class CDefaultLiteral<T> implements ILiteral<T>
+public class CLiteral<T> implements ILiteral<T>
 {
     /**
      * the literal annotations
@@ -62,7 +66,7 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      * @param p_functor functor
      * @param p_literal literal
      */
-    public CDefaultLiteral( final String p_functor, final T p_literal )
+    public CLiteral( final String p_functor, final T p_literal )
     {
         this( p_functor, p_literal, new CTermList(), new CTermSet() );
     }
@@ -75,7 +79,7 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CDefaultLiteral( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
+    public CLiteral( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
     {
         this( new CStringAtom( p_functor ), p_literal, new CTermList( p_values ), new CTermSet( p_annotations ) );
     }
@@ -88,7 +92,7 @@ public class CDefaultLiteral<T> implements ILiteral<T>
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
      */
-    public CDefaultLiteral( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations )
+    public CLiteral( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations )
     {
         m_functor = p_functor;
         m_literal = p_literal;
@@ -100,7 +104,7 @@ public class CDefaultLiteral<T> implements ILiteral<T>
     @Override
     public ILiteral<T> clone( final CPath p_prefix )
     {
-        return new CDefaultLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations );
+        return new CLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations );
     }
 
     @Override

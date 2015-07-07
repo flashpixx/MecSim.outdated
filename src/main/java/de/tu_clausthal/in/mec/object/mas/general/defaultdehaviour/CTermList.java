@@ -21,68 +21,44 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
- * interface for equal method names on masks and beliefbases
+ * generic term list for agent literals
  */
-public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
+public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
+    /**
+     * default ctor
+     */
+    public CTermList()
+    {
+        super();
+    }
 
     /**
-     * returns a new mask of the belief base
+     * ctor - with initial elements specified
      *
-     * @param p_name name of the mask
-     * @return mask
+     * @param p_collection collection containing initial elements
      */
-    public IBeliefBaseMask<T> createMask( final String p_name );
-
-    /**
-     * adds a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void add( final ILiteral<T> p_literal );
-
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void remove( final ILiteral<T> p_literal );
-
-    /**
-     * adds a mask into the current structure
-     *
-     * @param p_mask mask
-     */
-    public void add( final IBeliefBaseMask<T>  p_mask );
-
-    /**
-     * removes a mask in the current structure
-     *
-     * @param p_mask mask
-     */
-    public void remove( final IBeliefBaseMask<T>  p_mask );
-
-    /**
-     * checks if the structure empty
-     *
-     * @return empty boolean
-     */
-    public boolean isEmpty();
+    public CTermList( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
 
 
-    /**
-     * updates all items
-     */
-    public void update();
-
-
-    /**
-     * clears all elements
-     */
-    public void clear();
+    @Override
+    public boolean instanceOf( final Class<?> p_class )
+    {
+        return List.class.isAssignableFrom( p_class );
+    }
 
 }

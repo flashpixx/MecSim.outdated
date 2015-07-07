@@ -21,41 +21,24 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import de.tu_clausthal.in.mec.object.mas.general.IDefaultAtom;
 
 
 /**
- * generic term list for agent literals
+ * numeric atom class for agent literals
  */
-public class CTermList extends LinkedList<ITerm> implements ITermCollection
+public class CNumberAtom extends IDefaultAtom<Number>
 {
     /**
-     * default ctor
-     */
-    public CTermList()
-    {
-        super();
-    }
-
-    /**
-     * ctor - with initial elements specified
+     * ctor
      *
-     * @param p_collection collection containing initial elements
+     * @param p_value the atom's value
      */
-    public CTermList( final Collection<ITerm> p_collection )
+    public CNumberAtom( final Number p_value )
     {
-        super( p_collection );
-    }
-
-
-    @Override
-    public boolean instanceOf( final Class<?> p_class )
-    {
-        return List.class.isAssignableFrom( p_class );
+        super( p_value );
     }
 
 }

@@ -39,9 +39,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
@@ -192,7 +190,7 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "invoke", m_methodBind );
 
             // initialize inherited getBeliefbases
-            m_beliefs.add( new CBindingBeliefBase( c_bindname, p_bind, new CPath( "binding" ) ) );
+            m_beliefs.add( new CBindingStorage( c_bindname, p_bind, new CPath( "binding" ) ) );
             m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS(), new CPath( "messages" ) ) );
         }
 

@@ -21,10 +21,14 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
 
 
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,7 +39,7 @@ import java.util.Set;
  * default beliefbase
  * @tparam T literal type
  */
-public class CDefaultBeliefBase<T> implements IBeliefBase<T>
+public class CBeliefBase<T> implements IBeliefBase<T>
 {
     /**
      * storage with data
@@ -50,9 +54,9 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
     /**
      * ctor - creates an root beliefbase
      */
-    public CDefaultBeliefBase()
+    public CBeliefBase()
     {
-        this( null, new CDefaultBeliefStorage<>() );
+        this( null, new CBeliefStorage<>() );
     }
 
     /**
@@ -60,9 +64,9 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_parent parent element
      */
-    public CDefaultBeliefBase( final IBeliefBaseMask<T> p_parent )
+    public CBeliefBase( final IBeliefBaseMask<T> p_parent )
     {
-        this( p_parent, new CDefaultBeliefStorage<>() );
+        this( p_parent, new CBeliefStorage<>() );
     }
 
     /**
@@ -70,7 +74,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_storage storage
      */
-    public CDefaultBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
+    public CBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
         this(null, p_storage);
     }
@@ -80,7 +84,7 @@ public class CDefaultBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_parent
      */
-    public CDefaultBeliefBase( final IBeliefBaseMask<T> p_parent, final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
+    public CBeliefBase( final IBeliefBaseMask<T> p_parent, final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
         m_storage = p_storage;
         m_parent = p_parent;

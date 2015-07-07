@@ -21,7 +21,10 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+
+import de.tu_clausthal.in.mec.object.mas.general.IDefaultAtom;
+
 
 /**
  * string atom class for agent literals

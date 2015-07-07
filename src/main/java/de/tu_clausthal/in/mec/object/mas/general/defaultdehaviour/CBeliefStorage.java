@@ -21,8 +21,10 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
 
+
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +41,7 @@ import java.util.Stack;
  * @tparam N element type
  * @tparam M mask type
  */
-public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
+public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
 {
     /** map with elements **/
     protected final Map<String, Set<N>> m_elements = new HashMap<>();
@@ -47,7 +49,7 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
     protected final Map<String, M> m_masks = new HashMap<>();
 
     @Override
-    public void addElement( final String p_key, final N p_element )
+    public final void addElement( final String p_key, final N p_element )
     {
         final Set<N> l_element;
 
@@ -69,13 +71,13 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
     }
 
     @Override
-    public boolean contains( final String p_key )
+    public final boolean contains( final String p_key )
     {
         return m_elements.containsKey( p_key ) || m_masks.containsKey( p_key );
     }
 
     @Override
-    public boolean containsElement( final String p_key )
+    public final boolean containsElement( final String p_key )
     {
         final Set<N> l_elements = m_elements.get( p_key );
         if ( l_elements == null )
@@ -85,25 +87,25 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
     }
 
     @Override
-    public boolean containsMask( String p_key )
+    public final boolean containsMask( String p_key )
     {
         return m_masks.containsKey( p_key );
     }
 
     @Override
-    public Set<N> getElement( final String p_key )
+    public final Set<N> getElement( final String p_key )
     {
         return m_elements.get( p_key );
     }
 
     @Override
-    public M getMask( final String p_key )
+    public final M getMask( final String p_key )
     {
         return m_masks.get( p_key );
     }
 
     @Override
-    public Iterator<N> iterator()
+    public final Iterator<N> iterator()
     {
         return new Iterator<N>()
         {
@@ -117,7 +119,7 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
             }};
 
             @Override
-            public boolean hasNext()
+            public final boolean hasNext()
             {
                 if (m_stack.isEmpty())
                     return false;
@@ -130,7 +132,7 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
             }
 
             @Override
-            public N next()
+            public final N next()
             {
                 return m_stack.peek().next();
             }
@@ -160,7 +162,14 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
     }
 
     @Override
-    public boolean isEmpty()
+    public void clear()
+    {
+        m_elements.clear();
+        m_masks.clear();
+    }
+
+    @Override
+    public final boolean isEmpty()
     {
         return m_elements.isEmpty() && m_masks.isEmpty();
     }
@@ -169,13 +178,6 @@ public class CDefaultBeliefStorage<N, M extends Iterable<N>> implements IBeliefS
     public void update()
     {
 
-    }
-
-    @Override
-    public void clear()
-    {
-        m_elements.clear();
-        m_masks.clear();
     }
 
 }

@@ -21,7 +21,10 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
+
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -23,11 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
-import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.CDefaultLiteral;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
-import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 
@@ -35,7 +31,7 @@ import jason.asSyntax.Term;
 /**
  * class for literals
  */
-public class CLiteral extends CDefaultLiteral<Literal>
+public class CLiteral extends de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.CLiteral<Literal>
 {
 
     /**

@@ -25,42 +25,33 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.CDefaultBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.CBindStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
-import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
  * beliefbase structure to bind object properties
  */
-public class CBindingBeliefBase extends CDefaultBeliefBase<Literal>
+public class CBindingStorage extends CBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
-    /**
-     * field filter
-     */
-    private static final CFieldFilter c_filter = new CFieldFilter();
 
     /**
-     * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
-     * setter handles, so each bind can configurate individual
+     * default ctor
      */
-    private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
-
+    public CBindingStorage()
+    {
+        super();
+    }
 
     /**
      * ctor bind an object
@@ -68,69 +59,15 @@ public class CBindingBeliefBase extends CDefaultBeliefBase<Literal>
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CBindingBeliefBase( final String p_name, final Object p_object )
+    public CBindingStorage( final String p_name, final Object p_object )
     {
-        this.push( p_name, p_object );
+        super( p_name, p_object );
     }
 
-
-    /**
-     * adds / binds an object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        m_bind.put(
-                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
-                        p_object, CReflection.getClassFields(
-                        p_object.getClass(), c_filter
-                )
-                )
-        );
-    }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void removeBinding( final String p_name )
-    {
-        m_bind.remove( p_name );
-    }
 
     @Override
-    public void add( final ILiteral<Literal> p_literal )
+    protected void updateBind()
     {
-    }
-
-    @Override
-    public void add( final IBeliefBaseMask<Literal> p_mask )
-    {
-    }
-
-    @Override
-    public void remove( final ILiteral<Literal> p_literal )
-    {
-    }
-
-    @Override
-    public void remove( final IBeliefBaseMask<Literal> p_mask )
-    {
-    }
-
-    /**
-     * @todo fix
-     */
-    @Override
-    public final void update()
-    {
-        // clear all data and run child updates
-        this.clear();
-        super.update();
-
         // iterate over all binded objects
         for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
 
@@ -140,16 +77,18 @@ public class CBindingBeliefBase extends CDefaultBeliefBase<Literal>
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
-                    final Literal l_literal = CCommon.getLiteral(
-                            "binding_" + l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
-                                    l_item.getValue().getLeft()
-                            )
-                    );
+                    final Literal l_literal = CCommon.getLiteral( l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke( l_item.getValue().getLeft() ) );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
 
-                    //-----> this.add( CCommon.convertGeneric( l_literal ) );
+                    final Set<ILiteral<Literal>> l_elements = m_elements.getOrDefault( l_literal.getFunctor(), new HashSet<>() );
+                    l_elements.add(
+                            new CLiteral(
+                                    l_literal
+                            )
+                    );
+                    m_elements.put( l_literal.getFunctor(), l_elements );
                 }
                 catch ( final Exception l_exception )
                 {
@@ -168,4 +107,5 @@ public class CBindingBeliefBase extends CDefaultBeliefBase<Literal>
                     );
                 }
     }
+
 }

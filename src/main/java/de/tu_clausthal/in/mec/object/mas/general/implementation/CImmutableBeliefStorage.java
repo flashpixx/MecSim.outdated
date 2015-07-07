@@ -29,6 +29,12 @@ package de.tu_clausthal.in.mec.object.mas.general.implementation;
  */
 public class CImmutableBeliefStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
 {
+
+    @Override
+    public final void addElement( final String p_key, final N p_element )
+    {
+    }
+
     @Override
     public final void addMask( final String p_key, final M p_element )
     {

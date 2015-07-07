@@ -53,7 +53,7 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     protected final Map<String, M> m_masks = new HashMap<>();
 
     @Override
-    public final void addElement( final String p_key, final N p_element )
+    public void addElement( final String p_key, final N p_element )
     {
         final Set<N> l_element;
 

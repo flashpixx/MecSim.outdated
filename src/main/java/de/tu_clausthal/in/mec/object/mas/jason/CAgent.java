@@ -119,7 +119,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * agent object
      */
-    private Agent m_agent;
+    private final Agent m_agent;
     /**
      * Jason interal agent architecture to run the reasoning cycle
      */
@@ -148,11 +148,11 @@ public class CAgent<T> implements IVoidAgent
     /**
      * name of the agent
      */
-    private CPath m_namepath;
+    private final CPath m_namepath;
     /**
      * participant object
      */
-    private CParticipant m_participant;
+    private final CParticipant m_participant;
 
     /**
      * ctor
@@ -174,13 +174,10 @@ public class CAgent<T> implements IVoidAgent
      * @throws JasonException throws an Jason exception
      * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
      * and all properties and methods will be bind to the agent with the source "self"
-     * @todo fix ctor call
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
-        m_namepath = p_namepath;
-        if ( ( m_namepath == null ) || ( m_namepath.isEmpty() ) )
-            m_namepath = new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() );
+        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ) : p_namepath;
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself

@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.IOneTimeStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.CMessage;
@@ -41,7 +40,6 @@ import jason.asSyntax.Trigger;
 import jason.bb.BeliefBase;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -51,13 +49,13 @@ import java.util.Set;
 public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
     /**
-     * path seperator
-     */
-    private final static String c_seperator = "::";
-    /**
      * set with received messages
      */
     private final Set<IMessage> m_receivedmessages = new HashSet<>();
+    /**
+     * path seperator
+     */
+    private final String m_seperator;
     /**
      * transition system for agent cycle
      */
@@ -68,44 +66,11 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
      *
      * @param p_transitionSystem agent transition system
      */
-    public CMessageStorage( final TransitionSystem p_transitionSystem )
+    public CMessageStorage( final TransitionSystem p_transitionSystem, final String p_pathseparator )
     {
         super();
         m_transitionSystem = p_transitionSystem;
-    }
-
-    public CMessageStorage( final TransitionSystem p_transitionSystem, final CPath p_path )
-    {
-        super( null, null, p_path );
-        m_transitionSystem = p_transitionSystem;
-    }
-
-    /**
-     * ctor - just the top-level literals are specified
-     *
-     * @param p_literals top level literals
-     * @param p_transitionSystem agent transition system
-     */
-    public CMessageStorage( final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem )
-    {
-        super( p_literals );
-        m_transitionSystem = p_transitionSystem;
-    }
-
-    /**
-     * ctor - top-level literals and inherited getBeliefbases are specified
-     *
-     * @param p_beliefbases inherited getBeliefbases
-     * @param p_literals top level literals
-     * @param p_transitionSystem agent transition system
-     */
-    public CMessageStorage( final Map<String, Old_IBeliefBase<Literal>> p_beliefbases,
-            final Set<ILiteral<Literal>> p_literals,
-            final TransitionSystem p_transitionSystem
-    )
-    {
-        super( p_beliefbases, p_literals, CPath.EMPTY );
-        m_transitionSystem = p_transitionSystem;
+        m_seperator = p_pathseparator;
     }
 
     /**
@@ -120,10 +85,8 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
     }
 
     @Override
-    public void update()
+    protected void updating()
     {
-        super.update();
-
         for ( final IMessage l_msg : m_receivedmessages )
             try
             {
@@ -132,9 +95,10 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
                 {
                     final Message l_jmsg = ( (Message) l_msg.getData() );
                     final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( c_seperator ) ) ) );
+                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( m_seperator ) ) ) );
 
                     if ( l_jmsg.isTell() )
+
                         add( CCommon.convertGeneric( l_literal ) );
                     if ( l_jmsg.isUnTell() )
                         remove( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
@@ -157,7 +121,7 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
 
                 // otherwise message will direct converted
                 final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
-                l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( c_seperator ) ) ) );
+                l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( m_seperator ) ) ) );
                 add( CCommon.convertGeneric( l_literal ) );
 
             }
@@ -165,4 +129,5 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
             {
             }
     }
+
 }

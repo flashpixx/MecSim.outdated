@@ -27,7 +27,9 @@ package de.tu_clausthal.in.mec.object.mas;
 
 /**
  * interface of running calls on the agent-cycle
+ * @deprecated
  */
+@Deprecated
 public interface ICycle
 {
 

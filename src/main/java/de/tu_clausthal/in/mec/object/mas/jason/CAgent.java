@@ -38,7 +38,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
@@ -379,14 +378,9 @@ public class CAgent<T> implements IVoidAgent
          * manual call of the reasoning cycle
          *
          * @param p_currentstep current step
-         * @todo fix
          */
         public final void cycle( final int p_currentstep )
         {
-            m_beliefs.remove( new CPath( "simulation" ), "step", ILiteral.class );
-            m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation_step", ASSyntax.createNumber( p_currentstep ) ) ) );
-
-
             // update beliefbases
             m_beliefbases.get( "root" ).update();
 
@@ -406,16 +400,6 @@ public class CAgent<T> implements IVoidAgent
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
-
-            // get updated internal beliefs after agent reasoning cycle
-            m_beliefs.clear();
-            //todo: convert path
-            for ( final Literal l_literal : m_agent.getBB() )
-            {
-
-                m_beliefs.add( new CLiteral( CPath.EMPTY, l_literal, "_" ) );
-            }
-
         }
     }
 

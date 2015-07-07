@@ -193,9 +193,13 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "invoke", m_methodBind );
 
             // create beliefbases
-            m_beliefbases.add( "beliefbase", new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
+            m_beliefbases.add( "root", new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
             m_beliefbases.add( "bind", new CBeliefBase<>( new CBindingStorage() ) );
             m_beliefbases.add( "message", new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
+
+            // create tree structure
+            m_beliefbases.get( "root" ).add( m_beliefbases.get( "bind" ).createMask( "bind" ) );
+            m_beliefbases.get( "root" ).add( m_beliefbases.get( "message" ).createMask( "message" ) );
         }
 
         // register beliefbase-mapper with individual mapping

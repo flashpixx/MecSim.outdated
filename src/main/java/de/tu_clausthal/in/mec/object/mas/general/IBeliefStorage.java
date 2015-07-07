@@ -78,8 +78,20 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      */
     public boolean containsMask( String p_key );
 
+    /**
+     * returns a set of elements
+     *
+     * @param p_key key name
+     * @return set
+     */
     public Set<N> getElement( final String p_key );
 
+    /**
+     * returns a mask
+     *
+     * @param p_key key name
+     * @return mask
+     */
     public M getMask( final String p_key );
 
     /**

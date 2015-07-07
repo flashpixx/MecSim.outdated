@@ -74,6 +74,20 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
     }
 
     /**
+     * adds an literal to the element
+     *
+     * @param p_literal
+     */
+    private void addElement( final ILiteral<Literal> p_literal )
+    {
+        final Set<ILiteral<Literal>> l_set = m_elements.getOrDefault( p_literal.getFunctor().get(), new HashSet<>() );
+        if ( !m_elements.containsKey( p_literal.getFunctor().get() ) )
+            m_elements.put( p_literal.getFunctor().get(), l_set );
+
+        l_set.add( p_literal );
+    }
+
+    /**
      * method for registering incoming messages
      *
      * @param p_messages current incoming messages
@@ -84,6 +98,9 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
         m_receivedmessages.addAll( p_messages );
     }
 
+    /**
+     * @todo untell should iterator over all BB
+     */
     @Override
     protected void updating()
     {
@@ -98,10 +115,9 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( m_seperator ) ) ) );
 
                     if ( l_jmsg.isTell() )
-
-                        add( CCommon.convertGeneric( l_literal ) );
-                    if ( l_jmsg.isUnTell() )
-                        remove( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
+                        this.addElement( new CLiteral( l_literal ) );
+                    //if ( l_jmsg.isUnTell() )
+                    //    remove( CPath.EMPTY, CCommon.convertGeneric( l_literal ) );
                     if ( l_jmsg.isKnownPerformative() )
                     {
                         l_literal.addAnnot( BeliefBase.TPercept );
@@ -122,7 +138,7 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
                 // otherwise message will direct converted
                 final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
                 l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( m_seperator ) ) ) );
-                add( CCommon.convertGeneric( l_literal ) );
+                this.addElement( new CLiteral( l_literal ) );
 
             }
             catch ( final Exception l_exception )

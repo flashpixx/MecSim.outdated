@@ -27,7 +27,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
@@ -61,7 +60,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -133,10 +131,6 @@ public class CAgent<T> implements IVoidAgent
      * agent)
      */
     private int m_cycle;
-    /**
-     * set with cycle objects
-     */
-    private final Set<ICycle> m_cycleobject = new HashSet<>();
     /**
      * mapping from functor to path
      */
@@ -274,12 +268,6 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
-    public void registerCycle( final ICycle p_cycle )
-    {
-        m_cycleobject.add( p_cycle );
-    }
-
-    @Override
     public final void release()
     {
         m_agent.stopAg();
@@ -294,12 +282,6 @@ public class CAgent<T> implements IVoidAgent
             return;
 
         m_methodBind.remove( p_name );
-    }
-
-    @Override
-    public void unregisterCycle( final ICycle p_cycle )
-    {
-        m_cycleobject.remove( p_cycle );
     }
 
     @Override
@@ -404,9 +386,6 @@ public class CAgent<T> implements IVoidAgent
             m_beliefs.remove( new CPath( "simulation" ), "step", ILiteral.class );
             m_beliefs.add( CCommon.convertGeneric( ASSyntax.createLiteral( "simulation_step", ASSyntax.createNumber( p_currentstep ) ) ) );
 
-            // run all register before-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.beforeCycle( p_currentstep, CAgent.this );
 
             // update beliefbases
             m_beliefbases.get( "root" ).update();
@@ -437,9 +416,6 @@ public class CAgent<T> implements IVoidAgent
                 m_beliefs.add( new CLiteral( CPath.EMPTY, l_literal, "_" ) );
             }
 
-            // run all register after-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.afterCycle( p_currentstep, CAgent.this );
         }
     }
 

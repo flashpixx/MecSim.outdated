@@ -64,13 +64,6 @@ public interface IAgent extends Painter, IReceiver
     public void registerAction( final String p_name, final Object p_object );
 
     /**
-     * register a cycle object
-     *
-     * @param p_cycle cycle object
-     */
-    void registerCycle( final ICycle p_cycle );
-
-    /**
      * release agent call *
      */
     void release();
@@ -81,13 +74,5 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name binding name of the action
      */
     public void unregisterAction( final String p_name );
-
-
-    /**
-     * unregister a cycle object
-     *
-     * @param p_cycle cycle object
-     */
-    void unregisterCycle( final ICycle p_cycle );
 
 }

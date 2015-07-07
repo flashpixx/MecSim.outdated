@@ -35,7 +35,9 @@ import java.util.Map;
 /**
  * class for internal action for mapping literals to getBeliefbases
  * based on the literals functor
+ * @deprecated
  */
+@Deprecated
 public class CBeliefBaseMapper extends DefaultInternalAction
 {
     /**

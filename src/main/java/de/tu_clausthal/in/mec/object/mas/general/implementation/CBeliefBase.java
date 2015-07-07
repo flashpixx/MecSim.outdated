@@ -84,6 +84,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      * ctor - creates a beliefbase and sets the parent
      *
      * @param p_parent
+     * @param p_storage storage
      */
     public CBeliefBase( final IBeliefBaseMask<T> p_parent, final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {

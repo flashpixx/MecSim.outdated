@@ -30,12 +30,9 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.Old_CDefaultBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
@@ -184,7 +181,15 @@ public class CAgent<T> implements IVoidAgent
         // initialize message system
         m_participant = new CParticipant( this );
 
+        // create action bind & beliefbases with tree structure
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
+
+        m_beliefbases.add( "root", new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
+        m_beliefbases.add( "message", new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
+        m_beliefbases.add( "bind", new CBeliefBase<>( new CBindingStorage() ) );
+
+        m_beliefbases.get( "root" ).add( m_beliefbases.get( "bind" ).createMask( "bind" ) );
+        m_beliefbases.get( "root" ).add( m_beliefbases.get( "message" ).createMask( "message" ) );
 
         if ( p_bind != null )
         {
@@ -192,23 +197,8 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
 
-            // create beliefbases
-            m_beliefbases.add( "root", new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
-            m_beliefbases.add( "bind", new CBeliefBase<>( new CBindingStorage() ) );
-            m_beliefbases.add( "message", new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
-
-            // create tree structure
-            m_beliefbases.get( "root" ).add( m_beliefbases.get( "bind" ).createMask( "bind" ) );
-            m_beliefbases.get( "root" ).add( m_beliefbases.get( "message" ).createMask( "message" ) );
+            m_beliefbases.get( "bind" ).<CBindingStorage>getStorage().push( c_bindname, this );
         }
-
-        // register beliefbase-mapper with individual mapping
-        c_overwriteaction.put( "mecsim.beliefbasemapper", new CBeliefBaseMapper( m_mapping ) );
-
-        // put initial internal beliefs into top-level beliefbase
-        for ( final Literal l_initialBelief : m_agent.getBB() )
-            m_beliefs.add( CCommon.convertGeneric( l_initialBelief ) );
-
     }
 
 
@@ -266,15 +256,6 @@ public class CAgent<T> implements IVoidAgent
         m_beliefs.add( CCommon.convertGeneric( CCommon.getLiteral( l_path.toString(), p_data ) ) );
     }
 
-    /**
-     * getter for generic beliefbase
-     *
-     * @return generic beliefbase
-     */
-    public Old_IBeliefBase getBeliefs()
-    {
-        return m_beliefs;
-    }
 
     @Override
     public final int getCycle()
@@ -358,15 +339,6 @@ public class CAgent<T> implements IVoidAgent
         return m_action;
     }
 
-    /**
-     * returns the agents current beliefbase
-     *
-     * @return beliefbase
-     */
-    public final Old_CDefaultBeliefBase getBeliefBase()
-    {
-        return m_beliefs;
-    }
 
     @Override
     public final CPath getReceiverPath()
@@ -475,8 +447,8 @@ public class CAgent<T> implements IVoidAgent
             for ( final ICycle l_item : m_cycleobject )
                 l_item.beforeCycle( p_currentstep, CAgent.this );
 
-            // refresh generic beliefbase
-            m_beliefs.update();
+            // update beliefbases
+            m_beliefbases.get( "root" ).update();
 
             // synchronize agent beliefbase
             m_agent.getBB().clear();

@@ -69,9 +69,8 @@ import java.util.Set;
  * class of a Jason agent architecture
  *
  * @tparam T typ of binding objects
- * @todo error in cycle step, synchronize agent and generic beliefbase correctly
  */
-public class CAgent implements IVoidAgent<Literal>
+public class CAgent<T> implements IVoidAgent<Literal>
 {
     /**
      * name of the binding beliefbase and its mask

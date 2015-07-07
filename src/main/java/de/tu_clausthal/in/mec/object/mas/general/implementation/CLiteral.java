@@ -155,16 +155,4 @@ public class CLiteral<T> implements ILiteral<T>
         return ILiteral.class.isAssignableFrom( p_class );
     }
 
-    @Override
-    public final boolean isBeliefbase()
-    {
-        return false;
-    }
-
-    @Override
-    public final boolean isLiteral()
-    {
-        return true;
-    }
-
 }

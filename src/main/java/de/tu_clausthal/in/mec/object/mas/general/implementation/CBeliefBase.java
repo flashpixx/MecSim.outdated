@@ -105,13 +105,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         return m_storage.iterator();
     }
 
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
-    {
-        return (L) m_storage;
-    }
-
     /**
      * mask of a beliefbase
      *
@@ -255,7 +248,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             m_self.clear();
         }
 
+    }    @Override
+    @SuppressWarnings( "unchecked" )
+    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
+    {
+        return (L) m_storage;
     }
+
+
 
 
     @Override
@@ -301,8 +301,5 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     {
         m_storage.clear();
     }
-
-
-
 
 }

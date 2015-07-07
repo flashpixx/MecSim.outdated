@@ -35,6 +35,7 @@ import java.util.Map;
 /**
  * class for internal action for mapping literals to getBeliefbases
  * based on the literals functor
+ *
  * @deprecated
  */
 @Deprecated
@@ -44,7 +45,7 @@ public class CBeliefBaseMapper extends DefaultInternalAction
      * map which contains functor-path mapping
      * to locate literals in inherited getBeliefbases
      */
-    final Map<String, CPath> m_mapping;
+    private final Map<String, CPath> m_mapping;
 
     /**
      * ctor with initial mapping

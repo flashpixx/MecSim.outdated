@@ -32,6 +32,7 @@ import org.jxmapviewer.painter.Painter;
 
 /**
  * interface of an agent
+ *
  * @tparam T literal type
  */
 public interface IAgent<T> extends Painter, IReceiver
@@ -62,7 +63,7 @@ public interface IAgent<T> extends Painter, IReceiver
      * register an object for running actions
      *
      * @param p_name binding name of the action
-     * @param p_object
+     * @param p_object binding object
      */
     public void registerAction( final String p_name, final Object p_object );
 

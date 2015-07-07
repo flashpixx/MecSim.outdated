@@ -132,32 +132,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
             this.bind( l_item );
     }
 
-    @Override
-    public void afterCycle( final int p_currentstep, final IAgent p_agent )
-    {
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    // todo: removeLiterals does not work here
-    public void beforeCycle( final int p_currentstep, final IAgent p_agent )
-    {
-        // removes old beliefs
-        for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.removeLiteral( l_item.getKey(), l_item.getValue() );
-
-        // refresh belief cache
-        m_beliefcache.clear();
-
-        // add new beliefs
-        m_beliefcache.put( "position", this.getCurrentPosition() );
-        m_beliefcache.put( "predecessor", this.getPredecessorWithName( 5 ) );
-
-        // synchronize agent beliefbase
-        for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.addLiteral( l_item.getKey(), l_item.getValue() );
-    }
-
     /**
      * binds an agent with the name
      *

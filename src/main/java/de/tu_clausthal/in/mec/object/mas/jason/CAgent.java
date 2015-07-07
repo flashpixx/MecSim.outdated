@@ -75,15 +75,15 @@ public class CAgent<T> implements IVoidAgent<Literal>
     /**
      * name of the binding beliefbase and its mask
      */
-    private static final String c_beliefbase_bind = "bind";
+    private static final String c_beliefbasebind = "bind";
     /**
      * name of the message beliefbase and its mask
      */
-    private static final String c_beliefbase_message = "message";
+    private static final String c_beliefbasemessage = "message";
     /**
      * name of the root beliefbase and its mask
      */
-    private static final String c_beliefbase_root = "root";
+    private static final String c_beliefbaseroot = "root";
     /**
      * bind name of the initial object
      */
@@ -108,7 +108,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     /**
      * path seperator
      */
-    private final static String c_seperator = "::";
+    private static final String c_seperator = "::";
     /**
      * set with actions of this implementation
      */
@@ -190,13 +190,13 @@ public class CAgent<T> implements IVoidAgent<Literal>
         // create action bind & beliefbases with tree structure
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
 
-        m_beliefbases.add( c_beliefbase_root, new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
-        m_beliefbases.add( c_beliefbase_message, new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
-        m_beliefbases.add( c_beliefbase_bind, new CBeliefBase<>( new CBindingStorage() ) );
+        m_beliefbases.add( c_beliefbaseroot, new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
+        m_beliefbases.add( c_beliefbasemessage, new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
+        m_beliefbases.add( c_beliefbasebind, new CBeliefBase<>( new CBindingStorage() ) );
 
-        m_beliefbaserootmask = m_beliefbases.get( c_beliefbase_root ).createMask( c_beliefbase_root );
-        m_beliefbases.get( c_beliefbase_root ).add( m_beliefbases.get( c_beliefbase_bind ).createMask( c_beliefbase_bind ) );
-        m_beliefbases.get( c_beliefbase_root ).add( m_beliefbases.get( c_beliefbase_message ).createMask( c_beliefbase_message ) );
+        m_beliefbaserootmask = m_beliefbases.get( c_beliefbaseroot ).createMask( c_beliefbaseroot );
+        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasebind ).createMask( c_beliefbasebind ) );
+        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasemessage ).createMask( c_beliefbasemessage ) );
 
         if ( p_bind != null )
         {
@@ -204,7 +204,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
 
-            m_beliefbases.get( c_beliefbase_bind ).<CBindingStorage>getStorage().push( c_bindname, this );
+            m_beliefbases.get( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, this );
         }
     }
 
@@ -315,7 +315,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        m_beliefbases.get( c_beliefbase_message ).<CMessageStorage>getStorage().receiveMessage( p_messages );
+        m_beliefbases.get( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
     @Override

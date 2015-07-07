@@ -29,10 +29,12 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.Old_CDefaultBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefBaseMapper;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
@@ -114,9 +116,9 @@ public class CAgent<T> implements IVoidAgent
      */
     private final CJasonArchitecture m_architecture;
     /**
-     * the agents beliefbase
+     * the agents beliefbases
      */
-    private final IBeliefBaseMask<Literal> m_beliefs = null;
+    private final CBeliefBaseStorage m_beliefbases = new CBeliefBaseStorage();
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
@@ -190,9 +192,10 @@ public class CAgent<T> implements IVoidAgent
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
 
-            // initialize inherited getBeliefbases
-            m_beliefs.add( new CBindingStorage( c_bindname, p_bind, new CPath( "binding" ) ) );
-            m_beliefs.add( new CMessageStorage( m_agent.getTS(), new CPath( "messages" ) ) );
+            // create beliefbases
+            m_beliefbases.add( "beliefbase", new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
+            m_beliefbases.add( "bind", new CBeliefBase<>( new CBindingStorage() ) );
+            m_beliefbases.add( "message", new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
         }
 
         // register beliefbase-mapper with individual mapping

@@ -21,19 +21,23 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
-public interface IBeliefBase<T> extends IBeliefBaseAction<T>
+/**
+ * storage of a beliefbase for storing masks only
+ */
+public class CBeliefMaskStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
 {
 
-    /**
-     * returns the storage of the beliefbase
-     *
-     * @return storage
-     *
-     * @tparam L typecast
-     */
-    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
+    @Override
+    public final void addElement( final String p_key, final N p_element )
+    {
+    }
 
+    @Override
+    public final boolean removeElement( final String p_key, final N p_element )
+    {
+        return false;
+    }
 }

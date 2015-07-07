@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
@@ -122,7 +123,11 @@ public class CAgent<T> implements IVoidAgent
      */
     private final CJasonArchitecture m_architecture;
     /**
-     * the agents beliefbases
+     * root beliefbase
+     */
+    private final IBeliefBaseMask<Literal> m_beliefbaserootmask;
+    /**
+     * agents beliefbases
      */
     private final CBeliefBaseStorage<Literal> m_beliefbases = new CBeliefBaseStorage();
     /**
@@ -190,6 +195,7 @@ public class CAgent<T> implements IVoidAgent
         m_beliefbases.add( c_beliefbase_message, new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
         m_beliefbases.add( c_beliefbase_bind, new CBeliefBase<>( new CBindingStorage() ) );
 
+        m_beliefbaserootmask = m_beliefbases.get( c_beliefbase_root ).createMask( c_beliefbase_root );
         m_beliefbases.get( c_beliefbase_root ).add( m_beliefbases.get( c_beliefbase_bind ).createMask( c_beliefbase_bind ) );
         m_beliefbases.get( c_beliefbase_root ).add( m_beliefbases.get( c_beliefbase_message ).createMask( c_beliefbase_message ) );
 
@@ -267,6 +273,12 @@ public class CAgent<T> implements IVoidAgent
     }
 
     @Override
+    public <Literal> void registerMask( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
+    {
+        m_beliefbaserootmask.add( p_mask );
+    }
+
+    @Override
     public final void release()
     {
         m_agent.stopAg();
@@ -281,6 +293,12 @@ public class CAgent<T> implements IVoidAgent
             return;
 
         m_methodBind.remove( p_name );
+    }
+
+    @Override
+    public void unregisterMask( final CPath p_path )
+    {
+
     }
 
     @Override

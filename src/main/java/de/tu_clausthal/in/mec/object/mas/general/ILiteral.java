@@ -32,7 +32,7 @@ import de.tu_clausthal.in.mec.common.CPath;
  *
  * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral<T> extends ITerm, Old_IBeliefBaseElement
+public interface ILiteral<T> extends ITerm
 {
 
     /**

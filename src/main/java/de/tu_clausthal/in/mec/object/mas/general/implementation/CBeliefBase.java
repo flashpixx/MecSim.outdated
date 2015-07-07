@@ -100,17 +100,16 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    public Iterator<ILiteral<T>> iterator()
+    {
+        return m_storage.iterator();
+    }
+
+    @Override
     @SuppressWarnings( "unchecked" )
     public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
     {
         return (L) m_storage;
-    }
-
-
-    @Override
-    public Iterator<ILiteral<T>> iterator()
-    {
-        return m_storage.iterator();
     }
 
     /**
@@ -245,12 +244,19 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
+        public <L extends IBeliefStorage<ILiteral<P>, IBeliefBaseMask<P>>> L getStorage()
+        {
+            return m_self.getStorage();
+        }
+
+        @Override
         public void clear()
         {
             m_self.clear();
         }
 
     }
+
 
     @Override
     public void add( final IBeliefBaseMask<T> p_mask )

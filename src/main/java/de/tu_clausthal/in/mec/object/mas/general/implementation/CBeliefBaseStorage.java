@@ -47,7 +47,7 @@ public class CBeliefBaseStorage
      * @param p_name key name
      * @param p_base beliefbase
      */
-    public void add( final String p_name, final IBeliefBase<?> p_base )
+    public final void add( final String p_name, final IBeliefBase<?> p_base )
     {
         if ( m_beliefbases.containsKey( p_name.toLowerCase() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "exists", p_name.toLowerCase() ) );
@@ -61,7 +61,7 @@ public class CBeliefBaseStorage
      * @param p_name key name
      * @return null or beliefbase
      */
-    public IBeliefBase<?> get( final String p_name )
+    public final IBeliefBase<?> get( final String p_name )
     {
         return m_beliefbases.get( p_name.toLowerCase() );
     }
@@ -71,7 +71,7 @@ public class CBeliefBaseStorage
      *
      * @param p_name key name
      */
-    public void remove( final String p_name )
+    public final void remove( final String p_name )
     {
         m_beliefbases.remove( p_name.toLowerCase() );
     }

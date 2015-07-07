@@ -115,7 +115,7 @@ public class CAgent<T> implements IVoidAgent
     /**
      * the agents beliefbases
      */
-    private final CBeliefBaseStorage m_beliefbases = new CBeliefBaseStorage();
+    private final CBeliefBaseStorage<Literal> m_beliefbases = new CBeliefBaseStorage();
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)

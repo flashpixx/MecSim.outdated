@@ -227,35 +227,15 @@ public class CAgent<T> implements IVoidAgent
         this( null, p_asl, p_bind );
     }
 
-    public void addAction( final String p_name, final Object p_object )
-    {
-        if ( m_methodBind == null )
-            return;
-
-        m_methodBind.push( p_name, p_object );
-    }
-
-    @Override
-    public void addLiteral( final String p_path, final Object p_data )
-    {
-        this.addLiteral( new CPath( p_path ), p_data );
-    }
-
     /**
-     * adds a literal to the top-level literals
+     * returns the set of actions
      *
-     * @param p_path name of the belief
-     * @param p_data belief data
+     * @return action set
      */
-    @Override
-    public void addLiteral( final CPath p_path, final Object p_data )
+    public final Map<String, IAction> getActions()
     {
-        final CPath l_path = p_path;
-        l_path.setSeparator( "_" );
-
-        m_beliefs.add( CCommon.convertGeneric( CCommon.getLiteral( l_path.toString(), p_data ) ) );
+        return m_action;
     }
-
 
     @Override
     public final int getCycle()
@@ -263,7 +243,7 @@ public class CAgent<T> implements IVoidAgent
         return m_cycle;
     }
 
-    //@Override
+    @Override
     public final String getName()
     {
         return m_namepath.getPath( c_seperator );
@@ -273,6 +253,15 @@ public class CAgent<T> implements IVoidAgent
     public final String getSource()
     {
         return new File( m_agent.getASLSrc() ).getName();
+    }
+
+    @Override
+    public void registerAction( final String p_name, final Object p_object )
+    {
+        if ( m_methodBind == null )
+            return;
+
+        m_methodBind.push( p_name, p_object );
     }
 
     @Override
@@ -289,7 +278,8 @@ public class CAgent<T> implements IVoidAgent
         MindInspectorWeb.get().removeAg( m_agent );
     }
 
-    public void removeAction( final String p_name )
+    @Override
+    public void unregisterAction( final String p_name )
     {
         if ( m_methodBind == null )
             return;
@@ -297,48 +287,11 @@ public class CAgent<T> implements IVoidAgent
         m_methodBind.remove( p_name );
     }
 
-    /**
-     * removes a literal from specified beliefbase
-     *
-     * @param p_path path to beliefbase with literal name as last element
-     * @param p_data belief data
-     */
-    @Override
-    public void removeLiteral( final String p_path, final Object p_data )
-    {
-        this.removeLiteral( new CPath( p_path ), p_data );
-    }
-
-    /**
-     * removes a literal from specified beliefbase
-     *
-     * @param p_path path to beliefbase with literal name as last element
-     * @param p_data belief data
-     * @todo fix
-     */
-    @Override
-    public void removeLiteral( final CPath p_path, final Object p_data )
-    {
-        // m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), CCommon.convertGeneric( CCommon.getLiteral( p_path.getSuffix(), p_data ) ) );
-        //m_beliefs.remove( p_path.getSubPath( 0, p_path.size() - 1 ), p_path.getSuffix(), ILiteral.class );
-    }
-
     @Override
     public void unregisterCycle( final ICycle p_cycle )
     {
         m_cycleobject.remove( p_cycle );
     }
-
-    /**
-     * returns the set of actions
-     *
-     * @return action set
-     */
-    public final Map<String, IAction> getActions()
-    {
-        return m_action;
-    }
-
 
     @Override
     public final CPath getReceiverPath()

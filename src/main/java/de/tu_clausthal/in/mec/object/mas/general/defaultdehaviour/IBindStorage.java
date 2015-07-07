@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * binding belief storage
  */
-public abstract class CBindStorage<N,M extends Iterable<N>> extends CImmutableBeliefStorage<N,M>
+public abstract class IBindStorage<N,M extends Iterable<N>> extends IOneTimeStorage<N,M>
 {
     /**
      * field filter
@@ -29,7 +29,7 @@ public abstract class CBindStorage<N,M extends Iterable<N>> extends CImmutableBe
     /**
      * default ctor
      */
-    public CBindStorage()
+    public IBindStorage()
     {
     }
 
@@ -40,7 +40,7 @@ public abstract class CBindStorage<N,M extends Iterable<N>> extends CImmutableBe
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CBindStorage( final String p_name, final Object p_object )
+    public IBindStorage( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object );
     }
@@ -73,18 +73,4 @@ public abstract class CBindStorage<N,M extends Iterable<N>> extends CImmutableBe
         m_bind.remove( p_name );
     }
 
-
-    @Override
-    public final void update()
-    {
-        super.clear();
-        super.update();
-        this.updateBind();
-    }
-
-
-    /**
-     * updates the element structure
-     */
-    protected abstract void updateBind();
 }

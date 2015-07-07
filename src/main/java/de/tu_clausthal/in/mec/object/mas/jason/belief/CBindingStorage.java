@@ -28,7 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.CBindStorage;
+import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.IBindStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
@@ -42,7 +42,7 @@ import java.util.Set;
 /**
  * beliefbase structure to bind object properties
  */
-public class CBindingStorage extends CBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
+public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
 
     /**
@@ -66,7 +66,7 @@ public class CBindingStorage extends CBindStorage<ILiteral<Literal>, IBeliefBase
 
 
     @Override
-    protected void updateBind()
+    protected void updating()
     {
         // iterate over all binded objects
         for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )

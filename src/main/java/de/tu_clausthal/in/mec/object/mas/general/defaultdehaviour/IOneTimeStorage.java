@@ -21,35 +21,30 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.jason.belief;
-
-
-import jason.asSyntax.Literal;
-
-import java.util.Set;
+package de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour;
 
 
 /**
- * interface for belief structure
+ * class to update an immutable belief storage
  */
-public interface IBelief
+public abstract class IOneTimeStorage<N,M extends Iterable<N>> extends CImmutableBeliefStorage<N,M>
 {
 
-    /**
-     * clear all literals *
-     */
-    void clear();
+    @Override
+    public final void update()
+    {
+        // clear is final at the super, so clearing is run manually
+        m_elements.clear();
+        m_masks.clear();
+
+        super.update();
+        this.updating();
+    }
+
 
     /**
-     * get non-atom literals
-     *
-     * @return non-atom literals
+     * updates the element structure
      */
-    Set<Literal> getLiterals();
-
-    /**
-     * update the literals *
-     */
-    void update();
+    protected abstract void updating();
 
 }

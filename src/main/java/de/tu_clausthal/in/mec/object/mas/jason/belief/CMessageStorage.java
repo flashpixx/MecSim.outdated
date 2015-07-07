@@ -24,8 +24,10 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.Old_IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.IOneTimeStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.CMessage;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
@@ -47,7 +49,7 @@ import java.util.Set;
 /**
  * beliefbase structure for message beliefs
  */
-public class CMessageBeliefBase extends CBeliefBase
+public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
     /**
      * path seperator
@@ -67,13 +69,13 @@ public class CMessageBeliefBase extends CBeliefBase
      *
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final TransitionSystem p_transitionSystem )
+    public CMessageStorage( final TransitionSystem p_transitionSystem )
     {
         super();
         m_transitionSystem = p_transitionSystem;
     }
 
-    public CMessageBeliefBase( final TransitionSystem p_transitionSystem, final CPath p_path )
+    public CMessageStorage( final TransitionSystem p_transitionSystem, final CPath p_path )
     {
         super( null, null, p_path );
         m_transitionSystem = p_transitionSystem;
@@ -85,7 +87,7 @@ public class CMessageBeliefBase extends CBeliefBase
      * @param p_literals top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem )
+    public CMessageStorage( final Set<ILiteral<Literal>> p_literals, final TransitionSystem p_transitionSystem )
     {
         super( p_literals );
         m_transitionSystem = p_transitionSystem;
@@ -98,7 +100,7 @@ public class CMessageBeliefBase extends CBeliefBase
      * @param p_literals top level literals
      * @param p_transitionSystem agent transition system
      */
-    public CMessageBeliefBase( final Map<String, Old_IBeliefBase<Literal>> p_beliefbases,
+    public CMessageStorage( final Map<String, Old_IBeliefBase<Literal>> p_beliefbases,
             final Set<ILiteral<Literal>> p_literals,
             final TransitionSystem p_transitionSystem
     )

@@ -41,6 +41,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -191,7 +192,7 @@ public class CAgent<T> implements IVoidAgent
 
             // initialize inherited getBeliefbases
             m_beliefs.add( new CBindingStorage( c_bindname, p_bind, new CPath( "binding" ) ) );
-            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageBeliefBase( m_agent.getTS(), new CPath( "messages" ) ) );
+            m_beliefs.add( new CMessageStorage( m_agent.getTS(), new CPath( "messages" ) ) );
         }
 
         // register beliefbase-mapper with individual mapping

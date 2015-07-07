@@ -24,6 +24,9 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.defaultdehaviour.IOneTimeStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import de.tu_clausthal.in.mec.object.mas.jason.general.CBeliefBase;
 import jason.asSemantics.Agent;
@@ -36,7 +39,7 @@ import jason.asSyntax.Literal;
  *
  * @todo in update-method: add just literals which are not in other getBeliefbases
  */
-public class CInternalBeliefBase extends CBeliefBase
+public class CInternalStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
     /**
      * agent object
@@ -49,7 +52,7 @@ public class CInternalBeliefBase extends CBeliefBase
      *
      * @param p_agent
      */
-    public CInternalBeliefBase( final Agent p_agent )
+    public CInternalStorage( final Agent p_agent )
     {
         super( CCommon.convertGeneric( p_agent.getInitialBels() ) );
         m_agent = p_agent;

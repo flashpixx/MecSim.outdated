@@ -36,12 +36,62 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
 {
 
     /**
+     * adds a literal in the current structure
+     *
+     * @param p_path path
+     * @param p_literal literal
+     */
+    void add( final CPath p_path, final ILiteral<T> p_literal );
+
+    /**
+     * adds a mask in the current structure
+     *
+     * @param p_path path
+     * @param p_mask mask
+     */
+    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+
+    /**
+     * adds a mask in the current structure
+     *
+     * @param p_path path
+     * @param p_mask mask
+     * @param p_generator beliefbase generator if beliefbase not exists
+     */
+    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IBaseGenerator<T> p_generator );
+
+    /**
+     * adds a literal in the current structure
+     *
+     * @param p_path path
+     * @param p_literal literal
+     * @param p_generator beliefbase generator if beliefbase not exists
+     */
+    void add( final CPath p_path, final ILiteral<T> p_literal, final IBaseGenerator<T> p_generator );
+
+    /**
      * clones the current mask
      *
      * @param p_parent new parent
      * @return new mask object
      */
     public IBeliefBaseMask<T> clone( final IBeliefBaseMask<T> p_parent );
+
+    /**
+     * gets a list of all literals
+     * of the path
+     *
+     * @param p_path path
+     * @return set with literal
+     */
+    public Set<ILiteral<T>> get( final CPath p_path );
+
+    /**
+     * gets a list of all literals
+     *
+     * @return set with literals
+     */
+    public Set<ILiteral<T>> get();
 
     /**
      * returns the full path
@@ -64,36 +114,12 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      */
     public IBeliefBaseMask<T> getParent();
 
-    /**
-     * gets a list of all literals
-     * of the path
-     *
-     * @param p_path path
-     * @return set with literal
-     */
-    public Set<ILiteral<T>> get( final CPath p_path );
 
     /**
-     * adds a literal in the current structure
-     *
-     * @param p_path path
-     * @param p_literal literal
+     * interface for generating non-existing beliefbases
      */
-    void add( final CPath p_path, final ILiteral<T> p_literal );
-
-    /**
-     * adds a mask in the current structure
-     *
-     * @param p_path path
-     * @param p_mask mask
-     */
-    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * gets a list of all literals
-     *
-     * @return set with literals
-     */
-    public Set<ILiteral<T>> get();
-
+    public interface IBaseGenerator<Q>
+    {
+        public IBeliefBaseMask<Q> create( final String p_name );
+    }
 }
